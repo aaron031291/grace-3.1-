@@ -1,0 +1,25 @@
+# API and Server
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+
+# HTTP and Networking
+requests
+
+# Deep Learning and ML
+torch
+sentence-transformers
+transformers
+safetensors
+
+# Data Processing
+numpy
+scikit-learn
+
+# Testing
+pytest
+pytest-cov
+
+# Utilities
+tqdm
