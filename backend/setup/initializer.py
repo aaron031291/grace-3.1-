@@ -3,6 +3,7 @@ Environment initializer module that handles:
 - Virtual environment detection and creation
 - Dependency installation with error recovery
 - Ollama service detection and startup
+- Model availability checking and pulling
 """
 
 import os
@@ -11,6 +12,11 @@ import subprocess
 import shutil
 import re
 from pathlib import Path
+
+try:
+    from huggingface_hub import snapshot_download
+except ImportError:
+    snapshot_download = None
 
 
 class EnvironmentInitializer:
@@ -243,14 +249,119 @@ class EnvironmentInitializer:
         
         if self.check_ollama_running():
             print("✓ Ollama is already running")
+        else:
+            if self.start_ollama():
+                print("✓ Ollama service started successfully")
+            else:
+                print("✗ Failed to start Ollama service")
+                return False
+        
+        # Check and pull default LLM model
+        if not self.ensure_llm_model():
+            print("⚠ Warning: Failed to ensure default LLM model")
+        
+        # Check and pull embedding model
+        if not self.ensure_embedding_model():
+            print("⚠ Warning: Failed to ensure embedding model")
+        
+        return True
+    
+    def ensure_llm_model(self) -> bool:
+        """
+        Check if the default LLM model is available, pull it if not.
+        
+        Returns:
+            bool: True if model is available or was pulled successfully
+        """
+        try:
+            from settings import settings
+            model_name = settings.OLLAMA_LLM_DEFAULT
+        except (ImportError, AttributeError):
+            model_name = "mistral:7b"
+        
+        print(f"\n🔍 Checking for default LLM model: {model_name}")
+        
+        try:
+            # Check if model is available
+            result = subprocess.run(
+                ["ollama", "list"],
+                capture_output=True,
+                timeout=10,
+                text=True
+            )
+            
+            if result.returncode == 0 and model_name in result.stdout:
+                print(f"✓ Model '{model_name}' is already available")
+                return True
+            
+            # Model not found, pull it
+            print(f"📥 Pulling model '{model_name}'. This may take a while...")
+            result = subprocess.run(
+                ["ollama", "pull", model_name],
+                capture_output=True,
+                timeout=3600,  # 1 hour timeout for pulling
+                text=True
+            )
+            
+            if result.returncode == 0:
+                print(f"✓ Model '{model_name}' pulled successfully")
+                return True
+            else:
+                print(f"✗ Failed to pull model '{model_name}'")
+                if result.stderr:
+                    print(f"  Error: {result.stderr}")
+                return False
+        
+        except subprocess.TimeoutExpired:
+            print(f"✗ Timeout while pulling model '{model_name}'")
+            return False
+        except Exception as e:
+            print(f"✗ Error checking/pulling LLM model: {e}")
+            return False
+    
+    def ensure_embedding_model(self) -> bool:
+        """
+        Check if embedding model exists locally, download from HuggingFace if not.
+        
+        Returns:
+            bool: True if model exists or was downloaded successfully
+        """
+        embedding_dir = self.backend_dir / "models" / "embeddings" / "qwen_4b"
+        
+        print(f"\n🔍 Checking embedding model at {embedding_dir}")
+        
+        # Check if model already exists
+        if embedding_dir.exists() and (embedding_dir / "config.json").exists():
+            print(f"✓ Embedding model already exists")
             return True
         
-        if self.start_ollama():
-            print("✓ Ollama service started successfully")
+        # Create directory if it doesn't exist
+        embedding_dir.parent.mkdir(parents=True, exist_ok=True)
+        
+        print(f"📥 Downloading Qwen3-4B embedding model from HuggingFace...")
+        print(f"   This may take a few minutes on first run...")
+        
+        try:
+            if snapshot_download is None:
+                print("✗ huggingface-hub not available. Please install it with: pip install huggingface-hub")
+                return False
+            
+            # Download model from HuggingFace
+            model_repo = "Qwen/Qwen3-4B"
+            snapshot_download(
+                repo_id=model_repo,
+                local_dir=str(embedding_dir),
+                local_dir_use_symlinks=False
+            )
+            
+            print(f"✓ Embedding model downloaded to {embedding_dir}")
             return True
         
-        print("✗ Failed to start Ollama service")
-        return False
+        except Exception as e:
+            print(f"✗ Failed to download embedding model: {e}")
+            print(f"  You can manually download from: https://huggingface.co/{model_repo}")
+            return False
+    
     
     def initialize(self) -> bool:
         """
