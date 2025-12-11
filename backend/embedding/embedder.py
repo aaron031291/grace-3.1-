@@ -9,6 +9,13 @@ from typing import List, Union, Optional, Tuple
 import torch
 from sentence_transformers import SentenceTransformer
 
+# Import settings
+try:
+    from settings import settings
+    USE_SETTINGS = True
+except ImportError:
+    USE_SETTINGS = False
+
 
 class EmbeddingModel:
     """Wrapper for Qwen3-Embedding-4B model for text embeddings."""
@@ -24,7 +31,7 @@ class EmbeddingModel:
         Initialize the embedding model.
         
         Args:
-            model_path: Path to the model directory. If None, uses default from backend/models/embedding/qwen_4b
+            model_path: Path to the model directory. If None, uses default from settings
             device: Device to run model on ('cuda', 'cpu'). Auto-detected if None
             normalize_embeddings: Whether to normalize embeddings to unit length
             max_length: Maximum sequence length. Model supports up to 32k tokens
@@ -34,14 +41,18 @@ class EmbeddingModel:
         
         # Set device
         if device is None:
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        else:
-            self.device = device
+            if USE_SETTINGS:
+                device = settings.EMBEDDING_DEVICE
+            device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device
         
         # Determine model path
         if model_path is None:
-            backend_dir = Path(__file__).parent.parent
-            model_path = str(backend_dir / "models" / "embedding" / "qwen_4b")
+            if USE_SETTINGS:
+                model_path = settings.EMBEDDING_MODEL_PATH
+            else:
+                backend_dir = Path(__file__).parent.parent
+                model_path = str(backend_dir / "models" / "embedding" / "qwen_4b")
         
         if not Path(model_path).exists():
             raise FileNotFoundError(f"Model path does not exist: {model_path}")

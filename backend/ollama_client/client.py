@@ -9,6 +9,13 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 
+# Import settings
+try:
+    from settings import settings
+    USE_SETTINGS = True
+except ImportError:
+    USE_SETTINGS = False
+
 
 class ModelStatus(Enum):
     """Status of a model."""
@@ -41,13 +48,19 @@ class Model:
 class OllamaClient:
     """Client for interacting with Ollama service."""
     
-    def __init__(self, base_url: str = "http://localhost:11434"):
+    def __init__(self, base_url: str = None):
         """
         Initialize Ollama client.
         
         Args:
-            base_url: The base URL of the Ollama service
+            base_url: The base URL of the Ollama service. If None, uses settings or default
         """
+        if base_url is None:
+            if USE_SETTINGS:
+                base_url = settings.OLLAMA_URL
+            else:
+                base_url = "http://localhost:11434"
+        
         self.base_url = base_url
         self.api_list_url = f"{base_url}/api/tags"
         self.api_generate_url = f"{base_url}/api/generate"
@@ -416,6 +429,13 @@ class OllamaClient:
 
 
 # Convenience functions
-def get_ollama_client(base_url: str = "http://localhost:11434") -> OllamaClient:
-    """Factory function to create an Ollama client."""
+def get_ollama_client(base_url: str = None) -> OllamaClient:
+    """
+    Factory function to create an Ollama client.
+    
+    Args:
+        base_url: The base URL of the Ollama service. If None, uses settings or default
+    """
+    if base_url is None and USE_SETTINGS:
+        base_url = settings.OLLAMA_URL
     return OllamaClient(base_url)
