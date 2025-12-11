@@ -28,6 +28,16 @@ class Settings:
     EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cuda")  # cuda or cpu
     EMBEDDING_NORMALIZE: bool = os.getenv("EMBEDDING_NORMALIZE", "true").lower() == "true"
     
+    # ==================== Database Configuration ====================
+    DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite")
+    DATABASE_HOST: str = os.getenv("DATABASE_HOST", "localhost")
+    DATABASE_PORT: int = int(os.getenv("DATABASE_PORT", "0")) or None
+    DATABASE_USER: str = os.getenv("DATABASE_USER", "")
+    DATABASE_PASSWORD: str = os.getenv("DATABASE_PASSWORD", "")
+    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "grace")
+    DATABASE_PATH: str = os.getenv("DATABASE_PATH", str(BACKEND_DIR / "data" / "grace.db"))
+    DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "false").lower() == "true"
+    
     # ==================== Application Configuration ====================
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
@@ -75,6 +85,13 @@ class Settings:
             "EMBEDDING_MODEL_PATH": cls.EMBEDDING_MODEL_PATH,
             "EMBEDDING_DEVICE": cls.EMBEDDING_DEVICE,
             "EMBEDDING_NORMALIZE": cls.EMBEDDING_NORMALIZE,
+            "DATABASE_TYPE": cls.DATABASE_TYPE,
+            "DATABASE_HOST": cls.DATABASE_HOST,
+            "DATABASE_PORT": cls.DATABASE_PORT,
+            "DATABASE_USER": cls.DATABASE_USER,
+            "DATABASE_NAME": cls.DATABASE_NAME,
+            "DATABASE_PATH": cls.DATABASE_PATH,
+            "DATABASE_ECHO": cls.DATABASE_ECHO,
             "DEBUG": cls.DEBUG,
             "LOG_LEVEL": cls.LOG_LEVEL,
             "MAX_NUM_PREDICT": cls.MAX_NUM_PREDICT,

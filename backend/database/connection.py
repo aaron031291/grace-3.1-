@@ -1,0 +1,158 @@
+"""
+Database connection management module.
+Handles engine creation and connection pooling.
+"""
+
+from sqlalchemy import create_engine, Engine, event
+from sqlalchemy.pool import QueuePool, StaticPool
+from typing import Optional
+import logging
+
+from .config import DatabaseConfig, DatabaseType
+
+
+logger = logging.getLogger(__name__)
+
+
+class DatabaseConnection:
+    """Manages SQLAlchemy engine and connection lifecycle."""
+    
+    _instance: Optional["DatabaseConnection"] = None
+    _engine: Optional[Engine] = None
+    _config: Optional[DatabaseConfig] = None
+    
+    def __new__(cls):
+        """Singleton pattern - only one database connection instance."""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    @classmethod
+    def initialize(cls, config: DatabaseConfig) -> "DatabaseConnection":
+        """
+        Initialize database connection with configuration.
+        
+        Args:
+            config: DatabaseConfig instance
+            
+        Returns:
+            DatabaseConnection: Singleton instance
+        """
+        instance = cls()
+        instance._config = config
+        instance._engine = instance._create_engine(config)
+        return instance
+    
+    @classmethod
+    def get_engine(cls) -> Engine:
+        """
+        Get the SQLAlchemy engine.
+        
+        Returns:
+            Engine: SQLAlchemy engine instance
+            
+        Raises:
+            RuntimeError: If database not initialized
+        """
+        instance = cls()
+        if instance._engine is None:
+            raise RuntimeError(
+                "Database not initialized. Call DatabaseConnection.initialize() first."
+            )
+        return instance._engine
+    
+    @classmethod
+    def get_config(cls) -> DatabaseConfig:
+        """
+        Get the database configuration.
+        
+        Returns:
+            DatabaseConfig: Current configuration
+            
+        Raises:
+            RuntimeError: If database not initialized
+        """
+        instance = cls()
+        if instance._config is None:
+            raise RuntimeError(
+                "Database not initialized. Call DatabaseConnection.initialize() first."
+            )
+        return instance._config
+    
+    def _create_engine(self, config: DatabaseConfig) -> Engine:
+        """
+        Create SQLAlchemy engine with appropriate configuration.
+        
+        Args:
+            config: DatabaseConfig instance
+            
+        Returns:
+            Engine: Configured SQLAlchemy engine
+        """
+        connection_string = config.get_connection_string()
+        
+        logger.info(f"Creating database engine for {config.db_type}")
+        
+        # SQLite uses a different pool strategy
+        if config.db_type == DatabaseType.SQLITE:
+            engine = create_engine(
+                connection_string,
+                connect_args={"check_same_thread": False},
+                poolclass=StaticPool,
+                echo=config.echo,
+            )
+            # Enable foreign keys for SQLite
+            @event.listens_for(engine, "connect")
+            def set_sqlite_pragma(dbapi_conn, connection_record):
+                cursor = dbapi_conn.cursor()
+                cursor.execute("PRAGMA foreign_keys=ON")
+                cursor.close()
+        else:
+            # Use QueuePool for remote databases
+            engine = create_engine(
+                connection_string,
+                poolclass=QueuePool,
+                pool_size=config.pool_size,
+                max_overflow=config.max_overflow,
+                pool_pre_ping=config.pool_pre_ping,
+                echo=config.echo,
+            )
+        
+        logger.info(f"Database engine created successfully: {config.get_connection_string()}")
+        return engine
+    
+    @classmethod
+    def close(cls) -> None:
+        """Close database connection."""
+        instance = cls()
+        if instance._engine:
+            instance._engine.dispose()
+            instance._engine = None
+            logger.info("Database connection closed")
+    
+    @classmethod
+    def health_check(cls) -> bool:
+        """
+        Check if database connection is healthy.
+        
+        Returns:
+            bool: True if connection is healthy, False otherwise
+        """
+        try:
+            engine = cls.get_engine()
+            with engine.connect() as connection:
+                connection.execute("SELECT 1")
+            return True
+        except Exception as e:
+            logger.error(f"Database health check failed: {e}")
+            return False
+
+
+def get_db_connection() -> DatabaseConnection:
+    """
+    Get the database connection singleton.
+    
+    Returns:
+        DatabaseConnection: Database connection instance
+    """
+    return DatabaseConnection()

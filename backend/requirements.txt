@@ -50,6 +50,9 @@ python-dotenv==1.2.1
 PyYAML==6.0.3
 regex==2025.11.3
 requests==2.32.5
+SQLAlchemy==2.0.28
+psycopg2-binary==2.9.12
+pymysql==1.1.1
 safetensors==0.7.0
 scikit-learn==1.8.0
 scipy==1.16.3
