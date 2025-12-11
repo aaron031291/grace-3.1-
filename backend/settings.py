@@ -31,6 +31,7 @@ class Settings:
     # ==================== Application Configuration ====================
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+    MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "2048"))
     
     @classmethod
     def validate(cls) -> bool:
@@ -76,6 +77,7 @@ class Settings:
             "EMBEDDING_NORMALIZE": cls.EMBEDDING_NORMALIZE,
             "DEBUG": cls.DEBUG,
             "LOG_LEVEL": cls.LOG_LEVEL,
+            "MAX_NUM_PREDICT": cls.MAX_NUM_PREDICT,
         }
     
     @classmethod

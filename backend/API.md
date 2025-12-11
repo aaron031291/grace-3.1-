@@ -12,10 +12,12 @@ FastAPI-based REST API for Ollama model inference and embeddings.
 
 ## Endpoints
 
-### GET `/` 
+### GET `/`
+
 Root endpoint with API information.
 
 **Response:**
+
 ```json
 {
   "name": "Grace API",
@@ -27,9 +29,11 @@ Root endpoint with API information.
 ```
 
 ### GET `/health`
+
 Health check endpoint.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -39,9 +43,11 @@ Health check endpoint.
 ```
 
 ### POST `/chat`
+
 Chat endpoint for generating responses using Ollama models.
 
 **Request Body:**
+
 ```json
 {
   "messages": [
@@ -63,6 +69,7 @@ Chat endpoint for generating responses using Ollama models.
 ```
 
 **Parameters:**
+
 - `messages` (required): Array of message objects with `role` and `content`
   - Roles: `"user"`, `"assistant"`, `"system"`
 - `model` (optional): Model name (defaults to `OLLAMA_LLM_DEFAULT` from settings)
@@ -72,6 +79,7 @@ Chat endpoint for generating responses using Ollama models.
 - `num_predict` (optional): Max tokens to generate
 
 **Response:**
+
 ```json
 {
   "message": "Python is a high-level programming language...",
@@ -83,14 +91,17 @@ Chat endpoint for generating responses using Ollama models.
 ```
 
 ### GET `/docs`
+
 Swagger UI documentation (interactive API explorer).
 
 ### GET `/redoc`
+
 ReDoc documentation (alternative API documentation).
 
 ## Running the API
 
 ### Start the server
+
 ```bash
 cd backend
 source venv/bin/activate
@@ -100,6 +111,7 @@ python app.py
 The API will be available at `http://localhost:8000`
 
 ### With Uvicorn directly
+
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -123,6 +135,7 @@ OLLAMA_LLM_DEFAULT=mistral:7b
 ## Testing
 
 Run the test suite:
+
 ```bash
 source venv/bin/activate
 pytest tests/test_app.py -v
@@ -131,6 +144,7 @@ pytest tests/test_app.py -v
 ## Example Usage
 
 ### Using curl
+
 ```bash
 curl -X POST "http://localhost:8000/chat" \
   -H "Content-Type: application/json" \
@@ -142,6 +156,7 @@ curl -X POST "http://localhost:8000/chat" \
 ```
 
 ### Using Python
+
 ```python
 import requests
 
@@ -160,18 +175,17 @@ print(response.json())
 ```
 
 ### Using JavaScript/TypeScript
+
 ```javascript
-const response = await fetch('http://localhost:8000/chat', {
-  method: 'POST',
+const response = await fetch("http://localhost:8000/chat", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    messages: [
-      { role: 'user', content: 'Hello!' }
-    ],
-    temperature: 0.7
-  })
+    messages: [{ role: "user", content: "Hello!" }],
+    temperature: 0.7,
+  }),
 });
 
 const data = await response.json();

@@ -27,10 +27,6 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     """Request model for chat endpoint."""
     messages: List[Message] = Field(..., description="List of messages in conversation history")
-    model: Optional[str] = Field(
-        None,
-        description="Model to use. If not provided, uses OLLAMA_LLM_DEFAULT from settings"
-    )
     temperature: Optional[float] = Field(
         0.7,
         ge=0.0,
@@ -47,11 +43,6 @@ class ChatRequest(BaseModel):
         40,
         ge=0,
         description="Top-k sampling parameter"
-    )
-    num_predict: Optional[int] = Field(
-        None,
-        ge=1,
-        description="Maximum number of tokens to generate"
     )
 
 
@@ -168,13 +159,11 @@ async def chat(request: ChatRequest):
                 detail="Ollama service is not running. Please start Ollama and try again."
             )
         
-        # Determine which model to use
-        model_name = request.model
-        if not model_name:
-            if settings:
-                model_name = settings.OLLAMA_LLM_DEFAULT
-            else:
-                model_name = "mistral:7b"
+        # Get model from settings
+        if settings:
+            model_name = settings.OLLAMA_LLM_DEFAULT
+        else:
+            model_name = "mistral:7b"
         
         # Check if model exists
         if not client.model_exists(model_name):
@@ -191,6 +180,7 @@ async def chat(request: ChatRequest):
         
         # Generate response
         start_time = time.time()
+        max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
         response = client.chat(
             model=model_name,
             messages=messages,
@@ -198,7 +188,7 @@ async def chat(request: ChatRequest):
             temperature=request.temperature,
             top_p=request.top_p,
             top_k=request.top_k,
-            num_predict=request.num_predict
+            num_predict=max_num_predict
         )
         generation_time = time.time() - start_time
         

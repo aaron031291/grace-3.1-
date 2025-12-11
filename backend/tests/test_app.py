@@ -54,11 +54,9 @@ class TestChatEndpoint:
             "messages": [
                 {"role": "user", "content": "What is Python?"}
             ],
-            "model": "mistral:7b",
             "temperature": 0.7,
             "top_p": 0.9,
-            "top_k": 40,
-            "num_predict": 50
+            "top_k": 40
         }
         
         response = client.post("/chat", json=request_data)
@@ -73,7 +71,6 @@ class TestChatEndpoint:
             assert "message" in data
             assert "model" in data
             assert "generation_time" in data
-            assert data["model"] == "mistral:7b"
             assert isinstance(data["generation_time"], float)
             assert data["generation_time"] > 0
     
