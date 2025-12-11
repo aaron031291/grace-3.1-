@@ -404,6 +404,81 @@ class OllamaClient:
         except Exception as e:
             raise Exception(f"Failed to delete model: {e}")
     
+    def chat(
+        self,
+        model: str,
+        messages: List[Dict[str, str]],
+        stream: bool = False,
+        temperature: float = 0.7,
+        top_p: float = 0.9,
+        top_k: int = 40,
+        num_predict: Optional[int] = None,
+    ) -> str:
+        """
+        Generate a response using Ollama's chat endpoint.
+        
+        Args:
+            model: The model name to use
+            messages: List of message dicts with 'role' and 'content' keys.
+                     Roles can be 'user', 'assistant', or 'system'
+                     Example: [
+                         {"role": "system", "content": "You are a helpful assistant"},
+                         {"role": "user", "content": "Hello"},
+                         {"role": "assistant", "content": "Hi! How can I help?"},
+                         {"role": "user", "content": "Tell me a joke"}
+                     ]
+            stream: Whether to stream the response
+            temperature: Controls randomness (0-1, higher = more random)
+            top_p: Nucleus sampling parameter
+            top_k: Top-k sampling parameter
+            num_predict: Maximum tokens to generate
+            
+        Returns:
+            str: The generated response
+            
+        Raises:
+            ValueError: If model doesn't exist
+            ConnectionError: If unable to connect to Ollama service
+            requests.RequestException: If API request fails
+        """
+        if not self.model_exists(model):
+            raise ValueError(f"Model '{model}' not found. Available models: {self.get_all_models()}")
+        
+        payload = {
+            "model": model,
+            "messages": messages,
+            "stream": stream,
+            "options": {
+                "temperature": temperature,
+                "top_p": top_p,
+                "top_k": top_k,
+            }
+        }
+        
+        if num_predict is not None:
+            payload["options"]["num_predict"] = num_predict
+        
+        api_chat_url = f"{self.base_url}/api/chat"
+        
+        try:
+            response = requests.post(
+                api_chat_url,
+                json=payload,
+                timeout=300,  # Long timeout for model inference
+                stream=stream
+            )
+            response.raise_for_status()
+            
+            if stream:
+                return self._process_streamed_response(response)
+            else:
+                return response.json().get("message", {}).get("content", "")
+        
+        except requests.ConnectionError:
+            raise ConnectionError(f"Failed to connect to Ollama service at {self.base_url}")
+        except requests.RequestException as e:
+            raise requests.RequestException(f"Failed to generate chat response: {e}")
+    
     def get_model_info_detailed(self, model_name: str) -> Optional[Dict[str, Any]]:
         """
         Get detailed model information in a user-friendly format.

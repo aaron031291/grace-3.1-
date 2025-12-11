@@ -328,6 +328,72 @@ class TestOllamaResponseGeneration(unittest.TestCase):
         # Responses at different temperatures should be different
         self.assertNotEqual(responses[0], responses[2])
         print(f"\n  ✓ Different temperatures produced different responses")
+    
+    def test_chat_endpoint(self):
+        """Test chat endpoint with message list."""
+        print(f"\n  Test 7: Chat Endpoint")
+        print(f"  Model: {self.model_name}")
+        
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant that explains concepts simply."},
+            {"role": "user", "content": "What is machine learning in simple terms?"}
+        ]
+        
+        self._prompt = "Chat: ML explanation"
+        
+        print(f"  Sending chat messages...")
+        start_time = time.time()
+        response = self.client.chat(
+            model=self.model_name,
+            messages=messages,
+            stream=False,
+            num_predict=120
+        )
+        gen_time = time.time() - start_time
+        
+        self._response = response
+        self._response_generated = True
+        
+        self.assertIsInstance(response, str)
+        self.assertGreater(len(response), 0)
+        
+        print(f"  ✓ Chat response generated in {gen_time:.2f}s")
+        print(f"  Response length: {len(response)} characters")
+        print(f"  Response: {response[:150]}...")
+    
+    def test_chat_multi_turn(self):
+        """Test chat endpoint with multi-turn conversation."""
+        print(f"\n  Test 8: Chat Multi-Turn")
+        print(f"  Model: {self.model_name}")
+        
+        messages = [
+            {"role": "system", "content": "You are a coding expert."},
+            {"role": "user", "content": "What is Python?"},
+            {"role": "assistant", "content": "Python is a high-level programming language known for its simplicity and readability."},
+            {"role": "user", "content": "What are its main uses?"}
+        ]
+        
+        self._prompt = "Chat: Python uses"
+        
+        print(f"  Sending multi-turn chat...")
+        start_time = time.time()
+        response = self.client.chat(
+            model=self.model_name,
+            messages=messages,
+            stream=False,
+            num_predict=100
+        )
+        gen_time = time.time() - start_time
+        
+        self._response = response
+        self._response_generated = True
+        
+        self.assertIsInstance(response, str)
+        self.assertGreater(len(response), 0)
+        
+        print(f"  ✓ Chat response generated in {gen_time:.2f}s")
+        print(f"  Response length: {len(response)} characters")
+        print(f"  Response: {response[:150]}...")
 
 
 if __name__ == "__main__":
