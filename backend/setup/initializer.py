@@ -11,6 +11,7 @@ import sys
 import subprocess
 import shutil
 import re
+import socket
 from pathlib import Path
 
 try:
@@ -362,6 +363,103 @@ class EnvironmentInitializer:
             print(f"  You can manually download from: https://huggingface.co/{model_repo}")
             return False
     
+    def check_qdrant_running(self) -> bool:
+        """
+        Check if Qdrant service is running on port 6333.
+        
+        Returns:
+            bool: True if Qdrant is running, False otherwise
+        """
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(2)
+            result = sock.connect_ex(('localhost', 6333))
+            sock.close()
+            return result == 0
+        except Exception:
+            return False
+    
+    def docker_engine_running(self) -> bool:
+        """
+        Check if Docker engine is running.
+        
+        Returns:
+            bool: True if Docker is running, False otherwise
+        """
+        try:
+            result = subprocess.run(
+                ["docker", "ps"],
+                capture_output=True,
+                timeout=5
+            )
+            return result.returncode == 0
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            return False
+    
+    def docker_exists(self) -> bool:
+        """Check if docker command is available in PATH."""
+        return shutil.which("docker") is not None
+    
+    def start_qdrant(self) -> bool:
+        """
+        Start Qdrant container using Docker.
+        
+        Returns:
+            bool: True if started successfully, False otherwise
+        """
+        print("🚀 Starting Qdrant container...")
+        try:
+            subprocess.run(
+                [
+                    "docker", "run","-d", "-p", "6333:6333",
+                    "-v", "qdrant_storage:/qdrant/storage",
+                    "qdrant/qdrant"
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=True
+            )
+            print("✓ Qdrant container started")
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"✗ Failed to start Qdrant container: {e}")
+            return False
+        except Exception as e:
+            print(f"✗ Error starting Qdrant: {e}")
+            return False
+    
+    def setup_qdrant(self) -> bool:
+        """
+        Check and setup Qdrant vector database service.
+        
+        Returns:
+            bool: True if Qdrant is running or was started, False otherwise
+        """
+        print("\n🔍 Checking Qdrant service...")
+        
+        if self.check_qdrant_running():
+            print("✓ Qdrant is already running on port 6333")
+            return True
+        
+        print("⚠ Qdrant is not running on port 6333")
+        
+        if not self.docker_exists():
+            print("✗ Docker is not installed")
+            print("\n📥 Please download and install Docker from: https://www.docker.com/products/docker-desktop")
+            return False
+        
+        if not self.docker_engine_running():
+            print("✗ Docker engine is not running")
+            print("\n📥 Please start Docker Desktop or Docker daemon before running this program")
+            return False
+        
+        if self.start_qdrant():
+            print("✓ Qdrant container started successfully")
+            return True
+        else:
+            print("✗ Failed to start Qdrant container")
+            return False
+    
     
     def initialize(self) -> bool:
         """
@@ -385,6 +483,11 @@ class EnvironmentInitializer:
         # Step 3: Setup Ollama
         if not self.setup_ollama():
             print("\n⚠ Warning: Ollama setup failed, but proceeding...")
+        
+        # Step 4: Setup Qdrant
+        if not self.setup_qdrant():
+            print("\n✗ Error: Qdrant setup failed")
+            return False
         
         print("\n" + "=" * 60)
         print("✓ Environment initialization complete!")
