@@ -11,12 +11,14 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 
 from ollama_client.client import get_ollama_client
-from database.session import SessionLocal, get_session
+from database.session import SessionLocal, get_session, initialize_session_factory
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
+from api.ingest import router as ingest_router
+from vector_db.client import get_qdrant_client
 
 try:
     from settings import settings
@@ -171,6 +173,10 @@ async def lifespan(app: FastAPI):
         DatabaseConnection.initialize(db_config)
         print("✓ Database connection initialized")
         
+        # Initialize session factory
+        initialize_session_factory()
+        print("✓ Database session factory initialized")
+        
         # Create tables
         create_tables()
         print("✓ Database tables created/verified")
@@ -188,6 +194,17 @@ async def lifespan(app: FastAPI):
             print("⚠ Ollama is not running - chat endpoint will be unavailable")
     except Exception as e:
         print(f"⚠ Could not connect to Ollama: {e}")
+    
+    # Check Qdrant
+    try:
+        qdrant = get_qdrant_client()
+        if qdrant.is_connected():
+            collections = qdrant.list_collections()
+            print(f"✓ Qdrant is running with {len(collections)} collection(s)")
+        else:
+            print("⚠ Qdrant is not running - document ingestion will be unavailable")
+    except Exception as e:
+        print(f"⚠ Could not connect to Qdrant: {e}")
     
     yield
     
@@ -212,6 +229,9 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
 )
+
+# Register API routers
+app.include_router(ingest_router)
 
 
 # ==================== Health Check Endpoint ====================

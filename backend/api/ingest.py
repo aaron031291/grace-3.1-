@@ -1,0 +1,390 @@
+"""
+Text ingestion API endpoints.
+Provides REST endpoints for uploading and managing documents.
+"""
+
+from fastapi import APIRouter, HTTPException, File, UploadFile, Form, Query, Depends, Path
+from pydantic import BaseModel, Field
+from typing import List, Optional, Any
+from datetime import datetime
+import logging
+
+from ingestion.service import TextIngestionService
+from embedding.embedder import EmbeddingModel
+from vector_db.client import get_qdrant_client
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/ingest", tags=["Document Ingestion"])
+
+# Global ingestion service instance
+_ingestion_service: Optional[TextIngestionService] = None
+
+
+def get_ingestion_service() -> TextIngestionService:
+    """Get or create ingestion service."""
+    global _ingestion_service
+    
+    if _ingestion_service is None:
+        try:
+            embedding_model = EmbeddingModel()
+            print("Initialized embedding model for ingestion service.")
+            _ingestion_service = TextIngestionService(
+                collection_name="documents",
+                chunk_size=512,
+                chunk_overlap=50,
+                embedding_model=embedding_model,
+            )
+            print("Ingestion service created successfully.")
+        except Exception as e:
+            logger.error(f"Failed to initialize ingestion service: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Ingestion service initialization failed"
+            )
+    
+    return _ingestion_service
+
+
+# ==================== Pydantic Models ====================
+
+class IngestTextRequest(BaseModel):
+    """Request model for text ingestion."""
+    text: str = Field(..., description="The text content to ingest")
+    filename: str = Field(..., description="Name of the document")
+    source: Optional[str] = Field("upload", description="Source of the document")
+    metadata: Optional[dict] = Field(None, description="Additional metadata")
+
+
+class DocumentInfo(BaseModel):
+    """Document information response."""
+    id: int
+    filename: str
+    source: str
+    status: str
+    total_chunks: int
+    text_length: int
+    created_at: str
+    updated_at: str
+    chunks: Optional[List[dict]] = None
+
+
+class DocumentListItem(BaseModel):
+    """Document list item."""
+    id: int
+    filename: str
+    source: str
+    status: str
+    total_chunks: int
+    text_length: int
+    created_at: str
+
+
+class IngestionResponse(BaseModel):
+    """Response for ingestion operation."""
+    success: bool = Field(..., description="Whether operation was successful")
+    message: str = Field(..., description="Operation message")
+    document_id: Optional[int] = Field(None, description="ID of ingested document")
+
+
+class SearchResult(BaseModel):
+    """Search result item."""
+    vector_id: int
+    score: float
+    chunk_id: int
+    document_id: int
+    chunk_index: int
+    text: str
+    metadata: dict
+
+
+class SearchResponse(BaseModel):
+    """Response for document search."""
+    query: str
+    results: List[SearchResult]
+    total: int
+
+
+class DocumentListResponse(BaseModel):
+    """Response for document listing."""
+    documents: List[DocumentListItem]
+    total: int
+
+
+# ==================== Endpoints ====================
+
+@router.post("/text", response_model=IngestionResponse, summary="Ingest text content")
+async def ingest_text(
+    request: IngestTextRequest,
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> IngestionResponse:
+    """
+    Ingest plain text content.
+    
+    Chunks the text, generates embeddings, and stores in both SQL database and Qdrant.
+    
+    Args:
+        request: IngestTextRequest containing text, filename, and metadata
+        service: Ingestion service instance
+        
+    Returns:
+        IngestionResponse with document ID and status
+    """
+    try:
+        document_id, message = service.ingest_text(
+            text_content=request.text,
+            filename=request.filename,
+            source=request.source,
+            metadata=request.metadata,
+        )
+        
+        if document_id is None:
+            raise HTTPException(status_code=400, detail=message)
+        
+        return IngestionResponse(
+            success=True,
+            message=message,
+            document_id=document_id,
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Ingestion error: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Ingestion failed: {str(e)}"
+        )
+
+
+@router.post("/file", response_model=IngestionResponse, summary="Ingest uploaded file")
+async def ingest_file(
+    file: UploadFile = File(..., description="Text file to ingest"),
+    source: str = Form("upload", description="Source identifier"),
+    metadata: Optional[str] = Form(None, description="JSON metadata"),
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> IngestionResponse:
+    """
+    Ingest a text file.
+    
+    Args:
+        file: Uploaded text file
+        source: Source identifier
+        metadata: Optional JSON metadata
+        service: Ingestion service instance
+        
+    Returns:
+        IngestionResponse with document ID and status
+    """
+    try:
+        import json
+        
+        # Read file content
+        content = await file.read()
+        text = content.decode('utf-8')
+        
+        # Parse metadata if provided
+        metadata_dict = None
+        if metadata:
+            try:
+                metadata_dict = json.loads(metadata)
+            except json.JSONDecodeError:
+                raise HTTPException(status_code=400, detail="Invalid metadata JSON")
+        
+        # Ingest the text
+        document_id, message = service.ingest_text(
+            text_content=text,
+            filename=file.filename or "uploaded_file",
+            source=source,
+            metadata=metadata_dict,
+        )
+        
+        if document_id is None:
+            raise HTTPException(status_code=400, detail=message)
+        
+        return IngestionResponse(
+            success=True,
+            message=message,
+            document_id=document_id,
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"File ingestion error: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"File ingestion failed: {str(e)}"
+        )
+
+
+@router.get("/documents/{document_id}", response_model=DocumentInfo, summary="Get document info")
+async def get_document(
+    document_id: int = Path(..., description="Document ID"),
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> DocumentInfo:
+    """
+    Get information about a document and its chunks.
+    
+    Args:
+        document_id: ID of the document
+        service: Ingestion service instance
+        
+    Returns:
+        DocumentInfo with document details and chunks
+    """
+    try:
+        doc_info = service.get_document_info(document_id)
+        
+        if not doc_info:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        return DocumentInfo(**doc_info)
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting document: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve document")
+
+
+@router.get("/documents", response_model=DocumentListResponse, summary="List documents")
+async def list_documents(
+    status: Optional[str] = Query(None, description="Filter by status"),
+    source: Optional[str] = Query(None, description="Filter by source"),
+    limit: int = Query(100, ge=1, le=1000, description="Number of results"),
+    offset: int = Query(0, ge=0, description="Result offset"),
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> DocumentListResponse:
+    """
+    List ingested documents with optional filtering.
+    
+    Args:
+        status: Filter by status (pending, processing, completed, failed)
+        source: Filter by source (upload, url, api)
+        limit: Maximum number of results
+        offset: Result offset for pagination
+        service: Ingestion service instance
+        
+    Returns:
+        DocumentListResponse with document list
+    """
+    try:
+        documents = service.list_documents(
+            status=status,
+            source=source,
+            limit=limit,
+            offset=offset,
+        ) 
+        return DocumentListResponse(
+            documents=[DocumentListItem(**doc) for doc in documents],
+            total=len(documents),
+        )
+    
+    except Exception as e:
+        logger.error(f"Error listing documents: {e}")
+        raise HTTPException(status_code=500, detail="Failed to list documents")
+
+
+@router.delete("/documents/{document_id}", response_model=IngestionResponse, summary="Delete document")
+async def delete_document(
+    document_id: int = Path(..., description="Document ID to delete"),
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> IngestionResponse:
+    """
+    Delete a document and all its chunks.
+    
+    Args:
+        document_id: ID of the document to delete
+        service: Ingestion service instance
+        
+    Returns:
+        IngestionResponse with deletion status
+    """
+    try:
+        success, message = service.delete_document(document_id)
+        
+        if not success:
+            raise HTTPException(status_code=404, detail=message)
+        
+        return IngestionResponse(
+            success=True,
+            message=message,
+            document_id=document_id,
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting document: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete document")
+
+
+@router.post("/search", response_model=SearchResponse, summary="Search documents")
+async def search_documents(
+    query: str = Query(..., description="Search query"),
+    limit: int = Query(10, ge=1, le=100, description="Maximum results"),
+    threshold: float = Query(0.5, ge=0.0, le=1.0, description="Minimum similarity score"),
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> SearchResponse:
+    """
+    Search for similar document chunks.
+    
+    Uses semantic search with embeddings.
+    
+    Args:
+        query: Search query text
+        limit: Maximum number of results
+        threshold: Minimum similarity score (0-1)
+        service: Ingestion service instance
+        
+    Returns:
+        SearchResponse with matching chunks
+    """
+    try:
+        results = service.search_documents(
+            query_text=query,
+            limit=limit,
+            score_threshold=threshold,
+        )
+        
+        return SearchResponse(
+            query=query,
+            results=[SearchResult(**result) for result in results],
+            total=len(results),
+        )
+    
+    except Exception as e:
+        logger.error(f"Search error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Search failed")
+
+
+@router.get("/status", summary="Get ingestion service status")
+async def get_status(
+    service: TextIngestionService = Depends(get_ingestion_service)
+) -> dict:
+    """
+    Get status of ingestion service and vector database.
+    
+    Returns:
+        Dictionary with service status information
+    """
+    try:
+        qdrant = get_qdrant_client()
+        
+        return {
+            "ingestion_service": "operational",
+            "vector_db_connected": qdrant.is_connected(),
+            "collections": qdrant.list_collections(),
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+    
+    except Exception as e:
+        logger.error(f"Error getting status: {e}")
+        return {
+            "ingestion_service": "error",
+            "vector_db_connected": False,
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat(),
+        }
