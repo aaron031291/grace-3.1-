@@ -38,6 +38,17 @@ class Settings:
     DATABASE_PATH: str = os.getenv("DATABASE_PATH", str(BACKEND_DIR / "data" / "grace.db"))
     DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "false").lower() == "true"
     
+    # ==================== Qdrant Configuration ====================
+    QDRANT_HOST: str = os.getenv("QDRANT_HOST", "localhost")
+    QDRANT_PORT: int = int(os.getenv("QDRANT_PORT", "6333"))
+    QDRANT_API_KEY: str = os.getenv("QDRANT_API_KEY", "")
+    QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "documents")
+    QDRANT_TIMEOUT: int = int(os.getenv("QDRANT_TIMEOUT", "30"))
+    
+    # ==================== Ingestion Configuration ====================
+    INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))
+    INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
+    
     # ==================== Application Configuration ====================
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
@@ -92,6 +103,12 @@ class Settings:
             "DATABASE_NAME": cls.DATABASE_NAME,
             "DATABASE_PATH": cls.DATABASE_PATH,
             "DATABASE_ECHO": cls.DATABASE_ECHO,
+            "QDRANT_HOST": cls.QDRANT_HOST,
+            "QDRANT_PORT": cls.QDRANT_PORT,
+            "QDRANT_COLLECTION_NAME": cls.QDRANT_COLLECTION_NAME,
+            "QDRANT_TIMEOUT": cls.QDRANT_TIMEOUT,
+            "INGESTION_CHUNK_SIZE": cls.INGESTION_CHUNK_SIZE,
+            "INGESTION_CHUNK_OVERLAP": cls.INGESTION_CHUNK_OVERLAP,
             "DEBUG": cls.DEBUG,
             "LOG_LEVEL": cls.LOG_LEVEL,
             "MAX_NUM_PREDICT": cls.MAX_NUM_PREDICT,

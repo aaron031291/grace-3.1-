@@ -327,7 +327,7 @@ class EnvironmentInitializer:
         Returns:
             bool: True if model exists or was downloaded successfully
         """
-        embedding_dir = self.backend_dir / "models" / "embeddings" / "qwen_4b"
+        embedding_dir = self.backend_dir / "models" / "embedding" / "qwen_4b"
         
         print(f"\n🔍 Checking embedding model at {embedding_dir}")
         
