@@ -186,6 +186,16 @@ async def lifespan(app: FastAPI):
         print(f"⚠ Database initialization error: {e}")
         raise
     
+    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
+    try:
+        from embedding.embedder import get_embedding_model
+        print("\n[STARTUP] Pre-initializing embedding model...")
+        embedding_model = get_embedding_model()
+        print("[STARTUP] ✓ Embedding model loaded and ready\n")
+    except Exception as e:
+        print(f"[STARTUP] ⚠ Warning: Could not pre-load embedding model: {e}")
+        print("[STARTUP] ⚠ Model will be loaded on first use\n")
+    
     # Check Ollama
     try:
         client = get_ollama_client()
