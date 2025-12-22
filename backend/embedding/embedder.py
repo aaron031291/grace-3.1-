@@ -18,7 +18,15 @@ except ImportError:
 
 
 class EmbeddingModel:
-    """Wrapper for Qwen3-Embedding-4B model for text embeddings."""
+    """
+    Wrapper for Qwen3-Embedding-4B model for text embeddings.
+    
+    IMPORTANT: Use get_embedding_model() function to get instances.
+    Direct instantiation should only happen via the singleton factory.
+    """
+    
+    # Class variable to track instances
+    _instance_count = 0
     
     def __init__(
         self,
@@ -30,12 +38,28 @@ class EmbeddingModel:
         """
         Initialize the embedding model.
         
+        NOTE: This should only be called by get_embedding_model() singleton factory.
+        
         Args:
             model_path: Path to the model directory. If None, uses default from settings
             device: Device to run model on ('cuda', 'cpu'). Defaults to 'cpu' for stability
             normalize_embeddings: Whether to normalize embeddings to unit length
             max_length: Maximum sequence length. Model supports up to 32k tokens
         """
+        # Track instance creation
+        EmbeddingModel._instance_count += 1
+        instance_num = EmbeddingModel._instance_count
+        
+        # SAFETY CHECK: Should never create more than 1 instance
+        if instance_num > 1:
+            print(f"⚠️  WARNING: EmbeddingModel instance #{instance_num} created!")
+            print(f"⚠️  This should not happen - use get_embedding_model() singleton instead!")
+            print(f"⚠️  Stack trace:")
+            import traceback
+            traceback.print_stack()
+        
+        print(f"[EMBEDDING] Creating EmbeddingModel instance #{instance_num}...")
+        
         self.normalize_embeddings = normalize_embeddings
         self.max_length = max_length or 32768  # 32k context length
         
@@ -366,8 +390,9 @@ class EmbeddingModel:
         }
 
 
-# Global instance for convenience
-_embedding_model = None
+# Global instance for convenience - STRICTLY ENFORCED SINGLETON
+_embedding_model_instance = None  # Renamed for clarity
+_embedding_model_loaded = False  # Track whether model has been loaded
 
 
 def get_embedding_model(
@@ -379,24 +404,35 @@ def get_embedding_model(
     Get or create the global embedding model instance (singleton pattern).
     The model is loaded ONLY ONCE on first call and reused thereafter.
     
+    CRITICAL: This is the ONLY way to get the embedding model.
+    Direct EmbeddingModel() instantiation should never happen in production code.
+    
     Args:
-        model_path: Path to model (only used on first initialization)
-        device: Device to use (only used on first initialization)
+        model_path: Path to model (only used on first initialization, ignored on subsequent calls)
+        device: Device to use (only used on first initialization, ignored on subsequent calls)
         reset: Force reload the model (not recommended in production)
         
     Returns:
-        EmbeddingModel instance
+        EmbeddingModel instance (always the same singleton instance)
     """
-    global _embedding_model
+    global _embedding_model_instance, _embedding_model_loaded
     
-    if _embedding_model is None or reset:
-        print(f"[EMBEDDING] Creating new embedding model instance (singleton)...")
-        _embedding_model = EmbeddingModel(model_path=model_path, device=device)
-        print(f"[EMBEDDING] ✓ Embedding model singleton created and ready")
-    else:
-        print(f"[EMBEDDING] ✓ Reusing existing embedding model instance (already loaded)")
+    # FAST PATH: If model is already loaded, return immediately without logging
+    if _embedding_model_loaded and not reset:
+        return _embedding_model_instance
     
-    return _embedding_model
+    # SLOW PATH: First initialization or reset requested
+    if _embedding_model_instance is not None and not reset:
+        return _embedding_model_instance
+    
+    print(f"[EMBEDDING] Creating new embedding model instance (singleton)...")
+    print(f"[EMBEDDING]   model_path={model_path}, device={device}, reset={reset}")
+    
+    _embedding_model_instance = EmbeddingModel(model_path=model_path, device=device)
+    _embedding_model_loaded = True
+    
+    print(f"[EMBEDDING] ✓ Embedding model singleton created and ready")
+    return _embedding_model_instance
 
 
 def embed(
