@@ -2,6 +2,7 @@ annotated-doc
 annotated-types
 anyio
 certifi
+chardet
 charset-normalizer
 click
 coverage

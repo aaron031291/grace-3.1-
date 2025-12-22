@@ -127,6 +127,10 @@ class TextIngestionService:
         text_content: str,
         filename: str,
         source: str = "upload",
+        upload_method: str = "ui-upload",
+        trust_score: float = 0.0,
+        description: Optional[str] = None,
+        tags: Optional[List[str]] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Tuple[Optional[int], str]:
         """
@@ -136,6 +140,10 @@ class TextIngestionService:
             text_content: The text content to ingest
             filename: Name of the file/document
             source: Source of the document (e.g., 'upload', 'url', 'api')
+            upload_method: How the document was uploaded (ui-upload, ui-paste, api, etc.)
+            trust_score: Trustworthiness score of the source (0.0-1.0)
+            description: Optional description of the document
+            tags: Optional list of tags for categorization
             metadata: Additional metadata dictionary
             
         Returns:
@@ -156,20 +164,32 @@ class TextIngestionService:
                 logger.warning(f"Document with hash {content_hash} already exists")
                 return existing.id, "Document already ingested"
             
+            # Prepare document metadata
+            doc_metadata = {
+                "user_metadata": metadata or {},
+                "original_source": source,
+                "upload_timestamp": datetime.utcnow().isoformat(),
+            }
+            
             # Create document record
             document = Document(
                 filename=filename,
                 original_filename=filename,
                 source=source,
+                upload_method=upload_method,
+                trust_score=min(max(trust_score, 0.0), 1.0),  # Clamp between 0.0 and 1.0
+                description=description,
+                tags=json.dumps(tags) if tags else None,
                 content_hash=content_hash,
                 status="processing",
                 extracted_text_length=len(text_content),
+                document_metadata=json.dumps(doc_metadata),
             )
             db.add(document)
             db.flush()  # Get the ID without committing
             document_id = document.id
             
-            logger.info(f"Created document record: {document_id} ({filename})")
+            logger.info(f"Created document record: {document_id} ({filename}), upload_method={upload_method}, trust_score={trust_score}")
             
             # Chunk the text
             chunks = self.chunker.chunk_text(text_content)
@@ -404,10 +424,15 @@ class TextIngestionService:
                     "id": doc.id,
                     "filename": doc.filename,
                     "source": doc.source,
+                    "upload_method": doc.upload_method,
+                    "trust_score": doc.trust_score,
+                    "description": doc.description,
+                    "tags": json.loads(doc.tags) if doc.tags else None,
                     "status": doc.status,
                     "total_chunks": doc.total_chunks,
                     "text_length": doc.extracted_text_length,
                     "created_at": doc.created_at.isoformat(),
+                    "updated_at": doc.updated_at.isoformat(),
                 }
                 for doc in documents
             ]

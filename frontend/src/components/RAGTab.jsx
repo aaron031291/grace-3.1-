@@ -49,6 +49,12 @@ export default function RAGTab() {
       formData.append("file", file);
       formData.append("source", "ui-upload");
 
+      // Add optional metadata from form if available
+      const trustScoreInput = document.getElementById("file-trust-score-input");
+      if (trustScoreInput?.value) {
+        formData.append("trust_score", trustScoreInput.value);
+      }
+
       const response = await fetch(`${API_BASE}/ingest/file`, {
         method: "POST",
         body: formData,
@@ -77,6 +83,8 @@ export default function RAGTab() {
   const handlePasteText = async () => {
     const textInput = document.getElementById("text-input");
     const filenameInput = document.getElementById("filename-input");
+    const trustScoreInput = document.getElementById("trust-score-input");
+    const descriptionInput = document.getElementById("description-input");
 
     if (!textInput?.value || !filenameInput?.value) {
       setError("Please enter both text and filename");
@@ -94,6 +102,9 @@ export default function RAGTab() {
           text: textInput.value,
           filename: filenameInput.value,
           source: "ui-paste",
+          upload_method: "ui-paste",
+          trust_score: parseFloat(trustScoreInput?.value || 0),
+          description: descriptionInput?.value || null,
         }),
       });
 
@@ -130,15 +141,15 @@ export default function RAGTab() {
 
     try {
       const response = await fetch(
-        `${API_BASE}/ingest/search?query=${encodeURIComponent(
+        `${API_BASE}/retrieve/search?query=${encodeURIComponent(
           searchQuery
-        )}&limit=10`,
+        )}&limit=5&threshold=0.3`,
         { method: "POST" }
       );
 
       if (!response.ok) throw new Error("Search failed");
       const data = await response.json();
-      setSearchResults(data.results || []);
+      setSearchResults(data.chunks || []);
     } catch (err) {
       setError(err.message);
       console.error("Search error:", err);
@@ -271,6 +282,34 @@ export default function RAGTab() {
                         <span>{doc.source}</span>
                       </div>
                       <div className="info-row">
+                        <span className="label">Upload Method:</span>
+                        <span className="badge">
+                          {doc.upload_method || "unknown"}
+                        </span>
+                      </div>
+                      <div className="info-row">
+                        <span className="label">Trust Score:</span>
+                        <span
+                          className="trust-score"
+                          style={{
+                            color:
+                              doc.trust_score >= 0.7
+                                ? "#4CAF50"
+                                : doc.trust_score >= 0.4
+                                ? "#FF9800"
+                                : "#f44336",
+                          }}
+                        >
+                          {(doc.trust_score || 0).toFixed(2)} / 1.0
+                        </span>
+                      </div>
+                      {doc.description && (
+                        <div className="info-row">
+                          <span className="label">Description:</span>
+                          <span>{doc.description}</span>
+                        </div>
+                      )}
+                      <div className="info-row">
                         <span className="label">Chunks:</span>
                         <span>{doc.total_chunks}</span>
                       </div>
@@ -334,7 +373,8 @@ export default function RAGTab() {
                   <div key={idx} className="search-result-card">
                     <div className="result-header">
                       <span className="score">
-                        Score: {(result.score * 100).toFixed(0)}%
+                        Score:{" "}
+                        {result.score ? (result.score * 100).toFixed(0) : "?"}%
                       </span>
                       <span className="doc-ref">
                         {result.metadata?.filename ||
@@ -377,6 +417,20 @@ export default function RAGTab() {
                   <p className="file-hint">TXT, MD, PDF (up to 10MB)</p>
                 </label>
               </div>
+              <div className="metadata-section">
+                <h4>Metadata (Optional)</h4>
+                <input
+                  type="number"
+                  id="file-trust-score-input"
+                  placeholder="Trust Score (0.0-1.0)"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  defaultValue="0"
+                  className="text-input"
+                  disabled={uploading}
+                />
+              </div>
             </div>
 
             {/* Text Paste Section */}
@@ -396,6 +450,27 @@ export default function RAGTab() {
                 rows="8"
                 disabled={uploading}
               />
+              <div className="metadata-section">
+                <h4>Metadata (Optional)</h4>
+                <input
+                  type="number"
+                  id="trust-score-input"
+                  placeholder="Trust Score (0.0-1.0)"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  defaultValue="0"
+                  className="text-input"
+                  disabled={uploading}
+                />
+                <textarea
+                  id="description-input"
+                  placeholder="Description (optional)"
+                  className="text-area"
+                  rows="3"
+                  disabled={uploading}
+                />
+              </div>
               <button
                 onClick={handlePasteText}
                 disabled={uploading}
