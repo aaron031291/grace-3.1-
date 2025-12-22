@@ -18,7 +18,9 @@ from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
 from api.ingest import router as ingest_router
+from api.retrieve import router as retrieve_router, get_document_retriever
 from vector_db.client import get_qdrant_client
+from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
 try:
     from settings import settings
@@ -232,6 +234,7 @@ app.add_middleware(
 
 # Register API routers
 app.include_router(ingest_router)
+app.include_router(retrieve_router)
 
 
 # ==================== Health Check Endpoint ====================
@@ -326,9 +329,11 @@ async def generate_title(request: TitleGenerationRequest):
 @app.post("/chat", response_model=ChatResponse, tags=["Chat"])
 async def chat(request: ChatRequest):
     """
-    Chat endpoint using Ollama models.
+    Chat endpoint using Ollama models with RAG enforcement.
+    ENFORCES RAG-FIRST: Only responds if relevant knowledge is found in the knowledge base.
     
     Accepts a list of messages and generates a response using the specified model.
+    Uses RAG retrieval to augment responses with knowledge base content.
     
     Args:
         request: ChatRequest containing messages and generation parameters
@@ -337,7 +342,7 @@ async def chat(request: ChatRequest):
         ChatResponse: The generated response with metadata
         
     Raises:
-        HTTPException: If Ollama is not running or model is not available
+        HTTPException: 404 if no relevant knowledge found, 503 if services unavailable
     """
     try:
         # Get the Ollama client
@@ -363,22 +368,82 @@ async def chat(request: ChatRequest):
                 detail=f"Model '{model_name}' not found. Available models: {[m.name for m in client.get_all_models()]}"
             )
         
-        # Convert Pydantic models to dicts for Ollama client
-        messages = [
-            {"role": msg.role, "content": msg.content}
-            for msg in request.messages
-        ]
+        # ==================== RAG-FIRST RETRIEVAL ====================
+        # Get the last user message as the query
+        user_query = ""
+        for msg in reversed(request.messages):
+            if msg.role == "user":
+                user_query = msg.content
+                break
         
-        # Generate response
+        if not user_query:
+            raise HTTPException(
+                status_code=400,
+                detail="No user message found in conversation"
+            )
+        
+        # Retrieve RAG context
+        rag_context = ""
+        try:
+            retriever = get_document_retriever()
+            retrieval_result = retriever.retrieve(
+                query=user_query,
+                limit=5,
+                include_metadata=False
+            )
+            
+            if retrieval_result:
+                rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
+                rag_context = rag_context.strip()
+        except Exception as e:
+            print(f"⚠ RAG retrieval error: {str(e)}")
+        
+        # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
+        # Core enforcement: No knowledge = reject response
+        if not rag_context:
+            raise HTTPException(
+                status_code=404,
+                detail="I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
+            )
+        
+        # Prepare messages with RAG context
+        messages = []
+        
+        # Add strict system prompt
+        messages.append({
+            "role": "system",
+            "content": build_rag_system_prompt()
+        })
+        
+        # Add conversation history, injecting RAG context into the last user message
+        for i, msg in enumerate(request.messages):
+            if i == len(request.messages) - 1 and msg.role == "user":
+                # Last message is user query - inject RAG context
+                augmented_content = build_rag_prompt(msg.content, rag_context)
+                messages.append({
+                    "role": msg.role,
+                    "content": augmented_content
+                })
+            else:
+                messages.append({
+                    "role": msg.role,
+                    "content": msg.content
+                })
+        
+        # Generate response with strict constraints
         start_time = time.time()
+        temperature = request.temperature if request.temperature is not None else 0.7
+        # Use lower temperature to enforce deterministic, knowledge-based responses
+        temperature = min(temperature, 0.3)  # Cap temperature at 0.3 for strict RAG
         max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
+        
         response = client.chat(
             model=model_name,
             messages=messages,
             stream=False,
-            temperature=request.temperature,
-            top_p=request.top_p,
-            top_k=request.top_k,
+            temperature=temperature,
+            top_p=request.top_p if request.top_p else 0.5,  # Lower top_p
+            top_k=request.top_k if request.top_k else 10,   # Lower top_k
             num_predict=max_num_predict
         )
         generation_time = time.time() - start_time
@@ -761,6 +826,8 @@ async def get_chat_history(chat_id: int, skip: int = 0, limit: int = 100, sessio
 async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(get_session)):
     """
     Send a prompt/message to a chat and get an AI-generated response.
+    ENFORCES RAG-FIRST RETRIEVAL: Rejects queries if no relevant knowledge is found.
+    Only uses information from the knowledge base, does not add external knowledge.
     
     Args:
         chat_id: ID of the chat
@@ -769,6 +836,9 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         
     Returns:
         PromptResponse: The generated response with metadata
+        
+    Raises:
+        HTTPException: 404 if no relevant knowledge found, 503 if services unavailable
     """
     try:
         chat_repo = ChatRepository(session)
@@ -797,18 +867,61 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             content=request.content
         )
         
+        # ==================== RAG-FIRST RETRIEVAL ====================
+        # Retrieve RAG context for the user query - MANDATORY
+        rag_context = ""
+        try:
+            retriever = get_document_retriever()
+            retrieval_result = retriever.retrieve(
+                query=request.content,
+                limit=5,
+                include_metadata=False
+            )
+            
+            # Check if any relevant data was found
+            if retrieval_result:
+                rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
+                rag_context = rag_context.strip()
+        except Exception as e:
+            print(f"⚠ RAG retrieval error: {str(e)}")
+        
+        # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
+        # Core enforcement: No knowledge in database = reject response
+        if not rag_context:
+            # Delete the user message since we're rejecting the query
+            session.delete(user_message)
+            session.commit()
+            
+            raise HTTPException(
+                status_code=404,
+                detail="I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
+            )
+        
         # Get chat history for context
         chat_history = history_repo.get_by_chat(chat_id, skip=0, limit=100)
         
         # Prepare messages for Ollama
-        messages = [
-            {"role": msg.role, "content": msg.content}
-            for msg in chat_history
-        ]
+        messages = []
         
-        # Generate response
+        # Add strict system prompt that enforces knowledge-only responses
+        messages.append({
+            "role": "system",
+            "content": build_rag_system_prompt()
+        })
+        
+        # Add chat history (excluding the latest user message for now)
+        for msg in chat_history[:-1]:  # All messages except the last user message
+            messages.append({"role": msg.role, "content": msg.content})
+        
+        # Inject RAG context into the user message
+        augmented_content = build_rag_prompt(request.content, rag_context)
+        messages.append({"role": "user", "content": augmented_content})
+        
+        # Generate response with strict constraints
         start_time = time.time()
         temperature = request.temperature or chat.temperature
+        # Use lower temperature to enforce deterministic, knowledge-based responses
+        temperature = min(temperature, 0.3) if temperature else 0.1  # Cap temperature at 0.3 for strict RAG
         max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
         
         response_text = client.chat(
@@ -816,11 +929,14 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             messages=messages,
             stream=False,
             temperature=temperature,
-            top_p=request.top_p,
-            top_k=request.top_k,
+            top_p=request.top_p if request.top_p else 0.5,  # Lower top_p for deterministic output
+            top_k=request.top_k if request.top_k else 10,   # Lower top_k for stricter sampling
             num_predict=max_num_predict
         )
         generation_time = time.time() - start_time
+        
+        # Verify response is not a rejection/failure message from the model
+        response_text = response_text.strip()
         
         # Add assistant message to chat
         assistant_message = history_repo.add_message(

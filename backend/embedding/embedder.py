@@ -32,18 +32,25 @@ class EmbeddingModel:
         
         Args:
             model_path: Path to the model directory. If None, uses default from settings
-            device: Device to run model on ('cuda', 'cpu'). Auto-detected if None
+            device: Device to run model on ('cuda', 'cpu'). Defaults to 'cpu' for stability
             normalize_embeddings: Whether to normalize embeddings to unit length
             max_length: Maximum sequence length. Model supports up to 32k tokens
         """
         self.normalize_embeddings = normalize_embeddings
         self.max_length = max_length or 32768  # 32k context length
         
-        # Set device
+        # Set device - DEFAULT TO CPU to avoid CUDA memory issues
         if device is None:
             if USE_SETTINGS:
                 device = settings.EMBEDDING_DEVICE
-            device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+            # CRITICAL: Default to CPU to avoid out-of-memory errors
+            device = device or "cpu"
+        
+        # Force CPU if device not explicitly set and not available
+        if device == 'cuda' and not torch.cuda.is_available():
+            print("⚠ CUDA requested but not available, falling back to CPU")
+            device = 'cpu'
+        
         self.device = device
         
         # Determine model path
@@ -57,14 +64,35 @@ class EmbeddingModel:
         if not Path(model_path).exists():
             raise FileNotFoundError(f"Model path does not exist: {model_path}")
         
-        print(f"Loading embedding model from {model_path}")
-        print(f"Using device: {self.device}")
+        print(f"[EMBEDDING] ⏳ Instantiating EmbeddingModel class...")
+        print(f"[EMBEDDING]   Model path: {model_path}")
+        print(f"[EMBEDDING]   Device: {self.device}")
         
-        # Load the model
-        self.model = SentenceTransformer(model_path, device=self.device, trust_remote_code=True)
+        # Load the model with reduced memory footprint
+        try:
+            print(f"[EMBEDDING]   Loading model weights (this may take a moment)...")
+            self.model = SentenceTransformer(
+                model_path, 
+                device=self.device, 
+                trust_remote_code=True
+            )
+        except Exception as e:
+            print(f"⚠ Failed to load model on {self.device}: {e}")
+            print("Retrying with CPU...")
+            self.device = 'cpu'
+            self.model = SentenceTransformer(
+                model_path, 
+                device='cpu', 
+                trust_remote_code=True
+            )
+        
         self.model_path = model_path
         
-        print("✓ Embedding model loaded successfully")
+        print(f"[EMBEDDING] ✓ Model loaded successfully")
+        if self.device == 'cuda':
+            if torch.cuda.is_available():
+                print(f"[EMBEDDING]   GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
+                print(f"[EMBEDDING]   GPU Used: {torch.cuda.memory_allocated(0) / 1e9:.2f} GB")
     
     def __del__(self):
         """Destructor to unload model from VRAM."""
@@ -103,7 +131,7 @@ class EmbeddingModel:
         text: Union[str, List[str]],
         normalize: Optional[bool] = None,
         instruction: Optional[str] = None,
-        batch_size: int = 32,
+        batch_size: int = 8,
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
     ) -> Union[np.ndarray, torch.Tensor]:
@@ -114,7 +142,7 @@ class EmbeddingModel:
             text: Single text string or list of text strings
             normalize: Override default normalization setting for this call
             instruction: Optional instruction to guide the embedding (instruction-aware model)
-            batch_size: Batch size for processing large number of texts
+            batch_size: Batch size for processing (default 8 to prevent memory issues on CPU)
             convert_to_numpy: Convert output to numpy array
             convert_to_tensor: Convert output to torch tensor
             
@@ -131,14 +159,23 @@ class EmbeddingModel:
         if instruction:
             texts = [f"{instruction} {t}" for t in texts]
         
-        # Generate embeddings
+        # Reduce batch size on CPU to avoid memory issues
+        if self.device == 'cpu':
+            batch_size = min(batch_size, 8)  # Cap at 8 for CPU
+        
+        # Generate embeddings with smaller batch size
         embeddings = self.model.encode(
             texts,
             batch_size=batch_size,
             convert_to_numpy=convert_to_numpy,
             convert_to_tensor=convert_to_tensor,
             normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
+            show_progress_bar=False,  # Disable progress bar for API calls
         )
+        
+        # Clear torch cache if using CUDA
+        if self.device == 'cuda' and torch.cuda.is_available():
+            torch.cuda.empty_cache()
         
         # Return single embedding if input was single text
         if is_single_text:
@@ -339,12 +376,13 @@ def get_embedding_model(
     reset: bool = False,
 ) -> EmbeddingModel:
     """
-    Get or create the global embedding model instance.
+    Get or create the global embedding model instance (singleton pattern).
+    The model is loaded ONLY ONCE on first call and reused thereafter.
     
     Args:
         model_path: Path to model (only used on first initialization)
         device: Device to use (only used on first initialization)
-        reset: Force reload the model
+        reset: Force reload the model (not recommended in production)
         
     Returns:
         EmbeddingModel instance
@@ -352,7 +390,11 @@ def get_embedding_model(
     global _embedding_model
     
     if _embedding_model is None or reset:
+        print(f"[EMBEDDING] Creating new embedding model instance (singleton)...")
         _embedding_model = EmbeddingModel(model_path=model_path, device=device)
+        print(f"[EMBEDDING] ✓ Embedding model singleton created and ready")
+    else:
+        print(f"[EMBEDDING] ✓ Reusing existing embedding model instance (already loaded)")
     
     return _embedding_model
 

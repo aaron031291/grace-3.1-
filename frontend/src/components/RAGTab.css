@@ -480,6 +480,50 @@
   margin: 0;
 }
 
+/* Metadata Section Styles */
+.metadata-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  border-left: 3px solid #9ca3af;
+}
+
+.metadata-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metadata-section .text-input,
+.metadata-section .text-area {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.metadata-section .text-input:last-child,
+.metadata-section .text-area:last-child {
+  margin-bottom: 0;
+}
+
+/* Trust Score Display */
+.trust-score {
+  font-weight: 600;
+  font-family: "Courier New", monospace;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .rag-container {
@@ -503,5 +547,10 @@
   .result-meta {
     flex-direction: column;
     gap: 0.25rem;
+  }
+
+  .metadata-section {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
   }
 }

@@ -10,7 +10,7 @@ from datetime import datetime
 import logging
 
 from ingestion.service import TextIngestionService
-from embedding.embedder import EmbeddingModel
+from embedding.embedder import get_embedding_model
 from vector_db.client import get_qdrant_client
 
 logger = logging.getLogger(__name__)
@@ -28,15 +28,17 @@ def get_ingestion_service() -> TextIngestionService:
     
     if _ingestion_service is None:
         try:
-            embedding_model = EmbeddingModel()
-            print("Initialized embedding model for ingestion service.")
+            print("[INGEST] Initializing ingestion service...")
+            # Use singleton instance to avoid loading model multiple times
+            embedding_model = get_embedding_model()
+            print("[INGEST] ✓ Got embedding model (singleton)")
             _ingestion_service = TextIngestionService(
                 collection_name="documents",
                 chunk_size=512,
                 chunk_overlap=50,
                 embedding_model=embedding_model,
             )
-            print("Ingestion service created successfully.")
+            print("[INGEST] ✓ Ingestion service created successfully")
         except Exception as e:
             logger.error(f"Failed to initialize ingestion service: {e}")
             raise HTTPException(
@@ -54,6 +56,10 @@ class IngestTextRequest(BaseModel):
     text: str = Field(..., description="The text content to ingest")
     filename: str = Field(..., description="Name of the document")
     source: Optional[str] = Field("upload", description="Source of the document")
+    upload_method: Optional[str] = Field("ui-paste", description="How the document was uploaded (ui-upload, ui-paste, api, etc.)")
+    trust_score: Optional[float] = Field(0.0, ge=0.0, le=1.0, description="Trustworthiness of source (0.0-1.0)")
+    description: Optional[str] = Field(None, description="Optional description of the document")
+    tags: Optional[List[str]] = Field(None, description="Optional tags for categorization")
     metadata: Optional[dict] = Field(None, description="Additional metadata")
 
 
@@ -62,6 +68,10 @@ class DocumentInfo(BaseModel):
     id: int
     filename: str
     source: str
+    upload_method: str
+    trust_score: float
+    description: Optional[str]
+    tags: Optional[List[str]]
     status: str
     total_chunks: int
     text_length: int
@@ -75,6 +85,10 @@ class DocumentListItem(BaseModel):
     id: int
     filename: str
     source: str
+    upload_method: str
+    trust_score: float
+    description: Optional[str]
+    tags: Optional[List[str]]
     status: str
     total_chunks: int
     text_length: int
@@ -132,10 +146,15 @@ async def ingest_text(
         IngestionResponse with document ID and status
     """
     try:
+        print("Ingesting text document...")
         document_id, message = service.ingest_text(
             text_content=request.text,
             filename=request.filename,
             source=request.source,
+            upload_method=request.upload_method,
+            trust_score=request.trust_score,
+            description=request.description,
+            tags=request.tags,
             metadata=request.metadata,
         )
         
@@ -162,6 +181,7 @@ async def ingest_text(
 async def ingest_file(
     file: UploadFile = File(..., description="Text file to ingest"),
     source: str = Form("upload", description="Source identifier"),
+    trust_score: float = Form(0.0, ge=0.0, le=1.0, description="Trust score (0.0-1.0)"),
     metadata: Optional[str] = Form(None, description="JSON metadata"),
     service: TextIngestionService = Depends(get_ingestion_service)
 ) -> IngestionResponse:
@@ -171,6 +191,7 @@ async def ingest_file(
     Args:
         file: Uploaded text file
         source: Source identifier
+        trust_score: Trustworthiness of source (0.0-1.0)
         metadata: Optional JSON metadata
         service: Ingestion service instance
         
@@ -179,10 +200,28 @@ async def ingest_file(
     """
     try:
         import json
+        import chardet
         
         # Read file content
         content = await file.read()
-        text = content.decode('utf-8')
+        
+        # Detect and decode with fallback encodings
+        try:
+            text = content.decode('utf-8')
+        except UnicodeDecodeError:
+            # Try to detect encoding
+            detected = chardet.detect(content)
+            encoding = detected.get('encoding') if detected else None
+            
+            if encoding:
+                try:
+                    text = content.decode(encoding)
+                except (UnicodeDecodeError, LookupError):
+                    # Fall back to latin-1 which accepts all byte sequences
+                    text = content.decode('latin-1')
+            else:
+                # Fall back to latin-1 if detection fails
+                text = content.decode('latin-1')
         
         # Parse metadata if provided
         metadata_dict = None
@@ -197,6 +236,8 @@ async def ingest_file(
             text_content=text,
             filename=file.filename or "uploaded_file",
             source=source,
+            upload_method="ui-upload",
+            trust_score=trust_score,
             metadata=metadata_dict,
         )
         
