@@ -65,6 +65,7 @@ class ChatResponse(BaseModel):
     generation_time: float = Field(..., description="Time taken to generate response in seconds")
     prompt_tokens: Optional[int] = Field(None, description="Number of tokens in the prompt")
     response_tokens: Optional[int] = Field(None, description="Number of tokens in the response")
+    sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
 
 
 class HealthResponse(BaseModel):
@@ -149,6 +150,7 @@ class PromptResponse(BaseModel):
     generation_time: float = Field(..., description="Time taken to generate")
     tokens_used: Optional[int] = Field(None, description="Tokens used in response")
     total_tokens_in_chat: int = Field(..., description="Total tokens in chat so far")
+    sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
 
 
 # ==================== Lifespan ====================
@@ -394,17 +396,36 @@ async def chat(request: ChatRequest):
         
         # Retrieve RAG context
         rag_context = ""
+        sources = []  # Track source chunks
         try:
             retriever = get_document_retriever()
             retrieval_result = retriever.retrieve(
                 query=user_query,
                 limit=5,
-                include_metadata=False
+                include_metadata=True  # Include metadata for source attribution
             )
             
             if retrieval_result:
                 rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
                 rag_context = rag_context.strip()
+                
+                # Prepare sources for response
+                sources = [
+                    {
+                        "text": chunk["text"],
+                        "score": chunk.get("score", 0),
+                        "chunk_id": chunk.get("chunk_id"),
+                        "document_id": chunk.get("document_id"),
+                        "filename": chunk.get("metadata", {}).get("filename", "Unknown"),
+                        "source": chunk.get("metadata", {}).get("source", "Unknown"),
+                        "upload_method": chunk.get("metadata", {}).get("upload_method", "Unknown"),
+                        "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
+                        "trust_score": chunk.get("metadata", {}).get("trust_score", 0.0),
+                        "created_at": chunk.get("metadata", {}).get("created_at"),
+                        "description": chunk.get("metadata", {}).get("description"),
+                    }
+                    for chunk in retrieval_result
+                ]
         except Exception as e:
             print(f"⚠ RAG retrieval error: {str(e)}")
         
@@ -463,7 +484,8 @@ async def chat(request: ChatRequest):
             model=model_name,
             generation_time=generation_time,
             prompt_tokens=None,
-            response_tokens=None
+            response_tokens=None,
+            sources=sources  # Include source chunks
         )
     
     except HTTPException:
@@ -880,18 +902,37 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         # ==================== RAG-FIRST RETRIEVAL ====================
         # Retrieve RAG context for the user query - MANDATORY
         rag_context = ""
+        sources = []  # Track source chunks
         try:
             retriever = get_document_retriever()
             retrieval_result = retriever.retrieve(
                 query=request.content,
                 limit=5,
-                include_metadata=False
+                include_metadata=True  # Include metadata for source attribution
             )
             
             # Check if any relevant data was found
             if retrieval_result:
                 rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
                 rag_context = rag_context.strip()
+                
+                # Prepare sources for response
+                sources = [
+                    {
+                        "text": chunk["text"],
+                        "score": chunk.get("score", 0),
+                        "chunk_id": chunk.get("chunk_id"),
+                        "document_id": chunk.get("document_id"),
+                        "filename": chunk.get("metadata", {}).get("filename", "Unknown"),
+                        "source": chunk.get("metadata", {}).get("source", "Unknown"),
+                        "upload_method": chunk.get("metadata", {}).get("upload_method", "Unknown"),
+                        "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
+                        "trust_score": chunk.get("metadata", {}).get("trust_score", 0.0),
+                        "created_at": chunk.get("metadata", {}).get("created_at"),
+                        "description": chunk.get("metadata", {}).get("description"),
+                    }
+                    for chunk in retrieval_result
+                ]
         except Exception as e:
             print(f"⚠ RAG retrieval error: {str(e)}")
         
@@ -970,7 +1011,8 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             model=chat.model,
             generation_time=generation_time,
             tokens_used=None,
-            total_tokens_in_chat=total_tokens
+            total_tokens_in_chat=total_tokens,
+            sources=sources  # Include source chunks for attribution
         )
     except HTTPException:
         raise

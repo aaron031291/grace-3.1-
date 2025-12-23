@@ -120,9 +120,13 @@ class DocumentRetriever:
                                 "document_id": chunk.document_id,
                                 "filename": document.filename if document else "Unknown",
                                 "source": document.source if document else "Unknown",
+                                "upload_method": document.upload_method if document else "Unknown",
                                 "chunk_index": chunk.chunk_index,
                                 "char_start": chunk.char_start,
                                 "char_end": chunk.char_end,
+                                "trust_score": document.trust_score if document else 0.0,
+                                "created_at": document.created_at.isoformat() if document and document.created_at else None,
+                                "description": document.description if document else None,
                             }
                         
                         enriched_results.append(result_dict)
