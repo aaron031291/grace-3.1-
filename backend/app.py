@@ -19,6 +19,7 @@ from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
 from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router, get_document_retriever
+from api.version_control import router as version_control_router
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -247,6 +248,7 @@ app.add_middleware(
 # Register API routers
 app.include_router(ingest_router)
 app.include_router(retrieve_router)
+app.include_router(version_control_router)
 
 
 # ==================== Health Check Endpoint ====================

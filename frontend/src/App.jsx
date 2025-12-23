@@ -3,6 +3,7 @@ import "./App.css";
 import ChatTab from "./components/ChatTab";
 import RAGTab from "./components/RAGTab";
 import MonitoringTab from "./components/MonitoringTab";
+import VersionControl from "./components/VersionControl";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -114,6 +115,28 @@ function App() {
               </svg>
               Monitoring
             </button>
+            <button
+              className={`tab-button ${
+                activeTab === "version-control" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("version-control")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="6" cy="6" r="3"></circle>
+                <circle cx="18" cy="6" r="3"></circle>
+                <circle cx="12" cy="18" r="3"></circle>
+                <line x1="8.5" y1="8" x2="12" y2="16"></line>
+                <line x1="15.5" y1="8" x2="12" y2="16"></line>
+              </svg>
+              Version Control
+            </button>
           </nav>
         </aside>
 
@@ -122,6 +145,7 @@ function App() {
           {activeTab === "chat" && <ChatTab />}
           {activeTab === "rag" && <RAGTab />}
           {activeTab === "monitoring" && <MonitoringTab />}
+          {activeTab === "version-control" && <VersionControl />}
         </main>
       </div>
     </div>

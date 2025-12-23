@@ -1,0 +1,281 @@
+.module-history {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.module-header {
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.module-header h3 {
+  margin: 0;
+  color: #0d0d0d;
+  font-size: 1rem;
+}
+
+.module-meta {
+  display: flex;
+  gap: 10px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.meta-label {
+  color: #565869;
+}
+
+.meta-value {
+  color: #10a981;
+  font-weight: 600;
+}
+
+.modules-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.modules-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modules-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modules-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.modules-empty {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 0.9rem;
+}
+
+.module-item {
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.module-item:hover {
+  border-color: #10a981;
+  background: #fff;
+}
+
+.module-item.selected {
+  border-color: #10a981;
+  background: rgba(16, 169, 129, 0.05);
+}
+
+.module-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
+}
+
+.module-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.module-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.module-name {
+  color: #0d0d0d;
+  font-size: 0.95rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.module-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #f5f5f5;
+  border-radius: 3px;
+  border: 1px solid #10a981;
+  flex-shrink: 0;
+}
+
+.badge-value {
+  color: #10a981;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.badge-label {
+  color: #565869;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.module-expanded {
+  border-top: 1px solid #e5e5e5;
+  padding: 12px;
+  background: #fff;
+}
+
+.expanded-content {
+  display: flex;
+  gap: 15px;
+}
+
+.module-icon-large {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  color: #d97706;
+  opacity: 0.7;
+}
+
+.expanded-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.stat-label {
+  color: #565869;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  color: #0d0d0d;
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+}
+
+.stat-number {
+  color: #10a981;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.recent-commits {
+  padding-top: 8px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.commits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.commit-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  background: #f5f5f5;
+  border-radius: 3px;
+  border-left: 3px solid #10a981;
+  font-size: 0.8rem;
+}
+
+.commit-sha {
+  font-family: "Monaco", "Menlo", "Courier New", monospace;
+  color: #10a981;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.commit-msg {
+  color: #565869;
+  flex: 1;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.module-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .module-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .module-badge {
+    align-self: flex-end;
+  }
+
+  .expanded-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .module-icon-large {
+    width: 32px;
+    height: 32px;
+  }
+
+  .expanded-stats {
+    width: 100%;
+  }
+}

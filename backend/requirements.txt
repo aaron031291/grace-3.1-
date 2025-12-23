@@ -6,6 +6,7 @@ chardet
 charset-normalizer
 click
 coverage
+dulwich
 fastapi
 filelock
 fsspec

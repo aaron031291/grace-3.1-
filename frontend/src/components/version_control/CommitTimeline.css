@@ -1,0 +1,246 @@
+.commit-timeline {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.commit-timeline::-webkit-scrollbar {
+  width: 6px;
+}
+
+.commit-timeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.commit-timeline::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.timeline-header h4 {
+  margin: 0;
+  color: #0d0d0d;
+  font-size: 1rem;
+}
+
+.commit-count {
+  font-size: 0.8rem;
+  color: #565869;
+  background: #f5f5f5;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.timeline-items {
+  position: relative;
+  padding-left: 30px;
+}
+
+.no-commits {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timeline-item.selected {
+  background: rgba(16, 169, 129, 0.1);
+  padding: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-radius: 6px;
+  border-left: 3px solid #10a981;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-dot-inner {
+  width: 8px;
+  height: 8px;
+  background: #10a981;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.timeline-dot-inner.latest {
+  width: 12px;
+  height: 12px;
+  background: #d97706;
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
+}
+
+.timeline-item:hover .timeline-dot-inner:not(.latest) {
+  width: 10px;
+  height: 10px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: -22px;
+  top: 20px;
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, #10a981, transparent);
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.commit-message-line {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.commit-sha {
+  font-family: "Monaco", "Menlo", "Courier New", monospace;
+  background: #f5f5f5;
+  color: #10a981;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.commit-message {
+  color: #0d0d0d;
+  font-size: 0.95rem;
+  flex: 1;
+  word-break: break-word;
+}
+
+.commit-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: #565869;
+}
+
+.meta-author {
+  padding: 2px 6px;
+  background: #f5f5f5;
+  border-radius: 3px;
+  border: 1px solid #e5e5e5;
+}
+
+.meta-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.commit-expanded {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.expanded-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+.section-label {
+  color: #565869;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-value {
+  color: #0d0d0d;
+  font-size: 0.85rem;
+  word-break: break-word;
+}
+
+.section-value.monospace {
+  font-family: "Monaco", "Menlo", "Courier New", monospace;
+  background: #f5f5f5;
+  padding: 4px 6px;
+  border-radius: 2px;
+  color: #10a981;
+  overflow-x: auto;
+  border: 1px solid #e5e5e5;
+}
+
+.section-value.pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.expanded-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.expanded-action-btn {
+  flex: 1;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.expanded-action-btn.danger {
+  background: #d97706;
+  color: #fff;
+}
+
+.expanded-action-btn.danger:hover {
+  background: #c65d07;
+}
+
+.timeline-background {
+  position: absolute;
+  left: -35px;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
