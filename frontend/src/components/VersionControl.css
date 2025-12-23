@@ -1,0 +1,286 @@
+.version-control {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  color: #0d0d0d;
+  overflow: hidden;
+}
+
+.vc-header {
+  padding: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vc-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0d0d0d;
+}
+
+.vc-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9rem;
+}
+
+.stat-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stat-label {
+  color: #565869;
+}
+
+.stat-value {
+  color: #10a981;
+  font-weight: 600;
+}
+
+.vc-error {
+  padding: 12px 20px;
+  background: #fef2f2;
+  color: #d97706;
+  border-left: 4px solid #d97706;
+  margin: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.vc-loading {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+  font-size: 1rem;
+}
+
+.vc-navigation {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e5e5e5;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f9f9f9;
+}
+
+.vc-navigation::-webkit-scrollbar {
+  height: 6px;
+}
+
+.vc-navigation::-webkit-scrollbar-track {
+  background: #f9f9f9;
+}
+
+.vc-navigation::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.vc-nav-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #e5e5e5;
+  color: #565869;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.vc-nav-button:hover {
+  border-color: #999;
+  color: #0d0d0d;
+}
+
+.vc-nav-button.active {
+  background: #10a981;
+  border-color: #10a981;
+  color: #fff;
+}
+
+.vc-nav-button svg {
+  flex-shrink: 0;
+}
+
+.vc-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.vc-view {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.vc-timeline-container {
+  flex: 1;
+  min-width: 300px;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #fff;
+}
+
+.vc-timeline-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vc-timeline-container::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.vc-timeline-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.vc-commit-details {
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-y: auto;
+  min-width: 300px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #fff;
+}
+
+.vc-commit-details::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vc-commit-details::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.vc-commit-details::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.vc-commit-details h3 {
+  margin: 0 0 15px 0;
+  color: #0d0d0d;
+  font-size: 1.1rem;
+}
+
+.commit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #565869;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: #0d0d0d;
+  word-break: break-word;
+  font-size: 0.95rem;
+}
+
+.info-value.monospace {
+  font-family: "Monaco", "Menlo", "Courier New", monospace;
+  background: #f5f5f5;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #10a981;
+}
+
+.commit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.action-button {
+  flex: 1;
+  padding: 8px 12px;
+  background: #10a981;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.action-button:hover {
+  background: #059669;
+}
+
+.action-button.danger {
+  background: #d97706;
+}
+
+.action-button.danger:hover {
+  background: #c65d07;
+}
+
+@media (max-width: 1200px) {
+  .vc-view {
+    flex-direction: column;
+  }
+
+  .vc-timeline-container,
+  .vc-commit-details {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .vc-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .vc-stats {
+    flex-wrap: wrap;
+  }
+
+  .vc-navigation {
+    overflow-x: auto;
+  }
+}
