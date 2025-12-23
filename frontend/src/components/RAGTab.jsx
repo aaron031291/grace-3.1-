@@ -95,20 +95,45 @@ export default function RAGTab() {
     setError(null);
 
     try {
+      const trustScoreValue = trustScoreInput?.value;
+      let trustScore = 0.0;
+
+      // Handle numeric input value
+      if (
+        trustScoreValue !== null &&
+        trustScoreValue !== undefined &&
+        trustScoreValue !== ""
+      ) {
+        const parsed = parseFloat(trustScoreValue);
+        if (!isNaN(parsed)) {
+          trustScore = parsed;
+        }
+      }
+
+      const payloadData = {
+        text: textInput.value,
+        filename: filenameInput.value,
+        source: "ui-paste",
+        upload_method: "ui-paste",
+        trust_score: trustScore,
+        description: descriptionInput?.value?.trim() || null,
+      };
+
+      console.log("Sending ingest text request:", payloadData);
+
       const response = await fetch(`${API_BASE}/ingest/text`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: textInput.value,
-          filename: filenameInput.value,
-          source: "ui-paste",
-          upload_method: "ui-paste",
-          trust_score: parseFloat(trustScoreInput?.value || 0),
-          description: descriptionInput?.value || null,
-        }),
+        body: JSON.stringify(payloadData),
       });
 
-      if (!response.ok) throw new Error("Upload failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server error response:", errorData);
+        throw new Error(
+          errorData.detail || `Upload failed: ${response.status}`
+        );
+      }
       const data = await response.json();
 
       if (data.success) {
@@ -117,6 +142,8 @@ export default function RAGTab() {
         setActiveTab("documents");
         textInput.value = "";
         filenameInput.value = "";
+        if (trustScoreInput) trustScoreInput.value = "0";
+        if (descriptionInput) descriptionInput.value = "";
       } else {
         setError(data.message);
       }

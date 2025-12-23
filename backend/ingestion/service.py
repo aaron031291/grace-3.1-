@@ -6,9 +6,11 @@ Handles chunking, embedding generation, and vector storage.
 import hashlib
 import logging
 import json
+import re
 from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
 from datetime import datetime
+import numpy as np
 
 from embedding.embedder import EmbeddingModel
 from vector_db.client import get_qdrant_client
@@ -20,36 +22,174 @@ logger = logging.getLogger(__name__)
 
 
 class TextChunker:
-    """Handles text chunking with configurable strategies."""
+    """Handles text chunking with semantic and structure-aware strategies."""
     
     def __init__(
         self,
         chunk_size: int = 512,
         chunk_overlap: int = 50,
+        embedding_model: Optional[EmbeddingModel] = None,
+        use_semantic_chunking: bool = True,
+        similarity_threshold: float = 0.5,
     ):
         """
-        Initialize text chunker.
+        Initialize text chunker with semantic awareness.
         
         Args:
-            chunk_size: Number of characters per chunk
+            chunk_size: Target number of characters per chunk
             chunk_overlap: Number of overlapping characters between chunks
+            embedding_model: Optional EmbeddingModel for semantic chunking
+            use_semantic_chunking: Whether to use embedding-based semantic chunking
+            similarity_threshold: Similarity threshold for semantic boundaries (0.0-1.0)
         """
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
+        self.embedding_model = embedding_model
+        self.use_semantic_chunking = use_semantic_chunking and embedding_model is not None
+        self.similarity_threshold = similarity_threshold
     
-    def chunk_text(self, text: str) -> List[Dict[str, Any]]:
+    def _split_by_structure(self, text: str) -> List[str]:
         """
-        Split text into chunks with overlap.
+        Split text by structural elements (paragraphs, sentences).
+        
+        Args:
+            text: Text to split
+            
+        Returns:
+            List of structural segments
+        """
+        # First split by double newlines (paragraphs)
+        paragraphs = text.split('\n\n')
+        paragraphs = [p.strip() for p in paragraphs if p.strip()]
+        
+        # If paragraphs are too large, split by sentences
+        segments = []
+        for paragraph in paragraphs:
+            if len(paragraph) > self.chunk_size:
+                # Split by sentence-ending punctuation
+                sentences = re.split(r'(?<=[.!?])\s+', paragraph)
+                segments.extend([s.strip() for s in sentences if s.strip()])
+            else:
+                segments.append(paragraph)
+        
+        return segments
+    
+    def _cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
+        """Calculate cosine similarity between two vectors."""
+        try:
+            dot_product = np.dot(a, b)
+            norm_a = np.linalg.norm(a)
+            norm_b = np.linalg.norm(b)
+            if norm_a == 0 or norm_b == 0:
+                return 0.0
+            return float(dot_product / (norm_a * norm_b))
+        except Exception as e:
+            logger.error(f"Error calculating cosine similarity: {e}")
+            return 0.0
+    
+    def _semantic_chunk(self, text: str) -> List[Dict[str, Any]]:
+        """
+        Perform semantic chunking using embeddings.
+        
+        Splits text into chunks based on semantic boundaries detected
+        by comparing embeddings of adjacent segments.
         
         Args:
             text: Text to chunk
             
         Returns:
-            List of chunk dictionaries with content and position info
+            List of semantic chunks with metadata
+        """
+        try:
+            # First pass: split by structure
+            segments = self._split_by_structure(text)
+            
+            if not segments:
+                return [{
+                    "text": text,
+                    "char_start": 0,
+                    "char_end": len(text),
+                }]
+            
+            # Generate embeddings for all segments
+            segment_texts = [s for s in segments if len(s.strip()) > 10]  # Skip very short segments
+            if not segment_texts:
+                return [{
+                    "text": text,
+                    "char_start": 0,
+                    "char_end": len(text),
+                }]
+            
+            embeddings = self.embedding_model.embed_text(segment_texts)
+            embeddings = np.array(embeddings)
+            
+            # Group segments into chunks based on semantic similarity
+            chunks = []
+            current_chunk = []
+            current_length = 0
+            current_char_start = 0
+            
+            for i, segment in enumerate(segment_texts):
+                current_chunk.append(segment)
+                current_length += len(segment)
+                
+                # Check if we should end the chunk
+                should_split = False
+                
+                # Condition 1: Size-based split
+                if current_length >= self.chunk_size:
+                    should_split = True
+                
+                # Condition 2: Semantic boundary detected
+                if (i < len(segment_texts) - 1 and 
+                    current_length > self.chunk_size // 2):
+                    similarity = self._cosine_similarity(
+                        embeddings[i],
+                        embeddings[i + 1]
+                    )
+                    if similarity < self.similarity_threshold:
+                        should_split = True
+                
+                if should_split or i == len(segment_texts) - 1:
+                    chunk_text = " ".join(current_chunk)
+                    chunk_char_end = current_char_start + len(chunk_text)
+                    
+                    chunks.append({
+                        "text": chunk_text,
+                        "char_start": current_char_start,
+                        "char_end": chunk_char_end,
+                    })
+                    
+                    # Prepare for next chunk with overlap
+                    if i < len(segment_texts) - 1:
+                        # Calculate overlap from end of current chunk
+                        overlap_text = chunk_text[-self.chunk_overlap:] if len(chunk_text) > self.chunk_overlap else chunk_text
+                        current_chunk = [overlap_text]
+                        current_length = len(overlap_text)
+                        current_char_start = chunk_char_end - self.chunk_overlap
+                    else:
+                        current_chunk = []
+                        current_length = 0
+            
+            logger.info(f"[CHUNKING] Semantic chunking produced {len(chunks)} chunks from {len(segments)} segments")
+            return chunks
+        
+        except Exception as e:
+            logger.warning(f"Semantic chunking failed, falling back to simple chunking: {e}")
+            return self._simple_chunk(text)
+    
+    def _simple_chunk(self, text: str) -> List[Dict[str, Any]]:
+        """
+        Simple character-based chunking with overlap (fallback).
+        
+        Args:
+            text: Text to chunk
+            
+        Returns:
+            List of chunks
         """
         chunks = []
         
-        # Simple character-based chunking with overlap
         for start in range(0, len(text), self.chunk_size - self.chunk_overlap):
             end = min(start + self.chunk_size, len(text))
             chunk_text = text[start:end]
@@ -61,7 +201,29 @@ class TextChunker:
                     "char_end": end,
                 })
         
+        logger.info(f"[CHUNKING] Simple chunking produced {len(chunks)} chunks")
         return chunks
+
+    def chunk_text(self, text: str) -> List[Dict[str, Any]]:
+        """
+        Split text into chunks using the configured strategy.
+        
+        Uses embedding-based semantic chunking if available,
+        falls back to simple character-based chunking otherwise.
+        
+        Args:
+            text: Text to chunk
+            
+        Returns:
+            List of chunk dictionaries with content and position info
+        """
+        if self.use_semantic_chunking:
+            logger.info("[CHUNKING] Using embedding-based semantic chunking")
+            return self._semantic_chunk(text)
+        else:
+            logger.info("[CHUNKING] Using simple character-based chunking")
+            return self._simple_chunk(text)
+
 
 
 class TextIngestionService:
@@ -84,7 +246,14 @@ class TextIngestionService:
             embedding_model: EmbeddingModel instance for generating embeddings
         """
         self.collection_name = collection_name
-        self.chunker = TextChunker(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        # Pass embedding model to chunker for semantic chunking
+        self.chunker = TextChunker(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+            embedding_model=embedding_model,
+            use_semantic_chunking=True,  # Enable semantic chunking by default
+            similarity_threshold=0.5,
+        )
         self.embedding_model = embedding_model
         self.qdrant_client = get_qdrant_client()
         
