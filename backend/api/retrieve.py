@@ -59,6 +59,7 @@ class RetrievalChunk(BaseModel):
     chunk_index: int
     text: str
     score: Optional[float] = None
+    confidence_score: Optional[float] = None
     metadata: Optional[dict] = None
 
 
