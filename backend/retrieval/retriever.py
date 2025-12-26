@@ -113,6 +113,7 @@ class DocumentRetriever:
                             "document_id": chunk.document_id,
                             "chunk_index": chunk.chunk_index,
                             "text": chunk.text_content,
+                            "confidence_score": chunk.confidence_score,
                         }
                         
                         if include_metadata:
@@ -124,7 +125,8 @@ class DocumentRetriever:
                                 "chunk_index": chunk.chunk_index,
                                 "char_start": chunk.char_start,
                                 "char_end": chunk.char_end,
-                                "trust_score": document.trust_score if document else 0.0,
+                                "confidence_score": chunk.confidence_score,
+                                "document_confidence_score": document.confidence_score if document else 0.5,
                                 "created_at": document.created_at.isoformat() if document and document.created_at else None,
                                 "description": document.description if document else None,
                             }

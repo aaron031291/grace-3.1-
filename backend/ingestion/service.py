@@ -14,6 +14,7 @@ import numpy as np
 
 from embedding.embedder import EmbeddingModel
 from vector_db.client import get_qdrant_client
+from confidence_scorer import ConfidenceScorer
 from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
@@ -257,6 +258,13 @@ class TextIngestionService:
         self.embedding_model = embedding_model
         self.qdrant_client = get_qdrant_client()
         
+        # Initialize confidence scorer
+        self.confidence_scorer = ConfidenceScorer(
+            embedding_model=embedding_model,
+            qdrant_client=self.qdrant_client,
+            collection_name=collection_name,
+        )
+        
         # Initialize Qdrant collection if not exists
         if self.embedding_model:
             embedding_dim = self.embedding_model.get_embedding_dimension()
@@ -297,20 +305,26 @@ class TextIngestionService:
         filename: str,
         source: str = "upload",
         upload_method: str = "ui-upload",
-        trust_score: float = 0.0,
+        source_type: str = "user_generated",
         description: Optional[str] = None,
         tags: Optional[List[str]] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Tuple[Optional[int], str]:
         """
-        Ingest text content into database and vector store.
+        Ingest text content into database and vector store with automatic confidence scoring.
+        
+        Confidence score is automatically calculated based on:
+        - Source type/reliability
+        - Content quality indicators
+        - Consensus with existing knowledge
+        - Recency of content
         
         Args:
             text_content: The text content to ingest
             filename: Name of the file/document
             source: Source of the document (e.g., 'upload', 'url', 'api')
             upload_method: How the document was uploaded (ui-upload, ui-paste, api, etc.)
-            trust_score: Trustworthiness score of the source (0.0-1.0)
+            source_type: Type of source for reliability calculation (official_docs, academic_paper, verified_tutorial, trusted_blog, community_qa, user_generated, unverified)
             description: Optional description of the document
             tags: Optional list of tags for categorization
             metadata: Additional metadata dictionary
@@ -333,32 +347,58 @@ class TextIngestionService:
                 logger.warning(f"Document with hash {content_hash} already exists")
                 return existing.id, "Document already ingested"
             
+            # Calculate document-level confidence score
+            doc_confidence_data = self.confidence_scorer.calculate_confidence_score(
+                text_content=text_content,
+                source_type=source_type,
+                created_at=datetime.utcnow(),
+            )
+            
             # Prepare document metadata
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
                 "upload_timestamp": datetime.utcnow().isoformat(),
+                "source_type": source_type,
             }
             
-            # Create document record
+            # Create document record with auto-calculated confidence scores
             document = Document(
                 filename=filename,
                 original_filename=filename,
                 source=source,
                 upload_method=upload_method,
-                trust_score=min(max(trust_score, 0.0), 1.0),  # Clamp between 0.0 and 1.0
                 description=description,
                 tags=json.dumps(tags) if tags else None,
                 content_hash=content_hash,
                 status="processing",
                 extracted_text_length=len(text_content),
                 document_metadata=json.dumps(doc_metadata),
+                # Confidence scoring fields
+                confidence_score=doc_confidence_data["confidence_score"],
+                source_reliability=doc_confidence_data["source_reliability"],
+                content_quality=doc_confidence_data["content_quality"],
+                consensus_score=doc_confidence_data["consensus_score"],
+                recency_score=doc_confidence_data["recency"],
+                confidence_metadata=json.dumps(doc_confidence_data),
             )
             db.add(document)
             db.flush()  # Get the ID without committing
             document_id = document.id
             
-            logger.info(f"Created document record: {document_id} ({filename}), upload_method={upload_method}, trust_score={trust_score}")
+            # Log contradiction detection at document level
+            if doc_confidence_data.get("contradictions_detected"):
+                logger.warning(
+                    f"Document {document_id} ({filename}): "
+                    f"Found {doc_confidence_data.get('contradiction_count', 0)} semantic contradictions. "
+                    f"Confidence score reduced accordingly."
+                )
+            
+            logger.info(
+                f"Created document record: {document_id} ({filename}), "
+                f"upload_method={upload_method}, source_type={source_type}, "
+                f"confidence_score={doc_confidence_data['confidence_score']:.3f}"
+            )
             
             # Chunk the text
             chunks = self.chunker.chunk_text(text_content)
@@ -367,9 +407,30 @@ class TextIngestionService:
             # Generate embeddings and store chunks
             vector_id_counter = int(f"{document_id}000")  # Create unique IDs
             vectors_to_upsert = []
+            chunk_confidence_scores = []
+            
+            # Collect all chunk texts for consensus calculation
+            all_chunk_texts = [chunk["text"] for chunk in chunks]
             
             for chunk_index, chunk in enumerate(chunks):
                 chunk_text = chunk["text"]
+                
+                # Calculate chunk-level confidence score
+                chunk_confidence_data = self.confidence_scorer.calculate_confidence_score(
+                    text_content=chunk_text,
+                    source_type=source_type,
+                    created_at=datetime.utcnow(),
+                    existing_chunks=all_chunk_texts[:chunk_index] + all_chunk_texts[chunk_index+1:],  # Exclude current chunk
+                )
+                
+                chunk_confidence_scores.append(chunk_confidence_data["confidence_score"])
+                
+                # Log chunk-level contradictions
+                if chunk_confidence_data.get("contradictions_detected"):
+                    logger.debug(
+                        f"Chunk {chunk_index} in document {document_id}: "
+                        f"Found {chunk_confidence_data.get('contradiction_count', 0)} semantic contradictions"
+                    )
                 
                 # Generate embedding
                 if self.embedding_model:
@@ -383,17 +444,19 @@ class TextIngestionService:
                 # Create vector ID (unique across system)
                 vector_id = vector_id_counter + chunk_index
                 
-                # Prepare chunk metadata
+                # Prepare chunk metadata for Qdrant payload
                 chunk_metadata = {
                     "document_id": document_id,
                     "chunk_index": chunk_index,
                     "filename": filename,
                     "char_start": chunk["char_start"],
                     "char_end": chunk["char_end"],
+                    "text": chunk_text,  # Include text for retrieval and contradiction detection
+                    "confidence_score": chunk_confidence_data["confidence_score"],  # Trust score for weighted contradictions
                     **(metadata or {})
                 }
                 
-                # Create chunk record
+                # Create chunk record with confidence scores
                 doc_chunk = DocumentChunk(
                     document_id=document_id,
                     chunk_index=chunk_index,
@@ -404,6 +467,9 @@ class TextIngestionService:
                     char_start=chunk["char_start"],
                     char_end=chunk["char_end"],
                     chunk_metadata=json.dumps(chunk_metadata),
+                    # Confidence scoring fields
+                    confidence_score=chunk_confidence_data["confidence_score"],
+                    consensus_similarity_scores=json.dumps(chunk_confidence_data.get("similarity_scores", [])),
                 )
                 db.add(doc_chunk)
                 
@@ -413,6 +479,13 @@ class TextIngestionService:
                     embedding_vector,
                     chunk_metadata,
                 ))
+            
+            logger.info(
+                f"Calculated confidence scores for {len(chunks)} chunks. "
+                f"Average: {np.mean(chunk_confidence_scores):.3f}, "
+                f"Min: {np.min(chunk_confidence_scores):.3f}, "
+                f"Max: {np.max(chunk_confidence_scores):.3f}"
+            )
             
             # Flush chunk inserts
             db.flush()
@@ -510,7 +583,7 @@ class TextIngestionService:
     
     def get_document_info(self, document_id: int) -> Optional[Dict[str, Any]]:
         """
-        Get document information and chunk list.
+        Get document information and chunk list with confidence scores.
         
         Args:
             document_id: ID of the document
@@ -536,6 +609,14 @@ class TextIngestionService:
                 "id": document.id,
                 "filename": document.filename,
                 "source": document.source,
+                "upload_method": document.upload_method,
+                "confidence_score": document.confidence_score,
+                "source_reliability": document.source_reliability,
+                "content_quality": document.content_quality,
+                "consensus_score": document.consensus_score,
+                "recency_score": document.recency_score,
+                "description": document.description,
+                "tags": json.loads(document.tags) if document.tags else None,
                 "status": document.status,
                 "total_chunks": document.total_chunks,
                 "text_length": document.extracted_text_length,
@@ -547,6 +628,8 @@ class TextIngestionService:
                         "index": c.chunk_index,
                         "text_length": len(c.text_content),
                         "vector_id": c.embedding_vector_id,
+                        "confidence_score": c.confidence_score,
+                        "consensus_similarities": json.loads(c.consensus_similarity_scores) if c.consensus_similarity_scores else [],
                     }
                     for c in chunks
                 ]
@@ -594,7 +677,7 @@ class TextIngestionService:
                     "filename": doc.filename,
                     "source": doc.source,
                     "upload_method": doc.upload_method,
-                    "trust_score": doc.trust_score,
+                    "confidence_score": doc.confidence_score,
                     "description": doc.description,
                     "tags": json.loads(doc.tags) if doc.tags else None,
                     "status": doc.status,

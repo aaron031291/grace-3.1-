@@ -57,7 +57,7 @@ class IngestTextRequest(BaseModel):
     filename: str = Field(..., description="Name of the document")
     source: Optional[str] = Field("upload", description="Source of the document")
     upload_method: Optional[str] = Field("ui-paste", description="How the document was uploaded (ui-upload, ui-paste, api, etc.)")
-    trust_score: Optional[float] = Field(0.0, ge=0.0, le=1.0, description="Trustworthiness of source (0.0-1.0)")
+    source_type: Optional[str] = Field("user_generated", description="Type of source for reliability (official_docs, academic_paper, verified_tutorial, trusted_blog, community_qa, user_generated, unverified)")
     description: Optional[str] = Field(None, description="Optional description of the document")
     tags: Optional[List[str]] = Field(None, description="Optional tags for categorization")
     metadata: Optional[dict] = Field(None, description="Additional metadata")
@@ -69,7 +69,11 @@ class DocumentInfo(BaseModel):
     filename: str
     source: str
     upload_method: str
-    trust_score: float
+    confidence_score: float
+    source_reliability: float
+    content_quality: float
+    consensus_score: float
+    recency_score: float
     description: Optional[str]
     tags: Optional[List[str]]
     status: str
@@ -86,7 +90,7 @@ class DocumentListItem(BaseModel):
     filename: str
     source: str
     upload_method: str
-    trust_score: float
+    confidence_score: float
     description: Optional[str]
     tags: Optional[List[str]]
     status: str
@@ -152,7 +156,7 @@ async def ingest_text(
             filename=request.filename,
             source=request.source,
             upload_method=request.upload_method,
-            trust_score=request.trust_score,
+            source_type=request.source_type,
             description=request.description,
             tags=request.tags,
             metadata=request.metadata,
@@ -181,7 +185,7 @@ async def ingest_text(
 async def ingest_file(
     file: UploadFile = File(..., description="Text file to ingest"),
     source: str = Form("upload", description="Source identifier"),
-    trust_score: float = Form(0.0, ge=0.0, le=1.0, description="Trust score (0.0-1.0)"),
+    source_type: str = Form("user_generated", description="Type of source for reliability (official_docs, academic_paper, verified_tutorial, trusted_blog, community_qa, user_generated, unverified)"),
     metadata: Optional[str] = Form(None, description="JSON metadata"),
     service: TextIngestionService = Depends(get_ingestion_service)
 ) -> IngestionResponse:
@@ -191,7 +195,7 @@ async def ingest_file(
     Args:
         file: Uploaded text file
         source: Source identifier
-        trust_score: Trustworthiness of source (0.0-1.0)
+        source_type: Type of source for reliability calculation
         metadata: Optional JSON metadata
         service: Ingestion service instance
         
@@ -237,7 +241,7 @@ async def ingest_file(
             filename=file.filename or "uploaded_file",
             source=source,
             upload_method="ui-upload",
-            trust_score=trust_score,
+            source_type=source_type,
             metadata=metadata_dict,
         )
         
