@@ -30,6 +30,10 @@ pillow
 pluggy
 pydantic
 pydantic_core
+pdfplumber
+python-docx
+openpyxl
+python-pptx
 Pygments
 pytest
 pytest-cov

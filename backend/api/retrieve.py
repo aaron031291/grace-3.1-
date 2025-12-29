@@ -123,6 +123,7 @@ async def retrieve_chunks(
                 chunk_index=chunk["chunk_index"],
                 text=chunk["text"],
                 score=chunk.get("score"),
+                confidence_score=chunk.get("confidence_score"),
                 metadata=chunk.get("metadata")
             )
             for chunk in chunks
@@ -178,6 +179,7 @@ async def get_document_chunks(
                 document_id=chunk["document_id"],
                 chunk_index=chunk["chunk_index"],
                 text=chunk["text"],
+                confidence_score=chunk.get("confidence_score"),
                 metadata=chunk.get("metadata")
             )
             for chunk in chunks
@@ -232,6 +234,7 @@ async def get_chunks_by_source(
                 document_id=chunk["document_id"],
                 chunk_index=chunk["chunk_index"],
                 text=chunk["text"] or "",
+                confidence_score=chunk.get("confidence_score"),
                 metadata=chunk.get("metadata")
             )
             for chunk in chunks
@@ -326,6 +329,7 @@ async def retrieve_and_rerank(
                 chunk_index=chunk["chunk_index"],
                 text=chunk["text"],
                 score=chunk.get("score"),
+                confidence_score=chunk.get("confidence_score"),
                 metadata=chunk.get("metadata")
             )
             for chunk in chunks

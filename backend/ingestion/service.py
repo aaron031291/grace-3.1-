@@ -299,6 +299,192 @@ class TextIngestionService:
         """
         return hashlib.sha256(content.encode()).hexdigest()
     
+    def ingest_text_fast(
+        self,
+        text_content: str,
+        filename: str,
+        source: str = "upload",
+        upload_method: str = "ui-upload",
+        source_type: str = "user_generated",
+        description: Optional[str] = None,
+        tags: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[Optional[int], str]:
+        """
+        Fast ingestion without confidence scoring (for quick uploads).
+        
+        Args:
+            text_content: The text content to ingest
+            filename: Name of the file/document
+            source: Source of the document
+            upload_method: How the document was uploaded
+            source_type: Type of source
+            description: Optional description
+            tags: Optional tags
+            metadata: Additional metadata
+            
+        Returns:
+            Tuple of (document_id, status_message)
+        """
+        logger.info(f"[INGEST_FAST] Starting fast ingestion for: {filename}")
+        logger.info(f"[INGEST_FAST] Text content length: {len(text_content)} characters")
+        logger.info(f"[INGEST_FAST] Metadata: {metadata}")
+        
+        db = self._get_db_session()
+        logger.info(f"[INGEST_FAST] Got database session")
+        
+        try:
+            # Compute hash for deduplication
+            logger.info(f"[INGEST_FAST] Computing content hash...")
+            content_hash = self.compute_file_hash(text_content)
+            logger.info(f"[INGEST_FAST] Content hash: {content_hash}")
+            
+            # Check if document already exists
+            logger.info(f"[INGEST_FAST] Checking for duplicate documents...")
+            existing = db.query(Document).filter(
+                Document.content_hash == content_hash
+            ).first()
+            
+            if existing:
+                logger.warning(f"[INGEST_FAST] Document with hash {content_hash} already exists (ID: {existing.id})")
+                return existing.id, "Document already ingested"
+            
+            logger.info(f"[INGEST_FAST] No duplicates found, proceeding with ingestion")
+            
+            # Prepare document metadata (without confidence scoring)
+            doc_metadata = {
+                "user_metadata": metadata or {},
+                "original_source": source,
+                "upload_timestamp": datetime.utcnow().isoformat(),
+                "source_type": source_type,
+            }
+            
+            # Create document record WITHOUT confidence scores for speed
+            logger.info(f"[INGEST_FAST] Creating document record...")
+            document = Document(
+                filename=filename,
+                original_filename=filename,
+                source=source,
+                upload_method=upload_method,
+                description=description,
+                tags=json.dumps(tags) if tags else None,
+                content_hash=content_hash,
+                status="processing",
+                extracted_text_length=len(text_content),
+                document_metadata=json.dumps(doc_metadata),
+                # Default confidence scores (not calculated)
+                confidence_score=0.5,
+                source_reliability=0.5,
+                content_quality=0.5,
+                consensus_score=0.5,
+                recency_score=0.5,
+                confidence_metadata=json.dumps({}),
+            )
+            db.add(document)
+            db.flush()  # Get the ID without committing
+            document_id = document.id
+            
+            logger.info(f"[INGEST_FAST] ✓ Created document record with ID: {document_id}")
+            
+            # Chunk the text
+            logger.info(f"[INGEST_FAST] Chunking text with chunk_size=512, overlap=50...")
+            chunks = self.chunker.chunk_text(text_content)
+            logger.info(f"[INGEST_FAST] ✓ Chunked text into {len(chunks)} chunks")
+            
+            # Generate embeddings and store chunks
+            vector_id_counter = int(f"{document_id}000")
+            vectors_to_upsert = []
+            
+            logger.info(f"[INGEST_FAST] Starting embedding generation for {len(chunks)} chunks...")
+            for chunk_index, chunk in enumerate(chunks):
+                chunk_text = chunk["text"]
+                
+                # Generate embedding
+                if self.embedding_model:
+                    logger.debug(f"[INGEST_FAST] Embedding chunk {chunk_index + 1}/{len(chunks)} ({len(chunk_text)} chars)")
+                    embeddings = self.embedding_model.embed_text([chunk_text])
+                    embedding_vector = embeddings[0]
+                else:
+                    logger.error("[INGEST_FAST] Embedding model not available!")
+                    db.rollback()
+                    return None, "Embedding model not available"
+                
+                # Create vector ID
+                vector_id = vector_id_counter + chunk_index
+                
+                # Prepare chunk metadata
+                chunk_metadata = {
+                    "document_id": document_id,
+                    "chunk_index": chunk_index,
+                    "text": chunk_text,
+                    "filename": filename,
+                    "source": source,
+                    "confidence_score": 0.5,
+                }
+                
+                # Format as tuple for upsert_vectors
+                vectors_to_upsert.append((
+                    vector_id,
+                    embedding_vector,
+                    chunk_metadata,
+                ))
+                
+                # Create database record for chunk
+                chunk_record = DocumentChunk(
+                    document_id=document_id,
+                    chunk_index=chunk_index,
+                    text_content=chunk_text,
+                    embedding_vector_id=str(vector_id),
+                    embedding_model="qwen_4b",
+                    confidence_score=0.5,
+                    chunk_metadata=json.dumps({
+                        "source": source,
+                        "filename": filename,
+                    }),
+                )
+                db.add(chunk_record)
+            
+            logger.info(f"[INGEST_FAST] ✓ Generated embeddings for all {len(chunks)} chunks")
+            
+            # Store vectors in Qdrant
+            logger.info(f"[INGEST_FAST] Storing {len(vectors_to_upsert)} vectors in Qdrant...")
+            if vectors_to_upsert:
+                success = self.qdrant_client.upsert_vectors(
+                    collection_name=self.collection_name,
+                    vectors=vectors_to_upsert,
+                )
+                
+                if not success:
+                    logger.error(f"[INGEST_FAST] Failed to store embeddings for document {document_id}")
+                    db.rollback()
+                    return None, "Failed to store embeddings"
+                
+                logger.info(f"[INGEST_FAST] ✓ Successfully stored vectors in Qdrant")
+            
+            # Update document status to completed
+            document.status = "completed"
+            document.total_chunks = len(chunks)
+            
+            # Commit transaction
+            logger.info(f"[INGEST_FAST] Committing database transaction...")
+            db.commit()
+            logger.info(f"[INGEST_FAST] ✓✓✓ INGESTION COMPLETE ✓✓✓")
+            logger.info(f"[INGEST_FAST] Document {document_id}: {filename}")
+            logger.info(f"[INGEST_FAST]   - {len(chunks)} chunks")
+            logger.info(f"[INGEST_FAST]   - {len(text_content)} characters")
+            logger.info(f"[INGEST_FAST]   - Stored in PostgreSQL + Qdrant")
+            
+            return document_id, "Document ingested successfully"
+        
+        except Exception as e:
+            logger.error(f"[INGEST_FAST] ✗✗✗ ERROR DURING INGESTION ✗✗✗", exc_info=True)
+            logger.error(f"[INGEST_FAST] Error details: {str(e)}")
+            db.rollback()
+            return None, f"Ingestion failed: {str(e)}"
+        finally:
+            db.close()
+            logger.info(f"[INGEST_FAST] Database session closed")
+    
     def ingest_text(
         self,
         text_content: str,
