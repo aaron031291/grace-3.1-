@@ -20,6 +20,7 @@ from models.database_models import Chat
 from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router, get_document_retriever
 from api.version_control import router as version_control_router
+from api.file_management import router as file_management_router
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -249,6 +250,7 @@ app.add_middleware(
 app.include_router(ingest_router)
 app.include_router(retrieve_router)
 app.include_router(version_control_router)
+app.include_router(file_management_router)
 
 
 # ==================== Health Check Endpoint ====================
@@ -929,7 +931,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                         "source": chunk.get("metadata", {}).get("source", "Unknown"),
                         "upload_method": chunk.get("metadata", {}).get("upload_method", "Unknown"),
                         "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
-                        "trust_score": chunk.get("metadata", {}).get("trust_score", 0.0),
+                        "trust_score": chunk.get("confidence_score", 0.0),  # Get confidence_score from chunk, not metadata
                         "created_at": chunk.get("metadata", {}).get("created_at"),
                         "description": chunk.get("metadata", {}).get("description"),
                     }

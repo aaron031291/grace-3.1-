@@ -40,7 +40,7 @@ class SemanticContradictionDetector:
             # Load the cross-encoder model for NLI
             # This model outputs 3 scores: entailment, neutral, contradiction
             self.model = CrossEncoder(
-                'cross-encoder/nli-deberta-large',
+                'cross-encoder/nli-deberta-v3-large',
                 device=self.device,
                 max_length=512
             )

@@ -1,159 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import "./RAGTab.css";
+import FileBrowser from "./FileBrowser";
 
 export default function RAGTab() {
-  const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
-  const [activeTab, setActiveTab] = useState("documents"); // documents, search, upload
-  const fileInputRef = useRef(null);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("files"); // files, search
 
   const API_BASE = "http://localhost:8000";
-
-  // Load documents on mount
-  useEffect(() => {
-    loadDocuments();
-  }, []);
-
-  // Load documents list
-  const loadDocuments = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_BASE}/ingest/documents`);
-      if (!response.ok) throw new Error("Failed to load documents");
-      const data = await response.json();
-      setDocuments(data.documents || []);
-    } catch (err) {
-      setError(err.message);
-      console.error("Load documents error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle file upload
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    setError(null);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("source", "ui-upload");
-
-      // Add optional metadata from form if available
-      const trustScoreInput = document.getElementById("file-trust-score-input");
-      if (trustScoreInput?.value) {
-        formData.append("trust_score", trustScoreInput.value);
-      }
-
-      const response = await fetch(`${API_BASE}/ingest/file`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Upload failed");
-      const data = await response.json();
-
-      if (data.success) {
-        setError(null);
-        await loadDocuments(); // Reload documents list
-        setActiveTab("documents"); // Switch to documents tab
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      } else {
-        setError(data.message);
-      }
-    } catch (err) {
-      setError(err.message);
-      console.error("Upload error:", err);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // Handle paste text
-  const handlePasteText = async () => {
-    const textInput = document.getElementById("text-input");
-    const filenameInput = document.getElementById("filename-input");
-    const trustScoreInput = document.getElementById("trust-score-input");
-    const descriptionInput = document.getElementById("description-input");
-
-    if (!textInput?.value || !filenameInput?.value) {
-      setError("Please enter both text and filename");
-      return;
-    }
-
-    setUploading(true);
-    setError(null);
-
-    try {
-      const trustScoreValue = trustScoreInput?.value;
-      let trustScore = 0.0;
-
-      // Handle numeric input value
-      if (
-        trustScoreValue !== null &&
-        trustScoreValue !== undefined &&
-        trustScoreValue !== ""
-      ) {
-        const parsed = parseFloat(trustScoreValue);
-        if (!isNaN(parsed)) {
-          trustScore = parsed;
-        }
-      }
-
-      const payloadData = {
-        text: textInput.value,
-        filename: filenameInput.value,
-        source: "ui-paste",
-        upload_method: "ui-paste",
-        trust_score: trustScore,
-        description: descriptionInput?.value?.trim() || null,
-      };
-
-      console.log("Sending ingest text request:", payloadData);
-
-      const response = await fetch(`${API_BASE}/ingest/text`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Server error response:", errorData);
-        throw new Error(
-          errorData.detail || `Upload failed: ${response.status}`
-        );
-      }
-      const data = await response.json();
-
-      if (data.success) {
-        setError(null);
-        await loadDocuments();
-        setActiveTab("documents");
-        textInput.value = "";
-        filenameInput.value = "";
-        if (trustScoreInput) trustScoreInput.value = "0";
-        if (descriptionInput) descriptionInput.value = "";
-      } else {
-        setError(data.message);
-      }
-    } catch (err) {
-      setError(err.message);
-      console.error("Paste text error:", err);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   // Handle search
   const handleSearch = async (e) => {
@@ -170,7 +26,7 @@ export default function RAGTab() {
       const response = await fetch(
         `${API_BASE}/retrieve/search?query=${encodeURIComponent(
           searchQuery
-        )}&limit=5&threshold=0.3`,
+        )}&limit=10&threshold=0.3`,
         { method: "POST" }
       );
 
@@ -185,56 +41,17 @@ export default function RAGTab() {
     }
   };
 
-  // Delete document
-  const deleteDocument = async (docId) => {
-    if (!confirm("Delete this document?")) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${API_BASE}/ingest/documents/${docId}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Delete failed");
-      await loadDocuments();
-    } catch (err) {
-      setError(err.message);
-      console.error("Delete error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "completed":
-        return "#10b981";
-      case "processing":
-        return "#f59e0b";
-      case "pending":
-        return "#6b7280";
-      case "failed":
-        return "#ef4444";
-      default:
-        return "#6b7280";
-    }
-  };
-
   return (
     <div className="rag-tab">
       <div className="rag-container">
         {/* Tabs */}
         <div className="rag-tabs">
           <button
-            className={`tab-button ${
-              activeTab === "documents" ? "active" : ""
-            }`}
-            onClick={() => setActiveTab("documents")}
+            className={`tab-button ${activeTab === "files" ? "active" : ""}`}
+            onClick={() => setActiveTab("files")}
           >
-            <span className="tab-icon">📄</span>
-            Documents
+            <span className="tab-icon">📁</span>
+            Files
           </button>
           <button
             className={`tab-button ${activeTab === "search" ? "active" : ""}`}
@@ -242,13 +59,6 @@ export default function RAGTab() {
           >
             <span className="tab-icon">🔍</span>
             Search
-          </button>
-          <button
-            className={`tab-button ${activeTab === "upload" ? "active" : ""}`}
-            onClick={() => setActiveTab("upload")}
-          >
-            <span className="tab-icon">⬆️</span>
-            Upload
           </button>
         </div>
 
@@ -260,101 +70,10 @@ export default function RAGTab() {
           </div>
         )}
 
-        {/* Documents Tab */}
-        {activeTab === "documents" && (
-          <div className="tab-content documents-tab">
-            <div className="documents-header">
-              <h2>Ingested Documents</h2>
-              <button
-                className="refresh-button"
-                onClick={loadDocuments}
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "🔄 Refresh"}
-              </button>
-            </div>
-
-            {documents.length === 0 ? (
-              <div className="empty-state">
-                <p>No documents uploaded yet</p>
-                <p className="hint">Upload documents to get started with RAG</p>
-              </div>
-            ) : (
-              <div className="documents-list">
-                {documents.map((doc) => (
-                  <div key={doc.id} className="document-card">
-                    <div className="doc-header">
-                      <div className="doc-title">
-                        <h3>{doc.filename}</h3>
-                        <span
-                          className="status-badge"
-                          style={{
-                            backgroundColor: getStatusColor(doc.status),
-                          }}
-                        >
-                          {doc.status}
-                        </span>
-                      </div>
-                      <button
-                        className="delete-btn"
-                        onClick={() => deleteDocument(doc.id)}
-                        title="Delete document"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                    <div className="doc-info">
-                      <div className="info-row">
-                        <span className="label">Source:</span>
-                        <span>{doc.source}</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Upload Method:</span>
-                        <span className="badge">
-                          {doc.upload_method || "unknown"}
-                        </span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Trust Score:</span>
-                        <span
-                          className="trust-score"
-                          style={{
-                            color:
-                              doc.trust_score >= 0.7
-                                ? "#4CAF50"
-                                : doc.trust_score >= 0.4
-                                ? "#FF9800"
-                                : "#f44336",
-                          }}
-                        >
-                          {(doc.trust_score || 0).toFixed(2)} / 1.0
-                        </span>
-                      </div>
-                      {doc.description && (
-                        <div className="info-row">
-                          <span className="label">Description:</span>
-                          <span>{doc.description}</span>
-                        </div>
-                      )}
-                      <div className="info-row">
-                        <span className="label">Chunks:</span>
-                        <span>{doc.total_chunks}</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Size:</span>
-                        <span>{(doc.text_length / 1024).toFixed(2)} KB</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Added:</span>
-                        <span>
-                          {new Date(doc.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Files Tab */}
+        {activeTab === "files" && (
+          <div className="tab-content files-tab">
+            <FileBrowser />
           </div>
         )}
 
@@ -386,7 +105,7 @@ export default function RAGTab() {
               <div className="empty-state">
                 <p>No search results yet</p>
                 <p className="hint">
-                  Enter a query to search through documents
+                  Enter a query to search through uploaded documents
                 </p>
               </div>
             )}
@@ -417,102 +136,6 @@ export default function RAGTab() {
                 ))}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Upload Tab */}
-        {activeTab === "upload" && (
-          <div className="tab-content upload-tab">
-            <h2>Upload Documents</h2>
-
-            {/* File Upload Section */}
-            <div className="upload-section">
-              <h3>Upload Text File</h3>
-              <div className="file-upload-area">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".txt,.md,.pdf"
-                  onChange={handleFileUpload}
-                  disabled={uploading}
-                  id="file-input"
-                  className="file-input-hidden"
-                />
-                <label htmlFor="file-input" className="file-upload-label">
-                  <div className="upload-icon">📁</div>
-                  <p>Click to upload or drag and drop</p>
-                  <p className="file-hint">TXT, MD, PDF (up to 10MB)</p>
-                </label>
-              </div>
-              <div className="metadata-section">
-                <h4>Metadata (Optional)</h4>
-                <input
-                  type="number"
-                  id="file-trust-score-input"
-                  placeholder="Trust Score (0.0-1.0)"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  defaultValue="0"
-                  className="text-input"
-                  disabled={uploading}
-                />
-              </div>
-            </div>
-
-            {/* Text Paste Section */}
-            <div className="upload-section">
-              <h3>Paste Text Content</h3>
-              <input
-                type="text"
-                id="filename-input"
-                placeholder="Enter filename (e.g., notes.txt)"
-                className="text-input"
-                disabled={uploading}
-              />
-              <textarea
-                id="text-input"
-                placeholder="Paste or type your text content here..."
-                className="text-area"
-                rows="8"
-                disabled={uploading}
-              />
-              <div className="metadata-section">
-                <h4>Metadata (Optional)</h4>
-                <input
-                  type="number"
-                  id="trust-score-input"
-                  placeholder="Trust Score (0.0-1.0)"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  defaultValue="0"
-                  className="text-input"
-                  disabled={uploading}
-                />
-                <textarea
-                  id="description-input"
-                  placeholder="Description (optional)"
-                  className="text-area"
-                  rows="3"
-                  disabled={uploading}
-                />
-              </div>
-              <button
-                onClick={handlePasteText}
-                disabled={uploading}
-                className="submit-button"
-              >
-                {uploading ? "Uploading..." : "⬆️ Upload Text"}
-              </button>
-            </div>
-
-            <div className="upload-info">
-              <p>
-                <strong>Note:</strong> Uploaded documents are automatically
-                chunked and indexed for semantic search.
-              </p>
-            </div>
           </div>
         )}
       </div>
