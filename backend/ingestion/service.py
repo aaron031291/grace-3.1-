@@ -391,6 +391,9 @@ class TextIngestionService:
             chunks = self.chunker.chunk_text(text_content)
             logger.info(f"[INGEST_FAST] ✓ Chunked text into {len(chunks)} chunks")
             
+            # Get document creation date for embedding into chunks
+            created_at = document.created_at.isoformat() if document.created_at else datetime.utcnow().isoformat()
+            
             # Generate embeddings and store chunks
             vector_id_counter = int(f"{document_id}000")
             vectors_to_upsert = []
@@ -412,7 +415,7 @@ class TextIngestionService:
                 # Create vector ID
                 vector_id = vector_id_counter + chunk_index
                 
-                # Prepare chunk metadata
+                # Prepare chunk metadata with filename, source, and creation date
                 chunk_metadata = {
                     "document_id": document_id,
                     "chunk_index": chunk_index,
@@ -420,6 +423,7 @@ class TextIngestionService:
                     "filename": filename,
                     "source": source,
                     "confidence_score": 0.5,
+                    "created_at": created_at,
                 }
                 
                 # Format as tuple for upsert_vectors
@@ -440,6 +444,7 @@ class TextIngestionService:
                     chunk_metadata=json.dumps({
                         "source": source,
                         "filename": filename,
+                        "created_at": created_at,
                     }),
                 )
                 db.add(chunk_record)
