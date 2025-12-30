@@ -917,7 +917,21 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             
             # Check if any relevant data was found
             if retrieval_result:
-                rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
+                # Build context with metadata enrichment for each chunk
+                context_parts = []
+                for chunk in retrieval_result:
+                    filename = chunk.get("metadata", {}).get("filename", "Unknown")
+                    created_at = chunk.get("metadata", {}).get("created_at", "Unknown")
+                    confidence = chunk.get("confidence_score", 0.0)
+                    chunk_text = chunk["text"]
+                    chunk_index = chunk.get("chunk_index", 0)
+                    
+                    # Format chunk with metadata for LLM context
+                    enriched_chunk = f"""[Source: {filename} | Date: {created_at} | Confidence: {confidence:.1%} | Chunk {chunk_index}]
+{chunk_text}"""
+                    context_parts.append(enriched_chunk)
+                
+                rag_context = "\n\n".join(context_parts)
                 rag_context = rag_context.strip()
                 
                 # Prepare sources for response
