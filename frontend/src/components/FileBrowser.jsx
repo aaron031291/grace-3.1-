@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./FileBrowser.css";
 
-export default function FileBrowser() {
+export default function FileBrowser({ onOpenVSCode }) {
   const [currentPath, setCurrentPath] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -212,6 +212,25 @@ export default function FileBrowser() {
         <div className="header-top">
           <h2>Knowledge Base</h2>
           <div className="header-actions">
+            <button
+              className="icon-button vscode-button"
+              onClick={() => {
+                if (onOpenVSCode) {
+                  onOpenVSCode(currentPath);
+                }
+              }}
+              title="Open VS Code in current folder"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                {/* VS Code logo */}
+                <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.987 7.644A.999.999 0 0 0 .934 8.85L3.542 11.9.934 15.15a.999.999 0 0 0 .053 1.206l1.661 1.605a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.49 1.49 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.54A1.5 1.5 0 0 0 23.15 2.587z" />
+              </svg>
+            </button>
             <label className="upload-button">
               <input
                 type="file"

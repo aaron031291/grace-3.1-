@@ -7,9 +7,19 @@ export default function RAGTab() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("files"); // files, search
+  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode
+  const [vscodePath, setVscodePath] = useState("");
 
   const API_BASE = "http://localhost:8000";
+
+  // Handle opening VSCode
+  const handleOpenVSCode = (currentPath) => {
+    const basePath =
+      "/home/umer/Public/projects/grace_3/backend/knowledge_base";
+    const fullPath = currentPath ? `${basePath}/${currentPath}` : basePath;
+    setVscodePath(fullPath);
+    setActiveTab("vscode");
+  };
 
   // Handle search
   const handleSearch = async (e) => {
@@ -60,6 +70,18 @@ export default function RAGTab() {
             <span className="tab-icon">🔍</span>
             Search
           </button>
+          <button
+            className={`tab-button ${activeTab === "vscode" ? "active" : ""}`}
+            onClick={() => setActiveTab("vscode")}
+          >
+            <span className="tab-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#179ff1">
+                {/* VS Code logo */}
+                <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.987 7.644A.999.999 0 0 0 .934 8.85L3.542 11.9.934 15.15a.999.999 0 0 0 .053 1.206l1.661 1.605a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.49 1.49 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.54A1.5 1.5 0 0 0 23.15 2.587z" />
+              </svg>
+            </span>
+            VS Code
+          </button>
         </div>
 
         {/* Error Message */}
@@ -73,7 +95,7 @@ export default function RAGTab() {
         {/* Files Tab */}
         {activeTab === "files" && (
           <div className="tab-content files-tab">
-            <FileBrowser />
+            <FileBrowser onOpenVSCode={handleOpenVSCode} />
           </div>
         )}
 
@@ -136,6 +158,21 @@ export default function RAGTab() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* VSCode Tab */}
+        {activeTab === "vscode" && (
+          <div className="tab-content vscode-tab">
+            <div className="vscode-container">
+              <iframe
+                src={`http://localhost:8080/?folder=${encodeURIComponent(
+                  vscodePath
+                )}`}
+                className="vscode-iframe"
+                title="VS Code"
+              />
+            </div>
           </div>
         )}
       </div>

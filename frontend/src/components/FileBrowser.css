@@ -105,6 +105,32 @@
   stroke-width: 2;
 }
 
+.vscode-button {
+  color: #007acc;
+  border-color: #007acc;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 204, 0.05) 0%,
+    rgba(0, 122, 204, 0.02) 100%
+  );
+}
+
+.vscode-button:hover {
+  background-color: rgba(0, 122, 204, 0.1);
+  border-color: #005a9c;
+  color: #005a9c;
+  box-shadow: 0 0 8px rgba(0, 122, 204, 0.2);
+}
+
+.vscode-button:active {
+  background-color: rgba(0, 122, 204, 0.15);
+}
+
+.vscode-button svg {
+  color: inherit;
+  fill: currentColor;
+}
+
 .upload-button {
   display: inline-flex;
   align-items: center;
