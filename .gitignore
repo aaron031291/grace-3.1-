@@ -1,4 +1,6 @@
 backend/models/embedding
+backend/knowledge_base
+code_server/
 .env
 */venv/
 */env/
