@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./RAGTab.css";
 import FileBrowser from "./FileBrowser";
+import DirectoryChat from "./DirectoryChat";
 
 export default function RAGTab() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -9,6 +10,7 @@ export default function RAGTab() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("files"); // files, search, vscode
   const [vscodePath, setVscodePath] = useState("");
+  const [currentDirectory, setCurrentDirectory] = useState("");
 
   const API_BASE = "http://localhost:8000";
 
@@ -19,6 +21,11 @@ export default function RAGTab() {
     const fullPath = currentPath ? `${basePath}/${currentPath}` : basePath;
     setVscodePath(fullPath);
     setActiveTab("vscode");
+  };
+
+  // Handle path change from FileBrowser
+  const handlePathChange = (newPath) => {
+    setCurrentDirectory(newPath);
   };
 
   // Handle search
@@ -95,7 +102,17 @@ export default function RAGTab() {
         {/* Files Tab */}
         {activeTab === "files" && (
           <div className="tab-content files-tab">
-            <FileBrowser onOpenVSCode={handleOpenVSCode} />
+            <div className="files-content">
+              <div className="file-browser-section">
+                <FileBrowser
+                  onOpenVSCode={handleOpenVSCode}
+                  onPathChange={handlePathChange}
+                />
+              </div>
+              <div className="directory-chat-section">
+                <DirectoryChat currentPath={currentDirectory} />
+              </div>
+            </div>
           </div>
         )}
 

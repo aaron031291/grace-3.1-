@@ -347,3 +347,107 @@ async def retrieve_and_rerank(
     except Exception as e:
         logger.error(f"Reranking error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Reranking failed")
+
+@router.post("/directory-search", response_model=RetrievalResponse, summary="Search documents in a directory")
+async def retrieve_directory_chunks(
+    query: str = Query(..., description="Query text"),
+    directory_path: str = Query("", description="Directory path relative to knowledge_base root"),
+    limit: int = Query(5, ge=1, le=100, description="Maximum chunks to retrieve"),
+    threshold: float = Query(0.3, ge=0.0, le=1.0, description="Minimum relevance score"),
+    retriever: DocumentRetriever = Depends(get_document_retriever)
+) -> RetrievalResponse:
+    """
+    Retrieve document chunks from files in a specific directory.
+    
+    Only documents whose file_path starts with the specified directory_path
+    will be included in the search results.
+    
+    Args:
+        query: Query text to search for
+        directory_path: Directory path (relative to knowledge_base root)
+        limit: Maximum number of chunks to return
+        threshold: Minimum similarity score (0-1)
+        retriever: DocumentRetriever instance
+        
+    Returns:
+        RetrievalResponse with chunks from specified directory
+        
+    Raises:
+        HTTPException: 404 if no documents found in directory
+    """
+    try:
+        # Get all chunks for the query first
+        all_chunks = retriever.retrieve(
+            query=query,
+            limit=limit * 3,  # Get more to filter
+            score_threshold=threshold * 0.8,  # Slightly lower threshold to get more candidates
+            include_metadata=True,
+        )
+        
+        if not all_chunks:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No documents found matching query in directory: {directory_path or 'root'}"
+            )
+        
+        # Filter chunks by directory path
+        filtered_chunks = []
+        for chunk in all_chunks:
+            # Check if the document's file_path starts with the target directory
+            file_path = chunk.get("metadata", {}).get("file_path", "")
+            
+            # Normalize paths for comparison
+            target_dir = directory_path.rstrip("/") if directory_path else ""
+            
+            # Check if file is in the directory
+            if target_dir == "":
+                # Root directory - include all files with no subdirectory prefix
+                if "/" not in file_path:
+                    filtered_chunks.append(chunk)
+            else:
+                # Check if file_path starts with directory
+                if file_path.startswith(target_dir + "/") or file_path == target_dir:
+                    filtered_chunks.append(chunk)
+        
+        # Sort by score and limit
+        filtered_chunks = sorted(
+            filtered_chunks,
+            key=lambda x: x.get("score", 0),
+            reverse=True
+        )[:limit]
+        
+        if not filtered_chunks:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No documents found in directory: {directory_path or 'root'}"
+            )
+        
+        # Convert to RetrievalChunk objects
+        retrieval_chunks = [
+            RetrievalChunk(
+                chunk_id=chunk["chunk_id"],
+                document_id=chunk["document_id"],
+                chunk_index=chunk["chunk_index"],
+                text=chunk["text"],
+                score=chunk.get("score"),
+                confidence_score=chunk.get("confidence_score"),
+                metadata=chunk.get("metadata")
+            )
+            for chunk in filtered_chunks
+        ]
+        
+        # Build context string
+        context = retriever.build_context(filtered_chunks, include_sources=True)
+        
+        return RetrievalResponse(
+            query=query,
+            chunks=retrieval_chunks,
+            total=len(retrieval_chunks),
+            context=context
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Directory retrieval error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Directory retrieval failed")

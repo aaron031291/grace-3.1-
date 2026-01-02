@@ -21,6 +21,7 @@ from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router, get_document_retriever
 from api.version_control import router as version_control_router
 from api.file_management import router as file_management_router
+from api.file_ingestion import router as file_ingestion_router
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -251,6 +252,7 @@ app.include_router(ingest_router)
 app.include_router(retrieve_router)
 app.include_router(version_control_router)
 app.include_router(file_management_router)
+app.include_router(file_ingestion_router)
 
 
 # ==================== Health Check Endpoint ====================
@@ -1158,17 +1160,179 @@ async def root():
     }
 
 
+# ==================== Directory-Scoped Chat ====================
+
+class DirectoryPromptRequest(BaseModel):
+    """Request for directory-scoped chat."""
+    query: str = Field(..., description="User query/prompt")
+    directory_path: str = Field("", description="Directory path relative to knowledge_base root")
+    temperature: Optional[float] = Field(0.7, ge=0.0, le=2.0, description="Temperature for generation")
+    top_p: Optional[float] = Field(0.9, ge=0.0, le=1.0, description="Nucleus sampling parameter")
+    top_k: Optional[int] = Field(40, ge=0, description="Top-k sampling parameter")
 
 
-# ==================== Run ====================
+class DirectoryPromptResponse(BaseModel):
+    """Response for directory-scoped chat."""
+    message: str = Field(..., description="The generated response")
+    message_id: Optional[int] = Field(None, description="Message ID if saved")
+    directory_path: str = Field(..., description="Directory path that was queried")
+    generation_time: float = Field(..., description="Time taken to generate response")
+    sources: Optional[List[dict]] = Field(None, description="Source chunks used")
 
-if __name__ == "__main__":
-    import uvicorn
+
+@app.post("/chat/directory-prompt", response_model=DirectoryPromptResponse, tags=["Directory Chat"])
+async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depends(get_session)):
+    """
+    Send a prompt/message and get a response using only context from files in a specific directory.
+    This is a stateless chat endpoint that doesn't save to chat history.
     
-    # Run the app
-    uvicorn.run(
-        "app:app",
-        host="0.0.0.0",
-        port=8000,
+    Args:
+        request: DirectoryPromptRequest with query and directory path
+        session: Database session
+        
+    Returns:
+        DirectoryPromptResponse: The generated response with source attribution
+        
+    Raises:
+        HTTPException: 404 if no documents found in directory, 503 if services unavailable
+    """
+    try:
+        # Verify Ollama is running
+        client = get_ollama_client()
+        if not client.is_running():
+            raise HTTPException(
+                status_code=503,
+                detail="Ollama service is not running"
+            )
+        
+        # ==================== DIRECTORY-SCOPED RAG RETRIEVAL ====================
+        # Retrieve context only from specified directory
+        rag_context = ""
+        sources = []
+        try:
+            from api.retrieve import get_document_retriever
+            
+            retriever = get_document_retriever()
+            
+            # Use directory-scoped retrieval endpoint
+            retrieval_result = retriever.retrieve(
+                query=request.query,
+                limit=10,
+                score_threshold=0.2,
+                include_metadata=True
+            )
+            
+            # Filter by directory if specified
+            if retrieval_result:
+                filtered_chunks = []
+                target_dir = request.directory_path.rstrip("/") if request.directory_path else ""
+                
+                for chunk in retrieval_result:
+                    file_path = chunk.get("metadata", {}).get("file_path", "")
+                    
+                    # Check if file is in the directory
+                    if target_dir == "":
+                        # Root directory - include files with no subdirectory
+                        if file_path and "/" not in file_path:
+                            filtered_chunks.append(chunk)
+                    else:
+                        # Check if file_path starts with directory
+                        if file_path and (file_path.startswith(target_dir + "/") or file_path == target_dir):
+                            filtered_chunks.append(chunk)
+                
+                # Limit to top chunks
+                filtered_chunks = filtered_chunks[:5]
+                
+                if filtered_chunks:
+                    # Build context with metadata enrichment
+                    context_parts = []
+                    for chunk in filtered_chunks:
+                        filename = chunk.get("metadata", {}).get("filename", "Unknown")
+                        created_at = chunk.get("metadata", {}).get("created_at", "Unknown")
+                        confidence = chunk.get("confidence_score", 0.0)
+                        chunk_text = chunk["text"]
+                        chunk_index = chunk.get("chunk_index", 0)
+                        
+                        enriched_chunk = f"""[Source: {filename} | Date: {created_at} | Confidence: {confidence:.1%} | Chunk {chunk_index}]
+{chunk_text}"""
+                        context_parts.append(enriched_chunk)
+                    
+                    rag_context = "\n\n".join(context_parts)
+                    rag_context = rag_context.strip()
+                    
+                    # Prepare sources for response
+                    sources = [
+                        {
+                            "text": chunk["text"],
+                            "score": chunk.get("score", 0),
+                            "chunk_id": chunk.get("chunk_id"),
+                            "document_id": chunk.get("document_id"),
+                            "filename": chunk.get("metadata", {}).get("filename", "Unknown"),
+                            "source": chunk.get("metadata", {}).get("source", "Unknown"),
+                            "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
+                            "confidence_score": chunk.get("confidence_score", 0.0),
+                            "created_at": chunk.get("metadata", {}).get("created_at"),
+                        }
+                        for chunk in filtered_chunks
+                    ]
+        
+        except Exception as e:
+            print(f"⚠ Directory RAG retrieval error: {str(e)}")
+        
+        # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
+        if not rag_context:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No documents found in directory: {request.directory_path or 'root'}"
+            )
+        
+        # ==================== PREPARE MESSAGES FOR OLLAMA ====================
+        messages = []
+        
+        # Add system prompt
+        messages.append({
+            "role": "system",
+            "content": build_rag_system_prompt()
+        })
+        
+        # Inject RAG context into the user message
+        augmented_content = build_rag_prompt(request.query, rag_context)
+        messages.append({"role": "user", "content": augmented_content})
+        
+        # ==================== GENERATE RESPONSE ====================
+        start_time = time.time()
+        temperature = min(request.temperature or 0.7, 0.3)  # Cap temperature for deterministic responses
+        max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
+        
+        response_text = client.chat(
+            model=settings.DEFAULT_MODEL if settings else "llama2",
+            messages=messages,
+            stream=False,
+            temperature=temperature,
+            top_p=request.top_p or 0.5,
+            top_k=request.top_k or 10,
+            num_predict=max_num_predict
+        )
+        generation_time = time.time() - start_time
+        
+        response_text = response_text.strip()
+        
+        return DirectoryPromptResponse(
+            message=response_text,
+            directory_path=request.directory_path or "root",
+            generation_time=generation_time,
+            sources=sources
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        print(f"Error in directory chat: {str(e)}")
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error processing directory chat: {str(e)}"
+        )
         reload=True
     )
