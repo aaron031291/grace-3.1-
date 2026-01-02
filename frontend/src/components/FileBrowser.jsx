@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./FileBrowser.css";
 
-export default function FileBrowser({ onOpenVSCode }) {
+export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [currentPath, setCurrentPath] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,10 @@ export default function FileBrowser({ onOpenVSCode }) {
   // Load directory on mount and when path changes
   useEffect(() => {
     loadDirectory();
+    // Notify parent of path change
+    if (onPathChange) {
+      onPathChange(currentPath);
+    }
   }, [currentPath]);
 
   const loadDirectory = async () => {

@@ -120,6 +120,7 @@ class DocumentRetriever:
                             result_dict["metadata"] = {
                                 "document_id": chunk.document_id,
                                 "filename": document.filename if document else "Unknown",
+                                "file_path": document.file_path if document else None,
                                 "source": document.source if document else "Unknown",
                                 "upload_method": document.upload_method if document else "Unknown",
                                 "chunk_index": chunk.chunk_index,
