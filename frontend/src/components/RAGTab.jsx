@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import "./RAGTab.css";
 import FileBrowser from "./FileBrowser";
 import DirectoryChat from "./DirectoryChat";
+import NotionTab from "./NotionTab";
 
 export default function RAGTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode
+  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode, notion
   const [vscodePath, setVscodePath] = useState("");
   const [currentDirectory, setCurrentDirectory] = useState("");
 
@@ -138,6 +139,13 @@ export default function RAGTab() {
             </span>
             VS Code
           </button>
+          <button
+            className={`tab-button ${activeTab === "notion" ? "active" : ""}`}
+            onClick={() => setActiveTab("notion")}
+          >
+            <span className="tab-icon">📌</span>
+            Notion
+          </button>
         </div>
 
         {/* Error Message */}
@@ -248,6 +256,13 @@ export default function RAGTab() {
                 title="VS Code"
               />
             </div>
+          </div>
+        )}
+
+        {/* Notion Tab */}
+        {activeTab === "notion" && (
+          <div className="tab-content notion-tab-content">
+            <NotionTab />
           </div>
         )}
       </div>
