@@ -89,6 +89,7 @@ class Chat(BaseModel):
     temperature = Column(Float, default=0.7, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False, index=True)
     last_message_at = Column(DateTime, nullable=True)
+    folder_path = Column(String(512), nullable=True, default="", index=True)  # Path to folder context for this chat
     
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="chat", cascade="all, delete-orphan")
@@ -97,10 +98,11 @@ class Chat(BaseModel):
         Index("idx_created", "created_at"),
         Index("idx_active", "is_active"),
         Index("idx_updated", "updated_at"),
+        Index("idx_folder_path", "folder_path"),
     )
     
     def __repr__(self) -> str:
-        return f"<Chat(id={self.id}, title={self.title})>"
+        return f"<Chat(id={self.id}, title={self.title}, folder_path={self.folder_path})>"
 
 
 class ChatHistory(BaseModel):
