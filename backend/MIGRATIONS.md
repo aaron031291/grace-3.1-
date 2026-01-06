@@ -5,18 +5,23 @@ This guide explains how to run database migrations for the GRACE project.
 ## Quick Start
 
 ### On Windows:
+
 Double-click `run_migrations.bat` in the `backend` folder, or run:
+
 ```cmd
 run_migrations.bat
 ```
 
 ### On Linux/macOS:
+
 Run the shell script:
+
 ```bash
 ./run_migrations.sh
 ```
 
 Or run the Python script directly:
+
 ```bash
 python run_all_migrations.py
 ```
@@ -26,18 +31,22 @@ python run_all_migrations.py
 The migration script runs the following steps in order:
 
 1. **Base Tables** - Creates all database tables from SQLAlchemy models
+
    - Users, Conversations, Messages, Embeddings
    - Chats, ChatHistory, Documents, DocumentChunks
 
 2. **Metadata Columns** - Adds metadata fields to the documents table
+
    - File metadata, extraction details
    - Processing information
 
 3. **Folder Path** - Adds folder_path column to track document locations
+
    - Enables folder-specific organization
    - Supports document hierarchy
 
 4. **Confidence Scoring** - Adds confidence scoring columns
+
    - Trust scores for information retrieval
    - Semantic contradiction detection
    - Weighted confidence metrics
@@ -57,21 +66,25 @@ The migration script runs the following steps in order:
 If you need to run individual migrations:
 
 ### Create Base Tables:
+
 ```bash
 python -c "from database.migration import create_tables; create_tables()"
 ```
 
 ### Add Metadata Columns:
+
 ```bash
 python migrate_add_metadata_columns.py
 ```
 
 ### Add Folder Path:
+
 ```bash
 python migrate_add_folder_path.py
 ```
 
 ### Add Confidence Scoring:
+
 ```bash
 python -c "from database.migrate_add_confidence_scoring import migrate; migrate()"
 ```
@@ -79,21 +92,26 @@ python -c "from database.migrate_add_confidence_scoring import migrate; migrate(
 ## Troubleshooting
 
 ### "Python is not installed"
+
 - Install Python 3.10+ from https://www.python.org/downloads/
 - Make sure to check "Add Python to PATH" during installation
 - Restart your terminal after installation
 
 ### "Database is locked"
+
 - Close any other applications using the database
 - Make sure no other instances of the app are running
 - Delete `data/grace.db` and rerun migrations if corrupted
 
 ### "Column already exists"
+
 - This is normal - migrations are idempotent and safe to run multiple times
 - If a column exists, it will skip and continue
 
 ### "Permission denied" (Linux/macOS)
+
 Make the script executable first:
+
 ```bash
 chmod +x run_migrations.sh
 ./run_migrations.sh
@@ -130,6 +148,7 @@ MIGRATION SUMMARY
 ## After Migration
 
 Your database is now ready for use. The GRACE application will automatically:
+
 - Use the created tables
 - Store conversations and chat history
 - Process documents with metadata
@@ -137,11 +156,13 @@ Your database is now ready for use. The GRACE application will automatically:
 - Calculate confidence scores
 
 If you need to reset the database:
+
 ```bash
 python clear_all_data.py
 ```
 
 Then run migrations again:
+
 ```bash
 # Windows
 run_migrations.bat

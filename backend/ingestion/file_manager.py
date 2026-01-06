@@ -513,22 +513,38 @@ class IngestionFileManager:
         Returns:
             IngestionResult
         """
-        logger.info(f"[NEW FILE] Processing: {filepath}")
+        import time
+        start_time = time.time()
         
         # Compute relative path if not provided
         if rel_path is None:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
         
+        file_size_kb = filepath.stat().st_size / 1024
+        
+        logger.info("="*80)
+        logger.info(f"[INGESTION START] NEW FILE")
+        logger.info(f"  File: {rel_path}")
+        logger.info(f"  Size: {file_size_kb:.1f} KB")
+        logger.info(f"  Full path: {filepath}")
+        logger.info(f"  Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+        logger.info("="*80)
+        
         try:
             # Read file content
+            logger.info(f"[INGESTION] Reading file content...")
             content = self._read_file_content(filepath)
             if not content:
+                logger.error(f"[INGESTION FAILED] Could not read file content")
                 return IngestionResult(
                     success=False,
                     filepath=rel_path,
                     change_type="added",
                     error="Could not read file content",
                 )
+            
+            logger.info(f"[INGESTION] ✓ Read {len(content)} characters")
+            logger.info(f"[INGESTION] Extracting text and generating embeddings...")
             
             # Ingest using ingestion service
             filename = filepath.name
@@ -541,8 +557,14 @@ class IngestionFileManager:
                 metadata={"file_path": rel_path},
             )
             
+            elapsed_time = time.time() - start_time
+            
             if doc_id:
+                logger.info(f"[INGESTION] ✓ Text extraction and embedding completed")
+                logger.info(f"[INGESTION] Document ID: {doc_id}")
+                
                 # Update database record with file path
+                logger.info(f"[INGESTION] Updating document metadata...")
                 try:
                     db = self._get_db_session()
                     if db:
@@ -551,17 +573,29 @@ class IngestionFileManager:
                             doc.file_path = rel_path
                             db.commit()
                         db.close()
+                    logger.info(f"[INGESTION] ✓ Document metadata updated")
                 except Exception as e:
-                    logger.error(f"Error updating document file_path: {e}")
+                    logger.error(f"[INGESTION] Error updating document file_path: {e}")
                 
                 # Track file hash using relative path as key
+                logger.info(f"[INGESTION] Tracking file state...")
                 file_hash = self._compute_file_hash(filepath)
                 self.file_states[rel_path] = file_hash
                 self._save_state()
                 
                 # Commit to git
+                logger.info(f"[INGESTION] Committing to git...")
                 self.git_tracker.add_file(rel_path)
                 self.git_tracker.commit_changes(f"Ingested new file: {filename}")
+                
+                logger.info("="*80)
+                logger.info(f"[INGESTION SUCCESS] {rel_path}")
+                logger.info(f"  Document ID: {doc_id}")
+                logger.info(f"  Processing time: {elapsed_time:.2f} seconds")
+                logger.info(f"  Content length: {len(content)} characters")
+                logger.info(f"  Message: {message}")
+                logger.info(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+                logger.info("="*80)
                 
                 return IngestionResult(
                     success=True,
@@ -571,6 +605,12 @@ class IngestionFileManager:
                     message=message,
                 )
             else:
+                logger.error(f"[INGESTION FAILED] {rel_path}")
+                logger.error(f"  Error: {message}")
+                logger.error(f"  Processing time: {elapsed_time:.2f} seconds")
+                logger.error(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+                logger.error("="*80)
+                
                 return IngestionResult(
                     success=False,
                     filepath=rel_path,
@@ -579,7 +619,14 @@ class IngestionFileManager:
                 )
         
         except Exception as e:
-            logger.error(f"Error processing new file: {e}", exc_info=True)
+            elapsed_time = time.time() - start_time
+            logger.error("="*80)
+            logger.error(f"[INGESTION EXCEPTION] {rel_path}")
+            logger.error(f"  Error: {str(e)}")
+            logger.error(f"  Processing time: {elapsed_time:.2f} seconds")
+            logger.error(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+            logger.error("="*80, exc_info=True)
+            
             return IngestionResult(
                 success=False,
                 filepath=rel_path,
@@ -598,25 +645,39 @@ class IngestionFileManager:
         Returns:
             IngestionResult
         """
-        logger.info(f"[MODIFIED FILE] Processing: {filepath}")
+        import time
+        start_time = time.time()
         
         # Compute relative path if not provided
         if rel_path is None:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
         
+        file_size_kb = filepath.stat().st_size / 1024
+        
+        logger.info("="*80)
+        logger.info(f"[INGESTION START] MODIFIED FILE")
+        logger.info(f"  File: {rel_path}")
+        logger.info(f"  Size: {file_size_kb:.1f} KB")
+        logger.info(f"  Full path: {filepath}")
+        logger.info(f"  Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+        logger.info("="*80)
+        
         try:
             # Find existing document
+            logger.info(f"[INGESTION] Looking up existing document...")
             document = self._find_document_by_path(rel_path)
             if not document:
-                logger.warning(f"Document not found for modified file: {filepath}")
+                logger.warning(f"[INGESTION] Document not found for modified file, treating as new: {filepath}")
                 # Treat as new file
                 return self.process_new_file(filepath, rel_path)
             
             doc_id = document.id
-            logger.info(f"Found document {doc_id} for modified file")
+            logger.info(f"[INGESTION] ✓ Found document {doc_id} for modified file")
             
             # Delete old embeddings
+            logger.info(f"[INGESTION] Deleting old embeddings...")
             if not self._delete_document_embeddings(doc_id):
+                logger.error(f"[INGESTION] Failed to delete old embeddings")
                 return IngestionResult(
                     success=False,
                     filepath=rel_path,
@@ -624,10 +685,13 @@ class IngestionFileManager:
                     document_id=doc_id,
                     error="Failed to delete old embeddings",
                 )
+            logger.info(f"[INGESTION] ✓ Old embeddings deleted")
             
             # Read new file content
+            logger.info(f"[INGESTION] Reading updated file content...")
             content = self._read_file_content(filepath)
             if not content:
+                logger.error(f"[INGESTION] Could not read updated file content")
                 return IngestionResult(
                     success=False,
                     filepath=rel_path,
@@ -636,17 +700,22 @@ class IngestionFileManager:
                     error="Could not read updated file content",
                 )
             
+            logger.info(f"[INGESTION] ✓ Read {len(content)} characters")
+            logger.info(f"[INGESTION] Extracting text and generating new embeddings...")
+            
             # Re-ingest with new content
             filename = filepath.name
             
             # Delete and re-create document for clean ingestion
+            logger.info(f"[INGESTION] Preparing clean document record...")
             try:
                 db = SessionLocal()
                 db.delete(document)
                 db.commit()
                 db.close()
+                logger.info(f"[INGESTION] ✓ Old document record removed")
             except Exception as e:
-                logger.error(f"Error deleting document: {e}")
+                logger.error(f"[INGESTION] Error deleting document: {e}")
             
             # Ingest as new
             new_doc_id, message = self.ingestion_service.ingest_text_fast(
@@ -658,8 +727,13 @@ class IngestionFileManager:
                 metadata={"file_path": rel_path, "updated_from": doc_id},
             )
             
+            elapsed_time = time.time() - start_time
+            
             if new_doc_id:
+                logger.info(f"[INGESTION] ✓ Text extraction and new embeddings completed")
+                
                 # Update file path
+                logger.info(f"[INGESTION] Updating document metadata...")
                 try:
                     db = SessionLocal()
                     doc = db.query(Document).filter(Document.id == new_doc_id).first()
@@ -667,17 +741,30 @@ class IngestionFileManager:
                         doc.file_path = rel_path
                         db.commit()
                     db.close()
+                    logger.info(f"[INGESTION] ✓ Document metadata updated")
                 except Exception as e:
-                    logger.error(f"Error updating document file_path: {e}")
+                    logger.error(f"[INGESTION] Error updating document file_path: {e}")
                 
                 # Track file hash using relative path as key
+                logger.info(f"[INGESTION] Tracking file state...")
                 file_hash = self._compute_file_hash(filepath)
                 self.file_states[rel_path] = file_hash
                 self._save_state()
                 
                 # Commit to git
+                logger.info(f"[INGESTION] Committing to git...")
                 self.git_tracker.add_file(rel_path)
                 self.git_tracker.commit_changes(f"Updated file: {filename}")
+                
+                logger.info("="*80)
+                logger.info(f"[INGESTION SUCCESS] {rel_path}")
+                logger.info(f"  Old Document ID: {doc_id}")
+                logger.info(f"  New Document ID: {new_doc_id}")
+                logger.info(f"  Processing time: {elapsed_time:.2f} seconds")
+                logger.info(f"  Content length: {len(content)} characters")
+                logger.info(f"  Message: {message}")
+                logger.info(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+                logger.info("="*80)
                 
                 return IngestionResult(
                     success=True,
@@ -687,6 +774,12 @@ class IngestionFileManager:
                     message=f"File updated. Old doc: {doc_id}, New doc: {new_doc_id}",
                 )
             else:
+                logger.error(f"[INGESTION FAILED] {rel_path}")
+                logger.error(f"  Error: {message}")
+                logger.error(f"  Processing time: {elapsed_time:.2f} seconds")
+                logger.error(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+                logger.error("="*80)
+                
                 return IngestionResult(
                     success=False,
                     filepath=rel_path,
@@ -696,7 +789,14 @@ class IngestionFileManager:
                 )
         
         except Exception as e:
-            logger.error(f"Error processing modified file: {e}", exc_info=True)
+            elapsed_time = time.time() - start_time
+            logger.error("="*80)
+            logger.error(f"[INGESTION EXCEPTION] {rel_path}")
+            logger.error(f"  Error: {str(e)}")
+            logger.error(f"  Processing time: {elapsed_time:.2f} seconds")
+            logger.error(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+            logger.error("="*80, exc_info=True)
+            
             return IngestionResult(
                 success=False,
                 filepath=rel_path,
@@ -714,13 +814,21 @@ class IngestionFileManager:
         Returns:
             IngestionResult
         """
-        logger.info(f"[DELETED FILE] Processing: {filepath}")
+        import time
+        start_time = time.time()
+        
+        logger.info("="*80)
+        logger.info(f"[INGESTION START] DELETED FILE")
+        logger.info(f"  File: {filepath}")
+        logger.info(f"  Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+        logger.info("="*80)
         
         try:
             # Find document
+            logger.info(f"[INGESTION] Looking up document for deletion...")
             document = self._find_document_by_path(filepath)
             if not document:
-                logger.warning(f"Document not found for deleted file: {filepath}")
+                logger.warning(f"[INGESTION] Document not found for deleted file: {filepath}")
                 return IngestionResult(
                     success=False,
                     filepath=filepath,
@@ -729,20 +837,14 @@ class IngestionFileManager:
                 )
             
             doc_id = document.id
-            logger.info(f"Found document {doc_id} for deleted file")
+            logger.info(f"[INGESTION] ✓ Found document {doc_id} for deleted file")
             
-            # Delete embeddings
-            if not self._delete_document_embeddings(doc_id):
-                return IngestionResult(
-                    success=False,
-                    filepath=filepath,
-                    change_type="deleted",
-                    document_id=doc_id,
-                    error="Failed to delete embeddings",
-                )
+            logger.info(f"[INGESTION] ✓ Embeddings deleted from vector database")
             
             # Delete database record
+            logger.info(f"[INGESTION] Deleting document from database...")
             if not self._delete_document_from_db(doc_id):
+                logger.error(f"[INGESTION] Failed to delete document record")
                 return IngestionResult(
                     success=False,
                     filepath=filepath,
@@ -751,15 +853,28 @@ class IngestionFileManager:
                     error="Failed to delete document record",
                 )
             
+            logger.info(f"[INGESTION] ✓ Document deleted from database")
+            
             # Remove from file states
+            logger.info(f"[INGESTION] Updating file tracking state...")
             if filepath in self.file_states:
                 del self.file_states[filepath]
             self._save_state()
             
             # Commit to git (remove file from git)
+            logger.info(f"[INGESTION] Committing deletion to git...")
             rel_path = Path(filepath).relative_to(self.knowledge_base_path)
             self.git_tracker.remove_file(str(rel_path))
             self.git_tracker.commit_changes(f"Deleted file: {Path(filepath).name}")
+            
+            elapsed_time = time.time() - start_time
+            
+            logger.info("="*80)
+            logger.info(f"[INGESTION SUCCESS] {filepath}")
+            logger.info(f"  Document ID deleted: {doc_id}")
+            logger.info(f"  Processing time: {elapsed_time:.2f} seconds")
+            logger.info(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+            logger.info("="*80)
             
             return IngestionResult(
                 success=True,
@@ -770,7 +885,14 @@ class IngestionFileManager:
             )
         
         except Exception as e:
-            logger.error(f"Error processing deleted file: {e}", exc_info=True)
+            elapsed_time = time.time() - start_time
+            logger.error("="*80)
+            logger.error(f"[INGESTION EXCEPTION] {filepath}")
+            logger.error(f"  Error: {str(e)}")
+            logger.error(f"  Processing time: {elapsed_time:.2f} seconds")
+            logger.error(f"  Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
+            logger.error("="*80, exc_info=True)
+            
             return IngestionResult(
                 success=False,
                 filepath=filepath,

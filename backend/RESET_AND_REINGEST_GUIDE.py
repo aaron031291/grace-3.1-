@@ -1,0 +1,204 @@
+#!/usr/bin/env python
+"""
+Quick reference and usage guide for reset_and_reingest.py
+"""
+
+"""
+==============================================================================
+GRACE KNOWLEDGE BASE - RESET & RE-INGESTION SCRIPT
+==============================================================================
+
+PURPOSE:
+--------
+A single Python script that:
+1. Clears all data from SQLite database
+2. Clears all data from Qdrant vector database
+3. Resets file ingestion tracking state
+4. Triggers fresh auto-ingestion of all files in knowledge_base/
+
+USAGE:
+------
+From the backend directory, run:
+
+    python reset_and_reingest.py
+
+Or with explicit path:
+
+    python /home/umer/Public/projects/grace_3/backend/reset_and_reingest.py
+
+
+WHAT IT DOES:
+-------------
+1. CLEARS SQLITE DATABASE
+   - Deletes all documents from Document table
+   - Deletes all chunks from DocumentChunk table
+   - Deletes all chat histories
+   - Deletes all chats
+   
+2. CLEARS QDRANT VECTOR DATABASE
+   - Deletes the "documents" collection
+   - All vector embeddings are removed
+   
+3. RESETS FILE TRACKING
+   - Clears .file_states.json tracking file
+   - Prepares for fresh scan
+   
+4. TRIGGERS AUTO-INGESTION
+   - Initializes file manager
+   - Scans knowledge_base/ directory
+   - Re-ingests all files from scratch
+   - Reports progress with detailed logging
+
+
+OUTPUT AND LOGGING:
+-------------------
+The script provides comprehensive logging with:
+
+✓ Color-coded output (green for info, yellow for warnings, red for errors)
+✓ Timestamps for all operations (millisecond precision)
+✓ Progress indicators for each step
+✓ File list before re-ingestion
+✓ Per-file ingestion status
+✓ Summary statistics (added/modified/deleted counts)
+✓ Total processing duration
+✓ Detailed error messages if anything fails
+
+Example log output:
+
+    ╔════════════════════════════════════════════════════════════════════════╗
+    ║                                                                        ║
+    ║        GRACE KNOWLEDGE BASE - COMPLETE RESET & RE-INGESTION          ║
+    ║                Started: 2026-01-06 14:23:45                          ║
+    ║                                                                        ║
+    ╚════════════════════════════════════════════════════════════════════════╝
+    
+    ════════════════════════════════════════════════════════════════════════
+    [1/4] CLEARING SQLITE DATABASE
+    ════════════════════════════════════════════════════════════════════════
+    Setting up SQLite configuration...
+    Initializing database connection...
+    Creating session factory...
+    Deleting document chunks...
+      ✓ Deleted 45 document chunks
+    Deleting documents...
+      ✓ Deleted 10 documents
+    ...
+    
+    ════════════════════════════════════════════════════════════════════════
+    [2/4] CLEARING QDRANT VECTOR DATABASE
+    ════════════════════════════════════════════════════════════════════════
+    ...
+    
+    ════════════════════════════════════════════════════════════════════════
+    [4/4] TRIGGERING AUTO-INGESTION
+    ════════════════════════════════════════════════════════════════════════
+    
+    ────────────────────────────────────────────────────────────────────────
+    SCANNING KNOWLEDGE BASE FOR FILES
+    ────────────────────────────────────────────────────────────────────────
+    Knowledge base path: /path/to/knowledge_base
+    Total files found: 15
+    
+    Files to be ingested:
+        1. documents/report.pdf (245.3 KB)
+        2. documents/guide.md (45.1 KB)
+        ...
+
+
+ENHANCED INGESTION LOGGING:
+---------------------------
+When files are being ingested, you'll see detailed progress for each file:
+
+    ════════════════════════════════════════════════════════════════════════
+    [INGESTION START] NEW FILE
+      File: documents/report.pdf
+      Size: 245.3 KB
+      Full path: /path/to/knowledge_base/documents/report.pdf
+      Started at: 2026-01-06 14:24:12.345
+    ════════════════════════════════════════════════════════════════════════
+    [INGESTION] Reading file content...
+    [INGESTION] ✓ Read 12450 characters
+    [INGESTION] Extracting text and generating embeddings...
+    [INGESTION] ✓ Text extraction and embedding completed
+    [INGESTION] Document ID: 123
+    [INGESTION] Updating document metadata...
+    [INGESTION] ✓ Document metadata updated
+    [INGESTION] Tracking file state...
+    [INGESTION] Committing to git...
+    ════════════════════════════════════════════════════════════════════════
+    [INGESTION SUCCESS] documents/report.pdf
+      Document ID: 123
+      Processing time: 2.45 seconds
+      Content length: 12450 characters
+      Message: Document already ingested
+      Completed at: 2026-01-06 14:24:14.791
+    ════════════════════════════════════════════════════════════════════════
+
+
+FEATURES:
+---------
+✓ Single Python file - easy to run
+✓ Comprehensive error handling
+✓ Detailed logging at every step
+✓ Shows which file is currently being ingested
+✓ Progress timestamps for all operations
+✓ Per-file processing time tracking
+✓ Summary statistics at the end
+✓ Color-coded output for easy reading
+✓ Works with existing auto-ingestion system
+
+
+EXIT CODES:
+-----------
+    0 = Success (all steps completed)
+    1 = Failure (at least one step failed)
+
+
+REQUIREMENTS:
+-------------
+- Python 3.7+
+- PostgreSQL/SQLite database configured
+- Qdrant vector database running
+- Ollama service running (for embeddings)
+- All Grace backend dependencies installed (see requirements.txt)
+
+
+TROUBLESHOOTING:
+----------------
+If the script fails:
+1. Check the error messages in the log output
+2. Verify database connections are working
+3. Ensure Qdrant is running
+4. Check file permissions in knowledge_base/
+5. Review detailed error messages with full stack traces
+
+The script will provide helpful error messages if anything goes wrong.
+
+
+TIME ESTIMATES:
+---------------
+- Clear databases: 1-2 seconds
+- Reset tracking: <1 second
+- Scan knowledge base: 2-5 seconds (depends on file count)
+- Re-ingest files: 5-60 seconds (depends on file sizes and complexity)
+- Total: 10-90 seconds typically
+
+For a knowledge base with 1000+ files, allow 5-10 minutes.
+
+
+SAFETY:
+-------
+⚠️  WARNING: This script DELETES all your ingested documents and embeddings!
+    Use only when you want to:
+    - Reset the system to a clean state
+    - Re-ingest all files from scratch
+    - Fix ingestion issues by starting fresh
+    
+    Create a backup if you need to preserve the data!
+
+
+==============================================================================
+"""
+
+if __name__ == "__main__":
+    print(__doc__)
