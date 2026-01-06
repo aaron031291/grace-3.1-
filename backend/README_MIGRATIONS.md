@@ -5,16 +5,19 @@ This directory contains all scripts needed to set up and migrate the GRACE datab
 ## Quick Start
 
 ### For Windows Users
+
 ```cmd
 run_migrations.bat
 ```
 
 ### For Linux/macOS Users
+
 ```bash
 ./run_migrations.sh
 ```
 
 ### For Any Platform
+
 ```bash
 python run_all_migrations.py
 ```
@@ -22,6 +25,7 @@ python run_all_migrations.py
 ## What These Scripts Do
 
 These scripts automatically:
+
 1. ✅ Initialize the database connection
 2. ✅ Create all required tables (8 total)
 3. ✅ Add metadata columns to documents
@@ -32,14 +36,14 @@ These scripts automatically:
 
 ## Files Included
 
-| File | Purpose | Platform |
-|------|---------|----------|
-| `run_all_migrations.py` | Main Python migration script | Windows, Linux, macOS |
-| `run_migrations.bat` | Windows batch wrapper | Windows only |
-| `run_migrations.sh` | Linux/macOS shell wrapper | Linux/macOS only |
-| `MIGRATIONS.md` | Detailed migration guide | All platforms |
-| `MIGRATION_SCRIPTS.md` | Scripts documentation | All platforms |
-| `MIGRATION_QUICK_REFERENCE.md` | Quick reference | All platforms |
+| File                           | Purpose                      | Platform              |
+| ------------------------------ | ---------------------------- | --------------------- |
+| `run_all_migrations.py`        | Main Python migration script | Windows, Linux, macOS |
+| `run_migrations.bat`           | Windows batch wrapper        | Windows only          |
+| `run_migrations.sh`            | Linux/macOS shell wrapper    | Linux/macOS only      |
+| `MIGRATIONS.md`                | Detailed migration guide     | All platforms         |
+| `MIGRATION_SCRIPTS.md`         | Scripts documentation        | All platforms         |
+| `MIGRATION_QUICK_REFERENCE.md` | Quick reference              | All platforms         |
 
 ## Prerequisites
 
@@ -50,6 +54,7 @@ These scripts automatically:
 ## Success Indicators
 
 After running, you should see:
+
 ```
 ✓ PASSED: Base Tables
 ✓ PASSED: Metadata Columns
@@ -65,6 +70,7 @@ Your database is ready for use.
 ## Database Location
 
 The database is created at:
+
 ```
 backend/data/grace.db
 ```
@@ -83,6 +89,7 @@ backend/data/grace.db
 ## Idempotent & Safe
 
 These scripts are **safe to run multiple times**:
+
 - ✅ Won't create duplicate tables
 - ✅ Won't recreate existing columns
 - ✅ Will skip already migrated columns
@@ -91,19 +98,23 @@ These scripts are **safe to run multiple times**:
 ## Troubleshooting
 
 ### Python not found
+
 - Install Python 3.10+ from https://www.python.org/downloads/
 - Ensure it's added to your system PATH
 - Restart your terminal
 
 ### Windows: Batch file won't run
+
 - Try: `python run_all_migrations.py` instead
 - Or open PowerShell and run: `run_migrations.bat`
 
 ### Linux/macOS: Permission denied
+
 - Run: `chmod +x run_migrations.sh`
 - Then: `./run_migrations.sh`
 
 ### Database locked
+
 - Close any other applications using the database
 - Stop the application if it's running
 - If corrupted: `rm data/grace.db` then rerun migrations
@@ -129,6 +140,7 @@ python -c "from database.migrate_add_confidence_scoring import migrate; migrate(
 ## Full Documentation
 
 For complete documentation, see:
+
 - **Setup Guide**: `../SETUP_GUIDE.md` - Complete project setup
 - **Migration Guide**: `MIGRATIONS.md` - Detailed migration docs
 - **Scripts Guide**: `MIGRATION_SCRIPTS.md` - Script documentation
@@ -139,11 +151,13 @@ For complete documentation, see:
 After running migrations:
 
 1. **Backend** starts automatically with database
+
    ```bash
    python app.py
    ```
 
 2. **Frontend** uses backend API
+
    ```bash
    npm run dev
    ```

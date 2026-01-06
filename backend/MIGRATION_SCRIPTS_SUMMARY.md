@@ -7,6 +7,7 @@
 ### Executable Scripts (Main)
 
 1. **`run_all_migrations.py`** (6.3 KB)
+
    - Main Python migration orchestrator
    - Works on Windows, Linux, and macOS
    - Initializes database and runs all migrations in order
@@ -14,6 +15,7 @@
    - **Usage**: `python run_all_migrations.py`
 
 2. **`run_migrations.bat`** (2.7 KB)
+
    - Windows batch wrapper around Python script
    - Checks for Python, shows output, handles errors
    - Auto-pauses to show results
@@ -28,12 +30,14 @@
 ### Documentation Files
 
 4. **`README_MIGRATIONS.md`** (4.3 KB)
+
    - Main README for the migration system
    - Quick start guide for all platforms
    - Troubleshooting and manual migration steps
    - Integration with GRACE project
 
 5. **`MIGRATIONS.md`** (4.3 KB)
+
    - Complete migration guide
    - What each migration does
    - Manual migration steps
@@ -41,6 +45,7 @@
    - File descriptions
 
 6. **`MIGRATION_SCRIPTS.md`** (3.8 KB)
+
    - Overview of the three scripts
    - Which to use for each platform
    - Features and benefits
@@ -67,26 +72,31 @@
 The scripts run 5 automated steps:
 
 ### Step 1: Create Base Tables
+
 - Initializes database connection
 - Creates 8 core tables from SQLAlchemy models
 - Sets up indexes and constraints
 
 ### Step 2: Add Metadata Columns
+
 - Adds document metadata fields
 - Adds trust scores and tags
 - Creates indexes for performance
 
 ### Step 3: Add Folder Path
+
 - Adds folder_path column to documents
 - Enables folder-based organization
 - Supports document hierarchy
 
 ### Step 4: Add Confidence Scoring
+
 - Adds confidence scoring columns
 - Supports semantic analysis
 - Adds trust metrics
 
 ### Step 5: Database Verification
+
 - Tests database connection
 - Lists all created tables
 - Shows column count per table
@@ -94,12 +104,12 @@ The scripts run 5 automated steps:
 
 ## Platform Support
 
-| Platform | Command | Status |
-|----------|---------|--------|
-| **Windows** | `run_migrations.bat` | ✅ Tested |
-| **Linux** | `./run_migrations.sh` | ✅ Tested |
-| **macOS** | `./run_migrations.sh` | ✅ Tested |
-| **Any OS** | `python run_all_migrations.py` | ✅ Tested |
+| Platform    | Command                        | Status    |
+| ----------- | ------------------------------ | --------- |
+| **Windows** | `run_migrations.bat`           | ✅ Tested |
+| **Linux**   | `./run_migrations.sh`          | ✅ Tested |
+| **macOS**   | `./run_migrations.sh`          | ✅ Tested |
+| **Any OS**  | `python run_all_migrations.py` | ✅ Tested |
 
 ## Test Results
 
@@ -126,23 +136,26 @@ Location: backend/data/grace.db
 ✅ **Verified** - Final schema validation included  
 ✅ **Fast** - Completes in 2-5 seconds  
 ✅ **No Configuration** - Works out of the box  
-✅ **Backward Compatible** - Works with existing databases  
+✅ **Backward Compatible** - Works with existing databases
 
 ## Usage Examples
 
 ### Windows Users
+
 ```cmd
 cd backend
 run_migrations.bat
 ```
 
 ### Linux/macOS Users
+
 ```bash
 cd backend
 ./run_migrations.sh
 ```
 
 ### Any Platform (Fallback)
+
 ```bash
 cd backend
 python run_all_migrations.py
@@ -153,6 +166,7 @@ python run_all_migrations.py
 **Location**: `backend/data/grace.db`
 
 **Tables Created** (8 total):
+
 - users (7 columns)
 - conversations (6 columns)
 - messages (7 columns)
@@ -167,6 +181,7 @@ python run_all_migrations.py
 ## What's Different from Manual Migration
 
 ### Before (Manual)
+
 ```bash
 # Step 1
 python -c "from database.migration import create_tables; create_tables()"
@@ -182,6 +197,7 @@ python -c "from database.migrate_add_confidence_scoring import migrate; migrate(
 ```
 
 ### After (Automated)
+
 ```bash
 # Windows
 run_migrations.bat
@@ -205,17 +221,21 @@ python run_all_migrations.py
 ## Troubleshooting
 
 ### Issue: "Python not found"
+
 - Install Python 3.10+ from python.org
 - Add to PATH and restart terminal
 
 ### Issue: "Permission denied" (Linux/macOS)
+
 - Run: `chmod +x run_migrations.sh`
 
 ### Issue: "Database locked"
+
 - Close other apps using database
 - Delete `data/grace.db` and rerun
 
 ### Issue: Batch file won't execute
+
 - Use: `python run_all_migrations.py` instead
 
 All issues have detailed solutions in the documentation files.
@@ -231,6 +251,7 @@ All issues have detailed solutions in the documentation files.
 ## Files to Keep
 
 These files should be checked into version control:
+
 - ✅ `run_all_migrations.py`
 - ✅ `run_migrations.bat`
 - ✅ `run_migrations.sh`
@@ -241,6 +262,7 @@ These files should be checked into version control:
 - ✅ `../SETUP_GUIDE.md`
 
 These files should NOT be checked in:
+
 - ❌ `data/grace.db` (auto-created)
 - ❌ `data/` directory (auto-created)
 
@@ -267,7 +289,7 @@ These files should NOT be checked in:
 ✅ Database initialization tested  
 ✅ All 5 migration steps automated  
 ✅ Schema verification included  
-✅ Setup guide created  
+✅ Setup guide created
 
 ---
 
