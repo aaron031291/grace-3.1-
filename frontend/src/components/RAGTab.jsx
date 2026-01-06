@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./RAGTab.css";
 import FileBrowser from "./FileBrowser";
 import DirectoryChat from "./DirectoryChat";
@@ -12,7 +12,56 @@ export default function RAGTab() {
   const [vscodePath, setVscodePath] = useState("");
   const [currentDirectory, setCurrentDirectory] = useState("");
 
+  // Chat history state for folder-specific chats
+  const [folderChats, setFolderChats] = useState({}); // Map of folder paths to chat objects
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [loadingChat, setLoadingChat] = useState(false);
+
   const API_BASE = "http://localhost:8000";
+
+  // Create or get chat for the current folder
+  useEffect(() => {
+    const createOrGetChat = async () => {
+      if (!currentDirectory) return;
+
+      // Check if we already have a chat for this folder
+      if (folderChats[currentDirectory]) {
+        setSelectedChatId(folderChats[currentDirectory].id);
+        return;
+      }
+
+      // Create a new chat for this folder
+      setLoadingChat(true);
+      try {
+        const response = await fetch(`${API_BASE}/chats`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: `Documents Chat - ${currentDirectory || "Root"}`,
+            description: `Chat for folder: ${currentDirectory || "Root"}`,
+            folder_path: currentDirectory,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to create chat");
+        }
+
+        const newChat = await response.json();
+        setFolderChats((prev) => ({
+          ...prev,
+          [currentDirectory]: newChat,
+        }));
+        setSelectedChatId(newChat.id);
+      } catch (err) {
+        console.error("Failed to create chat for folder:", err);
+      } finally {
+        setLoadingChat(false);
+      }
+    };
+
+    createOrGetChat();
+  }, [currentDirectory]);
 
   // Handle opening VSCode
   const handleOpenVSCode = (currentPath) => {
@@ -110,7 +159,16 @@ export default function RAGTab() {
                 />
               </div>
               <div className="directory-chat-section">
-                <DirectoryChat currentPath={currentDirectory} />
+                {loadingChat ? (
+                  <div className="loading-chat">
+                    Creating chat for folder...
+                  </div>
+                ) : (
+                  <DirectoryChat
+                    currentPath={currentDirectory}
+                    chatId={selectedChatId}
+                  />
+                )}
               </div>
             </div>
           </div>

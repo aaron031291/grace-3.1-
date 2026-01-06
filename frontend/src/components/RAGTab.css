@@ -86,6 +86,16 @@
   opacity: 0.7;
 }
 
+.loading-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 /* Tab Content */
 .tab-content {
   flex: 1;
