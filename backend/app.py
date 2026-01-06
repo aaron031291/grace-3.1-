@@ -86,6 +86,7 @@ class ChatCreateRequest(BaseModel):
     description: Optional[str] = Field(None, description="Description of the chat")
     model: Optional[str] = Field(None, description="Model to use (defaults to settings)")
     temperature: Optional[float] = Field(0.7, ge=0.0, le=2.0, description="Temperature for generation")
+    folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
 class ChatResponse(BaseModel):
@@ -99,6 +100,7 @@ class ChatResponse(BaseModel):
     created_at: datetime = Field(..., description="Creation timestamp")
     updated_at: datetime = Field(..., description="Last update timestamp")
     last_message_at: Optional[datetime] = Field(None, description="Last message timestamp")
+    folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
 class ChatListResponse(BaseModel):
@@ -596,7 +598,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
     Create a new chat session.
     
     Args:
-        request: ChatCreateRequest with optional title, description, model, and temperature
+        request: ChatCreateRequest with optional title, description, model, temperature, and folder_path
         session: Database session
         
     Returns:
@@ -616,12 +618,13 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
                 detail=f"Model '{model}' not found"
             )
         
-        # Create chat
+        # Create chat with folder_path
         chat = repo.create(
             title=request.title,
             description=request.description,
             model=model,
-            temperature=request.temperature or 0.7
+            temperature=request.temperature or 0.7,
+            folder_path=request.folder_path or ""
         )
         
         return ChatResponse(
@@ -633,7 +636,8 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
             is_active=chat.is_active,
             created_at=chat.created_at,
             updated_at=chat.updated_at,
-            last_message_at=chat.last_message_at
+            last_message_at=chat.last_message_at,
+            folder_path=getattr(chat, 'folder_path', None)
         )
     except HTTPException:
         raise
@@ -645,7 +649,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
 
 
 @app.get("/chats", response_model=ChatListResponse, tags=["Chat Management"])
-async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, session = Depends(get_session)):
+async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, folder_path: Optional[str] = None, session = Depends(get_session)):
     """
     List all chats with optional filtering.
     
@@ -653,6 +657,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         skip: Number of chats to skip
         limit: Maximum number of chats to return
         active_only: If True, only return active chats
+        folder_path: If specified, only return chats for this folder
         session: Database session
         
     Returns:
@@ -661,12 +666,36 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
     try:
         repo = ChatRepository(session)
         
+        # Build filter criteria
+        filter_kwargs = {}
+        if folder_path is not None:
+            filter_kwargs['folder_path'] = folder_path
         if active_only:
-            chats = repo.get_active_chats(skip=skip, limit=limit)
-            total = repo.count_active()
+            filter_kwargs['is_active'] = True
+        
+        # Get chats with filters
+        if filter_kwargs:
+            # Use filtered query
+            from sqlalchemy import and_, inspect
+            query = session.query(Chat)
+            
+            # Check if columns exist before filtering
+            mapper = inspect(Chat)
+            columns = {column.name for column in mapper.columns}
+            
+            for key, value in filter_kwargs.items():
+                if key in columns:
+                    query = query.filter(getattr(Chat, key) == value)
+            
+            chats = query.order_by(Chat.updated_at.desc()).offset(skip).limit(limit).all()
+            total = query.count()
         else:
-            chats = repo.get_all_chats(skip=skip, limit=limit)
-            total = repo.count()
+            if active_only:
+                chats = repo.get_active_chats(skip=skip, limit=limit)
+                total = repo.count_active()
+            else:
+                chats = repo.get_all_chats(skip=skip, limit=limit)
+                total = repo.count()
         
         return ChatListResponse(
             chats=[
@@ -679,7 +708,8 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
                     is_active=chat.is_active,
                     created_at=chat.created_at,
                     updated_at=chat.updated_at,
-                    last_message_at=chat.last_message_at
+                    last_message_at=chat.last_message_at,
+                    folder_path=getattr(chat, 'folder_path', None)
                 )
                 for chat in chats
             ],
@@ -725,7 +755,8 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
             is_active=chat.is_active,
             created_at=chat.created_at,
             updated_at=chat.updated_at,
-            last_message_at=chat.last_message_at
+            last_message_at=chat.last_message_at,
+            folder_path=getattr(chat, 'folder_path', None)
         )
     except HTTPException:
         raise
@@ -777,6 +808,8 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
             update_data['model'] = request.model
         if request.temperature is not None:
             update_data['temperature'] = request.temperature
+        if request.folder_path is not None:
+            update_data['folder_path'] = request.folder_path
         
         # Update chat
         updated_chat = repo.update(chat_id, **update_data)
@@ -790,7 +823,8 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
             is_active=updated_chat.is_active,
             created_at=updated_chat.created_at,
             updated_at=updated_chat.updated_at,
-            last_message_at=updated_chat.last_message_at
+            last_message_at=updated_chat.last_message_at,
+            folder_path=getattr(updated_chat, 'folder_path', None)
         )
     except HTTPException:
         raise
