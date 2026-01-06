@@ -319,6 +319,23 @@ class IngestionFileManager:
         except Exception as e:
             logger.error(f"Error saving state file: {e}")
     
+    def _get_db_session(self):
+        """Get a database session, handling uninitialized SessionLocal."""
+        try:
+            # Import dynamically to get the latest value
+            from database.session import SessionLocal as CurrentSessionLocal
+            
+            if CurrentSessionLocal is None:
+                logger.warning("SessionLocal is not initialized yet")
+                return None
+            
+            # Try to create a session
+            session = CurrentSessionLocal()
+            return session
+        except Exception as e:
+            logger.error(f"Error getting database session: {e}")
+            return None
+    
     def _compute_file_hash(self, filepath: Path) -> str:
         """
         Compute SHA256 hash of file content.
@@ -485,17 +502,22 @@ class IngestionFileManager:
         finally:
             db.close()
     
-    def process_new_file(self, filepath: Path) -> IngestionResult:
+    def process_new_file(self, filepath: Path, rel_path: str = None) -> IngestionResult:
         """
         Process a newly created file.
         
         Args:
-            filepath: Path to new file
+            filepath: Path to new file (absolute)
+            rel_path: Relative path from knowledge base (optional)
             
         Returns:
             IngestionResult
         """
         logger.info(f"[NEW FILE] Processing: {filepath}")
+        
+        # Compute relative path if not provided
+        if rel_path is None:
+            rel_path = str(filepath.relative_to(self.knowledge_base_path))
         
         try:
             # Read file content
@@ -503,7 +525,7 @@ class IngestionFileManager:
             if not content:
                 return IngestionResult(
                     success=False,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="added",
                     error="Could not read file content",
                 )
@@ -516,34 +538,34 @@ class IngestionFileManager:
                 source=str(self.knowledge_base_path),
                 upload_method="file-import",
                 source_type="knowledge_base",
-                metadata={"file_path": str(filepath)},
+                metadata={"file_path": rel_path},
             )
             
             if doc_id:
                 # Update database record with file path
                 try:
-                    db = SessionLocal()
-                    doc = db.query(Document).filter(Document.id == doc_id).first()
-                    if doc:
-                        doc.file_path = str(filepath)
-                        db.commit()
-                    db.close()
+                    db = self._get_db_session()
+                    if db:
+                        doc = db.query(Document).filter(Document.id == doc_id).first()
+                        if doc:
+                            doc.file_path = rel_path
+                            db.commit()
+                        db.close()
                 except Exception as e:
                     logger.error(f"Error updating document file_path: {e}")
                 
-                # Track file hash
+                # Track file hash using relative path as key
                 file_hash = self._compute_file_hash(filepath)
-                self.file_states[str(filepath)] = file_hash
+                self.file_states[rel_path] = file_hash
                 self._save_state()
                 
                 # Commit to git
-                rel_path = filepath.relative_to(self.knowledge_base_path)
-                self.git_tracker.add_file(str(rel_path))
+                self.git_tracker.add_file(rel_path)
                 self.git_tracker.commit_changes(f"Ingested new file: {filename}")
                 
                 return IngestionResult(
                     success=True,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="added",
                     document_id=doc_id,
                     message=message,
@@ -551,7 +573,7 @@ class IngestionFileManager:
             else:
                 return IngestionResult(
                     success=False,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="added",
                     error=message,
                 )
@@ -560,30 +582,35 @@ class IngestionFileManager:
             logger.error(f"Error processing new file: {e}", exc_info=True)
             return IngestionResult(
                 success=False,
-                filepath=str(filepath),
+                filepath=rel_path,
                 change_type="added",
                 error=str(e),
             )
     
-    def process_modified_file(self, filepath: Path) -> IngestionResult:
+    def process_modified_file(self, filepath: Path, rel_path: str = None) -> IngestionResult:
         """
         Process a modified file (re-ingest with new embeddings).
         
         Args:
-            filepath: Path to modified file
+            filepath: Path to modified file (absolute)
+            rel_path: Relative path from knowledge base (optional)
             
         Returns:
             IngestionResult
         """
         logger.info(f"[MODIFIED FILE] Processing: {filepath}")
         
+        # Compute relative path if not provided
+        if rel_path is None:
+            rel_path = str(filepath.relative_to(self.knowledge_base_path))
+        
         try:
             # Find existing document
-            document = self._find_document_by_path(str(filepath))
+            document = self._find_document_by_path(rel_path)
             if not document:
                 logger.warning(f"Document not found for modified file: {filepath}")
                 # Treat as new file
-                return self.process_new_file(filepath)
+                return self.process_new_file(filepath, rel_path)
             
             doc_id = document.id
             logger.info(f"Found document {doc_id} for modified file")
@@ -592,7 +619,7 @@ class IngestionFileManager:
             if not self._delete_document_embeddings(doc_id):
                 return IngestionResult(
                     success=False,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="modified",
                     document_id=doc_id,
                     error="Failed to delete old embeddings",
@@ -603,7 +630,7 @@ class IngestionFileManager:
             if not content:
                 return IngestionResult(
                     success=False,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="modified",
                     document_id=doc_id,
                     error="Could not read updated file content",
@@ -628,7 +655,7 @@ class IngestionFileManager:
                 source=str(self.knowledge_base_path),
                 upload_method="file-update",
                 source_type="knowledge_base",
-                metadata={"file_path": str(filepath), "updated_from": doc_id},
+                metadata={"file_path": rel_path, "updated_from": doc_id},
             )
             
             if new_doc_id:
@@ -637,25 +664,24 @@ class IngestionFileManager:
                     db = SessionLocal()
                     doc = db.query(Document).filter(Document.id == new_doc_id).first()
                     if doc:
-                        doc.file_path = str(filepath)
+                        doc.file_path = rel_path
                         db.commit()
                     db.close()
                 except Exception as e:
                     logger.error(f"Error updating document file_path: {e}")
                 
-                # Track file hash
+                # Track file hash using relative path as key
                 file_hash = self._compute_file_hash(filepath)
-                self.file_states[str(filepath)] = file_hash
+                self.file_states[rel_path] = file_hash
                 self._save_state()
                 
                 # Commit to git
-                rel_path = filepath.relative_to(self.knowledge_base_path)
-                self.git_tracker.add_file(str(rel_path))
+                self.git_tracker.add_file(rel_path)
                 self.git_tracker.commit_changes(f"Updated file: {filename}")
                 
                 return IngestionResult(
                     success=True,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="modified",
                     document_id=new_doc_id,
                     message=f"File updated. Old doc: {doc_id}, New doc: {new_doc_id}",
@@ -663,7 +689,7 @@ class IngestionFileManager:
             else:
                 return IngestionResult(
                     success=False,
-                    filepath=str(filepath),
+                    filepath=rel_path,
                     change_type="modified",
                     document_id=doc_id,
                     error=message,
@@ -673,7 +699,7 @@ class IngestionFileManager:
             logger.error(f"Error processing modified file: {e}", exc_info=True)
             return IngestionResult(
                 success=False,
-                filepath=str(filepath),
+                filepath=rel_path,
                 change_type="modified",
                 error=str(e),
             )
@@ -757,12 +783,28 @@ class IngestionFileManager:
         Scan knowledge base directory for changes and process them.
         
         Compares current files with tracked state and processes new,
-        modified, and deleted files.
+        modified, and deleted files. Also checks database for orphaned
+        documents (files that were ingested but no longer exist on disk).
         
         Returns:
             List of IngestionResult for each processed file
         """
         logger.info(f"[SCAN] Scanning knowledge base: {self.knowledge_base_path}")
+        import os
+        print(f"[DEBUG] Current working directory: {os.getcwd()}")
+        print(f"[DEBUG] Knowledge base path: {self.knowledge_base_path}")
+        print(f"[DEBUG] Absolute path: {self.knowledge_base_path.resolve()}")
+        print(f"[DEBUG] Path exists: {self.knowledge_base_path.exists()}")
+        print(f"[DEBUG] Path is directory: {self.knowledge_base_path.is_dir()}")
+        if self.knowledge_base_path.exists():
+            print(f"[DEBUG] Contents of directory:")
+            try:
+                for item in self.knowledge_base_path.iterdir():
+                    print(f"  - {item.name}")
+            except Exception as e:
+                print(f"  ERROR reading directory: {e}")
+        logger.info(f"[SCAN] Current tracked files: {len(self.file_states)}")
+        print(f"\n[DEBUG] Tracked files in state: {list(self.file_states.keys())}")
         
         results = []
         
@@ -778,6 +820,11 @@ class IngestionFileManager:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
             current_files[rel_path] = filepath
         
+        logger.info(f"[SCAN] Found {len(current_files)} files on disk")
+        for rel_path in sorted(current_files.keys()):
+            logger.debug(f"[SCAN]   File: {rel_path}")
+        print(f"[DEBUG] Found files on disk: {list(current_files.keys())}")
+        
         # Process new and modified files
         for rel_path, filepath in current_files.items():
             file_hash = self._compute_file_hash(filepath)
@@ -785,31 +832,74 @@ class IngestionFileManager:
             
             if old_hash is None:
                 # New file
-                logger.info(f"Detected new file: {rel_path}")
-                result = self.process_new_file(filepath)
+                logger.info(f"[SCAN] Detected new file: {rel_path}")
+                result = self.process_new_file(filepath, rel_path)
                 results.append(result)
+                logger.info(f"[SCAN] New file result: success={result.success}, error={result.error}")
             elif old_hash != file_hash:
                 # Modified file
-                logger.info(f"Detected modified file: {rel_path}")
-                result = self.process_modified_file(filepath)
+                logger.info(f"[SCAN] Detected modified file: {rel_path}")
+                result = self.process_modified_file(filepath, rel_path)
                 results.append(result)
+                logger.info(f"[SCAN] Modified file result: success={result.success}, error={result.error}")
         
-        # Process deleted files
+        # Process deleted files (from tracked state)
         deleted_files = set(self.file_states.keys()) - set(current_files.keys())
         for rel_path in deleted_files:
             logger.info(f"Detected deleted file: {rel_path}")
             result = self.process_deleted_file(rel_path)
             results.append(result)
         
+        # ==================== Handle Orphaned Documents ====================
+        # If state file is empty or missing, check database for orphaned documents
+        if not self.file_states:
+            logger.info("[SCAN] No tracked state found. Checking database for orphaned documents...")
+            try:
+                # Get a safe database session
+                db = self._get_db_session()
+                
+                if db is None:
+                    logger.warning("[SCAN] Could not get database session, skipping orphaned document check")
+                    return results
+                
+                all_documents = db.query(Document).all()
+                logger.info(f"[SCAN] Found {len(all_documents)} documents in database")
+                
+                for doc in all_documents:
+                    file_path = doc.file_path
+                    if not file_path:
+                        logger.debug(f"[SCAN] Document {doc.id} has no file_path, skipping")
+                        continue
+                    
+                    # Check if file exists
+                    abs_path = self.knowledge_base_path / file_path
+                    if not abs_path.exists():
+                        logger.info(f"[SCAN] Found orphaned document: {file_path} (doc_id={doc.id})")
+                        result = self.process_deleted_file(file_path)
+                        results.append(result)
+                    else:
+                        # File exists, add to state
+                        try:
+                            file_hash = self._compute_file_hash(abs_path)
+                            self.file_states[file_path] = file_hash
+                        except Exception as e:
+                            logger.warning(f"[SCAN] Could not hash existing file {file_path}: {e}")
+                
+                self._save_state()
+                db.close()
+            except Exception as e:
+                logger.error(f"[SCAN] Error checking for orphaned documents: {e}", exc_info=True)
+        
         logger.info(f"[SCAN] ✓ Scan complete. Processed {len(results)} changes.")
         return results
     
-    def watch_and_process(self, continuous: bool = False) -> None:
+    def watch_and_process(self, continuous: bool = False, interval: int = 30) -> None:
         """
         Watch directory for changes and process them.
         
         Args:
             continuous: If True, continuously watch for changes
+            interval: Time in seconds between scans (default 30 seconds)
         """
         logger.info(f"[WATCH] Starting file watcher for {self.knowledge_base_path}")
         
@@ -818,7 +908,7 @@ class IngestionFileManager:
             while True:
                 try:
                     self.scan_directory()
-                    time.sleep(5)  # Check every 5 seconds
+                    time.sleep(interval)  # Check every interval seconds
                 except Exception as e:
                     logger.error(f"Error in watch loop: {e}")
                     time.sleep(10)

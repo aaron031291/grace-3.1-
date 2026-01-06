@@ -9,6 +9,19 @@ import logging
 from .connection import DatabaseConnection
 from .base import Base
 
+# Import all models to register them with Base.metadata
+# This must be done BEFORE calling create_all()
+from models.database_models import (  # noqa: F401
+    User,
+    Conversation,
+    Message,
+    Embedding,
+    Chat,
+    ChatHistory,
+    Document,
+    DocumentChunk,
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +36,20 @@ def create_tables() -> None:
     engine = DatabaseConnection.get_engine()
     
     logger.info("Creating database tables...")
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database tables created successfully")
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables created successfully")
+    except Exception as e:
+        logger.warning(f"Error during table creation (may be normal): {type(e).__name__}: {str(e)[:100]}")
+        # Try to create tables individually to skip ones that already exist
+        logger.info("Attempting to create tables individually...")
+        for table_name, table in Base.metadata.tables.items():
+            try:
+                table.create(bind=engine, checkfirst=True)
+                logger.debug(f"Table '{table_name}' created or already exists")
+            except Exception as table_error:
+                logger.debug(f"Could not create table '{table_name}': {table_error}")
+        logger.info("Individual table creation completed")
 
 
 def drop_tables() -> None:

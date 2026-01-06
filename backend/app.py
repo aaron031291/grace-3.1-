@@ -223,6 +223,91 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"⚠ Could not connect to Qdrant: {e}")
     
+    # ==================== Initialize Auto-Ingestion ====================
+    # Start background task for monitoring knowledge base for new files
+    import asyncio
+    import threading
+    
+    auto_ingest_task = None
+    
+    def run_auto_ingestion():
+        """Run auto-ingestion in a background thread."""
+        try:
+            import time
+            import sys
+            from api.file_ingestion import get_file_manager
+            from database.connection import DatabaseConnection
+            from database.session import initialize_session_factory
+            
+            # Ensure database is initialized in this thread context
+            print("\n[AUTO-INGEST] Verifying database connection...", flush=True)
+            try:
+                engine = DatabaseConnection.get_engine()
+                if engine:
+                    print("[AUTO-INGEST] ✓ Database engine verified", flush=True)
+            except RuntimeError as e:
+                print(f"[AUTO-INGEST] ⚠ Database not initialized yet: {e}", flush=True)
+                print("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
+                time.sleep(2)
+            
+            # Initialize session factory in this thread if needed
+            print("[AUTO-INGEST] Initializing session factory...", flush=True)
+            session_factory = initialize_session_factory()
+            if session_factory:
+                print("[AUTO-INGEST] ✓ Session factory initialized", flush=True)
+            else:
+                print("[AUTO-INGEST] ✗ Failed to initialize session factory", flush=True)
+            
+            print("[AUTO-INGEST] Starting auto-ingestion monitor...", flush=True)
+            
+            # Get the file manager instance
+            file_manager = get_file_manager()
+            
+            # Initialize git if needed
+            file_manager.git_tracker.initialize_git()
+            
+            # Do initial scan on startup
+            print("[AUTO-INGEST] Running initial scan of knowledge base...", flush=True)
+            max_retries = 3
+            retry_count = 0
+            results = []
+            
+            while retry_count < max_retries:
+                try:
+                    results = file_manager.scan_directory()
+                    break
+                except Exception as e:
+                    retry_count += 1
+                    if retry_count < max_retries:
+                        print(f"[AUTO-INGEST] Scan attempt {retry_count} failed, retrying in 2 seconds: {e}", flush=True)
+                        time.sleep(2)
+                    else:
+                        print(f"[AUTO-INGEST] ✗ Initial scan failed after {max_retries} attempts: {e}", flush=True)
+                        raise
+            
+            if results:
+                print(f"[AUTO-INGEST] Initial scan found {len(results)} changes:", flush=True)
+                for result in results:
+                    status = "✓" if result.success else "✗"
+                    print(f"  {status} {result.change_type}: {result.filepath}", flush=True)
+            else:
+                print("[AUTO-INGEST] No changes detected in initial scan", flush=True)
+            
+            # Continue monitoring in background
+            print("[AUTO-INGEST] Auto-ingestion monitor started (will check every 30 seconds)\n", flush=True)
+            file_manager.watch_and_process(continuous=True)
+        except Exception as e:
+            print(f"[AUTO-INGEST] ✗ Error in auto-ingestion: {e}", flush=True)
+            import traceback
+            traceback.print_exc()
+    
+    # Start auto-ingestion in a daemon thread
+    try:
+        auto_ingest_thread = threading.Thread(target=run_auto_ingestion, daemon=True)
+        auto_ingest_thread.start()
+    except Exception as e:
+        print(f"[AUTO-INGEST] ✗ Failed to start auto-ingestion: {e}")
+    
     yield
     
     # Shutdown
@@ -1305,7 +1390,7 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
         
         response_text = client.chat(
-            model=settings.DEFAULT_MODEL if settings else "llama2",
+            model=settings.OLLAMA_LLM_DEFAULT if settings else "llama2",
             messages=messages,
             stream=False,
             temperature=temperature,
@@ -1334,5 +1419,17 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
             status_code=500,
             detail=f"Error processing directory chat: {str(e)}"
         )
+
+
+# ==================== Run ====================
+
+if __name__ == "__main__":
+    import uvicorn
+    
+    # Run the app
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=8000,
         reload=True
     )

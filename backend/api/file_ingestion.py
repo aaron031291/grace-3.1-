@@ -28,15 +28,21 @@ def get_file_manager() -> IngestionFileManager:
     
     if _file_manager is None:
         try:
+            from pathlib import Path
+            import os
             logger.info("[FILE_INGEST] Initializing file ingestion manager...")
             ingestion_service = get_ingestion_service()
             embedding_model = get_embedding_model()
+            
+            # Use absolute path to knowledge base
+            kb_path = Path(os.path.dirname(__file__)).parent / "knowledge_base"
+            
             _file_manager = IngestionFileManager(
-                knowledge_base_path="backend/knowledge_base",
+                knowledge_base_path=kb_path,
                 embedding_model=embedding_model,
                 ingestion_service=ingestion_service,
             )
-            logger.info("[FILE_INGEST] ✓ File manager initialized")
+            logger.info(f"[FILE_INGEST] ✓ File manager initialized with path: {kb_path}")
         except Exception as e:
             logger.error(f"Failed to initialize file manager: {e}")
             raise HTTPException(
