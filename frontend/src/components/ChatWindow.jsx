@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 
-export default function ChatWindow({ chatId, onChatCreated }) {
+export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -328,7 +328,12 @@ export default function ChatWindow({ chatId, onChatCreated }) {
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <h2>{chatInfo?.title || "Chat"}</h2>
+        <div className="chat-header-top">
+          <h2>{chatInfo?.title || "Chat"}</h2>
+          {folderPath && (
+            <span className="folder-context-badge">📁 {folderPath}</span>
+          )}
+        </div>
         {chatInfo && (
           <div className="chat-info">
             <span className="model-badge">{chatInfo.model}</span>
