@@ -151,7 +151,7 @@ async def ingest_text(
     """
     try:
         print("Ingesting text document...")
-        document_id, message = service.ingest_text(
+        document_id, message = service.ingest_text_fast(
             text_content=request.text,
             filename=request.filename,
             source=request.source,
@@ -236,7 +236,7 @@ async def ingest_file(
                 raise HTTPException(status_code=400, detail="Invalid metadata JSON")
         
         # Ingest the text
-        document_id, message = service.ingest_text(
+        document_id, message = service.ingest_text_fast(
             text_content=text,
             filename=file.filename or "uploaded_file",
             source=source,
