@@ -211,7 +211,7 @@ class ConfidenceScorer:
                 results = self.qdrant_client.search_vectors(
                     collection_name=self.collection_name,
                     query_vector=chunk_embedding,
-                    limit=10,
+                    limit=5,
                     score_threshold=0.3,  # Low threshold to capture related content
                 )
                 

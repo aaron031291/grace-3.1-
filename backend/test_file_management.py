@@ -151,7 +151,7 @@ def test_ingestion_service():
         These technologies power modern applications and continue to evolve rapidly.
         """
         
-        document_id, message = service.ingest_text(
+        document_id, message = service.ingest_text_fast(
             text_content=test_text,
             filename="test_ingestion.txt",
             source="knowledge_base",
