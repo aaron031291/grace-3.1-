@@ -27,7 +27,7 @@ class TextChunker:
     
     def __init__(
         self,
-        chunk_size: int = 10024,
+        chunk_size: int = 2048,
         chunk_overlap: int = 100,
         embedding_model: Optional[EmbeddingModel] = None,
         use_semantic_chunking: bool = True,
@@ -233,7 +233,7 @@ class TextIngestionService:
     def __init__(
         self,
         collection_name: str = "documents",
-        chunk_size: int = 10024,
+        chunk_size: int = 2048,
         chunk_overlap: int = 100,
         embedding_model: Optional[EmbeddingModel] = None,
     ):
@@ -387,7 +387,7 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST] ✓ Created document record with ID: {document_id}")
             
             # Chunk the text
-            logger.info(f"[INGEST_FAST] Chunking text with chunk_size=10024, overlap=50...")
+            logger.info(f"[INGEST_FAST] Chunking text with chunk_size=2048, overlap=50...")
             chunks = self.chunker.chunk_text(text_content)
             logger.info(f"[INGEST_FAST] ✓ Chunked text into {len(chunks)} chunks")
             

@@ -39,9 +39,9 @@ class Model:
     def _format_size(self) -> str:
         """Format size in human-readable format."""
         for unit in ['B', 'KB', 'MB', 'GB']:
-            if self.size < 10024:
+            if self.size < 2048:
                 return f"{self.size:.2f}{unit}"
-            self.size /= 10024
+            self.size /= 2048
         return f"{self.size:.2f}TB"
 
 

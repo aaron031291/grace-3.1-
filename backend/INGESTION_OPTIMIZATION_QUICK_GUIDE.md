@@ -73,7 +73,7 @@ doc_id, message = service.ingest_text_fast(content, filename)
 ### Chunking Strategy
 
 - **Type:** Simple character-based (disabled semantic)
-- **Chunk size:** 10024 characters
+- **Chunk size:** 2048 characters
 - **Overlap:** 50 characters
 - **Result:** ~2.3 chunks per KB (for typical text)
 

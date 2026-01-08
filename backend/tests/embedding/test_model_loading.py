@@ -31,9 +31,9 @@ class TestVRAMUsage(unittest.TestCase):
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.synchronize()
         
-        allocated = torch.cuda.memory_allocated() / (10024 ** 3)  # Convert to GB
-        total = torch.cuda.get_device_properties(0).total_memory / (10024 ** 3)  # Convert to GB
-        reserved = torch.cuda.memory_reserved() / (10024 ** 3)  # Convert to GB
+        allocated = torch.cuda.memory_allocated() / (2048 ** 3)  # Convert to GB
+        total = torch.cuda.get_device_properties(0).total_memory / (2048 ** 3)  # Convert to GB
+        reserved = torch.cuda.memory_reserved() / (2048 ** 3)  # Convert to GB
         percentage = (allocated / total) * 100
         
         return {
