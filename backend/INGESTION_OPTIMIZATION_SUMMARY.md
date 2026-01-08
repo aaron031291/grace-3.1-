@@ -110,7 +110,7 @@ for batch_start in range(0, len(vectors_to_upsert), batch_size):
 - **Cost:** Generates embeddings for every text segment (expensive!)
 - **Benefit:** Better semantic coherence in chunk boundaries
 - **Our Decision:** Disabled by default because:
-  - Simple character-based chunking (1024 char chunks) works well for most use cases
+  - Simple character-based chunking (10024 char chunks) works well for most use cases
   - Semantic chunking is a 2-3x time penalty
   - Users who need semantic chunking can enable it explicitly
 
@@ -216,8 +216,8 @@ for batch_start in range(0, len(vectors_to_upsert), batch_size):
    - Good for concurrent uploads
 
 4. **Chunk Size Tuning** (Low effort)
-   - Current: 1024 chars per chunk
-   - Could try 256 or 1024 depending on use case
+   - Current: 10024 chars per chunk
+   - Could try 256 or 10024 depending on use case
    - Affects number of embeddings needed
 
 ---

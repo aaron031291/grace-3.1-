@@ -46,7 +46,7 @@ class Settings:
     QDRANT_TIMEOUT: int = int(os.getenv("QDRANT_TIMEOUT", "30"))
     
     # ==================== Ingestion Configuration ====================
-    INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "1024"))
+    INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "10024"))
     INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
     
     # ==================== Application Configuration ====================

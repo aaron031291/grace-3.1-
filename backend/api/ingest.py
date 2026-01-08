@@ -34,7 +34,7 @@ def get_ingestion_service() -> TextIngestionService:
             print("[INGEST] ✓ Got embedding model (singleton)")
             _ingestion_service = TextIngestionService(
                 collection_name="documents",
-                chunk_size=1024,
+                chunk_size=10024,
                 chunk_overlap=50,
                 embedding_model=embedding_model,
             )
