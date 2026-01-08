@@ -269,7 +269,7 @@ def trigger_auto_ingestion():
                 logger.info("\nFiles to be ingested:")
                 for i, file_path in enumerate(sorted(files_to_process), 1):
                     rel_path = file_path.relative_to(kb_path)
-                    size_kb = file_path.stat().st_size / 10024
+                    size_kb = file_path.stat().st_size / 2048
                     logger.info(f"  {i:3d}. {rel_path} ({size_kb:.1f} KB)")
             else:
                 logger.warning("No files found in knowledge base!")

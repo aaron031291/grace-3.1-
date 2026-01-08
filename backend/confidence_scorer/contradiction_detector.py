@@ -42,7 +42,7 @@ class SemanticContradictionDetector:
             self.model = CrossEncoder(
                 'cross-encoder/nli-deberta-v3-large',
                 device=self.device,
-                max_length=10024
+                max_length=2048
             )
             logger.info("✓ NLI DeBERTa model loaded successfully")
             self.model_available = True
@@ -57,7 +57,7 @@ class SemanticContradictionDetector:
             self.model = CrossEncoder(
                 'cross-encoder/nli-deberta-large',
                 device=self.device,
-                max_length=10024
+                max_length=2048
             )
             self.model_available = True
         except Exception as e:
