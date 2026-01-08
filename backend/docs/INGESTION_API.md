@@ -171,13 +171,13 @@ Retrieve information about a specific document and its chunks.
     {
       "id": 1,
       "index": 0,
-      "text_length": 512,
+      "text_length": 1024,
       "vector_id": "1000"
     },
     {
       "id": 2,
       "index": 1,
-      "text_length": 512,
+      "text_length": 1024,
       "vector_id": "1001"
     }
   ]
@@ -314,7 +314,7 @@ POST /ingest/search?query=machine%20learning&limit=10&threshold=0.6
         "chunk_index": 2,
         "filename": "document1.txt",
         "char_start": 1024,
-        "char_end": 1512
+        "char_end": 11024
       }
     }
   ],
@@ -356,7 +356,7 @@ QDRANT_COLLECTION_NAME=documents
 QDRANT_TIMEOUT=30
 
 # Ingestion Configuration
-INGESTION_CHUNK_SIZE=512        # Characters per chunk
+INGESTION_CHUNK_SIZE=1024        # Characters per chunk
 INGESTION_CHUNK_OVERLAP=50      # Overlap between chunks
 ```
 
@@ -443,7 +443,7 @@ for doc in documents["documents"]:
 
 ### Performance Considerations
 
-1. **Chunk Size**: Default 512 characters balances granularity and embedding quality
+1. **Chunk Size**: Default 1024 characters balances granularity and embedding quality
 2. **Embedding Generation**: Each chunk is embedded using Qwen3-4B model
 3. **Deduplication**: Documents are deduplicated by SHA256 hash
 4. **Batch Processing**: For large documents, consider chunking on the client side

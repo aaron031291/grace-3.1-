@@ -155,7 +155,7 @@ class EmbeddingModel:
         text: Union[str, List[str]],
         normalize: Optional[bool] = None,
         instruction: Optional[str] = None,
-        batch_size: int = 8,
+        batch_size: int = 32,
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
     ) -> Union[np.ndarray, torch.Tensor]:
@@ -194,7 +194,8 @@ class EmbeddingModel:
             convert_to_numpy=convert_to_numpy,
             convert_to_tensor=convert_to_tensor,
             normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
-            show_progress_bar=False,  # Disable progress bar for API calls
+            show_progress_bar=True,  # Enable progress bar for API calls
+
         )
         
         # Clear torch cache if using CUDA

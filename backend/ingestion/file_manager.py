@@ -287,7 +287,7 @@ class IngestionFileManager:
         if ingestion_service is None:
             self.ingestion_service = TextIngestionService(
                 collection_name="documents",
-                chunk_size=512,
+                chunk_size=1024,
                 chunk_overlap=50,
                 embedding_model=self.embedding_model,
             )

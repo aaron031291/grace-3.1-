@@ -348,7 +348,7 @@ class EnvironmentInitializer:
                 return False
             
             # Download model from HuggingFace
-            model_repo = "Qwen/Qwen3-4B"
+            model_repo = "Qwen/Qwen3-Embedding-0.6B"
             snapshot_download(
                 repo_id=model_repo,
                 local_dir=str(embedding_dir),

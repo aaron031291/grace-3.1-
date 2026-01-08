@@ -387,7 +387,7 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST] ✓ Created document record with ID: {document_id}")
             
             # Chunk the text
-            logger.info(f"[INGEST_FAST] Chunking text with chunk_size=512, overlap=50...")
+            logger.info(f"[INGEST_FAST] Chunking text with chunk_size=1024, overlap=50...")
             chunks = self.chunker.chunk_text(text_content)
             logger.info(f"[INGEST_FAST] ✓ Chunked text into {len(chunks)} chunks")
             
@@ -413,7 +413,7 @@ class TextIngestionService:
             # Use smaller batch size to avoid CUDA OOM errors
             # Fallback: if CUDA fails, automatically reduce batch size and retry
             all_embeddings = None
-            batch_size = 16  # Start with smaller batch size for VRAM-constrained systems
+            batch_size = 32  # Start with smaller batch size for VRAM-constrained systems
             
             try:
                 all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)

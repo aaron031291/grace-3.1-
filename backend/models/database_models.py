@@ -89,7 +89,7 @@ class Chat(BaseModel):
     temperature = Column(Float, default=0.7, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False, index=True)
     last_message_at = Column(DateTime, nullable=True)
-    folder_path = Column(String(512), nullable=True, default="", index=True)  # Path to folder context for this chat
+    folder_path = Column(String(1024), nullable=True, default="", index=True)  # Path to folder context for this chat
     
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="chat", cascade="all, delete-orphan")
@@ -141,7 +141,7 @@ class Document(BaseModel):
     
     filename = Column(String(255), nullable=False, index=True)
     original_filename = Column(String(255), nullable=True)  # Original filename uploaded by user
-    file_path = Column(String(512), nullable=True)  # Path where file is stored
+    file_path = Column(String(1024), nullable=True)  # Path where file is stored
     file_size = Column(Integer, nullable=True)  # Size in bytes
     content_hash = Column(String(64), nullable=True)  # SHA256 hash for deduplication
     source = Column(String(255), nullable=False, index=True)  # Source (e.g., "upload", "url", "api")
