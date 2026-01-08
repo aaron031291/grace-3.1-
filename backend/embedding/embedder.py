@@ -75,7 +75,7 @@ class EmbeddingModel:
             print("⚠ CUDA requested but not available, falling back to CPU")
             device = 'cpu'
         
-        self.device = device
+        self.device = "cuda"
         
         # Determine model path
         if model_path is None:
@@ -186,7 +186,7 @@ class EmbeddingModel:
         # Reduce batch size on CPU to avoid memory issues
         if self.device == 'cpu':
             batch_size = min(batch_size, 8)  # Cap at 8 for CPU
-        
+        print(f"[EMBEDDING] Generating embeddings for {len(texts)} texts with batch_size={batch_size}...")
         # Generate embeddings with smaller batch size
         embeddings = self.model.encode(
             texts,
