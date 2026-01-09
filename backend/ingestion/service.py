@@ -408,7 +408,7 @@ class TextIngestionService:
             # OPTIMIZATION: Batch embed all chunks at once instead of one at a time
             # This reduces embedding time from ~16s to ~2-3s for 100KB (234 chunks)
             chunk_texts = [chunk["text"] for chunk in chunks]
-            with open("embedding_debug.log", "a") as debug_log:
+            with open("embedding_debug.log", "a", encoding="utf-8") as debug_log:
                 debug_log.write(f"{chunk_texts}\n")
             logger.debug(f"[INGEST_FAST] Batch embedding {len(chunk_texts)} texts...")
             
