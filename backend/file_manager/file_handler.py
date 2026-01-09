@@ -11,6 +11,14 @@ import mimetypes
 
 logger = logging.getLogger(__name__)
 
+# Suppress verbose logging from PDF extraction libraries
+logging.getLogger('pdfminer').setLevel(logging.WARNING)
+logging.getLogger('pdfminer.pdfpage').setLevel(logging.WARNING)
+logging.getLogger('pdfminer.pdfdocument').setLevel(logging.WARNING)
+logging.getLogger('pdfminer.pdfparser').setLevel(logging.WARNING)
+logging.getLogger('pdfminer.converter').setLevel(logging.WARNING)
+logging.getLogger('pdfplumber').setLevel(logging.WARNING)
+
 
 class FileHandler:
     """Handles extraction of text from different file types."""
@@ -84,34 +92,197 @@ class FileHandler:
     
     @staticmethod
     def _extract_pdf(file_path: str) -> Tuple[str, Optional[str]]:
-        """Extract text from PDF file."""
+        """Extract text from PDF file with fallback mechanisms for encoding issues."""
+        # Suppress pdfplumber and pdfminer verbose logging during extraction
+        pdfplumber_logger = logging.getLogger('pdfplumber')
+        pdfminer_logger = logging.getLogger('pdfminer')
+        old_pdfplumber_level = pdfplumber_logger.level
+        old_pdfminer_level = pdfminer_logger.level
+        
         try:
+            pdfplumber_logger.setLevel(logging.WARNING)
+            pdfminer_logger.setLevel(logging.WARNING)
+            
             import pdfplumber
             
             text_parts = []
+            
+            # Try primary extraction method with proper encoding handling
             try:
                 with pdfplumber.open(file_path) as pdf:
                     for page_num, page in enumerate(pdf.pages, 1):
-                        text = page.extract_text()
-                        if text:
-                            # Add page marker for better chunking
-                            text_parts.append(f"[Page {page_num}]\n{text}")
+                        try:
+                            # Extract text with layout preservation
+                            text = page.extract_text(layout=False)
+                            
+                            if text:
+                                # Clean up encoding artifacts
+                                text = FileHandler._clean_text(text)
+                                if text.strip():  # Only add if there's content after cleaning
+                                    text_parts.append(f"[Page {page_num}]\n{text}")
+                            
+                            # Fallback: Try extracting with layout if basic extraction gave no results
+                            if not text or not text.strip():
+                                text_layout = page.extract_text(layout=True)
+                                if text_layout:
+                                    text_layout = FileHandler._clean_text(text_layout)
+                                    if text_layout.strip():
+                                        text_parts.append(f"[Page {page_num}]\n{text_layout}")
                         
+                        except Exception as page_error:
+                            logger.warning(f"Error extracting page {page_num}: {page_error}")
+                            # Continue to next page on error
+                            continue
+                
                 if not text_parts:
                     return "", "No text content found in PDF"
                 
-                return "\n\n".join(text_parts), None
+                final_text = "\n\n".join(text_parts)
+                
+                # Verify the text is readable (not mostly garbage characters)
+                if not FileHandler._is_valid_text(final_text):
+                    logger.warning(f"PDF extraction resulted in mostly unreadable text, falling back to alternative method")
+                    return FileHandler._extract_pdf_fallback(file_path)
+                
+                return final_text, None
             
             except Exception as e:
-                logger.error(f"Error extracting PDF content: {e}")
-                return "", f"Error extracting PDF: {str(e)}"
+                logger.error(f"Error extracting PDF content with primary method: {e}")
+                # Try fallback method
+                return FileHandler._extract_pdf_fallback(file_path)
         
         except ImportError:
             logger.error("pdfplumber not installed")
             return "", "PDF support not available. Install pdfplumber."
-        except Exception as e:
-            logger.error(f"Error processing PDF {file_path}: {e}")
-            return "", f"Error processing PDF: {str(e)}"
+        
+        finally:
+            # Restore original logging levels
+            pdfplumber_logger.setLevel(old_pdfplumber_level)
+            pdfminer_logger.setLevel(old_pdfminer_level)
+    
+    @staticmethod
+    def _extract_pdf_fallback(file_path: str) -> Tuple[str, Optional[str]]:
+        """Fallback PDF extraction using PyPDF2 if pdfplumber fails."""
+        try:
+            # Suppress PyPDF2 logging during import
+            pdf2_logger = logging.getLogger('PyPDF2')
+            old_level = pdf2_logger.level
+            pdf2_logger.setLevel(logging.WARNING)
+            
+            try:
+                from PyPDF2 import PdfReader
+            finally:
+                pdf2_logger.setLevel(old_level)
+            
+            text_parts = []
+            
+            try:
+                pdf_reader = PdfReader(file_path)
+                
+                for page_num, page in enumerate(pdf_reader.pages, 1):
+                    try:
+                        text = page.extract_text()
+                        if text:
+                            text = FileHandler._clean_text(text)
+                            if text.strip():
+                                text_parts.append(f"[Page {page_num}]\n{text}")
+                    except Exception as page_error:
+                        logger.warning(f"Error extracting page {page_num} with fallback: {page_error}")
+                        continue
+                
+                if not text_parts:
+                    return "", "No text content found in PDF (fallback method)"
+                
+                return "\n\n".join(text_parts), None
+            
+            except Exception as e:
+                logger.error(f"Error with PyPDF2 fallback: {e}")
+                return "", f"PDF extraction failed: {str(e)}"
+        
+        except ImportError:
+            logger.error("PyPDF2 not installed for fallback PDF extraction")
+            return "", "PDF extraction failed and fallback library not available"
+    
+    @staticmethod
+    def _clean_text(text: str) -> str:
+        """
+        Clean extracted text by removing encoding artifacts and control characters.
+        
+        Args:
+            text: Raw extracted text
+            
+        Returns:
+            Cleaned text
+        """
+        if not text:
+            return text
+        
+        # Remove null bytes and other control characters
+        text = ''.join(char for char in text if ord(char) >= 32 or char in '\n\r\t')
+        
+        # Fix common encoding artifacts
+        # Replace mojibake patterns commonly found in PDF extraction
+        replacements = [
+            ('\x80', ''),  # NULL control character
+            ('\x93', '"'),  # Left double quotation mark encoding issue
+            ('\x94', '"'),  # Right double quotation mark encoding issue
+            ('\x97', '—'),  # Em dash encoding issue
+            ('\x96', '–'),  # En dash encoding issue
+            ('\x92', "'"),  # Single quote encoding issue
+        ]
+        
+        for old, new in replacements:
+            text = text.replace(old, new)
+        
+        # Remove excessive whitespace
+        lines = [line.rstrip() for line in text.split('\n')]
+        text = '\n'.join(line for line in lines if line.strip())
+        
+        return text
+    
+    @staticmethod
+    def _is_valid_text(text: str) -> bool:
+        """
+        Check if extracted text is valid and readable.
+        
+        Returns True if text has normal word patterns.
+        Returns False if text is mostly control/encoding artifacts.
+        
+        Args:
+            text: Text to validate
+            
+        Returns:
+            Whether the text appears to be valid
+        """
+        if not text:
+            return False
+        
+        # Clean the text first to remove obvious artifacts
+        cleaned = FileHandler._clean_text(text)
+        
+        # Count words (sequences of alphanumeric + Unicode letter characters)
+        import re
+        words = re.findall(r'\b[a-zA-Z0-9\u0100-\uFFFF]+\b', cleaned)
+        
+        # Check average word length (real text typically has words 3+ chars)
+        if words:
+            avg_word_length = sum(len(w) for w in words) / len(words)
+            # Text is valid if we have reasonable words and average word length is normal
+            # (3-20 chars is typical for most languages)
+            has_words = len(words) > 5  # At least a few words
+            word_length_ok = 2 < avg_word_length < 25
+            return has_words and word_length_ok
+        
+        # Fallback: check if we have mostly printable characters after cleaning
+        printable_count = sum(1 for char in cleaned if ord(char) >= 32 or char in '\n\r\t')
+        total_count = len(cleaned) if cleaned else len(text)
+        
+        if total_count == 0:
+            return False
+        
+        # Text is valid if at least 60% is printable after cleaning
+        readability = printable_count / total_count
+        return readability >= 0.60
 
     @staticmethod
     def _extract_docx(file_path: str) -> Tuple[str, Optional[str]]:

@@ -1,0 +1,456 @@
+#!/usr/bin/env python3
+"""
+Parallel Embedding Performance Benchmark Script
+
+This script benchmarks the embedding performance of the Qwen 4B model
+using parallel workers to embed text chunks simultaneously.
+
+Features:
+- 24 parallel workers (configurable)
+- Split text into chunks and embed in parallel
+- Compare sequential vs parallel performance
+- Measure throughput and speedup
+
+Usage:
+    python benchmark_embedding_parallel.py [--workers 24] [--chunks 24]
+"""
+
+import sys
+import time
+import argparse
+from pathlib import Path
+from typing import List, Tuple, Optional
+import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import logging
+
+# Add backend to path
+backend_dir = Path(__file__).parent
+sys.path.insert(0, str(backend_dir))
+
+from embedding.embedder import EmbeddingModel
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+def generate_sample_text(target_tokens: int = 5000) -> str:
+    """
+    Generate sample text with approximately target_tokens tokens.
+    
+    Rough estimation: ~1.3 words per token, ~5 characters per word
+    So target_tokens * 1.3 * 5 = target_tokens * 6.5 characters
+    
+    Args:
+        target_tokens: Approximate number of tokens desired
+        
+    Returns:
+        Sample text string
+    """
+    sample_paragraph = """
+    Machine learning is a subset of artificial intelligence that enables systems 
+    to learn and improve from experience without explicit programming. The field has 
+    seen remarkable growth in recent years, with applications spanning computer vision, 
+    natural language processing, healthcare, finance, and numerous other domains. 
+    
+    Deep learning, a subset of machine learning, uses artificial neural networks with 
+    multiple layers to process data and extract increasingly abstract features at each layer. 
+    These models have proven particularly effective for tasks like image recognition, 
+    language translation, and text generation. The success of deep learning has driven 
+    significant advances in artificial intelligence.
+    
+    Modern language models like transformers have revolutionized the field of natural 
+    language processing. These models use attention mechanisms to weigh the importance 
+    of different words in a sentence, allowing them to capture long-range dependencies 
+    and contextual relationships. This architecture has become the foundation for most 
+    state-of-the-art NLP systems today.
+    
+    Embeddings are numerical representations of text that capture semantic meaning. 
+    By converting words or documents into high-dimensional vectors, machine learning 
+    models can perform mathematical operations to measure similarity, classify content, 
+    or retrieve relevant information. Embedding models have become essential tools in 
+    modern NLP and recommendation systems.
+    
+    The transformer architecture, introduced in the "Attention Is All You Need" paper, 
+    has become the dominant approach for sequence-to-sequence tasks. Self-attention 
+    mechanisms allow the model to focus on different parts of the input simultaneously, 
+    making it highly parallelizable and efficient for training on large datasets.
+    
+    Distributed computing enables processing large amounts of data across multiple machines.
+    The rise of cloud computing has made it easier for organizations to scale their ML systems.
+    Containerization with Docker and orchestration with Kubernetes have standardized deployment.
+    
+    Natural language understanding requires models to grasp context, nuance, and meaning.
+    Pre-trained models like BERT, GPT, and others have achieved state-of-the-art results.
+    Transfer learning allows these models to be fine-tuned for specific downstream tasks.
+    
+    Retrieval-augmented generation combines information retrieval with generative models.
+    This approach allows models to access external knowledge during generation.
+    RAG systems can provide more accurate and grounded responses than language models alone.
+    
+    Vector databases store and retrieve high-dimensional embeddings efficiently.
+    Approximate nearest neighbor search enables fast similarity queries at scale.
+    These systems power modern recommendation engines and semantic search applications.
+    """
+    
+    # Calculate how many repetitions we need
+    chars_per_token = 6.5
+    needed_chars = int(target_tokens * chars_per_token)
+    repetitions = (needed_chars // len(sample_paragraph)) + 1
+    
+    full_text = sample_paragraph * repetitions
+    
+    # Trim to approximate token count
+    word_count = len(full_text.split())
+    estimated_tokens = word_count / 1.3
+    
+    if estimated_tokens > target_tokens:
+        trim_point = int(len(full_text) * (target_tokens / estimated_tokens))
+        full_text = full_text[:trim_point]
+    
+    return full_text
+
+
+def split_text_into_chunks(text: str, num_chunks: int) -> List[str]:
+    """
+    Split text into approximately equal chunks.
+    
+    Args:
+        text: Text to split
+        num_chunks: Number of chunks to create
+        
+    Returns:
+        List of text chunks
+    """
+    chunk_size = len(text) // num_chunks
+    chunks = []
+    
+    for i in range(num_chunks):
+        start = i * chunk_size
+        if i == num_chunks - 1:
+            # Last chunk gets remaining text
+            end = len(text)
+        else:
+            end = (i + 1) * chunk_size
+        
+        chunks.append(text[start:end].strip())
+    
+    return [c for c in chunks if c]  # Remove empty chunks
+
+
+def embed_text_chunk(embedding_model: EmbeddingModel, chunk_id: int, text: str) -> Tuple[int, float, float, int]:
+    """
+    Embed a single text chunk.
+    
+    Args:
+        embedding_model: EmbeddingModel instance
+        chunk_id: ID of the chunk being processed
+        text: Text to embed
+        
+    Returns:
+        Tuple of (chunk_id, elapsed_time, tokens, embedding_dimension)
+    """
+    start_time = time.time()
+    
+    try:
+        embeddings = embedding_model.embed_text(text)
+        elapsed = time.time() - start_time
+        
+        tokens = len(text.split()) / 1.3
+        
+        if hasattr(embeddings, 'shape'):
+            dim = embeddings.shape[-1]
+        else:
+            dim = len(embeddings)
+        
+        logger.debug(f"✓ Chunk {chunk_id}: {tokens:.0f} tokens in {elapsed:.2f}s")
+        return chunk_id, elapsed, tokens, dim
+    
+    except Exception as e:
+        logger.error(f"✗ Chunk {chunk_id}: Error - {e}")
+        raise
+
+
+def benchmark_sequential(embedding_model: EmbeddingModel, chunks: List[str]) -> Tuple[float, float]:
+    """
+    Benchmark sequential embedding of chunks.
+    
+    Args:
+        embedding_model: EmbeddingModel instance
+        chunks: List of text chunks
+        
+    Returns:
+        Tuple of (total_elapsed, total_tokens)
+    """
+    print(f"\n{'='*70}")
+    print(f"SEQUENTIAL BENCHMARK: {len(chunks)} chunks")
+    print(f"{'='*70}")
+    
+    total_tokens = sum(len(c.split()) / 1.3 for c in chunks)
+    print(f"\n⏳ Warming up model...")
+    
+    try:
+        _ = embedding_model.embed_text("Warmup text")
+    except Exception as e:
+        logger.warning(f"Warmup failed: {e}")
+    
+    print(f"🚀 Starting sequential embedding...\n")
+    start_time = time.time()
+    
+    try:
+        for i, chunk in enumerate(chunks):
+            chunk_start = time.time()
+            embeddings = embedding_model.embed_text(chunk)
+            chunk_elapsed = time.time() - chunk_start
+            
+            tokens = len(chunk.split()) / 1.3
+            print(f"  [{i+1:2d}/{len(chunks)}] Chunk {i}: {tokens:6.0f} tokens in {chunk_elapsed:6.2f}s ({tokens/chunk_elapsed:6.1f} tok/s)")
+        
+        total_elapsed = time.time() - start_time
+        
+        print(f"\n✅ Sequential embedding complete!")
+        print(f"  ⏱️  Total time: {total_elapsed:.2f}s")
+        print(f"  📊 Total tokens: {total_tokens:.0f}")
+        print(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
+        
+        return total_elapsed, total_tokens
+    
+    except Exception as e:
+        print(f"\n❌ Sequential embedding failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return None, total_tokens
+
+
+def benchmark_parallel(
+    embedding_model: EmbeddingModel,
+    chunks: List[str],
+    num_workers: int = 24
+) -> Tuple[float, float]:
+    """
+    Benchmark parallel embedding of chunks using ThreadPoolExecutor.
+    
+    Args:
+        embedding_model: EmbeddingModel instance
+        chunks: List of text chunks
+        num_workers: Number of parallel workers
+        
+    Returns:
+        Tuple of (total_elapsed, total_tokens)
+    """
+    print(f"\n{'='*70}")
+    print(f"PARALLEL BENCHMARK: {len(chunks)} chunks x {num_workers} workers")
+    print(f"{'='*70}")
+    
+    total_tokens = sum(len(c.split()) / 1.3 for c in chunks)
+    print(f"\n⏳ Warming up model...")
+    
+    try:
+        _ = embedding_model.embed_text("Warmup text")
+    except Exception as e:
+        logger.warning(f"Warmup failed: {e}")
+    
+    print(f"🚀 Starting parallel embedding with {num_workers} workers...\n")
+    start_time = time.time()
+    
+    try:
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            # Submit all tasks
+            futures = {
+                executor.submit(embed_text_chunk, embedding_model, i, chunk): i
+                for i, chunk in enumerate(chunks)
+            }
+            
+            completed = 0
+            chunk_results = {}
+            
+            # Process results as they complete
+            for future in as_completed(futures):
+                completed += 1
+                try:
+                    chunk_id, elapsed, tokens, dim = future.result()
+                    chunk_results[chunk_id] = (elapsed, tokens, dim)
+                    print(f"  ✓ Chunk {chunk_id:2d}: {tokens:6.0f} tokens in {elapsed:6.2f}s ({tokens/elapsed:6.1f} tok/s)")
+                except Exception as e:
+                    logger.error(f"  ✗ Chunk {futures[future]}: {e}")
+                    raise
+            
+            total_elapsed = time.time() - start_time
+            
+            print(f"\n✅ Parallel embedding complete!")
+            print(f"  ⏱️  Total time: {total_elapsed:.2f}s")
+            print(f"  📊 Total tokens: {total_tokens:.0f}")
+            print(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
+            print(f"  👷 Workers: {num_workers}")
+            
+            return total_elapsed, total_tokens
+    
+    except Exception as e:
+        print(f"\n❌ Parallel embedding failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return None, total_tokens
+
+
+def main():
+    """Main benchmark function."""
+    parser = argparse.ArgumentParser(
+        description="Benchmark Qwen 4B embedding with parallel workers"
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=24,
+        help="Number of parallel workers (default: 24)"
+    )
+    parser.add_argument(
+        "--chunks",
+        type=int,
+        default=24,
+        help="Number of text chunks to process (default: 24)"
+    )
+    parser.add_argument(
+        "--tokens",
+        type=int,
+        default=5000,
+        help="Approximate total tokens to process (default: 5000)"
+    )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default=None,
+        choices=["cpu", "cuda"],
+        help="Device to use (cpu or cuda, auto-detected if not specified)"
+    )
+    parser.add_argument(
+        "--skip-sequential",
+        action="store_true",
+        help="Skip sequential benchmark (only run parallel)"
+    )
+    
+    args = parser.parse_args()
+    
+    print("\n" + "="*70)
+    print("🔬 QWEN 4B PARALLEL EMBEDDING BENCHMARK")
+    print("="*70)
+    print(f"\nBenchmark Configuration:")
+    print(f"  Parallel workers: {args.workers}")
+    print(f"  Text chunks: {args.chunks}")
+    print(f"  Total tokens: ~{args.tokens}")
+    print(f"  Device: {args.device or 'auto-detect'}")
+    print(f"  Include sequential: {not args.skip_sequential}")
+    
+    # Initialize embedding model
+    print(f"\n⏳ Initializing Qwen 4B embedding model...")
+    try:
+        model = EmbeddingModel(device=args.device)
+        print(f"✅ Model initialized successfully")
+    except Exception as e:
+        print(f"❌ Failed to initialize model: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+    
+    # Generate text and split into chunks
+    print(f"\n⏳ Generating sample text (~{args.tokens} tokens)...")
+    full_text = generate_sample_text(args.tokens)
+    print(f"✅ Generated text: {len(full_text)} characters")
+    
+    print(f"\n⏳ Splitting text into {args.chunks} chunks...")
+    chunks = split_text_into_chunks(full_text, args.chunks)
+    chunks = [c for c in chunks if len(c.strip()) > 50]  # Filter out tiny chunks
+    print(f"✅ Created {len(chunks)} chunks")
+    
+    for i, chunk in enumerate(chunks):
+        tokens = len(chunk.split()) / 1.3
+        print(f"   Chunk {i}: {len(chunk):6d} chars, ~{tokens:6.0f} tokens")
+    
+    results = {
+        "config": {
+            "workers": args.workers,
+            "chunks": len(chunks),
+            "total_tokens": sum(len(c.split()) / 1.3 for c in chunks),
+            "device": args.device or "auto-detect",
+        },
+        "sequential": None,
+        "parallel": None,
+        "comparison": None,
+    }
+    
+    # Sequential benchmark
+    sequential_elapsed = None
+    sequential_tokens = None
+    
+    if not args.skip_sequential:
+        sequential_elapsed, sequential_tokens = benchmark_sequential(model, chunks)
+        if sequential_elapsed:
+            results["sequential"] = {
+                "elapsed": sequential_elapsed,
+                "tokens": sequential_tokens,
+                "throughput": sequential_tokens / sequential_elapsed
+            }
+    
+    # Parallel benchmark
+    parallel_elapsed, parallel_tokens = benchmark_parallel(model, chunks, args.workers)
+    
+    if parallel_elapsed:
+        results["parallel"] = {
+            "elapsed": parallel_elapsed,
+            "tokens": parallel_tokens,
+            "throughput": parallel_tokens / parallel_elapsed,
+            "workers": args.workers,
+        }
+    
+    # Comparison
+    if sequential_elapsed and parallel_elapsed:
+        speedup = sequential_elapsed / parallel_elapsed
+        efficiency = speedup / args.workers * 100
+        
+        results["comparison"] = {
+            "speedup": speedup,
+            "efficiency_percent": efficiency,
+            "time_saved": sequential_elapsed - parallel_elapsed,
+        }
+    
+    # Summary
+    print("\n\n" + "="*70)
+    print("📊 BENCHMARK SUMMARY")
+    print("="*70)
+    
+    if results["sequential"]:
+        seq = results["sequential"]
+        print(f"\n✅ Sequential Execution:")
+        print(f"   ⏱️  Time: {seq['elapsed']:.2f}s")
+        print(f"   📊 Throughput: {seq['throughput']:.1f} tokens/sec")
+    
+    if results["parallel"]:
+        par = results["parallel"]
+        print(f"\n✅ Parallel Execution ({par['workers']} workers):")
+        print(f"   ⏱️  Time: {par['elapsed']:.2f}s")
+        print(f"   📊 Throughput: {par['throughput']:.1f} tokens/sec")
+    
+    if results["comparison"]:
+        cmp = results["comparison"]
+        print(f"\n📈 Comparison:")
+        print(f"   🚀 Speedup: {cmp['speedup']:.2f}x")
+        print(f"   ⚡ Efficiency: {cmp['efficiency_percent']:.1f}%")
+        print(f"   ⏱️  Time saved: {cmp['time_saved']:.2f}s")
+    
+    print("\n" + "="*70 + "\n")
+    
+    # Save results to JSON
+    output_file = backend_dir / "benchmark_parallel_results.json"
+    try:
+        with open(output_file, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"✅ Results saved to: {output_file}\n")
+    except Exception as e:
+        print(f"⚠️  Failed to save results: {e}\n")
+
+
+if __name__ == "__main__":
+    main()

@@ -183,17 +183,20 @@ async def ingest_text(
 
 @router.post("/file", response_model=IngestionResponse, summary="Ingest uploaded file")
 async def ingest_file(
-    file: UploadFile = File(..., description="Text file to ingest"),
+    file: UploadFile = File(..., description="Text or document file to ingest (txt, md, pdf, docx, etc.)"),
     source: str = Form("upload", description="Source identifier"),
     source_type: str = Form("user_generated", description="Type of source for reliability (official_docs, academic_paper, verified_tutorial, trusted_blog, community_qa, user_generated, unverified)"),
     metadata: Optional[str] = Form(None, description="JSON metadata"),
     service: TextIngestionService = Depends(get_ingestion_service)
 ) -> IngestionResponse:
     """
-    Ingest a text file.
+    Ingest a file (text or document).
+    
+    Supports: TXT, MD, PDF, DOCX, DOC, XLSX, PPTX, etc.
+    Automatically handles format-specific text extraction.
     
     Args:
-        file: Uploaded text file
+        file: Uploaded file
         source: Source identifier
         source_type: Type of source for reliability calculation
         metadata: Optional JSON metadata
@@ -205,27 +208,70 @@ async def ingest_file(
     try:
         import json
         import chardet
+        import tempfile
+        from pathlib import Path
+        from file_manager.file_handler import FileHandler
+        
+        filename = file.filename or "uploaded_file"
+        file_ext = Path(filename).suffix.lower()
         
         # Read file content
         content = await file.read()
         
-        # Detect and decode with fallback encodings
-        try:
-            text = content.decode('utf-8')
-        except UnicodeDecodeError:
-            # Try to detect encoding
-            detected = chardet.detect(content)
-            encoding = detected.get('encoding') if detected else None
+        logger.info(f"[API_FILE_INGEST] Received file: {filename} ({len(content)} bytes)")
+        logger.info(f"[API_FILE_INGEST] File extension: {file_ext}")
+        
+        # For PDFs and other complex formats, save to temp file and extract
+        if file_ext in ['.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt']:
+            logger.info(f"[API_FILE_INGEST] Using specialized extractor for {file_ext}")
             
-            if encoding:
+            # Save to temporary file
+            with tempfile.NamedTemporaryFile(suffix=file_ext, delete=False) as temp_file:
+                temp_file.write(content)
+                temp_path = temp_file.name
+            
+            try:
+                # Extract text using FileHandler
+                text, error = FileHandler.extract_text(temp_path)
+                
+                if error:
+                    logger.error(f"[API_FILE_INGEST] Extraction failed: {error}")
+                    raise HTTPException(status_code=400, detail=f"Failed to extract text: {error}")
+                
+                logger.info(f"[API_FILE_INGEST] ✓ Extracted {len(text)} characters from {file_ext}")
+            
+            finally:
+                # Clean up temp file
                 try:
-                    text = content.decode(encoding)
-                except (UnicodeDecodeError, LookupError):
-                    # Fall back to latin-1 which accepts all byte sequences
+                    Path(temp_path).unlink()
+                except Exception as e:
+                    logger.warning(f"Could not delete temp file {temp_path}: {e}")
+        
+        # For text files, decode directly
+        else:
+            logger.info(f"[API_FILE_INGEST] Reading as text file")
+            
+            # Detect and decode with fallback encodings
+            try:
+                text = content.decode('utf-8')
+                logger.info(f"[API_FILE_INGEST] ✓ Decoded as UTF-8")
+            except UnicodeDecodeError:
+                # Try to detect encoding
+                detected = chardet.detect(content)
+                encoding = detected.get('encoding') if detected else None
+                
+                if encoding:
+                    try:
+                        text = content.decode(encoding)
+                        logger.info(f"[API_FILE_INGEST] ✓ Decoded as {encoding}")
+                    except (UnicodeDecodeError, LookupError):
+                        # Fall back to latin-1 which accepts all byte sequences
+                        text = content.decode('latin-1')
+                        logger.info(f"[API_FILE_INGEST] ✓ Decoded as latin-1 (fallback)")
+                else:
+                    # Fall back to latin-1 if detection fails
                     text = content.decode('latin-1')
-            else:
-                # Fall back to latin-1 if detection fails
-                text = content.decode('latin-1')
+                    logger.info(f"[API_FILE_INGEST] ✓ Decoded as latin-1 (no detection)")
         
         # Parse metadata if provided
         metadata_dict = None
@@ -235,10 +281,12 @@ async def ingest_file(
             except json.JSONDecodeError:
                 raise HTTPException(status_code=400, detail="Invalid metadata JSON")
         
+        logger.info(f"[API_FILE_INGEST] Ingesting {len(text)} characters...")
+        
         # Ingest the text
         document_id, message = service.ingest_text_fast(
             text_content=text,
-            filename=file.filename or "uploaded_file",
+            filename=filename,
             source=source,
             upload_method="ui-upload",
             source_type=source_type,
@@ -246,7 +294,10 @@ async def ingest_file(
         )
         
         if document_id is None:
+            logger.error(f"[API_FILE_INGEST] Ingestion failed: {message}")
             raise HTTPException(status_code=400, detail=message)
+        
+        logger.info(f"[API_FILE_INGEST] ✓ Successfully ingested document {document_id}")
         
         return IngestionResponse(
             success=True,
@@ -257,7 +308,7 @@ async def ingest_file(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"File ingestion error: {e}", exc_info=True)
+        logger.error(f"[API_FILE_INGEST] File ingestion error: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,
             detail=f"File ingestion failed: {str(e)}"
