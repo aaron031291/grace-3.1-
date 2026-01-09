@@ -5,9 +5,10 @@ Welcome! This guide covers the file management and semantic search system that w
 ## 🎯 What You Can Do
 
 Upload documents and search them semantically. The system:
+
 - 📤 Accepts TXT, MD, and PDF files
 - 📝 Automatically extracts text
-- 🧠 Generates semantic embeddings  
+- 🧠 Generates semantic embeddings
 - 🔍 Enables natural language search
 - 📊 Ranks results by relevance
 
@@ -26,6 +27,7 @@ open http://localhost:3000  # or navigate manually
 ```
 
 Then:
+
 1. Go to **Documents** tab
 2. Click **Files** subtab
 3. Upload a PDF or text file
@@ -46,7 +48,7 @@ Read these in order:
 
 ```
 ┌─────────────────┐
-│  Frontend (React)│  
+│  Frontend (React)│
 │  - FileBrowser  │
 │  - Search UI    │
 └────────┬────────┘
@@ -96,6 +98,7 @@ grace_3/
 ## �� API Endpoints
 
 ### Upload File
+
 ```bash
 POST /files/upload
 Content-Type: multipart/form-data
@@ -107,6 +110,7 @@ curl -X POST http://localhost:8000/files/upload \
 ```
 
 ### Browse Files
+
 ```bash
 GET /files/browse?path=
 
@@ -115,7 +119,8 @@ curl http://localhost:8000/files/browse?path=
 # Response: { "items": [...], "current_path": "" }
 ```
 
-### Search Documents  
+### Search Documents
+
 ```bash
 POST /retrieve/search?query=...&limit=5&threshold=0.3
 
@@ -126,6 +131,7 @@ query=machine+learning&limit=5&threshold=0.3"
 ```
 
 ### Create Folder
+
 ```bash
 POST /files/create-folder
 Content-Type: application/json
@@ -136,6 +142,7 @@ curl -X POST http://localhost:8000/files/create-folder \
 ```
 
 ### Delete File
+
 ```bash
 POST /files/delete
 Content-Type: application/json
@@ -154,6 +161,7 @@ curl -X POST http://localhost:8000/files/delete \
 5. **Results returned**: Relevant chunks with scores
 
 ### Understanding Scores
+
 - **0.9+** = Exact match (very relevant)
 - **0.7-0.9** = Highly relevant
 - **0.5-0.7** = Moderately relevant
@@ -163,14 +171,17 @@ curl -X POST http://localhost:8000/files/delete \
 ## 📋 Supported File Types
 
 ### Text Files (.txt)
+
 - Plain text documents
 - Auto-detects encoding (UTF-8, Latin-1, etc.)
 
-### Markdown (.md)  
+### Markdown (.md)
+
 - Markdown-formatted documents
 - Preserves structure for context
 
 ### PDF (.pdf)
+
 - Multi-page PDFs supported
 - Text extracted from all pages
 - Requires pdfplumber (already installed)
@@ -190,34 +201,41 @@ QDRANT_COLLECTION_NAME = "documents"  # Vector collection
 ```
 
 To change:
+
 1. Edit `backend/.env` file or
 2. Set environment variables:
    ```bash
-   export INGESTION_CHUNK_SIZE=1024
+   export INGESTION_CHUNK_SIZE=512
    export EMBEDDING_DEVICE=cpu
    ```
 
 ## 🐛 Troubleshooting
 
 ### Files Upload But Search Returns Empty
+
 **Problem**: Qdrant not running  
 **Solution**: Start Qdrant
+
 ```bash
 docker start qdrant
 curl http://localhost:6333/health
 ```
 
 ### Slow Upload (10+ seconds)
+
 **Problem**: First-time embedding model load  
 **Solution**: Normal on first use. Subsequent uploads are faster (3-4 sec)
 
-### Out of Memory Error  
+### Out of Memory Error
+
 **Problem**: GPU memory insufficient
 **Solution**: Automatic fallback to CPU. No action needed.
 
 ### Cannot Find Previously Uploaded File
+
 **Problem**: Qdrant restarted (vectors lost) or database issue  
 **Solution**:
+
 1. Files still exist in `backend/knowledge_base/`
 2. Re-upload to re-index to Qdrant
 3. Or check database: `sqlite3 backend/data/grace.db "SELECT COUNT(*) FROM documents;"`
@@ -225,13 +243,15 @@ curl http://localhost:6333/health
 ## 📊 System Requirements
 
 ### Minimum
+
 - CPU: 4 cores
 - RAM: 8 GB
 - Storage: 5 GB free
 - OS: Linux, Mac, or Windows
 
 ### Recommended
-- CPU: 8+ cores  
+
+- CPU: 8+ cores
 - RAM: 16+ GB
 - Storage: 10+ GB free
 - GPU: Optional (NVIDIA with CUDA)
@@ -241,11 +261,13 @@ curl http://localhost:6333/health
 ⚠️ **Important**: This system has no authentication.
 
 ### For Local Use Only ✓
+
 - Development environment
 - Trusted network only
 - Personal computer
 
 ### For Production 🚫
+
 - Add authentication/authorization
 - Use HTTPS/TLS encryption
 - Implement access control
@@ -257,18 +279,19 @@ curl http://localhost:6333/health
 
 Based on testing with Qwen-4B embeddings:
 
-| Operation | Time | Depends On |
-|-----------|------|----------|
-| Upload file | < 1s | File size |
-| Extract text | 0.5s | File type, size |
-| Generate embedding | 1-2s | Chunk count |
-| Store vectors | < 100ms | Qdrant connectivity |
-| Search query | < 100ms | Collection size |
-| **Total (per file)** | **3-4s** | Mostly chunking |
+| Operation            | Time     | Depends On          |
+| -------------------- | -------- | ------------------- |
+| Upload file          | < 1s     | File size           |
+| Extract text         | 0.5s     | File type, size     |
+| Generate embedding   | 1-2s     | Chunk count         |
+| Store vectors        | < 100ms  | Qdrant connectivity |
+| Search query         | < 100ms  | Collection size     |
+| **Total (per file)** | **3-4s** | Mostly chunking     |
 
 ## 🚀 Advanced Usage
 
 ### Batch Upload
+
 ```bash
 for file in *.pdf; do
   curl -X POST http://localhost:8000/files/upload -F "file=@$file"
@@ -276,6 +299,7 @@ done
 ```
 
 ### Search with Threshold
+
 ```bash
 # Only return results above 0.5 relevance
 curl -X POST "http://localhost:8000/retrieve/search?\
@@ -283,11 +307,13 @@ query=AI&limit=10&threshold=0.5"
 ```
 
 ### Get Specific Document
+
 ```bash
 curl http://localhost:8000/retrieve/document/123
 ```
 
 ### Organize into Folders
+
 ```bash
 # Create folder
 curl -X POST http://localhost:8000/files/create-folder \
@@ -317,15 +343,18 @@ The system returns relevant chunks ranked by relevance!
 ## 💾 Data Persistence
 
 ### What's Persistent
+
 - ✓ Files (stored in backend/knowledge_base/)
 - ✓ Document metadata (SQLite database)
 - ✓ Vector embeddings (Qdrant vector DB)
 
 ### What's Ephemeral
+
 - ✗ Qdrant in-memory cache (reloads on restart)
 - ✗ Embedding model cache (reloads on first use)
 
 ### Backup Recommendation
+
 ```bash
 # Backup your files
 cp -r backend/knowledge_base/ backup/knowledge_base_backup/
@@ -349,6 +378,7 @@ cp backend/data/grace.db backup/grace_backup.db
 Found a bug or have suggestions?
 
 Create a test case:
+
 ```python
 # backend/test_new_feature.py
 def test_my_feature():
@@ -357,6 +387,7 @@ def test_my_feature():
 ```
 
 Run tests:
+
 ```bash
 cd backend
 python -m pytest test_file_management.py -v
@@ -365,8 +396,9 @@ python -m pytest test_file_management.py -v
 ## 📞 Getting Help
 
 Check in this order:
+
 1. **QUICK_START.md** - Most common tasks
-2. **Search endpoint docs** - API details  
+2. **Search endpoint docs** - API details
 3. **Troubleshooting section** - Common issues
 4. **Backend logs** - See what's happening
 

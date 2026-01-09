@@ -477,7 +477,7 @@
 }
 
 /* Responsive design */
-@media (max-width: 1024px) {
+@media (max-width: 512px) {
   .file-row {
     grid-template-columns: 32px 1fr 80px 40px;
   }
