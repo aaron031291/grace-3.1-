@@ -355,7 +355,10 @@ class IngestionFileManager:
     
     def _read_file_content(self, filepath: Path) -> Optional[str]:
         """
-        Read file content safely.
+        Read file content safely with proper format-specific extraction.
+        
+        For PDFs and other complex formats, uses specialized extractors.
+        For text files, reads directly.
         
         Args:
             filepath: Path to file
@@ -364,19 +367,38 @@ class IngestionFileManager:
             File content or None if unreadable
         """
         try:
-            # Try UTF-8 first
-            with open(filepath, 'r', encoding='utf-8') as f:
-                return f.read()
-        except UnicodeDecodeError:
+            file_ext = filepath.suffix.lower()
+            
+            # For PDFs and complex formats, use specialized extractors
+            if file_ext in ['.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt']:
+                logger.info(f"[FILE_READ] Using specialized extractor for {file_ext} file")
+                from file_manager.file_handler import FileHandler
+                text, error = FileHandler.extract_text(str(filepath))
+                if error:
+                    logger.error(f"[FILE_READ] Extraction failed for {filepath}: {error}")
+                    return None
+                logger.info(f"[FILE_READ] ✓ Extracted {len(text)} characters from {file_ext}")
+                return text
+            
+            # For text files, read directly
             try:
-                # Fall back to latin-1 (always works)
-                with open(filepath, 'r', encoding='latin-1') as f:
-                    return f.read()
-            except Exception as e:
-                logger.warning(f"Could not read file {filepath}: {e}")
-                return None
+                # Try UTF-8 first
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                logger.info(f"[FILE_READ] ✓ Read {len(content)} characters (UTF-8)")
+                return content
+            except UnicodeDecodeError:
+                try:
+                    # Fall back to latin-1 (always works)
+                    with open(filepath, 'r', encoding='latin-1') as f:
+                        content = f.read()
+                    logger.info(f"[FILE_READ] ✓ Read {len(content)} characters (latin-1)")
+                    return content
+                except Exception as e:
+                    logger.warning(f"[FILE_READ] Could not read file {filepath}: {e}")
+                    return None
         except Exception as e:
-            logger.error(f"Error reading file {filepath}: {e}")
+            logger.error(f"[FILE_READ] Error reading file {filepath}: {e}")
             return None
     
     def _is_ingestionable_file(self, filepath: Path) -> bool:
