@@ -24,7 +24,7 @@ def test_reranker_singleton_and_half_precision():
     if torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.synchronize()
-        vram_before = torch.cuda.memory_allocated() / 2048**2
+        vram_before = torch.cuda.memory_allocated() / 512**2
         print(f"\nVRAM before loading reranker: {vram_before:.2f} MB")
     
     # First initialization
@@ -39,7 +39,7 @@ def test_reranker_singleton_and_half_precision():
     # Get VRAM after loading
     if torch.cuda.is_available():
         torch.cuda.synchronize()
-        vram_after = torch.cuda.memory_allocated() / 2048**2
+        vram_after = torch.cuda.memory_allocated() / 512**2
         print(f"  VRAM usage: {vram_after:.2f} MB (delta: {vram_after - vram_before:.2f} MB)")
     
     # Second call should return same instance (no reload)

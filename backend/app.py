@@ -559,7 +559,7 @@ async def chat(request: ChatRequest):
         temperature = request.temperature if request.temperature is not None else 0.7
         # Use lower temperature to enforce deterministic, knowledge-based responses
         temperature = min(temperature, 0.3)  # Cap temperature at 0.3 for strict RAG
-        max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
+        max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
         
         response = client.chat(
             model=model_name,
@@ -1112,7 +1112,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         temperature = request.temperature or chat.temperature
         # Use lower temperature to enforce deterministic, knowledge-based responses
         temperature = min(temperature, 0.3) if temperature else 0.1  # Cap temperature at 0.3 for strict RAG
-        max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
+        max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
         
         response_text = client.chat(
             model=chat.model,
@@ -1421,7 +1421,7 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         # ==================== GENERATE RESPONSE ====================
         start_time = time.time()
         temperature = min(request.temperature or 0.7, 0.3)  # Cap temperature for deterministic responses
-        max_num_predict = settings.MAX_NUM_PREDICT if settings else 2048
+        max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
         
         response_text = client.chat(
             model=settings.OLLAMA_LLM_DEFAULT if settings else "llama2",

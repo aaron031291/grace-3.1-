@@ -144,6 +144,87 @@ class DocumentRetriever:
             logger.error(f"Retrieval error for query '{query}': {e}", exc_info=True)
             raise  # Re-raise so caller knows about the failure
     
+    def retrieve_hybrid(
+        self,
+        query: str,
+        limit: int = 5,
+        score_threshold: float = 0.3,
+        include_metadata: bool = True,
+        keyword_weight: float = 0.3,
+    ) -> List[Dict[str, Any]]:
+        """
+        Hybrid retrieval combining semantic search + keyword matching.
+        
+        For short queries, keyword matching helps ensure relevant documents.
+        For longer queries, semantic search dominates.
+        
+        Args:
+            query: Query text to search for
+            limit: Maximum number of chunks to retrieve
+            score_threshold: Minimum similarity score (0-1)
+            include_metadata: Whether to include chunk metadata
+            keyword_weight: Weight for keyword matching (0-1)
+            
+        Returns:
+            List of relevant chunks with combined scores
+        """
+        try:
+            # Get semantic search results first
+            semantic_results = self.retrieve(
+                query=query,
+                limit=limit * 3,  # Get more to re-rank
+                score_threshold=0,  # No threshold yet
+                include_metadata=include_metadata
+            )
+            
+            if not semantic_results:
+                return []
+            
+            # Extract keywords from query (words > 3 chars, case-insensitive)
+            query_keywords = [
+                word.lower() for word in query.split() 
+                if len(word) > 2
+            ]
+            
+            # Boost scores for documents containing query keywords
+            for result in semantic_results:
+                chunk_text = result["text"].lower()
+                keyword_matches = sum(1 for keyword in query_keywords if keyword in chunk_text)
+                
+                # Calculate keyword score (0-1)
+                if query_keywords:
+                    keyword_score = min(1.0, keyword_matches / len(query_keywords))
+                else:
+                    keyword_score = 0.0
+                
+                # Combine scores: semantic + keyword boost
+                original_score = result["score"]
+                combined_score = (original_score * (1 - keyword_weight)) + (keyword_score * keyword_weight)
+                result["score"] = combined_score
+                result["keyword_matches"] = keyword_matches
+            
+            # Re-sort by combined score
+            semantic_results.sort(key=lambda x: x["score"], reverse=True)
+            
+            # Apply threshold and limit
+            final_results = [
+                r for r in semantic_results 
+                if r["score"] >= score_threshold
+            ][:limit]
+            
+            logger.info(f"Hybrid retrieval: {len(final_results)} chunks for query: {query}")
+            return final_results
+        
+        except Exception as e:
+            logger.error(f"Hybrid retrieval error for query '{query}': {e}", exc_info=True)
+            # Fall back to regular retrieve
+            return self.retrieve(
+                query=query,
+                limit=limit,
+                score_threshold=score_threshold,
+                include_metadata=include_metadata
+            )
+    
     def retrieve_by_document(
         self,
         document_id: int,

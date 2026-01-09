@@ -41,15 +41,15 @@ def migrate():
         with session.begin():
             if 'postgresql' in str(session.bind.url):
                 # PostgreSQL
-                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(2048) DEFAULT ''"))
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
                 session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
             elif 'mysql' in str(session.bind.url):
                 # MySQL
-                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(2048) DEFAULT ''"))
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
                 session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
             elif 'sqlite' in str(session.bind.url):
                 # SQLite
-                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(2048) DEFAULT ''"))
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
                 # SQLite doesn't support CREATE INDEX in same transaction for newly added columns
                 try:
                     session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))

@@ -85,10 +85,82 @@ async def retrieve_chunks(
     query: str = Query(..., description="Query text"),
     limit: int = Query(5, ge=1, le=100, description="Maximum chunks to retrieve"),
     threshold: float = Query(0.3, ge=0.0, le=1.0, description="Minimum relevance score"),
+    keyword_weight: float = Query(0.3, ge=0.0, le=1.0, description="Weight for keyword matching (0-1)"),
     retriever: DocumentRetriever = Depends(get_document_retriever)
 ) -> RetrievalResponse:
     """
-    Retrieve document chunks relevant to a query using semantic search.
+    Retrieve document chunks relevant to a query using hybrid search (semantic + keyword).
+    
+    Uses keyword boosting to ensure short queries return documents with matching keywords.
+    For longer queries, semantic relevance naturally dominates.
+    
+    Args:
+        query: Query text to search for
+        limit: Maximum number of chunks to return
+        threshold: Minimum similarity score (0-1)
+        keyword_weight: Weight for keyword matching (0-1, default 0.3 = 30% keyword, 70% semantic)
+        retriever: DocumentRetriever instance
+        
+    Returns:
+        RetrievalResponse with relevant chunks, ranked by combined score
+    """
+    try:
+        chunks = retriever.retrieve_hybrid(
+            query=query,
+            limit=limit,
+            score_threshold=threshold,
+            include_metadata=True,
+            keyword_weight=keyword_weight,
+        )
+        
+        if not chunks:
+            return RetrievalResponse(
+                query=query,
+                chunks=[],
+                total=0,
+                context=""
+            )
+        
+        # Convert to RetrievalChunk objects
+        retrieval_chunks = [
+            RetrievalChunk(
+                chunk_id=chunk["chunk_id"],
+                document_id=chunk["document_id"],
+                chunk_index=chunk["chunk_index"],
+                text=chunk["text"],
+                score=chunk.get("score"),
+                confidence_score=chunk.get("confidence_score"),
+                metadata=chunk.get("metadata")
+            )
+            for chunk in chunks
+        ]
+        
+        # Build context string
+        context = retriever.build_context(chunks, include_sources=True)
+        
+        return RetrievalResponse(
+            query=query,
+            chunks=retrieval_chunks,
+            total=len(retrieval_chunks),
+            context=context
+        )
+    
+    except Exception as e:
+        logger.error(f"Retrieval error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Retrieval failed")
+
+
+@router.post("/search-semantic", response_model=RetrievalResponse, summary="Retrieve using pure semantic search")
+async def retrieve_chunks_semantic(
+    query: str = Query(..., description="Query text"),
+    limit: int = Query(5, ge=1, le=100, description="Maximum chunks to retrieve"),
+    threshold: float = Query(0.3, ge=0.0, le=1.0, description="Minimum relevance score"),
+    retriever: DocumentRetriever = Depends(get_document_retriever)
+) -> RetrievalResponse:
+    """
+    Retrieve document chunks using pure semantic search (no keyword boosting).
+    
+    Best for longer, contextual queries. Use /retrieve/search for hybrid approach.
     
     Args:
         query: Query text to search for
@@ -97,7 +169,7 @@ async def retrieve_chunks(
         retriever: DocumentRetriever instance
         
     Returns:
-        RetrievalResponse with relevant chunks
+        RetrievalResponse with relevant chunks ranked by semantic similarity
     """
     try:
         chunks = retriever.retrieve(
@@ -140,8 +212,8 @@ async def retrieve_chunks(
         )
     
     except Exception as e:
-        logger.error(f"Retrieval error: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Retrieval failed")
+        logger.error(f"Semantic retrieval error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Semantic retrieval failed")
 
 
 @router.get("/document/{document_id}", response_model=RetrievalResponse, summary="Get document chunks")
