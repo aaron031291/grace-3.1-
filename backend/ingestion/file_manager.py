@@ -672,7 +672,8 @@ class IngestionFileManager:
         
         # Compute relative path if not provided
         if rel_path is None:
-            rel_path = str(filepath.relative_to(self.knowledge_base_path))
+            # Normalize to forward slashes for cross-platform compatibility
+            rel_path = str(filepath.relative_to(self.knowledge_base_path)).replace("\\", "/")
         
         file_size_kb = filepath.stat().st_size / 512
         

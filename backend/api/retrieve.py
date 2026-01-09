@@ -467,9 +467,11 @@ async def retrieve_directory_chunks(
         for chunk in all_chunks:
             # Check if the document's file_path starts with the target directory
             file_path = chunk.get("metadata", {}).get("file_path", "")
+            # Normalize file_path to forward slashes for cross-platform compatibility
+            file_path = file_path.replace("\\", "/") if file_path else ""
             
             # Normalize paths for comparison
-            target_dir = directory_path.rstrip("/") if directory_path else ""
+            target_dir = directory_path.rstrip("/").rstrip("\\").replace("\\", "/") if directory_path else ""
             
             # Check if file is in the directory
             if target_dir == "":
