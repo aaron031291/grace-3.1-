@@ -100,7 +100,7 @@ def split_text_into_chunks(text: str, num_chunks: int) -> List[str]:
     return [c for c in chunks if c]
 
 
-def combine_chunks_for_throughput(chunks: List[str], target_size: int = 2048, max_size: int = 8192) -> List[str]:
+def combine_chunks_for_throughput(chunks: List[str], target_size: int = 512, max_size: int = 8192) -> List[str]:
     """
     Combine small chunks into larger texts for better throughput.
     Smaller texts have higher per-text overhead.

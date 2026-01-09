@@ -287,7 +287,7 @@ class IngestionFileManager:
         if ingestion_service is None:
             self.ingestion_service = TextIngestionService(
                 collection_name="documents",
-                chunk_size=2048,
+                chunk_size=512,
                 chunk_overlap=50,
                 embedding_model=self.embedding_model,
             )
@@ -542,7 +542,7 @@ class IngestionFileManager:
         if rel_path is None:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
         
-        file_size_kb = filepath.stat().st_size / 2048
+        file_size_kb = filepath.stat().st_size / 512
         
         logger.info("="*80)
         logger.info(f"[INGESTION START] NEW FILE")
@@ -674,7 +674,7 @@ class IngestionFileManager:
         if rel_path is None:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
         
-        file_size_kb = filepath.stat().st_size / 2048
+        file_size_kb = filepath.stat().st_size / 512
         
         logger.info("="*80)
         logger.info(f"[INGESTION START] MODIFIED FILE")

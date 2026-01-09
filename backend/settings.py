@@ -46,13 +46,13 @@ class Settings:
     QDRANT_TIMEOUT: int = int(os.getenv("QDRANT_TIMEOUT", "30"))
     
     # ==================== Ingestion Configuration ====================
-    INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "2048"))
+    INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))
     INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
     
     # ==================== Application Configuration ====================
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
-    MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "2048"))
+    MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "512"))
     
     @classmethod
     def validate(cls) -> bool:

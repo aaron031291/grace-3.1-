@@ -89,7 +89,7 @@ def clear_sqlite():
         logger.info("Setting up SQLite configuration...")
         config = DatabaseConfig(
             db_type=DatabaseType.SQLITE,
-            database_path="grace.db",
+            database_path="./data/grace.db",
             echo=False,
         )
         
@@ -177,6 +177,7 @@ def reset_file_tracking():
     logger.info("=" * 80)
     
     try:
+        import json
         from pathlib import Path
         
         kb_path = Path(__file__).parent / "knowledge_base"
@@ -189,7 +190,13 @@ def reset_file_tracking():
             tracking_file.unlink()
             logger.info("✓ File tracking state removed")
         else:
-            logger.info("✓ No existing file tracking state found (OK)")
+            logger.info("✓ No existing file tracking state found")
+        
+        # Create empty ingestion state file for fresh start
+        logger.info("Creating empty ingestion state file for fresh start...")
+        with open(tracking_file, 'w') as f:
+            json.dump({}, f)
+        logger.info("✓ Empty ingestion state file created")
         
         # Also reset git tracking if it exists
         git_dir = kb_path / ".git"
@@ -269,7 +276,7 @@ def trigger_auto_ingestion():
                 logger.info("\nFiles to be ingested:")
                 for i, file_path in enumerate(sorted(files_to_process), 1):
                     rel_path = file_path.relative_to(kb_path)
-                    size_kb = file_path.stat().st_size / 2048
+                    size_kb = file_path.stat().st_size / 512
                     logger.info(f"  {i:3d}. {rel_path} ({size_kb:.1f} KB)")
             else:
                 logger.warning("No files found in knowledge base!")

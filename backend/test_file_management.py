@@ -137,7 +137,7 @@ def test_ingestion_service():
         print("Initializing ingestion service...")
         service = TextIngestionService(
             collection_name="test_documents",
-            chunk_size=2048,
+            chunk_size=512,
             chunk_overlap=50,
             embedding_model=embedding_model,
         )

@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""Debug vector ID to chunk mapping."""
+
+import sys
+import logging
+logging.basicConfig(level=logging.WARNING)
+
+from vector_db.client import get_qdrant_client
+from embedding.embedder import EmbeddingModel
+
+print("=" * 80)
+print("VECTOR ID TO CHUNK MAPPING DEBUG")
+print("=" * 80)
+
+# Load embedding model
+embedding_model = EmbeddingModel(
+    model_path="/home/umer/Public/projects/grace_3/backend/models/embedding/qwen_4b",
+    device="cuda"
+)
+
+# Generate query embedding for simple "GDP" query
+query = "GDP"
+query_embedding = embedding_model.embed_text([query])[0]
+
+# Search in Qdrant
+qdrant = get_qdrant_client()
+results = qdrant.search_vectors(
+    collection_name="documents",
+    query_vector=query_embedding,
+    limit=15
+)
+
+print(f"\nQuery: '{query}'")
+print(f"Total results: {len(results)}\n")
+
+# Show what Qdrant returns
+print("QDRANT RESULTS (from vector search):")
+print("-" * 80)
+for i, result in enumerate(results[:8], 1):
+    payload = result.get('payload', {})
+    doc_name = payload.get('filename', 'unknown')
+    text_preview = payload.get('text', '')[:100].replace('\n', ' ')
+    vector_id = result.get('id')
+    score = result.get('score', 'N/A')
+    
+    print(f"{i}. Vector ID: {vector_id}, Score: {score:.4f}")
+    print(f"   File: {doc_name}")
+    print(f"   Text: {text_preview}...")
+    print()
+
+print("\n" + "=" * 80)
+print("NOW CHECKING WHAT RETRIEVER GETS FROM DATABASE:")
+print("=" * 80)
+
+# Now simulate what the retriever does
+try:
+    from settings import settings
+    from database.connection import DatabaseConnection, DatabaseConfig, DatabaseType
+    from models.database_models import Document, DocumentChunk
+    from sqlalchemy.orm import sessionmaker
+    
+    # Initialize database
+    db_type = DatabaseType(settings.DATABASE_TYPE) if settings else DatabaseType.SQLITE
+    db_config = DatabaseConfig(
+        db_type=db_type,
+        host=settings.DATABASE_HOST if settings else None,
+        port=settings.DATABASE_PORT if settings else None,
+        username=settings.DATABASE_USER if settings else None,
+        password=settings.DATABASE_PASSWORD if settings else None,
+        database=settings.DATABASE_NAME if settings else "grace",
+        database_path=settings.DATABASE_PATH if settings else None,
+        echo=settings.DATABASE_ECHO if settings else False,
+    )
+    DatabaseConnection.initialize(db_config)
+    
+    SessionLocal = sessionmaker(bind=DatabaseConnection.get_engine())
+    db = SessionLocal()
+    
+    print("\nDOCUMENTS IN DATABASE:")
+    for doc in db.query(Document).all():
+        print(f"  ID {doc.id}: {doc.filename}")
+    
+    print("\nMAPPING FOR TOP QDRANT RESULTS:")
+    print("-" * 80)
+    
+    for i, result in enumerate(results[:8], 1):
+        vector_id = result.get('id')
+        payload_file = result.get('payload', {}).get('filename', 'unknown')
+        payload_text = result.get('payload', {}).get('text', '')[:50]
+        
+        # Look up in database
+        chunk = db.query(DocumentChunk).filter(
+            DocumentChunk.embedding_vector_id == str(vector_id)
+        ).first()
+        
+        if chunk:
+            doc = db.query(Document).filter(Document.id == chunk.document_id).first()
+            db_file = doc.filename if doc else f"UNKNOWN (doc_id {chunk.document_id})"
+            db_text = chunk.text_content[:50]
+        else:
+            db_file = "NO CHUNK FOUND"
+            db_text = ""
+        
+        print(f"{i}. Vector ID {vector_id}:")
+        print(f"   QDRANT file: {payload_file}")
+        print(f"   DB file:     {db_file}")
+        print(f"   MATCH: {'✓' if payload_file == db_file else '✗ MISMATCH'}")
+        print()
+
+except Exception as e:
+    import traceback
+    print(f"\nError: {e}")
+    traceback.print_exc()
