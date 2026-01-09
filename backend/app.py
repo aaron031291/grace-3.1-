@@ -1344,10 +1344,13 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
             # Filter by directory if specified
             if retrieval_result:
                 filtered_chunks = []
-                target_dir = request.directory_path.rstrip("/") if request.directory_path else ""
+                # Normalize directory path to forward slashes for cross-platform compatibility
+                target_dir = request.directory_path.rstrip("/").rstrip("\\").replace("\\", "/") if request.directory_path else ""
                 
                 for chunk in retrieval_result:
                     file_path = chunk.get("metadata", {}).get("file_path", "")
+                    # Normalize file_path to forward slashes as well
+                    file_path = file_path.replace("\\", "/") if file_path else ""
                     
                     # Check if file is in the directory
                     if target_dir == "":
