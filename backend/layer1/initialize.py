@@ -15,8 +15,9 @@ Usage:
     # All components now communicate autonomously!
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import logging
+from pathlib import Path
 from sqlalchemy.orm import Session
 
 from layer1.message_bus import get_message_bus, Layer1MessageBus
@@ -29,9 +30,41 @@ from layer1.components import (
 )
 from layer1.components.version_control_connector import get_version_control_connector
 
+# Optional neuro-symbolic connector
+try:
+    from layer1.components.neuro_symbolic_connector import (
+        NeuroSymbolicConnector,
+        create_neuro_symbolic_connector
+    )
+    NEURO_SYMBOLIC_AVAILABLE = True
+except ImportError:
+    NeuroSymbolicConnector = None
+    create_neuro_symbolic_connector = None
+    NEURO_SYMBOLIC_AVAILABLE = False
+
+# Optional knowledge base connectors
+try:
+    from layer1.components.knowledge_base_connector import (
+        KnowledgeBaseIngestionConnector,
+        create_knowledge_base_ingestion_connector
+    )
+    from layer1.components.data_integrity_connector import (
+        DataIntegrityConnector,
+        create_data_integrity_connector
+    )
+    KNOWLEDGE_BASE_AVAILABLE = True
+except ImportError:
+    KnowledgeBaseIngestionConnector = None
+    create_knowledge_base_ingestion_connector = None
+    DataIntegrityConnector = None
+    create_data_integrity_connector = None
+    KNOWLEDGE_BASE_AVAILABLE = False
+
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from retrieval.retriever import DocumentRetriever
 from ingestion.service import TextIngestionService
+from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+from embedding.embedder import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +90,10 @@ class Layer1System:
         rag_connector: RAGConnector,
         ingestion_connector: IngestionConnector,
         llm_orchestration_connector: LLMOrchestrationConnector,
-        version_control_connector=None
+        version_control_connector=None,
+        neuro_symbolic_connector=None,
+        knowledge_base_ingestion_connector=None,
+        data_integrity_connector=None,
     ):
         self.message_bus = message_bus
         self.memory_mesh = memory_mesh_connector
@@ -66,6 +102,9 @@ class Layer1System:
         self.ingestion = ingestion_connector
         self.llm_orchestration = llm_orchestration_connector
         self.version_control = version_control_connector
+        self.neuro_symbolic = neuro_symbolic_connector
+        self.knowledge_base_ingestion = knowledge_base_ingestion_connector
+        self.data_integrity = data_integrity_connector
 
         logger.info("[LAYER1] ✓ System initialized with all components")
 
@@ -82,7 +121,13 @@ def initialize_layer1(
     session: Session,
     kb_path: str,
     vector_db_client=None,
-    ollama_client=None
+    ollama_client=None,
+    enable_neuro_symbolic: bool = False,
+    trust_weight: float = 0.3,
+    min_trust_threshold: float = 0.3,
+    enable_knowledge_base: bool = False,
+    ai_research_path: Optional[str] = None,
+    database_path: Optional[str] = None,
 ) -> Layer1System:
     """
     Initialize complete Layer 1 system.
@@ -92,6 +137,12 @@ def initialize_layer1(
         kb_path: Path to knowledge base
         vector_db_client: Optional vector DB client
         ollama_client: Optional Ollama client
+        enable_neuro_symbolic: Enable neuro-symbolic features (optional)
+        trust_weight: Weight of trust in similarity (0-1) if neuro-symbolic enabled
+        min_trust_threshold: Minimum trust to include (0-1) if neuro-symbolic enabled
+        enable_knowledge_base: Enable knowledge base ingestion and verification (optional)
+        ai_research_path: Path to ai_research directory (default: {project_root}/data/ai_research)
+        database_path: Path to database file (default: from DatabaseConfig)
 
     Returns:
         Fully initialized Layer 1 system
@@ -106,23 +157,43 @@ def initialize_layer1(
     memory_mesh = MemoryMeshIntegration(session, kb_path)
     logger.info("[LAYER1] ✓ Memory mesh initialized")
 
-    # Create retriever (simplified - would use actual instances)
-    from backend.vector_db.client import get_vector_db_client
-    from backend.database.session import get_db
+    # Create embedding model (singleton)
+    embedding_model = get_embedding_model()
+    logger.info("[LAYER1] ✓ Embedding model loaded")
 
-    if vector_db_client is None:
-        vector_db_client = get_vector_db_client()
+    # Create retriever (optionally trust-aware)
+    if enable_neuro_symbolic and NEURO_SYMBOLIC_AVAILABLE:
+        try:
+            from retrieval.trust_aware_retriever import get_trust_aware_retriever
+            base_retriever = DocumentRetriever(
+                collection_name="documents",
+                embedding_model=embedding_model
+            )
+            retriever = get_trust_aware_retriever(
+                base_retriever=base_retriever,
+                trust_weight=trust_weight,
+                min_trust_threshold=min_trust_threshold,
+            )
+            logger.info("[LAYER1] ✓ Trust-aware RAG retriever initialized")
+        except ImportError:
+            retriever = DocumentRetriever(
+                collection_name="documents",
+                embedding_model=embedding_model
+            )
+            logger.info("[LAYER1] ✓ RAG retriever initialized (trust-aware not available)")
+    else:
+        retriever = DocumentRetriever(
+            collection_name="documents",
+            embedding_model=embedding_model
+        )
+        logger.info("[LAYER1] ✓ RAG retriever initialized")
 
-    retriever = HybridRetriever(
-        session=session,
-        vector_db_client=vector_db_client
-    )
-    logger.info("[LAYER1] ✓ RAG retriever initialized")
-
-    ingestion_service = IngestionService(
-        session=session,
-        kb_path=kb_path,
-        vector_db_client=vector_db_client
+    # Create ingestion service
+    ingestion_service = TextIngestionService(
+        collection_name="documents",
+        chunk_size=512,
+        chunk_overlap=50,
+        embedding_model=embedding_model
     )
     logger.info("[LAYER1] ✓ Ingestion service initialized")
 
@@ -138,9 +209,13 @@ def initialize_layer1(
         message_bus=message_bus
     )
 
+    # Create RAG connector (optionally with trust-aware retrieval)
     rag_connector = RAGConnector(
         retriever=retriever,
-        message_bus=message_bus
+        message_bus=message_bus,
+        use_trust_aware=enable_neuro_symbolic and NEURO_SYMBOLIC_AVAILABLE,
+        trust_weight=trust_weight,
+        min_trust_threshold=min_trust_threshold,
     )
 
     ingestion_connector = IngestionConnector(
@@ -148,17 +223,104 @@ def initialize_layer1(
         message_bus=message_bus
     )
 
-    # LLM orchestrator (simplified)
-    llm_orchestrator = {}  # Would be actual orchestrator
+    # LLM orchestrator
+    llm_orchestrator = LLMOrchestrator(
+        session=session,
+        embedding_model=embedding_model,
+        knowledge_base_path=kb_path
+    )
+    logger.info("[LAYER1] ✓ LLM orchestrator initialized")
+    
     llm_orchestration_connector = LLMOrchestrationConnector(
         llm_orchestrator=llm_orchestrator,
         message_bus=message_bus
     )
+    logger.info("[LAYER1] ✓ LLM orchestration connector initialized")
 
     # Version control connector (symbiotic Genesis Keys + Version Control)
     version_control_connector = get_version_control_connector()
     message_bus.register_connector("version_control", version_control_connector)
     logger.info("[LAYER1] ✓ Version control connector registered")
+
+    # Neuro-symbolic connector (optional)
+    neuro_symbolic_connector = None
+    if enable_neuro_symbolic and NEURO_SYMBOLIC_AVAILABLE:
+        try:
+            from ml_intelligence.neuro_symbolic_reasoner import get_neuro_symbolic_reasoner
+            from ml_intelligence.rule_storage import get_rule_storage
+            from cognitive.learning_memory import LearningMemoryManager
+            from pathlib import Path
+            
+            # Create learning memory manager for rule storage
+            learning_memory = LearningMemoryManager(session, Path(kb_path))
+            
+            # Create neuro-symbolic reasoner
+            reasoner = get_neuro_symbolic_reasoner(
+                retriever=retriever,
+                learning_memory=learning_memory,
+                neural_weight=0.5,
+                symbolic_weight=0.5,
+            )
+            
+            # Create rule storage
+            rule_storage = get_rule_storage(learning_memory)
+            
+            # Create neuro-symbolic connector
+            neuro_symbolic_connector = create_neuro_symbolic_connector(
+                reasoner=reasoner,
+                rule_storage=rule_storage,
+                message_bus=message_bus,
+            )
+            
+            if neuro_symbolic_connector and neuro_symbolic_connector.enabled:
+                logger.info("[LAYER1] ✓ Neuro-symbolic connector initialized")
+            else:
+                logger.info("[LAYER1] ⚠ Neuro-symbolic connector not available")
+                neuro_symbolic_connector = None
+                
+        except Exception as e:
+            logger.warning(f"[LAYER1] ⚠ Failed to initialize neuro-symbolic connector: {e}")
+            neuro_symbolic_connector = None
+
+    # Knowledge base connectors (optional)
+    knowledge_base_ingestion_connector = None
+    data_integrity_connector = None
+    if enable_knowledge_base and KNOWLEDGE_BASE_AVAILABLE:
+        try:
+            from database.config import DatabaseConfig
+            
+            # Get paths
+            project_root = Path(kb_path).parent.parent if kb_path else Path.cwd()
+            if ai_research_path is None:
+                ai_research_path = str(project_root / "data" / "ai_research")
+            
+            if database_path is None:
+                db_config = DatabaseConfig.from_env()
+                database_path = db_config.database_path or str(project_root / "data" / "grace.db")
+            
+            # Create knowledge base ingestion connector
+            knowledge_base_ingestion_connector = create_knowledge_base_ingestion_connector(
+                ai_research_path=ai_research_path,
+                message_bus=message_bus,
+                use_trust_aware=enable_neuro_symbolic and NEURO_SYMBOLIC_AVAILABLE,
+                trust_weight=trust_weight,
+                min_trust_threshold=min_trust_threshold,
+            )
+            logger.info("[LAYER1] ✓ Knowledge base ingestion connector initialized")
+            
+            # Create data integrity connector
+            data_integrity_connector = create_data_integrity_connector(
+                ai_research_path=ai_research_path,
+                database_path=database_path,
+                message_bus=message_bus,
+                enable_trust_scoring=enable_neuro_symbolic and NEURO_SYMBOLIC_AVAILABLE,
+            )
+            logger.info("[LAYER1] ✓ Data integrity connector initialized")
+            
+        except Exception as e:
+            logger.warning(f"[LAYER1] ⚠ Failed to initialize knowledge base connectors: {e}")
+            knowledge_base_ingestion_connector = None
+            data_integrity_connector = None
 
     logger.info("[LAYER1] ✓ All components connected to message bus")
 
@@ -170,7 +332,10 @@ def initialize_layer1(
         rag_connector=rag_connector,
         ingestion_connector=ingestion_connector,
         llm_orchestration_connector=llm_orchestration_connector,
-        version_control_connector=version_control_connector
+        version_control_connector=version_control_connector,
+        neuro_symbolic_connector=neuro_symbolic_connector,
+        knowledge_base_ingestion_connector=knowledge_base_ingestion_connector,
+        data_integrity_connector=data_integrity_connector,
     )
 
     # 5. Log statistics

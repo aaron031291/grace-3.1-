@@ -27,7 +27,9 @@ from .components import (
     GenesisKeysConnector,
     RAGConnector,
     IngestionConnector,
-    LLMOrchestrationConnector
+    LLMOrchestrationConnector,
+    VersionControlConnector,
+    get_version_control_connector
 )
 
 __all__ = [
@@ -46,4 +48,6 @@ __all__ = [
     "RAGConnector",
     "IngestionConnector",
     "LLMOrchestrationConnector",
+    "VersionControlConnector",
+    "get_version_control_connector",
 ]

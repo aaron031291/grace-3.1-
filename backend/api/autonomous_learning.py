@@ -12,7 +12,15 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 
-from cognitive.learning_subagent_system import LearningOrchestrator, TaskType
+import sys
+import platform
+
+# Use thread-based orchestrator on Windows, multiprocessing on Linux/Mac
+if platform.system() == "Windows":
+    from cognitive.thread_learning_orchestrator import ThreadLearningOrchestrator as LearningOrchestrator
+    from cognitive.learning_subagent_system import TaskType
+else:
+    from cognitive.learning_subagent_system import LearningOrchestrator, TaskType
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
 from database.session import initialize_session_factory

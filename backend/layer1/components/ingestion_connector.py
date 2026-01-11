@@ -279,23 +279,28 @@ class IngestionConnector:
 
         # Get status from database
         from backend.models.database_models import Document
-        document = self.ingestion_service.session.query(Document).filter(
-            Document.id == document_id
-        ).first()
+        # TextIngestionService uses static _get_db_session() method
+        db_session = self.ingestion_service._get_db_session()
+        try:
+            document = db_session.query(Document).filter(
+                Document.id == document_id
+            ).first()
 
-        if not document:
-            return {"error": f"Document not found: {document_id}"}
+            if not document:
+                return {"error": f"Document not found: {document_id}"}
 
-        return {
-            "document_id": document.id,
-            "file_path": document.file_path,
-            "status": "processed",
-            "chunks_count": len(document.chunks) if hasattr(document, "chunks") else 0
-        }
+            return {
+                "document_id": document.id,
+                "file_path": document.file_path,
+                "status": "processed",
+                "chunks_count": len(document.chunks) if hasattr(document, "chunks") else 0
+            }
+        finally:
+            db_session.close()
 
 
 def create_ingestion_connector(
-    ingestion_service: IngestionService,
+    ingestion_service: TextIngestionService,
     message_bus: Optional[Layer1MessageBus] = None
 ) -> IngestionConnector:
     """Create and initialize ingestion connector."""

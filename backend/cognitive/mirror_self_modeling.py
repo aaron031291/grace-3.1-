@@ -344,16 +344,23 @@ class MirrorSelfModelingSystem:
 
         # Calculate metrics
         total = len(examples)
-        successes = sum(1 for e in examples if e.outcome == "success")
-        avg_confidence = sum(e.confidence_score for e in examples) / total
-        topics = len(set(e.topic for e in examples))
+        # Use outcome_quality to determine success (> 0.7 = success) or example_type
+        successes = sum(1 for e in examples if (
+            e.outcome_quality > 0.7 or 
+            e.example_type in ["success", "practice_outcome"] or
+            (isinstance(e.actual_output, dict) and e.actual_output.get("success", False))
+        ))
+        # Use trust_score as confidence (since confidence_score doesn't exist)
+        avg_confidence = sum(e.trust_score for e in examples) / total if total > 0 else 0.0
+        # Use example_type as topic (since topic doesn't exist)
+        topics = len(set(e.example_type for e in examples))
 
         return {
             "total_examples": total,
             "avg_confidence": round(avg_confidence, 3),
             "success_rate": round(successes / total, 3) if total > 0 else 0.0,
             "topics_studied": topics,
-            "recent_topics": list(set(e.topic for e in examples[-10:]))
+            "recent_topics": list(set(e.example_type for e in examples[-10:]))
         }
 
     def _generate_improvement_suggestions(
