@@ -17,7 +17,7 @@ from layer1.message_bus import (
     Message,
     get_message_bus
 )
-from ingestion.service import IngestionService
+from ingestion.service import TextIngestionService
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class IngestionConnector:
 
     def __init__(
         self,
-        ingestion_service: IngestionService,
+        ingestion_service: TextIngestionService,
         message_bus: Optional[Layer1MessageBus] = None
     ):
         self.ingestion_service = ingestion_service
