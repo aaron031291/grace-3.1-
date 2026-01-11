@@ -110,7 +110,7 @@ const TelemetryTab = () => {
         fetchDriftAlerts(),
         fetchStats()
       ]);
-    } catch (err) {
+    } catch {
       setError('Failed to load telemetry data. Please ensure the backend is running.');
     } finally {
       setLoading(false);

@@ -16,10 +16,6 @@ export default function ModuleHistory({ moduleStats, commits }) {
     setSelectedModule(moduleName);
   };
 
-  const getModuleIcon = (isDir) => {
-    return isDir ? "folder" : "file";
-  };
-
   return (
     <div className="module-history">
       <div className="module-header">
