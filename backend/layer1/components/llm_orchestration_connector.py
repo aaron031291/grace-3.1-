@@ -10,6 +10,8 @@ Connects LLM orchestration to Layer 1 message bus for:
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -19,6 +21,9 @@ from layer1.message_bus import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class LLMOrchestrationConnector:

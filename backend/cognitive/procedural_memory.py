@@ -3,12 +3,19 @@ Procedural Memory - Learned Skills and Procedures
 
 Stores HOW to do things, not just WHAT is true.
 This is the difference between knowing and doing.
+
+OPTIMIZED: Now supports semantic similarity for procedure finding
 """
 from sqlalchemy import Column, String, Float, Integer, Text, JSON, ForeignKey
 from database.base import BaseModel
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
+import logging
+import json
+import numpy as np
+
+logger = logging.getLogger(__name__)
 
 
 class Procedure(BaseModel):
@@ -49,10 +56,28 @@ class Procedure(BaseModel):
 class ProceduralRepository:
     """
     Manages procedural memory - learned skills and procedures.
+
+    OPTIMIZED: Now supports semantic similarity for procedure finding
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, embedder=None):
         self.session = session
+        self._embedder = embedder
+        self._use_semantic = False
+
+    @property
+    def embedder(self):
+        """Lazy load embedder for semantic similarity"""
+        if self._embedder is None:
+            try:
+                from embedding.embedder import get_embedding_model
+                self._embedder = get_embedding_model()
+                self._use_semantic = True
+                logger.info("[PROCEDURAL] Semantic similarity enabled")
+            except Exception as e:
+                logger.warning(f"[PROCEDURAL] Embedder not available, using text matching: {e}")
+                self._use_semantic = False
+        return self._embedder
 
     def create_procedure(
         self,
@@ -100,8 +125,76 @@ class ProceduralRepository:
     ) -> Optional[Procedure]:
         """
         Find existing procedure for goal and context.
+
+        OPTIMIZED: Uses semantic similarity when embedder is available,
+        falls back to text CONTAINS when not.
         """
-        # Simple search - should use embeddings
+        # Try semantic search first
+        if self._use_semantic or self.embedder:
+            try:
+                return self._find_procedure_semantic(goal, context)
+            except Exception as e:
+                logger.warning(f"[PROCEDURAL] Semantic search failed, using fallback: {e}")
+
+        # Fallback to text-based search
+        return self._find_procedure_text(goal, context)
+
+    def _find_procedure_semantic(
+        self,
+        goal: str,
+        context: Dict[str, Any],
+        min_similarity: float = 0.6
+    ) -> Optional[Procedure]:
+        """
+        Find procedure using semantic similarity (embedding-based).
+        """
+        # Generate embedding for goal
+        goal_embedding = self.embedder.embed_text([goal])[0]
+        goal_embedding = np.array(goal_embedding)
+
+        # Get procedures with embeddings
+        procedures = self.session.query(Procedure).filter(
+            Procedure.embedding.isnot(None)
+        ).all()
+
+        if not procedures:
+            # Fallback if no embeddings
+            return self._find_procedure_text(goal, context)
+
+        # Calculate semantic similarity for each
+        scored = []
+        for proc in procedures:
+            try:
+                proc_embedding = np.array(json.loads(proc.embedding))
+                similarity = self._cosine_similarity(goal_embedding, proc_embedding)
+
+                # Combine with precondition match
+                precond_score = self._match_preconditions(context, proc.preconditions)
+                combined_score = (similarity * 0.7) + (precond_score * 0.3)
+
+                if similarity >= min_similarity:
+                    scored.append((combined_score, proc))
+            except Exception:
+                continue
+
+        if not scored:
+            return None
+
+        # Return best match
+        scored.sort(reverse=True, key=lambda x: x[0])
+        best_score, best_proc = scored[0]
+
+        logger.debug(f"[PROCEDURAL] Semantic match found: {best_proc.name} (score={best_score:.2f})")
+        return best_proc
+
+    def _find_procedure_text(
+        self,
+        goal: str,
+        context: Dict[str, Any]
+    ) -> Optional[Procedure]:
+        """
+        Find procedure using text CONTAINS (fallback).
+        """
         procedures = self.session.query(Procedure).filter(
             Procedure.goal.contains(goal)
         ).all()
@@ -120,6 +213,18 @@ class ProceduralRepository:
                 best_match = proc
 
         return best_match if best_score > 0.5 else None
+
+    def _cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
+        """Calculate cosine similarity between two vectors."""
+        try:
+            dot_product = np.dot(a, b)
+            norm_a = np.linalg.norm(a)
+            norm_b = np.linalg.norm(b)
+            if norm_a == 0 or norm_b == 0:
+                return 0.0
+            return float(dot_product / (norm_a * norm_b))
+        except Exception:
+            return 0.0
 
     def _match_preconditions(
         self,
@@ -140,6 +245,54 @@ class ProceduralRepository:
                 matches += 1
 
         return matches / len(matching_keys)
+
+    def generate_procedure_embedding(self, procedure: Procedure) -> Optional[List[float]]:
+        """
+        Generate and store embedding for a procedure.
+        """
+        if not self.embedder:
+            return None
+
+        try:
+            # Embed goal + name for better matching
+            text = f"{procedure.name}: {procedure.goal}"
+            embedding = self.embedder.embed_text([text])[0]
+            procedure.embedding = json.dumps(embedding)
+            self.session.commit()
+            return embedding
+        except Exception as e:
+            logger.error(f"[PROCEDURAL] Error generating embedding: {e}")
+            return None
+
+    def index_all_procedures(self) -> int:
+        """
+        Generate embeddings for all procedures that don't have them.
+        Returns count of procedures indexed.
+        """
+        if not self.embedder:
+            logger.warning("[PROCEDURAL] Cannot index - no embedder available")
+            return 0
+
+        # Get procedures without embeddings
+        procedures = self.session.query(Procedure).filter(
+            Procedure.embedding.is_(None)
+        ).all()
+
+        if not procedures:
+            logger.info("[PROCEDURAL] All procedures already indexed")
+            return 0
+
+        # Batch embed
+        texts = [f"{p.name}: {p.goal}" for p in procedures]
+        embeddings = self.embedder.embed_text(texts, batch_size=32)
+
+        # Update procedures
+        for proc, emb in zip(procedures, embeddings):
+            proc.embedding = json.dumps(emb)
+
+        self.session.commit()
+        logger.info(f"[PROCEDURAL] Indexed {len(procedures)} procedures")
+        return len(procedures)
 
     def suggest_procedure(
         self,

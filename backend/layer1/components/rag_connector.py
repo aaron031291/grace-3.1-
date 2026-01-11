@@ -10,6 +10,8 @@ Connects RAG system to Layer 1 message bus for:
 from typing import Dict, Any, Optional, List
 import logging
 from datetime import datetime
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -20,6 +22,9 @@ from layer1.message_bus import (
 from retrieval.retriever import DocumentRetriever
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class RAGConnector:
@@ -249,8 +254,12 @@ class RAGConnector:
         query = message.payload.get("query")
         top_k = message.payload.get("top_k", 5)
 
-        # Perform retrieval
-        results = self.retriever.retrieve(query_text=query, top_k=top_k)
+        # Perform retrieval asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(
+            _executor,
+            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
+        )
 
         # Send success/failure event
         if results:
@@ -299,8 +308,12 @@ class RAGConnector:
             from_component=ComponentType.RAG
         )
 
-        # Perform retrieval (enhanced by procedures)
-        results = self.retriever.retrieve(query_text=query, top_k=top_k)
+        # Perform retrieval asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(
+            _executor,
+            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
+        )
 
         return {
             "results": [
@@ -344,7 +357,7 @@ class RAGConnector:
 
 
 def create_rag_connector(
-    retriever: HybridRetriever,
+    retriever: DocumentRetriever,
     message_bus: Optional[Layer1MessageBus] = None
 ) -> RAGConnector:
     """Create and initialize RAG connector."""
