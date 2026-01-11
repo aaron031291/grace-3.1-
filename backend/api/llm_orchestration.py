@@ -572,10 +572,10 @@ async def build_llm_consensus(
 
 @router.post("/collaborate/delegate")
 async def delegate_to_specialists(
-    task: str,
-    task_type: str = "general",
-    num_specialists: int = Field(default=3, ge=1, le=5),
-    coordinator_reviews: bool = True,
+    task: str = Body(...),
+    task_type: str = Body(default="general"),
+    num_specialists: int = Body(default=3),
+    coordinator_reviews: bool = Body(default=True),
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -621,9 +621,9 @@ async def delegate_to_specialists(
 
 @router.post("/collaborate/review")
 async def peer_review_content(
-    content: str,
-    review_aspects: List[str] = Field(default=["accuracy", "clarity", "completeness"]),
-    num_reviewers: int = Field(default=3, ge=1, le=5),
+    content: str = Body(...),
+    review_aspects: List[str] = Body(default=["accuracy", "clarity", "completeness"]),
+    num_reviewers: int = Body(default=3),
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -662,12 +662,12 @@ async def peer_review_content(
 
 @router.post("/fine-tune/prepare-dataset")
 async def prepare_fine_tuning_dataset(
-    task_type: str,
-    dataset_name: str,
-    min_trust_score: float = Field(default=0.8, ge=0.0, le=1.0),
-    num_examples: int = Field(default=500, ge=10, le=10000),
-    validation_split: float = Field(default=0.2, ge=0.1, le=0.5),
-    user_id: Optional[str] = None,
+    task_type: str = Body(...),
+    dataset_name: str = Body(...),
+    min_trust_score: float = Body(default=0.8),
+    num_examples: int = Body(default=500),
+    validation_split: float = Body(default=0.2),
+    user_id: Optional[str] = Body(default=None),
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """

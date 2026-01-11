@@ -117,6 +117,16 @@ class GenesisTriggerPipeline:
             actions = self._handle_multi_llm_verification(genesis_key)
             triggered_actions.extend(actions)
 
+        # Check if health check is needed (errors/failures)
+        if self._should_trigger_health_check(genesis_key):
+            actions = self._handle_health_check_trigger(genesis_key)
+            triggered_actions.extend(actions)
+
+        # Check if mirror self-modeling should run (periodic)
+        if self._should_trigger_mirror_analysis(genesis_key):
+            actions = self._handle_mirror_analysis_trigger(genesis_key)
+            triggered_actions.extend(actions)
+
         self.triggers_fired += len(triggered_actions)
 
         return {
@@ -566,6 +576,143 @@ class GenesisTriggerPipeline:
 
         except Exception as e:
             logger.error(f"Error triggering multi-LLM verification: {e}")
+
+        return actions
+
+    # ======================================================================
+    # SELF-HEALING TRIGGERS
+    # ======================================================================
+
+    def _should_trigger_health_check(self, genesis_key: GenesisKey) -> bool:
+        """
+        Determine if health check should be triggered.
+
+        Triggers on:
+        - Multiple errors in short period
+        - Critical failures
+        - System anomalies
+        """
+        metadata = genesis_key.metadata or {}
+
+        # Trigger on error/failure Genesis Keys
+        if genesis_key.key_type in [GenesisKeyType.ERROR, GenesisKeyType.FAILURE]:
+            return True
+
+        # Trigger if explicitly requested
+        if metadata.get('request_health_check', False):
+            return True
+
+        return False
+
+    def _handle_health_check_trigger(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
+        """
+        Handle health check and healing trigger.
+
+        Uses autonomous healing system to:
+        - Assess system health
+        - Detect anomalies
+        - Decide healing actions
+        - Execute autonomously (if trust allows)
+        """
+        actions = []
+
+        try:
+            from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+
+            logger.info("[GENESIS-TRIGGER] Error/failure detected → Triggering health check")
+
+            # Get healing system
+            healing = get_autonomous_healing(
+                session=self.session,
+                trust_level=TrustLevel.MEDIUM_RISK_AUTO,
+                enable_learning=True
+            )
+
+            # Run monitoring cycle
+            cycle_result = healing.run_monitoring_cycle()
+
+            actions.append({
+                "action": "health_check_and_healing",
+                "trigger": "error_or_failure_detected",
+                "health_status": cycle_result["health_status"],
+                "anomalies_detected": cycle_result["anomalies_detected"],
+                "actions_executed": cycle_result["actions_executed"],
+                "awaiting_approval": cycle_result["awaiting_approval"]
+            })
+
+            logger.info(
+                f"[GENESIS-TRIGGER] Health check complete: {cycle_result['health_status']}, "
+                f"executed {cycle_result['actions_executed']} healing actions"
+            )
+
+        except Exception as e:
+            logger.error(f"Error triggering health check: {e}")
+
+        return actions
+
+    # ======================================================================
+    # MIRROR SELF-MODELING TRIGGERS
+    # ======================================================================
+
+    def _should_trigger_mirror_analysis(self, genesis_key: GenesisKey) -> bool:
+        """
+        Determine if mirror self-modeling should be triggered.
+
+        Triggers periodically (every N operations) to build self-model.
+        """
+        # Trigger every 50 operations
+        return self.triggers_fired % 50 == 0
+
+    def _handle_mirror_analysis_trigger(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
+        """
+        Handle mirror self-modeling trigger.
+
+        Uses mirror system to:
+        - Observe recent operations
+        - Detect behavioral patterns
+        - Build self-model
+        - Generate improvement suggestions
+        - Trigger improvement actions
+        """
+        actions = []
+
+        try:
+            from cognitive.mirror_self_modeling import get_mirror_system
+
+            logger.info("[GENESIS-TRIGGER] Triggering mirror self-modeling analysis")
+
+            # Get mirror system
+            mirror = get_mirror_system(
+                session=self.session,
+                observation_window_hours=24,
+                min_pattern_occurrences=3
+            )
+
+            # Build self-model
+            self_model = mirror.build_self_model()
+
+            # Trigger improvement actions if orchestrator available
+            if self.orchestrator:
+                improvement_result = mirror.trigger_improvement_actions(self.orchestrator)
+
+                actions.append({
+                    "action": "mirror_self_modeling",
+                    "trigger": "periodic_self_reflection",
+                    "patterns_detected": self_model["behavioral_patterns"]["total_detected"],
+                    "improvement_suggestions": len(self_model["improvement_suggestions"]),
+                    "actions_triggered": improvement_result["actions_triggered"],
+                    "self_awareness_score": self_model["self_awareness_score"]
+                })
+
+                logger.info(
+                    f"[GENESIS-TRIGGER] Mirror analysis complete: "
+                    f"{self_model['behavioral_patterns']['total_detected']} patterns, "
+                    f"{len(self_model['improvement_suggestions'])} suggestions, "
+                    f"{improvement_result['actions_triggered']} actions triggered"
+                )
+
+        except Exception as e:
+            logger.error(f"Error triggering mirror analysis: {e}")
 
         return actions
 
