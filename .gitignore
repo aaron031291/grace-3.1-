@@ -30,3 +30,50 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python caches and tooling
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.eggs/
+build/
+dist/
+
+# Databases and runtime/state
+*.db
+backend/**/data/*.db
+data/**/*.db
+.data/
+var/
+state/
+artifacts/
+benchmarks/results/
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Benchmark artifacts
+benchmark_results/
+
+# OS files
+Thumbs.db
+data/ 
+# Windows reserved filenames
+nul
+con
+prn
+aux
+NUL
+CON
+PRN
+AUX 
