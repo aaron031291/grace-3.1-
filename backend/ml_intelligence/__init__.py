@@ -52,6 +52,26 @@ from .contrastive_learning import (
     SupervisedContrastiveLoss,
     get_contrastive_learner
 )
+from .trust_aware_embedding import (
+    TrustAwareEmbeddingModel,
+    TrustContext,
+    get_trust_aware_embedding_model
+)
+from .neural_to_symbolic_rule_generator import (
+    NeuralToSymbolicRuleGenerator,
+    NeuralPattern,
+    SymbolicRule,
+    get_neural_to_symbolic_generator
+)
+from .neuro_symbolic_reasoner import (
+    NeuroSymbolicReasoner,
+    ReasoningResult,
+    get_neuro_symbolic_reasoner
+)
+from .rule_storage import (
+    RuleStorage,
+    get_rule_storage
+)
 
 __all__ = [
     # Neural Trust Scorer
@@ -94,4 +114,23 @@ __all__ = [
     'TripletLoss',
     'SupervisedContrastiveLoss',
     'get_contrastive_learner',
+
+    # Neuro-Symbolic Integration
+    'TrustAwareEmbeddingModel',
+    'TrustContext',
+    'get_trust_aware_embedding_model',
+    'NeuralToSymbolicRuleGenerator',
+    'NeuralPattern',
+    'SymbolicRule',
+    'get_neural_to_symbolic_generator',
+    'NeuroSymbolicReasoner',
+    'ReasoningResult',
+    'get_neuro_symbolic_reasoner',
+    'RuleStorage',
+    'get_rule_storage',
+    # KPI Tracking
+    'KPITracker',
+    'KPI',
+    'ComponentKPIs',
+    'get_kpi_tracker',
 ]

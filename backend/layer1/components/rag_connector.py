@@ -19,6 +19,14 @@ from layer1.message_bus import (
 )
 from retrieval.retriever import DocumentRetriever
 
+# Optional trust-aware retriever support
+try:
+    from retrieval.trust_aware_retriever import TrustAwareDocumentRetriever
+    TRUST_AWARE_AVAILABLE = True
+except ImportError:
+    TrustAwareDocumentRetriever = None
+    TRUST_AWARE_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -36,9 +44,34 @@ class RAGConnector:
     def __init__(
         self,
         retriever: DocumentRetriever,
-        message_bus: Optional[Layer1MessageBus] = None
+        message_bus: Optional[Layer1MessageBus] = None,
+        use_trust_aware: bool = False,
+        trust_weight: float = 0.3,
+        min_trust_threshold: float = 0.3,
     ):
+        """
+        Initialize RAG connector.
+        
+        Args:
+            retriever: DocumentRetriever or TrustAwareDocumentRetriever instance
+            message_bus: Message bus instance
+            use_trust_aware: Enable trust-aware retrieval (wraps retriever if True)
+            trust_weight: Weight of trust in similarity (0-1) if use_trust_aware=True
+            min_trust_threshold: Minimum trust to include (0-1) if use_trust_aware=True
+        """
+        # Wrap with trust-aware retriever if requested and available
+        if use_trust_aware and TRUST_AWARE_AVAILABLE:
+            if not isinstance(retriever, TrustAwareDocumentRetriever):
+                from retrieval.trust_aware_retriever import get_trust_aware_retriever
+                retriever = get_trust_aware_retriever(
+                    base_retriever=retriever,
+                    trust_weight=trust_weight,
+                    min_trust_threshold=min_trust_threshold,
+                )
+                logger.info("[RAG-CONNECTOR] Enabled trust-aware retrieval")
+        
         self.retriever = retriever
+        self.use_trust_aware = use_trust_aware and TRUST_AWARE_AVAILABLE
         self.message_bus = message_bus or get_message_bus()
 
         # Register component
@@ -248,9 +281,19 @@ class RAGConnector:
         """Handle retrieval request."""
         query = message.payload.get("query")
         top_k = message.payload.get("top_k", 5)
+        use_trust_weighting = message.payload.get("use_trust_weighting", self.use_trust_aware)
 
-        # Perform retrieval
-        results = self.retriever.retrieve(query_text=query, top_k=top_k)
+        # Perform retrieval (DocumentRetriever or TrustAwareDocumentRetriever)
+        if self.use_trust_aware and use_trust_weighting:
+            # Use trust-aware retrieval
+            results = self.retriever.retrieve(
+                query=query,
+                limit=top_k,
+                use_trust_weighting=True
+            )
+        else:
+            # Use standard retrieval
+            results = self.retriever.retrieve(query=query, limit=top_k)
 
         # Send success/failure event
         if results:
@@ -273,21 +316,32 @@ class RAGConnector:
                 from_component=ComponentType.RAG
             )
 
+        # Build results with trust information if available
+        formatted_results = []
+        for r in results:
+            result_item = {
+                "id": r.get("chunk_id"),
+                "content": r.get("text", ""),
+                "score": r.get("score", 0.0)
+            }
+            
+            # Add trust information if available
+            if self.use_trust_aware:
+                result_item["trust_score"] = r.get("trust_score", r.get("confidence_score", 0.5))
+                result_item["trust_weighted_score"] = r.get("trust_weighted_score", r.get("score", 0.0))
+            
+            formatted_results.append(result_item)
+        
         return {
-            "results": [
-                {
-                    "id": r.id,
-                    "content": r.content,
-                    "score": r.combined_score if hasattr(r, "combined_score") else 0.0
-                }
-                for r in results
-            ]
+            "results": formatted_results,
+            "trust_aware": self.use_trust_aware and use_trust_weighting
         }
 
     async def _handle_retrieve_with_context(self, message: Message) -> Dict[str, Any]:
         """Handle retrieval with procedural context."""
         query = message.payload.get("query")
         top_k = message.payload.get("top_k", 5)
+        use_trust_weighting = message.payload.get("use_trust_weighting", self.use_trust_aware)
 
         # Trigger query received event (will auto-enhance with procedures)
         await self.message_bus.publish(
@@ -299,19 +353,36 @@ class RAGConnector:
             from_component=ComponentType.RAG
         )
 
-        # Perform retrieval (enhanced by procedures)
-        results = self.retriever.retrieve(query_text=query, top_k=top_k)
+        # Perform retrieval (enhanced by procedures and optionally trust-aware)
+        if self.use_trust_aware and use_trust_weighting:
+            results = self.retriever.retrieve(
+                query=query,
+                limit=top_k,
+                use_trust_weighting=True
+            )
+        else:
+            results = self.retriever.retrieve(query=query, limit=top_k)
+
+        # Build results with trust information if available
+        formatted_results = []
+        for r in results:
+            result_item = {
+                "id": r.get("chunk_id"),
+                "content": r.get("text", ""),
+                "score": r.get("score", 0.0)
+            }
+            
+            # Add trust information if available
+            if self.use_trust_aware:
+                result_item["trust_score"] = r.get("trust_score", r.get("confidence_score", 0.5))
+                result_item["trust_weighted_score"] = r.get("trust_weighted_score", r.get("score", 0.0))
+            
+            formatted_results.append(result_item)
 
         return {
-            "results": [
-                {
-                    "id": r.id,
-                    "content": r.content,
-                    "score": r.combined_score if hasattr(r, "combined_score") else 0.0
-                }
-                for r in results
-            ],
-            "enhanced_with_procedures": True
+            "results": formatted_results,
+            "enhanced_with_procedures": True,
+            "trust_aware": self.use_trust_aware and use_trust_weighting
         }
 
     # ================================================================
@@ -344,10 +415,28 @@ class RAGConnector:
 
 
 def create_rag_connector(
-    retriever: HybridRetriever,
-    message_bus: Optional[Layer1MessageBus] = None
+    retriever: DocumentRetriever,
+    message_bus: Optional[Layer1MessageBus] = None,
+    use_trust_aware: bool = False,
+    trust_weight: float = 0.3,
+    min_trust_threshold: float = 0.3,
 ) -> RAGConnector:
-    """Create and initialize RAG connector."""
-    connector = RAGConnector(retriever, message_bus)
+    """
+    Create and initialize RAG connector.
+    
+    Args:
+        retriever: DocumentRetriever instance
+        message_bus: Message bus instance
+        use_trust_aware: Enable trust-aware retrieval
+        trust_weight: Weight of trust in similarity (0-1)
+        min_trust_threshold: Minimum trust to include (0-1)
+    """
+    connector = RAGConnector(
+        retriever=retriever,
+        message_bus=message_bus,
+        use_trust_aware=use_trust_aware,
+        trust_weight=trust_weight,
+        min_trust_threshold=min_trust_threshold,
+    )
     logger.info("[RAG-CONNECTOR] ✓ Initialized and connected to message bus")
     return connector
