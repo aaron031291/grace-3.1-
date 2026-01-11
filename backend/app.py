@@ -33,7 +33,10 @@ from api.cognitive import router as cognitive_router
 from api.training import router as training_router
 from api.autonomous_learning import router as autonomous_learning_router
 from api.master_integration import router as master_router
-from api.llm_orchestration import router as llm_orchestration_router  # Temporarily disabled
+from api.llm_orchestration import router as llm_orchestration_router
+from api.ingestion_integration import router as ingestion_integration_router  # Complete autonomous cycle
+from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
+from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -237,7 +240,36 @@ async def lifespan(app: FastAPI):
             print("[WARN] Qdrant is not running - document ingestion will be unavailable")
     except Exception as e:
         print(f"[WARN] Could not connect to Qdrant: {e}")
-    
+
+    # ==================== Initialize File Watcher ====================
+    # Start file system watcher for automatic version control
+    try:
+        from genesis.file_watcher import start_watching_workspace
+        import threading
+
+        def run_file_watcher():
+            """Run file watcher in background thread"""
+            try:
+                print("[FILE-WATCHER] Starting file system monitoring...")
+                start_watching_workspace()
+            except Exception as e:
+                print(f"[FILE-WATCHER] [WARN] Error: {e}")
+
+        watcher_thread = threading.Thread(target=run_file_watcher, daemon=True)
+        watcher_thread.start()
+        print("[OK] File watcher started - automatic version tracking enabled")
+    except Exception as e:
+        print(f"[WARN] Could not start file watcher: {e}")
+
+    # ==================== Initialize ML Intelligence ====================
+    # Initialize ML Intelligence orchestrator
+    try:
+        from api.ml_intelligence_api import get_orchestrator
+        orchestrator = get_orchestrator()
+        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
+    except Exception as e:
+        print(f"[WARN] ML Intelligence not available: {e}")
+
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
@@ -322,7 +354,24 @@ async def lifespan(app: FastAPI):
         auto_ingest_thread.start()
     except Exception as e:
         print(f"[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: {e}")
-    
+
+    # ==================== Start Continuous Learning Orchestrator ====================
+    # Connect sandbox lab to continuous training data
+    try:
+        from cognitive.continuous_learning_orchestrator import start_continuous_learning
+        print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
+        orchestrator = start_continuous_learning()
+        print("[CONTINUOUS_LEARNING] [OK] Continuous learning activated", flush=True)
+        print("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
+        print("  - Ingest new data from knowledge_base", flush=True)
+        print("  - Learn autonomously from content", flush=True)
+        print("  - Mirror observes and proposes experiments", flush=True)
+        print("  - Run sandbox experiments and trials", flush=True)
+        print("  - Request approval for validated improvements", flush=True)
+        print("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
+    except Exception as e:
+        print(f"[CONTINUOUS_LEARNING] [WARN] Could not start continuous learning: {e}", flush=True)
+
     yield
     
     # Shutdown
@@ -364,7 +413,10 @@ app.include_router(cognitive_router)
 app.include_router(training_router)
 app.include_router(master_router)  # Master integration - unified access to ALL systems
 app.include_router(autonomous_learning_router)
-app.include_router(llm_orchestration_router)  # Temporarily disabled
+app.include_router(llm_orchestration_router)
+app.include_router(ingestion_integration_router)  # Complete autonomous cycle with self-healing
+app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
+app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)

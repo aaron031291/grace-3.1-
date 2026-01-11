@@ -205,10 +205,7 @@ class AutonomousHealingSystem:
 
         errors = self.session.query(GenesisKey).filter(
             GenesisKey.created_at >= cutoff_time,
-            GenesisKey.key_type.in_([
-                GenesisKeyType.ERROR,
-                GenesisKeyType.FAILURE
-            ])
+            GenesisKey.key_type == GenesisKeyType.ERROR
         ).all()
 
         return errors
@@ -247,7 +244,10 @@ class AutonomousHealingSystem:
         # Check for repeated failures (same file multiple times)
         file_error_counts = {}
         for error in recent_errors:
-            file_path = error.metadata.get("file_path") if error.metadata else None
+            # Use file_path column or context_data
+            file_path = error.file_path
+            if not file_path and error.context_data:
+                file_path = error.context_data.get("file_path")
             if file_path:
                 file_error_counts[file_path] = file_error_counts.get(file_path, 0) + 1
 
@@ -502,6 +502,14 @@ class AutonomousHealingSystem:
                 "message": "Cache flushed successfully"
             }
 
+        elif action == HealingAction.STATE_ROLLBACK:
+            # Use multi-LLM to decide rollback strategy
+            return self._execute_with_llm_guidance(action, anomaly, file_keys)
+
+        elif action == HealingAction.ISOLATION:
+            # Use multi-LLM to analyze isolation strategy
+            return self._execute_with_llm_guidance(action, anomaly, file_keys)
+
         # Add other action implementations as needed
         else:
             return {
@@ -509,6 +517,92 @@ class AutonomousHealingSystem:
                 "status": "simulated",
                 "message": f"Action {action.value} simulated (not implemented)"
             }
+
+    def _execute_with_llm_guidance(
+        self,
+        action: HealingAction,
+        anomaly: Dict[str, Any],
+        file_keys: List[str]
+    ) -> Dict[str, Any]:
+        """
+        Execute complex healing action with multi-LLM guidance.
+
+        For complex/risky actions, use multiple LLMs to:
+        - Analyze the anomaly
+        - Recommend healing strategy
+        - Validate proposed solution
+        - Build consensus before execution
+        """
+        try:
+            from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+
+            logger.info(f"[AUTONOMOUS-HEALING] Requesting LLM guidance for {action.value}")
+
+            orchestrator = LLMOrchestrator()
+
+            # Build query for LLMs
+            query = self._build_healing_query(action, anomaly, file_keys)
+
+            # Get consensus from multiple LLMs
+            result = orchestrator.execute_query(
+                query=query,
+                min_models=3,
+                require_consensus=True
+            )
+
+            # Extract healing strategy from consensus
+            healing_strategy = result.get("consensus_answer", "")
+
+            logger.info(
+                f"[AUTONOMOUS-HEALING] LLM consensus received "
+                f"(confidence={result.get('confidence', 0):.2f})"
+            )
+
+            return {
+                "action": action.value,
+                "status": "llm_guided",
+                "llm_strategy": healing_strategy,
+                "llm_confidence": result.get("confidence", 0),
+                "models_consulted": result.get("models_used", []),
+                "message": f"Healing strategy generated with {len(result.get('models_used', []))} LLM consensus"
+            }
+
+        except Exception as e:
+            logger.error(f"[AUTONOMOUS-HEALING] LLM guidance failed: {e}")
+            return {
+                "action": action.value,
+                "status": "failed",
+                "error": str(e)
+            }
+
+    def _build_healing_query(
+        self,
+        action: HealingAction,
+        anomaly: Dict[str, Any],
+        file_keys: List[str]
+    ) -> str:
+        """Build query for LLMs to provide healing guidance."""
+        query = f"""System Healing Analysis Required
+
+Anomaly Detected:
+- Type: {anomaly['type'].value}
+- Severity: {anomaly['severity']}
+- Details: {anomaly['details']}
+
+Proposed Healing Action: {action.value}
+
+Evidence (Genesis Keys): {', '.join(file_keys[:3])}
+
+Please provide:
+1. Root cause analysis of the anomaly
+2. Recommended healing strategy for {action.value}
+3. Potential risks of this action
+4. Alternative approaches if applicable
+5. Step-by-step execution plan
+
+Focus on practical, safe, and effective healing."""
+
+        return query
 
     # ======================================================================
     # Learning from Healing Outcomes

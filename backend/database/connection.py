@@ -108,13 +108,14 @@ class DatabaseConnection:
                 cursor.execute("PRAGMA foreign_keys=ON")
                 cursor.close()
         else:
-            # Use QueuePool for remote databases
+            # Use QueuePool for remote databases with enhanced scalability
             engine = create_engine(
                 connection_string,
                 poolclass=QueuePool,
                 pool_size=config.pool_size,
                 max_overflow=config.max_overflow,
                 pool_pre_ping=config.pool_pre_ping,
+                pool_recycle=getattr(config, 'pool_recycle', 3600),  # Recycle connections
                 echo=config.echo,
             )
         

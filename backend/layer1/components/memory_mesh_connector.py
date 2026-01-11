@@ -10,6 +10,8 @@ Connects the memory mesh to Layer 1 message bus for:
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -20,6 +22,9 @@ from layer1.message_bus import (
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class MemoryMeshConnector:
@@ -96,7 +101,24 @@ class MemoryMeshConnector:
             description="Notify autonomous learning of new pattern"
         )
 
-        logger.info("[MEMORY-MESH-CONNECTOR] ⭐ Registered 4 autonomous actions")
+        # 5. Proactive learning gap analysis (NEW - Grace-aligned)
+        self.message_bus.register_autonomous_action(
+            trigger_event="system.daily_analysis",
+            action=self._analyze_learning_gaps,
+            component=ComponentType.MEMORY_MESH,
+            description="Daily proactive learning gap analysis and suggestions"
+        )
+
+        # 6. Trust score degradation detection (NEW - self-healing)
+        self.message_bus.register_autonomous_action(
+            trigger_event="memory_mesh.trust_updated",
+            action=self._on_trust_degradation,
+            component=ComponentType.MEMORY_MESH,
+            description="Detect and respond to trust score degradation",
+            conditions=[lambda msg: msg.payload.get("new_trust", 1.0) < msg.payload.get("old_trust", 0.0)]
+        )
+
+        logger.info("[MEMORY-MESH-CONNECTOR] ⭐ Registered 6 autonomous actions")
 
     # ================================================================
     # EVENT HANDLERS (Autonomous)
@@ -211,6 +233,79 @@ class MemoryMeshConnector:
             from_component=ComponentType.MEMORY_MESH
         )
 
+    async def _analyze_learning_gaps(self, message: Message):
+        """
+        Proactive learning gap analysis (NEW - Grace-aligned).
+
+        Analyzes memory mesh to identify knowledge gaps and suggests
+        what Grace should learn next.
+        """
+        logger.info("[MEMORY-MESH-CONNECTOR] 🤖 Running proactive learning gap analysis")
+
+        try:
+            from cognitive.memory_mesh_learner import get_memory_mesh_learner
+
+            # Run analysis in thread pool (CPU-bound)
+            loop = asyncio.get_event_loop()
+            learner = get_memory_mesh_learner(self.memory_mesh.session)
+
+            suggestions = await loop.run_in_executor(
+                _executor,
+                learner.get_learning_suggestions
+            )
+
+            # Publish suggestions for autonomous learning system
+            await self.message_bus.publish(
+                topic="autonomous_learning.suggestions",
+                payload={
+                    "suggestions": suggestions,
+                    "top_priorities": suggestions.get("top_priorities", [])[:5],
+                    "timestamp": datetime.utcnow().isoformat()
+                },
+                from_component=ComponentType.MEMORY_MESH
+            )
+
+            logger.info(
+                f"[MEMORY-MESH-CONNECTOR] ✓ Published {len(suggestions.get('top_priorities', []))} "
+                f"learning suggestions"
+            )
+
+        except Exception as e:
+            logger.error(f"[MEMORY-MESH-CONNECTOR] Error in learning gap analysis: {e}")
+
+    async def _on_trust_degradation(self, message: Message):
+        """
+        Handle trust score degradation (NEW - self-healing).
+
+        When trust scores drop, automatically trigger re-learning or review.
+        """
+        learning_id = message.payload.get("learning_id")
+        old_trust = message.payload.get("old_trust", 0.0)
+        new_trust = message.payload.get("new_trust", 0.0)
+        degradation = old_trust - new_trust
+
+        logger.warning(
+            f"[MEMORY-MESH-CONNECTOR] ⚠️  Trust degradation detected: "
+            f"learning_id={learning_id}, {old_trust:.2f} → {new_trust:.2f} "
+            f"(Δ={degradation:.2f})"
+        )
+
+        # If significant degradation, trigger review
+        if degradation >= 0.2:
+            await self.message_bus.publish(
+                topic="autonomous_learning.needs_review",
+                payload={
+                    "learning_id": learning_id,
+                    "reason": "significant_trust_degradation",
+                    "old_trust": old_trust,
+                    "new_trust": new_trust,
+                    "degradation": degradation,
+                    "suggested_action": "re_study" if new_trust < 0.5 else "validate",
+                    "timestamp": datetime.utcnow().isoformat()
+                },
+                from_component=ComponentType.MEMORY_MESH
+            )
+
     # ================================================================
     # REQUEST HANDLERS
     # ================================================================
@@ -239,8 +334,12 @@ class MemoryMeshConnector:
         logger.info("[MEMORY-MESH-CONNECTOR] 🔧 Registered 3 request handlers")
 
     async def _handle_get_memory_stats(self, message: Message) -> Dict[str, Any]:
-        """Handle request for memory mesh statistics."""
-        stats = self.memory_mesh.get_memory_mesh_stats()
+        """Handle request for memory mesh statistics (ASYNC OPTIMIZED)."""
+        loop = asyncio.get_event_loop()
+        stats = await loop.run_in_executor(
+            _executor,
+            self.memory_mesh.get_memory_mesh_stats
+        )
         return {"stats": stats}
 
     async def _handle_get_learning_by_genesis_key(self, message: Message) -> Dict[str, Any]:

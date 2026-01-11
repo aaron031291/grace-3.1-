@@ -19,6 +19,18 @@ from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
 
+# Import cognitive blueprint decorators
+try:
+    from cognitive.decorators import cognitive_operation
+    COGNITIVE_AVAILABLE = True
+except ImportError:
+    COGNITIVE_AVAILABLE = False
+    # Fallback: no-op decorator
+    def cognitive_operation(operation_name, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
 logger = logging.getLogger(__name__)
 
 
@@ -290,15 +302,21 @@ class TextIngestionService:
     def compute_file_hash(content: str) -> str:
         """
         Compute SHA256 hash of content.
-        
+
         Args:
             content: Text content
-            
+
         Returns:
             Hex digest of SHA256 hash
         """
         return hashlib.sha256(content.encode()).hexdigest()
-    
+
+    @cognitive_operation(
+        operation_name="ingest_document",
+        is_reversible=True,  # Can delete document if needed
+        impact_scope="component",  # Affects ingestion component
+        requires_determinism=False  # Embedding generation has some randomness
+    )
     def ingest_text_fast(
         self,
         text_content: str,
@@ -518,7 +536,30 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST]   - {len(chunks)} chunks")
             logger.info(f"[INGEST_FAST]   - {len(text_content)} characters")
             logger.info(f"[INGEST_FAST]   - Stored in PostgreSQL + Qdrant")
-            
+
+            # SYMBIOTIC VERSION CONTROL: Auto-track ingested file
+            try:
+                from layer1.components.version_control_connector import get_version_control_connector
+
+                vc_connector = get_version_control_connector()
+                version_result = vc_connector.on_file_ingest(
+                    file_path=filename,
+                    user_id=metadata.get("user_id", "system") if metadata else "system",
+                    chunks_created=len(chunks)
+                )
+
+                if version_result.get("status") == "success":
+                    logger.info(
+                        f"[INGEST_FAST] [VERSION_CONTROL] Tracked: {filename} - "
+                        f"Genesis Key: {version_result.get('genesis_key')}, "
+                        f"Version: {version_result.get('version_number')}"
+                    )
+                else:
+                    logger.debug(f"[INGEST_FAST] [VERSION_CONTROL] Skipped: {version_result.get('reason', 'Unknown')}")
+            except Exception as vc_error:
+                # Don't fail ingestion if version control fails
+                logger.warning(f"[INGEST_FAST] [VERSION_CONTROL] Failed to track version: {vc_error}")
+
             return document_id, "Document ingested successfully"
         
         except Exception as e:

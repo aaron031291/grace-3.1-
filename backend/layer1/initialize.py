@@ -19,18 +19,19 @@ from typing import Dict, Any
 import logging
 from sqlalchemy.orm import Session
 
-from backend.layer1.message_bus import get_message_bus, Layer1MessageBus
-from backend.layer1.components import (
+from layer1.message_bus import get_message_bus, Layer1MessageBus
+from layer1.components import (
     MemoryMeshConnector,
     GenesisKeysConnector,
     RAGConnector,
     IngestionConnector,
     LLMOrchestrationConnector
 )
+from layer1.components.version_control_connector import get_version_control_connector
 
-from backend.cognitive.memory_mesh_integration import MemoryMeshIntegration
-from backend.retrieval.retriever import HybridRetriever
-from backend.ingestion.service import IngestionService
+from cognitive.memory_mesh_integration import MemoryMeshIntegration
+from retrieval.retriever import DocumentRetriever
+from ingestion.service import TextIngestionService
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,7 @@ class Layer1System:
     - RAG retrieval with procedural memory
     - File ingestion with automatic indexing
     - Multi-LLM orchestration with skill awareness
+    - Symbiotic version control (Genesis Keys + File Versions)
     """
 
     def __init__(
@@ -54,7 +56,8 @@ class Layer1System:
         genesis_keys_connector: GenesisKeysConnector,
         rag_connector: RAGConnector,
         ingestion_connector: IngestionConnector,
-        llm_orchestration_connector: LLMOrchestrationConnector
+        llm_orchestration_connector: LLMOrchestrationConnector,
+        version_control_connector=None
     ):
         self.message_bus = message_bus
         self.memory_mesh = memory_mesh_connector
@@ -62,6 +65,7 @@ class Layer1System:
         self.rag = rag_connector
         self.ingestion = ingestion_connector
         self.llm_orchestration = llm_orchestration_connector
+        self.version_control = version_control_connector
 
         logger.info("[LAYER1] ✓ System initialized with all components")
 
@@ -151,6 +155,11 @@ def initialize_layer1(
         message_bus=message_bus
     )
 
+    # Version control connector (symbiotic Genesis Keys + Version Control)
+    version_control_connector = get_version_control_connector()
+    message_bus.register_connector("version_control", version_control_connector)
+    logger.info("[LAYER1] ✓ Version control connector registered")
+
     logger.info("[LAYER1] ✓ All components connected to message bus")
 
     # 4. Create Layer 1 system
@@ -160,7 +169,8 @@ def initialize_layer1(
         genesis_keys_connector=genesis_keys_connector,
         rag_connector=rag_connector,
         ingestion_connector=ingestion_connector,
-        llm_orchestration_connector=llm_orchestration_connector
+        llm_orchestration_connector=llm_orchestration_connector,
+        version_control_connector=version_control_connector
     )
 
     # 5. Log statistics

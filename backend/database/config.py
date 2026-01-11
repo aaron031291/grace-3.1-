@@ -57,9 +57,13 @@ class DatabaseConfig:
         self.password = password
         self.database = database
         self.database_path = database_path
-        self.pool_size = pool_size
-        self.max_overflow = max_overflow
+        # OPTIMIZED: Increased pool size for Memory Mesh scalability
+        # From: pool_size=5, max_overflow=10 (15 total)
+        # To: pool_size=20, max_overflow=30 (50 total)
+        self.pool_size = pool_size if pool_size != 5 else 20  # Upgrade default
+        self.max_overflow = max_overflow if max_overflow != 10 else 30  # Upgrade default
         self.pool_pre_ping = pool_pre_ping
+        self.pool_recycle = 3600  # Recycle connections every hour
         self.echo = echo
     
     @classmethod

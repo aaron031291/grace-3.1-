@@ -375,27 +375,43 @@ class MemoryMeshIntegration:
     def get_memory_mesh_stats(self) -> Dict[str, Any]:
         """
         Get statistics about the entire memory mesh.
+        OPTIMIZED: Single aggregation query instead of 7 separate queries
         """
-        # Learning memory stats
-        total_learning = self.session.query(LearningExample).count()
-        high_trust_learning = self.session.query(LearningExample).filter(
-            LearningExample.trust_score >= 0.7
-        ).count()
+        from sqlalchemy import func, case
 
-        # Episodic memory stats
-        total_episodes = self.session.query(Episode).count()
-        linked_episodes = self.session.query(LearningExample).filter(
-            LearningExample.episodic_episode_id.isnot(None)
-        ).count()
+        # Single optimized query with conditional aggregations
+        stats = self.session.query(
+            # Learning examples counts
+            func.count(LearningExample.id).label('total_learning'),
+            func.sum(
+                case((LearningExample.trust_score >= 0.7, 1), else_=0)
+            ).label('high_trust_learning'),
+            func.sum(
+                case((LearningExample.episodic_episode_id.isnot(None), 1), else_=0)
+            ).label('linked_episodes'),
+            # Episode counts (via left join)
+            func.count(Episode.id.distinct()).label('total_episodes'),
+            # Procedure counts (via left join)
+            func.count(Procedure.id.distinct()).label('total_procedures'),
+            func.sum(
+                case((Procedure.success_rate >= 0.7, 1), else_=0)
+            ).label('high_success_procedures'),
+        ).outerjoin(
+            Episode, LearningExample.episodic_episode_id == Episode.id
+        ).outerjoin(
+            Procedure, LearningExample.procedure_id == Procedure.id
+        ).first()
 
-        # Procedural memory stats
-        total_procedures = self.session.query(Procedure).count()
-        high_success_procedures = self.session.query(Procedure).filter(
-            Procedure.success_rate >= 0.7
-        ).count()
+        # Pattern stats (separate lightweight query)
+        total_patterns = self.session.query(func.count(LearningPattern.id)).scalar() or 0
 
-        # Pattern stats
-        total_patterns = self.session.query(LearningPattern).count()
+        # Handle None values from aggregations
+        total_learning = stats.total_learning or 0
+        high_trust_learning = stats.high_trust_learning or 0
+        linked_episodes = stats.linked_episodes or 0
+        total_episodes = stats.total_episodes or 0
+        total_procedures = stats.total_procedures or 0
+        high_success_procedures = stats.high_success_procedures or 0
 
         return {
             'learning_memory': {
