@@ -10,6 +10,8 @@ Connects ingestion system to Layer 1 message bus for:
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -20,6 +22,9 @@ from layer1.message_bus import (
 from ingestion.service import TextIngestionService
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class IngestionConnector:
@@ -277,11 +282,17 @@ class IngestionConnector:
         """Handle ingestion status request."""
         document_id = message.payload.get("document_id")
 
-        # Get status from database
-        from backend.models.database_models import Document
-        document = self.ingestion_service.session.query(Document).filter(
-            Document.id == document_id
-        ).first()
+        def _get_status():
+            # Get status from database
+            from backend.models.database_models import Document
+            document = self.ingestion_service.session.query(Document).filter(
+                Document.id == document_id
+            ).first()
+            return document
+
+        # Run database query asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        document = await loop.run_in_executor(_executor, _get_status)
 
         if not document:
             return {"error": f"Document not found: {document_id}"}
@@ -295,7 +306,7 @@ class IngestionConnector:
 
 
 def create_ingestion_connector(
-    ingestion_service: IngestionService,
+    ingestion_service: TextIngestionService,
     message_bus: Optional[Layer1MessageBus] = None
 ) -> IngestionConnector:
     """Create and initialize ingestion connector."""

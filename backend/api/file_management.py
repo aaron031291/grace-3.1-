@@ -635,19 +635,37 @@ async def delete_file(
                 db = get_db_session()
                 
                 try:
-                    # Query all documents that have this file_path in their metadata
+                    # OPTIMIZED: Use SQL filtering instead of full table scan
+                    # Query documents that have this file_path in their metadata using SQL JSON extraction
                     documents_to_delete = []
-                    
-                    for doc in db.query(Document).all():
-                        if doc.document_metadata:
-                            try:
-                                metadata = json.loads(doc.document_metadata)
-                                user_metadata = metadata.get('user_metadata', {})
-                                if user_metadata.get('file_path') == file_path:
-                                    documents_to_delete.append(doc.id)
-                                    logger.info(f"Found document {doc.id} for deletion: {doc.filename}")
-                            except Exception as e:
-                                logger.debug(f"Error parsing document metadata: {e}")
+
+                    # First try: Direct file_path column match (if exists)
+                    docs_by_path = db.query(Document).filter(
+                        Document.file_path == file_path
+                    ).all()
+
+                    for doc in docs_by_path:
+                        documents_to_delete.append(doc.id)
+                        logger.info(f"Found document {doc.id} for deletion: {doc.filename}")
+
+                    # Second try: JSON metadata search (only if no direct matches)
+                    if not documents_to_delete:
+                        # Use SQL LIKE for JSON field search (more efficient than loading all)
+                        search_pattern = f'%"file_path": "{file_path}"%'
+                        docs_by_metadata = db.query(Document).filter(
+                            Document.document_metadata.like(search_pattern)
+                        ).all()
+
+                        for doc in docs_by_metadata:
+                            if doc.document_metadata:
+                                try:
+                                    metadata = json.loads(doc.document_metadata)
+                                    user_metadata = metadata.get('user_metadata', {})
+                                    if user_metadata.get('file_path') == file_path:
+                                        documents_to_delete.append(doc.id)
+                                        logger.info(f"Found document {doc.id} for deletion: {doc.filename}")
+                                except Exception as e:
+                                    logger.debug(f"Error parsing document metadata: {e}")
                     
                     # Delete each document from vector DB and database
                     for doc_id in documents_to_delete:

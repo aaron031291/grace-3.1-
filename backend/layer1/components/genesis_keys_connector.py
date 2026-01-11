@@ -11,6 +11,8 @@ from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
 import hashlib
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -20,6 +22,9 @@ from layer1.message_bus import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class GenesisKeysConnector:
@@ -217,17 +222,62 @@ class GenesisKeysConnector:
             handler=self._handle_get_user_contributions
         )
 
-        logger.info("[GENESIS-KEYS-CONNECTOR] 🔧 Registered 2 request handlers")
+        self.message_bus.register_request_handler(
+            component=ComponentType.GENESIS_KEYS,
+            topic="create_file_key",
+            handler=self._handle_create_file_key
+        )
+
+        logger.info("[GENESIS-KEYS-CONNECTOR] 🔧 Registered 3 request handlers")
+
+    async def _handle_create_file_key(self, message: Message) -> Dict[str, Any]:
+        """Handle request to create Genesis Key for a file."""
+        file_path = message.payload.get("file_path")
+        file_type = message.payload.get("file_type")
+        user_id = message.payload.get("user_id")
+
+        def _create_key():
+            return self._create_genesis_key(
+                key_type="ingestion",
+                entity_type=file_type or "file",
+                entity_id=file_path,
+                metadata={
+                    "file_path": file_path,
+                    "file_type": file_type,
+                    "user_id": user_id,
+                    "created_via": "create_file_key_request"
+                }
+            )
+
+        # Run database operation asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        genesis_key_id = await loop.run_in_executor(_executor, _create_key)
+
+        logger.info(
+            f"[GENESIS-KEYS-CONNECTOR] ✓ Created file Genesis Key: {genesis_key_id}"
+        )
+
+        return {
+            "genesis_key_id": genesis_key_id,
+            "file_path": file_path,
+            "created": True
+        }
 
     async def _handle_get_genesis_key(self, message: Message) -> Dict[str, Any]:
         """Handle request for Genesis Key details."""
         genesis_key_id = message.payload.get("genesis_key_id")
 
-        # Get Genesis Key from database
-        from backend.models.database_models import GenesisKey
-        genesis_key = self.session.query(GenesisKey).filter(
-            GenesisKey.genesis_key_id == genesis_key_id
-        ).first()
+        def _get_key():
+            # Get Genesis Key from database
+            from backend.models.database_models import GenesisKey
+            genesis_key = self.session.query(GenesisKey).filter(
+                GenesisKey.genesis_key_id == genesis_key_id
+            ).first()
+            return genesis_key
+
+        # Run database query asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        genesis_key = await loop.run_in_executor(_executor, _get_key)
 
         if not genesis_key:
             return {"error": f"Genesis Key not found: {genesis_key_id}"}
@@ -243,11 +293,17 @@ class GenesisKeysConnector:
         """Handle request for user's Genesis Key contributions."""
         user_id = message.payload.get("user_id")
 
-        # Get user's Genesis Keys
-        from backend.models.database_models import GenesisKey
-        keys = self.session.query(GenesisKey).filter(
-            GenesisKey.metadata.contains(f'"user_id": "{user_id}"')
-        ).all()
+        def _get_contributions():
+            # Get user's Genesis Keys
+            from backend.models.database_models import GenesisKey
+            keys = self.session.query(GenesisKey).filter(
+                GenesisKey.metadata.contains(f'"user_id": "{user_id}"')
+            ).all()
+            return keys
+
+        # Run database query asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        keys = await loop.run_in_executor(_executor, _get_contributions)
 
         return {
             "user_id": user_id,
