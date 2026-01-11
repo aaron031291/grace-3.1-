@@ -10,6 +10,8 @@ Connects RAG system to Layer 1 message bus for:
 from typing import Dict, Any, Optional, List
 import logging
 from datetime import datetime
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -28,6 +30,9 @@ except ImportError:
     TRUST_AWARE_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 class RAGConnector:
@@ -283,6 +288,7 @@ class RAGConnector:
         top_k = message.payload.get("top_k", 5)
         use_trust_weighting = message.payload.get("use_trust_weighting", self.use_trust_aware)
 
+<<<<<<< HEAD
         # Perform retrieval (DocumentRetriever or TrustAwareDocumentRetriever)
         if self.use_trust_aware and use_trust_weighting:
             # Use trust-aware retrieval
@@ -294,6 +300,14 @@ class RAGConnector:
         else:
             # Use standard retrieval
             results = self.retriever.retrieve(query=query, limit=top_k)
+=======
+        # Perform retrieval asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(
+            _executor,
+            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
+        )
+>>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
 
         # Send success/failure event
         if results:
@@ -353,6 +367,7 @@ class RAGConnector:
             from_component=ComponentType.RAG
         )
 
+<<<<<<< HEAD
         # Perform retrieval (enhanced by procedures and optionally trust-aware)
         if self.use_trust_aware and use_trust_weighting:
             results = self.retriever.retrieve(
@@ -378,6 +393,14 @@ class RAGConnector:
                 result_item["trust_weighted_score"] = r.get("trust_weighted_score", r.get("score", 0.0))
             
             formatted_results.append(result_item)
+=======
+        # Perform retrieval asynchronously (SCALABILITY)
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(
+            _executor,
+            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
+        )
+>>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
 
         return {
             "results": formatted_results,
@@ -416,10 +439,14 @@ class RAGConnector:
 
 def create_rag_connector(
     retriever: DocumentRetriever,
+<<<<<<< HEAD
     message_bus: Optional[Layer1MessageBus] = None,
     use_trust_aware: bool = False,
     trust_weight: float = 0.3,
     min_trust_threshold: float = 0.3,
+=======
+    message_bus: Optional[Layer1MessageBus] = None
+>>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
 ) -> RAGConnector:
     """
     Create and initialize RAG connector.

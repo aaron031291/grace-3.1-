@@ -22,6 +22,14 @@ from models.database_models import (  # noqa: F401
     DocumentChunk,
 )
 
+# Import Notion task management models
+from models.notion_models import (  # noqa: F401
+    NotionProfile,
+    NotionTask,
+    TaskHistory,
+    TaskTemplate,
+)
+
 
 logger = logging.getLogger(__name__)
 

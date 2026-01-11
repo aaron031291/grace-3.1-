@@ -20,7 +20,7 @@ import logging
 from pathlib import Path
 from sqlalchemy.orm import Session
 
-from layer1.message_bus import get_message_bus, Layer1MessageBus
+from layer1.message_bus import get_message_bus, Layer1MessageBus, ComponentType
 from layer1.components import (
     MemoryMeshConnector,
     GenesisKeysConnector,
@@ -239,7 +239,7 @@ def initialize_layer1(
 
     # Version control connector (symbiotic Genesis Keys + Version Control)
     version_control_connector = get_version_control_connector()
-    message_bus.register_connector("version_control", version_control_connector)
+    message_bus.register_component(ComponentType.VERSION_CONTROL, version_control_connector)
     logger.info("[LAYER1] ✓ Version control connector registered")
 
     # Neuro-symbolic connector (optional)
