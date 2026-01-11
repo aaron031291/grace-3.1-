@@ -5,6 +5,7 @@ import RAGTab from "./components/RAGTab";
 import MonitoringTab from "./components/MonitoringTab";
 import VersionControl from "./components/VersionControl";
 import CognitiveTab from "./components/CognitiveTab";
+import NotionTab from "./components/NotionTab";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -218,6 +219,27 @@ function App() {
               </svg>
               Version Control
             </button>
+            <button
+              className={`tab-button ${
+                activeTab === "notion" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("notion")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              Task Manager
+            </button>
           </nav>
         </aside>
 
@@ -228,6 +250,7 @@ function App() {
           {activeTab === "cognitive" && <CognitiveTab />}
           {activeTab === "monitoring" && <MonitoringTab />}
           {activeTab === "version-control" && <VersionControl />}
+          {activeTab === "notion" && <NotionTab />}
         </main>
       </div>
     </div>
