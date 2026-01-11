@@ -9,45 +9,80 @@ from typing import List, Optional
 import logging
 
 from retrieval.retriever import DocumentRetriever, get_retriever
+from retrieval.cognitive_retriever import CognitiveRetriever
 from embedding.embedder import EmbeddingModel
+from genesis.genesis_key_service import get_genesis_service
+from models.genesis_key_models import GenesisKeyType
+from database.session import get_session
+from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
 # Create router
 router = APIRouter(prefix="/retrieve", tags=["Document Retrieval"])
 
-# Global retriever instance
+# Global retriever instances
 _retriever: Optional[DocumentRetriever] = None
+_cognitive_retriever: Optional[CognitiveRetriever] = None
 
 
 def get_document_retriever() -> DocumentRetriever:
     """Get or create document retriever instance."""
     global _retriever
-    
+
     if _retriever is None:
         try:
             print("[RETRIEVE] Initializing document retriever...")
             # Get the embedding model from the ingestion service
             from api.ingest import get_ingestion_service
             ingest_service = get_ingestion_service()
-            
+
             # Reuse the embedding model from ingestion service
             embedding_model = ingest_service.embedding_model
-            print("[RETRIEVE] ✓ Reusing embedding model from ingestion service")
-            
+            print("[RETRIEVE] [OK] Reusing embedding model from ingestion service")
+
             _retriever = get_retriever(
                 collection_name="documents",
                 embedding_model=embedding_model,
             )
-            print("[RETRIEVE] ✓ Document retriever created successfully")
+            print("[RETRIEVE] [OK] Document retriever created successfully")
         except Exception as e:
             logger.error(f"Failed to initialize retriever: {e}")
             raise HTTPException(
                 status_code=500,
                 detail="Retriever initialization failed"
             )
-    
+
     return _retriever
+
+
+def get_cognitive_retriever() -> CognitiveRetriever:
+    """Get or create cognitive retriever instance."""
+    global _cognitive_retriever, _retriever
+
+    if _cognitive_retriever is None:
+        try:
+            print("[COGNITIVE] Initializing cognitive retriever...")
+            # Get base retriever
+            base_retriever = get_document_retriever()
+
+            # Wrap with cognitive layer
+            _cognitive_retriever = CognitiveRetriever(
+                retriever=base_retriever,
+                enable_cognitive=True,
+                enable_learning=True
+            )
+            print("[COGNITIVE] [OK] Cognitive retriever created successfully")
+            print("[COGNITIVE] [OK] OODA loop enforcement enabled")
+            print("[COGNITIVE] [OK] Learning memory integration enabled")
+        except Exception as e:
+            logger.error(f"Failed to initialize cognitive retriever: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Cognitive retriever initialization failed"
+            )
+
+    return _cognitive_retriever
 
 
 # ==================== Pydantic Models ====================
@@ -79,6 +114,154 @@ class ContextRequest(BaseModel):
 
 
 # ==================== Endpoints ====================
+
+@router.post("/search-cognitive", summary="Cognitive retrieval with OODA loop")
+async def retrieve_chunks_cognitive(
+    query: str = Query(..., description="Query text"),
+    limit: int = Query(5, ge=1, le=100, description="Maximum chunks to retrieve"),
+    threshold: float = Query(0.3, ge=0.0, le=1.0, description="Minimum relevance score"),
+    keyword_weight: float = Query(0.3, ge=0.0, le=1.0, description="Weight for keyword matching (0-1)"),
+    user_id: Optional[str] = Query(None, description="Genesis user ID"),
+    genesis_key_id: Optional[str] = Query(None, description="Genesis Key ID"),
+    cognitive_retriever: CognitiveRetriever = Depends(get_cognitive_retriever),
+    session: Session = Depends(get_session)
+) -> dict:
+    """
+    Retrieve document chunks using Cognitive Engine with OODA loop.
+
+    This endpoint integrates:
+    1. **Cognitive Engine** - OODA loop for decision-making
+    2. **Ambiguity Tracking** - Identifies and tracks unknowns
+    3. **Learning Memory** - Records outcomes for future improvement
+    4. **Trust Scoring** - Builds trust in retrieval strategies
+
+    The system:
+    - **Observes**: Analyzes query characteristics and ambiguity
+    - **Orients**: Determines constraints and available strategies
+    - **Decides**: Chooses best retrieval strategy (semantic/hybrid/reranked)
+    - **Acts**: Executes retrieval and tracks quality
+
+    Returns enriched results with cognitive metadata including:
+    - Decision ID (for tracking)
+    - Strategy selected (semantic/hybrid/reranked)
+    - Ambiguity level (low/medium/high)
+    - Quality score (0-1)
+    - OODA phases completed
+
+    Args:
+        query: Query text to search for
+        limit: Maximum number of chunks to return
+        threshold: Minimum similarity score (0-1)
+        keyword_weight: Weight for keyword matching (0-1)
+        user_id: Genesis user ID (for learning memory)
+        genesis_key_id: Genesis Key ID (for tracking)
+        cognitive_retriever: CognitiveRetriever instance
+
+    Returns:
+        Dict with chunks, context, and cognitive metadata
+    """
+    try:
+        # ✅ GENESIS KEY: Track RAG query
+        genesis_service = get_genesis_service(session)
+        created_genesis_key = genesis_service.create_key(
+            key_type=GenesisKeyType.USER_INPUT,
+            what_description=f"RAG query: {query[:100]}",
+            who_actor=user_id or "anonymous",
+            where_location="cognitive_retrieval_api",
+            why_reason="User requested information retrieval",
+            how_method="POST /retrieve/search-cognitive",
+            input_data={"query": query, "limit": limit, "threshold": threshold},
+            context_data={"endpoint": "/retrieve/search-cognitive"},
+            session=session
+        )
+        logger.info(f"✅ Genesis Key created for RAG query: {created_genesis_key.key_id}")
+
+        # Use the created genesis_key_id if not provided
+        if not genesis_key_id:
+            genesis_key_id = created_genesis_key.key_id
+
+        result = cognitive_retriever.retrieve_with_cognition(
+            query=query,
+            limit=limit,
+            score_threshold=threshold,
+            keyword_weight=keyword_weight,
+            user_id=user_id,
+            genesis_key_id=genesis_key_id
+        )
+
+        # Convert chunks to RetrievalChunk objects for consistency
+        retrieval_chunks = [
+            {
+                "chunk_id": chunk["chunk_id"],
+                "document_id": chunk["document_id"],
+                "chunk_index": chunk["chunk_index"],
+                "text": chunk["text"],
+                "score": chunk.get("score"),
+                "confidence_score": chunk.get("confidence_score"),
+                "metadata": chunk.get("metadata")
+            }
+            for chunk in result["chunks"]
+        ]
+
+        return {
+            "query": result["query"],
+            "chunks": retrieval_chunks,
+            "total": result["total"],
+            "context": result["context"],
+            "cognitive_metadata": result.get("cognitive_metadata", {}),
+            "strategy_used": result.get("strategy_used")
+        }
+
+    except Exception as e:
+        logger.error(f"Cognitive retrieval error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Cognitive retrieval failed: {str(e)}")
+
+
+@router.post("/feedback", summary="Provide feedback on retrieval results")
+async def provide_retrieval_feedback(
+    query: str = Query(..., description="Original query"),
+    chunks_used: List[int] = Query(..., description="Chunk IDs that were used"),
+    was_helpful: bool = Query(..., description="Whether results were helpful"),
+    user_id: Optional[str] = Query(None, description="Genesis user ID"),
+    genesis_key_id: Optional[str] = Query(None, description="Genesis Key ID"),
+    cognitive_retriever: CognitiveRetriever = Depends(get_cognitive_retriever)
+) -> dict:
+    """
+    Provide feedback on retrieval results to improve learning.
+
+    This creates high-trust learning examples from direct user feedback,
+    which helps the system learn which retrieval strategies work best.
+
+    Args:
+        query: Original query that was used
+        chunks_used: List of chunk IDs that were used in the response
+        was_helpful: True if results were helpful, False otherwise
+        user_id: Genesis user ID
+        genesis_key_id: Genesis Key ID
+        cognitive_retriever: CognitiveRetriever instance
+
+    Returns:
+        Success confirmation
+    """
+    try:
+        cognitive_retriever.provide_feedback(
+            query=query,
+            chunks_used=chunks_used,
+            was_helpful=was_helpful,
+            user_id=user_id,
+            genesis_key_id=genesis_key_id
+        )
+
+        return {
+            "success": True,
+            "message": "Feedback recorded successfully",
+            "feedback_type": "positive" if was_helpful else "negative"
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to record feedback: {e}")
+        raise HTTPException(status_code=500, detail="Failed to record feedback")
+
 
 @router.post("/search", response_model=RetrievalResponse, summary="Retrieve relevant chunks")
 async def retrieve_chunks(

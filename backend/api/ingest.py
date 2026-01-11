@@ -31,14 +31,14 @@ def get_ingestion_service() -> TextIngestionService:
             print("[INGEST] Initializing ingestion service...")
             # Use singleton instance to avoid loading model multiple times
             embedding_model = get_embedding_model()
-            print("[INGEST] ✓ Got embedding model (singleton)")
+            print("[INGEST] [OK] Got embedding model (singleton)")
             _ingestion_service = TextIngestionService(
                 collection_name="documents",
                 chunk_size=512,
                 chunk_overlap=50,
                 embedding_model=embedding_model,
             )
-            print("[INGEST] ✓ Ingestion service created successfully")
+            print("[INGEST] [OK] Ingestion service created successfully")
         except Exception as e:
             logger.error(f"Failed to initialize ingestion service: {e}")
             raise HTTPException(
@@ -238,7 +238,7 @@ async def ingest_file(
                     logger.error(f"[API_FILE_INGEST] Extraction failed: {error}")
                     raise HTTPException(status_code=400, detail=f"Failed to extract text: {error}")
                 
-                logger.info(f"[API_FILE_INGEST] ✓ Extracted {len(text)} characters from {file_ext}")
+                logger.info(f"[API_FILE_INGEST] [OK] Extracted {len(text)} characters from {file_ext}")
             
             finally:
                 # Clean up temp file
@@ -254,7 +254,7 @@ async def ingest_file(
             # Detect and decode with fallback encodings
             try:
                 text = content.decode('utf-8')
-                logger.info(f"[API_FILE_INGEST] ✓ Decoded as UTF-8")
+                logger.info(f"[API_FILE_INGEST] [OK] Decoded as UTF-8")
             except UnicodeDecodeError:
                 # Try to detect encoding
                 detected = chardet.detect(content)
@@ -263,15 +263,15 @@ async def ingest_file(
                 if encoding:
                     try:
                         text = content.decode(encoding)
-                        logger.info(f"[API_FILE_INGEST] ✓ Decoded as {encoding}")
+                        logger.info(f"[API_FILE_INGEST] [OK] Decoded as {encoding}")
                     except (UnicodeDecodeError, LookupError):
                         # Fall back to latin-1 which accepts all byte sequences
                         text = content.decode('latin-1')
-                        logger.info(f"[API_FILE_INGEST] ✓ Decoded as latin-1 (fallback)")
+                        logger.info(f"[API_FILE_INGEST] [OK] Decoded as latin-1 (fallback)")
                 else:
                     # Fall back to latin-1 if detection fails
                     text = content.decode('latin-1')
-                    logger.info(f"[API_FILE_INGEST] ✓ Decoded as latin-1 (no detection)")
+                    logger.info(f"[API_FILE_INGEST] [OK] Decoded as latin-1 (no detection)")
         
         # Parse metadata if provided
         metadata_dict = None
@@ -297,7 +297,7 @@ async def ingest_file(
             logger.error(f"[API_FILE_INGEST] Ingestion failed: {message}")
             raise HTTPException(status_code=400, detail=message)
         
-        logger.info(f"[API_FILE_INGEST] ✓ Successfully ingested document {document_id}")
+        logger.info(f"[API_FILE_INGEST] [OK] Successfully ingested document {document_id}")
         
         return IngestionResponse(
             success=True,

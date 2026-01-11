@@ -22,6 +22,19 @@ from api.retrieve import router as retrieve_router, get_document_retriever
 from api.version_control import router as version_control_router
 from api.file_management import router as file_management_router
 from api.file_ingestion import router as file_ingestion_router
+from api.genesis_keys import router as genesis_keys_router
+from api.auth import router as auth_router
+from api.directory_hierarchy import router as directory_hierarchy_router
+from api.repo_genesis import router as repo_genesis_router
+from api.layer1 import router as layer1_router
+from api.learning_memory_api import router as learning_memory_router
+from api.librarian_api import router as librarian_router
+from api.cognitive import router as cognitive_router
+from api.training import router as training_router
+from api.autonomous_learning import router as autonomous_learning_router
+from api.master_integration import router as master_router
+from api.llm_orchestration import router as llm_orchestration_router  # Temporarily disabled
+from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -164,7 +177,7 @@ class PromptResponse(BaseModel):
 async def lifespan(app: FastAPI):
     """Manage app startup and shutdown events."""
     # Startup
-    print("🚀 Grace API starting up...")
+    print("Grace API starting up...")
     
     # Initialize database
     try:
@@ -180,17 +193,17 @@ async def lifespan(app: FastAPI):
             echo=settings.DATABASE_ECHO if settings else False,
         )
         DatabaseConnection.initialize(db_config)
-        print("✓ Database connection initialized")
+        print("[OK] Database connection initialized")
         
         # Initialize session factory
         initialize_session_factory()
-        print("✓ Database session factory initialized")
+        print("[OK] Database session factory initialized")
         
         # Create tables
         create_tables()
-        print("✓ Database tables created/verified")
+        print("[OK] Database tables created/verified")
     except Exception as e:
-        print(f"⚠ Database initialization error: {e}")
+        print(f"[WARN] Database initialization error: {e}")
         raise
     
     # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
@@ -198,32 +211,32 @@ async def lifespan(app: FastAPI):
         from embedding.embedder import get_embedding_model
         print("\n[STARTUP] Pre-initializing embedding model...")
         embedding_model = get_embedding_model()
-        print("[STARTUP] ✓ Embedding model loaded and ready\n")
+        print("[STARTUP] [OK] Embedding model loaded and ready\n")
     except Exception as e:
-        print(f"[STARTUP] ⚠ Warning: Could not pre-load embedding model: {e}")
-        print("[STARTUP] ⚠ Model will be loaded on first use\n")
+        print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
+        print("[STARTUP] [WARN] Model will be loaded on first use\n")
     
     # Check Ollama
     try:
         client = get_ollama_client()
         if client.is_running():
             models = client.get_all_models()
-            print(f"✓ Ollama is running with {len(models)} model(s)")
+            print(f"[OK] Ollama is running with {len(models)} model(s)")
         else:
-            print("⚠ Ollama is not running - chat endpoint will be unavailable")
+            print("[WARN] Ollama is not running - chat endpoint will be unavailable")
     except Exception as e:
-        print(f"⚠ Could not connect to Ollama: {e}")
+        print(f"[WARN] Could not connect to Ollama: {e}")
     
     # Check Qdrant
     try:
         qdrant = get_qdrant_client()
         if qdrant.is_connected():
             collections = qdrant.list_collections()
-            print(f"✓ Qdrant is running with {len(collections)} collection(s)")
+            print(f"[OK] Qdrant is running with {len(collections)} collection(s)")
         else:
-            print("⚠ Qdrant is not running - document ingestion will be unavailable")
+            print("[WARN] Qdrant is not running - document ingestion will be unavailable")
     except Exception as e:
-        print(f"⚠ Could not connect to Qdrant: {e}")
+        print(f"[WARN] Could not connect to Qdrant: {e}")
     
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
@@ -246,9 +259,9 @@ async def lifespan(app: FastAPI):
             try:
                 engine = DatabaseConnection.get_engine()
                 if engine:
-                    print("[AUTO-INGEST] ✓ Database engine verified", flush=True)
+                    print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
             except RuntimeError as e:
-                print(f"[AUTO-INGEST] ⚠ Database not initialized yet: {e}", flush=True)
+                print(f"[AUTO-INGEST] [WARN] Database not initialized yet: {e}", flush=True)
                 print("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
                 time.sleep(2)
             
@@ -256,9 +269,9 @@ async def lifespan(app: FastAPI):
             print("[AUTO-INGEST] Initializing session factory...", flush=True)
             session_factory = initialize_session_factory()
             if session_factory:
-                print("[AUTO-INGEST] ✓ Session factory initialized", flush=True)
+                print("[AUTO-INGEST] [OK] Session factory initialized", flush=True)
             else:
-                print("[AUTO-INGEST] ✗ Failed to initialize session factory", flush=True)
+                print("[AUTO-INGEST] [FAIL] Failed to initialize session factory", flush=True)
             
             print("[AUTO-INGEST] Starting auto-ingestion monitor...", flush=True)
             
@@ -284,13 +297,13 @@ async def lifespan(app: FastAPI):
                         print(f"[AUTO-INGEST] Scan attempt {retry_count} failed, retrying in 2 seconds: {e}", flush=True)
                         time.sleep(2)
                     else:
-                        print(f"[AUTO-INGEST] ✗ Initial scan failed after {max_retries} attempts: {e}", flush=True)
+                        print(f"[AUTO-INGEST] [FAIL] Initial scan failed after {max_retries} attempts: {e}", flush=True)
                         raise
             
             if results:
                 print(f"[AUTO-INGEST] Initial scan found {len(results)} changes:", flush=True)
                 for result in results:
-                    status = "✓" if result.success else "✗"
+                    status = "[OK]" if result.success else "[FAIL]"
                     print(f"  {status} {result.change_type}: {result.filepath}", flush=True)
             else:
                 print("[AUTO-INGEST] No changes detected in initial scan", flush=True)
@@ -299,7 +312,7 @@ async def lifespan(app: FastAPI):
             print("[AUTO-INGEST] Auto-ingestion monitor started (will check every 30 seconds)\n", flush=True)
             file_manager.watch_and_process(continuous=True)
         except Exception as e:
-            print(f"[AUTO-INGEST] ✗ Error in auto-ingestion: {e}", flush=True)
+            print(f"[AUTO-INGEST] [FAIL] Error in auto-ingestion: {e}", flush=True)
             import traceback
             traceback.print_exc()
     
@@ -308,12 +321,12 @@ async def lifespan(app: FastAPI):
         auto_ingest_thread = threading.Thread(target=run_auto_ingestion, daemon=True)
         auto_ingest_thread.start()
     except Exception as e:
-        print(f"[AUTO-INGEST] ✗ Failed to start auto-ingestion: {e}")
+        print(f"[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: {e}")
     
     yield
     
     # Shutdown
-    print("👋 Grace API shutting down...")
+    print("Grace API shutting down...")
 
 
 # ==================== FastAPI App ====================
@@ -340,6 +353,21 @@ app.include_router(retrieve_router)
 app.include_router(version_control_router)
 app.include_router(file_management_router)
 app.include_router(file_ingestion_router)
+app.include_router(genesis_keys_router)
+app.include_router(auth_router)
+app.include_router(directory_hierarchy_router)
+app.include_router(repo_genesis_router)
+app.include_router(layer1_router)
+app.include_router(learning_memory_router)
+app.include_router(librarian_router)
+app.include_router(cognitive_router)
+app.include_router(training_router)
+app.include_router(master_router)  # Master integration - unified access to ALL systems
+app.include_router(autonomous_learning_router)
+app.include_router(llm_orchestration_router)  # Temporarily disabled
+
+# Add Genesis Key middleware for automatic tracking
+app.add_middleware(GenesisKeyMiddleware)
 
 
 # ==================== Health Check Endpoint ====================
@@ -520,7 +548,7 @@ async def chat(request: ChatRequest):
                     for chunk in retrieval_result
                 ]
         except Exception as e:
-            print(f"⚠ RAG retrieval error: {str(e)}")
+            print(f"[WARN] RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         # Core enforcement: No knowledge = reject response
@@ -1073,7 +1101,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                     for chunk in retrieval_result
                 ]
         except Exception as e:
-            print(f"⚠ RAG retrieval error: {str(e)}")
+            print(f"[WARN] RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         # Core enforcement: No knowledge in database = reject response
@@ -1399,7 +1427,7 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
                     ]
         
         except Exception as e:
-            print(f"⚠ Directory RAG retrieval error: {str(e)}")
+            print(f"[WARN] Directory RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         if not rag_context:

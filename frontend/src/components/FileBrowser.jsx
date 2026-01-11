@@ -9,6 +9,8 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolderInput, setShowNewFolderInput] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingFiles, setUploadingFiles] = useState([]);
   const API_BASE = "http://localhost:8000";
 
   // Load directory on mount and when path changes
@@ -85,41 +87,95 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   };
 
   const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploading(true);
     setError(null);
+    setUploadProgress(0);
+    setUploadingFiles(Array.from(files).map(f => f.name));
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder_path", currentPath);
-      formData.append("ingest", "true");
-      formData.append("source_type", "user_generated");
+    // Use XMLHttpRequest for upload progress tracking
+    const xhr = new XMLHttpRequest();
 
-      const response = await fetch(`${API_BASE}/files/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Upload failed");
-      const data = await response.json();
-
-      if (data.success) {
-        setError(null);
-        await loadDirectory();
-        // Reset file input
-        e.target.value = "";
-      } else {
-        setError(data.message);
+    // Track upload progress
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        const percentComplete = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(percentComplete);
       }
-    } catch (err) {
-      setError(err.message);
-      console.error("Upload error:", err);
-    } finally {
+    });
+
+    // Handle completion
+    xhr.addEventListener("load", async () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+
+          // Show summary of results
+          if (data.successful > 0 || data.failed > 0) {
+            const successMsg =
+              data.successful > 0
+                ? `${data.successful} file(s) uploaded successfully`
+                : "";
+            const failMsg = data.failed > 0 ? `${data.failed} file(s) failed` : "";
+            const message = [successMsg, failMsg].filter((m) => m).join(", ");
+
+            if (data.failed > 0) {
+              // Show detailed errors
+              const failedFiles = data.results
+                .filter((r) => !r.success)
+                .map((r) => r.filename);
+              setError(`${message}. Failed: ${failedFiles.join(", ")}`);
+            } else {
+              setError(null);
+            }
+
+            await loadDirectory();
+            // Reset file input
+            e.target.value = "";
+          }
+        } catch (parseErr) {
+          setError("Failed to parse response");
+          console.error("Parse error:", parseErr);
+        }
+      } else {
+        setError(`Upload failed with status ${xhr.status}`);
+      }
+
       setUploading(false);
-    }
+      setUploadProgress(0);
+      setUploadingFiles([]);
+    });
+
+    // Handle errors
+    xhr.addEventListener("error", () => {
+      setError("Network error during upload");
+      setUploading(false);
+      setUploadProgress(0);
+      setUploadingFiles([]);
+    });
+
+    // Handle abort
+    xhr.addEventListener("abort", () => {
+      setError("Upload cancelled");
+      setUploading(false);
+      setUploadProgress(0);
+      setUploadingFiles([]);
+    });
+
+    // Prepare form data
+    const formData = new FormData();
+    Array.from(files).forEach((file) => {
+      formData.append("files", file);
+    });
+    formData.append("folder_path", currentPath);
+    formData.append("ingest", "true");
+    formData.append("source_type", "user_generated");
+
+    // Send request
+    xhr.open("POST", `${API_BASE}/files/upload-multiple`);
+    xhr.send(formData);
   };
 
   const handleDeleteFile = async (filePath) => {
@@ -238,9 +294,10 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
             <label className="upload-button">
               <input
                 type="file"
+                multiple
                 onChange={handleFileUpload}
                 disabled={uploading}
-                accept=".txt,.md,.pdf,.docx,.doc,.xlsx,.xls,.pptx,.ppt"
+                accept=".txt,.md,.pdf,.docx,.doc,.xlsx,.xls,.pptx,.ppt,.json,.xml,.csv,.py,.js,.jsx,.ts,.tsx,.java,.cpp,.c,.h,.cs,.php,.rb,.go,.rs,.swift,.kt,.scala,.sh,.bash,.sql,.html,.css,.scss,.yaml,.yml,.toml,.mp3,.wav,.m4a,.flac,.ogg,.aac,.mp4,.avi,.mov,.mkv,.webm,.flv"
               />
               <svg
                 width="16"
@@ -320,6 +377,28 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
           <button className="error-close" onClick={() => setError(null)}>
             ×
           </button>
+        </div>
+      )}
+
+      {uploading && uploadProgress > 0 && (
+        <div className="upload-progress">
+          <div className="upload-progress-header">
+            <span>Uploading {uploadingFiles.length} file(s)...</span>
+            <span>{uploadProgress}%</span>
+          </div>
+          <div className="upload-progress-bar">
+            <div
+              className="upload-progress-fill"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
+          <div className="upload-progress-files">
+            {uploadingFiles.map((filename, idx) => (
+              <div key={idx} className="upload-progress-file">
+                {filename}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

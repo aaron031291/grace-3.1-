@@ -38,20 +38,20 @@ class EnvironmentInitializer:
             bool: True if venv exists or was created successfully, False otherwise
         """
         if self.venv_path.exists():
-            print(f"✓ Virtual environment found at {self.venv_path}")
+            print(f"[OK] Virtual environment found at {self.venv_path}")
             return True
         
-        print(f"⚠ Virtual environment not found. Creating at {self.venv_path}...")
+        print(f"[WARN] Virtual environment not found. Creating at {self.venv_path}...")
         try:
             subprocess.run(
                 [sys.executable, "-m", "venv", str(self.venv_path)],
                 check=True,
                 capture_output=True
             )
-            print(f"✓ Virtual environment created successfully")
+            print(f"[OK] Virtual environment created successfully")
             return True
         except subprocess.CalledProcessError as e:
-            print(f"✗ Failed to create virtual environment: {e}")
+            print(f"[FAIL] Failed to create virtual environment: {e}")
             return False
     
     def get_pip_executable(self) -> str:
@@ -70,7 +70,7 @@ class EnvironmentInitializer:
         pip_exe = self.get_pip_executable()
         
         if not os.path.exists(pip_exe):
-            print("✗ pip executable not found in virtual environment")
+            print("[FAIL] pip executable not found in virtual environment")
             return False
         
         print("📦 Installing requirements...")
@@ -80,10 +80,10 @@ class EnvironmentInitializer:
                 check=True,
                 capture_output=True
             )
-            print("✓ Requirements installed successfully")
+            print("[OK] Requirements installed successfully")
             return True
         except subprocess.CalledProcessError as e:
-            print(f"✗ Failed to install requirements: {e}")
+            print(f"[FAIL] Failed to install requirements: {e}")
             return False
     
     def cleanup_version_pins(self) -> bool:
@@ -118,10 +118,10 @@ class EnvironmentInitializer:
             with open(self.requirements_file, 'w') as f:
                 f.write(cleaned_content)
             
-            print("✓ Cleaned version pins from requirements.txt")
+            print("[OK] Cleaned version pins from requirements.txt")
             return True
         except Exception as e:
-            print(f"✗ Failed to clean version pins: {e}")
+            print(f"[FAIL] Failed to clean version pins: {e}")
             return False
     
     def restore_requirements(self) -> bool:
@@ -132,10 +132,10 @@ class EnvironmentInitializer:
                     content = f.read()
                 with open(self.requirements_file, 'w') as f:
                     f.write(content)
-                print("✓ Restored original requirements.txt")
+                print("[OK] Restored original requirements.txt")
                 return True
         except Exception as e:
-            print(f"✗ Failed to restore requirements: {e}")
+            print(f"[FAIL] Failed to restore requirements: {e}")
         return False
     
     def uninstall_requirements(self) -> bool:
@@ -157,10 +157,10 @@ class EnvironmentInitializer:
                 check=True,
                 capture_output=True
             )
-            print("✓ Requirements uninstalled successfully")
+            print("[OK] Requirements uninstalled successfully")
             return True
         except subprocess.CalledProcessError as e:
-            print(f"⚠ Warning during uninstall: {e}")
+            print(f"[WARN] Warning during uninstall: {e}")
             return False
     
     def install_dependencies(self) -> bool:
@@ -172,7 +172,7 @@ class EnvironmentInitializer:
             bool: True if installation successful, False otherwise
         """
         if not self.install_requirements():
-            print("\n⚠ Initial installation failed. Attempting recovery...")
+            print("\n[WARN] Initial installation failed. Attempting recovery...")
             
             # Uninstall what was partially installed
             self.uninstall_requirements()
@@ -181,12 +181,12 @@ class EnvironmentInitializer:
             if self.cleanup_version_pins():
                 print("🔄 Retrying installation with cleaned requirements...")
                 if self.install_requirements():
-                    print("✓ Installation successful after cleanup")
+                    print("[OK] Installation successful after cleanup")
                     return True
             
             # If still failing, restore original and report
             self.restore_requirements()
-            print("✗ Installation failed even after recovery attempt")
+            print("[FAIL] Installation failed even after recovery attempt")
             return False
         
         return True
@@ -219,19 +219,19 @@ class EnvironmentInitializer:
         Returns:
             bool: True if started successfully, False otherwise
         """
-        print("🚀 Starting Ollama serve...")
+        print(" Starting Ollama serve...")
         try:
             subprocess.Popen(
                 ["ollama", "serve"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL
             )
-            print("✓ Ollama serve started")
+            print("[OK] Ollama serve started")
             return True
         except FileNotFoundError:
             return False
         except Exception as e:
-            print(f"✗ Failed to start Ollama: {e}")
+            print(f"[FAIL] Failed to start Ollama: {e}")
             return False
     
     def setup_ollama(self) -> bool:
@@ -244,26 +244,26 @@ class EnvironmentInitializer:
         print("\n🔍 Checking Ollama service...")
         
         if not self.ollama_exists():
-            print("✗ Ollama is not installed")
+            print("[FAIL] Ollama is not installed")
             print("\n📥 Please download and install Ollama from: https://ollama.ai")
             return False
         
         if self.check_ollama_running():
-            print("✓ Ollama is already running")
+            print("[OK] Ollama is already running")
         else:
             if self.start_ollama():
-                print("✓ Ollama service started successfully")
+                print("[OK] Ollama service started successfully")
             else:
-                print("✗ Failed to start Ollama service")
+                print("[FAIL] Failed to start Ollama service")
                 return False
         
         # Check and pull default LLM model
         if not self.ensure_llm_model():
-            print("⚠ Warning: Failed to ensure default LLM model")
+            print("[WARN] Warning: Failed to ensure default LLM model")
         
         # Check and pull embedding model
         if not self.ensure_embedding_model():
-            print("⚠ Warning: Failed to ensure embedding model")
+            print("[WARN] Warning: Failed to ensure embedding model")
         
         return True
     
@@ -292,7 +292,7 @@ class EnvironmentInitializer:
             )
             
             if result.returncode == 0 and model_name in result.stdout:
-                print(f"✓ Model '{model_name}' is already available")
+                print(f"[OK] Model '{model_name}' is already available")
                 return True
             
             # Model not found, pull it
@@ -305,19 +305,19 @@ class EnvironmentInitializer:
             )
             
             if result.returncode == 0:
-                print(f"✓ Model '{model_name}' pulled successfully")
+                print(f"[OK] Model '{model_name}' pulled successfully")
                 return True
             else:
-                print(f"✗ Failed to pull model '{model_name}'")
+                print(f"[FAIL] Failed to pull model '{model_name}'")
                 if result.stderr:
                     print(f"  Error: {result.stderr}")
                 return False
         
         except subprocess.TimeoutExpired:
-            print(f"✗ Timeout while pulling model '{model_name}'")
+            print(f"[FAIL] Timeout while pulling model '{model_name}'")
             return False
         except Exception as e:
-            print(f"✗ Error checking/pulling LLM model: {e}")
+            print(f"[FAIL] Error checking/pulling LLM model: {e}")
             return False
     
     def ensure_embedding_model(self) -> bool:
@@ -333,7 +333,7 @@ class EnvironmentInitializer:
         
         # Check if model already exists
         if embedding_dir.exists() and (embedding_dir / "config.json").exists():
-            print(f"✓ Embedding model already exists")
+            print(f"[OK] Embedding model already exists")
             return True
         
         # Create directory if it doesn't exist
@@ -344,7 +344,7 @@ class EnvironmentInitializer:
         
         try:
             if snapshot_download is None:
-                print("✗ huggingface-hub not available. Please install it with: pip install huggingface-hub")
+                print("[FAIL] huggingface-hub not available. Please install it with: pip install huggingface-hub")
                 return False
             
             # Download model from HuggingFace
@@ -355,11 +355,11 @@ class EnvironmentInitializer:
                 local_dir_use_symlinks=False
             )
             
-            print(f"✓ Embedding model downloaded to {embedding_dir}")
+            print(f"[OK] Embedding model downloaded to {embedding_dir}")
             return True
         
         except Exception as e:
-            print(f"✗ Failed to download embedding model: {e}")
+            print(f"[FAIL] Failed to download embedding model: {e}")
             print(f"  You can manually download from: https://huggingface.co/{model_repo}")
             return False
     
@@ -407,7 +407,7 @@ class EnvironmentInitializer:
         Returns:
             bool: True if started successfully, False otherwise
         """
-        print("🚀 Starting Qdrant container...")
+        print(" Starting Qdrant container...")
         try:
             subprocess.run(
                 [
@@ -419,13 +419,13 @@ class EnvironmentInitializer:
                 stderr=subprocess.DEVNULL,
                 check=True
             )
-            print("✓ Qdrant container started")
+            print("[OK] Qdrant container started")
             return True
         except subprocess.CalledProcessError as e:
-            print(f"✗ Failed to start Qdrant container: {e}")
+            print(f"[FAIL] Failed to start Qdrant container: {e}")
             return False
         except Exception as e:
-            print(f"✗ Error starting Qdrant: {e}")
+            print(f"[FAIL] Error starting Qdrant: {e}")
             return False
     
     def setup_qdrant(self) -> bool:
@@ -438,26 +438,26 @@ class EnvironmentInitializer:
         print("\n🔍 Checking Qdrant service...")
         
         if self.check_qdrant_running():
-            print("✓ Qdrant is already running on port 6333")
+            print("[OK] Qdrant is already running on port 6333")
             return True
         
-        print("⚠ Qdrant is not running on port 6333")
+        print("[WARN] Qdrant is not running on port 6333")
         
         if not self.docker_exists():
-            print("✗ Docker is not installed")
+            print("[FAIL] Docker is not installed")
             print("\n📥 Please download and install Docker from: https://www.docker.com/products/docker-desktop")
             return False
         
         if not self.docker_engine_running():
-            print("✗ Docker engine is not running")
+            print("[FAIL] Docker engine is not running")
             print("\n📥 Please start Docker Desktop or Docker daemon before running this program")
             return False
         
         if self.start_qdrant():
-            print("✓ Qdrant container started successfully")
+            print("[OK] Qdrant container started successfully")
             return True
         else:
-            print("✗ Failed to start Qdrant container")
+            print("[FAIL] Failed to start Qdrant container")
             return False
     
     
@@ -482,15 +482,15 @@ class EnvironmentInitializer:
         
         # Step 3: Setup Ollama
         if not self.setup_ollama():
-            print("\n⚠ Warning: Ollama setup failed, but proceeding...")
+            print("\n[WARN] Warning: Ollama setup failed, but proceeding...")
         
         # Step 4: Setup Qdrant
         if not self.setup_qdrant():
-            print("\n✗ Error: Qdrant setup failed")
+            print("\n[FAIL] Error: Qdrant setup failed")
             return False
         
         print("\n" + "=" * 60)
-        print("✓ Environment initialization complete!")
+        print("[OK] Environment initialization complete!")
         print("=" * 60)
         return True
 

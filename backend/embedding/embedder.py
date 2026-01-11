@@ -52,9 +52,9 @@ class EmbeddingModel:
         
         # SAFETY CHECK: Should never create more than 1 instance
         if instance_num > 1:
-            print(f"⚠️  WARNING: EmbeddingModel instance #{instance_num} created!")
-            print(f"⚠️  This should not happen - use get_embedding_model() singleton instead!")
-            print(f"⚠️  Stack trace:")
+            print(f"[WARN]  WARNING: EmbeddingModel instance #{instance_num} created!")
+            print(f"[WARN]  This should not happen - use get_embedding_model() singleton instead!")
+            print(f"[WARN]  Stack trace:")
             import traceback
             traceback.print_stack()
         
@@ -72,7 +72,7 @@ class EmbeddingModel:
         
         # Force CPU if device not explicitly set and not available
         if device == 'cuda' and not torch.cuda.is_available():
-            print("⚠ CUDA requested but not available, falling back to CPU")
+            print("[WARN] CUDA requested but not available, falling back to CPU")
             device = 'cpu'
         
         self.device = "cuda"
@@ -88,7 +88,7 @@ class EmbeddingModel:
         if not Path(model_path).exists():
             raise FileNotFoundError(f"Model path does not exist: {model_path}")
         
-        print(f"[EMBEDDING] ⏳ Instantiating EmbeddingModel class...")
+        print(f"[EMBEDDING] [LOADING] Instantiating EmbeddingModel class...")
         print(f"[EMBEDDING]   Model path: {model_path}")
         print(f"[EMBEDDING]   Device: {self.device}")
         
@@ -101,7 +101,7 @@ class EmbeddingModel:
                 trust_remote_code=True
             )
         except Exception as e:
-            print(f"⚠ Failed to load model on {self.device}: {e}")
+            print(f"[WARN] Failed to load model on {self.device}: {e}")
             print("Retrying with CPU...")
             self.device = 'cpu'
             self.model = SentenceTransformer(
@@ -112,7 +112,7 @@ class EmbeddingModel:
         
         self.model_path = model_path
         
-        print(f"[EMBEDDING] ✓ Model loaded successfully")
+        print(f"[EMBEDDING] [OK] Model loaded successfully")
         if self.device == 'cuda':
             if torch.cuda.is_available():
                 print(f"[EMBEDDING]   GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
@@ -141,9 +141,9 @@ class EmbeddingModel:
                 if self.device == 'cuda' and torch.cuda.is_available():
                     torch.cuda.empty_cache()
                 
-                print("✓ Model unloaded from VRAM")
+                print("[OK] Model unloaded from VRAM")
             except Exception as e:
-                print(f"⚠ Warning while unloading model: {e}")
+                print(f"[WARN] Warning while unloading model: {e}")
     
     def _ensure_model_loaded(self):
         """Ensure model is loaded, raise error if not."""
@@ -432,7 +432,7 @@ def get_embedding_model(
     _embedding_model_instance = EmbeddingModel(model_path=model_path, device=device)
     _embedding_model_loaded = True
     
-    print(f"[EMBEDDING] ✓ Embedding model singleton created and ready")
+    print(f"[EMBEDDING] [OK] Embedding model singleton created and ready")
     return _embedding_model_instance
 
 

@@ -44,7 +44,7 @@ class SemanticContradictionDetector:
                 device=self.device,
                 max_length=512
             )
-            logger.info("✓ NLI DeBERTa model loaded successfully")
+            logger.info("[OK] NLI DeBERTa model loaded successfully")
             self.model_available = True
             
         except ImportError:

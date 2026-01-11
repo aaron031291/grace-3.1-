@@ -52,9 +52,9 @@ class DocumentReranker:
         # Convert to half precision if enabled and on GPU
         if self.use_half_precision:
             self.model.model = self.model.model.half()
-            print("✓ Model converted to FP16")
+            print("[OK] Model converted to FP16")
         
-        print("✓ Reranker model loaded successfully")
+        print("[OK] Reranker model loaded successfully")
     
     def rerank(
         self,
@@ -144,7 +144,7 @@ class DocumentReranker:
                 if self.device == 'cuda' and torch.cuda.is_available():
                     torch.cuda.empty_cache()
                 
-                print("✓ Reranker model unloaded from VRAM")
+                print("[OK] Reranker model unloaded from VRAM")
             except Exception as e:
                 logger.warning(f"Warning while unloading reranker model: {e}")
     
