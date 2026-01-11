@@ -92,20 +92,33 @@ class DocumentRetriever:
                 logger.debug(f"No results found for query: {query}")
                 return []
             
-            # Enrich results with database information
+            # Enrich results with database information (OPTIMIZED: Single JOIN query)
             db = self._get_db_session()
             try:
+                # Extract all vector IDs from search results
+                vector_ids = [str(result["id"]) for result in search_results]
+
+                # Single query with JOIN to get chunks and documents together
+                chunks_with_docs = db.query(DocumentChunk, Document).outerjoin(
+                    Document, DocumentChunk.document_id == Document.id
+                ).filter(
+                    DocumentChunk.embedding_vector_id.in_(vector_ids)
+                ).all()
+
+                # Build lookup map for fast access
+                chunk_map = {
+                    chunk.embedding_vector_id: (chunk, doc)
+                    for chunk, doc in chunks_with_docs
+                }
+
+                # Preserve original order from search results
                 enriched_results = []
                 for result in search_results:
-                    chunk = db.query(DocumentChunk).filter(
-                        DocumentChunk.embedding_vector_id == str(result["id"])
-                    ).first()
-                    
-                    if chunk:
-                        document = db.query(Document).filter(
-                            Document.id == chunk.document_id
-                        ).first()
-                        
+                    vector_id = str(result["id"])
+
+                    if vector_id in chunk_map:
+                        chunk, document = chunk_map[vector_id]
+
                         result_dict = {
                             "vector_id": result["id"],
                             "score": result["score"],
@@ -115,7 +128,7 @@ class DocumentRetriever:
                             "text": chunk.text_content,
                             "confidence_score": chunk.confidence_score,
                         }
-                        
+
                         if include_metadata:
                             result_dict["metadata"] = {
                                 "document_id": chunk.document_id,
@@ -131,7 +144,7 @@ class DocumentRetriever:
                                 "created_at": document.created_at.isoformat() if document and document.created_at else None,
                                 "description": document.description if document else None,
                             }
-                        
+
                         enriched_results.append(result_dict)
                 
                 logger.info(f"Retrieved {len(enriched_results)} chunks for query: {query}")

@@ -594,8 +594,8 @@ class GenesisTriggerPipeline:
         """
         metadata = genesis_key.metadata or {}
 
-        # Trigger on error/failure Genesis Keys
-        if genesis_key.key_type in [GenesisKeyType.ERROR, GenesisKeyType.FAILURE]:
+        # Trigger on error Genesis Keys
+        if genesis_key.key_type == GenesisKeyType.ERROR:
             return True
 
         # Trigger if explicitly requested

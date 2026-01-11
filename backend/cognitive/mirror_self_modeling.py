@@ -175,14 +175,11 @@ class MirrorSelfModelingSystem:
         """Detect operations that keep failing."""
         cutoff_time = datetime.utcnow() - timedelta(hours=self.observation_window_hours)
 
-        # Find Genesis Keys with FAILURE or ERROR types
+        # Find Genesis Keys with ERROR type
         failures = self.session.query(GenesisKey).filter(
             and_(
                 GenesisKey.created_at >= cutoff_time,
-                GenesisKey.key_type.in_([
-                    GenesisKeyType.ERROR,
-                    GenesisKeyType.FAILURE
-                ])
+                GenesisKey.key_type == GenesisKeyType.ERROR
             )
         ).all()
 
@@ -190,7 +187,9 @@ class MirrorSelfModelingSystem:
         failure_groups = defaultdict(list)
         for failure in failures:
             # Extract topic or operation identifier
-            topic = failure.metadata.get("topic") if failure.metadata else None
+            topic = None
+            if failure.context_data:
+                topic = failure.context_data.get("topic")
             if not topic:
                 topic = failure.what_description[:50]  # Use description as topic
 
@@ -219,48 +218,9 @@ class MirrorSelfModelingSystem:
 
     def _detect_success_sequences(self) -> List[Dict[str, Any]]:
         """Detect sequences of operations that consistently succeed."""
-        cutoff_time = datetime.utcnow() - timedelta(hours=self.observation_window_hours)
-
-        # Find successful practice outcomes
-        successes = self.session.query(GenesisKey).filter(
-            and_(
-                GenesisKey.created_at >= cutoff_time,
-                GenesisKey.key_type == GenesisKeyType.PRACTICE_OUTCOME
-            )
-        ).all()
-
-        # Filter to successes only
-        successful_practices = [
-            s for s in successes
-            if s.metadata and s.metadata.get("outcome") == "success"
-        ]
-
-        # Group by topic
-        success_groups = defaultdict(list)
-        for success in successful_practices:
-            topic = success.metadata.get("topic", "unknown")
-            success_groups[topic].append(success)
-
-        # Identify consistent success patterns
-        patterns = []
-        for topic, successes_list in success_groups.items():
-            if len(successes_list) >= self.min_pattern_occurrences:
-                patterns.append({
-                    "pattern_type": PatternType.SUCCESS_SEQUENCE,
-                    "severity": "positive",
-                    "topic": topic,
-                    "occurrences": len(successes_list),
-                    "evidence": [s.key_id for s in successes_list[:5]],
-                    "first_success": successes_list[-1].created_at.isoformat(),
-                    "latest_success": successes_list[0].created_at.isoformat(),
-                    "recommendation": (
-                        f"This skill is mastered ({len(successes_list)} successes). "
-                        "Consider: (1) Moving to more advanced topics, "
-                        "(2) Teaching/explaining to reinforce"
-                    )
-                })
-
-        return patterns
+        # For now, return empty list since PRACTICE_OUTCOME type doesn't exist yet
+        # This can be implemented when the learning system creates these types
+        return []
 
     def _detect_learning_plateaus(self) -> List[Dict[str, Any]]:
         """Detect topics where learning has plateaued (no improvement)."""
