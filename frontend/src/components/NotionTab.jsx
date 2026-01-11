@@ -53,7 +53,7 @@ const TYPE_ICONS = {
 };
 
 // Task Card Component
-function DraggableCard({ task, columnId, onDelete, onEdit, profiles }) {
+function DraggableCard({ task, columnId, onDelete, onEdit, onViewHistory, profiles }) {
   const {
     attributes,
     listeners,
@@ -136,6 +136,17 @@ function DraggableCard({ task, columnId, onDelete, onEdit, profiles }) {
           ...
         </button>
         <button
+          className="card-history"
+          onClick={(e) => {
+            e.stopPropagation();
+            onViewHistory?.(task);
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          title="View task history"
+        >
+          History
+        </button>
+        <button
           className="card-delete"
           onClick={(e) => {
             e.stopPropagation();
@@ -152,7 +163,7 @@ function DraggableCard({ task, columnId, onDelete, onEdit, profiles }) {
 }
 
 // Column Component
-function Column({ column, tasks, onDelete, onEdit, activeId, profiles }) {
+function Column({ column, tasks, onDelete, onEdit, onViewHistory, profiles }) {
   const taskIds = tasks.map((t) => t.genesis_key_id);
   const { setNodeRef } = useSortable({
     id: column.id,
@@ -179,6 +190,7 @@ function Column({ column, tasks, onDelete, onEdit, activeId, profiles }) {
                 columnId={column.id}
                 onDelete={onDelete}
                 onEdit={onEdit}
+                onViewHistory={onViewHistory}
                 profiles={profiles}
               />
             ))
@@ -780,6 +792,7 @@ export default function NotionTab() {
       await moveTask(active.id, destStatus);
       fetchBoard(); // Refresh to get updated data
     } catch (err) {
+      console.error("Error moving task:", err);
       // Revert on error
       fetchBoard();
     }
@@ -1022,7 +1035,7 @@ export default function NotionTab() {
               tasks={board[column.status] || []}
               onDelete={deleteTask}
               onEdit={(task) => setTaskModal({ open: true, task, isNew: false })}
-              activeId={activeId}
+              onViewHistory={viewTaskHistory}
               profiles={profiles}
             />
           ))}

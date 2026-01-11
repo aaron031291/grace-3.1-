@@ -111,6 +111,7 @@ const TelemetryTab = () => {
         fetchStats()
       ]);
     } catch (err) {
+      console.error("Failed to load telemetry data:", err);
       setError('Failed to load telemetry data. Please ensure the backend is running.');
     } finally {
       setLoading(false);

@@ -10,13 +10,6 @@ function App() {
   const [activeTab, setActiveTab] = useState("chat");
   const [apiHealth, setApiHealth] = useState(null);
 
-  useEffect(() => {
-    // Check API health on mount
-    checkHealth();
-    const interval = setInterval(checkHealth, 30000); // Check every 30 seconds
-    return () => clearInterval(interval);
-  }, []);
-
   const checkHealth = async () => {
     try {
       const response = await fetch("http://localhost:8000/health");
@@ -27,6 +20,16 @@ function App() {
       setApiHealth(null);
     }
   };
+
+  useEffect(() => {
+    // Check API health on mount
+    const timeout = setTimeout(checkHealth, 0);
+    const interval = setInterval(checkHealth, 30000); // Check every 30 seconds
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className="app">

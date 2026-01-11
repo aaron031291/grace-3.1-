@@ -31,7 +31,7 @@ export default function GitTree({ treeData, onFolderClick, onBackClick }) {
   const canGoBack =
     treeData.path && treeData.path !== "" && treeData.path !== "/";
 
-  const renderTreeNode = (node, depth = 0, parentPath = "") => {
+  const renderTreeNode = (node, depth = 0) => {
     if (!node.children) return null;
 
     return (
@@ -39,7 +39,7 @@ export default function GitTree({ treeData, onFolderClick, onBackClick }) {
         className="tree-node-container"
         style={{ marginLeft: `${depth * 16}px` }}
       >
-        {node.children.map((child, idx) => {
+        {node.children.map((child) => {
           const isDir = child.type === "tree";
           const isExpanded = expandedPaths.has(child.path);
           const hasChildren =
@@ -97,7 +97,7 @@ export default function GitTree({ treeData, onFolderClick, onBackClick }) {
 
               {isExpanded && isDir && hasChildren && (
                 <div className="tree-children">
-                  {renderTreeNode(child, depth + 1, child.path)}
+                  {renderTreeNode(child, depth + 1)}
                 </div>
               )}
             </div>
