@@ -22,10 +22,44 @@ logging.getLogger('pdfplumber').setLevel(logging.WARNING)
 
 class FileHandler:
     """Handles extraction of text from different file types."""
-    
+
     SUPPORTED_TYPES = {
+        # Text formats
         '.txt': 'text/plain',
         '.md': 'text/markdown',
+        '.json': 'application/json',
+        '.xml': 'application/xml',
+        '.csv': 'text/csv',
+
+        # Code files
+        '.py': 'text/x-python',
+        '.js': 'text/javascript',
+        '.jsx': 'text/javascript',
+        '.ts': 'text/typescript',
+        '.tsx': 'text/typescript',
+        '.java': 'text/x-java',
+        '.cpp': 'text/x-c++src',
+        '.c': 'text/x-csrc',
+        '.h': 'text/x-chdr',
+        '.cs': 'text/x-csharp',
+        '.php': 'text/x-php',
+        '.rb': 'text/x-ruby',
+        '.go': 'text/x-go',
+        '.rs': 'text/x-rust',
+        '.swift': 'text/x-swift',
+        '.kt': 'text/x-kotlin',
+        '.scala': 'text/x-scala',
+        '.sh': 'text/x-sh',
+        '.bash': 'text/x-sh',
+        '.sql': 'text/x-sql',
+        '.html': 'text/html',
+        '.css': 'text/css',
+        '.scss': 'text/x-scss',
+        '.yaml': 'text/yaml',
+        '.yml': 'text/yaml',
+        '.toml': 'text/x-toml',
+
+        # Document formats
         '.pdf': 'application/pdf',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.doc': 'application/msword',
@@ -33,6 +67,22 @@ class FileHandler:
         '.xls': 'application/vnd.ms-excel',
         '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.ppt': 'application/vnd.ms-powerpoint',
+
+        # Audio formats
+        '.mp3': 'audio/mpeg',
+        '.wav': 'audio/wav',
+        '.m4a': 'audio/mp4',
+        '.flac': 'audio/flac',
+        '.ogg': 'audio/ogg',
+        '.aac': 'audio/aac',
+
+        # Video formats
+        '.mp4': 'video/mp4',
+        '.avi': 'video/x-msvideo',
+        '.mov': 'video/quicktime',
+        '.mkv': 'video/x-matroska',
+        '.webm': 'video/webm',
+        '.flv': 'video/x-flv',
     }
     
     @staticmethod
@@ -45,20 +95,24 @@ class FileHandler:
     def extract_text(file_path: str) -> Tuple[str, Optional[str]]:
         """
         Extract text from file.
-        
+
         Args:
             file_path: Path to the file
-            
+
         Returns:
             Tuple of (text_content, error_message)
             If successful, error_message is None
         """
         if not os.path.exists(file_path):
             return "", f"File not found: {file_path}"
-        
+
         ext = Path(file_path).suffix.lower()
-        
-        if ext in ['.txt', '.md']:
+
+        # Text-based files (includes code, JSON, CSV, XML, YAML, etc.)
+        if ext in ['.txt', '.md', '.json', '.xml', '.csv', '.py', '.js', '.jsx', '.ts',
+                   '.tsx', '.java', '.cpp', '.c', '.h', '.cs', '.php', '.rb', '.go', '.rs',
+                   '.swift', '.kt', '.scala', '.sh', '.bash', '.sql', '.html', '.css',
+                   '.scss', '.yaml', '.yml', '.toml']:
             return FileHandler._extract_text_file(file_path)
         elif ext == '.pdf':
             return FileHandler._extract_pdf(file_path)
@@ -68,6 +122,10 @@ class FileHandler:
             return FileHandler._extract_excel(file_path)
         elif ext in ['.pptx', '.ppt']:
             return FileHandler._extract_pptx(file_path)
+        elif ext in ['.mp3', '.wav', '.m4a', '.flac', '.ogg', '.aac']:
+            return FileHandler._extract_audio(file_path)
+        elif ext in ['.mp4', '.avi', '.mov', '.mkv', '.webm', '.flv']:
+            return FileHandler._extract_video(file_path)
         else:
             return "", f"Unsupported file type: {ext}"
     
@@ -360,30 +418,133 @@ class FileHandler:
         """Extract text from PPTX or PPT files."""
         try:
             from pptx import Presentation
-            
+
             prs = Presentation(file_path)
             text_parts = []
-            
+
             for slide_num, slide in enumerate(prs.slides, 1):
                 text_parts.append(f"[Slide {slide_num}]")
-                
+
                 for shape in slide.shapes:
                     if hasattr(shape, "text") and shape.text.strip():
                         text_parts.append(shape.text)
-            
+
             text = "\n\n".join(text_parts)
-            
+
             if not text.strip():
                 return "", "No text content found in PowerPoint file"
-            
+
             return text, None
-        
+
         except ImportError:
             logger.error("python-pptx not installed")
             return "", "PowerPoint support not available. Install python-pptx."
         except Exception as e:
             logger.error(f"Error processing PowerPoint {file_path}: {e}")
             return "", f"Error processing PowerPoint: {str(e)}"
+
+    @staticmethod
+    def _extract_audio(file_path: str) -> Tuple[str, Optional[str]]:
+        """Extract text from audio files using speech recognition."""
+        try:
+            import speech_recognition as sr
+            from pydub import AudioSegment
+            import tempfile
+
+            # Convert audio to WAV format if needed
+            ext = Path(file_path).suffix.lower()
+
+            if ext != '.wav':
+                try:
+                    logger.info(f"Converting {ext} audio to WAV format...")
+                    audio = AudioSegment.from_file(file_path)
+
+                    # Create temporary WAV file
+                    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_wav:
+                        temp_wav_path = temp_wav.name
+                        audio.export(temp_wav_path, format='wav')
+                        working_file = temp_wav_path
+                except Exception as e:
+                    logger.error(f"Error converting audio format: {e}")
+                    return "", f"Error converting audio format: {str(e)}"
+            else:
+                working_file = file_path
+
+            try:
+                # Use speech recognition to transcribe
+                recognizer = sr.Recognizer()
+
+                with sr.AudioFile(working_file) as source:
+                    audio_data = recognizer.record(source)
+
+                    try:
+                        # Try Google Speech Recognition (free)
+                        text = recognizer.recognize_google(audio_data)
+                        return text, None
+                    except sr.UnknownValueError:
+                        return "", "Could not understand audio"
+                    except sr.RequestError as e:
+                        return "", f"Speech recognition service error: {str(e)}"
+            finally:
+                # Clean up temporary file if created
+                if ext != '.wav' and os.path.exists(working_file):
+                    try:
+                        os.unlink(working_file)
+                    except:
+                        pass
+
+        except ImportError:
+            logger.error("Audio processing libraries not installed")
+            return "", "Audio support not available. Install speech_recognition and pydub packages."
+        except Exception as e:
+            logger.error(f"Error processing audio {file_path}: {e}")
+            return "", f"Error processing audio: {str(e)}"
+
+    @staticmethod
+    def _extract_video(file_path: str) -> Tuple[str, Optional[str]]:
+        """Extract text from video files by extracting audio and transcribing."""
+        try:
+            from moviepy.editor import VideoFileClip
+            import tempfile
+
+            logger.info(f"Extracting audio from video: {file_path}")
+
+            # Extract audio from video
+            try:
+                video = VideoFileClip(file_path)
+
+                # Create temporary audio file
+                with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_audio:
+                    temp_audio_path = temp_audio.name
+
+                # Extract audio
+                video.audio.write_audiofile(temp_audio_path, logger=None)
+                video.close()
+
+                # Use audio extraction method
+                text, error = FileHandler._extract_audio(temp_audio_path)
+
+                # Clean up
+                try:
+                    os.unlink(temp_audio_path)
+                except:
+                    pass
+
+                if error:
+                    return "", f"Video processed but audio transcription failed: {error}"
+
+                return text, None
+
+            except Exception as e:
+                logger.error(f"Error extracting audio from video: {e}")
+                return "", f"Error extracting audio from video: {str(e)}"
+
+        except ImportError:
+            logger.error("Video processing libraries not installed")
+            return "", "Video support not available. Install moviepy package."
+        except Exception as e:
+            logger.error(f"Error processing video {file_path}: {e}")
+            return "", f"Error processing video: {str(e)}"
 
 
 def extract_file_text(file_path: str) -> Tuple[str, Optional[str]]:

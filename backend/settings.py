@@ -14,6 +14,9 @@ BACKEND_DIR = Path(__file__).parent
 ENV_FILE = BACKEND_DIR / ".env"
 load_dotenv(ENV_FILE)
 
+# Module-level constants
+KNOWLEDGE_BASE_PATH = str(BACKEND_DIR / "knowledge_base")
+
 
 class Settings:
     """Application settings loaded from environment variables."""
@@ -48,11 +51,23 @@ class Settings:
     # ==================== Ingestion Configuration ====================
     INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))
     INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
-    
+
+    # ==================== Librarian System Configuration ====================
+    LIBRARIAN_AUTO_PROCESS: bool = os.getenv("LIBRARIAN_AUTO_PROCESS", "true").lower() == "true"
+    LIBRARIAN_USE_AI: bool = os.getenv("LIBRARIAN_USE_AI", "true").lower() == "true"
+    LIBRARIAN_DETECT_RELATIONSHIPS: bool = os.getenv("LIBRARIAN_DETECT_RELATIONSHIPS", "true").lower() == "true"
+    LIBRARIAN_AI_CONFIDENCE_THRESHOLD: float = float(os.getenv("LIBRARIAN_AI_CONFIDENCE_THRESHOLD", "0.6"))
+    LIBRARIAN_SIMILARITY_THRESHOLD: float = float(os.getenv("LIBRARIAN_SIMILARITY_THRESHOLD", "0.7"))
+    LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES: int = int(os.getenv("LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES", "20"))
+    LIBRARIAN_AI_MODEL: str = os.getenv("LIBRARIAN_AI_MODEL", "mistral:7b")
+
     # ==================== Application Configuration ====================
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
     MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "512"))
+
+    # ==================== Knowledge Base Configuration ====================
+    KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     
     @classmethod
     def validate(cls) -> bool:
@@ -109,6 +124,13 @@ class Settings:
             "QDRANT_TIMEOUT": cls.QDRANT_TIMEOUT,
             "INGESTION_CHUNK_SIZE": cls.INGESTION_CHUNK_SIZE,
             "INGESTION_CHUNK_OVERLAP": cls.INGESTION_CHUNK_OVERLAP,
+            "LIBRARIAN_AUTO_PROCESS": cls.LIBRARIAN_AUTO_PROCESS,
+            "LIBRARIAN_USE_AI": cls.LIBRARIAN_USE_AI,
+            "LIBRARIAN_DETECT_RELATIONSHIPS": cls.LIBRARIAN_DETECT_RELATIONSHIPS,
+            "LIBRARIAN_AI_CONFIDENCE_THRESHOLD": cls.LIBRARIAN_AI_CONFIDENCE_THRESHOLD,
+            "LIBRARIAN_SIMILARITY_THRESHOLD": cls.LIBRARIAN_SIMILARITY_THRESHOLD,
+            "LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES": cls.LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES,
+            "LIBRARIAN_AI_MODEL": cls.LIBRARIAN_AI_MODEL,
             "DEBUG": cls.DEBUG,
             "LOG_LEVEL": cls.LOG_LEVEL,
             "MAX_NUM_PREDICT": cls.MAX_NUM_PREDICT,
@@ -135,7 +157,7 @@ settings = Settings()
 try:
     Settings.validate()
 except ValueError as e:
-    print(f"⚠ Warning: {e}")
+    print(f"[WARN] Warning: {e}")
     print("Using default values for missing settings")
 
 

@@ -3,13 +3,14 @@ import "./RAGTab.css";
 import FileBrowser from "./FileBrowser";
 import DirectoryChat from "./DirectoryChat";
 import NotionTab from "./NotionTab";
+import GenesisKeyPanel from "./GenesisKeyPanel";
 
 export default function RAGTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode, notion
+  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode, notion, genesis
   const [vscodePath, setVscodePath] = useState("");
   const [currentDirectory, setCurrentDirectory] = useState("");
 
@@ -67,7 +68,7 @@ export default function RAGTab() {
   // Handle opening VSCode
   const handleOpenVSCode = (currentPath) => {
     const basePath =
-      "/home/umer/Public/projects/grace_3/backend/knowledge_base";
+      "/mnt/c/Users/aaron/grace_3/backend/knowledge_base";
     const fullPath = currentPath ? `${basePath}/${currentPath}` : basePath;
     setVscodePath(fullPath);
     setActiveTab("vscode");
@@ -145,6 +146,13 @@ export default function RAGTab() {
           >
             <span className="tab-icon">📌</span>
             Notion
+          </button>
+          <button
+            className={`tab-button ${activeTab === "genesis" ? "active" : ""}`}
+            onClick={() => setActiveTab("genesis")}
+          >
+            <span className="tab-icon">🔑</span>
+            Genesis Key
           </button>
         </div>
 
@@ -263,6 +271,13 @@ export default function RAGTab() {
         {activeTab === "notion" && (
           <div className="tab-content notion-tab-content">
             <NotionTab />
+          </div>
+        )}
+
+        {/* Genesis Key Tab */}
+        {activeTab === "genesis" && (
+          <div className="tab-content genesis-tab-content">
+            <GenesisKeyPanel />
           </div>
         )}
       </div>

@@ -99,7 +99,7 @@ class GitFileTracker:
         try:
             output, code = self._run_git_command(["init"])
             if code == 0:
-                logger.info(f"✓ Initialized git repository at {self.repo_path}")
+                logger.info(f"[OK] Initialized git repository at {self.repo_path}")
                 # Set git config
                 self._run_git_command(["config", "user.email", "ingestion@grace.local"])
                 self._run_git_command(["config", "user.name", "Grace Ingestion Manager"])
@@ -377,7 +377,7 @@ class IngestionFileManager:
                 if error:
                     logger.error(f"[FILE_READ] Extraction failed for {filepath}: {error}")
                     return None
-                logger.info(f"[FILE_READ] ✓ Extracted {len(text)} characters from {file_ext}")
+                logger.info(f"[FILE_READ] [OK] Extracted {len(text)} characters from {file_ext}")
                 return text
             
             # For text files, read directly
@@ -385,14 +385,14 @@ class IngestionFileManager:
                 # Try UTF-8 first
                 with open(filepath, 'r', encoding='utf-8') as f:
                     content = f.read()
-                logger.info(f"[FILE_READ] ✓ Read {len(content)} characters (UTF-8)")
+                logger.info(f"[FILE_READ] [OK] Read {len(content)} characters (UTF-8)")
                 return content
             except UnicodeDecodeError:
                 try:
                     # Fall back to latin-1 (always works)
                     with open(filepath, 'r', encoding='latin-1') as f:
                         content = f.read()
-                    logger.info(f"[FILE_READ] ✓ Read {len(content)} characters (latin-1)")
+                    logger.info(f"[FILE_READ] [OK] Read {len(content)} characters (latin-1)")
                     return content
                 except Exception as e:
                     logger.warning(f"[FILE_READ] Could not read file {filepath}: {e}")
@@ -489,7 +489,7 @@ class IngestionFileManager:
                 db.delete(chunk)
             
             db.commit()
-            logger.info(f"✓ Deleted embeddings for document {document_id}")
+            logger.info(f"[OK] Deleted embeddings for document {document_id}")
             return True
         
         except Exception as e:
@@ -514,7 +514,7 @@ class IngestionFileManager:
             if doc:
                 db.delete(doc)
                 db.commit()
-                logger.info(f"✓ Deleted document record {document_id} from database")
+                logger.info(f"[OK] Deleted document record {document_id} from database")
                 return True
             db.close()
             return False
@@ -565,7 +565,7 @@ class IngestionFileManager:
                     error="Could not read file content",
                 )
             
-            logger.info(f"[INGESTION] ✓ Read {len(content)} characters")
+            logger.info(f"[INGESTION] [OK] Read {len(content)} characters")
             logger.info(f"[INGESTION] Extracting text and generating embeddings...")
             
             # Ingest using ingestion service
@@ -582,7 +582,7 @@ class IngestionFileManager:
             elapsed_time = time.time() - start_time
             
             if doc_id:
-                logger.info(f"[INGESTION] ✓ Text extraction and embedding completed")
+                logger.info(f"[INGESTION] [OK] Text extraction and embedding completed")
                 logger.info(f"[INGESTION] Document ID: {doc_id}")
                 
                 # Update database record with file path
@@ -595,7 +595,7 @@ class IngestionFileManager:
                             doc.file_path = rel_path
                             db.commit()
                         db.close()
-                    logger.info(f"[INGESTION] ✓ Document metadata updated")
+                    logger.info(f"[INGESTION] [OK] Document metadata updated")
                 except Exception as e:
                     logger.error(f"[INGESTION] Error updating document file_path: {e}")
                 
@@ -695,7 +695,7 @@ class IngestionFileManager:
                 return self.process_new_file(filepath, rel_path)
             
             doc_id = document.id
-            logger.info(f"[INGESTION] ✓ Found document {doc_id} for modified file")
+            logger.info(f"[INGESTION] [OK] Found document {doc_id} for modified file")
             
             # Delete old embeddings
             logger.info(f"[INGESTION] Deleting old embeddings...")
@@ -708,7 +708,7 @@ class IngestionFileManager:
                     document_id=doc_id,
                     error="Failed to delete old embeddings",
                 )
-            logger.info(f"[INGESTION] ✓ Old embeddings deleted")
+            logger.info(f"[INGESTION] [OK] Old embeddings deleted")
             
             # Read new file content
             logger.info(f"[INGESTION] Reading updated file content...")
@@ -723,7 +723,7 @@ class IngestionFileManager:
                     error="Could not read updated file content",
                 )
             
-            logger.info(f"[INGESTION] ✓ Read {len(content)} characters")
+            logger.info(f"[INGESTION] [OK] Read {len(content)} characters")
             logger.info(f"[INGESTION] Extracting text and generating new embeddings...")
             
             # Re-ingest with new content
@@ -736,7 +736,7 @@ class IngestionFileManager:
                 db.delete(document)
                 db.commit()
                 db.close()
-                logger.info(f"[INGESTION] ✓ Old document record removed")
+                logger.info(f"[INGESTION] [OK] Old document record removed")
             except Exception as e:
                 logger.error(f"[INGESTION] Error deleting document: {e}")
             
@@ -753,7 +753,7 @@ class IngestionFileManager:
             elapsed_time = time.time() - start_time
             
             if new_doc_id:
-                logger.info(f"[INGESTION] ✓ Text extraction and new embeddings completed")
+                logger.info(f"[INGESTION] [OK] Text extraction and new embeddings completed")
                 
                 # Update file path
                 logger.info(f"[INGESTION] Updating document metadata...")
@@ -764,7 +764,7 @@ class IngestionFileManager:
                         doc.file_path = rel_path
                         db.commit()
                     db.close()
-                    logger.info(f"[INGESTION] ✓ Document metadata updated")
+                    logger.info(f"[INGESTION] [OK] Document metadata updated")
                 except Exception as e:
                     logger.error(f"[INGESTION] Error updating document file_path: {e}")
                 
@@ -860,9 +860,9 @@ class IngestionFileManager:
                 )
             
             doc_id = document.id
-            logger.info(f"[INGESTION] ✓ Found document {doc_id} for deleted file")
+            logger.info(f"[INGESTION] [OK] Found document {doc_id} for deleted file")
             
-            logger.info(f"[INGESTION] ✓ Embeddings deleted from vector database")
+            logger.info(f"[INGESTION] [OK] Embeddings deleted from vector database")
             
             # Delete database record
             logger.info(f"[INGESTION] Deleting document from database...")
@@ -876,7 +876,7 @@ class IngestionFileManager:
                     error="Failed to delete document record",
                 )
             
-            logger.info(f"[INGESTION] ✓ Document deleted from database")
+            logger.info(f"[INGESTION] [OK] Document deleted from database")
             
             # Remove from file states
             logger.info(f"[INGESTION] Updating file tracking state...")
@@ -1035,7 +1035,7 @@ class IngestionFileManager:
             except Exception as e:
                 logger.error(f"[SCAN] Error checking for orphaned documents: {e}", exc_info=True)
         
-        logger.info(f"[SCAN] ✓ Scan complete. Processed {len(results)} changes.")
+        logger.info(f"[SCAN] [OK] Scan complete. Processed {len(results)} changes.")
         return results
     
     def watch_and_process(self, continuous: bool = False, interval: int = 30) -> None:

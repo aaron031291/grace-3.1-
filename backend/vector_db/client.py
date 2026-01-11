@@ -59,10 +59,10 @@ class QdrantVectorDB:
             # Test connection by getting server info
             info = self.client.get_collections()
             self.connected = True
-            logger.info(f"✓ Connected to Qdrant at {self.host}:{self.port}")
+            logger.info(f"[OK] Connected to Qdrant at {self.host}:{self.port}")
             return True
         except Exception as e:
-            logger.error(f"✗ Failed to connect to Qdrant: {e}")
+            logger.error(f"[FAIL] Failed to connect to Qdrant: {e}")
             self.connected = False
             return False
     
@@ -115,11 +115,11 @@ class QdrantVectorDB:
                 vectors_config=VectorParams(size=vector_size, distance=distance),
                 **kwargs
             )
-            logger.info(f"✓ Created collection '{collection_name}' with vector size {vector_size}")
+            logger.info(f"[OK] Created collection '{collection_name}' with vector size {vector_size}")
             return True
         
         except Exception as e:
-            logger.error(f"✗ Failed to create collection '{collection_name}': {e}")
+            logger.error(f"[FAIL] Failed to create collection '{collection_name}': {e}")
             return False
     
     def collection_exists(self, collection_name: str) -> bool:
@@ -139,7 +139,7 @@ class QdrantVectorDB:
             collections = self.client.get_collections()
             return any(c.name == collection_name for c in collections.collections)
         except Exception as e:
-            logger.error(f"✗ Error checking collection existence: {e}")
+            logger.error(f"[FAIL] Error checking collection existence: {e}")
             return False
     
     def upsert_vectors(
@@ -175,11 +175,11 @@ class QdrantVectorDB:
                 points=points,
                 **kwargs
             )
-            logger.info(f"✓ Upserted {len(vectors)} vectors to '{collection_name}'")
+            logger.info(f"[OK] Upserted {len(vectors)} vectors to '{collection_name}'")
             return True
         
         except Exception as e:
-            logger.error(f"✗ Failed to upsert vectors: {e}")
+            logger.error(f"[FAIL] Failed to upsert vectors: {e}")
             return False
     
     def search_vectors(
@@ -226,7 +226,7 @@ class QdrantVectorDB:
             ]
         
         except Exception as e:
-            logger.error(f"✗ Search failed: {e}")
+            logger.error(f"[FAIL] Search failed: {e}")
             return []
     
     def delete_vectors(
@@ -256,11 +256,11 @@ class QdrantVectorDB:
                 points_selector=vector_ids,
                 **kwargs
             )
-            logger.info(f"✓ Deleted {len(vector_ids)} vectors from '{collection_name}'")
+            logger.info(f"[OK] Deleted {len(vector_ids)} vectors from '{collection_name}'")
             return True
         
         except Exception as e:
-            logger.error(f"✗ Failed to delete vectors: {e}")
+            logger.error(f"[FAIL] Failed to delete vectors: {e}")
             return False
     
     def get_collection_info(self, collection_name: str) -> Optional[Dict[str, Any]]:
@@ -286,7 +286,7 @@ class QdrantVectorDB:
             }
         
         except Exception as e:
-            logger.error(f"✗ Failed to get collection info: {e}")
+            logger.error(f"[FAIL] Failed to get collection info: {e}")
             return None
     
     def delete_collection(self, collection_name: str) -> bool:
@@ -304,11 +304,11 @@ class QdrantVectorDB:
         
         try:
             self.client.delete_collection(collection_name)
-            logger.info(f"✓ Deleted collection '{collection_name}'")
+            logger.info(f"[OK] Deleted collection '{collection_name}'")
             return True
         
         except Exception as e:
-            logger.error(f"✗ Failed to delete collection: {e}")
+            logger.error(f"[FAIL] Failed to delete collection: {e}")
             return False
     
     def list_collections(self) -> List[str]:
@@ -326,7 +326,7 @@ class QdrantVectorDB:
             return [c.name for c in collections.collections]
         
         except Exception as e:
-            logger.error(f"✗ Failed to list collections: {e}")
+            logger.error(f"[FAIL] Failed to list collections: {e}")
             return []
 
 

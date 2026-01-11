@@ -384,12 +384,12 @@ class TextIngestionService:
             db.flush()  # Get the ID without committing
             document_id = document.id
             
-            logger.info(f"[INGEST_FAST] ✓ Created document record with ID: {document_id}")
+            logger.info(f"[INGEST_FAST] [OK] Created document record with ID: {document_id}")
             
             # Chunk the text
             logger.info(f"[INGEST_FAST] Chunking text with chunk_size=512, overlap=50...")
             chunks = self.chunker.chunk_text(text_content)
-            logger.info(f"[INGEST_FAST] ✓ Chunked text into {len(chunks)} chunks")
+            logger.info(f"[INGEST_FAST] [OK] Chunked text into {len(chunks)} chunks")
             
             # Get document creation date for embedding into chunks
             created_at = document.created_at.isoformat() if document.created_at else datetime.utcnow().isoformat()
@@ -419,10 +419,10 @@ class TextIngestionService:
             
             try:
                 all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
-                logger.info(f"[INGEST_FAST] ✓ Generated batch embeddings for all {len(chunks)} chunks (batch_size={batch_size})")
+                logger.info(f"[INGEST_FAST] [OK] Generated batch embeddings for all {len(chunks)} chunks (batch_size={batch_size})")
             except RuntimeError as e:
                 if "out of memory" in str(e).lower() or "cuda" in str(e).lower():
-                    logger.warning(f"[INGEST_FAST] ⚠ CUDA OOM with batch_size={batch_size}, reducing batch size...")
+                    logger.warning(f"[INGEST_FAST] [WARN] CUDA OOM with batch_size={batch_size}, reducing batch size...")
                     # Fallback: Embed in smaller batches
                     import torch
                     if torch.cuda.is_available():
@@ -436,7 +436,7 @@ class TextIngestionService:
                         batch_embeddings = self.embedding_model.embed_text(batch, batch_size=smaller_batch_size)
                         all_embeddings.extend(batch_embeddings)
                     
-                    logger.info(f"[INGEST_FAST] ✓ Generated batch embeddings for all {len(chunks)} chunks (fallback batch_size={smaller_batch_size})")
+                    logger.info(f"[INGEST_FAST] [OK] Generated batch embeddings for all {len(chunks)} chunks (fallback batch_size={smaller_batch_size})")
                 else:
                     logger.error(f"[INGEST_FAST] Error during embedding: {e}")
                     db.rollback()
@@ -504,7 +504,7 @@ class TextIngestionService:
                         db.rollback()
                         return None, f"Failed to store embeddings (batch {batch_start}-{batch_end})"
                 
-                logger.info(f"[INGEST_FAST] ✓ Successfully stored {len(vectors_to_upsert)} vectors in Qdrant")
+                logger.info(f"[INGEST_FAST] [OK] Successfully stored {len(vectors_to_upsert)} vectors in Qdrant")
             
             # Update document status to completed
             document.status = "completed"
@@ -513,7 +513,7 @@ class TextIngestionService:
             # Commit transaction
             logger.info(f"[INGEST_FAST] Committing database transaction...")
             db.commit()
-            logger.info(f"[INGEST_FAST] ✓✓✓ INGESTION COMPLETE ✓✓✓")
+            logger.info(f"[INGEST_FAST] [OK][OK][OK] INGESTION COMPLETE [OK][OK][OK]")
             logger.info(f"[INGEST_FAST] Document {document_id}: {filename}")
             logger.info(f"[INGEST_FAST]   - {len(chunks)} chunks")
             logger.info(f"[INGEST_FAST]   - {len(text_content)} characters")
@@ -522,7 +522,7 @@ class TextIngestionService:
             return document_id, "Document ingested successfully"
         
         except Exception as e:
-            logger.error(f"[INGEST_FAST] ✗✗✗ ERROR DURING INGESTION ✗✗✗", exc_info=True)
+            logger.error(f"[INGEST_FAST] [FAIL][FAIL][FAIL] ERROR DURING INGESTION [FAIL][FAIL][FAIL]", exc_info=True)
             logger.error(f"[INGEST_FAST] Error details: {str(e)}")
             db.rollback()
             return None, f"Ingestion failed: {str(e)}"
@@ -738,7 +738,7 @@ class TextIngestionService:
             document.total_chunks = len(chunks)
             db.commit()
             
-            logger.info(f"✓ Successfully ingested document: {document_id}")
+            logger.info(f"[OK] Successfully ingested document: {document_id}")
             return document_id, "Document ingested successfully"
         
         except Exception as e:
@@ -960,7 +960,7 @@ class TextIngestionService:
             db.delete(document)
             db.commit()
             
-            logger.info(f"✓ Deleted document: {document_id}")
+            logger.info(f"[OK] Deleted document: {document_id}")
             return True, "Document deleted successfully"
         
         except Exception as e:
