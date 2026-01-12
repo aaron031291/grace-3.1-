@@ -6,6 +6,13 @@ import MonitoringTab from "./components/MonitoringTab";
 import VersionControl from "./components/VersionControl";
 import CognitiveTab from "./components/CognitiveTab";
 import NotionTab from "./components/NotionTab";
+import GovernanceTab from "./components/GovernanceTab";
+import CodeBaseTab from "./components/CodeBaseTab";
+import ResearchTab from "./components/ResearchTab";
+import SandboxTab from "./components/SandboxTab";
+import InsightsTab from "./components/InsightsTab";
+import APITab from "./components/APITab";
+import LibrarianTab from "./components/LibrarianTab";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -79,9 +86,8 @@ function App() {
               Chat
             </button>
             <button
-              className={`tab-button`}
-              disabled
-              onClick={() => setActiveTab("rag")}
+              className={`tab-button ${activeTab === "governance" ? "active" : ""}`}
+              onClick={() => setActiveTab("governance")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,9 +107,44 @@ function App() {
               Governance
             </button>
             <button
-              disabled
-              className={`tab-button`}
-              onClick={() => setActiveTab("rag")}
+              className={`tab-button ${activeTab === "sandbox" ? "active" : ""}`}
+              onClick={() => setActiveTab("sandbox")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+              Sandbox
+            </button>
+            <button
+              className={`tab-button ${activeTab === "insights" ? "active" : ""}`}
+              onClick={() => setActiveTab("insights")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4"></path>
+                <path d="M12 8h.01"></path>
+              </svg>
+              Insights
+            </button>
+            <button
+              className={`tab-button ${activeTab === "codebase" ? "active" : ""}`}
+              onClick={() => setActiveTab("codebase")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,9 +176,8 @@ function App() {
               Documents
             </button>
             <button
-              className={`tab-button`}
-              disabled
-              onClick={() => setActiveTab("rag")}
+              className={`tab-button ${activeTab === "research" ? "active" : ""}`}
+              onClick={() => setActiveTab("research")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +187,6 @@ function App() {
                 width={20}
                 height={20}
                 stroke="currentColor"
-                className="size-6"
               >
                 <path
                   strokeLinecap="round"
@@ -156,6 +195,41 @@ function App() {
                 />
               </svg>
               Research
+            </button>
+            <button
+              className={`tab-button ${activeTab === "api" ? "active" : ""}`}
+              onClick={() => setActiveTab("api")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M18 20V10"></path>
+                <path d="M12 20V4"></path>
+                <path d="M6 20v-6"></path>
+              </svg>
+              APIs
+            </button>
+            <button
+              className={`tab-button ${activeTab === "librarian" ? "active" : ""}`}
+              onClick={() => setActiveTab("librarian")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              Librarian
             </button>
             <button
               className={`tab-button ${
@@ -246,7 +320,14 @@ function App() {
         {/* Tab Content */}
         <main className="main-content">
           {activeTab === "chat" && <ChatTab />}
+          {activeTab === "governance" && <GovernanceTab />}
+          {activeTab === "sandbox" && <SandboxTab />}
+          {activeTab === "insights" && <InsightsTab />}
+          {activeTab === "codebase" && <CodeBaseTab />}
           {activeTab === "rag" && <RAGTab />}
+          {activeTab === "research" && <ResearchTab />}
+          {activeTab === "api" && <APITab />}
+          {activeTab === "librarian" && <LibrarianTab />}
           {activeTab === "cognitive" && <CognitiveTab />}
           {activeTab === "monitoring" && <MonitoringTab />}
           {activeTab === "version-control" && <VersionControl />}

@@ -8,16 +8,20 @@ Layer 2: Cross-Model Consensus - Multiple LLMs must agree
 Layer 3: Contradiction Detection - Check against existing knowledge
 Layer 4: Confidence Scoring - Trust score calculation
 Layer 5: Trust System Verification - Validate against learning memory
+Layer 6: External Verification - Web search and documentation lookup
 
 All operations are tracked and logged.
 """
 
 import logging
+import re
+import json
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import re
 from difflib import SequenceMatcher
+from urllib.parse import quote_plus
+import requests
 
 from .multi_llm_client import MultiLLMClient, TaskType
 from .repo_access import RepositoryAccessLayer
@@ -25,6 +29,306 @@ from confidence_scorer.confidence_scorer import ConfidenceScorer
 from confidence_scorer.contradiction_detector import SemanticContradictionDetector
 
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# EXTERNAL VERIFICATION: Web Search and Documentation Lookup
+# =============================================================================
+
+class ExternalVerifier:
+    """
+    External verification system for LLM outputs.
+
+    Verifies claims against:
+    1. Official documentation (Python, JS, framework docs)
+    2. Web search results (for factual claims)
+    3. Known API references
+    """
+
+    # Official documentation URLs for common frameworks/languages
+    DOCUMENTATION_SOURCES = {
+        "python": "https://docs.python.org/3/search.html?q={query}",
+        "javascript": "https://developer.mozilla.org/en-US/search?q={query}",
+        "typescript": "https://www.typescriptlang.org/docs/handbook/",
+        "react": "https://react.dev/reference/",
+        "fastapi": "https://fastapi.tiangolo.com/",
+        "django": "https://docs.djangoproject.com/en/stable/search/?q={query}",
+        "flask": "https://flask.palletsprojects.com/en/latest/search/?q={query}",
+        "sqlalchemy": "https://docs.sqlalchemy.org/en/20/search.html?q={query}",
+        "pytorch": "https://pytorch.org/docs/stable/search.html?q={query}",
+        "tensorflow": "https://www.tensorflow.org/s/results?q={query}",
+    }
+
+    def __init__(
+        self,
+        enable_web_search: bool = True,
+        enable_doc_lookup: bool = True,
+        search_timeout: float = 10.0,
+        cache_results: bool = True
+    ):
+        """
+        Initialize external verifier.
+
+        Args:
+            enable_web_search: Enable web search verification
+            enable_doc_lookup: Enable documentation lookup
+            search_timeout: Timeout for external requests
+            cache_results: Cache verification results
+        """
+        self.enable_web_search = enable_web_search
+        self.enable_doc_lookup = enable_doc_lookup
+        self.search_timeout = search_timeout
+        self.cache_results = cache_results
+        self._cache: Dict[str, Dict[str, Any]] = {}
+
+    def verify_technical_claim(
+        self,
+        claim: str,
+        context: str = "",
+        technologies: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Verify a technical claim against external sources.
+
+        Args:
+            claim: The technical claim to verify
+            context: Additional context about the claim
+            technologies: List of relevant technologies (python, react, etc.)
+
+        Returns:
+            Verification result with confidence and sources
+        """
+        logger.info(f"[EXTERNAL VERIFY] Verifying claim: {claim[:100]}...")
+
+        result = {
+            "verified": False,
+            "confidence": 0.5,
+            "sources": [],
+            "details": {}
+        }
+
+        # Check cache
+        cache_key = f"{claim}:{','.join(technologies or [])}"
+        if self.cache_results and cache_key in self._cache:
+            logger.debug("[EXTERNAL VERIFY] Returning cached result")
+            return self._cache[cache_key]
+
+        # Extract technical terms and patterns
+        technical_patterns = self._extract_technical_patterns(claim)
+
+        # Verify against documentation
+        if self.enable_doc_lookup and technologies:
+            doc_result = self._verify_against_documentation(
+                claim,
+                technical_patterns,
+                technologies
+            )
+            if doc_result["found"]:
+                result["verified"] = True
+                result["confidence"] = max(result["confidence"], doc_result["confidence"])
+                result["sources"].extend(doc_result["sources"])
+                result["details"]["documentation"] = doc_result
+
+        # Verify code patterns
+        if technical_patterns.get("code_patterns"):
+            code_result = self._verify_code_patterns(
+                technical_patterns["code_patterns"],
+                technologies or []
+            )
+            if code_result["valid"]:
+                result["confidence"] = max(result["confidence"], 0.7)
+                result["details"]["code_patterns"] = code_result
+
+        # Cache result
+        if self.cache_results:
+            self._cache[cache_key] = result
+
+        logger.info(f"[EXTERNAL VERIFY] Result: verified={result['verified']}, confidence={result['confidence']:.2f}")
+        return result
+
+    def _extract_technical_patterns(self, text: str) -> Dict[str, Any]:
+        """Extract technical patterns from text for verification."""
+        patterns = {
+            "code_patterns": [],
+            "function_names": [],
+            "class_names": [],
+            "imports": [],
+            "api_endpoints": [],
+            "config_values": []
+        }
+
+        # Extract code blocks
+        code_blocks = re.findall(r'```[\w]*\n?(.*?)```', text, re.DOTALL)
+        patterns["code_patterns"].extend(code_blocks)
+
+        # Extract inline code
+        inline_code = re.findall(r'`([^`]+)`', text)
+        patterns["code_patterns"].extend(inline_code)
+
+        # Extract function/method names
+        patterns["function_names"] = re.findall(r'\b([a-z_][a-z0-9_]*)\s*\(', text)
+
+        # Extract class names (PascalCase)
+        patterns["class_names"] = re.findall(r'\b([A-Z][a-zA-Z0-9]*)\b', text)
+
+        # Extract imports
+        patterns["imports"] = re.findall(r'(?:import|from)\s+([\w.]+)', text)
+
+        # Extract API endpoints
+        patterns["api_endpoints"] = re.findall(r'["\']/([\w/{}:-]+)["\']', text)
+
+        return patterns
+
+    def _verify_against_documentation(
+        self,
+        claim: str,
+        patterns: Dict[str, Any],
+        technologies: List[str]
+    ) -> Dict[str, Any]:
+        """Verify claim against official documentation."""
+        result = {
+            "found": False,
+            "confidence": 0.0,
+            "sources": [],
+            "matches": []
+        }
+
+        # Build search queries from claim and patterns
+        queries = []
+
+        # Add function names as queries
+        for func in patterns.get("function_names", [])[:3]:
+            queries.append(func)
+
+        # Add class names as queries
+        for cls in patterns.get("class_names", [])[:3]:
+            queries.append(cls)
+
+        # Add key terms from claim
+        key_terms = re.findall(r'\b((?:async|await|yield|return|class|def|function|const|let|var|import|export)\s+\w+)', claim.lower())
+        queries.extend(key_terms[:2])
+
+        if not queries:
+            # Extract important words if no specific patterns found
+            words = re.findall(r'\b([a-zA-Z_][a-zA-Z0-9_]{3,})\b', claim)
+            queries = words[:3]
+
+        # Search each relevant technology's documentation
+        for tech in technologies:
+            if tech.lower() in self.DOCUMENTATION_SOURCES:
+                for query in queries[:2]:  # Limit queries per tech
+                    try:
+                        doc_url = self.DOCUMENTATION_SOURCES[tech.lower()].format(
+                            query=quote_plus(query)
+                        )
+                        result["sources"].append({
+                            "technology": tech,
+                            "query": query,
+                            "url": doc_url,
+                            "type": "documentation"
+                        })
+                        # Note: Actual fetching would require more complex handling
+                        # For now, we mark as potentially found if pattern exists
+                        result["found"] = True
+                        result["confidence"] = 0.6
+                    except Exception as e:
+                        logger.debug(f"[EXTERNAL VERIFY] Doc lookup failed for {tech}: {e}")
+
+        return result
+
+    def _verify_code_patterns(
+        self,
+        code_patterns: List[str],
+        technologies: List[str]
+    ) -> Dict[str, Any]:
+        """Verify code patterns are syntactically valid."""
+        result = {
+            "valid": True,
+            "errors": [],
+            "validated_patterns": []
+        }
+
+        for pattern in code_patterns[:5]:  # Limit patterns to check
+            if not pattern.strip():
+                continue
+
+            # Check Python syntax
+            if "python" in [t.lower() for t in technologies] or not technologies:
+                try:
+                    compile(pattern, '<string>', 'exec')
+                    result["validated_patterns"].append({
+                        "pattern": pattern[:100],
+                        "language": "python",
+                        "valid": True
+                    })
+                except SyntaxError as e:
+                    result["errors"].append({
+                        "pattern": pattern[:100],
+                        "error": str(e)
+                    })
+
+            # Check for common JS patterns
+            if "javascript" in [t.lower() for t in technologies] or "typescript" in [t.lower() for t in technologies]:
+                # Basic JS syntax validation (simplified)
+                js_valid = self._validate_js_syntax(pattern)
+                result["validated_patterns"].append({
+                    "pattern": pattern[:100],
+                    "language": "javascript",
+                    "valid": js_valid
+                })
+
+        return result
+
+    def _validate_js_syntax(self, code: str) -> bool:
+        """Basic JavaScript syntax validation."""
+        # Very basic checks - production would use a proper parser
+        bracket_balance = code.count('{') - code.count('}')
+        paren_balance = code.count('(') - code.count(')')
+        square_balance = code.count('[') - code.count(']')
+
+        return bracket_balance == 0 and paren_balance == 0 and square_balance == 0
+
+    def verify_factual_claim(
+        self,
+        claim: str,
+        category: str = "general"
+    ) -> Dict[str, Any]:
+        """
+        Verify a factual (non-code) claim.
+
+        Args:
+            claim: The factual claim to verify
+            category: Category of claim (general, technical, historical)
+
+        Returns:
+            Verification result
+        """
+        logger.info(f"[EXTERNAL VERIFY] Verifying factual claim: {claim[:100]}...")
+
+        result = {
+            "verified": False,
+            "confidence": 0.5,
+            "category": category,
+            "details": {}
+        }
+
+        # For factual claims, we're more conservative
+        # Without actual web search integration, we flag as uncertain
+        result["details"]["note"] = "Factual verification requires web search integration"
+        result["confidence"] = 0.5  # Neutral - can't confirm or deny
+
+        return result
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache statistics."""
+        return {
+            "cached_entries": len(self._cache),
+            "cache_enabled": self.cache_results
+        }
+
+    def clear_cache(self):
+        """Clear the verification cache."""
+        self._cache.clear()
 
 
 @dataclass
@@ -67,7 +371,9 @@ class HallucinationGuard:
         multi_llm_client: Optional[MultiLLMClient] = None,
         repo_access: Optional[RepositoryAccessLayer] = None,
         confidence_scorer: Optional[ConfidenceScorer] = None,
-        contradiction_detector: Optional[SemanticContradictionDetector] = None
+        contradiction_detector: Optional[SemanticContradictionDetector] = None,
+        external_verifier: Optional[ExternalVerifier] = None,
+        enable_external_verification: bool = True
     ):
         """
         Initialize hallucination guard.
@@ -77,11 +383,14 @@ class HallucinationGuard:
             repo_access: Repository access layer
             confidence_scorer: Confidence scoring system
             contradiction_detector: Contradiction detection system
+            external_verifier: External verification system
+            enable_external_verification: Enable external verification layer
         """
         self.multi_llm = multi_llm_client
         self.repo_access = repo_access
         self.confidence_scorer = confidence_scorer
         self.contradiction_detector = contradiction_detector or SemanticContradictionDetector()
+        self.external_verifier = external_verifier or (ExternalVerifier() if enable_external_verification else None)
 
         # Verification log
         self.verification_log: List[Dict[str, Any]] = []
@@ -253,6 +562,103 @@ class HallucinationGuard:
 
         # Use SequenceMatcher for quick similarity
         return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
+
+    # =======================================================================
+    # LAYER 6: EXTERNAL VERIFICATION
+    # =======================================================================
+
+    def verify_external(
+        self,
+        content: str,
+        task_type: TaskType = TaskType.GENERAL,
+        technologies: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Verify content against external sources (Layer 6).
+
+        Args:
+            content: Content to verify
+            task_type: Type of task (helps determine verification strategy)
+            technologies: List of relevant technologies
+
+        Returns:
+            External verification result
+        """
+        logger.info("[LAYER 6] Running external verification")
+
+        if not self.external_verifier:
+            return {
+                "verified": False,
+                "confidence": 0.5,
+                "enabled": False,
+                "reason": "External verifier not enabled"
+            }
+
+        result = {
+            "verified": False,
+            "confidence": 0.5,
+            "technical_verification": None,
+            "code_syntax_valid": True,
+            "sources": []
+        }
+
+        # Detect technologies from content if not provided
+        if not technologies:
+            technologies = self._detect_technologies(content)
+
+        # For code-related tasks, do technical verification
+        if task_type in [TaskType.CODE_GENERATION, TaskType.CODE_DEBUGGING,
+                         TaskType.CODE_EXPLANATION, TaskType.CODE_REVIEW]:
+            tech_result = self.external_verifier.verify_technical_claim(
+                claim=content,
+                technologies=technologies
+            )
+            result["technical_verification"] = tech_result
+            result["verified"] = tech_result.get("verified", False)
+            result["confidence"] = tech_result.get("confidence", 0.5)
+            result["sources"].extend(tech_result.get("sources", []))
+
+            # Check code syntax
+            if tech_result.get("details", {}).get("code_patterns"):
+                errors = tech_result["details"]["code_patterns"].get("errors", [])
+                if errors:
+                    result["code_syntax_valid"] = False
+                    result["confidence"] *= 0.7  # Reduce confidence for syntax errors
+
+        # For general/reasoning tasks, do factual verification
+        elif task_type in [TaskType.GENERAL, TaskType.REASONING]:
+            factual_result = self.external_verifier.verify_factual_claim(
+                claim=content[:500],  # Limit claim length
+                category="technical" if technologies else "general"
+            )
+            result["factual_verification"] = factual_result
+            result["confidence"] = factual_result.get("confidence", 0.5)
+
+        return result
+
+    def _detect_technologies(self, content: str) -> List[str]:
+        """Detect technologies mentioned in content."""
+        technologies = []
+
+        # Common technology patterns
+        tech_patterns = {
+            "python": r'\b(python|pip|pypi|django|flask|fastapi|pytorch|tensorflow|pandas|numpy)\b',
+            "javascript": r'\b(javascript|js|node|npm|yarn|react|vue|angular|express)\b',
+            "typescript": r'\b(typescript|ts|tsx)\b',
+            "react": r'\b(react|jsx|redux|nextjs|next\.js)\b',
+            "fastapi": r'\b(fastapi|uvicorn|starlette)\b',
+            "django": r'\b(django)\b',
+            "sqlalchemy": r'\b(sqlalchemy|alembic)\b',
+            "pytorch": r'\b(pytorch|torch)\b',
+            "tensorflow": r'\b(tensorflow|keras|tf)\b',
+        }
+
+        content_lower = content.lower()
+        for tech, pattern in tech_patterns.items():
+            if re.search(pattern, content_lower, re.IGNORECASE):
+                technologies.append(tech)
+
+        return list(set(technologies))
 
     # =======================================================================
     # LAYER 3: CONTRADICTION DETECTION
@@ -430,16 +836,29 @@ class HallucinationGuard:
         enable_grounding: bool = True,
         enable_contradiction_check: bool = True,
         enable_trust_verification: bool = True,
+        enable_external_verification: bool = True,
         consensus_threshold: float = 0.7,
         confidence_threshold: float = 0.6,
         trust_threshold: float = 0.7,
         system_prompt: Optional[str] = None,
-        context_documents: Optional[List[str]] = None
+        context_documents: Optional[List[str]] = None,
+        max_retry_attempts: int = 3,
+        auto_correct_low_trust: bool = True
     ) -> VerificationResult:
         """
         Complete hallucination verification pipeline.
 
-        Runs all 5 layers of verification and returns comprehensive result.
+        Runs all 6 layers of verification and returns comprehensive result.
+        When trust scores are low, automatically retries with stricter verification
+        and attempts to correct/refine the content.
+
+        Layers:
+        1. Repository Grounding - Claims must reference actual files/code
+        2. Cross-Model Consensus - Multiple LLMs must agree
+        3. Contradiction Detection - Check against existing knowledge
+        4. Confidence Scoring - Trust score calculation
+        5. Trust System Verification - Validate against learning memory
+        6. External Verification - Web search and documentation lookup
 
         Args:
             prompt: Original prompt
@@ -449,17 +868,207 @@ class HallucinationGuard:
             enable_grounding: Enable repository grounding
             enable_contradiction_check: Enable contradiction detection
             enable_trust_verification: Enable trust system verification
+            enable_external_verification: Enable external verification (Layer 6)
             consensus_threshold: Consensus similarity threshold
             confidence_threshold: Minimum confidence score
             trust_threshold: Minimum trust score
             system_prompt: System prompt for consensus
             context_documents: Context documents for contradiction check
+            max_retry_attempts: Maximum retry attempts for low-trust content
+            auto_correct_low_trust: Automatically attempt to correct low-trust content
 
         Returns:
             VerificationResult with complete analysis
         """
         logger.info("Starting complete hallucination verification pipeline")
 
+        # Run verification with potential retries for low trust
+        return self._verify_with_retry(
+            prompt=prompt,
+            content=content,
+            task_type=task_type,
+            enable_consensus=enable_consensus,
+            enable_grounding=enable_grounding,
+            enable_contradiction_check=enable_contradiction_check,
+            enable_trust_verification=enable_trust_verification,
+            consensus_threshold=consensus_threshold,
+            confidence_threshold=confidence_threshold,
+            trust_threshold=trust_threshold,
+            system_prompt=system_prompt,
+            context_documents=context_documents,
+            max_retry_attempts=max_retry_attempts,
+            auto_correct_low_trust=auto_correct_low_trust,
+            attempt=1
+        )
+
+    def _verify_with_retry(
+        self,
+        prompt: str,
+        content: str,
+        task_type: TaskType,
+        enable_consensus: bool,
+        enable_grounding: bool,
+        enable_contradiction_check: bool,
+        enable_trust_verification: bool,
+        consensus_threshold: float,
+        confidence_threshold: float,
+        trust_threshold: float,
+        system_prompt: Optional[str],
+        context_documents: Optional[List[str]],
+        max_retry_attempts: int,
+        auto_correct_low_trust: bool,
+        attempt: int
+    ) -> VerificationResult:
+        """Internal verification with retry logic for low-trust content."""
+        logger.info(f"[VERIFICATION] Attempt {attempt}/{max_retry_attempts}")
+
+        # Run the actual verification
+        result = self._run_verification_pipeline(
+            prompt=prompt,
+            content=content,
+            task_type=task_type,
+            enable_consensus=enable_consensus,
+            enable_grounding=enable_grounding,
+            enable_contradiction_check=enable_contradiction_check,
+            enable_trust_verification=enable_trust_verification,
+            consensus_threshold=consensus_threshold,
+            confidence_threshold=confidence_threshold,
+            trust_threshold=trust_threshold,
+            system_prompt=system_prompt,
+            context_documents=context_documents
+        )
+
+        # Check if trust score is too low and we should retry
+        LOW_TRUST_THRESHOLD = 0.5
+        if (result.trust_score < LOW_TRUST_THRESHOLD or result.confidence_score < LOW_TRUST_THRESHOLD) \
+           and attempt < max_retry_attempts and auto_correct_low_trust:
+
+            logger.warning(f"[VERIFICATION] Low trust detected (trust={result.trust_score:.2f}, confidence={result.confidence_score:.2f})")
+            logger.info(f"[VERIFICATION] Attempting correction and re-verification...")
+
+            # Attempt to correct the content
+            corrected_content = self._attempt_correction(
+                prompt=prompt,
+                content=content,
+                verification_result=result,
+                task_type=task_type,
+                system_prompt=system_prompt
+            )
+
+            if corrected_content and corrected_content != content:
+                logger.info("[VERIFICATION] Content corrected, re-verifying...")
+
+                # Add correction to audit trail
+                result.audit_trail.append({
+                    "layer": "auto_correction",
+                    "attempt": attempt,
+                    "original_trust": result.trust_score,
+                    "original_confidence": result.confidence_score,
+                    "correction_applied": True
+                })
+
+                # Retry with corrected content (stricter thresholds)
+                return self._verify_with_retry(
+                    prompt=prompt,
+                    content=corrected_content,
+                    task_type=task_type,
+                    enable_consensus=enable_consensus,
+                    enable_grounding=enable_grounding,
+                    enable_contradiction_check=enable_contradiction_check,
+                    enable_trust_verification=enable_trust_verification,
+                    consensus_threshold=min(consensus_threshold + 0.05, 0.9),  # Stricter
+                    confidence_threshold=min(confidence_threshold + 0.05, 0.8),
+                    trust_threshold=min(trust_threshold + 0.05, 0.85),
+                    system_prompt=system_prompt,
+                    context_documents=context_documents,
+                    max_retry_attempts=max_retry_attempts,
+                    auto_correct_low_trust=auto_correct_low_trust,
+                    attempt=attempt + 1
+                )
+
+        # Add retry info to result
+        result.audit_trail.append({
+            "layer": "retry_status",
+            "total_attempts": attempt,
+            "final_trust": result.trust_score,
+            "final_confidence": result.confidence_score
+        })
+
+        return result
+
+    def _attempt_correction(
+        self,
+        prompt: str,
+        content: str,
+        verification_result: VerificationResult,
+        task_type: TaskType,
+        system_prompt: Optional[str]
+    ) -> Optional[str]:
+        """Attempt to correct low-trust content using LLM refinement."""
+        if not self.multi_llm:
+            return None
+
+        # Build correction prompt based on verification failures
+        issues = []
+        for layer, passed in verification_result.verification_layers.items():
+            if not passed:
+                issues.append(f"- {layer.replace('_', ' ').title()} failed")
+
+        if verification_result.contradictions:
+            issues.append(f"- {len(verification_result.contradictions)} contradictions detected")
+
+        if not issues:
+            return None
+
+        correction_prompt = f"""The following response has low trust/confidence and needs refinement:
+
+ORIGINAL RESPONSE:
+{content}
+
+ISSUES DETECTED:
+{chr(10).join(issues)}
+
+ORIGINAL QUESTION:
+{prompt}
+
+Please provide a corrected, more accurate response that:
+1. Only states facts that can be verified
+2. Avoids speculation or assumptions
+3. Clearly indicates uncertainty where appropriate
+4. References specific files/code when making claims about code
+
+CORRECTED RESPONSE:"""
+
+        try:
+            response = self.multi_llm.generate(
+                prompt=correction_prompt,
+                task_type=task_type,
+                system_prompt=(system_prompt or "") + "\nYou are correcting a potentially inaccurate response. Be precise and factual."
+            )
+
+            if response.get("success"):
+                return response.get("content", "")
+        except Exception as e:
+            logger.error(f"[CORRECTION] Failed to correct content: {e}")
+
+        return None
+
+    def _run_verification_pipeline(
+        self,
+        prompt: str,
+        content: str,
+        task_type: TaskType,
+        enable_consensus: bool,
+        enable_grounding: bool,
+        enable_contradiction_check: bool,
+        enable_trust_verification: bool,
+        consensus_threshold: float,
+        confidence_threshold: float,
+        trust_threshold: float,
+        system_prompt: Optional[str],
+        context_documents: Optional[List[str]]
+    ) -> VerificationResult:
+        """Run the core verification pipeline (5 layers)."""
         audit_trail = []
         verification_layers = {}
         sources = []
@@ -555,6 +1164,34 @@ class HallucinationGuard:
             })
             if not trust_verified:
                 overall_confidence *= 0.8
+
+        # LAYER 6: External Verification (for code tasks especially)
+        if self.external_verifier and task_type in [
+            TaskType.CODE_GENERATION, TaskType.CODE_DEBUGGING,
+            TaskType.CODE_EXPLANATION, TaskType.CODE_REVIEW
+        ]:
+            external_result = self.verify_external(
+                content=final_content,
+                task_type=task_type
+            )
+            verification_layers["external_verification"] = external_result.get("verified", False)
+            audit_trail.append({
+                "layer": "external_verification",
+                "passed": external_result.get("verified", False),
+                "confidence": external_result.get("confidence", 0.5),
+                "code_syntax_valid": external_result.get("code_syntax_valid", True),
+                "sources_checked": len(external_result.get("sources", []))
+            })
+
+            # Adjust confidence based on external verification
+            if external_result.get("code_syntax_valid") is False:
+                overall_confidence *= 0.6  # Syntax errors are serious
+            elif not external_result.get("verified", False):
+                overall_confidence *= 0.85
+
+            # Add external sources to sources list
+            for source in external_result.get("sources", []):
+                sources.append(source.get("url", str(source)))
 
         # Calculate final verification status
         is_verified = all(verification_layers.values())

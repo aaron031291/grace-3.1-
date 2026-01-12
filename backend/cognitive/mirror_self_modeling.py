@@ -540,6 +540,101 @@ class MirrorSelfModelingSystem:
             ])
         }
 
+    def analyze_recent_operations(self, limit: int = 100) -> Dict[str, Any]:
+        """
+        Analyze recent operations and return improvement opportunities.
+
+        This is the method called by ContinuousLearningOrchestrator to get
+        improvement opportunities that can be proposed as experiments.
+
+        Args:
+            limit: Maximum number of operations to analyze
+
+        Returns:
+            Dictionary with improvement_opportunities list
+        """
+        logger.info(f"[MIRROR] Analyzing recent operations (limit={limit})...")
+
+        # Build self-model which includes patterns and suggestions
+        self_model = self.build_self_model()
+
+        # Convert suggestions to improvement opportunities for sandbox experiments
+        improvement_opportunities = []
+
+        for suggestion in self.improvement_suggestions:
+            # Map suggestion categories to experiment-friendly format
+            category_map = {
+                "failure_resolution": "error",
+                "skill_development": "learning",
+                "optimization": "performance",
+                "mastery_reinforcement": "learning"
+            }
+
+            opportunity = {
+                "name": f"Improve {suggestion.get('topic', 'unknown')}",
+                "description": suggestion.get("reason", ""),
+                "category": category_map.get(suggestion.get("category", ""), "improvement"),
+                "motivation": f"Mirror detected {suggestion.get('evidence_count', 0)} occurrences requiring attention",
+                "confidence": 0.6 if suggestion["priority"] == "high" else 0.4,
+                "priority": suggestion["priority"],
+                "action": suggestion.get("action", "study")
+            }
+            improvement_opportunities.append(opportunity)
+
+        # Also check for proactive improvements even without failures
+        if len(improvement_opportunities) == 0:
+            # Generate seed opportunities based on system capabilities
+            seed_opportunities = self._generate_seed_opportunities()
+            improvement_opportunities.extend(seed_opportunities)
+
+        logger.info(f"[MIRROR] Found {len(improvement_opportunities)} improvement opportunities")
+
+        return {
+            "operations_analyzed": self_model.get("operations_observed", 0),
+            "patterns_detected": len(self.behavioral_patterns),
+            "improvement_opportunities": improvement_opportunities,
+            "self_awareness_score": self_model.get("self_awareness_score", 0.0)
+        }
+
+    def _generate_seed_opportunities(self) -> List[Dict[str, Any]]:
+        """
+        Generate seed improvement opportunities when no patterns are detected.
+
+        This ensures the system has experiments to run even when starting fresh.
+        """
+        seed_opportunities = [
+            {
+                "name": "Optimize Retrieval Quality",
+                "description": "Improve semantic search and document retrieval accuracy",
+                "category": "retrieval",
+                "motivation": "Core capability that benefits all operations",
+                "confidence": 0.5,
+                "priority": "medium",
+                "action": "algorithm_improvement"
+            },
+            {
+                "name": "Enhance Chunking Strategy",
+                "description": "Improve document chunking for better context preservation",
+                "category": "chunking",
+                "motivation": "Better chunks lead to better retrieval and responses",
+                "confidence": 0.5,
+                "priority": "medium",
+                "action": "algorithm_improvement"
+            },
+            {
+                "name": "Improve Learning Retention",
+                "description": "Enhance how knowledge is consolidated and retained over time",
+                "category": "learning",
+                "motivation": "Continuous learning requires effective retention",
+                "confidence": 0.5,
+                "priority": "medium",
+                "action": "learning_enhancement"
+            }
+        ]
+
+        logger.info(f"[MIRROR] Generated {len(seed_opportunities)} seed opportunities for cold start")
+        return seed_opportunities
+
 
 # ======================================================================
 # Global Instance

@@ -40,7 +40,10 @@
       "Bash(if [ -f \"logs/autonomous_learning.log\" ])",
       "Bash(then tail -100 logs/autonomous_learning.log)",
       "Bash(else echo \"Log file not found\")",
-      "Bash(du:*)"
+      "Bash(du:*)",
+      "Bash(git pull:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(bc:*)"
     ]
   }
 }
