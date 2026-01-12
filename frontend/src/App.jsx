@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import ChatTab from "./components/ChatTab";
 import RAGTab from "./components/RAGTab";
@@ -13,10 +13,21 @@ import SandboxTab from "./components/SandboxTab";
 import InsightsTab from "./components/InsightsTab";
 import APITab from "./components/APITab";
 import LibrarianTab from "./components/LibrarianTab";
+import PersistentVoicePanel from "./components/PersistentVoicePanel";
+import GenesisKeyTab from "./components/GenesisKeyTab";
+import LearningTab from "./components/LearningTab";
+import MLIntelligenceTab from "./components/MLIntelligenceTab";
+import WhitelistTab from "./components/WhitelistTab";
+import ExperimentTab from "./components/ExperimentTab";
+import ConnectorsTab from "./components/ConnectorsTab";
+import OrchestrationTab from "./components/OrchestrationTab";
+import TelemetryTab from "./components/TelemetryTab";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
   const [apiHealth, setApiHealth] = useState(null);
+  const [lastVoiceResponse, setLastVoiceResponse] = useState("");
+  const [isVoiceProcessing, setIsVoiceProcessing] = useState(false);
 
   useEffect(() => {
     // Check API health on mount
@@ -33,6 +44,38 @@ function App() {
     } catch (error) {
       console.error("Failed to check API health:", error);
       setApiHealth(null);
+    }
+  };
+
+  // Handle voice messages from PersistentVoicePanel
+  const handleVoiceMessage = async (message) => {
+    setIsVoiceProcessing(true);
+    try {
+      // Send voice message to Grace's chat API
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: message }],
+          temperature: 0.7,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLastVoiceResponse(data.message);
+      } else if (response.status === 404) {
+        setLastVoiceResponse(
+          "I don't have information about that in my knowledge base yet. Please upload relevant documents."
+        );
+      } else {
+        setLastVoiceResponse("Sorry, I encountered an error processing your request.");
+      }
+    } catch (error) {
+      console.error("Voice message error:", error);
+      setLastVoiceResponse("Sorry, I couldn't connect to the server.");
+    } finally {
+      setIsVoiceProcessing(false);
     }
   };
 
@@ -314,6 +357,163 @@ function App() {
               </svg>
               Task Manager
             </button>
+            <button
+              className={`tab-button ${
+                activeTab === "genesis" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("genesis")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              Genesis Keys
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "learning" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("learning")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+              </svg>
+              Learning
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "ml-intelligence" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("ml-intelligence")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+              ML Intelligence
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "whitelist" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("whitelist")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 12l2 2 4-4"></path>
+              </svg>
+              Whitelist
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "experiments" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("experiments")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 3h6v2H9z"></path>
+                <path d="M10 5v4l-4 8h12l-4-8V5"></path>
+                <circle cx="12" cy="15" r="1"></circle>
+              </svg>
+              Experiments
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "connectors" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("connectors")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              Connectors
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "orchestration" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("orchestration")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="5" r="3"></circle>
+                <circle cx="5" cy="19" r="3"></circle>
+                <circle cx="19" cy="19" r="3"></circle>
+                <line x1="12" y1="8" x2="5" y2="16"></line>
+                <line x1="12" y1="8" x2="19" y2="16"></line>
+              </svg>
+              Orchestration
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "telemetry" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("telemetry")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+              Telemetry
+            </button>
           </nav>
         </aside>
 
@@ -332,8 +532,23 @@ function App() {
           {activeTab === "monitoring" && <MonitoringTab />}
           {activeTab === "version-control" && <VersionControl />}
           {activeTab === "notion" && <NotionTab />}
+          {activeTab === "genesis" && <GenesisKeyTab />}
+          {activeTab === "learning" && <LearningTab />}
+          {activeTab === "ml-intelligence" && <MLIntelligenceTab />}
+          {activeTab === "whitelist" && <WhitelistTab />}
+          {activeTab === "experiments" && <ExperimentTab />}
+          {activeTab === "connectors" && <ConnectorsTab />}
+          {activeTab === "orchestration" && <OrchestrationTab />}
+          {activeTab === "telemetry" && <TelemetryTab />}
         </main>
       </div>
+
+      {/* Persistent Voice Panel - Always visible floating button */}
+      <PersistentVoicePanel
+        onSendMessage={handleVoiceMessage}
+        lastResponse={lastVoiceResponse}
+        isProcessing={isVoiceProcessing}
+      />
     </div>
   );
 }
