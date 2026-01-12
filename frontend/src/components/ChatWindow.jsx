@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
+import VoiceButton from "./VoiceButton";
 
 export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
@@ -9,6 +10,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [temperature, setTemperature] = useState(0.7);
   const [showTempControl, setShowTempControl] = useState(false);
   const [expandedSources, setExpandedSources] = useState({});
+  const [lastAssistantMessage, setLastAssistantMessage] = useState("");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -35,6 +37,11 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
       ...prev,
       [key]: !prev[key],
     }));
+  };
+
+  // Handle voice transcript - populate input and optionally auto-submit
+  const handleVoiceTranscript = (transcript) => {
+    setInput(transcript);
   };
 
   const formatDate = (isoString) => {
@@ -266,6 +273,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+      setLastAssistantMessage(result.message); // Track for TTS
 
       // Generate title if this is the first message and chat has no title or has default title
       if (
@@ -507,11 +515,18 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       <form onSubmit={sendMessage} className="message-input-form">
         <div className="input-wrapper">
+          <VoiceButton
+            onTranscript={handleVoiceTranscript}
+            speakText={lastAssistantMessage}
+            disabled={loading}
+            size="medium"
+            showTTSButton={true}
+          />
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
+            placeholder="Type or speak a message..."
             disabled={loading}
             className="message-input"
           />

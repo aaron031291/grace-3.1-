@@ -38,6 +38,8 @@ from api.ingestion_integration import router as ingestion_integration_router  # 
 from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
 from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
 from api.notion import router as notion_router  # Notion task management system
+from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
+from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -419,6 +421,8 @@ app.include_router(ingestion_integration_router)  # Complete autonomous cycle wi
 app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
 app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
 app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
+app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
+app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)

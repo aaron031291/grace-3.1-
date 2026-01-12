@@ -101,6 +101,7 @@ class ContinuousLearningOrchestrator:
 
     def initialize_components(self):
         """Initialize all required components"""
+        print("[CONTINUOUS_LEARNING] Initializing components...", flush=True)
         logger.info("[CONTINUOUS_LEARNING] Initializing components...")
 
         # Get Sandbox Lab
@@ -133,14 +134,12 @@ class ContinuousLearningOrchestrator:
         try:
             from ingestion.service import TextIngestionService
             from embedding.embedder import get_embedding_model
-            from vector_db.client import get_qdrant_client
 
             embedding_model = get_embedding_model()
-            qdrant_client = get_qdrant_client()
             self.ingestion_service = TextIngestionService(
-                embedding_model=embedding_model,
-                qdrant_client=qdrant_client
+                embedding_model=embedding_model
             )
+            print("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized", flush=True)
             logger.info("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized")
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")
@@ -151,6 +150,10 @@ class ContinuousLearningOrchestrator:
         """Start continuous learning orchestration"""
         if self.running:
             logger.warning("[CONTINUOUS_LEARNING] Already running")
+            # Re-initialize components if they're missing
+            if not self.ingestion_service or not self.sandbox_lab:
+                logger.info("[CONTINUOUS_LEARNING] Re-initializing missing components...")
+                self.initialize_components()
             return
 
         logger.info("[CONTINUOUS_LEARNING] Starting continuous learning orchestration...")
@@ -268,8 +271,20 @@ class ContinuousLearningOrchestrator:
 
         try:
             # Check knowledge_base directory for new files
-            knowledge_base = Path("knowledge_base")
-            if not knowledge_base.exists():
+            # Try multiple locations since cwd may vary
+            possible_paths = [
+                Path("knowledge_base"),  # Relative to cwd
+                Path("../knowledge_base"),  # Parent directory
+                Path(__file__).parent.parent.parent / "knowledge_base",  # Project root
+            ]
+
+            knowledge_base = None
+            for path in possible_paths:
+                if path.exists() and path.is_dir():
+                    knowledge_base = path
+                    break
+
+            if not knowledge_base:
                 return
 
             # Scan for files (simplified - would integrate with file manager)
@@ -531,6 +546,14 @@ def get_continuous_orchestrator() -> ContinuousLearningOrchestrator:
 
 def start_continuous_learning():
     """Start continuous learning orchestration"""
+    global _continuous_orchestrator
+
+    # Force re-initialization if components are missing
+    if _continuous_orchestrator and not _continuous_orchestrator.ingestion_service:
+        logger.info("[CONTINUOUS_LEARNING] Forcing re-initialization (components missing)")
+        _continuous_orchestrator.running = False
+        _continuous_orchestrator = None
+
     orchestrator = get_continuous_orchestrator()
     orchestrator.start()
     return orchestrator
