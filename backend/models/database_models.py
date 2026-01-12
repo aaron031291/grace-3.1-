@@ -210,3 +210,125 @@ class DocumentChunk(BaseModel):
     
     def __repr__(self) -> str:
         return f"<DocumentChunk(id={self.id}, document_id={self.document_id}, chunk_index={self.chunk_index})>"
+
+
+# ==================== Governance Models ====================
+
+class GovernanceRule(BaseModel):
+    """Governance rule model for storing operational and behavioral rules."""
+    __tablename__ = "governance_rules"
+
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    pillar_type = Column(String(50), nullable=False, index=True)  # operational, behavioral, immutable
+    severity = Column(Integer, default=5, nullable=False)  # 1-10
+    enabled = Column(Boolean, default=True, nullable=False, index=True)
+    pattern = Column(Text, nullable=True)  # Regex pattern for content matching
+    action = Column(String(50), default="warn", nullable=False)  # warn, block, flag, redact
+    source = Column(String(255), nullable=True)  # e.g., "ISO 27001", "GDPR", "User-defined"
+
+    __table_args__ = (
+        Index("idx_pillar_enabled", "pillar_type", "enabled"),
+        Index("idx_severity", "severity"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<GovernanceRule(id={self.id}, name={self.name}, pillar={self.pillar_type})>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "pillar_type": self.pillar_type,
+            "severity": self.severity,
+            "enabled": self.enabled,
+            "pattern": self.pattern,
+            "action": self.action,
+            "source": self.source,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
+class GovernanceDocument(BaseModel):
+    """Governance document model for uploaded compliance documents."""
+    __tablename__ = "governance_documents"
+
+    filename = Column(String(255), nullable=False)
+    pillar_type = Column(String(50), nullable=False, index=True)
+    status = Column(String(50), default="uploaded", nullable=False)  # uploaded, processing, processed, error
+    file_path = Column(String(512), nullable=True)
+    extracted_rules_count = Column(Integer, default=0)
+    processed_at = Column(DateTime, nullable=True)
+    error_message = Column(Text, nullable=True)
+
+    __table_args__ = (
+        Index("idx_doc_pillar_status", "pillar_type", "status"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<GovernanceDocument(id={self.id}, filename={self.filename}, pillar={self.pillar_type})>"
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "filename": self.filename,
+            "pillar_type": self.pillar_type,
+            "status": self.status,
+            "extracted_rules": self.extracted_rules_count,
+            "uploaded_at": self.created_at.isoformat() if self.created_at else None,
+            "processed_at": self.processed_at.isoformat() if self.processed_at else None,
+        }
+
+
+class GovernanceDecision(BaseModel):
+    """Human-in-the-loop decision model for pending approvals."""
+    __tablename__ = "governance_decisions"
+
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    pillar_type = Column(String(50), nullable=False, index=True)
+    severity = Column(Integer, default=5, nullable=False)
+    status = Column(String(50), default="pending", nullable=False, index=True)  # pending, confirmed, denied, discussing
+    context = Column(JSON, nullable=True)  # JSON context data
+    rule_reference = Column(String(255), nullable=True)  # Related rule name
+    discussion = Column(JSON, nullable=True)  # Array of discussion messages
+    resolution_note = Column(Text, nullable=True)
+    resolved_by = Column(String(255), nullable=True)
+    resolved_at = Column(DateTime, nullable=True)
+
+    # Link to GovernanceEngine approval workflow
+    approval_id = Column(String(64), nullable=True, index=True)  # Links to GovernanceEngine approval
+    action_type = Column(String(100), nullable=True)  # The action that triggered this decision
+    target_resource = Column(String(255), nullable=True)  # Resource affected by the action
+
+    __table_args__ = (
+        Index("idx_decision_status", "status"),
+        Index("idx_decision_pillar", "pillar_type", "status"),
+        Index("idx_decision_severity", "severity"),
+        Index("idx_decision_approval", "approval_id"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<GovernanceDecision(id={self.id}, title={self.title}, status={self.status})>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "pillar_type": self.pillar_type,
+            "severity": self.severity,
+            "status": self.status,
+            "context": self.context,
+            "rule_reference": self.rule_reference,
+            "discussion": self.discussion,
+            "resolution_note": self.resolution_note,
+            "resolved_by": self.resolved_by,
+            "resolved_at": self.resolved_at.isoformat() if self.resolved_at else None,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "approval_id": self.approval_id,
+            "action_type": self.action_type,
+            "target_resource": self.target_resource,
+        }

@@ -44,6 +44,7 @@ from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimen
 from api.notion import router as notion_router  # Notion task management system
 from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
 from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
+from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -442,6 +443,7 @@ app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvem
 app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
 app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
 app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
+app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
@@ -750,6 +752,58 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
         raise HTTPException(
             status_code=500,
             detail=f"Error creating chat: {str(e)}"
+        )
+
+
+@app.get("/chats/folders", tags=["Chat Management"])
+async def list_chat_folders(session = Depends(get_session)):
+    """
+    List all unique folder paths from chats.
+    Returns folder names with chat counts for the folder selector UI.
+    """
+    try:
+        from sqlalchemy import func, distinct
+
+        # Get all unique folder paths and their chat counts
+        results = session.query(
+            Chat.folder_path,
+            func.count(Chat.id).label('chat_count'),
+            func.max(Chat.updated_at).label('last_updated')
+        ).filter(
+            Chat.folder_path != None,
+            Chat.folder_path != ''
+        ).group_by(Chat.folder_path).order_by(func.max(Chat.updated_at).desc()).all()
+
+        folders = []
+        for row in results:
+            folder_path = row.folder_path or row[0]
+            chat_count = row.chat_count if hasattr(row, 'chat_count') else row[1]
+            last_updated = row.last_updated if hasattr(row, 'last_updated') else row[2]
+
+            # Extract folder name from path
+            folder_name = folder_path.split('/')[-1] or folder_path.split('\\')[-1] or folder_path
+
+            folders.append({
+                "path": folder_path,
+                "name": folder_name,
+                "chat_count": chat_count,
+                "last_updated": last_updated.isoformat() if last_updated else None
+            })
+
+        # Also get count of chats with no folder (general chats)
+        general_count = session.query(func.count(Chat.id)).filter(
+            (Chat.folder_path == None) | (Chat.folder_path == '')
+        ).scalar() or 0
+
+        return {
+            "folders": folders,
+            "general_chat_count": general_count,
+            "total_folders": len(folders)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error listing folders: {str(e)}"
         )
 
 
@@ -1131,16 +1185,33 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         
         # ==================== RAG-FIRST RETRIEVAL ====================
         # Retrieve RAG context for the user query - MANDATORY
+        # CONTEXT SCOPING:
+        #   - General chats (no folder_path): Full access to world model + all knowledge
+        #   - Folder chats (has folder_path): Scoped to folder's learning memory only
         rag_context = ""
         sources = []  # Track source chunks
+        is_folder_scoped = bool(chat.folder_path and chat.folder_path.strip())
+
         try:
             retriever = get_document_retriever()
             retrieval_result = retriever.retrieve(
                 query=request.content,
-                limit=5,
+                limit=10 if is_folder_scoped else 5,  # Get more for folder filtering
                 include_metadata=True  # Include metadata for source attribution
             )
-            
+
+            # Apply folder scoping if this is a folder chat
+            if is_folder_scoped and retrieval_result:
+                folder_path = chat.folder_path.replace("\\", "/").strip("/")
+                filtered_chunks = []
+                for chunk in retrieval_result:
+                    file_path = chunk.get("metadata", {}).get("file_path", "")
+                    file_path = file_path.replace("\\", "/") if file_path else ""
+                    # Check if file is within the folder scope
+                    if file_path.startswith(folder_path + "/") or file_path.startswith(folder_path):
+                        filtered_chunks.append(chunk)
+                retrieval_result = filtered_chunks[:5]  # Limit to 5 after filtering
+
             # Check if any relevant data was found
             if retrieval_result:
                 # Build context with metadata enrichment for each chunk
@@ -1151,15 +1222,15 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                     confidence = chunk.get("confidence_score", 0.0)
                     chunk_text = chunk["text"]
                     chunk_index = chunk.get("chunk_index", 0)
-                    
+
                     # Format chunk with metadata for LLM context
                     enriched_chunk = f"""[Source: {filename} | Date: {created_at} | Confidence: {confidence:.1%} | Chunk {chunk_index}]
 {chunk_text}"""
                     context_parts.append(enriched_chunk)
-                
+
                 rag_context = "\n\n".join(context_parts)
                 rag_context = rag_context.strip()
-                
+
                 # Prepare sources for response
                 sources = [
                     {
@@ -1186,23 +1257,47 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             # Delete the user message since we're rejecting the query
             session.delete(user_message)
             session.commit()
-            
+
+            # Context-aware rejection message
+            if is_folder_scoped:
+                detail_msg = f"No relevant information found in folder '{chat.folder_path}'. This chat is scoped to that folder's learning memory. Please upload documents to this folder or use a General Chat for broader queries."
+            else:
+                detail_msg = "I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
+
             raise HTTPException(
                 status_code=404,
-                detail="I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
+                detail=detail_msg
             )
-        
+
         # Get chat history for context
         chat_history = history_repo.get_by_chat(chat_id, skip=0, limit=100)
-        
+
         # Prepare messages for Ollama
         messages = []
-        
-        # Add strict system prompt that enforces knowledge-only responses
-        messages.append({
-            "role": "system",
-            "content": build_rag_system_prompt()
-        })
+
+        # Build context-aware system prompt
+        if is_folder_scoped:
+            # Folder-scoped: Focus on folder-specific knowledge
+            folder_system_prompt = f"""You are Grace, an intelligent assistant with access to the learning memory for the folder: {chat.folder_path}
+
+Your knowledge is SCOPED to this specific folder's documents and learning memory only.
+You can apply your intelligence and reasoning within this context, but you cannot access or reference information from other folders or the general knowledge base.
+
+IMPORTANT CONSTRAINTS:
+- Only use information from the provided context (from folder: {chat.folder_path})
+- If asked about topics outside this folder's scope, acknowledge the limitation
+- Be precise and reference the source documents when possible
+- Apply your full reasoning capabilities within this folder's context"""
+            messages.append({
+                "role": "system",
+                "content": folder_system_prompt
+            })
+        else:
+            # General chat: Full world model access
+            messages.append({
+                "role": "system",
+                "content": build_rag_system_prompt()
+            })
         
         # Add chat history (excluding the latest user message for now)
         for msg in chat_history[:-1]:  # All messages except the last user message

@@ -238,12 +238,19 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         const errorData = await response.json();
         console.log("Knowledge not found (404):", errorData.detail);
 
-        // Add assistant message about self-learning
+        // Context-aware message based on whether this is a folder-scoped chat
+        let notFoundMessage;
+        if (folderPath) {
+          notFoundMessage = `No relevant information found in folder "${folderPath.split(/[/\\]/).pop()}". This chat is scoped to that folder's learning memory. Please upload documents to this folder or switch to a General Chat for broader queries.`;
+        } else {
+          notFoundMessage = "Knowledge not found. Please upload relevant documents to the knowledge base so I can learn and answer your questions better.";
+        }
+
+        // Add assistant message about scope limitation
         const assistantMessage = {
           id: Date.now() + Math.random(),
           role: "assistant",
-          content:
-            "🔄 Knowledge not found, triggering self-learning. Please upload relevant documents to the knowledge base so I can learn and answer your questions better.",
+          content: notFoundMessage,
           tokens: null,
           sources: [],
           isSystemMessage: true, // Mark as system message
@@ -338,8 +345,23 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
       <div className="chat-header">
         <div className="chat-header-top">
           <h2>{chatInfo?.title || "Chat"}</h2>
-          {folderPath && (
-            <span className="folder-context-badge">📁 {folderPath}</span>
+          {folderPath ? (
+            <span className="folder-context-badge" title="This chat is scoped to this folder's learning memory only">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+              </svg>
+              <span className="folder-scope-label">Scoped:</span>
+              <span className="folder-scope-path">{folderPath.split(/[/\\]/).pop()}</span>
+            </span>
+          ) : (
+            <span className="general-context-badge" title="Full access to world model and all knowledge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+              </svg>
+              <span>General</span>
+            </span>
           )}
         </div>
         {chatInfo && (

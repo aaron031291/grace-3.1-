@@ -105,6 +105,49 @@ class RepoQueryResponse(BaseModel):
     access_logged: bool
 
 
+class DebateRequest(BaseModel):
+    """LLM debate request."""
+    topic: str = Field(..., description="Debate topic")
+    positions: List[str] = Field(default=["pro", "con", "neutral"], description="Positions to debate")
+    num_agents: int = Field(default=2, description="Number of agents per position")
+    max_rounds: int = Field(default=3, description="Maximum debate rounds")
+    user_id: Optional[str] = Field(default=None, description="User ID for tracking")
+
+
+class ConsensusRequest(BaseModel):
+    """LLM consensus request."""
+    topic: str = Field(..., description="Topic to reach consensus on")
+    initial_proposals: List[str] = Field(..., description="Initial proposals to consider")
+    num_agents: int = Field(default=5, description="Number of agents")
+    max_iterations: int = Field(default=5, description="Maximum iterations")
+    agreement_threshold: float = Field(default=0.8, description="Required agreement level (0.0-1.0)")
+
+
+class DelegateRequest(BaseModel):
+    """Task delegation request."""
+    task: str = Field(..., description="Task description")
+    task_type: str = Field(default="general", description="Type of task")
+    num_specialists: int = Field(default=3, description="Number of specialist agents")
+    coordinator_reviews: bool = Field(default=True, description="Whether coordinator reviews results")
+
+
+class ReviewRequest(BaseModel):
+    """Peer review request."""
+    content: str = Field(..., description="Content to review")
+    review_aspects: List[str] = Field(default=["accuracy", "clarity", "completeness"], description="Aspects to review")
+    num_reviewers: int = Field(default=3, description="Number of reviewer agents")
+
+
+class FineTuneDatasetRequest(BaseModel):
+    """Fine-tuning dataset request."""
+    task_type: str = Field(..., description="Type of task (code_generation, reasoning, etc.)")
+    dataset_name: str = Field(..., description="Name for dataset")
+    min_trust_score: float = Field(default=0.8, description="Minimum trust score for examples")
+    num_examples: int = Field(default=500, description="Target number of examples")
+    validation_split: float = Field(default=0.2, description="Validation set percentage")
+    user_id: Optional[str] = Field(default=None, description="User ID for tracking")
+
+
 # =======================================================================
 # DEPENDENCY INJECTION
 # =======================================================================
@@ -467,11 +510,7 @@ async def get_cognitive_decisions(
 
 @router.post("/collaborate/debate")
 async def start_llm_debate(
-    topic: str = Body(...),
-    positions: List[str] = Body(default=["pro", "con", "neutral"]),
-    num_agents: int = Body(default=2),
-    max_rounds: int = Body(default=3),
-    user_id: Optional[str] = Body(default=None),
+    request: DebateRequest,
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -497,15 +536,15 @@ async def start_llm_debate(
         )
 
         result = collaboration_hub.start_debate(
-            topic=topic,
-            positions=positions,
-            num_agents=num_agents,
-            max_rounds=max_rounds,
-            user_id=user_id
+            topic=request.topic,
+            positions=request.positions,
+            num_agents=request.num_agents,
+            max_rounds=request.max_rounds,
+            user_id=request.user_id
         )
 
         return {
-            "topic": topic,
+            "topic": request.topic,
             "winning_position": result.winning_position,
             "vote_counts": result.vote_counts,
             "num_arguments": len(result.arguments),
@@ -520,11 +559,7 @@ async def start_llm_debate(
 
 @router.post("/collaborate/consensus")
 async def build_llm_consensus(
-    topic: str = Body(...),
-    initial_proposals: List[str] = Body(...),
-    num_agents: int = Body(default=5),
-    max_iterations: int = Body(default=5),
-    agreement_threshold: float = Body(default=0.8),
+    request: ConsensusRequest,
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -550,15 +585,15 @@ async def build_llm_consensus(
         )
 
         result = collaboration_hub.build_consensus(
-            topic=topic,
-            initial_proposals=initial_proposals,
-            num_agents=num_agents,
-            max_iterations=max_iterations,
-            agreement_threshold=agreement_threshold
+            topic=request.topic,
+            initial_proposals=request.initial_proposals,
+            num_agents=request.num_agents,
+            max_iterations=request.max_iterations,
+            agreement_threshold=request.agreement_threshold
         )
 
         return {
-            "topic": topic,
+            "topic": request.topic,
             "consensus_reached": result.consensus_reached,
             "consensus_content": result.consensus_content,
             "agreement_level": result.agreement_level,
@@ -572,10 +607,7 @@ async def build_llm_consensus(
 
 @router.post("/collaborate/delegate")
 async def delegate_to_specialists(
-    task: str = Body(...),
-    task_type: str = Body(default="general"),
-    num_specialists: int = Body(default=3),
-    coordinator_reviews: bool = Body(default=True),
+    request: DelegateRequest,
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -598,7 +630,7 @@ async def delegate_to_specialists(
             "reasoning": TaskType.REASONING,
             "general": TaskType.GENERAL
         }
-        task_type_enum = task_type_map.get(task_type, TaskType.GENERAL)
+        task_type_enum = task_type_map.get(request.task_type, TaskType.GENERAL)
 
         collaboration_hub = get_collaboration_hub(
             multi_llm_client=orchestrator.multi_llm,
@@ -607,10 +639,10 @@ async def delegate_to_specialists(
         )
 
         result = collaboration_hub.delegate_task(
-            task=task,
+            task=request.task,
             task_type=task_type_enum,
-            num_specialists=num_specialists,
-            coordinator_reviews=coordinator_reviews
+            num_specialists=request.num_specialists,
+            coordinator_reviews=request.coordinator_reviews
         )
 
         return result
@@ -621,9 +653,7 @@ async def delegate_to_specialists(
 
 @router.post("/collaborate/review")
 async def peer_review_content(
-    content: str = Body(...),
-    review_aspects: List[str] = Body(default=["accuracy", "clarity", "completeness"]),
-    num_reviewers: int = Body(default=3),
+    request: ReviewRequest,
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -645,9 +675,9 @@ async def peer_review_content(
         )
 
         result = collaboration_hub.peer_review(
-            content=content,
-            review_aspects=review_aspects,
-            num_reviewers=num_reviewers
+            content=request.content,
+            review_aspects=request.review_aspects,
+            num_reviewers=request.num_reviewers
         )
 
         return result
@@ -662,12 +692,7 @@ async def peer_review_content(
 
 @router.post("/fine-tune/prepare-dataset")
 async def prepare_fine_tuning_dataset(
-    task_type: str = Body(...),
-    dataset_name: str = Body(...),
-    min_trust_score: float = Body(default=0.8),
-    num_examples: int = Body(default=500),
-    validation_split: float = Body(default=0.2),
-    user_id: Optional[str] = Body(default=None),
+    request: FineTuneDatasetRequest,
     orchestrator: LLMOrchestrator = Depends(get_orchestrator)
 ):
     """
@@ -691,12 +716,12 @@ async def prepare_fine_tuning_dataset(
         )
 
         dataset = fine_tuning_system.prepare_dataset(
-            task_type=task_type,
-            dataset_name=dataset_name,
-            min_trust_score=min_trust_score,
-            num_examples=num_examples,
-            validation_split=validation_split,
-            user_id=user_id
+            task_type=request.task_type,
+            dataset_name=request.dataset_name,
+            min_trust_score=request.min_trust_score,
+            num_examples=request.num_examples,
+            validation_split=request.validation_split,
+            user_id=request.user_id
         )
 
         return {
