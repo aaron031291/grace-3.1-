@@ -666,6 +666,85 @@ class AutonomousSandboxLab:
             except Exception as e:
                 logger.error(f"[SANDBOX_LAB] Failed to load {exp_file}: {e}")
 
+    def seed_initial_experiments(self):
+        """
+        Seed the sandbox lab with initial experiments for cold start.
+
+        This ensures there are always experiments running for continuous learning.
+        Only seeds if no experiments exist.
+        """
+        if len(self.experiments) > 0:
+            logger.info(f"[SANDBOX_LAB] Already have {len(self.experiments)} experiments, skipping seed")
+            return
+
+        logger.info("[SANDBOX_LAB] Seeding initial experiments for cold start...")
+
+        seed_experiments = [
+            {
+                "name": "Retrieval Quality Optimization",
+                "description": "Improve semantic search accuracy by optimizing embedding similarity thresholds and re-ranking strategies",
+                "experiment_type": ExperimentType.ALGORITHM_IMPROVEMENT,
+                "motivation": "Core capability that affects all RAG operations",
+                "initial_trust_score": 0.5
+            },
+            {
+                "name": "Adaptive Chunking Strategy",
+                "description": "Implement dynamic chunk sizing based on content type and semantic boundaries",
+                "experiment_type": ExperimentType.ALGORITHM_IMPROVEMENT,
+                "motivation": "Better chunking leads to better context preservation and retrieval",
+                "initial_trust_score": 0.5
+            },
+            {
+                "name": "Learning Retention Enhancement",
+                "description": "Improve knowledge consolidation through spaced repetition and active recall patterns",
+                "experiment_type": ExperimentType.LEARNING_ENHANCEMENT,
+                "motivation": "Continuous learning requires effective long-term retention",
+                "initial_trust_score": 0.5
+            },
+            {
+                "name": "Trust Score Calibration",
+                "description": "Calibrate trust scoring weights based on actual prediction accuracy",
+                "experiment_type": ExperimentType.SELF_MODELING,
+                "motivation": "Accurate trust scores are essential for autonomous decision making",
+                "initial_trust_score": 0.5
+            },
+            {
+                "name": "Response Quality Improvement",
+                "description": "Optimize context assembly and prompt engineering for better response quality",
+                "experiment_type": ExperimentType.PERFORMANCE_OPTIMIZATION,
+                "motivation": "Higher quality responses increase user trust and system value",
+                "initial_trust_score": 0.5
+            }
+        ]
+
+        for seed in seed_experiments:
+            try:
+                exp = self.propose_experiment(
+                    name=seed["name"],
+                    description=seed["description"],
+                    experiment_type=seed["experiment_type"],
+                    motivation=seed["motivation"],
+                    proposed_by="sandbox_lab_seed",
+                    initial_trust_score=seed["initial_trust_score"]
+                )
+
+                # Move to sandbox status immediately (since these are pre-vetted)
+                exp.status = ExperimentStatus.SANDBOX
+                exp.sandbox_started_at = datetime.now()
+                exp.current_trust_score = seed["initial_trust_score"]
+
+                # Add placeholder implementation code
+                exp.implementation_code = f"# Seed experiment: {seed['name']}\n# Implementation pending"
+
+                self._save_experiment(exp)
+
+                logger.info(f"[SANDBOX_LAB] Seeded experiment: {exp.experiment_id} - {exp.name}")
+
+            except Exception as e:
+                logger.error(f"[SANDBOX_LAB] Failed to seed experiment {seed['name']}: {e}")
+
+        logger.info(f"[SANDBOX_LAB] Seeded {len(self.experiments)} initial experiments")
+
     def get_statistics(self) -> Dict[str, Any]:
         """Get lab statistics"""
         experiments = list(self.experiments.values())
@@ -695,4 +774,5 @@ def get_sandbox_lab() -> AutonomousSandboxLab:
     if _sandbox_lab is None:
         _sandbox_lab = AutonomousSandboxLab()
         _sandbox_lab.initialize_ml_intelligence()
+        _sandbox_lab.seed_initial_experiments()
     return _sandbox_lab

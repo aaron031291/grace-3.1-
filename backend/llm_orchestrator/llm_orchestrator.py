@@ -439,7 +439,7 @@ class LLMOrchestrator:
         """Assign Genesis Key to LLM interaction."""
         logger.info(f"[GENESIS KEY] Assigning Genesis Key for task {task_request.task_id}")
 
-        if not self.layer1:
+        if not self.cognitive_layer1:
             return None
 
         # Create metadata for Genesis Key

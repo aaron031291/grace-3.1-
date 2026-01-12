@@ -111,10 +111,12 @@ class ContinuousLearningOrchestrator:
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Sandbox Lab unavailable: {e}")
 
-        # Get Mirror System
+        # Get Mirror System (requires database session)
         try:
             from cognitive.mirror_self_modeling import get_mirror_system
-            self.mirror_system = get_mirror_system()
+            from database.session import SessionLocal
+            session = SessionLocal()
+            self.mirror_system = get_mirror_system(session=session)
             logger.info("[CONTINUOUS_LEARNING] [OK] Mirror System initialized")
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Mirror System unavailable: {e}")
