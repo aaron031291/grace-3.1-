@@ -46,7 +46,17 @@
       "Bash(bc:*)",
       "Bash(# Kill any existing python processes running uvicorn tasklist)",
       "Bash(# Windows - kill python taskkill //F //IM python.exe || true sleep 3 # Start fresh cd /c/Users/aaron/grace_3/backend python -m uvicorn app:app --host 0.0.0.0 --port 8000 2>&1 & sleep 20 echo \"\"=== Backend Health ===\"\" curl -s http://localhost:8000/health echo \"\"\"\" echo \"\"=== Checking initialization logs ===\"\" cat /tmp/grace_backend3.log)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(cmd.exe //c start.bat)",
+      "Bash(cmd.exe //c \"cd /d C:\\\\Users\\\\aaron\\\\grace_3 && start.bat\")",
+      "Bash(cmd.exe //c \"C:\\\\Users\\\\aaron\\\\grace_3\\\\start.bat\")",
+      "Bash(npm install:*)",
+      "Bash(source:*)",
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri http://localhost:8000/health -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri ''http://localhost:8000/api/files/browse?path='' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri ''http://localhost:8000/files/browse?path='' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(powershell.exe:*)",
+      "Bash(ping:*)"
     ]
   }
 }
