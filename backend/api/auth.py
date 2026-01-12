@@ -2,6 +2,7 @@
 Authentication API with Genesis Key integration.
 
 Provides login/session management using Genesis IDs.
+Includes secure session management and security logging.
 """
 from fastapi import APIRouter, HTTPException, Depends, Response, Cookie
 from pydantic import BaseModel, Field
@@ -13,6 +14,11 @@ from database.session import get_session
 from genesis.genesis_key_service import get_genesis_service
 from genesis.kb_integration import get_kb_integration
 from models.genesis_key_models import GenesisKeyType
+
+# Security imports
+from security.config import get_security_config
+from security.auth import get_session_manager
+from security.logging import get_security_logger
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -79,8 +85,14 @@ async def login(
                 user_id=request.existing_genesis_id,
                 session=session
             )
-        except:
-            pass
+        except Exception as e:
+            # Log the failed attempt but continue to create new user
+            security_logger = get_security_logger()
+            security_logger.log_auth_attempt(
+                success=False,
+                username=request.existing_genesis_id[:20] if request.existing_genesis_id else None,
+                reason=f"Failed to resume session: {str(e)}"
+            )
 
     # Create new user if needed
     if not user:
@@ -92,9 +104,21 @@ async def login(
             session=session
         )
 
-    # Generate session ID
-    import uuid
-    session_id = f"SS-{uuid.uuid4().hex[:16]}"
+    # Use secure session manager for cookie handling
+    security_config = get_security_config()
+    session_manager = get_session_manager()
+    security_logger = get_security_logger()
+
+    # Create secure session (sets both genesis_id and session_id cookies)
+    session_id = session_manager.create_session(
+        user_id=user.user_id,
+        response=response,
+        metadata={
+            "username": user.username,
+            "email": user.email,
+            "is_new_user": is_new_user,
+        }
+    )
 
     # Create login Genesis Key
     genesis_service.create_key(
@@ -131,21 +155,11 @@ async def login(
         }
     )
 
-    # Set cookies for Genesis ID and Session ID
-    response.set_cookie(
-        key="genesis_id",
-        value=user.user_id,
-        max_age=365 * 24 * 60 * 60,  # 1 year
-        httponly=True,
-        samesite="lax"
-    )
-
-    response.set_cookie(
-        key="session_id",
-        value=session_id,
-        max_age=24 * 60 * 60,  # 24 hours
-        httponly=True,
-        samesite="lax"
+    # Log the authentication event
+    security_logger.log_auth_attempt(
+        success=True,
+        username=user.username,
+        reason="Login successful"
     )
 
     message = (
@@ -171,6 +185,9 @@ async def logout(
     session: Session = Depends(get_session)
 ):
     """Logout and create logout Genesis Key."""
+    security_logger = get_security_logger()
+    session_manager = get_session_manager()
+
     if genesis_id:
         genesis_service = get_genesis_service(session)
 
@@ -189,11 +206,25 @@ async def logout(
                 session=session
             )
         except Exception as e:
-            print(f"Failed to create logout key: {e}")
+            # Log the error properly instead of just printing
+            security_logger.log_security_event(
+                event_type="LOGOUT_KEY_CREATION_FAILED",
+                details={"error": str(e), "genesis_id": genesis_id[:20] if genesis_id else None}
+            )
 
-    # Clear cookies
-    response.delete_cookie(key="genesis_id")
-    response.delete_cookie(key="session_id")
+    # Invalidate session securely (clears cookies and server-side session)
+    if session_id:
+        session_manager.invalidate_session(session_id, response)
+    else:
+        # Just clear cookies if no session_id
+        response.delete_cookie(key="genesis_id")
+        response.delete_cookie(key="session_id")
+
+    # Log the logout event
+    security_logger.log_security_event(
+        event_type="USER_LOGOUT",
+        details={"genesis_id": genesis_id[:20] if genesis_id else "anonymous"}
+    )
 
     return {"message": "Logged out successfully"}
 
@@ -224,7 +255,13 @@ async def get_session_info(
             last_seen=user.last_seen
         )
     except Exception as e:
-        raise HTTPException(status_code=404, detail=f"User not found: {str(e)}")
+        # Log the error but don't expose internal exception details to client
+        security_logger = get_security_logger()
+        security_logger.log_security_event(
+            event_type="SESSION_LOOKUP_FAILED",
+            details={"error": str(e), "genesis_id": genesis_id[:20] if genesis_id else None}
+        )
+        raise HTTPException(status_code=404, detail="User not found")
 
 
 @router.get("/whoami")
@@ -249,8 +286,14 @@ async def whoami(
             "total_actions": user.total_actions,
             "message": f"You are {user.username}"
         }
-    except:
+    except Exception as e:
+        # Log the error but don't expose internal details
+        security_logger = get_security_logger()
+        security_logger.log_security_event(
+            event_type="WHOAMI_LOOKUP_FAILED",
+            details={"error": str(e), "genesis_id": genesis_id[:20] if genesis_id else None}
+        )
         return {
-            "genesis_id": genesis_id,
+            "genesis_id": genesis_id[:20] if genesis_id else None,  # Truncate for safety
             "message": "Genesis ID found but user profile not loaded"
         }

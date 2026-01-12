@@ -288,26 +288,24 @@ class RAGConnector:
         top_k = message.payload.get("top_k", 5)
         use_trust_weighting = message.payload.get("use_trust_weighting", self.use_trust_aware)
 
-<<<<<<< HEAD
-        # Perform retrieval (DocumentRetriever or TrustAwareDocumentRetriever)
+        # Perform retrieval asynchronously (SCALABILITY) with trust-aware support
+        loop = asyncio.get_event_loop()
         if self.use_trust_aware and use_trust_weighting:
             # Use trust-aware retrieval
-            results = self.retriever.retrieve(
-                query=query,
-                limit=top_k,
-                use_trust_weighting=True
+            results = await loop.run_in_executor(
+                _executor,
+                lambda: self.retriever.retrieve(
+                    query=query,
+                    limit=top_k,
+                    use_trust_weighting=True
+                )
             )
         else:
             # Use standard retrieval
-            results = self.retriever.retrieve(query=query, limit=top_k)
-=======
-        # Perform retrieval asynchronously (SCALABILITY)
-        loop = asyncio.get_event_loop()
-        results = await loop.run_in_executor(
-            _executor,
-            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
-        )
->>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
+            results = await loop.run_in_executor(
+                _executor,
+                lambda: self.retriever.retrieve(query=query, limit=top_k)
+            )
 
         # Send success/failure event
         if results:
@@ -367,16 +365,22 @@ class RAGConnector:
             from_component=ComponentType.RAG
         )
 
-<<<<<<< HEAD
-        # Perform retrieval (enhanced by procedures and optionally trust-aware)
+        # Perform retrieval asynchronously (SCALABILITY) with trust-aware support
+        loop = asyncio.get_event_loop()
         if self.use_trust_aware and use_trust_weighting:
-            results = self.retriever.retrieve(
-                query=query,
-                limit=top_k,
-                use_trust_weighting=True
+            results = await loop.run_in_executor(
+                _executor,
+                lambda: self.retriever.retrieve(
+                    query=query,
+                    limit=top_k,
+                    use_trust_weighting=True
+                )
             )
         else:
-            results = self.retriever.retrieve(query=query, limit=top_k)
+            results = await loop.run_in_executor(
+                _executor,
+                lambda: self.retriever.retrieve(query=query, limit=top_k)
+            )
 
         # Build results with trust information if available
         formatted_results = []
@@ -386,21 +390,13 @@ class RAGConnector:
                 "content": r.get("text", ""),
                 "score": r.get("score", 0.0)
             }
-            
+
             # Add trust information if available
             if self.use_trust_aware:
                 result_item["trust_score"] = r.get("trust_score", r.get("confidence_score", 0.5))
                 result_item["trust_weighted_score"] = r.get("trust_weighted_score", r.get("score", 0.0))
-            
+
             formatted_results.append(result_item)
-=======
-        # Perform retrieval asynchronously (SCALABILITY)
-        loop = asyncio.get_event_loop()
-        results = await loop.run_in_executor(
-            _executor,
-            lambda: self.retriever.retrieve(query_text=query, top_k=top_k)
-        )
->>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
 
         return {
             "results": formatted_results,
@@ -439,14 +435,10 @@ class RAGConnector:
 
 def create_rag_connector(
     retriever: DocumentRetriever,
-<<<<<<< HEAD
     message_bus: Optional[Layer1MessageBus] = None,
     use_trust_aware: bool = False,
     trust_weight: float = 0.3,
     min_trust_threshold: float = 0.3,
-=======
-    message_bus: Optional[Layer1MessageBus] = None
->>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
 ) -> RAGConnector:
     """
     Create and initialize RAG connector.

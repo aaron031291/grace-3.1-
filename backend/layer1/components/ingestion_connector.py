@@ -282,40 +282,33 @@ class IngestionConnector:
         """Handle ingestion status request."""
         document_id = message.payload.get("document_id")
 
-<<<<<<< HEAD
-        # Get status from database
-        from backend.models.database_models import Document
-        # TextIngestionService uses static _get_db_session() method
-        db_session = self.ingestion_service._get_db_session()
-        try:
-            document = db_session.query(Document).filter(
-                Document.id == document_id
-            ).first()
-=======
         def _get_status():
             # Get status from database
-            from backend.models.database_models import Document
-            document = self.ingestion_service.session.query(Document).filter(
-                Document.id == document_id
-            ).first()
-            return document
+            from database.models import Document
+            db_session = self.ingestion_service._get_db_session()
+            try:
+                document = db_session.query(Document).filter(
+                    Document.id == document_id
+                ).first()
+                if not document:
+                    return None
+                return {
+                    "document_id": document.id,
+                    "file_path": document.file_path,
+                    "status": "processed",
+                    "chunks_count": len(document.chunks) if hasattr(document, "chunks") else 0
+                }
+            finally:
+                db_session.close()
 
         # Run database query asynchronously (SCALABILITY)
         loop = asyncio.get_event_loop()
-        document = await loop.run_in_executor(_executor, _get_status)
->>>>>>> 1a058d9d02201c9855b2667292494828ce4d3916
+        result = await loop.run_in_executor(_executor, _get_status)
 
-            if not document:
-                return {"error": f"Document not found: {document_id}"}
+        if not result:
+            return {"error": f"Document not found: {document_id}"}
 
-            return {
-                "document_id": document.id,
-                "file_path": document.file_path,
-                "status": "processed",
-                "chunks_count": len(document.chunks) if hasattr(document, "chunks") else 0
-            }
-        finally:
-            db_session.close()
+        return result
 
 
 def create_ingestion_connector(

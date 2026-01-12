@@ -10,6 +10,10 @@ import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+# Security imports
+from security.config import get_security_config
+from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, RequestValidationMiddleware
+
 from ollama_client.client import get_ollama_client
 from database.session import SessionLocal, get_session, initialize_session_factory
 from database.connection import DatabaseConnection
@@ -390,13 +394,28 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add CORS middleware
+# ==================== Security Middleware ====================
+# Load security configuration
+security_config = get_security_config()
+
+# Add security headers middleware (runs last, so added first)
+app.add_middleware(SecurityHeadersMiddleware)
+
+# Add rate limiting middleware
+app.add_middleware(RateLimitMiddleware, default_limit=security_config.RATE_LIMIT_DEFAULT)
+
+# Add request validation middleware
+app.add_middleware(RequestValidationMiddleware)
+
+# Add CORS middleware with secure configuration
+# IMPORTANT: In production, set CORS_ALLOWED_ORIGINS env var to your specific domains
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (can be restricted to specific domains)
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_origins=security_config.CORS_ALLOWED_ORIGINS,
+    allow_credentials=security_config.CORS_ALLOW_CREDENTIALS,
+    allow_methods=security_config.CORS_ALLOWED_METHODS,
+    allow_headers=security_config.CORS_ALLOWED_HEADERS,
+    max_age=security_config.CORS_MAX_AGE,
 )
 
 # Register API routers
