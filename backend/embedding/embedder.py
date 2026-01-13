@@ -186,7 +186,7 @@ class EmbeddingModel:
         # Reduce batch size on CPU to avoid memory issues
         if self.device == 'cpu':
             batch_size = min(batch_size, 8)  # Cap at 8 for CPU
-        print(f"[EMBEDDING] Generating embeddings for {len(texts)} texts with batch_size={batch_size}...")
+        
         # Generate embeddings with smaller batch size
         embeddings = self.model.encode(
             texts,
@@ -194,7 +194,7 @@ class EmbeddingModel:
             convert_to_numpy=convert_to_numpy,
             convert_to_tensor=convert_to_tensor,
             normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
-            show_progress_bar=True,  # Enable progress bar for API calls
+            show_progress_bar=False,  # Disable progress bar to reduce clutter
 
         )
         
