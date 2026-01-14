@@ -33,9 +33,19 @@ from llm_orchestrator.fine_tuning import (
     FineTuningMethod
 )
 from database.session import get_db
-from embedding.embedder import EmbeddingModel
+from embedding.embedder import EmbeddingModel, get_embedding_model
 
 logger = logging.getLogger(__name__)
+
+# Lazy-loaded embedding model singleton
+_embedding_model: Optional[EmbeddingModel] = None
+
+def get_or_create_embedding_model() -> EmbeddingModel:
+    """Get or create singleton embedding model instance."""
+    global _embedding_model
+    if _embedding_model is None:
+        _embedding_model = get_embedding_model()
+    return _embedding_model
 
 router = APIRouter(prefix="/llm", tags=["LLM Orchestration"])
 
@@ -153,11 +163,16 @@ class FineTuneDatasetRequest(BaseModel):
 # =======================================================================
 
 def get_orchestrator(db: Session = Depends(get_db)) -> LLMOrchestrator:
-    """Get LLM orchestrator instance."""
-    # Note: In production, you'd initialize embedding model here
+    """Get LLM orchestrator instance with embedding model."""
+    try:
+        embedding_model = get_or_create_embedding_model()
+    except Exception as e:
+        logger.warning(f"Failed to initialize embedding model: {e}, proceeding without")
+        embedding_model = None
+
     return get_llm_orchestrator(
         session=db,
-        embedding_model=None,  # TODO: Initialize EmbeddingModel
+        embedding_model=embedding_model,
         knowledge_base_path="backend/knowledge_base"
     )
 
