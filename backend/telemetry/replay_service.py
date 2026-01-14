@@ -74,7 +74,7 @@ class ReplayService:
             )
 
             # Execute replay
-            from backend.telemetry.telemetry_service import get_telemetry_service
+            from telemetry.telemetry_service import get_telemetry_service
             telemetry = get_telemetry_service(session)
 
             with telemetry.track_operation(

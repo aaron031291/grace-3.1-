@@ -18,8 +18,31 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def _validate_identifier(name: str) -> bool:
+    """Validate that a name is a safe SQL identifier (alphanumeric + underscore only)."""
+    import re
+    return bool(re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', name))
+
+
 def safe_create_index(cursor, index_name: str, table: str, columns: str):
-    """Safely create index, ignoring if table doesn't exist"""
+    """Safely create index, ignoring if table doesn't exist.
+
+    Note: SQL identifiers cannot be parameterized, so we validate them instead.
+    All values must match [a-zA-Z_][a-zA-Z0-9_]* pattern.
+    """
+    # Validate identifiers to prevent SQL injection
+    if not _validate_identifier(index_name):
+        logger.error(f"Invalid index name: {index_name}")
+        return False
+    if not _validate_identifier(table):
+        logger.error(f"Invalid table name: {table}")
+        return False
+    # Columns can include DESC, spaces, and commas, so validate each part
+    for col_part in columns.replace(',', ' ').replace('DESC', '').replace('ASC', '').split():
+        if col_part and not _validate_identifier(col_part):
+            logger.error(f"Invalid column name: {col_part}")
+            return False
+
     try:
         cursor.execute(f"""
             CREATE INDEX IF NOT EXISTS {index_name}
@@ -104,6 +127,8 @@ def upgrade(db_path: str = "backend/data/grace.db"):
             "document_chunks", "documents", "genesis_keys"
         ]
         for table in tables_to_analyze:
+            if not _validate_identifier(table):
+                continue
             try:
                 cursor.execute(f"ANALYZE {table}")
             except sqlite3.OperationalError:
@@ -152,6 +177,8 @@ def downgrade(db_path: str = "backend/data/grace.db"):
         ]
 
         for idx in indexes:
+            if not _validate_identifier(idx):
+                continue
             try:
                 cursor.execute(f"DROP INDEX IF EXISTS {idx}")
                 logger.info(f"Dropped {idx}")

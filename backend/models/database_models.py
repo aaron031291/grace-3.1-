@@ -45,7 +45,7 @@ class Message(BaseModel):
     """Message model for storing individual messages in conversations."""
     __tablename__ = "messages"
     
-    conversation_id = Column(String, ForeignKey("conversations.id"), nullable=False, index=True)
+    conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=False, index=True)
     role = Column(String(50), nullable=False)  # "user", "assistant", "system"
     content = Column(Text, nullable=False)
     tokens = Column(String, nullable=True)  # JSON array of token IDs
@@ -67,7 +67,7 @@ class Embedding(BaseModel):
     
     text = Column(Text, nullable=False)
     embedding = Column(Text, nullable=False)  # Store as JSON array string
-    dimension = Column(String, nullable=False, default=384)
+    dimension = Column(Integer, nullable=False, default=384)
     model = Column(String(255), nullable=False, default="qwen_4b")
     source = Column(String(255), nullable=True)  # Source of the embedding (e.g., "document_id", "message_id")
     

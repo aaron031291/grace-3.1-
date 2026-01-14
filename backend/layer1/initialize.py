@@ -363,7 +363,7 @@ def get_layer1_stats() -> Dict[str, Any]:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    from backend.database.session import get_db
+    from database.session import get_db
 
     # Initialize system
     session = next(get_db())

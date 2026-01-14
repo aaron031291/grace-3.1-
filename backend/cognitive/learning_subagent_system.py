@@ -592,6 +592,9 @@ class LearningOrchestrator:
         self.total_tasks_submitted = 0
         self.total_tasks_completed = 0
 
+        # Shutdown flag for result collector (shared across processes)
+        self._collector_running = Value('b', True)
+
         logger.info(
             f"[ORCHESTRATOR] Initialized with {num_study_agents} study agents, "
             f"{num_practice_agents} practice agents, 1 mirror agent"
@@ -619,8 +622,11 @@ class LearningOrchestrator:
         logger.info("[ORCHESTRATOR] All subagents started")
 
     def stop(self):
-        """Stop all subagents."""
+        """Stop all subagents gracefully."""
         logger.info("[ORCHESTRATOR] Stopping all subagents...")
+
+        # Signal result collector to stop
+        self._collector_running.value = False
 
         for agent in self.study_agents:
             agent.stop()
@@ -630,8 +636,19 @@ class LearningOrchestrator:
 
         self.mirror_agent.stop()
 
-        if self.result_collector:
-            self.result_collector.terminate()
+        # Wait for result collector to stop gracefully
+        if self.result_collector and self.result_collector.is_alive():
+            self.result_collector.join(timeout=10)
+            if self.result_collector.is_alive():
+                logger.warning("[ORCHESTRATOR] Force terminating result collector")
+                self.result_collector.terminate()
+                self.result_collector.join(timeout=2)
+
+        # Cleanup manager resources
+        try:
+            self.manager.shutdown()
+        except Exception as e:
+            logger.debug(f"[ORCHESTRATOR] Manager shutdown: {e}")
 
         logger.info("[ORCHESTRATOR] All subagents stopped")
 
@@ -681,10 +698,14 @@ class LearningOrchestrator:
         """Collect results from all subagents (runs in separate process)."""
         logger.info("[RESULT-COLLECTOR] Started")
 
-        while True:
+        while self._collector_running.value:
             try:
                 msg_dict = self.result_queue.get(timeout=5)
                 msg = Message.from_dict(msg_dict)
+
+                if msg.msg_type == MessageType.SHUTDOWN:
+                    logger.info("[RESULT-COLLECTOR] Shutdown signal received")
+                    break
 
                 if msg.msg_type == MessageType.RESULT:
                     task = LearningTask.from_dict(msg.data)
@@ -719,6 +740,8 @@ class LearningOrchestrator:
                 continue
             except Exception as e:
                 logger.error(f"[RESULT-COLLECTOR] Error: {e}")
+
+        logger.info("[RESULT-COLLECTOR] Stopped")
 
     def get_status(self) -> Dict[str, Any]:
         """Get orchestrator status."""

@@ -347,7 +347,7 @@ class MemoryMeshConnector:
         genesis_key_id = message.payload.get("genesis_key_id")
 
         # Query learning examples by Genesis Key
-        from backend.models.database_models import LearningExample
+        from models.database_models import LearningExample
         learning = self.memory_mesh.session.query(LearningExample).filter(
             LearningExample.genesis_key_id == genesis_key_id
         ).all()
@@ -371,7 +371,7 @@ class MemoryMeshConnector:
         min_trust = message.payload.get("min_trust_score", 0.8)
 
         # Get procedures from memory mesh
-        from backend.models.database_models import Procedure
+        from models.database_models import Procedure
         procedures = self.memory_mesh.session.query(Procedure).filter(
             Procedure.success_rate >= min_trust
         ).all()
@@ -477,7 +477,7 @@ class MemoryMeshConnector:
         )
 
         # Get the created learning example
-        from backend.models.database_models import LearningExample
+        from models.database_models import LearningExample
         learning = self.memory_mesh.session.query(LearningExample).get(learning_id)
 
         if not learning:

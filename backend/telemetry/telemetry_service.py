@@ -382,8 +382,8 @@ class TelemetryService:
 
         try:
             # Import here to avoid circular dependencies
-            from backend.vector_db.client import get_qdrant_client
-            from backend.models.database_models import Document, DocumentChunk, Chat, ChatHistory
+            from vector_db.client import get_qdrant_client
+            from models.database_models import Document, DocumentChunk, Chat, ChatHistory
 
             # Check LLM health - prefer orchestrator over direct Ollama
             ollama_running = False
@@ -400,7 +400,7 @@ class TelemetryService:
             # Fallback to direct Ollama check
             if not ollama_running:
                 try:
-                    from backend.ollama_client.client import check_ollama_running
+                    from ollama_client.client import check_ollama_running
                     ollama_running = check_ollama_running()
                     if ollama_running:
                         logger.debug("[TELEMETRY] LLM health via direct client: OK")
