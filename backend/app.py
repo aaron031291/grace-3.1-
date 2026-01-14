@@ -55,6 +55,7 @@ from api.monitoring_api import router as monitoring_router  # System Monitoring 
 from api.streaming import router as streaming_router  # SSE Streaming chat responses
 from api.websocket import router as websocket_router  # WebSocket real-time updates
 from api.health import router as health_router  # Comprehensive health checks
+from api.metrics import router as metrics_router  # Prometheus metrics endpoint
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -464,6 +465,7 @@ app.include_router(monitoring_router)  # System Monitoring - organs of grace, he
 app.include_router(streaming_router)  # SSE Streaming - real-time chat response streaming
 app.include_router(websocket_router)  # WebSocket - real-time bidirectional updates
 app.include_router(health_router)  # Comprehensive health checks for all services
+app.include_router(metrics_router)  # Prometheus metrics - /metrics endpoint
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
