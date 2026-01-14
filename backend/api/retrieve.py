@@ -58,7 +58,7 @@ def get_document_retriever() -> DocumentRetriever:
 
 def get_cognitive_retriever() -> CognitiveRetriever:
     """Get or create cognitive retriever instance."""
-    global _cognitive_retriever, _retriever
+    global _cognitive_retriever
 
     if _cognitive_retriever is None:
         try:

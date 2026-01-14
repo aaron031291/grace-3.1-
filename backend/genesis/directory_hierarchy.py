@@ -401,7 +401,7 @@ Genesis Key: {dir_info['genesis_key']}
             )
 
             return {
-                "version_key": key.key_id,
+                "version_key": version_key.key_id,
                 "version_number": version_number,
                 "directory_genesis_key": dir_key,
                 "file_path": file_path,
