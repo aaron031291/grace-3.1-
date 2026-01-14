@@ -34,9 +34,9 @@ class Conversation(BaseModel):
     messages = relationship("Message", back_populates="conversation", cascade="all, delete-orphan")
     
     __table_args__ = (
-        Index("idx_created", "created_at"),
+        Index("idx_conversations_created", "created_at"),
     )
-    
+
     def __repr__(self) -> str:
         return f"<Conversation(id={self.id}, title={self.title})>"
 
@@ -95,10 +95,10 @@ class Chat(BaseModel):
     chat_history = relationship("ChatHistory", back_populates="chat", cascade="all, delete-orphan")
     
     __table_args__ = (
-        Index("idx_created", "created_at"),
-        Index("idx_active", "is_active"),
-        Index("idx_updated", "updated_at"),
-        Index("idx_folder_path", "folder_path"),
+        Index("idx_chats_created", "created_at"),
+        Index("idx_chats_active", "is_active"),
+        Index("idx_chats_updated", "updated_at"),
+        Index("idx_chats_folder_path", "folder_path"),
     )
     
     def __repr__(self) -> str:

@@ -487,6 +487,63 @@ def client(app, request):
             reason="App not available for test client"
         )
         pytest.skip("Full app dependencies not available")
+
+    # Initialize database for test environment before creating test client
+    try:
+        from database.connection import DatabaseConnection
+        from database.config import DatabaseConfig, DatabaseType
+        from database.session import initialize_session_factory
+        from database.base import Base
+        import os
+        import time
+
+        # Always create a fresh database for tests using unique timestamp
+        import tempfile
+        temp_dir = tempfile.gettempdir()
+        timestamp = int(time.time() * 1000)
+        temp_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
+
+        # Clean up any stale test DBs from previous runs
+        for f in os.listdir(temp_dir):
+            if f.startswith("grace_test_") and f.endswith(".db"):
+                try:
+                    old_path = os.path.join(temp_dir, f)
+                    os.unlink(old_path)
+                except (OSError, PermissionError):
+                    pass  # Ignore if can't delete
+
+        # Reset singleton to force fresh initialization
+        DatabaseConnection._engine = None
+        DatabaseConnection._config = None
+
+        test_config = DatabaseConfig(
+            db_type=DatabaseType.SQLITE,
+            database_path=temp_db_path,
+            echo=False,
+        )
+        DatabaseConnection.initialize(test_config)
+
+        # Initialize session factory
+        initialize_session_factory()
+
+        # Import all models to register them with Base before create_all
+        try:
+            from models import database_models  # Core models like GovernanceRule
+            from models import genesis_key_models  # GenesisKey, UserProfile, etc.
+        except ImportError as e:
+            import logging
+            logging.warning(f"Could not import all models: {e}")
+
+        # Create all tables
+        Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+
+    except Exception as e:
+        # Log but continue - some tests may not need DB
+        import logging
+        logging.warning(f"Could not initialize test database: {e}")
+        import traceback
+        traceback.print_exc()
+
     from fastapi.testclient import TestClient
     return TestClient(app)
 
@@ -498,7 +555,7 @@ def test_db(request):
         from sqlalchemy import create_engine
         from sqlalchemy.orm import sessionmaker
         from sqlalchemy.pool import StaticPool
-        from models.database_models import Base
+        from database.base import Base
 
         # Create in-memory SQLite database
         engine = create_engine(
