@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-**Overall Completion: ~70-72%** (Revised - frontend wiring issues found)
+**Overall Completion: ~65-68%** (Revised - frontend wiring + backend registration issues found)
 
 Grace 3.1 is an **ambitious autonomous AI assistant system** with significant implementation maturity. The codebase demonstrates a sophisticated architecture combining RAG, neuro-symbolic AI, autonomous learning, and governance frameworks.
 
@@ -211,20 +211,37 @@ Grace 3.1 is an **ambitious autonomous AI assistant system** with significant im
 | **WhitelistTab** | ❌ BROKEN - calls `/api/layer1/...` (404) |
 | **MonitoringTab** | ❌ STATIC - hardcoded data, no API calls |
 
-**Root Cause**: `vite.config.js` has no proxy configuration. 53 API calls will fail.
+**Root Cause #1**: `vite.config.js` has no proxy configuration. 53 API calls will fail.
 
-**Fix Required**: Add proxy to `vite.config.js`:
-```javascript
-server: {
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8000',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, '')
-    }
-  }
-}
+**Root Cause #2**: **5 Backend API modules are NOT REGISTERED in app.py** (61 endpoints inaccessible!):
+
+| Unregistered API | Endpoints | Frontend Tabs Affected |
+|------------------|-----------|------------------------|
+| `knowledge_base_api` | 14 | ConnectorsTab |
+| `kpi_api` | 12 | KPIDashboard |
+| `proactive_learning` | 7 | LearningTab |
+| `repositories_api` | 15 | RepositoryManager |
+| `telemetry` | 13 | TelemetryTab |
+
+**These frontend components will get 404 even with correct URL** because the backend routes don't exist!
+
+**Fix Required**:
+1. Add missing routers to `app.py`:
+```python
+from api.knowledge_base_api import router as knowledge_base_router
+from api.kpi_api import router as kpi_router
+from api.proactive_learning import router as proactive_learning_router
+from api.repositories_api import router as repositories_router
+from api.telemetry import router as telemetry_router
+
+app.include_router(knowledge_base_router)
+app.include_router(kpi_router)
+app.include_router(proactive_learning_router)
+app.include_router(repositories_router)
+app.include_router(telemetry_router)
 ```
+
+2. Add Vite proxy configuration (or fix 53 `/api/` prefixed calls)
 
 ---
 
@@ -274,14 +291,20 @@ Found **63 instances** of `pass` statements or `NotImplementedError`:
 ## What Remains for Production-Readiness
 
 ### High Priority
-1. **Frontend API Wiring** — Fix 8 broken tabs (53 API calls use wrong `/api/` prefix):
+1. **Backend API Registration** — Register 5 missing API modules in `app.py`:
+   - `knowledge_base_api` (14 endpoints) - affects ConnectorsTab
+   - `kpi_api` (12 endpoints) - affects KPIDashboard
+   - `proactive_learning` (7 endpoints) - affects LearningTab
+   - `repositories_api` (15 endpoints) - affects RepositoryManager
+   - `telemetry` (13 endpoints) - affects TelemetryTab
+2. **Frontend API Wiring** — Fix 8 tabs using wrong `/api/` prefix (53 API calls):
    - Option A: Add Vite proxy configuration
    - Option B: Update all `/api/...` calls to `http://localhost:8000/...`
    - Affected: CodeBaseTab, ConnectorsTab, ExperimentTab, GenesisKeyTab, LearningTab, MLIntelligenceTab, OrchestrationTab, WhitelistTab
-2. **MonitoringTab** — Currently shows hardcoded static data, needs API integration
-3. **Test Coverage** — Add comprehensive API tests, increase from 215 to ~500+ tests
-4. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
-5. **Authentication** — Genesis Key auth exists but needs hardening
+3. **MonitoringTab** — Currently shows hardcoded static data, needs API integration
+4. **Test Coverage** — Add comprehensive API tests, increase from 215 to ~500+ tests
+5. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
+6. **Authentication** — Genesis Key auth exists but needs hardening
 
 ### Medium Priority
 5. **E2E Testing** — Add Playwright/Cypress for frontend
@@ -309,28 +332,32 @@ Governance           ███████████████░░░░�
 Librarian            ████████████████░░░░░ 80%
 Voice API            █████████████████░░░░ 85%
 Agent Framework      ███████████████░░░░░░ 75%
-Frontend UI          ████████████░░░░░░░░░ 60%  ← REVISED (8 broken tabs)
+Backend API Reg.     ████████████████░░░░░ 80%  ← 5 APIs NOT registered (61 endpoints)
+Frontend UI          ██████████░░░░░░░░░░░ 50%  ← REVISED (13 broken tabs total)
 Test Coverage        ███████████░░░░░░░░░░ 55%
 ──────────────────────────────────────────────
-OVERALL              ██████████████░░░░░░░ ~72%
+OVERALL              █████████████░░░░░░░░ ~67%
 ```
 
 ---
 
 ## Verdict
 
-**Grace 3.1 is approximately 70-72% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational. However, **8 frontend tabs are broken** due to missing Vite proxy configuration.
+**Grace 3.1 is approximately 65-68% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational. However, there are **critical wiring issues**:
 
-### Critical Fix Required
-Add Vite proxy configuration or update 53 API calls in 8 frontend components.
+### Critical Fixes Required
+1. **Register 5 missing backend API modules** in `app.py` (61 endpoints inaccessible)
+2. **Fix frontend API paths** - Add Vite proxy or update 53 `/api/...` calls
+3. **Wire MonitoringTab** to actual backend (currently hardcoded)
 
-### To reach MVP (minimum viable product): ~3-5 weeks of focused work
-### To reach production-ready: ~8-10 weeks with comprehensive testing
+### To reach MVP (minimum viable product): ~4-6 weeks of focused work
+### To reach production-ready: ~10-12 weeks with comprehensive testing
 
 The codebase shows evidence of **sophisticated architectural thinking** and **incremental development**. The 53 commits and 104K LOC represent significant engineering effort. The main gaps are:
-1. Frontend API wiring (8 broken tabs, 53 wrong API paths)
-2. Test coverage (215 tests, needs ~500+)
-3. Stub implementations (63 incomplete blocks)
+1. **Backend API registration** (5 modules with 61 endpoints NOT in app.py)
+2. **Frontend API wiring** (8 tabs with wrong paths + 5 tabs calling unregistered APIs)
+3. **Test coverage** (215 tests, needs ~500+)
+4. **Stub implementations** (63 incomplete blocks)
 
 ---
 
