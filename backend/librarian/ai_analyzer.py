@@ -543,17 +543,16 @@ Respond in JSON:
                     "raw_response": response
                 }
 
-        except Exception as e:
-            logger.error(f"Failed to compare documents: {e}")
-
-        return {
-            "document_1_id": doc_id_1,
-            "document_2_id": doc_id_2,
-            "similarity_score": 0.0,
-            "relationship_type": "unknown",
-            "explanation": "Analysis failed",
-            "error": str(e) if 'e' in locals() else "Unknown error"
-        }
+        except Exception as exc:
+            logger.error(f"Failed to compare documents: {exc}")
+            return {
+                "document_1_id": doc_id_1,
+                "document_2_id": doc_id_2,
+                "similarity_score": 0.0,
+                "relationship_type": "unknown",
+                "explanation": "Analysis failed",
+                "error": str(exc)
+            }
 
     def is_available(self) -> bool:
         """

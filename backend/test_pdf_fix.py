@@ -29,7 +29,7 @@ def test_text_cleaning():
     
     cleaned = FileHandler._clean_text(test_text)
     print(f"Cleaned text: {repr(cleaned)}")
-    print(f"Result: {'✓ PASS' if 'encoding' in cleaned and len(cleaned) < len(test_text) else '✗ FAIL'}")
+    print(f"Result: {'PASS' if 'encoding' in cleaned and len(cleaned) < len(test_text) else 'FAIL'}")
     
     # Test case 2: Text with control characters
     test_text2 = "Normal text\x00\x01\x02with control chars\x03\x04"
@@ -37,7 +37,8 @@ def test_text_cleaning():
     
     cleaned2 = FileHandler._clean_text(test_text2)
     print(f"Cleaned text: {repr(cleaned2)}")
-    print(f"Result: {'✓ PASS' if 'Normal' in cleaned2 and '\x00' not in cleaned2 else '✗ FAIL'}")
+    null_char = '\x00'
+    print(f"Result: {'PASS' if 'Normal' in cleaned2 and null_char not in cleaned2 else 'FAIL'}")
     
     # Test case 3: Text with smart quotes
     test_text3 = 'He said \x93hello\x94 with \x92quotes\x92 and em\x97dashes'
@@ -45,7 +46,8 @@ def test_text_cleaning():
     
     cleaned3 = FileHandler._clean_text(test_text3)
     print(f"Cleaned text: {repr(cleaned3)}")
-    print(f"Result: {'✓ PASS' if 'hello' in cleaned3 and '"' in cleaned3 else '✗ FAIL'}")
+    quote_char = '"'
+    print(f"Result: {'PASS' if 'hello' in cleaned3 and quote_char in cleaned3 else 'FAIL'}")
 
 def test_text_validation():
     """Test the text validation functionality."""
@@ -58,20 +60,20 @@ def test_text_validation():
     is_valid = FileHandler._is_valid_text(valid_text)
     print(f"\nValid text: {is_valid}")
     print(f"Text: '{valid_text[:50]}...'")
-    print(f"Result: {'✓ PASS' if is_valid else '✗ FAIL'}")
+    print(f"Result: {'PASS' if is_valid else 'FAIL'}")
     
     # Test case 2: Mostly garbage encoding artifacts
     garbage_text = "\x80ëL\x93NÎº\x82l\x1e\x87ý\x14²\x1fz[\x9d\x87=\x08\x84:¡`\x8eç" * 5
     is_invalid = not FileHandler._is_valid_text(garbage_text)
     print(f"\nGarbage text should be invalid: {is_invalid}")
     print(f"Text: {repr(garbage_text[:50])}...")
-    print(f"Result: {'✓ PASS' if is_invalid else '✗ FAIL'}")
+    print(f"Result: {'PASS' if is_invalid else 'FAIL'}")
     
     # Test case 3: Mixed but mostly valid text
     mixed_text = "This is mostly valid text " * 10 + "\x80\x93\x94" * 2
     is_valid_mixed = FileHandler._is_valid_text(mixed_text)
     print(f"\nMixed text (70%+ valid) should be valid: {is_valid_mixed}")
-    print(f"Result: {'✓ PASS' if is_valid_mixed else '✗ FAIL'}")
+    print(f"Result: {'PASS' if is_valid_mixed else 'FAIL'}")
 
 def test_pdf_extraction_if_available():
     """Test PDF extraction with actual PDF if available."""
