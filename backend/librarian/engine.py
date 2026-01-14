@@ -3,10 +3,16 @@ LibrarianEngine - Central Orchestrator
 
 Coordinates all librarian components to provide comprehensive file management:
 - Rule-based categorization
-- AI content analysis
+- AI content analysis (via LLM Orchestrator)
 - Tag management
 - Relationship detection
 - Approval workflow
+
+FULLY INTEGRATED with:
+- LLM Orchestrator for AI operations
+- Cognitive Framework (OODA Loop + 12 Invariants)
+- Genesis Key tracking
+- Layer 1 Message Bus
 
 This is the main entry point for the librarian system.
 """
@@ -29,21 +35,30 @@ class LibrarianEngine:
     """
     Central orchestrator for the Grace Librarian System.
 
+    NOW FULLY INTEGRATED with LLM Orchestrator for all AI operations.
+
     Coordinates all librarian components to automatically organize, categorize,
     and index documents. Handles the complete processing pipeline:
 
     1. Rule-based categorization (fast pattern matching)
-    2. AI content analysis (for ambiguous cases)
+    2. AI content analysis (via LLM Orchestrator with full cognitive pipeline)
     3. Tag assignment (with confidence tracking)
     4. Relationship detection (citations, versions, similarity)
     5. Approval workflow (for sensitive operations)
+
+    All AI operations include:
+    - OODA Loop enforcement
+    - 12 Invariants validation
+    - Genesis Key tracking
+    - Hallucination mitigation
+    - Learning Memory integration
 
     Example:
         >>> from database.session import initialize_session_factory
         >>> from database.config import DatabaseConfig
         >>> from database.connection import DatabaseConnection
         >>> from embedding import get_embedding_model
-        >>> from ollama_client.client import get_ollama_client
+        >>> from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
         >>> from vector_db.client import get_qdrant_client
         >>>
         >>> # Initialize
@@ -52,11 +67,11 @@ class LibrarianEngine:
         >>> SessionLocal = initialize_session_factory()
         >>> db = SessionLocal()
         >>>
-        >>> # Create engine
+        >>> # Create engine with LLM Orchestrator (preferred)
         >>> librarian = LibrarianEngine(
         ...     db_session=db,
         ...     embedding_model=get_embedding_model(),
-        ...     ollama_client=get_ollama_client(),
+        ...     llm_orchestrator=get_llm_orchestrator(session=db),
         ...     vector_db_client=get_qdrant_client()
         ... )
         >>>
@@ -64,13 +79,15 @@ class LibrarianEngine:
         >>> result = librarian.process_document(document_id=123)
         >>> print(f"Tags: {result['tags_assigned']}")
         >>> print(f"Relationships: {result['relationships_detected']}")
+        >>> print(f"Genesis Key: {result.get('genesis_key_id')}")
     """
 
     def __init__(
         self,
         db_session: Session,
         embedding_model=None,
-        ollama_client=None,
+        ollama_client=None,  # [DEPRECATED] Use llm_orchestrator instead
+        llm_orchestrator=None,
         vector_db_client=None,
         ai_model_name: str = "mistral:7b",
         use_ai: bool = True,
@@ -84,7 +101,8 @@ class LibrarianEngine:
         Args:
             db_session: SQLAlchemy database session
             embedding_model: Embedding model for similarity
-            ollama_client: Ollama client for AI analysis
+            ollama_client: [DEPRECATED] Legacy Ollama client (use llm_orchestrator instead)
+            llm_orchestrator: LLM Orchestrator instance (preferred)
             vector_db_client: Qdrant vector DB client
             ai_model_name: LLM model name (default: "mistral:7b")
             use_ai: Enable AI content analysis (default: True)
@@ -105,20 +123,39 @@ class LibrarianEngine:
         self.rule_categorizer = RuleBasedCategorizer(db_session)
         self.approval_workflow = ApprovalWorkflow(db_session)
 
-        # Optional AI analyzer
+        # Store orchestrator reference
+        self._llm_orchestrator = llm_orchestrator
+
+        # Try to get orchestrator if not provided
+        if self._llm_orchestrator is None and use_ai:
+            try:
+                from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+                self._llm_orchestrator = get_llm_orchestrator(
+                    session=db_session,
+                    embedding_model=embedding_model,
+                    knowledge_base_path="knowledge_base"
+                )
+                logger.info("[LIBRARIAN] ✓ Connected to LLM Orchestrator")
+            except Exception as e:
+                logger.warning(f"[LIBRARIAN] Could not connect to LLM Orchestrator: {e}")
+
+        # Optional AI analyzer (now uses orchestrator)
         self.ai_analyzer = None
-        if use_ai and ollama_client:
+        if use_ai:
             try:
                 self.ai_analyzer = AIContentAnalyzer(
                     db_session,
-                    ollama_client,
+                    ollama_client=ollama_client,  # Legacy fallback
+                    llm_orchestrator=self._llm_orchestrator,  # Preferred
                     model_name=ai_model_name
                 )
                 if not self.ai_analyzer.is_available():
-                    logger.warning("AI analyzer created but not available (Ollama not running or model not found)")
+                    logger.warning("[LIBRARIAN] AI analyzer created but not available")
                     self.ai_analyzer = None
+                else:
+                    logger.info("[LIBRARIAN] ✓ AI analyzer ready (via LLM Orchestrator)")
             except Exception as e:
-                logger.warning(f"Failed to initialize AI analyzer: {e}")
+                logger.warning(f"[LIBRARIAN] Failed to initialize AI analyzer: {e}")
                 self.ai_analyzer = None
 
         # Optional relationship manager
@@ -130,7 +167,7 @@ class LibrarianEngine:
                 vector_db_client
             )
 
-        logger.info(f"LibrarianEngine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None})")
+        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None})")
 
     def process_document(
         self,
