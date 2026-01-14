@@ -269,7 +269,7 @@ class GenesisKeysConnector:
 
         def _get_key():
             # Get Genesis Key from database
-            from backend.models.database_models import GenesisKey
+            from models.genesis_key_models import GenesisKey
             genesis_key = self.session.query(GenesisKey).filter(
                 GenesisKey.genesis_key_id == genesis_key_id
             ).first()
@@ -295,7 +295,7 @@ class GenesisKeysConnector:
 
         def _get_contributions():
             # Get user's Genesis Keys
-            from backend.models.database_models import GenesisKey
+            from models.genesis_key_models import GenesisKey
             keys = self.session.query(GenesisKey).filter(
                 GenesisKey.metadata.contains(f'"user_id": "{user_id}"')
             ).all()
@@ -365,7 +365,7 @@ class GenesisKeysConnector:
         genesis_key_id = f"GK-{key_type}-{entity_type}-{timestamp}-{key_hash}"
 
         # Save to database
-        from backend.models.database_models import GenesisKey
+        from models.genesis_key_models import GenesisKey
         genesis_key = GenesisKey(
             genesis_key_id=genesis_key_id,
             key_type=key_type,
