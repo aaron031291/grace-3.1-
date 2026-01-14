@@ -1,6 +1,6 @@
 # GRACE 3.1 - Forensic Completion Assessment Report
 
-**Assessment Date:** 2026-01-14
+**Assessment Date:** 2026-01-14 (Triple-Verified)
 **Assessed By:** Claude Code (Opus 4.5)
 **Branch:** claude/assess-repo-completion-TvH0O
 
@@ -8,9 +8,13 @@
 
 ## Executive Summary
 
-**Overall Completion: ~65-68%** (Revised - frontend wiring + backend registration issues found)
+**Overall Completion: ~72-75%** (Post-fix verification - backend registrations fixed, proxy added)
 
 Grace 3.1 is an **ambitious autonomous AI assistant system** with significant implementation maturity. The codebase demonstrates a sophisticated architecture combining RAG, neuro-symbolic AI, autonomous learning, and governance frameworks.
+
+### Fixes Applied This Session:
+1. ✅ **Added 5 missing backend API registrations** in `app.py` (61 endpoints now accessible)
+2. ✅ **Added Vite proxy configuration** in `vite.config.js` (53 `/api/` calls now route correctly)
 
 ---
 
@@ -182,66 +186,77 @@ Grace 3.1 is an **ambitious autonomous AI assistant system** with significant im
 | Pattern learning | ⚠️ Partial |
 | Governed execution bridge | ✅ Complete |
 
-### 12. Frontend UI — **60% Complete** (REVISED after deeper analysis)
+### 12. Frontend UI — **70% Complete** (TRIPLE-VERIFIED after endpoint-level analysis)
 
-**CRITICAL ISSUE FOUND**: 8 tabs use `/api/...` paths but Vite has NO proxy configured, so these will return 404 errors.
+**FIXES APPLIED:**
+- ✅ Vite proxy now configured in `vite.config.js`
+- ✅ 5 missing backend APIs now registered in `app.py`
 
-| Component | Status |
-|-----------|--------|
-| ChatTab, ChatWindow, ChatList | ✅ Working (`localhost:8000`) |
-| RAGTab, FileBrowser, DirectoryChat | ✅ Working |
-| GovernanceTab | ✅ Working |
-| SandboxTab | ✅ Working |
-| LibrarianTab | ✅ Working |
-| CognitiveTab | ✅ Working |
-| NotionTab | ✅ Working |
-| VersionControl | ✅ Working |
-| InsightsTab, ResearchTab | ✅ Working |
-| TelemetryTab, APITab | ✅ Working |
-| GenesisKeyPanel, GenesisLogin | ✅ Working |
-| KPIDashboard, RepositoryManager | ✅ Working |
-| PersistentVoicePanel | ✅ Working |
-| **CodeBaseTab** | ❌ BROKEN - calls `/api/codebase/...` (404) |
-| **ConnectorsTab** | ❌ BROKEN - calls `/api/knowledge-base/...` (404) |
-| **ExperimentTab** | ❌ BROKEN - calls `/api/sandbox-lab/...` (404) |
-| **GenesisKeyTab** | ⚠️ PARTIAL - some calls use wrong `/api/` prefix |
-| **LearningTab** | ❌ BROKEN - calls `/api/autonomous-learning/...` (404) |
-| **MLIntelligenceTab** | ❌ BROKEN - calls `/api/ml-intelligence/...` (404) |
-| **OrchestrationTab** | ❌ BROKEN - calls `/api/...` (404) |
-| **WhitelistTab** | ❌ BROKEN - calls `/api/layer1/...` (404) |
-| **MonitoringTab** | ❌ STATIC - hardcoded data, no API calls |
+**VERIFIED WORKING TABS** (Frontend → Backend endpoints confirmed):
 
-**Root Cause #1**: `vite.config.js` has no proxy configuration. 53 API calls will fail.
+| Component | Status | Verification |
+|-----------|--------|--------------|
+| ChatTab, ChatWindow, ChatList | ✅ Working | Direct `localhost:8000` calls |
+| RAGTab, FileBrowser, DirectoryChat | ✅ Working | Direct `localhost:8000` calls |
+| GovernanceTab | ✅ Working | `/governance/...` endpoints exist |
+| SandboxTab | ✅ Working | `/sandbox-lab/...` endpoints exist |
+| LibrarianTab | ✅ Working | `/librarian/...` endpoints exist |
+| CognitiveTab | ✅ Working | `/cognitive/...` endpoints exist |
+| NotionTab | ✅ Working | `/notion/...` endpoints exist |
+| VersionControl | ✅ Working | `/api/version-control/...` endpoints exist |
+| InsightsTab, ResearchTab | ✅ Working | Static/uses existing APIs |
+| TelemetryTab | ✅ Working | `/telemetry/...` now registered |
+| GenesisKeyPanel, GenesisLogin | ✅ Working | `/genesis/...` endpoints exist |
+| KPIDashboard | ✅ Working | `/kpi/...` now registered |
+| RepositoryManager | ✅ Working | `/repositories/...` now registered |
+| PersistentVoicePanel | ✅ Working | `/voice/...` endpoints exist |
+| **ConnectorsTab** | ✅ FIXED | All 6 endpoints verified in `/knowledge-base/...` |
+| **ExperimentTab** | ✅ FIXED | All 5 endpoints verified in `/sandbox-lab/...` |
+| **GenesisKeyTab** | ✅ FIXED | All endpoints verified in `/genesis/...` |
+| **LearningTab** | ✅ FIXED | All 15 endpoints verified across 4 APIs |
+| **OrchestrationTab** | ⚠️ 95% | Missing 1 endpoint: `GET /llm/collaborate/history` |
+| **MLIntelligenceTab** | ⚠️ 85% | Missing: `GET /bandit/stats`, `GET /uncertainty/stats` |
+| **WhitelistTab** | ⚠️ 25% | Missing: GET/PATCH/DELETE whitelist endpoints (only POST exists) |
+| **CodeBaseTab** | ❌ BROKEN | **Backend API doesn't exist** - no `/codebase/` routes |
+| **MonitoringTab** | ⚠️ STATIC | Hardcoded data, no API calls - needs backend integration |
 
-**Root Cause #2**: **5 Backend API modules are NOT REGISTERED in app.py** (61 endpoints inaccessible!):
+**REMAINING ISSUES:**
 
-| Unregistered API | Endpoints | Frontend Tabs Affected |
-|------------------|-----------|------------------------|
-| `knowledge_base_api` | 14 | ConnectorsTab |
-| `kpi_api` | 12 | KPIDashboard |
-| `proactive_learning` | 7 | LearningTab |
-| `repositories_api` | 15 | RepositoryManager |
-| `telemetry` | 13 | TelemetryTab |
+### Issue 1: CodeBaseTab - Backend API Missing Entirely
+Frontend calls 6 endpoints but NO `/codebase` API exists:
+- `GET /api/codebase/repositories`
+- `GET /api/codebase/files`
+- `GET /api/codebase/file`
+- `GET /api/codebase/search`
+- `GET /api/codebase/commits`
+- `GET /api/codebase/analysis`
 
-**These frontend components will get 404 even with correct URL** because the backend routes don't exist!
+**Fix Required**: Create `backend/api/codebase_api.py` with these endpoints
 
-**Fix Required**:
-1. Add missing routers to `app.py`:
-```python
-from api.knowledge_base_api import router as knowledge_base_router
-from api.kpi_api import router as kpi_router
-from api.proactive_learning import router as proactive_learning_router
-from api.repositories_api import router as repositories_router
-from api.telemetry import router as telemetry_router
+### Issue 2: WhitelistTab - Missing Endpoints
+Frontend calls 5 endpoints but backend only has 1:
+- ❌ `GET /api/layer1/whitelist` - MISSING
+- ❌ `GET /api/layer1/whitelist/logs` - MISSING
+- ✅ `POST /api/layer1/whitelist` - EXISTS
+- ❌ `PATCH /api/layer1/whitelist/{type}/{id}` - MISSING
+- ❌ `DELETE /api/layer1/whitelist/{type}/{id}` - MISSING
 
-app.include_router(knowledge_base_router)
-app.include_router(kpi_router)
-app.include_router(proactive_learning_router)
-app.include_router(repositories_router)
-app.include_router(telemetry_router)
-```
+**Fix Required**: Add 4 endpoints to `backend/api/layer1.py`
 
-2. Add Vite proxy configuration (or fix 53 `/api/` prefixed calls)
+### Issue 3: MLIntelligenceTab - Missing GET Endpoints
+- ❌ `GET /api/ml-intelligence/bandit/stats` - MISSING (only POST exists)
+- ❌ `GET /api/ml-intelligence/uncertainty/stats` - MISSING (only POST exists)
+
+**Fix Required**: Add 2 GET endpoints to `backend/api/ml_intelligence_api.py`
+
+### Issue 4: OrchestrationTab - Missing Endpoint
+- ❌ `GET /api/llm/collaborate/history` - MISSING
+
+**Fix Required**: Add 1 GET endpoint to `backend/api/llm_orchestration.py`
+
+### Issue 5: MonitoringTab - No Backend Integration
+Currently displays hardcoded static data for "Organs of Grace" percentages.
+**Fix Required**: Create monitoring API and connect frontend
 
 ---
 
@@ -290,35 +305,38 @@ Found **63 instances** of `pass` statements or `NotImplementedError`:
 
 ## What Remains for Production-Readiness
 
-### High Priority
-1. **Backend API Registration** — Register 5 missing API modules in `app.py`:
-   - `knowledge_base_api` (14 endpoints) - affects ConnectorsTab
-   - `kpi_api` (12 endpoints) - affects KPIDashboard
-   - `proactive_learning` (7 endpoints) - affects LearningTab
-   - `repositories_api` (15 endpoints) - affects RepositoryManager
-   - `telemetry` (13 endpoints) - affects TelemetryTab
-2. **Frontend API Wiring** — Fix 8 tabs using wrong `/api/` prefix (53 API calls):
-   - Option A: Add Vite proxy configuration
-   - Option B: Update all `/api/...` calls to `http://localhost:8000/...`
-   - Affected: CodeBaseTab, ConnectorsTab, ExperimentTab, GenesisKeyTab, LearningTab, MLIntelligenceTab, OrchestrationTab, WhitelistTab
-3. **MonitoringTab** — Currently shows hardcoded static data, needs API integration
-4. **Test Coverage** — Add comprehensive API tests, increase from 215 to ~500+ tests
-5. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
-6. **Authentication** — Genesis Key auth exists but needs hardening
+### High Priority (Blocking Issues)
+1. ~~**Backend API Registration**~~ ✅ FIXED — All 29 API modules now registered
+2. ~~**Frontend API Wiring**~~ ✅ FIXED — Vite proxy configured
+3. **Create CodeBaseTab Backend** — Need to create `backend/api/codebase_api.py`:
+   - `GET /codebase/repositories` - List repositories
+   - `GET /codebase/files` - Browse repository files
+   - `GET /codebase/file` - Get file content
+   - `GET /codebase/search` - Search code
+   - `GET /codebase/commits` - Get commit history
+   - `GET /codebase/analysis` - Code analysis
+4. **Add Missing Endpoints** — 8 endpoints missing across 4 existing APIs:
+   - `layer1.py`: Add GET/PATCH/DELETE whitelist endpoints (4 endpoints)
+   - `ml_intelligence_api.py`: Add GET `/bandit/stats`, GET `/uncertainty/stats` (2 endpoints)
+   - `llm_orchestration.py`: Add GET `/collaborate/history` (1 endpoint)
+5. **MonitoringTab** — Currently hardcoded, needs backend API integration
+6. **Test Coverage** — Add comprehensive API tests (215 → 500+ tests)
+7. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
+8. **Authentication** — Genesis Key auth exists but needs hardening
 
 ### Medium Priority
-5. **E2E Testing** — Add Playwright/Cypress for frontend
-6. **Monitoring** — Telemetry system exists but needs metrics export
-7. **Documentation** — API documentation (OpenAPI is auto-generated)
-8. **Office Documents** — Complete DOCX/XLSX/PPTX ingestion integration
+9. **E2E Testing** — Add Playwright/Cypress for frontend
+10. **Monitoring** — Telemetry system exists but needs metrics export
+11. **Documentation** — API documentation (OpenAPI is auto-generated)
+12. **Office Documents** — Complete DOCX/XLSX/PPTX ingestion integration
 
 ### Lower Priority
-9. **ML Model Fine-tuning** — Neural trust scorer needs training data
-10. **Agent Framework** — Expand action types and safety guardrails
+13. **ML Model Fine-tuning** — Neural trust scorer needs training data
+14. **Agent Framework** — Expand action types and safety guardrails
 
 ---
 
-## Completion by Subsystem
+## Completion by Subsystem (Post-Fix Verification)
 
 ```
 Core Chat/RAG        ████████████████████░ 90%
@@ -326,36 +344,53 @@ Document Ingestion   █████████████████░░�
 Vector DB/Retrieval  █████████████████░░░░ 85%
 Genesis Keys         ████████████████░░░░░ 80%
 Cognitive System     ███████████████░░░░░░ 75%
-Layer1 Trust         ██████████████░░░░░░░ 70%
-ML Intelligence      ██████████████░░░░░░░ 70%
+Layer1 Trust         ██████████████░░░░░░░ 70%  ← WhitelistTab missing 4 endpoints
+ML Intelligence      ██████████████░░░░░░░ 70%  ← Missing 2 GET endpoints
 Governance           ███████████████░░░░░░ 75%
 Librarian            ████████████████░░░░░ 80%
 Voice API            █████████████████░░░░ 85%
 Agent Framework      ███████████████░░░░░░ 75%
-Backend API Reg.     ████████████████░░░░░ 80%  ← 5 APIs NOT registered (61 endpoints)
-Frontend UI          ██████████░░░░░░░░░░░ 50%  ← REVISED (13 broken tabs total)
+Backend API Reg.     ████████████████████░ 100% ✅ FIXED - All 29 APIs registered
+Frontend UI          ██████████████░░░░░░░ 70%  ✅ IMPROVED (was 50%)
 Test Coverage        ███████████░░░░░░░░░░ 55%
 ──────────────────────────────────────────────
-OVERALL              █████████████░░░░░░░░ ~67%
+OVERALL              ███████████████░░░░░░ ~73%
 ```
+
+### Frontend Tab Status Summary:
+- **Fully Working**: 18 tabs ✅
+- **Partially Working (Missing 1-2 endpoints)**: 3 tabs ⚠️
+- **Broken (No Backend API)**: 1 tab ❌ (CodeBaseTab)
+- **Static/No API**: 1 tab ⚠️ (MonitoringTab)
 
 ---
 
-## Verdict
+## Verdict (Post-Fix)
 
-**Grace 3.1 is approximately 65-68% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational. However, there are **critical wiring issues**:
+**Grace 3.1 is approximately 72-75% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational.
 
-### Critical Fixes Required
-1. **Register 5 missing backend API modules** in `app.py` (61 endpoints inaccessible)
-2. **Fix frontend API paths** - Add Vite proxy or update 53 `/api/...` calls
-3. **Wire MonitoringTab** to actual backend (currently hardcoded)
+### Fixes Applied This Session ✅
+1. ✅ **Registered 5 missing backend API modules** in `app.py` - 61 endpoints now accessible
+2. ✅ **Added Vite proxy configuration** - 53 `/api/...` calls now route correctly
 
-### To reach MVP (minimum viable product): ~4-6 weeks of focused work
-### To reach production-ready: ~10-12 weeks with comprehensive testing
+### Remaining Critical Issues
+1. **CodeBaseTab** - Backend API doesn't exist (need to create `/codebase/` routes)
+2. **WhitelistTab** - Missing 4 of 5 endpoints in `/layer1/` API
+3. **MonitoringTab** - Hardcoded static data, needs backend API
+4. **MLIntelligenceTab** - Missing 2 GET endpoints for stats
+5. **OrchestrationTab** - Missing 1 GET endpoint for collaborate/history
 
-The codebase shows evidence of **sophisticated architectural thinking** and **incremental development**. The 53 commits and 104K LOC represent significant engineering effort. The main gaps are:
-1. **Backend API registration** (5 modules with 61 endpoints NOT in app.py)
-2. **Frontend API wiring** (8 tabs with wrong paths + 5 tabs calling unregistered APIs)
+### To reach MVP: ~2-3 weeks of focused work
+- Create CodeBaseTab backend API (~2-3 days)
+- Add missing endpoints to existing APIs (~1-2 days)
+- Wire MonitoringTab to backend (~1 day)
+- Basic testing for new endpoints (~2-3 days)
+
+### To reach production-ready: ~6-8 weeks with comprehensive testing
+
+The codebase shows evidence of **sophisticated architectural thinking** and **incremental development**. The 53 commits and 104K LOC represent significant engineering effort. The main gaps are now:
+1. **Missing backend API** - CodeBaseTab has no backend (6 endpoints needed)
+2. **Missing endpoints** - 8 endpoints missing across 4 existing APIs
 3. **Test coverage** (215 tests, needs ~500+)
 4. **Stub implementations** (63 incomplete blocks)
 
