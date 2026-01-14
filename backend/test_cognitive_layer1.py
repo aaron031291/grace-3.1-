@@ -301,7 +301,8 @@ def test_layer1_stats():
     print(f"    Invariants Validated: {cog.get('invariants_validated')}")
     print(f"    Decision Logging: {cog.get('decision_logging')}")
 
-    return stats
+    assert stats is not None, "Stats should be returned"
+    assert 'total_inputs' in stats, "Stats should have total_inputs"
 
 
 def main():
