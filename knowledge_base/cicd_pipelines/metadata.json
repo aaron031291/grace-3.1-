@@ -1,0 +1,107 @@
+{
+  "id": "cicd_pipelines",
+  "title": "CI/CD Pipelines",
+  "description": "Genesis Key-powered CI/CD pipeline system for autonomous build, test, and deployment",
+  "category": "infrastructure",
+  "tags": ["cicd", "pipelines", "automation", "devops", "genesis-key"],
+  "created_at": "2026-01-14T00:00:00Z",
+  "updated_at": "2026-01-14T00:00:00Z",
+  "author": "GRACE System",
+  "version": "1.0.0",
+  "autonomous_actions": {
+    "enabled": true,
+    "actions": [
+      {
+        "id": "trigger_ci",
+        "name": "Trigger CI Pipeline",
+        "description": "Run the main CI pipeline",
+        "endpoint": "/api/cicd/trigger",
+        "method": "POST",
+        "payload": {
+          "pipeline_id": "grace-ci",
+          "branch": "main"
+        }
+      },
+      {
+        "id": "trigger_quick",
+        "name": "Quick Check",
+        "description": "Run a quick validation check",
+        "endpoint": "/api/cicd/trigger",
+        "method": "POST",
+        "payload": {
+          "pipeline_id": "grace-quick",
+          "branch": "main"
+        }
+      },
+      {
+        "id": "trigger_deploy",
+        "name": "Deploy to Production",
+        "description": "Deploy GRACE to production (main branch only)",
+        "endpoint": "/api/cicd/trigger",
+        "method": "POST",
+        "payload": {
+          "pipeline_id": "grace-deploy",
+          "branch": "main"
+        },
+        "requires_confirmation": true
+      },
+      {
+        "id": "view_runs",
+        "name": "View Pipeline Runs",
+        "description": "List recent pipeline executions",
+        "endpoint": "/api/cicd/runs",
+        "method": "GET"
+      },
+      {
+        "id": "view_status",
+        "name": "CI/CD Status",
+        "description": "Get CI/CD system status",
+        "endpoint": "/api/cicd/status",
+        "method": "GET"
+      }
+    ]
+  },
+  "api_endpoints": [
+    {
+      "path": "/api/cicd/pipelines",
+      "method": "GET",
+      "description": "List all pipelines"
+    },
+    {
+      "path": "/api/cicd/trigger",
+      "method": "POST",
+      "description": "Trigger a pipeline"
+    },
+    {
+      "path": "/api/cicd/runs",
+      "method": "GET",
+      "description": "List pipeline runs"
+    },
+    {
+      "path": "/api/cicd/runs/{run_id}",
+      "method": "GET",
+      "description": "Get run details"
+    },
+    {
+      "path": "/api/cicd/runs/{run_id}/logs",
+      "method": "GET",
+      "description": "Get run logs"
+    },
+    {
+      "path": "/api/cicd/webhook",
+      "method": "POST",
+      "description": "Git webhook handler"
+    },
+    {
+      "path": "/api/cicd/status",
+      "method": "GET",
+      "description": "System status"
+    }
+  ],
+  "related_knowledge": [
+    "devops",
+    "docker",
+    "kubernetes",
+    "testing"
+  ]
+}

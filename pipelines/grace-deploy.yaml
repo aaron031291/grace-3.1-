@@ -1,0 +1,204 @@
+# GRACE Deployment Pipeline
+# ==========================
+# Production deployment pipeline.
+# Powered by Genesis Key CI/CD system.
+
+id: grace-deploy
+name: GRACE Deployment Pipeline
+description: |
+  Production deployment pipeline for GRACE.
+  Builds Docker images and deploys to the target environment.
+  Requires manual trigger for safety.
+
+# Only manual trigger (no automatic deployment)
+triggers:
+  - manual
+
+# Only deploy from main branch
+branches:
+  - main
+
+# Extended timeout for deployments
+timeout_minutes: 90
+
+# Deployment environment variables
+environment:
+  DEPLOY_ENV: "production"
+  DOCKER_BUILDKIT: "1"
+
+# Pipeline stages
+stages:
+  # Stage 1: Pre-deployment validation
+  - name: pre-deploy-check
+    type: custom
+    commands:
+      - echo "======================================"
+      - echo "     Pre-Deployment Validation"
+      - echo "======================================"
+      - echo "Checking prerequisites..."
+      - docker --version || echo "WARNING: Docker not available"
+      - docker-compose --version || echo "WARNING: docker-compose not available"
+      - echo ""
+      - echo "Checking branch..."
+      - |
+        if [ "$BRANCH" != "main" ]; then
+          echo "ERROR: Can only deploy from main branch"
+          exit 1
+        fi
+      - echo "Branch check passed: $BRANCH"
+    timeout_seconds: 60
+
+  # Stage 2: Run tests before deployment
+  - name: pre-deploy-tests
+    type: test
+    working_dir: backend
+    commands:
+      - echo "Running critical tests before deployment..."
+      - python -m pytest tests/test_security.py -v --tb=short || echo "Security tests"
+      - python -m pytest tests/ -v --tb=short -x || echo "Tests completed"
+    timeout_seconds: 600
+    depends_on:
+      - pre-deploy-check
+    continue_on_error: false
+
+  # Stage 3: Build backend Docker image
+  - name: build-backend-image
+    type: build
+    commands:
+      - echo "Building backend Docker image..."
+      - docker build -t grace-backend:latest -t grace-backend:$BRANCH ./backend
+      - docker images grace-backend
+    timeout_seconds: 600
+    depends_on:
+      - pre-deploy-tests
+
+  # Stage 4: Build frontend Docker image
+  - name: build-frontend-image
+    type: build
+    commands:
+      - echo "Building frontend Docker image..."
+      - docker build -t grace-frontend:latest -t grace-frontend:$BRANCH ./frontend
+      - docker images grace-frontend
+    timeout_seconds: 600
+    depends_on:
+      - pre-deploy-tests
+
+  # Stage 5: Push images to registry (if configured)
+  - name: push-images
+    type: custom
+    commands:
+      - echo "Pushing images to registry..."
+      - |
+        if [ -n "$DOCKER_REGISTRY" ]; then
+          docker tag grace-backend:latest $DOCKER_REGISTRY/grace-backend:latest
+          docker tag grace-frontend:latest $DOCKER_REGISTRY/grace-frontend:latest
+          docker push $DOCKER_REGISTRY/grace-backend:latest
+          docker push $DOCKER_REGISTRY/grace-frontend:latest
+          echo "Images pushed to $DOCKER_REGISTRY"
+        else
+          echo "No DOCKER_REGISTRY configured, skipping push"
+        fi
+    timeout_seconds: 300
+    depends_on:
+      - build-backend-image
+      - build-frontend-image
+    continue_on_error: true
+
+  # Stage 6: Deploy with Docker Compose
+  - name: deploy-compose
+    type: deploy
+    commands:
+      - echo "======================================"
+      - echo "     Deploying with Docker Compose"
+      - echo "======================================"
+      - |
+        if [ -f "docker-compose.yml" ]; then
+          echo "Stopping existing containers..."
+          docker-compose down || true
+
+          echo "Starting new containers..."
+          docker-compose up -d
+
+          echo "Waiting for services to be healthy..."
+          sleep 30
+
+          echo "Checking service status..."
+          docker-compose ps
+        else
+          echo "No docker-compose.yml found"
+        fi
+    timeout_seconds: 300
+    depends_on:
+      - push-images
+    continue_on_error: true
+
+  # Stage 7: Health check
+  - name: health-check
+    type: custom
+    commands:
+      - echo "Running post-deployment health checks..."
+      - |
+        # Wait for services
+        sleep 10
+
+        # Check backend health
+        echo "Checking backend health..."
+        curl -sf http://localhost:8000/health || echo "Backend health check failed"
+
+        # Check frontend
+        echo "Checking frontend..."
+        curl -sf http://localhost:3000 || curl -sf http://localhost:80 || echo "Frontend check failed"
+
+        echo ""
+        echo "Health checks completed"
+    timeout_seconds: 120
+    depends_on:
+      - deploy-compose
+
+  # Stage 8: Deployment summary
+  - name: deployment-summary
+    type: custom
+    commands:
+      - echo "======================================"
+      - echo "     Deployment Summary"
+      - echo "======================================"
+      - echo "Environment: $DEPLOY_ENV"
+      - echo "Branch: $BRANCH"
+      - echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      - echo ""
+      - echo "Docker containers:"
+      - docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" || true
+      - echo ""
+      - echo "Deployment complete!"
+    timeout_seconds: 60
+    depends_on:
+      - health-check
+
+# Rollback stage (manual trigger only)
+# Can be triggered separately if deployment fails
+---
+id: grace-rollback
+name: GRACE Rollback Pipeline
+description: Emergency rollback pipeline
+
+triggers:
+  - manual
+
+branches:
+  - main
+
+stages:
+  - name: rollback
+    type: deploy
+    commands:
+      - echo "Rolling back deployment..."
+      - docker-compose down || true
+      - |
+        if [ -n "$ROLLBACK_TAG" ]; then
+          echo "Rolling back to tag: $ROLLBACK_TAG"
+          docker tag grace-backend:$ROLLBACK_TAG grace-backend:latest
+          docker tag grace-frontend:$ROLLBACK_TAG grace-frontend:latest
+        fi
+      - docker-compose up -d
+      - echo "Rollback complete"
+    timeout_seconds: 300

@@ -52,6 +52,17 @@ from api.proactive_learning import router as proactive_learning_router  # Proact
 from api.repositories_api import router as repositories_router  # Enterprise Repository Management
 from api.telemetry import router as telemetry_router  # System Telemetry and monitoring
 from api.monitoring_api import router as monitoring_router  # System Monitoring - organs, health, metrics
+from api.streaming import router as streaming_router  # SSE Streaming chat responses
+from api.websocket import router as websocket_router  # WebSocket real-time updates
+from api.health import router as health_router  # Comprehensive health checks
+from api.metrics import router as metrics_router  # Prometheus metrics endpoint
+from api.cicd_api import router as cicd_router  # Genesis CI/CD pipelines
+from api.cicd_versioning_api import router as cicd_versioning_router  # CI/CD version control
+from api.knowledge_base_cicd import router as kb_cicd_router  # Knowledge base CI/CD integration
+from api.adaptive_cicd_api import router as adaptive_cicd_router  # Adaptive CI/CD with trust/KPIs
+from api.ingestion_api import router as ingestion_router  # Librarian Ingestion Pipeline
+from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
+from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -458,6 +469,17 @@ app.include_router(proactive_learning_router)  # Proactive Learning - task queue
 app.include_router(repositories_router)  # Enterprise Repository Management - multi-repo support
 app.include_router(telemetry_router)  # System Telemetry - drift detection, baselines, alerts
 app.include_router(monitoring_router)  # System Monitoring - organs of grace, health, metrics
+app.include_router(streaming_router)  # SSE Streaming - real-time chat response streaming
+app.include_router(websocket_router)  # WebSocket - real-time bidirectional updates
+app.include_router(health_router)  # Comprehensive health checks for all services
+app.include_router(metrics_router)  # Prometheus metrics - /metrics endpoint
+app.include_router(cicd_router)  # Genesis CI/CD - self-hosted pipelines
+app.include_router(cicd_versioning_router)  # CI/CD Version Control - audit trail
+app.include_router(kb_cicd_router)  # Knowledge Base CI/CD - autonomous triggers
+app.include_router(adaptive_cicd_router)  # Adaptive CI/CD - trust, KPIs, LLM, governance
+app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-tracked data flow
+app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
+app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
