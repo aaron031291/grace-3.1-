@@ -42,7 +42,7 @@ class LibrarianEngine:
         >>> from database.session import initialize_session_factory
         >>> from database.config import DatabaseConfig
         >>> from database.connection import DatabaseConnection
-        >>> from embedding.embedder import get_embedding_model
+        >>> from embedding import get_embedding_model
         >>> from ollama_client.client import get_ollama_client
         >>> from vector_db.client import get_qdrant_client
         >>>

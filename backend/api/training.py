@@ -55,7 +55,7 @@ class CreateCurriculumRequest(BaseModel):
 
 def get_learning_system(session: Session = Depends(get_session)) -> GraceActiveLearningSystem:
     """Get Grace's active learning system."""
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
 
     # Initialize retriever
     embedding_model = get_embedding_model()

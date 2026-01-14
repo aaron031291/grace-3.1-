@@ -24,7 +24,7 @@ Core Components:
 Usage:
     from librarian.engine import LibrarianEngine
     from database.session import SessionLocal
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from ollama_client.client import get_ollama_client
 
     librarian = LibrarianEngine(

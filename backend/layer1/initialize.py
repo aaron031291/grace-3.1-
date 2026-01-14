@@ -64,7 +64,7 @@ from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from retrieval.retriever import DocumentRetriever
 from ingestion.service import TextIngestionService
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 
 logger = logging.getLogger(__name__)
 

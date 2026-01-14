@@ -98,31 +98,38 @@ class SemanticContradictionDetector:
             return False, 0.0, "Low semantic similarity"
         
         try:
-            # The model expects input as [sentence_a, sentence_b]
+            # The model expects input as [[sentence_a, sentence_b]]
             # and outputs 3 scores for [entailment, neutral, contradiction]
-            scores = self.model.predict([chunk1, chunk2])
-            
-            # scores shape: (1, 3) - [entailment_score, neutral_score, contradiction_score]
+            scores = self.model.predict([[chunk1, chunk2]])
+
+            # Handle different score shapes - ensure we have the right format
+            scores_arr = np.atleast_2d(scores)
+            if scores_arr.shape[-1] != 3:
+                # If scores don't have 3 classes, this model may not be an NLI model
+                logger.warning(f"Unexpected scores shape: {scores_arr.shape}, expected 3 classes")
+                return False, 0.0, "Model output format unexpected"
+
             # Get the contradiction score (index 2)
-            contradiction_score = scores[0][2]  # Contradiction is the 3rd class
-            
+            contradiction_score = float(scores_arr[0][2])  # Contradiction is the 3rd class
+
             # Check both directions for robustness
-            scores_reverse = self.model.predict([chunk2, chunk1])
-            contradiction_score_reverse = scores_reverse[0][2]
-            
+            scores_reverse = self.model.predict([[chunk2, chunk1]])
+            scores_reverse_arr = np.atleast_2d(scores_reverse)
+            contradiction_score_reverse = float(scores_reverse_arr[0][2])
+
             # Use the maximum contradiction score from both directions
             max_contradiction_score = max(contradiction_score, contradiction_score_reverse)
-            
+
             logger.debug(
-                f"NLI scores - Forward: {scores[0]}, Reverse: {scores_reverse[0]}"
+                f"NLI scores - Forward: {scores_arr[0]}, Reverse: {scores_reverse_arr[0]}"
             )
-            
+
             if max_contradiction_score > threshold:
                 return True, float(max_contradiction_score), \
                     f"Semantic contradiction detected (confidence: {max_contradiction_score:.3f})"
-            
+
             return False, 0.0, "No contradiction detected"
-            
+
         except Exception as e:
             logger.error(f"Error in contradiction detection: {e}", exc_info=True)
             return False, 0.0, f"Detection error: {str(e)}"

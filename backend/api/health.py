@@ -124,7 +124,7 @@ async def check_embedding_model() -> ServiceHealth:
     import time
     start = time.time()
     try:
-        from embedding.embedder import get_embedder
+        from embedding import get_embedder
         embedder = get_embedder()
 
         # Quick test embedding

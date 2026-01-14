@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import time
 from pathlib import Path
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 
 
 class TestEmbeddingModel(unittest.TestCase):

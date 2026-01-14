@@ -10,7 +10,7 @@ from datetime import datetime
 import logging
 
 from ingestion.service import TextIngestionService
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from vector_db.client import get_qdrant_client
 
 logger = logging.getLogger(__name__)
@@ -22,15 +22,22 @@ router = APIRouter(prefix="/ingest", tags=["Document Ingestion"])
 _ingestion_service: Optional[TextIngestionService] = None
 
 
-def get_ingestion_service() -> TextIngestionService:
-    """Get or create ingestion service."""
+def get_ingestion_service() -> Optional[TextIngestionService]:
+    """Get or create ingestion service.
+
+    Returns None if service cannot be initialized (e.g., in test environments
+    without embedding models). Endpoints should handle None gracefully.
+    """
     global _ingestion_service
-    
+
     if _ingestion_service is None:
         try:
             print("[INGEST] Initializing ingestion service...")
             # Use singleton instance to avoid loading model multiple times
             embedding_model = get_embedding_model()
+            if embedding_model is None:
+                logger.warning("Embedding model not available, ingestion service disabled")
+                return None
             print("[INGEST] [OK] Got embedding model (singleton)")
             _ingestion_service = TextIngestionService(
                 collection_name="documents",
@@ -41,11 +48,8 @@ def get_ingestion_service() -> TextIngestionService:
             print("[INGEST] [OK] Ingestion service created successfully")
         except Exception as e:
             logger.error(f"Failed to initialize ingestion service: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Ingestion service initialization failed"
-            )
-    
+            return None
+
     return _ingestion_service
 
 
@@ -135,20 +139,27 @@ class DocumentListResponse(BaseModel):
 @router.post("/text", response_model=IngestionResponse, summary="Ingest text content")
 async def ingest_text(
     request: IngestTextRequest,
-    service: TextIngestionService = Depends(get_ingestion_service)
+    service: Optional[TextIngestionService] = Depends(get_ingestion_service)
 ) -> IngestionResponse:
     """
     Ingest plain text content.
-    
+
     Chunks the text, generates embeddings, and stores in both SQL database and Qdrant.
-    
+
     Args:
         request: IngestTextRequest containing text, filename, and metadata
         service: Ingestion service instance
-        
+
     Returns:
         IngestionResponse with document ID and status
     """
+    # Check if service is available
+    if service is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Ingestion service unavailable. Embedding model may not be configured."
+        )
+
     try:
         print("Ingesting text document...")
         document_id, message = service.ingest_text_fast(

@@ -238,7 +238,7 @@ async def lifespan(app: FastAPI):
     
     # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
     try:
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         print("\n[STARTUP] Pre-initializing embedding model...")
         embedding_model = get_embedding_model()
         print("[STARTUP] [OK] Embedding model loaded and ready\n")

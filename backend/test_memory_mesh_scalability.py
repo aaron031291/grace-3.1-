@@ -110,7 +110,7 @@ async def test_async_embedding():
     print("="*60)
 
     try:
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         from embedding.async_embedder import create_async_embedder
 
         # Create async embedder

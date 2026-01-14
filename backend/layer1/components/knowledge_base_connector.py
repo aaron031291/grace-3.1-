@@ -89,7 +89,7 @@ class KnowledgeBaseIngestionConnector:
             
             # Import trust-aware components if enabled
             if self.use_trust_aware:
-                from embedding.embedder import get_embedding_model
+                from embedding import get_embedding_model
                 from ml_intelligence.trust_aware_embedding import (
                     TrustAwareEmbeddingModel,
                     TrustContext,

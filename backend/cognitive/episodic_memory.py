@@ -72,7 +72,7 @@ class EpisodicBuffer:
         """Lazy load embedder for semantic similarity"""
         if self._embedder is None:
             try:
-                from embedding.embedder import get_embedding_model
+                from embedding import get_embedding_model
                 self._embedder = get_embedding_model()
                 self._use_semantic = True
                 logger.info("[EPISODIC] Semantic similarity enabled")

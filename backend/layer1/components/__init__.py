@@ -7,12 +7,47 @@ Connects all Layer 1 components to the message bus for:
 - Cross-component coordination
 """
 
-from .memory_mesh_connector import MemoryMeshConnector
-from .genesis_keys_connector import GenesisKeysConnector
-from .rag_connector import RAGConnector
-from .ingestion_connector import IngestionConnector
-from .llm_orchestration_connector import LLMOrchestrationConnector
-from .version_control_connector import VersionControlConnector, get_version_control_connector
+import logging
+
+_logger = logging.getLogger(__name__)
+
+# Core connector imports with graceful fallbacks
+try:
+    from .memory_mesh_connector import MemoryMeshConnector
+except ImportError as e:
+    _logger.warning(f"Could not import MemoryMeshConnector: {e}")
+    MemoryMeshConnector = None
+
+try:
+    from .genesis_keys_connector import GenesisKeysConnector
+except ImportError as e:
+    _logger.warning(f"Could not import GenesisKeysConnector: {e}")
+    GenesisKeysConnector = None
+
+try:
+    from .rag_connector import RAGConnector
+except ImportError as e:
+    _logger.warning(f"Could not import RAGConnector: {e}")
+    RAGConnector = None
+
+try:
+    from .ingestion_connector import IngestionConnector
+except ImportError as e:
+    _logger.warning(f"Could not import IngestionConnector: {e}")
+    IngestionConnector = None
+
+try:
+    from .llm_orchestration_connector import LLMOrchestrationConnector
+except ImportError as e:
+    _logger.warning(f"Could not import LLMOrchestrationConnector: {e}")
+    LLMOrchestrationConnector = None
+
+try:
+    from .version_control_connector import VersionControlConnector, get_version_control_connector
+except ImportError as e:
+    _logger.warning(f"Could not import VersionControlConnector: {e}")
+    VersionControlConnector = None
+    get_version_control_connector = None
 
 # Optional neuro-symbolic connector
 try:
