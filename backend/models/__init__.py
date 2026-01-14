@@ -3,26 +3,19 @@
 Database models and Pydantic schemas for Grace AI.
 """
 
-from models.database_models import (
-    BaseModel,
-    Conversation,
-    Message,
-    Document,
-    DocumentChunk,
-    Chat,
-    QdrantCollection,
-    SemanticCluster,
-    EmbeddingDimension,
-)
+# Import only what actually exists in the models
+# Note: Use lazy imports to avoid circular dependency issues
 
 __all__ = [
-    "BaseModel",
+    "User",
     "Conversation",
     "Message",
+    "Embedding",
+    "Chat",
+    "ChatHistory",
     "Document",
     "DocumentChunk",
-    "Chat",
-    "QdrantCollection",
-    "SemanticCluster",
-    "EmbeddingDimension",
+    "GovernanceRule",
+    "GovernanceDocument",
+    "GovernanceDecision",
 ]

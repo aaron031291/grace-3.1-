@@ -9,7 +9,7 @@ Provides comprehensive task management with:
 """
 
 from fastapi import APIRouter, HTTPException, Depends, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import logging
@@ -78,8 +78,7 @@ class ProfileResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileListResponse(BaseModel):
@@ -163,8 +162,7 @@ class TaskResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TaskListResponse(BaseModel):
@@ -190,8 +188,7 @@ class TaskHistoryResponse(BaseModel):
     change_reason: Optional[str]
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class KanbanBoardResponse(BaseModel):
