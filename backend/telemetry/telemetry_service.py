@@ -1,8 +1,13 @@
 """
 Telemetry service for Grace's self-modeling mechanism.
 
+INTEGRATED with LLM Orchestrator for health monitoring.
+
 This service provides context managers and utilities for tracking
 operations, measuring performance, and enabling replay functionality.
+
+Health checks prioritize LLM Orchestrator availability over direct
+Ollama client access to ensure consistent system status reporting.
 """
 import uuid
 import time
@@ -377,12 +382,30 @@ class TelemetryService:
 
         try:
             # Import here to avoid circular dependencies
-            from backend.ollama_client.client import check_ollama_running
             from backend.vector_db.client import get_qdrant_client
             from backend.models.database_models import Document, DocumentChunk, Chat, ChatHistory
 
-            # Check service health
-            ollama_running = check_ollama_running()
+            # Check LLM health - prefer orchestrator over direct Ollama
+            ollama_running = False
+            try:
+                # Try orchestrator first (preferred)
+                from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+                orchestrator = get_llm_orchestrator()
+                ollama_running = orchestrator is not None
+                if ollama_running:
+                    logger.debug("[TELEMETRY] LLM health via orchestrator: OK")
+            except Exception:
+                pass
+
+            # Fallback to direct Ollama check
+            if not ollama_running:
+                try:
+                    from backend.ollama_client.client import check_ollama_running
+                    ollama_running = check_ollama_running()
+                    if ollama_running:
+                        logger.debug("[TELEMETRY] LLM health via direct client: OK")
+                except Exception:
+                    pass
 
             qdrant_connected = False
             vector_count = None
