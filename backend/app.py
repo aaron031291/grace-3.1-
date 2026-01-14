@@ -60,6 +60,8 @@ from api.cicd_api import router as cicd_router  # Genesis CI/CD pipelines
 from api.cicd_versioning_api import router as cicd_versioning_router  # CI/CD version control
 from api.knowledge_base_cicd import router as kb_cicd_router  # Knowledge base CI/CD integration
 from api.adaptive_cicd_api import router as adaptive_cicd_router  # Adaptive CI/CD with trust/KPIs
+from api.ingestion_api import router as ingestion_router  # Librarian Ingestion Pipeline
+from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -474,6 +476,8 @@ app.include_router(cicd_router)  # Genesis CI/CD - self-hosted pipelines
 app.include_router(cicd_versioning_router)  # CI/CD Version Control - audit trail
 app.include_router(kb_cicd_router)  # Knowledge Base CI/CD - autonomous triggers
 app.include_router(adaptive_cicd_router)  # Adaptive CI/CD - trust, KPIs, LLM, governance
+app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-tracked data flow
+app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
