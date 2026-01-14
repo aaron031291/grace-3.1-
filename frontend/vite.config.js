@@ -12,6 +12,12 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+        // Enable for debugging proxy issues
+        // configure: (proxy, options) => {
+        //   proxy.on('proxyReq', (proxyReq, req, res) => {
+        //     console.log('Proxying:', req.method, req.url, '->', options.target + proxyReq.path);
+        //   });
+        // }
       }
     }
   }
