@@ -1,5 +1,5 @@
 {
-  "session_id": "2026-01-14T12:09:54.781218",
+  "session_id": "2026-01-14T12:23:53.115020",
   "environment": {
     "python_version": "3.11.14 (main, Oct 10 2025, 08:54:04) [GCC 13.3.0]",
     "platform": "linux",
@@ -8,8 +8,8 @@
   "passes": [
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_sensor_layer_initialization",
-      "timestamp": "2026-01-14T12:09:55.654441",
-      "duration_ms": 49.46541786193848,
+      "timestamp": "2026-01-14T12:23:53.845017",
+      "duration_ms": 65.3076171875,
       "categories": [
         "general"
       ],
@@ -32,8 +32,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_sensor_data_structure",
-      "timestamp": "2026-01-14T12:09:55.655906",
-      "duration_ms": 0.22029876708984375,
+      "timestamp": "2026-01-14T12:23:53.846474",
+      "duration_ms": 0.22840499877929688,
       "categories": [
         "general"
       ],
@@ -56,8 +56,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_collect_all_returns_sensor_data",
-      "timestamp": "2026-01-14T12:10:07.685854",
-      "duration_ms": 12028.794288635254,
+      "timestamp": "2026-01-14T12:24:06.212098",
+      "duration_ms": 12364.465475082397,
       "categories": [
         "general"
       ],
@@ -80,8 +80,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_test_result_data_structure",
-      "timestamp": "2026-01-14T12:10:07.687957",
-      "duration_ms": 0.24127960205078125,
+      "timestamp": "2026-01-14T12:24:06.213885",
+      "duration_ms": 0.2372264862060547,
       "categories": [
         "general"
       ],
@@ -104,8 +104,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_metrics_data_structure",
-      "timestamp": "2026-01-14T12:10:07.689544",
-      "duration_ms": 0.22745132446289062,
+      "timestamp": "2026-01-14T12:24:06.215475",
+      "duration_ms": 0.2512931823730469,
       "categories": [
         "general"
       ],
@@ -128,8 +128,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestSensorLayer::test_sensor_to_dict",
-      "timestamp": "2026-01-14T12:10:07.691321",
-      "duration_ms": 0.3523826599121094,
+      "timestamp": "2026-01-14T12:24:06.217455",
+      "duration_ms": 0.41174888610839844,
       "categories": [
         "general"
       ],
@@ -152,8 +152,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_interpreter_layer_initialization",
-      "timestamp": "2026-01-14T12:10:07.692830",
-      "duration_ms": 0.2155303955078125,
+      "timestamp": "2026-01-14T12:24:06.219023",
+      "duration_ms": 0.25200843811035156,
       "categories": [
         "general"
       ],
@@ -176,8 +176,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_pattern_types",
-      "timestamp": "2026-01-14T12:10:07.694471",
-      "duration_ms": 0.2872943878173828,
+      "timestamp": "2026-01-14T12:24:06.220846",
+      "duration_ms": 0.4067420959472656,
       "categories": [
         "general"
       ],
@@ -200,8 +200,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_anomaly_types",
-      "timestamp": "2026-01-14T12:10:07.695985",
-      "duration_ms": 0.209808349609375,
+      "timestamp": "2026-01-14T12:24:06.222712",
+      "duration_ms": 0.2181529998779297,
       "categories": [
         "general"
       ],
@@ -224,8 +224,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_clarity_levels",
-      "timestamp": "2026-01-14T12:10:07.697235",
-      "duration_ms": 0.24557113647460938,
+      "timestamp": "2026-01-14T12:24:06.224675",
+      "duration_ms": 0.2715587615966797,
       "categories": [
         "general"
       ],
@@ -248,8 +248,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_interpret_returns_interpreted_data",
-      "timestamp": "2026-01-14T12:10:07.698928",
-      "duration_ms": 0.377655029296875,
+      "timestamp": "2026-01-14T12:24:06.226455",
+      "duration_ms": 0.5519390106201172,
       "categories": [
         "general"
       ],
@@ -272,8 +272,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_pattern_detection_with_failures",
-      "timestamp": "2026-01-14T12:10:07.700755",
-      "duration_ms": 0.2987384796142578,
+      "timestamp": "2026-01-14T12:24:06.227939",
+      "duration_ms": 0.30732154846191406,
       "categories": [
         "general"
       ],
@@ -296,8 +296,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_anomaly_detection_low_pass_rate",
-      "timestamp": "2026-01-14T12:10:07.702688",
-      "duration_ms": 0.48732757568359375,
+      "timestamp": "2026-01-14T12:24:06.229375",
+      "duration_ms": 0.2923011779785156,
       "categories": [
         "general"
       ],
@@ -320,8 +320,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_invariant_checks",
-      "timestamp": "2026-01-14T12:10:07.704845",
-      "duration_ms": 0.29969215393066406,
+      "timestamp": "2026-01-14T12:24:06.230850",
+      "duration_ms": 0.2624988555908203,
       "categories": [
         "general"
       ],
@@ -344,8 +344,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestInterpreterLayer::test_clarity_classification",
-      "timestamp": "2026-01-14T12:10:07.706093",
-      "duration_ms": 0.22649765014648438,
+      "timestamp": "2026-01-14T12:24:06.232479",
+      "duration_ms": 0.2567768096923828,
       "categories": [
         "general"
       ],
@@ -368,8 +368,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_judgement_layer_initialization",
-      "timestamp": "2026-01-14T12:10:07.707607",
-      "duration_ms": 0.3037452697753906,
+      "timestamp": "2026-01-14T12:24:06.234005",
+      "duration_ms": 0.247955322265625,
       "categories": [
         "general"
       ],
@@ -392,8 +392,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_health_status_enum",
-      "timestamp": "2026-01-14T12:10:07.709203",
-      "duration_ms": 0.2300739288330078,
+      "timestamp": "2026-01-14T12:24:06.235431",
+      "duration_ms": 0.25725364685058594,
       "categories": [
         "general"
       ],
@@ -417,8 +417,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_risk_level_enum",
-      "timestamp": "2026-01-14T12:10:07.710733",
-      "duration_ms": 0.25200843811035156,
+      "timestamp": "2026-01-14T12:24:06.236951",
+      "duration_ms": 0.2124309539794922,
       "categories": [
         "general"
       ],
@@ -441,8 +441,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_judge_returns_judgement_result",
-      "timestamp": "2026-01-14T12:10:07.712304",
-      "duration_ms": 0.38623809814453125,
+      "timestamp": "2026-01-14T12:24:06.238474",
+      "duration_ms": 0.3764629364013672,
       "categories": [
         "general"
       ],
@@ -465,8 +465,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_health_score_calculation",
-      "timestamp": "2026-01-14T12:10:07.714330",
-      "duration_ms": 0.7140636444091797,
+      "timestamp": "2026-01-14T12:24:06.240232",
+      "duration_ms": 0.4119873046875,
       "categories": [
         "general"
       ],
@@ -489,8 +489,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_risk_vector_identification",
-      "timestamp": "2026-01-14T12:10:07.716185",
-      "duration_ms": 0.40149688720703125,
+      "timestamp": "2026-01-14T12:24:06.242104",
+      "duration_ms": 0.46515464782714844,
       "categories": [
         "general"
       ],
@@ -513,8 +513,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_drift_analysis",
-      "timestamp": "2026-01-14T12:10:07.717857",
-      "duration_ms": 0.4954338073730469,
+      "timestamp": "2026-01-14T12:24:06.243799",
+      "duration_ms": 0.4024505615234375,
       "categories": [
         "general"
       ],
@@ -537,8 +537,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_avn_alerts_generation",
-      "timestamp": "2026-01-14T12:10:07.719484",
-      "duration_ms": 0.3952980041503906,
+      "timestamp": "2026-01-14T12:24:06.245794",
+      "duration_ms": 0.46181678771972656,
       "categories": [
         "general"
       ],
@@ -561,8 +561,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_avm_status_update",
-      "timestamp": "2026-01-14T12:10:07.720970",
-      "duration_ms": 0.3120899200439453,
+      "timestamp": "2026-01-14T12:24:06.247474",
+      "duration_ms": 0.3533363342285156,
       "categories": [
         "general"
       ],
@@ -586,8 +586,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestJudgementLayer::test_recommended_action_determination",
-      "timestamp": "2026-01-14T12:10:07.722579",
-      "duration_ms": 0.39076805114746094,
+      "timestamp": "2026-01-14T12:24:06.249465",
+      "duration_ms": 0.6239414215087891,
       "categories": [
         "general"
       ],
@@ -610,8 +610,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_action_router_initialization",
-      "timestamp": "2026-01-14T12:10:07.724791",
-      "duration_ms": 0.9665489196777344,
+      "timestamp": "2026-01-14T12:24:06.252028",
+      "duration_ms": 1.0514259338378906,
       "categories": [
         "general"
       ],
@@ -634,8 +634,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_action_types",
-      "timestamp": "2026-01-14T12:10:07.726239",
-      "duration_ms": 0.21767616271972656,
+      "timestamp": "2026-01-14T12:24:06.254387",
+      "duration_ms": 0.43272972106933594,
       "categories": [
         "general"
       ],
@@ -658,8 +658,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_route_returns_action_decision",
-      "timestamp": "2026-01-14T12:10:07.728959",
-      "duration_ms": 1.7271041870117188,
+      "timestamp": "2026-01-14T12:24:06.257462",
+      "duration_ms": 1.8458366394042969,
       "categories": [
         "general"
       ],
@@ -682,8 +682,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_dry_run_mode",
-      "timestamp": "2026-01-14T12:10:07.731528",
-      "duration_ms": 1.3573169708251953,
+      "timestamp": "2026-01-14T12:24:06.260498",
+      "duration_ms": 1.35040283203125,
       "categories": [
         "general"
       ],
@@ -706,8 +706,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_healing_disabled",
-      "timestamp": "2026-01-14T12:10:07.733469",
-      "duration_ms": 0.6875991821289062,
+      "timestamp": "2026-01-14T12:24:06.262824",
+      "duration_ms": 1.0297298431396484,
       "categories": [
         "general"
       ],
@@ -730,8 +730,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestActionRouter::test_action_decision_to_dict",
-      "timestamp": "2026-01-14T12:10:07.735914",
-      "duration_ms": 1.1832714080810547,
+      "timestamp": "2026-01-14T12:24:06.266051",
+      "duration_ms": 1.9114017486572266,
       "categories": [
         "general"
       ],
@@ -754,8 +754,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_engine_initialization",
-      "timestamp": "2026-01-14T12:10:07.737749",
-      "duration_ms": 0.7574558258056641,
+      "timestamp": "2026-01-14T12:24:06.268336",
+      "duration_ms": 0.8425712585449219,
       "categories": [
         "general"
       ],
@@ -778,8 +778,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_run_cycle",
-      "timestamp": "2026-01-14T12:10:07.849865",
-      "duration_ms": 110.94832420349121,
+      "timestamp": "2026-01-14T12:24:06.380058",
+      "duration_ms": 110.36825180053711,
       "categories": [
         "general"
       ],
@@ -802,8 +802,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_engine_start_stop",
-      "timestamp": "2026-01-14T12:10:07.961165",
-      "duration_ms": 109.87186431884766,
+      "timestamp": "2026-01-14T12:24:06.491523",
+      "duration_ms": 109.57217216491699,
       "categories": [
         "general"
       ],
@@ -826,8 +826,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_engine_pause_resume",
-      "timestamp": "2026-01-14T12:10:08.072543",
-      "duration_ms": 109.88450050354004,
+      "timestamp": "2026-01-14T12:24:06.601415",
+      "duration_ms": 107.66172409057617,
       "categories": [
         "general"
       ],
@@ -850,8 +850,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_trigger_from_sensor",
-      "timestamp": "2026-01-14T12:10:08.181877",
-      "duration_ms": 108.09111595153809,
+      "timestamp": "2026-01-14T12:24:06.711855",
+      "duration_ms": 108.88814926147461,
       "categories": [
         "general"
       ],
@@ -874,8 +874,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_trigger_from_cicd",
-      "timestamp": "2026-01-14T12:10:08.291934",
-      "duration_ms": 108.13212394714355,
+      "timestamp": "2026-01-14T12:24:06.821858",
+      "duration_ms": 108.34693908691406,
       "categories": [
         "general"
       ],
@@ -898,8 +898,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_get_health_summary",
-      "timestamp": "2026-01-14T12:10:08.402120",
-      "duration_ms": 108.49666595458984,
+      "timestamp": "2026-01-14T12:24:06.932192",
+      "duration_ms": 108.14833641052246,
       "categories": [
         "general"
       ],
@@ -923,8 +923,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_get_recent_cycles",
-      "timestamp": "2026-01-14T12:10:08.726792",
-      "duration_ms": 323.16112518310547,
+      "timestamp": "2026-01-14T12:24:07.255254",
+      "duration_ms": 321.14386558532715,
       "categories": [
         "general"
       ],
@@ -947,8 +947,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_engine_stats",
-      "timestamp": "2026-01-14T12:10:08.944490",
-      "duration_ms": 216.01152420043945,
+      "timestamp": "2026-01-14T12:24:07.471324",
+      "duration_ms": 214.4789695739746,
       "categories": [
         "general"
       ],
@@ -971,8 +971,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_callback_registration",
-      "timestamp": "2026-01-14T12:10:09.053602",
-      "duration_ms": 107.8944206237793,
+      "timestamp": "2026-01-14T12:24:07.581079",
+      "duration_ms": 108.1397533416748,
       "categories": [
         "general"
       ],
@@ -995,8 +995,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticEngine::test_engine_to_dict",
-      "timestamp": "2026-01-14T12:10:09.055980",
-      "duration_ms": 0.850677490234375,
+      "timestamp": "2026-01-14T12:24:07.583876",
+      "duration_ms": 1.0704994201660156,
       "categories": [
         "general"
       ],
@@ -1019,8 +1019,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_health_endpoint",
-      "timestamp": "2026-01-14T12:10:11.032429",
-      "duration_ms": 13.939857482910156,
+      "timestamp": "2026-01-14T12:24:09.485655",
+      "duration_ms": 14.061450958251953,
       "categories": [
         "api"
       ],
@@ -1044,8 +1044,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_status_endpoint",
-      "timestamp": "2026-01-14T12:10:11.043685",
-      "duration_ms": 7.41267204284668,
+      "timestamp": "2026-01-14T12:24:09.497106",
+      "duration_ms": 8.345842361450195,
       "categories": [
         "api"
       ],
@@ -1069,8 +1069,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_trigger_endpoint",
-      "timestamp": "2026-01-14T12:10:11.170294",
-      "duration_ms": 124.91631507873535,
+      "timestamp": "2026-01-14T12:24:09.622759",
+      "duration_ms": 123.92616271972656,
       "categories": [
         "api"
       ],
@@ -1094,8 +1094,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_history_endpoint",
-      "timestamp": "2026-01-14T12:10:11.179380",
-      "duration_ms": 7.175445556640625,
+      "timestamp": "2026-01-14T12:24:09.631764",
+      "duration_ms": 7.124423980712891,
       "categories": [
         "api"
       ],
@@ -1119,8 +1119,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_cicd_webhook_endpoint",
-      "timestamp": "2026-01-14T12:10:11.301668",
-      "duration_ms": 120.45955657958984,
+      "timestamp": "2026-01-14T12:24:09.752367",
+      "duration_ms": 118.79634857177734,
       "categories": [
         "api"
       ],
@@ -1144,8 +1144,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_sensor_flag_endpoint",
-      "timestamp": "2026-01-14T12:10:11.424487",
-      "duration_ms": 120.9561824798584,
+      "timestamp": "2026-01-14T12:24:09.872844",
+      "duration_ms": 118.6072826385498,
       "categories": [
         "api"
       ],
@@ -1169,8 +1169,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_avn_alerts_endpoint",
-      "timestamp": "2026-01-14T12:10:11.434654",
-      "duration_ms": 8.068561553955078,
+      "timestamp": "2026-01-14T12:24:09.881915",
+      "duration_ms": 7.152557373046875,
       "categories": [
         "api"
       ],
@@ -1194,8 +1194,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_avm_status_endpoint",
-      "timestamp": "2026-01-14T12:10:11.444087",
-      "duration_ms": 7.335901260375977,
+      "timestamp": "2026-01-14T12:24:09.890760",
+      "duration_ms": 7.040262222290039,
       "categories": [
         "api"
       ],
@@ -1219,8 +1219,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_forensics_endpoint",
-      "timestamp": "2026-01-14T12:10:11.452504",
-      "duration_ms": 6.714582443237305,
+      "timestamp": "2026-01-14T12:24:09.899865",
+      "duration_ms": 7.066488265991211,
       "categories": [
         "api"
       ],
@@ -1244,8 +1244,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticAPI::test_full_report_endpoint",
-      "timestamp": "2026-01-14T12:10:11.570020",
-      "duration_ms": 116.06335639953613,
+      "timestamp": "2026-01-14T12:24:10.018063",
+      "duration_ms": 115.95368385314941,
       "categories": [
         "api"
       ],
@@ -1269,8 +1269,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticIntegration::test_full_diagnostic_pipeline",
-      "timestamp": "2026-01-14T12:10:11.573336",
-      "duration_ms": 1.9042491912841797,
+      "timestamp": "2026-01-14T12:24:10.021246",
+      "duration_ms": 1.3918876647949219,
       "categories": [
         "general"
       ],
@@ -1293,8 +1293,8 @@
     },
     {
       "test": "tests/test_diagnostic_machine.py::TestDiagnosticIntegration::test_engine_full_cycle",
-      "timestamp": "2026-01-14T12:10:11.684734",
-      "duration_ms": 109.92980003356934,
+      "timestamp": "2026-01-14T12:24:10.130834",
+      "duration_ms": 108.14809799194336,
       "categories": [
         "general"
       ],
@@ -1462,11 +1462,11 @@
     "has_critical_issues": false,
     "environment_ready": false,
     "validation_types_working": [
-      "data_retrieval_validation",
+      "api_response_validation",
       "data_modification_validation",
       "connectivity_validation",
-      "general_validation",
-      "api_response_validation"
+      "data_retrieval_validation",
+      "general_validation"
     ],
     "category_pass_counts": {
       "general": 44,
