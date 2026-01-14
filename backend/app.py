@@ -62,6 +62,7 @@ from api.knowledge_base_cicd import router as kb_cicd_router  # Knowledge base C
 from api.adaptive_cicd_api import router as adaptive_cicd_router  # Adaptive CI/CD with trust/KPIs
 from api.ingestion_api import router as ingestion_router  # Librarian Ingestion Pipeline
 from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
+from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -478,6 +479,7 @@ app.include_router(kb_cicd_router)  # Knowledge Base CI/CD - autonomous triggers
 app.include_router(adaptive_cicd_router)  # Adaptive CI/CD - trust, KPIs, LLM, governance
 app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-tracked data flow
 app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
+app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
