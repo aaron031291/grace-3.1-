@@ -308,7 +308,7 @@ class RepoScanner:
         Links file Genesis Keys with version control.
         """
         try:
-            from backend.genesis.file_version_tracker import get_file_version_tracker
+            from genesis.file_version_tracker import get_file_version_tracker
 
             tracker = get_file_version_tracker(base_path=self.repo_path)
 

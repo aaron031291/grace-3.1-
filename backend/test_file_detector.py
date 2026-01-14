@@ -9,8 +9,16 @@ sys.path.insert(0, '.')
 import time
 import json
 from pathlib import Path
+import pytest
+
 from ingestion.file_manager import IngestionFileManager
 from embedding import get_embedding_model
+
+# Skip all tests in this module if torch is not available
+pytestmark = pytest.mark.skipif(
+    get_embedding_model is None,
+    reason="Embedding model not available (torch not installed)"
+)
 
 def print_section(title):
     print(f"\n{'='*60}")

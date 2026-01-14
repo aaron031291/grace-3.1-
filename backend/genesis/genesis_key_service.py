@@ -37,9 +37,9 @@ class GenesisKeyService:
         self.repo_path = repo_path or os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         try:
             self.git_service = GitService(self.repo_path)
-        except:
+        except Exception as e:
             self.git_service = None
-            logger.warning("Git service not available for Genesis Key tracking")
+            logger.warning(f"Git service not available for Genesis Key tracking: {e}")
 
     def generate_user_id(self, identifier: Optional[str] = None) -> str:
         """
@@ -165,7 +165,7 @@ class GenesisKeyService:
                     commits = self.git_service.get_commits(limit=1)
                     if commits:
                         commit_sha = commits[0].get('sha')
-                except:
+                except Exception:
                     pass
 
             # Generate human-readable metadata

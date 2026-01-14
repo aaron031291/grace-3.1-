@@ -45,16 +45,14 @@ def test_daily_curation():
             else:
                 print(f"\n[OK] No Genesis Keys to curate for {result['date']}")
 
-            return True
+            assert result['success'], "Curation should succeed"
         else:
-            print(f"\n[FAIL] Curation failed: {result.get('error')}")
-            return False
+            assert False, f"Curation failed: {result.get('error')}"
 
     except Exception as e:
-        print(f"\n[FAIL] Error: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        assert False, f"Error: {e}"
 
 
 def check_layer1_export():
@@ -178,13 +176,12 @@ def test_curation_status():
             for day in status['organized_days'][:5]:
                 print(f"    - {day}")
 
-        return True
+        assert status is not None, "Status should be returned"
 
     except Exception as e:
-        print(f"[FAIL] Error getting status: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        assert False, f"Error getting status: {e}"
 
 
 def main():

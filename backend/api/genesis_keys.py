@@ -4,7 +4,7 @@ Genesis Key API endpoints.
 Provides comprehensive tracking and version control capabilities.
 """
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
@@ -62,8 +62,7 @@ class GenesisKeyResponse(BaseModel):
     fix_applied: bool
     metadata_human: Optional[str]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class FixSuggestionResponse(BaseModel):
@@ -78,8 +77,7 @@ class FixSuggestionResponse(BaseModel):
     status: str
     confidence: Optional[float]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AnalyzeCodeRequest(BaseModel):
@@ -119,8 +117,7 @@ class UserProfileResponse(BaseModel):
     total_errors: int
     total_fixes: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ArchiveResponse(BaseModel):
@@ -135,8 +132,7 @@ class ArchiveResponse(BaseModel):
     most_changed_file: Optional[str]
     most_common_error: Optional[str]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==================== Endpoints ====================
@@ -231,7 +227,7 @@ async def get_genesis_key(
 @router.get("/keys/{key_id}/metadata")
 async def get_key_metadata(
     key_id: str,
-    format: str = Query("human", regex="^(human|ai|both)$"),
+    format: str = Query("human", pattern="^(human|ai|both)$"),
     session: Session = Depends(get_session)
 ):
     """Get metadata for a Genesis Key (human and/or AI readable)."""
@@ -436,7 +432,7 @@ async def get_archive(
 @router.get("/archives/{archive_id}/report")
 async def get_archive_report(
     archive_id: str,
-    format: str = Query("text", regex="^(text|json)$"),
+    format: str = Query("text", pattern="^(text|json)$"),
     session: Session = Depends(get_session)
 ):
     """Get archive report in text or JSON format."""

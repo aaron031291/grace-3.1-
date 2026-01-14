@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 from typing import Optional, List
 from datetime import datetime, timedelta
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from database.session import get_session
 from models.telemetry_models import (
@@ -38,8 +38,7 @@ class OperationLogResponse(BaseModel):
     output_tokens: Optional[int]
     confidence_score: Optional[float]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class BaselineResponse(BaseModel):
@@ -54,8 +53,7 @@ class BaselineResponse(BaseModel):
     mean_confidence_score: Optional[float]
     last_updated: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class DriftAlertResponse(BaseModel):
@@ -72,8 +70,7 @@ class DriftAlertResponse(BaseModel):
     resolved: bool
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SystemStateResponse(BaseModel):
@@ -89,8 +86,7 @@ class SystemStateResponse(BaseModel):
     memory_percent: Optional[float]
     operations_last_24h: Optional[int]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ReplayResponse(BaseModel):
@@ -104,8 +100,7 @@ class ReplayResponse(BaseModel):
     insights: Optional[str]
     replayed_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OperationStatsResponse(BaseModel):

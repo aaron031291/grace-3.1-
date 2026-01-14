@@ -683,7 +683,7 @@ class MultiLLMClient:
                 )
                 if model_key in self.model_stats:
                     self.model_stats[model_key]["failures"] += 1
-            except:
+            except (KeyError, StopIteration):
                 pass
 
             return {

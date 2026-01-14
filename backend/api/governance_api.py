@@ -266,7 +266,7 @@ async def upload_governance_document(
         try:
             from file_manager.file_handler import extract_file_text
             text = extract_file_text(file_path)
-        except:
+        except (ImportError, OSError, ValueError):
             text = content.decode("utf-8", errors="ignore")
 
         # Process document to extract rules
