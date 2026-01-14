@@ -1,25 +1,255 @@
 {
-  "session_id": "2026-01-14T11:02:08.222653",
+  "session_id": "2026-01-14T11:11:11.571275",
   "environment": {
     "python_version": "3.11.14 (main, Oct 10 2025, 08:54:04) [GCC 13.3.0]",
     "platform": "linux",
     "cwd": "/home/user/grace-3.1-/backend"
   },
+  "passes": [
+    {
+      "test": "tests/test_database.py::TestDatabaseConfig::test_sqlite_connection_string",
+      "timestamp": "2026-01-14T11:11:23.470298",
+      "duration_ms": 0.3364086151123047,
+      "categories": [
+        "database"
+      ],
+      "details": {
+        "module": "test_database",
+        "class": "TestDatabaseConfig",
+        "function": "test_sqlite_connection_string",
+        "file": "/home/user/grace-3.1-/backend/tests/test_database.py",
+        "markers": [],
+        "fixtures_used": [
+          "event_loop_policy"
+        ],
+        "outcome": "passed",
+        "assertions_likely_validated": [
+          "Connection establishment validation"
+        ]
+      },
+      "validation_type": "connectivity_validation",
+      "learned_insight": "Service connectivity is established: test_sqlite_connection_string"
+    },
+    {
+      "test": "tests/test_database.py::TestDatabaseConfig::test_postgresql_connection_string",
+      "timestamp": "2026-01-14T11:11:23.471944",
+      "duration_ms": 0.28634071350097656,
+      "categories": [
+        "database"
+      ],
+      "details": {
+        "module": "test_database",
+        "class": "TestDatabaseConfig",
+        "function": "test_postgresql_connection_string",
+        "file": "/home/user/grace-3.1-/backend/tests/test_database.py",
+        "markers": [],
+        "fixtures_used": [
+          "event_loop_policy"
+        ],
+        "outcome": "passed",
+        "assertions_likely_validated": [
+          "Connection establishment validation"
+        ]
+      },
+      "validation_type": "connectivity_validation",
+      "learned_insight": "Service connectivity is established: test_postgresql_connection_string"
+    },
+    {
+      "test": "tests/test_database.py::TestDatabaseConfig::test_mysql_connection_string",
+      "timestamp": "2026-01-14T11:11:23.473256",
+      "duration_ms": 0.22602081298828125,
+      "categories": [
+        "database"
+      ],
+      "details": {
+        "module": "test_database",
+        "class": "TestDatabaseConfig",
+        "function": "test_mysql_connection_string",
+        "file": "/home/user/grace-3.1-/backend/tests/test_database.py",
+        "markers": [],
+        "fixtures_used": [
+          "event_loop_policy"
+        ],
+        "outcome": "passed",
+        "assertions_likely_validated": [
+          "Connection establishment validation"
+        ]
+      },
+      "validation_type": "connectivity_validation",
+      "learned_insight": "Service connectivity is established: test_mysql_connection_string"
+    }
+  ],
+  "failures": [
+    {
+      "test": "tests/test_api_retrieval.py::TestVectorDBOperations::test_get_collection_stats",
+      "timestamp": "2026-01-14T11:11:23.456975",
+      "duration_ms": 11.070966720581055,
+      "categories": [
+        "api"
+      ],
+      "error_type": "AssertionError",
+      "error_message": "assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "details": {
+        "module": "test_api_retrieval",
+        "class": "TestVectorDBOperations",
+        "function": "test_get_collection_stats",
+        "file": "/home/user/grace-3.1-/backend/tests/test_api_retrieval.py",
+        "markers": [
+          "api"
+        ],
+        "fixtures_used": [
+          "event_loop_policy",
+          "client",
+          "app",
+          "request"
+        ],
+        "outcome": "failed",
+        "traceback_summary": [
+          "  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 166, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n",
+          "  File \"/home/user/grace-3.1-/backend/tests/test_api_retrieval.py\", line 169, in test_get_collection_stats\n    assert response.status_code in [200, 500]\n",
+          "AssertionError: assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code\n"
+        ],
+        "full_traceback": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 353, in from_call\n    result: TResult | None = func()\n                             ^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 245, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/logging.py\", line 850, in pytest_runtest_call\n    yield\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/capture.py\", line 900, in pytest_runtest_call\n    return (yield)\n            ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/skipping.py\", line 268, in pytest_runtest_call\n    return (yield)\n            ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 179, in pytest_runtest_call\n    item.runtest()\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 1720, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 53, in run_old_style_hookwrapper\n    return result.get_result()\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_result.py\", line 103, in get_result\n    raise exc.with_traceback(tb)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 38, in run_old_style_hookwrapper\n    res = yield\n          ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 166, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/grace-3.1-/backend/tests/test_api_retrieval.py\", line 169, in test_get_collection_stats\n    assert response.status_code in [200, 500]\nAssertionError: assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code\n"
+      },
+      "suggested_fix": "Check test expectations vs actual implementation",
+      "is_infrastructure_issue": false
+    },
+    {
+      "test": "tests/test_api_retrieval.py::TestVectorDBOperations::test_get_collections",
+      "timestamp": "2026-01-14T11:11:23.468533",
+      "duration_ms": 5.83648681640625,
+      "categories": [
+        "api"
+      ],
+      "error_type": "AssertionError",
+      "error_message": "assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "details": {
+        "module": "test_api_retrieval",
+        "class": "TestVectorDBOperations",
+        "function": "test_get_collections",
+        "file": "/home/user/grace-3.1-/backend/tests/test_api_retrieval.py",
+        "markers": [
+          "api"
+        ],
+        "fixtures_used": [
+          "event_loop_policy",
+          "client",
+          "app",
+          "request"
+        ],
+        "outcome": "failed",
+        "traceback_summary": [
+          "  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 166, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n",
+          "  File \"/home/user/grace-3.1-/backend/tests/test_api_retrieval.py\", line 174, in test_get_collections\n    assert response.status_code in [200, 500]\n",
+          "AssertionError: assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code\n"
+        ],
+        "full_traceback": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 353, in from_call\n    result: TResult | None = func()\n                             ^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 245, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/logging.py\", line 850, in pytest_runtest_call\n    yield\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/capture.py\", line 900, in pytest_runtest_call\n    return (yield)\n            ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/skipping.py\", line 268, in pytest_runtest_call\n    return (yield)\n            ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/runner.py\", line 179, in pytest_runtest_call\n    item.runtest()\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 1720, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 53, in run_old_style_hookwrapper\n    return result.get_result()\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_result.py\", line 103, in get_result\n    raise exc.with_traceback(tb)\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 38, in run_old_style_hookwrapper\n    res = yield\n          ^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/dist-packages/_pytest/python.py\", line 166, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/grace-3.1-/backend/tests/test_api_retrieval.py\", line 174, in test_get_collections\n    assert response.status_code in [200, 500]\nAssertionError: assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code\n"
+      },
+      "suggested_fix": "Check test expectations vs actual implementation",
+      "is_infrastructure_issue": false
+    }
+  ],
   "skips": [],
   "import_errors": [],
   "missing_dependencies": [],
   "suggested_fixes": [],
+  "learned_patterns": [
+    {
+      "pattern_type": "connectivity_validation",
+      "categories": [
+        "database"
+      ],
+      "test_name": "tests/test_database.py::TestDatabaseConfig::test_sqlite_connection_string",
+      "description": "Successfully validated connectivity_validation for database"
+    },
+    {
+      "pattern_type": "connectivity_validation",
+      "categories": [
+        "database"
+      ],
+      "test_name": "tests/test_database.py::TestDatabaseConfig::test_postgresql_connection_string",
+      "description": "Successfully validated connectivity_validation for database"
+    },
+    {
+      "pattern_type": "connectivity_validation",
+      "categories": [
+        "database"
+      ],
+      "test_name": "tests/test_database.py::TestDatabaseConfig::test_mysql_connection_string",
+      "description": "Successfully validated connectivity_validation for database"
+    }
+  ],
   "test_results": {
-    "passed": 162,
-    "failed": 108,
+    "passed": 3,
+    "failed": 2,
     "skipped": 0,
     "errors": 0
   },
   "summary": {
+    "total_tests": 5,
+    "pass_rate": 60.0,
+    "total_passes": 3,
+    "total_failures": 2,
     "total_skips": 0,
     "total_import_errors": 0,
+    "infrastructure_failures": 0,
+    "code_failures": 2,
     "missing_dependency_count": 0,
     "has_critical_issues": false,
-    "environment_ready": true
+    "environment_ready": true,
+    "validation_types_working": [
+      "connectivity_validation"
+    ],
+    "category_pass_counts": {
+      "database": 3
+    },
+    "learned_patterns_count": 3
+  },
+  "learning_insights": {
+    "what_works": [
+      "Service connectivity is established: test_sqlite_connection_string",
+      "Service connectivity is established: test_postgresql_connection_string",
+      "Service connectivity is established: test_mysql_connection_string"
+    ],
+    "what_fails": [
+      {
+        "test": "tests/test_api_retrieval.py::TestVectorDBOperations::test_get_collection_stats",
+        "reason": "assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code",
+        "fix": "Check test expectations vs actual implementation",
+        "is_infra": false
+      },
+      {
+        "test": "tests/test_api_retrieval.py::TestVectorDBOperations::test_get_collections",
+        "reason": "assert 404 in [200, 500]\n +  where 404 = <Response [404 Not Found]>.status_code",
+        "fix": "Check test expectations vs actual implementation",
+        "is_infra": false
+      }
+    ],
+    "patterns_learned": [
+      {
+        "pattern_type": "connectivity_validation",
+        "categories": [
+          "database"
+        ],
+        "test_name": "tests/test_database.py::TestDatabaseConfig::test_sqlite_connection_string",
+        "description": "Successfully validated connectivity_validation for database"
+      },
+      {
+        "pattern_type": "connectivity_validation",
+        "categories": [
+          "database"
+        ],
+        "test_name": "tests/test_database.py::TestDatabaseConfig::test_postgresql_connection_string",
+        "description": "Successfully validated connectivity_validation for database"
+      },
+      {
+        "pattern_type": "connectivity_validation",
+        "categories": [
+          "database"
+        ],
+        "test_name": "tests/test_database.py::TestDatabaseConfig::test_mysql_connection_string",
+        "description": "Successfully validated connectivity_validation for database"
+      }
+    ]
   }
 }
