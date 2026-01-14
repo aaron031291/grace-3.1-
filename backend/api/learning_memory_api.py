@@ -515,3 +515,269 @@ async def compare_snapshots(
         raise HTTPException(status_code=404, detail=f"Snapshot file not found: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Pattern Learning Endpoints ====================
+
+class PatternResponse(BaseModel):
+    """Response for a learning pattern."""
+    pattern_id: str = Field(..., description="Pattern unique identifier")
+    pattern_name: str = Field(..., description="Pattern name")
+    pattern_type: str = Field(..., description="Type: behavioral, optimization, error_recovery, etc.")
+    preconditions: Dict[str, Any] = Field(..., description="When pattern applies")
+    actions: Dict[str, Any] = Field(..., description="What to do")
+    expected_outcomes: Dict[str, Any] = Field(..., description="Expected results")
+    trust_score: float = Field(..., description="Pattern trust score 0-1")
+    usage_count: int = Field(0, description="How many times pattern was used")
+    success_rate: float = Field(0, description="Success rate when applied")
+    created_at: str = Field(..., description="Creation timestamp")
+
+
+class PatternsListResponse(BaseModel):
+    """Response for listing patterns."""
+    patterns: List[PatternResponse]
+    total: int
+    high_trust_count: int
+    pattern_types: Dict[str, int]
+
+
+class PatternExtractRequest(BaseModel):
+    """Request to extract patterns."""
+    min_examples: int = Field(3, description="Minimum examples needed for pattern")
+    example_type: Optional[str] = Field(None, description="Filter by example type")
+    force: bool = Field(False, description="Force re-extraction even if patterns exist")
+
+
+@router.get("/patterns", response_model=PatternsListResponse)
+async def get_all_patterns(
+    pattern_type: Optional[str] = None,
+    min_trust: float = 0.0,
+    limit: int = 100,
+    session: Session = Depends(get_session)
+):
+    """
+    Get all extracted learning patterns.
+
+    Patterns are higher-level abstractions learned from multiple examples.
+    They represent reusable knowledge that Grace can apply to new situations.
+    """
+    try:
+        from cognitive.learning_memory import LearningPattern
+
+        query = session.query(LearningPattern)
+
+        if pattern_type:
+            query = query.filter(LearningPattern.pattern_type == pattern_type)
+
+        if min_trust > 0:
+            query = query.filter(LearningPattern.trust_score >= min_trust)
+
+        patterns_db = query.limit(limit).all()
+
+        patterns = []
+        type_counts = {}
+
+        for p in patterns_db:
+            pattern_resp = PatternResponse(
+                pattern_id=str(p.id),
+                pattern_name=p.pattern_name,
+                pattern_type=p.pattern_type,
+                preconditions=p.preconditions or {},
+                actions=p.actions or {},
+                expected_outcomes=p.expected_outcomes or {},
+                trust_score=p.trust_score or 0.5,
+                usage_count=p.usage_count or 0,
+                success_rate=p.success_rate or 0.0,
+                created_at=p.created_at.isoformat() if p.created_at else datetime.utcnow().isoformat()
+            )
+            patterns.append(pattern_resp)
+
+            # Count types
+            if p.pattern_type not in type_counts:
+                type_counts[p.pattern_type] = 0
+            type_counts[p.pattern_type] += 1
+
+        high_trust = sum(1 for p in patterns if p.trust_score >= 0.7)
+
+        return PatternsListResponse(
+            patterns=patterns,
+            total=len(patterns),
+            high_trust_count=high_trust,
+            pattern_types=type_counts
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get patterns: {str(e)}")
+
+
+@router.get("/patterns/{pattern_id}", response_model=PatternResponse)
+async def get_pattern_by_id(
+    pattern_id: str,
+    session: Session = Depends(get_session)
+):
+    """
+    Get a specific pattern by ID.
+
+    Returns detailed information about the pattern including
+    its preconditions, actions, and usage statistics.
+    """
+    try:
+        from cognitive.learning_memory import LearningPattern
+
+        pattern = session.query(LearningPattern).filter(
+            LearningPattern.id == pattern_id
+        ).first()
+
+        if not pattern:
+            raise HTTPException(status_code=404, detail=f"Pattern not found: {pattern_id}")
+
+        return PatternResponse(
+            pattern_id=str(pattern.id),
+            pattern_name=pattern.pattern_name,
+            pattern_type=pattern.pattern_type,
+            preconditions=pattern.preconditions or {},
+            actions=pattern.actions or {},
+            expected_outcomes=pattern.expected_outcomes or {},
+            trust_score=pattern.trust_score or 0.5,
+            usage_count=pattern.usage_count or 0,
+            success_rate=pattern.success_rate or 0.0,
+            created_at=pattern.created_at.isoformat() if pattern.created_at else datetime.utcnow().isoformat()
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get pattern: {str(e)}")
+
+
+@router.post("/patterns/extract")
+async def extract_patterns(
+    request: PatternExtractRequest,
+    session: Session = Depends(get_session)
+):
+    """
+    Force pattern extraction from learning examples.
+
+    Analyzes existing learning examples and extracts patterns
+    where multiple similar examples exist.
+
+    This is useful for:
+    - Initial pattern extraction after bulk data import
+    - Re-analysis after trust score updates
+    - Manual triggering of learning consolidation
+    """
+    try:
+        from cognitive.learning_memory import LearningMemoryManager, LearningExample, LearningPattern
+
+        # Get learning examples
+        query = session.query(LearningExample)
+
+        if request.example_type:
+            query = query.filter(LearningExample.example_type == request.example_type)
+
+        examples = query.all()
+
+        if len(examples) < request.min_examples:
+            return {
+                "success": False,
+                "message": f"Not enough examples ({len(examples)}) for pattern extraction (min: {request.min_examples})",
+                "examples_found": len(examples)
+            }
+
+        # Group examples by type
+        type_groups = {}
+        for ex in examples:
+            if ex.example_type not in type_groups:
+                type_groups[ex.example_type] = []
+            type_groups[ex.example_type].append(ex)
+
+        patterns_created = 0
+        patterns_updated = 0
+
+        # Extract patterns from each group
+        for example_type, group in type_groups.items():
+            if len(group) < request.min_examples:
+                continue
+
+            # Check if pattern already exists
+            existing = session.query(LearningPattern).filter(
+                LearningPattern.pattern_type == example_type
+            ).first()
+
+            if existing and not request.force:
+                # Update existing pattern
+                avg_trust = sum(e.trust_score for e in group) / len(group)
+                existing.trust_score = avg_trust
+                existing.usage_count = len(group)
+                patterns_updated += 1
+            else:
+                # Create new pattern
+                pattern_name = f"pattern_{example_type}_{datetime.utcnow().timestamp()}"
+
+                # Extract common elements (simplified)
+                preconditions = {"example_count": len(group), "types": [example_type]}
+                actions = {"derived_from": example_type}
+                outcomes = {"expected": "success"}
+
+                avg_trust = sum(e.trust_score for e in group) / len(group)
+
+                new_pattern = LearningPattern(
+                    pattern_name=pattern_name,
+                    pattern_type=example_type,
+                    preconditions=preconditions,
+                    actions=actions,
+                    expected_outcomes=outcomes,
+                    trust_score=avg_trust,
+                    usage_count=len(group),
+                    success_rate=0.0
+                )
+                session.add(new_pattern)
+                patterns_created += 1
+
+        session.commit()
+
+        return {
+            "success": True,
+            "patterns_created": patterns_created,
+            "patterns_updated": patterns_updated,
+            "example_groups": len(type_groups),
+            "total_examples_analyzed": len(examples),
+            "message": f"Pattern extraction complete. Created {patterns_created}, updated {patterns_updated}"
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Pattern extraction failed: {str(e)}")
+
+
+@router.delete("/patterns/{pattern_id}")
+async def delete_pattern(
+    pattern_id: str,
+    session: Session = Depends(get_session)
+):
+    """
+    Delete a learning pattern.
+
+    Use with caution - deleting patterns removes learned knowledge.
+    """
+    try:
+        from cognitive.learning_memory import LearningPattern
+
+        pattern = session.query(LearningPattern).filter(
+            LearningPattern.id == pattern_id
+        ).first()
+
+        if not pattern:
+            raise HTTPException(status_code=404, detail=f"Pattern not found: {pattern_id}")
+
+        session.delete(pattern)
+        session.commit()
+
+        return {
+            "success": True,
+            "message": f"Pattern {pattern_id} deleted"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete pattern: {str(e)}")
