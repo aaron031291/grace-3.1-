@@ -514,3 +514,126 @@ async def get_cognitive_status(session: Session = Depends(get_session)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Whitelist Management Endpoints ====================
+
+# In-memory whitelist storage (in production, use database)
+_whitelist_store = {
+    "domains": [
+        {"id": "d-1", "domain": "github.com", "status": "active", "added": "2025-01-01", "hits": 245, "description": "GitHub API access"},
+        {"id": "d-2", "domain": "api.openai.com", "status": "active", "added": "2025-01-02", "hits": 189, "description": "OpenAI API"},
+        {"id": "d-3", "domain": "huggingface.co", "status": "active", "added": "2025-01-03", "hits": 67, "description": "Hugging Face models"},
+    ],
+    "paths": [
+        {"id": "p-1", "path": "/api/*", "type": "wildcard", "status": "active", "hits": 1250, "description": "All API endpoints"},
+        {"id": "p-2", "path": "/auth/login", "type": "exact", "status": "active", "hits": 450, "description": "Login endpoint"},
+    ],
+    "patterns": [
+        {"id": "pt-1", "pattern": "^[a-zA-Z0-9_]+\\.py$", "type": "regex", "status": "active", "hits": 890, "description": "Python files"},
+        {"id": "pt-2", "pattern": "*.md", "type": "glob", "status": "active", "hits": 156, "description": "Markdown files"},
+    ],
+}
+
+_whitelist_logs = [
+    {"id": "l-1", "timestamp": "2025-01-11T10:28:00Z", "action": "allowed", "type": "domain", "value": "github.com", "source": "API request"},
+    {"id": "l-2", "timestamp": "2025-01-11T10:27:00Z", "action": "blocked", "type": "path", "value": "/admin/delete", "source": "User input"},
+    {"id": "l-3", "timestamp": "2025-01-11T10:25:00Z", "action": "allowed", "type": "pattern", "value": "utils.py", "source": "File access"},
+]
+
+
+class WhitelistResponse(BaseModel):
+    """Response for whitelist data."""
+    total_entries: int = Field(0, description="Total whitelist entries")
+    domains_count: int = Field(0, description="Number of domain entries")
+    paths_count: int = Field(0, description="Number of path entries")
+    patterns_count: int = Field(0, description="Number of pattern entries")
+    last_updated: str = Field(..., description="Last update timestamp")
+    blocked_today: int = Field(0, description="Blocked requests today")
+    allowed_today: int = Field(0, description="Allowed requests today")
+    domains: List[Dict] = Field(default_factory=list)
+    paths: List[Dict] = Field(default_factory=list)
+    patterns: List[Dict] = Field(default_factory=list)
+
+
+class WhitelistLogsResponse(BaseModel):
+    """Response for whitelist logs."""
+    logs: List[Dict] = Field(default_factory=list)
+
+
+@router.get("/whitelist", response_model=WhitelistResponse)
+async def get_whitelist():
+    """
+    Get all whitelist entries.
+
+    Returns domains, paths, and patterns with statistics.
+    """
+    from datetime import datetime
+
+    return WhitelistResponse(
+        total_entries=len(_whitelist_store["domains"]) + len(_whitelist_store["paths"]) + len(_whitelist_store["patterns"]),
+        domains_count=len(_whitelist_store["domains"]),
+        paths_count=len(_whitelist_store["paths"]),
+        patterns_count=len(_whitelist_store["patterns"]),
+        last_updated=datetime.now().isoformat(),
+        blocked_today=12,
+        allowed_today=892,
+        domains=_whitelist_store["domains"],
+        paths=_whitelist_store["paths"],
+        patterns=_whitelist_store["patterns"]
+    )
+
+
+@router.get("/whitelist/logs", response_model=WhitelistLogsResponse)
+async def get_whitelist_logs():
+    """
+    Get whitelist access logs.
+
+    Returns recent allowed/blocked requests.
+    """
+    return WhitelistLogsResponse(logs=_whitelist_logs)
+
+
+@router.patch("/whitelist/{entry_type}/{entry_id}")
+async def update_whitelist_entry(
+    entry_type: str,
+    entry_id: str,
+    status: str = Body(..., embed=True)
+):
+    """
+    Update a whitelist entry status.
+
+    Args:
+        entry_type: Type of entry (domains, paths, patterns)
+        entry_id: Entry ID
+        status: New status (active, paused)
+    """
+    if entry_type not in _whitelist_store:
+        raise HTTPException(status_code=400, detail=f"Invalid entry type: {entry_type}")
+
+    for entry in _whitelist_store[entry_type]:
+        if entry["id"] == entry_id:
+            entry["status"] = status
+            return {"success": True, "entry": entry}
+
+    raise HTTPException(status_code=404, detail=f"Entry not found: {entry_id}")
+
+
+@router.delete("/whitelist/{entry_type}/{entry_id}")
+async def delete_whitelist_entry(entry_type: str, entry_id: str):
+    """
+    Delete a whitelist entry.
+
+    Args:
+        entry_type: Type of entry (domains, paths, patterns)
+        entry_id: Entry ID
+    """
+    if entry_type not in _whitelist_store:
+        raise HTTPException(status_code=400, detail=f"Invalid entry type: {entry_type}")
+
+    for i, entry in enumerate(_whitelist_store[entry_type]):
+        if entry["id"] == entry_id:
+            deleted = _whitelist_store[entry_type].pop(i)
+            return {"success": True, "deleted": deleted}
+
+    raise HTTPException(status_code=404, detail=f"Entry not found: {entry_id}")
