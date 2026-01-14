@@ -1,0 +1,462 @@
+---
+# GRACE Kubernetes Deployment Manifests
+# =====================================
+# Complete deployment configuration for Kubernetes.
+
+# =============================================================================
+# Namespace
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: namespace
+
+---
+# =============================================================================
+# ConfigMap - Application Configuration
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grace-config
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: config
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  OLLAMA_HOST: "http://ollama-service:11434"
+  QDRANT_HOST: "qdrant-service"
+  QDRANT_PORT: "6333"
+  DATABASE_TYPE: "postgresql"
+  CORS_ORIGINS: "*"
+  RATE_LIMIT_ENABLED: "true"
+  RATE_LIMIT_DEFAULT: "100"
+
+---
+# =============================================================================
+# Secret - Sensitive Configuration
+# =============================================================================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grace-secrets
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: secrets
+type: Opaque
+stringData:
+  DATABASE_URL: "postgresql://grace:grace@postgres-service:5432/grace"
+  JWT_SECRET: "change-this-in-production-use-strong-secret"
+  API_KEY: "change-this-api-key"
+
+---
+# =============================================================================
+# Backend Deployment
+# =============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grace-backend
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grace
+      app.kubernetes.io/component: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grace
+        app.kubernetes.io/component: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: backend
+          image: grace-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: grace-config
+            - secretRef:
+                name: grace-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: logs
+              mountPath: /app/logs
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: grace-data-pvc
+        - name: logs
+          emptyDir: {}
+
+---
+# =============================================================================
+# Backend Service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: grace-backend-service
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: backend
+
+---
+# =============================================================================
+# Frontend Deployment
+# =============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grace-frontend
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grace
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grace
+        app.kubernetes.io/component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: grace-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+---
+# =============================================================================
+# Frontend Service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: grace-frontend-service
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: frontend
+
+---
+# =============================================================================
+# Ingress
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grace-ingress
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/websocket-services: "grace-backend-service"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - grace.example.com
+      secretName: grace-tls
+  rules:
+    - host: grace.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: grace-backend-service
+                port:
+                  number: 8000
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: grace-backend-service
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grace-frontend-service
+                port:
+                  number: 80
+
+---
+# =============================================================================
+# Persistent Volume Claim
+# =============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grace-data-pvc
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+# =============================================================================
+# Horizontal Pod Autoscaler - Backend
+# =============================================================================
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: grace-backend-hpa
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: grace-backend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+---
+# =============================================================================
+# Network Policy
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: grace-network-policy
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: grace
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: grace
+      ports:
+        - protocol: TCP
+          port: 8000
+        - protocol: TCP
+          port: 80
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: grace
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              app: postgres
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              app: qdrant
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              app: ollama
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+
+---
+# =============================================================================
+# Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: grace-backend-pdb
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+    app.kubernetes.io/component: backend
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grace
+      app.kubernetes.io/component: backend
+
+---
+# =============================================================================
+# ServiceAccount
+# =============================================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grace-service-account
+  namespace: grace
+  labels:
+    app.kubernetes.io/name: grace
+
+---
+# =============================================================================
+# Role for GRACE pods
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grace-role
+  namespace: grace
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+
+---
+# =============================================================================
+# RoleBinding
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grace-role-binding
+  namespace: grace
+subjects:
+  - kind: ServiceAccount
+    name: grace-service-account
+    namespace: grace
+roleRef:
+  kind: Role
+  name: grace-role
+  apiGroup: rbac.authorization.k8s.io
