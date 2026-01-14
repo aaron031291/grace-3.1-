@@ -591,7 +591,7 @@ IMPROVED: [improved version if you suggest changes]"""
                     score_str = content.split("AGREEMENT:")[1].split("\n")[0].strip()
                     score = float(score_str.split()[0])
                     scores.append(score / 10.0)  # Normalize to 0-1
-                except:
+                except (ValueError, IndexError):
                     scores.append(0.5)  # Default neutral
             else:
                 scores.append(0.5)

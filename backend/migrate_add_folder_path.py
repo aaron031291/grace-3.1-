@@ -53,7 +53,7 @@ def migrate():
                 # SQLite doesn't support CREATE INDEX in same transaction for newly added columns
                 try:
                     session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
-                except:
+                except Exception:
                     pass
             else:
                 print("Unknown database type")

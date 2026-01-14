@@ -68,7 +68,7 @@ class GenesisTrackingMiddleware(BaseHTTPMiddleware):
                     request_body = await request.body()
                     # Re-create request with same body for handler
                     request._body = request_body
-                except:
+                except Exception:
                     pass
 
             genesis_key = tracker._create_genesis_key(
@@ -134,7 +134,7 @@ class GenesisTrackingMiddleware(BaseHTTPMiddleware):
                         parent_key_id=genesis_key_id
                     )
                     db.close()
-            except:
+            except Exception:
                 pass
 
             raise

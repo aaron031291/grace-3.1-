@@ -165,7 +165,7 @@ class GenesisKeyService:
                     commits = self.git_service.get_commits(limit=1)
                     if commits:
                         commit_sha = commits[0].get('sha')
-                except:
+                except Exception:
                     pass
 
             # Generate human-readable metadata
