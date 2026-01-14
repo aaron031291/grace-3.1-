@@ -361,7 +361,7 @@ async def search_code(
 
 @router.get("/commits", response_model=CommitsResponse)
 async def get_commits(
-    repo: str = Query(..., description="Repository ID")
+    repo: str = Query("grace-main", description="Repository ID")
 ):
     """
     Get commit history for a repository.
