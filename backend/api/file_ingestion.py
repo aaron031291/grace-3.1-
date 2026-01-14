@@ -11,7 +11,7 @@ import logging
 
 from ingestion.file_manager import IngestionFileManager, IngestionResult
 from api.ingest import get_ingestion_service
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session

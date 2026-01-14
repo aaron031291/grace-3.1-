@@ -51,7 +51,7 @@ def test_imports():
         test_result("Database connection imports", False, str(e))
     
     try:
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         test_result("Embedding model imports", True)
     except Exception as e:
         test_result("Embedding model imports", False, str(e))
@@ -154,7 +154,7 @@ def test_neuro_symbolic_components():
         test_result("KPI tracker instantiation", False, str(e))
     
     try:
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         from ml_intelligence.trust_aware_embedding import get_trust_aware_embedding_model
         
         base_model = get_embedding_model()

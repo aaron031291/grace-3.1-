@@ -133,7 +133,7 @@ class ContinuousLearningOrchestrator:
         # Get Ingestion Service
         try:
             from ingestion.service import TextIngestionService
-            from embedding.embedder import get_embedding_model
+            from embedding import get_embedding_model
 
             embedding_model = get_embedding_model()
             self.ingestion_service = TextIngestionService(

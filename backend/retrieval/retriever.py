@@ -7,7 +7,7 @@ import logging
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk

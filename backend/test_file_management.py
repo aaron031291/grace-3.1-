@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from file_manager.knowledge_base_manager import KnowledgeBaseManager
 from file_manager.file_handler import FileHandler
 from ingestion.service import TextIngestionService
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 
 
 def test_file_upload_and_directory():

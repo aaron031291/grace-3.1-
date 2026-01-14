@@ -32,10 +32,13 @@ _diagnostics: Dict[str, Any] = {
         "platform": sys.platform,
         "cwd": os.getcwd(),
     },
+    "passes": [],  # Track passing tests with diagnostic info
+    "failures": [],  # Track failing tests with diagnostic info
     "skips": [],
     "import_errors": [],
     "missing_dependencies": set(),
     "suggested_fixes": [],
+    "learned_patterns": [],  # Patterns GRACE can learn from successful tests
     "test_results": {
         "passed": 0,
         "failed": 0,
@@ -53,7 +56,13 @@ DIAGNOSTIC_REPORT_PATH = backend_dir / "tests" / "diagnostic_report.json"
 
 
 class DiagnosticCollector:
-    """Collects diagnostic information about test skips and failures."""
+    """Collects diagnostic information about test passes, skips and failures.
+
+    This collector helps GRACE learn from ALL test outcomes:
+    - PASSES: Learn what makes tests succeed, capture validation patterns
+    - FAILURES: Learn what breaks, capture error patterns for self-healing
+    - SKIPS: Learn what dependencies are missing, track environment issues
+    """
 
     # Known dependency mappings for helpful suggestions
     DEPENDENCY_FIXES = {
@@ -75,6 +84,185 @@ class DiagnosticCollector:
         "models.database_models": "Ensure models/ module exists with database_models.py",
     }
 
+    # Categories of tests for learning patterns
+    TEST_CATEGORIES = {
+        "api": ["test_api_", "TestAPI", "endpoint"],
+        "database": ["test_database", "test_db", "TestDatabase", "repository"],
+        "model": ["test_model", "TestModel", "embedding", "ml_"],
+        "security": ["test_security", "TestSecurity", "auth", "injection"],
+        "integration": ["test_integration", "TestIntegration", "complete"],
+        "cognitive": ["test_cognitive", "cognitive", "learning"],
+        "retrieval": ["test_retrieval", "rag", "search", "retrieve"],
+    }
+
+    @classmethod
+    def _categorize_test(cls, test_name: str) -> List[str]:
+        """Categorize a test based on its name for pattern learning."""
+        categories = []
+        test_lower = test_name.lower()
+        for category, patterns in cls.TEST_CATEGORIES.items():
+            if any(pattern.lower() in test_lower for pattern in patterns):
+                categories.append(category)
+        return categories if categories else ["general"]
+
+    @classmethod
+    def record_pass(cls, test_name: str, duration_ms: float, details: Optional[Dict] = None):
+        """Record a passing test with diagnostic information for GRACE learning.
+
+        Args:
+            test_name: Full test identifier (module::class::method)
+            duration_ms: Test execution time in milliseconds
+            details: Additional context about the test
+        """
+        categories = cls._categorize_test(test_name)
+
+        pass_info = {
+            "test": test_name,
+            "timestamp": datetime.utcnow().isoformat(),
+            "duration_ms": duration_ms,
+            "categories": categories,
+            "details": details or {},
+            "validation_type": cls._infer_validation_type(test_name),
+            "learned_insight": cls._generate_learned_insight(test_name, details)
+        }
+        _diagnostics["passes"].append(pass_info)
+        _diagnostics["test_results"]["passed"] += 1
+
+        # Extract learnable patterns from successful tests
+        pattern = cls._extract_success_pattern(test_name, details)
+        if pattern and pattern not in _diagnostics["learned_patterns"]:
+            _diagnostics["learned_patterns"].append(pattern)
+
+    @classmethod
+    def record_failure(cls, test_name: str, error_type: str, error_message: str,
+                       duration_ms: float, details: Optional[Dict] = None):
+        """Record a failing test with diagnostic information.
+
+        Args:
+            test_name: Full test identifier
+            error_type: Exception type name
+            error_message: Error message
+            duration_ms: Test execution time
+            details: Additional context
+        """
+        categories = cls._categorize_test(test_name)
+
+        failure_info = {
+            "test": test_name,
+            "timestamp": datetime.utcnow().isoformat(),
+            "duration_ms": duration_ms,
+            "categories": categories,
+            "error_type": error_type,
+            "error_message": error_message,
+            "details": details or {},
+            "suggested_fix": cls._suggest_fix_for_failure(error_type, error_message),
+            "is_infrastructure_issue": cls._is_infrastructure_failure(error_message),
+        }
+        _diagnostics["failures"].append(failure_info)
+        _diagnostics["test_results"]["failed"] += 1
+
+    @classmethod
+    def _infer_validation_type(cls, test_name: str) -> str:
+        """Infer what type of validation the test performs."""
+        test_lower = test_name.lower()
+
+        if "response" in test_lower or "status_code" in test_lower or "endpoint" in test_lower:
+            return "api_response_validation"
+        elif "create" in test_lower or "insert" in test_lower:
+            return "data_creation_validation"
+        elif "get" in test_lower or "retrieve" in test_lower or "fetch" in test_lower:
+            return "data_retrieval_validation"
+        elif "update" in test_lower or "modify" in test_lower:
+            return "data_modification_validation"
+        elif "delete" in test_lower or "remove" in test_lower:
+            return "data_deletion_validation"
+        elif "auth" in test_lower or "permission" in test_lower:
+            return "authorization_validation"
+        elif "search" in test_lower or "query" in test_lower:
+            return "search_validation"
+        elif "connection" in test_lower or "health" in test_lower:
+            return "connectivity_validation"
+        elif "config" in test_lower or "setting" in test_lower:
+            return "configuration_validation"
+        else:
+            return "general_validation"
+
+    @classmethod
+    def _generate_learned_insight(cls, test_name: str, details: Optional[Dict]) -> str:
+        """Generate a human-readable insight about what the test validates."""
+        validation_type = cls._infer_validation_type(test_name)
+
+        # Extract test components
+        parts = test_name.split("::")
+        method_name = parts[-1] if parts else test_name
+
+        insights = {
+            "api_response_validation": f"API endpoint responds correctly: {method_name}",
+            "data_creation_validation": f"Data creation works as expected: {method_name}",
+            "data_retrieval_validation": f"Data retrieval returns expected results: {method_name}",
+            "data_modification_validation": f"Data updates are applied correctly: {method_name}",
+            "data_deletion_validation": f"Data deletion removes records properly: {method_name}",
+            "authorization_validation": f"Authorization rules are enforced: {method_name}",
+            "search_validation": f"Search functionality returns relevant results: {method_name}",
+            "connectivity_validation": f"Service connectivity is established: {method_name}",
+            "configuration_validation": f"Configuration is valid and applied: {method_name}",
+            "general_validation": f"Test assertion passed: {method_name}",
+        }
+
+        return insights.get(validation_type, f"Validation passed: {method_name}")
+
+    @classmethod
+    def _extract_success_pattern(cls, test_name: str, details: Optional[Dict]) -> Optional[Dict]:
+        """Extract a learnable pattern from a successful test."""
+        categories = cls._categorize_test(test_name)
+        validation_type = cls._infer_validation_type(test_name)
+
+        # Only extract patterns for significant test categories
+        if "general" not in categories or validation_type != "general_validation":
+            return {
+                "pattern_type": validation_type,
+                "categories": categories,
+                "test_name": test_name,
+                "description": f"Successfully validated {validation_type} for {', '.join(categories)}",
+            }
+        return None
+
+    @classmethod
+    def _suggest_fix_for_failure(cls, error_type: str, error_message: str) -> Optional[str]:
+        """Suggest a fix based on the failure type."""
+        error_lower = error_message.lower()
+
+        if "connection refused" in error_lower:
+            return "Start the required service (Qdrant/Ollama/Database)"
+        elif "no module named" in error_lower:
+            return cls._get_suggested_fix(error_message)
+        elif "assertion" in error_type.lower():
+            return "Check test expectations vs actual implementation"
+        elif "timeout" in error_lower:
+            return "Increase timeout or check service performance"
+        elif "permission" in error_lower or "forbidden" in error_lower:
+            return "Check authentication/authorization configuration"
+        elif "not found" in error_lower or "404" in error_lower:
+            return "Verify endpoint/resource exists"
+
+        return None
+
+    @classmethod
+    def _is_infrastructure_failure(cls, error_message: str) -> bool:
+        """Determine if failure is due to infrastructure issues."""
+        infrastructure_indicators = [
+            "connection refused",
+            "no module named",
+            "service unavailable",
+            "timeout",
+            "503",
+            "qdrant",
+            "ollama",
+            "database not initialized",
+        ]
+        error_lower = error_message.lower()
+        return any(indicator in error_lower for indicator in infrastructure_indicators)
+
     @classmethod
     def record_skip(cls, test_name: str, reason: str, details: Optional[Dict] = None):
         """Record a test skip with diagnostic information."""
@@ -82,8 +270,10 @@ class DiagnosticCollector:
             "test": test_name,
             "reason": reason,
             "timestamp": datetime.utcnow().isoformat(),
+            "categories": cls._categorize_test(test_name),
             "details": details or {},
-            "suggested_fix": cls._get_suggested_fix(reason)
+            "suggested_fix": cls._get_suggested_fix(reason),
+            "is_infrastructure_issue": cls._is_infrastructure_failure(reason),
         }
         _diagnostics["skips"].append(skip_info)
         _diagnostics["test_results"]["skipped"] += 1
@@ -126,16 +316,68 @@ class DiagnosticCollector:
 
     @classmethod
     def get_report(cls) -> Dict[str, Any]:
-        """Get the full diagnostic report."""
+        """Get the full diagnostic report with learning insights."""
         report = _diagnostics.copy()
         report["missing_dependencies"] = list(_diagnostics["missing_dependencies"])
+
+        # Calculate pass rate and categorize results
+        total_tests = (
+            _diagnostics["test_results"]["passed"] +
+            _diagnostics["test_results"]["failed"] +
+            _diagnostics["test_results"]["skipped"]
+        )
+        pass_rate = (_diagnostics["test_results"]["passed"] / total_tests * 100) if total_tests > 0 else 0
+
+        # Categorize failures
+        infrastructure_failures = [f for f in _diagnostics["failures"]
+                                    if f.get("is_infrastructure_issue", False)]
+        code_failures = [f for f in _diagnostics["failures"]
+                         if not f.get("is_infrastructure_issue", False)]
+
+        # Extract unique validation types from passes
+        validation_types_passed = list(set(
+            p.get("validation_type", "unknown")
+            for p in _diagnostics["passes"]
+        ))
+
+        # Extract categories with most passes
+        category_pass_counts = {}
+        for p in _diagnostics["passes"]:
+            for cat in p.get("categories", ["general"]):
+                category_pass_counts[cat] = category_pass_counts.get(cat, 0) + 1
+
         report["summary"] = {
+            "total_tests": total_tests,
+            "pass_rate": round(pass_rate, 2),
+            "total_passes": len(_diagnostics["passes"]),
+            "total_failures": len(_diagnostics["failures"]),
             "total_skips": len(_diagnostics["skips"]),
             "total_import_errors": len(_diagnostics["import_errors"]),
+            "infrastructure_failures": len(infrastructure_failures),
+            "code_failures": len(code_failures),
             "missing_dependency_count": len(_diagnostics["missing_dependencies"]),
             "has_critical_issues": len(_diagnostics["import_errors"]) > 0,
-            "environment_ready": _app_available
+            "environment_ready": _app_available,
+            "validation_types_working": validation_types_passed,
+            "category_pass_counts": category_pass_counts,
+            "learned_patterns_count": len(_diagnostics["learned_patterns"]),
         }
+
+        # Add learning insights section
+        report["learning_insights"] = {
+            "what_works": [p.get("learned_insight") for p in _diagnostics["passes"][:20]],
+            "what_fails": [
+                {
+                    "test": f["test"],
+                    "reason": f.get("error_message", "Unknown"),
+                    "fix": f.get("suggested_fix"),
+                    "is_infra": f.get("is_infrastructure_issue", False)
+                }
+                for f in _diagnostics["failures"][:20]
+            ],
+            "patterns_learned": _diagnostics["learned_patterns"][:20],
+        }
+
         return report
 
     @classmethod
@@ -149,24 +391,43 @@ class DiagnosticCollector:
 
     @classmethod
     def report_to_grace(cls) -> bool:
-        """Attempt to report diagnostics back to GRACE API."""
-        report = cls.get_report()
+        """Report ALL diagnostics to GRACE API for learning.
 
-        # Only report if there are issues
-        if report["summary"]["total_skips"] == 0 and report["summary"]["total_import_errors"] == 0:
-            return True
+        Reports successes, failures, and skips - GRACE learns from everything.
+        """
+        report = cls.get_report()
 
         try:
             import httpx
-            # Try to report to local GRACE instance
+
+            # Report full diagnostics to GRACE learning endpoint
             response = httpx.post(
                 "http://localhost:8000/test/diagnostics",
                 json=report,
-                timeout=5.0
+                timeout=10.0
             )
+
+            if response.status_code == 200:
+                return True
+
+            # Also try the autonomous learning endpoint for pattern extraction
+            try:
+                httpx.post(
+                    "http://localhost:8000/api/learning/from-tests",
+                    json={
+                        "passes": report.get("passes", [])[:50],
+                        "failures": report.get("failures", [])[:50],
+                        "learned_patterns": report.get("learned_patterns", []),
+                        "session_id": report.get("session_id"),
+                    },
+                    timeout=5.0
+                )
+            except Exception:
+                pass  # Learning endpoint is optional
+
             return response.status_code == 200
         except Exception:
-            # If GRACE isn't running, save locally
+            # If GRACE isn't running, save locally for later learning
             cls.save_report()
             return False
 
@@ -226,6 +487,63 @@ def client(app, request):
             reason="App not available for test client"
         )
         pytest.skip("Full app dependencies not available")
+
+    # Initialize database for test environment before creating test client
+    try:
+        from database.connection import DatabaseConnection
+        from database.config import DatabaseConfig, DatabaseType
+        from database.session import initialize_session_factory
+        from database.base import Base
+        import os
+        import time
+
+        # Always create a fresh database for tests using unique timestamp
+        import tempfile
+        temp_dir = tempfile.gettempdir()
+        timestamp = int(time.time() * 1000)
+        temp_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
+
+        # Clean up any stale test DBs from previous runs
+        for f in os.listdir(temp_dir):
+            if f.startswith("grace_test_") and f.endswith(".db"):
+                try:
+                    old_path = os.path.join(temp_dir, f)
+                    os.unlink(old_path)
+                except (OSError, PermissionError):
+                    pass  # Ignore if can't delete
+
+        # Reset singleton to force fresh initialization
+        DatabaseConnection._engine = None
+        DatabaseConnection._config = None
+
+        test_config = DatabaseConfig(
+            db_type=DatabaseType.SQLITE,
+            database_path=temp_db_path,
+            echo=False,
+        )
+        DatabaseConnection.initialize(test_config)
+
+        # Initialize session factory
+        initialize_session_factory()
+
+        # Import all models to register them with Base before create_all
+        try:
+            from models import database_models  # Core models like GovernanceRule
+            from models import genesis_key_models  # GenesisKey, UserProfile, etc.
+        except ImportError as e:
+            import logging
+            logging.warning(f"Could not import all models: {e}")
+
+        # Create all tables
+        Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+
+    except Exception as e:
+        # Log but continue - some tests may not need DB
+        import logging
+        logging.warning(f"Could not initialize test database: {e}")
+        import traceback
+        traceback.print_exc()
+
     from fastapi.testclient import TestClient
     return TestClient(app)
 
@@ -237,7 +555,7 @@ def test_db(request):
         from sqlalchemy import create_engine
         from sqlalchemy.orm import sessionmaker
         from sqlalchemy.pool import StaticPool
-        from models.database_models import Base
+        from database.base import Base
 
         # Create in-memory SQLite database
         engine = create_engine(
@@ -363,53 +681,204 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "requires_app: marks tests that need full app")
 
 
+@pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Hook to capture test results for diagnostics."""
+    """Hook to capture detailed test results for GRACE learning.
+
+    Captures comprehensive diagnostic data for:
+    - PASSED tests: Why they passed, what was validated, duration
+    - FAILED tests: Error details, stack traces, suggested fixes
+    - SKIPPED tests: Reasons, missing dependencies
+    """
+    outcome = yield
+    report = outcome.get_result()
+
+    # Calculate duration in milliseconds
+    duration_ms = (call.stop - call.start) * 1000 if hasattr(call, 'stop') and hasattr(call, 'start') else 0
+
+    # Get test details
+    test_name = item.nodeid
+    test_module = item.module.__name__ if hasattr(item, 'module') else "unknown"
+    test_class = item.cls.__name__ if hasattr(item, 'cls') and item.cls else None
+    test_function = item.name
+
+    # Build details dict
+    details = {
+        "module": test_module,
+        "class": test_class,
+        "function": test_function,
+        "file": str(item.fspath) if hasattr(item, 'fspath') else None,
+        "markers": [mark.name for mark in item.iter_markers()],
+        "fixtures_used": list(item.fixturenames) if hasattr(item, 'fixturenames') else [],
+    }
+
     if call.when == "call":
-        if call.excinfo is None:
-            _diagnostics["test_results"]["passed"] += 1
-        elif call.excinfo.typename == "Skipped":
-            # Already recorded in fixture
+        if report.passed:
+            # Record successful test with full details
+            DiagnosticCollector.record_pass(
+                test_name=test_name,
+                duration_ms=duration_ms,
+                details={
+                    **details,
+                    "outcome": "passed",
+                    "assertions_likely_validated": _infer_assertions(test_function),
+                }
+            )
+        elif report.failed:
+            # Record failed test with error details
+            error_type = call.excinfo.typename if call.excinfo else "Unknown"
+            error_message = str(call.excinfo.value) if call.excinfo else "No error message"
+            tb_lines = traceback.format_exception(
+                call.excinfo.type, call.excinfo.value, call.excinfo.tb
+            ) if call.excinfo else []
+
+            DiagnosticCollector.record_failure(
+                test_name=test_name,
+                error_type=error_type,
+                error_message=error_message,
+                duration_ms=duration_ms,
+                details={
+                    **details,
+                    "outcome": "failed",
+                    "traceback_summary": tb_lines[-3:] if tb_lines else [],
+                    "full_traceback": "".join(tb_lines) if len(tb_lines) < 50 else "Traceback too long",
+                }
+            )
+        elif report.skipped:
+            # Skip is already recorded elsewhere, but update count if needed
             pass
-        else:
-            _diagnostics["test_results"]["failed"] += 1
+
     elif call.when == "setup" and call.excinfo is not None:
         if call.excinfo.typename != "Skipped":
+            # Setup error
+            error_type = call.excinfo.typename
+            error_message = str(call.excinfo.value)
+
+            DiagnosticCollector.record_failure(
+                test_name=test_name,
+                error_type=f"SetupError:{error_type}",
+                error_message=error_message,
+                duration_ms=duration_ms,
+                details={
+                    **details,
+                    "outcome": "setup_error",
+                    "phase": "setup",
+                }
+            )
             _diagnostics["test_results"]["errors"] += 1
 
 
+def _infer_assertions(test_function: str) -> List[str]:
+    """Infer what assertions a test likely validates based on its name."""
+    assertions = []
+    test_lower = test_function.lower()
+
+    # Common assertion patterns
+    assertion_patterns = {
+        "status": "HTTP status code validation",
+        "response": "Response structure/content validation",
+        "create": "Object/record creation validation",
+        "get": "Data retrieval validation",
+        "update": "Data modification validation",
+        "delete": "Data deletion validation",
+        "list": "Collection/list retrieval validation",
+        "search": "Search results validation",
+        "filter": "Filtering logic validation",
+        "auth": "Authentication/authorization validation",
+        "permission": "Permission check validation",
+        "valid": "Input validation",
+        "invalid": "Invalid input handling validation",
+        "error": "Error handling validation",
+        "exception": "Exception handling validation",
+        "connection": "Connection establishment validation",
+        "health": "Health check validation",
+        "config": "Configuration validation",
+        "timestamp": "Timestamp/datetime validation",
+        "relationship": "Data relationship validation",
+        "singleton": "Singleton pattern validation",
+        "initialization": "Initialization validation",
+        "empty": "Empty state handling validation",
+        "null": "Null/None handling validation",
+        "unicode": "Unicode/encoding validation",
+        "injection": "Injection protection validation",
+    }
+
+    for pattern, description in assertion_patterns.items():
+        if pattern in test_lower:
+            assertions.append(description)
+
+    return assertions if assertions else ["General assertion validation"]
+
+
 def pytest_sessionfinish(session, exitstatus):
-    """Called after test session finishes - report diagnostics to GRACE."""
+    """Called after test session finishes - report ALL diagnostics to GRACE for learning."""
     # Save diagnostic report
     report_path = DiagnosticCollector.save_report()
 
     # Try to report to GRACE
     reported = DiagnosticCollector.report_to_grace()
 
-    # Print summary if there were issues
+    # Always print summary for GRACE learning visibility
     report = DiagnosticCollector.get_report()
-    if report["summary"]["total_skips"] > 0 or report["summary"]["total_import_errors"] > 0:
-        print("\n" + "=" * 60)
-        print("GRACE TEST DIAGNOSTIC SUMMARY")
-        print("=" * 60)
-        print(f"Tests Passed:  {report['test_results']['passed']}")
-        print(f"Tests Failed:  {report['test_results']['failed']}")
-        print(f"Tests Skipped: {report['test_results']['skipped']}")
-        print(f"Setup Errors:  {report['test_results']['errors']}")
+    summary = report["summary"]
 
-        if report["missing_dependencies"]:
-            print(f"\nMissing Dependencies ({len(report['missing_dependencies'])}):")
-            for dep in sorted(report["missing_dependencies"]):
-                print(f"  - {dep}")
+    print("\n" + "=" * 70)
+    print("GRACE TEST DIAGNOSTIC SUMMARY - Learning from ALL Outcomes")
+    print("=" * 70)
 
-        if report["suggested_fixes"]:
-            print(f"\nSuggested Fixes:")
-            for fix in report["suggested_fixes"]:
-                print(f"  $ {fix}")
+    # Overall results
+    print(f"\n📊 TEST RESULTS (Pass Rate: {summary['pass_rate']}%)")
+    print(f"   ✅ Passed:  {summary['total_passes']}")
+    print(f"   ❌ Failed:  {summary['total_failures']} (Infrastructure: {summary['infrastructure_failures']}, Code: {summary['code_failures']})")
+    print(f"   ⏭️  Skipped: {summary['total_skips']}")
+    print(f"   ⚠️  Errors:  {report['test_results']['errors']}")
 
-        print(f"\nDiagnostic report saved to: {report_path}")
-        if reported:
-            print("Diagnostics reported to GRACE API for learning.")
-        else:
-            print("GRACE API not available - diagnostics saved locally.")
-        print("=" * 60)
+    # Learning insights from passes
+    if summary['total_passes'] > 0:
+        print(f"\n📚 LEARNING FROM SUCCESS ({summary['total_passes']} tests):")
+        print(f"   Validation types working: {', '.join(summary['validation_types_working'][:5])}")
+        if summary['category_pass_counts']:
+            top_categories = sorted(summary['category_pass_counts'].items(),
+                                    key=lambda x: x[1], reverse=True)[:5]
+            print(f"   Strongest areas: {', '.join(f'{cat}({count})' for cat, count in top_categories)}")
+        if summary['learned_patterns_count'] > 0:
+            print(f"   Patterns learned: {summary['learned_patterns_count']}")
+
+    # Learning insights from failures
+    if summary['total_failures'] > 0:
+        print(f"\n🔧 LEARNING FROM FAILURES ({summary['total_failures']} tests):")
+        if summary['infrastructure_failures'] > 0:
+            print(f"   Infrastructure issues: {summary['infrastructure_failures']} (external services/deps)")
+        if summary['code_failures'] > 0:
+            print(f"   Code issues: {summary['code_failures']} (logic/assertion failures)")
+
+        # Show top failure patterns
+        failure_types = {}
+        for f in report.get("failures", [])[:20]:
+            error_type = f.get("error_type", "Unknown")
+            failure_types[error_type] = failure_types.get(error_type, 0) + 1
+        if failure_types:
+            print(f"   Top error types: {', '.join(f'{t}({c})' for t, c in sorted(failure_types.items(), key=lambda x: x[1], reverse=True)[:3])}")
+
+    # Missing dependencies
+    if report["missing_dependencies"]:
+        print(f"\n📦 MISSING DEPENDENCIES ({len(report['missing_dependencies'])}):")
+        for dep in sorted(report["missing_dependencies"])[:5]:
+            print(f"   - {dep}")
+        if len(report["missing_dependencies"]) > 5:
+            print(f"   ... and {len(report['missing_dependencies']) - 5} more")
+
+    # Suggested fixes
+    if report["suggested_fixes"]:
+        print(f"\n💡 SUGGESTED FIXES:")
+        for fix in report["suggested_fixes"][:5]:
+            print(f"   $ {fix}")
+
+    # Report status
+    print(f"\n📁 Diagnostic report: {report_path}")
+    if reported:
+        print("✅ Diagnostics reported to GRACE API for autonomous learning")
+    else:
+        print("📝 GRACE API not available - diagnostics saved locally for later learning")
+
+    print("=" * 70)

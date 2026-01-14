@@ -19,7 +19,7 @@ import logging
 import json
 import uuid
 
-from embedding.embedder import EmbeddingModel, get_embedding_model
+from embedding import EmbeddingModel, get_embedding_model
 
 try:
     from cognitive.learning_memory import TrustScorer

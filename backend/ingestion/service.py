@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 import numpy as np
 
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from confidence_scorer import ConfidenceScorer
 from database import session as db_session

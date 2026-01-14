@@ -38,7 +38,7 @@ class RelationshipManager:
     - **part_of**: Document is part of collection
 
     Example:
-        >>> from embedding.embedder import get_embedding_model
+        >>> from embedding import get_embedding_model
         >>> from vector_db.client import get_qdrant_client
         >>>
         >>> rel_manager = RelationshipManager(

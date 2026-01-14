@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from ingestion.service import TextIngestionService
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from file_manager.file_handler import extract_file_text
 from database.session import initialize_session_factory
 from database.connection import DatabaseConnection

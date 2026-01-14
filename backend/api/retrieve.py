@@ -10,7 +10,7 @@ import logging
 
 from retrieval.retriever import DocumentRetriever, get_retriever
 from retrieval.cognitive_retriever import CognitiveRetriever
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session

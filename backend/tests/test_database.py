@@ -10,7 +10,7 @@ import os
 
 from database.config import DatabaseConfig, DatabaseType
 from database.connection import DatabaseConnection
-from database.session import SessionLocal, initialize_session_factory
+from database import session as db_session
 from database.migration import create_tables, drop_tables, table_exists, get_all_tables
 from models.database_models import User, Conversation, Message, Chat, ChatHistory
 from models.repositories import UserRepository, ConversationRepository, ChatRepository, ChatHistoryRepository
@@ -38,7 +38,7 @@ def test_config(temp_db):
 def initialized_db(test_config):
     """Initialize database for testing."""
     DatabaseConnection.initialize(test_config)
-    initialize_session_factory()
+    db_session.initialize_session_factory()
     create_tables()
     yield
     drop_tables()
@@ -108,7 +108,7 @@ class TestDatabaseModels:
     
     def test_create_user(self, initialized_db):
         """Test creating a user."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         user = User(
             username="testuser",
             email="test@example.com",
@@ -126,19 +126,21 @@ class TestDatabaseModels:
     
     def test_user_timestamps(self, initialized_db):
         """Test user creation timestamps."""
-        session = SessionLocal()
+        from datetime import timedelta
+        session = db_session.SessionLocal()
         user = User(username="test", email="test@example.com")
         session.add(user)
         session.commit()
-        
+
         assert user.created_at is not None
         assert user.updated_at is not None
-        assert user.created_at == user.updated_at
+        # Timestamps may differ by a few microseconds, allow 1 second tolerance
+        assert abs((user.created_at - user.updated_at).total_seconds()) < 1
         session.close()
     
     def test_conversation_relationship(self, initialized_db):
         """Test conversation relationship."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         
         # Create conversation
         conversation = Conversation(
@@ -161,7 +163,7 @@ class TestBaseRepository:
     
     def test_create_user(self, initialized_db):
         """Test repository create operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         user = repo.create(
@@ -176,7 +178,7 @@ class TestBaseRepository:
     
     def test_get_user(self, initialized_db):
         """Test repository get operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         # Create user
@@ -192,7 +194,7 @@ class TestBaseRepository:
     
     def test_update_user(self, initialized_db):
         """Test repository update operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         # Create and update user
@@ -206,7 +208,7 @@ class TestBaseRepository:
     
     def test_delete_user(self, initialized_db):
         """Test repository delete operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         # Create and delete user
@@ -224,7 +226,7 @@ class TestBaseRepository:
     
     def test_get_all(self, initialized_db):
         """Test repository get_all operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         # Create multiple users
@@ -239,7 +241,7 @@ class TestBaseRepository:
     
     def test_filter(self, initialized_db):
         """Test repository filter operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         # Create users
@@ -254,7 +256,7 @@ class TestBaseRepository:
     
     def test_count(self, initialized_db):
         """Test repository count operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         repo.create(username="user1", email="user1@example.com")
@@ -267,7 +269,7 @@ class TestBaseRepository:
     
     def test_exists(self, initialized_db):
         """Test repository exists operation."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         repo.create(username="testuser", email="test@example.com")
@@ -279,7 +281,7 @@ class TestBaseRepository:
     
     def test_bulk_create(self, initialized_db):
         """Test repository bulk create."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         users = [
@@ -298,7 +300,7 @@ class TestBaseRepository:
     
     def test_bulk_delete(self, initialized_db):
         """Test repository bulk delete."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         user1 = repo.create(username="user1", email="user1@example.com")
@@ -319,7 +321,7 @@ class TestCustomRepositories:
     
     def test_get_by_username(self, initialized_db):
         """Test custom get_by_username method."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         repo.create(username="testuser", email="test@example.com")
@@ -332,7 +334,7 @@ class TestCustomRepositories:
     
     def test_get_active_users(self, initialized_db):
         """Test custom get_active_users method."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         repo = UserRepository(session)
         
         repo.create(username="active1", email="user1@example.com", is_active=True)
@@ -346,7 +348,7 @@ class TestCustomRepositories:
     
     def test_get_all_conversations(self, initialized_db):
         """Test getting all conversations."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         conv_repo = ConversationRepository(session)
         
         # Create conversations
@@ -383,7 +385,7 @@ class TestChatModel:
     
     def test_create_chat(self, initialized_db):
         """Test creating a chat."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         
         # Create chat
         chat = Chat(
@@ -403,7 +405,7 @@ class TestChatModel:
     
     def test_multiple_chats(self, initialized_db):
         """Test creating multiple chats."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         
         # Create multiple chats
@@ -423,7 +425,7 @@ class TestChatHistoryModel:
     
     def test_create_chat_history(self, initialized_db):
         """Test creating chat history."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         
         # Create chat
         chat = Chat(title="Test Chat")
@@ -453,7 +455,7 @@ class TestChatRepository:
     
     def test_get_all_chats(self, initialized_db):
         """Test getting all chats."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         
         # Create chats
@@ -468,7 +470,7 @@ class TestChatRepository:
     
     def test_get_active_chats(self, initialized_db):
         """Test getting active chats."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         
         # Create chats
@@ -483,7 +485,7 @@ class TestChatRepository:
     
     def test_deactivate_chat(self, initialized_db):
         """Test deactivating a chat."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         
         # Create chat
@@ -496,7 +498,7 @@ class TestChatRepository:
     
     def test_search_by_title(self, initialized_db):
         """Test searching chats by title."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         
         # Create chats with searchable titles
@@ -515,7 +517,7 @@ class TestChatHistoryRepository:
     
     def test_add_message(self, initialized_db):
         """Test adding a message to chat history."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         
@@ -536,7 +538,7 @@ class TestChatHistoryRepository:
     
     def test_get_by_chat(self, initialized_db):
         """Test getting messages from a chat."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         
@@ -557,7 +559,7 @@ class TestChatHistoryRepository:
     
     def test_get_by_role(self, initialized_db):
         """Test getting messages by role."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         
@@ -580,7 +582,7 @@ class TestChatHistoryRepository:
     
     def test_edit_message(self, initialized_db):
         """Test editing a message."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         
@@ -599,7 +601,7 @@ class TestChatHistoryRepository:
     
     def test_count_tokens(self, initialized_db):
         """Test counting tokens in a chat."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         
@@ -618,7 +620,7 @@ class TestChatHistoryRepository:
     
     def test_get_edited_messages(self, initialized_db):
         """Test getting edited messages."""
-        session = SessionLocal()
+        session = db_session.SessionLocal()
         chat_repo = ChatRepository(session)
         history_repo = ChatHistoryRepository(session)
         

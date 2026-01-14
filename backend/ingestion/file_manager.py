@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 import hashlib
 
 from ingestion.service import TextIngestionService
-from embedding.embedder import EmbeddingModel, get_embedding_model
+from embedding import EmbeddingModel, get_embedding_model
 from vector_db.client import get_qdrant_client
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk

@@ -34,7 +34,7 @@ from llm_orchestrator.fine_tuning import (
     FineTuningMethod
 )
 from database.session import get_db
-from embedding.embedder import EmbeddingModel, get_embedding_model
+from embedding import EmbeddingModel, get_embedding_model
 
 logger = logging.getLogger(__name__)
 

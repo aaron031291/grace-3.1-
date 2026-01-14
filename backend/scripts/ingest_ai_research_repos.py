@@ -16,7 +16,7 @@ backend_path = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_path))
 
 from ingestion.service import TextIngestionService
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from file_manager.file_handler import FileHandler
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig

@@ -31,18 +31,21 @@ class TestHealthEndpoint:
         response = client.get("/health")
         assert response.status_code == 200
         data = response.json()
-        
-        # Should have these fields
+
+        # Should have these fields in the new health response format
         assert "status" in data
-        assert "ollama_running" in data
-        assert "models_available" in data
-        
-        # Status should be either healthy or unhealthy
-        assert data["status"] in ["healthy", "unhealthy"]
-        
-        # If unhealthy, models should be 0
-        if not data["ollama_running"]:
-            assert data["models_available"] == 0
+        assert "services" in data
+        assert "timestamp" in data
+
+        # Status should be either healthy, degraded, or unhealthy
+        assert data["status"] in ["healthy", "degraded", "unhealthy"]
+
+        # Services should be a list
+        assert isinstance(data["services"], list)
+
+        # Each service should have name and status fields
+        for service in data["services"]:
+            assert "name" in service
 
 
 class TestChatEndpoint:

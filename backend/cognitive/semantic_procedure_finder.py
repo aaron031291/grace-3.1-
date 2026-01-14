@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 import numpy as np
 
 from models.database_models import Procedure
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from vector_db.client import get_qdrant_client
 
 logger = logging.getLogger(__name__)
