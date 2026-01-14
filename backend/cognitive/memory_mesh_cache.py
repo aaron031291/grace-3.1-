@@ -124,8 +124,8 @@ class MemoryMeshCache:
                 return session.query(LearningExample).filter(
                     LearningExample.id.in_(cached_ids)
                 ).all()
-        except:
-            pass
+        except (KeyError, TypeError, AttributeError):
+            pass  # Cache miss or invalid cache state
 
         # Cache miss - query database
         self.stats['misses'] += 1
@@ -172,8 +172,8 @@ class MemoryMeshCache:
             if cached:
                 self.stats['hits'] += 1
                 return cached
-        except:
-            pass
+        except (KeyError, TypeError, AttributeError):
+            pass  # Cache miss or invalid cache state
 
         # Compute fresh stats
         self.stats['misses'] += 1
@@ -241,8 +241,8 @@ class MemoryMeshCache:
                     examples = [ex for ex in examples if ex.id != exclude_id]
 
                 return examples[:limit]
-        except:
-            pass
+        except (KeyError, TypeError, AttributeError):
+            pass  # Cache miss or invalid cache state
 
         # Cache miss - query database
         self.stats['misses'] += 1
@@ -303,8 +303,8 @@ class MemoryMeshCache:
                 self.stats['hits'] += 1
                 procedure_id = cached[0]
                 return session.query(Procedure).get(procedure_id)
-        except:
-            pass
+        except (KeyError, TypeError, AttributeError):
+            pass  # Cache miss or invalid cache state
 
         # Cache miss - query database
         self.stats['misses'] += 1
