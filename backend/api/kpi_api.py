@@ -11,7 +11,14 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 
 from database.session import get_session
-from ml_intelligence.kpi_tracker import get_kpi_tracker
+
+# Try to import KPI tracker, handle if not available
+try:
+    from ml_intelligence.kpi_tracker import get_kpi_tracker
+    KPI_AVAILABLE = True
+except ImportError:
+    get_kpi_tracker = None
+    KPI_AVAILABLE = False
 
 router = APIRouter(prefix="/kpi", tags=["KPI Tracking"])
 

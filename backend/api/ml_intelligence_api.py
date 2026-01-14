@@ -34,14 +34,15 @@ try:
 except ImportError as e:
     print(f"[WARN] ML Intelligence not available: {e}")
     ML_AVAILABLE = False
+    MLIntelligenceOrchestrator = None  # Define as None when not available
 
 router = APIRouter(prefix="/ml-intelligence", tags=["ml-intelligence"])
 
 # Global orchestrator instance
-_orchestrator: Optional[MLIntelligenceOrchestrator] = None
+_orchestrator: Optional[Any] = None
 
 
-def get_orchestrator() -> MLIntelligenceOrchestrator:
+def get_orchestrator():
     """Get or create ML Intelligence orchestrator"""
     global _orchestrator
     if _orchestrator is None:

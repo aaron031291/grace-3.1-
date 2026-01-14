@@ -47,6 +47,19 @@ htmlcov/
 build/
 dist/
 
+# Genesis pipeline metadata (auto-generated)
+.genesis_*.json
+*/.genesis_*.json
+**/.genesis_*.json
+
+# Knowledge base metadata (auto-generated)
+**/.metadata.json
+**/test_documents/
+
+# Test artifacts
+diagnostic_report.json
+**/diagnostic_report.json
+
 # Databases and runtime/state
 *.db
 backend/**/data/*.db
