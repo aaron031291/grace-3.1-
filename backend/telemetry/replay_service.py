@@ -186,7 +186,7 @@ class ReplayService:
             original_str = json.dumps(original_output, sort_keys=True, default=str)
             replay_str = json.dumps(replay_output, sort_keys=True, default=str)
             return original_str == replay_str
-        except:
+        except (TypeError, ValueError):
             return False
 
     def _compute_differences(

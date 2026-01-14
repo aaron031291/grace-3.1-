@@ -414,7 +414,7 @@ class TelemetryService:
                 collection_info = qdrant.get_collection_info()
                 qdrant_connected = True
                 vector_count = collection_info.vectors_count if collection_info else None
-            except:
+            except Exception:
                 pass
 
             # Database metrics

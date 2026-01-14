@@ -196,7 +196,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                     try:
                         import json
                         return json.loads(body)
-                    except:
+                    except (json.JSONDecodeError, UnicodeDecodeError):
                         return {"raw": body.decode('utf-8', errors='ignore')[:1000]}
         except Exception as e:
             logger.debug(f"Could not extract request data: {e}")

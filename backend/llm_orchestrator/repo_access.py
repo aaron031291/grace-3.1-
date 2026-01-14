@@ -228,7 +228,7 @@ class RepositoryAccessLayer:
                                 })
                                 if len(results) >= max_results:
                                     break
-                except:
+                except (OSError, UnicodeDecodeError):
                     continue
 
         except Exception as e:
