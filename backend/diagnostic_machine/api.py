@@ -476,3 +476,411 @@ async def get_forensic_findings():
     except Exception as e:
         logger.error(f"Error getting forensic findings: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Enhanced API Endpoints ====================
+
+# Trend Analysis Endpoints
+@router.get("/trends")
+async def get_all_trends(window_hours: int = 24):
+    """Get trend analysis for all tracked metrics."""
+    try:
+        from .trend_analysis import get_metrics_collector, TrendAnalyzer, get_time_series_store
+
+        collector = get_metrics_collector()
+        trends = collector.get_all_trends(window_hours)
+
+        return {
+            "trends": {
+                name: {
+                    "direction": t.direction.value,
+                    "significance": t.significance.value,
+                    "change_percent": t.change_percent,
+                    "current_value": t.current_value,
+                    "baseline_value": t.baseline_value,
+                    "prediction": t.prediction,
+                    "alert_breached": t.alert_threshold_breached,
+                    "recommendation": t.recommendation,
+                }
+                for name, t in trends.items()
+            },
+            "window_hours": window_hours,
+        }
+    except Exception as e:
+        logger.error(f"Error getting trends: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/trends/{metric_name}")
+async def get_metric_trend(metric_name: str, window_hours: int = 24):
+    """Get trend analysis for a specific metric."""
+    try:
+        from .trend_analysis import get_trend_analyzer
+
+        analyzer = get_trend_analyzer()
+        trend = analyzer.analyze_trend(metric_name, window_hours)
+
+        return {
+            "metric_name": trend.metric_name,
+            "direction": trend.direction.value,
+            "significance": trend.significance.value,
+            "change_percent": trend.change_percent,
+            "current_value": trend.current_value,
+            "baseline_value": trend.baseline_value,
+            "trend_slope": trend.trend_slope,
+            "data_points": trend.data_points,
+            "prediction": trend.prediction,
+            "alert_breached": trend.alert_threshold_breached,
+            "recommendation": trend.recommendation,
+        }
+    except Exception as e:
+        logger.error(f"Error getting trend for {metric_name}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/trends/{metric_name}/history")
+async def get_metric_history(metric_name: str, hours: int = 168):
+    """Get historical summary for a metric."""
+    try:
+        from .trend_analysis import get_trend_analyzer
+
+        analyzer = get_trend_analyzer()
+        summary = analyzer.get_historical_summary(metric_name, hours)
+
+        return {
+            "metric_name": summary.metric_name,
+            "min_value": summary.min_value,
+            "max_value": summary.max_value,
+            "avg_value": summary.avg_value,
+            "std_dev": summary.std_dev,
+            "percentile_25": summary.percentile_25,
+            "percentile_50": summary.percentile_50,
+            "percentile_75": summary.percentile_75,
+            "percentile_95": summary.percentile_95,
+            "data_points": summary.data_points,
+            "time_range_hours": summary.time_range_hours,
+        }
+    except Exception as e:
+        logger.error(f"Error getting history for {metric_name}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/trends/{metric_name}/anomalies")
+async def get_metric_anomalies(metric_name: str, hours: int = 24, threshold: float = 2.0):
+    """Detect anomalies in a metric using statistical analysis."""
+    try:
+        from .trend_analysis import get_trend_analyzer
+
+        analyzer = get_trend_analyzer()
+        anomalies = analyzer.detect_anomalies(metric_name, hours, threshold)
+
+        return {
+            "metric_name": metric_name,
+            "anomalies": anomalies,
+            "total": len(anomalies),
+            "std_threshold": threshold,
+        }
+    except Exception as e:
+        logger.error(f"Error detecting anomalies for {metric_name}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/trends/{metric_name}/calibrate")
+async def calibrate_metric_baseline(metric_name: str):
+    """Auto-calibrate baseline for a metric from historical data."""
+    try:
+        from .trend_analysis import get_trend_analyzer
+
+        analyzer = get_trend_analyzer()
+        calibration = analyzer.calibrate_baseline(metric_name)
+
+        return {
+            "metric_name": metric_name,
+            "calibration": calibration,
+        }
+    except Exception as e:
+        logger.error(f"Error calibrating {metric_name}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Healing Endpoints
+class HealingRequest(BaseModel):
+    """Request to execute a healing action."""
+    action_type: str = Field(..., description="Type of healing action")
+    parameters: Dict[str, Any] = Field(default_factory=dict, description="Action parameters")
+    dry_run: bool = Field(default=False, description="Simulate without executing")
+
+
+@router.get("/healing/actions")
+async def list_healing_actions():
+    """List all available healing actions."""
+    try:
+        from .healing import get_healing_executor
+
+        executor = get_healing_executor()
+        actions = executor.registry.list_actions()
+
+        return {
+            "actions": [
+                {
+                    "action_type": a.action_type.value,
+                    "enabled": a.enabled,
+                    "risk_level": a.risk_level.value,
+                    "timeout_seconds": a.timeout_seconds,
+                    "requires_confirmation": a.requires_confirmation,
+                }
+                for a in actions
+            ],
+        }
+    except Exception as e:
+        logger.error(f"Error listing healing actions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/healing/execute")
+async def execute_healing_action(request: HealingRequest):
+    """Execute a healing action."""
+    try:
+        from .healing import execute_healing, HealingActionType
+
+        # Validate action type
+        try:
+            action_type = HealingActionType(request.action_type)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid action type: {request.action_type}"
+            )
+
+        result = execute_healing(request.action_type, request.parameters)
+
+        return {
+            "action_type": result.action_type.value,
+            "success": result.success,
+            "message": result.message,
+            "duration_ms": result.duration_ms,
+            "pre_state": result.pre_state,
+            "post_state": result.post_state,
+            "rollback_available": result.rollback_available,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error executing healing: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Notification Endpoints
+class NotificationTestRequest(BaseModel):
+    """Request to send a test notification."""
+    title: str = Field(default="Test Notification", description="Notification title")
+    message: str = Field(default="This is a test notification from GRACE Diagnostic Machine", description="Message")
+    priority: str = Field(default="medium", description="Priority: low, medium, high, critical")
+    channels: Optional[List[str]] = Field(default=None, description="Specific channels to use")
+
+
+@router.get("/notifications/channels")
+async def list_notification_channels():
+    """List configured notification channels."""
+    try:
+        from .notifications import get_notification_manager
+
+        manager = get_notification_manager()
+        configured = manager.get_configured_channels()
+
+        return {
+            "configured_channels": configured,
+            "available_channels": list(manager.channels.keys()),
+        }
+    except Exception as e:
+        logger.error(f"Error listing channels: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/notifications/test")
+async def send_test_notification(request: NotificationTestRequest):
+    """Send a test notification."""
+    try:
+        from .notifications import get_notification_manager, NotificationPriority
+
+        manager = get_notification_manager()
+
+        priority_map = {
+            'low': NotificationPriority.LOW,
+            'medium': NotificationPriority.MEDIUM,
+            'high': NotificationPriority.HIGH,
+            'critical': NotificationPriority.CRITICAL,
+        }
+        priority = priority_map.get(request.priority, NotificationPriority.MEDIUM)
+
+        results = manager.notify(
+            title=request.title,
+            message=request.message,
+            priority=priority,
+            channels=request.channels,
+            tags=['test'],
+        )
+
+        return {
+            "results": [
+                {
+                    "channel": r.channel,
+                    "status": r.status.value,
+                    "message": r.message,
+                }
+                for r in results
+            ],
+        }
+    except Exception as e:
+        logger.error(f"Error sending notification: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/notifications/history")
+async def get_notification_history(limit: int = 50):
+    """Get recent notification history."""
+    try:
+        from .notifications import get_notification_manager
+
+        manager = get_notification_manager()
+        results = manager.get_recent_results(limit)
+
+        return {
+            "notifications": [
+                {
+                    "notification_id": r.notification_id,
+                    "channel": r.channel,
+                    "status": r.status.value,
+                    "message": r.message,
+                    "timestamp": r.timestamp.isoformat(),
+                }
+                for r in results
+            ],
+            "total": len(results),
+        }
+    except Exception as e:
+        logger.error(f"Error getting notification history: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Cognitive Integration Endpoints
+@router.get("/learning/insights")
+async def get_learning_insights(limit: int = 20):
+    """Get recent learning insights from diagnostics."""
+    try:
+        from pathlib import Path
+        import json
+
+        insights_dir = Path(__file__).parent.parent / "learning_memory" / "diagnostic_insights"
+
+        if not insights_dir.exists():
+            return {"insights": [], "total": 0}
+
+        insights = []
+        for file_path in sorted(insights_dir.glob("*.json"), reverse=True)[:limit]:
+            try:
+                with open(file_path, 'r') as f:
+                    insights.append(json.load(f))
+            except Exception:
+                continue
+
+        return {
+            "insights": insights,
+            "total": len(insights),
+        }
+    except Exception as e:
+        logger.error(f"Error getting learning insights: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/learning/patterns")
+async def get_learned_patterns(limit: int = 20):
+    """Get learned diagnostic patterns."""
+    try:
+        from .cognitive_integration import get_cognitive_manager
+
+        manager = get_cognitive_manager()
+        patterns = manager.memory_mesh.retrieve_similar_patterns({}, limit)
+
+        return {
+            "patterns": patterns,
+            "total": len(patterns),
+        }
+    except Exception as e:
+        logger.error(f"Error getting patterns: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# WebSocket endpoint for real-time updates
+from fastapi import WebSocket, WebSocketDisconnect
+
+
+@router.websocket("/ws")
+async def diagnostic_websocket(websocket: WebSocket):
+    """WebSocket endpoint for real-time diagnostic updates."""
+    from .realtime import get_connection_manager
+
+    manager = get_connection_manager()
+    client_id = None
+
+    try:
+        client_id = await manager.connect(websocket)
+
+        while True:
+            # Wait for messages from client
+            data = await websocket.receive_text()
+
+            # Handle subscription requests
+            import json
+            try:
+                message = json.loads(data)
+                if message.get('action') == 'subscribe':
+                    topics = message.get('topics', [])
+                    await manager.subscribe(client_id, topics)
+                elif message.get('action') == 'unsubscribe':
+                    topics = message.get('topics', [])
+                    await manager.unsubscribe(client_id, topics)
+            except json.JSONDecodeError:
+                pass
+
+    except WebSocketDisconnect:
+        if client_id:
+            await manager.disconnect(client_id)
+    except Exception as e:
+        logger.error(f"WebSocket error: {e}")
+        if client_id:
+            await manager.disconnect(client_id)
+
+
+@router.get("/ws/clients")
+async def get_websocket_clients():
+    """Get info about connected WebSocket clients."""
+    try:
+        from .realtime import get_connection_manager
+
+        manager = get_connection_manager()
+
+        return {
+            "client_count": manager.client_count,
+            "clients": manager.get_all_clients(),
+        }
+    except Exception as e:
+        logger.error(f"Error getting WS clients: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/ws/events")
+async def get_recent_events(limit: int = 50):
+    """Get recent WebSocket events."""
+    try:
+        from .realtime import get_connection_manager
+
+        manager = get_connection_manager()
+
+        return {
+            "events": manager.get_event_history(limit),
+            "total": len(manager.get_event_history(limit)),
+        }
+    except Exception as e:
+        logger.error(f"Error getting events: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
