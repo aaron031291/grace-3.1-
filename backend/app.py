@@ -51,6 +51,7 @@ from api.kpi_api import router as kpi_router  # KPI Dashboard tracking
 from api.proactive_learning import router as proactive_learning_router  # Proactive Learning system
 from api.repositories_api import router as repositories_router  # Enterprise Repository Management
 from api.telemetry import router as telemetry_router  # System Telemetry and monitoring
+from api.monitoring_api import router as monitoring_router  # System Monitoring - organs, health, metrics
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -456,6 +457,7 @@ app.include_router(kpi_router)  # KPI Dashboard - system health and performance 
 app.include_router(proactive_learning_router)  # Proactive Learning - task queue and autonomous learning
 app.include_router(repositories_router)  # Enterprise Repository Management - multi-repo support
 app.include_router(telemetry_router)  # System Telemetry - drift detection, baselines, alerts
+app.include_router(monitoring_router)  # System Monitoring - organs of grace, health, metrics
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
