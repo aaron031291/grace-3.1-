@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-**Overall Completion: ~75-80%**
+**Overall Completion: ~70-72%** (Revised - frontend wiring issues found)
 
 Grace 3.1 is an **ambitious autonomous AI assistant system** with significant implementation maturity. The codebase demonstrates a sophisticated architecture combining RAG, neuro-symbolic AI, autonomous learning, and governance frameworks.
 
@@ -182,21 +182,49 @@ Grace 3.1 is an **ambitious autonomous AI assistant system** with significant im
 | Pattern learning | ⚠️ Partial |
 | Governed execution bridge | ✅ Complete |
 
-### 12. Frontend UI — **85% Complete**
+### 12. Frontend UI — **60% Complete** (REVISED after deeper analysis)
+
+**CRITICAL ISSUE FOUND**: 8 tabs use `/api/...` paths but Vite has NO proxy configured, so these will return 404 errors.
 
 | Component | Status |
 |-----------|--------|
-| ChatTab | ✅ Complete |
-| RAGTab | ✅ Complete |
-| GovernanceTab | ✅ Complete |
-| SandboxTab | ✅ Complete |
-| GenesisKeyTab | ✅ Complete |
-| LibrarianTab | ✅ Complete |
-| MLIntelligenceTab | ✅ Complete |
-| VoiceButton/Panel | ✅ Complete |
-| VersionControl | ✅ Complete |
-| NotionTab | ✅ Complete |
-| All 21 tabs wired | ✅ Complete |
+| ChatTab, ChatWindow, ChatList | ✅ Working (`localhost:8000`) |
+| RAGTab, FileBrowser, DirectoryChat | ✅ Working |
+| GovernanceTab | ✅ Working |
+| SandboxTab | ✅ Working |
+| LibrarianTab | ✅ Working |
+| CognitiveTab | ✅ Working |
+| NotionTab | ✅ Working |
+| VersionControl | ✅ Working |
+| InsightsTab, ResearchTab | ✅ Working |
+| TelemetryTab, APITab | ✅ Working |
+| GenesisKeyPanel, GenesisLogin | ✅ Working |
+| KPIDashboard, RepositoryManager | ✅ Working |
+| PersistentVoicePanel | ✅ Working |
+| **CodeBaseTab** | ❌ BROKEN - calls `/api/codebase/...` (404) |
+| **ConnectorsTab** | ❌ BROKEN - calls `/api/knowledge-base/...` (404) |
+| **ExperimentTab** | ❌ BROKEN - calls `/api/sandbox-lab/...` (404) |
+| **GenesisKeyTab** | ⚠️ PARTIAL - some calls use wrong `/api/` prefix |
+| **LearningTab** | ❌ BROKEN - calls `/api/autonomous-learning/...` (404) |
+| **MLIntelligenceTab** | ❌ BROKEN - calls `/api/ml-intelligence/...` (404) |
+| **OrchestrationTab** | ❌ BROKEN - calls `/api/...` (404) |
+| **WhitelistTab** | ❌ BROKEN - calls `/api/layer1/...` (404) |
+| **MonitoringTab** | ❌ STATIC - hardcoded data, no API calls |
+
+**Root Cause**: `vite.config.js` has no proxy configuration. 53 API calls will fail.
+
+**Fix Required**: Add proxy to `vite.config.js`:
+```javascript
+server: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, '')
+    }
+  }
+}
+```
 
 ---
 
@@ -246,10 +274,14 @@ Found **63 instances** of `pass` statements or `NotImplementedError`:
 ## What Remains for Production-Readiness
 
 ### High Priority
-1. **Test Coverage** — Add comprehensive API tests, increase from 215 to ~500+ tests
-2. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
-3. **Performance Optimization** — Profiling and caching for RAG retrieval
-4. **Authentication** — Genesis Key auth exists but needs hardening
+1. **Frontend API Wiring** — Fix 8 broken tabs (53 API calls use wrong `/api/` prefix):
+   - Option A: Add Vite proxy configuration
+   - Option B: Update all `/api/...` calls to `http://localhost:8000/...`
+   - Affected: CodeBaseTab, ConnectorsTab, ExperimentTab, GenesisKeyTab, LearningTab, MLIntelligenceTab, OrchestrationTab, WhitelistTab
+2. **MonitoringTab** — Currently shows hardcoded static data, needs API integration
+3. **Test Coverage** — Add comprehensive API tests, increase from 215 to ~500+ tests
+4. **Stub Implementations** — Complete the 63 pass/NotImplemented blocks
+5. **Authentication** — Genesis Key auth exists but needs hardening
 
 ### Medium Priority
 5. **E2E Testing** — Add Playwright/Cypress for frontend
@@ -277,22 +309,28 @@ Governance           ███████████████░░░░�
 Librarian            ████████████████░░░░░ 80%
 Voice API            █████████████████░░░░ 85%
 Agent Framework      ███████████████░░░░░░ 75%
-Frontend UI          █████████████████░░░░ 85%
+Frontend UI          ████████████░░░░░░░░░ 60%  ← REVISED (8 broken tabs)
 Test Coverage        ███████████░░░░░░░░░░ 55%
 ──────────────────────────────────────────────
-OVERALL              ███████████████░░░░░░ ~78%
+OVERALL              ██████████████░░░░░░░ ~72%
 ```
 
 ---
 
 ## Verdict
 
-**Grace 3.1 is approximately 75-80% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational. The advanced features (ML intelligence, cognitive architecture, autonomous learning) are architecturally sound but need polish.
+**Grace 3.1 is approximately 70-72% complete** for a first production release. The core functionality (RAG chat, document ingestion, semantic search, governance) is operational. However, **8 frontend tabs are broken** due to missing Vite proxy configuration.
 
-### To reach MVP (minimum viable product): ~2-4 weeks of focused work
-### To reach production-ready: ~6-8 weeks with comprehensive testing
+### Critical Fix Required
+Add Vite proxy configuration or update 53 API calls in 8 frontend components.
 
-The codebase shows evidence of **sophisticated architectural thinking** and **incremental development**. The 53 commits and 104K LOC represent significant engineering effort. The main gaps are test coverage and completing stub implementations rather than fundamental architectural issues.
+### To reach MVP (minimum viable product): ~3-5 weeks of focused work
+### To reach production-ready: ~8-10 weeks with comprehensive testing
+
+The codebase shows evidence of **sophisticated architectural thinking** and **incremental development**. The 53 commits and 104K LOC represent significant engineering effort. The main gaps are:
+1. Frontend API wiring (8 broken tabs, 53 wrong API paths)
+2. Test coverage (215 tests, needs ~500+)
+3. Stub implementations (63 incomplete blocks)
 
 ---
 
