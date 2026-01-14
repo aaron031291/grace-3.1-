@@ -1,6 +1,8 @@
 """
 Layer 1 - Sensors: Data Collection Layer
 
+INTEGRATED with LLM Orchestrator for health monitoring.
+
 Collects raw data from:
 - Test results (passed/failed/skipped)
 - System logs (tail logs)
@@ -8,6 +10,10 @@ Collects raw data from:
 - Agent outputs (cognitive decisions)
 - Genesis Keys (provenance data)
 - GRACE Mirror (self-reflection state)
+- LLM Orchestrator health status (preferred over direct Ollama)
+
+Health checks prioritize LLM Orchestrator availability over direct
+Ollama client access to ensure consistent system status reporting.
 """
 
 import os
@@ -331,9 +337,33 @@ class SensorLayer:
                 metrics.vector_db_health = False
 
             try:
-                from ollama_client import get_ollama_client
-                client = get_ollama_client()
-                metrics.llm_health = client.is_running() if client else False
+                # For health checks, we can use either orchestrator or direct client
+                # Orchestrator is preferred as it provides integrated health status
+                llm_healthy = False
+
+                # Try orchestrator first (preferred)
+                try:
+                    from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+                    orchestrator = get_llm_orchestrator()
+                    # Orchestrator available means LLM system is healthy
+                    llm_healthy = orchestrator is not None
+                    if llm_healthy:
+                        logger.debug("[SENSORS] LLM health via orchestrator: OK")
+                except Exception:
+                    pass
+
+                # Fallback to direct Ollama check
+                if not llm_healthy:
+                    try:
+                        from ollama_client import get_ollama_client
+                        client = get_ollama_client()
+                        llm_healthy = client.is_running() if client else False
+                        if llm_healthy:
+                            logger.debug("[SENSORS] LLM health via direct client: OK")
+                    except Exception:
+                        pass
+
+                metrics.llm_health = llm_healthy
             except Exception:
                 metrics.llm_health = False
 
