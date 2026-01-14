@@ -3,7 +3,7 @@ Database connection management module.
 Handles engine creation and connection pooling.
 """
 
-from sqlalchemy import create_engine, Engine, event
+from sqlalchemy import create_engine, Engine, event, text
 from sqlalchemy.pool import QueuePool, StaticPool
 from typing import Optional
 import logging
@@ -135,14 +135,14 @@ class DatabaseConnection:
     def health_check(cls) -> bool:
         """
         Check if database connection is healthy.
-        
+
         Returns:
             bool: True if connection is healthy, False otherwise
         """
         try:
             engine = cls.get_engine()
             with engine.connect() as connection:
-                connection.execute("SELECT 1")
+                connection.execute(text("SELECT 1"))
             return True
         except Exception as e:
             logger.error(f"Database health check failed: {e}")

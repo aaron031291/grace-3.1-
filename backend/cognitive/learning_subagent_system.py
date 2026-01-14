@@ -281,7 +281,7 @@ class StudySubagent(BaseSubagent):
     def _initialize(self):
         """Initialize database and retriever."""
         from database.session import get_session_factory
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         from retrieval.retriever import DocumentRetriever
         from cognitive.active_learning_system import GraceActiveLearningSystem
 
@@ -366,7 +366,7 @@ class PracticeSubagent(BaseSubagent):
     def _initialize(self):
         """Initialize practice environment."""
         from database.session import get_session_factory
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         from retrieval.retriever import DocumentRetriever
 
         self.session_factory = get_session_factory()

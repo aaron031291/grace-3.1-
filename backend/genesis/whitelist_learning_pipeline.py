@@ -248,7 +248,7 @@ def get_proactive_learner():
 def get_embedder():
     """Get Embedder for vector generation."""
     try:
-        from embedding.embedder import get_embedder
+        from embedding import get_embedder
         return get_embedder()
     except Exception as e:
         logger.debug(f"[WL-Pipeline] Embedder not available: {e}")

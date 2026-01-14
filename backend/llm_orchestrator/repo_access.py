@@ -27,7 +27,7 @@ from models.genesis_key_models import GenesisKey
 from models.librarian_models import LibrarianTag, DocumentRelationship
 from cognitive.learning_memory import LearningExample, LearningPattern
 from vector_db.client import get_qdrant_client
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from retrieval.retriever import DocumentRetriever
 
 logger = logging.getLogger(__name__)

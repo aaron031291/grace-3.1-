@@ -24,7 +24,7 @@ print("[TEST] ✓ Database initialized\n")
 # Now test the file manager
 print("[TEST] Setting up file manager...")
 from ingestion.file_manager import IngestionFileManager
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from pathlib import Path
 
 kb_path = Path('knowledge_base')

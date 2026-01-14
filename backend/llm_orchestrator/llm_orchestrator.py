@@ -34,7 +34,7 @@ from .hallucination_guard import HallucinationGuard, VerificationResult
 from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
 from cognitive.learning_memory import LearningMemoryManager
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from confidence_scorer.confidence_scorer import ConfidenceScorer
 
 logger = logging.getLogger(__name__)
