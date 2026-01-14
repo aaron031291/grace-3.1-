@@ -64,6 +64,7 @@ from api.ingestion_api import router as ingestion_router  # Librarian Ingestion 
 from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
 from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
 from api.test_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
+from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -482,6 +483,7 @@ app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-t
 app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
 app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
 app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
+app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
