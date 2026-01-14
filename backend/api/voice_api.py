@@ -666,5 +666,5 @@ async def websocket_continuous_voice(websocket: WebSocket):
                 "type": "error",
                 "message": str(e)
             })
-        except:
-            pass
+        except Exception:
+            pass  # Client may have disconnected

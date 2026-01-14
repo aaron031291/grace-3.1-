@@ -300,5 +300,5 @@ class KnowledgeBaseManager:
         try:
             file_path = self.base_path / relative_path
             return file_path.exists() and file_path.is_file()
-        except:
+        except (OSError, ValueError, TypeError):
             return False

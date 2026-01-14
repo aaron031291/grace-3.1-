@@ -490,8 +490,8 @@ class FileHandler:
                 if ext != '.wav' and os.path.exists(working_file):
                     try:
                         os.unlink(working_file)
-                    except:
-                        pass
+                    except OSError:
+                        pass  # Ignore cleanup errors
 
         except ImportError:
             logger.error("Audio processing libraries not installed")
@@ -527,8 +527,8 @@ class FileHandler:
                 # Clean up
                 try:
                     os.unlink(temp_audio_path)
-                except:
-                    pass
+                except OSError:
+                    pass  # Ignore cleanup errors
 
                 if error:
                     return "", f"Video processed but audio transcription failed: {error}"
