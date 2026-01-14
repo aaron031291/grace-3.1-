@@ -1,0 +1,48 @@
+# =============================================================================
+# GRACE Root Docker Ignore
+# =============================================================================
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test files
+tests/
+test_*.py
+*_test.py
+.pytest_cache/
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Local data
+data/
+*.db
+*.sqlite
+
+# Build artifacts
+__pycache__/
+*.pyc
+node_modules/
+dist/
+build/
+
+# Large files
+*.bin
+*.pt
+*.pth
+models/

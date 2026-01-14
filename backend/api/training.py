@@ -8,6 +8,7 @@ API for Grace's active learning system where she:
 - Tracks skill proficiency over time
 """
 
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
