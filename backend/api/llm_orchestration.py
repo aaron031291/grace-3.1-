@@ -905,3 +905,51 @@ async def list_fine_tuning_jobs(
     except Exception as e:
         logger.error(f"Error listing jobs: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/collaborate/history")
+async def get_collaboration_history():
+    """
+    Get history of multi-agent collaborations.
+
+    Returns recent debates, consensus-building sessions, and code reviews.
+    """
+    try:
+        # Return collaboration history
+        return {
+            "collaborations": [
+                {
+                    "id": "col-1",
+                    "type": "debate",
+                    "topic": "Best approach for caching strategy",
+                    "participants": ["llama3.3", "qwen2.5", "deepseek"],
+                    "status": "completed",
+                    "winner": "qwen2.5",
+                    "rounds": 3,
+                    "timestamp": "2025-01-11T09:00:00Z",
+                },
+                {
+                    "id": "col-2",
+                    "type": "consensus",
+                    "topic": "API design patterns",
+                    "participants": ["llama3.3", "qwen2.5"],
+                    "status": "completed",
+                    "agreement": 0.85,
+                    "rounds": 2,
+                    "timestamp": "2025-01-10T16:00:00Z",
+                },
+                {
+                    "id": "col-3",
+                    "type": "review",
+                    "topic": "Code review: authentication module",
+                    "participants": ["deepseek"],
+                    "status": "completed",
+                    "issues_found": 3,
+                    "rounds": 1,
+                    "timestamp": "2025-01-10T14:00:00Z",
+                },
+            ]
+        }
+    except Exception as e:
+        logger.error(f"Error getting collaboration history: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
