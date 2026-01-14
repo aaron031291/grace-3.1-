@@ -1,0 +1,215 @@
+# =============================================================================
+# GRACE Docker Compose Configuration
+# =============================================================================
+# Usage:
+#   Development: docker-compose up -d
+#   Production:  docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   With GPU:    docker-compose --profile gpu up -d
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Backend API Service
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: grace-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_TYPE=sqlite
+      - DATABASE_PATH=/app/data/grace.db
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - OLLAMA_URL=http://ollama:11434
+      - EMBEDDING_DEVICE=cpu
+      - LOG_LEVEL=INFO
+    volumes:
+      - grace-data:/app/data
+      - grace-logs:/app/logs
+      - grace-knowledge:/app/knowledge_base
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - grace-network
+
+  # ---------------------------------------------------------------------------
+  # Frontend Service
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: grace-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - grace-network
+
+  # ---------------------------------------------------------------------------
+  # Qdrant Vector Database
+  # ---------------------------------------------------------------------------
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: grace-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - grace-network
+
+  # ---------------------------------------------------------------------------
+  # Ollama LLM Service (Optional - can use external)
+  # ---------------------------------------------------------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: grace-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - grace-network
+    profiles:
+      - with-ollama
+
+  # ---------------------------------------------------------------------------
+  # Ollama with GPU Support
+  # ---------------------------------------------------------------------------
+  ollama-gpu:
+    image: ollama/ollama:latest
+    container_name: grace-ollama-gpu
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - grace-network
+    profiles:
+      - gpu
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database (Production alternative to SQLite)
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:15-alpine
+    container_name: grace-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=grace
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-grace_secure_password}
+      - POSTGRES_DB=grace
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U grace -d grace"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - grace-network
+    profiles:
+      - postgres
+
+  # ---------------------------------------------------------------------------
+  # Redis Cache (Optional - for session/caching)
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: grace-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - grace-network
+    profiles:
+      - cache
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  grace-network:
+    driver: bridge
+    name: grace-network
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  grace-data:
+    name: grace-data
+  grace-logs:
+    name: grace-logs
+  grace-knowledge:
+    name: grace-knowledge
+  qdrant-data:
+    name: grace-qdrant-data
+  ollama-data:
+    name: grace-ollama-data
+  postgres-data:
+    name: grace-postgres-data
+  redis-data:
+    name: grace-redis-data
