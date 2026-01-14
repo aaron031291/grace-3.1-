@@ -45,6 +45,12 @@ from api.notion import router as notion_router  # Notion task management system
 from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
 from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
 from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
+from api.codebase_api import router as codebase_router  # Codebase Browser - file browsing, search, analysis
+from api.knowledge_base_api import router as knowledge_base_router  # Knowledge Base Connectors
+from api.kpi_api import router as kpi_router  # KPI Dashboard tracking
+from api.proactive_learning import router as proactive_learning_router  # Proactive Learning system
+from api.repositories_api import router as repositories_router  # Enterprise Repository Management
+from api.telemetry import router as telemetry_router  # System Telemetry and monitoring
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -444,6 +450,12 @@ app.include_router(notion_router)  # Notion Task Management - Kanban board with 
 app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
 app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
 app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
+app.include_router(codebase_router)  # Codebase Browser - file browsing, code search, commit history, analysis
+app.include_router(knowledge_base_router)  # Knowledge Base Connectors - external knowledge sources
+app.include_router(kpi_router)  # KPI Dashboard - system health and performance metrics
+app.include_router(proactive_learning_router)  # Proactive Learning - task queue and autonomous learning
+app.include_router(repositories_router)  # Enterprise Repository Management - multi-repo support
+app.include_router(telemetry_router)  # System Telemetry - drift detection, baselines, alerts
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
