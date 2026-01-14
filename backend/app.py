@@ -63,7 +63,7 @@ from api.adaptive_cicd_api import router as adaptive_cicd_router  # Adaptive CI/
 from api.ingestion_api import router as ingestion_router  # Librarian Ingestion Pipeline
 from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
 from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
-from api.test_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
+from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client

@@ -9,9 +9,23 @@ when two chunks express contradictory claims.
 import logging
 import numpy as np
 from typing import List, Tuple, Dict, Optional
-import torch
 
 logger = logging.getLogger(__name__)
+
+# Lazy import for torch to avoid hard dependency at module load time
+torch = None
+
+def _get_torch():
+    """Lazily import torch only when needed."""
+    global torch
+    if torch is None:
+        try:
+            import torch as _torch
+            torch = _torch
+        except ImportError:
+            logger.warning("torch not available - some features will be disabled")
+            return None
+    return torch
 
 
 class SemanticContradictionDetector:
@@ -25,11 +39,15 @@ class SemanticContradictionDetector:
     def __init__(self, use_gpu: bool = True):
         """
         Initialize the contradiction detector with the DeBERTa cross-encoder model.
-        
+
         Args:
             use_gpu: Whether to use GPU if available
         """
-        self.use_gpu = use_gpu and torch.cuda.is_available()
+        _torch = _get_torch()
+        if _torch is not None:
+            self.use_gpu = use_gpu and _torch.cuda.is_available()
+        else:
+            self.use_gpu = False
         self.device = "cuda" if self.use_gpu else "cpu"
         
         logger.info(f"Loading NLI model on {self.device.upper()}...")
