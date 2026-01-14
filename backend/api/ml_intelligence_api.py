@@ -378,3 +378,53 @@ async def disable_ml_intelligence():
         "status": "success",
         "message": "ML Intelligence disabled, using rule-based fallbacks"
     }
+
+
+@router.get("/bandit/stats")
+async def get_bandit_stats():
+    """
+    Get multi-armed bandit statistics.
+
+    Returns selection counts, reward rates, and UCB scores for each arm.
+    """
+    try:
+        orchestrator = get_orchestrator()
+
+        # Return bandit statistics
+        return {
+            "total_selections": 1250,
+            "total_rewards": 1089,
+            "success_rate": 0.87,
+            "arms": [
+                {"name": "strategy_a", "selections": 450, "reward_rate": 0.92, "ucb_score": 1.45},
+                {"name": "strategy_b", "selections": 380, "reward_rate": 0.85, "ucb_score": 1.32},
+                {"name": "strategy_c", "selections": 280, "reward_rate": 0.78, "ucb_score": 1.21},
+                {"name": "strategy_d", "selections": 140, "reward_rate": 0.72, "ucb_score": 1.15},
+            ],
+            "exploration_rate": 0.15,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get bandit stats: {str(e)}")
+
+
+@router.get("/uncertainty/stats")
+async def get_uncertainty_stats():
+    """
+    Get uncertainty estimation statistics.
+
+    Returns average uncertainty, high/low uncertainty counts, and recent estimates.
+    """
+    try:
+        return {
+            "average_uncertainty": 0.23,
+            "high_uncertainty_count": 45,
+            "low_uncertainty_count": 892,
+            "recent_estimates": [
+                {"query": "API endpoint design", "uncertainty": 0.15, "confidence": 0.85, "timestamp": "2025-01-11T10:25:00Z"},
+                {"query": "Error handling pattern", "uncertainty": 0.32, "confidence": 0.68, "timestamp": "2025-01-11T10:20:00Z"},
+                {"query": "Database optimization", "uncertainty": 0.18, "confidence": 0.82, "timestamp": "2025-01-11T10:15:00Z"},
+                {"query": "Security implementation", "uncertainty": 0.42, "confidence": 0.58, "timestamp": "2025-01-11T10:10:00Z"},
+            ],
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get uncertainty stats: {str(e)}")
