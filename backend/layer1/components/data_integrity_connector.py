@@ -56,6 +56,7 @@ class DataIntegrityConnector:
         self.enable_trust_scoring = enable_trust_scoring
         self.verifier = None
         self.enabled = True
+        self._last_report = None  # Cache last integrity report
 
         # Register with message bus
         self.message_bus.register_component(
@@ -171,10 +172,17 @@ class DataIntegrityConnector:
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
 
-            return {
-                "success": True,
+            # Cache the report
+            self._last_report = {
                 "report": report.summary if hasattr(report, 'summary') else report,
                 "all_checks_passed": self._check_all_passed(report),
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+
+            return {
+                "success": True,
+                "report": self._last_report["report"],
+                "all_checks_passed": self._last_report["all_checks_passed"],
             }
 
         except Exception as e:
@@ -183,10 +191,18 @@ class DataIntegrityConnector:
 
     async def _handle_get_report(self, message: Message) -> Dict[str, Any]:
         """Handle get integrity report request."""
-        # TODO: Load last report from file
+        if self._last_report is None:
+            return {
+                "success": True,
+                "message": "No report available. Run verify_integrity first.",
+                "report": None,
+            }
+
         return {
             "success": True,
-            "message": "Use verify_integrity to generate report",
+            "report": self._last_report["report"],
+            "all_checks_passed": self._last_report["all_checks_passed"],
+            "timestamp": self._last_report["timestamp"],
         }
 
     async def _on_periodic_check(self, message: Message):

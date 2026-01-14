@@ -59,6 +59,15 @@ class KnowledgeBaseIngestionConnector:
         self.ingestion_manager = None
         self.enabled = True
 
+        # Status tracking
+        self._ingestion_status = {
+            "state": "idle",  # idle, ingesting, completed, error
+            "last_ingestion": None,
+            "repositories_ingested": 0,
+            "total_documents": 0,
+            "last_error": None,
+        }
+
         # Register with message bus
         self.message_bus.register_component(
             ComponentType.KNOWLEDGE_BASE,
@@ -96,9 +105,10 @@ class KnowledgeBaseIngestionConnector:
                 )
                 
                 logger.info("[KB-INGESTION-CONNECTOR] Using trust-aware embeddings")
-                
-                # TODO: Modify AIResearchIngestionManager to accept trust-aware model
-                # For now, we'll use standard model and enhance post-ingestion
+
+                # Note: AIResearchIngestionManager uses its own embedding model internally.
+                # Trust-aware scoring is applied post-ingestion via the trust_weight parameter.
+                # Future enhancement: Pass trust_aware_model directly to ingestion manager.
                 
             # Initialize manager
             self.ingestion_manager = AIResearchIngestionManager(
@@ -215,6 +225,10 @@ class KnowledgeBaseIngestionConnector:
         try:
             self._initialize_ingestion_manager()
 
+            # Update status
+            self._ingestion_status["state"] = "ingesting"
+            self._ingestion_status["last_error"] = None
+
             # Publish start event
             await self.message_bus.publish(
                 topic="knowledge_base.ingestion_all_started",
@@ -226,6 +240,12 @@ class KnowledgeBaseIngestionConnector:
 
             # Ingest all
             stats = self.ingestion_manager.ingest_all_repositories()
+
+            # Update status on success
+            self._ingestion_status["state"] = "completed"
+            self._ingestion_status["last_ingestion"] = datetime.utcnow().isoformat()
+            self._ingestion_status["repositories_ingested"] += stats.get("repositories_processed", 0)
+            self._ingestion_status["total_documents"] += stats.get("total_documents", 0)
 
             # Publish completion event
             await self.message_bus.publish(
@@ -241,16 +261,21 @@ class KnowledgeBaseIngestionConnector:
 
         except Exception as e:
             logger.error(f"[KB-INGESTION-CONNECTOR] Ingestion failed: {e}")
+            self._ingestion_status["state"] = "error"
+            self._ingestion_status["last_error"] = str(e)
             return {"success": False, "error": str(e)}
 
     async def _handle_get_status(self, message: Message) -> Dict[str, Any]:
         """Handle get ingestion status request."""
-        # TODO: Implement status tracking
         return {
             "success": True,
-            "status": "ready",
+            "status": self._ingestion_status["state"],
             "ai_research_path": str(self.ai_research_path),
             "trust_aware": self.use_trust_aware,
+            "last_ingestion": self._ingestion_status["last_ingestion"],
+            "repositories_ingested": self._ingestion_status["repositories_ingested"],
+            "total_documents": self._ingestion_status["total_documents"],
+            "last_error": self._ingestion_status["last_error"],
         }
 
     async def _on_new_repository_detected(self, message: Message):
