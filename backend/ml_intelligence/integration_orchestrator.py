@@ -15,23 +15,42 @@ Features:
 
 import sys
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from datetime import datetime
-import numpy as np
+from enum import Enum
 
 # Add backend to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ml_intelligence import (
-    get_neural_trust_scorer,
-    get_bandit,
-    get_meta_learner,
-    get_uncertainty_quantifier,
-    get_active_sampler,
-    BanditAlgorithm,
-    BanditContext,
-    SamplingStrategy
-)
+# Track availability
+ML_ORCHESTRATOR_AVAILABLE = False
+
+try:
+    import numpy as np
+    from ml_intelligence.neural_trust_scorer import get_neural_trust_scorer
+    from ml_intelligence.multi_armed_bandit import get_bandit, BanditAlgorithm, BanditContext
+    from ml_intelligence.meta_learning import get_meta_learner
+    from ml_intelligence.uncertainty_quantification import get_uncertainty_quantifier
+    from ml_intelligence.active_learning_sampler import get_active_sampler, SamplingStrategy
+    ML_ORCHESTRATOR_AVAILABLE = True
+except ImportError as e:
+    import logging
+    logging.getLogger(__name__).warning(f"ML Orchestrator dependencies not available: {e}")
+    # Create stub implementations
+    np = None
+    get_neural_trust_scorer = None
+    get_bandit = None
+    get_meta_learner = None
+    get_uncertainty_quantifier = None
+    get_active_sampler = None
+    BanditAlgorithm = None
+    BanditContext = None
+
+    # Create a stub SamplingStrategy enum
+    class SamplingStrategy(Enum):
+        UNCERTAINTY = "uncertainty"
+        DIVERSITY = "diversity"
+        RANDOM = "random"
 
 
 class MLIntelligenceOrchestrator:

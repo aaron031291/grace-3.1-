@@ -50,6 +50,7 @@ class CognitiveLayer1Integration:
         is_safety_critical: bool = False,
         impact_scope: str = "local",
         is_reversible: bool = True,
+        reversibility_justification: Optional[str] = None,
         observations: Optional[Dict] = None,
         constraints: Optional[Dict] = None,
         context_info: Optional[Dict] = None,
@@ -68,6 +69,7 @@ class CognitiveLayer1Integration:
             is_safety_critical: If True, marks as safety-critical
             impact_scope: Blast radius (local, component, systemic)
             is_reversible: Whether operation can be reversed
+            reversibility_justification: Justification for irreversible operations
             observations: Observed facts
             constraints: Constraints on decision
             context_info: Contextual information
@@ -86,6 +88,10 @@ class CognitiveLayer1Integration:
             impact_scope=impact_scope,
             is_reversible=is_reversible
         )
+
+        # Set reversibility justification for irreversible operations
+        if not is_reversible and reversibility_justification:
+            context.reversibility_justification = reversibility_justification
 
         # Set planning timeout
         context.decision_freeze_point = (
@@ -250,6 +256,7 @@ class CognitiveLayer1Integration:
             is_safety_critical=False,
             impact_scope="component",  # Affects knowledge base
             is_reversible=False,  # Cannot unlearn ingested data
+            reversibility_justification="File ingestion is intentionally permanent to maintain knowledge base integrity. Data can be marked as deprecated but not fully removed.",
             observations={
                 'user_id': user_id,
                 'file_name': file_name,
@@ -315,6 +322,7 @@ class CognitiveLayer1Integration:
             is_safety_critical=False,
             impact_scope="component",
             is_reversible=False,
+            reversibility_justification="API data ingestion is permanent to maintain data provenance and audit trails.",
             observations={
                 'api_name': api_name,
                 'api_endpoint': api_endpoint,
@@ -369,6 +377,7 @@ class CognitiveLayer1Integration:
             is_safety_critical=False,
             impact_scope="component",
             is_reversible=False,
+            reversibility_justification="Web scraping data is permanently archived to maintain historical accuracy and source tracking.",
             observations={
                 'url': url,
                 'html_size': len(html_content),
@@ -472,6 +481,7 @@ class CognitiveLayer1Integration:
             is_safety_critical=True,  # Learning affects future behavior
             impact_scope="systemic",  # Affects entire system behavior
             is_reversible=False,  # Cannot unlearn
+            reversibility_justification="Learning operations permanently affect the knowledge base and model behavior. While weights can be adjusted, learned patterns cannot be fully unlearned.",
             observations={
                 'learning_type': learning_type,
                 'has_context': 'context' in learning_data,
@@ -527,6 +537,7 @@ class CognitiveLayer1Integration:
             is_safety_critical=True,  # Affects security
             impact_scope="systemic",  # Affects entire system
             is_reversible=False,
+            reversibility_justification="Whitelist changes are critical security operations. While entries can be removed, the history of all security decisions must be permanently maintained for audit purposes.",
             observations={
                 'whitelist_type': whitelist_type,
                 'operation': whitelist_data.get('operation', 'unknown')
