@@ -386,6 +386,61 @@ async def create_tag(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/tags/statistics", response_model=TagStatisticsResponse, summary="Get tag statistics")
+async def get_tag_statistics(
+    session: Session = Depends(get_session)
+):
+    """Get comprehensive tag usage statistics."""
+    try:
+        tag_manager = TagManager(session)
+        stats = tag_manager.get_tag_statistics()
+
+        return TagStatisticsResponse(
+            total_tags=stats.get("total_tags", 0),
+            by_category=stats.get("by_category", {}),
+            most_used=stats.get("most_used", []),
+            recent_tags=stats.get("recent_tags", [])
+        )
+
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error getting tag statistics: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/tags/popular", response_model=TagListResponse, summary="Get popular tags")
+async def get_popular_tags(
+    limit: int = Query(20, ge=1, le=100, description="Number of tags to return"),
+    session: Session = Depends(get_session)
+):
+    """Get most frequently used tags."""
+    try:
+        tags = session.query(LibrarianTag).order_by(
+            LibrarianTag.usage_count.desc()
+        ).limit(limit).all()
+
+        tag_responses = []
+        for tag in tags:
+            tag_responses.append(TagResponse(
+                id=tag.id,
+                name=tag.name,
+                description=tag.description,
+                color=tag.color,
+                category=tag.category,
+                usage_count=tag.usage_count,
+                created_at=tag.created_at.isoformat(),
+                updated_at=tag.updated_at.isoformat()
+            ))
+
+        return TagListResponse(
+            tags=tag_responses,
+            total=len(tag_responses)
+        )
+
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error getting popular tags: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/tags/{tag_id}", response_model=TagResponse, summary="Get tag by ID")
 async def get_tag(
     tag_id: int = Path(..., description="Tag ID"),
@@ -599,61 +654,6 @@ async def search_by_tags(
 
     except Exception as e:
         logger.error(f"[LIBRARIAN-API] Error searching by tags: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/tags/statistics", response_model=TagStatisticsResponse, summary="Get tag statistics")
-async def get_tag_statistics(
-    session: Session = Depends(get_session)
-):
-    """Get comprehensive tag usage statistics."""
-    try:
-        tag_manager = TagManager(session)
-        stats = tag_manager.get_tag_statistics()
-
-        return TagStatisticsResponse(
-            total_tags=stats.get("total_tags", 0),
-            by_category=stats.get("by_category", {}),
-            most_used=stats.get("most_used", []),
-            recent_tags=stats.get("recent_tags", [])
-        )
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting tag statistics: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/tags/popular", response_model=TagListResponse, summary="Get popular tags")
-async def get_popular_tags(
-    limit: int = Query(20, ge=1, le=100, description="Number of tags to return"),
-    session: Session = Depends(get_session)
-):
-    """Get most frequently used tags."""
-    try:
-        tags = session.query(LibrarianTag).order_by(
-            LibrarianTag.usage_count.desc()
-        ).limit(limit).all()
-
-        tag_responses = []
-        for tag in tags:
-            tag_responses.append(TagResponse(
-                id=tag.id,
-                name=tag.name,
-                description=tag.description,
-                color=tag.color,
-                category=tag.category,
-                usage_count=tag.usage_count,
-                created_at=tag.created_at.isoformat(),
-                updated_at=tag.updated_at.isoformat()
-            ))
-
-        return TagListResponse(
-            tags=tag_responses,
-            total=len(tag_responses)
-        )
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting popular tags: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -902,6 +902,22 @@ async def create_rule(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/rules/statistics", summary="Get rule statistics")
+async def get_rule_statistics(
+    session: Session = Depends(get_session)
+):
+    """Get rule effectiveness statistics."""
+    try:
+        categorizer = RuleBasedCategorizer(session)
+        stats = categorizer.get_rule_statistics()
+
+        return stats
+
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error getting rule statistics: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/rules/{rule_id}", response_model=RuleResponse, summary="Get rule by ID")
 async def get_rule(
     rule_id: int = Path(..., description="Rule ID"),
@@ -1033,22 +1049,6 @@ async def test_rule(
 
     except Exception as e:
         logger.error(f"[LIBRARIAN-API] Error testing rule {rule_id}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/rules/statistics", summary="Get rule statistics")
-async def get_rule_statistics(
-    session: Session = Depends(get_session)
-):
-    """Get rule effectiveness statistics."""
-    try:
-        categorizer = RuleBasedCategorizer(session)
-        stats = categorizer.get_rule_statistics()
-
-        return stats
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting rule statistics: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
