@@ -10,6 +10,9 @@ Verifies that all Layer 1 inputs flow through:
 import sys
 import json
 import pytest
+import tempfile
+import shutil
+from pathlib import Path
 from datetime import datetime
 
 from database.connection import DatabaseConnection
@@ -21,12 +24,13 @@ from genesis.cognitive_layer1_integration import get_cognitive_layer1_integratio
 
 # Global flag to track initialization
 _db_initialized = False
+_test_kb_dir = None
 
 
 @pytest.fixture(autouse=True)
 def init_db():
     """Initialize the database for testing - runs before each test."""
-    global _db_initialized
+    global _db_initialized, _test_kb_dir
     if not _db_initialized:
         try:
             config = DatabaseConfig(
@@ -36,15 +40,32 @@ def init_db():
             DatabaseConnection.initialize(config)
             initialize_session_factory()
             # Import all models to register them with BaseModel
-            from models import genesis_key_models, database_models
+            from models import genesis_key_models, database_models, telemetry_models, librarian_models, notion_models
+            from cognitive import episodic_memory, procedural_memory, learning_memory
             # Create all database tables including genesis_key
             engine = DatabaseConnection.get_engine()
             BaseModel.metadata.create_all(engine)
+
+            # Create knowledge_base directory structure for file upload tests
+            kb_path = Path(__file__).parent.parent / "knowledge_base"
+            if not kb_path.exists():
+                kb_path.mkdir(parents=True, exist_ok=True)
+                _test_kb_dir = kb_path
+            layer1_path = kb_path / "layer_1" / "uploads"
+            layer1_path.mkdir(parents=True, exist_ok=True)
+
             _db_initialized = True
         except RuntimeError:
             # Already initialized
             _db_initialized = True
     yield
+
+    # Cleanup test directories if we created them
+    if _test_kb_dir and _test_kb_dir.exists():
+        try:
+            shutil.rmtree(_test_kb_dir)
+        except Exception:
+            pass
 
 
 def test_user_input():
