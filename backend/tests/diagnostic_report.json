@@ -1,0 +1,25 @@
+{
+  "session_id": "2026-01-14T11:02:08.222653",
+  "environment": {
+    "python_version": "3.11.14 (main, Oct 10 2025, 08:54:04) [GCC 13.3.0]",
+    "platform": "linux",
+    "cwd": "/home/user/grace-3.1-/backend"
+  },
+  "skips": [],
+  "import_errors": [],
+  "missing_dependencies": [],
+  "suggested_fixes": [],
+  "test_results": {
+    "passed": 162,
+    "failed": 108,
+    "skipped": 0,
+    "errors": 0
+  },
+  "summary": {
+    "total_skips": 0,
+    "total_import_errors": 0,
+    "missing_dependency_count": 0,
+    "has_critical_issues": false,
+    "environment_ready": true
+  }
+}

@@ -6,7 +6,7 @@ import unittest
 import torch
 import gc
 from pathlib import Path
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 
 
 class TestVRAMUsage(unittest.TestCase):

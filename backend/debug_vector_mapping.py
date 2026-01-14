@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.WARNING)
 
 from vector_db.client import get_qdrant_client
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 
 print("=" * 80)
 print("VECTOR ID TO CHUNK MAPPING DEBUG")

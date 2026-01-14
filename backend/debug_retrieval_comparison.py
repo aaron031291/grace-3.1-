@@ -88,7 +88,7 @@ try:
     print("=" * 80)
     
     try:
-        from embedding.embedder import EmbeddingModel
+        from embedding import EmbeddingModel
         from vector_db.client import get_qdrant_client
         import logging
         logging.basicConfig(level=logging.WARNING)

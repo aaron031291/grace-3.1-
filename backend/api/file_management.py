@@ -15,7 +15,7 @@ import asyncio
 from file_manager.knowledge_base_manager import KnowledgeBaseManager
 from file_manager.file_handler import extract_file_text
 from ingestion.service import TextIngestionService
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from models.database_models import Document
 from database.session import initialize_session_factory
 from database import connection
@@ -46,7 +46,7 @@ def _process_with_librarian(document_id: int) -> None:
     """
     try:
         from librarian.engine import LibrarianEngine
-        from embedding.embedder import get_embedding_model
+        from embedding import get_embedding_model
         from ollama_client.client import get_ollama_client
         from vector_db.client import get_qdrant_client
 

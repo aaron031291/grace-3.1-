@@ -130,6 +130,18 @@ class ActionPriority(str, Enum):
     BACKGROUND = "background" # Execute in background
 
 
+class ActionStatus(str, Enum):
+    """Status of an autonomous action."""
+    PENDING = "pending"              # Waiting to execute
+    PENDING_APPROVAL = "pending_approval"  # Waiting for human approval
+    RUNNING = "running"              # Currently executing
+    SUCCESS = "success"              # Completed successfully
+    FAILED = "failed"                # Failed to execute
+    SKIPPED = "skipped"              # Skipped (e.g., duplicate)
+    CANCELLED = "cancelled"          # Cancelled before execution
+    TIMEOUT = "timeout"              # Timed out during execution
+
+
 @dataclass
 class ActionContext:
     """Context for an autonomous action."""

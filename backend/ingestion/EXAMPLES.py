@@ -8,7 +8,7 @@ Shows how to use the manager in different contexts.
 def example_basic_scan():
     """Basic example: Scan for changes and process them."""
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     # Initialize
@@ -40,7 +40,7 @@ def example_basic_scan():
 def example_continuous_watch():
     """Example: Watch directory continuously for changes."""
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     embedding_model = get_embedding_model()
@@ -63,7 +63,7 @@ def example_process_specific_actions():
     """Example: Handle specific file actions manually."""
     from pathlib import Path
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     embedding_model = get_embedding_model()
@@ -149,7 +149,7 @@ def example_fastapi_integration():
 def example_error_handling():
     """Example: Proper error handling when using the manager."""
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     from pathlib import Path
     
@@ -194,7 +194,7 @@ def example_batch_import():
     import shutil
     from pathlib import Path
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     # Copy files to knowledge base
@@ -236,7 +236,7 @@ def example_batch_import():
 def example_state_management():
     """Example: Managing ingestion state."""
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     import json
     
@@ -273,7 +273,7 @@ def example_state_management():
 def example_git_operations():
     """Example: Direct git operations."""
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     embedding_model = get_embedding_model()
@@ -310,7 +310,7 @@ def example_custom_processing():
     """Example: Custom processing logic on top of manager."""
     from pathlib import Path
     from ingestion.file_manager import IngestionFileManager, IngestionResult
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     class CustomIngestionManager(IngestionFileManager):
@@ -353,7 +353,7 @@ def example_monitoring_logging():
     """Example: Set up monitoring and advanced logging."""
     import logging
     from ingestion.file_manager import IngestionFileManager
-    from embedding.embedder import get_embedding_model
+    from embedding import get_embedding_model
     from api.ingest import get_ingestion_service
     
     # Set up detailed logging

@@ -15,7 +15,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent))
 
 from ingestion.file_manager import IngestionFileManager
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 from api.ingest import get_ingestion_service
 
 # Configure logging

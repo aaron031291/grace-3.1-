@@ -23,7 +23,7 @@ import logging
 import numpy as np
 from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime
-from embedding.embedder import EmbeddingModel
+from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from .contradiction_detector import SemanticContradictionDetector
 

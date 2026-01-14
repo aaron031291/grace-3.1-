@@ -10,7 +10,7 @@ import time
 import json
 from pathlib import Path
 from ingestion.file_manager import IngestionFileManager
-from embedding.embedder import get_embedding_model
+from embedding import get_embedding_model
 
 def print_section(title):
     print(f"\n{'='*60}")

@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import logging
 
-from embedding.embedder import EmbeddingModel, get_embedding_model
+from embedding import EmbeddingModel, get_embedding_model
 from retrieval.retriever import DocumentRetriever
 from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext
 from ml_intelligence.neural_to_symbolic_rule_generator import NeuralToSymbolicRuleGenerator, SymbolicRule
