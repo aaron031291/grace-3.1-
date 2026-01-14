@@ -52,6 +52,10 @@ dist/
 */.genesis_*.json
 **/.genesis_*.json
 
+# Knowledge base metadata (auto-generated)
+**/.metadata.json
+**/test_documents/
+
 # Test artifacts
 diagnostic_report.json
 **/diagnostic_report.json
