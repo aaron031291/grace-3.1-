@@ -217,6 +217,56 @@ class DecisionLogger:
         """
         return self._log_entries.copy()
 
+    def get_recent_decisions(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get recent decisions with their metadata.
+
+        Args:
+            limit: Maximum number of decisions to return
+
+        Returns:
+            List of decision dictionaries with status and metadata
+        """
+        # Get all decision_start events
+        decisions = []
+        for entry in reversed(self._log_entries):
+            if entry.get('event') == 'decision_start':
+                decision_id = entry.get('decision_id')
+                # Find the status of this decision
+                status = 'in_progress'
+                for e in self._log_entries:
+                    if e.get('decision_id') == decision_id:
+                        if e.get('event') == 'decision_complete':
+                            status = 'completed'
+                        elif e.get('event') == 'decision_aborted':
+                            status = 'aborted'
+                        elif e.get('event') == 'decision_finalized':
+                            status = 'finalized'
+
+                decisions.append({
+                    'decision_id': decision_id,
+                    'problem_statement': entry.get('problem_statement'),
+                    'goal': entry.get('goal'),
+                    'success_criteria': entry.get('success_criteria'),
+                    'timestamp': entry.get('timestamp'),
+                    'status': status
+                })
+
+                if len(decisions) >= limit:
+                    break
+
+        return decisions
+
+    def get_active_decisions(self) -> List[Dict[str, Any]]:
+        """
+        Get currently active (non-completed) decisions.
+
+        Returns:
+            List of active decision dictionaries
+        """
+        all_decisions = self.get_recent_decisions(limit=100)
+        return [d for d in all_decisions if d.get('status') == 'in_progress']
+
     def _write_log_entry(self, entry: Dict[str, Any]) -> None:
         """
         Write a log entry to file if log_dir is set.
