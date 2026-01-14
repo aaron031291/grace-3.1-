@@ -424,9 +424,53 @@ class GraceActiveLearningSystem:
         if not existing:
             return 0.6  # No existing knowledge, moderate trust
 
-        # TODO: In production, use semantic similarity to compare concepts
-        # For now, assume reasonable consistency
+        # Use semantic similarity to compare concepts
+        try:
+            # Get embedding for new concept
+            if hasattr(self.retriever, 'embedding_model') and self.retriever.embedding_model:
+                new_embedding = self.retriever.embedding_model.embed(concept_text)
+
+                similarities = []
+                for example in existing:
+                    # Extract text from existing example
+                    existing_text = ""
+                    if example.input_context:
+                        existing_text = json.dumps(example.input_context)
+                    if example.expected_output:
+                        existing_text += " " + json.dumps(example.expected_output)
+
+                    if existing_text.strip():
+                        existing_embedding = self.retriever.embedding_model.embed(existing_text)
+
+                        # Calculate cosine similarity
+                        similarity = self._cosine_similarity(new_embedding, existing_embedding)
+                        similarities.append(similarity)
+
+                if similarities:
+                    avg_similarity = sum(similarities) / len(similarities)
+                    # High similarity = consistent with existing knowledge
+                    # Map similarity (0-1) to trust score (0.5-0.9)
+                    return 0.5 + (avg_similarity * 0.4)
+
+        except Exception as e:
+            logger.debug(f"Semantic similarity assessment failed: {e}")
+
+        # Fallback: assume reasonable consistency
         return 0.7
+
+    def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
+        """Calculate cosine similarity between two vectors."""
+        if not vec1 or not vec2 or len(vec1) != len(vec2):
+            return 0.0
+
+        dot_product = sum(a * b for a, b in zip(vec1, vec2))
+        norm1 = sum(a * a for a in vec1) ** 0.5
+        norm2 = sum(b * b for b in vec2) ** 0.5
+
+        if norm1 == 0 or norm2 == 0:
+            return 0.0
+
+        return dot_product / (norm1 * norm2)
 
     # ======================================================================
     # PHASE 2: PRACTICE - Apply knowledge in sandbox
