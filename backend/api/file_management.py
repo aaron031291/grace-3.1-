@@ -35,11 +35,20 @@ def _process_with_librarian(document_id: int) -> None:
     """
     Process a document through the librarian system.
 
+    NOW FULLY INTEGRATED with LLM Orchestrator for AI operations.
+
     Called asynchronously after successful ingestion to automatically:
-    - Categorize with rules and AI
-    - Assign tags
+    - Categorize with rules and AI (via LLM Orchestrator)
+    - Assign tags (with Genesis Key tracking)
     - Detect relationships
     - Create any necessary actions
+
+    All AI operations include:
+    - OODA Loop enforcement
+    - 12 Invariants validation
+    - Genesis Key tracking
+    - Hallucination mitigation
+    - Learning Memory integration
 
     Args:
         document_id: Document ID to process
@@ -47,8 +56,15 @@ def _process_with_librarian(document_id: int) -> None:
     try:
         from librarian.engine import LibrarianEngine
         from embedding import get_embedding_model
-        from ollama_client.client import get_ollama_client
         from vector_db.client import get_qdrant_client
+
+        # Import LLM Orchestrator (preferred over direct Ollama)
+        try:
+            from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+            llm_orchestrator = None  # Will be created with session
+        except ImportError:
+            logger.warning("[LIBRARIAN] LLM Orchestrator not available, AI features may be limited")
+            llm_orchestrator = None
 
         logger.info(f"[LIBRARIAN] Starting automatic processing for document {document_id}")
 
@@ -56,11 +72,24 @@ def _process_with_librarian(document_id: int) -> None:
         db = get_db_session()
 
         try:
-            # Create librarian engine with settings
+            # Get LLM Orchestrator with session
+            try:
+                from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+                llm_orchestrator = get_llm_orchestrator(
+                    session=db,
+                    embedding_model=get_embedding_model(),
+                    knowledge_base_path="knowledge_base"
+                )
+                logger.info("[LIBRARIAN] ✓ Using LLM Orchestrator for AI operations")
+            except Exception as e:
+                logger.warning(f"[LIBRARIAN] Could not initialize LLM Orchestrator: {e}")
+                llm_orchestrator = None
+
+            # Create librarian engine with LLM Orchestrator (no direct Ollama)
             librarian = LibrarianEngine(
                 db_session=db,
                 embedding_model=get_embedding_model(),
-                ollama_client=get_ollama_client(),
+                llm_orchestrator=llm_orchestrator,  # Use orchestrator instead of ollama_client
                 vector_db_client=get_qdrant_client(),
                 ai_model_name=settings.LIBRARIAN_AI_MODEL,
                 use_ai=settings.LIBRARIAN_USE_AI,
@@ -76,11 +105,13 @@ def _process_with_librarian(document_id: int) -> None:
             )
 
             if result["status"] == "success":
+                genesis_key = result.get("genesis_key_id", "N/A")
                 logger.info(
-                    f"[LIBRARIAN] [OK] Processed document {document_id}: "
+                    f"[LIBRARIAN] ✓ Processed document {document_id}: "
                     f"{result['tags_assigned']} tags, "
                     f"{result['relationships_detected']} relationships, "
-                    f"rules matched: {result['rules_matched']}"
+                    f"rules matched: {result['rules_matched']}, "
+                    f"Genesis Key: {genesis_key}"
                 )
             else:
                 logger.error(

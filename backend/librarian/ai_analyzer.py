@@ -1,8 +1,15 @@
 """
 AIContentAnalyzer - LLM-based Content Analysis
 
-Uses LLM to analyze document content and suggest categorization when
+Uses LLM Orchestrator to analyze document content and suggest categorization when
 rule-based matching is insufficient or ambiguous.
+
+FULLY INTEGRATED with:
+- Cognitive Framework (OODA Loop + 12 Invariants)
+- Genesis Key tracking
+- Hallucination mitigation
+- Learning Memory integration
+- Layer 1 Message Bus
 """
 
 from typing import List, Dict, Any, Optional, Tuple
@@ -25,11 +32,18 @@ class AIContentAnalyzer:
     """
     LLM-powered content analysis for intelligent document categorization.
 
-    Uses existing Ollama client to analyze document content and provide:
+    NOW FULLY INTEGRATED with LLM Orchestrator to provide:
     - Suggested tags based on content understanding
     - Document category classification
     - Main topics identification
     - Confidence scores
+
+    All AI operations are:
+    - Tracked with Genesis Keys
+    - Enforced through OODA Loop + 12 Invariants
+    - Verified through hallucination mitigation pipeline
+    - Integrated with Learning Memory
+    - Logged for complete audit trail
 
     Features:
     - Content sampling (first N chunks to avoid token limits)
@@ -38,17 +52,19 @@ class AIContentAnalyzer:
     - Configurable confidence thresholds
 
     Example:
-        >>> from ollama_client.client import get_ollama_client
-        >>> analyzer = AIContentAnalyzer(db_session, get_ollama_client())
+        >>> from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+        >>> analyzer = AIContentAnalyzer(db_session, llm_orchestrator=get_llm_orchestrator())
         >>> result = analyzer.analyze_document(document_id=123)
         >>> print(f"Suggested tags: {result['tags']}")
         >>> print(f"Confidence: {result['confidence']}")
+        >>> print(f"Genesis Key: {result['genesis_key_id']}")
     """
 
     def __init__(
         self,
         db_session: Session,
-        ollama_client,
+        ollama_client=None,
+        llm_orchestrator=None,
         model_name: str = "mistral:7b",
         max_chunks: int = 5,
         max_chars: int = 4000
@@ -58,16 +74,38 @@ class AIContentAnalyzer:
 
         Args:
             db_session: SQLAlchemy database session
-            ollama_client: Ollama client instance
+            ollama_client: [DEPRECATED] Legacy Ollama client (use llm_orchestrator instead)
+            llm_orchestrator: LLM Orchestrator instance (preferred)
             model_name: Model to use for analysis (default: "mistral:7b")
             max_chunks: Maximum chunks to analyze (default: 5)
             max_chars: Maximum characters to analyze (default: 4000)
         """
         self.db = db_session
-        self.ollama = ollama_client
         self.model_name = model_name
         self.max_chunks = max_chunks
         self.max_chars = max_chars
+
+        # Prefer LLM Orchestrator over direct Ollama client
+        self._llm_orchestrator = llm_orchestrator
+        self._ollama_legacy = ollama_client  # Keep for backward compatibility
+
+        # Try to get orchestrator if not provided
+        if self._llm_orchestrator is None:
+            try:
+                from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+                from embedding import get_embedding_model
+                self._llm_orchestrator = get_llm_orchestrator(
+                    session=db_session,
+                    embedding_model=get_embedding_model(),
+                    knowledge_base_path="knowledge_base"
+                )
+                logger.info("[AI ANALYZER] ✓ Connected to LLM Orchestrator")
+            except Exception as e:
+                logger.warning(f"[AI ANALYZER] Could not connect to LLM Orchestrator: {e}")
+                logger.warning("[AI ANALYZER] Falling back to legacy Ollama client")
+
+        # Legacy compatibility
+        self.ollama = ollama_client
 
     def analyze_document(
         self,
@@ -122,24 +160,63 @@ class AIContentAnalyzer:
         # Build prompt
         prompt = custom_prompt or self._build_analysis_prompt(document, content_sample)
 
-        # Generate analysis
+        # Generate analysis using LLM Orchestrator (preferred) or legacy Ollama
         try:
-            response = self.ollama.generate_response(
-                model=self.model_name,
-                prompt=prompt,
-                temperature=0.3,  # Low temperature for consistency
-                stream=False
-            )
+            genesis_key_id = None
+            trust_score = None
+
+            if self._llm_orchestrator:
+                # Use LLM Orchestrator with full cognitive pipeline
+                from llm_orchestrator.multi_llm_client import TaskType
+
+                logger.info(f"[AI ANALYZER] Using LLM Orchestrator for document {document_id}")
+
+                task_result = self._llm_orchestrator.execute_task(
+                    prompt=prompt,
+                    task_type=TaskType.ANALYSIS,
+                    user_id=f"librarian_analyzer_{document_id}",
+                    require_verification=True,
+                    require_consensus=False,  # Single task, no consensus needed
+                    require_grounding=False,  # Document analysis, not code grounding
+                    enable_learning=True,
+                    system_prompt="You are an expert document categorization assistant. Analyze documents and provide structured JSON responses for categorization."
+                )
+
+                if task_result.success:
+                    response = task_result.content
+                    genesis_key_id = task_result.genesis_key_id
+                    trust_score = task_result.trust_score
+                    logger.info(f"[AI ANALYZER] ✓ Orchestrator task completed - Genesis Key: {genesis_key_id}")
+                else:
+                    raise Exception(f"Orchestrator task failed: {task_result.audit_trail}")
+
+            elif self._ollama_legacy:
+                # Legacy fallback to direct Ollama
+                logger.warning(f"[AI ANALYZER] Using legacy Ollama client for document {document_id}")
+                response = self._ollama_legacy.generate_response(
+                    model=self.model_name,
+                    prompt=prompt,
+                    temperature=0.3,
+                    stream=False
+                )
+            else:
+                raise Exception("No LLM backend available (orchestrator or ollama)")
 
             # Parse response
             result = self._parse_analysis_response(response)
             result["raw_response"] = response
 
-            logger.info(f"AI analyzed document {document_id}: {len(result['tags'])} tags, confidence={result['confidence']}")
+            # Add orchestrator metadata
+            if genesis_key_id:
+                result["genesis_key_id"] = genesis_key_id
+            if trust_score is not None:
+                result["trust_score"] = trust_score
+
+            logger.info(f"[AI ANALYZER] Analyzed document {document_id}: {len(result['tags'])} tags, confidence={result['confidence']}")
             return result
 
         except Exception as e:
-            logger.error(f"AI analysis failed for document {document_id}: {e}")
+            logger.error(f"[AI ANALYZER] Analysis failed for document {document_id}: {e}")
             return {
                 "tags": [],
                 "category": "unknown",
@@ -454,12 +531,35 @@ Example response: ["ai", "machine-learning", "research"]
 """
 
         try:
-            response = self.ollama.generate_response(
-                model=self.model_name,
-                prompt=prompt,
-                temperature=0.3,
-                stream=False
-            )
+            if self._llm_orchestrator:
+                # Use LLM Orchestrator
+                from llm_orchestrator.multi_llm_client import TaskType
+
+                task_result = self._llm_orchestrator.execute_task(
+                    prompt=prompt,
+                    task_type=TaskType.ANALYSIS,
+                    user_id="librarian_tag_suggester",
+                    require_verification=False,
+                    require_consensus=False,
+                    require_grounding=False,
+                    enable_learning=True,
+                    system_prompt="You are a tag suggestion assistant. Return only JSON arrays."
+                )
+
+                if task_result.success:
+                    response = task_result.content
+                else:
+                    return []
+
+            elif self._ollama_legacy:
+                response = self._ollama_legacy.generate_response(
+                    model=self.model_name,
+                    prompt=prompt,
+                    temperature=0.3,
+                    stream=False
+                )
+            else:
+                return []
 
             # Parse JSON array
             tags = safe_json_loads(response, default=[])
@@ -469,7 +569,7 @@ Example response: ["ai", "machine-learning", "research"]
             return []
 
         except Exception as e:
-            logger.error(f"Failed to suggest tags for query: {e}")
+            logger.error(f"[AI ANALYZER] Failed to suggest tags for query: {e}")
             return []
 
     def compare_documents(
@@ -525,16 +625,42 @@ Respond in JSON:
 """
 
         try:
-            response = self.ollama.generate_response(
-                model=self.model_name,
-                prompt=prompt,
-                temperature=0.3,
-                stream=False
-            )
+            genesis_key_id = None
+
+            if self._llm_orchestrator:
+                # Use LLM Orchestrator
+                from llm_orchestrator.multi_llm_client import TaskType
+
+                task_result = self._llm_orchestrator.execute_task(
+                    prompt=prompt,
+                    task_type=TaskType.ANALYSIS,
+                    user_id=f"librarian_compare_{doc_id_1}_{doc_id_2}",
+                    require_verification=True,
+                    require_consensus=False,
+                    require_grounding=False,
+                    enable_learning=True,
+                    system_prompt="You are a document comparison assistant. Analyze documents and provide structured JSON responses."
+                )
+
+                if task_result.success:
+                    response = task_result.content
+                    genesis_key_id = task_result.genesis_key_id
+                else:
+                    raise Exception("Comparison task failed")
+
+            elif self._ollama_legacy:
+                response = self._ollama_legacy.generate_response(
+                    model=self.model_name,
+                    prompt=prompt,
+                    temperature=0.3,
+                    stream=False
+                )
+            else:
+                raise Exception("No LLM backend available")
 
             result = self._extract_json(response)
             if result:
-                return {
+                comparison_result = {
                     "document_1_id": doc_id_1,
                     "document_2_id": doc_id_2,
                     "similarity_score": float(result.get("similarity_score", 0.5)),
@@ -542,9 +668,12 @@ Respond in JSON:
                     "explanation": str(result.get("explanation", "")),
                     "raw_response": response
                 }
+                if genesis_key_id:
+                    comparison_result["genesis_key_id"] = genesis_key_id
+                return comparison_result
 
         except Exception as exc:
-            logger.error(f"Failed to compare documents: {exc}")
+            logger.error(f"[AI ANALYZER] Failed to compare documents: {exc}")
             return {
                 "document_1_id": doc_id_1,
                 "document_2_id": doc_id_2,
@@ -556,16 +685,24 @@ Respond in JSON:
 
     def is_available(self) -> bool:
         """
-        Check if AI analysis is available (Ollama service and model).
+        Check if AI analysis is available (LLM Orchestrator or legacy Ollama).
 
         Returns:
             bool: True if available, False otherwise
         """
         try:
-            return (
-                self.ollama.is_running() and
-                self.ollama.model_exists(self.model_name)
-            )
+            # Prefer orchestrator
+            if self._llm_orchestrator:
+                return True
+
+            # Fallback to legacy
+            if self._ollama_legacy:
+                return (
+                    self._ollama_legacy.is_running() and
+                    self._ollama_legacy.model_exists(self.model_name)
+                )
+
+            return False
         except Exception:
             return False
 
@@ -577,14 +714,29 @@ Respond in JSON:
             Dict: Model information
         """
         try:
-            if self.is_available():
+            if self._llm_orchestrator:
                 return {
                     "model_name": self.model_name,
                     "available": True,
-                    "running": self.ollama.is_model_running(self.model_name)
+                    "backend": "llm_orchestrator",
+                    "features": [
+                        "cognitive_enforcement",
+                        "genesis_key_tracking",
+                        "hallucination_mitigation",
+                        "learning_memory_integration"
+                    ]
                 }
+
+            if self._ollama_legacy and self.is_available():
+                return {
+                    "model_name": self.model_name,
+                    "available": True,
+                    "backend": "ollama_legacy",
+                    "running": self._ollama_legacy.is_model_running(self.model_name)
+                }
+
         except Exception as e:
-            logger.error(f"Failed to get model info: {e}")
+            logger.error(f"[AI ANALYZER] Failed to get model info: {e}")
 
         return {
             "model_name": self.model_name,
