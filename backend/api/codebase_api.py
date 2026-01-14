@@ -151,6 +151,47 @@ def get_repo_root() -> Path:
     return Path(os.getcwd()).parent if os.getcwd().endswith('backend') else Path(os.getcwd())
 
 
+def validate_path_traversal(base_path: Path, requested_path: str) -> Path:
+    """
+    Validate that the requested path doesn't escape the base directory.
+    Prevents path traversal attacks using ../ sequences.
+
+    Args:
+        base_path: The allowed base directory
+        requested_path: The user-requested path
+
+    Returns:
+        The validated absolute path
+
+    Raises:
+        HTTPException: If path traversal is detected
+    """
+    # Normalize the path to remove . and ..
+    if requested_path.startswith("/"):
+        requested_path = requested_path[1:]
+
+    # Block obvious traversal attempts
+    if ".." in requested_path or requested_path.startswith("/"):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid path: path traversal not allowed"
+        )
+
+    # Construct and resolve the full path
+    full_path = (base_path / requested_path).resolve()
+
+    # Ensure the resolved path is within the base directory
+    try:
+        full_path.relative_to(base_path.resolve())
+    except ValueError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid path: access denied"
+        )
+
+    return full_path
+
+
 # ==================== Endpoints ====================
 
 @router.get("/repositories", response_model=RepositoriesResponse)
@@ -217,11 +258,8 @@ async def get_files(
     else:
         raise HTTPException(status_code=404, detail=f"Repository not found: {repo}")
 
-    # Normalize path
-    if path.startswith("/"):
-        path = path[1:]
-
-    target_path = base_path / path if path else base_path
+    # Validate path to prevent traversal attacks
+    target_path = validate_path_traversal(base_path, path) if path and path != "/" else base_path
 
     if not target_path.exists():
         raise HTTPException(status_code=404, detail=f"Path not found: {path}")
@@ -270,11 +308,8 @@ async def get_file_content(
     else:
         raise HTTPException(status_code=404, detail=f"Repository not found: {repo}")
 
-    # Normalize path
-    if path.startswith("/"):
-        path = path[1:]
-
-    file_path = base_path / path
+    # Validate path to prevent traversal attacks
+    file_path = validate_path_traversal(base_path, path)
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail=f"File not found: {path}")

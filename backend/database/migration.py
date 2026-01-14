@@ -20,6 +20,9 @@ from models.database_models import (  # noqa: F401
     ChatHistory,
     Document,
     DocumentChunk,
+    GovernanceRule,
+    GovernanceDocument,
+    GovernanceDecision,
 )
 
 # Import Notion task management models
@@ -28,6 +31,33 @@ from models.notion_models import (  # noqa: F401
     NotionTask,
     TaskHistory,
     TaskTemplate,
+)
+
+# Import telemetry models for self-modeling
+from models.telemetry_models import (  # noqa: F401
+    OperationLog,
+    PerformanceBaseline,
+    DriftAlert,
+    OperationReplay,
+    SystemState,
+)
+
+# Import Genesis Key models for version control
+from models.genesis_key_models import (  # noqa: F401
+    GenesisKey,
+    FixSuggestion,
+    GenesisKeyArchive,
+    UserProfile,
+)
+
+# Import Librarian models for document management
+from models.librarian_models import (  # noqa: F401
+    LibrarianTag,
+    DocumentTag,
+    DocumentRelationship,
+    LibrarianRule,
+    LibrarianAction,
+    LibrarianAudit,
 )
 
 

@@ -376,7 +376,7 @@ class AutonomousMasterIntegration:
                     "failure_patterns": len(suggestions.get('failure_patterns', [])),
                     "top_priorities": suggestions.get('top_priorities', [])[:3]
                 }
-            except:
+            except Exception:
                 status['memory_mesh'] = {"status": "error"}
 
         return status
