@@ -379,11 +379,13 @@ class ExecutionBridge:
 
     async def _handle_run_bash(self, action: ActionRequest) -> ActionResult:
         """Execute a bash command."""
+        import shlex
+
         command = action.parameters.get("command")
         working_dir = action.parameters.get("working_dir", self.config.workspace_dir)
         timeout = action.parameters.get("timeout", self.config.timeout)
 
-        # Security check
+        # Security check - block dangerous commands
         for blocked in self.config.blocked_commands:
             if blocked in command:
                 return ActionResult(
@@ -393,9 +395,21 @@ class ExecutionBridge:
                     error=f"Command blocked for security: contains '{blocked}'",
                 )
 
+        # SECURITY FIX: Parse command into list to avoid shell injection
+        # Use shlex.split() to safely parse the command string
+        try:
+            command_list = shlex.split(command)
+        except ValueError as e:
+            return ActionResult(
+                action_id=action.action_id,
+                action_type=action.action_type,
+                status=ActionStatus.FAILURE,
+                error=f"Invalid command syntax: {str(e)}",
+            )
+
         result = await self._run_subprocess(
-            command,
-            shell=True,
+            command_list,
+            shell=False,  # SECURITY FIX: Never use shell=True with user input
             timeout=timeout,
             cwd=working_dir,
         )

@@ -125,14 +125,33 @@ class KnowledgeBaseManager:
             Tuple of (success, message)
         """
         try:
-            if ".." in relative_path or relative_path.startswith("/"):
-                return False, "Invalid path"
-            
-            target_path = self.base_path / relative_path
-            
+            # SECURITY FIX: Enhanced path traversal protection
+            if not relative_path:
+                return False, "Empty path"
+
+            # Check for path traversal attempts (including URL-encoded variants)
+            dangerous_patterns = ["..", "//", "\\\\", "%2e", "%2f", "%5c"]
+            path_lower = relative_path.lower()
+            for pattern in dangerous_patterns:
+                if pattern in path_lower:
+                    return False, "Invalid path: contains forbidden characters"
+
+            if relative_path.startswith("/") or relative_path.startswith("\\"):
+                return False, "Invalid path: absolute paths not allowed"
+
+            # Resolve paths and verify target is within base directory
+            target_path = (self.base_path / relative_path).resolve()
+            base_resolved = self.base_path.resolve()
+
+            # Ensure target is within base_path (prevents path traversal via symlinks)
+            try:
+                target_path.relative_to(base_resolved)
+            except ValueError:
+                return False, "Invalid path: target outside allowed directory"
+
             if target_path.exists():
                 return False, "Folder already exists"
-            
+
             target_path.mkdir(parents=True, exist_ok=True)
             
             logger.info(f"Created folder: {relative_path}")
@@ -162,34 +181,77 @@ class KnowledgeBaseManager:
             Tuple of (success, message, full_relative_path)
         """
         try:
-            if ".." in relative_path or ".." in filename:
-                return False, "Invalid path", None
-            
+            # SECURITY FIX: Enhanced path and filename validation
+            dangerous_patterns = ["..", "//", "\\\\", "%2e", "%2f", "%5c", "\x00"]
+
+            # Check relative_path
+            if relative_path:
+                path_lower = relative_path.lower()
+                for pattern in dangerous_patterns:
+                    if pattern in path_lower:
+                        return False, "Invalid path: contains forbidden characters", None
+                if relative_path.startswith("/") or relative_path.startswith("\\"):
+                    return False, "Invalid path: absolute paths not allowed", None
+
+            # Check filename - also sanitize it
+            if not filename:
+                return False, "Filename is required", None
+            filename_lower = filename.lower()
+            for pattern in dangerous_patterns:
+                if pattern in filename_lower:
+                    return False, "Invalid filename: contains forbidden characters", None
+
+            # Additional filename sanitization: remove path separators and control characters
+            import re
+            # Only allow alphanumeric, dots, hyphens, underscores, and spaces in filenames
+            sanitized_filename = re.sub(r'[^\w.\-\s]', '_', filename)
+            # Prevent hidden files starting with dot unless explicitly intended
+            sanitized_filename = sanitized_filename.lstrip('.')
+            if not sanitized_filename:
+                sanitized_filename = "unnamed_file"
+
             # Create directory if it doesn't exist
             target_dir = self.base_path / relative_path if relative_path else self.base_path
+
+            # Resolve and verify paths are within base directory
+            target_dir_resolved = target_dir.resolve()
+            base_resolved = self.base_path.resolve()
+            try:
+                target_dir_resolved.relative_to(base_resolved)
+            except ValueError:
+                return False, "Invalid path: target outside allowed directory", None
             target_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Save file
-            file_path = target_dir / filename
+
+            # Use sanitized filename for actual file operations
+            file_path = target_dir / sanitized_filename
+
+            # Final security check: verify the final file path is within base
+            file_path_resolved = file_path.resolve()
+            try:
+                file_path_resolved.relative_to(base_resolved)
+            except ValueError:
+                return False, "Invalid path: file target outside allowed directory", None
+
             with open(file_path, 'wb') as f:
                 f.write(file_content)
-            
-            # Update metadata
-            full_relative_path = str(Path(relative_path) / filename) if relative_path else filename
+
+            # Update metadata using sanitized filename
+            full_relative_path = str(Path(relative_path) / sanitized_filename) if relative_path else sanitized_filename
             metadata_dict = self._load_metadata()
-            
+
             file_metadata_key = self._get_file_metadata_key(full_relative_path)
             metadata_dict[file_metadata_key] = {
-                "filename": filename,
+                "filename": sanitized_filename,
+                "original_filename": filename,  # Keep original for reference
                 "size": len(file_content),
                 "created": datetime.utcnow().isoformat(),
                 "user_metadata": metadata or {},
             }
-            
+
             self._save_metadata(metadata_dict)
-            
+
             logger.info(f"Saved file: {full_relative_path}")
-            return True, f"File saved: {filename}", full_relative_path
+            return True, f"File saved: {sanitized_filename}", full_relative_path
         
         except Exception as e:
             logger.error(f"Error saving file: {e}")
