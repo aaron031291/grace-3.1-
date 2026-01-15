@@ -51,6 +51,10 @@ _diagnostics: Dict[str, Any] = {
 _app_available = False
 _app = None
 
+# FIX: Track database initialization to prevent multiple initializations
+_database_initialized = False
+_test_db_path = None
+
 # Diagnostic report path
 DIAGNOSTIC_REPORT_PATH = backend_dir / "tests" / "diagnostic_report.json"
 
@@ -434,7 +438,7 @@ class DiagnosticCollector:
 
 def _try_import_app():
     """Try to import the FastAPI app, handling missing dependencies gracefully."""
-    global _app_available, _app
+    global _app_available, _app, _database_initialized, _test_db_path
     import_chain = []
 
     try:
@@ -447,30 +451,34 @@ def _try_import_app():
             import tempfile
             import time
 
-            # Only initialize if not already initialized
-            try:
-                DatabaseConnection.get_engine()
-                # Already initialized, skip
-            except RuntimeError:
-                # Not initialized, set it up
-                temp_dir = tempfile.gettempdir()
-                timestamp = int(time.time() * 1000)
-                temp_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
+            # FIX: Use global flag to prevent multiple initializations
+            if not _database_initialized:
+                try:
+                    DatabaseConnection.get_engine()
+                    # Already initialized by another path
+                    _database_initialized = True
+                except RuntimeError:
+                    # Not initialized, set it up
+                    temp_dir = tempfile.gettempdir()
+                    timestamp = int(time.time() * 1000)
+                    _test_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
 
-                test_config = DatabaseConfig(
-                    db_type=DatabaseType.SQLITE,
-                    database_path=temp_db_path,
-                    echo=False,
-                )
-                DatabaseConnection.initialize(test_config)
+                    test_config = DatabaseConfig(
+                        db_type=DatabaseType.SQLITE,
+                        database_path=_test_db_path,
+                        echo=False,
+                    )
+                    DatabaseConnection.initialize(test_config)
 
-                # Import models and create tables
-                from models import database_models, genesis_key_models
-                Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+                    # Import models and create tables
+                    from models import database_models, genesis_key_models
+                    Base.metadata.create_all(bind=DatabaseConnection.get_engine())
 
-                # Also initialize session factory
-                from database.session import initialize_session_factory
-                initialize_session_factory()
+                    # Also initialize session factory
+                    from database.session import initialize_session_factory
+                    initialize_session_factory()
+
+                    _database_initialized = True
         except Exception as db_err:
             import logging
             logging.warning(f"Test database pre-initialization failed: {db_err}")
@@ -518,6 +526,8 @@ def app(request):
 @pytest.fixture(scope="session")
 def client(app, request):
     """Create a test client for the application."""
+    global _database_initialized, _test_db_path
+
     if app is None:
         DiagnosticCollector.record_skip(
             test_name=request.node.name if hasattr(request, 'node') else "client_fixture",
@@ -525,54 +535,48 @@ def client(app, request):
         )
         pytest.skip("Full app dependencies not available")
 
-    # Database should already be initialized by _try_import_app()
-    # Only initialize if not already done (defensive)
-    try:
-        from database.connection import DatabaseConnection
-        from database.config import DatabaseConfig, DatabaseType
-        from database.session import initialize_session_factory
-        from database.base import Base
-        import os
-        import time
-
-        # Check if already initialized - if so, skip re-initialization
+    # FIX: Database should already be initialized by _try_import_app()
+    # Use the global flag to check - only initialize if absolutely necessary
+    if not _database_initialized:
         try:
-            DatabaseConnection.get_engine()
-            # Already initialized by _try_import_app, skip
-        except RuntimeError:
-            # Not initialized, set it up
+            from database.connection import DatabaseConnection
+            from database.config import DatabaseConfig, DatabaseType
+            from database.session import initialize_session_factory
+            from database.base import Base
             import tempfile
-            temp_dir = tempfile.gettempdir()
-            timestamp = int(time.time() * 1000)
-            temp_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
+            import time
 
-            test_config = DatabaseConfig(
-                db_type=DatabaseType.SQLITE,
-                database_path=temp_db_path,
-                echo=False,
-            )
-            DatabaseConnection.initialize(test_config)
-
-            # Initialize session factory
-            initialize_session_factory()
-
-            # Import all models to register them with Base before create_all
+            # Check if already initialized via DatabaseConnection
             try:
-                from models import database_models  # Core models like GovernanceRule
-                from models import genesis_key_models  # GenesisKey, UserProfile, etc.
-            except ImportError as e:
-                import logging
-                logging.warning(f"Could not import all models: {e}")
+                DatabaseConnection.get_engine()
+                _database_initialized = True
+            except RuntimeError:
+                # Not initialized, set it up
+                temp_dir = tempfile.gettempdir()
+                timestamp = int(time.time() * 1000)
+                _test_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
 
-            # Create all tables
-            Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+                test_config = DatabaseConfig(
+                    db_type=DatabaseType.SQLITE,
+                    database_path=_test_db_path,
+                    echo=False,
+                )
+                DatabaseConnection.initialize(test_config)
+                initialize_session_factory()
 
-    except Exception as e:
-        # Log but continue - some tests may not need DB
-        import logging
-        logging.warning(f"Could not initialize test database: {e}")
-        import traceback
-        traceback.print_exc()
+                # Import all models and create tables
+                try:
+                    from models import database_models, genesis_key_models
+                except ImportError as e:
+                    import logging
+                    logging.warning(f"Could not import all models: {e}")
+
+                Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+                _database_initialized = True
+
+        except Exception as e:
+            import logging
+            logging.warning(f"Could not initialize test database: {e}")
 
     from fastapi.testclient import TestClient
     return TestClient(app)
@@ -580,7 +584,12 @@ def client(app, request):
 
 @pytest.fixture(scope="session", autouse=True)
 def ensure_database_initialized():
-    """Ensure database is initialized for the entire test session."""
+    """Ensure database is initialized for the entire test session.
+
+    FIX: Uses global flag to prevent multiple initializations.
+    """
+    global _database_initialized, _test_db_path
+
     try:
         from database.connection import DatabaseConnection
         from database.config import DatabaseConfig, DatabaseType
@@ -588,29 +597,30 @@ def ensure_database_initialized():
         from database.base import Base
         import tempfile
         import time
-        import os
 
-        # Check if already initialized
-        try:
-            DatabaseConnection.get_engine()
-            # Already initialized
-        except RuntimeError:
-            # Initialize database
-            temp_dir = tempfile.gettempdir()
-            timestamp = int(time.time() * 1000)
-            temp_db_path = os.path.join(temp_dir, f"grace_test_session_{timestamp}.db")
+        # FIX: Check global flag first
+        if not _database_initialized:
+            try:
+                DatabaseConnection.get_engine()
+                _database_initialized = True
+            except RuntimeError:
+                # Initialize database
+                temp_dir = tempfile.gettempdir()
+                timestamp = int(time.time() * 1000)
+                _test_db_path = os.path.join(temp_dir, f"grace_test_session_{timestamp}.db")
 
-            test_config = DatabaseConfig(
-                db_type=DatabaseType.SQLITE,
-                database_path=temp_db_path,
-                echo=False,
-            )
-            DatabaseConnection.initialize(test_config)
-            initialize_session_factory()
+                test_config = DatabaseConfig(
+                    db_type=DatabaseType.SQLITE,
+                    database_path=_test_db_path,
+                    echo=False,
+                )
+                DatabaseConnection.initialize(test_config)
+                initialize_session_factory()
 
-            # Import and create tables
-            from models import database_models, genesis_key_models
-            Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+                # Import and create tables
+                from models import database_models, genesis_key_models
+                Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+                _database_initialized = True
 
         yield
 
@@ -619,6 +629,12 @@ def ensure_database_initialized():
             engine = DatabaseConnection.get_engine()
             if engine:
                 engine.dispose()
+            # Clean up temp database file
+            if _test_db_path and os.path.exists(_test_db_path):
+                try:
+                    os.remove(_test_db_path)
+                except Exception:
+                    pass
         except Exception:
             pass
     except Exception as e:
