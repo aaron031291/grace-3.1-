@@ -542,6 +542,29 @@
     margin-bottom: 0.5rem;
 }
 
+.page-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: #fee2e2;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid #ef4444;
+}
+
+.page-error .error-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.page-error .error-text {
+    font-size: 0.8rem;
+    color: #dc2626;
+    font-weight: 500;
+}
+
+
 .page-meta {
     display: flex;
     gap: 0.5rem;

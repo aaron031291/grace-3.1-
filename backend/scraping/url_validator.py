@@ -75,12 +75,16 @@ class URLValidator:
             # Check for cloud storage/drive links
             for domain in URLValidator.DRIVE_DOMAINS:
                 if domain in parsed.netloc.lower():
-                    return False, (
-                        f"Cloud storage links ({domain}) are not supported. "
-                        "Please use direct website URLs instead. "
-                        "If you need to scrape content from cloud storage, "
-                        "download the files first and upload them directly."
-                    )
+                    # Allow Google Drive URLs if they're document links
+                    if URLValidator.is_google_drive_url(url):
+                        continue  # Allow Drive document URLs
+                    else:
+                        return False, (
+                            f"Cloud storage links ({domain}) are not supported. "
+                            "Please use direct website URLs instead. "
+                            "If you need to scrape content from cloud storage, "
+                            "download the files first and upload them directly."
+                        )
             
             # Check for localhost/internal IPs
             for pattern in URLValidator.INTERNAL_PATTERNS:
@@ -138,9 +142,138 @@ class URLValidator:
             domain1 = domain1.replace('www.', '')
             domain2 = domain2.replace('www.', '')
             
-            return domain1 == domain2
+            # Check if domains match exactly OR if one is a subdomain of the other
+            # This allows disk.sample.cat to match sample.cat
+            if domain1 == domain2:
+                return True
+            
+            # Check if one domain is a subdomain of the other
+            if domain1.endswith('.' + domain2) or domain2.endswith('.' + domain1):
+                return True
+            
+            return False
         except:
             return False
+    
+    @staticmethod
+    def is_downloadable_document(url: str) -> bool:
+        """
+        Check if URL points to a downloadable document for RAG.
+        
+        These documents will be downloaded and stored in the knowledge base
+        instead of being skipped as binary files.
+        
+        Args:
+            url: The URL to check
+            
+        Returns:
+            True if downloadable document, False otherwise
+        """
+        document_extensions = [
+            # Documents
+            '.pdf', '.doc', '.docx', '.txt', '.rtf',
+            # Presentations
+            '.ppt', '.pptx', '.odp',
+            # Spreadsheets
+            '.xls', '.xlsx', '.csv', '.ods',
+            # Ebooks
+            '.epub', '.mobi'
+        ]
+        
+        url_lower = url.lower()
+        
+        # Check if URL contains document extension anywhere
+        # This catches: /file.pdf, /download?file=doc.pptx, /get/report.pdf?token=xyz
+        for ext in document_extensions:
+            if ext in url_lower:
+                return True
+        
+        # Also check for common download URL patterns
+        # Even if no extension is visible, these patterns suggest downloadable content
+        download_patterns = [
+            '/download/', '/get/', '/file/', '/attachment/',
+            'download?', 'file?', 'attachment?', '/api/download', '/api/file'
+        ]
+        
+        for pattern in download_patterns:
+            if pattern in url_lower:
+                # If it's a download URL, assume it might be a document
+                return True
+        
+        return False
+    
+    @staticmethod
+    def is_google_drive_url(url: str) -> bool:
+        """
+        Check if URL is a Google Drive document link.
+        
+        Args:
+            url: The URL to check
+            
+        Returns:
+            True if Google Drive document URL, False otherwise
+        """
+        drive_patterns = [
+            'drive.google.com/file',
+            'drive.google.com/uc',
+            'docs.google.com/document',
+            'docs.google.com/spreadsheets',
+            'docs.google.com/presentation'
+        ]
+        url_lower = url.lower()
+        return any(pattern in url_lower for pattern in drive_patterns)
+    
+    @staticmethod
+    def extract_drive_file_id(url: str) -> Optional[str]:
+        """
+        Extract Google Drive file ID from URL.
+        
+        Args:
+            url: Google Drive URL
+            
+        Returns:
+            File ID if found, None otherwise
+        """
+        patterns = [
+            r'/file/d/([a-zA-Z0-9_-]+)',
+            r'[?&]id=([a-zA-Z0-9_-]+)',
+            r'/document/d/([a-zA-Z0-9_-]+)',
+            r'/spreadsheets/d/([a-zA-Z0-9_-]+)',
+            r'/presentation/d/([a-zA-Z0-9_-]+)'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1)
+        
+        return None
+    
+    @staticmethod
+    def get_drive_download_url(url: str) -> Optional[str]:
+        """
+        Convert Google Drive sharing URL to direct download URL.
+        
+        Args:
+            url: Google Drive sharing URL
+            
+        Returns:
+            Direct download URL if successful, None otherwise
+        """
+        file_id = URLValidator.extract_drive_file_id(url)
+        if not file_id:
+            return None
+        
+        # Check if it's a Google Docs/Sheets/Slides
+        if 'docs.google.com/document' in url:
+            return f"https://docs.google.com/document/d/{file_id}/export?format=docx"
+        elif 'docs.google.com/spreadsheets' in url:
+            return f"https://docs.google.com/spreadsheets/d/{file_id}/export?format=xlsx"
+        elif 'docs.google.com/presentation' in url:
+            return f"https://docs.google.com/presentation/d/{file_id}/export?format=pptx"
+        else:
+            # Regular file download
+            return f"https://drive.google.com/uc?id={file_id}&export=download"
     
     @staticmethod
     def is_binary_file(url: str) -> bool:

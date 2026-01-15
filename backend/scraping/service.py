@@ -22,6 +22,7 @@ import re
 
 from .models import ScrapingJob, ScrapedPage
 from .url_validator import URLValidator
+from .document_downloader import DocumentDownloader
 
 try:
     from settings import settings
@@ -46,7 +47,7 @@ class WebScrapingService:
         self.session = db_session
         self.visited_urls: Set[str] = set()
         self.timeout = 30  # seconds
-        self.max_content_size = 1024 * 1024  # 1 MB
+        self.max_content_size = 10 * 1024 * 1024  # 10 MB (increased for modern news sites)
         self.embedding_model = None
         self.base_page_embedding = None
         
@@ -57,6 +58,9 @@ class WebScrapingService:
             logger.info("✓ Embedding model loaded for semantic relevance filtering")
         except Exception as e:
             logger.warning(f"Embedding model not available: {e}. Using keyword-based filtering only.")
+        
+        # Initialize document downloader
+        self.document_downloader = DocumentDownloader()
         
     async def start_scraping_job(
         self,
@@ -161,7 +165,29 @@ class WebScrapingService:
             self._mark_page_failed(job_id, url, current_depth, parent_url, error)
             return
         
-        # Check if binary file
+        # Check if this is a Google Drive URL (needs special handling)
+        if URLValidator.is_google_drive_url(url):
+            logger.info(f"📥 Detected Google Drive URL: {url}")
+            await self._download_and_store_document(
+                job_id=job_id,
+                url=url,
+                depth_level=current_depth,
+                parent_url=parent_url
+            )
+            return
+        
+        # Check if this is a downloadable document (PDF, DOCX, etc.)
+        if URLValidator.is_downloadable_document(url):
+            logger.info(f"📄 Detected downloadable document: {url}")
+            await self._download_and_store_document(
+                job_id=job_id,
+                url=url,
+                depth_level=current_depth,
+                parent_url=parent_url
+            )
+            return
+        
+        # Check if binary file (non-document binaries like images, videos)
         if URLValidator.is_binary_file(url):
             self._mark_page_failed(
                 job_id, url, current_depth, parent_url,
@@ -352,7 +378,17 @@ class WebScrapingService:
             if same_domain_only and not URLValidator.is_same_domain(link, original_url):
                 continue
             
-            # Skip binary files
+            # Check if this is a downloadable document or Drive URL
+            # These should ALWAYS be included, bypassing semantic filtering
+            is_document = URLValidator.is_downloadable_document(link)
+            is_drive = URLValidator.is_google_drive_url(link)
+            
+            if is_document or is_drive:
+                logger.info(f"📥 Including document/Drive URL (bypassing filters): {link}")
+                filtered.append(normalized)
+                continue
+            
+            # Skip binary files (images, videos, etc.) - but NOT documents
             if URLValidator.is_binary_file(link):
                 continue
             
@@ -369,6 +405,7 @@ class WebScrapingService:
                 continue
             
             # Semantic relevance filtering (if embedding model available)
+            # NOTE: Documents bypass this check above
             if self.embedding_model and self.base_page_embedding is not None:
                 try:
                     # Quick check: extract title/text from URL for preliminary filtering
@@ -567,6 +604,82 @@ class WebScrapingService:
             f.write(content)
         
         return str(file_path)
+    
+    async def _download_and_store_document(
+        self,
+        job_id: int,
+        url: str,
+        depth_level: int,
+        parent_url: Optional[str]
+    ) -> None:
+        """
+        Download a document and store it in the knowledge base.
+        
+        Args:
+            job_id: ID of the scraping job
+            url: Document URL
+            depth_level: Depth level of this document
+            parent_url: URL of parent page
+        """
+        try:
+            # Get job to find folder path
+            job = self.session.query(ScrapingJob).filter_by(id=job_id).first()
+            if not job:
+                logger.error(f"Job {job_id} not found")
+                return
+            
+            # Download the document
+            success, metadata = await self.document_downloader.download_document(
+                url=url,
+                folder_path=job.folder_path
+            )
+            
+            if success and metadata:
+                # Store in database with 'downloaded' status
+                page = ScrapedPage(
+                    job_id=job_id,
+                    url=url,
+                    depth_level=depth_level,
+                    parent_url=parent_url,
+                    title=metadata.get('file_type', 'document').upper(),
+                    status='downloaded',
+                    file_path=metadata['file_path'],
+                    file_size=metadata['file_size'],
+                    file_type=metadata['file_type'],
+                    scraped_at=datetime.utcnow()
+                )
+                
+                self.session.add(page)
+                
+                # Update job statistics
+                job.pages_downloaded += 1
+                job.total_pages = max(job.total_pages, job.pages_scraped + job.pages_downloaded)
+                
+                self.session.commit()
+                
+                logger.info(
+                    f"✓ Stored document: {url} -> {metadata['file_path']} "
+                    f"({metadata['file_size']} bytes)"
+                )
+            else:
+                # Mark as failed if download unsuccessful
+                self._mark_page_failed(
+                    job_id=job_id,
+                    url=url,
+                    depth_level=depth_level,
+                    parent_url=parent_url,
+                    error_message="Failed to download document"
+                )
+                
+        except Exception as e:
+            logger.error(f"Error downloading document {url}: {str(e)}")
+            self._mark_page_failed(
+                job_id=job_id,
+                url=url,
+                depth_level=depth_level,
+                parent_url=parent_url,
+                error_message=f"Document download error: {str(e)}"
+            )
     
     def _store_filtered_page(
         self,
