@@ -17,6 +17,41 @@ export default function WebScraper() {
 
   const API_BASE = 'http://localhost:8000';
 
+  // Restore session from localStorage on mount
+  useEffect(() => {
+    const savedSession = localStorage.getItem('scrapingSession');
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        setJobId(session.jobId);
+        setStatus(session.status);
+        setResults(session.results);
+        setScraping(session.scraping);
+
+        // If scraping is still in progress, resume polling
+        if (session.scraping && session.jobId) {
+          // The polling useEffect will handle this
+        }
+      } catch (err) {
+        console.error('Failed to restore session:', err);
+        localStorage.removeItem('scrapingSession');
+      }
+    }
+  }, []);
+
+  // Save session to localStorage whenever it changes
+  useEffect(() => {
+    if (jobId) {
+      const session = {
+        jobId,
+        status,
+        results,
+        scraping
+      };
+      localStorage.setItem('scrapingSession', JSON.stringify(session));
+    }
+  }, [jobId, status, results, scraping]);
+
   // Poll for status updates
   useEffect(() => {
     if (!jobId || !scraping) return;
@@ -86,7 +121,8 @@ export default function WebScraper() {
       pages_scraped: 0,
       total_pages: 1,
       pages_failed: 0,
-      pages_filtered: 0
+      pages_filtered: 0,
+      pages_downloaded: 0
     });
 
     try {
@@ -313,6 +349,10 @@ export default function WebScraper() {
               <div className="stat-label">Filtered</div>
               <div className="stat-value" style={{ color: '#f59e0b' }}>{status.pages_filtered || 0}</div>
             </div>
+            <div className="stat">
+              <div className="stat-label">Downloaded</div>
+              <div className="stat-value" style={{ color: '#10b981' }}>{status.pages_downloaded || 0}</div>
+            </div>
           </div>
         </div>
       )}
@@ -352,6 +392,14 @@ export default function WebScraper() {
             </div>
 
             <div className="summary-card">
+              <div className="summary-icon">📥</div>
+              <div className="summary-content">
+                <div className="summary-value">{results.summary.downloaded || 0}</div>
+                <div className="summary-label">Downloaded</div>
+              </div>
+            </div>
+
+            <div className="summary-card">
               <div className="summary-icon">📄</div>
               <div className="summary-content">
                 <div className="summary-value">
@@ -371,16 +419,31 @@ export default function WebScraper() {
                 {results.pages.map((page, idx) => (
                   <div key={idx} className={`page-row ${page.status}`}>
                     <div className="page-icon">
-                      {page.status === 'success' ? '✓' : page.status === 'filtered' ? '🔍' : '✗'}
+                      {page.status === 'success' ? '✓' :
+                        page.status === 'downloaded' ? '📥' :
+                          page.status === 'filtered' ? '🔍' : '✗'}
                     </div>
                     <div className="page-info">
                       <div className="page-title">
-                        {page.title || 'Untitled'}
+                        {page.status === 'downloaded' && page.file_type ?
+                          `${page.file_type.toUpperCase()}` :
+                          (page.title || 'Untitled')}
                       </div>
                       <div className="page-url">{page.url}</div>
+                      {page.status === 'failed' && page.error_message && (
+                        <div className="page-error">
+                          <span className="error-icon">⚠️</span>
+                          <span className="error-text">{page.error_message}</span>
+                        </div>
+                      )}
                       <div className="page-meta">
                         <span className="depth-badge">Depth {page.depth_level}</span>
-                        {page.content_length > 0 && (
+                        {page.status === 'downloaded' && page.file_size && (
+                          <span className="size-badge">
+                            {(page.file_size / 1024).toFixed(1)} KB
+                          </span>
+                        )}
+                        {page.status !== 'downloaded' && page.content_length > 0 && (
                           <span className="size-badge">
                             {(page.content_length / 1024).toFixed(1)} KB
                           </span>

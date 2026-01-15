@@ -1,6 +1,7 @@
 annotated-doc
 annotated-types
 anyio
+aiohttp
 certifi
 chardet
 charset-normalizer
@@ -59,7 +60,8 @@ threadpoolctl
 tokenizers
 torch
 tqdm
-transformers 
+transformers
+trafilatura
 typing-inspection
 typing_extensions
 urllib3
