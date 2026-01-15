@@ -123,7 +123,7 @@ def check_database_status():
         try:
             result = conn.execute(text('SELECT COUNT(*) FROM learning_patterns')).fetchone()
             print(f"   - Learning Patterns: {result[0]}")
-        except:
+        except Exception:
             print(f"   - Learning Patterns: Table not found")
 
         conn.close()
