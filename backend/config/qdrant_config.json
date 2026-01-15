@@ -1,0 +1,6 @@
+{
+  "mode": "memory",
+  "host": "localhost",
+  "port": 6333,
+  "fallback_to_memory": true
+}
