@@ -1,0 +1,1736 @@
+{
+  "test_summary": {
+    "start_time": "2026-01-15T19:13:42.462251+00:00",
+    "end_time": "2026-01-15T19:13:47.477770+00:00",
+    "duration_seconds": 5.015519,
+    "total_tests": 100,
+    "successful_fixes": 0,
+    "failed_fixes": 0,
+    "fix_success_rate": 0,
+    "kpi_target": 95.0,
+    "meets_target": false
+  },
+  "kpis": {
+    "overall_score": 35.0,
+    "targets": {
+      "fix_success_rate": 95.0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 2.0,
+      "knowledge_request_rate": 0.5,
+      "llm_usage_rate": 0.3
+    },
+    "scores": {
+      "fix_success_rate": 0.0,
+      "detection_rate": 100,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 100,
+      "llm_usage_rate": 50
+    },
+    "weights": {
+      "fix_success_rate": 0.5,
+      "detection_rate": 0.2,
+      "genesis_key_creation_rate": 0.1,
+      "knowledge_request_rate": 0.1,
+      "llm_usage_rate": 0.1
+    },
+    "metrics": {
+      "fix_success_rate": 0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 1.08,
+      "llm_usage_rate": 0.0
+    }
+  },
+  "genesis_keys": {
+    "total_created": 0,
+    "by_type": {},
+    "details": []
+  },
+  "knowledge_requests": {
+    "total": 108,
+    "by_type": {
+      "knowledge_missing": 108
+    },
+    "details": [
+      {
+        "timestamp": "2026-01-15T19:13:46.546599+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.CODE_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.713540+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.CODE_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.716524+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.CODE_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.806108+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "DevOpsLayer.DATABASE",
+        "category": "IssueCategory.DATABASE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.806912+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "DevOpsLayer.DATABASE",
+        "category": "IssueCategory.DATABASE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.807602+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "DevOpsLayer.DATABASE",
+        "category": "IssueCategory.DATABASE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.923251+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "DevOpsLayer.CONFIGURATION",
+        "category": "IssueCategory.CONFIGURATION"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.923494+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "DevOpsLayer.CONFIGURATION",
+        "category": "IssueCategory.CONFIGURATION"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.924075+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "DevOpsLayer.CONFIGURATION",
+        "category": "IssueCategory.CONFIGURATION"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.981642+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.981887+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.982528+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.992182+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.992416+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:46.992918+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.003376+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.003632+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.004174+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.014331+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.014576+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.015099+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.024923+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.025154+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.025678+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.035753+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.035985+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.036448+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.046946+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.047192+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.047717+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.057536+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.057761+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.058165+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.068644+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.068887+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.069362+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.079646+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.079892+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.080397+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.094495+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.094736+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.095315+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.104981+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.105206+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.105622+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.115663+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.115897+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.116341+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.125858+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.126079+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.126488+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.136248+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.136476+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.136879+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.147070+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.147338+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.147852+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.157975+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.158202+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.158799+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.169142+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.169374+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.169808+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.180071+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.180332+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.180946+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.191069+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.191298+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.191706+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.204241+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RESOURCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.204489+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RESOURCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.204965+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RESOURCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.229332+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.229576+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.230208+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.242684+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.PERFORMANCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.242944+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.PERFORMANCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.243509+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.PERFORMANCE"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.261710+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RUNTIME_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.261969+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RUNTIME_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.262667+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "DevOpsLayer.BACKEND",
+        "category": "IssueCategory.RUNTIME_ERROR"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.383820+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.384060+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.384636+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.394770+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.395014+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.395662+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.405547+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.405777+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.406208+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.416198+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.416457+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.416983+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.426703+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.426938+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.427373+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.437401+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.437635+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.438087+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.448482+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.448736+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.449257+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.458977+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.459209+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.459862+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.469920+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.470160+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:13:47.470625+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      }
+    ]
+  },
+  "llm_usage": {
+    "total": 0,
+    "by_model": {},
+    "details": []
+  },
+  "healing_actions": {
+    "total": 0,
+    "details": []
+  },
+  "fix_verifications": {
+    "total": 0,
+    "successful": 0,
+    "failed": 0,
+    "details": []
+  },
+  "test_results": [
+    {
+      "test_name": "test_missing_file",
+      "issue_introduced": "Test: Delete a critical file and see if healing restores it.",
+      "timestamp": "2026-01-15T19:13:46.727342+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_file_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:13:46.745572+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_file_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:13:46.755221+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_corrupted_file",
+      "issue_introduced": "Test corrupted file.",
+      "timestamp": "2026-01-15T19:13:46.764459+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_locked_file",
+      "issue_introduced": "Test locked file.",
+      "timestamp": "2026-01-15T19:13:46.770961+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_invalid_file_permissions",
+      "issue_introduced": "Test invalid file permissions.",
+      "timestamp": "2026-01-15T19:13:46.777402+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_file_too_large",
+      "issue_introduced": "Test file too large.",
+      "timestamp": "2026-01-15T19:13:46.783646+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_directory",
+      "issue_introduced": "Test missing directory.",
+      "timestamp": "2026-01-15T19:13:46.789378+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_circular_symlink",
+      "issue_introduced": "Test circular symlink.",
+      "timestamp": "2026-01-15T19:13:46.794942+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_file_encoding_error",
+      "issue_introduced": "Test file encoding error.",
+      "timestamp": "2026-01-15T19:13:46.800608+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_corrupted_database",
+      "issue_introduced": "Test: Corrupt database schema and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:13:46.815924+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_table",
+      "issue_introduced": "Test missing table.",
+      "timestamp": "2026-01-15T19:13:46.822886+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_invalid_schema",
+      "issue_introduced": "Test invalid schema.",
+      "timestamp": "2026-01-15T19:13:46.828776+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_foreign_key_violation",
+      "issue_introduced": "Test foreign key violation.",
+      "timestamp": "2026-01-15T19:13:46.834632+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_connection_pool_exhausted",
+      "issue_introduced": "Test connection pool exhausted.",
+      "timestamp": "2026-01-15T19:13:46.840269+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_deadlock",
+      "issue_introduced": "Test database deadlock.",
+      "timestamp": "2026-01-15T19:13:46.846035+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_transaction_timeout",
+      "issue_introduced": "Test transaction timeout.",
+      "timestamp": "2026-01-15T19:13:46.851990+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_index_corruption",
+      "issue_introduced": "Test index corruption.",
+      "timestamp": "2026-01-15T19:13:46.857513+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_orphaned_records",
+      "issue_introduced": "Test orphaned records.",
+      "timestamp": "2026-01-15T19:13:46.863178+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_database_locked",
+      "issue_introduced": "Test database locked.",
+      "timestamp": "2026-01-15T19:13:46.868695+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error",
+      "issue_introduced": "Test: Introduce syntax error in a Python file.",
+      "timestamp": "2026-01-15T19:13:46.875956+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:13:46.881244+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:13:46.886378+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_import",
+      "issue_introduced": "Test: Remove an import and see if healing adds it back.",
+      "timestamp": "2026-01-15T19:13:46.893724+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_import_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:13:46.898701+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_undefined_variable",
+      "issue_introduced": "Test undefined variable.",
+      "timestamp": "2026-01-15T19:13:46.903606+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_type_error",
+      "issue_introduced": "Test type error.",
+      "timestamp": "2026-01-15T19:13:46.907575+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_attribute_error",
+      "issue_introduced": "Test attribute error.",
+      "timestamp": "2026-01-15T19:13:46.910801+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_indentation_error",
+      "issue_introduced": "Test indentation error.",
+      "timestamp": "2026-01-15T19:13:46.915372+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_name_error",
+      "issue_introduced": "Test name error.",
+      "timestamp": "2026-01-15T19:13:46.918534+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_configuration_error",
+      "issue_introduced": "Test: Break configuration and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:13:46.931760+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_missing_env_var",
+      "issue_introduced": "Test missing environment variable.",
+      "timestamp": "2026-01-15T19:13:46.937175+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_invalid_env_var",
+      "issue_introduced": "Test invalid environment variable.",
+      "timestamp": "2026-01-15T19:13:46.942363+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_file_corrupted",
+      "issue_introduced": "Test corrupted config file.",
+      "timestamp": "2026-01-15T19:13:46.947617+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_syntax_error",
+      "issue_introduced": "Test config syntax error.",
+      "timestamp": "2026-01-15T19:13:46.952823+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_permission_denied",
+      "issue_introduced": "Test config permission denied.",
+      "timestamp": "2026-01-15T19:13:46.957938+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_override_failed",
+      "issue_introduced": "Test config override failed.",
+      "timestamp": "2026-01-15T19:13:46.963276+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_validation_failed",
+      "issue_introduced": "Test config validation failed.",
+      "timestamp": "2026-01-15T19:13:46.968536+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_missing_section",
+      "issue_introduced": "Test missing config section.",
+      "timestamp": "2026-01-15T19:13:46.973641+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_config_invalid_type",
+      "issue_introduced": "Test invalid config type.",
+      "timestamp": "2026-01-15T19:13:46.978934+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_network_timeout",
+      "issue_introduced": "Test: Simulate network timeout.",
+      "timestamp": "2026-01-15T19:13:46.989448+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_connection_refused",
+      "issue_introduced": "Test connection refused.",
+      "timestamp": "2026-01-15T19:13:47.000256+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_dns_resolution_failed",
+      "issue_introduced": "Test DNS resolution failed.",
+      "timestamp": "2026-01-15T19:13:47.011420+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_ssl_certificate_error",
+      "issue_introduced": "Test SSL certificate error.",
+      "timestamp": "2026-01-15T19:13:47.022049+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_rate_limit_exceeded",
+      "issue_introduced": "Test rate limit exceeded.",
+      "timestamp": "2026-01-15T19:13:47.032900+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_service_unavailable",
+      "issue_introduced": "Test service unavailable.",
+      "timestamp": "2026-01-15T19:13:47.044011+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_network_unreachable",
+      "issue_introduced": "Test network unreachable.",
+      "timestamp": "2026-01-15T19:13:47.054739+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_timeout_reading_response",
+      "issue_introduced": "Test timeout reading response.",
+      "timestamp": "2026-01-15T19:13:47.065729+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_connection_reset",
+      "issue_introduced": "Test connection reset.",
+      "timestamp": "2026-01-15T19:13:47.076561+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_proxy_error",
+      "issue_introduced": "Test proxy error.",
+      "timestamp": "2026-01-15T19:13:47.088311+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_permission_error",
+      "issue_introduced": "Test: Create permission error and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:13:47.091805+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_unauthorized_access",
+      "issue_introduced": "Test unauthorized access.",
+      "timestamp": "2026-01-15T19:13:47.102270+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_invalid_token",
+      "issue_introduced": "Test invalid token.",
+      "timestamp": "2026-01-15T19:13:47.112819+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_expired_token",
+      "issue_introduced": "Test expired token.",
+      "timestamp": "2026-01-15T19:13:47.123112+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_weak_encryption",
+      "issue_introduced": "Test weak encryption.",
+      "timestamp": "2026-01-15T19:13:47.133462+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_sql_injection_attempt",
+      "issue_introduced": "Test SQL injection attempt.",
+      "timestamp": "2026-01-15T19:13:47.144100+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_path_traversal_attempt",
+      "issue_introduced": "Test path traversal attempt.",
+      "timestamp": "2026-01-15T19:13:47.155205+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_csrf_token_missing",
+      "issue_introduced": "Test CSRF token missing.",
+      "timestamp": "2026-01-15T19:13:47.166162+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_authentication_failed",
+      "issue_introduced": "Test authentication failed.",
+      "timestamp": "2026-01-15T19:13:47.177117+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_authorization_failed",
+      "issue_introduced": "Test authorization failed.",
+      "timestamp": "2026-01-15T19:13:47.188288+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_slow_query",
+      "issue_introduced": "Test slow query.",
+      "timestamp": "2026-01-15T19:13:47.199153+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cpu_exhausted",
+      "issue_introduced": "Test CPU exhausted.",
+      "timestamp": "2026-01-15T19:13:47.212227+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_disk_space_full",
+      "issue_introduced": "Test disk space full.",
+      "timestamp": "2026-01-15T19:13:47.217860+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_leak",
+      "issue_introduced": "Test memory leak.",
+      "timestamp": "2026-01-15T19:13:47.223397+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_infinite_loop",
+      "issue_introduced": "Test infinite loop.",
+      "timestamp": "2026-01-15T19:13:47.226672+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_n_plus_one_query",
+      "issue_introduced": "Test N+1 query problem.",
+      "timestamp": "2026-01-15T19:13:47.237517+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cache_miss_storm",
+      "issue_introduced": "Test cache miss storm.",
+      "timestamp": "2026-01-15T19:13:47.250721+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_garbage_collection_stuck",
+      "issue_introduced": "Test garbage collection stuck.",
+      "timestamp": "2026-01-15T19:13:47.256815+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_thread_deadlock",
+      "issue_introduced": "Test thread deadlock.",
+      "timestamp": "2026-01-15T19:13:47.270054+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_resource_contention",
+      "issue_introduced": "Test resource contention.",
+      "timestamp": "2026-01-15T19:13:47.275340+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_issue",
+      "issue_introduced": "Test: Simulate memory issue.",
+      "timestamp": "2026-01-15T19:13:47.280680+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_out_of_memory",
+      "issue_introduced": "Test out of memory.",
+      "timestamp": "2026-01-15T19:13:47.285924+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_fragmentation",
+      "issue_introduced": "Test memory fragmentation.",
+      "timestamp": "2026-01-15T19:13:47.291101+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_buffer_overflow",
+      "issue_introduced": "Test buffer overflow.",
+      "timestamp": "2026-01-15T19:13:47.294280+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_stack_overflow",
+      "issue_introduced": "Test stack overflow.",
+      "timestamp": "2026-01-15T19:13:47.297620+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_corruption",
+      "issue_introduced": "Test memory corruption.",
+      "timestamp": "2026-01-15T19:13:47.302940+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_shared_memory_error",
+      "issue_introduced": "Test shared memory error.",
+      "timestamp": "2026-01-15T19:13:47.308185+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_mapping_failed",
+      "issue_introduced": "Test memory mapping failed.",
+      "timestamp": "2026-01-15T19:13:47.313519+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_virtual_memory_exhausted",
+      "issue_introduced": "Test virtual memory exhausted.",
+      "timestamp": "2026-01-15T19:13:47.318759+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_memory_allocation_failed",
+      "issue_introduced": "Test memory allocation failed.",
+      "timestamp": "2026-01-15T19:13:47.324216+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_concurrent_errors",
+      "issue_introduced": "Test: Introduce multiple concurrent errors.",
+      "timestamp": "2026-01-15T19:13:47.327726+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_race_condition",
+      "issue_introduced": "Test race condition.",
+      "timestamp": "2026-01-15T19:13:47.333365+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_deadlock_multiple_threads",
+      "issue_introduced": "Test deadlock multiple threads.",
+      "timestamp": "2026-01-15T19:13:47.338648+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_livelock",
+      "issue_introduced": "Test livelock.",
+      "timestamp": "2026-01-15T19:13:47.343914+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_starvation",
+      "issue_introduced": "Test starvation.",
+      "timestamp": "2026-01-15T19:13:47.349450+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_atomic_operation_failed",
+      "issue_introduced": "Test atomic operation failed.",
+      "timestamp": "2026-01-15T19:13:47.354706+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_lock_timeout",
+      "issue_introduced": "Test lock timeout.",
+      "timestamp": "2026-01-15T19:13:47.359930+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_semaphore_exhausted",
+      "issue_introduced": "Test semaphore exhausted.",
+      "timestamp": "2026-01-15T19:13:47.365262+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_condition_variable_error",
+      "issue_introduced": "Test condition variable error.",
+      "timestamp": "2026-01-15T19:13:47.370480+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_barrier_timeout",
+      "issue_introduced": "Test barrier timeout.",
+      "timestamp": "2026-01-15T19:13:47.375795+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_data_integrity",
+      "issue_introduced": "Test: Break data integrity.",
+      "timestamp": "2026-01-15T19:13:47.381161+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'DevOpsHealingAgent' object has no attribute 'max_retries'"
+      }
+    },
+    {
+      "test_name": "test_api_version_mismatch",
+      "issue_introduced": "Test API version mismatch.",
+      "timestamp": "2026-01-15T19:13:47.392036+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_service_dependency_down",
+      "issue_introduced": "Test service dependency down.",
+      "timestamp": "2026-01-15T19:13:47.402797+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_message_queue_full",
+      "issue_introduced": "Test message queue full.",
+      "timestamp": "2026-01-15T19:13:47.413214+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_event_bus_disconnected",
+      "issue_introduced": "Test event bus disconnected.",
+      "timestamp": "2026-01-15T19:13:47.423938+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_database_replication_lag",
+      "issue_introduced": "Test database replication lag.",
+      "timestamp": "2026-01-15T19:13:47.434585+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cache_invalidation_failed",
+      "issue_introduced": "Test cache invalidation failed.",
+      "timestamp": "2026-01-15T19:13:47.445539+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_external_service_changed",
+      "issue_introduced": "Test external service changed.",
+      "timestamp": "2026-01-15T19:13:47.456111+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_webhook_delivery_failed",
+      "issue_introduced": "Test webhook delivery failed.",
+      "timestamp": "2026-01-15T19:13:47.466989+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_third_party_api_changed",
+      "issue_introduced": "Test third party API changed.",
+      "timestamp": "2026-01-15T19:13:47.477480+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    }
+  ],
+  "knowledge_gaps": {
+    "identified_gaps": [],
+    "recommendations": [],
+    "missing_knowledge_areas": [],
+    "error": "'StressTestTracker' object has no attribute 'session'"
+  }
+}

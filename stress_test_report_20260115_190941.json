@@ -1,0 +1,977 @@
+{
+  "test_summary": {
+    "start_time": "2026-01-15T19:09:36.821649+00:00",
+    "end_time": "2026-01-15T19:09:41.040592+00:00",
+    "duration_seconds": 4.218943,
+    "total_tests": 100,
+    "successful_fixes": 0,
+    "failed_fixes": 0,
+    "fix_success_rate": 0,
+    "kpi_target": 95.0,
+    "meets_target": false
+  },
+  "kpis": {
+    "overall_score": 30.0,
+    "targets": {
+      "fix_success_rate": 95.0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 2.0,
+      "knowledge_request_rate": 0.5,
+      "llm_usage_rate": 0.3
+    },
+    "scores": {
+      "fix_success_rate": 0.0,
+      "detection_rate": 100,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 50,
+      "llm_usage_rate": 50
+    },
+    "weights": {
+      "fix_success_rate": 0.5,
+      "detection_rate": 0.2,
+      "genesis_key_creation_rate": 0.1,
+      "knowledge_request_rate": 0.1,
+      "llm_usage_rate": 0.1
+    },
+    "metrics": {
+      "fix_success_rate": 0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 0.0,
+      "llm_usage_rate": 0.0
+    }
+  },
+  "genesis_keys": {
+    "total_created": 0,
+    "by_type": {},
+    "details": []
+  },
+  "knowledge_requests": {
+    "total": 0,
+    "by_type": {},
+    "details": []
+  },
+  "llm_usage": {
+    "total": 0,
+    "by_model": {},
+    "details": []
+  },
+  "healing_actions": {
+    "total": 0,
+    "details": []
+  },
+  "fix_verifications": {
+    "total": 0,
+    "successful": 0,
+    "failed": 0,
+    "details": []
+  },
+  "test_results": [
+    {
+      "test_name": "test_missing_file",
+      "issue_introduced": "Test: Delete a critical file and see if healing restores it.",
+      "timestamp": "2026-01-15T19:09:40.727630+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_file_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:09:40.733194+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_file_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:09:40.738357+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_corrupted_file",
+      "issue_introduced": "Test corrupted file.",
+      "timestamp": "2026-01-15T19:09:40.743087+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_locked_file",
+      "issue_introduced": "Test locked file.",
+      "timestamp": "2026-01-15T19:09:40.745975+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_invalid_file_permissions",
+      "issue_introduced": "Test invalid file permissions.",
+      "timestamp": "2026-01-15T19:09:40.748826+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_file_too_large",
+      "issue_introduced": "Test file too large.",
+      "timestamp": "2026-01-15T19:09:40.751652+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_directory",
+      "issue_introduced": "Test missing directory.",
+      "timestamp": "2026-01-15T19:09:40.754539+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_circular_symlink",
+      "issue_introduced": "Test circular symlink.",
+      "timestamp": "2026-01-15T19:09:40.757414+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_file_encoding_error",
+      "issue_introduced": "Test file encoding error.",
+      "timestamp": "2026-01-15T19:09:40.760800+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_corrupted_database",
+      "issue_introduced": "Test: Corrupt database schema and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:09:40.763927+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_table",
+      "issue_introduced": "Test missing table.",
+      "timestamp": "2026-01-15T19:09:40.766787+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_invalid_schema",
+      "issue_introduced": "Test invalid schema.",
+      "timestamp": "2026-01-15T19:09:40.769617+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_foreign_key_violation",
+      "issue_introduced": "Test foreign key violation.",
+      "timestamp": "2026-01-15T19:09:40.772453+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_connection_pool_exhausted",
+      "issue_introduced": "Test connection pool exhausted.",
+      "timestamp": "2026-01-15T19:09:40.775275+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_deadlock",
+      "issue_introduced": "Test database deadlock.",
+      "timestamp": "2026-01-15T19:09:40.778087+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_transaction_timeout",
+      "issue_introduced": "Test transaction timeout.",
+      "timestamp": "2026-01-15T19:09:40.780885+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_index_corruption",
+      "issue_introduced": "Test index corruption.",
+      "timestamp": "2026-01-15T19:09:40.783715+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_orphaned_records",
+      "issue_introduced": "Test orphaned records.",
+      "timestamp": "2026-01-15T19:09:40.786527+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_database_locked",
+      "issue_introduced": "Test database locked.",
+      "timestamp": "2026-01-15T19:09:40.789345+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_syntax_error",
+      "issue_introduced": "Test: Introduce syntax error in a Python file.",
+      "timestamp": "2026-01-15T19:09:40.794173+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:09:40.798820+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:09:40.802945+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_import",
+      "issue_introduced": "Test: Remove an import and see if healing adds it back.",
+      "timestamp": "2026-01-15T19:09:40.807509+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_import_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:09:40.812300+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_undefined_variable",
+      "issue_introduced": "Test undefined variable.",
+      "timestamp": "2026-01-15T19:09:40.817036+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_type_error",
+      "issue_introduced": "Test type error.",
+      "timestamp": "2026-01-15T19:09:40.821108+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_attribute_error",
+      "issue_introduced": "Test attribute error.",
+      "timestamp": "2026-01-15T19:09:40.824122+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_indentation_error",
+      "issue_introduced": "Test indentation error.",
+      "timestamp": "2026-01-15T19:09:40.829650+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_name_error",
+      "issue_introduced": "Test name error.",
+      "timestamp": "2026-01-15T19:09:40.832737+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_configuration_error",
+      "issue_introduced": "Test: Break configuration and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:09:40.835805+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_missing_env_var",
+      "issue_introduced": "Test missing environment variable.",
+      "timestamp": "2026-01-15T19:09:40.838789+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_invalid_env_var",
+      "issue_introduced": "Test invalid environment variable.",
+      "timestamp": "2026-01-15T19:09:40.841887+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_file_corrupted",
+      "issue_introduced": "Test corrupted config file.",
+      "timestamp": "2026-01-15T19:09:40.844988+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_syntax_error",
+      "issue_introduced": "Test config syntax error.",
+      "timestamp": "2026-01-15T19:09:40.848048+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_permission_denied",
+      "issue_introduced": "Test config permission denied.",
+      "timestamp": "2026-01-15T19:09:40.850972+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_override_failed",
+      "issue_introduced": "Test config override failed.",
+      "timestamp": "2026-01-15T19:09:40.853936+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_validation_failed",
+      "issue_introduced": "Test config validation failed.",
+      "timestamp": "2026-01-15T19:09:40.856849+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_missing_section",
+      "issue_introduced": "Test missing config section.",
+      "timestamp": "2026-01-15T19:09:40.859784+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_config_invalid_type",
+      "issue_introduced": "Test invalid config type.",
+      "timestamp": "2026-01-15T19:09:40.862739+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_network_timeout",
+      "issue_introduced": "Test: Simulate network timeout.",
+      "timestamp": "2026-01-15T19:09:40.865649+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_connection_refused",
+      "issue_introduced": "Test connection refused.",
+      "timestamp": "2026-01-15T19:09:40.868557+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_dns_resolution_failed",
+      "issue_introduced": "Test DNS resolution failed.",
+      "timestamp": "2026-01-15T19:09:40.871420+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_ssl_certificate_error",
+      "issue_introduced": "Test SSL certificate error.",
+      "timestamp": "2026-01-15T19:09:40.874270+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_rate_limit_exceeded",
+      "issue_introduced": "Test rate limit exceeded.",
+      "timestamp": "2026-01-15T19:09:40.877201+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_service_unavailable",
+      "issue_introduced": "Test service unavailable.",
+      "timestamp": "2026-01-15T19:09:40.880050+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_network_unreachable",
+      "issue_introduced": "Test network unreachable.",
+      "timestamp": "2026-01-15T19:09:40.882926+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_timeout_reading_response",
+      "issue_introduced": "Test timeout reading response.",
+      "timestamp": "2026-01-15T19:09:40.885800+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_connection_reset",
+      "issue_introduced": "Test connection reset.",
+      "timestamp": "2026-01-15T19:09:40.888647+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_proxy_error",
+      "issue_introduced": "Test proxy error.",
+      "timestamp": "2026-01-15T19:09:40.891497+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_permission_error",
+      "issue_introduced": "Test: Create permission error and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:09:40.894500+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_unauthorized_access",
+      "issue_introduced": "Test unauthorized access.",
+      "timestamp": "2026-01-15T19:09:40.897581+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_invalid_token",
+      "issue_introduced": "Test invalid token.",
+      "timestamp": "2026-01-15T19:09:40.900602+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_expired_token",
+      "issue_introduced": "Test expired token.",
+      "timestamp": "2026-01-15T19:09:40.903502+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_weak_encryption",
+      "issue_introduced": "Test weak encryption.",
+      "timestamp": "2026-01-15T19:09:40.906595+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_sql_injection_attempt",
+      "issue_introduced": "Test SQL injection attempt.",
+      "timestamp": "2026-01-15T19:09:40.909551+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_path_traversal_attempt",
+      "issue_introduced": "Test path traversal attempt.",
+      "timestamp": "2026-01-15T19:09:40.912477+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_csrf_token_missing",
+      "issue_introduced": "Test CSRF token missing.",
+      "timestamp": "2026-01-15T19:09:40.915448+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_authentication_failed",
+      "issue_introduced": "Test authentication failed.",
+      "timestamp": "2026-01-15T19:09:40.918393+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_authorization_failed",
+      "issue_introduced": "Test authorization failed.",
+      "timestamp": "2026-01-15T19:09:40.921432+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_slow_query",
+      "issue_introduced": "Test slow query.",
+      "timestamp": "2026-01-15T19:09:40.924429+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_cpu_exhausted",
+      "issue_introduced": "Test CPU exhausted.",
+      "timestamp": "2026-01-15T19:09:40.927449+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_disk_space_full",
+      "issue_introduced": "Test disk space full.",
+      "timestamp": "2026-01-15T19:09:40.930337+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_leak",
+      "issue_introduced": "Test memory leak.",
+      "timestamp": "2026-01-15T19:09:40.933213+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_infinite_loop",
+      "issue_introduced": "Test infinite loop.",
+      "timestamp": "2026-01-15T19:09:40.936280+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_n_plus_one_query",
+      "issue_introduced": "Test N+1 query problem.",
+      "timestamp": "2026-01-15T19:09:40.939214+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_cache_miss_storm",
+      "issue_introduced": "Test cache miss storm.",
+      "timestamp": "2026-01-15T19:09:40.942195+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_garbage_collection_stuck",
+      "issue_introduced": "Test garbage collection stuck.",
+      "timestamp": "2026-01-15T19:09:40.945201+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_thread_deadlock",
+      "issue_introduced": "Test thread deadlock.",
+      "timestamp": "2026-01-15T19:09:40.948141+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_resource_contention",
+      "issue_introduced": "Test resource contention.",
+      "timestamp": "2026-01-15T19:09:40.951165+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_issue",
+      "issue_introduced": "Test: Simulate memory issue.",
+      "timestamp": "2026-01-15T19:09:40.954203+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_out_of_memory",
+      "issue_introduced": "Test out of memory.",
+      "timestamp": "2026-01-15T19:09:40.957133+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_fragmentation",
+      "issue_introduced": "Test memory fragmentation.",
+      "timestamp": "2026-01-15T19:09:40.960150+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_buffer_overflow",
+      "issue_introduced": "Test buffer overflow.",
+      "timestamp": "2026-01-15T19:09:40.963050+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_stack_overflow",
+      "issue_introduced": "Test stack overflow.",
+      "timestamp": "2026-01-15T19:09:40.966013+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_corruption",
+      "issue_introduced": "Test memory corruption.",
+      "timestamp": "2026-01-15T19:09:40.969054+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_shared_memory_error",
+      "issue_introduced": "Test shared memory error.",
+      "timestamp": "2026-01-15T19:09:40.972127+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_mapping_failed",
+      "issue_introduced": "Test memory mapping failed.",
+      "timestamp": "2026-01-15T19:09:40.975171+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_virtual_memory_exhausted",
+      "issue_introduced": "Test virtual memory exhausted.",
+      "timestamp": "2026-01-15T19:09:40.978132+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_memory_allocation_failed",
+      "issue_introduced": "Test memory allocation failed.",
+      "timestamp": "2026-01-15T19:09:40.981110+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_concurrent_errors",
+      "issue_introduced": "Test: Introduce multiple concurrent errors.",
+      "timestamp": "2026-01-15T19:09:40.984136+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_race_condition",
+      "issue_introduced": "Test race condition.",
+      "timestamp": "2026-01-15T19:09:40.987134+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_deadlock_multiple_threads",
+      "issue_introduced": "Test deadlock multiple threads.",
+      "timestamp": "2026-01-15T19:09:40.990080+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_livelock",
+      "issue_introduced": "Test livelock.",
+      "timestamp": "2026-01-15T19:09:40.993031+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_starvation",
+      "issue_introduced": "Test starvation.",
+      "timestamp": "2026-01-15T19:09:40.996048+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_atomic_operation_failed",
+      "issue_introduced": "Test atomic operation failed.",
+      "timestamp": "2026-01-15T19:09:40.999057+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_lock_timeout",
+      "issue_introduced": "Test lock timeout.",
+      "timestamp": "2026-01-15T19:09:41.002106+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_semaphore_exhausted",
+      "issue_introduced": "Test semaphore exhausted.",
+      "timestamp": "2026-01-15T19:09:41.005202+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_condition_variable_error",
+      "issue_introduced": "Test condition variable error.",
+      "timestamp": "2026-01-15T19:09:41.008217+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_barrier_timeout",
+      "issue_introduced": "Test barrier timeout.",
+      "timestamp": "2026-01-15T19:09:41.011240+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_data_integrity",
+      "issue_introduced": "Test: Break data integrity.",
+      "timestamp": "2026-01-15T19:09:41.014234+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_api_version_mismatch",
+      "issue_introduced": "Test API version mismatch.",
+      "timestamp": "2026-01-15T19:09:41.017174+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_service_dependency_down",
+      "issue_introduced": "Test service dependency down.",
+      "timestamp": "2026-01-15T19:09:41.020046+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_message_queue_full",
+      "issue_introduced": "Test message queue full.",
+      "timestamp": "2026-01-15T19:09:41.022905+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_event_bus_disconnected",
+      "issue_introduced": "Test event bus disconnected.",
+      "timestamp": "2026-01-15T19:09:41.025824+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_database_replication_lag",
+      "issue_introduced": "Test database replication lag.",
+      "timestamp": "2026-01-15T19:09:41.028777+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_cache_invalidation_failed",
+      "issue_introduced": "Test cache invalidation failed.",
+      "timestamp": "2026-01-15T19:09:41.031639+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_external_service_changed",
+      "issue_introduced": "Test external service changed.",
+      "timestamp": "2026-01-15T19:09:41.034508+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_webhook_delivery_failed",
+      "issue_introduced": "Test webhook delivery failed.",
+      "timestamp": "2026-01-15T19:09:41.037421+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    },
+    {
+      "test_name": "test_third_party_api_changed",
+      "issue_introduced": "Test third party API changed.",
+      "timestamp": "2026-01-15T19:09:41.040321+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "cannot access local variable 'analysis' where it is not associated with a value"
+      }
+    }
+  ],
+  "knowledge_gaps": {
+    "identified_gaps": [],
+    "recommendations": [],
+    "missing_knowledge_areas": [],
+    "error": "'StressTestTracker' object has no attribute 'session'"
+  }
+}
