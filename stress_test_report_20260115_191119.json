@@ -1,0 +1,3080 @@
+{
+  "test_summary": {
+    "start_time": "2026-01-15T19:11:13.944320+00:00",
+    "end_time": "2026-01-15T19:11:19.185176+00:00",
+    "duration_seconds": 5.240856,
+    "total_tests": 100,
+    "successful_fixes": 0,
+    "failed_fixes": 0,
+    "fix_success_rate": 0,
+    "kpi_target": 95.0,
+    "meets_target": false
+  },
+  "kpis": {
+    "overall_score": 35.0,
+    "targets": {
+      "fix_success_rate": 95.0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 2.0,
+      "knowledge_request_rate": 0.5,
+      "llm_usage_rate": 0.3
+    },
+    "scores": {
+      "fix_success_rate": 0.0,
+      "detection_rate": 100,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 100,
+      "llm_usage_rate": 50
+    },
+    "weights": {
+      "fix_success_rate": 0.5,
+      "detection_rate": 0.2,
+      "genesis_key_creation_rate": 0.1,
+      "knowledge_request_rate": 0.1,
+      "llm_usage_rate": 0.1
+    },
+    "metrics": {
+      "fix_success_rate": 0,
+      "detection_rate": 100.0,
+      "genesis_key_creation_rate": 0.0,
+      "knowledge_request_rate": 3.0,
+      "llm_usage_rate": 0.0
+    }
+  },
+  "genesis_keys": {
+    "total_created": 0,
+    "by_type": {},
+    "details": []
+  },
+  "knowledge_requests": {
+    "total": 300,
+    "by_type": {
+      "knowledge_missing": 300
+    },
+    "details": [
+      {
+        "timestamp": "2026-01-15T19:11:17.995876+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.160743+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.169367+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file: backend\\test_stress_file.txt",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.185797+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 2: backend\\test_stress_file_v2.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.186657+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 2: backend\\test_stress_file_v2.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.186791+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 2: backend\\test_stress_file_v2.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.198611+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 3: backend\\test_stress_file_v3.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.198955+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 3: backend\\test_stress_file_v3.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.199071+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file variant 3: backend\\test_stress_file_v3.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.209998+00:00",
+        "type": "knowledge_missing",
+        "query": "Corrupted file: backend\\test_corrupted.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.210305+00:00",
+        "type": "knowledge_missing",
+        "query": "Corrupted file: backend\\test_corrupted.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.210427+00:00",
+        "type": "knowledge_missing",
+        "query": "Corrupted file: backend\\test_corrupted.txt",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.219982+00:00",
+        "type": "knowledge_missing",
+        "query": "File is locked by another process",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.220269+00:00",
+        "type": "knowledge_missing",
+        "query": "File is locked by another process",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.220380+00:00",
+        "type": "knowledge_missing",
+        "query": "File is locked by another process",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.229626+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid file permissions",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.229923+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid file permissions",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.230035+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid file permissions",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.239496+00:00",
+        "type": "knowledge_missing",
+        "query": "File size exceeds limit",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.239760+00:00",
+        "type": "knowledge_missing",
+        "query": "File size exceeds limit",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.239871+00:00",
+        "type": "knowledge_missing",
+        "query": "File size exceeds limit",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.248868+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing directory: backend\\test_missing_dir",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.249164+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing directory: backend\\test_missing_dir",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.249276+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing directory: backend\\test_missing_dir",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.258311+00:00",
+        "type": "knowledge_missing",
+        "query": "Circular symlink detected",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.258609+00:00",
+        "type": "knowledge_missing",
+        "query": "Circular symlink detected",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.258722+00:00",
+        "type": "knowledge_missing",
+        "query": "Circular symlink detected",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.268148+00:00",
+        "type": "knowledge_missing",
+        "query": "File encoding error",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.268500+00:00",
+        "type": "knowledge_missing",
+        "query": "File encoding error",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.268622+00:00",
+        "type": "knowledge_missing",
+        "query": "File encoding error",
+        "layer": "backend",
+        "category": "file_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.277717+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.278020+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.278133+00:00",
+        "type": "knowledge_missing",
+        "query": "Database schema corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.287545+00:00",
+        "type": "knowledge_missing",
+        "query": "Table does not exist",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.287833+00:00",
+        "type": "knowledge_missing",
+        "query": "Table does not exist",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.287951+00:00",
+        "type": "knowledge_missing",
+        "query": "Table does not exist",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.296968+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid database schema",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.297254+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid database schema",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.297365+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid database schema",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.306674+00:00",
+        "type": "knowledge_missing",
+        "query": "Foreign key constraint violation",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.306954+00:00",
+        "type": "knowledge_missing",
+        "query": "Foreign key constraint violation",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.307067+00:00",
+        "type": "knowledge_missing",
+        "query": "Foreign key constraint violation",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.316047+00:00",
+        "type": "knowledge_missing",
+        "query": "Database connection pool exhausted",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.316334+00:00",
+        "type": "knowledge_missing",
+        "query": "Database connection pool exhausted",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.316445+00:00",
+        "type": "knowledge_missing",
+        "query": "Database connection pool exhausted",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.325518+00:00",
+        "type": "knowledge_missing",
+        "query": "Database deadlock detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.325798+00:00",
+        "type": "knowledge_missing",
+        "query": "Database deadlock detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.325909+00:00",
+        "type": "knowledge_missing",
+        "query": "Database deadlock detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.335150+00:00",
+        "type": "knowledge_missing",
+        "query": "Transaction timeout",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.335458+00:00",
+        "type": "knowledge_missing",
+        "query": "Transaction timeout",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.335574+00:00",
+        "type": "knowledge_missing",
+        "query": "Transaction timeout",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.344715+00:00",
+        "type": "knowledge_missing",
+        "query": "Database index corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.345007+00:00",
+        "type": "knowledge_missing",
+        "query": "Database index corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.345119+00:00",
+        "type": "knowledge_missing",
+        "query": "Database index corruption",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.354518+00:00",
+        "type": "knowledge_missing",
+        "query": "Orphaned database records",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.354802+00:00",
+        "type": "knowledge_missing",
+        "query": "Orphaned database records",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.354920+00:00",
+        "type": "knowledge_missing",
+        "query": "Orphaned database records",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.364132+00:00",
+        "type": "knowledge_missing",
+        "query": "Database is locked",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.364425+00:00",
+        "type": "knowledge_missing",
+        "query": "Database is locked",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.364539+00:00",
+        "type": "knowledge_missing",
+        "query": "Database is locked",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.374954+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error in backend\\test_syntax_error.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.375238+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error in backend\\test_syntax_error.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.375347+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error in backend\\test_syntax_error.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.385895+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.386177+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.386289+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.396634+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 3",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.396945+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 3",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.397058+00:00",
+        "type": "knowledge_missing",
+        "query": "Syntax error variant 3",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.408153+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import in backend\\test_missing_import.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.408443+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import in backend\\test_missing_import.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.408556+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import in backend\\test_missing_import.py",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.419592+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.419897+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.420013+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing import variant 2",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.430809+00:00",
+        "type": "knowledge_missing",
+        "query": "Undefined variable",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.431134+00:00",
+        "type": "knowledge_missing",
+        "query": "Undefined variable",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.431254+00:00",
+        "type": "knowledge_missing",
+        "query": "Undefined variable",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.441693+00:00",
+        "type": "knowledge_missing",
+        "query": "Type error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.441998+00:00",
+        "type": "knowledge_missing",
+        "query": "Type error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.442147+00:00",
+        "type": "knowledge_missing",
+        "query": "Type error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.452603+00:00",
+        "type": "knowledge_missing",
+        "query": "Attribute error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.452951+00:00",
+        "type": "knowledge_missing",
+        "query": "Attribute error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.453070+00:00",
+        "type": "knowledge_missing",
+        "query": "Attribute error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.464352+00:00",
+        "type": "knowledge_missing",
+        "query": "Indentation error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.464694+00:00",
+        "type": "knowledge_missing",
+        "query": "Indentation error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.464806+00:00",
+        "type": "knowledge_missing",
+        "query": "Indentation error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.474953+00:00",
+        "type": "knowledge_missing",
+        "query": "Name error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.475258+00:00",
+        "type": "knowledge_missing",
+        "query": "Name error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.475376+00:00",
+        "type": "knowledge_missing",
+        "query": "Name error",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.485290+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.485581+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.485696+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration error: invalid setting",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.495146+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing required environment variable",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.495447+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing required environment variable",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.495562+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing required environment variable",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.505177+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid environment variable value",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.505467+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid environment variable value",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.505586+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid environment variable value",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.515107+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration file corrupted",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.515410+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration file corrupted",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.515524+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration file corrupted",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.525143+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration syntax error",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.525449+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration syntax error",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.525566+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration syntax error",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.535246+00:00",
+        "type": "knowledge_missing",
+        "query": "Config file permission denied",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.535535+00:00",
+        "type": "knowledge_missing",
+        "query": "Config file permission denied",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.535645+00:00",
+        "type": "knowledge_missing",
+        "query": "Config file permission denied",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.545868+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration override failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.546171+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration override failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.546296+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration override failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.556217+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration validation failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.556494+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration validation failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.556606+00:00",
+        "type": "knowledge_missing",
+        "query": "Configuration validation failed",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.566525+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing configuration section",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.566828+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing configuration section",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.566944+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing configuration section",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.576479+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid configuration type",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.576774+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid configuration type",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.576889+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid configuration type",
+        "layer": "configuration",
+        "category": "configuration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.586595+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.586891+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.587005+00:00",
+        "type": "knowledge_missing",
+        "query": "Network timeout connecting to external service",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.596937+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.597259+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.597379+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection refused",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.607141+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.607444+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.607559+00:00",
+        "type": "knowledge_missing",
+        "query": "DNS resolution failed",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.617561+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.617865+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.617983+00:00",
+        "type": "knowledge_missing",
+        "query": "SSL certificate error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.627763+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.628083+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.628199+00:00",
+        "type": "knowledge_missing",
+        "query": "Rate limit exceeded",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.637890+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.638171+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.638368+00:00",
+        "type": "knowledge_missing",
+        "query": "Service unavailable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.648164+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.648467+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.648595+00:00",
+        "type": "knowledge_missing",
+        "query": "Network unreachable",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.657881+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.658162+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.658272+00:00",
+        "type": "knowledge_missing",
+        "query": "Timeout reading response",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.667966+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.668291+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.668416+00:00",
+        "type": "knowledge_missing",
+        "query": "Connection reset by peer",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.677506+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.677798+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.677913+00:00",
+        "type": "knowledge_missing",
+        "query": "Proxy error",
+        "layer": "network",
+        "category": "network"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.687554+00:00",
+        "type": "knowledge_missing",
+        "query": "Permission denied on file access",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.687838+00:00",
+        "type": "knowledge_missing",
+        "query": "Permission denied on file access",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.687959+00:00",
+        "type": "knowledge_missing",
+        "query": "Permission denied on file access",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.697446+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.697751+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.697866+00:00",
+        "type": "knowledge_missing",
+        "query": "Unauthorized access attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.707261+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.707553+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.707730+00:00",
+        "type": "knowledge_missing",
+        "query": "Invalid authentication token",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.717639+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.717932+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.718048+00:00",
+        "type": "knowledge_missing",
+        "query": "Token expired",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.727408+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.727716+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.727831+00:00",
+        "type": "knowledge_missing",
+        "query": "Weak encryption detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.737299+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.737582+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.737692+00:00",
+        "type": "knowledge_missing",
+        "query": "SQL injection attempt detected",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.747199+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.747500+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.747617+00:00",
+        "type": "knowledge_missing",
+        "query": "Path traversal attempt",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.757055+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.757322+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.757446+00:00",
+        "type": "knowledge_missing",
+        "query": "CSRF token missing",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.766971+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.767262+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.767372+00:00",
+        "type": "knowledge_missing",
+        "query": "Authentication failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.776851+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.777167+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.777283+00:00",
+        "type": "knowledge_missing",
+        "query": "Authorization failed",
+        "layer": "security",
+        "category": "security"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.786868+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.787167+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.787277+00:00",
+        "type": "knowledge_missing",
+        "query": "Slow database query detected",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.796613+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.796917+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.797036+00:00",
+        "type": "knowledge_missing",
+        "query": "CPU usage at 100%",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.806431+00:00",
+        "type": "knowledge_missing",
+        "query": "Disk space full",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.806711+00:00",
+        "type": "knowledge_missing",
+        "query": "Disk space full",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.806820+00:00",
+        "type": "knowledge_missing",
+        "query": "Disk space full",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.816208+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory leak detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.816497+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory leak detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.816611+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory leak detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.825815+00:00",
+        "type": "knowledge_missing",
+        "query": "Infinite loop detected",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.826089+00:00",
+        "type": "knowledge_missing",
+        "query": "Infinite loop detected",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.826202+00:00",
+        "type": "knowledge_missing",
+        "query": "Infinite loop detected",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.835632+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.835935+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.836048+00:00",
+        "type": "knowledge_missing",
+        "query": "N+1 query problem",
+        "layer": "database",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.845736+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.846053+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.846172+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache miss storm",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.855596+00:00",
+        "type": "knowledge_missing",
+        "query": "Garbage collection stuck",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.855877+00:00",
+        "type": "knowledge_missing",
+        "query": "Garbage collection stuck",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.855985+00:00",
+        "type": "knowledge_missing",
+        "query": "Garbage collection stuck",
+        "layer": "backend",
+        "category": "performance"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.865411+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.865701+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.865856+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread deadlock",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.875587+00:00",
+        "type": "knowledge_missing",
+        "query": "Resource contention",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.875888+00:00",
+        "type": "knowledge_missing",
+        "query": "Resource contention",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.875998+00:00",
+        "type": "knowledge_missing",
+        "query": "Resource contention",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.885469+00:00",
+        "type": "knowledge_missing",
+        "query": "High memory usage detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.885766+00:00",
+        "type": "knowledge_missing",
+        "query": "High memory usage detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.885895+00:00",
+        "type": "knowledge_missing",
+        "query": "High memory usage detected",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.895450+00:00",
+        "type": "knowledge_missing",
+        "query": "Out of memory",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.895763+00:00",
+        "type": "knowledge_missing",
+        "query": "Out of memory",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.895883+00:00",
+        "type": "knowledge_missing",
+        "query": "Out of memory",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.905730+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory fragmentation",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.906007+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory fragmentation",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.906117+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory fragmentation",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.915741+00:00",
+        "type": "knowledge_missing",
+        "query": "Buffer overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.916044+00:00",
+        "type": "knowledge_missing",
+        "query": "Buffer overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.916158+00:00",
+        "type": "knowledge_missing",
+        "query": "Buffer overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.925817+00:00",
+        "type": "knowledge_missing",
+        "query": "Stack overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.926112+00:00",
+        "type": "knowledge_missing",
+        "query": "Stack overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.926227+00:00",
+        "type": "knowledge_missing",
+        "query": "Stack overflow",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.935842+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory corruption",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.936147+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory corruption",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.936264+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory corruption",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.946771+00:00",
+        "type": "knowledge_missing",
+        "query": "Shared memory error",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.947151+00:00",
+        "type": "knowledge_missing",
+        "query": "Shared memory error",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.947271+00:00",
+        "type": "knowledge_missing",
+        "query": "Shared memory error",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.957091+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory mapping failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.957395+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory mapping failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.957513+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory mapping failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.967712+00:00",
+        "type": "knowledge_missing",
+        "query": "Virtual memory exhausted",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.968035+00:00",
+        "type": "knowledge_missing",
+        "query": "Virtual memory exhausted",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.968151+00:00",
+        "type": "knowledge_missing",
+        "query": "Virtual memory exhausted",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.978419+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory allocation failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.978738+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory allocation failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.978856+00:00",
+        "type": "knowledge_missing",
+        "query": "Memory allocation failed",
+        "layer": "backend",
+        "category": "resource"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.988811+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.989123+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.989276+00:00",
+        "type": "knowledge_missing",
+        "query": "Missing file",
+        "layer": "backend",
+        "category": "code_error"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.999203+00:00",
+        "type": "knowledge_missing",
+        "query": "Race condition detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.999515+00:00",
+        "type": "knowledge_missing",
+        "query": "Race condition detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:18.999633+00:00",
+        "type": "knowledge_missing",
+        "query": "Race condition detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.009340+00:00",
+        "type": "knowledge_missing",
+        "query": "Deadlock in multiple threads",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.009643+00:00",
+        "type": "knowledge_missing",
+        "query": "Deadlock in multiple threads",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.009761+00:00",
+        "type": "knowledge_missing",
+        "query": "Deadlock in multiple threads",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.019415+00:00",
+        "type": "knowledge_missing",
+        "query": "Livelock detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.019709+00:00",
+        "type": "knowledge_missing",
+        "query": "Livelock detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.019829+00:00",
+        "type": "knowledge_missing",
+        "query": "Livelock detected",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.029286+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread starvation",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.029579+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread starvation",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.029692+00:00",
+        "type": "knowledge_missing",
+        "query": "Thread starvation",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.039371+00:00",
+        "type": "knowledge_missing",
+        "query": "Atomic operation failed",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.039654+00:00",
+        "type": "knowledge_missing",
+        "query": "Atomic operation failed",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.039766+00:00",
+        "type": "knowledge_missing",
+        "query": "Atomic operation failed",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.049269+00:00",
+        "type": "knowledge_missing",
+        "query": "Lock timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.049573+00:00",
+        "type": "knowledge_missing",
+        "query": "Lock timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.049689+00:00",
+        "type": "knowledge_missing",
+        "query": "Lock timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.058775+00:00",
+        "type": "knowledge_missing",
+        "query": "Semaphore exhausted",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.059045+00:00",
+        "type": "knowledge_missing",
+        "query": "Semaphore exhausted",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.059161+00:00",
+        "type": "knowledge_missing",
+        "query": "Semaphore exhausted",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.068493+00:00",
+        "type": "knowledge_missing",
+        "query": "Condition variable error",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.068790+00:00",
+        "type": "knowledge_missing",
+        "query": "Condition variable error",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.068901+00:00",
+        "type": "knowledge_missing",
+        "query": "Condition variable error",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.078304+00:00",
+        "type": "knowledge_missing",
+        "query": "Barrier timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.078600+00:00",
+        "type": "knowledge_missing",
+        "query": "Barrier timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.078713+00:00",
+        "type": "knowledge_missing",
+        "query": "Barrier timeout",
+        "layer": "backend",
+        "category": "concurrency"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.088263+00:00",
+        "type": "knowledge_missing",
+        "query": "Data integrity violation detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.088542+00:00",
+        "type": "knowledge_missing",
+        "query": "Data integrity violation detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.088656+00:00",
+        "type": "knowledge_missing",
+        "query": "Data integrity violation detected",
+        "layer": "database",
+        "category": "database"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.098214+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.098518+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.098633+00:00",
+        "type": "knowledge_missing",
+        "query": "API version mismatch",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.108033+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.108304+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.108414+00:00",
+        "type": "knowledge_missing",
+        "query": "Service dependency down",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.118594+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.118890+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.119001+00:00",
+        "type": "knowledge_missing",
+        "query": "Message queue full",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.128336+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.128710+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.128828+00:00",
+        "type": "knowledge_missing",
+        "query": "Event bus disconnected",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.138462+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.138742+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.138854+00:00",
+        "type": "knowledge_missing",
+        "query": "Database replication lag",
+        "layer": "database",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.148293+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.148590+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.148701+00:00",
+        "type": "knowledge_missing",
+        "query": "Cache invalidation failed",
+        "layer": "backend",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.158119+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.158390+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.158503+00:00",
+        "type": "knowledge_missing",
+        "query": "External service API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.168056+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.168360+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.168473+00:00",
+        "type": "knowledge_missing",
+        "query": "Webhook delivery failed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.177756+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.178075+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      },
+      {
+        "timestamp": "2026-01-15T19:11:19.178189+00:00",
+        "type": "knowledge_missing",
+        "query": "Third party API changed",
+        "layer": "integration",
+        "category": "integration"
+      }
+    ]
+  },
+  "llm_usage": {
+    "total": 0,
+    "by_model": {},
+    "details": []
+  },
+  "healing_actions": {
+    "total": 0,
+    "details": []
+  },
+  "fix_verifications": {
+    "total": 0,
+    "successful": 0,
+    "failed": 0,
+    "details": []
+  },
+  "test_results": [
+    {
+      "test_name": "test_missing_file",
+      "issue_introduced": "Test: Delete a critical file and see if healing restores it.",
+      "timestamp": "2026-01-15T19:11:18.176538+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_file_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:11:18.193332+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_file_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:11:18.205407+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_corrupted_file",
+      "issue_introduced": "Test corrupted file.",
+      "timestamp": "2026-01-15T19:11:18.217138+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_locked_file",
+      "issue_introduced": "Test locked file.",
+      "timestamp": "2026-01-15T19:11:18.226655+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_invalid_file_permissions",
+      "issue_introduced": "Test invalid file permissions.",
+      "timestamp": "2026-01-15T19:11:18.236720+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_file_too_large",
+      "issue_introduced": "Test file too large.",
+      "timestamp": "2026-01-15T19:11:18.245979+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_directory",
+      "issue_introduced": "Test missing directory.",
+      "timestamp": "2026-01-15T19:11:18.255399+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_circular_symlink",
+      "issue_introduced": "Test circular symlink.",
+      "timestamp": "2026-01-15T19:11:18.265294+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_file_encoding_error",
+      "issue_introduced": "Test file encoding error.",
+      "timestamp": "2026-01-15T19:11:18.274875+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_corrupted_database",
+      "issue_introduced": "Test: Corrupt database schema and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:11:18.284789+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_table",
+      "issue_introduced": "Test missing table.",
+      "timestamp": "2026-01-15T19:11:18.294199+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_invalid_schema",
+      "issue_introduced": "Test invalid schema.",
+      "timestamp": "2026-01-15T19:11:18.303773+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_foreign_key_violation",
+      "issue_introduced": "Test foreign key violation.",
+      "timestamp": "2026-01-15T19:11:18.313360+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_connection_pool_exhausted",
+      "issue_introduced": "Test connection pool exhausted.",
+      "timestamp": "2026-01-15T19:11:18.322645+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_deadlock",
+      "issue_introduced": "Test database deadlock.",
+      "timestamp": "2026-01-15T19:11:18.332308+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_transaction_timeout",
+      "issue_introduced": "Test transaction timeout.",
+      "timestamp": "2026-01-15T19:11:18.341963+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_index_corruption",
+      "issue_introduced": "Test index corruption.",
+      "timestamp": "2026-01-15T19:11:18.351678+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_orphaned_records",
+      "issue_introduced": "Test orphaned records.",
+      "timestamp": "2026-01-15T19:11:18.361208+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_database_locked",
+      "issue_introduced": "Test database locked.",
+      "timestamp": "2026-01-15T19:11:18.370768+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error",
+      "issue_introduced": "Test: Introduce syntax error in a Python file.",
+      "timestamp": "2026-01-15T19:11:18.381794+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:11:18.392636+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_syntax_error_3",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:11:18.403957+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_import",
+      "issue_introduced": "Test: Remove an import and see if healing adds it back.",
+      "timestamp": "2026-01-15T19:11:18.415340+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_import_2",
+      "issue_introduced": null,
+      "timestamp": "2026-01-15T19:11:18.426412+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_undefined_variable",
+      "issue_introduced": "Test undefined variable.",
+      "timestamp": "2026-01-15T19:11:18.437862+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_type_error",
+      "issue_introduced": "Test type error.",
+      "timestamp": "2026-01-15T19:11:18.449608+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_attribute_error",
+      "issue_introduced": "Test attribute error.",
+      "timestamp": "2026-01-15T19:11:18.459899+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_indentation_error",
+      "issue_introduced": "Test indentation error.",
+      "timestamp": "2026-01-15T19:11:18.472077+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_name_error",
+      "issue_introduced": "Test name error.",
+      "timestamp": "2026-01-15T19:11:18.482345+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_configuration_error",
+      "issue_introduced": "Test: Break configuration and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:11:18.492277+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_missing_env_var",
+      "issue_introduced": "Test missing environment variable.",
+      "timestamp": "2026-01-15T19:11:18.502238+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_invalid_env_var",
+      "issue_introduced": "Test invalid environment variable.",
+      "timestamp": "2026-01-15T19:11:18.512219+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_file_corrupted",
+      "issue_introduced": "Test corrupted config file.",
+      "timestamp": "2026-01-15T19:11:18.522237+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_syntax_error",
+      "issue_introduced": "Test config syntax error.",
+      "timestamp": "2026-01-15T19:11:18.532440+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_permission_denied",
+      "issue_introduced": "Test config permission denied.",
+      "timestamp": "2026-01-15T19:11:18.542786+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_override_failed",
+      "issue_introduced": "Test config override failed.",
+      "timestamp": "2026-01-15T19:11:18.553146+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_validation_failed",
+      "issue_introduced": "Test config validation failed.",
+      "timestamp": "2026-01-15T19:11:18.563500+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_missing_section",
+      "issue_introduced": "Test missing config section.",
+      "timestamp": "2026-01-15T19:11:18.573682+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_config_invalid_type",
+      "issue_introduced": "Test invalid config type.",
+      "timestamp": "2026-01-15T19:11:18.583714+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_network_timeout",
+      "issue_introduced": "Test: Simulate network timeout.",
+      "timestamp": "2026-01-15T19:11:18.593942+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_connection_refused",
+      "issue_introduced": "Test connection refused.",
+      "timestamp": "2026-01-15T19:11:18.604345+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_dns_resolution_failed",
+      "issue_introduced": "Test DNS resolution failed.",
+      "timestamp": "2026-01-15T19:11:18.614683+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_ssl_certificate_error",
+      "issue_introduced": "Test SSL certificate error.",
+      "timestamp": "2026-01-15T19:11:18.624801+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_rate_limit_exceeded",
+      "issue_introduced": "Test rate limit exceeded.",
+      "timestamp": "2026-01-15T19:11:18.635132+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_service_unavailable",
+      "issue_introduced": "Test service unavailable.",
+      "timestamp": "2026-01-15T19:11:18.644960+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_network_unreachable",
+      "issue_introduced": "Test network unreachable.",
+      "timestamp": "2026-01-15T19:11:18.655093+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_timeout_reading_response",
+      "issue_introduced": "Test timeout reading response.",
+      "timestamp": "2026-01-15T19:11:18.664977+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_connection_reset",
+      "issue_introduced": "Test connection reset.",
+      "timestamp": "2026-01-15T19:11:18.674735+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_proxy_error",
+      "issue_introduced": "Test proxy error.",
+      "timestamp": "2026-01-15T19:11:18.684779+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_permission_error",
+      "issue_introduced": "Test: Create permission error and see if healing fixes it.",
+      "timestamp": "2026-01-15T19:11:18.694490+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_unauthorized_access",
+      "issue_introduced": "Test unauthorized access.",
+      "timestamp": "2026-01-15T19:11:18.704573+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_invalid_token",
+      "issue_introduced": "Test invalid token.",
+      "timestamp": "2026-01-15T19:11:18.714808+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_expired_token",
+      "issue_introduced": "Test expired token.",
+      "timestamp": "2026-01-15T19:11:18.724567+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_weak_encryption",
+      "issue_introduced": "Test weak encryption.",
+      "timestamp": "2026-01-15T19:11:18.734546+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_sql_injection_attempt",
+      "issue_introduced": "Test SQL injection attempt.",
+      "timestamp": "2026-01-15T19:11:18.744289+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_path_traversal_attempt",
+      "issue_introduced": "Test path traversal attempt.",
+      "timestamp": "2026-01-15T19:11:18.754164+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_csrf_token_missing",
+      "issue_introduced": "Test CSRF token missing.",
+      "timestamp": "2026-01-15T19:11:18.763983+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_authentication_failed",
+      "issue_introduced": "Test authentication failed.",
+      "timestamp": "2026-01-15T19:11:18.773916+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_authorization_failed",
+      "issue_introduced": "Test authorization failed.",
+      "timestamp": "2026-01-15T19:11:18.784069+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_slow_query",
+      "issue_introduced": "Test slow query.",
+      "timestamp": "2026-01-15T19:11:18.793784+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cpu_exhausted",
+      "issue_introduced": "Test CPU exhausted.",
+      "timestamp": "2026-01-15T19:11:18.803621+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_disk_space_full",
+      "issue_introduced": "Test disk space full.",
+      "timestamp": "2026-01-15T19:11:18.813341+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_leak",
+      "issue_introduced": "Test memory leak.",
+      "timestamp": "2026-01-15T19:11:18.823026+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_infinite_loop",
+      "issue_introduced": "Test infinite loop.",
+      "timestamp": "2026-01-15T19:11:18.832794+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_n_plus_one_query",
+      "issue_introduced": "Test N+1 query problem.",
+      "timestamp": "2026-01-15T19:11:18.842837+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cache_miss_storm",
+      "issue_introduced": "Test cache miss storm.",
+      "timestamp": "2026-01-15T19:11:18.852842+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_garbage_collection_stuck",
+      "issue_introduced": "Test garbage collection stuck.",
+      "timestamp": "2026-01-15T19:11:18.862475+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_thread_deadlock",
+      "issue_introduced": "Test thread deadlock.",
+      "timestamp": "2026-01-15T19:11:18.872761+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_resource_contention",
+      "issue_introduced": "Test resource contention.",
+      "timestamp": "2026-01-15T19:11:18.882607+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_issue",
+      "issue_introduced": "Test: Simulate memory issue.",
+      "timestamp": "2026-01-15T19:11:18.892497+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_out_of_memory",
+      "issue_introduced": "Test out of memory.",
+      "timestamp": "2026-01-15T19:11:18.903029+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_fragmentation",
+      "issue_introduced": "Test memory fragmentation.",
+      "timestamp": "2026-01-15T19:11:18.912644+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_buffer_overflow",
+      "issue_introduced": "Test buffer overflow.",
+      "timestamp": "2026-01-15T19:11:18.922972+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_stack_overflow",
+      "issue_introduced": "Test stack overflow.",
+      "timestamp": "2026-01-15T19:11:18.932952+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_corruption",
+      "issue_introduced": "Test memory corruption.",
+      "timestamp": "2026-01-15T19:11:18.943652+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_shared_memory_error",
+      "issue_introduced": "Test shared memory error.",
+      "timestamp": "2026-01-15T19:11:18.954247+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_mapping_failed",
+      "issue_introduced": "Test memory mapping failed.",
+      "timestamp": "2026-01-15T19:11:18.964799+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_virtual_memory_exhausted",
+      "issue_introduced": "Test virtual memory exhausted.",
+      "timestamp": "2026-01-15T19:11:18.975372+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_memory_allocation_failed",
+      "issue_introduced": "Test memory allocation failed.",
+      "timestamp": "2026-01-15T19:11:18.985876+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_concurrent_errors",
+      "issue_introduced": "Test: Introduce multiple concurrent errors.",
+      "timestamp": "2026-01-15T19:11:18.996278+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_race_condition",
+      "issue_introduced": "Test race condition.",
+      "timestamp": "2026-01-15T19:11:19.006517+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_deadlock_multiple_threads",
+      "issue_introduced": "Test deadlock multiple threads.",
+      "timestamp": "2026-01-15T19:11:19.016650+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_livelock",
+      "issue_introduced": "Test livelock.",
+      "timestamp": "2026-01-15T19:11:19.026438+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_starvation",
+      "issue_introduced": "Test starvation.",
+      "timestamp": "2026-01-15T19:11:19.036412+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_atomic_operation_failed",
+      "issue_introduced": "Test atomic operation failed.",
+      "timestamp": "2026-01-15T19:11:19.046387+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_lock_timeout",
+      "issue_introduced": "Test lock timeout.",
+      "timestamp": "2026-01-15T19:11:19.056144+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_semaphore_exhausted",
+      "issue_introduced": "Test semaphore exhausted.",
+      "timestamp": "2026-01-15T19:11:19.065715+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_condition_variable_error",
+      "issue_introduced": "Test condition variable error.",
+      "timestamp": "2026-01-15T19:11:19.075522+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_barrier_timeout",
+      "issue_introduced": "Test barrier timeout.",
+      "timestamp": "2026-01-15T19:11:19.085438+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_data_integrity",
+      "issue_introduced": "Test: Break data integrity.",
+      "timestamp": "2026-01-15T19:11:19.095278+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_api_version_mismatch",
+      "issue_introduced": "Test API version mismatch.",
+      "timestamp": "2026-01-15T19:11:19.105239+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_service_dependency_down",
+      "issue_introduced": "Test service dependency down.",
+      "timestamp": "2026-01-15T19:11:19.115640+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_message_queue_full",
+      "issue_introduced": "Test message queue full.",
+      "timestamp": "2026-01-15T19:11:19.125495+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_event_bus_disconnected",
+      "issue_introduced": "Test event bus disconnected.",
+      "timestamp": "2026-01-15T19:11:19.135624+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_database_replication_lag",
+      "issue_introduced": "Test database replication lag.",
+      "timestamp": "2026-01-15T19:11:19.145426+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_cache_invalidation_failed",
+      "issue_introduced": "Test cache invalidation failed.",
+      "timestamp": "2026-01-15T19:11:19.155310+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_external_service_changed",
+      "issue_introduced": "Test external service changed.",
+      "timestamp": "2026-01-15T19:11:19.165178+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_webhook_delivery_failed",
+      "issue_introduced": "Test webhook delivery failed.",
+      "timestamp": "2026-01-15T19:11:19.175025+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    },
+    {
+      "test_name": "test_third_party_api_changed",
+      "issue_introduced": "Test third party API changed.",
+      "timestamp": "2026-01-15T19:11:19.184914+00:00",
+      "result": {
+        "status": "test_failed",
+        "error": "'str' object has no attribute 'value'"
+      }
+    }
+  ],
+  "knowledge_gaps": {
+    "identified_gaps": [],
+    "recommendations": [],
+    "missing_knowledge_areas": [],
+    "error": "'StressTestTracker' object has no attribute 'session'"
+  }
+}
