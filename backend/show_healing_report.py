@@ -36,7 +36,7 @@ def parse_log_entries(log_file: Path, hours: int = 1) -> List[Dict]:
                                     'line': line.strip(),
                                     'type': 'health_check' if '[HEALTH]' in line else 'general'
                                 })
-                        except:
+                        except Exception:
                             pass
     except Exception as e:
         print(f"Error reading log file: {e}")

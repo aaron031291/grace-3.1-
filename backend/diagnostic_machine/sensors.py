@@ -692,9 +692,72 @@ class SensorLayer:
     def _collect_static_analysis(self) -> Optional[Any]:
         """Collect static analysis data."""
         try:
-            from .static_analysis_sensor import StaticAnalysisSensor
-            sensor = StaticAnalysisSensor()
-            return sensor.analyze_all()
+            # First, run proactive code scanner (catches syntax/import/missing file bugs)
+            from .proactive_code_scanner import get_proactive_scanner
+            scanner = get_proactive_scanner(backend_dir=Path(__file__).parent.parent)
+            proactive_issues = scanner.scan_all()
+            
+            # Then run traditional static analysis (mypy, pylint)
+            try:
+                from .static_analysis_sensor import StaticAnalysisSensor
+                sensor = StaticAnalysisSensor()
+                static_data = sensor.analyze_all()
+                
+                # Merge proactive issues into static analysis results
+                if static_data and hasattr(static_data, 'issues'):
+                    # Convert proactive issues to static analysis format
+                    for issue in proactive_issues:
+                        from .static_analysis_sensor import StaticAnalysisIssue
+                        static_data.issues.append(StaticAnalysisIssue(
+                            tool='proactive_scanner',
+                            file_path=issue.file_path,
+                            line_number=issue.line_number,
+                            issue_type=issue.issue_type,
+                            severity=issue.severity,
+                            message=issue.message,
+                            fix_suggestion=issue.suggested_fix
+                        ))
+                        # Update totals
+                        if issue.severity == 'critical':
+                            static_data.critical_issues += 1
+                        elif issue.severity == 'high':
+                            static_data.high_issues += 1
+                        elif issue.severity == 'medium':
+                            static_data.medium_issues += 1
+                        else:
+                            static_data.low_issues += 1
+                        static_data.total_issues += 1
+                
+                return static_data
+            except Exception as e:
+                logger.debug(f"Traditional static analysis not available: {e}")
+                # Return proactive scanner results even if mypy/pylint fail
+                if proactive_issues:
+                    logger.warning(f"Proactive scanner found {len(proactive_issues)} issues that self-healing should fix!")
+                    # Create a simple result structure
+                    from .static_analysis_sensor import StaticAnalysisSensorData, StaticAnalysisIssue
+                    result = StaticAnalysisSensorData()
+                    for issue in proactive_issues:
+                        result.issues.append(StaticAnalysisIssue(
+                            tool='proactive_scanner',
+                            file_path=issue.file_path,
+                            line_number=issue.line_number,
+                            issue_type=issue.issue_type,
+                            severity=issue.severity,
+                            message=issue.message,
+                            fix_suggestion=issue.suggested_fix
+                        ))
+                        if issue.severity == 'critical':
+                            result.critical_issues += 1
+                        elif issue.severity == 'high':
+                            result.high_issues += 1
+                        elif issue.severity == 'medium':
+                            result.medium_issues += 1
+                        else:
+                            result.low_issues += 1
+                    result.total_issues = len(proactive_issues)
+                    result.analysis_passed = result.critical_issues == 0
+                    return result
         except Exception as e:
             logger.error(f"Failed to collect static analysis data: {e}")
             return None

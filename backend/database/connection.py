@@ -56,6 +56,7 @@ class DatabaseConnection:
         """
         instance = cls()
         if instance._engine is None:
+            # Don't try to reconnect or check health here - just fail fast
             raise RuntimeError(
                 "Database not initialized. Call DatabaseConnection.initialize() first."
             )
@@ -139,10 +140,18 @@ class DatabaseConnection:
         Returns:
             bool: True if connection is healthy, False otherwise
         """
+        instance = cls()
+        
+        # Quick check: engine must exist
+        if instance._engine is None:
+            logger.warning("Database health check: Engine not initialized")
+            return False
+        
+        # Try to execute a simple query
         try:
-            engine = cls.get_engine()
-            with engine.connect() as connection:
+            with instance._engine.connect() as connection:
                 connection.execute(text("SELECT 1"))
+                connection.commit()
             return True
         except Exception as e:
             logger.error(f"Database health check failed: {e}")

@@ -22,10 +22,13 @@ import socket
 from pathlib import Path
 from typing import Dict, Optional, List, Any
 from dataclasses import dataclass, field
+import threading
 
 from .version import VersionManager, VersionMismatchError
 from .health_checker import HealthChecker, HealthCheckResult
 from .folder_validator import FolderValidator
+from .sqlite_logger import SQLiteLogHandler, LauncherLogCapture
+from .nlp_error_processor import get_nlp_error_processor, NLPErrorProcessor
 
 # Configure logging
 logging.basicConfig(
@@ -84,6 +87,25 @@ class GraceLauncher:
         # Process management
         self.processes: List[ProcessInfo] = []
         self._shutdown_requested = False
+        
+        # Setup SQLite logging
+        logs_dir = self.root_path / "logs"
+        logs_dir.mkdir(exist_ok=True)
+        db_path = logs_dir / "launcher_log.db"
+        self.log_capture = LauncherLogCapture(db_path=db_path)
+        
+        # Add SQLite handler to logger
+        sqlite_handler = SQLiteLogHandler(db_path=db_path, genesis_key=self.log_capture.genesis_key)
+        sqlite_handler.setLevel(logging.INFO)
+        logger.addHandler(sqlite_handler)
+        
+        # Setup NLP error processor (will use LLM if available, otherwise rule-based)
+        try:
+            backend_url = f"http://localhost:{self.backend_port}"
+            self.nlp_processor = get_nlp_error_processor(use_llm=True, backend_url=backend_url)
+        except Exception as e:
+            logger.warning(f"Could not initialize NLP error processor: {e}")
+            self.nlp_processor = None
         
         # Components
         self.version_manager = VersionManager()
@@ -170,7 +192,7 @@ class GraceLauncher:
                 cwd=str(cwd_path),
                 env=env,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.PIPE,  # Capture stderr separately
                 text=True,
                 bufsize=1
             )
@@ -186,10 +208,17 @@ class GraceLauncher:
             # Store process object for monitoring
             process_info.process = process  # type: ignore
             
+            # Capture both stdout and stderr to SQLite and echo to console
+            if process.stdout:
+                self.log_capture.capture_stream(process.stdout, stream_name="backend-stdout", echo=True)
+            if process.stderr:
+                self.log_capture.capture_stream(process.stderr, stream_name="backend-stderr", echo=True)
+            
             self.processes.append(process_info)
             
             logger.info(f"✓ Backend started via startup script (PID: {process.pid})")
             logger.info("Waiting for backend to initialize (this may take 30-120 seconds)...")
+            logger.info("(Backend startup output will be shown below)")
             
             return process_info
             
@@ -248,11 +277,29 @@ class GraceLauncher:
                     except:
                         error_output = "Could not capture process output"
                     
-                    raise RuntimeError(
+                    # Process error through NLP
+                    error_msg = (
                         f"Backend process died during startup (exit code: {process.returncode})\n"
                         f"Last output:\n{error_output}\n"
                         f"Check backend logs for detailed error messages."
                     )
+                    
+                    if self.nlp_processor:
+                        try:
+                            error_info = self.nlp_processor.process_error(
+                                error=RuntimeError(error_msg),
+                                context={
+                                    "process_name": "backend",
+                                    "exit_code": process.returncode,
+                                    "last_output": error_output[:500]
+                                }
+                            )
+                            # Include NLP explanation in error
+                            error_msg = f"{error_info['nlp_explanation']}\n\n{error_msg}"
+                        except Exception:
+                            pass  # Fall back to original error
+                    
+                    raise RuntimeError(error_msg)
             
             # First check if port is open (simpler check)
             port_open = is_port_open("localhost", self.backend_port)
@@ -466,7 +513,47 @@ class GraceLauncher:
             logger.error("=" * 60)
             logger.error("❌ LAUNCH FAILED")
             logger.error("=" * 60)
-            logger.error(f"Error: {str(e)}")
+            
+            # Process error through NLP for user-friendly explanation
+            if self.nlp_processor:
+                try:
+                    error_info = self.nlp_processor.process_error(
+                        error=e,
+                        context={
+                            "root_path": str(self.root_path),
+                            "backend_port": self.backend_port,
+                            "processes": [p.name for p in self.processes]
+                        }
+                    )
+                    
+                    # Display NLP explanation
+                    logger.error("")
+                    logger.error("📝 What Happened:")
+                    logger.error(f"   {error_info.get('nlp_explanation', str(e))}")
+                    logger.error("")
+                    
+                    solutions = error_info.get('suggested_solutions', [])
+                    if solutions:
+                        logger.error("💡 Suggested Solutions:")
+                        for i, solution in enumerate(solutions, 1):
+                            logger.error(f"   {i}. {solution}")
+                        logger.error("")
+                    
+                    logger.error(f"🔍 Technical Details:")
+                    logger.error(f"   Error Type: {error_info.get('error_type', type(e).__name__)}")
+                    logger.error(f"   Original Error: {error_info.get('original_error', str(e))}")
+                    logger.error(f"   Severity: {error_info.get('severity', 'medium').upper()}")
+                    logger.error("")
+                    
+                except Exception as nlp_error:
+                    # If NLP processing fails, just show the original error
+                    logger.warning(f"Could not process error through NLP: {nlp_error}")
+                    logger.error(f"Error: {str(e)}")
+                    logger.error("")
+            else:
+                logger.error(f"Error: {str(e)}")
+                logger.error("")
+            
             logger.error("")
             logger.error("Shutting down started processes...")
             self.shutdown()
@@ -481,25 +568,56 @@ class GraceLauncher:
         
         for process_info in self.processes:
             try:
-                # Try graceful shutdown first
-                os.kill(process_info.pid, signal.SIGTERM)
-                
-                # Wait up to 5 seconds
-                for _ in range(5):
-                    try:
-                        os.waitpid(process_info.pid, os.WNOHANG)
-                        break
-                    except ChildProcessError:
-                        break
-                    time.sleep(1)
-                
-                # Force kill if still running
-                try:
-                    os.kill(process_info.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass  # Already dead
-                
-                logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
+                # Use subprocess methods for cross-platform compatibility
+                if process_info.process:
+                    # Try graceful shutdown first
+                    process_info.process.terminate()
+                    
+                    # Wait up to 5 seconds for process to exit
+                    for _ in range(5):
+                        if process_info.process.poll() is not None:
+                            # Process has exited
+                            break
+                        time.sleep(1)
+                    
+                    # Force kill if still running
+                    if process_info.process.poll() is None:
+                        process_info.process.kill()
+                        # Give it a moment to die
+                        time.sleep(0.5)
+                    
+                    logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
+                else:
+                    # Fallback: use os.kill if process object not available
+                    if sys.platform != "win32":
+                        # Unix: use signals
+                        os.kill(process_info.pid, signal.SIGTERM)
+                        # Wait up to 5 seconds
+                        for _ in range(5):
+                            try:
+                                pid, _ = os.waitpid(process_info.pid, os.WNOHANG)
+                                if pid == process_info.pid:
+                                    break
+                            except ChildProcessError:
+                                break
+                            time.sleep(1)
+                        # Force kill if still running
+                        try:
+                            os.kill(process_info.pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass  # Already dead
+                    else:
+                        # Windows: use taskkill
+                        try:
+                            subprocess.run(
+                                ["taskkill", "/F", "/PID", str(process_info.pid)],
+                                capture_output=True,
+                                timeout=5
+                            )
+                        except Exception:
+                            pass  # Process may already be dead
+                    
+                    logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
                 
             except ProcessLookupError:
                 logger.warning(f"Process {process_info.name} (PID: {process_info.pid}) not found")
@@ -508,6 +626,10 @@ class GraceLauncher:
         
         self.processes.clear()
         logger.info("✓ All processes stopped")
+        
+        # Close log capture
+        if hasattr(self, 'log_capture'):
+            self.log_capture.close()
     
     def run(self):
         """

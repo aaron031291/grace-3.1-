@@ -81,15 +81,14 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
         }),
       }).catch((err) => console.warn("Failed to save user message:", err));
 
-      const response = await fetch(`${API_BASE}/chat/directory-prompt`, {
+      // Use full LLM orchestrator with world model integration
+      const response = await fetch(`${API_BASE}/chat/directory-prompt-orchestrator`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: userMessage,
           directory_path: currentPath || "",
-          temperature: 0.7,
-          top_p: 0.9,
-          top_k: 40,
+          chat_id: chatId,
         }),
       });
 
@@ -132,7 +131,12 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
       const assistantMessage = {
         id: result.message_id || Date.now() + Math.random(),
         role: "assistant",
-        content: result.message,
+        content: result.response || result.message,
+        genesis_key_id: result.genesis_key_id,
+        trust_score: result.trust_score,
+        confidence_score: result.confidence_score,
+        model_used: result.model_used,
+        world_model_integrated: result.world_model_integrated,
         sources: result.sources || [],
       };
 
@@ -220,6 +224,45 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
                 </div>
                 <div className="message-content">
                   <p>{msg.content}</p>
+                  {/* LLM Orchestrator Metadata */}
+                  {msg.role === "assistant" && (msg.genesis_key_id || msg.trust_score || msg.model_used) && (
+                    <div className="message-orchestrator-metadata">
+                      {msg.genesis_key_id && (
+                        <div className="metadata-item">
+                          <span className="metadata-label">🔑 Genesis Key:</span>
+                          <span className="metadata-value">{msg.genesis_key_id}</span>
+                        </div>
+                      )}
+                      {msg.trust_score !== undefined && (
+                        <div className="metadata-item">
+                          <span className="metadata-label">✓ Trust:</span>
+                          <span className={`metadata-value ${msg.trust_score >= 0.8 ? 'high-trust' : msg.trust_score >= 0.6 ? 'medium-trust' : 'low-trust'}`}>
+                            {(msg.trust_score * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                      )}
+                      {msg.confidence_score !== undefined && (
+                        <div className="metadata-item">
+                          <span className="metadata-label">🎯 Confidence:</span>
+                          <span className="metadata-value">
+                            {(msg.confidence_score * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                      )}
+                      {msg.model_used && (
+                        <div className="metadata-item">
+                          <span className="metadata-label">🤖 Model:</span>
+                          <span className="metadata-value">{msg.model_used}</span>
+                        </div>
+                      )}
+                      {msg.world_model_integrated && (
+                        <div className="metadata-item">
+                          <span className="metadata-label">🌐 World Model:</span>
+                          <span className="metadata-value">✓ Integrated</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="message-sources">
                       <span className="sources-label">Sources:</span>

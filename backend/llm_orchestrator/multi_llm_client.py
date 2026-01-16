@@ -297,11 +297,19 @@ class MultiLLMClient:
     Routes requests to appropriate models based on task type.
     """
 
-    # Model registry with recommended configurations
+    # Model registry optimized for GRACE Memory System
+    # These models work best WITH memory system (RAG, code intelligence, learning memory)
+    # Memory system provides context, reducing need for larger models
+    # Updated: 2026-01-15
     MODEL_REGISTRY = {
-        "deepseek-coder-33b": LLMModel(
-            name="DeepSeek Coder 33B",
-            model_id="deepseek-coder:33b-instruct",
+        # ===================================================================
+        # TIER 1: CORE INTELLIGENCE MODELS (Optimized for Memory System)
+        # ===================================================================
+        
+        # Best Code Intelligence - Memory system provides code context automatically
+        "deepseek-coder-v2-16b": LLMModel(
+            name="DeepSeek Coder V2 16B",
+            model_id="deepseek-coder-v2:16b-instruct",
             capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
             context_window=16384,
             recommended_tasks=[
@@ -310,42 +318,24 @@ class MultiLLMClient:
                 TaskType.CODE_EXPLANATION,
                 TaskType.CODE_REVIEW
             ],
-            priority=10
+            priority=12  # Highest - Best code model, memory system provides context
         ),
-        "deepseek-coder-6.7b": LLMModel(
-            name="DeepSeek Coder 6.7B",
-            model_id="deepseek-coder:6.7b-instruct",
-            capabilities=[ModelCapability.CODE],
-            context_window=16384,
+        
+        # Best General Intelligence - Memory system fills knowledge gaps
+        "qwen2.5-32b": LLMModel(
+            name="Qwen 2.5 32B",
+            model_id="qwen2.5:32b-instruct",
+            capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
+            context_window=32768,  # Large context for RAG results
             recommended_tasks=[
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_DEBUGGING
+                TaskType.GENERAL,
+                TaskType.REASONING,
+                TaskType.PLANNING
             ],
-            priority=8
+            priority=11  # High - Sweet spot with memory system
         ),
-        "qwen2.5-coder-32b": LLMModel(
-            name="Qwen 2.5 Coder 32B",
-            model_id="qwen2.5-coder:32b-instruct",
-            capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_EXPLANATION,
-                TaskType.CODE_REVIEW
-            ],
-            priority=9
-        ),
-        "qwen2.5-coder-7b": LLMModel(
-            name="Qwen 2.5 Coder 7B",
-            model_id="qwen2.5-coder:7b-instruct",
-            capabilities=[ModelCapability.CODE],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.CODE_GENERATION,
-                TaskType.QUICK_QUERY
-            ],
-            priority=7
-        ),
+        
+        # Best Reasoning Intelligence - Still best for complex reasoning
         "deepseek-r1-70b": LLMModel(
             name="DeepSeek-R1 70B",
             model_id="deepseek-r1:70b",
@@ -355,74 +345,53 @@ class MultiLLMClient:
                 TaskType.REASONING,
                 TaskType.PLANNING
             ],
-            priority=10
+            priority=11  # High - Best reasoning, memory system enhances it
         ),
-        "deepseek-r1-7b": LLMModel(
-            name="DeepSeek-R1 7B",
-            model_id="deepseek-r1:7b",
-            capabilities=[ModelCapability.REASONING],
+        
+        # ===================================================================
+        # TIER 2: FAST INTELLIGENCE MODELS (Memory System Makes Them Smart)
+        # ===================================================================
+        
+        # Fast Code - Memory system provides code context
+        "codeqwen1.5-7b": LLMModel(
+            name="CodeQwen 1.5 7B",
+            model_id="codeqwen1.5:7b",
+            capabilities=[ModelCapability.CODE, ModelCapability.SPEED],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_DEBUGGING,
+                TaskType.QUICK_QUERY
+            ],
+            priority=10  # High - Fast, memory system makes it smart
+        ),
+        
+        # Fast Reasoning - Memory system provides examples
+        "deepseek-r1-distill-1.3b": LLMModel(
+            name="DeepSeek-R1 Distill 1.3B",
+            model_id="deepseek-r1-distill:1.3b",
+            capabilities=[ModelCapability.REASONING, ModelCapability.SPEED],
             context_window=16384,
             recommended_tasks=[
                 TaskType.REASONING,
-                TaskType.VALIDATION
+                TaskType.VALIDATION,
+                TaskType.QUICK_QUERY
             ],
-            priority=7
+            priority=9  # High - Fast reasoning, memory system enhances
         ),
-        "qwen2.5-72b": LLMModel(
-            name="Qwen 2.5 72B",
-            model_id="qwen2.5:72b-instruct",
-            capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.REASONING,
-                TaskType.PLANNING,
-                TaskType.GENERAL
-            ],
-            priority=9
-        ),
-        "mistral-small": LLMModel(
-            name="Mistral Small",
-            model_id="mistral-small:22b",
-            capabilities=[ModelCapability.SPEED, ModelCapability.GENERAL],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.QUICK_QUERY,
-                TaskType.VALIDATION
-            ],
-            priority=8
-        ),
-        "llama3.3-70b": LLMModel(
-            name="Llama 3.3 70B",
-            model_id="llama3.3:70b-instruct",
+        
+        # Efficient General - MoE architecture + memory system
+        "mixtral-8x7b": LLMModel(
+            name="Mixtral 8x7B",
+            model_id="mixtral:8x7b",
             capabilities=[ModelCapability.GENERAL, ModelCapability.REASONING],
-            context_window=8192,
+            context_window=32768,
             recommended_tasks=[
                 TaskType.GENERAL,
-                TaskType.REASONING
+                TaskType.REASONING,
+                TaskType.PLANNING
             ],
-            priority=8
-        ),
-        "gemma2-27b": LLMModel(
-            name="Gemma 2 27B",
-            model_id="gemma2:27b-instruct",
-            capabilities=[ModelCapability.GENERAL],
-            context_window=8192,
-            recommended_tasks=[
-                TaskType.VALIDATION,
-                TaskType.GENERAL
-            ],
-            priority=7
-        ),
-        "mistral-7b": LLMModel(
-            name="Mistral 7B",
-            model_id="mistral:7b",
-            capabilities=[ModelCapability.GENERAL],
-            context_window=8192,
-            recommended_tasks=[
-                TaskType.QUICK_QUERY,
-                TaskType.GENERAL
-            ],
-            priority=6
+            priority=10  # High - Efficient MoE, memory system provides context
         ),
     }
 

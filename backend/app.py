@@ -39,11 +39,13 @@ from api.training import router as training_router
 from api.autonomous_learning import router as autonomous_learning_router
 from api.master_integration import router as master_router
 from api.llm_orchestration import router as llm_orchestration_router
+from api.chat_llm_integration import get_chat_llm_integration, ChatLLMIntegration
 from api.ingestion_integration import router as ingestion_integration_router  # Complete autonomous cycle
 from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
 from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
 from api.notion import router as notion_router  # Notion task management system
 from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
+from api.multimodal_api import router as multimodal_router  # Multimodal API - Vision, Voice, Audio, Video with Genesis Keys
 from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
 from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
 from api.codebase_api import router as codebase_router  # Codebase Browser - file browsing, search, analysis
@@ -240,159 +242,188 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Database initialization error: {e}")
         raise
     
-    # ==================== Start Self-Healing FIRST ====================
-    # Initialize self-healing early so it can fix runtime/startup issues
-    try:
-        import time
-        import threading
-        from pathlib import Path
-        from database.session import get_db
-        from genesis.autonomous_triggers import get_genesis_trigger_pipeline
-        from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
-        from cognitive.mirror_self_modeling import get_mirror_system
-        
-        print("\n[AUTONOMOUS-HEALING] Initializing self-healing system (BOOT FIRST)...", flush=True)
-        
-        # Get session for healing system
-        session = next(get_db())
-        # Try to resolve knowledge_base path (could be in root or backend/)
-        knowledge_base_path = Path("knowledge_base")
-        if not knowledge_base_path.exists():
-            knowledge_base_path = Path("backend/knowledge_base")
-        knowledge_base_path = knowledge_base_path.resolve()
-        
-        # Initialize healing system FIRST
-        healing_system = get_autonomous_healing(
-            session=session,
-            trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-            enable_learning=True
-        )
-        
-        # Initialize trigger pipeline (for error-triggered healing)
-        trigger_pipeline = get_genesis_trigger_pipeline(
-            session=session,
-            knowledge_base_path=knowledge_base_path,
-            orchestrator=None
-        )
-        
-        # Initialize mirror system
-        mirror_system = get_mirror_system(
-            session=session,
-            observation_window_hours=24,
-            min_pattern_occurrences=3
-        )
-        
-        # Run initial health check immediately to catch startup issues
-        print("[AUTONOMOUS-HEALING] Running initial health check...", flush=True)
+    # ==================== Start Self-Healing in Background ====================
+    # Initialize self-healing in background so it doesn't block server startup
+    def initialize_self_healing_background():
+        """Initialize self-healing system in background thread."""
         try:
-            initial_check = healing_system.run_monitoring_cycle()
-            print(
-                f"[AUTONOMOUS-HEALING] Initial check: Status={initial_check['health_status']}, "
-                f"Anomalies={initial_check['anomalies_detected']}, "
-                f"Actions executed={initial_check['actions_executed']}",
-                flush=True
+            import time
+            from pathlib import Path
+            from database.session import get_db
+            from genesis.autonomous_triggers import get_genesis_trigger_pipeline
+            from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+            from cognitive.mirror_self_modeling import get_mirror_system
+            
+            print("\n[AUTONOMOUS-HEALING] Initializing self-healing system (background)...", flush=True)
+            
+            # Get session for healing system
+            session = next(get_db())
+            # Try to resolve knowledge_base path (could be in root or backend/)
+            knowledge_base_path = Path("knowledge_base")
+            if not knowledge_base_path.exists():
+                knowledge_base_path = Path("backend/knowledge_base")
+            knowledge_base_path = knowledge_base_path.resolve()
+            
+            # Initialize healing system FIRST
+            healing_system = get_autonomous_healing(
+                session=session,
+                trust_level=TrustLevel.MEDIUM_RISK_AUTO,
+                enable_learning=True
             )
-            if initial_check['actions_executed'] > 0:
-                print("[AUTONOMOUS-HEALING] ✓ Startup issues detected and healed!", flush=True)
-        except Exception as check_error:
-            print(f"[AUTONOMOUS-HEALING] [WARN] Initial health check error: {check_error}", flush=True)
-        
-        # Background health monitoring thread (runs every 5 minutes)
-        def health_monitor_background():
-            """Run health checks every 5 minutes in background."""
-            while True:
-                try:
-                    time.sleep(300)  # Check every 5 minutes
-                    if healing_system:
-                        cycle_result = healing_system.run_monitoring_cycle()
-                        print(
-                            f"[HEALTH] Status: {cycle_result['health_status']}, "
-                            f"Anomalies: {cycle_result['anomalies_detected']}, "
-                            f"Actions executed: {cycle_result['actions_executed']}",
-                            flush=True
-                        )
-                except Exception as e:
-                    print(f"[HEALTH-MONITOR] Error: {e}", flush=True)
-                    time.sleep(60)
-        
-        # Background mirror analysis thread (runs every 10 minutes)
-        def mirror_analysis_background():
-            """Run mirror self-modeling every 10 minutes in background."""
-            while True:
-                try:
-                    time.sleep(600)  # Analyze every 10 minutes
-                    if mirror_system:
-                        self_model = mirror_system.build_self_model()
-                        print(
-                            f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
-                            f"Suggestions: {len(self_model['improvement_suggestions'])}, "
-                            f"Self-awareness: {self_model['self_awareness_score']:.2f}",
-                            flush=True
-                        )
-                except Exception as e:
-                    print(f"[MIRROR-ANALYSIS] Error: {e}", flush=True)
-                    time.sleep(60)
-        
-        # Start background threads
-        health_thread = threading.Thread(target=health_monitor_background, daemon=True)
-        health_thread.start()
-        
-        mirror_thread = threading.Thread(target=mirror_analysis_background, daemon=True)
-        mirror_thread.start()
-        
-        print("[AUTONOMOUS-HEALING] [OK] Self-healing system active (booted first)", flush=True)
-        print("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
-        print("  - Connection issues → CONNECTION_RESET", flush=True)
-        print("  - Process errors → PROCESS_RESTART", flush=True)
-        print("  - Service failures → SERVICE_RESTART", flush=True)
-        print("  - Error spikes → Automatic healing", flush=True)
-        print("  - Performance issues → CACHE_FLUSH / BUFFER_CLEAR", flush=True)
-        print("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
-        
-    except Exception as e:
-        print(f"[AUTONOMOUS-HEALING] [WARN] Could not start self-healing: {e}", flush=True)
-        import traceback
-        traceback.print_exc()
+            
+            # Initialize trigger pipeline (for error-triggered healing)
+            trigger_pipeline = get_genesis_trigger_pipeline(
+                session=session,
+                knowledge_base_path=knowledge_base_path,
+                orchestrator=None
+            )
+            
+            # Initialize mirror system
+            mirror_system = get_mirror_system(
+                session=session,
+                observation_window_hours=24,
+                min_pattern_occurrences=3
+            )
+            
+            # Run initial health check immediately to catch startup issues
+            print("[AUTONOMOUS-HEALING] Running initial health check...", flush=True)
+            try:
+                initial_check = healing_system.run_monitoring_cycle()
+                print(
+                    f"[AUTONOMOUS-HEALING] Initial check: Status={initial_check['health_status']}, "
+                    f"Anomalies={initial_check['anomalies_detected']}, "
+                    f"Actions executed={initial_check['actions_executed']}",
+                    flush=True
+                )
+                if initial_check['actions_executed'] > 0:
+                    print("[AUTONOMOUS-HEALING] ✓ Startup issues detected and healed!", flush=True)
+            except Exception as check_error:
+                print(f"[AUTONOMOUS-HEALING] [WARN] Initial health check error: {check_error}", flush=True)
+            
+            # Background health monitoring thread (runs every 5 minutes)
+            def health_monitor_background():
+                """Run health checks every 5 minutes in background."""
+                while True:
+                    try:
+                        time.sleep(300)  # Check every 5 minutes
+                        if healing_system:
+                            cycle_result = healing_system.run_monitoring_cycle()
+                            print(
+                                f"[HEALTH] Status: {cycle_result['health_status']}, "
+                                f"Anomalies: {cycle_result['anomalies_detected']}, "
+                                f"Actions executed: {cycle_result['actions_executed']}",
+                                flush=True
+                            )
+                    except Exception as e:
+                        print(f"[HEALTH-MONITOR] Error: {e}", flush=True)
+                        time.sleep(60)
+            
+            # Background mirror analysis thread (runs every 10 minutes)
+            def mirror_analysis_background():
+                """Run mirror self-modeling every 10 minutes in background."""
+                while True:
+                    try:
+                        time.sleep(600)  # Analyze every 10 minutes
+                        if mirror_system:
+                            self_model = mirror_system.build_self_model()
+                            print(
+                                f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
+                                f"Suggestions: {len(self_model['improvement_suggestions'])}, "
+                                f"Self-awareness: {self_model['self_awareness_score']:.2f}",
+                                flush=True
+                            )
+                    except Exception as e:
+                        print(f"[MIRROR-ANALYSIS] Error: {e}", flush=True)
+                        time.sleep(60)
+            
+            # Start background threads
+            health_thread = threading.Thread(target=health_monitor_background, daemon=True)
+            health_thread.start()
+            
+            mirror_thread = threading.Thread(target=mirror_analysis_background, daemon=True)
+            mirror_thread.start()
+            
+            print("[AUTONOMOUS-HEALING] [OK] Self-healing system active", flush=True)
+            print("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
+            print("  - Connection issues -> CONNECTION_RESET", flush=True)
+            print("  - Process errors -> PROCESS_RESTART", flush=True)
+            print("  - Service failures -> SERVICE_RESTART", flush=True)
+            print("  - Error spikes -> Automatic healing", flush=True)
+            print("  - Performance issues -> CACHE_FLUSH / BUFFER_CLEAR", flush=True)
+            print("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
+            
+        except Exception as e:
+            print(f"[AUTONOMOUS-HEALING] [WARN] Could not start self-healing: {e}", flush=True)
+            import traceback
+            traceback.print_exc()
     
-    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
-    try:
-        from embedding import get_embedding_model
-        print("\n[STARTUP] Pre-initializing embedding model...")
-        embedding_model = get_embedding_model()
-        print("[STARTUP] [OK] Embedding model loaded and ready\n")
-    except Exception as e:
-        print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
-        print("[STARTUP] [WARN] Model will be loaded on first use\n")
+    # Start self-healing in background (non-blocking)
+    healing_thread = threading.Thread(target=initialize_self_healing_background, daemon=True)
+    healing_thread.start()
+    print("[AUTONOMOUS-HEALING] Self-healing initialization started in background")
+    
+    # Pre-initialize embedding model in background (non-blocking)
+    # This allows server to start accepting connections faster
+    def load_embedding_model_background():
+        """Load embedding model in background thread."""
+        try:
+            from embedding import get_embedding_model
+            print("\n[STARTUP] Pre-initializing embedding model (background)...")
+            embedding_model = get_embedding_model()
+            print("[STARTUP] [OK] Embedding model loaded and ready\n")
+        except Exception as e:
+            print(f"[STARTUP] [INFO] Embedding model not pre-loaded: {e}")
+            print("[STARTUP] [INFO] Model will be loaded on first use\n")
+    
+    embedding_thread = threading.Thread(target=load_embedding_model_background, daemon=True)
+    embedding_thread.start()
+    print("[STARTUP] Embedding model loading started in background")
 
     # ==================== Initialize TimeSense Engine ====================
     # Grace's empirical time calibration - gives her a "clock" grounded in physics
-    try:
-        from timesense.engine import get_timesense_engine
-        print("\n[TIMESENSE] Initializing Time & Cost Model...")
+    # Also moved to background to speed up server startup
+    def initialize_timesense_background():
+        """Initialize TimeSense in background thread."""
+        try:
+            from timesense.engine import get_timesense_engine
+            print("\n[TIMESENSE] Initializing Time & Cost Model (background)...")
 
-        timesense_engine = get_timesense_engine(auto_calibrate=True)
+            timesense_engine = get_timesense_engine(auto_calibrate=True)
 
-        # Run quick calibration at startup
-        initialized = timesense_engine.initialize_sync(quick_calibration=True)
+            # Run quick calibration at startup
+            initialized = timesense_engine.initialize_sync(quick_calibration=True)
 
-        if initialized:
-            print("[TIMESENSE] [OK] TimeSense engine ready")
-            print(f"[TIMESENSE] Calibrated profiles: {timesense_engine.stats.stable_profiles}")
-            print(f"[TIMESENSE] Average confidence: {timesense_engine.stats.average_confidence:.2f}")
-            print("[TIMESENSE] Grace now has empirical time awareness:")
-            print("  - Disk I/O throughput calibrated")
-            print("  - CPU compute benchmarked")
-            print("  - Can predict task durations with uncertainty bounds")
-            print("[TIMESENSE] Time predictions: p50/p90/p95/p99 latencies available\n")
-        else:
-            print("[TIMESENSE] [WARN] Engine initialized but calibration incomplete\n")
-    except Exception as e:
-        print(f"[TIMESENSE] [WARN] Could not initialize TimeSense: {e}")
-        import traceback
-        traceback.print_exc()
-        print("[TIMESENSE] [WARN] Time predictions will use default estimates\n")
+            if initialized:
+                print("[TIMESENSE] [OK] TimeSense engine ready")
+                print(f"[TIMESENSE] Calibrated profiles: {timesense_engine.stats.stable_profiles}")
+                print(f"[TIMESENSE] Average confidence: {timesense_engine.stats.average_confidence:.2f}")
+                print("[TIMESENSE] Grace now has empirical time awareness:")
+                print("  - Disk I/O throughput calibrated")
+                print("  - CPU compute benchmarked")
+                print("  - Can predict task durations with uncertainty bounds")
+                print("[TIMESENSE] Time predictions: p50/p90/p95/p99 latencies available\n")
+            else:
+                print("[TIMESENSE] [WARN] Engine initialized but calibration incomplete\n")
+        except Exception as e:
+            print(f"[TIMESENSE] [WARN] Could not initialize TimeSense: {e}")
+            import traceback
+            traceback.print_exc()
+            print("[TIMESENSE] [WARN] Time predictions will use default estimates\n")
+    
+    timesense_thread = threading.Thread(target=initialize_timesense_background, daemon=True)
+    timesense_thread.start()
+    print("[TIMESENSE] TimeSense initialization started in background")
 
-    # Check Ollama
+    # CRITICAL: Yield FIRST to let server start listening
+    # Move non-critical checks to after server is available
+    print("[OK] Database initialized, starting server...")
+    yield  # ← SERVER STARTS LISTENING HERE
+    
+    # Non-critical initialization happens AFTER server is running
+    # This way server can accept connections even if these fail
+    print("\n[STARTUP] Continuing background initialization...")
+    
+    # Check Ollama (non-blocking check)
     try:
         client = get_ollama_client()
         if client.is_running():
@@ -403,7 +434,7 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Could not connect to Ollama: {e}")
     
-    # Check Qdrant
+    # Check Qdrant (non-blocking check)
     try:
         qdrant = get_qdrant_client()
         if qdrant.is_connected():
@@ -418,7 +449,6 @@ async def lifespan(app: FastAPI):
     # Start file system watcher for automatic version control
     try:
         from genesis.file_watcher import start_watching_workspace
-        import threading
 
         def run_file_watcher():
             """Run file watcher in background thread"""
@@ -435,18 +465,21 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Could not start file watcher: {e}")
 
     # ==================== Initialize ML Intelligence ====================
-    # Initialize ML Intelligence orchestrator
-    try:
-        from api.ml_intelligence_api import get_orchestrator
-        orchestrator = get_orchestrator()
-        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
-    except Exception as e:
-        print(f"[WARN] ML Intelligence not available: {e}")
+    # Initialize ML Intelligence orchestrator (moved after yield - non-critical)
+    def init_ml_intelligence():
+        try:
+            from api.ml_intelligence_api import get_orchestrator
+            orchestrator = get_orchestrator()
+            print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
+        except Exception as e:
+            print(f"[WARN] ML Intelligence not available: {e}")
+    
+    ml_thread = threading.Thread(target=init_ml_intelligence, daemon=True)
+    ml_thread.start()
 
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
-    import threading
     
     auto_ingest_task = None
     
@@ -486,7 +519,10 @@ async def lifespan(app: FastAPI):
             # Initialize git if needed
             file_manager.git_tracker.initialize_git()
             
-            # Do initial scan on startup
+            # Do initial scan on startup (defer to avoid blocking server start)
+            print("[AUTO-INGEST] Will run initial scan after server starts...", flush=True)
+            time.sleep(5)  # Wait for server to be fully up
+            
             print("[AUTO-INGEST] Running initial scan of knowledge base...", flush=True)
             max_retries = 3
             retry_count = 0
@@ -503,13 +539,14 @@ async def lifespan(app: FastAPI):
                         time.sleep(2)
                     else:
                         print(f"[AUTO-INGEST] [FAIL] Initial scan failed after {max_retries} attempts: {e}", flush=True)
-                        raise
             
             if results:
                 print(f"[AUTO-INGEST] Initial scan found {len(results)} changes:", flush=True)
-                for result in results:
+                for result in results[:10]:  # Only show first 10 to avoid spam
                     status = "[OK]" if result.success else "[FAIL]"
                     print(f"  {status} {result.change_type}: {result.filepath}", flush=True)
+                if len(results) > 10:
+                    print(f"  ... and {len(results) - 10} more changes", flush=True)
             else:
                 print("[AUTO-INGEST] No changes detected in initial scan", flush=True)
             
@@ -529,23 +566,33 @@ async def lifespan(app: FastAPI):
         print(f"[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: {e}")
 
     # ==================== Start Continuous Learning Orchestrator ====================
-    # Connect sandbox lab to continuous training data
-    try:
-        from cognitive.continuous_learning_orchestrator import start_continuous_learning
-        print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
-        orchestrator = start_continuous_learning()
-        print("[CONTINUOUS_LEARNING] [OK] Continuous learning activated", flush=True)
-        print("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
-        print("  - Ingest new data from knowledge_base", flush=True)
-        print("  - Learn autonomously from content", flush=True)
-        print("  - Mirror observes and proposes experiments", flush=True)
-        print("  - Run sandbox experiments and trials", flush=True)
-        print("  - Request approval for validated improvements", flush=True)
-        print("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
-    except Exception as e:
-        print(f"[CONTINUOUS_LEARNING] [WARN] Could not start continuous learning: {e}", flush=True)
+    # Connect sandbox lab to continuous training data (moved after yield - non-critical)
+    def init_continuous_learning():
+        try:
+            from cognitive.continuous_learning_orchestrator import start_continuous_learning
+            print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
+            orchestrator = start_continuous_learning()
+            print("[CONTINUOUS_LEARNING] [OK] Continuous learning activated", flush=True)
+            print("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
+            print("  - Ingest new data from knowledge_base", flush=True)
+            print("  - Learn autonomously from content", flush=True)
+            print("  - Mirror observes and proposes experiments", flush=True)
+            print("  - Run sandbox experiments and trials", flush=True)
+            print("  - Request approval for validated improvements", flush=True)
+            print("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
+        except Exception as e:
+            print(f"[CONTINUOUS_LEARNING] [WARN] Could not start continuous learning: {e}", flush=True)
+    
+    continuous_learning_thread = threading.Thread(target=init_continuous_learning, daemon=True)
+    continuous_learning_thread.start()
 
-    yield
+    # Server is ready to accept connections
+    print("\n" + "="*60)
+    print("✓ GRACE API STARTUP COMPLETE")
+    print("="*60)
+    print("Server is ready to accept connections on http://0.0.0.0:8000")
+    print("Health check: http://localhost:8000/health/live")
+    print("="*60 + "\n")
     
     # Shutdown
     print("Grace API shutting down...")
@@ -602,11 +649,14 @@ app.include_router(training_router)
 app.include_router(master_router)  # Master integration - unified access to ALL systems
 app.include_router(autonomous_learning_router)
 app.include_router(llm_orchestration_router)
+from api.chat_orchestrator_endpoint import router as chat_orchestrator_router
+app.include_router(chat_orchestrator_router)  # Full LLM orchestrator for chats with world model integration
 app.include_router(ingestion_integration_router)  # Complete autonomous cycle with self-healing
 app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
 app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
 app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
 app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
+app.include_router(multimodal_router)  # Multimodal API - Vision, Voice, Audio, Video with Genesis Key tracking
 app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
 app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
 app.include_router(codebase_router)  # Codebase Browser - file browsing, code search, commit history, analysis
@@ -636,7 +686,22 @@ app.include_router(timesense_router)  # TimeSense - Time & Cost Model with physi
 app.add_middleware(GenesisKeyMiddleware)
 
 
-# ==================== Health Check Endpoint ====================
+# ==================== Health Check Endpoints ====================
+
+@app.get("/health/live", tags=["Health"])
+async def health_live():
+    """
+    Liveness check endpoint - indicates the process is running.
+    
+    This is a lightweight check used by the launcher to verify the backend
+    process has started and is accepting connections. It does not check
+    service health - use /health for that.
+    
+    Returns:
+        dict: Simple status indicating the process is alive
+    """
+    return {"status": "alive"}
+
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check():
@@ -655,8 +720,9 @@ async def health_check():
             models_available = len(models)
             status = "healthy"
         else:
+            # Ollama is optional - backend can function without it (just without chat)
             models_available = 0
-            status = "unhealthy"
+            status = "degraded"
         
         return HealthResponse(
             status=status,
@@ -664,8 +730,10 @@ async def health_check():
             models_available=models_available
         )
     except Exception as e:
+        # Backend is still functional even if Ollama check fails
+        # Return degraded instead of unhealthy
         return HealthResponse(
-            status="unhealthy",
+            status="degraded",
             ollama_running=False,
             models_available=0
         )
@@ -1690,7 +1758,7 @@ async def get_version():
         pass
     
     return {
-        "version": "0.1.0",  # Backend API version
+        "version": "1.0.0",  # Backend API version
         "protocol_version": "1.0",  # API protocol version
         "embeddings_version": embeddings_version,  # Embeddings service version
         "name": "Grace API"
