@@ -604,7 +604,7 @@ class SensorLayer:
                 (r'open\s*\([^)]*\+[^)]*\)', 'path_traversal', 'high',
                  'Potential path traversal via string concatenation', 'CWE-22'),
                 # Hardcoded secrets
-                (r'(password|secret|api_key|token)\s*=\s*["\'][^"\']+["\']', 'hardcoded_secret', 'high',
+                (r'(password|secret|api_key|token)\s*=\s*["\'][^"\']{8,}["\']', 'hardcoded_secret', 'high',
                  'Potential hardcoded secret', 'CWE-798'),
                 # Unsafe pickle
                 (r'pickle\.load', 'unsafe_deserialization', 'high',
@@ -614,6 +614,17 @@ class SensorLayer:
                  'Dangerous eval() usage', 'CWE-95'),
                 (r'\bexec\s*\(', 'code_injection', 'critical',
                  'Dangerous exec() usage', 'CWE-95'),
+                # PROACTIVE: Additional security patterns
+                (r'yaml\.load\s*\([^)]*\)(?!\s*,\s*Loader)', 'yaml_unsafe_load', 'high',
+                 'Unsafe YAML load without Loader specified', 'CWE-502'),
+                (r'subprocess\.call\s*\([^)]*shell\s*=\s*True', 'subprocess_injection', 'critical',
+                 'Subprocess with shell=True is vulnerable', 'CWE-78'),
+                (r'os\.system\s*\(', 'os_system_injection', 'critical',
+                 'os.system() is vulnerable to command injection', 'CWE-78'),
+                (r'__import__\s*\([^)]*\+', 'dynamic_import', 'high',
+                 'Dynamic import with user input', 'CWE-94'),
+                (r'getattr\s*\([^)]*,\s*[^"\']+\)', 'unsafe_getattr', 'medium',
+                 'Dynamic getattr may allow attribute access attacks', 'CWE-913'),
             ]
 
             # Configuration issue patterns
@@ -624,6 +635,13 @@ class SensorLayer:
                  'Debug mode enabled in configuration', None),
                 (r'CORS.*\*', 'cors_wildcard', 'medium',
                  'CORS allows all origins', None),
+                # PROACTIVE: Additional config patterns
+                (r'verify\s*=\s*False', 'ssl_verify_disabled', 'high',
+                 'SSL verification disabled - vulnerable to MITM', None),
+                (r'httponly\s*=\s*False', 'cookie_not_httponly', 'medium',
+                 'Cookie not HttpOnly - vulnerable to XSS', None),
+                (r'secure\s*=\s*False', 'cookie_not_secure', 'medium',
+                 'Cookie not Secure - transmitted over HTTP', None),
             ]
 
             # Database patterns
@@ -632,7 +650,45 @@ class SensorLayer:
                  'Token column using String instead of Integer', None),
                 (r'ForeignKey\([^)]*\)[^)]*(?!ondelete)', 'missing_cascade', 'low',
                  'Foreign key without ondelete specification', None),
+                # PROACTIVE: Additional DB patterns
+                (r'session\.execute\s*\(\s*["\']', 'raw_sql', 'medium',
+                 'Raw SQL execution - prefer ORM methods', None),
+                (r'\.query\s*\([^)]*\)\.filter\s*\([^)]*==\s*[^"\']+\)', 'dynamic_filter', 'low',
+                 'Dynamic filter value - ensure sanitization', None),
             ]
+
+            # PROACTIVE: Race condition patterns
+            race_condition_patterns = [
+                (r'asyncio\.create_task\s*\([^)]*\)(?!\s*#\s*await)', 'unawaited_task', 'medium',
+                 'Fire-and-forget async task may cause race conditions', 'CWE-362'),
+                (r'threading\.Thread\([^)]*daemon\s*=\s*True', 'daemon_thread', 'low',
+                 'Daemon thread may terminate unexpectedly', None),
+                (r'global\s+\w+\s*\n.*=', 'global_state_mutation', 'medium',
+                 'Global state mutation can cause race conditions', 'CWE-362'),
+                (r'@app\.(get|post|put|delete)\s*\([^)]*\)\s*\n(?:.*\n)*?.*(?<!async\s)def\s', 'sync_endpoint', 'low',
+                 'Synchronous endpoint may block event loop', None),
+            ]
+
+            # PROACTIVE: Memory and resource patterns
+            resource_patterns = [
+                (r'open\s*\([^)]*\)(?!\s*as\s)', 'file_not_closed', 'medium',
+                 'File opened without context manager - may leak', 'CWE-404'),
+                (r'while\s+True\s*:', 'infinite_loop', 'low',
+                 'Infinite loop detected - ensure exit condition', None),
+                (r'\.append\([^)]*\)\s*(?:.*\n)*?\s*while', 'list_growth_in_loop', 'low',
+                 'List growing in loop - potential memory issue', None),
+            ]
+
+            # PROACTIVE: API security patterns
+            api_security_patterns = [
+                (r'@app\.(get|post|put|delete)\s*\([^)]*\)\s*\n(?:.*\n)*?def\s+\w+\([^)]*\)(?!.*Depends)', 'missing_auth', 'high',
+                 'API endpoint may be missing authentication', None),
+                (r'response\.set_cookie\s*\([^)]*\)(?!.*httponly)', 'cookie_missing_flags', 'medium',
+                 'Cookie set without security flags', None),
+            ]
+
+            # Combine all proactive patterns
+            all_security_patterns = security_patterns + race_condition_patterns + resource_patterns + api_security_patterns
 
             # Scan Python files
             python_files = list(backend_dir.glob('**/*.py'))
@@ -650,8 +706,8 @@ class SensorLayer:
 
                     rel_path = str(py_file.relative_to(backend_dir))
 
-                    # Check security patterns
-                    for pattern, issue_type, severity, desc, cwe in security_patterns:
+                    # Check ALL security patterns (including proactive race/resource/API patterns)
+                    for pattern, issue_type, severity, desc, cwe in all_security_patterns:
                         for i, line in enumerate(lines, 1):
                             if re.search(pattern, line, re.IGNORECASE):
                                 issue = CodeQualityIssue(
