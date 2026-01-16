@@ -52,6 +52,8 @@ class ComponentType(Enum):
     AUTONOMOUS_LEARNING = "autonomous_learning"
     LLM_ORCHESTRATION = "llm_orchestration"
     COGNITIVE_ENGINE = "cognitive_engine"
+    TIMESENSE = "timesense"  # Time & Cost Model - empirical time calibration
+    DIAGNOSTIC_ENGINE = "diagnostic_engine"  # Diagnostic machine
 
 
 @dataclass
