@@ -538,9 +538,24 @@ class ActionRouter:
 
         # WHOLE-SYSTEM HEALING
 
-        # Code quality issues (security vulnerabilities)
+        # Code quality issues (security vulnerabilities, syntax errors, etc.)
         if sensor_data.code_quality and sensor_data.code_quality.critical_issues > 0:
             healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
+        
+        # Static analysis issues (syntax errors, import errors, missing files)
+        if sensor_data.static_analysis:
+            static_issues = sensor_data.static_analysis
+            critical_count = getattr(static_issues, 'critical_issues', 0)
+            high_count = getattr(static_issues, 'high_issues', 0)
+            if critical_count > 0 or high_count > 0:
+                healing_actions.append(HealingAction(
+                    healing_id=f"FIX-CODE-{self._action_counter}",
+                    name="Fix Code Issues",
+                    description=f"Fix {critical_count} critical and {high_count} high severity code issues",
+                    target_component="codebase",
+                    function="fix_code_issues",
+                    parameters={'fix_warnings': False}  # Only fix critical/high for now
+                ))
 
         # Infrastructure issues - unhealthy containers
         if sensor_data.infrastructure and sensor_data.infrastructure.containers_unhealthy > 0:
@@ -842,15 +857,22 @@ class ActionRouter:
 
     def _heal_code_issues(self, params: Dict) -> bool:
         """
-        Fix detected security vulnerabilities using the HealingExecutor.
+        Fix detected code issues using the HealingExecutor and AutomaticBugFixer.
 
         This connects to the CODE_FIX action in the healing layer to automatically
-        apply fixes for detected security issues like command injection, path traversal, etc.
+        apply fixes for:
+        - Syntax errors (indentation, missing colons, unclosed parentheses)
+        - Import errors (comment out broken imports)
+        - Missing files (comment out imports)
+        - Code quality issues (bare except, mutable defaults, print vs logger, 'is' vs '==')
+        - Security vulnerabilities (command injection, path traversal, etc.)
+        - Warnings (if fix_warnings=True)
         """
         try:
             healer = get_healing_executor()
 
-            # Get code quality data if available
+            # Get parameters
+            fix_warnings = params.get('fix_warnings', False)
             issue_type = params.get('issue_type', 'auto')
             file_path = params.get('file_path')
 
@@ -860,6 +882,7 @@ class ActionRouter:
                     'issue_type': issue_type,
                     'file_path': file_path,
                     'fix_type': 'auto',  # Auto-detect and fix
+                    'fix_warnings': fix_warnings,  # Also fix warnings if requested
                 }
             )
 
@@ -872,6 +895,8 @@ class ActionRouter:
 
         except Exception as e:
             logger.error(f"Code issue healing failed: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def _heal_clear_disk_space(self, params: Dict) -> bool:

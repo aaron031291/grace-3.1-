@@ -27,6 +27,10 @@ from librarian.rule_categorizer import RuleBasedCategorizer
 from librarian.ai_analyzer import AIContentAnalyzer
 from librarian.relationship_manager import RelationshipManager
 from librarian.approval_workflow import ApprovalWorkflow
+from librarian.file_organizer import FileOrganizer
+from librarian.file_naming_manager import FileNamingManager
+from librarian.file_creator import FileCreator
+from librarian.unified_retriever import UnifiedRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +97,12 @@ class LibrarianEngine:
         use_ai: bool = True,
         detect_relationships: bool = True,
         ai_confidence_threshold: float = 0.6,
-        similarity_threshold: float = 0.7
+        similarity_threshold: float = 0.7,
+        knowledge_base_path: str = "backend/knowledge_base",
+        auto_organize: bool = True,
+        auto_rename: bool = False,
+        organization_pattern: str = "category/type",
+        naming_convention: str = "sanitized"
     ):
         """
         Initialize LibrarianEngine with all components.
@@ -167,7 +176,32 @@ class LibrarianEngine:
                 vector_db_client
             )
 
-        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None})")
+        # File system librarian components
+        self.file_organizer = FileOrganizer(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path,
+            auto_organize=auto_organize,
+            organization_pattern=organization_pattern
+        )
+
+        self.file_naming_manager = FileNamingManager(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path,
+            naming_convention=naming_convention,
+            auto_rename=auto_rename
+        )
+
+        self.file_creator = FileCreator(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path
+        )
+
+        self.unified_retriever = UnifiedRetriever(
+            db_session=db_session,
+            relationship_manager=self.relationship_manager
+        )
+
+        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None}, File System: Enabled)")
 
     def process_document(
         self,
@@ -295,7 +329,30 @@ class LibrarianEngine:
                 except Exception as e:
                     logger.error(f"Relationship detection failed for document {document_id}: {e}")
 
-            # Step 4: Auto-execute approved actions (if enabled)
+            # Step 4: File organization (if auto_organize enabled)
+            if self.file_organizer.auto_organize:
+                try:
+                    org_result = self.file_organizer.organize_document(document_id)
+                    if org_result.get("success"):
+                        result["organization_path"] = org_result.get("organization_path")
+                        result["file_moved"] = org_result.get("file_moved", False)
+                        result["folder_created"] = org_result.get("folder_created", False)
+                        logger.info(f"Organized document {document_id} to: {org_result.get('organization_path')}")
+                except Exception as e:
+                    logger.warning(f"File organization failed for document {document_id}: {e}")
+
+            # Step 5: File naming (if auto_rename enabled)
+            if self.file_naming_manager.auto_rename:
+                try:
+                    rename_result = self.file_naming_manager.rename_file(document_id, auto_suggest=True)
+                    if rename_result.get("success") and rename_result.get("renamed"):
+                        result["file_renamed"] = True
+                        result["new_filename"] = rename_result.get("new_filename")
+                        logger.info(f"Renamed document {document_id} to: {rename_result.get('new_filename')}")
+                except Exception as e:
+                    logger.warning(f"File naming failed for document {document_id}: {e}")
+
+            # Step 6: Auto-execute approved actions (if enabled)
             if auto_execute:
                 approved_count = self.approval_workflow.auto_approve_safe_actions(
                     min_confidence=0.8
