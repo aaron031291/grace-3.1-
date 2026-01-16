@@ -22,10 +22,13 @@ import socket
 from pathlib import Path
 from typing import Dict, Optional, List, Any
 from dataclasses import dataclass, field
+import threading
 
 from .version import VersionManager, VersionMismatchError
 from .health_checker import HealthChecker, HealthCheckResult
 from .folder_validator import FolderValidator
+from .logging_db import LauncherLogger
+from .sqlite_logger import SQLiteLogHandler, LauncherLogCapture
 
 # Configure logging
 logging.basicConfig(
@@ -33,6 +36,9 @@ logging.basicConfig(
     format='[%(levelname)s] %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Global launcher logger (will be initialized in GraceLauncher)
+_launcher_logger: Optional['LauncherLogger'] = None
 
 
 @dataclass
@@ -84,6 +90,17 @@ class GraceLauncher:
         # Process management
         self.processes: List[ProcessInfo] = []
         self._shutdown_requested = False
+        
+        # Setup SQLite logging
+        logs_dir = self.root_path / "logs"
+        logs_dir.mkdir(exist_ok=True)
+        db_path = logs_dir / "launcher_log.db"
+        self.log_capture = LauncherLogCapture(db_path=db_path)
+        
+        # Add SQLite handler to logger
+        sqlite_handler = SQLiteLogHandler(db_path=db_path, genesis_key=self.log_capture.genesis_key)
+        sqlite_handler.setLevel(logging.INFO)
+        logger.addHandler(sqlite_handler)
         
         # Components
         self.version_manager = VersionManager()
@@ -170,7 +187,7 @@ class GraceLauncher:
                 cwd=str(cwd_path),
                 env=env,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.PIPE,  # Capture stderr separately
                 text=True,
                 bufsize=1
             )
@@ -186,10 +203,17 @@ class GraceLauncher:
             # Store process object for monitoring
             process_info.process = process  # type: ignore
             
+            # Capture both stdout and stderr to SQLite
+            if process.stdout:
+                self.log_capture.capture_stream(process.stdout, stream_name="backend-stdout")
+            if process.stderr:
+                self.log_capture.capture_stream(process.stderr, stream_name="backend-stderr")
+            
             self.processes.append(process_info)
             
             logger.info(f"✓ Backend started via startup script (PID: {process.pid})")
             logger.info("Waiting for backend to initialize (this may take 30-120 seconds)...")
+            logger.info("(Backend output will be shown if errors occur)")
             
             return process_info
             
@@ -508,6 +532,10 @@ class GraceLauncher:
         
         self.processes.clear()
         logger.info("✓ All processes stopped")
+        
+        # Close log capture
+        if hasattr(self, 'log_capture'):
+            self.log_capture.close()
     
     def run(self):
         """

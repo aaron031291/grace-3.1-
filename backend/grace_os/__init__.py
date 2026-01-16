@@ -15,7 +15,7 @@ Core Components:
 """
 
 from .ide_bridge import IDEBridge, IDEBridgeConfig
-from .self_healing_ide import SelfHealingIDE
+# from .self_healing_ide import SelfHealingIDE  # TODO: Create this module
 from .nocode_panels import NoCodePanelSystem
 from .autonomous_scheduler import AutonomousTaskScheduler
 from .ghost_ledger import GhostLedger, GhostMemory
@@ -25,7 +25,7 @@ from .reasoning_planes import MultiPlaneReasoner, ReasoningPlane
 __all__ = [
     'IDEBridge',
     'IDEBridgeConfig',
-    'SelfHealingIDE',
+    # 'SelfHealingIDE',  # TODO: Add when module is created
     'NoCodePanelSystem',
     'AutonomousTaskScheduler',
     'GhostLedger',

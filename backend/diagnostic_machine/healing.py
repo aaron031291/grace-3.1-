@@ -736,115 +736,80 @@ class HealingExecutor:
 
     def _heal_code_issues(self, params: Dict) -> HealingResult:
         """
-        Apply automatic code fixes for detected vulnerabilities.
-
         FIX: This healing action provides proactive code remediation for:
-        - Security vulnerabilities (command injection, path traversal, etc.)
-        - Configuration issues (unsafe settings)
-        - Common code anti-patterns
-
-        Parameters:
-            issue_type: str - Type of issue to fix
-            file_path: str - Path to file to fix
-            line_number: int - Line number of issue
-            fix_type: str - Specific fix to apply
-
-        Returns backup path for rollback capability.
+        - Syntax errors
+        - Import errors
+        - Missing files
+        - Code quality issues (bare except, mutable defaults, etc.)
+        - Security vulnerabilities
+        - Type errors
+        
+        Uses the automatic bug fixer to fix issues detected by proactive scanner.
         """
-        import re
         try:
-            issue_type = params.get('issue_type')
-            file_path = params.get('file_path')
-            line_number = params.get('line_number')
-            fix_type = params.get('fix_type', 'auto')
-
-            if not file_path:
-                return HealingResult(
-                    action_type=HealingActionType.CODE_FIX,
-                    success=False,
-                    message="Missing required parameter: file_path",
-                )
-
+            from .automatic_bug_fixer import get_automatic_fixer
+            from .proactive_code_scanner import get_proactive_scanner
+            from pathlib import Path
+            
             backend_dir = Path(__file__).parent.parent
-            full_path = backend_dir / file_path
-
-            if not full_path.exists():
-                return HealingResult(
-                    action_type=HealingActionType.CODE_FIX,
-                    success=False,
-                    message=f"File not found: {file_path}",
-                )
-
-            # Create backup for rollback
-            backup_dir = self.log_dir / "code_backups"
-            backup_dir.mkdir(parents=True, exist_ok=True)
-            timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-            backup_path = backup_dir / f"{full_path.name}_{timestamp}.bak"
-            shutil.copy2(full_path, backup_path)
-
-            # Read current content
-            with open(full_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-                lines = content.split('\n')
-
-            original_content = content
-            fixes_applied = []
-
-            # Apply automatic fixes based on issue type
-            fix_patterns = self._get_code_fix_patterns()
-
-            if issue_type and issue_type in fix_patterns:
-                pattern, replacement, description = fix_patterns[issue_type]
-                if line_number and 0 < line_number <= len(lines):
-                    # Fix specific line
-                    old_line = lines[line_number - 1]
-                    new_line = re.sub(pattern, replacement, old_line)
-                    if new_line != old_line:
-                        lines[line_number - 1] = new_line
-                        fixes_applied.append(f"Line {line_number}: {description}")
-                else:
-                    # Fix all occurrences
-                    for i, line in enumerate(lines):
-                        new_line = re.sub(pattern, line, replacement)
-                        if new_line != line:
-                            lines[i] = new_line
-                            fixes_applied.append(f"Line {i+1}: {description}")
-
-            elif fix_type == 'auto':
-                # Auto-detect and fix multiple issue types
-                for issue_name, (pattern, replacement, description) in fix_patterns.items():
-                    for i, line in enumerate(lines):
-                        new_line = re.sub(pattern, replacement, line)
-                        if new_line != line:
-                            lines[i] = new_line
-                            fixes_applied.append(f"Line {i+1}: {description}")
-
-            if not fixes_applied:
-                # No fixes needed, remove backup
-                backup_path.unlink()
+            # Enable DeepSeek for intelligent fixes (can be disabled via params)
+            use_deepseek = params.get('use_deepseek', True)
+            fixer = get_automatic_fixer(backend_dir=backend_dir, use_deepseek=use_deepseek)
+            scanner = get_proactive_scanner(backend_dir=backend_dir)
+            
+            # Scan for issues
+            issues = scanner.scan_all()
+            
+            if not issues:
                 return HealingResult(
                     action_type=HealingActionType.CODE_FIX,
                     success=True,
-                    message="No code fixes needed",
-                    rollback_available=False,
+                    message="No code issues detected",
                 )
-
-            # Write fixed content
-            new_content = '\n'.join(lines)
-            with open(full_path, 'w', encoding='utf-8') as f:
-                f.write(new_content)
-
+            
+            # Filter by severity - only auto-fix critical and high issues
+            critical_issues = [i for i in issues if i.severity == 'critical']
+            high_issues = [i for i in issues if i.severity == 'high']
+            
+            # Fix critical issues first
+            critical_fixes = fixer.fix_all_issues(critical_issues)
+            high_fixes = fixer.fix_all_issues(high_issues)
+            
+            successful_fixes = [f for f in critical_fixes + high_fixes if f.success]
+            failed_fixes = [f for f in critical_fixes + high_fixes if not f.success]
+            
+            # Also fix common warnings if requested
+            warning_fixes = []
+            if params.get('fix_warnings', False):
+                warning_fixes = fixer.fix_all_warnings(max_files=50)
+                successful_fixes.extend([f for f in warning_fixes if f.success])
+            
+            total_fixed = len(successful_fixes)
+            total_failed = len(failed_fixes)
+            
+            message = f"Fixed {total_fixed} code issues"
+            if total_failed > 0:
+                message += f", {total_failed} failed"
+            if warning_fixes:
+                message += f", {len([f for f in warning_fixes if f.success])} warnings fixed"
+            
             return HealingResult(
                 action_type=HealingActionType.CODE_FIX,
-                success=True,
-                message=f"Applied {len(fixes_applied)} fixes: {'; '.join(fixes_applied[:5])}",
-                rollback_available=True,
-                rollback_command=f"cp {backup_path} {full_path}",
-                pre_state={'backup_path': str(backup_path), 'file_path': str(full_path)},
+                success=total_fixed > 0,
+                message=message,
+                pre_state={'issues_before': len(issues)},
+                post_state={
+                    'issues_after': len(issues) - total_fixed,
+                    'fixes_applied': total_fixed,
+                    'fixes_failed': total_failed,
+                },
+                rollback_available=True,  # Backups created
             )
-
+            
         except Exception as e:
             logger.error(f"Code fix healing failed: {e}")
+            import traceback
+            traceback.print_exc()
             return HealingResult(
                 action_type=HealingActionType.CODE_FIX,
                 success=False,
