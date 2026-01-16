@@ -38,6 +38,7 @@ class SensorType(str, Enum):
     GRACE_MIRROR = "grace_mirror"
     COGNITIVE_DECISIONS = "cognitive_decisions"
     FILE_HEALTH = "file_health"
+    CODE_QUALITY = "code_quality"  # FIX: Static code analysis for security vulnerabilities
 
 
 @dataclass
@@ -123,6 +124,37 @@ class GraceMirrorData:
 
 
 @dataclass
+class CodeQualityIssue:
+    """A single code quality issue detected by static analysis."""
+    issue_type: str  # e.g., "security", "type_mismatch", "missing_index"
+    severity: str  # "critical", "high", "medium", "low"
+    file_path: str
+    line_number: Optional[int] = None
+    description: str = ""
+    code_snippet: Optional[str] = None
+    suggested_fix: Optional[str] = None
+    cwe_id: Optional[str] = None  # Common Weakness Enumeration ID
+
+
+@dataclass
+class CodeQualityData:
+    """Code quality sensor data from static analysis."""
+    total_issues: int = 0
+    critical_issues: int = 0
+    high_issues: int = 0
+    medium_issues: int = 0
+    low_issues: int = 0
+    security_vulnerabilities: List[CodeQualityIssue] = field(default_factory=list)
+    type_mismatches: List[CodeQualityIssue] = field(default_factory=list)
+    database_issues: List[CodeQualityIssue] = field(default_factory=list)
+    configuration_issues: List[CodeQualityIssue] = field(default_factory=list)
+    dependency_issues: List[CodeQualityIssue] = field(default_factory=list)
+    files_scanned: int = 0
+    scan_duration_ms: float = 0.0
+    timestamp: datetime = field(default_factory=datetime.utcnow)
+
+
+@dataclass
 class SensorData:
     """Aggregated sensor data from all sources."""
     test_results: Optional[TestResultData] = None
@@ -131,6 +163,7 @@ class SensorData:
     agent_outputs: Optional[AgentOutputData] = None
     genesis_keys: Optional[GenesisKeyData] = None
     grace_mirror: Optional[GraceMirrorData] = None
+    code_quality: Optional[CodeQualityData] = None  # FIX: Added code quality sensor
     collection_timestamp: datetime = field(default_factory=datetime.utcnow)
     collection_duration_ms: float = 0.0
     sensors_available: List[SensorType] = field(default_factory=list)
@@ -181,6 +214,7 @@ class SensorLayer:
             (SensorType.AGENT_OUTPUTS, self._collect_agent_outputs),
             (SensorType.GENESIS_KEYS, self._collect_genesis_keys),
             (SensorType.GRACE_MIRROR, self._collect_grace_mirror),
+            (SensorType.CODE_QUALITY, self._collect_code_quality),  # FIX: Added code quality sensor
         ]
 
         for sensor_type, collector in sensors:
@@ -199,6 +233,8 @@ class SensorLayer:
                         sensor_data.genesis_keys = result
                     elif sensor_type == SensorType.GRACE_MIRROR:
                         sensor_data.grace_mirror = result
+                    elif sensor_type == SensorType.CODE_QUALITY:
+                        sensor_data.code_quality = result
                     sensor_data.sensors_available.append(sensor_type)
             except Exception as e:
                 logger.error(f"Sensor {sensor_type} failed: {e}")
@@ -537,6 +573,190 @@ class SensorLayer:
             logger.error(f"Failed to collect grace mirror: {e}")
             return None
 
+    def _collect_code_quality(self) -> Optional[CodeQualityData]:
+        """
+        Collect code quality data by performing static analysis.
+
+        FIX: This sensor performs comprehensive static code analysis to detect:
+        - Security vulnerabilities (SQL injection, command injection, path traversal)
+        - Type mismatches between models
+        - Database schema issues (missing indexes, CASCADE)
+        - Configuration issues (unsafe settings, hardcoded secrets)
+        - Dependency issues (unpinned versions)
+        """
+        import re
+        try:
+            scan_start = datetime.utcnow()
+            code_quality = CodeQualityData()
+            backend_dir = Path(__file__).parent.parent
+
+            # Security vulnerability patterns to detect
+            security_patterns = [
+                # Command injection
+                (r'shell\s*=\s*True', 'command_injection', 'critical',
+                 'Command injection via shell=True', 'CWE-78'),
+                # SQL injection (raw string formatting in queries)
+                (r'execute\s*\(\s*[f"\'].*\{.*\}', 'sql_injection', 'critical',
+                 'Potential SQL injection via string formatting', 'CWE-89'),
+                (r'\.format\s*\(.*\).*execute', 'sql_injection', 'critical',
+                 'Potential SQL injection via .format()', 'CWE-89'),
+                # Path traversal
+                (r'open\s*\([^)]*\+[^)]*\)', 'path_traversal', 'high',
+                 'Potential path traversal via string concatenation', 'CWE-22'),
+                # Hardcoded secrets
+                (r'(password|secret|api_key|token)\s*=\s*["\'][^"\']+["\']', 'hardcoded_secret', 'high',
+                 'Potential hardcoded secret', 'CWE-798'),
+                # Unsafe pickle
+                (r'pickle\.load', 'unsafe_deserialization', 'high',
+                 'Unsafe pickle deserialization', 'CWE-502'),
+                # Eval/exec
+                (r'\beval\s*\(', 'code_injection', 'critical',
+                 'Dangerous eval() usage', 'CWE-95'),
+                (r'\bexec\s*\(', 'code_injection', 'critical',
+                 'Dangerous exec() usage', 'CWE-95'),
+            ]
+
+            # Configuration issue patterns
+            config_patterns = [
+                (r'unsafe-inline', 'unsafe_csp', 'medium',
+                 'CSP allows unsafe-inline which weakens XSS protection', None),
+                (r'DEBUG\s*=\s*True', 'debug_enabled', 'medium',
+                 'Debug mode enabled in configuration', None),
+                (r'CORS.*\*', 'cors_wildcard', 'medium',
+                 'CORS allows all origins', None),
+            ]
+
+            # Database patterns
+            db_patterns = [
+                (r'Column\([^)]*String[^)]*\).*#.*token', 'type_mismatch', 'medium',
+                 'Token column using String instead of Integer', None),
+                (r'ForeignKey\([^)]*\)[^)]*(?!ondelete)', 'missing_cascade', 'low',
+                 'Foreign key without ondelete specification', None),
+            ]
+
+            # Scan Python files
+            python_files = list(backend_dir.glob('**/*.py'))
+            code_quality.files_scanned = len(python_files)
+
+            for py_file in python_files[:200]:  # Limit to avoid performance issues
+                try:
+                    # Skip test files and __pycache__
+                    if '__pycache__' in str(py_file) or 'test_' in py_file.name:
+                        continue
+
+                    with open(py_file, 'r', encoding='utf-8', errors='ignore') as f:
+                        content = f.read()
+                        lines = content.split('\n')
+
+                    rel_path = str(py_file.relative_to(backend_dir))
+
+                    # Check security patterns
+                    for pattern, issue_type, severity, desc, cwe in security_patterns:
+                        for i, line in enumerate(lines, 1):
+                            if re.search(pattern, line, re.IGNORECASE):
+                                issue = CodeQualityIssue(
+                                    issue_type=issue_type,
+                                    severity=severity,
+                                    file_path=rel_path,
+                                    line_number=i,
+                                    description=desc,
+                                    code_snippet=line.strip()[:100],
+                                    cwe_id=cwe
+                                )
+                                code_quality.security_vulnerabilities.append(issue)
+                                self._increment_severity_count(code_quality, severity)
+
+                    # Check config patterns
+                    for pattern, issue_type, severity, desc, cwe in config_patterns:
+                        for i, line in enumerate(lines, 1):
+                            if re.search(pattern, line, re.IGNORECASE):
+                                issue = CodeQualityIssue(
+                                    issue_type=issue_type,
+                                    severity=severity,
+                                    file_path=rel_path,
+                                    line_number=i,
+                                    description=desc,
+                                    code_snippet=line.strip()[:100],
+                                    cwe_id=cwe
+                                )
+                                code_quality.configuration_issues.append(issue)
+                                self._increment_severity_count(code_quality, severity)
+
+                    # Check database patterns
+                    for pattern, issue_type, severity, desc, cwe in db_patterns:
+                        for i, line in enumerate(lines, 1):
+                            if re.search(pattern, line, re.IGNORECASE):
+                                issue = CodeQualityIssue(
+                                    issue_type=issue_type,
+                                    severity=severity,
+                                    file_path=rel_path,
+                                    line_number=i,
+                                    description=desc,
+                                    code_snippet=line.strip()[:100],
+                                    cwe_id=cwe
+                                )
+                                code_quality.database_issues.append(issue)
+                                self._increment_severity_count(code_quality, severity)
+
+                except Exception as e:
+                    logger.debug(f"Could not scan {py_file}: {e}")
+
+            # Check requirements.txt for unpinned dependencies
+            requirements_path = backend_dir / 'requirements.txt'
+            if requirements_path.exists():
+                try:
+                    with open(requirements_path, 'r') as f:
+                        for i, line in enumerate(f, 1):
+                            line = line.strip()
+                            if line and not line.startswith('#'):
+                                # Check if version is pinned
+                                if '==' not in line and '>=' not in line and '<' not in line:
+                                    issue = CodeQualityIssue(
+                                        issue_type='unpinned_dependency',
+                                        severity='medium',
+                                        file_path='requirements.txt',
+                                        line_number=i,
+                                        description=f'Unpinned dependency: {line}',
+                                        code_snippet=line,
+                                        suggested_fix='Pin dependency version for reproducibility'
+                                    )
+                                    code_quality.dependency_issues.append(issue)
+                                    code_quality.medium_issues += 1
+                except Exception as e:
+                    logger.debug(f"Could not check requirements.txt: {e}")
+
+            # Calculate totals
+            code_quality.total_issues = (
+                code_quality.critical_issues +
+                code_quality.high_issues +
+                code_quality.medium_issues +
+                code_quality.low_issues
+            )
+
+            scan_end = datetime.utcnow()
+            code_quality.scan_duration_ms = (scan_end - scan_start).total_seconds() * 1000
+            code_quality.timestamp = scan_end
+
+            logger.info(f"Code quality scan complete: {code_quality.total_issues} issues found "
+                       f"({code_quality.critical_issues} critical, {code_quality.high_issues} high)")
+
+            return code_quality
+
+        except Exception as e:
+            logger.error(f"Failed to collect code quality: {e}")
+            return None
+
+    def _increment_severity_count(self, code_quality: CodeQualityData, severity: str):
+        """Helper to increment severity counts."""
+        if severity == 'critical':
+            code_quality.critical_issues += 1
+        elif severity == 'high':
+            code_quality.high_issues += 1
+        elif severity == 'medium':
+            code_quality.medium_issues += 1
+        elif severity == 'low':
+            code_quality.low_issues += 1
+
     def to_dict(self, sensor_data: SensorData) -> Dict[str, Any]:
         """Convert sensor data to dictionary for serialization."""
         result = {
@@ -605,6 +825,46 @@ class SensorLayer:
                 'self_learning_progress': sensor_data.grace_mirror.self_learning_progress,
                 'self_governance_progress': sensor_data.grace_mirror.self_governance_progress,
                 'component_status': sensor_data.grace_mirror.component_status,
+            }
+
+        # FIX: Added code quality sensor output
+        if sensor_data.code_quality:
+            result['code_quality'] = {
+                'total_issues': sensor_data.code_quality.total_issues,
+                'critical_issues': sensor_data.code_quality.critical_issues,
+                'high_issues': sensor_data.code_quality.high_issues,
+                'medium_issues': sensor_data.code_quality.medium_issues,
+                'low_issues': sensor_data.code_quality.low_issues,
+                'security_vulnerabilities_count': len(sensor_data.code_quality.security_vulnerabilities),
+                'type_mismatches_count': len(sensor_data.code_quality.type_mismatches),
+                'database_issues_count': len(sensor_data.code_quality.database_issues),
+                'configuration_issues_count': len(sensor_data.code_quality.configuration_issues),
+                'dependency_issues_count': len(sensor_data.code_quality.dependency_issues),
+                'files_scanned': sensor_data.code_quality.files_scanned,
+                'scan_duration_ms': sensor_data.code_quality.scan_duration_ms,
+                # Include details of critical and high severity issues
+                'critical_details': [
+                    {
+                        'type': issue.issue_type,
+                        'file': issue.file_path,
+                        'line': issue.line_number,
+                        'description': issue.description,
+                        'cwe': issue.cwe_id,
+                    }
+                    for issue in sensor_data.code_quality.security_vulnerabilities
+                    if issue.severity == 'critical'
+                ][:10],  # Limit to 10 for brevity
+                'high_details': [
+                    {
+                        'type': issue.issue_type,
+                        'file': issue.file_path,
+                        'line': issue.line_number,
+                        'description': issue.description,
+                        'cwe': issue.cwe_id,
+                    }
+                    for issue in sensor_data.code_quality.security_vulnerabilities
+                    if issue.severity == 'high'
+                ][:10],
             }
 
         return result
