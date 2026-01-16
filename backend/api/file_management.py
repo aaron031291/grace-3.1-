@@ -31,7 +31,7 @@ _kb_manager: Optional[KnowledgeBaseManager] = None
 _ingestion_service: Optional[TextIngestionService] = None
 
 
-def _process_with_librarian(document_id: int) -> None:
+def _process_with_librarian(document_id: int) -> None:  # type: ignore
     """
     Process a document through the librarian system.
 

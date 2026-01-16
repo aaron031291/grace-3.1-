@@ -38,6 +38,9 @@ class SensorType(str, Enum):
     GRACE_MIRROR = "grace_mirror"
     COGNITIVE_DECISIONS = "cognitive_decisions"
     FILE_HEALTH = "file_health"
+    CONFIGURATION = "configuration"  # Configuration validation
+    STATIC_ANALYSIS = "static_analysis"  # Static code analysis
+    DESIGN_PATTERNS = "design_patterns"  # Design pattern detection
     CODE_QUALITY = "code_quality"  # FIX: Static code analysis for security vulnerabilities
     # WHOLE-SYSTEM SENSORS: Track system beyond just runtime
     BUILD_STATUS = "build_status"  # CI/CD pipeline health
@@ -270,6 +273,9 @@ class SensorData:
     agent_outputs: Optional[AgentOutputData] = None
     genesis_keys: Optional[GenesisKeyData] = None
     grace_mirror: Optional[GraceMirrorData] = None
+    configuration: Optional[Any] = None  # ConfigurationSensorData
+    static_analysis: Optional[Any] = None  # StaticAnalysisSensorData
+    design_patterns: Optional[Any] = None  # DesignPatternSensorData
     code_quality: Optional[CodeQualityData] = None  # FIX: Added code quality sensor
     # WHOLE-SYSTEM SENSORS: Track system beyond just runtime
     build_status: Optional[BuildStatusData] = None
@@ -326,6 +332,9 @@ class SensorLayer:
             (SensorType.AGENT_OUTPUTS, self._collect_agent_outputs),
             (SensorType.GENESIS_KEYS, self._collect_genesis_keys),
             (SensorType.GRACE_MIRROR, self._collect_grace_mirror),
+            (SensorType.CONFIGURATION, self._collect_configuration),
+            (SensorType.STATIC_ANALYSIS, self._collect_static_analysis),
+            (SensorType.DESIGN_PATTERNS, self._collect_design_patterns),
             (SensorType.CODE_QUALITY, self._collect_code_quality),
             # WHOLE-SYSTEM SENSORS
             (SensorType.BUILD_STATUS, self._collect_build_status),
@@ -350,6 +359,12 @@ class SensorLayer:
                         sensor_data.genesis_keys = result
                     elif sensor_type == SensorType.GRACE_MIRROR:
                         sensor_data.grace_mirror = result
+                    elif sensor_type == SensorType.CONFIGURATION:
+                        sensor_data.configuration = result
+                    elif sensor_type == SensorType.STATIC_ANALYSIS:
+                        sensor_data.static_analysis = result
+                    elif sensor_type == SensorType.DESIGN_PATTERNS:
+                        sensor_data.design_patterns = result
                     elif sensor_type == SensorType.CODE_QUALITY:
                         sensor_data.code_quality = result
                     # WHOLE-SYSTEM SENSORS
@@ -664,6 +679,36 @@ class SensorLayer:
             logger.error(f"Failed to collect genesis keys: {e}")
             return None
 
+    def _collect_configuration(self) -> Optional[Any]:
+        """Collect configuration validation data."""
+        try:
+            from .configuration_sensor import ConfigurationSensor
+            sensor = ConfigurationSensor()
+            return sensor.validate_all()
+        except Exception as e:
+            logger.error(f"Failed to collect configuration data: {e}")
+            return None
+    
+    def _collect_static_analysis(self) -> Optional[Any]:
+        """Collect static analysis data."""
+        try:
+            from .static_analysis_sensor import StaticAnalysisSensor
+            sensor = StaticAnalysisSensor()
+            return sensor.analyze_all()
+        except Exception as e:
+            logger.error(f"Failed to collect static analysis data: {e}")
+            return None
+    
+    def _collect_design_patterns(self) -> Optional[Any]:
+        """Collect design pattern detection data."""
+        try:
+            from .design_pattern_sensor import DesignPatternSensor
+            sensor = DesignPatternSensor()
+            return sensor.detect_all()
+        except Exception as e:
+            logger.error(f"Failed to collect design pattern data: {e}")
+            return None
+    
     def _collect_grace_mirror(self) -> Optional[GraceMirrorData]:
         """Collect GRACE Mirror self-reflection data."""
         try:
@@ -1521,6 +1566,31 @@ class SensorLayer:
                     }
                     for svc in sensor_data.infrastructure.external_dependencies
                 ][:5],
+            }
+
+        if sensor_data.configuration:
+            result['configuration'] = {
+                'total_issues': sensor_data.configuration.total_issues,
+                'critical_issues': sensor_data.configuration.critical_issues,
+                'high_issues': sensor_data.configuration.high_issues,
+                'validation_passed': sensor_data.configuration.validation_passed,
+                'components_checked': sensor_data.configuration.components_checked,
+            }
+
+        if sensor_data.static_analysis:
+            result['static_analysis'] = {
+                'total_issues': sensor_data.static_analysis.total_issues,
+                'critical_issues': sensor_data.static_analysis.critical_issues,
+                'high_issues': sensor_data.static_analysis.high_issues,
+                'analysis_passed': sensor_data.static_analysis.analysis_passed,
+                'tools_run': sensor_data.static_analysis.tools_run,
+            }
+
+        if sensor_data.design_patterns:
+            result['design_patterns'] = {
+                'total_issues': sensor_data.design_patterns.total_issues,
+                'high_issues': sensor_data.design_patterns.high_issues,
+                'patterns_checked': sensor_data.design_patterns.patterns_checked,
             }
 
         return result

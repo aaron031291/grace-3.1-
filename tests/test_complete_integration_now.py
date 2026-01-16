@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Add backend to path
-backend_dir = Path(__file__).parent / "backend"
+backend_dir = Path(__file__).parent.parent / "backend"
 sys.path.insert(0, str(backend_dir))
 
 def print_test(name):

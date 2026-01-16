@@ -394,6 +394,23 @@ class EmbeddingModel:
 # Global instance for convenience - STRICTLY ENFORCED SINGLETON
 _embedding_model_instance = None  # Renamed for clarity
 _embedding_model_loaded = False  # Track whether model has been loaded
+_cache_version = 0  # Cache version for invalidation
+
+
+def invalidate_embedding_cache() -> None:
+    """
+    Invalidate the embedding model cache, forcing reload on next access.
+    
+    Use this when:
+    - Model configuration changes
+    - Model needs to be reloaded
+    - Cache coherence issues detected
+    """
+    global _embedding_model_instance, _embedding_model_loaded, _cache_version
+    _embedding_model_instance = None
+    _embedding_model_loaded = False
+    _cache_version += 1
+    print(f"[EMBEDDING] Cache invalidated (version: {_cache_version})")
 
 
 def get_embedding_model(

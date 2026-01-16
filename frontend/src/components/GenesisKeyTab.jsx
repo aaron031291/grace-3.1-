@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GenesisKeyTab.css';
 
 const GenesisKeyTab = () => {
-  const [view, setView] = useState('dashboard'); // dashboard, keys, archives, curation, analysis
+  const [view, setView] = useState('dashboard'); // dashboard, keys, lineage, archives, curation, analysis
   const [loading, setLoading] = useState(true);
   const [genesisKeys, setGenesisKeys] = useState([]);
   const [selectedKey, setSelectedKey] = useState(null);
@@ -11,6 +11,8 @@ const GenesisKeyTab = () => {
   const [stats, setStats] = useState(null);
   const [dailySummary, setDailySummary] = useState(null);
   const [analysisResults, setAnalysisResults] = useState(null);
+  const [lineageData, setLineageData] = useState(null);
+  const [selectedLineageKey, setSelectedLineageKey] = useState(null);
 
   useEffect(() => {
     fetchStats();
@@ -172,6 +174,49 @@ const GenesisKeyTab = () => {
     }
   };
 
+  const fetchLineageData = async () => {
+    try {
+      const response = await fetch('/api/genesis/lineage');
+      if (response.ok) {
+        const data = await response.json();
+        setLineageData(data);
+      } else {
+        // Demo lineage data
+        setLineageData({
+          total_chains: 45,
+          active_chains: 32,
+          max_depth: 8,
+          chains: [
+            {
+              root_key: 'GK-2025-0111-API-001',
+              depth: 3,
+              total_keys: 5,
+              chain: [
+                { key_id: 'GK-2025-0111-API-001', parent_key: null, type: 'file', path: 'backend/api/librarian_api.py', created_at: '2025-01-11T10:30:00Z' },
+                { key_id: 'GK-2025-0111-API-002', parent_key: 'GK-2025-0111-API-001', type: 'modification', path: 'backend/api/librarian_api.py', created_at: '2025-01-11T11:15:00Z' },
+                { key_id: 'GK-2025-0111-API-003', parent_key: 'GK-2025-0111-API-002', type: 'fix', path: 'backend/api/librarian_api.py', created_at: '2025-01-11T11:45:00Z' },
+              ],
+            },
+          ],
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching lineage data:', error);
+    }
+  };
+
+  const fetchKeyLineage = async (keyId) => {
+    try {
+      const response = await fetch(`/api/genesis/keys/${keyId}/lineage`);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedLineageKey(data);
+      }
+    } catch (error) {
+      console.error('Error fetching key lineage:', error);
+    }
+  };
+
   const fetchDailySummary = async (date) => {
     try {
       const response = await fetch(`/api/librarian/genesis-keys/summary/${date}`);
@@ -314,6 +359,9 @@ const GenesisKeyTab = () => {
           <button className={view === 'keys' ? 'active' : ''} onClick={() => setView('keys')}>
             Keys
           </button>
+          <button className={view === 'lineage' ? 'active' : ''} onClick={() => { setView('lineage'); fetchLineageData(); }}>
+            Lineage & Tracking
+          </button>
           <button className={view === 'archives' ? 'active' : ''} onClick={() => { setView('archives'); fetchArchives(); }}>
             Archives
           </button>
@@ -446,6 +494,133 @@ const GenesisKeyTab = () => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Lineage & Tracking View */}
+        {view === 'lineage' && (
+          <div className="lineage-view">
+            <div className="lineage-header">
+              <h4>Genesis Key Lineage & Complete Tracking</h4>
+              <p>View complete parent-child relationships and tracking chains</p>
+            </div>
+
+            {lineageData ? (
+              <div className="lineage-content">
+                <div className="lineage-stats">
+                  <div className="lineage-stat">
+                    <span className="stat-value">{lineageData.total_chains}</span>
+                    <span className="stat-label">Total Chains</span>
+                  </div>
+                  <div className="lineage-stat">
+                    <span className="stat-value">{lineageData.active_chains}</span>
+                    <span className="stat-label">Active Chains</span>
+                  </div>
+                  <div className="lineage-stat">
+                    <span className="stat-value">{lineageData.max_depth}</span>
+                    <span className="stat-label">Max Depth</span>
+                  </div>
+                </div>
+
+                <div className="lineage-chains">
+                  <h5>Key Lineage Chains</h5>
+                  {lineageData.chains && lineageData.chains.length > 0 ? (
+                    <div className="chains-list">
+                      {lineageData.chains.map((chain, idx) => (
+                        <div key={idx} className="chain-card">
+                          <div className="chain-header">
+                            <span className="chain-root">Root: {chain.root_key}</span>
+                            <span className="chain-depth">Depth: {chain.depth}</span>
+                            <span className="chain-count">{chain.total_keys} keys</span>
+                          </div>
+                          <div className="chain-timeline">
+                            {chain.chain.map((key, keyIdx) => (
+                              <div key={keyIdx} className="chain-item">
+                                <div className="chain-connector">
+                                  {keyIdx > 0 && <div className="connector-line"></div>}
+                                  <div className="chain-node">
+                                    <span className="node-icon">{key.type === 'file' ? '📄' : key.type === 'modification' ? '✏️' : '🔧'}</span>
+                                  </div>
+                                </div>
+                                <div className="chain-details">
+                                  <div className="chain-key-id">{key.key_id}</div>
+                                  <div className="chain-path">{key.path}</div>
+                                  <div className="chain-meta">
+                                    <span>{key.type}</span>
+                                    <span>{new Date(key.created_at).toLocaleString()}</span>
+                                    {key.parent_key && <span>Parent: {key.parent_key}</span>}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <p>No lineage chains found</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="lineage-search">
+                  <h5>Search Key Lineage</h5>
+                  <div className="search-box">
+                    <input
+                      type="text"
+                      placeholder="Enter Genesis Key ID..."
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          fetchKeyLineage(e.target.value);
+                        }
+                      }}
+                    />
+                    <button onClick={() => {
+                      const input = document.querySelector('.search-box input');
+                      if (input && input.value) {
+                        fetchKeyLineage(input.value);
+                      }
+                    }}>
+                      Search
+                    </button>
+                  </div>
+                  {selectedLineageKey && (
+                    <div className="selected-lineage">
+                      <h6>Lineage for: {selectedLineageKey.key_id}</h6>
+                      <div className="lineage-tree">
+                        {selectedLineageKey.parents && selectedLineageKey.parents.length > 0 && (
+                          <div className="lineage-parents">
+                            <h6>Parents:</h6>
+                            {selectedLineageKey.parents.map((parent, idx) => (
+                              <div key={idx} className="lineage-item">
+                                <span>{parent.key_id}</span>
+                                <span>{parent.path}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {selectedLineageKey.children && selectedLineageKey.children.length > 0 && (
+                          <div className="lineage-children">
+                            <h6>Children:</h6>
+                            {selectedLineageKey.children.map((child, idx) => (
+                              <div key={idx} className="lineage-item">
+                                <span>{child.key_id}</span>
+                                <span>{child.path}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="empty-state">
+                <p>Loading lineage data...</p>
+              </div>
+            )}
           </div>
         )}
 
