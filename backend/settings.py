@@ -91,8 +91,17 @@ class Settings:
         # Validate Embedding settings
         if not cls.EMBEDDING_DEFAULT:
             errors.append("EMBEDDING_DEFAULT is not set")
+        
+        # Embedding model path validation - warn but don't fail (model can be downloaded later)
         if not Path(cls.EMBEDDING_MODEL_PATH).exists():
-            errors.append(f"Embedding model path does not exist: {cls.EMBEDDING_MODEL_PATH}")
+            # Only warn, don't fail - allows system to start and download model later
+            import warnings
+            warnings.warn(
+                f"Embedding model path does not exist: {cls.EMBEDDING_MODEL_PATH}\n"
+                f"Model will need to be downloaded before embedding operations can be performed.",
+                UserWarning
+            )
+        
         if cls.EMBEDDING_DEVICE not in ["cuda", "cpu"]:
             errors.append(f"EMBEDDING_DEVICE must be 'cuda' or 'cpu', got '{cls.EMBEDDING_DEVICE}'")
         

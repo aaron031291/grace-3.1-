@@ -156,17 +156,23 @@ def health_monitor_thread():
             time.sleep(300)  # Check every 5 minutes
 
             if not shutdown_requested and healing_system:
-                logger.info("[HEALTH] Running periodic health check...")
-                cycle_result = healing_system.run_monitoring_cycle()
-                logger.info(
-                    f"[HEALTH] Status: {cycle_result['health_status']}, "
-                    f"Anomalies: {cycle_result['anomalies_detected']}, "
-                    f"Actions executed: {cycle_result['actions_executed']}"
-                )
+                try:
+                    logger.info("[HEALTH] Running periodic health check...")
+                    cycle_result = healing_system.run_monitoring_cycle()
+                    logger.info(
+                        f"[HEALTH] Status: {cycle_result['health_status']}, "
+                        f"Anomalies: {cycle_result['anomalies_detected']}, "
+                        f"Actions executed: {cycle_result['actions_executed']}"
+                    )
+                except Exception as health_error:
+                    logger.error(f"[HEALTH MONITOR] Error during health check: {health_error}", exc_info=True)
+                    # Continue monitoring even if one check fails
+            elif not shutdown_requested and not healing_system:
+                logger.warning("[HEALTH MONITOR] Healing system not available")
 
         except Exception as e:
-            logger.error(f"[HEALTH MONITOR] Error: {e}")
-            time.sleep(60)
+            logger.error(f"[HEALTH MONITOR] Thread error: {e}", exc_info=True)
+            time.sleep(60)  # Wait before retrying
 
 
 def mirror_analysis_thread():
@@ -231,11 +237,14 @@ def monitor_learning_cycle():
                 logger.info(f"[STATUS] System running for {cycle_count} minutes")
 
                 if trigger_pipeline:
-                    status = trigger_pipeline.get_status()
-                    logger.info(
-                        f"[STATUS] Triggers fired: {status['triggers_fired']}, "
-                        f"Recursive loops: {status['recursive_loops_active']}"
-                    )
+                    try:
+                        status = trigger_pipeline.get_status()
+                        logger.info(
+                            f"[STATUS] Triggers fired: {status.get('triggers_fired', 0)}, "
+                            f"Recursive loops: {status.get('recursive_loops_active', 0)}"
+                        )
+                    except Exception as status_error:
+                        logger.debug(f"[STATUS] Could not get trigger pipeline status: {status_error}")
 
         except KeyboardInterrupt:
             break
