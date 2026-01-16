@@ -14,7 +14,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 
-from .sensors import SensorData, TestResultData, MetricsData
+from .sensors import SensorData, TestResultData, MetricsData, CodeQualityData
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,11 @@ class PatternType(str, Enum):
     LEARNING_OPPORTUNITY = "learning_opportunity"
     INFRASTRUCTURE_ISSUE = "infrastructure_issue"
     CODE_QUALITY_ISSUE = "code_quality_issue"
+    # FIX: Added new pattern types for static code analysis
+    SECURITY_VULNERABILITY = "security_vulnerability"
+    DATABASE_SCHEMA_ISSUE = "database_schema_issue"
+    CONFIGURATION_ISSUE = "configuration_issue"
+    DEPENDENCY_ISSUE = "dependency_issue"
 
 
 class AnomalyType(str, Enum):
@@ -188,6 +193,10 @@ class InterpreterLayer:
         # Genesis key patterns
         if sensor_data.genesis_keys:
             patterns.extend(self._detect_genesis_patterns(sensor_data))
+
+        # FIX: Code quality patterns from static analysis
+        if sensor_data.code_quality:
+            patterns.extend(self._detect_code_quality_patterns(sensor_data.code_quality))
 
         # Learning opportunity patterns
         patterns.extend(self._detect_learning_opportunities(sensor_data))
@@ -353,6 +362,145 @@ class InterpreterLayer:
                     evidence=[learned],
                     suggested_action="Incorporate into knowledge base"
                 ))
+
+        return patterns
+
+    def _detect_code_quality_patterns(self, code_quality: CodeQualityData) -> List[Pattern]:
+        """
+        FIX: Detect patterns from code quality static analysis.
+
+        This method analyzes the code quality sensor data to identify:
+        - Security vulnerability patterns
+        - Database schema issues
+        - Configuration problems
+        - Dependency management issues
+        """
+        patterns = []
+
+        # Security vulnerability pattern
+        if code_quality.critical_issues > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.SECURITY_VULNERABILITY,
+                description=f"CRITICAL: {code_quality.critical_issues} critical security vulnerabilities detected",
+                confidence=1.0,
+                frequency=code_quality.critical_issues,
+                affected_components=["security", "code"],
+                evidence=[{
+                    'critical_count': code_quality.critical_issues,
+                    'vulnerabilities': [
+                        {
+                            'type': v.issue_type,
+                            'file': v.file_path,
+                            'line': v.line_number,
+                            'cwe': v.cwe_id,
+                        }
+                        for v in code_quality.security_vulnerabilities[:5]
+                        if v.severity == 'critical'
+                    ]
+                }],
+                suggested_action="IMMEDIATE: Fix critical security vulnerabilities"
+            ))
+
+        if code_quality.high_issues > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.SECURITY_VULNERABILITY,
+                description=f"HIGH: {code_quality.high_issues} high severity security issues detected",
+                confidence=0.9,
+                frequency=code_quality.high_issues,
+                affected_components=["security"],
+                evidence=[{
+                    'high_count': code_quality.high_issues,
+                    'issues': [
+                        {
+                            'type': v.issue_type,
+                            'file': v.file_path,
+                            'line': v.line_number,
+                        }
+                        for v in code_quality.security_vulnerabilities[:5]
+                        if v.severity == 'high'
+                    ]
+                }],
+                suggested_action="Fix high severity security issues"
+            ))
+
+        # Database schema issue pattern
+        if code_quality.database_issues:
+            db_issue_count = len(code_quality.database_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.DATABASE_SCHEMA_ISSUE,
+                description=f"{db_issue_count} database schema issues detected",
+                confidence=0.8,
+                frequency=db_issue_count,
+                affected_components=["database", "models"],
+                evidence=[{
+                    'issues': [
+                        {
+                            'type': i.issue_type,
+                            'file': i.file_path,
+                            'description': i.description,
+                        }
+                        for i in code_quality.database_issues[:5]
+                    ]
+                }],
+                suggested_action="Review database models for type mismatches and missing constraints"
+            ))
+
+        # Configuration issue pattern
+        if code_quality.configuration_issues:
+            config_issue_count = len(code_quality.configuration_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.CONFIGURATION_ISSUE,
+                description=f"{config_issue_count} configuration security issues detected",
+                confidence=0.7,
+                frequency=config_issue_count,
+                affected_components=["configuration", "security"],
+                evidence=[{
+                    'issues': [
+                        {
+                            'type': i.issue_type,
+                            'file': i.file_path,
+                            'description': i.description,
+                        }
+                        for i in code_quality.configuration_issues[:5]
+                    ]
+                }],
+                suggested_action="Review security configuration settings"
+            ))
+
+        # Dependency issue pattern
+        if code_quality.dependency_issues:
+            dep_issue_count = len(code_quality.dependency_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.DEPENDENCY_ISSUE,
+                description=f"{dep_issue_count} dependency management issues detected",
+                confidence=0.6,
+                frequency=dep_issue_count,
+                affected_components=["dependencies", "supply_chain"],
+                evidence=[{
+                    'unpinned_count': dep_issue_count,
+                    'examples': [i.code_snippet for i in code_quality.dependency_issues[:5]]
+                }],
+                suggested_action="Pin dependency versions for reproducibility and security"
+            ))
+
+        # Overall code quality summary pattern
+        if code_quality.total_issues > 10:
+            patterns.append(Pattern(
+                pattern_type=PatternType.CODE_QUALITY_ISSUE,
+                description=f"Code quality scan found {code_quality.total_issues} total issues",
+                confidence=0.8,
+                frequency=code_quality.total_issues,
+                affected_components=["codebase"],
+                evidence=[{
+                    'total': code_quality.total_issues,
+                    'critical': code_quality.critical_issues,
+                    'high': code_quality.high_issues,
+                    'medium': code_quality.medium_issues,
+                    'low': code_quality.low_issues,
+                    'files_scanned': code_quality.files_scanned,
+                }],
+                suggested_action="Prioritize fixing critical and high severity issues"
+            ))
 
         return patterns
 
