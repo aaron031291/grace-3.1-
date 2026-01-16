@@ -5,6 +5,14 @@ Tests the complete autonomous cycle end-to-end.
 """
 
 import sys
+import multiprocessing
+import os
+
+# Fix for Windows multiprocessing
+if __name__ == '__main__':
+    # Windows requires this guard for multiprocessing
+    multiprocessing.freeze_support()
+
 sys.path.insert(0, 'backend')
 
 from pathlib import Path

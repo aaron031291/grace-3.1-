@@ -92,7 +92,17 @@ class DocumentReranker:
             print("[OK] Model converted to FP16")
 
         print("[OK] Reranker model loaded successfully")
-    
+
+    def _add_default_scores(self, chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Add default rerank scores to chunks when model is unavailable."""
+        scored_chunks = []
+        for i, chunk in enumerate(chunks):
+            chunk_copy = chunk.copy()
+            # Assign decreasing scores based on original order (assumes pre-sorted by initial retrieval)
+            chunk_copy["rerank_score"] = max(0.0, 1.0 - (i * 0.1))
+            scored_chunks.append(chunk_copy)
+        return scored_chunks
+
     def rerank(
         self,
         query: str,
@@ -117,13 +127,13 @@ class DocumentReranker:
             return chunks
 
         if self.model is None:
-            logger.debug("Reranker model not available - returning chunks unchanged")
-            return chunks
+            logger.debug("Reranker model not available - returning chunks with default scores")
+            return self._add_default_scores(chunks)
 
         torch = _get_torch()
         if torch is None:
-            logger.debug("torch not available - returning chunks unchanged")
-            return chunks
+            logger.debug("torch not available - returning chunks with default scores")
+            return self._add_default_scores(chunks)
 
         try:
             # Prepare pairs for cross-encoder (query, chunk_text)
@@ -169,8 +179,8 @@ class DocumentReranker:
 
         except Exception as e:
             logger.error(f"Reranking error: {e}", exc_info=True)
-            # Return original chunks if reranking fails
-            return chunks
+            # Return chunks with default scores if reranking fails
+            return self._add_default_scores(chunks)
     
     def unload_model(self):
         """

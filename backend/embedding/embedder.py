@@ -186,7 +186,7 @@ class EmbeddingModel:
         # Reduce batch size on CPU to avoid memory issues
         if self.device == 'cpu':
             batch_size = min(batch_size, 8)  # Cap at 8 for CPU
-        print(f"[EMBEDDING] Generating embeddings for {len(texts)} texts with batch_size={batch_size}...")
+        
         # Generate embeddings with smaller batch size
         embeddings = self.model.encode(
             texts,
@@ -194,7 +194,7 @@ class EmbeddingModel:
             convert_to_numpy=convert_to_numpy,
             convert_to_tensor=convert_to_tensor,
             normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
-            show_progress_bar=True,  # Enable progress bar for API calls
+            show_progress_bar=False,  # Disable progress bar to reduce clutter
 
         )
         
@@ -394,6 +394,23 @@ class EmbeddingModel:
 # Global instance for convenience - STRICTLY ENFORCED SINGLETON
 _embedding_model_instance = None  # Renamed for clarity
 _embedding_model_loaded = False  # Track whether model has been loaded
+_cache_version = 0  # Cache version for invalidation
+
+
+def invalidate_embedding_cache() -> None:
+    """
+    Invalidate the embedding model cache, forcing reload on next access.
+    
+    Use this when:
+    - Model configuration changes
+    - Model needs to be reloaded
+    - Cache coherence issues detected
+    """
+    global _embedding_model_instance, _embedding_model_loaded, _cache_version
+    _embedding_model_instance = None
+    _embedding_model_loaded = False
+    _cache_version += 1
+    print(f"[EMBEDDING] Cache invalidated (version: {_cache_version})")
 
 
 def get_embedding_model(

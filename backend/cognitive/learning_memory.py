@@ -100,9 +100,19 @@ class TrustScorer:
     3. Consistency (alignment with other knowledge)
     4. Recency (newer is often better)
     5. Validation history (proven right/wrong)
+    
+    Can optionally use enhanced trust scorer for advanced features.
     """
 
-    def __init__(self):
+    def __init__(self, use_enhanced: bool = False):
+        """
+        Initialize trust scorer.
+        
+        Args:
+            use_enhanced: If True, use enhanced trust scorer with confidence intervals
+        """
+        self.use_enhanced = use_enhanced
+        
         # Source reliability weights
         self.source_weights = {
             'user_feedback_positive': 0.9,
@@ -114,6 +124,17 @@ class TrustScorer:
             'inferred': 0.3,
             'assumed': 0.1
         }
+        
+        # Initialize enhanced scorer if requested
+        if self.use_enhanced:
+            try:
+                from cognitive.enhanced_trust_scorer import get_adaptive_trust_scorer
+                self.enhanced_scorer = get_adaptive_trust_scorer()
+            except ImportError:
+                self.use_enhanced = False
+                self.enhanced_scorer = None
+        else:
+            self.enhanced_scorer = None
 
     def calculate_trust_score(
         self,
@@ -121,7 +142,9 @@ class TrustScorer:
         outcome_quality: float,
         consistency_score: float,
         validation_history: Dict[str, int],
-        age_days: float
+        age_days: float,
+        context: Optional[Dict[str, Any]] = None,
+        operational_confidence: Optional[float] = None
     ) -> float:
         """
         Calculate comprehensive trust score.
@@ -132,10 +155,26 @@ class TrustScorer:
             consistency_score: Consistency with other knowledge (0-1)
             validation_history: {'validated': N, 'invalidated': M}
             age_days: Age in days
+            context: Optional context for enhanced scoring
+            operational_confidence: Optional operational confidence (0-1)
 
         Returns:
             Trust score (0-1)
         """
+        # Use enhanced scorer if available and requested
+        if self.use_enhanced and self.enhanced_scorer:
+            result = self.enhanced_scorer.calculate_trust_score(
+                source=source,
+                outcome_quality=outcome_quality,
+                consistency_score=consistency_score,
+                validation_history=validation_history,
+                age_days=age_days,
+                operational_confidence=operational_confidence,
+                context=context or {}
+            )
+            return result.trust_score
+        
+        # Original implementation (backward compatible)
         # 1. Source reliability (40% weight)
         source_score = self.source_weights.get(source, 0.5)
 
@@ -338,22 +377,58 @@ class LearningMemoryManager:
     def _calculate_consistency(
         self,
         input_context: Dict[str, Any],
-        expected_output: Dict[str, Any]
+        expected_output: Dict[str, Any],
+        use_enhanced: bool = False
     ) -> float:
         """
         Calculate consistency with existing knowledge.
 
         Checks if this aligns with other learning examples.
+        
+        Args:
+            input_context: Input context for the learning example
+            expected_output: Expected output
+            use_enhanced: If True, use enhanced consistency checker
+            
+        Returns:
+            Consistency score (0-1)
         """
         # Find similar learning examples
+        topic = input_context.get('topic', '')
         similar_examples = self.session.query(LearningExample).filter(
             LearningExample.trust_score > 0.7
-        ).limit(10).all()
+        ).limit(50).all()  # Get more examples for enhanced checking
 
         if not similar_examples:
             return 0.5  # Neutral if no comparison data
 
-        # Simple consistency check (can be enhanced)
+        # Use enhanced consistency checker if available
+        if use_enhanced:
+            try:
+                from cognitive.enhanced_consistency_checker import get_consistency_checker
+                checker = get_consistency_checker(use_semantic_detection=True)
+                
+                # Create a temporary example dict for checking
+                temp_example = {
+                    'input_context': input_context,
+                    'expected_output': expected_output,
+                    'topic': topic
+                }
+                
+                # Run comprehensive consistency check
+                result = checker.check_consistency(
+                    new_example=temp_example,
+                    existing_examples=similar_examples,
+                    topic=topic
+                )
+                
+                # Return the consistency score
+                return result.consistency_score
+            except ImportError:
+                logger.warning("Enhanced consistency checker not available, using simple check")
+                use_enhanced = False
+
+        # Simple consistency check (fallback)
         consistent_count = 0
         total_count = len(similar_examples)
 

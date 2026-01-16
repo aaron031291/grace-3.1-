@@ -62,8 +62,10 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
 
       - name: Type check with mypy
-        run: mypy --ignore-missing-imports --no-error-summary .
+        run: mypy --ignore-missing-imports --no-error-summary --show-error-codes .
         continue-on-error: true
+        # Note: Currently set to continue-on-error to allow gradual type improvement
+        # Should be set to false once type coverage is sufficient
 
   # ===========================================================================
   # Backend Unit Tests

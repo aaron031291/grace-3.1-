@@ -41,6 +41,7 @@ class AnomalyType(str, Enum):
     INVARIANT_VIOLATION = "invariant_violation"
     GENESIS_KEY_ANOMALY = "genesis_key_anomaly"
     COGNITIVE_ANOMALY = "cognitive_anomaly"
+    CODE_QUALITY_ISSUE = "code_quality_issue"  # NEW: Static analysis and design pattern issues
 
 
 class ClarityLevel(str, Enum):
@@ -371,6 +372,18 @@ class InterpreterLayer:
         # Agent anomalies
         if sensor_data.agent_outputs:
             anomalies.extend(self._detect_agent_anomalies(sensor_data))
+        
+        # Configuration anomalies (NEW)
+        if sensor_data.configuration:
+            anomalies.extend(self._detect_configuration_anomalies(sensor_data.configuration))
+        
+        # Static analysis anomalies (NEW)
+        if sensor_data.static_analysis:
+            anomalies.extend(self._detect_static_analysis_anomalies(sensor_data.static_analysis))
+        
+        # Design pattern anomalies (NEW)
+        if sensor_data.design_patterns:
+            anomalies.extend(self._detect_design_pattern_anomalies(sensor_data.design_patterns))
 
         return anomalies
 
@@ -493,6 +506,110 @@ class InterpreterLayer:
                 affected_components=["cognitive"],
             ))
 
+        return anomalies
+    
+    def _detect_configuration_anomalies(self, config_data: Any) -> List[Anomaly]:
+        """Detect anomalies from configuration validation."""
+        anomalies = []
+        
+        try:
+            # Check for critical configuration issues
+            if config_data.critical_issues > 0:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.SERVICE_DEGRADATION,
+                    severity=1.0,  # Critical
+                    description=f"Found {config_data.critical_issues} critical configuration issues",
+                    expected_value=0,
+                    actual_value=config_data.critical_issues,
+                    affected_components=config_data.components_checked
+                ))
+            
+            # Check for high severity issues
+            if config_data.high_issues > 0:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.SERVICE_DEGRADATION,
+                    severity=0.7,  # High
+                    description=f"Found {config_data.high_issues} high-severity configuration issues",
+                    expected_value=0,
+                    actual_value=config_data.high_issues,
+                    affected_components=config_data.components_checked
+                ))
+            
+            # Check validation status
+            if not config_data.validation_passed:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.INVARIANT_VIOLATION,
+                    severity=0.8,
+                    description="Configuration validation failed",
+                    expected_value=True,
+                    actual_value=False,
+                    affected_components=config_data.components_checked
+                ))
+        except Exception as e:
+            logger.error(f"Failed to detect configuration anomalies: {e}")
+        
+        return anomalies
+    
+    def _detect_static_analysis_anomalies(self, static_data: Any) -> List[Anomaly]:
+        """Detect anomalies from static analysis."""
+        anomalies = []
+        
+        try:
+            # Check for critical static analysis issues
+            if static_data.critical_issues > 0:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.CODE_QUALITY_ISSUE,
+                    severity=0.9,  # Critical code issues
+                    description=f"Found {static_data.critical_issues} critical static analysis issues",
+                    expected_value=0,
+                    actual_value=static_data.critical_issues,
+                    affected_components=["code_quality"]
+                ))
+            
+            # Check for high severity issues
+            if static_data.high_issues > 0:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.CODE_QUALITY_ISSUE,
+                    severity=0.6,  # High
+                    description=f"Found {static_data.high_issues} high-severity static analysis issues",
+                    expected_value=0,
+                    actual_value=static_data.high_issues,
+                    affected_components=["code_quality"]
+                ))
+            
+            # Check analysis status
+            if not static_data.analysis_passed:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.CODE_QUALITY_ISSUE,
+                    severity=0.5,
+                    description="Static analysis found issues",
+                    expected_value=True,
+                    actual_value=False,
+                    affected_components=["code_quality"]
+                ))
+        except Exception as e:
+            logger.error(f"Failed to detect static analysis anomalies: {e}")
+        
+        return anomalies
+    
+    def _detect_design_pattern_anomalies(self, pattern_data: Any) -> List[Anomaly]:
+        """Detect anomalies from design pattern detection."""
+        anomalies = []
+        
+        try:
+            # Check for high severity design issues
+            if pattern_data.high_issues > 0:
+                anomalies.append(Anomaly(
+                    anomaly_type=AnomalyType.CODE_QUALITY_ISSUE,
+                    severity=0.5,  # Medium - design issues
+                    description=f"Found {pattern_data.high_issues} high-severity design pattern issues",
+                    expected_value=0,
+                    actual_value=pattern_data.high_issues,
+                    affected_components=pattern_data.patterns_checked
+                ))
+        except Exception as e:
+            logger.error(f"Failed to detect design pattern anomalies: {e}")
+        
         return anomalies
 
     def _check_invariants(self, sensor_data: SensorData) -> List[InvariantCheck]:

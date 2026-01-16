@@ -537,8 +537,23 @@ class LearningOrchestrator:
     ):
         self.knowledge_base_path = knowledge_base_path
 
-        # Multiprocessing setup
-        mp.set_start_method('spawn', force=True)
+        # Multiprocessing setup - Windows compatible
+        import sys
+        if sys.platform == 'win32':
+            # Windows requires 'spawn' method
+            try:
+                mp.set_start_method('spawn', force=True)
+            except RuntimeError:
+                # Already set, continue
+                pass
+        else:
+            # Unix systems can use 'fork' (faster)
+            try:
+                mp.set_start_method('fork', force=True)
+            except RuntimeError:
+                # Already set, continue
+                pass
+        
         self.manager = Manager()
 
         # Shared state
