@@ -25,8 +25,23 @@ import requests
 
 from .multi_llm_client import MultiLLMClient, TaskType
 from .repo_access import RepositoryAccessLayer
-from confidence_scorer.confidence_scorer import ConfidenceScorer
-from confidence_scorer.contradiction_detector import SemanticContradictionDetector
+
+# Robust imports for confidence scorer
+try:
+    from backend.confidence_scorer.confidence_scorer import ConfidenceScorer
+except ImportError:
+    try:
+        from confidence_scorer.confidence_scorer import ConfidenceScorer
+    except ImportError:
+        ConfidenceScorer = None
+
+try:
+    from backend.confidence_scorer.contradiction_detector import SemanticContradictionDetector
+except ImportError:
+    try:
+        from confidence_scorer.contradiction_detector import SemanticContradictionDetector
+    except ImportError:
+        SemanticContradictionDetector = None
 
 logger = logging.getLogger(__name__)
 

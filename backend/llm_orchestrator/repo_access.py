@@ -21,14 +21,37 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 import json
 
-from database import session as db_session
-from models.database_models import Document, DocumentChunk
-from models.genesis_key_models import GenesisKey
-from models.librarian_models import LibrarianTag, DocumentRelationship
-from cognitive.learning_memory import LearningExample, LearningPattern
-from vector_db.client import get_qdrant_client
-from embedding import EmbeddingModel
-from retrieval.retriever import DocumentRetriever
+# Lazy imports to avoid SQLAlchemy metadata conflicts
+# All imports are deferred to runtime when actually needed
+db_session = None
+Document = None
+DocumentChunk = None
+GenesisKey = None
+LibrarianTag = None
+DocumentRelationship = None
+LearningExample = None
+LearningPattern = None
+EmbeddingModel = None
+DocumentRetriever = None
+
+def _get_db_session():
+    """Lazy load database session."""
+    global db_session
+    if db_session is None:
+        try:
+            from database import session as _db_session
+            db_session = _db_session
+        except Exception:
+            pass
+    return db_session
+
+def _get_qdrant_client():
+    """Lazy load Qdrant client."""
+    try:
+        from vector_db.client import get_qdrant_client as _get_client
+        return _get_client()
+    except Exception:
+        return None
 
 logger = logging.getLogger(__name__)
 
