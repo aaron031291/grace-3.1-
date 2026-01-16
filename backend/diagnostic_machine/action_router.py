@@ -23,6 +23,7 @@ from pathlib import Path
 from .sensors import SensorData
 from .interpreters import InterpretedData, Pattern, PatternType
 from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
+from .healing import HealingExecutor, HealingActionType, get_healing_executor
 
 logger = logging.getLogger(__name__)
 
@@ -171,6 +172,39 @@ class ActionRouter:
             function="force_garbage_collection",
             reversible=False,
         ),
+        # WHOLE-SYSTEM HEALING ACTIONS
+        'fix_code_issues': HealingAction(
+            healing_id="HEAL-006",
+            name="Fix Code Issues",
+            description="Automatically fix detected security vulnerabilities",
+            target_component="code",
+            function="fix_code_issues",
+            reversible=True,
+        ),
+        'restart_container': HealingAction(
+            healing_id="HEAL-007",
+            name="Restart Container",
+            description="Restart unhealthy Docker container",
+            target_component="containers",
+            command="docker restart {container_name}",
+            reversible=True,
+        ),
+        'clear_disk_space': HealingAction(
+            healing_id="HEAL-008",
+            name="Clear Disk Space",
+            description="Clear temporary files and logs to free disk space",
+            target_component="disk",
+            function="clear_disk_space",
+            reversible=False,
+        ),
+        'reload_embedding_model': HealingAction(
+            healing_id="HEAL-009",
+            name="Reload Embedding Model",
+            description="Reload embedding model to fix model issues",
+            target_component="embedding",
+            function="reload_embedding_model",
+            reversible=True,
+        ),
     }
 
     def __init__(
@@ -205,6 +239,10 @@ class ActionRouter:
         self._healing_functions['reset_database_connection'] = self._heal_reset_database
         self._healing_functions['reset_vector_db_client'] = self._heal_reset_vector_db
         self._healing_functions['force_garbage_collection'] = self._heal_garbage_collection
+        # WHOLE-SYSTEM HEALING FUNCTIONS
+        self._healing_functions['fix_code_issues'] = self._heal_code_issues
+        self._healing_functions['clear_disk_space'] = self._heal_clear_disk_space
+        self._healing_functions['reload_embedding_model'] = self._heal_reload_embedding
 
     def register_healing_function(self, name: str, func: Callable):
         """Register a custom healing function."""
@@ -498,6 +536,24 @@ class ActionRouter:
         if sensor_data.metrics and sensor_data.metrics.memory_percent > 85:
             healing_actions.append(self.HEALING_ACTIONS['run_garbage_collection'])
 
+        # WHOLE-SYSTEM HEALING
+
+        # Code quality issues (security vulnerabilities)
+        if sensor_data.code_quality and sensor_data.code_quality.critical_issues > 0:
+            healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
+
+        # Infrastructure issues - unhealthy containers
+        if sensor_data.infrastructure and sensor_data.infrastructure.containers_unhealthy > 0:
+            healing_actions.append(self.HEALING_ACTIONS['restart_container'])
+
+        # Disk space issues
+        if sensor_data.infrastructure and sensor_data.infrastructure.disk_space_critical:
+            healing_actions.append(self.HEALING_ACTIONS['clear_disk_space'])
+
+        # Embedding service issues
+        if sensor_data.metrics and not sensor_data.metrics.embedding_health:
+            healing_actions.append(self.HEALING_ACTIONS['reload_embedding_model'])
+
         # Execute each healing action
         for healing in healing_actions:
             self._action_counter += 1
@@ -780,6 +836,109 @@ class ActionRouter:
             return True
         except Exception as e:
             logger.error(f"GC failed: {e}")
+            return False
+
+    # ==================== WHOLE-SYSTEM HEALING FUNCTIONS ====================
+
+    def _heal_code_issues(self, params: Dict) -> bool:
+        """
+        Fix detected security vulnerabilities using the HealingExecutor.
+
+        This connects to the CODE_FIX action in the healing layer to automatically
+        apply fixes for detected security issues like command injection, path traversal, etc.
+        """
+        try:
+            healer = get_healing_executor()
+
+            # Get code quality data if available
+            issue_type = params.get('issue_type', 'auto')
+            file_path = params.get('file_path')
+
+            result = healer.execute(
+                HealingActionType.CODE_FIX,
+                {
+                    'issue_type': issue_type,
+                    'file_path': file_path,
+                    'fix_type': 'auto',  # Auto-detect and fix
+                }
+            )
+
+            if result.success:
+                logger.info(f"Code issues healed: {result.message}")
+                return True
+            else:
+                logger.warning(f"Code healing partial: {result.message}")
+                return False
+
+        except Exception as e:
+            logger.error(f"Code issue healing failed: {e}")
+            return False
+
+    def _heal_clear_disk_space(self, params: Dict) -> bool:
+        """Clear temporary files and logs to free up disk space."""
+        try:
+            import shutil
+
+            # Clear Python cache files
+            backend_dir = Path(__file__).parent.parent
+            cleared_bytes = 0
+
+            # Clear __pycache__ directories
+            for pycache in backend_dir.rglob('__pycache__'):
+                if pycache.is_dir():
+                    try:
+                        size = sum(f.stat().st_size for f in pycache.rglob('*') if f.is_file())
+                        shutil.rmtree(pycache)
+                        cleared_bytes += size
+                    except Exception:
+                        pass
+
+            # Clear .pyc files
+            for pyc in backend_dir.rglob('*.pyc'):
+                try:
+                    size = pyc.stat().st_size
+                    pyc.unlink()
+                    cleared_bytes += size
+                except Exception:
+                    pass
+
+            # Clear old log files (older than 7 days)
+            log_dir = backend_dir / 'logs'
+            if log_dir.exists():
+                import time
+                cutoff = time.time() - (7 * 24 * 60 * 60)  # 7 days ago
+                for log_file in log_dir.glob('*.log*'):
+                    try:
+                        if log_file.stat().st_mtime < cutoff:
+                            size = log_file.stat().st_size
+                            log_file.unlink()
+                            cleared_bytes += size
+                    except Exception:
+                        pass
+
+            logger.info(f"Disk space cleared: {cleared_bytes / (1024*1024):.2f} MB")
+            return True
+
+        except Exception as e:
+            logger.error(f"Disk space clearing failed: {e}")
+            return False
+
+    def _heal_reload_embedding(self, params: Dict) -> bool:
+        """Reload embedding model to fix model issues."""
+        try:
+            healer = get_healing_executor()
+
+            result = healer.execute(HealingActionType.EMBEDDING_MODEL_RELOAD, {})
+
+            if result.success:
+                logger.info("Embedding model reloaded successfully")
+                return True
+            else:
+                logger.warning(f"Embedding reload issue: {result.message}")
+                return False
+
+        except Exception as e:
+            logger.error(f"Embedding reload failed: {e}")
             return False
 
     def to_dict(self, decision: ActionDecision) -> Dict[str, Any]:
