@@ -170,13 +170,38 @@ class FileOrganizer:
         elif pattern == "category/date":
             date_part = datetime.utcnow().strftime("%Y/%m")
             path_parts = [category or "general", date_part]
+        elif pattern == "category/type/date":
+            # 3-level: category/type/date
+            date_part = datetime.utcnow().strftime("%Y-%m")
+            path_parts = [category or "general", file_type, date_part]
+        elif pattern == "date/category/type":
+            # 3-level: date/category/type
+            date_part = datetime.utcnow().strftime("%Y/%m")
+            path_parts = [date_part, category or "general", file_type]
+        elif pattern == "tags/hierarchy":
+            # Multi-level based on tags: tag1/tag2/tag3
+            # Use top 3 tags as folder hierarchy
+            path_parts = tag_names[:3] if tag_names else [category or "general"]
+        elif pattern == "category/tags":
+            # Category then tags: category/tag1/tag2
+            path_parts = [category or "general"]
+            if tag_names:
+                path_parts.extend(tag_names[:2])  # Add up to 2 more tag levels
         else:
             # Default: category/type
             path_parts = [category or "general", file_type]
 
-        # Sanitize path parts
-        path_parts = [sanitize_filename(part) for part in path_parts]
-        org_path = os.path.join("documents", *path_parts)
+        # Sanitize path parts (flatten date patterns like "2025/01" -> ["2025", "01"])
+        sanitized_parts = []
+        for part in path_parts:
+            # If part contains "/" (like date patterns), split it
+            if "/" in part:
+                sanitized_parts.extend([sanitize_filename(p) for p in part.split("/")])
+            else:
+                sanitized_parts.append(sanitize_filename(part))
+
+        # Build full path
+        org_path = os.path.join("documents", *sanitized_parts)
 
         return org_path
 
@@ -279,32 +304,71 @@ class FileOrganizer:
         self,
         document_id: int,
         tag_names: List[str],
-        base_path: str = "documents"
+        base_path: str = "documents",
+        max_depth: int = 5
     ) -> Dict[str, Any]:
         """
-        Organize document based on specific tags.
+        Organize document based on specific tags creating nested subfolders.
 
         Args:
             document_id: Document ID
-            tag_names: List of tags to use for organization
+            tag_names: List of tags to use for organization (creates nested folders)
             base_path: Base path for organization (default: "documents")
+            max_depth: Maximum folder depth (default: 5)
 
         Returns:
             Dict with organization result
+
+        Example:
+            >>> organize_by_tags(123, ["ai", "research", "papers"])
+            >>> # Creates: documents/ai/research/papers/document.pdf
         """
         try:
             document = self.db.query(Document).filter(Document.id == document_id).first()
             if not document:
                 return {"success": False, "error": f"Document {document_id} not found"}
 
-            # Build path from tags
-            path_parts = [sanitize_filename(tag.lower()) for tag in tag_names[:3]]  # Limit to 3 levels
-            org_path = os.path.join(base_path, *path_parts)
+            # Build nested path from tags (up to max_depth levels)
+            tag_path_parts = [sanitize_filename(tag.lower()) for tag in tag_names[:max_depth]]
+            org_path = os.path.join(base_path, *tag_path_parts)
 
             return self.organize_document(document_id, target_folder=org_path)
 
         except Exception as e:
             logger.error(f"Error organizing by tags: {e}")
+            return {"success": False, "error": str(e)}
+
+    def organize_into_subfolder(
+        self,
+        document_id: int,
+        folder_hierarchy: List[str],
+        base_path: str = "documents"
+    ) -> Dict[str, Any]:
+        """
+        Organize document into specific subfolder hierarchy.
+
+        Args:
+            document_id: Document ID
+            folder_hierarchy: List of folder names creating nested structure
+                            e.g., ["ai", "research", "papers"] creates ai/research/papers/
+            base_path: Base path for organization (default: "documents")
+
+        Returns:
+            Dict with organization result
+
+        Example:
+            >>> organize_into_subfolder(123, ["ai", "research", "2025"])
+            >>> # Creates: documents/ai/research/2025/document.pdf
+        """
+        try:
+            # Build nested path from hierarchy
+            sanitized_parts = [sanitize_filename(part) for part in folder_hierarchy]
+            org_path = os.path.join(base_path, *sanitized_parts)
+
+            return self.organize_document(document_id, target_folder=org_path)
+
+        except Exception as e:
+            logger.error(f"Error organizing into subfolder: {e}")
             return {"success": False, "error": str(e)}
 
     def create_index_file(
