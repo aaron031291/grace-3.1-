@@ -1,11 +1,12 @@
 """
-Grace Librarian System
+Grace Librarian System - Full File System Librarian
 
 A comprehensive file management and organization system that automatically:
 - Categorizes and tags documents using hybrid rules + AI analysis
 - Tracks relationships between documents (citations, prerequisites, versions, etc.)
 - Manages approval workflows for sensitive operations
 - Maintains complete audit trail of all actions
+- **FULL FILE SYSTEM OPERATIONS**: File creation, naming, organization, and retrieval
 
 The librarian handles files from all sources:
 - User uploads via UI
@@ -19,7 +20,10 @@ Core Components:
 - AIContentAnalyzer: LLM-based content analysis
 - RelationshipManager: Document relationship detection and graphs
 - ApprovalWorkflow: Permission checking and approval queue
-- ActionExecutor: Atomic action execution with rollback
+- FileOrganizer: Automatic folder creation and file organization
+- FileNamingManager: Naming convention enforcement and renaming
+- FileCreator: Template-based file creation (index files, summaries, READMEs)
+- UnifiedRetriever: Combined search across tags, relationships, and metadata
 
 Usage:
     from librarian.engine import LibrarianEngine
@@ -53,6 +57,16 @@ from .rule_categorizer import RuleBasedCategorizer
 from .ai_analyzer import AIContentAnalyzer
 from .relationship_manager import RelationshipManager
 from .approval_workflow import ApprovalWorkflow
+from .file_organizer import FileOrganizer
+from .file_naming_manager import FileNamingManager
+from .file_creator import FileCreator
+from .unified_retriever import UnifiedRetriever
+from .genesis_integration import LibrarianGenesisIntegration
+from .content_recommender import ContentRecommender
+from .content_lifecycle_manager import ContentLifecycleManager
+from .content_integrity_verifier import ContentIntegrityVerifier
+from .content_visualizer import ContentVisualizer
+from .bulk_operations_manager import BulkOperationsManager
 
 __all__ = [
     "LibrarianEngine",
@@ -61,4 +75,14 @@ __all__ = [
     "AIContentAnalyzer",
     "RelationshipManager",
     "ApprovalWorkflow",
+    "FileOrganizer",
+    "FileNamingManager",
+    "FileCreator",
+    "UnifiedRetriever",
+    "LibrarianGenesisIntegration",
+    "ContentRecommender",
+    "ContentLifecycleManager",
+    "ContentIntegrityVerifier",
+    "ContentVisualizer",
+    "BulkOperationsManager",
 ]

@@ -27,6 +27,16 @@ from librarian.rule_categorizer import RuleBasedCategorizer
 from librarian.ai_analyzer import AIContentAnalyzer
 from librarian.relationship_manager import RelationshipManager
 from librarian.approval_workflow import ApprovalWorkflow
+from librarian.file_organizer import FileOrganizer
+from librarian.file_naming_manager import FileNamingManager
+from librarian.file_creator import FileCreator
+from librarian.unified_retriever import UnifiedRetriever
+from librarian.genesis_integration import LibrarianGenesisIntegration
+from librarian.content_recommender import ContentRecommender
+from librarian.content_lifecycle_manager import ContentLifecycleManager
+from librarian.content_integrity_verifier import ContentIntegrityVerifier
+from librarian.content_visualizer import ContentVisualizer
+from librarian.bulk_operations_manager import BulkOperationsManager
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +103,12 @@ class LibrarianEngine:
         use_ai: bool = True,
         detect_relationships: bool = True,
         ai_confidence_threshold: float = 0.6,
-        similarity_threshold: float = 0.7
+        similarity_threshold: float = 0.7,
+        knowledge_base_path: str = "backend/knowledge_base",
+        auto_organize: bool = True,
+        auto_rename: bool = False,
+        organization_pattern: str = "category/type",
+        naming_convention: str = "sanitized"
     ):
         """
         Initialize LibrarianEngine with all components.
@@ -167,7 +182,64 @@ class LibrarianEngine:
                 vector_db_client
             )
 
-        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None})")
+        # File system librarian components
+        self.file_organizer = FileOrganizer(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path,
+            auto_organize=auto_organize,
+            organization_pattern=organization_pattern
+        )
+
+        self.file_naming_manager = FileNamingManager(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path,
+            naming_convention=naming_convention,
+            auto_rename=auto_rename
+        )
+
+        self.file_creator = FileCreator(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path
+        )
+
+        self.unified_retriever = UnifiedRetriever(
+            db_session=db_session,
+            relationship_manager=self.relationship_manager
+        )
+
+        # Genesis Key integration
+        self.genesis_integration = LibrarianGenesisIntegration(db_session)
+
+        # Content management modules
+        self.content_recommender = ContentRecommender(
+            db_session=db_session,
+            relationship_manager=self.relationship_manager
+        )
+
+        self.lifecycle_manager = ContentLifecycleManager(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path
+        )
+
+        self.integrity_verifier = ContentIntegrityVerifier(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path
+        )
+
+        self.content_visualizer = ContentVisualizer(
+            db_session=db_session,
+            tag_manager=self.tag_manager,
+            relationship_manager=self.relationship_manager
+        )
+
+        self.bulk_operations = BulkOperationsManager(
+            db_session=db_session,
+            tag_manager=self.tag_manager,
+            file_organizer=self.file_organizer,
+            file_naming_manager=self.file_naming_manager
+        )
+
+        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None}, File System: Enabled, Genesis Keys: Enabled, Recommendations: Enabled, Lifecycle: Enabled, Integrity: Enabled, Visualization: Enabled, Bulk Ops: Enabled)")
 
     def process_document(
         self,
@@ -295,7 +367,87 @@ class LibrarianEngine:
                 except Exception as e:
                     logger.error(f"Relationship detection failed for document {document_id}: {e}")
 
-            # Step 4: Auto-execute approved actions (if enabled)
+            # Step 4: File organization (if auto_organize enabled)
+            if self.file_organizer.auto_organize:
+                try:
+                    old_path = document.file_path
+                    org_result = self.file_organizer.organize_document(document_id)
+                    if org_result.get("success"):
+                        result["organization_path"] = org_result.get("organization_path")
+                        result["file_moved"] = org_result.get("file_moved", False)
+                        result["folder_created"] = org_result.get("folder_created", False)
+                        
+                        # Track organization via Genesis Key
+                        if org_result.get("file_moved"):
+                            self.genesis_integration.track_organization_action(
+                                document_id=document_id,
+                                old_path=old_path,
+                                new_path=org_result.get("organization_path", ""),
+                                organization_pattern=self.file_organizer.organization_pattern
+                            )
+                        
+                        logger.info(f"Organized document {document_id} to: {org_result.get('organization_path')}")
+                except Exception as e:
+                    logger.warning(f"File organization failed for document {document_id}: {e}")
+
+            # Step 5: File naming (if auto_rename enabled)
+            if self.file_naming_manager.auto_rename:
+                try:
+                    old_filename = document.filename
+                    rename_result = self.file_naming_manager.rename_file(document_id, auto_suggest=True)
+                    if rename_result.get("success") and rename_result.get("renamed"):
+                        result["file_renamed"] = True
+                        result["new_filename"] = rename_result.get("new_filename")
+                        
+                        # Track renaming via Genesis Key
+                        self.genesis_integration.track_renaming_action(
+                            document_id=document_id,
+                            old_filename=old_filename or "",
+                            new_filename=rename_result.get("new_filename", ""),
+                            naming_convention=self.file_naming_manager.naming_convention
+                        )
+                        
+                        logger.info(f"Renamed document {document_id} to: {rename_result.get('new_filename')}")
+                except Exception as e:
+                    logger.warning(f"File naming failed for document {document_id}: {e}")
+
+            # Step 6: Track tag assignments via Genesis Key
+            if result["tags_assigned"] > 0:
+                try:
+                    # Get assigned tags for this document
+                    doc_tags = self.tag_manager.get_document_tags(document_id)
+                    tag_names = [tag.get("tag_name", "") for tag in doc_tags]
+                    
+                    if tag_names:
+                        self.genesis_integration.track_tag_assignment(
+                            document_id=document_id,
+                            tag_names=tag_names,
+                            assigned_by="librarian_engine"
+                        )
+                except Exception as e:
+                    logger.warning(f"Genesis Key tracking for tags failed: {e}")
+
+            # Step 7: Create Genesis Key for document processing
+            try:
+                genesis_key_id = self.genesis_integration.create_genesis_key_for_document(
+                    document_id=document_id,
+                    action_type="process",
+                    description=f"Librarian processing: {result['tags_assigned']} tags, {result['relationships_detected']} relationships",
+                    metadata={
+                        "tags_assigned": result["tags_assigned"],
+                        "relationships_detected": result["relationships_detected"],
+                        "rules_matched": result["rules_matched"],
+                        "organization_path": result.get("organization_path"),
+                        "file_moved": result.get("file_moved", False),
+                        "file_renamed": result.get("file_renamed", False)
+                    }
+                )
+                if genesis_key_id:
+                    result["genesis_key_id"] = genesis_key_id
+            except Exception as e:
+                logger.warning(f"Genesis Key creation for processing failed: {e}")
+
+            # Step 6: Auto-execute approved actions (if enabled)
             if auto_execute:
                 approved_count = self.approval_workflow.auto_approve_safe_actions(
                     min_confidence=0.8
@@ -473,8 +625,27 @@ class LibrarianEngine:
             "rules": self.rule_categorizer.get_rule_statistics(),
             "actions": self.approval_workflow.get_action_statistics(),
             "ai_available": self.ai_analyzer.is_available() if self.ai_analyzer else False,
-            "relationships_enabled": self.relationship_manager is not None
+            "relationships_enabled": self.relationship_manager is not None,
+            "file_system": {
+                "organization_enabled": self.file_organizer.auto_organize,
+                "organization_pattern": self.file_organizer.organization_pattern,
+                "naming_enabled": self.file_naming_manager.auto_rename,
+                "naming_convention": self.file_naming_manager.naming_convention
+            },
+            "genesis_keys": "enabled",
+            "content_recommendations": "enabled",
+            "lifecycle_management": "enabled",
+            "integrity_verification": "enabled",
+            "content_visualization": "enabled",
+            "bulk_operations": "enabled"
         }
+
+        # Add organization statistics if available
+        try:
+            org_stats = self.file_organizer.get_organization_statistics()
+            stats["file_system"]["organization_stats"] = org_stats
+        except Exception:
+            pass
 
         return stats
 
@@ -496,6 +667,16 @@ class LibrarianEngine:
             "approval_workflow": "healthy",
             "ai_analyzer": "unavailable",
             "relationship_manager": "unavailable",
+            "file_organizer": "healthy",
+            "file_naming_manager": "healthy",
+            "file_creator": "healthy",
+            "unified_retriever": "healthy",
+            "genesis_integration": "healthy",
+            "content_recommender": "healthy",
+            "lifecycle_manager": "healthy",
+            "integrity_verifier": "healthy",
+            "content_visualizer": "healthy",
+            "bulk_operations": "healthy",
             "overall_status": "healthy"
         }
 
@@ -510,5 +691,13 @@ class LibrarianEngine:
         # Check relationship manager
         if self.relationship_manager:
             health["relationship_manager"] = "healthy"
+
+        # Check file system components
+        try:
+            # Test file organizer
+            _ = self.file_organizer.kb_path.exists()
+        except Exception:
+            health["file_organizer"] = "degraded"
+            health["overall_status"] = "degraded"
 
         return health
