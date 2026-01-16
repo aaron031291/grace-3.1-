@@ -61,6 +61,12 @@ from .file_organizer import FileOrganizer
 from .file_naming_manager import FileNamingManager
 from .file_creator import FileCreator
 from .unified_retriever import UnifiedRetriever
+from .genesis_integration import LibrarianGenesisIntegration
+from .content_recommender import ContentRecommender
+from .content_lifecycle_manager import ContentLifecycleManager
+from .content_integrity_verifier import ContentIntegrityVerifier
+from .content_visualizer import ContentVisualizer
+from .bulk_operations_manager import BulkOperationsManager
 
 __all__ = [
     "LibrarianEngine",
@@ -73,4 +79,10 @@ __all__ = [
     "FileNamingManager",
     "FileCreator",
     "UnifiedRetriever",
+    "LibrarianGenesisIntegration",
+    "ContentRecommender",
+    "ContentLifecycleManager",
+    "ContentIntegrityVerifier",
+    "ContentVisualizer",
+    "BulkOperationsManager",
 ]
