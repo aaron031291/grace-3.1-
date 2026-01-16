@@ -66,6 +66,7 @@ from api.autonomous_api import router as autonomous_router  # Autonomous Action 
 from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
 from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
+from api.grace_os_api import router as grace_os_router  # Grace OS - Full IDE integration
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -599,6 +600,7 @@ app.include_router(autonomous_router)  # Autonomous Action Engine - self-trigger
 app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
 app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
+app.include_router(grace_os_router)  # Grace OS - Self-healing IDE, Genesis IDE, autonomous actions
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
