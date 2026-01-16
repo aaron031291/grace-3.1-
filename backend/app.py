@@ -39,11 +39,13 @@ from api.training import router as training_router
 from api.autonomous_learning import router as autonomous_learning_router
 from api.master_integration import router as master_router
 from api.llm_orchestration import router as llm_orchestration_router
+from api.chat_llm_integration import get_chat_llm_integration, ChatLLMIntegration
 from api.ingestion_integration import router as ingestion_integration_router  # Complete autonomous cycle
 from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
 from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
 from api.notion import router as notion_router  # Notion task management system
 from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
+from api.multimodal_api import router as multimodal_router  # Multimodal API - Vision, Voice, Audio, Video with Genesis Keys
 from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
 from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
 from api.codebase_api import router as codebase_router  # Codebase Browser - file browsing, search, analysis
@@ -649,11 +651,14 @@ app.include_router(training_router)
 app.include_router(master_router)  # Master integration - unified access to ALL systems
 app.include_router(autonomous_learning_router)
 app.include_router(llm_orchestration_router)
+from api.chat_orchestrator_endpoint import router as chat_orchestrator_router
+app.include_router(chat_orchestrator_router)  # Full LLM orchestrator for chats with world model integration
 app.include_router(ingestion_integration_router)  # Complete autonomous cycle with self-healing
 app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
 app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
 app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
 app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
+app.include_router(multimodal_router)  # Multimodal API - Vision, Voice, Audio, Video with Genesis Key tracking
 app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
 app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
 app.include_router(codebase_router)  # Codebase Browser - file browsing, code search, commit history, analysis

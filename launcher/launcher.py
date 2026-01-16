@@ -27,7 +27,6 @@ import threading
 from .version import VersionManager, VersionMismatchError
 from .health_checker import HealthChecker, HealthCheckResult
 from .folder_validator import FolderValidator
-from .logging_db import LauncherLogger
 from .sqlite_logger import SQLiteLogHandler, LauncherLogCapture
 
 # Configure logging
@@ -36,9 +35,6 @@ logging.basicConfig(
     format='[%(levelname)s] %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-# Global launcher logger (will be initialized in GraceLauncher)
-_launcher_logger: Optional['LauncherLogger'] = None
 
 
 @dataclass
@@ -505,25 +501,56 @@ class GraceLauncher:
         
         for process_info in self.processes:
             try:
-                # Try graceful shutdown first
-                os.kill(process_info.pid, signal.SIGTERM)
-                
-                # Wait up to 5 seconds
-                for _ in range(5):
-                    try:
-                        os.waitpid(process_info.pid, os.WNOHANG)
-                        break
-                    except ChildProcessError:
-                        break
-                    time.sleep(1)
-                
-                # Force kill if still running
-                try:
-                    os.kill(process_info.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass  # Already dead
-                
-                logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
+                # Use subprocess methods for cross-platform compatibility
+                if process_info.process:
+                    # Try graceful shutdown first
+                    process_info.process.terminate()
+                    
+                    # Wait up to 5 seconds for process to exit
+                    for _ in range(5):
+                        if process_info.process.poll() is not None:
+                            # Process has exited
+                            break
+                        time.sleep(1)
+                    
+                    # Force kill if still running
+                    if process_info.process.poll() is None:
+                        process_info.process.kill()
+                        # Give it a moment to die
+                        time.sleep(0.5)
+                    
+                    logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
+                else:
+                    # Fallback: use os.kill if process object not available
+                    if sys.platform != "win32":
+                        # Unix: use signals
+                        os.kill(process_info.pid, signal.SIGTERM)
+                        # Wait up to 5 seconds
+                        for _ in range(5):
+                            try:
+                                pid, _ = os.waitpid(process_info.pid, os.WNOHANG)
+                                if pid == process_info.pid:
+                                    break
+                            except ChildProcessError:
+                                break
+                            time.sleep(1)
+                        # Force kill if still running
+                        try:
+                            os.kill(process_info.pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass  # Already dead
+                    else:
+                        # Windows: use taskkill
+                        try:
+                            subprocess.run(
+                                ["taskkill", "/F", "/PID", str(process_info.pid)],
+                                capture_output=True,
+                                timeout=5
+                            )
+                        except Exception:
+                            pass  # Process may already be dead
+                    
+                    logger.info(f"✓ Stopped {process_info.name} (PID: {process_info.pid})")
                 
             except ProcessLookupError:
                 logger.warning(f"Process {process_info.name} (PID: {process_info.pid}) not found")

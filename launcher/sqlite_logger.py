@@ -45,6 +45,13 @@ class SQLiteLogHandler(logging.Handler):
                 )
             """)
             
+            # Migrate: Add source column if it doesn't exist
+            try:
+                cursor.execute("SELECT source FROM launcher_log LIMIT 1")
+            except sqlite3.OperationalError:
+                # Column doesn't exist, add it
+                cursor.execute("ALTER TABLE launcher_log ADD COLUMN source TEXT")
+            
             # Create indexes for faster queries
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_genesis_key 
@@ -124,6 +131,13 @@ class LauncherLogCapture:
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+            
+            # Migrate: Add source column if it doesn't exist
+            try:
+                cursor.execute("SELECT source FROM launcher_log LIMIT 1")
+            except sqlite3.OperationalError:
+                # Column doesn't exist, add it
+                cursor.execute("ALTER TABLE launcher_log ADD COLUMN source TEXT")
             
             # Create indexes for faster queries
             cursor.execute("""
@@ -297,3 +311,4 @@ class LauncherLogCapture:
         # Threads are daemon threads, so they'll exit when main thread exits
         for thread in self._threads:
             if thread.is_alive():
+                thread.join(timeout=1.0)

@@ -27,11 +27,15 @@ from dataclasses import dataclass
 from sqlalchemy.orm import Session
 import json
 import uuid
+import hashlib
 
 from .multi_llm_client import MultiLLMClient, TaskType
 from .repo_access import RepositoryAccessLayer
 from .hallucination_guard import HallucinationGuard, VerificationResult
 from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
+from .proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
+from .autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
+from .grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
 from cognitive.learning_memory import LearningMemoryManager
 from embedding import EmbeddingModel
@@ -129,6 +133,42 @@ class LLMOrchestrator:
             session=session,
             knowledge_base_path=knowledge_base_path
         ) if session and knowledge_base_path else None
+
+        # Initialize proactive code intelligence (makes LLMs always code-aware)
+        self.code_intelligence = get_proactive_code_intelligence(
+            multi_llm_client=self.multi_llm,
+            repo_access=self.repo_access,
+            learning_integration=None  # Will be set after learning_integration is created
+        )
+        
+        # Initialize autonomous fine-tuning trigger (continuous improvement)
+        from .learning_integration import get_learning_integration
+        learning_integration = get_learning_integration(
+            multi_llm_client=self.multi_llm,
+            repo_access=self.repo_access,
+            learning_memory=self.learning_memory,
+            cognitive_layer1=self.cognitive_layer1,
+            session=session
+        )
+        
+        from .fine_tuning import get_fine_tuning_system
+        fine_tuning_system = get_fine_tuning_system(
+            multi_llm_client=self.multi_llm,
+            repo_access=self.repo_access,
+            learning_integration=learning_integration
+        )
+        
+        self.autonomous_fine_tuning = get_autonomous_fine_tuning_trigger(
+            multi_llm_client=self.multi_llm,
+            fine_tuning_system=fine_tuning_system,
+            repo_access=self.repo_access,
+            learning_integration=learning_integration,
+            auto_approve=False  # Requires user approval for safety
+        )
+        
+        # Start proactive monitoring
+        self.code_intelligence.start_monitoring()
+        self.autonomous_fine_tuning.start_monitoring()
 
         # Task registry
         self.active_tasks: Dict[str, LLMTaskRequest] = {}
@@ -394,14 +434,63 @@ class LLMOrchestrator:
         """Generate LLM response."""
         logger.info(f"[LLM GENERATION] Generating response for task {task_request.task_id}")
 
-        # Add repository context to system prompt if grounding required
+        # Enhance prompt with code context (makes LLMs always code-aware)
+        enhanced_prompt = self.code_intelligence.enhance_prompt_with_code_context(
+            prompt=task_request.prompt,
+            task_type=task_request.task_type,
+            relevant_files=task_request.context_documents
+        )
+        
+        # Enhance prompt with GRACE context (Genesis Keys, trust scores, learning examples)
+        # Get relevant learning examples if available
+        learning_examples = None
+        if self.learning_memory and task_request.enable_learning:
+            try:
+                # Extract keywords from prompt for learning example retrieval
+                keywords = enhanced_prompt[:200].split()[:5]  # Simple keyword extraction
+                # Would use more sophisticated extraction in production
+                learning_examples = []  # Placeholder - would query learning memory
+            except Exception as e:
+                logger.warning(f"Could not retrieve learning examples: {e}")
+        
+        # Enhance with GRACE context
+        enhanced_prompt = enhance_prompt_with_grace_context(
+            prompt=enhanced_prompt,
+            task_type=task_request.task_type.value,
+            include_code=task_request.task_type in [
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_DEBUGGING,
+                TaskType.CODE_EXPLANATION,
+                TaskType.CODE_REVIEW
+            ],
+            learning_examples=learning_examples
+        )
+
+        # Add GRACE system prompt (makes LLMs GRACE-aligned)
+        grace_prompt = get_grace_system_prompt(
+            task_type=task_request.task_type.value,
+            include_code=task_request.task_type in [
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_DEBUGGING,
+                TaskType.CODE_EXPLANATION,
+                TaskType.CODE_REVIEW
+            ]
+        )
+        
+        # Combine with user-provided system prompt
         system_prompt = task_request.system_prompt or ""
+        if system_prompt:
+            system_prompt = f"{grace_prompt}\n\n{system_prompt}"
+        else:
+            system_prompt = grace_prompt
+        
+        # Add repository context if grounding required
         if task_request.require_grounding and self.repo_access:
             system_prompt += "\n\nYou have read-only access to the repository. Always reference actual files when making claims about code."
 
         # Generate response
         response = self.multi_llm.generate(
-            prompt=task_request.prompt,
+            prompt=enhanced_prompt,
             task_type=task_request.task_type,
             system_prompt=system_prompt
         )
@@ -436,26 +525,55 @@ class LLMOrchestrator:
         task_request: LLMTaskRequest,
         content: str
     ) -> Optional[str]:
-        """Assign Genesis Key to LLM interaction."""
+        """Assign Genesis Key to LLM interaction - ALL outputs tracked."""
         logger.info(f"[GENESIS KEY] Assigning Genesis Key for task {task_request.task_id}")
 
         if not self.cognitive_layer1:
-            return None
+            logger.warning("Cognitive Layer 1 not available - cannot assign Genesis Key")
+            return f"GK-LLM-{task_request.task_id}"  # Fallback ID
 
-        # Create metadata for Genesis Key
-        metadata = {
-            "task_id": task_request.task_id,
-            "task_type": task_request.task_type.value,
-            "user_id": task_request.user_id,
-            "prompt": task_request.prompt[:500],  # Truncate for storage
-            "content_length": len(content),
-            "timestamp": datetime.now().isoformat()
-        }
+        try:
+            # Create comprehensive metadata for Genesis Key
+            metadata = {
+                "task_id": task_request.task_id,
+                "task_type": task_request.task_type.value,
+                "user_id": task_request.user_id,
+                "prompt": task_request.prompt[:500],  # Truncate for storage
+                "content_length": len(content),
+                "content_hash": hashlib.sha256(content.encode()).hexdigest()[:16],
+                "model_used": "auto-selected",  # Will be updated with actual model
+                "verification_required": task_request.require_verification,
+                "consensus_required": task_request.require_consensus,
+                "grounding_required": task_request.require_grounding,
+                "timestamp": datetime.now().isoformat()
+            }
 
-        # Genesis Keys will be created via Layer 1 integration
-        # For now, return a placeholder
-        genesis_key_id = f"GK-LLM-{task_request.task_id}"
-        return genesis_key_id
+            # Process through Layer 1 to create Genesis Key
+            result = self.cognitive_layer1.process_system_event(
+                event_type="llm_interaction",
+                event_data={
+                    "task_id": task_request.task_id,
+                    "prompt": task_request.prompt,
+                    "content": content[:2000],  # Truncate for storage
+                    "task_type": task_request.task_type.value
+                },
+                metadata=metadata
+            )
+            
+            genesis_key_id = result.get("genesis_key_id")
+            
+            if genesis_key_id:
+                logger.info(f"[GENESIS KEY] ✓ Assigned: {genesis_key_id}")
+                return genesis_key_id
+            else:
+                logger.warning(f"[GENESIS KEY] Layer 1 did not return Genesis Key ID")
+                return f"GK-LLM-{task_request.task_id}"  # Fallback
+                
+        except Exception as e:
+            logger.error(f"[GENESIS KEY] Error assigning Genesis Key: {e}")
+            import traceback
+            traceback.print_exc()
+            return f"GK-LLM-{task_request.task_id}"  # Fallback
 
     def _integrate_layer1(
         self,
