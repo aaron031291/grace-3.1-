@@ -24,7 +24,7 @@ If Genesis updates:
 """
 
 import logging
-from typing import Dict, Any, List, Optional, Set, Callable
+from typing import Dict, Any, List, Optional, Set, Callable, Tuple
 from datetime import datetime, UTC
 from enum import Enum
 from dataclasses import dataclass, field
