@@ -86,6 +86,15 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
         try:
             duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
 
+            # Extract key_id safely - handle case where object might be detached from session
+            parent_key_id = None
+            if request_key:
+                try:
+                    parent_key_id = request_key.key_id
+                except Exception:
+                    # Object is detached, parent_key_id will be None
+                    pass
+
             # Create Genesis Key for response
             self.genesis_service.create_key(
                 key_type=GenesisKeyType.API_REQUEST,
@@ -96,7 +105,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 how_method=f"HTTP Response {response.status_code}",
                 user_id=genesis_id,
                 session_id=session_id,
-                parent_key_id=request_key.key_id if request_key else None,
+                parent_key_id=parent_key_id,
                 output_data={
                     "status_code": response.status_code,
                     "duration_ms": duration_ms,
@@ -145,13 +154,22 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 email=None
             )
 
+            # Extract data safely - handle case where object might be detached from session
+            try:
+                first_seen = user.first_seen.isoformat() if user.first_seen else None
+                username = user.username
+            except Exception:
+                # Object is detached, use fallback values
+                first_seen = datetime.utcnow().isoformat()
+                username = f"User_{genesis_id[-8:]}"
+
             # Save profile to knowledge base
             self.kb_integration.save_user_profile(
                 user_id=genesis_id,
                 profile_data={
                     "user_id": genesis_id,
-                    "username": user.username,
-                    "first_seen": user.first_seen.isoformat(),
+                    "username": username,
+                    "first_seen": first_seen,
                     "user_agent": request.headers.get("user-agent"),
                     "initial_ip": request.client.host if request.client else None,
                     "initial_path": request.url.path

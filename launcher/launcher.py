@@ -28,6 +28,7 @@ from .version import VersionManager, VersionMismatchError
 from .health_checker import HealthChecker, HealthCheckResult
 from .folder_validator import FolderValidator
 from .sqlite_logger import SQLiteLogHandler, LauncherLogCapture
+from .nlp_error_processor import get_nlp_error_processor, NLPErrorProcessor
 
 # Configure logging
 logging.basicConfig(
@@ -97,6 +98,14 @@ class GraceLauncher:
         sqlite_handler = SQLiteLogHandler(db_path=db_path, genesis_key=self.log_capture.genesis_key)
         sqlite_handler.setLevel(logging.INFO)
         logger.addHandler(sqlite_handler)
+        
+        # Setup NLP error processor (will use LLM if available, otherwise rule-based)
+        try:
+            backend_url = f"http://localhost:{self.backend_port}"
+            self.nlp_processor = get_nlp_error_processor(use_llm=True, backend_url=backend_url)
+        except Exception as e:
+            logger.warning(f"Could not initialize NLP error processor: {e}")
+            self.nlp_processor = None
         
         # Components
         self.version_manager = VersionManager()
@@ -268,11 +277,29 @@ class GraceLauncher:
                     except:
                         error_output = "Could not capture process output"
                     
-                    raise RuntimeError(
+                    # Process error through NLP
+                    error_msg = (
                         f"Backend process died during startup (exit code: {process.returncode})\n"
                         f"Last output:\n{error_output}\n"
                         f"Check backend logs for detailed error messages."
                     )
+                    
+                    if self.nlp_processor:
+                        try:
+                            error_info = self.nlp_processor.process_error(
+                                error=RuntimeError(error_msg),
+                                context={
+                                    "process_name": "backend",
+                                    "exit_code": process.returncode,
+                                    "last_output": error_output[:500]
+                                }
+                            )
+                            # Include NLP explanation in error
+                            error_msg = f"{error_info['nlp_explanation']}\n\n{error_msg}"
+                        except Exception:
+                            pass  # Fall back to original error
+                    
+                    raise RuntimeError(error_msg)
             
             # First check if port is open (simpler check)
             port_open = is_port_open("localhost", self.backend_port)
@@ -486,7 +513,47 @@ class GraceLauncher:
             logger.error("=" * 60)
             logger.error("❌ LAUNCH FAILED")
             logger.error("=" * 60)
-            logger.error(f"Error: {str(e)}")
+            
+            # Process error through NLP for user-friendly explanation
+            if self.nlp_processor:
+                try:
+                    error_info = self.nlp_processor.process_error(
+                        error=e,
+                        context={
+                            "root_path": str(self.root_path),
+                            "backend_port": self.backend_port,
+                            "processes": [p.name for p in self.processes]
+                        }
+                    )
+                    
+                    # Display NLP explanation
+                    logger.error("")
+                    logger.error("📝 What Happened:")
+                    logger.error(f"   {error_info.get('nlp_explanation', str(e))}")
+                    logger.error("")
+                    
+                    solutions = error_info.get('suggested_solutions', [])
+                    if solutions:
+                        logger.error("💡 Suggested Solutions:")
+                        for i, solution in enumerate(solutions, 1):
+                            logger.error(f"   {i}. {solution}")
+                        logger.error("")
+                    
+                    logger.error(f"🔍 Technical Details:")
+                    logger.error(f"   Error Type: {error_info.get('error_type', type(e).__name__)}")
+                    logger.error(f"   Original Error: {error_info.get('original_error', str(e))}")
+                    logger.error(f"   Severity: {error_info.get('severity', 'medium').upper()}")
+                    logger.error("")
+                    
+                except Exception as nlp_error:
+                    # If NLP processing fails, just show the original error
+                    logger.warning(f"Could not process error through NLP: {nlp_error}")
+                    logger.error(f"Error: {str(e)}")
+                    logger.error("")
+            else:
+                logger.error(f"Error: {str(e)}")
+                logger.error("")
+            
             logger.error("")
             logger.error("Shutting down started processes...")
             self.shutdown()

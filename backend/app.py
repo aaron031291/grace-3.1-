@@ -345,11 +345,11 @@ async def lifespan(app: FastAPI):
             
             print("[AUTONOMOUS-HEALING] [OK] Self-healing system active", flush=True)
             print("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
-            print("  - Connection issues → CONNECTION_RESET", flush=True)
-            print("  - Process errors → PROCESS_RESTART", flush=True)
-            print("  - Service failures → SERVICE_RESTART", flush=True)
-            print("  - Error spikes → Automatic healing", flush=True)
-            print("  - Performance issues → CACHE_FLUSH / BUFFER_CLEAR", flush=True)
+            print("  - Connection issues -> CONNECTION_RESET", flush=True)
+            print("  - Process errors -> PROCESS_RESTART", flush=True)
+            print("  - Service failures -> SERVICE_RESTART", flush=True)
+            print("  - Error spikes -> Automatic healing", flush=True)
+            print("  - Performance issues -> CACHE_FLUSH / BUFFER_CLEAR", flush=True)
             print("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
             
         except Exception as e:
@@ -372,8 +372,8 @@ async def lifespan(app: FastAPI):
             embedding_model = get_embedding_model()
             print("[STARTUP] [OK] Embedding model loaded and ready\n")
         except Exception as e:
-            print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
-            print("[STARTUP] [WARN] Model will be loaded on first use\n")
+            print(f"[STARTUP] [INFO] Embedding model not pre-loaded: {e}")
+            print("[STARTUP] [INFO] Model will be loaded on first use\n")
     
     embedding_thread = threading.Thread(target=load_embedding_model_background, daemon=True)
     embedding_thread.start()
@@ -720,8 +720,9 @@ async def health_check():
             models_available = len(models)
             status = "healthy"
         else:
+            # Ollama is optional - backend can function without it (just without chat)
             models_available = 0
-            status = "unhealthy"
+            status = "degraded"
         
         return HealthResponse(
             status=status,
@@ -729,8 +730,10 @@ async def health_check():
             models_available=models_available
         )
     except Exception as e:
+        # Backend is still functional even if Ollama check fails
+        # Return degraded instead of unhealthy
         return HealthResponse(
-            status="unhealthy",
+            status="degraded",
             ollama_running=False,
             models_available=0
         )
@@ -1755,7 +1758,7 @@ async def get_version():
         pass
     
     return {
-        "version": "0.1.0",  # Backend API version
+        "version": "1.0.0",  # Backend API version
         "protocol_version": "1.0",  # API protocol version
         "embeddings_version": embeddings_version,  # Embeddings service version
         "name": "Grace API"

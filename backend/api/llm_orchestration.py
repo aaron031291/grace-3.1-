@@ -41,11 +41,20 @@ logger = logging.getLogger(__name__)
 # Lazy-loaded embedding model singleton
 _embedding_model: Optional[EmbeddingModel] = None
 
-def get_or_create_embedding_model() -> EmbeddingModel:
+def get_or_create_embedding_model() -> Optional[EmbeddingModel]:
     """Get or create singleton embedding model instance."""
     global _embedding_model
     if _embedding_model is None:
-        _embedding_model = get_embedding_model()
+        try:
+            _embedding_model = get_embedding_model()
+        except FileNotFoundError as e:
+            # Model path doesn't exist - this is expected if model hasn't been downloaded yet
+            logger.debug(f"Embedding model not available: {e}. Will be loaded on first use.")
+            _embedding_model = None
+        except Exception as e:
+            # Other errors - log but don't fail
+            logger.warning(f"Failed to initialize embedding model: {e}, proceeding without")
+            _embedding_model = None
     return _embedding_model
 
 router = APIRouter(prefix="/llm", tags=["LLM Orchestration"])
