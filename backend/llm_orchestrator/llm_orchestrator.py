@@ -441,17 +441,60 @@ class LLMOrchestrator:
             relevant_files=task_request.context_documents
         )
         
+        # Always include source code access context if repo_access available
+        if self.repo_access:
+            # Add source code repository context
+            code_context = "\n\n[SOURCE CODE ACCESS - READ-ONLY]\n"
+            code_context += "You have read-only access to GRACE's source code repository.\n"
+            code_context += "You can read files, search code, and understand the codebase structure.\n"
+            code_context += "When discussing code, always reference actual file paths (e.g., backend/path/to/file.py).\n"
+            code_context += "Available methods:\n"
+            code_context += "- repo_access.read_file(file_path) - Read source files\n"
+            code_context += "- repo_access.search_code(pattern) - Search for code patterns\n"
+            code_context += "- repo_access.get_file_tree() - Get codebase structure\n"
+            code_context += "- repo_access.get_genesis_keys() - Get related Genesis Keys\n"
+            code_context += "- repo_access.get_learning_examples() - Get high-trust learning examples\n"
+            code_context += "All access is logged and read-only - you cannot modify code.\n"
+            
+            enhanced_prompt = code_context + "\n\n" + enhanced_prompt
+        
         # Enhance prompt with GRACE context (Genesis Keys, trust scores, learning examples)
         # Get relevant learning examples if available
         learning_examples = None
         if self.learning_memory and task_request.enable_learning:
             try:
-                # Extract keywords from prompt for learning example retrieval
-                keywords = enhanced_prompt[:200].split()[:5]  # Simple keyword extraction
-                # Would use more sophisticated extraction in production
-                learning_examples = []  # Placeholder - would query learning memory
+                # Get high-trust learning examples from learning memory
+                # Use repo_access if available, otherwise use learning_memory directly
+                if self.repo_access:
+                    examples = self.repo_access.get_learning_examples(
+                        min_trust_score=0.8,
+                        limit=5
+                    )
+                    learning_examples = [
+                        {
+                            "content": ex.get("input_context", {}).get("text", "")[:200] if isinstance(ex.get("input_context"), dict) else str(ex.get("input_context", ""))[:200],
+                            "trust_score": ex.get("trust_score", 0.8),
+                            "example_type": ex.get("example_type", "general")
+                        }
+                        for ex in examples[:3]  # Top 3
+                    ]
+                elif hasattr(self.learning_memory, 'get_examples'):
+                    # Direct access to learning memory
+                    examples = self.learning_memory.get_examples(
+                        min_trust_score=0.8,
+                        limit=5
+                    )
+                    learning_examples = [
+                        {
+                            "content": str(ex.input_context)[:200] if hasattr(ex, 'input_context') else "",
+                            "trust_score": ex.trust_score if hasattr(ex, 'trust_score') else 0.8,
+                            "example_type": ex.example_type if hasattr(ex, 'example_type') else "general"
+                        }
+                        for ex in examples[:3] if hasattr(ex, 'trust_score')
+                    ]
             except Exception as e:
                 logger.warning(f"Could not retrieve learning examples: {e}")
+                learning_examples = None
         
         # Enhance with GRACE context
         enhanced_prompt = enhance_prompt_with_grace_context(

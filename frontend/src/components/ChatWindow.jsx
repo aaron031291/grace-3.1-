@@ -218,17 +218,23 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     setLoading(true);
 
     try {
-      // Send prompt and get response
+      // Use full LLM orchestrator with world model integration
+      // Build conversation history
+      const conversationHistory = messages.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
       const response = await fetch(
-        `http://localhost:8000/chats/${chatId}/prompt`,
+        `http://localhost:8000/chat/orchestrator`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: userMessage,
-            temperature: chatInfo?.temperature || 0.7,
-            top_p: 0.9,
-            top_k: 40,
+            message: userMessage,
+            chat_id: chatId,
+            folder_path: folderPath || null,
+            conversation_history: conversationHistory,
           }),
         }
       );
@@ -270,13 +276,19 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       const result = await response.json();
 
-      // Add assistant message with sources if available
+      // Add assistant message with full orchestrator metadata
       const assistantMessage = {
-        id: result.assistant_message_id,
+        id: result.assistant_message_id || Date.now() + Math.random(),
         role: "assistant",
-        content: result.message,
+        content: result.content || result.message,
         tokens: null,
-        sources: result.sources || [], // Include sources from response
+        sources: result.sources || [],
+        genesis_key_id: result.genesis_key_id,
+        trust_score: result.trust_score,
+        confidence_score: result.confidence_score,
+        model_used: result.model_used,
+        world_model_integrated: result.world_model_integrated,
+        verification: result.verification,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -417,6 +429,45 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
               <div className="message-text">{msg.content}</div>
               {msg.tokens && (
                 <div className="message-meta">Tokens: {msg.tokens}</div>
+              )}
+              {/* LLM Orchestrator Metadata */}
+              {msg.role === "assistant" && (msg.genesis_key_id || msg.trust_score || msg.model_used) && (
+                <div className="message-orchestrator-metadata">
+                  {msg.genesis_key_id && (
+                    <div className="metadata-item">
+                      <span className="metadata-label">🔑 Genesis Key:</span>
+                      <span className="metadata-value">{msg.genesis_key_id}</span>
+                    </div>
+                  )}
+                  {msg.trust_score !== undefined && (
+                    <div className="metadata-item">
+                      <span className="metadata-label">✓ Trust:</span>
+                      <span className={`metadata-value ${msg.trust_score >= 0.8 ? 'high-trust' : msg.trust_score >= 0.6 ? 'medium-trust' : 'low-trust'}`}>
+                        {(msg.trust_score * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                  )}
+                  {msg.confidence_score !== undefined && (
+                    <div className="metadata-item">
+                      <span className="metadata-label">🎯 Confidence:</span>
+                      <span className="metadata-value">
+                        {(msg.confidence_score * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                  )}
+                  {msg.model_used && (
+                    <div className="metadata-item">
+                      <span className="metadata-label">🤖 Model:</span>
+                      <span className="metadata-value">{msg.model_used}</span>
+                    </div>
+                  )}
+                  {msg.world_model_integrated && (
+                    <div className="metadata-item">
+                      <span className="metadata-label">🌐 World Model:</span>
+                      <span className="metadata-value">✓ Integrated</span>
+                    </div>
+                  )}
+                </div>
               )}
               {msg.sources && msg.sources.length > 0 && (
                 <div className="message-sources">

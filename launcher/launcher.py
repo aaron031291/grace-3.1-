@@ -199,17 +199,17 @@ class GraceLauncher:
             # Store process object for monitoring
             process_info.process = process  # type: ignore
             
-            # Capture both stdout and stderr to SQLite
+            # Capture both stdout and stderr to SQLite and echo to console
             if process.stdout:
-                self.log_capture.capture_stream(process.stdout, stream_name="backend-stdout")
+                self.log_capture.capture_stream(process.stdout, stream_name="backend-stdout", echo=True)
             if process.stderr:
-                self.log_capture.capture_stream(process.stderr, stream_name="backend-stderr")
+                self.log_capture.capture_stream(process.stderr, stream_name="backend-stderr", echo=True)
             
             self.processes.append(process_info)
             
             logger.info(f"✓ Backend started via startup script (PID: {process.pid})")
             logger.info("Waiting for backend to initialize (this may take 30-120 seconds)...")
-            logger.info("(Backend output will be shown if errors occur)")
+            logger.info("(Backend startup output will be shown below)")
             
             return process_info
             
