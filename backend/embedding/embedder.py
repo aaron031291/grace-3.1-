@@ -50,15 +50,23 @@ class EmbeddingModel:
         EmbeddingModel._instance_count += 1
         instance_num = EmbeddingModel._instance_count
         
-        # SAFETY CHECK: Should never create more than 1 instance
-        if instance_num > 1:
+        # Check if we're in a multiprocessing environment (uvicorn workers)
+        import multiprocessing
+        is_multiprocessing = multiprocessing.current_process().name != 'MainProcess'
+        
+        # SAFETY CHECK: Should never create more than 1 instance per process
+        # In multiprocessing (uvicorn workers), each process has its own instance - this is expected
+        if instance_num > 1 and not is_multiprocessing:
             print(f"[WARN]  WARNING: EmbeddingModel instance #{instance_num} created!")
             print(f"[WARN]  This should not happen - use get_embedding_model() singleton instead!")
             print(f"[WARN]  Stack trace:")
             import traceback
             traceback.print_stack()
         
-        print(f"[EMBEDDING] Creating EmbeddingModel instance #{instance_num}...")
+        if is_multiprocessing:
+            print(f"[EMBEDDING] Creating EmbeddingModel instance #{instance_num} (worker process)...")
+        else:
+            print(f"[EMBEDDING] Creating EmbeddingModel instance #{instance_num}...")
         
         self.normalize_embeddings = normalize_embeddings
         self.max_length = max_length or 32768  # 32k context length
@@ -72,10 +80,11 @@ class EmbeddingModel:
         
         # Force CPU if device not explicitly set and not available
         if device == 'cuda' and not torch.cuda.is_available():
-            print("[WARN] CUDA requested but not available, falling back to CPU")
+            # This is expected behavior, use debug level instead of warning
+            print("[EMBEDDING] CUDA requested but not available, falling back to CPU")
             device = 'cpu'
         
-        self.device = "cuda"
+        self.device = device
         
         # Determine model path
         if model_path is None:
@@ -86,7 +95,10 @@ class EmbeddingModel:
                 model_path = str(backend_dir / "models" / "embedding" / "qwen_4b")
         
         if not Path(model_path).exists():
-            raise FileNotFoundError(f"Model path does not exist: {model_path}")
+            raise FileNotFoundError(
+                f"Model path does not exist: {model_path}. "
+                f"The model will be downloaded automatically on first use, or you can download it manually."
+            )
         
         print(f"[EMBEDDING] [LOADING] Instantiating EmbeddingModel class...")
         print(f"[EMBEDDING]   Model path: {model_path}")

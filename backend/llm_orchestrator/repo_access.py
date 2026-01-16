@@ -80,7 +80,7 @@ class RepositoryAccessLayer:
         self.session = session
         self.kb_path = knowledge_base_path or Path("backend/knowledge_base")
         self.embedding_model = embedding_model
-        self.qdrant_client = get_qdrant_client()
+        self.qdrant_client = _get_qdrant_client()
 
         # Initialize retriever if embedding model provided
         self.retriever = None

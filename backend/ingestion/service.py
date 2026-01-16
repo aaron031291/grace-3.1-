@@ -19,6 +19,19 @@ from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
 
+# TimeSense integration
+try:
+    from timesense.integration import track_operation, TimeEstimator
+    from timesense.primitives import PrimitiveType
+    TIMESENSE_AVAILABLE = True
+except ImportError:
+    TIMESENSE_AVAILABLE = False
+    # Fallback: no-op context manager
+    from contextlib import nullcontext
+    def track_operation(*args, **kwargs):
+        return nullcontext()
+    TimeEstimator = None
+
 # Import cognitive blueprint decorators
 try:
     from cognitive.decorators import cognitive_operation
@@ -430,13 +443,40 @@ class TextIngestionService:
                 debug_log.write(f"{chunk_texts}\n")
             logger.debug(f"[INGEST_FAST] Batch embedding {len(chunk_texts)} texts...")
             
+            # TimeSense: Estimate embedding time and track
+            estimated_tokens = sum(len(text.split()) for text in chunk_texts)
+            embedding_prediction = None
+            if TIMESENSE_AVAILABLE and TimeEstimator:
+                try:
+                    embedding_prediction = TimeEstimator.estimate_embedding(
+                        num_tokens=estimated_tokens,
+                        model_name=getattr(self.embedding_model, 'model_name', None)
+                    )
+                    if embedding_prediction:
+                        logger.info(
+                            f"[INGEST_FAST] [TIMESENSE] Estimated embedding time: "
+                            f"{embedding_prediction.human_readable()} (confidence: {embedding_prediction.confidence:.2f})"
+                        )
+                except Exception as e:
+                    logger.debug(f"[INGEST_FAST] TimeSense estimation failed: {e}")
+            
             # Use smaller batch size to avoid CUDA OOM errors
             # Fallback: if CUDA fails, automatically reduce batch size and retry
             all_embeddings = None
             batch_size = 32  # Start with smaller batch size for VRAM-constrained systems
             
             try:
-                all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
+                # Track embedding operation with TimeSense
+                if TIMESENSE_AVAILABLE:
+                    with track_operation(
+                        PrimitiveType.EMBED_TEXT,
+                        size=estimated_tokens,
+                        task_id=f"ingest_embed_{document_id}",
+                        model_name=getattr(self.embedding_model, 'model_name', None)
+                    ):
+                        all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
+                else:
+                    all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
                 logger.info(f"[INGEST_FAST] [OK] Generated batch embeddings for all {len(chunks)} chunks (batch_size={batch_size})")
             except RuntimeError as e:
                 if "out of memory" in str(e).lower() or "cuda" in str(e).lower():
@@ -512,10 +552,23 @@ class TextIngestionService:
                     batch = vectors_to_upsert[batch_start:batch_end]
                     
                     logger.debug(f"[INGEST_FAST] Upserting batch {batch_start}-{batch_end} ({len(batch)} vectors)...")
-                    success = self.qdrant_client.upsert_vectors(
-                        collection_name=self.collection_name,
-                        vectors=batch,
-                    )
+                    
+                    # TimeSense: Track vector insertion
+                    if TIMESENSE_AVAILABLE:
+                        with track_operation(
+                            PrimitiveType.VECTOR_INSERT,
+                            size=len(batch),
+                            task_id=f"ingest_vector_insert_{document_id}_{batch_start}"
+                        ):
+                            success = self.qdrant_client.upsert_vectors(
+                                collection_name=self.collection_name,
+                                vectors=batch,
+                            )
+                    else:
+                        success = self.qdrant_client.upsert_vectors(
+                            collection_name=self.collection_name,
+                            vectors=batch,
+                        )
                     
                     if not success:
                         logger.error(f"[INGEST_FAST] Failed to store embeddings batch {batch_start}-{batch_end}")
