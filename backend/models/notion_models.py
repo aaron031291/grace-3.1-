@@ -90,10 +90,13 @@ class NotionProfile(BaseModel):
     # Metadata
     profile_metadata = Column(JSON, nullable=True)
 
-    # Relationships
-    assigned_tasks = relationship("NotionTask", back_populates="assignee", foreign_keys="NotionTask.assignee_id")
-    created_tasks = relationship("NotionTask", back_populates="creator", foreign_keys="NotionTask.creator_id")
-    task_history = relationship("TaskHistory", back_populates="actor")
+    # Relationships - FIX: Added passive_deletes to handle CASCADE properly
+    # Note: Using passive_deletes=True instead of cascade="all, delete-orphan" because
+    # tasks may have multiple FKs to profile (assignee/creator) and should be handled
+    # at the database level with SET NULL on delete
+    assigned_tasks = relationship("NotionTask", back_populates="assignee", foreign_keys="NotionTask.assignee_id", passive_deletes=True)
+    created_tasks = relationship("NotionTask", back_populates="creator", foreign_keys="NotionTask.creator_id", passive_deletes=True)
+    task_history = relationship("TaskHistory", back_populates="actor", passive_deletes=True)
 
     __table_args__ = (
         Index('idx_profile_genesis_key', 'genesis_key_id'),

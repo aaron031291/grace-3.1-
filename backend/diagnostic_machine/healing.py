@@ -40,6 +40,8 @@ class HealingActionType(str, Enum):
     CONNECTION_POOL_RESET = "connection_pool_reset"
     EMBEDDING_MODEL_RELOAD = "embedding_model_reload"
     SESSION_CLEANUP = "session_cleanup"
+    # FIX: Added code fix healing action for proactive self-healing
+    CODE_FIX = "code_fix"
 
 
 class HealingRisk(str, Enum):
@@ -136,6 +138,13 @@ class HealingActionRegistry:
                 risk_level=HealingRisk.MEDIUM,
                 timeout_seconds=120,
             ),
+            # FIX: Code fix action for automatic vulnerability remediation
+            HealingActionConfig(
+                action_type=HealingActionType.CODE_FIX,
+                risk_level=HealingRisk.HIGH,  # Code changes require careful handling
+                timeout_seconds=300,
+                requires_confirmation=True,  # Should be reviewed before applying
+            ),
         ]
 
         for config in defaults:
@@ -221,6 +230,11 @@ class HealingExecutor:
         self.registry.register_handler(
             HealingActionType.EMBEDDING_MODEL_RELOAD,
             self._heal_embedding_model
+        )
+        # FIX: Register code fix handler for automatic vulnerability remediation
+        self.registry.register_handler(
+            HealingActionType.CODE_FIX,
+            self._heal_code_issues
         )
 
     def execute(
@@ -718,6 +732,201 @@ class HealingExecutor:
                 action_type=HealingActionType.EMBEDDING_MODEL_RELOAD,
                 success=False,
                 message=f"Embedding model reload error: {str(e)}",
+            )
+
+    def _heal_code_issues(self, params: Dict) -> HealingResult:
+        """
+        Apply automatic code fixes for detected vulnerabilities.
+
+        FIX: This healing action provides proactive code remediation for:
+        - Security vulnerabilities (command injection, path traversal, etc.)
+        - Configuration issues (unsafe settings)
+        - Common code anti-patterns
+
+        Parameters:
+            issue_type: str - Type of issue to fix
+            file_path: str - Path to file to fix
+            line_number: int - Line number of issue
+            fix_type: str - Specific fix to apply
+
+        Returns backup path for rollback capability.
+        """
+        import re
+        try:
+            issue_type = params.get('issue_type')
+            file_path = params.get('file_path')
+            line_number = params.get('line_number')
+            fix_type = params.get('fix_type', 'auto')
+
+            if not file_path:
+                return HealingResult(
+                    action_type=HealingActionType.CODE_FIX,
+                    success=False,
+                    message="Missing required parameter: file_path",
+                )
+
+            backend_dir = Path(__file__).parent.parent
+            full_path = backend_dir / file_path
+
+            if not full_path.exists():
+                return HealingResult(
+                    action_type=HealingActionType.CODE_FIX,
+                    success=False,
+                    message=f"File not found: {file_path}",
+                )
+
+            # Create backup for rollback
+            backup_dir = self.log_dir / "code_backups"
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            backup_path = backup_dir / f"{full_path.name}_{timestamp}.bak"
+            shutil.copy2(full_path, backup_path)
+
+            # Read current content
+            with open(full_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                lines = content.split('\n')
+
+            original_content = content
+            fixes_applied = []
+
+            # Apply automatic fixes based on issue type
+            fix_patterns = self._get_code_fix_patterns()
+
+            if issue_type and issue_type in fix_patterns:
+                pattern, replacement, description = fix_patterns[issue_type]
+                if line_number and 0 < line_number <= len(lines):
+                    # Fix specific line
+                    old_line = lines[line_number - 1]
+                    new_line = re.sub(pattern, replacement, old_line)
+                    if new_line != old_line:
+                        lines[line_number - 1] = new_line
+                        fixes_applied.append(f"Line {line_number}: {description}")
+                else:
+                    # Fix all occurrences
+                    for i, line in enumerate(lines):
+                        new_line = re.sub(pattern, line, replacement)
+                        if new_line != line:
+                            lines[i] = new_line
+                            fixes_applied.append(f"Line {i+1}: {description}")
+
+            elif fix_type == 'auto':
+                # Auto-detect and fix multiple issue types
+                for issue_name, (pattern, replacement, description) in fix_patterns.items():
+                    for i, line in enumerate(lines):
+                        new_line = re.sub(pattern, replacement, line)
+                        if new_line != line:
+                            lines[i] = new_line
+                            fixes_applied.append(f"Line {i+1}: {description}")
+
+            if not fixes_applied:
+                # No fixes needed, remove backup
+                backup_path.unlink()
+                return HealingResult(
+                    action_type=HealingActionType.CODE_FIX,
+                    success=True,
+                    message="No code fixes needed",
+                    rollback_available=False,
+                )
+
+            # Write fixed content
+            new_content = '\n'.join(lines)
+            with open(full_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+
+            return HealingResult(
+                action_type=HealingActionType.CODE_FIX,
+                success=True,
+                message=f"Applied {len(fixes_applied)} fixes: {'; '.join(fixes_applied[:5])}",
+                rollback_available=True,
+                rollback_command=f"cp {backup_path} {full_path}",
+                pre_state={'backup_path': str(backup_path), 'file_path': str(full_path)},
+            )
+
+        except Exception as e:
+            logger.error(f"Code fix healing failed: {e}")
+            return HealingResult(
+                action_type=HealingActionType.CODE_FIX,
+                success=False,
+                message=f"Code fix error: {str(e)}",
+            )
+
+    def _get_code_fix_patterns(self) -> Dict[str, tuple]:
+        """
+        Get automatic code fix patterns.
+
+        Returns dict mapping issue_type to (pattern, replacement, description).
+        """
+        return {
+            # Security fixes
+            'command_injection': (
+                r'shell\s*=\s*True',
+                'shell=False',
+                'Disabled shell execution to prevent command injection'
+            ),
+            'yaml_unsafe_load': (
+                r'yaml\.load\s*\(([^)]+)\)',
+                r'yaml.safe_load(\1)',
+                'Changed yaml.load to yaml.safe_load'
+            ),
+            'os_system_injection': (
+                r'os\.system\s*\(([^)]+)\)',
+                r'subprocess.run(\1, shell=False, check=True)',
+                'Replaced os.system with subprocess.run'
+            ),
+            # Configuration fixes
+            'ssl_verify_disabled': (
+                r'verify\s*=\s*False',
+                'verify=True',
+                'Enabled SSL verification'
+            ),
+            'debug_enabled': (
+                r'DEBUG\s*=\s*True',
+                'DEBUG = os.getenv("DEBUG", "false").lower() == "true"',
+                'Made DEBUG configurable via environment'
+            ),
+            # Resource management fixes
+            'file_not_closed': (
+                r'(\w+)\s*=\s*open\s*\(([^)]+)\)(?!\s*as\s)',
+                r'with open(\2) as \1:',
+                'Wrapped file open in context manager'
+            ),
+        }
+
+    def rollback_code_fix(self, backup_path: str, original_path: str) -> HealingResult:
+        """
+        Rollback a code fix using the backup file.
+
+        Parameters:
+            backup_path: Path to backup file
+            original_path: Path to original file to restore
+        """
+        try:
+            backup = Path(backup_path)
+            original = Path(original_path)
+
+            if not backup.exists():
+                return HealingResult(
+                    action_type=HealingActionType.CODE_FIX,
+                    success=False,
+                    message=f"Backup file not found: {backup_path}",
+                )
+
+            # Restore from backup
+            shutil.copy2(backup, original)
+
+            return HealingResult(
+                action_type=HealingActionType.CODE_FIX,
+                success=True,
+                message=f"Successfully rolled back {original_path} from backup",
+            )
+
+        except Exception as e:
+            logger.error(f"Code fix rollback failed: {e}")
+            return HealingResult(
+                action_type=HealingActionType.CODE_FIX,
+                success=False,
+                message=f"Rollback error: {str(e)}",
             )
 
 

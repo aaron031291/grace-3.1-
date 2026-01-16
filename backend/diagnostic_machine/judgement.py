@@ -176,11 +176,16 @@ class JudgementLayer:
 
     # Weights for health score calculation
     HEALTH_WEIGHTS = {
-        'tests': 0.25,
-        'services': 0.25,
-        'resources': 0.20,
-        'cognitive': 0.15,
-        'governance': 0.15,
+        'tests': 0.15,
+        'services': 0.15,
+        'resources': 0.15,
+        'cognitive': 0.10,
+        'governance': 0.10,
+        # WHOLE-SYSTEM COMPONENTS
+        'build': 0.10,
+        'coverage': 0.10,
+        'api_contract': 0.05,
+        'infrastructure': 0.10,
     }
 
     def __init__(
@@ -313,6 +318,59 @@ class JudgementLayer:
             critical.append('governance')
         elif governance_score < 0.9:
             degraded.append('governance')
+
+        # ==================== WHOLE-SYSTEM HEALTH ====================
+
+        # Build health
+        build_score = 1.0
+        if sensor_data.build_status:
+            if not sensor_data.build_status.build_passing:
+                build_score = 0.3
+            elif not sensor_data.build_status.lint_passing:
+                build_score = 0.6
+            elif not sensor_data.build_status.tests_passing:
+                build_score = 0.5
+        component_scores['build'] = build_score
+        if build_score < 0.5:
+            critical.append('build')
+        elif build_score < 0.8:
+            degraded.append('build')
+
+        # Coverage health
+        coverage_score = 1.0
+        if sensor_data.test_coverage:
+            coverage_score = sensor_data.test_coverage.overall_coverage_percent / 100
+            if not sensor_data.test_coverage.critical_paths_covered:
+                coverage_score *= 0.5  # Penalize for uncovered critical paths
+        component_scores['coverage'] = coverage_score
+        if coverage_score < 0.5:
+            critical.append('coverage')
+        elif coverage_score < 0.7:
+            degraded.append('coverage')
+
+        # API contract health
+        api_score = 1.0
+        if sensor_data.api_contract:
+            api_score = sensor_data.api_contract.compliance_percent / 100
+            if not sensor_data.api_contract.spec_valid:
+                api_score *= 0.5
+        component_scores['api_contract'] = api_score
+        if api_score < 0.5:
+            degraded.append('api_contract')
+
+        # Infrastructure health
+        infra_score = 1.0
+        if sensor_data.infrastructure:
+            infra_score = sensor_data.infrastructure.infrastructure_score / 100
+            if not sensor_data.infrastructure.network_connectivity:
+                infra_score *= 0.3
+            if sensor_data.infrastructure.containers_unhealthy > 0:
+                infra_score *= 0.7
+        component_scores['infrastructure'] = infra_score
+        if infra_score < 0.5:
+            critical.append('infrastructure')
+        elif infra_score < 0.7:
+            degraded.append('infrastructure')
 
         # Calculate weighted overall score
         overall = sum(
@@ -480,6 +538,138 @@ class JudgementLayer:
                 ],
                 time_to_impact="days",
             ))
+
+        # ==================== WHOLE-SYSTEM RISKS ====================
+
+        # Build failure risk
+        if sensor_data.build_status and not sensor_data.build_status.build_passing:
+            risks.append(RiskVector(
+                risk_id=f"RISK-{len(risks)+1:03d}",
+                risk_type="build_failure",
+                level=RiskLevel.HIGH,
+                probability=1.0,
+                impact=0.8,
+                description="Build is failing - cannot deploy safely",
+                affected_components=["build", "ci_cd", "deployment"],
+                mitigation_suggestions=[
+                    "Fix failing lint/type checks",
+                    "Fix failing tests",
+                    "Review recent commits",
+                ],
+                time_to_impact="immediate",
+            ))
+
+        # Coverage risk
+        if sensor_data.test_coverage:
+            if not sensor_data.test_coverage.critical_paths_covered:
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="security_coverage_gap",
+                    level=RiskLevel.CRITICAL,
+                    probability=0.9,
+                    impact=0.9,
+                    description="Security/auth code paths lack test coverage",
+                    affected_components=["security", "auth", "tests"],
+                    mitigation_suggestions=[
+                        "Add tests for authentication logic",
+                        "Add tests for authorization checks",
+                        "Test security-critical paths",
+                    ],
+                    time_to_impact="immediate",
+                ))
+            elif sensor_data.test_coverage.overall_coverage_percent < 50:
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="low_coverage",
+                    level=RiskLevel.MEDIUM,
+                    probability=0.7,
+                    impact=0.5,
+                    description=f"Test coverage at {sensor_data.test_coverage.overall_coverage_percent:.1f}%",
+                    affected_components=["tests", "code"],
+                    mitigation_suggestions=[
+                        "Add unit tests for critical functions",
+                        "Add integration tests",
+                        "Review uncovered code paths",
+                    ],
+                    time_to_impact="days",
+                ))
+
+        # Infrastructure risk
+        if sensor_data.infrastructure:
+            if not sensor_data.infrastructure.network_connectivity:
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="network_failure",
+                    level=RiskLevel.CRITICAL,
+                    probability=1.0,
+                    impact=1.0,
+                    description="Network connectivity lost",
+                    affected_components=["network", "infrastructure"],
+                    mitigation_suggestions=[
+                        "Check network configuration",
+                        "Verify firewall rules",
+                        "Check DNS resolution",
+                    ],
+                    time_to_impact="immediate",
+                ))
+
+            if sensor_data.infrastructure.containers_unhealthy > 0:
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="container_failure",
+                    level=RiskLevel.HIGH,
+                    probability=0.9,
+                    impact=0.7,
+                    description=f"{sensor_data.infrastructure.containers_unhealthy} containers unhealthy",
+                    affected_components=["containers", "docker"],
+                    mitigation_suggestions=[
+                        "Restart unhealthy containers",
+                        "Check container logs",
+                        "Review resource limits",
+                    ],
+                    time_to_impact="immediate",
+                ))
+
+            if sensor_data.infrastructure.memory_pressure or sensor_data.infrastructure.disk_space_critical:
+                resources = []
+                if sensor_data.infrastructure.memory_pressure:
+                    resources.append("memory")
+                if sensor_data.infrastructure.disk_space_critical:
+                    resources.append("disk")
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="resource_pressure",
+                    level=RiskLevel.HIGH,
+                    probability=0.85,
+                    impact=0.8,
+                    description=f"Resource pressure: {', '.join(resources)}",
+                    affected_components=resources + ["infrastructure"],
+                    mitigation_suggestions=[
+                        "Free up disk space" if "disk" in resources else None,
+                        "Restart services to free memory" if "memory" in resources else None,
+                        "Scale infrastructure",
+                    ],
+                    time_to_impact="hours",
+                ))
+
+        # Code quality risk
+        if sensor_data.code_quality:
+            if sensor_data.code_quality.critical_issues > 0:
+                risks.append(RiskVector(
+                    risk_id=f"RISK-{len(risks)+1:03d}",
+                    risk_type="security_vulnerability",
+                    level=RiskLevel.CRITICAL,
+                    probability=1.0,
+                    impact=0.95,
+                    description=f"{sensor_data.code_quality.critical_issues} critical security vulnerabilities",
+                    affected_components=["security", "code"],
+                    mitigation_suggestions=[
+                        "Fix command injection vulnerabilities",
+                        "Fix path traversal issues",
+                        "Review and apply security patches",
+                    ],
+                    time_to_impact="immediate",
+                ))
 
         return risks
 

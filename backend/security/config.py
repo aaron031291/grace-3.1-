@@ -56,9 +56,11 @@ class SecurityConfig:
 
     # ==================== Security Headers ====================
     # Content Security Policy
+    # FIX: unsafe-inline should only be used in development mode
+    # Production mode uses stricter CSP (set dynamically in __post_init__)
     CSP_DEFAULT_SRC: str = "'self'"
-    CSP_SCRIPT_SRC: str = "'self' 'unsafe-inline'"   # Allow inline scripts (adjust as needed)
-    CSP_STYLE_SRC: str = "'self' 'unsafe-inline'"    # Allow inline styles
+    CSP_SCRIPT_SRC: str = "'self'"   # No unsafe-inline by default (see __post_init__)
+    CSP_STYLE_SRC: str = "'self'"    # No unsafe-inline by default (see __post_init__)
     CSP_IMG_SRC: str = "'self' data: blob:"
     CSP_CONNECT_SRC: str = "'self'"
     CSP_FRAME_ANCESTORS: str = "'none'"              # Prevent clickjacking
@@ -114,9 +116,14 @@ class SecurityConfig:
         if self.PRODUCTION_MODE:
             self.SESSION_COOKIE_SECURE = True
             self.HSTS_ENABLED = True
+            # FIX: Strict CSP in production - no unsafe-inline
+            # Use nonces or hashes for inline scripts/styles instead
         else:
             # Allow insecure cookies in development
             self.SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
+            # FIX: Only allow unsafe-inline in development mode for convenience
+            self.CSP_SCRIPT_SRC = "'self' 'unsafe-inline'"
+            self.CSP_STYLE_SRC = "'self' 'unsafe-inline'"
 
         # Rate limiting
         self.RATE_LIMIT_ENABLED = os.getenv("RATE_LIMIT_ENABLED", "true").lower() == "true"
