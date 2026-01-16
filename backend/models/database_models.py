@@ -44,12 +44,13 @@ class Conversation(BaseModel):
 class Message(BaseModel):
     """Message model for storing individual messages in conversations."""
     __tablename__ = "messages"
-    
+
     conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=False, index=True)
     role = Column(String(50), nullable=False)  # "user", "assistant", "system"
     content = Column(Text, nullable=False)
-    tokens = Column(String, nullable=True)  # JSON array of token IDs
-    
+    tokens = Column(Integer, nullable=True)  # FIX: Number of tokens (consistent with ChatHistory)
+    token_ids = Column(Text, nullable=True)  # JSON array of token IDs (if needed)
+
     # Relationships
     conversation = relationship("Conversation", back_populates="messages")
     
@@ -174,6 +175,11 @@ class Document(BaseModel):
         Index("idx_content_hash", "content_hash"),
         Index("idx_upload_method", "upload_method"),
         Index("idx_confidence_score", "confidence_score"),
+        # FIX: Added missing indexes for confidence scoring components
+        Index("idx_source_reliability", "source_reliability"),
+        Index("idx_content_quality", "content_quality"),
+        Index("idx_consensus_score", "consensus_score"),
+        Index("idx_recency_score", "recency_score"),
     )
     
     def __repr__(self) -> str:

@@ -14,7 +14,10 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 
-from .sensors import SensorData, TestResultData, MetricsData
+from .sensors import (
+    SensorData, TestResultData, MetricsData, CodeQualityData,
+    BuildStatusData, TestCoverageData, APIContractData, InfrastructureData
+)
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +32,16 @@ class PatternType(str, Enum):
     LEARNING_OPPORTUNITY = "learning_opportunity"
     INFRASTRUCTURE_ISSUE = "infrastructure_issue"
     CODE_QUALITY_ISSUE = "code_quality_issue"
+    # FIX: Added new pattern types for static code analysis
+    SECURITY_VULNERABILITY = "security_vulnerability"
+    DATABASE_SCHEMA_ISSUE = "database_schema_issue"
+    CONFIGURATION_ISSUE = "configuration_issue"
+    DEPENDENCY_ISSUE = "dependency_issue"
+    # WHOLE-SYSTEM PATTERNS: Track system beyond runtime
+    BUILD_FAILURE = "build_failure"
+    COVERAGE_GAP = "coverage_gap"
+    API_CONTRACT_VIOLATION = "api_contract_violation"
+    INFRASTRUCTURE_DEGRADATION = "infrastructure_degradation"
 
 
 class AnomalyType(str, Enum):
@@ -42,6 +55,11 @@ class AnomalyType(str, Enum):
     GENESIS_KEY_ANOMALY = "genesis_key_anomaly"
     COGNITIVE_ANOMALY = "cognitive_anomaly"
     CODE_QUALITY_ISSUE = "code_quality_issue"  # NEW: Static analysis and design pattern issues
+    # WHOLE-SYSTEM ANOMALIES
+    BUILD_BROKEN = "build_broken"
+    COVERAGE_DROP = "coverage_drop"
+    API_DRIFT = "api_drift"
+    INFRASTRUCTURE_FAILURE = "infrastructure_failure"
 
 
 class ClarityLevel(str, Enum):
@@ -189,6 +207,20 @@ class InterpreterLayer:
         # Genesis key patterns
         if sensor_data.genesis_keys:
             patterns.extend(self._detect_genesis_patterns(sensor_data))
+
+        # FIX: Code quality patterns from static analysis
+        if sensor_data.code_quality:
+            patterns.extend(self._detect_code_quality_patterns(sensor_data.code_quality))
+
+        # WHOLE-SYSTEM SENSOR PATTERNS
+        if sensor_data.build_status:
+            patterns.extend(self._detect_build_status_patterns(sensor_data.build_status))
+        if sensor_data.test_coverage:
+            patterns.extend(self._detect_coverage_patterns(sensor_data.test_coverage))
+        if sensor_data.api_contract:
+            patterns.extend(self._detect_api_contract_patterns(sensor_data.api_contract))
+        if sensor_data.infrastructure:
+            patterns.extend(self._detect_infrastructure_patterns(sensor_data.infrastructure))
 
         # Learning opportunity patterns
         patterns.extend(self._detect_learning_opportunities(sensor_data))
@@ -357,6 +389,512 @@ class InterpreterLayer:
 
         return patterns
 
+    def _detect_code_quality_patterns(self, code_quality: CodeQualityData) -> List[Pattern]:
+        """
+        FIX: Detect patterns from code quality static analysis.
+
+        This method analyzes the code quality sensor data to identify:
+        - Security vulnerability patterns
+        - Database schema issues
+        - Configuration problems
+        - Dependency management issues
+        """
+        patterns = []
+
+        # Security vulnerability pattern
+        if code_quality.critical_issues > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.SECURITY_VULNERABILITY,
+                description=f"CRITICAL: {code_quality.critical_issues} critical security vulnerabilities detected",
+                confidence=1.0,
+                frequency=code_quality.critical_issues,
+                affected_components=["security", "code"],
+                evidence=[{
+                    'critical_count': code_quality.critical_issues,
+                    'vulnerabilities': [
+                        {
+                            'type': v.issue_type,
+                            'file': v.file_path,
+                            'line': v.line_number,
+                            'cwe': v.cwe_id,
+                        }
+                        for v in code_quality.security_vulnerabilities[:5]
+                        if v.severity == 'critical'
+                    ]
+                }],
+                suggested_action="IMMEDIATE: Fix critical security vulnerabilities"
+            ))
+
+        if code_quality.high_issues > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.SECURITY_VULNERABILITY,
+                description=f"HIGH: {code_quality.high_issues} high severity security issues detected",
+                confidence=0.9,
+                frequency=code_quality.high_issues,
+                affected_components=["security"],
+                evidence=[{
+                    'high_count': code_quality.high_issues,
+                    'issues': [
+                        {
+                            'type': v.issue_type,
+                            'file': v.file_path,
+                            'line': v.line_number,
+                        }
+                        for v in code_quality.security_vulnerabilities[:5]
+                        if v.severity == 'high'
+                    ]
+                }],
+                suggested_action="Fix high severity security issues"
+            ))
+
+        # Database schema issue pattern
+        if code_quality.database_issues:
+            db_issue_count = len(code_quality.database_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.DATABASE_SCHEMA_ISSUE,
+                description=f"{db_issue_count} database schema issues detected",
+                confidence=0.8,
+                frequency=db_issue_count,
+                affected_components=["database", "models"],
+                evidence=[{
+                    'issues': [
+                        {
+                            'type': i.issue_type,
+                            'file': i.file_path,
+                            'description': i.description,
+                        }
+                        for i in code_quality.database_issues[:5]
+                    ]
+                }],
+                suggested_action="Review database models for type mismatches and missing constraints"
+            ))
+
+        # Configuration issue pattern
+        if code_quality.configuration_issues:
+            config_issue_count = len(code_quality.configuration_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.CONFIGURATION_ISSUE,
+                description=f"{config_issue_count} configuration security issues detected",
+                confidence=0.7,
+                frequency=config_issue_count,
+                affected_components=["configuration", "security"],
+                evidence=[{
+                    'issues': [
+                        {
+                            'type': i.issue_type,
+                            'file': i.file_path,
+                            'description': i.description,
+                        }
+                        for i in code_quality.configuration_issues[:5]
+                    ]
+                }],
+                suggested_action="Review security configuration settings"
+            ))
+
+        # Dependency issue pattern
+        if code_quality.dependency_issues:
+            dep_issue_count = len(code_quality.dependency_issues)
+            patterns.append(Pattern(
+                pattern_type=PatternType.DEPENDENCY_ISSUE,
+                description=f"{dep_issue_count} dependency management issues detected",
+                confidence=0.6,
+                frequency=dep_issue_count,
+                affected_components=["dependencies", "supply_chain"],
+                evidence=[{
+                    'unpinned_count': dep_issue_count,
+                    'examples': [i.code_snippet for i in code_quality.dependency_issues[:5]]
+                }],
+                suggested_action="Pin dependency versions for reproducibility and security"
+            ))
+
+        # Overall code quality summary pattern
+        if code_quality.total_issues > 10:
+            patterns.append(Pattern(
+                pattern_type=PatternType.CODE_QUALITY_ISSUE,
+                description=f"Code quality scan found {code_quality.total_issues} total issues",
+                confidence=0.8,
+                frequency=code_quality.total_issues,
+                affected_components=["codebase"],
+                evidence=[{
+                    'total': code_quality.total_issues,
+                    'critical': code_quality.critical_issues,
+                    'high': code_quality.high_issues,
+                    'medium': code_quality.medium_issues,
+                    'low': code_quality.low_issues,
+                    'files_scanned': code_quality.files_scanned,
+                }],
+                suggested_action="Prioritize fixing critical and high severity issues"
+            ))
+
+        return patterns
+
+    # ==================== WHOLE-SYSTEM PATTERN DETECTION ====================
+
+    def _detect_build_status_patterns(self, build_status: BuildStatusData) -> List[Pattern]:
+        """Detect patterns from build/CI status sensor."""
+        patterns = []
+
+        # Build failure pattern
+        if not build_status.build_passing:
+            failed_checks = []
+            if not build_status.lint_passing:
+                failed_checks.append("lint")
+            if not build_status.type_check_passing:
+                failed_checks.append("type_check")
+            if not build_status.tests_passing:
+                failed_checks.append("tests")
+
+            patterns.append(Pattern(
+                pattern_type=PatternType.BUILD_FAILURE,
+                description=f"Build failing: {', '.join(failed_checks) or 'unknown cause'}",
+                confidence=1.0,
+                frequency=1,
+                affected_components=["build", "ci_cd"] + failed_checks,
+                evidence=[{
+                    'build_passing': build_status.build_passing,
+                    'lint_passing': build_status.lint_passing,
+                    'type_check_passing': build_status.type_check_passing,
+                    'tests_passing': build_status.tests_passing,
+                    'last_status': build_status.last_build_status,
+                    'branch': build_status.branch_name,
+                    'commit': build_status.commit_sha,
+                }],
+                suggested_action="Fix build failures before merging"
+            ))
+
+        # CI provider pattern (informational)
+        if build_status.ci_provider != 'unknown':
+            patterns.append(Pattern(
+                pattern_type=PatternType.LEARNING_OPPORTUNITY,
+                description=f"CI/CD via {build_status.ci_provider}",
+                confidence=0.5,
+                frequency=1,
+                affected_components=["ci_cd"],
+                evidence=[{'ci_provider': build_status.ci_provider}],
+            ))
+
+        return patterns
+
+    def _detect_coverage_patterns(self, coverage: TestCoverageData) -> List[Pattern]:
+        """Detect patterns from test coverage sensor."""
+        patterns = []
+
+        # Low coverage pattern
+        if coverage.overall_coverage_percent < 50:
+            patterns.append(Pattern(
+                pattern_type=PatternType.COVERAGE_GAP,
+                description=f"Critical: Test coverage at {coverage.overall_coverage_percent:.1f}%",
+                confidence=1.0,
+                frequency=len(coverage.uncovered_files),
+                affected_components=["tests", "coverage"],
+                evidence=[{
+                    'overall_coverage': coverage.overall_coverage_percent,
+                    'line_coverage': coverage.line_coverage_percent,
+                    'branch_coverage': coverage.branch_coverage_percent,
+                    'uncovered_files': coverage.uncovered_files[:5],
+                }],
+                suggested_action="Add tests for critical code paths"
+            ))
+        elif coverage.overall_coverage_percent < 70:
+            patterns.append(Pattern(
+                pattern_type=PatternType.COVERAGE_GAP,
+                description=f"Warning: Test coverage at {coverage.overall_coverage_percent:.1f}%",
+                confidence=0.8,
+                frequency=len(coverage.uncovered_files),
+                affected_components=["tests", "coverage"],
+                evidence=[{
+                    'overall_coverage': coverage.overall_coverage_percent,
+                    'uncovered_files_count': len(coverage.uncovered_files),
+                }],
+                suggested_action="Improve test coverage"
+            ))
+
+        # Critical paths uncovered
+        if not coverage.critical_paths_covered:
+            patterns.append(Pattern(
+                pattern_type=PatternType.COVERAGE_GAP,
+                description="CRITICAL: Security/auth paths have insufficient test coverage",
+                confidence=1.0,
+                frequency=1,
+                affected_components=["security", "auth", "tests"],
+                evidence=[{
+                    'critical_paths_covered': False,
+                    'trend': coverage.coverage_trend,
+                }],
+                suggested_action="IMMEDIATE: Add tests for security and authentication code"
+            ))
+
+        # Coverage trend
+        if coverage.coverage_trend == "declining":
+            patterns.append(Pattern(
+                pattern_type=PatternType.COVERAGE_GAP,
+                description="Test coverage is declining",
+                confidence=0.7,
+                frequency=1,
+                affected_components=["tests", "coverage"],
+                evidence=[{
+                    'trend': coverage.coverage_trend,
+                    'delta': coverage.coverage_delta,
+                }],
+                suggested_action="Review recent commits for missing tests"
+            ))
+
+        return patterns
+
+    def _detect_api_contract_patterns(self, api: APIContractData) -> List[Pattern]:
+        """Detect patterns from API contract sensor."""
+        patterns = []
+
+        # Invalid spec
+        if not api.spec_valid and api.spec_path:
+            patterns.append(Pattern(
+                pattern_type=PatternType.API_CONTRACT_VIOLATION,
+                description="OpenAPI specification is invalid",
+                confidence=1.0,
+                frequency=1,
+                affected_components=["api", "documentation"],
+                evidence=[{'spec_path': api.spec_path}],
+                suggested_action="Fix OpenAPI specification syntax errors"
+            ))
+
+        # Undocumented endpoints
+        if api.undocumented_endpoints:
+            patterns.append(Pattern(
+                pattern_type=PatternType.API_CONTRACT_VIOLATION,
+                description=f"{len(api.undocumented_endpoints)} API endpoints not documented",
+                confidence=0.9,
+                frequency=len(api.undocumented_endpoints),
+                affected_components=["api", "documentation"],
+                evidence=[{
+                    'undocumented': api.undocumented_endpoints[:5],
+                    'total_endpoints': api.total_endpoints,
+                    'compliance_percent': api.compliance_percent,
+                }],
+                suggested_action="Add missing endpoints to OpenAPI spec"
+            ))
+
+        # Missing implementations
+        if api.missing_implementations:
+            patterns.append(Pattern(
+                pattern_type=PatternType.API_CONTRACT_VIOLATION,
+                description=f"{len(api.missing_implementations)} documented endpoints not implemented",
+                confidence=0.9,
+                frequency=len(api.missing_implementations),
+                affected_components=["api", "implementation"],
+                evidence=[{
+                    'missing': api.missing_implementations[:5],
+                }],
+                suggested_action="Implement missing documented endpoints or update spec"
+            ))
+
+        # Low compliance
+        if api.compliance_percent < 80 and api.total_endpoints > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.API_CONTRACT_VIOLATION,
+                description=f"API contract compliance at {api.compliance_percent:.1f}%",
+                confidence=0.8,
+                frequency=api.non_compliant_endpoints,
+                affected_components=["api"],
+                evidence=[{
+                    'compliance_percent': api.compliance_percent,
+                    'compliant': api.compliant_endpoints,
+                    'total': api.total_endpoints,
+                }],
+                suggested_action="Align API implementation with documentation"
+            ))
+
+        return patterns
+
+    def _detect_infrastructure_patterns(self, infra: InfrastructureData) -> List[Pattern]:
+        """Detect patterns from infrastructure sensor."""
+        patterns = []
+
+        # Unhealthy containers
+        if infra.containers_unhealthy > 0:
+            patterns.append(Pattern(
+                pattern_type=PatternType.INFRASTRUCTURE_DEGRADATION,
+                description=f"{infra.containers_unhealthy} containers in unhealthy state",
+                confidence=1.0,
+                frequency=infra.containers_unhealthy,
+                affected_components=["containers", "docker"],
+                evidence=[{
+                    'unhealthy_count': infra.containers_unhealthy,
+                    'running_count': infra.containers_running,
+                    'stopped_count': infra.containers_stopped,
+                }],
+                suggested_action="Investigate and restart unhealthy containers"
+            ))
+
+        # External dependency failures
+        unhealthy_deps = [d for d in infra.external_dependencies if d.status != 'healthy']
+        if unhealthy_deps:
+            patterns.append(Pattern(
+                pattern_type=PatternType.INFRASTRUCTURE_DEGRADATION,
+                description=f"{len(unhealthy_deps)} external dependencies unreachable",
+                confidence=0.9,
+                frequency=len(unhealthy_deps),
+                affected_components=["infrastructure", "external_services"],
+                evidence=[{
+                    'unhealthy_services': [
+                        {'name': d.name, 'status': d.status, 'error': d.error_message}
+                        for d in unhealthy_deps
+                    ]
+                }],
+                suggested_action="Check external service connectivity"
+            ))
+
+        # Network connectivity issues
+        if not infra.network_connectivity:
+            patterns.append(Pattern(
+                pattern_type=PatternType.INFRASTRUCTURE_DEGRADATION,
+                description="Network connectivity issues detected",
+                confidence=1.0,
+                frequency=1,
+                affected_components=["network", "infrastructure"],
+                evidence=[{'network_connectivity': False}],
+                suggested_action="Check network configuration and firewall rules"
+            ))
+
+        # Resource pressure
+        if infra.memory_pressure or infra.disk_space_critical:
+            resources = []
+            if infra.memory_pressure:
+                resources.append("memory")
+            if infra.disk_space_critical:
+                resources.append("disk")
+
+            patterns.append(Pattern(
+                pattern_type=PatternType.INFRASTRUCTURE_DEGRADATION,
+                description=f"Resource pressure detected: {', '.join(resources)}",
+                confidence=0.9,
+                frequency=1,
+                affected_components=resources + ["infrastructure"],
+                evidence=[{
+                    'memory_pressure': infra.memory_pressure,
+                    'disk_space_critical': infra.disk_space_critical,
+                }],
+                suggested_action="Free up resources or scale infrastructure"
+            ))
+
+        # Low infrastructure score
+        if infra.infrastructure_score < 70:
+            patterns.append(Pattern(
+                pattern_type=PatternType.INFRASTRUCTURE_DEGRADATION,
+                description=f"Infrastructure health score: {infra.infrastructure_score:.1f}/100",
+                confidence=0.8,
+                frequency=1,
+                affected_components=["infrastructure"],
+                evidence=[{
+                    'score': infra.infrastructure_score,
+                    'docker_available': infra.docker_available,
+                    'kubernetes_available': infra.kubernetes_available,
+                    'total_services': infra.total_services,
+                    'healthy_services': infra.healthy_services,
+                }],
+                suggested_action="Review and remediate infrastructure issues"
+            ))
+
+        return patterns
+
+    # ==================== WHOLE-SYSTEM ANOMALY DETECTION ====================
+
+    def _detect_build_anomalies(self, build_status: BuildStatusData) -> List[Anomaly]:
+        """Detect anomalies from build status sensor."""
+        anomalies = []
+
+        if not build_status.build_passing:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.BUILD_BROKEN,
+                severity=0.9,
+                description="Build is broken",
+                expected_value="passing",
+                actual_value=build_status.last_build_status,
+                affected_components=["build", "ci_cd"],
+            ))
+
+        return anomalies
+
+    def _detect_coverage_anomalies(self, coverage: TestCoverageData) -> List[Anomaly]:
+        """Detect anomalies from coverage sensor."""
+        anomalies = []
+
+        if coverage.overall_coverage_percent < 50:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.COVERAGE_DROP,
+                severity=0.8,
+                description=f"Test coverage critically low at {coverage.overall_coverage_percent:.1f}%",
+                expected_value=70.0,
+                actual_value=coverage.overall_coverage_percent,
+                deviation_percent=70 - coverage.overall_coverage_percent,
+                affected_components=["tests", "coverage"],
+            ))
+
+        if not coverage.critical_paths_covered:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.COVERAGE_DROP,
+                severity=1.0,
+                description="Critical security paths not covered by tests",
+                expected_value="covered",
+                actual_value="not covered",
+                affected_components=["security", "auth", "tests"],
+            ))
+
+        return anomalies
+
+    def _detect_api_anomalies(self, api: APIContractData) -> List[Anomaly]:
+        """Detect anomalies from API contract sensor."""
+        anomalies = []
+
+        if api.compliance_percent < 80 and api.total_endpoints > 0:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.API_DRIFT,
+                severity=0.6,
+                description=f"API contract compliance at {api.compliance_percent:.1f}%",
+                expected_value=100.0,
+                actual_value=api.compliance_percent,
+                deviation_percent=100 - api.compliance_percent,
+                affected_components=["api", "documentation"],
+            ))
+
+        return anomalies
+
+    def _detect_infrastructure_anomalies(self, infra: InfrastructureData) -> List[Anomaly]:
+        """Detect anomalies from infrastructure sensor."""
+        anomalies = []
+
+        if infra.containers_unhealthy > 0:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.INFRASTRUCTURE_FAILURE,
+                severity=0.8,
+                description=f"{infra.containers_unhealthy} unhealthy containers",
+                expected_value=0,
+                actual_value=infra.containers_unhealthy,
+                affected_components=["containers", "docker"],
+            ))
+
+        if not infra.network_connectivity:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.INFRASTRUCTURE_FAILURE,
+                severity=1.0,
+                description="Network connectivity lost",
+                expected_value="connected",
+                actual_value="disconnected",
+                affected_components=["network"],
+            ))
+
+        if infra.infrastructure_score < 50:
+            anomalies.append(Anomaly(
+                anomaly_type=AnomalyType.INFRASTRUCTURE_FAILURE,
+                severity=0.9,
+                description=f"Infrastructure health critical: {infra.infrastructure_score:.1f}/100",
+                expected_value=80.0,
+                actual_value=infra.infrastructure_score,
+                deviation_percent=80 - infra.infrastructure_score,
+                affected_components=["infrastructure"],
+            ))
+
+        return anomalies
+
     def _detect_anomalies(self, sensor_data: SensorData) -> List[Anomaly]:
         """Detect anomalies in the sensor data."""
         anomalies = []
@@ -384,6 +922,16 @@ class InterpreterLayer:
         # Design pattern anomalies (NEW)
         if sensor_data.design_patterns:
             anomalies.extend(self._detect_design_pattern_anomalies(sensor_data.design_patterns))
+
+        # WHOLE-SYSTEM ANOMALIES
+        if sensor_data.build_status:
+            anomalies.extend(self._detect_build_anomalies(sensor_data.build_status))
+        if sensor_data.test_coverage:
+            anomalies.extend(self._detect_coverage_anomalies(sensor_data.test_coverage))
+        if sensor_data.api_contract:
+            anomalies.extend(self._detect_api_anomalies(sensor_data.api_contract))
+        if sensor_data.infrastructure:
+            anomalies.extend(self._detect_infrastructure_anomalies(sensor_data.infrastructure))
 
         return anomalies
 
