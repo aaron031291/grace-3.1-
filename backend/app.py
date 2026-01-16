@@ -67,6 +67,7 @@ from api.whitelist_api import router as whitelist_router  # Whitelist Learning P
 from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
 from api.grace_os_api import router as grace_os_router  # Grace OS - Full IDE integration
+from api.timesense import router as timesense_router  # TimeSense - Time & Cost Model with physics-based time awareness
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -362,7 +363,35 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
         print("[STARTUP] [WARN] Model will be loaded on first use\n")
-    
+
+    # ==================== Initialize TimeSense Engine ====================
+    # Grace's empirical time calibration - gives her a "clock" grounded in physics
+    try:
+        from timesense.engine import get_timesense_engine
+        print("\n[TIMESENSE] Initializing Time & Cost Model...")
+
+        timesense_engine = get_timesense_engine(auto_calibrate=True)
+
+        # Run quick calibration at startup
+        initialized = timesense_engine.initialize_sync(quick_calibration=True)
+
+        if initialized:
+            print("[TIMESENSE] [OK] TimeSense engine ready")
+            print(f"[TIMESENSE] Calibrated profiles: {timesense_engine.stats.stable_profiles}")
+            print(f"[TIMESENSE] Average confidence: {timesense_engine.stats.average_confidence:.2f}")
+            print("[TIMESENSE] Grace now has empirical time awareness:")
+            print("  - Disk I/O throughput calibrated")
+            print("  - CPU compute benchmarked")
+            print("  - Can predict task durations with uncertainty bounds")
+            print("[TIMESENSE] Time predictions: p50/p90/p95/p99 latencies available\n")
+        else:
+            print("[TIMESENSE] [WARN] Engine initialized but calibration incomplete\n")
+    except Exception as e:
+        print(f"[TIMESENSE] [WARN] Could not initialize TimeSense: {e}")
+        import traceback
+        traceback.print_exc()
+        print("[TIMESENSE] [WARN] Time predictions will use default estimates\n")
+
     # Check Ollama
     try:
         client = get_ollama_client()
@@ -601,6 +630,7 @@ app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human inpu
 app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
 app.include_router(grace_os_router)  # Grace OS - Self-healing IDE, Genesis IDE, autonomous actions
+app.include_router(timesense_router)  # TimeSense - Time & Cost Model with physics-based time predictions
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
