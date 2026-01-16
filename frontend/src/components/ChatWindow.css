@@ -274,6 +274,51 @@
   margin-top: 0.25rem;
 }
 
+/* LLM Orchestrator Metadata */
+.message-orchestrator-metadata {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid #3b82f6;
+  font-size: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.metadata-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.metadata-label {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.metadata-value {
+  color: #1f2937;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+}
+
+.metadata-value.high-trust {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.metadata-value.medium-trust {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.metadata-value.low-trust {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 .message-input-form {
   padding: 1.5rem;
   border-top: 1px solid #e5e5e5;

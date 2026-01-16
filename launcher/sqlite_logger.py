@@ -252,23 +252,33 @@ class LauncherLogCapture:
         
         return None
     
-    def capture_stream(self, stream, stream_name: str = "stdout"):
+    def capture_stream(self, stream, stream_name: str = "stdout", echo: bool = False):
         """
         Capture output from a stream in a background thread.
         
         Args:
             stream: The stream to read from (e.g., subprocess.stdout)
             stream_name: Name of the stream for identification
+            echo: If True, print lines to console in real-time
         """
         def _read_stream():
             try:
                 for line in iter(stream.readline, ''):
                     if not line:
                         break
+                    line_stripped = line.rstrip()
                     # Pass stream_name to log_line for source tracking
-                    self.log_line(line.rstrip(), level=None, stream_name=stream_name)
+                    self.log_line(line_stripped, level=None, stream_name=stream_name)
+                    # Echo to console if requested
+                    if echo:
+                        # Only show backend output (not launcher's own output)
+                        if stream_name in ('backend-stdout', 'backend-stderr'):
+                            print(f"[BACKEND] {line_stripped}", flush=True)
             except Exception as e:
-                self.log_line(f"Error reading {stream_name}: {e}", level='error', stream_name=stream_name)
+                error_msg = f"Error reading {stream_name}: {e}"
+                self.log_line(error_msg, level='error', stream_name=stream_name)
+                if echo:
+                    print(f"[LOG-CAPTURE-ERROR] {error_msg}", flush=True)
         
         thread = threading.Thread(target=_read_stream, daemon=True, name=f"log-capture-{stream_name}")
         thread.start()

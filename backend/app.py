@@ -449,7 +449,6 @@ async def lifespan(app: FastAPI):
     # Start file system watcher for automatic version control
     try:
         from genesis.file_watcher import start_watching_workspace
-        import threading
 
         def run_file_watcher():
             """Run file watcher in background thread"""
@@ -481,7 +480,6 @@ async def lifespan(app: FastAPI):
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
-    import threading
     
     auto_ingest_task = None
     
