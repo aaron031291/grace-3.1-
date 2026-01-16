@@ -20,8 +20,9 @@ class DecisionType(str, Enum):
     """Types of decisions Grace can make."""
     REVERSIBLE = "reversible"
     IRREVERSIBLE = "irreversible"
-    PROBABILISTIC = "probabilistic"
+    PROBABILISTIC = "probabilistic"  # DEPRECATED: Use DETERMINISTIC instead
     DETERMINISTIC = "deterministic"
+    ULTRA_DETERMINISTIC = "ultra_deterministic"  # Maximum determinism with proofs
 
 
 @dataclass

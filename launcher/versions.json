@@ -1,0 +1,11 @@
+{
+  "launcher": "1.0.0",
+  "backend": "0.1.0",
+  "embeddings": "1.0.0",
+  "ide_bridge": "1.0.0",
+  "protocols": {
+    "backend_api": "1.0",
+    "embeddings": "1.0",
+    "ide_bridge": "1.0"
+  }
+}

@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import time
+import threading
 from contextlib import asynccontextmanager
 from datetime import datetime
 
@@ -236,6 +237,120 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Database initialization error: {e}")
         raise
+    
+    # ==================== Start Self-Healing FIRST ====================
+    # Initialize self-healing early so it can fix runtime/startup issues
+    try:
+        import time
+        import threading
+        from pathlib import Path
+        from database.session import get_db
+        from genesis.autonomous_triggers import get_genesis_trigger_pipeline
+        from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+        from cognitive.mirror_self_modeling import get_mirror_system
+        
+        print("\n[AUTONOMOUS-HEALING] Initializing self-healing system (BOOT FIRST)...", flush=True)
+        
+        # Get session for healing system
+        session = next(get_db())
+        # Try to resolve knowledge_base path (could be in root or backend/)
+        knowledge_base_path = Path("knowledge_base")
+        if not knowledge_base_path.exists():
+            knowledge_base_path = Path("backend/knowledge_base")
+        knowledge_base_path = knowledge_base_path.resolve()
+        
+        # Initialize healing system FIRST
+        healing_system = get_autonomous_healing(
+            session=session,
+            trust_level=TrustLevel.MEDIUM_RISK_AUTO,
+            enable_learning=True
+        )
+        
+        # Initialize trigger pipeline (for error-triggered healing)
+        trigger_pipeline = get_genesis_trigger_pipeline(
+            session=session,
+            knowledge_base_path=knowledge_base_path,
+            orchestrator=None
+        )
+        
+        # Initialize mirror system
+        mirror_system = get_mirror_system(
+            session=session,
+            observation_window_hours=24,
+            min_pattern_occurrences=3
+        )
+        
+        # Run initial health check immediately to catch startup issues
+        print("[AUTONOMOUS-HEALING] Running initial health check...", flush=True)
+        try:
+            initial_check = healing_system.run_monitoring_cycle()
+            print(
+                f"[AUTONOMOUS-HEALING] Initial check: Status={initial_check['health_status']}, "
+                f"Anomalies={initial_check['anomalies_detected']}, "
+                f"Actions executed={initial_check['actions_executed']}",
+                flush=True
+            )
+            if initial_check['actions_executed'] > 0:
+                print("[AUTONOMOUS-HEALING] ✓ Startup issues detected and healed!", flush=True)
+        except Exception as check_error:
+            print(f"[AUTONOMOUS-HEALING] [WARN] Initial health check error: {check_error}", flush=True)
+        
+        # Background health monitoring thread (runs every 5 minutes)
+        def health_monitor_background():
+            """Run health checks every 5 minutes in background."""
+            while True:
+                try:
+                    time.sleep(300)  # Check every 5 minutes
+                    if healing_system:
+                        cycle_result = healing_system.run_monitoring_cycle()
+                        print(
+                            f"[HEALTH] Status: {cycle_result['health_status']}, "
+                            f"Anomalies: {cycle_result['anomalies_detected']}, "
+                            f"Actions executed: {cycle_result['actions_executed']}",
+                            flush=True
+                        )
+                except Exception as e:
+                    print(f"[HEALTH-MONITOR] Error: {e}", flush=True)
+                    time.sleep(60)
+        
+        # Background mirror analysis thread (runs every 10 minutes)
+        def mirror_analysis_background():
+            """Run mirror self-modeling every 10 minutes in background."""
+            while True:
+                try:
+                    time.sleep(600)  # Analyze every 10 minutes
+                    if mirror_system:
+                        self_model = mirror_system.build_self_model()
+                        print(
+                            f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
+                            f"Suggestions: {len(self_model['improvement_suggestions'])}, "
+                            f"Self-awareness: {self_model['self_awareness_score']:.2f}",
+                            flush=True
+                        )
+                except Exception as e:
+                    print(f"[MIRROR-ANALYSIS] Error: {e}", flush=True)
+                    time.sleep(60)
+        
+        # Start background threads
+        health_thread = threading.Thread(target=health_monitor_background, daemon=True)
+        health_thread.start()
+        
+        mirror_thread = threading.Thread(target=mirror_analysis_background, daemon=True)
+        mirror_thread.start()
+        
+        print("[AUTONOMOUS-HEALING] [OK] Self-healing system active (booted first)", flush=True)
+        print("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
+        print("  - Connection issues → CONNECTION_RESET", flush=True)
+        print("  - Process errors → PROCESS_RESTART", flush=True)
+        print("  - Service failures → SERVICE_RESTART", flush=True)
+        print("  - Error spikes → Automatic healing", flush=True)
+        print("  - Performance issues → CACHE_FLUSH / BUFFER_CLEAR", flush=True)
+        print("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
+        
+    except Exception as e:
+        print(f"[AUTONOMOUS-HEALING] [WARN] Could not start self-healing: {e}", flush=True)
+        import traceback
+        traceback.print_exc()
     
     # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
     try:
@@ -1516,6 +1631,37 @@ async def root():
         "description": "API for Ollama-based chat and embeddings",
         "docs": "/docs",
         "health": "/health"
+    }
+
+
+@app.get("/version", tags=["System"])
+async def get_version():
+    """
+    Version endpoint for launcher handshake.
+    
+    Returns version information for compatibility checking.
+    This endpoint is used by the launcher to verify protocol compatibility.
+    
+    Returns:
+        dict: Version information including backend, embeddings, and protocol versions
+    """
+    # Get embedding model version if available
+    embeddings_version = None
+    try:
+        from embedding import get_embedding_model
+        embedding_model = get_embedding_model()
+        if embedding_model and hasattr(embedding_model, 'get_model_info'):
+            model_info = embedding_model.get_model_info()
+            embeddings_version = model_info.get("version", "1.0.0")
+    except Exception:
+        # Embeddings not loaded yet, that's ok
+        pass
+    
+    return {
+        "version": "0.1.0",  # Backend API version
+        "protocol_version": "1.0",  # API protocol version
+        "embeddings_version": embeddings_version,  # Embeddings service version
+        "name": "Grace API"
     }
 
 
