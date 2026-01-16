@@ -9,14 +9,18 @@ The Oracle is Grace's predictive intelligence system that enables:
 4. AI research storage with Genesis key tracking
 5. User intent prediction
 6. Pattern recognition and learning
+7. Real-time web knowledge access
+8. SWE platform integration (GitHub, StackOverflow, etc.)
 
 Components:
 - OracleCore: Central intelligence hub
 - CascadingFailurePredictor: Predicts and prevents cascade failures
 - ProactiveLearningSystem: Real-time learning pipeline
+- WebKnowledgeIntegration: Web search and documentation access
+- SWEPlatformConnector: GitHub, StackOverflow, package registries
 
 The Oracle sees what others miss, predicts issues before they happen,
-and continuously improves through learning.
+learns from the global SWE ecosystem, and continuously improves.
 """
 
 from .oracle_core import (
@@ -47,6 +51,24 @@ from .proactive_learning import (
     UserIntentModel
 )
 
+from .web_knowledge import (
+    WebKnowledgeIntegration,
+    WebKnowledge,
+    KnowledgeSource,
+    DocumentationType,
+    SecurityVulnerability
+)
+
+from .swe_platform_connector import (
+    SWEPlatformConnector,
+    Platform,
+    ResourceType,
+    GitHubRepository,
+    CodeSnippet,
+    SWEPattern,
+    CIWorkflow
+)
+
 __all__ = [
     # Oracle Core
     'OracleCore',
@@ -72,4 +94,20 @@ __all__ = [
     'LearningItem',
     'LearnedPattern',
     'UserIntentModel',
+
+    # Web Knowledge
+    'WebKnowledgeIntegration',
+    'WebKnowledge',
+    'KnowledgeSource',
+    'DocumentationType',
+    'SecurityVulnerability',
+
+    # SWE Platform Connector
+    'SWEPlatformConnector',
+    'Platform',
+    'ResourceType',
+    'GitHubRepository',
+    'CodeSnippet',
+    'SWEPattern',
+    'CIWorkflow',
 ]
