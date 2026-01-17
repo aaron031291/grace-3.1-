@@ -1,27 +1,15 @@
-"""
-API routes for web scraping functionality.
-"""
-
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional, List
 from datetime import datetime
 import asyncio
 import logging
-
 from database.session import get_session
 from scraping.service import WebScrapingService
 from scraping.models import ScrapingJob, ScrapedPage
 from scraping.url_validator import URLValidator
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/scrape", tags=["Web Scraping"])
-
-
-# ==================== Request/Response Models ====================
-
 class ScrapeSubmitRequest(BaseModel):
+    logger = logging.getLogger(__name__)
     """Request model for submitting a scraping job."""
     url: str = Field(..., description="URL to scrape")
     depth: int = Field(1, ge=0, le=5, description="Crawl depth (0-5)")

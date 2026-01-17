@@ -1,28 +1,12 @@
-"""
-Memory Mesh Learning Feedback System
-
-Memory mesh analyzes high-trust patterns and proactively suggests
-what Grace should learn next based on:
-1. Knowledge gaps identified from past failures
-2. High-value topics with insufficient practice
-3. Related concepts that appear frequently together
-4. Success patterns that should be reinforced
-
-This creates a feedback loop: Memory → Learning → Memory
-"""
-
 import logging
 from typing import Dict, Any, List, Tuple, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
 from datetime import datetime, timedelta
-
 from cognitive.learning_memory import TrustScorer, LearningExample
-
-logger = logging.getLogger(__name__)
-
-
+from genesis.database_error_logger import log_database_error
 class MemoryMeshLearner:
+    logger = logging.getLogger(__name__)
     """
     Analyzes memory mesh to determine what Grace should learn proactively.
 

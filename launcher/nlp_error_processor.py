@@ -262,7 +262,8 @@ SEVERITY: [low/medium/high/critical]"""
         # Parse response
         explanation = self._extract_section(content, "EXPLANATION:")
         solutions = self._extract_list(content, "SOLUTIONS:")
-        severity = self._extract_section(content, "SEVERITY:").lower().strip()
+        severity_str = self._extract_section(content, "SEVERITY:")
+        severity = severity_str.lower().strip() if severity_str else "medium"
         
         if not explanation:
             explanation = f"The launcher encountered an error: {fallback_error}"

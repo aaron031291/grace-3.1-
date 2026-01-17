@@ -1,29 +1,13 @@
-"""
-Unified Retriever - Complete File Retrieval System for Librarian
-
-Combines all retrieval methods:
-- Tag-based search
-- Relationship-based discovery
-- Metadata search
-- Semantic search integration
-
-Part of the full file system librarian capabilities.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
-
 from models.database_models import Document
 from models.librarian_models import DocumentTag, LibrarianTag, DocumentRelationship
 from librarian.tag_manager import TagManager
 from librarian.relationship_manager import RelationshipManager
-
-logger = logging.getLogger(__name__)
-
-
 class UnifiedRetriever:
+    logger = logging.getLogger(__name__)
     """
     Unified document retrieval system.
 

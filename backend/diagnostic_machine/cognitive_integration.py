@@ -1,16 +1,3 @@
-"""
-Cognitive Framework Integration for Diagnostic Machine
-
-Connects diagnostic insights to GRACE's cognitive systems:
-- Learning Memory: Store diagnostic patterns as learning examples
-- Memory Mesh: Index patterns for retrieval
-- Decision Log: Log all diagnostic decisions for observability
-- Procedural Memory: Extract reusable diagnostic procedures
-
-This closes the learning loop: diagnostics inform learning,
-learning improves diagnostics.
-"""
-
 import json
 import logging
 from datetime import datetime
@@ -18,11 +5,12 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from pathlib import Path
 from enum import Enum
-
-logger = logging.getLogger(__name__)
-
-
 class DiagnosticInsightType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of diagnostic insights to feed into learning."""
     TEST_FAILURE_PATTERN = "test_failure_pattern"
     TEST_SUCCESS_PATTERN = "test_success_pattern"

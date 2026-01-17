@@ -1,15 +1,3 @@
-"""
-Grace-LLM Bidirectional Communication Bridge
-
-Enables async bidirectional communication between Grace and LLMs:
-- Grace can ask LLMs questions
-- LLMs can respond to Grace
-- Async communication with callbacks
-- Governance and verification enforced
-- Anti-hallucination measures
-- DeepSeek direct support
-"""
-
 import asyncio
 import logging
 from typing import Dict, List, Optional, Any, Callable, Awaitable
@@ -17,16 +5,12 @@ from datetime import datetime, UTC
 from dataclasses import dataclass
 from enum import Enum
 from sqlalchemy.orm import Session
-
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, LLMTaskRequest, TaskType
 from llm_orchestrator.hallucination_guard import VerificationResult
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class MessageType(str, Enum):
+    logger = logging.getLogger(__name__)
     """Types of messages in Grace-LLM communication."""
     GRACE_TO_LLM = "grace_to_llm"  # Grace asking LLM
     LLM_TO_GRACE = "llm_to_grace"  # LLM responding to Grace

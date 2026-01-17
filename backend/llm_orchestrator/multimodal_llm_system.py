@@ -1,14 +1,3 @@
-"""
-Multimodal LLM System - Vision, Audio, Video, Voice
-
-Extends LLM system with multimodal capabilities:
-- Vision models for image/video understanding
-- Voice models for speech-to-text and text-to-speech
-- Audio processing and transcription
-- Video analysis and frame extraction
-- All outputs tracked with Genesis Keys
-"""
-
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
@@ -17,15 +6,11 @@ from enum import Enum
 import base64
 import io
 from pathlib import Path
-
-from .multi_llm_client import MultiLLMClient, TaskType, get_multi_llm_client
-from .repo_access import RepositoryAccessLayer, get_repo_access
+from multi_llm_client import MultiLLMClient, TaskType, get_multi_llm_client
+from repo_access import RepositoryAccessLayer, get_repo_access
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration
-
-logger = logging.getLogger(__name__)
-
-
 class MediaType(Enum):
+    logger = logging.getLogger(__name__)
     """Types of media that can be processed."""
     IMAGE = "image"
     VIDEO = "video"

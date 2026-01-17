@@ -1,10 +1,3 @@
-"""
-Whitelist Learning Pipeline API
-===============================
-REST API for the Whitelist Learning Pipeline.
-Human-approved data flows through GRACE's complete learning system.
-"""
-
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -13,26 +6,12 @@ from datetime import datetime
 import asyncio
 import json
 import logging
-
-from genesis.whitelist_learning_pipeline import (
-    get_whitelist_pipeline,
-    DataCategory,
-    TrustLevel,
-    PipelineStage,
-    WhitelistEntry,
-    PipelineResult
-)
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/api/whitelist", tags=["Whitelist Learning"])
-
-
-# =============================================================================
-# Request/Response Models
-# =============================================================================
-
+from genesis.whitelist_learning_pipeline import get_whitelist_pipeline, DataCategory, TrustLevel, PipelineStage, WhitelistEntry, PipelineResult
 class WhitelistProcessRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Request to process data through the whitelist pipeline."""
     content: str = Field(..., description="Content to process")
     source: str = Field(..., description="Source of the data (who provided it)")

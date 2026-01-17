@@ -1,26 +1,10 @@
-"""
-Scheduled Tasks Manager - Automation for Librarian
-
-Manages scheduled automated tasks:
-- Periodic integrity checks
-- Automatic archival
-- Scheduled organization
-- Batch processing
-- Statistics collection
-
-Part of the full file system librarian capabilities.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List, Callable
 from datetime import datetime, time, timedelta
 from threading import Timer
 import json
-
-logger = logging.getLogger(__name__)
-
-
 class ScheduledTask:
+    logger = logging.getLogger(__name__)
     """Represents a scheduled task."""
 
     def __init__(

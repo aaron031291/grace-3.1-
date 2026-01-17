@@ -1,22 +1,10 @@
-"""
-Git ↔ Genesis Keys Bridge.
-
-Connects Git version control with Genesis Key version control,
-making them work together as one unified system.
-
-When Git commits happen, Genesis Keys are automatically created.
-When Genesis Keys track file changes, optional Git commits can be triggered.
-"""
 import os
 import subprocess
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
 class GitGenesisBridge:
+    logger = logging.getLogger(__name__)
     """
     Bridge between Git and Genesis Keys.
 

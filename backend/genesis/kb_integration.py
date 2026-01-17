@@ -1,21 +1,12 @@
-"""
-Genesis Key Knowledge Base Integration.
-
-Auto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.
-"""
 import os
 import json
 import logging
 from datetime import datetime
 from typing import Optional
 from pathlib import Path
-
 from models.genesis_key_models import GenesisKey
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisKBIntegration:
+    logger = logging.getLogger(__name__)
     """
     Integrates Genesis Keys with Knowledge Base.
 

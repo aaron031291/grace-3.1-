@@ -7,11 +7,13 @@ from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, 
 from sqlalchemy.orm import relationship
 from database.base import BaseModel
 from datetime import datetime
+import uuid
 
 
 class User(BaseModel):
     """User model for storing user information."""
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
     
     username = Column(String(255), unique=True, nullable=False, index=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
@@ -175,7 +177,6 @@ class Document(BaseModel):
         Index("idx_content_hash", "content_hash"),
         Index("idx_upload_method", "upload_method"),
         Index("idx_confidence_score", "confidence_score"),
-        # FIX: Added missing indexes for confidence scoring components
         Index("idx_source_reliability", "source_reliability"),
         Index("idx_content_quality", "content_quality"),
         Index("idx_consensus_score", "consensus_score"),
@@ -338,3 +339,26 @@ class GovernanceDecision(BaseModel):
             "action_type": self.action_type,
             "target_resource": self.target_resource,
         }
+
+
+# ==================== Learning Models ====================
+
+class LearningExample(BaseModel):
+    """Learning example model for storing learning experiences."""
+    __tablename__ = "learning_examples"
+    __table_args__ = {'extend_existing': True}
+    
+    # Override id to use String UUID instead of Integer
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    example_type = Column(String, nullable=False)  # e.g., "positive", "negative", "reinforcement"
+    content = Column(Text, nullable=False)
+    context = Column(Text)
+    source = Column(String)  # e.g., "user", "system", "auto-generated"
+    metadata_json = Column(Text)  # JSON string for additional metadata
+    # Note: created_at and updated_at are inherited from BaseModel
+    
+    # Relationships
+    # Note: Memory relationship removed - Memory class does not exist
+    # If Memory class is added in the future, uncomment and configure:
+    # memory_id = Column(String, ForeignKey("memories.id"), nullable=True)
+    # memory = relationship("Memory", back_populates="learning_examples", foreign_keys=[memory_id], lazy="select")

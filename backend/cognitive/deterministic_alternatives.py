@@ -1,23 +1,10 @@
-"""
-Deterministic Alternatives - Replace All Probabilistic Operations
-
-This module provides deterministic alternatives to probabilistic operations:
-- Deterministic sampling (no randomness)
-- Deterministic selection (priority-based)
-- Deterministic uncertainty (confidence intervals, not probabilities)
-- Deterministic scheduling
-"""
-
 import logging
 from typing import List, Dict, Any, Optional, Callable, Tuple
 from datetime import datetime
 from collections import OrderedDict
 import hashlib
-
-logger = logging.getLogger(__name__)
-
-
 class DeterministicSampler:
+    logger = logging.getLogger(__name__)
     """
     Deterministic sampling - no randomness, all selections are provable.
     """

@@ -1,19 +1,3 @@
-"""
-Web Knowledge Integration for Oracle
-======================================
-
-Gives the Oracle real-time access to web knowledge:
-1. Web search for current information
-2. Documentation lookups (Python, JS, frameworks)
-3. GitHub repository analysis
-4. StackOverflow solution search
-5. Security vulnerability databases
-6. Best practices and patterns
-
-Enables Grace to stay current and learn from the global
-software engineering knowledge base.
-"""
-
 import logging
 import asyncio
 import aiohttp
@@ -26,11 +10,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import hashlib
 import urllib.parse
-
-logger = logging.getLogger(__name__)
-
-
 class KnowledgeSource(str, Enum):
+    logger = logging.getLogger(__name__)
     """Sources of web knowledge."""
     WEB_SEARCH = "web_search"
     GITHUB = "github"

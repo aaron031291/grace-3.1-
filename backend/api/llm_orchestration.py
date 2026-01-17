@@ -1,70 +1,26 @@
-"""
-LLM Orchestration API Endpoints
-
-Provides REST API access to the multi-LLM orchestration system.
-
-All endpoints:
-- Track with Genesis Keys
-- Enforce cognitive framework
-- Verify outputs through 5-layer pipeline
-- Integrate with learning memory
-- Log for audit
-"""
-
 import logging
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends, Body
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
-
-from llm_orchestrator.llm_orchestrator import (
-    get_llm_orchestrator,
-    LLMOrchestrator,
-    LLMTaskResult
-)
+from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, LLMOrchestrator, LLMTaskResult
 from llm_orchestrator.multi_llm_client import TaskType
 from llm_orchestrator.cognitive_enforcer import CognitiveConstraints
-from llm_orchestrator.llm_collaboration import (
-    get_collaboration_hub,
-    CollaborationMode
-)
-from llm_orchestrator.fine_tuning import (
-    get_fine_tuning_system,
-    FineTuningMethod
-)
+from llm_orchestrator.llm_collaboration import get_collaboration_hub, CollaborationMode
+from llm_orchestrator.fine_tuning import get_fine_tuning_system, FineTuningMethod
 from database.session import get_db
 from embedding import EmbeddingModel, get_embedding_model
-
-logger = logging.getLogger(__name__)
-
-# Lazy-loaded embedding model singleton
-_embedding_model: Optional[EmbeddingModel] = None
-
-def get_or_create_embedding_model() -> Optional[EmbeddingModel]:
-    """Get or create singleton embedding model instance."""
-    global _embedding_model
-    if _embedding_model is None:
-        try:
-            _embedding_model = get_embedding_model()
-        except FileNotFoundError as e:
-            # Model path doesn't exist - this is expected if model hasn't been downloaded yet
-            logger.debug(f"Embedding model not available: {e}. Will be loaded on first use.")
-            _embedding_model = None
-        except Exception as e:
-            # Other errors - log but don't fail
-            logger.warning(f"Failed to initialize embedding model: {e}, proceeding without")
-            _embedding_model = None
-    return _embedding_model
-
-router = APIRouter(prefix="/llm", tags=["LLM Orchestration"])
-
-
-# =======================================================================
-# REQUEST/RESPONSE MODELS
-# =======================================================================
-
 class LLMTaskRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """LLM task request."""
     prompt: str = Field(..., description="Task prompt")
     task_type: str = Field(default="general", description="Task type (code_generation, reasoning, etc.)")
@@ -180,10 +136,11 @@ def get_orchestrator(db: Session = Depends(get_db)) -> LLMOrchestrator:
         logger.warning(f"Failed to initialize embedding model: {e}, proceeding without")
         embedding_model = None
 
+    from pathlib import Path
     return get_llm_orchestrator(
         session=db,
         embedding_model=embedding_model,
-        knowledge_base_path="backend/knowledge_base"
+        knowledge_base_path=Path("backend/knowledge_base")
     )
 
 

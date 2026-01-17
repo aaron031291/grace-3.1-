@@ -11,7 +11,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boolean, ForeignKey
 import json
 
-from database.base import BaseModel
+# Try backend.database first, then database (for compatibility)
+try:
+    from backend.database.base import BaseModel
+except ImportError:
+    from database.base import BaseModel
 
 
 class LearningExample(BaseModel):
@@ -21,6 +25,7 @@ class LearningExample(BaseModel):
     Stores experiences that Grace learns from.
     """
     __tablename__ = "learning_examples"
+    __table_args__ = ({'extend_existing': True},)  # Allow table to be redefined if already exists
 
     # What was learned
     example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
@@ -262,10 +267,14 @@ class LearningMemoryManager:
     5. Update trust based on outcomes
     """
 
-    def __init__(self, session: Session, knowledge_base_path: Path):
+    def __init__(self, session: Session, knowledge_base_path):
         self.session = session
-        self.kb_path = knowledge_base_path
-        self.learning_memory_path = knowledge_base_path / "layer_1" / "learning_memory"
+        # Convert to Path if it's a string
+        if isinstance(knowledge_base_path, str):
+            self.kb_path = Path(knowledge_base_path)
+        else:
+            self.kb_path = knowledge_base_path
+        self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
         self.trust_scorer = TrustScorer()
 
     def ingest_learning_data(

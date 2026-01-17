@@ -1,21 +1,3 @@
-"""
-Parliament Governance System for Grace
-=======================================
-
-Multi-model consensus system using parliamentary-style governance
-with quorum voting, anti-hallucination verification, and KPI tracking.
-
-Key Concepts:
-1. Parliament - Assembly of multiple LLMs that vote on decisions
-2. Quorum - Minimum models required for valid decision
-3. Anti-Hallucination - Cross-model verification rejects inconsistencies
-4. Trust Scoring - Each model has a trust score based on history
-5. KPIs - Key Performance Indicators for quality governance
-
-This ensures Claude/Cursor-level quality through democratic model
-consensus rather than relying on a single model's output.
-"""
-
 import logging
 import asyncio
 import json
@@ -26,11 +8,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class VoteType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of votes in parliament."""
     APPROVE = "approve"
     REJECT = "reject"

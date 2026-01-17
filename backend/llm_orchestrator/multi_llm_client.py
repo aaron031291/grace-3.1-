@@ -335,7 +335,9 @@ class MultiLLMClient:
             priority=11  # High - Sweet spot with memory system
         ),
         
-        # Best Reasoning Intelligence - Still best for complex reasoning
+        # Best Reasoning Intelligence - Best for complex reasoning
+        # NOTE: 70B model (~40GB) - max_model_size_gb increased to 40 to accommodate
+        # When this model is loaded, max_concurrent_models should be 1
         "deepseek-r1-70b": LLMModel(
             name="DeepSeek-R1 70B",
             model_id="deepseek-r1:70b",
@@ -405,7 +407,7 @@ class MultiLLMClient:
         requests_per_minute: int = 60,
         requests_per_hour: int = 1000,
         max_retries: int = 3,
-        max_concurrent_requests: int = 10
+        max_concurrent_requests: int = 1  # Limited to 1 when running large models (70B) to prevent OOM
     ):
         """
         Initialize Multi-LLM client with production hardening.
@@ -492,15 +494,21 @@ class MultiLLMClient:
         self,
         task_type: TaskType,
         required_capabilities: Optional[List[ModelCapability]] = None,
-        prefer_speed: bool = False
+        prefer_speed: bool = False,
+        num_tokens: int = 500,
+        time_budget_ms: Optional[float] = None
     ) -> Optional[LLMModel]:
         """
         Select best model for task.
+        
+        TimeSense Integration: Now considers predicted generation time when selecting models.
 
         Args:
             task_type: Type of task
             required_capabilities: Required model capabilities
             prefer_speed: Prefer faster models
+            num_tokens: Expected number of tokens to generate (for time estimation)
+            time_budget_ms: Maximum time budget in milliseconds (if provided)
 
         Returns:
             Best matching model or None
@@ -537,14 +545,87 @@ class MultiLLMClient:
             logger.warning(f"No suitable model for task: {task_type}")
             return list(self.available_models.values())[0]  # Fallback to first available
 
-        # Sort by priority (higher is better)
-        candidates.sort(key=lambda m: (
-            -m.priority if not prefer_speed else m.priority,
-            -m.context_window
-        ))
-
-        selected = candidates[0]
-        logger.info(f"Selected model: {selected.name} for task: {task_type.value}")
+        # TimeSense: Estimate time for each candidate and score accordingly
+        scored_candidates = []
+        for model in candidates:
+            # Base score (priority)
+            base_score = model.priority
+            
+            # Time-aware scoring
+            time_score = 1.0
+            time_confidence = 0.5
+            estimated_time_ms = None
+            
+            try:
+                from timesense.integration import predict_time
+                from timesense.primitives import PrimitiveType
+                
+                # Estimate generation time for this model
+                prediction = predict_time(
+                    primitive_type=PrimitiveType.LLM_TOKENS_GENERATE,
+                    size=num_tokens,
+                    model_name=model.model_id
+                )
+                
+                if prediction:
+                    estimated_time_ms = prediction.p50_ms
+                    time_confidence = prediction.confidence
+                    
+                    # Check if within time budget
+                    if time_budget_ms and estimated_time_ms > time_budget_ms:
+                        # Model exceeds budget, penalize heavily
+                        time_score = 0.1
+                    else:
+                        # Faster models score higher (when prefer_speed or time budget)
+                        if prefer_speed or time_budget_ms:
+                            # Inverse time relationship: faster = higher score
+                            # Normalize: 0-2s = 1.0, 2-5s = 0.8, 5-10s = 0.6, 10s+ = 0.4
+                            if estimated_time_ms < 2000:
+                                time_score = 1.0
+                            elif estimated_time_ms < 5000:
+                                time_score = 0.8
+                            elif estimated_time_ms < 10000:
+                                time_score = 0.6
+                            else:
+                                time_score = 0.4
+                        else:
+                            # No time preference, neutral score
+                            time_score = 1.0
+            except Exception as e:
+                logger.debug(f"[TIME-AWARE-SELECT] Time estimation failed: {e}")
+                # Use historical stats if available
+                model_key = next(
+                    (k for k, v in self.available_models.items() if v.model_id == model.model_id),
+                    None
+                )
+                if model_key and model_key in self.model_stats:
+                    avg_time = self.model_stats[model_key].get('avg_duration_ms', 5000)
+                    if prefer_speed:
+                        # Use historical average
+                        time_score = 1.0 / (1.0 + avg_time / 5000)  # Normalized
+            
+            # Composite score: priority + time efficiency
+            # Weight time more if prefer_speed or time_budget
+            if prefer_speed or time_budget_ms:
+                composite_score = (base_score * 0.6) + (time_score * time_confidence * 0.4)
+            else:
+                composite_score = (base_score * 0.9) + (time_score * time_confidence * 0.1)
+            
+            scored_candidates.append({
+                'model': model,
+                'score': composite_score,
+                'base_score': base_score,
+                'time_score': time_score,
+                'estimated_time_ms': estimated_time_ms
+            })
+        
+        # Sort by composite score
+        scored_candidates.sort(key=lambda x: x['score'], reverse=True)
+        
+        selected = scored_candidates[0]['model']
+        time_info = f" (estimated: {scored_candidates[0]['estimated_time_ms']:.0f}ms)" if scored_candidates[0]['estimated_time_ms'] else ""
+        logger.info(f"Selected model: {selected.name} for task: {task_type.value}{time_info}")
+        
         return selected
 
     def generate(

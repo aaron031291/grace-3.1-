@@ -1,12 +1,3 @@
-"""
-Genesis Key Directory Hierarchy System.
-
-Creates a hierarchical structure where:
-- Every directory gets a unique Genesis Key (DIR-prefix)
-- Every subdirectory gets its own Genesis Key
-- Files within directories are version-controlled
-- Complete hierarchy tracking
-"""
 import os
 import uuid
 import json
@@ -15,15 +6,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus
 from genesis.genesis_key_service import get_genesis_service
 from database.session import get_session
-
-logger = logging.getLogger(__name__)
-
-
 class DirectoryGenesisKey:
+    logger = logging.getLogger(__name__)
     """
     Manages Genesis Keys for directory hierarchies.
 
@@ -42,15 +29,15 @@ class DirectoryGenesisKey:
         self.base_path = base_path or self._get_default_base_path()
         self.genesis_service = get_genesis_service(session)
 
-        # Metadata file to store directory Genesis Keys
-        self.metadata_file = os.path.join(self.base_path, ".genesis_directory_keys.json")
+        # Metadata file to store directory Genesis Keys (use Path for portability)
+        self.metadata_file = str(Path(self.base_path) / ".genesis_directory_keys.json")
         self._ensure_base_path()
         self._load_or_create_metadata()
 
     def _get_default_base_path(self) -> str:
-        """Get default base path (knowledge_base)."""
-        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        return os.path.join(backend_dir, "knowledge_base")
+        """Get default base path (knowledge_base) - portable path handling."""
+        backend_dir = Path(__file__).parent.parent
+        return str(backend_dir / "knowledge_base")
 
     def _ensure_base_path(self):
         """Ensure base path exists."""

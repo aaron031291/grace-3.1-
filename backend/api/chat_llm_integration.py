@@ -1,29 +1,24 @@
-"""
-Chat LLM Integration - Full LLM Orchestrator Integration for Chats
-
-Integrates complete LLM orchestrator into chat system:
-- All chat messages flow through LLM orchestrator
-- Genesis Keys assigned to all chat interactions
-- Layer 1 integration
-- Learning memory integration
-- World model integration
-- Trust scoring and verification
-"""
-
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, LLMOrchestrator
 from llm_orchestrator.multi_llm_client import TaskType
 from genesis.pipeline_integration import DataPipeline
 from genesis.genesis_key_service import get_genesis_service
 
+# Import emoji sanitization
+try:
+    from utils.emoji_sanitizer import sanitize_llm_output
+except ImportError:
+    def sanitize_llm_output(output, replace=True):
+        return output
+
 logger = logging.getLogger(__name__)
 
 
 class ChatLLMIntegration:
+    logger = logging.getLogger(__name__)
     """
     Integrates full LLM orchestrator into chat system.
     
@@ -101,9 +96,12 @@ class ChatLLMIntegration:
             except Exception as e:
                 logger.warning(f"World model integration failed: {e}")
         
+        # Sanitize LLM output to remove emojis
+        sanitized_content = sanitize_llm_output(result.content, replace=True)
+        
         # Build response
         response = {
-            "content": result.content,
+            "content": sanitized_content,  # Emojis removed/replaced
             "genesis_key_id": result.genesis_key_id,
             "trust_score": result.trust_score,
             "confidence_score": result.confidence_score,

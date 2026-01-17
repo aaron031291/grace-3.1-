@@ -1,28 +1,12 @@
-"""
-Trust-Aware Embedding Model - Neuro-Symbolic Integration
-
-Enhances neural embeddings with symbolic trust scores, creating embeddings
-that respect knowledge trust and provenance.
-
-Key Features:
-- Trust-enhanced embeddings that incorporate confidence scores
-- Trust-weighted similarity search
-- Trust-guided clustering
-- Integration with symbolic knowledge base
-"""
-
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Union
 from dataclasses import dataclass
 import logging
-
 from embedding import EmbeddingModel, get_embedding_model
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class TrustContext:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Trust context for embedding generation"""
     trust_score: float  # Overall trust (0-1)
     source_reliability: float  # Source reliability (0-1)

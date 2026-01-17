@@ -1,13 +1,3 @@
-"""
-Symbiotic Genesis Key Version Control System.
-
-Genesis Keys and version control work as ONE unified system:
-- Every Genesis Key IS a version control entry
-- Every version control entry IS a Genesis Key
-- File changes automatically create Genesis Keys
-- Genesis Keys automatically track versions
-- Complete bidirectional integration
-"""
 import os
 import hashlib
 import json
@@ -16,17 +6,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Tuple
 from sqlalchemy.orm import Session
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus
 from genesis.genesis_key_service import get_genesis_service
 from genesis.file_version_tracker import get_file_version_tracker
 from genesis.repo_scanner import get_repo_scanner
 from database.session import get_session
-
-logger = logging.getLogger(__name__)
-
-
 class SymbioticVersionControl:
+    logger = logging.getLogger(__name__)
     """
     Unified Genesis Key + Version Control System.
 

@@ -1,8 +1,3 @@
-"""
-Text ingestion service for processing documents and storing embeddings.
-Handles chunking, embedding generation, and vector storage.
-"""
-
 import hashlib
 import logging
 import json
@@ -11,43 +6,14 @@ from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
 from datetime import datetime
 import numpy as np
-
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from confidence_scorer import ConfidenceScorer
 from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
-
-# TimeSense integration
-try:
-    from timesense.integration import track_operation, TimeEstimator
-    from timesense.primitives import PrimitiveType
-    TIMESENSE_AVAILABLE = True
-except ImportError:
-    TIMESENSE_AVAILABLE = False
-    # Fallback: no-op context manager
-    from contextlib import nullcontext
-    def track_operation(*args, **kwargs):
-        return nullcontext()
-    TimeEstimator = None
-
-# Import cognitive blueprint decorators
-try:
-    from cognitive.decorators import cognitive_operation
-    COGNITIVE_AVAILABLE = True
-except ImportError:
-    COGNITIVE_AVAILABLE = False
-    # Fallback: no-op decorator
-    def cognitive_operation(operation_name, **kwargs):
-        def decorator(func):
-            return func
-        return decorator
-
-logger = logging.getLogger(__name__)
-
-
 class TextChunker:
+    logger = logging.getLogger(__name__)
     """Handles text chunking with semantic and structure-aware strategies."""
     
     def __init__(
@@ -463,7 +429,7 @@ class TextIngestionService:
             # Use smaller batch size to avoid CUDA OOM errors
             # Fallback: if CUDA fails, automatically reduce batch size and retry
             all_embeddings = None
-            batch_size = 32  # Start with smaller batch size for VRAM-constrained systems
+            batch_size = 4  # Reduced from 32 to match system specs (recommended_batch_size: 4)
             
             try:
                 # Track embedding operation with TimeSense

@@ -1,26 +1,11 @@
-"""
-WebSocket API for Real-Time Updates
-====================================
-Provides real-time bidirectional communication for:
-- Live chat streaming
-- System status updates
-- Learning progress notifications
-- File ingestion status
-"""
-
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from typing import Dict, Set, Optional, Any
 import json
 import asyncio
 from datetime import datetime
 import logging
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(tags=["WebSocket"])
-
-
 class ConnectionManager:
+    logger = logging.getLogger(__name__)
     """Manages WebSocket connections and broadcasts."""
 
     def __init__(self):

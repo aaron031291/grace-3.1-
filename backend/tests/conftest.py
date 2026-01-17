@@ -819,6 +819,66 @@ def pytest_runtest_makereport(item, call):
                     "assertions_likely_validated": _infer_assertions(test_function),
                 }
             )
+            
+            # ✅ NEW: Record outcome in OutcomeAggregator for cross-system learning
+            try:
+                from cognitive.outcome_aggregator import get_outcome_aggregator
+                from database.session import get_db
+                
+                session = next(get_db())
+                aggregator = get_outcome_aggregator(session)
+                aggregator.record_outcome('testing', {
+                    'test_name': test_name,
+                    'success': True,
+                    'trust_score': 0.9,  # High trust for passing tests
+                    'duration': duration_ms,
+                    'test_module': test_module,
+                    'test_class': test_class,
+                    'test_function': test_function
+                })
+            except Exception as e:
+                # Don't fail tests if aggregator fails
+                pass
+            
+            # ✅ NEW: Create Genesis Key for test outcome to trigger LLM knowledge update
+            try:
+                from genesis.genesis_key_service import get_genesis_service
+                from models.genesis_key_models import GenesisKeyType
+                from database.session import get_db
+                
+                session = next(get_db())
+                genesis_service = get_genesis_service()
+                
+                genesis_key = genesis_service.create_key(
+                    key_type=GenesisKeyType.SYSTEM_EVENT,
+                    what_description=f"Test passed: {test_name}",
+                    who_actor="pytest",
+                    where_location=str(item.fspath) if hasattr(item, 'fspath') else None,
+                    why_reason="Test outcome for LLM knowledge update",
+                    how_method="pytest_execution",
+                    file_path=str(item.fspath) if hasattr(item, 'fspath') else None,
+                    context_data={
+                        'test_name': test_name,
+                        'test_module': test_module,
+                        'test_class': test_class,
+                        'test_function': test_function,
+                        'duration_ms': duration_ms,
+                        'outcome': 'passed'
+                    },
+                    metadata={
+                        'outcome_type': 'test_outcome',
+                        'example_type': 'test_outcome',
+                        'trust_score': 0.9,  # High trust for passing tests
+                        'success': True,
+                        'test_name': test_name,
+                        'duration_ms': duration_ms
+                    },
+                    session=session
+                )
+            except Exception as e:
+                # Don't fail tests if Genesis Key creation fails
+                pass
+        
         elif report.failed:
             # Record failed test with error details
             error_type = call.excinfo.typename if call.excinfo else "Unknown"
@@ -839,6 +899,72 @@ def pytest_runtest_makereport(item, call):
                     "full_traceback": "".join(tb_lines) if len(tb_lines) < 50 else "Traceback too long",
                 }
             )
+            
+            # ✅ NEW: Record outcome in OutcomeAggregator for cross-system learning
+            try:
+                from cognitive.outcome_aggregator import get_outcome_aggregator
+                from database.session import get_db
+                
+                session = next(get_db())
+                aggregator = get_outcome_aggregator(session)
+                aggregator.record_outcome('testing', {
+                    'test_name': test_name,
+                    'success': False,
+                    'trust_score': 0.7,  # Medium trust - failures are still valuable
+                    'duration': duration_ms,
+                    'error_type': error_type,
+                    'error_message': error_message,
+                    'test_module': test_module,
+                    'test_class': test_class,
+                    'test_function': test_function
+                })
+            except Exception as e:
+                # Don't fail tests if aggregator fails
+                pass
+            
+            # ✅ NEW: Create Genesis Key for test failure outcome
+            try:
+                from genesis.genesis_key_service import get_genesis_service
+                from models.genesis_key_models import GenesisKeyType
+                from database.session import get_db
+                
+                session = next(get_db())
+                genesis_service = get_genesis_service()
+                
+                genesis_key = genesis_service.create_key(
+                    key_type=GenesisKeyType.ERROR,
+                    what_description=f"Test failed: {test_name}",
+                    who_actor="pytest",
+                    where_location=str(item.fspath) if hasattr(item, 'fspath') else None,
+                    why_reason="Test failure outcome for LLM knowledge update",
+                    how_method="pytest_execution",
+                    file_path=str(item.fspath) if hasattr(item, 'fspath') else None,
+                    is_error=True,
+                    error_type=error_type,
+                    error_message=error_message,
+                    context_data={
+                        'test_name': test_name,
+                        'test_module': test_module,
+                        'test_class': test_class,
+                        'test_function': test_function,
+                        'duration_ms': duration_ms,
+                        'outcome': 'failed',
+                        'error_type': error_type
+                    },
+                    metadata={
+                        'outcome_type': 'test_outcome',
+                        'example_type': 'test_outcome',
+                        'trust_score': 0.7,  # Medium trust - failures are still valuable for learning
+                        'success': False,
+                        'test_name': test_name,
+                        'error_type': error_type,
+                        'duration_ms': duration_ms
+                    },
+                    session=session
+                )
+            except Exception as e:
+                # Don't fail tests if Genesis Key creation fails
+                pass
         elif report.skipped:
             # Skip is already recorded elsewhere, but update count if needed
             pass

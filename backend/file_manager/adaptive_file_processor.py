@@ -1,21 +1,10 @@
-"""
-Grace Adaptive File Processor
-
-Learns optimal processing strategies from experience.
-Continuously improves file processing quality.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class ProcessingStrategy:
+    logger = logging.getLogger(__name__)
     """Processing strategy for a file type."""
 
     file_type: str
@@ -83,6 +72,8 @@ class StrategyLearner:
     ) -> ProcessingStrategy:
         """
         Get optimal processing strategy for a file type.
+        
+        TimeSense Integration: Now considers time efficiency when selecting strategies.
 
         Args:
             file_type: File extension (.pdf, .py, etc.)
@@ -99,20 +90,111 @@ class StrategyLearner:
             return self.strategy_cache[cache_key]
 
         # Query database for learned strategies
+        strategies = []
         if self.session:
-            strategy = self._get_learned_strategy(file_type, complexity_level)
-            if strategy:
-                self.strategy_cache[cache_key] = strategy
-                return strategy
+            learned_strategy = self._get_learned_strategy(file_type, complexity_level)
+            if learned_strategy:
+                strategies.append(learned_strategy)
 
-        # Fall back to default strategy
-        strategy = self._get_default_strategy(file_type, file_size, complexity_level)
+        # Always include default strategy for comparison
+        default_strategy = self._get_default_strategy(file_type, file_size, complexity_level)
+        if default_strategy not in strategies:
+            strategies.append(default_strategy)
+        
+        # TimeSense: Score strategies with time efficiency
+        if len(strategies) > 1:
+            strategy = self._select_time_aware_strategy(strategies, file_size)
+        else:
+            strategy = strategies[0] if strategies else default_strategy
+        
+        self.strategy_cache[cache_key] = strategy
+        
         logger.info(
-            f"[STRATEGY-LEARNER] Using default strategy for {file_type}: "
-            f"chunk_size={strategy.chunk_size}"
+            f"[STRATEGY-LEARNER] Selected strategy for {file_type}: "
+            f"chunk_size={strategy.chunk_size}, "
+            f"quality={strategy.avg_quality_score:.2f if hasattr(strategy, 'avg_quality_score') else 'N/A'}"
         )
 
         return strategy
+    
+    def _select_time_aware_strategy(
+        self,
+        strategies: List['ProcessingStrategy'],
+        file_size: int
+    ) -> 'ProcessingStrategy':
+        """
+        Select best strategy considering both quality AND time efficiency.
+        
+        TimeSense Integration: Scores strategies by quality (70%) + time efficiency (30%).
+        """
+        scored_strategies = []
+        
+        for strategy in strategies:
+            # Quality score (from historical performance)
+            quality_score = (
+                (strategy.success_rate * 0.6 + strategy.avg_quality_score * 0.4)
+                if hasattr(strategy, 'success_rate') and hasattr(strategy, 'avg_quality_score')
+                else 0.7  # Default quality for new strategies
+            )
+            
+            # TimeSense: Get time estimate for this strategy
+            time_efficiency_score = 1.0
+            time_confidence = 0.5
+            
+            try:
+                from timesense.integration import TimeEstimator
+                from timesense.primitives import PrimitiveType
+                
+                # Estimate time for file processing with this strategy
+                # Rough estimate: embedding time depends on chunk size
+                num_chunks = max(1, file_size // (strategy.chunk_size or 1024))
+                chunk_tokens = (strategy.chunk_size or 1024) // 4  # Rough token estimate
+                
+                # Estimate embedding time (main bottleneck)
+                embedding_time_est = TimeEstimator.estimate_file_processing(
+                    file_size_bytes=file_size,
+                    include_embedding=True
+                ) if TimeEstimator else None
+                
+                if embedding_time_est:
+                    # Normalize time efficiency: faster = higher score
+                    # Scale: 0-10s = 1.0, 10-60s = 0.8, 60s+ = 0.5
+                    estimated_ms = embedding_time_est.p50_ms
+                    if estimated_ms < 10000:  # < 10 seconds
+                        time_efficiency_score = 1.0
+                    elif estimated_ms < 60000:  # < 1 minute
+                        time_efficiency_score = 0.8
+                    else:
+                        time_efficiency_score = 0.5
+                    
+                    time_confidence = embedding_time_est.confidence
+            except Exception as e:
+                logger.debug(f"[STRATEGY-LEARNER] Time estimation failed: {e}")
+            
+            # Composite score: 70% quality + 30% time efficiency
+            composite_score = (
+                quality_score * 0.7 +
+                time_efficiency_score * time_confidence * 0.3
+            )
+            
+            scored_strategies.append({
+                'strategy': strategy,
+                'quality_score': quality_score,
+                'time_efficiency': time_efficiency_score,
+                'time_confidence': time_confidence,
+                'composite_score': composite_score
+            })
+            
+            logger.debug(
+                f"[STRATEGY-LEARNER] Strategy scored: "
+                f"quality={quality_score:.2f}, "
+                f"time_eff={time_efficiency_score:.2f}, "
+                f"composite={composite_score:.2f}"
+            )
+        
+        # Select strategy with highest composite score
+        best = max(scored_strategies, key=lambda s: s['composite_score'])
+        return best['strategy']
 
     def _get_learned_strategy(
         self,
@@ -161,7 +243,7 @@ class StrategyLearner:
                     chunk_size=strategy_data.get('chunk_size', 1024),
                     overlap=strategy_data.get('overlap', 100),
                     use_semantic_chunking=strategy_data.get('use_semantic', False),
-                    embedding_batch_size=strategy_data.get('batch_size', 32),
+                    embedding_batch_size=strategy_data.get('batch_size', 4),  # Reduced from 32 to match system specs
                     quality_threshold=strategy_data.get('quality_threshold', 0.5),
                     additional_params=strategy_data.get('additional', {}),
                     success_rate=result[2],
@@ -205,7 +287,7 @@ class StrategyLearner:
         chunk_size = 1024
         overlap = 100
         use_semantic = False
-        batch_size = 32
+        batch_size = 4  # Reduced from 32 to match system specs (recommended_batch_size: 4)
         quality_threshold = 0.5
 
         # Adjust based on file type
@@ -231,10 +313,10 @@ class StrategyLearner:
         # Adjust based on file size
         if file_size > 1_000_000:  # > 1MB
             chunk_size = int(chunk_size * 1.5)
-            batch_size = 16
+            batch_size = 4  # Reduced from 16 to match system specs
         elif file_size < 10_000:  # < 10KB
             chunk_size = int(chunk_size * 0.5)
-            batch_size = 64
+            batch_size = 4  # Reduced from 64 to match system specs
 
         return ProcessingStrategy(
             file_type=file_type,
@@ -567,6 +649,53 @@ class AdaptiveFileProcessor:
 
         # Learn from outcome
         self.strategy_learner.learn_from_outcome(outcome)
+
+        # ✅ NEW: Create Genesis Key for file processing outcome to trigger LLM knowledge update
+        try:
+            from genesis.genesis_key_service import get_genesis_service
+            from models.genesis_key_models import GenesisKeyType
+            
+            genesis_service = get_genesis_service()
+            
+            # Calculate trust score based on outcome
+            trust_score = quality_score if success else max(0.3, quality_score - 0.3)
+            if success and quality_score >= 0.8:
+                trust_score = 0.85  # High trust for high-quality successes
+            
+            genesis_key = genesis_service.create_key(
+                key_type=GenesisKeyType.FILE_OPERATION,
+                what_description=f"File processing outcome: {Path(file_path).name} ({'success' if success else 'failure'})",
+                who_actor="adaptive_file_processor",
+                where_location=str(file_path),
+                why_reason="File processing outcome for LLM knowledge update",
+                how_method=strategy.get('name', 'adaptive_processing') if isinstance(strategy, dict) else str(strategy),
+                file_path=str(file_path),
+                context_data={
+                    'file_id': file_id,
+                    'file_type': Path(file_path).suffix.lower(),
+                    'strategy_used': strategy,
+                    'success': success,
+                    'quality_score': quality_score,
+                    'processing_time': processing_time,
+                    'num_chunks': num_chunks,
+                    'num_embeddings': num_embeddings
+                },
+                metadata={
+                    'outcome_type': 'file_processing_outcome',
+                    'example_type': 'file_processing_outcome',
+                    'trust_score': trust_score,
+                    'success': success,
+                    'file_type': Path(file_path).suffix.lower(),
+                    'quality_score': quality_score,
+                    'strategy': strategy.get('name', str(strategy)) if isinstance(strategy, dict) else str(strategy)
+                }
+            )
+            logger.debug(
+                f"[ADAPTIVE-PROCESSOR] Created Genesis Key for processing outcome: "
+                f"{genesis_key.key_id} (trust={trust_score:.2f})"
+            )
+        except Exception as e:
+            logger.warning(f"[ADAPTIVE-PROCESSOR] Could not create Genesis Key for outcome: {e}")
 
         logger.info(
             f"[ADAPTIVE-PROCESSOR] Recorded outcome and learned from it: "

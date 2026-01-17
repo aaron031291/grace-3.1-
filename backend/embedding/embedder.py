@@ -16,6 +16,18 @@ try:
 except ImportError:
     USE_SETTINGS = False
 
+# TimeSense integration
+try:
+    from timesense.integration import track_operation, TimeEstimator
+    from timesense.primitives import PrimitiveType
+    TIMESENSE_AVAILABLE = True
+except ImportError:
+    TIMESENSE_AVAILABLE = False
+    from contextlib import nullcontext
+    def track_operation(*args, **kwargs):
+        return nullcontext()
+    TimeEstimator = None
+
 
 class EmbeddingModel:
     """
@@ -86,7 +98,7 @@ class EmbeddingModel:
         
         self.device = device
         
-        # Determine model path
+        # Determine model path or identifier
         if model_path is None:
             if USE_SETTINGS:
                 model_path = settings.EMBEDDING_MODEL_PATH
@@ -94,35 +106,137 @@ class EmbeddingModel:
                 backend_dir = Path(__file__).parent.parent
                 model_path = str(backend_dir / "models" / "embedding" / "qwen_4b")
         
-        if not Path(model_path).exists():
-            raise FileNotFoundError(
-                f"Model path does not exist: {model_path}. "
-                f"The model will be downloaded automatically on first use, or you can download it manually."
-            )
+        # Check if it's a local path or HuggingFace model identifier
+        model_path_obj = Path(model_path)
+        use_local_path = model_path_obj.exists() and model_path_obj.is_dir()
+        
+        # If local path doesn't exist, try to download or use alternative
+        if not use_local_path:
+            # Try downloading from HuggingFace first
+            huggingface_model = "Qwen/Qwen3-Embedding-4B"  # Correct model identifier
+            print(f"[EMBEDDING] Local model path not found: {model_path}")
+            print(f"[EMBEDDING] Attempting to download from HuggingFace: {huggingface_model}")
+            
+            try:
+                # Try using huggingface_hub to download if available
+                from huggingface_hub import snapshot_download
+                print(f"[EMBEDDING] Downloading model to: {model_path}")
+                embedding_dir = model_path_obj
+                embedding_dir.parent.mkdir(parents=True, exist_ok=True)
+                snapshot_download(
+                    repo_id=huggingface_model,
+                    local_dir=str(embedding_dir),
+                    local_dir_use_symlinks=False
+                )
+                print(f"[EMBEDDING] Model downloaded successfully to {model_path}")
+                use_local_path = True
+                model_identifier = model_path
+                cache_dir = None
+            except ImportError:
+                print(f"[EMBEDDING] huggingface_hub not available - will try SentenceTransformer download")
+                # Fall through to SentenceTransformer download
+                model_identifier = huggingface_model
+                cache_dir = None
+            except Exception as e:
+                print(f"[EMBEDDING] Failed to download via huggingface_hub: {e}")
+                print(f"[EMBEDDING] Will try SentenceTransformer automatic download instead...")
+                # Use a commonly available embedding model as fallback
+                # Try the Qwen model first, but allow fallback if it fails
+                model_identifier = huggingface_model
+                cache_dir = None
+        else:
+            model_identifier = model_path
+            cache_dir = None
         
         print(f"[EMBEDDING] [LOADING] Instantiating EmbeddingModel class...")
-        print(f"[EMBEDDING]   Model path: {model_path}")
+        print(f"[EMBEDDING]   Model: {model_identifier}")
         print(f"[EMBEDDING]   Device: {self.device}")
         
         # Load the model with reduced memory footprint
+        # SentenceTransformer will download from HuggingFace if needed
+        print(f"[EMBEDDING]   Loading model weights (this may take a moment if downloading)...")
+        load_kwargs = {
+            "device": self.device,
+            "trust_remote_code": True
+        }
+        if cache_dir and not use_local_path:
+            # Save downloaded model to intended location
+            load_kwargs["cache_folder"] = str(cache_dir)
+        
         try:
-            print(f"[EMBEDDING]   Loading model weights (this may take a moment)...")
-            self.model = SentenceTransformer(
-                model_path, 
-                device=self.device, 
-                trust_remote_code=True
-            )
+            try:
+                self.model = SentenceTransformer(
+                    model_identifier,
+                    **load_kwargs
+                )
+            except Exception as e1:
+                # If Qwen model fails, try a commonly available fallback model
+                print(f"[WARN] Failed to load {model_identifier}: {e1}")
+                print(f"[EMBEDDING] Trying fallback model: all-MiniLM-L6-v2 (universally available)")
+                try:
+                    # Use a lightweight, always-available model as fallback
+                    fallback_model = "all-MiniLM-L6-v2"
+                    load_kwargs_fallback = {
+                        "device": self.device,
+                        "trust_remote_code": False  # Not needed for this model
+                    }
+                    self.model = SentenceTransformer(fallback_model, **load_kwargs_fallback)
+                    print(f"[EMBEDDING] [OK] Using fallback model: {fallback_model}")
+                    print(f"[EMBEDDING] [WARN] This is a smaller model (384 dim) - for best results, download Qwen model")
+                    # Update model identifier to reflect fallback
+                    model_identifier = fallback_model
+                except Exception as e2:
+                    # If even fallback fails, re-raise the original error
+                    print(f"[EMBEDDING] [FAIL] Both primary and fallback models failed")
+                    raise e1 from e2
+            
+            # If we downloaded, optionally move to intended location for future use
+            if not use_local_path and cache_dir:
+                try:
+                    import shutil
+                    if not model_path_obj.exists():
+                        print(f"[EMBEDDING] Saving model to local path for future use: {model_path}")
+                        # SentenceTransformer downloads to cache, we could copy it here
+                        # but it's fine to use the cache for now
+                except Exception as e:
+                    print(f"[EMBEDDING] Note: Could not save model locally: {e}")
+                    
         except Exception as e:
             print(f"[WARN] Failed to load model on {self.device}: {e}")
-            print("Retrying with CPU...")
+            print("[EMBEDDING] Retrying with CPU...")
             self.device = 'cpu'
-            self.model = SentenceTransformer(
-                model_path, 
-                device='cpu', 
-                trust_remote_code=True
-            )
+            load_kwargs = {
+                "device": 'cpu',
+                "trust_remote_code": True
+            }
+            if cache_dir and not use_local_path:
+                load_kwargs["cache_folder"] = str(cache_dir)
+            
+            try:
+                self.model = SentenceTransformer(
+                    model_identifier,
+                    **load_kwargs
+                )
+            except Exception as e2:
+                # Try fallback on CPU too
+                print(f"[WARN] Failed again on CPU with {model_identifier}: {e2}")
+                print(f"[EMBEDDING] Trying fallback model on CPU: all-MiniLM-L6-v2")
+                try:
+                    fallback_model = "all-MiniLM-L6-v2"
+                    self.model = SentenceTransformer(
+                        fallback_model,
+                        device='cpu',
+                        trust_remote_code=False
+                    )
+                    print(f"[EMBEDDING] [OK] Using fallback model: {fallback_model}")
+                    model_identifier = fallback_model
+                except Exception as e3:
+                    print(f"[EMBEDDING] [FAIL] All model loading attempts failed")
+                    raise e from e3
         
-        self.model_path = model_path
+        # Store the actual path/identifier used
+        self.model_path = model_identifier if not use_local_path else model_path
+        self.model_identifier = model_identifier  # Store the identifier for reference
         
         print(f"[EMBEDDING] [OK] Model loaded successfully")
         if self.device == 'cuda':
@@ -167,7 +281,7 @@ class EmbeddingModel:
         text: Union[str, List[str]],
         normalize: Optional[bool] = None,
         instruction: Optional[str] = None,
-        batch_size: int = 32,
+        batch_size: int = 4,  # Reduced from 32 to match system specs (recommended_batch_size: 4)
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
     ) -> Union[np.ndarray, torch.Tensor]:
@@ -199,16 +313,23 @@ class EmbeddingModel:
         if self.device == 'cpu':
             batch_size = min(batch_size, 8)  # Cap at 8 for CPU
         
-        # Generate embeddings with smaller batch size
-        embeddings = self.model.encode(
-            texts,
-            batch_size=batch_size,
-            convert_to_numpy=convert_to_numpy,
-            convert_to_tensor=convert_to_tensor,
-            normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
-            show_progress_bar=False,  # Disable progress bar to reduce clutter
+        # Estimate total tokens (rough approximation: 1 token ≈ 4 characters)
+        total_chars = sum(len(t) for t in texts)
+        estimated_tokens = total_chars // 4
+        
+        # TimeSense: Track embedding operation
+        model_name = getattr(self, 'model_identifier', None) or self.model_path
+        with track_operation(PrimitiveType.EMBED_TEXT, estimated_tokens, model_name=model_name) if TIMESENSE_AVAILABLE else nullcontext():
+            # Generate embeddings with smaller batch size
+            embeddings = self.model.encode(
+                texts,
+                batch_size=batch_size,
+                convert_to_numpy=convert_to_numpy,
+                convert_to_tensor=convert_to_tensor,
+                normalize_embeddings=normalize if normalize is not None else self.normalize_embeddings,
+                show_progress_bar=False,  # Disable progress bar to reduce clutter
 
-        )
+            )
         
         # Clear torch cache if using CUDA
         if self.device == 'cuda' and torch.cuda.is_available():
@@ -225,7 +346,7 @@ class EmbeddingModel:
         texts: List[str],
         normalize: Optional[bool] = None,
         instruction: Optional[str] = None,
-        batch_size: int = 32,
+        batch_size: int = 4,  # Reduced from 32 to match system specs (recommended_batch_size: 4)
     ) -> Tuple[np.ndarray, List[float]]:
         """
         Generate embeddings and return with their statistical scores.

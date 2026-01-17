@@ -1,21 +1,4 @@
-"""
-Grace Governance - Constitutional AI Framework
-
-Layer-1 + Layer-2 runtime-wired governance system integrating with:
-- Layer1 Message Bus for component coordination
-- Cognitive Enforcer for OODA invariants
-- Genesis Keys for audit trails
-- Security Config for policy settings
-- KPI Tracker for metrics-driven governance
-- Telemetry for uptime and SLA enforcement
-
-Constitutional DNA provides immutable rules that cannot be overridden.
-Policy Engine provides runtime-configurable governance checks.
-Metrics Engine tracks KPIs for governance decisions.
-"""
-
 from __future__ import annotations
-
 import asyncio
 import logging
 import uuid
@@ -25,24 +8,16 @@ from enum import Enum
 from typing import Dict, List, Any, Optional, Callable, Set, Tuple
 from dataclasses import dataclass, field, asdict
 from collections import deque
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    ComponentType,
-    MessageType,
-    Message,
-    get_message_bus
-)
+from layer1.message_bus import Layer1MessageBus, ComponentType, MessageType, Message, get_message_bus
 from security.config import SecurityConfig, get_security_config
-
-logger = logging.getLogger(__name__)
-
-
-# ==============================================================================
-# CONSTITUTIONAL DNA (Immutable)
-# ==============================================================================
-
 class ConstitutionalRule(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Core constitutional rules that cannot be overridden."""
     HUMAN_CENTRICITY = "human_centricity"
     TRANSCENDENCE_MISSION = "transcendence_mission"

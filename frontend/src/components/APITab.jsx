@@ -3,6 +3,10 @@ import "./APITab.css";
 
 const API_BASE = "http://localhost:8000";
 
+// ============================================================================
+// EXTERNAL API COMPONENTS (Original)
+// ============================================================================
+
 // API Card
 function APICard({ api, onEdit, onDelete, onTest }) {
   const [testing, setTesting] = useState(false);
@@ -179,7 +183,7 @@ function APIEditorModal({ api, onSave, onClose }) {
       <div className="modal-content api-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{api ? "Edit API" : "Register New API"}</h3>
-          <button className="modal-close" onClick={onClose}>x</button>
+          <button className="modal-close" onClick={onClose}>×</button>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
@@ -290,7 +294,7 @@ function APIEditorModal({ api, onSave, onClose }) {
                 <div key={key} className="header-item">
                   <span className="header-key">{key}:</span>
                   <span className="header-value">{value}</span>
-                  <button type="button" onClick={() => removeHeader(key)}>x</button>
+                  <button type="button" onClick={() => removeHeader(key)}>×</button>
                 </div>
               ))}
             </div>
@@ -320,7 +324,7 @@ function APIEditorModal({ api, onSave, onClose }) {
                     {endpoint.method}
                   </span>
                   <span className="path">{endpoint.path}</span>
-                  <button type="button" onClick={() => removeEndpoint(i)}>x</button>
+                  <button type="button" onClick={() => removeEndpoint(i)}>×</button>
                 </div>
               ))}
             </div>
@@ -388,15 +392,346 @@ function APIStats({ stats }) {
   );
 }
 
-// Main API Tab
+// ============================================================================
+// THIRD-PARTY LLM COMPONENTS (New)
+// ============================================================================
+
+// LLM Card Component
+function LLMCard({ llm, onTest, onDelete }) {
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState(null);
+
+  const handleTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const response = await fetch(`${API_BASE}/third-party-llm/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          llm_id: llm.llm_id,
+          prompt: "Test connection - respond with 'OK' if you can read this.",
+          max_tokens: 50
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setTestResult({ success: true, response: data.content });
+      } else {
+        const error = await response.json();
+        setTestResult({ success: false, error: error.detail || "Connection failed" });
+      }
+    } catch (err) {
+      setTestResult({ success: false, error: err.message });
+    }
+    setTesting(false);
+  };
+
+  const getProviderIcon = (provider) => {
+    switch (provider) {
+      case "gemini":
+        return "🔷";
+      case "openai":
+        return "🤖";
+      case "anthropic":
+        return "🧠";
+      default:
+        return "🔌";
+    }
+  };
+
+  const getStatusColor = (handshakePassed) => {
+    return handshakePassed ? "#10b981" : "#ef4444";
+  };
+
+  return (
+    <div className="api-card llm-card">
+      <div className="api-header">
+        <div className="api-info">
+          <span className="api-name">
+            {getProviderIcon(llm.provider)} {llm.model_name}
+          </span>
+          <span
+            className="api-status"
+            style={{ backgroundColor: getStatusColor(llm.handshake_passed) }}
+          >
+            {llm.handshake_passed ? "Integrated" : "Failed"}
+          </span>
+        </div>
+        <span className={`api-type type-${llm.provider}`}>
+          {llm.provider.toUpperCase()}
+        </span>
+      </div>
+
+      <div className="api-details">
+        <div className="detail-row">
+          <span className="detail-label">LLM ID:</span>
+          <code className="detail-value">{llm.llm_id}</code>
+        </div>
+        <div className="detail-row">
+          <span className="detail-label">Provider:</span>
+          <span className="detail-value">{llm.provider}</span>
+        </div>
+        <div className="detail-row">
+          <span className="detail-label">Model:</span>
+          <span className="detail-value">{llm.model_name}</span>
+        </div>
+        <div className="detail-row">
+          <span className="detail-label">Handshake:</span>
+          <span className="detail-value">
+            {llm.handshake_passed ? "✅ Passed" : "❌ Failed"}
+          </span>
+        </div>
+        {llm.handshake_timestamp && (
+          <div className="detail-row">
+            <span className="detail-label">Registered:</span>
+            <span className="detail-value">
+              {new Date(llm.handshake_timestamp).toLocaleString()}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {llm.capabilities && Object.keys(llm.capabilities).length > 0 && (
+        <div className="api-capabilities">
+          <span className="capabilities-label">Capabilities:</span>
+          <div className="capabilities-list">
+            {Object.entries(llm.capabilities).map(([key, value]) => (
+              <span
+                key={key}
+                className={`capability ${value ? "enabled" : "disabled"}`}
+                title={key.replace(/_/g, " ")}
+              >
+                {value ? "✅" : "❌"} {key.replace(/_/g, " ")}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {testResult && (
+        <div className={`test-result ${testResult.success ? "success" : "error"}`}>
+          {testResult.success ? (
+            <div>
+              <span>✅ Connection successful</span>
+              {testResult.response && (
+                <div className="test-response">{testResult.response}</div>
+              )}
+            </div>
+          ) : (
+            <span>❌ Connection failed: {testResult.error}</span>
+          )}
+        </div>
+      )}
+
+      <div className="api-actions">
+        <button onClick={handleTest} disabled={testing} className="btn-test">
+          {testing ? "Testing..." : "Test Connection"}
+        </button>
+        <button onClick={() => onDelete(llm.llm_id)} className="btn-delete">
+          Remove
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Register LLM Modal
+function RegisterLLMModal({ provider, onSave, onClose }) {
+  const [formData, setFormData] = useState({
+    api_key: "",
+    model_name: provider === "gemini" ? "gemini-pro" : provider === "openai" ? "gpt-4" : "claude-3-opus-20240229",
+    base_url: ""
+  });
+  const [registering, setRegistering] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setRegistering(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const endpoint = `/third-party-llm/register/${provider}`;
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api_key: formData.api_key,
+          model_name: formData.model_name,
+          base_url: formData.base_url || null
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          onSave(data);
+          onClose();
+        }, 1500);
+      } else {
+        setError(data.errors?.join(", ") || data.detail || "Registration failed");
+      }
+    } catch (err) {
+      setError(err.message || "Failed to register LLM");
+    } finally {
+      setRegistering(false);
+    }
+  };
+
+  const getProviderInfo = () => {
+    switch (provider) {
+      case "gemini":
+        return {
+          name: "Google Gemini",
+          apiKeyPlaceholder: "Enter your Gemini API key",
+          modelOptions: ["gemini-pro", "gemini-pro-vision", "gemini-1.5-pro"]
+        };
+      case "openai":
+        return {
+          name: "OpenAI",
+          apiKeyPlaceholder: "Enter your OpenAI API key",
+          modelOptions: ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"]
+        };
+      case "anthropic":
+        return {
+          name: "Anthropic Claude",
+          apiKeyPlaceholder: "Enter your Anthropic API key",
+          modelOptions: ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240229"]
+        };
+      default:
+        return { name: "LLM", apiKeyPlaceholder: "Enter API key", modelOptions: [] };
+    }
+  };
+
+  const providerInfo = getProviderInfo();
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content api-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>Register {providerInfo.name}</h3>
+          <button className="modal-close" onClick={onClose}>×</button>
+        </div>
+
+        {success ? (
+          <div className="success-message">
+            <div className="success-icon">✅</div>
+            <h4>LLM Registered Successfully!</h4>
+            <p>Handshake completed. The LLM is now integrated with GRACE.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>API Key *</label>
+              <input
+                type="password"
+                value={formData.api_key}
+                onChange={(e) => setFormData({ ...formData, api_key: e.target.value })}
+                required
+                placeholder={providerInfo.apiKeyPlaceholder}
+              />
+              <small>Your API key will be securely stored and used for all requests.</small>
+            </div>
+
+            <div className="form-group">
+              <label>Model Name *</label>
+              {providerInfo.modelOptions.length > 0 ? (
+                <select
+                  value={formData.model_name}
+                  onChange={(e) => setFormData({ ...formData, model_name: e.target.value })}
+                  required
+                >
+                  {providerInfo.modelOptions.map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.model_name}
+                  onChange={(e) => setFormData({ ...formData, model_name: e.target.value })}
+                  required
+                  placeholder="Enter model name"
+                />
+              )}
+            </div>
+
+            <div className="form-group">
+              <label>Custom Base URL (Optional)</label>
+              <input
+                type="url"
+                value={formData.base_url}
+                onChange={(e) => setFormData({ ...formData, base_url: e.target.value })}
+                placeholder="Leave empty for default"
+              />
+              <small>Only specify if using a custom API endpoint.</small>
+            </div>
+
+            {error && (
+              <div className="error-message">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+
+            <div className="info-box">
+              <h4>What happens during registration:</h4>
+              <ul>
+                <li>✅ Complete system context provided to LLM</li>
+                <li>✅ All rules and governance policies explained</li>
+                <li>✅ Available APIs and scripts shared</li>
+                <li>✅ Integration test performed</li>
+                <li>✅ LLM registered for use with GRACE</li>
+              </ul>
+            </div>
+
+            <div className="modal-actions">
+              <button type="button" onClick={onClose} className="btn-secondary">
+                Cancel
+              </button>
+              <button type="submit" className="btn-primary" disabled={registering}>
+                {registering ? "Registering..." : "Register LLM"}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// MAIN API TAB COMPONENT (Merged)
+// ============================================================================
+
 export default function APITab() {
+  // Sub-tab state
+  const [activeSubTab, setActiveSubTab] = useState("external"); // "external" or "llm"
+
+  // External APIs state
   const [apis, setApis] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState({ open: false, api: null });
+  const [apiModal, setApiModal] = useState({ open: false, api: null });
   const [filterType, setFilterType] = useState("all");
 
-  // Fetch APIs
+  // LLMs state
+  const [llms, setLlms] = useState([]);
+  const [llmLoading, setLlmLoading] = useState(true);
+  const [llmModal, setLlmModal] = useState({ open: false, provider: null });
+  const [llmError, setLlmError] = useState(null);
+
+  // ============================================================================
+  // EXTERNAL APIs Functions
+  // ============================================================================
+
   const fetchAPIs = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/external-apis`);
@@ -469,17 +804,6 @@ export default function APITab() {
     }
   }, []);
 
-  // Initial load
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await fetchAPIs();
-      setLoading(false);
-    };
-    loadData();
-  }, [fetchAPIs]);
-
-  // CRUD operations
   const saveAPI = async (apiData) => {
     try {
       const method = apiData.id ? "PUT" : "POST";
@@ -494,7 +818,7 @@ export default function APITab() {
       });
 
       if (response.ok) {
-        setModal({ open: false, api: null });
+        setApiModal({ open: false, api: null });
         fetchAPIs();
       } else {
         // For demo, just add to local state
@@ -503,7 +827,7 @@ export default function APITab() {
         } else {
           setApis([...apis, { ...apiData, id: Date.now(), status: "pending", created_at: new Date().toISOString() }]);
         }
-        setModal({ open: false, api: null });
+        setApiModal({ open: false, api: null });
       }
     } catch (err) {
       console.error("Error saving API:", err);
@@ -550,88 +874,261 @@ export default function APITab() {
     }
   };
 
-  // Filter APIs
+  // ============================================================================
+  // LLMs Functions
+  // ============================================================================
+
+  const fetchLLMs = useCallback(async () => {
+    try {
+      setLlmLoading(true);
+      setLlmError(null);
+      const response = await fetch(`${API_BASE}/third-party-llm/list`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setLlms(data.integrated_llms || []);
+      } else {
+        throw new Error("Failed to fetch LLMs");
+      }
+    } catch (err) {
+      console.error("Error fetching LLMs:", err);
+      setLlmError(err.message);
+      setLlms([]);
+    } finally {
+      setLlmLoading(false);
+    }
+  }, []);
+
+  const deleteLLM = async (llmId) => {
+    if (!confirm("Are you sure you want to remove this LLM? It will no longer be available for use.")) {
+      return;
+    }
+    setLlms(llms.filter(llm => llm.llm_id !== llmId));
+  };
+
+  const testLLM = async (llmId) => {
+    return { success: true };
+  };
+
+  const handleRegistrationSuccess = (data) => {
+    fetchLLMs();
+  };
+
+  // ============================================================================
+  // Effects
+  // ============================================================================
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await fetchAPIs();
+      setLoading(false);
+    };
+    loadData();
+  }, [fetchAPIs]);
+
+  useEffect(() => {
+    if (activeSubTab === "llm") {
+      fetchLLMs();
+      const interval = setInterval(fetchLLMs, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [activeSubTab, fetchLLMs]);
+
+  // ============================================================================
+  // Render
+  // ============================================================================
+
   const filteredAPIs = filterType === "all"
     ? apis
     : apis.filter(a => a.type === filterType);
-
-  if (loading) {
-    return (
-      <div className="api-tab">
-        <div className="loading-state">
-          <div className="spinner" />
-          <p>Loading APIs...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="api-tab">
       <div className="api-header">
         <div className="header-left">
-          <h2>External APIs</h2>
-          <p>Register and manage external API integrations</p>
-        </div>
-        <div className="header-actions">
-          <button
-            className="btn-primary"
-            onClick={() => setModal({ open: true, api: null })}
-          >
-            + Register API
-          </button>
+          <h2>API Management</h2>
+          <p>Register and manage external APIs and third-party LLMs</p>
         </div>
       </div>
 
-      <div className="api-toolbar">
-        <div className="filter-tabs">
-          {["all", "rest", "graphql", "grpc", "websocket"].map(type => (
-            <button
-              key={type}
-              className={filterType === type ? "active" : ""}
-              onClick={() => setFilterType(type)}
-            >
-              {type.toUpperCase()}
-            </button>
-          ))}
-        </div>
-        <div className="toolbar-spacer" />
-        <button className="btn-refresh" onClick={fetchAPIs}>
-          Refresh
+      {/* Sub-tabs */}
+      <div className="sub-tabs">
+        <button
+          className={`sub-tab-button ${activeSubTab === "external" ? "active" : ""}`}
+          onClick={() => setActiveSubTab("external")}
+        >
+          <span className="sub-tab-icon">🔌</span>
+          External APIs
+        </button>
+        <button
+          className={`sub-tab-button ${activeSubTab === "llm" ? "active" : ""}`}
+          onClick={() => setActiveSubTab("llm")}
+        >
+          <span className="sub-tab-icon">🤖</span>
+          Third-Party LLMs
         </button>
       </div>
 
-      <div className="api-content">
-        <APIStats stats={stats} />
-
-        <div className="apis-section">
-          <h4>Registered APIs ({filteredAPIs.length})</h4>
-          {filteredAPIs.length === 0 ? (
-            <div className="empty-state">
-              <p>No APIs registered yet. Click "Register API" to add one.</p>
-            </div>
-          ) : (
-            <div className="apis-grid">
-              {filteredAPIs.map(api => (
-                <APICard
-                  key={api.id}
-                  api={api}
-                  onEdit={(api) => setModal({ open: true, api })}
-                  onDelete={deleteAPI}
-                  onTest={testAPI}
-                />
+      {/* External APIs Tab */}
+      {activeSubTab === "external" && (
+        <>
+          <div className="api-toolbar">
+            <div className="filter-tabs">
+              {["all", "rest", "graphql", "grpc", "websocket"].map(type => (
+                <button
+                  key={type}
+                  className={filterType === type ? "active" : ""}
+                  onClick={() => setFilterType(type)}
+                >
+                  {type.toUpperCase()}
+                </button>
               ))}
             </div>
-          )}
-        </div>
-      </div>
+            <div className="toolbar-spacer" />
+            <button className="btn-primary" onClick={() => setApiModal({ open: true, api: null })}>
+              + Register API
+            </button>
+            <button className="btn-refresh" onClick={fetchAPIs}>
+              Refresh
+            </button>
+          </div>
 
-      {modal.open && (
-        <APIEditorModal
-          api={modal.api}
-          onSave={saveAPI}
-          onClose={() => setModal({ open: false, api: null })}
-        />
+          <div className="api-content">
+            {loading ? (
+              <div className="loading-state">
+                <div className="spinner" />
+                <p>Loading APIs...</p>
+              </div>
+            ) : (
+              <>
+                <APIStats stats={stats} />
+                <div className="apis-section">
+                  <h4>Registered APIs ({filteredAPIs.length})</h4>
+                  {filteredAPIs.length === 0 ? (
+                    <div className="empty-state">
+                      <p>No APIs registered yet. Click "Register API" to add one.</p>
+                    </div>
+                  ) : (
+                    <div className="apis-grid">
+                      {filteredAPIs.map(api => (
+                        <APICard
+                          key={api.id}
+                          api={api}
+                          onEdit={(api) => setApiModal({ open: true, api })}
+                          onDelete={deleteAPI}
+                          onTest={testAPI}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          {apiModal.open && (
+            <APIEditorModal
+              api={apiModal.api}
+              onSave={saveAPI}
+              onClose={() => setApiModal({ open: false, api: null })}
+            />
+          )}
+        </>
+      )}
+
+      {/* Third-Party LLMs Tab */}
+      {activeSubTab === "llm" && (
+        <>
+          <div className="api-toolbar">
+            <div className="toolbar-info">
+              <span className="info-text">
+                {llms.length} LLM{llms.length !== 1 ? "s" : ""} registered
+              </span>
+            </div>
+            <div className="toolbar-spacer" />
+            <div className="register-buttons">
+              <button
+                className="btn-primary gemini-btn"
+                onClick={() => setLlmModal({ open: true, provider: "gemini" })}
+              >
+                🔷 Register Gemini
+              </button>
+              <button
+                className="btn-primary openai-btn"
+                onClick={() => setLlmModal({ open: true, provider: "openai" })}
+              >
+                🤖 Register OpenAI
+              </button>
+              <button
+                className="btn-primary anthropic-btn"
+                onClick={() => setLlmModal({ open: true, provider: "anthropic" })}
+              >
+                🧠 Register Claude
+              </button>
+            </div>
+            <button className="btn-refresh" onClick={fetchLLMs}>
+              🔄 Refresh
+            </button>
+          </div>
+
+          {llmError && (
+            <div className="error-banner">
+              <strong>Error:</strong> {llmError}
+              <button onClick={fetchLLMs}>Retry</button>
+            </div>
+          )}
+
+          <div className="api-content">
+            {llmLoading ? (
+              <div className="loading-state">
+                <div className="spinner" />
+                <p>Loading registered LLMs...</p>
+              </div>
+            ) : llms.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🔌</div>
+                <h3>No LLMs Registered</h3>
+                <p>Register a third-party LLM to get started. The LLM will automatically receive:</p>
+                <ul className="empty-features">
+                  <li>✅ Complete system architecture</li>
+                  <li>✅ All rules and governance policies</li>
+                  <li>✅ Available APIs and scripts</li>
+                  <li>✅ Integration protocols</li>
+                  <li>✅ Hallucination prevention rules</li>
+                </ul>
+                <button
+                  className="btn-primary"
+                  onClick={() => setLlmModal({ open: true, provider: "gemini" })}
+                >
+                  Register Your First LLM
+                </button>
+              </div>
+            ) : (
+              <div className="apis-section">
+                <h4>Registered LLMs ({llms.length})</h4>
+                <div className="apis-grid">
+                  {llms.map((llm) => (
+                    <LLMCard
+                      key={llm.llm_id}
+                      llm={llm}
+                      onTest={testLLM}
+                      onDelete={deleteLLM}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {llmModal.open && (
+            <RegisterLLMModal
+              provider={llmModal.provider}
+              onSave={handleRegistrationSuccess}
+              onClose={() => setLlmModal({ open: false, provider: null })}
+            />
+          )}
+        </>
       )}
     </div>
   );

@@ -1,20 +1,3 @@
-"""
-DevOps Full-Stack Healing Agent - Grace's Comprehensive Self-Healing System
-
-This module makes Grace a complete DevOps healing agent that can:
-- Detect and fix issues across the entire stack
-- Request knowledge when needed
-- Access AI research knowledge base
-- Perform full-stack debugging and healing
-- Automatically learn from fixes
-- Use full spectrum of Grace's architecture:
-  * Diagnostic Engine (health monitoring)
-  * Mirror Self-Modeling (self-observation)
-  * Cognitive Framework (OODA loop decision-making)
-  * Proactive Learning (autonomous knowledge acquisition)
-  * Sandbox Lab (safe testing and trials)
-"""
-
 import logging
 import json
 import subprocess
@@ -23,30 +6,16 @@ from typing import Dict, Any, Optional, List, Tuple
 from datetime import datetime, UTC
 from pathlib import Path
 from enum import Enum
-
 from sqlalchemy.orm import Session
-from cognitive.autonomous_help_requester import (
-    get_help_requester,
-    HelpPriority,
-    HelpRequestType
-)
-from cognitive.autonomous_healing_system import (
-    AutonomousHealingSystem,
-    HealthStatus,
-    AnomalyType,
-    HealingAction,
-    TrustLevel
-)
+from cognitive.autonomous_help_requester import get_help_requester, HelpPriority, HelpRequestType
+from cognitive.autonomous_healing_system import AutonomousHealingSystem, HealthStatus, AnomalyType, HealingAction, TrustLevel
 from genesis.genesis_key_service import GenesisKeyService
 from models.genesis_key_models import GenesisKeyType
 from genesis.validation_gate import AuthorityScope, DeltaType
 from genesis.capability_binding import check_pipeline_eligibility, GenesisCapability
 from genesis.runtime_governance import get_runtime_governance
-
-logger = logging.getLogger(__name__)
-
-
 class DevOpsLayer(str, Enum):
+    logger = logging.getLogger(__name__)
     """DevOps stack layers Grace can heal."""
     FRONTEND = "frontend"           # React, Vue, Angular, HTML/CSS/JS
     BACKEND = "backend"             # Python, Node.js, APIs, services

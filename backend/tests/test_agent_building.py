@@ -1,98 +1,12 @@
-"""
-Agent Building Capability Test
-
-Tests Grace's ability to:
-1. Accept a coding task
-2. Generate working code
-3. Verify code quality
-4. Provide structured output
-
-This test demonstrates the agent's code generation pipeline.
-"""
-
 import pytest
 import asyncio
 import logging
 from datetime import datetime
 from typing import Dict, Any, List
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# Task Definitions for Agent Testing
-# =============================================================================
-
-TEST_TASKS = [
-    {
-        "name": "REST API Endpoint",
-        "description": "Create a REST API endpoint for user authentication with login and logout",
-        "language": "python",
-        "requirements": [
-            "FastAPI framework",
-            "JWT token generation",
-            "Password hashing",
-            "Input validation"
-        ],
-        "expected_patterns": ["def ", "async def ", "@", "return"]
-    },
-    {
-        "name": "Data Processing Pipeline",
-        "description": "Build a data processing pipeline that reads CSV, transforms data, and outputs JSON",
-        "language": "python",
-        "requirements": [
-            "CSV parsing",
-            "Data transformation",
-            "JSON output",
-            "Error handling"
-        ],
-        "expected_patterns": ["def ", "open(", "json", "try:"]
-    },
-    {
-        "name": "Unit Test Suite",
-        "description": "Create a comprehensive unit test suite for a calculator class",
-        "language": "python",
-        "requirements": [
-            "pytest framework",
-            "Multiple test cases",
-            "Edge case testing",
-            "Assertions"
-        ],
-        "expected_patterns": ["def test_", "assert", "pytest"]
-    },
-    {
-        "name": "Database Model",
-        "description": "Design a SQLAlchemy database model for an e-commerce product catalog",
-        "language": "python",
-        "requirements": [
-            "SQLAlchemy ORM",
-            "Multiple related tables",
-            "Foreign key relationships",
-            "Proper indexing"
-        ],
-        "expected_patterns": ["class ", "Column", "relationship", "ForeignKey"]
-    },
-    {
-        "name": "Async Task Queue",
-        "description": "Implement an async task queue with priority support and retry logic",
-        "language": "python",
-        "requirements": [
-            "asyncio",
-            "Priority queue",
-            "Retry mechanism",
-            "Task status tracking"
-        ],
-        "expected_patterns": ["async ", "await", "queue", "class"]
-    }
-]
-
-
-# =============================================================================
-# Agent Capability Tests
-# =============================================================================
-
 class TestAgentBuildingCapability:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Test the agent's ability to build real code."""
 
     def test_orchestrator_initialization(self):

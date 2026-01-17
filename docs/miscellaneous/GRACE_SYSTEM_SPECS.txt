@@ -1,0 +1,69 @@
+Hello! 👋
+
+I'm GRACE, and I wanted to share my system specifications with you to help ensure 
+any code or architecture you design will work well within my hardware constraints.
+
+=== GRACE SYSTEM SPECIFICATIONS ===
+
+CPU:
+  Model: AMD Ryzen 9 9950X3D
+  Cores: 16
+  Threads: 32
+
+GPU:
+  Model: NVIDIA RTX 5090
+  VRAM: 32 GB
+  Compute Capability: Ada Lovelace
+
+RAM:
+  Total: 64 GB
+  Type: DDR5
+
+Storage:
+  Total: 4096 GB
+  Type: NVMe SSD
+
+Operating System:
+  Windows 10.0.26200
+
+Python:
+  Version: 3.11+
+
+Additional Constraints:
+  max_model_size_gb: 24
+  recommended_batch_size: 4
+  max_concurrent_models: 2
+  storage_reserved_for_grace_gb: 500
+  available_storage_gb: 3500
+
+=== ARCHITECTURE GUIDELINES ===
+
+When designing architecture or generating code:
+1. Respect VRAM limits - models must fit within GPU memory
+2. Consider RAM constraints - avoid excessive memory usage
+3. Optimize for available CPU cores/threads
+4. Be mindful of storage space - GRACE needs room for operations
+5. Ensure compatibility with specified OS and Python version
+
+DO NOT:
+- Design architectures requiring more VRAM than available
+- Suggest models larger than GPU can handle
+- Create memory-intensive operations without optimization
+- Over-engineer solutions beyond hardware capabilities
+
+DO:
+- Optimize models to fit within constraints
+- Use efficient data structures and algorithms
+- Consider batch sizes that respect memory limits
+- Design scalable solutions that work within limits
+
+Please keep these specifications in mind when:
+- Designing new features or architecture
+- Selecting or recommending models
+- Creating data processing pipelines
+- Optimizing performance
+- Making resource-intensive decisions
+
+If you have any questions about these specs or need clarification, feel free to ask!
+
+Thank you for helping keep GRACE running efficiently! 🚀

@@ -1,29 +1,12 @@
-"""
-TimeSense Connector - Layer 1 Message Bus Integration
-
-Connects TimeSense to Grace's event-driven architecture.
-Subscribes to task events and emits time estimates.
-
-Events:
-- Subscribes: TASK_STARTED, TASK_FINISHED, ingestion.*, retrieval.*
-- Emits: TIME_ESTIMATE_UPDATED, CALIBRATION_COMPLETE, PROFILE_STALE
-"""
-
 import asyncio
 import logging
 from datetime import datetime
 from typing import Dict, Any, Optional
-
 from timesense.engine import TimeSenseEngine, get_timesense_engine, EngineStatus
 from timesense.primitives import PrimitiveType
 from timesense.predictor import PredictionResult
-
-logger = logging.getLogger(__name__)
-
-
-# Define ComponentType locally to avoid circular imports
-# This should match the Layer1 ComponentType enum
 class TimeSenseComponentType:
+    logger = logging.getLogger(__name__)
     """Component type identifier for TimeSense."""
     TIMESENSE = "timesense"
 

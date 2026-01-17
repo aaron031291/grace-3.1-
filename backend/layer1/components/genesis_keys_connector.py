@@ -1,33 +1,12 @@
-"""
-Genesis Keys Connector - Universal Tracking Integration
-
-Connects Genesis Keys system to Layer 1 message bus for:
-- Automatic key creation on ingestion
-- User contribution tracking
-- Cross-component provenance
-"""
-
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
 import hashlib
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    ComponentType,
-    Message,
-    get_message_bus
-)
-
-logger = logging.getLogger(__name__)
-
-# Thread pool for CPU-bound operations (SCALABILITY)
-_executor = ThreadPoolExecutor(max_workers=4)
-
-
+from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 class GenesisKeysConnector:
+    logger = logging.getLogger(__name__)
     """
     Connects Genesis Keys to Layer 1 message bus.
 

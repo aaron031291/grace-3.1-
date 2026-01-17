@@ -1,38 +1,23 @@
-"""
-Grace OS API Endpoints
-=======================
-
-Unified API for all Grace OS capabilities:
-- IDE operations
-- Self-healing
-- Genesis Keys
-- Ghost Ledger
-- Autonomous tasks
-- No-code panels
-- Voice/NLP
-- Learning
-- Self-updating
-"""
-
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 from datetime import datetime
 from pathlib import Path
-
 from database.session import get_session
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/grace-os", tags=["Grace OS"])
+# Create router
+router = APIRouter(prefix="/grace-os", tags=["grace-os"])
 
-
-# =============================================================================
-# Request/Response Models
-# =============================================================================
 
 class ActionRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Request for executing an action."""
     action_type: str = Field(..., description="Type of action to execute")
     parameters: Dict[str, Any] = Field(default_factory=dict)
@@ -299,6 +284,679 @@ async def refresh_dashboard(session=Depends(get_session)):
         return await panels.refresh_dashboard_data()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# Coding Agent Integration (IDE)
+# =============================================================================
+
+@router.post("/coding/generate")
+async def ide_generate_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Generate code with LLM reasoning and coding assistance.
+    
+    Allows IDE to request code generation with full reasoning support.
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from cognitive.autonomous_healing_system import TrustLevel
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        # Create task
+        task_type = CodingTaskType(request.get("task_type", "code_generation"))
+        task = coding_agent.create_task(
+            task_type=task_type,
+            description=request.get("description", ""),
+            target_files=request.get("target_files", []),
+            requirements=request.get("requirements", {}),
+            context=request.get("context", {}),
+            priority=request.get("priority", "medium"),
+            trust_level_required=TrustLevel(request.get("trust_level", 3))
+        )
+        
+        # Execute with reasoning
+        result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": result.get("success", False),
+            "task_id": task.task_id,
+            "result": result,
+            "reasoning": result.get("decision", {}),
+            "knowledge_used": result.get("knowledge_used", {})
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code generation error: {str(e)}")
+
+
+@router.post("/coding/reason")
+async def ide_reason_about_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: LLM reasoning about code.
+    
+    Allows IDE to get reasoning/explanation about code.
+    """
+    try:
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        # Execute reasoning task
+        reasoning_result = llm_orchestrator.execute_task(
+            prompt=request.get("prompt", ""),
+            task_type=TaskType.REASONING,
+            user_id=request.get("user_id"),
+            require_verification=True,
+            require_grounding=True,
+            context_documents=request.get("context_files", [])
+        )
+        
+        return {
+            "success": True,
+            "reasoning": reasoning_result.content,
+            "confidence": reasoning_result.confidence_score,
+            "trust_score": reasoning_result.trust_score,
+            "sources": reasoning_result.sources
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Reasoning error: {str(e)}")
+
+
+@router.post("/coding/assist")
+async def ide_coding_assistance(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Comprehensive coding assistance with LLM reasoning.
+    
+    Combines:
+    - Code generation
+    - Reasoning about code
+    - Code analysis
+    - Suggestions
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        user_query = request.get("query", "")
+        file_path = request.get("file_path", "")
+        code_context = request.get("code_context", "")
+        
+        # Step 1: Reasoning about the request
+        reasoning_prompt = f"""
+        User wants: {user_query}
+        File: {file_path}
+        Current code context:
+        ```python
+        {code_context[:1000]}
+        ```
+        
+        Analyze and reason about:
+        1. What the user is trying to accomplish
+        2. What code changes are needed
+        3. Best approach to implement
+        4. Potential issues to consider
+        """
+        
+        reasoning_result = llm_orchestrator.execute_task(
+            prompt=reasoning_prompt,
+            task_type=TaskType.REASONING,
+            require_verification=True
+        )
+        
+        # Step 2: Generate code based on reasoning
+        code_generation_prompt = f"""
+        Based on this reasoning:
+        {reasoning_result.content}
+        
+        Generate the code to implement: {user_query}
+        """
+        
+        # Determine task type
+        task_type_str = request.get("task_type", "code_generation")
+        task_type = CodingTaskType(task_type_str)
+        
+        task = coding_agent.create_task(
+            task_type=task_type,
+            description=user_query,
+            target_files=[file_path] if file_path else [],
+            requirements={
+                "reasoning": reasoning_result.content,
+                "approach": reasoning_result.content
+            },
+            context={
+                "code_context": code_context,
+                "reasoning": reasoning_result.content
+            }
+        )
+        
+        code_result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": code_result.get("success", False),
+            "reasoning": {
+                "analysis": reasoning_result.content,
+                "confidence": reasoning_result.confidence_score,
+                "trust_score": reasoning_result.trust_score
+            },
+            "code_generation": {
+                "task_id": task.task_id,
+                "result": code_result,
+                "code": code_result.get("generation", {}).get("code_after", "") if code_result.get("generation") else ""
+            },
+            "suggestions": code_result.get("review_result", {}).get("analysis", {})
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Coding assistance error: {str(e)}")
+
+
+@router.post("/coding/fix")
+async def ide_fix_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Fix code with reasoning.
+    
+    Uses coding agent to fix code issues with LLM reasoning.
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        file_path = request.get("file_path", "")
+        issue_description = request.get("issue_description", "")
+        error_message = request.get("error_message", "")
+        
+        # Create fix task
+        task = coding_agent.create_task(
+            task_type=CodingTaskType.CODE_FIX,
+            description=f"Fix: {issue_description}",
+            target_files=[file_path] if file_path else [],
+            requirements={
+                "error_message": error_message,
+                "issue_description": issue_description
+            },
+            context={
+                "error": error_message,
+                "issue": issue_description
+            },
+            priority="high"
+        )
+        
+        result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": result.get("success", False),
+            "task_id": task.task_id,
+            "result": result,
+            "fixed_code": result.get("generation", {}).get("code_after", "") if result.get("generation") else ""
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code fix error: {str(e)}")
+
+
+@router.post("/coding/explain")
+async def ide_explain_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Explain code with LLM reasoning.
+    
+    Provides reasoning and explanation about code.
+    """
+    try:
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        code = request.get("code", "")
+        file_path = request.get("file_path", "")
+        question = request.get("question", "Explain this code")
+        
+        prompt = f"""
+        {question}
+        
+        Code from {file_path}:
+        ```python
+        {code}
+        ```
+        
+        Provide:
+        1. What this code does
+        2. How it works
+        3. Key concepts
+        4. Potential improvements
+        """
+        
+        result = llm_orchestrator.execute_task(
+            prompt=prompt,
+            task_type=TaskType.CODE_EXPLANATION,
+            require_verification=True
+        )
+        
+        return {
+            "success": True,
+            "explanation": result.content,
+            "confidence": result.confidence_score,
+            "trust_score": result.trust_score
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code explanation error: {str(e)}")
+
+
+@router.get("/coding/agent/status")
+async def ide_coding_agent_status(session=Depends(get_session)):
+    """Get coding agent status for IDE."""
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        health = coding_agent.get_health_status()
+        metrics = coding_agent.get_metrics()
+        learning = coding_agent.get_learning_connections()
+        
+        return {
+            "health": health,
+            "metrics": {
+                "total_tasks": metrics.total_tasks,
+                "tasks_completed": metrics.tasks_completed,
+                "code_generated": metrics.code_generated,
+                "learning_cycles": metrics.learning_cycles
+            },
+            "learning": learning
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Status error: {str(e)}")
+
+
+# =============================================================================
+# Coding Agent Integration (IDE)
+# =============================================================================
+
+@router.post("/coding/generate")
+async def ide_generate_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Generate code with LLM reasoning and coding assistance.
+    
+    Allows IDE to request code generation with full reasoning support.
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from cognitive.autonomous_healing_system import TrustLevel
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        # Create task
+        task_type = CodingTaskType(request.get("task_type", "code_generation"))
+        task = coding_agent.create_task(
+            task_type=task_type,
+            description=request.get("description", ""),
+            target_files=request.get("target_files", []),
+            requirements=request.get("requirements", {}),
+            context=request.get("context", {}),
+            priority=request.get("priority", "medium"),
+            trust_level_required=TrustLevel(request.get("trust_level", 3))
+        )
+        
+        # Execute with reasoning
+        result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": result.get("success", False),
+            "task_id": task.task_id,
+            "result": result,
+            "reasoning": result.get("decision", {}),
+            "knowledge_used": result.get("knowledge_used", {})
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code generation error: {str(e)}")
+
+
+@router.post("/coding/reason")
+async def ide_reason_about_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: LLM reasoning about code.
+    
+    Allows IDE to get reasoning/explanation about code.
+    """
+    try:
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        # Execute reasoning task
+        reasoning_result = llm_orchestrator.execute_task(
+            prompt=request.get("prompt", ""),
+            task_type=TaskType.REASONING,
+            user_id=request.get("user_id"),
+            require_verification=True,
+            require_grounding=True,
+            context_documents=request.get("context_files", [])
+        )
+        
+        return {
+            "success": True,
+            "reasoning": reasoning_result.content,
+            "confidence": reasoning_result.confidence_score,
+            "trust_score": reasoning_result.trust_score,
+            "sources": reasoning_result.sources
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Reasoning error: {str(e)}")
+
+
+@router.post("/coding/assist")
+async def ide_coding_assistance(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Comprehensive coding assistance with LLM reasoning.
+    
+    Combines:
+    - Code generation
+    - Reasoning about code
+    - Code analysis
+    - Suggestions
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        user_query = request.get("query", "")
+        file_path = request.get("file_path", "")
+        code_context = request.get("code_context", "")
+        
+        # Step 1: Reasoning about the request
+        reasoning_prompt = f"""
+        User wants: {user_query}
+        File: {file_path}
+        Current code context:
+        ```python
+        {code_context[:1000]}
+        ```
+        
+        Analyze and reason about:
+        1. What the user is trying to accomplish
+        2. What code changes are needed
+        3. Best approach to implement
+        4. Potential issues to consider
+        """
+        
+        reasoning_result = llm_orchestrator.execute_task(
+            prompt=reasoning_prompt,
+            task_type=TaskType.REASONING,
+            require_verification=True
+        )
+        
+        # Step 2: Generate code based on reasoning
+        # Determine task type
+        task_type_str = request.get("task_type", "code_generation")
+        task_type = CodingTaskType(task_type_str)
+        
+        task = coding_agent.create_task(
+            task_type=task_type,
+            description=user_query,
+            target_files=[file_path] if file_path else [],
+            requirements={
+                "reasoning": reasoning_result.content,
+                "approach": reasoning_result.content
+            },
+            context={
+                "code_context": code_context,
+                "reasoning": reasoning_result.content
+            }
+        )
+        
+        code_result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": code_result.get("success", False),
+            "reasoning": {
+                "analysis": reasoning_result.content,
+                "confidence": reasoning_result.confidence_score,
+                "trust_score": reasoning_result.trust_score
+            },
+            "code_generation": {
+                "task_id": task.task_id,
+                "result": code_result,
+                "code": code_result.get("generation", {}).get("code_after", "") if code_result.get("generation") else ""
+            },
+            "suggestions": code_result.get("review_result", {}).get("analysis", {})
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Coding assistance error: {str(e)}")
+
+
+@router.post("/coding/fix")
+async def ide_fix_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Fix code with reasoning.
+    
+    Uses coding agent to fix code issues with LLM reasoning.
+    """
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent, CodingTaskType
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        file_path = request.get("file_path", "")
+        issue_description = request.get("issue_description", "")
+        error_message = request.get("error_message", "")
+        
+        # Create fix task
+        task = coding_agent.create_task(
+            task_type=CodingTaskType.CODE_FIX,
+            description=f"Fix: {issue_description}",
+            target_files=[file_path] if file_path else [],
+            requirements={
+                "error_message": error_message,
+                "issue_description": issue_description
+            },
+            context={
+                "error": error_message,
+                "issue": issue_description
+            },
+            priority="high"
+        )
+        
+        result = coding_agent.execute_task(task.task_id)
+        
+        return {
+            "success": result.get("success", False),
+            "task_id": task.task_id,
+            "result": result,
+            "fixed_code": result.get("generation", {}).get("code_after", "") if result.get("generation") else ""
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code fix error: {str(e)}")
+
+
+@router.post("/coding/explain")
+async def ide_explain_code(
+    request: Dict[str, Any],
+    session=Depends(get_session)
+):
+    """
+    IDE endpoint: Explain code with LLM reasoning.
+    
+    Provides reasoning and explanation about code.
+    """
+    try:
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, TaskType
+        from pathlib import Path
+        
+        llm_orchestrator = get_llm_orchestrator(
+            session=session,
+            knowledge_base_path=Path("knowledge_base")
+        )
+        
+        code = request.get("code", "")
+        file_path = request.get("file_path", "")
+        question = request.get("question", "Explain this code")
+        
+        prompt = f"""
+        {question}
+        
+        Code from {file_path}:
+        ```python
+        {code}
+        ```
+        
+        Provide:
+        1. What this code does
+        2. How it works
+        3. Key concepts
+        4. Potential improvements
+        """
+        
+        result = llm_orchestrator.execute_task(
+            prompt=prompt,
+            task_type=TaskType.CODE_EXPLANATION,
+            require_verification=True
+        )
+        
+        return {
+            "success": True,
+            "explanation": result.content,
+            "confidence": result.confidence_score,
+            "trust_score": result.trust_score
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code explanation error: {str(e)}")
+
+
+@router.get("/coding/agent/status")
+async def ide_coding_agent_status(session=Depends(get_session)):
+    """Get coding agent status for IDE."""
+    try:
+        from cognitive.enterprise_coding_agent import get_enterprise_coding_agent
+        from pathlib import Path
+        
+        coding_agent = get_enterprise_coding_agent(
+            session=session,
+            repo_path=Path.cwd(),
+            enable_learning=True,
+            enable_sandbox=True
+        )
+        
+        health = coding_agent.get_health_status()
+        metrics = coding_agent.get_metrics()
+        learning = coding_agent.get_learning_connections()
+        
+        return {
+            "health": health,
+            "metrics": {
+                "total_tasks": metrics.total_tasks,
+                "tasks_completed": metrics.tasks_completed,
+                "code_generated": metrics.code_generated,
+                "learning_cycles": metrics.learning_cycles
+            },
+            "learning": learning
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Status error: {str(e)}")
 
 
 # =============================================================================

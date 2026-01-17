@@ -1,19 +1,3 @@
-"""
-Ultra-Deterministic Core - Maximum Determinism for Grace
-
-This module pushes determinism to its absolute limits:
-- Formal mathematical proofs
-- Deterministic state machines
-- Complete traceability
-- No randomness (deterministic alternatives)
-- Formal verification
-- Mathematical contracts
-- Deterministic scheduling
-- Proof-based validation
-
-Every operation is 100% deterministic, provable, and traceable.
-"""
-
 import logging
 import hashlib
 from typing import Dict, List, Optional, Tuple, Any, Callable, Set
@@ -22,13 +6,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from collections import OrderedDict
 import json
-
 from sqlalchemy.orm import Session
-
-logger = logging.getLogger(__name__)
-
-
 class DeterminismLevel(Enum):
+    logger = logging.getLogger(__name__)
     """Levels of determinism enforcement."""
     BASIC = "basic"  # Standard deterministic
     STRICT = "strict"  # No probabilistic elements

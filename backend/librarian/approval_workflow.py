@@ -1,26 +1,12 @@
-"""
-ApprovalWorkflow - Permission Management and Approval Queue
-
-Manages tiered permission system for librarian actions:
-- Auto-commit: Safe actions (tagging, metadata, indexing)
-- Approval required: Sensitive actions (folder creation, deletion, moves)
-
-Provides approval queue for human review of pending actions.
-"""
-
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime
 import logging
-
 from models.librarian_models import LibrarianAction
 from models.database_models import Document
-
-logger = logging.getLogger(__name__)
-
-
 class ApprovalWorkflow:
+    logger = logging.getLogger(__name__)
     """
     Manages approval workflow for librarian actions.
 

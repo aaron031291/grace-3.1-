@@ -1,30 +1,14 @@
-"""
-Automated Validation Pipeline - Layer 1 Knowledge Validation
-
-This module provides automated validation for Layer 1 knowledge:
-- Validation rule system
-- Automated validation cycles
-- Auto-correction of low-severity issues
-- Validation reporting
-
-Maintains 100% determinism while automating validation processes.
-"""
-
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Callable
 from enum import Enum
-
 from sqlalchemy.orm import Session
 from cognitive.learning_memory import LearningExample
 from cognitive.enhanced_trust_scorer import TrustScoreResult
 from cognitive.enhanced_consistency_checker import ConsistencyResult
-
-logger = logging.getLogger(__name__)
-
-
 class ValidationRuleType(Enum):
+    logger = logging.getLogger(__name__)
     """Types of validation rules."""
     TRUST_SCORE = "trust_score"
     CONSISTENCY = "consistency"

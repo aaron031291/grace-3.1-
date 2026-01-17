@@ -1,36 +1,16 @@
-"""
-Autonomous Master Integration - The Central Nervous System
-
-This is the MASTER INTEGRATION LAYER that connects ALL systems:
-- Layer 1 (Trust & Truth Foundation)
-- Genesis Keys (Audit Trail)
-- Autonomous Triggers (Action Pipeline)
-- Learning Subagents (Multi-Process Learning)
-- Memory Mesh (Pattern Analysis)
-- Multi-LLM Orchestration (Verification)
-- Cognitive Engine (Decision Making)
-- Training System (Skill Development)
-
-EVERYTHING flows through here and triggers autonomously.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from sqlalchemy.orm import Session
 from datetime import datetime
-
 from genesis.layer1_integration import get_layer1_integration
 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
 from cognitive.learning_subagent_system import LearningOrchestrator
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
 from database.session import initialize_session_factory
 from models.genesis_key_models import GenesisKey, GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class AutonomousMasterIntegration:
+    logger = logging.getLogger(__name__)
     """
     Master Integration Layer - Connects ALL systems.
 

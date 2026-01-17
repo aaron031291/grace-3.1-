@@ -1,9 +1,3 @@
-"""
-Genesis Key Service - Comprehensive tracking and version control system.
-
-Automatically tracks every input, change, and action with full metadata
-for what, where, when, why, who, and how.
-"""
 import uuid
 import json
 import hashlib
@@ -12,20 +6,13 @@ from datetime import datetime
 from typing import Optional, Dict, Any, List
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
-
-from models.genesis_key_models import (
-    GenesisKey, FixSuggestion, GenesisKeyArchive, UserProfile,
-    GenesisKeyType, GenesisKeyStatus, FixSuggestionStatus
-)
+from models.genesis_key_models import GenesisKey, FixSuggestion, GenesisKeyArchive, UserProfile, GenesisKeyType, GenesisKeyStatus, FixSuggestionStatus
 from database.session import get_session
 from version_control.git_service import GitService
 from genesis.kb_integration import get_kb_integration
 import os
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisKeyService:
+    logger = logging.getLogger(__name__)
     """
     Service for creating and managing Genesis Keys.
 

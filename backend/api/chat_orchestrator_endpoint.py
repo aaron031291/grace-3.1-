@@ -1,26 +1,13 @@
-"""
-Chat Orchestrator Endpoint - Full LLM Orchestrator for Chats
-
-Provides endpoint that uses full LLM orchestrator for chat messages,
-integrating with world model and folder chats.
-"""
-
 import logging
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, HTTPException, Depends, Body
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
-
-from .chat_llm_integration import get_chat_llm_integration
+from chat_llm_integration import get_chat_llm_integration
 from database.session import get_session
 from models.repositories import ChatRepository, ChatHistoryRepository
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/chat", tags=["Chat Orchestrator"])
-
-
 class ChatOrchestratorRequest(BaseModel):
+    logger = logging.getLogger(__name__)
     """Request for LLM orchestrator chat."""
     message: str = Field(..., description="User message")
     chat_id: Optional[int] = Field(None, description="Chat ID (if existing chat)")

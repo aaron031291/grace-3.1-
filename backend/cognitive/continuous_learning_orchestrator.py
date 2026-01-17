@@ -1,20 +1,3 @@
-"""
-Continuous Learning Orchestrator
-
-Connects the Autonomous Sandbox Lab to continuous training data ingestion.
-
-Grace continuously:
-1. Ingests new documents and data
-2. Learns from them using autonomous learning
-3. Identifies improvement opportunities via Mirror
-4. Proposes experiments to Sandbox Lab
-5. Tests improvements with new data
-6. Promotes validated improvements
-7. Repeats - continuous evolution
-
-This creates a never-ending self-improvement loop.
-"""
-
 import logging
 import asyncio
 import threading
@@ -23,11 +6,8 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Set
 from pathlib import Path
 import json
-
-logger = logging.getLogger(__name__)
-
-
 class ContinuousLearningOrchestrator:
+    logger = logging.getLogger(__name__)
     """
     Orchestrates continuous autonomous learning and self-improvement
 

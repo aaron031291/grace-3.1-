@@ -1,33 +1,12 @@
-"""
-Document retriever module for RAG (Retrieval-Augmented Generation).
-Retrieves relevant document chunks based on semantic similarity to queries.
-"""
-
 import logging
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
-
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk
-
-# TimeSense integration
-try:
-    from timesense.integration import track_operation, TimeEstimator
-    from timesense.primitives import PrimitiveType
-    TIMESENSE_AVAILABLE = True
-except ImportError:
-    TIMESENSE_AVAILABLE = False
-    from contextlib import nullcontext
-    def track_operation(*args, **kwargs):
-        return nullcontext()
-    TimeEstimator = None
-
-logger = logging.getLogger(__name__)
-
-
 class DocumentRetriever:
+    logger = logging.getLogger(__name__)
     """Retrieves relevant document chunks for query context."""
     
     def __init__(

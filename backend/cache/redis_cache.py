@@ -1,10 +1,3 @@
-"""
-Redis Caching Layer
-===================
-Provides caching functionality using Redis for improved performance.
-Supports TTL, tags, and cache invalidation patterns.
-"""
-
 import json
 import hashlib
 import asyncio
@@ -12,14 +5,8 @@ from typing import Any, Optional, Callable, TypeVar, Union, List
 from functools import wraps
 from datetime import timedelta
 import logging
-
-logger = logging.getLogger(__name__)
-
-# Type variable for generic cache decorator
-T = TypeVar('T')
-
-
 class RedisCache:
+    logger = logging.getLogger(__name__)
     """
     Redis-based caching client with async support.
 

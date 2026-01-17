@@ -1,18 +1,3 @@
-"""
-Autonomous Test Runner for Grace Self-Testing
-
-This module enables Grace to autonomously run tests to verify her own
-implementation and logic. Integrates with the sandbox lab and can be
-triggered via API, scheduled tasks, or autonomous actions.
-
-Features:
-- Run all tests or specific test suites
-- Generate detailed reports
-- Track test history and trends
-- Integrate with Genesis Keys for change tracking
-- Sandbox isolation for safe execution
-"""
-
 import subprocess
 import json
 import os
@@ -23,16 +8,8 @@ from typing import Dict, List, Optional, Any
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 import asyncio
-
-logger = logging.getLogger(__name__)
-
-# Add backend to path
-BACKEND_DIR = Path(__file__).parent
-sys.path.insert(0, str(BACKEND_DIR))
-
-
-@dataclass
 class TestResult:
+    logger = logging.getLogger(__name__)
     """Individual test result."""
     test_name: str
     test_file: str
