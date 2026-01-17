@@ -122,6 +122,47 @@ def project_to_mastery(
         cycles_to_90 = 0
         days_to_90 = 0
     
+    # Project to Elite (98%) - calculate separately with diminishing returns
+    elite_target_rate = 0.98
+    elite_target_topics = 200
+    elite_gap = max(0, elite_target_rate - current_success_rate)
+    elite_topics_gap = max(0, elite_target_topics - current_topics)
+    
+    if elite_gap > 0:
+        # Use trajectory projection
+        a = 0.5 * acceleration
+        b = velocity
+        c = -elite_gap
+        
+        if abs(acceleration) < 0.001:
+            cycles_for_elite_rate = elite_gap / velocity if velocity > 0 else 1000
+        else:
+            discriminant = b * b - 4 * a * c
+            if discriminant >= 0:
+                cycles_for_elite_rate = (-b + math.sqrt(discriminant)) / (2 * a)
+                if cycles_for_elite_rate < 0:
+                    cycles_for_elite_rate = elite_gap / velocity if velocity > 0 else 1000
+            else:
+                cycles_for_elite_rate = elite_gap / velocity if velocity > 0 else 1000
+    else:
+        cycles_for_elite_rate = 0
+    
+    cycles_for_elite_topics = elite_topics_gap / 5.0
+    cycles_elite = max(cycles_for_elite_rate, cycles_for_elite_topics)
+    cycles_elite = cycles_elite / KNOWLEDGE_RETRIEVAL_SPEEDUP / DOMAIN_LEARNING_SPEEDUP
+    
+    # Apply diminishing returns for Elite (98%+ is much harder)
+    if current_success_rate >= 0.90:
+        remaining_gap = elite_target_rate - current_success_rate
+        diminishing_factor = 1.0 + (remaining_gap * 2.0)
+        cycles_elite = cycles_elite * diminishing_factor
+    elif current_success_rate >= 0.85:
+        diminishing_factor = 1.0 + ((elite_target_rate - current_success_rate) * 1.5)
+        cycles_elite = cycles_elite * diminishing_factor
+    
+    hours_elite = cycles_elite * ENHANCED_CYCLE_TIME_HOURS
+    days_elite = hours_elite / 24.0
+    
     return {
         "category": category,
         "current_mastery": current_mastery,
@@ -142,6 +183,14 @@ def project_to_mastery(
             "estimated_hours": estimated_hours,
             "estimated_cycles": int(estimated_cycles),
             "already_achieved": current_mastery == "Expert"
+        },
+        "elite_mastery": {
+            "estimated_days": days_elite,
+            "estimated_hours": hours_elite,
+            "estimated_cycles": int(cycles_elite),
+            "target_topics": elite_target_topics,
+            "target_rate": elite_target_rate,
+            "already_achieved": current_success_rate >= 0.98
         },
         "trajectory": {
             "velocity": velocity,
@@ -272,6 +321,19 @@ def display_projections(projections: Dict[str, Dict[str, Any]]):
             print(f"   Success Rate: {proj['current_success_rate']:.1%} -> {proj['target_success_rate']:.1%}")
         print()
         
+        # Elite Mastery (98%)
+        elite = proj.get("elite_mastery")
+        if elite:
+            if elite.get("already_achieved"):
+                print("[ACHIEVED] Elite Mastery (98%): ALREADY ACHIEVED")
+            else:
+                print("[TARGET] Elite Mastery (98% Success Rate):")
+                print(f"   Estimated Time: {elite.get('estimated_days', 0):.2f} days ({elite.get('estimated_hours', 0):.1f} hours)")
+                print(f"   Estimated Cycles: {elite.get('estimated_cycles', 0)} cycles")
+                print(f"   Topics: {proj['current_topics']}/{elite.get('target_topics', 200)}")
+                print(f"   Success Rate: {proj['current_success_rate']:.1%} -> {elite.get('target_rate', 0.98):.1%}")
+            print()
+        
         # Trajectory
         traj = proj["trajectory"]
         print(f"Learning Trajectory:")
@@ -332,6 +394,19 @@ def main():
                     print(f"   Estimated Time: {expert.get('estimated_days', 0):.1f} days ({expert.get('estimated_days', 0) * 24:.1f} hours)")
                     print(f"   Estimated Cycles: {expert.get('estimated_cycles', 0)} cycles")
                     print(f"   Confidence: {expert.get('confidence', 0.0):.1%}")
+                
+                # Elite projection (98%)
+                elite = proj.get("projections", {}).get("elite")
+                if elite:
+                    if elite.get("already_achieved"):
+                        print("[ACHIEVED] Elite Mastery (98%): ALREADY ACHIEVED")
+                    else:
+                        print(f"[TARGET] Elite Mastery (98% Success Rate):")
+                        print(f"   Estimated Time: {elite.get('estimated_days', 0):.2f} days ({elite.get('estimated_hours', elite.get('estimated_days', 0) * 24):.1f} hours)")
+                        print(f"   Estimated Cycles: {elite.get('estimated_cycles', 0)} cycles")
+                        print(f"   Topics: {elite.get('current_topics', 0)}/{elite.get('target_topics', 200)}")
+                        print(f"   Success Rate: {elite.get('current_rate', 0.0):.1%} → {elite.get('target_rate', 0.98):.1%}")
+                        print(f"   Confidence: {elite.get('confidence', 0.0):.1%}")
                 
                 traj = proj.get("trajectory", {})
                 print(f"\nLearning Trajectory:")

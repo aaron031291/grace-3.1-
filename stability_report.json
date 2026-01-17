@@ -1,6 +1,6 @@
 {
-  "proof_id": "8458adebd2479bd6",
-  "timestamp": "2026-01-17T09:22:13.043506",
+  "proof_id": "0dab80a2c48dc2f2",
+  "timestamp": "2026-01-17T10:22:55.278667",
   "stability_level": "partially_stable",
   "overall_confidence": 0.875,
   "checks": [
@@ -40,7 +40,7 @@
         "all_identical": true
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:03.003159"
+      "timestamp": "2026-01-17T10:22:48.906305"
     },
     {
       "component": "cognitive_engine",
@@ -76,7 +76,7 @@
         ]
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:03.003210"
+      "timestamp": "2026-01-17T10:22:48.906350"
     },
     {
       "component": "invariants",
@@ -112,7 +112,7 @@
         ]
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:03.003232"
+      "timestamp": "2026-01-17T10:22:48.906370"
     },
     {
       "component": "state_machines",
@@ -124,7 +124,7 @@
         "message": "No state machines registered"
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:03.003235"
+      "timestamp": "2026-01-17T10:22:48.906373"
     },
     {
       "component": "deterministic_operations",
@@ -136,7 +136,7 @@
         "message": "No operations registered"
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:03.003237"
+      "timestamp": "2026-01-17T10:22:48.906376"
     },
     {
       "component": "system_health",
@@ -144,13 +144,12 @@
       "confidence": 0.0,
       "proof": null,
       "details": {
-        "error": "'logger' already defined as <Logger timesense.primitives (WARNING)>",
-        "import_error": true
+        "error": "No module named 'contradiction_detector'"
       },
       "violations": [
-        "Health check import failed due to logger conflict: 'logger' already defined as <Logger timesense.primitives (WARNING)>"
+        "Health check failed: No module named 'contradiction_detector'"
       ],
-      "timestamp": "2026-01-17T09:22:13.043173"
+      "timestamp": "2026-01-17T10:22:55.278511"
     },
     {
       "component": "error_rate",
@@ -161,7 +160,7 @@
         "message": "No executions recorded yet"
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:13.043370"
+      "timestamp": "2026-01-17T10:22:55.278574"
     },
     {
       "component": "component_consistency",
@@ -195,7 +194,7 @@
         "all_identical": true
       },
       "violations": [],
-      "timestamp": "2026-01-17T09:22:13.043386"
+      "timestamp": "2026-01-17T10:22:55.278584"
     }
   ],
   "mathematical_proof": {
@@ -252,7 +251,7 @@
     "proof_type": "direct",
     "verified": false
   },
-  "system_state_hash": "2b1259ae463dada5640b387e0cf35806fe1890ef35fc0ec7dafac1fd1590ad1b",
+  "system_state_hash": "b6095077d47bb45dbc76eb620cb76396c5d2bfae7470952c2b03080557bc360a",
   "verification_signature": null,
   "is_verified": false
 }
