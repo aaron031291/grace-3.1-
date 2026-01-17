@@ -1,18 +1,3 @@
-"""
-Hallucination Mitigation Pipeline
-
-Multi-layered approach to minimize LLM hallucinations:
-
-Layer 1: Repository Grounding - Claims must reference actual files/code
-Layer 2: Cross-Model Consensus - Multiple LLMs must agree
-Layer 3: Contradiction Detection - Check against existing knowledge
-Layer 4: Confidence Scoring - Trust score calculation
-Layer 5: Trust System Verification - Validate against learning memory
-Layer 6: External Verification - Web search and documentation lookup
-
-All operations are tracked and logged.
-"""
-
 import logging
 import re
 import json
@@ -22,35 +7,10 @@ from datetime import datetime
 from difflib import SequenceMatcher
 from urllib.parse import quote_plus
 import requests
-
-from .multi_llm_client import MultiLLMClient, TaskType
-from .repo_access import RepositoryAccessLayer
-
-# Robust imports for confidence scorer
-try:
-    from backend.confidence_scorer.confidence_scorer import ConfidenceScorer
-except ImportError:
-    try:
-        from confidence_scorer.confidence_scorer import ConfidenceScorer
-    except ImportError:
-        ConfidenceScorer = None
-
-try:
-    from backend.confidence_scorer.contradiction_detector import SemanticContradictionDetector
-except ImportError:
-    try:
-        from confidence_scorer.contradiction_detector import SemanticContradictionDetector
-    except ImportError:
-        SemanticContradictionDetector = None
-
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# EXTERNAL VERIFICATION: Web Search and Documentation Lookup
-# =============================================================================
-
+from multi_llm_client import MultiLLMClient, TaskType
+from repo_access import RepositoryAccessLayer
 class ExternalVerifier:
+    logger = logging.getLogger(__name__)
     """
     External verification system for LLM outputs.
 

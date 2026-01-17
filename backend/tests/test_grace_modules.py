@@ -1,26 +1,8 @@
-"""
-Grace Module Stress Tests - Validates core module functionality
-
-Tests all the key modules in the Grace system for:
-1. Proper import and initialization
-2. Data structure validity
-3. Enum completeness
-4. Integration compatibility
-"""
-
 import pytest
 import time
 import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# LLM Orchestrator Tests
-# =============================================================================
-
 class TestLLMOrchestrator:
+    logger = logging.getLogger(__name__)
     """Test LLM Orchestrator module components."""
 
     def test_module_import(self):

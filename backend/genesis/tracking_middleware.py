@@ -1,12 +1,3 @@
-"""
-Genesis Tracking Middleware
-
-Automatically tracks all requests, responses, and operations
-through FastAPI middleware and decorators.
-
-Every API call, file operation, and database change gets a Genesis Key.
-"""
-
 import logging
 import time
 from typing import Callable, Optional
@@ -16,11 +7,8 @@ from functools import wraps
 from database.session import SessionLocal
 from genesis.comprehensive_tracker import ComprehensiveTracker
 from models.genesis_key_models import GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisTrackingMiddleware(BaseHTTPMiddleware):
+    logger = logging.getLogger(__name__)
     """
     Middleware that tracks all API requests with Genesis Keys.
 

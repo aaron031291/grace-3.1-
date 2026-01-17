@@ -1,15 +1,3 @@
-"""
-File Naming Manager - Naming Convention Enforcement for Librarian
-
-Handles automatic file renaming based on:
-- Content analysis
-- Metadata
-- Naming conventions
-- Duplicate handling
-
-Part of the full file system librarian capabilities.
-"""
-
 import os
 import re
 import logging
@@ -17,14 +5,10 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from models.database_models import Document
 from librarian.utils import sanitize_filename, extract_file_extension
-
-logger = logging.getLogger(__name__)
-
-
 class FileNamingManager:
+    logger = logging.getLogger(__name__)
     """
     File naming and renaming manager.
 

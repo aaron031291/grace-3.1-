@@ -1,46 +1,19 @@
-"""
-Notion Task Management API endpoints.
-
-Provides comprehensive task management with:
-- Kanban board columns (Todo, In Progress, In Review, Completed)
-- Profile management with Genesis Key generation
-- Full task history and versioning
-- File/folder association for provenance
-"""
-
 from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import logging
 import json
-
 from database.session import get_session, initialize_session_factory
-from models.notion_models import (
-    NotionProfile, NotionTask, TaskHistory, TaskTemplate,
-    TaskStatus, TaskPriority, TaskType,
-    generate_genesis_key, generate_profile_genesis_id
-)
-
-logger = logging.getLogger(__name__)
-
-# Create router
-router = APIRouter(prefix="/notion", tags=["Notion Task Management"])
-
-
-def get_db_session():
-    """Get a database session."""
-    from database.session import SessionLocal
-    if SessionLocal is None:
-        initialize_session_factory()
-    from database.session import SessionLocal
-    return SessionLocal()
-
-
-# ==================== Pydantic Models ====================
-
-# Profile Models
+from models.notion_models import NotionProfile, NotionTask, TaskHistory, TaskTemplate, TaskStatus, TaskPriority, TaskType, generate_genesis_key, generate_profile_genesis_id
 class ProfileCreateRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Request to create a new profile."""
     name: str = Field(..., description="Profile name")
     display_name: Optional[str] = Field(None, description="Display name")

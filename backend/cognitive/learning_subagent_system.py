@@ -1,19 +1,3 @@
-"""
-Multi-Process Learning Subagent System
-
-Complete autonomous learning architecture running as independent processes.
-
-Architecture:
-- Master Process: Orchestrates learning subagents
-- Study Subagents: Autonomous concept extraction (multi-process)
-- Practice Subagents: Skill execution and validation (multi-process)
-- Mirror Subagent: Self-reflection and gap identification (dedicated process)
-- Trust Scorer Subagent: Continuous trust score updates (dedicated process)
-- Predictive Context Subagent: Pre-fetching and caching (dedicated process)
-
-All subagents run independently in background with IPC via queues.
-"""
-
 import multiprocessing as mp
 from multiprocessing import Process, Queue, Value, Manager, Lock
 import logging
@@ -25,19 +9,15 @@ from datetime import datetime
 import signal
 import sys
 from enum import Enum
-
 from sqlalchemy.orm import Session
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
-
-logger = logging.getLogger(__name__)
-
-
-# ======================================================================
-# Task and Message Types
-# ======================================================================
-
 class TaskType(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of learning tasks."""
     INGEST = "ingest"
     STUDY = "study"
@@ -537,9 +517,10 @@ class LearningOrchestrator:
     ):
         self.knowledge_base_path = knowledge_base_path
 
-        # Multiprocessing setup - Windows compatible
-        import sys
-        if sys.platform == 'win32':
+        # Multiprocessing setup - OS-agnostic via OS adapter
+        from backend.utils.os_adapter import OS
+        
+        if OS.is_windows:
             # Windows requires 'spawn' method
             try:
                 mp.set_start_method('spawn', force=True)

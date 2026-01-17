@@ -1,29 +1,9 @@
-"""
-Notification Channels for Diagnostic Machine
-
-Supports multiple notification channels:
-- Webhook (HTTP POST to configurable endpoints)
-- Slack (via webhook or API)
-- Email (via SMTP)
-- Console/Log (for debugging)
-
-All notifications are non-blocking and include retry logic.
-"""
-
 import os
 import json
 import logging
 import smtplib
 import asyncio
 from email.mime.text import MIMEText
-
-# Optional async HTTP client
-try:
-    import aiohttp
-    HAS_AIOHTTP = True
-except ImportError:
-    aiohttp = None
-    HAS_AIOHTTP = False
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Callable
@@ -32,11 +12,14 @@ from enum import Enum
 from abc import ABC, abstractmethod
 import threading
 from concurrent.futures import ThreadPoolExecutor
-
-logger = logging.getLogger(__name__)
-
-
 class NotificationPriority(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Priority levels for notifications."""
     LOW = "low"
     MEDIUM = "medium"

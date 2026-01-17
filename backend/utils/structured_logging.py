@@ -1,10 +1,3 @@
-"""
-Structured Logging Configuration
-================================
-JSON-formatted logging for production environments.
-Supports correlation IDs, context injection, and log levels.
-"""
-
 import logging
 import json
 import sys
@@ -15,14 +8,8 @@ from contextvars import ContextVar
 from functools import wraps
 import time
 import uuid
-
-# Context variables for request tracking
-request_id_var: ContextVar[Optional[str]] = ContextVar('request_id', default=None)
-user_id_var: ContextVar[Optional[str]] = ContextVar('user_id', default=None)
-session_id_var: ContextVar[Optional[str]] = ContextVar('session_id', default=None)
-
-
 class StructuredLogFormatter(logging.Formatter):
+    logger = logging.getLogger(__name__)
     """
     JSON log formatter for structured logging.
     Outputs logs in a format suitable for log aggregation systems.

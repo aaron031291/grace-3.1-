@@ -1,23 +1,10 @@
-"""
-Grace File Management Integration
-
-Integrates all Grace-aligned file management components:
-- FileIntelligenceAgent (deep understanding)
-- AdaptiveFileProcessor (learning-based optimization)
-- FileHealthMonitor (autonomous health)
-- GenesisFileTracker (complete tracking)
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
 import time
-
-logger = logging.getLogger(__name__)
-
-
 class GraceFileManager:
+    logger = logging.getLogger(__name__)
     """
     Complete Grace-aligned file management system.
 

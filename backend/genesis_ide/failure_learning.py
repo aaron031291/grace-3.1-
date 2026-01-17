@@ -1,21 +1,3 @@
-"""
-Failure Learning System for Genesis IDE
-=========================================
-
-Stores and learns from:
-- Training failures
-- Broken code
-- Test failures
-- Build errors
-- Runtime errors
-
-Uses VectorDB to:
-- Store failure patterns
-- Find similar past failures
-- Suggest solutions based on history
-- Train for better responses
-"""
-
 import logging
 import json
 from typing import Dict, Any, List, Optional
@@ -25,11 +7,8 @@ from enum import Enum
 from pathlib import Path
 import hashlib
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class FailureType(str, Enum):
+    logger = logging.getLogger(__name__)
     """Types of failures to track."""
     SYNTAX_ERROR = "syntax_error"
     RUNTIME_ERROR = "runtime_error"

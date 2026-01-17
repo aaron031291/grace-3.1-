@@ -1,17 +1,4 @@
-"""
-Base Component - Unified Component Abstraction
-
-Addresses Clarity Class 1 (Structural Ambiguity):
-- Consistent component definitions
-- Clear lifecycle methods
-- Standardized status reporting
-- Trust and role tracking
-
-All Grace components should inherit from BaseComponent.
-"""
-
 from __future__ import annotations
-
 import asyncio
 import logging
 import uuid
@@ -20,18 +7,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Dict, Any, Optional, List, Set, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from layer1.message_bus import Layer1MessageBus
-
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# ENUMS
-# =============================================================================
-
 class ComponentState(Enum):
+    logger = logging.getLogger(__name__)
     """Component lifecycle states."""
     UNINITIALIZED = "uninitialized"
     INITIALIZING = "initializing"

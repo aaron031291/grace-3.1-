@@ -1,18 +1,3 @@
-"""
-Oracle Intelligence Core for Grace
-====================================
-
-Central intelligence hub that enables Grace to:
-1. Think 7 steps ahead (like chess grandmaster)
-2. Predict and prevent cascading failures
-3. Learn proactively from all code interactions
-4. Store research findings with Genesis key tracking
-5. Anticipate user needs before they're expressed
-
-The Oracle sees patterns others miss, predicts issues before they
-manifest, and continuously evolves its understanding.
-"""
-
 import logging
 import asyncio
 import json
@@ -23,11 +8,8 @@ from enum import Enum
 from datetime import datetime, timedelta
 from pathlib import Path
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class InsightType(str, Enum):
+    logger = logging.getLogger(__name__)
     """Types of insights the Oracle can generate."""
     PATTERN = "pattern"               # Recurring code patterns
     FAILURE_PREDICTION = "failure"    # Predicted failures

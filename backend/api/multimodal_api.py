@@ -1,14 +1,3 @@
-"""
-Multimodal API - Vision, Voice, Audio, Video
-
-Provides API endpoints for multimodal LLM interactions:
-- Image understanding
-- Video analysis
-- Audio transcription
-- Voice (TTS/STT)
-- All outputs tracked with Genesis Keys
-"""
-
 import logging
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
@@ -17,26 +6,13 @@ from sqlalchemy.orm import Session
 import base64
 import tempfile
 import os
-
-from llm_orchestrator.multimodal_llm_system import (
-    get_multimodal_llm_system,
-    MultimodalLLMSystem,
-    MultimodalInput,
-    MediaType
-)
+from llm_orchestrator.multimodal_llm_system import get_multimodal_llm_system, MultimodalLLMSystem, MultimodalInput, MediaType
 from llm_orchestrator.multi_llm_client import TaskType
 from database.session import get_db
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/multimodal", tags=["multimodal"])
-
-
-# =============================================================================
-# REQUEST MODELS
-# =============================================================================
-
 class MultimodalRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Multimodal processing request."""
     prompt: str = Field(..., description="Text prompt/question")
     task_type: str = Field(default="general", description="Task type")

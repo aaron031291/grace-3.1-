@@ -1,19 +1,3 @@
-"""
-Ghost Ledger - Line-by-Line Code Generation Tracking
-=====================================================
-
-Ghost Ledger records line-by-line code generation outside Grace's core cognition.
-After 30 days of stability, review, and no regressions, the line-level data is
-deleted. The archive state is called Ghost Memory.
-
-Key Features:
-- Line-by-line change tracking with genesis key references
-- Automatic archival after stability period (30 days default)
-- Ghost Memory for long-term pattern storage
-- Background learning from ghost data without entering active cognition
-- Version control with rolling windows
-"""
-
 import logging
 import hashlib
 import json
@@ -25,11 +9,10 @@ from pathlib import Path
 from collections import defaultdict
 import difflib
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class ChangeType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of code changes tracked."""
     ADDITION = "addition"
     DELETION = "deletion"

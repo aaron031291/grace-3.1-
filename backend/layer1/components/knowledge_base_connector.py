@@ -1,28 +1,11 @@
-"""
-Knowledge Base Ingestion Connector - Layer 1 Integration
-
-Connects AI Research Repository Ingestion and Data Integrity Verification
-to the Layer 1 message bus, enabling autonomous knowledge base management.
-"""
-
 import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    Message,
-    ComponentType,
-    MessageType,
-    get_message_bus,
-)
+from layer1.message_bus import Layer1MessageBus, Message, ComponentType, MessageType, get_message_bus
 from layer1.autonomous_actions import AutonomousAction
-
-logger = logging.getLogger(__name__)
-
-
 class KnowledgeBaseIngestionConnector:
+    logger = logging.getLogger(__name__)
     """
     Connector for AI Research Repository Ingestion.
     

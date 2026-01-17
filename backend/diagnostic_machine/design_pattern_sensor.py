@@ -1,22 +1,13 @@
-"""
-Design Pattern Detection Sensor
-
-Detects missing design patterns, incomplete implementations, and design gaps
-that don't cause errors but indicate incomplete features.
-"""
-
 import ast
 import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class DesignPatternIssue:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """A design pattern issue detected by the sensor."""
     pattern_type: str  # 'missing_cache_invalidation', 'missing_error_handling', etc.
     severity: str  # 'low', 'medium', 'high'

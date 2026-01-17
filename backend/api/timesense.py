@@ -1,37 +1,13 @@
-"""
-TimeSense API Endpoints
-
-Provides REST API access to Grace's time calibration and prediction system.
-
-Endpoints:
-- GET /timesense/status - Get engine status and health
-- GET /timesense/profiles - List all time profiles
-- GET /timesense/profile/{primitive} - Get specific profile
-- POST /timesense/estimate - Get time estimate for operation
-- POST /timesense/calibrate - Trigger calibration
-- GET /timesense/predictions - Get prediction accuracy stats
-"""
-
 from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 import logging
-
 from timesense.engine import get_timesense_engine, TimeSenseEngine, EngineStatus
 from timesense.primitives import PrimitiveType, PrimitiveCategory, get_primitive_registry
 from timesense.predictor import PredictionResult
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/timesense", tags=["TimeSense"])
-
-
-# ================================================================
-# REQUEST/RESPONSE MODELS
-# ================================================================
-
 class EstimateRequest(BaseModel):
+    logger = logging.getLogger(__name__)
     """Request for time estimate."""
     primitive_type: str = Field(..., description="Type of primitive operation")
     size: float = Field(..., description="Size in the primitive's native unit")
@@ -398,6 +374,92 @@ async def get_prediction_accuracy(
             'total_predictions': engine.stats.total_predictions
         }
     }
+
+
+@router.get("/performance/health")
+async def get_performance_health() -> Dict[str, Any]:
+    """
+    Get TimeSense performance health check.
+
+    Returns health status, issues, and recommendations.
+    """
+    from timesense.monitor import get_performance_monitor
+    
+    monitor = get_performance_monitor()
+    return monitor.check_performance_health()
+
+
+@router.get("/performance/alerts")
+async def get_performance_alerts(
+    severity: Optional[str] = None,
+    limit: int = 10
+) -> Dict[str, Any]:
+    """
+    Get performance alerts.
+
+    Returns recent alerts about prediction accuracy and system health.
+    """
+    from timesense.monitor import get_performance_monitor
+    
+    monitor = get_performance_monitor()
+    alerts = monitor.get_alerts(severity=severity, limit=limit)
+    
+    return {
+        'alerts': [a.to_dict() for a in alerts],
+        'total': len(alerts)
+    }
+
+
+@router.post("/performance/auto-calibrate")
+async def trigger_auto_calibration() -> Dict[str, Any]:
+    """
+    Check and trigger auto-calibration if needed.
+
+    Auto-triggers recalibration when prediction accuracy degrades.
+    """
+    from timesense.monitor import get_performance_monitor
+    
+    monitor = get_performance_monitor()
+    result = monitor.check_and_trigger_calibration()
+    
+    return result
+
+
+@router.post("/cost/estimate")
+async def estimate_cost(
+    primitive_type: Optional[str] = None,
+    size: float = 1.0,
+    model_name: Optional[str] = None,
+    requires_gpu: bool = False,
+    memory_gb: float = 1.0,
+    storage_gb: float = 0.0
+) -> Dict[str, Any]:
+    """
+    Estimate computational cost for an operation.
+
+    Returns cost estimate based on time predictions.
+    """
+    from timesense.cost_estimator import get_cost_estimator
+    
+    estimator = get_cost_estimator()
+    
+    ptype = None
+    if primitive_type:
+        try:
+            ptype = PrimitiveType(primitive_type)
+        except ValueError:
+            pass
+    
+    cost_estimate = estimator.estimate_cost(
+        primitive_type=ptype,
+        size=size,
+        model_name=model_name,
+        requires_gpu=requires_gpu,
+        memory_gb=memory_gb,
+        storage_gb=storage_gb
+    )
+    
+    return cost_estimate.to_dict()
 
 
 @router.post("/task/start")

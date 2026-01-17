@@ -1,20 +1,3 @@
-"""
-Competitive Benchmarking System for Grace
-==========================================
-
-Benchmarks Grace's code generation quality against Claude/Cursor-level
-standards. Tracks improvements and identifies gaps.
-
-Key Features:
-1. Quality Pattern Library - Common patterns from high-quality outputs
-2. Competitive Metrics - Track how Grace compares
-3. Gap Analysis - Identify areas for improvement
-4. Continuous Learning - Learn from best examples
-5. A/B Testing - Compare different approaches
-
-Goal: Match or exceed Claude/Cursor quality using local open-source LLMs.
-"""
-
 import logging
 import json
 import re
@@ -25,11 +8,8 @@ from enum import Enum
 from datetime import datetime
 from pathlib import Path
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class QualityTier(str, Enum):
+    logger = logging.getLogger(__name__)
     """Quality tiers for comparison."""
     ELITE = "elite"           # Top 5% - Claude/Cursor level
     EXCELLENT = "excellent"   # Top 20%

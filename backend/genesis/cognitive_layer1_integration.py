@@ -1,29 +1,12 @@
-"""
-Cognitive Layer 1 Integration - OODA Loop + 12 Invariants for All Inputs
-
-This module wraps the Layer 1 Integration with the Cognitive Engine,
-ensuring ALL Layer 1 inputs flow through:
-- OODA Loop (Observe → Orient → Decide → Act)
-- 12 Invariant Validation
-- Deterministic Decision-Making
-- Complete Audit Trail
-
-Integration Flow:
-Layer 1 Input → Cognitive Engine (OODA + Invariants) → Genesis Pipeline → World Model
-"""
 import logging
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List, Any, Callable
 from sqlalchemy.orm import Session
-
 from genesis.layer1_integration import Layer1Integration
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.decision_log import DecisionLogger
-
-logger = logging.getLogger(__name__)
-
-
 class CognitiveLayer1Integration:
+    logger = logging.getLogger(__name__)
     """
     Layer 1 Integration with Cognitive Engine enforcement.
 

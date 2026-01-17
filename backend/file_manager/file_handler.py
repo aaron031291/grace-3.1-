@@ -1,26 +1,10 @@
-"""
-File handler for extracting text from various file types.
-Supports TXT, MD, PDF, DOCX, XLSX, and other text-based formats.
-"""
-
 import os
 import logging
 from pathlib import Path
 from typing import Tuple, Optional
 import mimetypes
-
-logger = logging.getLogger(__name__)
-
-# Suppress verbose logging from PDF extraction libraries
-logging.getLogger('pdfminer').setLevel(logging.WARNING)
-logging.getLogger('pdfminer.pdfpage').setLevel(logging.WARNING)
-logging.getLogger('pdfminer.pdfdocument').setLevel(logging.WARNING)
-logging.getLogger('pdfminer.pdfparser').setLevel(logging.WARNING)
-logging.getLogger('pdfminer.converter').setLevel(logging.WARNING)
-logging.getLogger('pdfplumber').setLevel(logging.WARNING)
-
-
 class FileHandler:
+    logger = logging.getLogger(__name__)
     """Handles extraction of text from different file types."""
 
     SUPPORTED_TYPES = {

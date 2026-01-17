@@ -1,13 +1,3 @@
-"""
-Time Profile Storage and Management
-
-Stores distribution-based time profiles for primitives, not single numbers.
-Tracks p50/p90/p95 latencies, throughput mean/variance, confidence, and freshness.
-
-Profiles are the "physics table" that Grace uses to understand
-how long operations take on this specific machine.
-"""
-
 import json
 import math
 import logging
@@ -15,11 +5,9 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Tuple, Any
 from enum import Enum
-
 from timesense.primitives import PrimitiveType, CacheState, ScalingVariable
 
 logger = logging.getLogger(__name__)
-
 
 class ProfileStatus(str, Enum):
     """Status of a time profile."""

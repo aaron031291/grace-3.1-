@@ -15,6 +15,7 @@ import GenesisKeyTab from "./components/GenesisKeyTab";
 import WhitelistTab from "./components/WhitelistTab";
 import OrchestrationConsolidatedTab from "./components/OrchestrationConsolidatedTab";
 import SelfHealingTab from "./components/SelfHealingTab";
+import EnterpriseDashboard from "./components/EnterpriseDashboard";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -372,6 +373,27 @@ function App() {
               </svg>
               Orchestration
             </button>
+            <button
+              className={`tab-button ${
+                activeTab === "enterprise" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("enterprise")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+                <circle cx="12" cy="12" r="2" fill="currentColor"></circle>
+              </svg>
+              Enterprise
+            </button>
           </nav>
         </aside>
 
@@ -391,6 +413,7 @@ function App() {
           {activeTab === "genesis" && <GenesisKeyTab />}
           {activeTab === "whitelist" && <WhitelistTab />}
           {activeTab === "orchestration" && <OrchestrationConsolidatedTab />}
+          {activeTab === "enterprise" && <EnterpriseDashboard />}
         </main>
       </div>
 

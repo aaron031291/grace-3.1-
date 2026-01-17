@@ -1,15 +1,3 @@
-"""
-Autonomous Fine-Tuning Trigger System
-
-Automatically triggers fine-tuning when:
-- Enough high-trust learning examples accumulate
-- Performance metrics indicate improvement opportunity
-- Code patterns suggest specialization would help
-- User performance feedback shows gaps
-
-This makes LLMs continuously improve without manual intervention.
-"""
-
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
@@ -17,16 +5,14 @@ from dataclasses import dataclass
 from enum import Enum
 import threading
 import time
-
-from .multi_llm_client import MultiLLMClient, TaskType
-from .fine_tuning import LLMFineTuningSystem, FineTuningMethod
-from .repo_access import RepositoryAccessLayer
-from .learning_integration import LearningIntegration
-
-logger = logging.getLogger(__name__)
-
-
+from multi_llm_client import MultiLLMClient, TaskType
+from fine_tuning import LLMFineTuningSystem, FineTuningMethod
+from repo_access import RepositoryAccessLayer
+from learning_integration import LearningIntegration
 class TriggerReason(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Reasons for triggering fine-tuning."""
     ENOUGH_EXAMPLES = "enough_examples"  # Accumulated enough high-trust examples
     PERFORMANCE_GAP = "performance_gap"  # Performance metrics show improvement opportunity

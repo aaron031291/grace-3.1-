@@ -1,62 +1,12 @@
-"""
-Repository Access Layer - Read-Only Access to GRACE Systems
-
-Provides LLMs with read-only access to:
-- Source code repository (file tree, contents)
-- Genesis Keys (universal tracking)
-- Librarian (semantic organization)
-- Immutable Memory (episodic, procedural, patterns)
-- RAG System (document retrieval)
-- World Model (system state)
-- Mesh Memory (learning memory, episodes, procedures)
-- Ingestion Data (training data, learning examples)
-
-All access is READ-ONLY and logged for audit.
-"""
-
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
 import json
-
-# Lazy imports to avoid SQLAlchemy metadata conflicts
-# All imports are deferred to runtime when actually needed
-db_session = None
-Document = None
-DocumentChunk = None
-GenesisKey = None
-LibrarianTag = None
-DocumentRelationship = None
-LearningExample = None
-LearningPattern = None
-EmbeddingModel = None
-DocumentRetriever = None
-
-def _get_db_session():
-    """Lazy load database session."""
-    global db_session
-    if db_session is None:
-        try:
-            from database import session as _db_session
-            db_session = _db_session
-        except Exception:
-            pass
-    return db_session
-
-def _get_qdrant_client():
-    """Lazy load Qdrant client."""
-    try:
-        from vector_db.client import get_qdrant_client as _get_client
-        return _get_client()
-    except Exception:
-        return None
-
-logger = logging.getLogger(__name__)
-
-
+from system_specs import get_system_specs
 class RepositoryAccessLayer:
+    logger = logging.getLogger(__name__)
     """
     Provides LLMs with read-only access to GRACE systems.
 
@@ -89,6 +39,9 @@ class RepositoryAccessLayer:
 
         # Access log
         self.access_log: List[Dict[str, Any]] = []
+        
+        # System specs (always available)
+        self.system_specs = get_system_specs()
 
     def _log_access(self, operation: str, details: Dict[str, Any]):
         """Log read access for audit trail."""
@@ -581,6 +534,26 @@ class RepositoryAccessLayer:
     def clear_access_log(self):
         """Clear access log."""
         self.access_log.clear()
+    
+    def get_system_specs(self) -> Dict[str, Any]:
+        """
+        Get system specifications.
+        
+        Returns:
+            System specs as dictionary
+        """
+        self._log_access("get_system_specs", {})
+        return self.system_specs.to_dict()
+    
+    def get_system_specs_prompt(self) -> str:
+        """
+        Get system specifications as formatted prompt string.
+        
+        Returns:
+            Formatted system specs for LLM prompts
+        """
+        self._log_access("get_system_specs_prompt", {})
+        return self.system_specs.to_prompt_string()
 
 
 # Global instance

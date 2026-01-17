@@ -1,8 +1,3 @@
-"""
-Git-based ingestion file manager for tracking knowledge base files.
-Monitors backend/knowledge_base for changes and triggers appropriate ingestion actions.
-"""
-
 import os
 import json
 import logging
@@ -12,18 +7,16 @@ from typing import List, Dict, Optional, Tuple, Set
 from datetime import datetime
 from dataclasses import dataclass, field
 import hashlib
-
 from ingestion.service import TextIngestionService
 from embedding import EmbeddingModel, get_embedding_model
 from vector_db.client import get_qdrant_client
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class FileChange:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Represents a change to a file in the knowledge base."""
     filepath: str
     change_type: str  # 'added', 'modified', 'deleted'

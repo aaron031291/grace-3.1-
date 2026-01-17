@@ -1,36 +1,3 @@
-"""
-Autonomous CI/CD Engine
-========================
-The autonomous brain for GRACE's CI/CD system.
-
-This engine:
-1. Monitors system health and code changes
-2. Makes intelligent decisions about when/what to test and deploy
-3. Triggers pipelines autonomously based on trust scores
-4. Integrates with the healing system for failure response
-5. Learns from CI/CD outcomes to improve decisions
-
-NO EXTERNAL DEPENDENCIES - Fully GRACE-native using Genesis Keys.
-
-Architecture:
-    ┌─────────────────────────────────────────────────────────────────┐
-    │              AUTONOMOUS CI/CD ENGINE                            │
-    ├─────────────────────────────────────────────────────────────────┤
-    │                                                                 │
-    │   ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │
-    │   │   Event     │  │  Intelligent │  │    Genesis Key     │   │
-    │   │   Monitor   │→ │   Decision   │→ │    CI/CD System    │   │
-    │   └─────────────┘  └─────────────┘  └─────────────────────┘   │
-    │          ↑                ↑                    ↓                │
-    │          │                │                    │                │
-    │   ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │
-    │   │   File      │  │   Healing   │  │   Learning Memory  │   │
-    │   │   Watcher   │  │   System    │← │   (Feedback Loop)  │   │
-    │   └─────────────┘  └─────────────┘  └─────────────────────┘   │
-    │                                                                 │
-    └─────────────────────────────────────────────────────────────────┘
-"""
-
 import asyncio
 import logging
 import hashlib
@@ -41,15 +8,9 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 from pathlib import Path
 import os
-
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# ENUMS
-# =============================================================================
-
 class AutonomousTriggerType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of autonomous triggers."""
     FILE_CHANGE = "file_change"
     HEALTH_CHECK = "health_check"

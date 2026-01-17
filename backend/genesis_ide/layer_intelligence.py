@@ -1,30 +1,13 @@
-"""
-Layer 1/2 Intelligence for Genesis IDE
-=======================================
-
-Layer 1: Universal Input/Output
-- Receives all input (text, voice, file changes, events)
-- Routes to appropriate processors
-- Formats output for IDE display
-
-Layer 2: Cognitive Processing
-- Intent understanding
-- Context-aware reasoning
-- Decision making with OODA loop
-- Multi-plane analysis
-"""
-
 import logging
 import asyncio
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
-
-
 class InputType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of input Layer 1 can receive."""
     TEXT = "text"
     VOICE = "voice"

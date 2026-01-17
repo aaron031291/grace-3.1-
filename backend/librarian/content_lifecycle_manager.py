@@ -1,15 +1,3 @@
-"""
-Content Lifecycle Manager - Lifecycle Management for Librarian
-
-Handles content lifecycle stages:
-- draft → active → archived → deleted
-- Automatic archival
-- Content expiration
-- Retention policies
-
-Part of the full file system librarian capabilities.
-"""
-
 import os
 import logging
 from pathlib import Path
@@ -17,13 +5,9 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-
 from models.database_models import Document
-
-logger = logging.getLogger(__name__)
-
-
 class ContentLifecycleManager:
+    logger = logging.getLogger(__name__)
     """
     Content lifecycle management.
 

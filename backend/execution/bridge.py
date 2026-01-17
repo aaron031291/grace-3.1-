@@ -1,10 +1,3 @@
-"""
-Grace Execution Bridge
-
-Bridges Grace's cognitive layer with code execution capabilities.
-Provides safe, sandboxed execution with full audit trail.
-"""
-
 import asyncio
 import subprocess
 import os
@@ -16,19 +9,9 @@ from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime
 from pathlib import Path
 import shutil
-
-from .actions import (
-    GraceAction,
-    ActionRequest,
-    ActionResult,
-    ActionStatus,
-    create_action,
-)
-
-logger = logging.getLogger(__name__)
-
-
+from actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
 class ExecutionConfig:
+    logger = logging.getLogger(__name__)
     """Configuration for the execution environment."""
 
     def __init__(

@@ -1,34 +1,8 @@
-"""
-Semantic contradiction detection using NLP.
-
-Uses cross-encoder/nli-deberta-large model for accurate entailment detection.
-Instead of hardcoded keyword checks, uses semantic understanding to detect
-when two chunks express contradictory claims.
-"""
-
 import logging
 import numpy as np
 from typing import List, Tuple, Dict, Optional
-
-logger = logging.getLogger(__name__)
-
-# Lazy import for torch to avoid hard dependency at module load time
-torch = None
-
-def _get_torch():
-    """Lazily import torch only when needed."""
-    global torch
-    if torch is None:
-        try:
-            import torch as _torch
-            torch = _torch
-        except ImportError:
-            logger.warning("torch not available - some features will be disabled")
-            return None
-    return torch
-
-
 class SemanticContradictionDetector:
+    logger = logging.getLogger(__name__)
     """
     Uses NLI (Natural Language Inference) to detect semantic contradictions.
     

@@ -1,17 +1,3 @@
-"""
-Governance API - Three Pillar Framework with Real Database Integration
-
-Provides endpoints for:
-1. Uploadable Governance Documents (industry rules, ISO compliance, standards)
-2. Three Governance Pillars (Operational, Behavioral, Immutable)
-3. Human-in-the-Loop Decision Review (pending, confirm, discuss, deny)
-4. Rule management and KPI-driven governance
-
-Integrates with:
-- Database models for persistence
-- security/governance.py GovernanceEngine for real enforcement
-"""
-
 import logging
 import os
 import re
@@ -22,31 +8,13 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-
 from database.session import get_session
-from models.database_models import (
-    GovernanceRule as GovernanceRuleModel,
-    GovernanceDocument as GovernanceDocumentModel,
-    GovernanceDecision as GovernanceDecisionModel
-)
-from security.governance import (
-    GovernanceEngine,
-    get_governance_engine,
-    ConstitutionalRule,
-    CONSTITUTIONAL_RULES,
-    AutonomyTier,
-    AUTONOMY_TIERS
-)
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/governance", tags=["Governance Framework"])
-
-# =============================================================================
-# PYDANTIC MODELS
-# =============================================================================
-
+from models.database_models import GovernanceRule as GovernanceRuleModel, GovernanceDocument as GovernanceDocumentModel, GovernanceDecision as GovernanceDecisionModel
+from security.governance import GovernanceEngine, get_governance_engine, ConstitutionalRule, CONSTITUTIONAL_RULES, AutonomyTier, AUTONOMY_TIERS
 class GovernanceRuleCreate(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Create a new governance rule."""
     name: str
     description: str

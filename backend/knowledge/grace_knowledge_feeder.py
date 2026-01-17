@@ -1,18 +1,3 @@
-"""
-Grace Knowledge Feeder - Feed Grace the Knowledge She Needs
-
-Automatically:
-1. Identifies knowledge gaps from stress tests
-2. Finds relevant GitHub repositories
-3. Ingests enterprise data
-4. Feeds AI research knowledge
-5. Enables bidirectional LLM communication
-6. Integrates with sandbox for testing
-7. Uses DeepSeek directly with governance
-
-This system ensures Grace has the knowledge needed for 95% success rate.
-"""
-
 import logging
 import asyncio
 import json
@@ -20,7 +5,6 @@ from typing import Dict, List, Optional, Any, Set
 from datetime import datetime, UTC
 from pathlib import Path
 from sqlalchemy.orm import Session
-
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from cognitive.memory_mesh_learner import MemoryMeshLearner
@@ -30,11 +14,8 @@ from ingestion.service import TextIngestionService
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, LLMTaskRequest, TaskType
 from cognitive.autonomous_sandbox_lab import get_sandbox_lab, ExperimentStatus
 from api.repositories_api import RepositoryConfig, RepositoryType, RepositoryPriority
-
-logger = logging.getLogger(__name__)
-
-
 class GraceKnowledgeFeeder:
+    logger = logging.getLogger(__name__)
     """
     Feeds Grace the knowledge she needs to reach 95% success rate.
     

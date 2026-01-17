@@ -1,18 +1,10 @@
-"""
-Integration module for test issues with self-healing and diagnostic engine.
-Updates both systems to recognize and fix issues found during testing.
-"""
-
 import logging
 import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
 class TestIssueIntegration:
+    logger = logging.getLogger(__name__)
     """Integrates test issues with self-healing and diagnostic systems."""
     
     def __init__(self):

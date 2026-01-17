@@ -75,7 +75,8 @@ class OllamaClient:
             bool: True if service is accessible, False otherwise
         """
         try:
-            response = requests.get(self.base_url, timeout=5)
+            # Fast check - 1 second timeout (reduced from 5s for better performance)
+            response = requests.get(self.base_url, timeout=1)
             return response.status_code == 200
         except (requests.ConnectionError, requests.Timeout):
             return False
@@ -94,7 +95,8 @@ class OllamaClient:
             requests.RequestException: If API request fails
         """
         try:
-            response = requests.get(self.api_list_url, timeout=10)
+            # Reduced timeout from 10s to 5s for better performance
+            response = requests.get(self.api_list_url, timeout=5)
             response.raise_for_status()
             data = response.json()
             

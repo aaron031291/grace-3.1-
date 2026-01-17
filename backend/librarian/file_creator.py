@@ -1,29 +1,13 @@
-"""
-File Creator - Template-based File Creation for Librarian
-
-Handles automatic file creation based on:
-- Templates
-- Document metadata
-- Organization needs (index files, summaries)
-- Folder scaffolding
-
-Part of the full file system librarian capabilities.
-"""
-
 import os
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from models.database_models import Document
 from librarian.tag_manager import TagManager
-
-logger = logging.getLogger(__name__)
-
-
 class FileCreator:
+    logger = logging.getLogger(__name__)
     """
     File creation manager for librarian.
 

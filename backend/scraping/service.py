@@ -1,14 +1,3 @@
-"""
-Web scraping service using trafilatura.
-
-This service handles the core scraping logic including:
-- Fetching web pages
-- Extracting content with trafilatura
-- Following links with depth control
-- Filtering relevant links
-- Storing results
-"""
-
 import trafilatura
 from typing import List, Set, Optional, Dict
 from urllib.parse import urljoin, urlparse
@@ -19,20 +8,11 @@ from sqlalchemy.orm import Session
 import os
 from pathlib import Path
 import re
-
-from .models import ScrapingJob, ScrapedPage
-from .url_validator import URLValidator
-from .document_downloader import DocumentDownloader
-
-try:
-    from settings import settings
-except ImportError:
-    settings = None
-
-logger = logging.getLogger(__name__)
-
-
+from models import ScrapingJob, ScrapedPage
+from url_validator import URLValidator
+from document_downloader import DocumentDownloader
 class WebScrapingService:
+    logger = logging.getLogger(__name__)
     """
     Service for scraping web content with depth control.
     """

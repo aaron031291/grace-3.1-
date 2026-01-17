@@ -1,24 +1,10 @@
-"""
-Deterministic Workflow Engine - State Machine-Based Workflows
-
-All workflows are deterministic state machines with formal verification.
-"""
-
 import logging
 from typing import Dict, List, Optional, Any, Callable
 from datetime import datetime
 from dataclasses import dataclass, field
-
-from cognitive.ultra_deterministic_core import (
-    DeterministicStateMachine,
-    DeterministicState,
-    MathematicalProof
-)
-
-logger = logging.getLogger(__name__)
-
-
+from cognitive.ultra_deterministic_core import DeterministicStateMachine, DeterministicState, MathematicalProof
 class DeterministicWorkflowEngine:
+    logger = logging.getLogger(__name__)
     """
     Deterministic workflow engine using state machines.
     

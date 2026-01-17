@@ -1,22 +1,3 @@
-"""
-Layer 1 Message Bus - Bidirectional Component Communication
-
-Enables all Layer 1 components to communicate, coordinate, and trigger
-autonomous actions intelligently.
-
-Components:
-- Genesis Keys
-- Memory Mesh
-- Learning Memory
-- RAG (Retrieval)
-- Ingestion
-- World Model
-- Autonomous Learning
-- LLM Orchestration
-- Version Control
-- Librarian
-"""
-
 from typing import Dict, Any, Callable, List, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -25,11 +6,8 @@ import asyncio
 import logging
 import uuid
 import json
-
-logger = logging.getLogger(__name__)
-
-
 class MessageType(Enum):
+    logger = logging.getLogger(__name__)
     """Types of messages in Layer 1 mesh."""
     REQUEST = "request"              # Request-response pattern
     RESPONSE = "response"            # Response to request

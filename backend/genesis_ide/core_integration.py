@@ -1,23 +1,3 @@
-"""
-Genesis IDE Core Integration
-============================
-
-Central orchestrator that connects ALL Grace systems into the IDE:
-- Layer 1/2 Intelligence
-- Cognitive Framework (OODA)
-- Genesis Key Tracking
-- Ghost Ledger
-- Self-Healing
-- Librarian
-- File Manager
-- Version Control
-- CI/CD Pipeline
-- Autonomous Actions
-- VectorDB Learning
-
-Everything is trackable, traceable, and learns from outcomes.
-"""
-
 import logging
 import asyncio
 from typing import Dict, Any, List, Optional, Callable
@@ -26,12 +6,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import json
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class IDESession:
+    logger = logging.getLogger(__name__)
     """Represents an IDE session with full tracking."""
     session_id: str
     started_at: datetime

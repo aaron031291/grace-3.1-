@@ -75,19 +75,36 @@ def create_tables() -> None:
     
     logger.info("Creating database tables...")
     try:
-        Base.metadata.create_all(bind=engine)
+        # Use checkfirst=True to avoid errors if tables already exist
+        # Note: extend_existing is not a valid parameter for create_all()
+        # The issue is that metadata is loaded multiple times, causing "already defined" errors
+        # The real fix is to prevent multiple imports of models, but we'll handle it gracefully here
+        Base.metadata.create_all(bind=engine, checkfirst=True)
         logger.info("Database tables created successfully")
     except Exception as e:
-        logger.warning(f"Error during table creation (may be normal): {type(e).__name__}: {str(e)[:100]}")
-        # Try to create tables individually to skip ones that already exist
-        logger.info("Attempting to create tables individually...")
-        for table_name, table in Base.metadata.tables.items():
-            try:
-                table.create(bind=engine, checkfirst=True)
-                logger.debug(f"Table '{table_name}' created or already exists")
-            except Exception as table_error:
-                logger.debug(f"Could not create table '{table_name}': {table_error}")
-        logger.info("Individual table creation completed")
+        error_msg = str(e)
+        # Check if it's the "already defined" error - this is expected when models are imported multiple times
+        if "already defined" in error_msg.lower() or "extend_existing" in error_msg.lower():
+            logger.info("Table metadata already loaded (normal when models imported multiple times)")
+            # Try to create tables individually to skip ones that already exist
+            logger.info("Attempting to create tables individually...")
+            for table_name, table in Base.metadata.tables.items():
+                try:
+                    table.create(bind=engine, checkfirst=True)
+                    logger.debug(f"Table '{table_name}' created or already exists")
+                except Exception as table_error:
+                    # Ignore "already defined" errors - they're expected
+                    if "already defined" not in str(table_error).lower():
+                        logger.debug(f"Could not create table '{table_name}': {table_error}")
+            logger.info("Individual table creation completed")
+        else:
+            logger.warning(f"Error during table creation: {type(e).__name__}: {error_msg[:200]}")
+            # Still try individual creation as fallback
+            for table_name, table in Base.metadata.tables.items():
+                try:
+                    table.create(bind=engine, checkfirst=True)
+                except Exception:
+                    pass
 
 
 def drop_tables() -> None:

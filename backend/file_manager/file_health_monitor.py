@@ -1,10 +1,3 @@
-"""
-Grace File Health Monitor
-
-Continuously monitors file system health.
-Detects and heals issues autonomously.
-"""
-
 import logging
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
@@ -392,24 +385,230 @@ class FileHealthMonitor:
         Check if vector DB is consistent with database.
 
         Returns:
-            List of document IDs with inconsistencies
+            List of document chunk IDs with inconsistencies
         """
-        # This would query Qdrant and compare with DB
-        logger.debug("[FILE-HEALTH] Vector DB consistency check (placeholder)")
-        return []
+        if not self.session:
+            return []
+
+        try:
+            from models.database_models import DocumentChunk
+            from vector_db.client import get_qdrant_client
+            import os
+
+            # Get Qdrant client
+            qdrant_host = os.getenv("QDRANT_HOST", "localhost")
+            qdrant_port = int(os.getenv("QDRANT_PORT", "6333"))
+            qdrant_client = get_qdrant_client(host=qdrant_host, port=qdrant_port)
+            
+            if not qdrant_client.is_connected():
+                logger.warning("[FILE-HEALTH] Qdrant not connected, skipping consistency check")
+                return []
+
+            collection_name = os.getenv("QDRANT_COLLECTION_NAME", "documents")
+            
+            if not qdrant_client.collection_exists(collection_name):
+                logger.debug("[FILE-HEALTH] Collection doesn't exist, no consistency issues")
+                return []
+
+            inconsistent_chunk_ids = []
+
+            # Get all chunks from database that should have vectors
+            db_chunks = self.session.query(DocumentChunk).filter(
+                DocumentChunk.embedding_vector_id.isnot(None),
+                DocumentChunk.embedding_vector_id != ""
+            ).all()
+
+            # Create a set of DB vector IDs for quick lookup
+            db_vector_ids = {int(chunk.embedding_vector_id) for chunk in db_chunks if chunk.embedding_vector_id and chunk.embedding_vector_id.isdigit()}
+
+            # Scroll through all vectors in Qdrant
+            vector_ids_in_qdrant = set()
+            
+            try:
+                # Use scroll_all_points helper method if available
+                if hasattr(qdrant_client, 'scroll_all_points'):
+                    points = qdrant_client.scroll_all_points(
+                        collection_name=collection_name,
+                        limit=100,
+                        with_payload=False,
+                        with_vectors=False
+                    )
+                    
+                    # Extract IDs
+                    for point in points:
+                        if hasattr(point, 'id'):
+                            vector_ids_in_qdrant.add(int(point.id))
+                        elif isinstance(point, dict):
+                            point_id = point.get('id', 0)
+                            if point_id:
+                                vector_ids_in_qdrant.add(int(point_id))
+                else:
+                    # Fallback: manual scrolling
+                    offset = None
+                    limit = 100
+
+                    while True:
+                        try:
+                            if hasattr(qdrant_client.client, 'scroll'):
+                                points, next_offset = qdrant_client.client.scroll(
+                                    collection_name=collection_name,
+                                    limit=limit,
+                                    offset=offset,
+                                    with_payload=False,
+                                    with_vectors=False
+                                )
+                                
+                                # Extract IDs
+                                for point in points:
+                                    if hasattr(point, 'id'):
+                                        vector_ids_in_qdrant.add(int(point.id))
+                                    elif isinstance(point, dict):
+                                        point_id = point.get('id', 0)
+                                        if point_id:
+                                            vector_ids_in_qdrant.add(int(point_id))
+
+                                if next_offset is None:
+                                    break
+                                offset = next_offset
+                            else:
+                                logger.warning("[FILE-HEALTH] Qdrant client doesn't support scroll")
+                                break
+                        except Exception as e:
+                            logger.error(f"[FILE-HEALTH] Error during scroll iteration: {e}")
+                            break
+
+            except Exception as e:
+                logger.error(f"[FILE-HEALTH] Error scrolling Qdrant: {e}")
+
+            # Find inconsistencies:
+            # 1. Chunks in DB but not in Qdrant
+            missing_in_qdrant = db_vector_ids - vector_ids_in_qdrant
+            for chunk in db_chunks:
+                if chunk.embedding_vector_id and chunk.embedding_vector_id.isdigit():
+                    if int(chunk.embedding_vector_id) in missing_in_qdrant:
+                        inconsistent_chunk_ids.append(chunk.id)
+
+            # 2. Vectors in Qdrant but not in DB (orphaned vectors)
+            orphaned_in_qdrant = vector_ids_in_qdrant - db_vector_ids
+            if orphaned_in_qdrant:
+                logger.warning(
+                    f"[FILE-HEALTH] Found {len(orphaned_in_qdrant)} orphaned vectors "
+                    f"in Qdrant (not in database)"
+                )
+
+            logger.debug(
+                f"[FILE-HEALTH] Vector DB consistency check complete: "
+                f"{len(inconsistent_chunk_ids)} inconsistent chunks found"
+            )
+
+            return inconsistent_chunk_ids
+
+        except Exception as e:
+            logger.error(f"[FILE-HEALTH] Error checking vector DB consistency: {e}")
+            return []
 
     def _heal_vector_inconsistencies(self, inconsistent_ids: List[int]) -> int:
         """
-        Heal vector DB inconsistencies.
+        Heal vector DB inconsistencies by re-embedding missing vectors.
 
         Returns:
             Number healed
         """
-        logger.info(
-            f"[FILE-HEALTH] Would sync {len(inconsistent_ids)} vector records "
-            f"(not implemented yet)"
-        )
-        return 0
+        if not self.session or not inconsistent_ids:
+            return 0
+
+        try:
+            from models.database_models import DocumentChunk, Document
+            from vector_db.client import get_qdrant_client
+            from embeddings.embedding_service import get_embedding_service
+            import os
+
+            healed_count = 0
+
+            # Get embedding service
+            embedding_service = get_embedding_service()
+            if not embedding_service:
+                logger.error("[FILE-HEALTH] Cannot get embedding service for healing")
+                return 0
+
+            # Get Qdrant client
+            qdrant_host = os.getenv("QDRANT_HOST", "localhost")
+            qdrant_port = int(os.getenv("QDRANT_PORT", "6333"))
+            qdrant_client = get_qdrant_client(host=qdrant_host, port=qdrant_port)
+            
+            if not qdrant_client.is_connected():
+                logger.error("[FILE-HEALTH] Qdrant not connected, cannot heal")
+                return 0
+
+            collection_name = os.getenv("QDRANT_COLLECTION_NAME", "documents")
+
+            # Process chunks in batches
+            batch_size = 10
+            for i in range(0, len(inconsistent_ids), batch_size):
+                batch_ids = inconsistent_ids[i:i + batch_size]
+                
+                chunks = self.session.query(DocumentChunk).filter(
+                    DocumentChunk.id.in_(batch_ids)
+                ).all()
+
+                for chunk in chunks:
+                    try:
+                        # Re-generate embedding
+                        embedding = embedding_service.embed_text([chunk.text_content])
+                        if not embedding or len(embedding) == 0:
+                            logger.warning(f"[FILE-HEALTH] Failed to generate embedding for chunk {chunk.id}")
+                            continue
+
+                        vector = embedding[0]
+                        
+                        # Use chunk ID as vector ID if embedding_vector_id is missing/invalid
+                        vector_id = chunk.id
+                        if chunk.embedding_vector_id and chunk.embedding_vector_id.isdigit():
+                            vector_id = int(chunk.embedding_vector_id)
+
+                        # Prepare payload
+                        payload = {
+                            "chunk_id": chunk.id,
+                            "document_id": chunk.document_id,
+                            "text": chunk.text_content[:500],  # First 500 chars
+                            "confidence_score": chunk.confidence_score or 0.5,
+                            "model": chunk.embedding_model
+                        }
+
+                        # Upsert to Qdrant
+                        success = qdrant_client.upsert_vectors(
+                            collection_name=collection_name,
+                            vectors=[(vector_id, vector, payload)]
+                        )
+
+                        if success:
+                            # Update chunk with vector ID
+                            chunk.embedding_vector_id = str(vector_id)
+                            self.session.add(chunk)
+                            healed_count += 1
+                            logger.debug(f"[FILE-HEALTH] Healed chunk {chunk.id} (vector_id={vector_id})")
+                        else:
+                            logger.warning(f"[FILE-HEALTH] Failed to upsert vector for chunk {chunk.id}")
+
+                    except Exception as e:
+                        logger.error(f"[FILE-HEALTH] Error healing chunk {chunk.id}: {e}")
+                        continue
+
+                # Commit batch
+                try:
+                    self.session.commit()
+                except Exception as e:
+                    logger.error(f"[FILE-HEALTH] Error committing batch: {e}")
+                    self.session.rollback()
+
+            logger.info(f"[FILE-HEALTH] Healed {healed_count} vector inconsistencies")
+            return healed_count
+
+        except Exception as e:
+            logger.error(f"[FILE-HEALTH] Error healing vector inconsistencies: {e}")
+            if self.session:
+                self.session.rollback()
+            return 0
 
     def _calculate_health_status(self, anomalies: List[Dict]) -> str:
         """

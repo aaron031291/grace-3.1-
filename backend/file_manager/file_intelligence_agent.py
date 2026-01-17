@@ -1,21 +1,11 @@
-"""
-Grace File Intelligence Agent
-
-Understands file content deeply, not just formats.
-Builds semantic understanding of knowledge base.
-"""
-
 import logging
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from dataclasses import dataclass
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class FileIntelligence:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Deep intelligence about a file's content."""
 
     content_summary: str

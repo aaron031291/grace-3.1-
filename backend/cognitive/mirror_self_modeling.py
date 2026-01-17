@@ -1,39 +1,14 @@
-"""
-Mirror Self-Modeling System
-
-The Mirror Agent continuously observes Grace's operations through Genesis Keys
-and builds a self-model of system behavior, patterns, and improvement opportunities.
-
-This creates true self-awareness by:
-1. Observing ALL operations via Genesis Keys
-2. Building behavioral models and patterns
-3. Identifying inefficiencies and improvement opportunities
-4. Feeding insights back to learning system
-5. Enabling recursive self-improvement
-
-The mirror creates a "reflection" of Grace that Grace can examine to understand
-herself and improve continuously.
-"""
-
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta
 from collections import defaultdict, Counter
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_memory import LearningExample
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
-
-logger = logging.getLogger(__name__)
-
-
-# ======================================================================
-# Behavioral Pattern Types
-# ======================================================================
-
 class PatternType:
+    logger = logging.getLogger(__name__)
     """Types of behavioral patterns the mirror can detect."""
     REPEATED_FAILURE = "repeated_failure"           # Same operation failing repeatedly
     SUCCESS_SEQUENCE = "success_sequence"           # Sequence that consistently succeeds
