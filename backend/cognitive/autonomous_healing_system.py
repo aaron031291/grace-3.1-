@@ -222,6 +222,25 @@ class AutonomousHealingSystem:
 
         # Scan for code issues using Genesis Keys
         code_issues = self.healing_system.scan_for_issues()
+        
+        # Also scan for Pydantic logger issues
+        try:
+            from diagnostic_machine.proactive_code_scanner import get_proactive_scanner
+            scanner = get_proactive_scanner()
+            pydantic_issues = scanner.scan_pydantic_logger_issues()
+            if pydantic_issues:
+                # Convert to code_issues format
+                for issue in pydantic_issues:
+                    code_issues.append({
+                        "type": "pydantic_logger",
+                        "severity": "high",
+                        "file": issue.file_path,
+                        "line": issue.line_number,
+                        "message": issue.message,
+                        "suggested_fix": issue.suggested_fix
+                    })
+        except Exception as e:
+            logger.debug(f"Could not scan for Pydantic logger issues: {e}")
 
         # Query recent Genesis Keys for errors
         recent_errors = self._query_recent_errors()

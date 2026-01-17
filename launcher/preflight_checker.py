@@ -705,7 +705,7 @@ class PreFlightChecker:
         return fixed
     
     def _check_and_fix_import_errors(self) -> Dict[str, Any]:
-        """Check for import errors in critical modules."""
+        """Check for import errors in critical modules and fix common issues."""
         backend_path = self.root_path / "backend"
         if not backend_path.exists():
             return {}
@@ -740,7 +740,19 @@ class PreFlightChecker:
                     # This is a logger conflict - we'll handle it in logger conflict check
                     pass
                 else:
-                    errors_found.append(f"{module_name}: {error_msg}")
+                    # Try to fix common import errors
+                    fixed = self._fix_import_error(module_name, error_msg, spec.origin if spec else None)
+                    if fixed:
+                        errors_fixed += 1
+                        logger.info(f"[PRE-FLIGHT] ✓ Fixed import error in {module_name}")
+                        # Try importing again to verify fix
+                        try:
+                            importlib.reload(importlib.import_module(module_name))
+                        except Exception:
+                            # Fix didn't work, still an error
+                            errors_found.append(f"{module_name}: {error_msg}")
+                    else:
+                        errors_found.append(f"{module_name}: {error_msg}")
         
         if errors_found:
             return {
@@ -750,6 +762,75 @@ class PreFlightChecker:
             }
         
         return {}
+    
+    def _fix_import_error(self, module_name: str, error_msg: str, file_path: Optional[str]) -> bool:
+        """Attempt to fix common import errors."""
+        if not file_path or not Path(file_path).exists():
+            return False
+        
+        try:
+            # Common fix: Missing type imports (Any, Union, etc.)
+            if "name 'Any' is not defined" in error_msg or "'Any' is not defined" in error_msg:
+                return self._add_missing_type_import(file_path, "Any")
+            if "name 'Union' is not defined" in error_msg or "'Union' is not defined" in error_msg:
+                return self._add_missing_type_import(file_path, "Union")
+            if "name 'Optional' is not defined" in error_msg or "'Optional' is not defined" in error_msg:
+                return self._add_missing_type_import(file_path, "Optional")
+            if "name 'List' is not defined" in error_msg or "'List' is not defined" in error_msg:
+                return self._add_missing_type_import(file_path, "List")
+            if "name 'Dict' is not defined" in error_msg or "'Dict' is not defined" in error_msg:
+                return self._add_missing_type_import(file_path, "Dict")
+            
+            return False
+        except Exception as e:
+            logger.debug(f"Could not fix import error in {module_name}: {e}")
+            return False
+    
+    def _add_missing_type_import(self, file_path: str, type_name: str) -> bool:
+        """Add missing type import to typing imports."""
+        try:
+            content = Path(file_path).read_text(encoding='utf-8')
+            
+            # Check if typing is already imported
+            typing_import_pattern = r'from typing import ([^\\n]+)'
+            match = re.search(typing_import_pattern, content)
+            
+            if match:
+                # Add to existing typing import
+                existing_imports = match.group(1)
+                if type_name not in existing_imports:
+                    # Add the missing type
+                    new_imports = existing_imports.rstrip() + f", {type_name}"
+                    new_line = f"from typing import {new_imports}"
+                    content = content[:match.start()] + new_line + content[match.end():]
+                    Path(file_path).write_text(content, encoding='utf-8')
+                    return True
+            else:
+                # Check if there's a standalone typing import
+                if "from typing import" in content:
+                    # Find the line and add to it
+                    lines = content.split('\n')
+                    for i, line in enumerate(lines):
+                        if line.strip().startswith("from typing import"):
+                            existing = line.strip()
+                            if type_name not in existing:
+                                lines[i] = existing.rstrip() + f", {type_name}"
+                                Path(file_path).write_text('\n'.join(lines), encoding='utf-8')
+                                return True
+                else:
+                    # Add new typing import after other imports
+                    import_section = re.search(r'(^import\s+.*\n|^from\s+.*\n)+', content, re.MULTILINE)
+                    if import_section:
+                        insert_pos = import_section.end()
+                        new_import = f"from typing import {type_name}\n"
+                        content = content[:insert_pos] + new_import + content[insert_pos:]
+                        Path(file_path).write_text(content, encoding='utf-8')
+                        return True
+            
+            return False
+        except Exception as e:
+            logger.debug(f"Could not add missing type import {type_name} to {file_path}: {e}")
+            return False
     
     def _check_and_create_missing_directories(self) -> Dict[str, Any]:
         """Check for missing critical directories and create them."""

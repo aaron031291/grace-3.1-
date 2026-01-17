@@ -8,11 +8,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
+logger = logging.getLogger(__name__)
+
+
+logger = logging.getLogger(__name__)
+
+
 class CodeQualityDimension(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Dimensions of code quality to optimize."""
     CORRECTNESS = "correctness"       # Does it work?
     COMPLETENESS = "completeness"     # Is it complete?

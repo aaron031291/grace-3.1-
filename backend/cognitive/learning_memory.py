@@ -15,7 +15,16 @@ import json
 try:
     from backend.database.base import BaseModel
 except ImportError:
-    from database.base import BaseModel
+    try:
+        from database.base import BaseModel
+    except ImportError:
+        # Fallback: try to import from models if available
+        try:
+            from models.database_models import BaseModel
+        except ImportError:
+            # Last resort: use SQLAlchemy Base directly
+            from sqlalchemy.ext.declarative import declarative_base
+            BaseModel = declarative_base()
 
 
 class LearningExample(BaseModel):
@@ -69,6 +78,7 @@ class LearningPattern(BaseModel):
     Higher-level abstractions learned from concrete examples.
     """
     __tablename__ = "learning_patterns"
+    __table_args__ = ({'extend_existing': True},)  # Allow table to be redefined if already exists
 
     pattern_name = Column(String, nullable=False, unique=True)
     pattern_type = Column(String, nullable=False)  # behavioral, optimization, error_recovery, etc.
@@ -482,6 +492,10 @@ class LearningMemoryManager:
         """
         Extract pattern from multiple learning examples.
         """
+        # Safety check: ensure examples list is not empty
+        if not examples:
+            raise ValueError("Cannot extract pattern from empty examples list")
+        
         # Simple pattern extraction (can be enhanced with ML)
         pattern_name = f"pattern_{examples[0].example_type}_{datetime.utcnow().timestamp()}"
 
@@ -494,8 +508,8 @@ class LearningMemoryManager:
         # Extract expected outcomes
         outcomes = self._extract_common_outcomes(examples)
 
-        # Calculate pattern trust
-        avg_trust = sum(e.trust_score for e in examples) / len(examples)
+        # Calculate pattern trust (with division by zero protection)
+        avg_trust = sum(e.trust_score for e in examples) / len(examples) if examples else 0.0
 
         # Create pattern
         pattern = LearningPattern(

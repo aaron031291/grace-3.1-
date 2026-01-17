@@ -4,9 +4,50 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
 import json
-from system_specs import get_system_specs
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+# Try to import optional dependencies
+try:
+    from system_specs import get_system_specs
+except ImportError:
+    def get_system_specs():
+        return {}
+
+try:
+    from backend.vector_db.client import get_qdrant_client
+    _get_qdrant_client_func = get_qdrant_client
+except ImportError:
+    try:
+        from vector_db.client import get_qdrant_client
+        _get_qdrant_client_func = get_qdrant_client
+    except ImportError:
+        try:
+            from backend.vector_db import get_qdrant_client
+            _get_qdrant_client_func = get_qdrant_client
+        except ImportError:
+            def _get_qdrant_client_func():
+                return None
+
+try:
+    from backend.retrieval.retriever import DocumentRetriever
+except ImportError:
+    try:
+        from retrieval.retriever import DocumentRetriever
+    except ImportError:
+        DocumentRetriever = None
+
+try:
+    from backend.embedding import EmbeddingModel
+except ImportError:
+    try:
+        from embedding import EmbeddingModel
+    except ImportError:
+        EmbeddingModel = None
+
+
 class RepositoryAccessLayer:
-    logger = logging.getLogger(__name__)
     """
     Provides LLMs with read-only access to GRACE systems.
 
@@ -30,12 +71,28 @@ class RepositoryAccessLayer:
         self.session = session
         self.kb_path = knowledge_base_path or Path("backend/knowledge_base")
         self.embedding_model = embedding_model
-        self.qdrant_client = _get_qdrant_client()
+        
+        # Initialize Qdrant client (optional)
+        try:
+            if _get_qdrant_client_func:
+                self.qdrant_client = _get_qdrant_client_func()
+            else:
+                self.qdrant_client = None
+        except Exception as e:
+            try:
+                logger.warning(f"[REPO-ACCESS] Qdrant client not available: {e}")
+            except NameError:
+                print(f"[REPO-ACCESS] Qdrant client not available: {e}")
+            self.qdrant_client = None
 
         # Initialize retriever if embedding model provided
         self.retriever = None
-        if embedding_model:
-            self.retriever = DocumentRetriever(embedding_model=embedding_model)
+        if embedding_model and DocumentRetriever:
+            try:
+                self.retriever = DocumentRetriever(embedding_model=embedding_model)
+            except Exception as e:
+                logger.warning(f"[REPO-ACCESS] DocumentRetriever not available: {e}")
+                self.retriever = None
 
         # Access log
         self.access_log: List[Dict[str, Any]] = []

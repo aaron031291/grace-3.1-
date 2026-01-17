@@ -2,16 +2,23 @@ import logging
 from typing import Optional, Dict, Any
 from fastapi import APIRouter, HTTPException, Body
 from pydantic import BaseModel, Field
-from llm_orchestrator.third_party_llm_client import get_third_party_llm_client
-from llm_orchestrator.third_party_llm_integration import LLMProvider
+
+logger = logging.getLogger(__name__)
+
+# Try to import third-party LLM components with fallback
+try:
+    from llm_orchestrator.third_party_llm_client import get_third_party_llm_client
+    from llm_orchestrator.third_party_llm_integration import LLMProvider
+except ImportError:
+    logger.warning("[THIRD-PARTY-LLM-API] Third-party LLM components not available")
+    get_third_party_llm_client = None
+    LLMProvider = None
+
+# Create router
+router = APIRouter(prefix="/third-party-llm", tags=["Third-Party LLM"])
+
+
 class RegisterGeminiRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to register Google Gemini."""
     api_key: str = Field(..., description="Gemini API key")
     model_name: str = Field(default="gemini-pro", description="Model name")
@@ -73,6 +80,9 @@ async def register_gemini(request: RegisterGeminiRequest):
     - Available APIs and scripts
     - Integration protocols
     """
+    if not get_third_party_llm_client:
+        raise HTTPException(status_code=503, detail="Third-party LLM integration not available")
+    
     try:
         client = get_third_party_llm_client()
         llm_id = client.register_gemini(
@@ -108,6 +118,9 @@ async def register_openai(request: RegisterOpenAIRequest):
     - Available APIs and scripts
     - Integration protocols
     """
+    if not get_third_party_llm_client:
+        raise HTTPException(status_code=503, detail="Third-party LLM integration not available")
+    
     try:
         client = get_third_party_llm_client()
         llm_id = client.register_openai(
@@ -143,6 +156,9 @@ async def register_anthropic(request: RegisterAnthropicRequest):
     - Available APIs and scripts
     - Integration protocols
     """
+    if not get_third_party_llm_client:
+        raise HTTPException(status_code=503, detail="Third-party LLM integration not available")
+    
     try:
         client = get_third_party_llm_client()
         llm_id = client.register_anthropic(
@@ -178,6 +194,9 @@ async def generate(request: GenerateRequest):
     - Be validated through hallucination prevention
     - Be tracked with Genesis Keys
     """
+    if not get_third_party_llm_client:
+        raise HTTPException(status_code=503, detail="Third-party LLM integration not available")
+    
     try:
         client = get_third_party_llm_client()
         
@@ -209,6 +228,8 @@ async def generate(request: GenerateRequest):
 @router.get("/list")
 async def list_integrated_llms():
     """List all integrated third-party LLMs."""
+    if not get_third_party_llm_client:
+        return {"integrated_llms": [], "message": "Third-party LLM integration not available"}
     try:
         client = get_third_party_llm_client()
         integration = client.integration

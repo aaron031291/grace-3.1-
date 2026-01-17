@@ -2,7 +2,17 @@ import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dataclasses import dataclass, field
-from actions import ActionRequest, ActionResult, ActionStatus, GraceAction
+try:
+    from execution.actions import ActionRequest, ActionResult, ActionStatus, GraceAction
+except ImportError:
+    try:
+        from actions import ActionRequest, ActionResult, ActionStatus, GraceAction
+    except ImportError:
+        # Make optional
+        ActionRequest = None
+        ActionResult = None
+        ActionStatus = None
+        GraceAction = None
 class LearningSignal:
     logger = logging.getLogger(__name__)
     """A signal extracted from execution for learning."""

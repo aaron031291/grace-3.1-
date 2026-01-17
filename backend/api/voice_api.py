@@ -11,12 +11,14 @@ from enum import Enum
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/voice", tags=["Voice API"])
+
+
 class TTSEngine(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Available TTS engines."""
     EDGE_TTS = "edge_tts"       # Microsoft Edge TTS (best quality, requires internet)
     PYTTSX3 = "pyttsx3"         # Offline TTS (cross-platform)

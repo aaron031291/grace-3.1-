@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
-from contradiction_detector import SemanticContradictionDetector
+from .contradiction_detector import SemanticContradictionDetector
 class ConfidenceScorer:
     logger = logging.getLogger(__name__)
     """

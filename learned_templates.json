@@ -1,0 +1,2416 @@
+{
+  "timestamp": "C:\\Users\\aaron\\grace 3.1\\grace-3.1-",
+  "templates": [
+    {
+      "name": "auto_minimum_maximum",
+      "pattern_keywords": [
+        "minimum",
+        "maximum",
+        "max_length_list",
+        "having",
+        "find",
+        "using",
+        "min_length_list",
+        "find_min",
+        "sublist",
+        "list"
+      ],
+      "pattern_regex": "minimum.*|maximum.*|max_length_list.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the list with minimum length using lambda function.\n\nFu...\"\"\"\n    # Auto-learned template from 4 similar failures\n    # Keywords: minimum, maximum, max_length_list, having, find\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 4 similar failure(s)",
+      "examples": [],
+      "confidence": 0.5,
+      "source": "proactive_learning",
+      "frequency": 4
+    },
+    {
+      "name": "auto_cube_cone",
+      "pattern_keywords": [
+        "cube",
+        "cone",
+        "volume_cube",
+        "volume_sphere",
+        "volume",
+        "find",
+        "volume_cylinder",
+        "sphere",
+        "cylinder",
+        "volume_cone"
+      ],
+      "pattern_regex": "cube.*|cone.*|volume_cube.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the volume of a sphere.\n\nFunction name should be: volum...\"\"\"\n    # Auto-learned template from 4 similar failures\n    # Keywords: cube, cone, volume_cube, volume_sphere, volume\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 4 similar failure(s)",
+      "examples": [],
+      "confidence": 0.5,
+      "source": "proactive_learning",
+      "frequency": 4
+    },
+    {
+      "name": "auto_largest_string",
+      "pattern_keywords": [
+        "largest",
+        "string",
+        "most",
+        "frequency",
+        "most_occurrences",
+        "maximum",
+        "frequency_of_largest",
+        "max_occurrences",
+        "get",
+        "strings"
+      ],
+      "pattern_regex": "largest.*|string.*|most.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the item with maximum frequency in a given list.\n\nFunct...\"\"\"\n    # Auto-learned template from 4 similar failures\n    # Keywords: largest, string, most, frequency, most_occurrences\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 4 similar failure(s)",
+      "examples": [],
+      "confidence": 0.5,
+      "source": "proactive_learning",
+      "frequency": 4
+    },
+    {
+      "name": "auto_maximum_between",
+      "pattern_keywords": [
+        "maximum",
+        "between",
+        "tuple",
+        "pairs",
+        "available",
+        "find",
+        "max_product_tuple",
+        "product",
+        "find_max",
+        "difference"
+      ],
+      "pattern_regex": "maximum.*|between.*|tuple.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the maximum difference between available pairs in the g...\"\"\"\n    # Auto-learned template from 3 similar failures\n    # Keywords: maximum, between, tuple, pairs, available\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 3 similar failure(s)",
+      "examples": [],
+      "confidence": 0.44999999999999996,
+      "source": "proactive_learning",
+      "frequency": 3
+    },
+    {
+      "name": "auto_count_freq_count",
+      "pattern_keywords": [
+        "count",
+        "freq_count",
+        "find",
+        "array",
+        "get",
+        "frequency_lists",
+        "frequency",
+        "number",
+        "list",
+        "lists"
+      ],
+      "pattern_regex": "count.*|freq_count.*|find.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to get the frequency of the elements in a list.\n\nFunction name ...\"\"\"\n    # Auto-learned template from 3 similar failures\n    # Keywords: count, freq_count, find, array, get\n    return len(lst)\n",
+      "description": "Auto-learned from 3 similar failure(s)",
+      "examples": [],
+      "confidence": 0.44999999999999996,
+      "source": "proactive_learning",
+      "frequency": 3
+    },
+    {
+      "name": "auto_check_equal",
+      "pattern_keywords": [
+        "check",
+        "equal",
+        "string",
+        "check_element",
+        "whether",
+        "same",
+        "chklist",
+        "unique",
+        "all_unique",
+        "list"
+      ],
+      "pattern_regex": "check.*|equal.*|string.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to check whether the elements in a list are same or not....\"\"\"\n    # Auto-learned template from 3 similar failures\n    # Keywords: check, equal, string, check_element, whether\n    return list(set(lst))\n",
+      "description": "Auto-learned from 3 similar failure(s)",
+      "examples": [],
+      "confidence": 0.44999999999999996,
+      "source": "proactive_learning",
+      "frequency": 3
+    },
+    {
+      "name": "auto_remove_uppercase_remove",
+      "pattern_keywords": [
+        "remove_uppercase",
+        "remove",
+        "string",
+        "using",
+        "remove_lowercase",
+        "substrings",
+        "uppercase",
+        "regex",
+        "lowercase"
+      ],
+      "pattern_regex": "remove_uppercase.*|remove.*|string.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to remove uppercase substrings from a given string by using reg...\"\"\"\n    # Auto-learned template from 3 similar failures\n    # Keywords: remove_uppercase, remove, string, using, remove_lowercase\n    # Implement based on keywords: remove_uppercase, remove, string\n    pass\n",
+      "description": "Auto-learned from 3 similar failure(s)",
+      "examples": [],
+      "confidence": 0.44999999999999996,
+      "source": "proactive_learning",
+      "frequency": 3
+    },
+    {
+      "name": "auto_binary_convert",
+      "pattern_keywords": [
+        "binary",
+        "convert",
+        "decimal",
+        "binary_to_decimal",
+        "decimal_to_binary",
+        "its",
+        "number",
+        "equivalent"
+      ],
+      "pattern_regex": "binary.*|convert.*|decimal.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to convert the given binary number to its decimal equivalent.\n\n...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: binary, convert, decimal, binary_to_decimal, decimal_to_binary\n    # Implement based on keywords: binary, convert, decimal\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_smallest_missing_find_missing",
+      "pattern_keywords": [
+        "smallest_missing",
+        "find_missing",
+        "sort",
+        "array",
+        "sorted",
+        "number",
+        "find",
+        "smallest",
+        "missing",
+        "element"
+      ],
+      "pattern_regex": "smallest_missing.*|find_missing.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the missing number in a sorted array.\n\nFunction ...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: smallest_missing, find_missing, sort, array, sorted\n    return sorted(lst)\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_gcd_find_gcd",
+      "pattern_keywords": [
+        "gcd",
+        "find_gcd",
+        "array",
+        "two",
+        "positive",
+        "integers",
+        "find",
+        "elements"
+      ],
+      "pattern_regex": "gcd.*|find_gcd.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the gcd of the given array elements.\n\nFunction name sho...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: gcd, find_gcd, array, two, positive\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_check_check_type",
+      "pattern_keywords": [
+        "check",
+        "check_type",
+        "data",
+        "tuple",
+        "equal",
+        "whether",
+        "same",
+        "find_equal_tuple",
+        "type",
+        "find"
+      ],
+      "pattern_regex": "check.*|check_type.*|data.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find whether all the given tuples have equal length or not.\n...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: check, check_type, data, tuple, equal\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_length_tuple",
+      "pattern_keywords": [
+        "length",
+        "tuple",
+        "find",
+        "remove",
+        "remove_tuples",
+        "all",
+        "list",
+        "divisible",
+        "tuples",
+        "find_tuples"
+      ],
+      "pattern_regex": "length.*|tuple.*|find.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find tuples which have all elements divisible by k from the ...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: length, tuple, find, remove, remove_tuples\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_centered_hexagonal",
+      "pattern_keywords": [
+        "centered",
+        "hexagonal",
+        "number",
+        "find",
+        "centered_hexagonal_number",
+        "nth",
+        "hexagonal_num"
+      ],
+      "pattern_regex": "centered.*|hexagonal.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find nth centered hexagonal number.\n\nFunction name should be...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: centered, hexagonal, number, find, centered_hexagonal_number\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_each_second",
+      "pattern_keywords": [
+        "each",
+        "second",
+        "sort",
+        "string",
+        "lists",
+        "using",
+        "strings",
+        "sort_sublists",
+        "according",
+        "sublist"
+      ],
+      "pattern_regex": "each.*|second.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to sort each sublist of strings in a given list of lists using ...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: each, second, sort, string, lists\n    return sorted(lst)\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_extract_freq_assign_freq",
+      "pattern_keywords": [
+        "extract_freq",
+        "assign_freq",
+        "tuple",
+        "each",
+        "assign",
+        "extract",
+        "unique",
+        "order",
+        "frequency",
+        "list"
+      ],
+      "pattern_regex": "extract_freq.*|assign_freq.*|tuple.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to assign frequency to each tuple in the given tuple list.\n\nFun...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: extract_freq, assign_freq, tuple, each, assign\n    return list(set(lst))\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_max_path_sum",
+      "pattern_keywords": [
+        "maximum",
+        "max_path_sum",
+        "right",
+        "sum",
+        "max_sum",
+        "path",
+        "number",
+        "find",
+        "numbers",
+        "triangle"
+      ],
+      "pattern_regex": "maximum.*|max_path_sum.*|right.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the maximum total path sum in the given triangle.\n\nFunc...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, max_path_sum, right, sum, max_sum\n    return sum(n)\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_check_month",
+      "pattern_keywords": [
+        "check",
+        "month",
+        "check_monthnumber",
+        "contains",
+        "check_monthnumb_number",
+        "whether",
+        "days",
+        "number",
+        "not"
+      ],
+      "pattern_regex": "check.*|month.*|check_monthnumber.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to check whether the given month name contains 30 days or not.\n...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: check, month, check_monthnumber, contains, check_monthnumb_number\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_convert_decimal",
+      "pattern_keywords": [
+        "convert",
+        "decimal",
+        "octal",
+        "number",
+        "decimal_to_octal",
+        "octal_to_decimal"
+      ],
+      "pattern_regex": "convert.*|decimal.*|octal.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to convert octal number to decimal number.\n\nFunction nam...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: convert, decimal, octal, number, decimal_to_octal\n    # Implement based on keywords: convert, decimal, octal\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_minimum",
+      "pattern_keywords": [
+        "maximum",
+        "minimum",
+        "values",
+        "find",
+        "positions",
+        "position_max",
+        "list",
+        "index",
+        "position_min",
+        "all"
+      ],
+      "pattern_regex": "maximum.*|minimum.*|values.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find all index positions of the maximum values in a given li...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, minimum, values, find, positions\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_tuple_string",
+      "pattern_keywords": [
+        "tuple",
+        "string",
+        "concatenate",
+        "into",
+        "concatenate_elements",
+        "all",
+        "adjacent",
+        "perform",
+        "list",
+        "tuples"
+      ],
+      "pattern_regex": "tuple.*|string.*|concatenate.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to perform the adjacent element concatenation in the given tupl...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: tuple, string, concatenate, into, concatenate_elements\n    # Implement based on keywords: tuple, string, concatenate\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_minimum_two",
+      "pattern_keywords": [
+        "minimum",
+        "two",
+        "min_of_three",
+        "three",
+        "number",
+        "find",
+        "numbers"
+      ],
+      "pattern_regex": "minimum.*|two.*|min_of_three.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find minimum of three numbers.\n\nFunction name should be: min...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: minimum, two, min_of_three, three, number\n    return min(n) if n else None\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_count_string",
+      "pattern_keywords": [
+        "count",
+        "string",
+        "characters",
+        "frequency",
+        "char_frequency",
+        "character",
+        "count_charac",
+        "total"
+      ],
+      "pattern_regex": "count.*|string.*|characters.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to count total characters in a string.\n\nFunction name should be...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: count, string, characters, frequency, char_frequency\n    return len(s)\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_having",
+      "pattern_keywords": [
+        "maximum",
+        "having",
+        "find_max",
+        "find",
+        "max_length",
+        "sublist",
+        "list",
+        "lists",
+        "length"
+      ],
+      "pattern_regex": "maximum.*|having.*|find_max.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the list of lists with maximum length.\n\nFunction name s...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, having, find_max, find, max_length\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_minimum",
+      "pattern_keywords": [
+        "maximum",
+        "minimum",
+        "find",
+        "max_val",
+        "list",
+        "value",
+        "min_val",
+        "heterogeneous"
+      ],
+      "pattern_regex": "maximum.*|minimum.*|find.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the maximum value in a given heterogeneous list.\n\nFunct...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, minimum, find, max_val, list\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_sum",
+      "pattern_keywords": [
+        "maximum",
+        "sum",
+        "volume_cuboid",
+        "cuboid",
+        "volume",
+        "find",
+        "max_volume",
+        "sides"
+      ],
+      "pattern_regex": "maximum.*|sum.*|volume_cuboid.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find the maximum volume of a cuboid with given sum of...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, sum, volume_cuboid, cuboid, volume\n    return sum(*args)\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_binomial_compute",
+      "pattern_keywords": [
+        "binomial",
+        "compute",
+        "ncr_modp",
+        "probability",
+        "number",
+        "value",
+        "ncr"
+      ],
+      "pattern_regex": "binomial.*|compute.*|ncr_modp.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to compute the value of ncr%p.\n\nFunction name should be: ncr_mo...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: binomial, compute, ncr_modp, probability, number\n    # Implement based on keywords: binomial, compute, ncr_modp\n    pass\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_maximum_subsequence",
+      "pattern_keywords": [
+        "maximum",
+        "subsequence",
+        "formed",
+        "multiply",
+        "product",
+        "array",
+        "multiplying",
+        "max_subarray_product",
+        "increasing",
+        "subarray"
+      ],
+      "pattern_regex": "maximum.*|subsequence.*|formed.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the maximum product subarray of the given array.\n\nFunct...\"\"\"\n    # Auto-learned template from 2 similar failures\n    # Keywords: maximum, subsequence, formed, multiply, product\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 2 similar failure(s)",
+      "examples": [],
+      "confidence": 0.4,
+      "source": "proactive_learning",
+      "frequency": 2
+    },
+    {
+      "name": "auto_occur_find",
+      "pattern_keywords": [
+        "occur",
+        "find",
+        "sort",
+        "using",
+        "frequently",
+        "algorithm",
+        "sorted",
+        "integers",
+        "distinct",
+        "list"
+      ],
+      "pattern_regex": "occur.*|find.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the top k integers that occur most frequently from give...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: occur, find, sort, using, frequently\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_different",
+      "pattern_keywords": [
+        "check",
+        "different",
+        "string",
+        "rearranged",
+        "characters",
+        "adjacent",
+        "letters",
+        "that"
+      ],
+      "pattern_regex": "check.*|different.*|string.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to check if the letters of a given string can be rearranged so ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, different, string, rearranged, characters\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_find_sum_array",
+      "pattern_keywords": [
+        "find_sum",
+        "array",
+        "sum",
+        "repeated",
+        "find",
+        "elements"
+      ],
+      "pattern_regex": "find_sum.*|array.*|sum.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the sum of repeated elements in a given array.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: find_sum, array, sum, repeated, find\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_first",
+      "pattern_keywords": [
+        "check",
+        "first",
+        "equal",
+        "last",
+        "string",
+        "whether",
+        "characters",
+        "check_equality"
+      ],
+      "pattern_regex": "check.*|first.*|equal.*",
+      "template_code": "def to(s):\n    \"\"\"Write a python function to check whether the first and last characters of a give...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, first, equal, last, string\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_is_octagonal_octagonal",
+      "pattern_keywords": [
+        "is_octagonal",
+        "octagonal",
+        "number",
+        "find",
+        "nth"
+      ],
+      "pattern_regex": "is_octagonal.*|octagonal.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the nth octagonal number.\n\nFunction name should be: is_...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: is_octagonal, octagonal, number, find, nth\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_subsequence",
+      "pattern_keywords": [
+        "maximum",
+        "subsequence",
+        "between",
+        "array",
+        "difference",
+        "adjacent",
+        "find",
+        "elements",
+        "length"
+      ],
+      "pattern_regex": "maximum.*|subsequence.*|between.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the maximum length of the subsequence with difference b...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, subsequence, between, array, difference\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_substrings_count",
+      "pattern_keywords": [
+        "count_substrings",
+        "count",
+        "digits",
+        "equal",
+        "string",
+        "sum",
+        "their",
+        "substrings",
+        "number",
+        "length"
+      ],
+      "pattern_regex": "count_substrings.*|count.*|digits.*",
+      "template_code": "def to(s):\n    \"\"\"Write a python function to count number of substrings with the sum of digits equ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count_substrings, count, digits, equal, string\n    return sum(s)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_tuple_sort",
+      "pattern_keywords": [
+        "tuple",
+        "sort",
+        "using",
+        "subject_marks",
+        "list",
+        "tuples",
+        "lambda"
+      ],
+      "pattern_regex": "tuple.*|sort.*|using.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to sort a list of tuples using lambda.\n\nFunction name should be...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: tuple, sort, using, subject_marks, list\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_recursion_sum",
+      "pattern_keywords": [
+        "recursion",
+        "sum",
+        "recursive_list_sum",
+        "list"
+      ],
+      "pattern_regex": "recursion.*|sum.*|recursive_list_sum.*",
+      "template_code": "def of(lst):\n    \"\"\"Write a function of recursion list sum.\n\nFunction name should be: recursive_list...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: recursion, sum, recursive_list_sum, list\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_multiple_split_string",
+      "pattern_keywords": [
+        "multiple_split",
+        "string",
+        "using",
+        "regex",
+        "multiple",
+        "delimiters",
+        "split"
+      ],
+      "pattern_regex": "multiple_split.*|string.*|using.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to split the given string with multiple delimiters by using reg...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: multiple_split, string, using, regex, multiple\n    # Implement based on keywords: multiple_split, string, using\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_tetrahedral_tetrahedral_number",
+      "pattern_keywords": [
+        "tetrahedral",
+        "tetrahedral_number",
+        "number",
+        "find",
+        "nth"
+      ],
+      "pattern_regex": "tetrahedral.*|tetrahedral_number.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the nth tetrahedral number.\n\nFunction name should be: t...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: tetrahedral, tetrahedral_number, number, find, nth\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_specified_palindrome",
+      "pattern_keywords": [
+        "specified",
+        "palindrome",
+        "number",
+        "next_smallest_palindrome",
+        "find",
+        "next",
+        "smallest"
+      ],
+      "pattern_regex": "specified.*|palindrome.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the next smallest palindrome of a specified number.\n\nFu...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: specified, palindrome, number, next_smallest_palindrome, find\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_hexadecimal",
+      "pattern_keywords": [
+        "count",
+        "hexadecimal",
+        "range",
+        "count_hexadecimal",
+        "number",
+        "numbers"
+      ],
+      "pattern_regex": "count.*|hexadecimal.*|range.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to count hexadecimal numbers for a given range.\n\nFunctio...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, hexadecimal, range, count_hexadecimal, number\n    return len(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_merge_sorted_list_sort",
+      "pattern_keywords": [
+        "merge_sorted_list",
+        "sort",
+        "sorted",
+        "algorithm",
+        "inputs",
+        "multiple",
+        "single",
+        "list",
+        "iterator",
+        "merge"
+      ],
+      "pattern_regex": "merge_sorted_list.*|sort.*|sorted.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to merge multiple sorted inputs into a single sorted iterator u...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: merge_sorted_list, sort, sorted, algorithm, inputs\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_item_find",
+      "pattern_keywords": [
+        "item",
+        "find",
+        "common_in_ne",
+        "list",
+        "nested",
+        "lists",
+        "common",
+        "elements"
+      ],
+      "pattern_regex": "item.*|find.*|common_in_ne.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find common elements in given nested lists. * list item * li...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: item, find, common_in_ne, list, nested\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_perimeter_cylinder",
+      "pattern_keywords": [
+        "perimeter",
+        "cylinder",
+        "find"
+      ],
+      "pattern_regex": "perimeter.*|cylinder.*|find.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find the perimeter of a cylinder.\n\nFunction name shou...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: perimeter, cylinder, find\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_dictionaries",
+      "pattern_keywords": [
+        "check",
+        "dictionaries",
+        "empty",
+        "whether",
+        "empty_dit",
+        "list",
+        "not",
+        "all"
+      ],
+      "pattern_regex": "check.*|dictionaries.*|empty.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to check whether all dictionaries in a list are empty or not.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, dictionaries, empty, whether, empty_dit\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_convert_text",
+      "pattern_keywords": [
+        "convert",
+        "text",
+        "string",
+        "link",
+        "string_to_l",
+        "list",
+        "https"
+      ],
+      "pattern_regex": "convert.*|text.*|string.*",
+      "template_code": "def to(lst):\n    \"\"\"[link text](https:// [link text](https:// [link text](https://)))write a functio...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: convert, text, string, link, string_to_l\n    # Implement based on keywords: convert, text, string\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_only_appears",
+      "pattern_keywords": [
+        "only",
+        "appears",
+        "sort",
+        "array",
+        "sorted",
+        "find",
+        "search",
+        "element",
+        "that"
+      ],
+      "pattern_regex": "only.*|appears.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the element that appears only once in a sorted a...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: only, appears, sort, array, sorted\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_binary",
+      "pattern_keywords": [
+        "maximum",
+        "binary",
+        "between",
+        "string",
+        "difference",
+        "any",
+        "number",
+        "find"
+      ],
+      "pattern_regex": "maximum.*|binary.*|between.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to find the maximum difference between the number of 0s and num...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, binary, between, string, difference\n    return max(s) if s else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_than_longer",
+      "pattern_keywords": [
+        "than",
+        "longer",
+        "words",
+        "shortlist",
+        "list",
+        "long_words",
+        "that"
+      ],
+      "pattern_regex": "than.*|longer.*|words.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to shortlist words that are longer than n from a given list of ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: than, longer, words, shortlist, list\n    # Implement based on keywords: than, longer, words\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_only_reverse_vowels",
+      "pattern_keywords": [
+        "only",
+        "reverse_vowels",
+        "string",
+        "reverse",
+        "vowels"
+      ],
+      "pattern_regex": "only.*|reverse_vowels.*|string.*",
+      "template_code": "def to(s):\n    \"\"\"Write a python function to reverse only the vowels of a given string.\n\nFunction ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: only, reverse_vowels, string, reverse, vowels\n    return s[::-1]\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_times",
+      "pattern_keywords": [
+        "check",
+        "times",
+        "after",
+        "last",
+        "array",
+        "performing",
+        "whether",
+        "even",
+        "operation",
+        "odd"
+      ],
+      "pattern_regex": "check.*|times.*|after.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to check whether the last element of given array is even...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, times, after, last, array\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_between",
+      "pattern_keywords": [
+        "maximum",
+        "between",
+        "array",
+        "difference",
+        "any",
+        "max_abs_diff",
+        "find",
+        "elements"
+      ],
+      "pattern_regex": "maximum.*|between.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the maximum difference between any two elements ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, between, array, difference, any\n    return max(lst) if lst else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_gcd",
+      "pattern_keywords": [
+        "check",
+        "gcd",
+        "whether",
+        "number",
+        "not",
+        "prime"
+      ],
+      "pattern_regex": "check.*|gcd.*|whether.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to check whether the given number is co-prime or not.\n\nF...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, gcd, whether, number, not\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_than_equal",
+      "pattern_keywords": [
+        "than",
+        "equal",
+        "find",
+        "next_power_of_2",
+        "greater",
+        "power",
+        "smallest"
+      ],
+      "pattern_regex": "than.*|equal.*|find.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find smallest power of 2 greater than or equal to n.\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: than, equal, find, next_power_of_2, greater\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_get_pell_get",
+      "pattern_keywords": [
+        "get_pell",
+        "get",
+        "calculate",
+        "number",
+        "nth",
+        "pell"
+      ],
+      "pattern_regex": "get_pell.*|get.*|calculate.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to calculate the nth pell number.\n\nFunction name should be: get...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: get_pell, get, calculate, number, nth\n    # Implement based on keywords: get_pell, get, calculate\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_perimeter_pentagon_perimeter",
+      "pattern_keywords": [
+        "perimeter_pentagon",
+        "perimeter",
+        "pentagon",
+        "find"
+      ],
+      "pattern_regex": "perimeter_pentagon.*|perimeter.*|pentagon.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the perimeter of a pentagon.\n\nFunction name should be: ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: perimeter_pentagon, perimeter, pentagon, find\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_perimeter_perimeter_triangle",
+      "pattern_keywords": [
+        "perimeter",
+        "perimeter_triangle",
+        "triangle",
+        "find"
+      ],
+      "pattern_regex": "perimeter.*|perimeter_triangle.*|triangle.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the perimeter of a triangle.\n\nFunction name should be: ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: perimeter, perimeter_triangle, triangle, find\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_such_within",
+      "pattern_keywords": [
+        "such",
+        "within",
+        "their",
+        "range",
+        "number",
+        "distinct",
+        "find",
+        "lcm",
+        "answer",
+        "numbers"
+      ],
+      "pattern_regex": "such.*|within.*|their.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find two distinct numbers such that their lcm lies wi...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: such, within, their, range, number\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_positive",
+      "pattern_keywords": [
+        "first",
+        "positive",
+        "number",
+        "find",
+        "missing",
+        "first_missing_positive"
+      ],
+      "pattern_regex": "first.*|positive.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find the first missing positive number.\n\nFunction nam...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, positive, number, find, missing\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_sort",
+      "pattern_keywords": [
+        "first",
+        "sort",
+        "array",
+        "sorted",
+        "position",
+        "find",
+        "element"
+      ],
+      "pattern_regex": "first.*|sort.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the first position of an element in a sorted arr...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, sort, array, sorted, position\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_count_num",
+      "pattern_keywords": [
+        "count",
+        "count_num",
+        "whose",
+        "oth",
+        "number",
+        "bits",
+        "nth",
+        "numbers",
+        "set"
+      ],
+      "pattern_regex": "count.*|count_num.*|whose.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to count numbers whose oth and nth bits are set.\n\nFuncti...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, count_num, whose, oth, number\n    return len(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_minimum_equal",
+      "pattern_keywords": [
+        "minimum",
+        "equal",
+        "min_operations",
+        "operations",
+        "number",
+        "required",
+        "find",
+        "numbers",
+        "make"
+      ],
+      "pattern_regex": "minimum.*|equal.*|min_operations.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find the minimum operations required to make two numb...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: minimum, equal, min_operations, operations, number\n    return min(n) if n else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_minimum",
+      "pattern_keywords": [
+        "maximum",
+        "minimum",
+        "tuple",
+        "extract",
+        "elements",
+        "extract_min_max"
+      ],
+      "pattern_regex": "maximum.*|minimum.*|tuple.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to extract maximum and minimum k elements in the given tuple.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, minimum, tuple, extract, elements\n    return max(*args) if *args else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_dots",
+      "pattern_keywords": [
+        "maximum",
+        "dots",
+        "commas",
+        "spaces",
+        "replace_max_specialchar",
+        "occurrences",
+        "replace",
+        "occurrence",
+        "colon"
+      ],
+      "pattern_regex": "maximum.*|dots.*|commas.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to replace maximum n occurrences of spaces, commas, or dots wit...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, dots, commas, spaces, replace_max_specialchar\n    return max(*args) if *args else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_minimum_rotated",
+      "pattern_keywords": [
+        "minimum",
+        "rotated",
+        "sort",
+        "array",
+        "sorted",
+        "find_min",
+        "find",
+        "element"
+      ],
+      "pattern_regex": "minimum.*|rotated.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the minimum element in a sorted and rotated arra...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: minimum, rotated, sort, array, sorted\n    return min(lst) if lst else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_tuple",
+      "pattern_keywords": [
+        "first",
+        "tuple",
+        "sort",
+        "based",
+        "sort_on_occurence",
+        "tuples",
+        "list",
+        "occurrence",
+        "element"
+      ],
+      "pattern_regex": "first.*|tuple.*|sort.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to sort the given list based on the occurrence of first element...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, tuple, sort, based, sort_on_occurence\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_array",
+      "pattern_keywords": [
+        "maximum",
+        "array",
+        "sum",
+        "sequence",
+        "max_sum",
+        "sub",
+        "find",
+        "tonic"
+      ],
+      "pattern_regex": "maximum.*|array.*|sum.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the maximum sum of bi-tonic sub-sequence for the given ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, array, sum, sequence, max_sum\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_string_words",
+      "pattern_keywords": [
+        "string",
+        "words",
+        "starting",
+        "find",
+        "words_ae",
+        "all"
+      ],
+      "pattern_regex": "string.*|words.*|starting.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to find all words starting with 'a' or 'e' in a given string.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: string, words, starting, find, words_ae\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_than",
+      "pattern_keywords": [
+        "count",
+        "than",
+        "count_primes_nums",
+        "negative",
+        "number",
+        "numbers",
+        "less",
+        "prime"
+      ],
+      "pattern_regex": "count.*|than.*|count_primes_nums.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to count the number of prime numbers less than a given n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, than, count_primes_nums, negative, number\n    return len(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_williams_shanks",
+      "pattern_keywords": [
+        "williams",
+        "shanks",
+        "newman",
+        "newman_prime",
+        "number",
+        "find",
+        "nth",
+        "prime"
+      ],
+      "pattern_regex": "williams.*|shanks.*|newman.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the nth newman\u2013shanks\u2013williams prime number.\n\nFunction ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: williams, shanks, newman, newman_prime, number\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_sum_binomial",
+      "pattern_keywords": [
+        "sum",
+        "binomial",
+        "coefficients",
+        "even_binomial_coeff_sum",
+        "even",
+        "find",
+        "index"
+      ],
+      "pattern_regex": "sum.*|binomial.*|coefficients.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find sum of even index binomial coefficients.\n\nFuncti...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: sum, binomial, coefficients, even_binomial_coeff_sum, even\n    return sum(*args)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_remove_last",
+      "pattern_keywords": [
+        "remove",
+        "last",
+        "array",
+        "get_position",
+        "get",
+        "position",
+        "find",
+        "element",
+        "removed"
+      ],
+      "pattern_regex": "remove.*|last.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the position of the last removed element from th...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: remove, last, array, get_position, get\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_values_dict_filter",
+      "pattern_keywords": [
+        "values",
+        "dict_filter",
+        "based",
+        "filter",
+        "dictionary"
+      ],
+      "pattern_regex": "values.*|dict_filter.*|based.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to filter a dictionary based on values.\n\nFunction name should b...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: values, dict_filter, based, filter, dictionary\n    return [x for x in *args if x]\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_first",
+      "pattern_keywords": [
+        "count",
+        "first",
+        "tuple",
+        "occurs",
+        "before",
+        "record",
+        "count_first_elements",
+        "find",
+        "element"
+      ],
+      "pattern_regex": "count.*|first.*|tuple.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the element count that occurs before the record in the ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, first, tuple, occurs, before\n    return len(*args)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_decagonal_number",
+      "pattern_keywords": [
+        "decagonal",
+        "number",
+        "find",
+        "nth",
+        "is_num_decagonal"
+      ],
+      "pattern_regex": "decagonal.*|number.*|find.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the nth decagonal number.\n\nFunction name should be: is_...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: decagonal, number, find, nth, is_num_decagonal\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_equal",
+      "pattern_keywords": [
+        "check",
+        "equal",
+        "validate",
+        "digit",
+        "whether",
+        "frequency",
+        "itself",
+        "each"
+      ],
+      "pattern_regex": "check.*|equal.*|validate.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to check whether the frequency of each digit is less tha...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, equal, validate, digit, whether\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_times_formed",
+      "pattern_keywords": [
+        "times",
+        "formed",
+        "array",
+        "sum",
+        "modified",
+        "largest",
+        "contiguous",
+        "repeating",
+        "find",
+        "which"
+      ],
+      "pattern_regex": "times.*|formed.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the largest sum of contiguous array in the modified arr...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: times, formed, array, sum, modified\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_subsequence",
+      "pattern_keywords": [
+        "maximum",
+        "subsequence",
+        "prefix",
+        "including",
+        "sum",
+        "increasing",
+        "find",
+        "index",
+        "element",
+        "which"
+      ],
+      "pattern_regex": "maximum.*|subsequence.*|prefix.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the maximum sum of increasing subsequence from prefix t...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, subsequence, prefix, including, sum\n    return sum(*args)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_two",
+      "pattern_keywords": [
+        "maximum",
+        "two",
+        "number",
+        "find",
+        "numbers"
+      ],
+      "pattern_regex": "maximum.*|two.*|number.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find the maximum of two numbers.\n\nFunction name shoul...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, two, number, find, numbers\n    return max(n) if n else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_print_positive",
+      "pattern_keywords": [
+        "print",
+        "positive",
+        "list",
+        "number",
+        "pos_nos",
+        "numbers"
+      ],
+      "pattern_regex": "print.*|positive.*|list.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to print positive numbers in a list.\n\nFunction name shou...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: print, positive, list, number, pos_nos\n    # Implement based on keywords: print, positive, list\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_dimension",
+      "pattern_keywords": [
+        "maximum",
+        "dimension",
+        "chosen",
+        "rectangular",
+        "sum",
+        "such",
+        "number",
+        "adjacent",
+        "find",
+        "numbers"
+      ],
+      "pattern_regex": "maximum.*|dimension.*|chosen.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find out the maximum sum such that no two chosen numbers are...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, dimension, chosen, rectangular, sum\n    return sum(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_first",
+      "pattern_keywords": [
+        "maximum",
+        "first",
+        "word",
+        "even",
+        "find_max_len_even",
+        "find",
+        "length"
+      ],
+      "pattern_regex": "maximum.*|first.*|word.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find the first maximum length of even word.\n\nFunction...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, first, word, even, find_max_len_even\n    return max(*args) if *args else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_last_sort",
+      "pattern_keywords": [
+        "last",
+        "sort",
+        "array",
+        "sorted",
+        "find_last_occurrence",
+        "number",
+        "find",
+        "occurrence",
+        "index"
+      ],
+      "pattern_regex": "last.*|sort.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the index of the last occurrence of a given number in a...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: last, sort, array, sorted, find_last_occurrence\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_minimum_get_min_squares",
+      "pattern_keywords": [
+        "minimum",
+        "get_min_squares",
+        "equal",
+        "sum",
+        "whose",
+        "get",
+        "number",
+        "find",
+        "squares"
+      ],
+      "pattern_regex": "minimum.*|get_min_squares.*|equal.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find the minimum number of squares whose sum is equal...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: minimum, get_min_squares, equal, sum, whose\n    return sum(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_neg_count",
+      "pattern_keywords": [
+        "count",
+        "neg_count",
+        "negative",
+        "number",
+        "list",
+        "numbers"
+      ],
+      "pattern_regex": "count.*|neg_count.*|negative.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to count negative numbers in a list.\n\nFunction name shou...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, neg_count, negative, number, list\n    return len(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_string_words",
+      "pattern_keywords": [
+        "string",
+        "words",
+        "using",
+        "three",
+        "characters",
+        "regex",
+        "find",
+        "find_char"
+      ],
+      "pattern_regex": "string.*|words.*|using.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to find all three, four, five characters long words in the give...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: string, words, using, three, characters\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_occuring",
+      "pattern_keywords": [
+        "maximum",
+        "occuring",
+        "divisor",
+        "interval",
+        "find",
+        "find_divisor"
+      ],
+      "pattern_regex": "maximum.*|occuring.*|divisor.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a python function to find the maximum occuring divisor in an interval.\n\nFu...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, occuring, divisor, interval, find\n    return max(*args) if *args else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_find_sum_three_smalles",
+      "pattern_keywords": [
+        "find",
+        "sum_three_smalles",
+        "sum",
+        "positive",
+        "three",
+        "number",
+        "list",
+        "numbers",
+        "lowest"
+      ],
+      "pattern_regex": "find.*|sum_three_smalles.*|sum.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the sum of the three lowest positive numbers fro...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: find, sum_three_smalles, sum, positive, three\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_arrays_includes",
+      "pattern_keywords": [
+        "arrays",
+        "includes",
+        "array",
+        "range",
+        "__init__",
+        "least",
+        "find",
+        "smallest",
+        "element"
+      ],
+      "pattern_regex": "arrays.*|includes.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the smallest range that includes at-least one element f...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: arrays, includes, array, range, __init__\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_times",
+      "pattern_keywords": [
+        "first",
+        "times",
+        "occurring",
+        "first_element",
+        "array",
+        "find",
+        "element"
+      ],
+      "pattern_regex": "first.*|times.*|occurring.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the first element occurring k times in a given a...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, times, occurring, first_element, array\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_round_num_specific",
+      "pattern_keywords": [
+        "round_num",
+        "specific",
+        "round",
+        "multiple",
+        "number",
+        "nearest"
+      ],
+      "pattern_regex": "round_num.*|specific.*|round.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to round the given number to the nearest multiple of a specific...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: round_num, specific, round, multiple, number\n    # Implement based on keywords: round_num, specific, round\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_index_on_inner_list_sort",
+      "pattern_keywords": [
+        "index_on_inner_list",
+        "sort",
+        "inner",
+        "list",
+        "index",
+        "lists"
+      ],
+      "pattern_regex": "index_on_inner_list.*|sort.*|inner.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to sort a list of lists by a given index of the inner list.\n\nFu...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: index_on_inner_list, sort, inner, list, index\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_circularly_count",
+      "pattern_keywords": [
+        "circularly",
+        "count",
+        "rotations",
+        "sort",
+        "array",
+        "find_rotation_count",
+        "sorted",
+        "number",
+        "find"
+      ],
+      "pattern_regex": "circularly.*|count.*|rotations.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the number of rotations in a circularly sorted array.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: circularly, count, rotations, sort, array\n    return len(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_array_frequency",
+      "pattern_keywords": [
+        "array",
+        "frequency",
+        "find",
+        "smallest",
+        "frequency_of_smallest",
+        "value"
+      ],
+      "pattern_regex": "array.*|frequency.*|find.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the frequency of the smallest value in a given a...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: array, frequency, find, smallest, frequency_of_smallest\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_minimum_count",
+      "pattern_keywords": [
+        "minimum",
+        "count",
+        "string",
+        "swaps",
+        "swap_count",
+        "bracket",
+        "required",
+        "find",
+        "balancing"
+      ],
+      "pattern_regex": "minimum.*|count.*|string.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to find out the minimum no of swaps required for bracket balanc...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: minimum, count, string, swaps, swap_count\n    return len(s)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_sum",
+      "pattern_keywords": [
+        "maximum",
+        "sum",
+        "using",
+        "equation",
+        "possible",
+        "find",
+        "max",
+        "shou"
+      ],
+      "pattern_regex": "maximum.*|sum.*|using.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the maximum sum possible by using the given equation f(...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, sum, using, equation, possible\n    return sum(*args)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_string",
+      "pattern_keywords": [
+        "first",
+        "string",
+        "first_non_repeating_character",
+        "repeated",
+        "character",
+        "non",
+        "find"
+      ],
+      "pattern_regex": "first.*|string.*|first_non_repeating_character.*",
+      "template_code": "def to(s):\n    \"\"\"Write a python function to find the first non-repeated character in a given stri...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, string, first_non_repeating_character, repeated, character\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_pairs",
+      "pattern_keywords": [
+        "first",
+        "pairs",
+        "second",
+        "array",
+        "consist",
+        "number",
+        "find",
+        "one",
+        "element",
+        "which"
+      ],
+      "pattern_regex": "first.*|pairs.*|second.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find k number of pairs which consist of one element from the...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, pairs, second, array, consist\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_minimum_tuple",
+      "pattern_keywords": [
+        "minimum",
+        "tuple",
+        "pairs",
+        "find",
+        "product",
+        "within",
+        "min_product_tuple",
+        "list",
+        "tuples"
+      ],
+      "pattern_regex": "minimum.*|tuple.*|pairs.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the minimum product from the pairs of tuples within a g...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: minimum, tuple, pairs, find, product\n    return min(lst) if lst else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_convert_string",
+      "pattern_keywords": [
+        "convert",
+        "string",
+        "snake",
+        "using",
+        "camel",
+        "snake_to_camel",
+        "regex",
+        "case"
+      ],
+      "pattern_regex": "convert.*|string.*|snake.*",
+      "template_code": "def to(s):\n    \"\"\"Write a function to convert the given snake case string to camel case string by ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: convert, string, snake, using, camel\n    # Implement based on keywords: convert, string, snake\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_tuple_extract",
+      "pattern_keywords": [
+        "tuple",
+        "extract",
+        "list",
+        "extract_nth_element",
+        "nth",
+        "tuples",
+        "element"
+      ],
+      "pattern_regex": "tuple.*|extract.*|list.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to extract the nth element from a given list of tuples.\n\nFuncti...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: tuple, extract, list, extract_nth_element, nth\n    # Implement based on keywords: tuple, extract, list\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_parts",
+      "pattern_keywords": [
+        "maximum",
+        "parts",
+        "sum",
+        "together",
+        "three",
+        "get",
+        "dividing",
+        "recursively",
+        "number",
+        "find"
+      ],
+      "pattern_regex": "maximum.*|parts.*|sum.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to find the maximum sum we can make by dividing number in three...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, parts, sum, together, three\n    return sum(n)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_first_tuple",
+      "pattern_keywords": [
+        "first",
+        "tuple",
+        "find",
+        "common",
+        "group_tuples",
+        "list",
+        "element"
+      ],
+      "pattern_regex": "first.*|tuple.*|find.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find common first element in given list of tuple.\n\nFunction ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: first, tuple, find, common, group_tuples\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_sum_print",
+      "pattern_keywords": [
+        "sum",
+        "print",
+        "round",
+        "number",
+        "list",
+        "multiplied",
+        "numbers",
+        "every",
+        "length"
+      ],
+      "pattern_regex": "sum.*|print.*|round.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to round every number of a given list of numbers and print the ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: sum, print, round, number, list\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_filter_oddnumbers_using",
+      "pattern_keywords": [
+        "filter_oddnumbers",
+        "using",
+        "filter",
+        "number",
+        "odd",
+        "lambda",
+        "numbers"
+      ],
+      "pattern_regex": "filter_oddnumbers.*|using.*|filter.*",
+      "template_code": "def to(n):\n    \"\"\"Write a function to filter odd numbers using lambda function.\n\nFunction name sho...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: filter_oddnumbers, using, filter, number, odd\n    return [x for x in n if x]\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_convert_multiple_to_single",
+      "pattern_keywords": [
+        "convert",
+        "multiple_to_single",
+        "integers",
+        "into",
+        "multiple",
+        "single",
+        "list",
+        "integer"
+      ],
+      "pattern_regex": "convert.*|multiple_to_single.*|integers.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to convert a list of multiple integers into a single integer.\n\n...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: convert, multiple_to_single, integers, into, multiple\n    # Implement based on keywords: convert, multiple_to_single, integers\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_positive_count",
+      "pattern_keywords": [
+        "count",
+        "positive_count",
+        "array",
+        "positive",
+        "integers",
+        "ration",
+        "number",
+        "find",
+        "numbers"
+      ],
+      "pattern_regex": "count.*|positive_count.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the ration of positive numbers in an array of integers....\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, positive_count, array, positive, integers\n    return len(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_count_tuple",
+      "pattern_keywords": [
+        "count",
+        "tuple",
+        "all",
+        "list",
+        "occurrence",
+        "count_occurrence",
+        "elements",
+        "occurence"
+      ],
+      "pattern_regex": "count.*|tuple.*|all.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to count the occurence of all elements of list in a tupl...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: count, tuple, all, list, occurrence\n    return len(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_values_string",
+      "pattern_keywords": [
+        "values",
+        "string",
+        "extract_string",
+        "give",
+        "extract",
+        "specified",
+        "strings",
+        "list",
+        "size"
+      ],
+      "pattern_regex": "values.*|string.*|extract_string.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to extract specified size of strings from a give list of string...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: values, string, extract_string, give, extract\n    # Implement based on keywords: values, string, extract_string\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_values_string",
+      "pattern_keywords": [
+        "values",
+        "string",
+        "reverse",
+        "strings",
+        "reverse_string_list",
+        "list"
+      ],
+      "pattern_regex": "values.*|string.*|reverse.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to reverse strings in a given list of string values.\n\nFunction ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: values, string, reverse, strings, reverse_string_list\n    return lst[::-1]\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_find_list",
+      "pattern_keywords": [
+        "find",
+        "list",
+        "combinations_list",
+        "possible",
+        "combinations",
+        "all",
+        "elements"
+      ],
+      "pattern_regex": "find.*|list.*|combinations_list.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find all possible combinations of the elements of a given li...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: find, list, combinations_list, possible, combinations\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_stock",
+      "pattern_keywords": [
+        "maximum",
+        "stock",
+        "max_profit",
+        "transactions",
+        "find",
+        "earned",
+        "profit"
+      ],
+      "pattern_regex": "maximum.*|stock.*|max_profit.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to find the maximum profit earned from a maximum of k stock tra...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, stock, max_profit, transactions, find\n    return max(*args) if *args else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_check_consecutive",
+      "pattern_keywords": [
+        "check",
+        "check_consecutive",
+        "contains",
+        "whether",
+        "list",
+        "not",
+        "number",
+        "consecutive",
+        "numbers"
+      ],
+      "pattern_regex": "check.*|check_consecutive.*|contains.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to check whether the given list contains consecutive num...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, check_consecutive, contains, whether, list\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_array_sum",
+      "pattern_keywords": [
+        "array",
+        "sum",
+        "largest",
+        "find",
+        "smallest",
+        "value",
+        "big_sum"
+      ],
+      "pattern_regex": "array.*|sum.*|largest.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a python function to find the sum of the largest and smallest value in a g...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: array, sum, largest, find, smallest\n    return sum(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_maximum_get_max_occuring_char",
+      "pattern_keywords": [
+        "maximum",
+        "get_max_occuring_char",
+        "string",
+        "occurring",
+        "get",
+        "character",
+        "find"
+      ],
+      "pattern_regex": "maximum.*|get_max_occuring_char.*|string.*",
+      "template_code": "def to(s):\n    \"\"\"Write a python function to find the maximum occurring character in a given strin...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: maximum, get_max_occuring_char, string, occurring, get\n    return max(s) if s else None\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_is_palindrome_array",
+      "pattern_keywords": [
+        "is_palindrome",
+        "array",
+        "largest",
+        "palindromic",
+        "palindrome",
+        "number",
+        "find"
+      ],
+      "pattern_regex": "is_palindrome.*|array.*|largest.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the largest palindromic number in the given array.\n\nFun...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: is_palindrome, array, largest, palindromic, palindrome\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_tuple_sort_tuple",
+      "pattern_keywords": [
+        "tuple",
+        "sort_tuple",
+        "last",
+        "sort",
+        "increasing",
+        "order",
+        "list",
+        "tuples",
+        "element"
+      ],
+      "pattern_regex": "tuple.*|sort_tuple.*|last.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to sort a list of tuples in increasing order by the last elemen...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: tuple, sort_tuple, last, sort, increasing\n    return sorted(lst)\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_binary_convert",
+      "pattern_keywords": [
+        "binary",
+        "convert",
+        "tuple",
+        "binary_to_integer",
+        "integer"
+      ],
+      "pattern_regex": "binary.*|convert.*|tuple.*",
+      "template_code": "def to(*args):\n    \"\"\"Write a function to convert the given binary tuple to integer.\n\nFunction name sh...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: binary, convert, tuple, binary_to_integer, integer\n    # Implement based on keywords: binary, convert, tuple\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_find_heap_queue_smallest",
+      "pattern_keywords": [
+        "find",
+        "heap_queue_smallest",
+        "using",
+        "algorithm",
+        "integers",
+        "queue",
+        "number",
+        "list",
+        "smallest",
+        "numbers"
+      ],
+      "pattern_regex": "find.*|heap_queue_smallest.*|using.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the smallest integers from a given list of numbers usin...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: find, heap_queue_smallest, using, algorithm, integers\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_between_gcd",
+      "pattern_keywords": [
+        "between",
+        "gcd",
+        "divisor",
+        "two",
+        "ngcd",
+        "number",
+        "find",
+        "numbers",
+        "common",
+        "pair"
+      ],
+      "pattern_regex": "between.*|gcd.*|divisor.*",
+      "template_code": "def to(n):\n    \"\"\"Write a python function to find common divisor between two numbers in a given pa...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: between, gcd, divisor, two, ngcd\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_check_between",
+      "pattern_keywords": [
+        "check",
+        "between",
+        "same_order",
+        "same",
+        "order",
+        "list",
+        "lists",
+        "common",
+        "elements"
+      ],
+      "pattern_regex": "check.*|between.*|same_order.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to check if the common elements between two given lists are in ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: check, between, same_order, same, order\n    # Check operation - implement based on test cases\n    return True\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    },
+    {
+      "name": "auto_having_product",
+      "pattern_keywords": [
+        "having",
+        "product",
+        "array",
+        "smaller",
+        "negative",
+        "subsequences",
+        "number",
+        "find",
+        "no_of_su"
+      ],
+      "pattern_regex": "having.*|product.*|array.*",
+      "template_code": "def to(lst):\n    \"\"\"Write a function to find the number of subsequences having product smaller than ...\"\"\"\n    # Auto-learned template from 1 similar failures\n    # Keywords: having, product, array, smaller, negative\n    # Find operation - implement based on test cases\n    pass\n",
+      "description": "Auto-learned from 1 similar failure(s)",
+      "examples": [],
+      "confidence": 0.35,
+      "source": "proactive_learning",
+      "frequency": 1
+    }
+  ],
+  "total_patterns": 122,
+  "total_candidates": 121
+}

@@ -7,16 +7,10 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 import logging
 import statistics
+
+logger = logging.getLogger(__name__)
+
 class PipelineTrustLevel(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Trust levels for pipelines."""
     UNTRUSTED = "untrusted"      # New or failing pipeline
     LOW = "low"                   # < 50% success rate

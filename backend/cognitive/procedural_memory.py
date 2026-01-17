@@ -2,11 +2,15 @@ from sqlalchemy import Column, String, Float, Integer, Text, JSON, ForeignKey
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
+from database.base import BaseModel
 import logging
 import json
 import numpy as np
+
+logger = logging.getLogger(__name__)
+
+
 class Procedure(BaseModel):
-    logger = logging.getLogger(__name__)
     """
     Learned procedure or skill.
 
@@ -96,6 +100,13 @@ class ProceduralRepository:
 
         self.session.add(procedure)
         self.session.commit()
+
+        # Auto-generate embedding if embedder is available
+        if self.embedder:
+            try:
+                self.generate_procedure_embedding(procedure)
+            except Exception as e:
+                logger.warning(f"[PROCEDURAL] Failed to generate embedding for new procedure: {e}")
 
         return procedure
 

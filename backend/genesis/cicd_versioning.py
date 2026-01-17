@@ -8,10 +8,10 @@ from enum import Enum
 from pathlib import Path
 import shutil
 import logging
+
+logger = logging.getLogger(__name__)
+
 class MutationType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of pipeline mutations."""
     CREATE = "create"
     UPDATE = "update"

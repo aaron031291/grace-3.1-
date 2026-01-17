@@ -189,7 +189,8 @@ class LearningProjectionTimeSense:
         category: str,
         current_topics: int,
         current_success_rate: float,
-        trajectory: Optional[LearningTrajectory] = None
+        trajectory: Optional[LearningTrajectory] = None,
+        target_level: str = "Expert"
     ) -> MasteryProjection:
         """
         Project when Grace will reach exceptional level.
@@ -198,14 +199,27 @@ class LearningProjectionTimeSense:
         - Current trajectory (velocity, acceleration)
         - TimeSense for cycle time estimates
         - Learning curve modeling
+        
+        Args:
+            target_level: "Expert", "Elite", or "Master"
         """
         # Determine current mastery
         current_mastery = self._get_mastery_level(current_topics, current_success_rate)
         
-        # Target: Expert level
-        target_mastery = "Expert"
-        target_topics = self.MASTERY_THRESHOLDS["Expert"]["topics"]
-        target_success_rate = self.MASTERY_THRESHOLDS["Expert"]["success_rate"]
+        # Target level (Expert, Elite, or Master)
+        if target_level == "Elite":
+            target_mastery = "Elite"
+            target_topics = self.EXCEPTIONAL_TARGETS["Elite"]["topics"]
+            target_success_rate = self.EXCEPTIONAL_TARGETS["Elite"]["success_rate"]
+        elif target_level == "Master":
+            target_mastery = "Master"
+            target_topics = self.EXCEPTIONAL_TARGETS["Master"]["topics"]
+            target_success_rate = self.EXCEPTIONAL_TARGETS["Master"]["success_rate"]
+        else:
+            # Default: Expert level
+            target_mastery = "Expert"
+            target_topics = self.MASTERY_THRESHOLDS["Expert"]["topics"]
+            target_success_rate = self.MASTERY_THRESHOLDS["Expert"]["success_rate"]
         
         # Project based on trajectory
         if trajectory:
@@ -230,6 +244,18 @@ class LearningProjectionTimeSense:
         # Apply acceleration (learning gets harder as you approach mastery)
         # Diminishing returns curve
         estimated_cycles = estimated_cycles / acceleration_factor if acceleration_factor > 0 else estimated_cycles
+        
+        # Apply additional diminishing returns for Elite/Master (98%+ is much harder)
+        if target_success_rate >= 0.98:
+            if current_success_rate >= 0.90:
+                # Already at 90%+, last few % points are much harder
+                remaining_gap = target_success_rate - current_success_rate
+                diminishing_factor = 1.0 + (remaining_gap * 2.0)  # Gets 2x harder per % point
+                estimated_cycles = estimated_cycles * diminishing_factor
+            elif current_success_rate >= 0.85:
+                # At 85-90%, slight diminishing returns
+                diminishing_factor = 1.0 + ((target_success_rate - current_success_rate) * 1.5)
+                estimated_cycles = estimated_cycles * diminishing_factor
         
         # Use TimeSense to estimate time
         if self.timesense:
@@ -365,7 +391,17 @@ class LearningProjectionTimeSense:
                 category=category,
                 current_topics=current_topics,
                 current_success_rate=avg_success,
-                trajectory=trajectory
+                trajectory=trajectory,
+                target_level="Expert"
+            )
+            
+            # Project to Elite (98%)
+            elite_projection = self.project_to_exceptional_level(
+                category=category,
+                current_topics=current_topics,
+                current_success_rate=avg_success,
+                trajectory=trajectory,
+                target_level="Elite"
             )
             
             # Project to 90% success rate
@@ -375,7 +411,20 @@ class LearningProjectionTimeSense:
                 else:
                     cycles_to_90 = (0.90 - avg_success) / 0.05
                 
-                hours_to_90 = cycles_to_90 * self.avg_cycle_duration_hours
+                # Use TimeSense for cycle duration
+                if self.timesense:
+                    try:
+                        cycle_time_model = self.timesense.get_cost_model("training_cycle")
+                        if cycle_time_model:
+                            hours_per_cycle = cycle_time_model.get("avg_duration_hours", self.avg_cycle_duration_hours)
+                        else:
+                            hours_per_cycle = self.avg_cycle_duration_hours
+                    except:
+                        hours_per_cycle = self.avg_cycle_duration_hours
+                else:
+                    hours_per_cycle = self.avg_cycle_duration_hours
+                
+                hours_to_90 = cycles_to_90 * hours_per_cycle
                 days_to_90 = hours_to_90 / 24.0
             else:
                 cycles_to_90 = 0
@@ -403,6 +452,17 @@ class LearningProjectionTimeSense:
                         "current_rate": avg_success,
                         "confidence": expert_projection.confidence,
                         "already_achieved": expert_projection.current_mastery == "Expert"
+                    },
+                    "elite": {
+                        "estimated_days": elite_projection.estimated_days,
+                        "estimated_hours": elite_projection.estimated_days * 24.0,
+                        "estimated_cycles": elite_projection.estimated_cycles,
+                        "target_topics": elite_projection.target_topics,
+                        "target_rate": elite_projection.target_success_rate,
+                        "current_topics": current_topics,
+                        "current_rate": avg_success,
+                        "confidence": elite_projection.confidence,
+                        "already_achieved": avg_success >= 0.98
                     }
                 },
                 "trajectory": {
@@ -460,6 +520,21 @@ class LearningProjectionTimeSense:
                 output.append(f"   Confidence: {expert['confidence']:.1%}")
             
             output.append()
+            
+            # Elite projection (98%)
+            elite = current["projections"].get("elite")
+            if elite:
+                if elite["already_achieved"]:
+                    output.append("✅ Elite Mastery (98%): ALREADY ACHIEVED")
+                else:
+                    output.append(f"🎯 Elite Mastery (98% Success Rate):")
+                    output.append(f"   Estimated Time: {elite['estimated_days']:.2f} days ({elite.get('estimated_hours', elite['estimated_days'] * 24):.1f} hours)")
+                    output.append(f"   Estimated Cycles: {elite['estimated_cycles']} cycles")
+                    output.append(f"   Topics: {elite['current_topics']}/{elite['target_topics']}")
+                    output.append(f"   Success Rate: {elite['current_rate']:.1%} → {elite['target_rate']:.1%}")
+                    output.append(f"   Confidence: {elite['confidence']:.1%}")
+                
+                output.append()
             
             # Trajectory info
             traj = current["trajectory"]

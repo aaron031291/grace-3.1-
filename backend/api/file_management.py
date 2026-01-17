@@ -10,12 +10,28 @@ from file_manager.knowledge_base_manager import KnowledgeBaseManager
 from file_manager.file_handler import extract_file_text
 from ingestion.service import TextIngestionService
 from embedding import get_embedding_model
+from api.ingest import get_ingestion_service
 from models.database_models import Document
 from database.session import initialize_session_factory
 from database import connection
 from settings import settings
+from settings import KNOWLEDGE_BASE_PATH
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/file-management", tags=["file-management"])
+
+# Singleton instance
+_kb_manager: Optional[KnowledgeBaseManager] = None
+
+def get_kb_manager() -> KnowledgeBaseManager:
+    """Get or create KnowledgeBaseManager singleton for dependency injection."""
+    global _kb_manager
+    if _kb_manager is None:
+        _kb_manager = KnowledgeBaseManager(base_path=KNOWLEDGE_BASE_PATH)
+    return _kb_manager
+
 class DirectoryItem(BaseModel):
-    logger = logging.getLogger(__name__)
     """Item in a directory."""
     name: str
     path: str

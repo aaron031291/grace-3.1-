@@ -3,12 +3,35 @@ import logging
 import time
 from typing import Optional, Dict, Any, List
 from datetime import datetime
-from bridge import ExecutionBridge, ExecutionConfig
-from actions import GraceAction, ActionRequest, ActionResult, ActionStatus
+try:
+    from execution.bridge import ExecutionBridge, ExecutionConfig
+except ImportError:
+    try:
+        from bridge import ExecutionBridge, ExecutionConfig
+    except ImportError:
+        ExecutionBridge = None
+        ExecutionConfig = None
+try:
+    from execution.actions import GraceAction, ActionRequest, ActionResult, ActionStatus
+except ImportError:
+    try:
+        from actions import GraceAction, ActionRequest, ActionResult, ActionStatus
+    except ImportError:
+        # Make optional
+        GraceAction = None
+        ActionRequest = None
+        ActionResult = None
+        ActionStatus = None
 from security.governance import GovernanceEngine, GovernanceContext, GovernanceDecision, AutonomyTier, get_governance_engine
 from layer1.message_bus import Layer1MessageBus, ComponentType, get_message_bus
+
+logger = logging.getLogger(__name__)
+
+# Action governance mapping - maps action types to governance requirements
+ACTION_GOVERNANCE_MAP: Dict[Any, Dict[str, Any]] = {}
+
+
 class GovernedExecutionBridge:
-    logger = logging.getLogger(__name__)
     """
     Execution bridge with constitutional governance integration.
 
@@ -150,7 +173,9 @@ class GovernedExecutionBridge:
     def _build_governance_context(self, action: ActionRequest) -> GovernanceContext:
         """Build governance context from action request."""
         # Get governance mapping for action type
-        mapping = ACTION_GOVERNANCE_MAP.get(action.action_type, {
+        # Get governance mapping for this action type
+        if GraceAction and action.action_type:
+            mapping = ACTION_GOVERNANCE_MAP.get(action.action_type, {
             "action_type": "unknown",
             "impact_scope": "local",
             "is_reversible": True,

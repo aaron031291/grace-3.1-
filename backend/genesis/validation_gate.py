@@ -4,9 +4,8 @@ from datetime import datetime, UTC
 from enum import Enum
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 class ValidationError(Exception):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
+# Module-level logger (removed duplicates)
+logger = logging.getLogger(__name__)
     """Raised when Genesis key validation fails."""
     pass
 

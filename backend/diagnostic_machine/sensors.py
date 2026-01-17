@@ -6,15 +6,10 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+logger = logging.getLogger(__name__)
+
+
 class SensorType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of sensors available."""
     TEST_RESULTS = "test_results"
     SYSTEM_LOGS = "system_logs"

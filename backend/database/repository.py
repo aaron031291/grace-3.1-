@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, desc, asc
 from typing import TypeVar, Generic, Type, Optional, List, Any
 import logging
+
+T = TypeVar('T')  # Define TypeVar before using it
+
 class BaseRepository(Generic[T]):
     logger = logging.getLogger(__name__)
     """

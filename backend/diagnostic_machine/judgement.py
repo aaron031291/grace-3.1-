@@ -3,16 +3,13 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-from sensors import SensorData
-from interpreters import InterpretedData, Pattern, Anomaly, InvariantCheck, PatternType, AnomalyType, ClarityLevel
+from .sensors import SensorData
+from .interpreters import InterpretedData, Pattern, Anomaly, InvariantCheck, PatternType, AnomalyType, ClarityLevel
+
+logger = logging.getLogger(__name__)
+
+
 class HealthStatus(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """System health status levels."""
     HEALTHY = "healthy"
     DEGRADED = "degraded"

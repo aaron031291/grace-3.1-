@@ -12,8 +12,12 @@ from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from cognitive.memory_mesh_snapshot import MemoryMeshSnapshot, create_memory_mesh_snapshot
 from settings import KNOWLEDGE_BASE_PATH
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/learning-memory", tags=["learning-memory"])
+
 class LearningExperienceRequest(BaseModel):
-    logger = logging.getLogger(__name__)
     """Request to record a learning experience."""
     experience_type: str = Field(..., description="Type: success, failure, feedback, correction, pattern")
     context: Dict[str, Any] = Field(..., description="Contextual information")
@@ -1010,7 +1014,8 @@ async def check_database_health(session: Session = Depends(get_session)):
     
     try:
         # Test basic connection
-        session.execute("SELECT 1")
+        from sqlalchemy import text
+        session.execute(text("SELECT 1"))
         health_status["database_connection"] = "healthy"
         
         # Check each table

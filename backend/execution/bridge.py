@@ -9,9 +9,51 @@ from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime
 from pathlib import Path
 import shutil
-from actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
+try:
+    from execution.actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
+except ImportError:
+    try:
+        from actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
+    except ImportError:
+        # Make optional - define basic types if not available
+        from enum import Enum
+        from dataclasses import dataclass
+        from typing import Optional, Dict, Any
+        
+        class GraceAction(Enum):
+            READ_FILE = "read_file"
+            WRITE_FILE = "write_file"
+        
+        class ActionStatus(str, Enum):
+            SUCCESS = "success"
+            FAILURE = "failure"
+            TIMEOUT = "timeout"
+        
+        @dataclass
+        class ActionRequest:
+            action_id: str = ""
+            action_type: GraceAction = None
+            parameters: Dict[str, Any] = None
+            timeout: int = 300
+        
+        @dataclass
+        class ActionResult:
+            action_id: str = ""
+            action_type: GraceAction = None
+            status: ActionStatus = ActionStatus.FAILURE
+            output: str = ""
+            error: Optional[str] = None
+            execution_time: float = 0.0
+            exit_code: int = 0
+            data: Optional[Dict[str, Any]] = None
+        
+        def create_action(*args, **kwargs):
+            return None
+
+logger = logging.getLogger(__name__)
+
+
 class ExecutionConfig:
-    logger = logging.getLogger(__name__)
     """Configuration for the execution environment."""
 
     def __init__(

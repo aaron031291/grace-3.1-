@@ -9,13 +9,8 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 import uuid
 class PipelineStage(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
+# Module-level logger (removed duplicates)
+logger = logging.getLogger(__name__)
     """Stages of the whitelist learning pipeline."""
     # Entry
     WHITELIST_ENTRY = "whitelist_entry"

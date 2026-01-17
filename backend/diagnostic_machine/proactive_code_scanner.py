@@ -1,12 +1,17 @@
 import ast
 import importlib
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
 class CodeIssue:
-    logger = logging.getLogger(__name__)
     """A code issue detected by proactive scanning."""
     issue_type: str  # 'syntax_error', 'import_error', 'missing_file', 'code_quality'
     severity: str  # 'critical', 'high', 'medium', 'low'
@@ -51,6 +56,9 @@ class ProactiveCodeScanner:
         # 4. Check for code quality issues
         self._scan_code_quality()
         
+        # 5. Check for Pydantic logger issues
+        self._scan_pydantic_logger_issues()
+        
         return self.issues
     
     def _scan_syntax_errors(self):
@@ -71,8 +79,13 @@ class ProactiveCodeScanner:
                 continue
                 
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
-                    source = f.read()
+                try:
+                    with open(py_file, 'r', encoding='utf-8') as f:
+                        source = f.read()
+                except UnicodeDecodeError:
+                    # Try with error handling for binary files
+                    with open(py_file, 'r', encoding='utf-8', errors='ignore') as f:
+                        source = f.read()
                 ast.parse(source, filename=str(py_file))
             except SyntaxError as e:
                 self.issues.append(CodeIssue(
@@ -125,7 +138,11 @@ class ProactiveCodeScanner:
         # Check grace_os imports
         grace_os_init = self.backend_dir / "grace_os" / "__init__.py"
         if grace_os_init.exists():
-            content = grace_os_init.read_text()
+            try:
+                content = grace_os_init.read_text(encoding='utf-8')
+            except UnicodeDecodeError:
+                # Skip if can't decode
+                return
             # Check if it's trying to import a non-existent file
             if "from .self_healing_ide" in content and "# from .self_healing_ide" not in content:
                 healing_ide_file = self.backend_dir / "grace_os" / "self_healing_ide.py"
@@ -138,14 +155,77 @@ class ProactiveCodeScanner:
                         suggested_fix="Either create self_healing_ide.py or comment out the import"
                     ))
     
+    def _scan_pydantic_logger_issues(self):
+        """Scan for logger definitions in Pydantic BaseModel classes."""
+        python_files = list(self.backend_dir.rglob("*.py"))
+        
+        for py_file in python_files:
+            try:
+                content = py_file.read_text(encoding='utf-8')
+            except Exception:
+                continue
+            
+            try:
+                # Check for Pydantic BaseModel classes with logger
+                lines = content.split('\n')
+                in_pydantic_class = False
+                pydantic_class_name = None
+                pydantic_class_start = None
+                class_indent = 0
+                
+                for i, line in enumerate(lines):
+                    # Detect Pydantic BaseModel class
+                    if re.search(r'class\s+\w+.*BaseModel', line):
+                        in_pydantic_class = True
+                        pydantic_class_name = re.search(r'class\s+(\w+)', line)
+                        pydantic_class_name = pydantic_class_name.group(1) if pydantic_class_name else "Unknown"
+                        pydantic_class_start = i
+                        class_indent = len(line) - len(line.lstrip())
+                    
+                    # Check if we're still in the class (indentation check)
+                    if in_pydantic_class:
+                        # Check if line is still part of class (has indentation or is empty/comment)
+                        stripped = line.strip()
+                        if stripped and not stripped.startswith('#'):
+                            current_indent = len(line) - len(line.lstrip())
+                            # Check if we've left the class (less indentation)
+                            if current_indent <= class_indent and i > pydantic_class_start:
+                                in_pydantic_class = False
+                                pydantic_class_name = None
+                                pydantic_class_start = None
+                            elif re.search(r'^\s+logger\s*=\s*logging\.getLogger', line):
+                                # Found logger in Pydantic class
+                                self.issues.append(CodeIssue(
+                                    issue_type='pydantic_logger',
+                                    severity='high',
+                                    file_path=str(py_file.relative_to(self.backend_dir.parent)),
+                                    line_number=i + 1,
+                                    message=f"Logger defined in Pydantic BaseModel class '{pydantic_class_name}' without ClassVar annotation",
+                                    suggested_fix=f"Move logger outside class or annotate as ClassVar"
+                                ))
+                                in_pydantic_class = False  # Found issue, reset
+                                pydantic_class_name = None
+                                pydantic_class_start = None
+            except Exception as e:
+                logger.debug(f"Could not scan {py_file} for Pydantic issues: {e}")
+    
+    def scan_pydantic_logger_issues(self) -> List[CodeIssue]:
+        """Public method to scan for Pydantic logger issues."""
+        self._scan_pydantic_logger_issues()
+        return [i for i in self.issues if i.issue_type == 'pydantic_logger']
+    
     def _scan_code_quality(self):
         """Scan for code quality issues."""
         python_files = list(self.backend_dir.rglob("*.py"))
         
         for py_file in python_files[:100]:  # Check first 100 files
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
-                    lines = f.readlines()
+                try:
+                    with open(py_file, 'r', encoding='utf-8') as f:
+                        lines = f.readlines()
+                except UnicodeDecodeError:
+                    # Skip binary files
+                    continue
                 
                 for i, line in enumerate(lines, 1):
                     stripped = line.strip()
