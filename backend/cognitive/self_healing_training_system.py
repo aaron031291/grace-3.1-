@@ -209,10 +209,11 @@ class SelfHealingTrainingSystem:
         files_collected = self._collect_training_files(folder_path, problem_perspective)
         cycle.files_collected = files_collected[:self.config["files_per_cycle"]]
         
+        perspective_value = self._get_perspective_value(problem_perspective)
         logger.info(
             f"[SELF-HEALING-TRAINING] Cycle {cycle_id} started: "
             f"{len(cycle.files_collected)} files, "
-            f"perspective={problem_perspective.value}, "
+            f"perspective={perspective_value}, "
             f"difficulty={difficulty_level:.1f}"
         )
         
@@ -272,18 +273,21 @@ class SelfHealingTrainingSystem:
             logger.warning("[SELF-HEALING-TRAINING] LLM not available for test generation")
             return []
         
+        # Get perspective value safely
+        perspective_value = self._get_perspective_value(problem_perspective)
+        
         # Create test files directory
-        test_dir = self.kb_path / "training" / "generated_tests" / problem_perspective.value
+        test_dir = self.kb_path / "training" / "generated_tests" / perspective_value
         test_dir.mkdir(parents=True, exist_ok=True)
         
         generated_files = []
         
         try:
             # Use LLM to design test cases
-            prompt = f"""Generate {count} Python code files with {problem_perspective.value} problems.
+            prompt = f"""Generate {count} Python code files with {perspective_value} problems.
 
 Each file should:
-1. Have a clear {problem_perspective.value} problem
+1. Have a clear {perspective_value} problem
 2. Be realistic and fixable
 3. Vary in difficulty from easy to hard
 4. Include comments explaining the issue
@@ -293,7 +297,7 @@ Generate files that self-healing can practice fixing."""
             # Would use LLM to generate test files
             # For now, create placeholder files
             for i in range(count):
-                test_file = test_dir / f"test_{problem_perspective.value}_{i}.py"
+                test_file = test_dir / f"test_{perspective_value}_{i}.py"
                 
                 # Generate test content based on perspective
                 content = self._generate_test_content(problem_perspective, i)
@@ -350,7 +354,8 @@ def slow_function():
 '''
         }
         
-        return templates.get(perspective, f"# Test file {index}\n# {perspective.value}\npass\n")
+        perspective_value = self._get_perspective_value(perspective)
+        return templates.get(perspective, f"# Test file {index}\n# {perspective_value}\npass\n")
     
     # ==================== SANDBOX PRACTICE ====================
     
@@ -412,6 +417,17 @@ def slow_function():
         else:
             self._complete_cycle(cycle)
     
+    def _get_perspective_value(self, perspective) -> str:
+        """Safely get perspective value, handling both Enum and string."""
+        if isinstance(perspective, str):
+            return perspective
+        elif isinstance(perspective, Enum):
+            return perspective.value
+        elif hasattr(perspective, 'value'):
+            return perspective.value
+        else:
+            return str(perspective)
+    
     def _practice_fix_in_sandbox(
         self,
         file_path: str,
@@ -426,10 +442,13 @@ def slow_function():
             learned_knowledge = self._retrieve_relevant_knowledge(file_path, cycle)
             patterns_count = len(learned_knowledge.get("patterns", []))
             
+            # Get perspective value safely
+            perspective_value = self._get_perspective_value(cycle.problem_perspective)
+            
             # Create sandbox experiment for this fix
             experiment = self.sandbox_lab.propose_experiment(
                 name=f"Fix {Path(file_path).name}",
-                description=f"Practice fixing {cycle.problem_perspective.value} in {file_path}",
+                description=f"Practice fixing {perspective_value} in {file_path}",
                 experiment_type="code_quality",
                 motivation=f"Training cycle {cycle.cycle_id}, difficulty {cycle.difficulty_level}"
             )
@@ -447,9 +466,9 @@ def slow_function():
                 
                 # Create lesson with pattern information
                 if patterns_count > 0:
-                    lesson = f"Applied {patterns_count} learned patterns for {cycle.problem_perspective.value} fix"
+                    lesson = f"Applied {patterns_count} learned patterns for {perspective_value} fix"
                 else:
-                    lesson = f"Learned: {cycle.problem_perspective.value} fix pattern"
+                    lesson = f"Learned: {perspective_value} fix pattern"
                 
                 return {
                     "success": success,
@@ -482,11 +501,12 @@ def slow_function():
             # Query Grace-Aligned LLM for relevant memories
             if self.llm_orchestrator and hasattr(self.llm_orchestrator, "grace_aligned_llm"):
                 try:
+                    perspective_value = self._get_perspective_value(cycle.problem_perspective)
                     memories = self.llm_orchestrator.grace_aligned_llm.retrieve_grace_memories(
-                        query=f"{cycle.problem_perspective.value} fix pattern",
+                        query=f"{perspective_value} fix pattern",
                         context={
                             "file_path": file_path,
-                            "problem_type": cycle.problem_perspective.value,
+                            "problem_type": perspective_value,
                             "difficulty": cycle.difficulty_level,
                             "cycle_id": cycle.cycle_id
                         },
@@ -508,7 +528,7 @@ def slow_function():
                     
                     logger.info(
                         f"[SELF-HEALING-TRAINING] Retrieved {len(patterns)} learned patterns "
-                        f"for {cycle.problem_perspective.value} fix"
+                        f"for {self._get_perspective_value(cycle.problem_perspective)} fix"
                     )
                     
                     return {
@@ -569,13 +589,13 @@ def slow_function():
             self.current_cycle.state = TrainingCycleState.ALERTED
             self.current_cycle.alerts_received.append({
                 "alert_id": alert.alert_id,
-                "source": source.value,
+                "source": self._get_perspective_value(source),
                 "severity": severity,
                 "timestamp": alert.timestamp.isoformat()
             })
         
         logger.info(
-            f"[SELF-HEALING-TRAINING] Alert registered: {source.value}, "
+            f"[SELF-HEALING-TRAINING] Alert registered: {self._get_perspective_value(source)}, "
             f"severity={severity}, brings Grace out of sandbox"
         )
         
@@ -634,7 +654,7 @@ def slow_function():
         try:
             # Execute healing based on alert
             healing_result = self.healing_system.execute_healing(
-                anomaly_type=alert.source.value,
+                anomaly_type=self._get_perspective_value(alert.source),
                 anomaly_details=alert.description,
                 suggested_fix=None,  # Healing system will determine
                 confidence=0.7,
@@ -660,7 +680,7 @@ def slow_function():
         lessons = []
         
         if fix_result.get("success"):
-            lesson = f"Successfully fixed {alert.source.value}: {alert.description}"
+            lesson = f"Successfully fixed {self._get_perspective_value(alert.source)}: {alert.description}"
             lessons.append(lesson)
             
             # Contribute to Grace's learning
@@ -676,7 +696,7 @@ def slow_function():
                 except Exception as e:
                     logger.warning(f"[SELF-HEALING-TRAINING] Learning contribution error: {e}")
         else:
-            lesson = f"Failed to fix {alert.source.value}: {fix_result.get('error', 'unknown')}"
+            lesson = f"Failed to fix {self._get_perspective_value(alert.source)}: {fix_result.get('error', 'unknown')}"
             lessons.append(lesson)
         
         return {"lessons": lessons}

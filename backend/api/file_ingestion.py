@@ -11,8 +11,30 @@ from models.genesis_key_models import GenesisKeyType
 from database.session import get_session
 from sqlalchemy.orm import Session
 from contextlib import nullcontext
+from pathlib import Path
+from settings import KNOWLEDGE_BASE_PATH
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/file-ingestion", tags=["file-ingestion"])
+
+# Singleton instance
+_file_manager: Optional[IngestionFileManager] = None
+
+def get_file_manager() -> IngestionFileManager:
+    """Get or create IngestionFileManager singleton for dependency injection."""
+    global _file_manager
+    if _file_manager is None:
+        embedding_model = get_embedding_model()
+        ingestion_service = get_ingestion_service()
+        _file_manager = IngestionFileManager(
+            knowledge_base_path=KNOWLEDGE_BASE_PATH,
+            embedding_model=embedding_model,
+            ingestion_service=ingestion_service,
+        )
+    return _file_manager
+
 class FileIngestionResultItem(BaseModel):
-    logger = logging.getLogger(__name__)
     """Result of a file ingestion operation."""
     success: bool
     filepath: str
