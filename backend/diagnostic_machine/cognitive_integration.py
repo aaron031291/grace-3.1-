@@ -5,12 +5,10 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from pathlib import Path
 from enum import Enum
+
+logger = logging.getLogger(__name__)
+
 class DiagnosticInsightType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of diagnostic insights to feed into learning."""
     TEST_FAILURE_PATTERN = "test_failure_pattern"
     TEST_SUCCESS_PATTERN = "test_success_pattern"

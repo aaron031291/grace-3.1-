@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 class OutputRecipient(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Output recipient types."""
     AI = "ai"  # AI-to-AI communication (deterministic JSON)
     HUMAN = "human"  # AI-to-Human communication (natural language)

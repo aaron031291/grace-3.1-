@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 import uuid
-from multi_llm_client import MultiLLMClient, TaskType, LLMModel
+from .multi_llm_client import MultiLLMClient, TaskType, LLMModel
 from repo_access import RepositoryAccessLayer
 from hallucination_guard import HallucinationGuard
 class CollaborationMode(Enum):

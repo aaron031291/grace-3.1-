@@ -7,14 +7,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
+
 class TrendDirection(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Direction of a trend."""
     IMPROVING = "improving"
     STABLE = "stable"

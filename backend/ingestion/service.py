@@ -12,6 +12,7 @@ from confidence_scorer import ConfidenceScorer
 from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
+from cognitive.decorators import cognitive_operation
 class TextChunker:
     logger = logging.getLogger(__name__)
     """Handles text chunking with semantic and structure-aware strategies."""

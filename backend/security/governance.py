@@ -10,14 +10,10 @@ from dataclasses import dataclass, field, asdict
 from collections import deque
 from layer1.message_bus import Layer1MessageBus, ComponentType, MessageType, Message, get_message_bus
 from security.config import SecurityConfig, get_security_config
+
+logger = logging.getLogger(__name__)
+
 class ConstitutionalRule(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Core constitutional rules that cannot be overridden."""
     HUMAN_CENTRICITY = "human_centricity"
     TRANSCENDENCE_MISSION = "transcendence_mission"

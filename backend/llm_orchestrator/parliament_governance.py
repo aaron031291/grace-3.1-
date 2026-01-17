@@ -8,12 +8,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
+
+# Module-level logger (moved outside Enum class to prevent conflicts)
+logger = logging.getLogger(__name__)
+
+
 class VoteType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of votes in parliament."""
     APPROVE = "approve"
     REJECT = "reject"
@@ -513,7 +513,11 @@ REASONING: [Your analysis]
             logger.warning(f"[PARLIAMENT] Anti-hallucination: High contradiction score ({contradiction_score:.2f})")
             return False
 
-        # Check confidence levels
+        # Check confidence levels (with division by zero protection)
+        if not votes:
+            logger.warning("[PARLIAMENT] Anti-hallucination: No votes provided")
+            return False
+        
         avg_confidence = sum(v.confidence for v in votes) / len(votes)
         if avg_confidence < self.anti_hallucination["fact_check_threshold"]:
             logger.warning(f"[PARLIAMENT] Anti-hallucination: Low average confidence ({avg_confidence:.2f})")
