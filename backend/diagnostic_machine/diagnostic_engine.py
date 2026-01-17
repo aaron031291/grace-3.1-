@@ -248,12 +248,29 @@ class DiagnosticEngine:
         try:
             cycle_start = datetime.utcnow()
 
-            # TimeSense: Track diagnostic cycle
-            with track_with_timesense(
-                primitive_type=PrimitiveType.COMPLEX_OPERATION if PrimitiveType else None,
-                size=1.0,  # Single cycle
-                fallback_name="diagnostic_cycle"
-            ):
+            # TimeSense: Track diagnostic cycle (optional)
+            try:
+                from timesense.decorators import track_with_timesense
+                from timesense.types import PrimitiveType
+                timesense_available = True
+            except ImportError:
+                # TimeSense not available, use context manager that does nothing
+                from contextlib import nullcontext as track_with_timesense
+                PrimitiveType = None
+                timesense_available = False
+            
+            # Use TimeSense if available, otherwise no-op context manager
+            if timesense_available and PrimitiveType:
+                timesense_context = track_with_timesense(
+                    primitive_type=PrimitiveType.COMPLEX_OPERATION,
+                    size=1.0,
+                    fallback_name="diagnostic_cycle"
+                )
+            else:
+                from contextlib import nullcontext
+                timesense_context = nullcontext()
+            
+            with timesense_context:
                 # Layer 1: Collect sensor data
                 logger.debug("Layer 1: Collecting sensor data...")
                 cycle.sensor_data = self.sensor_layer.collect_all()
@@ -394,6 +411,21 @@ class DiagnosticEngine:
         # Auto-heal if requested and issues found
         if auto_heal and code_quality.critical_issues > 0:
             result['healing_actions'] = self._auto_heal_code_issues(code_quality)
+        
+        # Also scan for Pydantic logger issues
+        try:
+            from .proactive_code_scanner import get_proactive_scanner
+            scanner = get_proactive_scanner()
+            pydantic_issues = scanner.scan_pydantic_logger_issues()
+            if pydantic_issues:
+                result['pydantic_logger_issues'] = len(pydantic_issues)
+                if auto_heal:
+                    from .automatic_bug_fixer import AutomaticBugFixer
+                    fixer = AutomaticBugFixer(create_backups=True)
+                    pydantic_fixes = fixer.fix_all_issues(pydantic_issues)
+                    result['pydantic_fixes'] = [f.fix_applied for f in pydantic_fixes if f.success]
+        except Exception as e:
+            logger.debug(f"Could not scan for Pydantic logger issues: {e}")
 
         # Also trigger a full diagnostic cycle to update system health
         cycle = self.run_cycle(TriggerSource.PROACTIVE_SCAN)

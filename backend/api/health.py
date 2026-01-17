@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Optional, List, Any
 from datetime import datetime
+from sqlalchemy import text
 import asyncio
 import logging
 
@@ -72,7 +73,7 @@ async def check_database() -> ServiceHealth:
     try:
         from database.session import SessionLocal
         session = SessionLocal()
-        session.execute("SELECT 1")
+        session.execute(text("SELECT 1"))
         latency = (time.time() - start) * 1000
         return ServiceHealth(
             name="database",
@@ -285,7 +286,7 @@ async def readiness_check():
         # Quick checks for critical services
         from database.session import SessionLocal
         session = SessionLocal()
-        session.execute("SELECT 1")
+        session.execute(text("SELECT 1"))
 
         return {"status": "ready"}
     except Exception as e:

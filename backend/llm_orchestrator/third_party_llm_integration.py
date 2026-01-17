@@ -4,9 +4,11 @@ from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+
+logger = logging.getLogger(__name__)
+
+
 class LLMProvider(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Supported third-party LLM providers."""
     GEMINI = "gemini"
     OPENAI = "openai"

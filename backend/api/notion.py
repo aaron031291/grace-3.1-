@@ -6,14 +6,14 @@ import logging
 import json
 from database.session import get_session, initialize_session_factory
 from models.notion_models import NotionProfile, NotionTask, TaskHistory, TaskTemplate, TaskStatus, TaskPriority, TaskType, generate_genesis_key, generate_profile_genesis_id
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/notion", tags=["Notion Integration"])
+
+
 class ProfileCreateRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to create a new profile."""
     name: str = Field(..., description="Profile name")
     display_name: Optional[str] = Field(None, description="Display name")

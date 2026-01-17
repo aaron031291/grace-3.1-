@@ -6,9 +6,12 @@ import hashlib
 import threading
 import time
 from dataclasses import dataclass
-from multi_llm_client import MultiLLMClient, TaskType
-from repo_access import RepositoryAccessLayer
-from learning_integration import LearningIntegration
+from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
+from llm_orchestrator.repo_access import RepositoryAccessLayer
+from llm_orchestrator.learning_integration import LearningIntegration
+
+logger = logging.getLogger(__name__)
+
 class CodeAnalysis:
     logger = logging.getLogger(__name__)
     """Code analysis result."""

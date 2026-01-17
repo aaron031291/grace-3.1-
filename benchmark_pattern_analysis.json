@@ -1,0 +1,320 @@
+{
+  "mbpp_patterns": {
+    "keywords": {
+      "a": 769,
+      "to": 537,
+      "function": 512,
+      "write": 500,
+      "the": 464,
+      "of": 343,
+      "given": 247,
+      "find": 221,
+      "python": 158,
+      "in": 142,
+      "list": 125,
+      "number": 124,
+      "string": 76,
+      "array": 57,
+      "check": 54,
+      "numbers": 54,
+      "from": 51,
+      "sum": 51,
+      "or": 50,
+      "element": 49,
+      "two": 47,
+      "all": 46,
+      "using": 46,
+      "n": 45,
+      "elements": 42,
+      "tuple": 42,
+      "count": 41,
+      "by": 40,
+      "and": 39,
+      "not": 39,
+      "whether": 38,
+      "that": 38,
+      "with": 37,
+      "is": 35,
+      "maximum": 35,
+      "tuples": 33,
+      "first": 31,
+      "are": 25,
+      "characters": 23,
+      "length": 23,
+      "if": 22,
+      "remove": 21,
+      "sort": 21,
+      "convert": 21,
+      "an": 20,
+      "odd": 20,
+      "integers": 19,
+      "lists": 19,
+      "k": 18,
+      "even": 18
+    },
+    "operations": {
+      "remove": 24,
+      "sum": 57,
+      "sort": 40,
+      "count": 77,
+      "find": 227,
+      "split": 10,
+      "search": 18,
+      "join": 13,
+      "add": 13,
+      "max": 61,
+      "filter": 7,
+      "min": 33,
+      "reverse": 8,
+      "map": 13,
+      "replace": 8,
+      "insert": 3,
+      "delete": 1,
+      "update": 1,
+      "average": 2
+    },
+    "data_types": {
+      "string": 80,
+      "dict": 20,
+      "list": 153,
+      "int": 74,
+      "set": 39,
+      "tuple": 63,
+      "float": 5
+    },
+    "algorithms": {
+      "sort": 40,
+      "search": 18,
+      "binary": 12,
+      "prime": 6,
+      "gcd": 5,
+      "factorial": 2,
+      "recursive": 2,
+      "lcm": 1,
+      "tree": 1
+    },
+    "problem_types": {
+      "string_operation": 30,
+      "dictionary_operation": 10,
+      "general": 65,
+      "string_split": 5,
+      "string_join": 6,
+      "list_operation": 117,
+      "list_unique": 5,
+      "number_operation": 100,
+      "list_sum": 18,
+      "list_sort": 26,
+      "number_parity": 18,
+      "number_prime": 5,
+      "list_filter": 5,
+      "string_search": 33,
+      "number_factorial": 2,
+      "list_min": 15,
+      "list_max": 29,
+      "string_reverse": 1,
+      "number_gcd_lcm": 4,
+      "string_replace": 3,
+      "list_reverse": 2,
+      "algorithm_tree": 1
+    }
+  },
+  "humaneval_patterns": {
+    "keywords": {
+      "the": 535,
+      "1": 372,
+      "a": 367,
+      "of": 330,
+      "2": 305,
+      "3": 269,
+      "is": 189,
+      "0": 185,
+      "and": 174,
+      "list": 172,
+      "def": 168,
+      "5": 168,
+      "4": 159,
+      "return": 147,
+      "in": 131,
+      "to": 123,
+      "n": 122,
+      "that": 119,
+      "string": 115,
+      "given": 110,
+      "number": 109,
+      "if": 101,
+      "are": 93,
+      "for": 89,
+      "true": 84,
+      "false": 80,
+      "should": 78,
+      "you": 77,
+      "be": 76,
+      "example": 70,
+      "function": 64,
+      "s": 58,
+      "6": 55,
+      "returns": 54,
+      "numbers": 53,
+      "two": 52,
+      "from": 51,
+      "input": 51,
+      "array": 51,
+      "integers": 51,
+      "it": 46,
+      "output": 46,
+      "7": 46,
+      "integer": 45,
+      "an": 43,
+      "b": 43,
+      "int": 42,
+      "x": 42,
+      "str": 40,
+      "i": 40
+    },
+    "operations": {
+      "join": 14,
+      "count": 21,
+      "sum": 43,
+      "average": 2,
+      "max": 18,
+      "split": 16,
+      "filter": 8,
+      "reverse": 10,
+      "find": 14,
+      "map": 3,
+      "sort": 24,
+      "min": 20,
+      "search": 1,
+      "replace": 7
+    },
+    "data_types": {
+      "list": 77,
+      "float": 8,
+      "set": 36,
+      "string": 64,
+      "int": 109,
+      "tuple": 11,
+      "dict": 4
+    },
+    "algorithms": {
+      "binary": 5,
+      "sort": 24,
+      "linear": 1,
+      "prime": 12,
+      "fibonacci": 3,
+      "tree": 1,
+      "search": 1,
+      "factorial": 2,
+      "graph": 2
+    },
+    "problem_types": {
+      "list_operation": 24,
+      "number_operation": 14,
+      "list_sum": 25,
+      "list_max": 11,
+      "list_filter": 4,
+      "string_reverse": 4,
+      "string_join": 3,
+      "string_search": 3,
+      "list_sort": 15,
+      "string_operation": 29,
+      "number_parity": 4,
+      "list_unique": 2,
+      "number_prime": 6,
+      "list_min": 8,
+      "general": 1,
+      "number_fibonacci": 1,
+      "string_split": 6,
+      "string_replace": 2,
+      "number_factorial": 1,
+      "list_reverse": 1
+    }
+  },
+  "template_suggestions": [
+    {
+      "pattern": "algorithm_tree",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "dictionary_operation",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "general",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "list_operation",
+      "priority": "high",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "list_sort",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "list_unique",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "number_factorial",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "number_fibonacci",
+      "priority": "medium",
+      "estimated_coverage": "medium"
+    },
+    {
+      "pattern": "number_gcd_lcm",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "number_operation",
+      "priority": "high",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "number_parity",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "number_prime",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "string_join",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "string_operation",
+      "priority": "high",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "string_replace",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "string_search",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    },
+    {
+      "pattern": "string_split",
+      "priority": "medium",
+      "estimated_coverage": "high"
+    }
+  ]
+}

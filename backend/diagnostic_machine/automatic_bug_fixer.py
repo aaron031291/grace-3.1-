@@ -5,8 +5,20 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+# Check if DeepSeek/MultiLLM is available
+try:
+    from llm_orchestrator.multi_llm_client import MultiLLMClient
+    DEEPSEEK_AVAILABLE = True
+except ImportError:
+    DEEPSEEK_AVAILABLE = False
+    MultiLLMClient = None
+
+
+@dataclass
 class FixResult:
-    logger = logging.getLogger(__name__)
     """Result of an automatic fix."""
     success: bool
     file_path: str
@@ -48,13 +60,16 @@ class AutomaticBugFixer:
         
         # Initialize DeepSeek client if available
         self.deepseek_client = None
-        if self.use_deepseek:
+        if self.use_deepseek and MultiLLMClient is not None:
             try:
                 self.deepseek_client = MultiLLMClient()
                 logger.info("[BUG-FIXER] DeepSeek AI enabled for intelligent fixes")
             except Exception as e:
                 logger.warning(f"[BUG-FIXER] Could not initialize DeepSeek: {e}")
                 self.use_deepseek = False
+        elif self.use_deepseek:
+            logger.warning("[BUG-FIXER] MultiLLMClient not available, disabling DeepSeek")
+            self.use_deepseek = False
     
     def fix_issue(self, issue) -> FixResult:
         """Fix a single issue (works with CodeIssue or ProactiveIssue)."""
@@ -81,6 +96,11 @@ class AutomaticBugFixer:
                 result = self._fix_missing_file(issue)
                 if not result.success and self.use_deepseek:
                     return self._fix_with_deepseek(issue, 'missing_file')
+                return result
+            elif issue_type == 'pydantic_logger':
+                result = self._fix_pydantic_logger(issue)
+                if not result.success and self.use_deepseek:
+                    return self._fix_with_deepseek(issue, 'pydantic_logger')
                 return result
             elif issue_type == 'code_quality':
                 result = self._fix_code_quality(issue)
@@ -143,7 +163,7 @@ class AutomaticBugFixer:
         # Create backup
         if self.create_backups:
             backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
-            backup_path.write_text(file_path.read_text())
+            backup_path.write_text(file_path.read_text(encoding='utf-8'), encoding='utf-8')
         
         try:
             content = file_path.read_text(encoding='utf-8')
@@ -246,7 +266,7 @@ class AutomaticBugFixer:
         # Create backup
         if self.create_backups:
             backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
-            backup_path.write_text(file_path.read_text())
+            backup_path.write_text(file_path.read_text(encoding='utf-8'), encoding='utf-8')
         
         try:
             content = file_path.read_text(encoding='utf-8')
@@ -303,7 +323,7 @@ class AutomaticBugFixer:
         # Create backup
         if self.create_backups:
             backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
-            backup_path.write_text(file_path.read_text())
+            backup_path.write_text(file_path.read_text(encoding='utf-8'), encoding='utf-8')
         
         try:
             content = file_path.read_text(encoding='utf-8')
@@ -381,7 +401,7 @@ class AutomaticBugFixer:
         # Create backup
         if self.create_backups:
             backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
-            backup_path.write_text(file_path.read_text())
+            backup_path.write_text(file_path.read_text(encoding='utf-8'), encoding='utf-8')
         
         try:
             content = file_path.read_text(encoding='utf-8')
@@ -438,6 +458,114 @@ class AutomaticBugFixer:
             ))
         
         return results
+    
+    def _fix_pydantic_logger(self, issue) -> FixResult:
+        """Fix logger definitions in Pydantic BaseModel classes."""
+        file_path = self.backend_dir / issue.file_path
+        if not file_path.exists():
+            return FixResult(
+                success=False,
+                file_path=issue.file_path,
+                issue_type='pydantic_logger',
+                fix_applied="",
+                error_message=f"File not found: {file_path}"
+            )
+        
+        try:
+            # Create backup
+            if self.create_backups:
+                backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
+                backup_path.write_text(file_path.read_text(encoding='utf-8'), encoding='utf-8')
+            
+            content = file_path.read_text(encoding='utf-8')
+            lines = content.split('\n')
+            changed = False
+            changed_lines = []
+            
+            # Find logger in Pydantic class and move it outside
+            in_pydantic_class = False
+            class_indent = 0
+            logger_line_idx = None
+            class_end_idx = None
+            
+            for i, line in enumerate(lines):
+                # Detect Pydantic BaseModel class start
+                if re.search(r'class\s+\w+.*BaseModel', line):
+                    in_pydantic_class = True
+                    class_indent = len(line) - len(line.lstrip())
+                    class_end_idx = i
+                
+                # Check if still in class
+                if in_pydantic_class:
+                    stripped = line.strip()
+                    if stripped and not stripped.startswith('#'):
+                        current_indent = len(line) - len(line.lstrip())
+                        # Check if we've left the class (less indentation)
+                        if current_indent <= class_indent and i > class_end_idx:
+                            in_pydantic_class = False
+                        # Check if logger is defined in class
+                        elif re.search(r'^\s+logger\s*=\s*logging\.getLogger', line):
+                            logger_line_idx = i
+                            # Remove logger from class
+                            lines[i] = ''  # Remove the line
+                            changed = True
+                            changed_lines.append(i + 1)
+                            in_pydantic_class = False
+            
+            # Add logger at module level if not present
+            if changed and logger_line_idx is not None:
+                # Check if logger already exists at module level
+                has_module_logger = any(
+                    re.search(r'^logger\s*=\s*logging\.getLogger', line) 
+                    for line in lines[:50]  # Check first 50 lines
+                )
+                
+                if not has_module_logger:
+                    # Find last import line
+                    import_idx = None
+                    for i, line in enumerate(lines[:50]):
+                        if line.strip().startswith('import ') or line.strip().startswith('from '):
+                            import_idx = i
+                    
+                    if import_idx is not None:
+                        # Add logger after imports
+                        if 'import logging' not in '\n'.join(lines[:import_idx+5]):
+                            lines.insert(import_idx + 1, 'import logging')
+                            changed_lines.append(import_idx + 2)
+                        lines.insert(import_idx + 2, 'logger = logging.getLogger(__name__)')
+                        changed_lines.append(import_idx + 3)
+                        changed = True
+            
+            if changed:
+                # Remove empty lines
+                lines = [line for i, line in enumerate(lines) if line.strip() or i not in [logger_line_idx] if logger_line_idx]
+                file_path.write_text('\n'.join(lines), encoding='utf-8')
+                
+                return FixResult(
+                    success=True,
+                    file_path=str(file_path.relative_to(self.backend_dir.parent)),
+                    issue_type='pydantic_logger',
+                    fix_applied="Moved logger from Pydantic class to module level",
+                    lines_changed=changed_lines,
+                    backup_created=self.create_backups
+                )
+            else:
+                return FixResult(
+                    success=False,
+                    file_path=str(file_path.relative_to(self.backend_dir.parent)),
+                    issue_type='pydantic_logger',
+                    fix_applied="",
+                    error_message="Could not locate logger in Pydantic class"
+                )
+                
+        except Exception as e:
+            return FixResult(
+                success=False,
+                file_path=str(file_path.relative_to(self.backend_dir.parent)),
+                issue_type='pydantic_logger',
+                fix_applied="",
+                error_message=str(e)
+            )
     
     def fix_all_warnings(self, max_files: int = 100) -> List[FixResult]:
         """Fix all common warnings across the codebase."""

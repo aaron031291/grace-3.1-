@@ -9,10 +9,14 @@ import os
 from llm_orchestrator.multimodal_llm_system import get_multimodal_llm_system, MultimodalLLMSystem, MultimodalInput, MediaType
 from llm_orchestrator.multi_llm_client import TaskType
 from database.session import get_db
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/multimodal", tags=["Multimodal LLM"])
+
+
 class MultimodalRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Multimodal processing request."""
     prompt: str = Field(..., description="Text prompt/question")
     task_type: str = Field(default="general", description="Task type")

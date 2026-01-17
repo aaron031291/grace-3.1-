@@ -479,16 +479,18 @@ class MultiLLMClient:
                 )
 
         except Exception as e:
-            logger.error(f"Error discovering models: {e}")
+            logger.warning(f"[MULTI-LLM] Error discovering models (Ollama may not be running): {e}")
             # Initialize with default fallback
+            default_model_id = getattr(settings, 'OLLAMA_LLM_DEFAULT', 'mistral:7b')
             self.available_models["fallback"] = LLMModel(
                 name="Fallback Model",
-                model_id=settings.OLLAMA_LLM_DEFAULT,
+                model_id=default_model_id,
                 capabilities=[ModelCapability.GENERAL],
                 context_window=4096,
                 recommended_tasks=[TaskType.GENERAL],
                 priority=1
             )
+            logger.info(f"[MULTI-LLM] Using fallback model: {default_model_id}")
 
     def select_model(
         self,

@@ -2,8 +2,8 @@ import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
-from multi_llm_client import MultiLLMClient, TaskType
-from repo_access import RepositoryAccessLayer
+from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
+from llm_orchestrator.repo_access import RepositoryAccessLayer
 from cognitive.learning_memory import LearningMemoryManager, LearningExample
 from genesis.cognitive_layer1_integration import CognitiveLayer1Integration
 class LearningIntegration:

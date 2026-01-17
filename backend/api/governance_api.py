@@ -11,10 +11,14 @@ from sqlalchemy import func
 from database.session import get_session
 from models.database_models import GovernanceRule as GovernanceRuleModel, GovernanceDocument as GovernanceDocumentModel, GovernanceDecision as GovernanceDecisionModel
 from security.governance import GovernanceEngine, get_governance_engine, ConstitutionalRule, CONSTITUTIONAL_RULES, AutonomyTier, AUTONOMY_TIERS
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/governance", tags=["Governance"])
+
+
 class GovernanceRuleCreate(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Create a new governance rule."""
     name: str
     description: str

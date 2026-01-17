@@ -11,16 +11,14 @@ from llm_orchestrator.llm_collaboration import get_collaboration_hub, Collaborat
 from llm_orchestrator.fine_tuning import get_fine_tuning_system, FineTuningMethod
 from database.session import get_db
 from embedding import EmbeddingModel, get_embedding_model
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/llm", tags=["LLM Orchestration"])
+
+
 class LLMTaskRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """LLM task request."""
     prompt: str = Field(..., description="Task prompt")
     task_type: str = Field(default="general", description="Task type (code_generation, reasoning, etc.)")

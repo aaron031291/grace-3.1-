@@ -4,9 +4,38 @@ from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass
 from datetime import datetime
 import requests
-from third_party_llm_integration import ThirdPartyLLMIntegration, ThirdPartyLLMConfig, LLMProvider, SystemContextProvider, get_third_party_llm_integration
+
+logger = logging.getLogger(__name__)
+
+# Try to import third_party_llm_integration with fallback
+try:
+    from llm_orchestrator.third_party_llm_integration import (
+        ThirdPartyLLMIntegration, 
+        ThirdPartyLLMConfig, 
+        LLMProvider, 
+        SystemContextProvider, 
+        get_third_party_llm_integration
+    )
+except ImportError:
+    try:
+        from third_party_llm_integration import (
+            ThirdPartyLLMIntegration, 
+            ThirdPartyLLMConfig, 
+            LLMProvider, 
+            SystemContextProvider, 
+            get_third_party_llm_integration
+        )
+    except ImportError:
+        # Make these optional - third party LLM is not required
+        ThirdPartyLLMIntegration = None
+        ThirdPartyLLMConfig = None
+        LLMProvider = None
+        SystemContextProvider = None
+        get_third_party_llm_integration = None
+        logger.warning("[THIRD-PARTY-LLM] third_party_llm_integration not available")
+
+
 class ThirdPartyLLMClient:
-    logger = logging.getLogger(__name__)
     """
     Client for third-party LLM APIs.
     
@@ -18,8 +47,24 @@ class ThirdPartyLLMClient:
     """
     
     def __init__(self):
-        self.integration = get_third_party_llm_integration()
-        self.context_provider = SystemContextProvider()
+        if get_third_party_llm_integration:
+            try:
+                self.integration = get_third_party_llm_integration()
+            except Exception as e:
+                logger.warning(f"[THIRD-PARTY-LLM] Failed to initialize integration: {e}")
+                self.integration = None
+        else:
+            self.integration = None
+        
+        if SystemContextProvider:
+            try:
+                self.context_provider = SystemContextProvider()
+            except Exception as e:
+                logger.warning(f"[THIRD-PARTY-LLM] Failed to initialize context provider: {e}")
+                self.context_provider = None
+        else:
+            self.context_provider = None
+        
         self.llm_handlers: Dict[str, Callable] = {}
     
     def register_gemini(
