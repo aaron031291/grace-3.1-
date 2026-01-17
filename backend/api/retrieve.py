@@ -4,13 +4,17 @@ from typing import List, Optional
 import logging
 from retrieval.retriever import DocumentRetriever, get_retriever
 from retrieval.cognitive_retriever import CognitiveRetriever
-from embedding import EmbeddingModel
+from embedding import EmbeddingModel, get_embedding_model
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session
 from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/retrieve", tags=["retrieval"])
+
 class RetrievalChunk(BaseModel):
-    logger = logging.getLogger(__name__)
     """Retrieved document chunk."""
     chunk_id: int
     document_id: int
@@ -34,6 +38,27 @@ class ContextRequest(BaseModel):
     chunks: List[dict] = Field(..., description="List of chunk dictionaries")
     max_length: Optional[int] = Field(None, description="Maximum context length")
     include_sources: bool = Field(True, description="Include source attribution")
+
+
+# ==================== Dependency Functions ====================
+
+def get_document_retriever() -> DocumentRetriever:
+    """Get DocumentRetriever instance for dependency injection."""
+    embedding_model = get_embedding_model()
+    return get_retriever(
+        collection_name="documents",
+        embedding_model=embedding_model,
+    )
+
+
+def get_cognitive_retriever() -> CognitiveRetriever:
+    """Get CognitiveRetriever instance for dependency injection."""
+    retriever = get_document_retriever()
+    return CognitiveRetriever(
+        retriever=retriever,
+        enable_cognitive=True,
+        enable_learning=True,
+    )
 
 
 # ==================== Endpoints ====================

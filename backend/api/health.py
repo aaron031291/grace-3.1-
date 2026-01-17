@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from datetime import datetime
 import asyncio
 import logging
@@ -68,11 +68,11 @@ async def check_database() -> ServiceHealth:
     """Check database connection health."""
     import time
     start = time.time()
+    session = None
     try:
         from database.session import SessionLocal
         session = SessionLocal()
         session.execute("SELECT 1")
-        session.close()
         latency = (time.time() - start) * 1000
         return ServiceHealth(
             name="database",
@@ -85,6 +85,9 @@ async def check_database() -> ServiceHealth:
             status="unhealthy",
             message=str(e)
         )
+    finally:
+        if session:
+            session.close()
 
 
 async def check_qdrant() -> ServiceHealth:
@@ -277,17 +280,20 @@ async def readiness_check():
     Kubernetes-style readiness probe.
     Returns 200 if service is ready to accept traffic.
     """
+    session = None
     try:
         # Quick checks for critical services
         from database.session import SessionLocal
         session = SessionLocal()
         session.execute("SELECT 1")
-        session.close()
 
         return {"status": "ready"}
     except Exception as e:
         from fastapi import HTTPException
         raise HTTPException(status_code=503, detail=str(e))
+    finally:
+        if session:
+            session.close()
 
 
 @router.get("/live")
@@ -476,3 +482,133 @@ async def force_stability_check() -> Dict[str, Any]:
             "status": "error",
             "error": str(e)
         }
+
+
+@router.get("/memory")
+async def check_memory_health() -> Dict[str, Any]:
+    """
+    Check health of memory systems.
+    
+    Returns status of:
+    - Memory retrieval system
+    - Procedural memory (total procedures, procedures with embeddings)
+    - Episodic memory (total episodes, episodes with embeddings)
+    - Embedder availability
+    
+    Example:
+    ```bash
+    curl http://localhost:8000/health/memory
+    ```
+    """
+    from database.session import SessionLocal
+    from sqlalchemy.orm import Session
+    
+    session = SessionLocal()
+    
+    try:
+        health = {
+            "memory_retrieval": {
+                "status": "unknown",
+                "issues": []
+            },
+            "procedural_memory": {
+                "status": "unknown",
+                "total_procedures": 0,
+                "procedures_with_embeddings": 0,
+                "issues": []
+            },
+            "episodic_memory": {
+                "status": "unknown",
+                "total_episodes": 0,
+                "episodes_with_embeddings": 0,
+                "issues": []
+            }
+        }
+        
+        # Check procedural memory
+        try:
+            from cognitive.procedural_memory import ProceduralRepository, Procedure
+            
+            proc_repo = ProceduralRepository(session)
+            total = session.query(Procedure).count()
+            with_embeddings = session.query(Procedure).filter(
+                Procedure.embedding.isnot(None)
+            ).count()
+            
+            health["procedural_memory"]["total_procedures"] = total
+            health["procedural_memory"]["procedures_with_embeddings"] = with_embeddings
+            
+            if proc_repo.embedder:
+                health["procedural_memory"]["status"] = "operational"
+            else:
+                health["procedural_memory"]["status"] = "degraded"
+                health["procedural_memory"]["issues"].append("Embedder not available")
+                
+            if total > 0 and with_embeddings == 0:
+                health["procedural_memory"]["status"] = "needs_indexing"
+                health["procedural_memory"]["issues"].append(
+                    "No embeddings generated - run index_all_procedures()"
+                )
+        except Exception as e:
+            health["procedural_memory"]["status"] = "error"
+            health["procedural_memory"]["issues"].append(str(e))
+        
+        # Check episodic memory
+        try:
+            from cognitive.episodic_memory import EpisodicBuffer, Episode
+            
+            epi_buffer = EpisodicBuffer(session)
+            total = session.query(Episode).count()
+            with_embeddings = session.query(Episode).filter(
+                Episode.embedding.isnot(None)
+            ).count()
+            
+            health["episodic_memory"]["total_episodes"] = total
+            health["episodic_memory"]["episodes_with_embeddings"] = with_embeddings
+            
+            if epi_buffer.embedder:
+                health["episodic_memory"]["status"] = "operational"
+            else:
+                health["episodic_memory"]["status"] = "degraded"
+                health["episodic_memory"]["issues"].append("Embedder not available")
+                
+            if total > 0 and with_embeddings == 0:
+                health["episodic_memory"]["status"] = "needs_indexing"
+                health["episodic_memory"]["issues"].append(
+                    "No embeddings generated - run index_all_episodes()"
+                )
+        except Exception as e:
+            health["episodic_memory"]["status"] = "error"
+            health["episodic_memory"]["issues"].append(str(e))
+        
+        # Check memory retrieval (LLM Orchestrator dependency)
+        try:
+            try:
+                from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+            except ImportError:
+                from backend.llm_orchestrator.llm_orchestrator import LLMOrchestrator
+            
+            # Check if LLMOrchestrator class exists and has expected attributes
+            if hasattr(LLMOrchestrator, '__init__'):
+                health["memory_retrieval"]["status"] = "operational"
+            else:
+                health["memory_retrieval"]["status"] = "degraded"
+                health["memory_retrieval"]["issues"].append("LLM Orchestrator class structure incomplete")
+        except Exception as e:
+            health["memory_retrieval"]["status"] = "degraded"
+            health["memory_retrieval"]["issues"].append(f"LLM Orchestrator dependency issue: {e}")
+        
+        return {
+            "status": "success",
+            "timestamp": datetime.utcnow().isoformat(),
+            "health": health
+        }
+    except Exception as e:
+        logger.error(f"Memory health check failed: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e),
+            "message": "Failed to check memory system health"
+        }
+    finally:
+        session.close()

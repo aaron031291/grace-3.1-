@@ -12,12 +12,9 @@ from enum import Enum
 from sqlalchemy.orm import Session
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
+logger = logging.getLogger(__name__)
+
 class TaskType(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of learning tasks."""
     INGEST = "ingest"
     STUDY = "study"

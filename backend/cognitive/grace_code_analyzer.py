@@ -7,9 +7,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from collections import defaultdict
 import importlib.util
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class Severity(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Issue severity levels"""
     LOW = "low"
     MEDIUM = "medium"

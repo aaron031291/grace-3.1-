@@ -6,10 +6,11 @@ from enum import Enum
 from pathlib import Path
 import hashlib
 import uuid
+
+logger = logging.getLogger(__name__)
+
+
 class ExperimentStatus(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Experiment lifecycle stages"""
     PROPOSED = "proposed"  # Grace has an idea
     SANDBOX = "sandbox"  # Testing in isolation

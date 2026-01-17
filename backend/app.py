@@ -2,6 +2,19 @@
 Grace API - FastAPI application for Ollama-based chat and embeddings.
 """
 
+# Windows multiprocessing setup - MUST be first, before any other imports
+# This ensures multiprocessing is properly configured for Windows before
+# any code that might use it (including uvicorn's reloader)
+import sys
+if sys.platform == "win32":
+    import multiprocessing
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        # Already set, continue
+        pass
+    multiprocessing.freeze_support()
+
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -78,6 +91,8 @@ from api.component_testing_api import router as component_testing_router  # Comp
 from api.coding_agent_api import router as coding_agent_router  # Enterprise Coding Agent - Same Quality & Standards as Self-Healing
 from api.healing_coding_bridge_api import router as healing_coding_bridge_router  # Bidirectional Communication: Self-Healing ↔ Coding Agent
 from api.nlp_file_descriptions_api import router as nlp_descriptions_router  # NLP File Descriptions - Makes filesystem no-code friendly
+from api.external_knowledge_api import router as external_knowledge_router  # External Knowledge Extraction - GitHub, AI Research, LLMs
+from api.benchmark_api import router as benchmark_router  # Benchmark API - HumanEval, BigCodeBench, etc.
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -862,7 +877,8 @@ app.include_router(enterprise_router)  # Enterprise Analytics - All enterprise s
 app.include_router(component_testing_router)  # Comprehensive Component Testing - Test all components and send bugs to self-healing
 app.include_router(coding_agent_router)  # Enterprise Coding Agent - Same Quality & Standards as Self-Healing System
 app.include_router(healing_coding_bridge_router)  # Bidirectional Communication: Self-Healing ↔ Coding Agent
-app.include_router(healing_coding_bridge_router)  # Bidirectional Communication: Self-Healing ↔ Coding Agent
+app.include_router(external_knowledge_router)  # External Knowledge Extraction - GitHub, AI Research, LLMs
+app.include_router(benchmark_router)  # Benchmark API - HumanEval, BigCodeBench, MBPP, etc.
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
@@ -1556,9 +1572,13 @@ async def add_message_to_chat(chat_id: int, request: MessageCreateRequest, sessi
     except HTTPException:
         raise
     except Exception as e:
+        # Include context in error message for better debugging
+        error_msg = f"Error adding message to chat {chat_id}"
+        if hasattr(request, 'role') and hasattr(request, 'content'):
+            error_msg += f" (role: {request.role}, content_length: {len(request.content) if request.content else 0})"
         raise HTTPException(
             status_code=500,
-            detail=f"Error adding message: {str(e)}"
+            detail=f"{error_msg}: {str(e)}"
         )
 
 
@@ -2201,11 +2221,44 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
 
 if __name__ == "__main__":
     import uvicorn
+    import asyncio
     
-    # Run the app
-    uvicorn.run(
-        "app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True
-    )
+    # On Windows, handle event loop manually to avoid asyncio conflicts
+    # On other platforms, use standard uvicorn.run
+    if sys.platform == "win32":
+        # Use Config and Server with manual event loop handling
+        # Pass app object directly (we're already in this module)
+        config = uvicorn.Config(
+            app=app,  # Pass app object directly instead of string
+            host="0.0.0.0",
+            port=8000,
+            reload=False,  # Disabled on Windows
+            log_level="info"
+        )
+        server = uvicorn.Server(config)
+        
+        # Manually handle the event loop to avoid asyncio.run() issues on Windows
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        try:
+            loop.run_until_complete(server.serve())
+        except KeyboardInterrupt:
+            pass
+        finally:
+            loop.close()
+    else:
+        # Standard uvicorn.run on non-Windows platforms
+        uvicorn.run(
+            "app:app",
+            host="0.0.0.0",
+            port=8000,
+            reload=True,
+            workers=1
+        )
