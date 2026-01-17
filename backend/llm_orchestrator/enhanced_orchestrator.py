@@ -1,21 +1,3 @@
-"""
-Enhanced LLM Orchestrator for Grace
-====================================
-
-Integrates all quality optimization systems to achieve
-Claude/Cursor-level code generation using only local
-open-source LLMs (DeepSeek, Qwen, Llama, Mistral) via Ollama.
-
-Key Systems Integrated:
-1. Code Quality Optimizer - Multi-stage refinement
-2. Chain-of-Thought Reasoner - Step-by-step reasoning
-3. Competitive Benchmark - Quality tracking vs Claude/Cursor
-4. Parliament Governance - Multi-model consensus & anti-hallucination
-5. Trust & KPI System - Performance tracking
-
-NO THIRD-PARTY API DEPENDENCIES - ALL LOCAL INFERENCE.
-"""
-
 import logging
 import asyncio
 from typing import Dict, Any, List, Optional
@@ -23,22 +5,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import uuid
-
-# Import quality systems
-from .code_quality_optimizer import CodeQualityOptimizer, CodeGenerationResult, RefinementStrategy
-from .chain_of_thought import ChainOfThoughtReasoner, ReasoningChain, ReasoningMode
-from .competitive_benchmark import CompetitiveBenchmark, BenchmarkResult, QualityTier
-from .parliament_governance import (
-    ParliamentGovernance,
-    ParliamentSession,
-    DecisionType,
-    GovernanceLevel
-)
-
-logger = logging.getLogger(__name__)
-
-
+from code_quality_optimizer import CodeQualityOptimizer, CodeGenerationResult, RefinementStrategy
+from chain_of_thought import ChainOfThoughtReasoner, ReasoningChain, ReasoningMode
+from competitive_benchmark import CompetitiveBenchmark, BenchmarkResult, QualityTier
+from parliament_governance import ParliamentGovernance, ParliamentSession, DecisionType, GovernanceLevel
 class QualityMode(str, Enum):
+    logger = logging.getLogger(__name__)
     """Quality mode for code generation."""
     FAST = "fast"           # Minimal quality checks, speed priority
     STANDARD = "standard"   # Standard quality with basic refinement

@@ -1,12 +1,3 @@
-"""
-File System Watcher for Automatic Version Control.
-
-Watches file changes in the workspace and automatically creates
-Genesis Keys + Version entries for all modifications.
-
-This makes GRACE truly autonomous - file changes are tracked
-in real-time without manual intervention.
-"""
 import os
 import logging
 import time
@@ -15,11 +6,8 @@ from pathlib import Path
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent, FileCreatedEvent, FileDeletedEvent
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisFileWatcher(FileSystemEventHandler):
+    logger = logging.getLogger(__name__)
     """
     Watches file system changes and creates Genesis Keys + Versions automatically.
 
@@ -46,7 +34,9 @@ class GenesisFileWatcher(FileSystemEventHandler):
             '.git', '__pycache__', '.pyc', '.pyo', '.pyd',
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
-            'grace.db', 'grace.db-shm', 'grace.db-wal',
+            'grace.db', 'grace.db-shm', 'grace.db-wal', 'grace.db-journal',
+            '*.db-journal', '*.db-shm', '*.db-wal',  # All SQLite journal files
+            'launcher_log.db-journal', 'launcher_log.db-shm', 'launcher_log.db-wal',
             '.log', 'embedding_debug.log'
         }
         self.debounce_seconds = debounce_seconds
@@ -67,18 +57,28 @@ class GenesisFileWatcher(FileSystemEventHandler):
 
     def _should_ignore(self, file_path: str) -> bool:
         """Check if file should be ignored based on exclude patterns."""
+        import fnmatch
+        
         path_parts = Path(file_path).parts
+        filename = os.path.basename(file_path)
 
         # Check each part of the path against exclude patterns
         for part in path_parts:
             for pattern in self.exclude_patterns:
-                if pattern in part or part.endswith(pattern):
+                # Support wildcard patterns (e.g., *.db-journal)
+                if '*' in pattern or '?' in pattern:
+                    if fnmatch.fnmatch(part, pattern) or fnmatch.fnmatch(filename, pattern):
+                        return True
+                elif pattern in part or part.endswith(pattern):
                     return True
 
         # Also check the full filename
-        filename = os.path.basename(file_path)
         for pattern in self.exclude_patterns:
-            if filename.endswith(pattern) or pattern in filename:
+            # Support wildcard patterns
+            if '*' in pattern or '?' in pattern:
+                if fnmatch.fnmatch(filename, pattern):
+                    return True
+            elif filename.endswith(pattern) or pattern in filename:
                 return True
 
         return False
@@ -359,7 +359,9 @@ def start_watching_workspace(workspace_path: Optional[str] = None) -> bool:
             '.git', '__pycache__', '.pyc', '.pyo', '.pyd',
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
-            'grace.db', 'grace.db-shm', 'grace.db-wal',
+            'grace.db', 'grace.db-shm', 'grace.db-wal', 'grace.db-journal',
+            '*.db-journal', '*.db-shm', '*.db-wal',  # All SQLite journal files
+            'launcher_log.db-journal', 'launcher_log.db-shm', 'launcher_log.db-wal',
             '.log', 'embedding_debug.log', 'nul'
         }
     )

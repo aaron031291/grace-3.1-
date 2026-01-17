@@ -1,15 +1,3 @@
-"""
-Content Integrity Verifier - Integrity Verification for Librarian
-
-Verifies content integrity using SHA-256 hashing:
-- Regular integrity checks
-- Corruption detection
-- Hash re-validation
-- Integrity reports
-
-Part of the full file system librarian capabilities.
-"""
-
 import os
 import hashlib
 import logging
@@ -17,13 +5,9 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-
 from models.database_models import Document
-
-logger = logging.getLogger(__name__)
-
-
 class ContentIntegrityVerifier:
+    logger = logging.getLogger(__name__)
     """
     Content integrity verification system.
 

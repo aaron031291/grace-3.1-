@@ -1,40 +1,13 @@
-"""
-Genesis Capability-Based Binding System
-
-Layer 3: CDIC pipelines must bind to Genesis capabilities, not values.
-
-If CDIC pipelines read "current Genesis key values" → you're already wrong.
-
-They must bind to:
-- Capabilities
-- Permissions
-- Action envelopes
-
-Example:
-CDIC_PIPELINE: ExternalExecution
-  requires:
-    - genesis.capability.EXECUTE_EXTERNAL
-    - genesis.constraint.SANDBOX_ENFORCED
-    - genesis.trust_score >= 0.82
-
-If Genesis updates:
-- Pipelines re-evaluate eligibility
-- Not blindly continue execution
-- No capability → pipeline halts, degrades, or re-requests authority.
-"""
-
 import logging
 from typing import Dict, Any, List, Optional, Set, Callable, Tuple
 from datetime import datetime, UTC
 from enum import Enum
 from dataclasses import dataclass, field
-
 from models.genesis_key_models import GenesisKey
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisCapability(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Genesis capabilities that pipelines can bind to."""
     # Execution capabilities
     EXECUTE_EXTERNAL = "EXECUTE_EXTERNAL"

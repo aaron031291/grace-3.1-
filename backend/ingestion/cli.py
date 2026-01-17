@@ -1,32 +1,14 @@
-#!/usr/bin/env python3
-"""
-Command-line utility for managing file-based document ingestion.
-Provides commands to scan, watch, and manage knowledge base files.
-"""
-
 import sys
 import os
 import logging
 import argparse
 from pathlib import Path
 from typing import Optional
-
-# Add backend to path
-sys.path.insert(0, str(Path(__file__).parent))
-
 from ingestion.file_manager import IngestionFileManager
 from embedding import get_embedding_model
 from api.ingest import get_ingestion_service
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
-
 class FileIngestionCLI:
+    logger = logging.getLogger(__name__)
     """Command-line interface for file ingestion management."""
     
     def __init__(self, knowledge_base_path: str = "backend/knowledge_base"):

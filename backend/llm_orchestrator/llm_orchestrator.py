@@ -1,25 +1,3 @@
-"""
-Complete LLM Orchestration System
-
-Integrates all components:
-- Multiple LLMs (DeepSeek, Qwen, Llama, etc.)
-- Read-only repository access
-- Hallucination mitigation (5-layer pipeline)
-- Cognitive framework enforcement (12 OODA invariants)
-- Genesis Key tracking
-- Layer 1 integration
-- Learning Memory integration
-- Version control
-- Trust system verification
-
-All LLM operations are:
-- Tracked with Genesis Keys
-- Logged for audit
-- Trust-scored
-- Cognitively enforced
-- Integrated with learning memory
-"""
-
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
@@ -28,24 +6,20 @@ from sqlalchemy.orm import Session
 import json
 import uuid
 import hashlib
-
-from .multi_llm_client import MultiLLMClient, TaskType
-from .repo_access import RepositoryAccessLayer
-from .hallucination_guard import HallucinationGuard, VerificationResult
-from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
-from .proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
-from .autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
-from .grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
+from multi_llm_client import MultiLLMClient, TaskType
+from repo_access import RepositoryAccessLayer
+from hallucination_guard import HallucinationGuard, VerificationResult
+from cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
+from proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
+from autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
+from grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
+from grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
 from cognitive.learning_memory import LearningMemoryManager
 from embedding import EmbeddingModel
 from confidence_scorer.confidence_scorer import ConfidenceScorer
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class LLMTaskRequest:
+    logger = logging.getLogger(__name__)
     """LLM task request."""
     task_id: str
     prompt: str
@@ -133,6 +107,56 @@ class LLMOrchestrator:
             session=session,
             knowledge_base_path=knowledge_base_path
         ) if session and knowledge_base_path else None
+        
+        # Initialize Grace-Aligned LLM System (for Memory Mesh retrieval before generation)
+        self.grace_aligned_llm = None
+        if session and knowledge_base_path:
+            try:
+                # Try Advanced Grace-Aligned LLM first (beyond current capabilities)
+                try:
+                    from .advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
+                    self.grace_aligned_llm = get_advanced_grace_aligned_llm(
+                        session=session,
+                        knowledge_base_path=knowledge_base_path,
+                        max_context_tokens=4096,  # PC limitation
+                        memory_strategy="smart_adaptive",
+                        compression_level="moderate"
+                    )
+                    logger.info("[LLM ORCHESTRATOR] Advanced Grace-Aligned LLM System initialized (beyond current capabilities)")
+                except Exception as e:
+                    # Fallback to base Grace-Aligned LLM
+                    logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
+                    self.grace_aligned_llm = get_grace_aligned_llm_system(
+                        session=session,
+                        knowledge_base_path=knowledge_base_path,
+                        alignment_level=GraceAlignmentLevel.ADVANCED
+                    )
+                    logger.info("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
+            except Exception as e:
+                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
+        
+        # Initialize Output Formatter (for AI-to-AI JSON and AI-to-Human NLP)
+        try:
+            from .output_formatter import get_output_formatter, OutputRecipient
+            self.output_formatter = get_output_formatter()
+            self.output_recipient = OutputRecipient
+            logger.info("[LLM ORCHESTRATOR] Output Formatter initialized")
+        except Exception as e:
+            logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Output Formatter: {e}")
+            self.output_formatter = None
+            self.output_recipient = None
+        
+        # Initialize LLM-Transform Integration (for deterministic transforms)
+        self.transform_integration = None
+        if session and knowledge_base_path:
+            try:
+                self.transform_integration = get_llm_transform_integration(
+                    session=session,
+                    knowledge_base_path=knowledge_base_path
+                )
+                logger.info("[LLM ORCHESTRATOR] LLM-Transform Integration initialized")
+            except Exception as e:
+                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Transform Integration: {e}")
 
         # Initialize proactive code intelligence (makes LLMs always code-aware)
         self.code_intelligence = get_proactive_code_intelligence(
@@ -240,21 +264,142 @@ class LLMOrchestrator:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # STEP 2: Generate LLM Response
-            llm_response = self._generate_llm_response(task_request)
-            audit_trail.append({
-                "step": "llm_generation",
-                "model": llm_response.get("model_name"),
-                "duration_ms": llm_response.get("duration_ms"),
-                "timestamp": datetime.now().isoformat()
-            })
+            # STEP 2: Generate LLM Response (with optional deterministic transforms)
+            # Check if we can use deterministic transforms instead of free-form generation
+            use_transforms = task_request.task_type in [
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_DEBUGGING,
+                TaskType.CODE_EXPLANATION
+            ] and self.transform_integration is not None
+            
+            if use_transforms:
+                # Try deterministic transforms first
+                try:
+                    transformed_code, transform_outcomes = self.transform_integration.generate_with_transforms(
+                        code_intent=task_request.prompt,
+                        use_proofs=True
+                    )
+                    
+                    if transformed_code and transform_outcomes:
+                        # Transforms worked - use deterministic output
+                        llm_response = {
+                            "success": True,
+                            "content": transformed_code,
+                            "model_name": "deterministic_transform",
+                            "duration_ms": 100.0,  # Faster than LLM
+                            "transform_applied": True,
+                            "transform_outcomes": transform_outcomes
+                        }
+                        
+                        audit_trail.append({
+                            "step": "deterministic_transform",
+                            "transforms_applied": len(transform_outcomes),
+                            "proofs_passed": sum(
+                                1 for o in transform_outcomes
+                                if all(p == ProofStatus.PASSED or p == ProofStatus.SKIPPED for p in o.proof_results.values())
+                            ),
+                            "timestamp": datetime.now().isoformat()
+                        })
+                        
+                        logger.info(
+                            f"[LLM ORCHESTRATOR] Used deterministic transforms: "
+                            f"{len(transform_outcomes)} transforms applied"
+                        )
+                    else:
+                        # Transforms didn't match - fall back to LLM
+                        use_transforms = False
+                except Exception as e:
+                    logger.warning(f"[LLM ORCHESTRATOR] Transform generation error: {e}, falling back to LLM")
+                    use_transforms = False
+            
+            if not use_transforms:
+                # Generate with LLM (original method)
+                llm_response = self._generate_llm_response(task_request)
+                audit_trail.append({
+                    "step": "llm_generation",
+                    "model": llm_response.get("model_name"),
+                    "duration_ms": llm_response.get("duration_ms"),
+                    "timestamp": datetime.now().isoformat()
+                })
 
-            if not llm_response.get("success"):
-                raise Exception(f"LLM generation failed: {llm_response.get('error')}")
+                if not llm_response.get("success"):
+                    raise Exception(f"LLM generation failed: {llm_response.get('error')}")
 
-            content = llm_response.get("content", "")
+            raw_content = llm_response.get("content", "")
+            
+            # NEW: Enhance LLM output with deterministic transforms (if transform integration available)
+            transform_metadata = None
+            if self.transform_integration and not use_transforms:
+                try:
+                    enhanced_content, transform_metadata = self.transform_integration.enhance_llm_generation(
+                        llm_output=raw_content,
+                        use_transforms=True,
+                        proof_gate=True
+                    )
+                    
+                    if enhanced_content and transform_metadata.get("transforms_applied", 0) > 0:
+                        raw_content = enhanced_content
+                        audit_trail.append({
+                            "step": "llm_output_enhancement",
+                            "transforms_applied": transform_metadata["transforms_applied"],
+                            "proofs_passed": transform_metadata["proofs_passed"],
+                            "rules_used": transform_metadata["rules_used"],
+                            "timestamp": datetime.now().isoformat()
+                        })
+                        logger.info(
+                            f"[LLM ORCHESTRATOR] Enhanced LLM output: "
+                            f"{transform_metadata['transforms_applied']} transforms, "
+                            f"{transform_metadata['proofs_passed']} proofs passed"
+                        )
+                except Exception as e:
+                    logger.warning(f"[LLM ORCHESTRATOR] LLM enhancement error: {e}, using raw output")
+            
+            # NEW: Format output based on recipient type (AI-to-AI JSON or AI-to-Human NLP)
+            # Determine recipient type (default: human for user-facing, ai for system-to-system)
+            recipient_type = "ai" if task_request.context_documents and "ai" in str(task_request.context_documents).lower() else "human"
+            if task_request.task_type in [TaskType.CODE_GENERATION, TaskType.REASONING]:
+                recipient_type = "ai"  # Code generation and reasoning are AI-to-AI
+            
+            formatted_output = None
+            if self.output_formatter:
+                try:
+                    if recipient_type == "ai":
+                        # AI-to-AI: Deterministic JSON
+                        formatted_output = self.output_formatter.format_for_ai(
+                            raw_output=raw_content,
+                            verify=True
+                        )
+                    else:
+                        # AI-to-Human: Natural language
+                        formatted_output = self.output_formatter.format_for_human(
+                            raw_output=raw_content,
+                            verify=True
+                        )
+                    
+                    # Use formatted content
+                    content = formatted_output.content
+                    
+                    audit_trail.append({
+                        "step": "output_formatting",
+                        "format": formatted_output.format.value,
+                        "recipient": formatted_output.recipient.value,
+                        "verified": formatted_output.verified,
+                        "is_json": formatted_output.is_json,
+                        "deterministic": formatted_output.deterministic,
+                        "timestamp": datetime.now().isoformat()
+                    })
+                    
+                    logger.info(
+                        f"[LLM ORCHESTRATOR] Output formatted: {formatted_output.format.value} "
+                        f"for {formatted_output.recipient.value}, verified={formatted_output.verified}"
+                    )
+                except Exception as e:
+                    logger.warning(f"[LLM ORCHESTRATOR] Output formatting error: {e}, using raw content")
+                    content = raw_content
+            else:
+                content = raw_content
 
-            # STEP 3: Hallucination Mitigation
+            # STEP 3: Hallucination Mitigation (additional verification)
             verification_result = None
             if require_verification:
                 verification_result = self._verify_content(
@@ -289,7 +434,7 @@ class LLMOrchestrator:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # STEP 6: Learning Memory Integration
+            # STEP 6: Learning Memory Integration + Grace Evolution
             learning_example_id = None
             if enable_learning:
                 learning_example_id = self._integrate_learning_memory(
@@ -303,6 +448,66 @@ class LLMOrchestrator:
                     "learning_example_id": learning_example_id,
                     "timestamp": datetime.now().isoformat()
                 })
+                
+                # NEW: Contribute to Grace's learning (if Grace-Aligned LLM available)
+                if self.grace_aligned_llm:
+                    try:
+                        # Calculate trust score
+                        trust_score = verification_result.trust_score if verification_result else 0.8
+                        
+                        grace_learning_id = self.grace_aligned_llm.contribute_to_grace_learning(
+                            llm_output=content,
+                            query=task_request.prompt,
+                            trust_score=trust_score,
+                            genesis_key_id=genesis_key_id
+                        )
+                        if grace_learning_id:
+                            audit_trail.append({
+                                "step": "grace_learning_contribution",
+                                "grace_learning_id": grace_learning_id,
+                                "timestamp": datetime.now().isoformat()
+                            })
+                            logger.info(f"[GRACE-ALIGNED-LLM] Contributed to Grace learning: {grace_learning_id}")
+                    except Exception as e:
+                        logger.warning(f"[GRACE-ALIGNED-LLM] Learning contribution error: {e}")
+                
+                # NEW: Learn from transform outcomes (if transform integration available)
+                if self.transform_integration:
+                    try:
+                        # Learn from outcomes if we used transforms
+                        if llm_response.get("transform_outcomes"):
+                            transform_outcomes = llm_response.get("transform_outcomes", [])
+                            if transform_outcomes:
+                                self.transform_integration.learn_from_outcomes(
+                                    outcomes=transform_outcomes,
+                                    update_rules=True
+                                )
+                                audit_trail.append({
+                                    "step": "transform_outcome_learning",
+                                    "outcomes_processed": len(transform_outcomes),
+                                    "timestamp": datetime.now().isoformat()
+                                })
+                                logger.info(f"[TRANSFORM-LIB] Learned from {len(transform_outcomes)} transform outcomes")
+                    except Exception as e:
+                        logger.warning(f"[TRANSFORM-LIB] Outcome learning error: {e}")
+                
+                # NEW: Learn from transform outcomes (if transform integration available)
+                if self.transform_integration and llm_response.get("transform_outcomes"):
+                    try:
+                        transform_outcomes = llm_response.get("transform_outcomes", [])
+                        if transform_outcomes:
+                            self.transform_integration.learn_from_outcomes(
+                                outcomes=transform_outcomes,
+                                update_rules=True
+                            )
+                            audit_trail.append({
+                                "step": "transform_outcome_learning",
+                                "outcomes_processed": len(transform_outcomes),
+                                "timestamp": datetime.now().isoformat()
+                            })
+                            logger.info(f"[TRANSFORM-LIB] Learned from {len(transform_outcomes)} transform outcomes")
+                    except Exception as e:
+                        logger.warning(f"[TRANSFORM-LIB] Outcome learning error: {e}")
 
             # STEP 7: Finalize Cognitive Decision
             self.cognitive_enforcer.act(
@@ -430,16 +635,48 @@ class LLMOrchestrator:
 
         return decision_id
 
-    def _generate_llm_response(self, task_request: LLMTaskRequest) -> Dict[str, Any]:
+    def _generate_llm_response(
+        self,
+        task_request: LLMTaskRequest,
+        recipient_type: Optional[str] = None  # "ai" or "human"
+    ) -> Dict[str, Any]:
         """Generate LLM response."""
         logger.info(f"[LLM GENERATION] Generating response for task {task_request.task_id}")
 
+        # NEW: Retrieve memories from Memory Mesh BEFORE generation (Grace-Aligned LLM)
+        memory_context = None
+        if self.grace_aligned_llm and task_request.enable_learning:
+            try:
+                memories = self.grace_aligned_llm.retrieve_grace_memories(
+                    query=task_request.prompt,
+                    limit=10
+                )
+                if memories:
+                    memory_context = "\n\n=== GRACE MEMORY CONTEXT ===\n"
+                    for i, mem in enumerate(memories[:5], 1):  # Top 5
+                        mem_type = mem.get("type", "memory")
+                        content = mem.get("content", "")[:300]
+                        trust = mem.get("trust_score", 0.5)
+                        memory_context += f"{i}. [{mem_type.upper()}] Trust: {trust:.2f} - {content}...\n"
+                    memory_context += "\nUse these memories to inform your response.\n"
+                    logger.info(f"[GRACE-ALIGNED-LLM] Retrieved {len(memories)} memories from Memory Mesh")
+            except Exception as e:
+                logger.warning(f"[GRACE-ALIGNED-LLM] Memory retrieval error: {e}")
+        
         # Enhance prompt with code context (makes LLMs always code-aware)
         enhanced_prompt = self.code_intelligence.enhance_prompt_with_code_context(
             prompt=task_request.prompt,
             task_type=task_request.task_type,
             relevant_files=task_request.context_documents
         )
+        
+        # Add Memory Mesh context if available (BEFORE generation)
+        if memory_context:
+            enhanced_prompt = memory_context + "\n\n" + enhanced_prompt
+        
+        # Add Memory Mesh context if available
+        if memory_context:
+            enhanced_prompt = memory_context + "\n\n" + enhanced_prompt
         
         # Always include source code access context if repo_access available
         if self.repo_access:
@@ -454,7 +691,16 @@ class LLMOrchestrator:
             code_context += "- repo_access.get_file_tree() - Get codebase structure\n"
             code_context += "- repo_access.get_genesis_keys() - Get related Genesis Keys\n"
             code_context += "- repo_access.get_learning_examples() - Get high-trust learning examples\n"
+            code_context += "- repo_access.get_system_specs() - Get hardware specifications\n"
+            code_context += "- repo_access.get_system_specs_prompt() - Get formatted specs for prompts\n"
             code_context += "All access is logged and read-only - you cannot modify code.\n"
+            
+            # Add system specs context
+            try:
+                specs_prompt = self.repo_access.get_system_specs_prompt()
+                code_context += f"\n\n{specs_prompt}\n"
+            except Exception as e:
+                logger.debug(f"Could not add system specs to prompt: {e}")
             
             enhanced_prompt = code_context + "\n\n" + enhanced_prompt
         
@@ -531,12 +777,63 @@ class LLMOrchestrator:
         if task_request.require_grounding and self.repo_access:
             system_prompt += "\n\nYou have read-only access to the repository. Always reference actual files when making claims about code."
 
-        # Generate response
-        response = self.multi_llm.generate(
-            prompt=enhanced_prompt,
-            task_type=task_request.task_type,
-            system_prompt=system_prompt
-        )
+        # TimeSense: Estimate LLM response time
+        # Estimate token counts (rough: 4 chars per token)
+        prompt_tokens = len(enhanced_prompt.split())  # Rough token estimate
+        max_output_tokens = 512  # Default max output
+        
+        llm_prediction = None
+        model_name = None
+        if TIMESENSE_AVAILABLE and TimeEstimator:
+            try:
+                # Try to get model name from multi_llm
+                selected_model = self.multi_llm.select_model(
+                    task_type=task_request.task_type,
+                    prefer_speed=False
+                )
+                model_name = selected_model.model_id if selected_model else None
+                
+                llm_prediction = TimeEstimator.estimate_llm_response(
+                    prompt_tokens=prompt_tokens,
+                    max_output_tokens=max_output_tokens,
+                    model_name=model_name
+                )
+                if llm_prediction:
+                    logger.info(
+                        f"[LLM GENERATION] [TIMESENSE] Estimated response time: "
+                        f"{llm_prediction.human_readable()} (confidence: {llm_prediction.confidence:.2f})"
+                    )
+            except Exception as e:
+                logger.debug(f"[LLM GENERATION] TimeSense estimation failed: {e}")
+
+        # Generate response with TimeSense tracking
+        if TIMESENSE_AVAILABLE:
+            with track_operation(
+                PrimitiveType.LLM_TOKENS_GENERATE,
+                size=max_output_tokens,
+                task_id=f"llm_gen_{task_request.task_id}",
+                model_name=model_name
+            ):
+                response = self.multi_llm.generate(
+                    prompt=enhanced_prompt,
+                    task_type=task_request.task_type,
+                    system_prompt=system_prompt
+                )
+        else:
+            response = self.multi_llm.generate(
+                prompt=enhanced_prompt,
+                task_type=task_request.task_type,
+                system_prompt=system_prompt
+            )
+        
+        # Add prediction to response if available
+        if llm_prediction and response:
+            response['timesense_prediction'] = {
+                'estimated_ms': llm_prediction.p50_ms,
+                'estimated_range': f"{llm_prediction.p50_ms:.0f}-{llm_prediction.p95_ms:.0f}ms",
+                'human_readable': llm_prediction.human_readable(),
+                'confidence': llm_prediction.confidence
+            }
 
         return response
 

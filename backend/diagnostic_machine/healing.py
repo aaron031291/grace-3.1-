@@ -1,18 +1,3 @@
-"""
-Self-Healing Actions for Diagnostic Machine
-
-Implements concrete healing actions for:
-- Database connection recovery
-- Vector database reset
-- Cache clearing
-- Memory management
-- Service restart coordination
-- Log rotation
-- Configuration reload
-
-All actions are reversible where possible (Invariant 4).
-"""
-
 import gc
 import os
 import logging
@@ -24,11 +9,10 @@ from typing import Dict, Any, Optional, Callable, List
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
-
-
 class HealingActionType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of healing actions."""
     DATABASE_RECONNECT = "database_reconnect"
     VECTOR_DB_RESET = "vector_db_reset"
@@ -737,14 +721,18 @@ class HealingExecutor:
     def _heal_code_issues(self, params: Dict) -> HealingResult:
         """
         FIX: This healing action provides proactive code remediation for:
-        - Syntax errors
+        - Syntax errors (including indentation errors - THREAD ISSUE)
         - Import errors
-        - Missing files
+        - Missing files (THREAD ISSUE)
         - Code quality issues (bare except, mutable defaults, etc.)
         - Security vulnerabilities
         - Type errors
+        - Database datatype mismatches (THREAD ISSUE)
+        - Port conflicts (THREAD ISSUE)
+        - Process failures (THREAD ISSUE)
         
-        Uses the automatic bug fixer to fix issues detected by proactive scanner.
+        Uses both the automatic bug fixer AND the autonomous healing knowledge base
+        to ensure all thread issues are properly handled.
         """
         try:
             from .automatic_bug_fixer import get_automatic_fixer
@@ -757,10 +745,35 @@ class HealingExecutor:
             fixer = get_automatic_fixer(backend_dir=backend_dir, use_deepseek=use_deepseek)
             scanner = get_proactive_scanner(backend_dir=backend_dir)
             
+            # THREAD ISSUES: Also try autonomous healing system for thread-specific issues
+            autonomous_healing_attempted = False
+            autonomous_fixes = []
+            try:
+                from database.session import get_db_session
+                from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+                
+                session = next(get_db_session())
+                healing_system = get_autonomous_healing(
+                    session=session,
+                    repo_path=backend_dir,
+                    trust_level=TrustLevel.MEDIUM_RISK_AUTO,
+                    enable_learning=True
+                )
+                
+                # Run a monitoring cycle which will detect and attempt to fix issues
+                cycle_result = healing_system.run_monitoring_cycle()
+                
+                if cycle_result.get("actions_executed", 0) > 0:
+                    autonomous_healing_attempted = True
+                    autonomous_fixes = cycle_result.get("results", {}).get("executed", [])
+                    logger.info(f"[HEALING] Autonomous healing system executed {len(autonomous_fixes)} fixes")
+            except Exception as e:
+                logger.debug(f"[HEALING] Autonomous healing system not available: {e}")
+            
             # Scan for issues
             issues = scanner.scan_all()
             
-            if not issues:
+            if not issues and not autonomous_fixes:
                 return HealingResult(
                     action_type=HealingActionType.CODE_FIX,
                     success=True,
@@ -784,10 +797,12 @@ class HealingExecutor:
                 warning_fixes = fixer.fix_all_warnings(max_files=50)
                 successful_fixes.extend([f for f in warning_fixes if f.success])
             
-            total_fixed = len(successful_fixes)
+            total_fixed = len(successful_fixes) + len(autonomous_fixes)
             total_failed = len(failed_fixes)
             
             message = f"Fixed {total_fixed} code issues"
+            if autonomous_healing_attempted:
+                message += f" ({len(autonomous_fixes)} via autonomous healing system)"
             if total_failed > 0:
                 message += f", {total_failed} failed"
             if warning_fixes:
@@ -799,9 +814,11 @@ class HealingExecutor:
                 message=message,
                 pre_state={'issues_before': len(issues)},
                 post_state={
-                    'issues_after': len(issues) - total_fixed,
+                    'issues_after': len(issues) - total_fixed + len(autonomous_fixes),
                     'fixes_applied': total_fixed,
                     'fixes_failed': total_failed,
+                    'autonomous_healing_used': autonomous_healing_attempted,
+                    'autonomous_fixes': len(autonomous_fixes)
                 },
                 rollback_available=True,  # Backups created
             )

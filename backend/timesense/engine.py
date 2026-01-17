@@ -1,13 +1,3 @@
-"""
-TimeSense Engine - Main Orchestrator
-
-The central component that coordinates calibration, prediction,
-and continuous learning for Grace's time awareness.
-
-Subscribes to TASK_STARTED/TASK_FINISHED events and emits
-TIME_ESTIMATE_UPDATED events for the system to use.
-"""
-
 import os
 import asyncio
 import logging
@@ -16,19 +6,12 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Callable
 from enum import Enum
-
-from timesense.primitives import (
-    PrimitiveType,
-    PrimitiveCategory,
-    PrimitiveRegistry,
-    get_primitive_registry
-)
+from timesense.primitives import PrimitiveType, PrimitiveCategory, PrimitiveRegistry, get_primitive_registry
 from timesense.profiles import ProfileManager, TimeProfile, ProfileStatus
 from timesense.benchmarks import CalibrationService, CalibrationReport
 from timesense.predictor import TimePredictor, PredictionResult, TaskPlan
 
 logger = logging.getLogger(__name__)
-
 
 class EngineStatus(str, Enum):
     """Status of the TimeSense engine."""

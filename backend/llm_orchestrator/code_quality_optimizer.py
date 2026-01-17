@@ -1,22 +1,3 @@
-"""
-Code Quality Optimizer for Grace
-=================================
-
-Enables Grace to produce Claude/Cursor-quality code using only
-local open-source LLMs (DeepSeek, Qwen, Llama, Mistral) via Ollama.
-
-Key Strategies:
-1. Multi-stage code generation with iterative refinement
-2. Chain-of-thought reasoning for complex tasks
-3. Self-critique and improvement loops
-4. Code-aware quality scoring
-5. Best-of-N sampling with quality ranking
-6. Model ensemble for consensus
-7. DeepSeek-specific optimizations
-
-NO third-party API dependencies - all inference through Ollama.
-"""
-
 import logging
 import asyncio
 import json
@@ -27,11 +8,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class CodeQualityDimension(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Dimensions of code quality to optimize."""
     CORRECTNESS = "correctness"       # Does it work?
     COMPLETENESS = "completeness"     # Is it complete?

@@ -1,31 +1,14 @@
-"""
-Content Recommender - Recommendation System for Librarian
-
-Provides intelligent content recommendations based on:
-- Tag similarity
-- Relationship graph traversal
-- Content similarity
-- User access patterns
-- Document metadata
-
-Part of the full file system librarian capabilities.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
-
 from models.database_models import Document
 from models.librarian_models import DocumentTag, LibrarianTag, DocumentRelationship
 from librarian.tag_manager import TagManager
 from librarian.relationship_manager import RelationshipManager
-
-logger = logging.getLogger(__name__)
-
-
 class ContentRecommender:
+    logger = logging.getLogger(__name__)
     """
     Content recommendation engine.
 

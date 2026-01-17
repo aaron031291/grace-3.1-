@@ -1,10 +1,3 @@
-"""
-Autonomous Action API
-=====================
-REST API for GRACE's Autonomous Action Engine.
-Allows triggering, scheduling, and monitoring autonomous actions.
-"""
-
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -13,25 +6,9 @@ from datetime import datetime
 import asyncio
 import json
 import logging
-
-from genesis.autonomous_engine import (
-    get_autonomous_engine,
-    ActionType,
-    ActionPriority,
-    TriggerType,
-    ActionStatus
-)
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/api/autonomous", tags=["Autonomous Actions"])
-
-
-# =============================================================================
-# Request/Response Models
-# =============================================================================
-
+from genesis.autonomous_engine import get_autonomous_engine, ActionType, ActionPriority, TriggerType, ActionStatus
 class QueueActionRequest(BaseModel):
+    logger = logging.getLogger(__name__)
     """Request to queue an autonomous action."""
     action_type: str = Field(..., description="Type of action to perform")
     context_data: Optional[Dict[str, Any]] = Field(default=None, description="Context data for the action")

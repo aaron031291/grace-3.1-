@@ -1,41 +1,12 @@
-"""
-RAG Connector - Retrieval-Augmented Generation Integration
-
-Connects RAG system to Layer 1 message bus for:
-- Context-aware retrieval with procedural memory
-- Feedback loops to memory mesh
-- LLM orchestration for answer generation
-"""
-
 from typing import Dict, Any, Optional, List
 import logging
 from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    ComponentType,
-    Message,
-    get_message_bus
-)
+from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 from retrieval.retriever import DocumentRetriever
-
-# Optional trust-aware retriever support
-try:
-    from retrieval.trust_aware_retriever import TrustAwareDocumentRetriever
-    TRUST_AWARE_AVAILABLE = True
-except ImportError:
-    TrustAwareDocumentRetriever = None
-    TRUST_AWARE_AVAILABLE = False
-
-logger = logging.getLogger(__name__)
-
-# Thread pool for CPU-bound operations (SCALABILITY)
-_executor = ThreadPoolExecutor(max_workers=4)
-
-
 class RAGConnector:
+    logger = logging.getLogger(__name__)
     """
     Connects RAG to Layer 1 message bus.
 

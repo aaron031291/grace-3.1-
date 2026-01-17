@@ -1,18 +1,3 @@
-"""
-Genesis Key CI/CD Pipeline System
-=================================
-Self-hosted CI/CD pipeline powered by Genesis Keys.
-No external dependencies - fully autonomous build/test/deploy.
-
-Genesis Key Actions for CI/CD:
-- PIPELINE_TRIGGER: Initiates a pipeline run
-- PIPELINE_STAGE: Executes a pipeline stage
-- PIPELINE_COMPLETE: Marks pipeline completion
-- BUILD_ARTIFACT: Creates build artifacts
-- TEST_EXECUTION: Runs test suites
-- DEPLOYMENT: Handles deployments
-"""
-
 import asyncio
 import subprocess
 import os
@@ -27,11 +12,8 @@ from pathlib import Path
 import logging
 import hashlib
 import tempfile
-
-logger = logging.getLogger(__name__)
-
-
 class PipelineStatus(str, Enum):
+    logger = logging.getLogger(__name__)
     """Pipeline execution status."""
     PENDING = "pending"
     QUEUED = "queued"

@@ -1,31 +1,15 @@
-"""
-Content Visualizer - Visualization Utilities for Librarian
-
-Provides data structures and utilities for visualizing:
-- Tag relationships and clouds
-- Document relationship graphs
-- Organization hierarchies
-- Content statistics and trends
-
-Part of the full file system librarian capabilities.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
 from collections import defaultdict, Counter
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
-
 from models.database_models import Document
 from models.librarian_models import DocumentTag, LibrarianTag, DocumentRelationship
 from librarian.tag_manager import TagManager
 from librarian.relationship_manager import RelationshipManager
-
-logger = logging.getLogger(__name__)
-
-
 class ContentVisualizer:
+    logger = logging.getLogger(__name__)
     """
     Content visualization utilities.
 

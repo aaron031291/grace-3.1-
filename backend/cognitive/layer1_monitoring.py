@@ -1,15 +1,3 @@
-"""
-Layer 1 Monitoring - Performance and Health Monitoring
-
-This module provides comprehensive monitoring for Layer 1 operations:
-- Performance metrics
-- Health checks
-- Alerting
-- Statistics
-
-Maintains observability while preserving determinism.
-"""
-
 import logging
 import time
 from typing import Dict, List, Optional, Any
@@ -17,15 +5,11 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from collections import deque
 import statistics
-
 from sqlalchemy.orm import Session
 from cognitive.learning_memory import LearningExample
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class PerformanceMetrics:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Performance metrics for Layer 1 operations."""
     operation_name: str
     count: int = 0

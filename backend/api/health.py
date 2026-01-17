@@ -1,9 +1,3 @@
-"""
-Comprehensive Health Check API
-==============================
-Health checks for all GRACE services and components.
-"""
-
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Optional, List
@@ -303,3 +297,182 @@ async def liveness_check():
     Returns 200 if service is alive (basic check).
     """
     return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
+
+
+@router.get("/stability-proof")
+async def get_stability_proof(include_proof: bool = True) -> Dict[str, Any]:
+    """
+    **Deterministic Stability Proof**
+    
+    Proves that the system is in a stable state using mathematical determinism.
+    
+    This endpoint performs comprehensive deterministic checks on:
+    - Database stability and determinism
+    - Cognitive engine stability
+    - Invariant satisfaction
+    - State machine validity
+    - Deterministic operations verification
+    - System health metrics
+    - Error rates
+    - Component consistency
+    
+    **Parameters:**
+    - `include_proof`: If True, includes full mathematical proof (default: True)
+    
+    **Returns:**
+    - Complete stability proof with mathematical verification
+    - System state hash for reproducibility
+    - Component-by-component stability checks
+    - Overall stability level and confidence
+    
+    **Example:**
+    ```bash
+    curl http://localhost:8000/health/stability-proof
+    ```
+    """
+    try:
+        from database.session import SessionLocal
+        from cognitive.deterministic_stability_proof import get_stability_prover
+        
+        session = SessionLocal()
+        
+        try:
+            prover = get_stability_prover(session=session)
+            proof = prover.prove_stability(include_proof=include_proof)
+            
+            return {
+                "status": "success",
+                "proof": proof.to_dict(),
+                "message": f"System stability: {proof.stability_level.value} (confidence: {proof.overall_confidence:.2f})"
+            }
+        finally:
+            session.close()
+            
+    except Exception as e:
+        logger.error(f"Stability proof failed: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e),
+            "message": "Failed to generate stability proof"
+        }
+
+
+@router.get("/stability-proof/history")
+async def get_stability_proof_history(limit: int = 10) -> Dict[str, Any]:
+    """
+    **Get Stability Proof History**
+    
+    Returns recent stability proofs for analysis.
+    
+    **Parameters:**
+    - `limit`: Number of recent proofs to return (default: 10)
+    
+    **Example:**
+    ```bash
+    curl http://localhost:8000/health/stability-proof/history?limit=5
+    ```
+    """
+    try:
+        from database.session import SessionLocal
+        from cognitive.deterministic_stability_proof import get_stability_prover
+        
+        session = SessionLocal()
+        
+        try:
+            prover = get_stability_prover(session=session)
+            history = prover.get_proof_history(limit=limit)
+            
+            return {
+                "status": "success",
+                "count": len(history),
+                "proofs": [proof.to_dict() for proof in history]
+            }
+        finally:
+            session.close()
+            
+    except Exception as e:
+        logger.error(f"Failed to get stability proof history: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@router.get("/stability-monitor/status")
+async def get_stability_monitor_status() -> Dict[str, Any]:
+    """
+    **Get Real-Time Stability Monitor Status**
+    
+    Returns current status of the real-time stability monitoring system.
+    
+    **Returns:**
+    - Monitor status (running, stopped, etc.)
+    - Current stability level and confidence
+    - Statistics (total checks, stable/unstable counts)
+    - Recent alerts
+    
+    **Example:**
+    ```bash
+    curl http://localhost:8000/health/stability-monitor/status
+    ```
+    """
+    try:
+        from cognitive.realtime_stability_monitor import get_stability_monitor
+        
+        monitor = get_stability_monitor()
+        status = monitor.get_current_status()
+        
+        # Add recent alerts
+        recent_alerts = monitor.get_recent_alerts(limit=10)
+        status['recent_alerts'] = [alert.to_dict() for alert in recent_alerts]
+        
+        return {
+            "status": "success",
+            "monitor": status
+        }
+    except Exception as e:
+        logger.error(f"Failed to get stability monitor status: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@router.post("/stability-monitor/force-check")
+async def force_stability_check() -> Dict[str, Any]:
+    """
+    **Force Immediate Stability Check**
+    
+    Triggers an immediate stability proof check (synchronous).
+    
+    **Returns:**
+    - Latest stability proof
+    
+    **Example:**
+    ```bash
+    curl -X POST http://localhost:8000/health/stability-monitor/force-check
+    ```
+    """
+    try:
+        from cognitive.realtime_stability_monitor import get_stability_monitor
+        
+        monitor = get_stability_monitor()
+        proof = monitor.force_check()
+        
+        if proof:
+            return {
+                "status": "success",
+                "proof": proof.to_dict(),
+                "message": f"Stability check completed: {proof.stability_level.value}"
+            }
+        else:
+            return {
+                "status": "error",
+                "message": "Stability check failed"
+            }
+    except Exception as e:
+        logger.error(f"Failed to force stability check: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e)
+        }

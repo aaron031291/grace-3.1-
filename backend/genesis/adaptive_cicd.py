@@ -1,17 +1,3 @@
-"""
-Adaptive CI/CD Pipeline System
-==============================
-Intelligent, self-improving CI/CD with:
-- Trust scores for pipeline reliability
-- KPI tracking and performance metrics
-- LLM orchestration for intelligent decisions
-- Sandbox testing before production
-- Governance integration for human oversight
-
-GRACE can autonomously trigger pipelines based on her needs,
-test in sandbox, and request human approval via governance.
-"""
-
 import asyncio
 import json
 import hashlib
@@ -21,11 +7,16 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 import logging
 import statistics
-
-logger = logging.getLogger(__name__)
-
-
 class PipelineTrustLevel(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Trust levels for pipelines."""
     UNTRUSTED = "untrusted"      # New or failing pipeline
     LOW = "low"                   # < 50% success rate

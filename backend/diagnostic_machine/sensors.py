@@ -1,21 +1,3 @@
-"""
-Layer 1 - Sensors: Data Collection Layer
-
-INTEGRATED with LLM Orchestrator for health monitoring.
-
-Collects raw data from:
-- Test results (passed/failed/skipped)
-- System logs (tail logs)
-- Metrics (CPU, memory, disk, latency)
-- Agent outputs (cognitive decisions)
-- Genesis Keys (provenance data)
-- GRACE Mirror (self-reflection state)
-- LLM Orchestrator health status (preferred over direct Ollama)
-
-Health checks prioritize LLM Orchestrator availability over direct
-Ollama client access to ensure consistent system status reporting.
-"""
-
 import os
 import json
 import logging
@@ -24,11 +6,15 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
-
-
 class SensorType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of sensors available."""
     TEST_RESULTS = "test_results"
     SYSTEM_LOGS = "system_logs"
@@ -157,6 +143,8 @@ class CodeQualityData:
     database_issues: List[CodeQualityIssue] = field(default_factory=list)
     configuration_issues: List[CodeQualityIssue] = field(default_factory=list)
     dependency_issues: List[CodeQualityIssue] = field(default_factory=list)
+    syntax_errors: List[CodeQualityIssue] = field(default_factory=list)  # Added for indentation/syntax issues
+    infrastructure_issues: List[CodeQualityIssue] = field(default_factory=list)  # Added for port/process/file issues
     files_scanned: int = 0
     scan_duration_ms: float = 0.0
     timestamp: datetime = field(default_factory=datetime.utcnow)
@@ -921,6 +909,34 @@ class SensorLayer:
                  'Cookie set without security flags', None),
             ]
 
+            # THREAD ISSUES: Patterns for issues discussed in thread
+            thread_issue_patterns = [
+                # Indentation errors - detect common patterns
+                (r'if\s+.*:\s*\n\s+try:', 'potential_indentation_error', 'critical',
+                 'Potential indentation error: try block may be misaligned after if', None),
+                (r'if\s+.*:\s*\n\s{1,3}\w', 'potential_indentation_error', 'critical',
+                 'Potential indentation error: code after if statement may be incorrectly indented', None),
+                # Database datatype mismatch
+                (r'datatype mismatch|IntegrityError.*datatype|SQLite.*datatype', 'database_datatype_mismatch', 'critical',
+                 'Database datatype mismatch detected in error message', None),
+                (r'IntegrityError.*learning_examples', 'database_schema_mismatch', 'critical',
+                 'Database schema mismatch in learning_examples table', None),
+                # Port conflicts
+                (r'port.*already in use|address already in use|port.*occupied|OSError.*Address already', 'port_conflict', 'high',
+                 'Port conflict detected - another service is using the required port', None),
+                # Missing files/directories
+                (r'FileNotFoundError.*app\.py|missing.*app\.py|app\.py.*not found', 'missing_backend_file', 'critical',
+                 'Critical backend file (app.py) is missing', None),
+                (r'directory.*not found|No such directory|directory.*does not exist', 'missing_directory', 'high',
+                 'Required directory is missing', None),
+                # Process failures
+                (r'process.*died|process.*exited|process.*failed|process.*crash|RuntimeError.*process', 'process_failure', 'critical',
+                 'Process failure detected - backend or service process crashed', None),
+                # Connection failures
+                (r'connection.*failed|ConnectionError|connection.*refused|connection.*timeout', 'connection_failure', 'high',
+                 'Connection failure detected - service unavailable', None),
+            ]
+
             # Combine all proactive patterns
             all_security_patterns = security_patterns + race_condition_patterns + resource_patterns + api_security_patterns
 
@@ -987,6 +1003,78 @@ class SensorLayer:
                                 )
                                 code_quality.database_issues.append(issue)
                                 self._increment_severity_count(code_quality, severity)
+                    
+                    # Check thread issue patterns (indentation, database, port, process issues)
+                    for pattern, issue_type, severity, desc, cwe in thread_issue_patterns:
+                        # For multiline patterns, check content
+                        if re.search(pattern, content, re.IGNORECASE | re.MULTILINE):
+                            # Find line number
+                            line_num = 1
+                            for i, line in enumerate(lines, 1):
+                                if re.search(pattern, line, re.IGNORECASE):
+                                    line_num = i
+                                    break
+                                # Check multiline context
+                                if i < len(lines):
+                                    context = '\n'.join(lines[max(0, i-2):min(len(lines), i+2)])
+                                    if re.search(pattern, context, re.IGNORECASE | re.MULTILINE):
+                                        line_num = i
+                                        break
+                            
+                            issue = CodeQualityIssue(
+                                issue_type=issue_type,
+                                severity=severity,
+                                file_path=rel_path,
+                                line_number=line_num,
+                                description=desc,
+                                code_snippet=lines[line_num-1].strip()[:100] if line_num <= len(lines) else '',
+                                cwe_id=cwe
+                            )
+                            # Categorize by type
+                            if 'indentation' in issue_type:
+                                code_quality.configuration_issues.append(issue)  # Syntax/configuration
+                            elif 'database' in issue_type or 'datatype' in issue_type:
+                                code_quality.database_issues.append(issue)
+                            elif 'port' in issue_type or 'connection' in issue_type or 'process' in issue_type or 'missing' in issue_type:
+                                code_quality.configuration_issues.append(issue)  # Infrastructure/configuration
+                            else:
+                                code_quality.configuration_issues.append(issue)
+                            self._increment_severity_count(code_quality, severity)
+                    
+                    # AST-based indentation error detection
+                    try:
+                        import ast
+                        try:
+                            ast.parse(content)
+                        except IndentationError as e:
+                            issue = CodeQualityIssue(
+                                issue_type='indentation_error',
+                                severity='critical',
+                                file_path=rel_path,
+                                line_number=e.lineno or 1,
+                                description=f'IndentationError: {e.msg}',
+                                code_snippet=lines[e.lineno - 1].strip()[:100] if e.lineno and e.lineno <= len(lines) else '',
+                                suggested_fix='Fix indentation - ensure consistent spacing (4 spaces recommended)',
+                                cwe_id=None
+                            )
+                            code_quality.configuration_issues.append(issue)
+                            self._increment_severity_count(code_quality, 'critical')
+                        except SyntaxError as e:
+                            if 'indentation' in str(e.msg).lower() or 'expected an indented block' in str(e.msg).lower():
+                                issue = CodeQualityIssue(
+                                    issue_type='indentation_error',
+                                    severity='critical',
+                                    file_path=rel_path,
+                                    line_number=e.lineno or 1,
+                                    description=f'SyntaxError (indentation): {e.msg}',
+                                    code_snippet=lines[e.lineno - 1].strip()[:100] if e.lineno and e.lineno <= len(lines) else '',
+                                    suggested_fix='Fix indentation - ensure consistent spacing (4 spaces recommended)',
+                                    cwe_id=None
+                                )
+                                code_quality.configuration_issues.append(issue)
+                                self._increment_severity_count(code_quality, 'critical')
+                    except Exception:
+                        pass  # AST parsing failed - that's okay, we'll catch it elsewhere
 
                 except Exception as e:
                     logger.debug(f"Could not scan {py_file}: {e}")

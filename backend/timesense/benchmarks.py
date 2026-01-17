@@ -1,16 +1,3 @@
-"""
-Calibration Benchmarking System for TimeSense
-
-Runs empirical benchmarks for primitive operations to calibrate
-Grace's time profiles. This is how Grace learns "on this machine,
-reading 1 MB from disk takes ~X ms."
-
-The calibration service:
-1. Runs startup benchmarks for core primitives
-2. Periodically recalibrates stale profiles
-3. Adapts to system conditions (load, cache state)
-"""
-
 import os
 import time
 import json
@@ -27,22 +14,12 @@ import psutil
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional, Any, Callable
 from dataclasses import dataclass, field
-
-from timesense.primitives import (
-    PrimitiveType,
-    PrimitiveCategory,
-    Primitive,
-    PrimitiveRegistry,
-    get_primitive_registry,
-    CacheState
-)
+from timesense.primitives import PrimitiveType, PrimitiveCategory, Primitive, PrimitiveRegistry, get_primitive_registry, CacheState
 from timesense.profiles import TimeProfile, ProfileManager, DistributionStats
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class BenchmarkResult:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Result of a single benchmark run."""
     primitive_type: PrimitiveType
     size: int

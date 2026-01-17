@@ -1,17 +1,3 @@
-"""
-Proactive Background Learning System
-
-Grace learns automatically in the background when new training data arrives.
-
-Key Features:
-- File system monitoring for new documents
-- Automatic ingestion + study when files detected
-- Multi-processing for parallel learning
-- Subagent architecture for autonomous operation
-- Background task queue for async learning
-- Progress tracking and reporting
-"""
-
 import asyncio
 import logging
 from pathlib import Path
@@ -23,21 +9,15 @@ from queue import Queue, Empty
 import threading
 import time
 import hashlib
-
 from sqlalchemy.orm import Session
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
-
 from database.session import initialize_session_factory
 from cognitive.active_learning_system import GraceActiveLearningSystem
 from retrieval.retriever import DocumentRetriever
 from embedding import get_embedding_model
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class LearningTask:
+    logger = logging.getLogger(__name__)
     """A learning task for Grace to process."""
     task_id: str
     task_type: str  # "study", "practice", "ingest"

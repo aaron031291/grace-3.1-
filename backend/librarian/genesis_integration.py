@@ -1,22 +1,11 @@
-"""
-Genesis Key Integration for Librarian
-
-Integrates librarian operations with Grace's Genesis Key tracking system.
-Every librarian action creates/updates Genesis Keys for full provenance tracking.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from models.database_models import Document
 from models.genesis_key_models import GenesisKey, GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class LibrarianGenesisIntegration:
+    logger = logging.getLogger(__name__)
     """
     Genesis Key integration for librarian operations.
 

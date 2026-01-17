@@ -1,31 +1,12 @@
-"""
-Genesis Validation Gate - Hard Stop Before Persistence
-
-Layer 1: Genesis must verify intent, not just structure.
-
-Before any Genesis key is saved:
-1. Validate schema
-2. Validate intent
-3. Validate authority
-4. Validate invariants
-5. Validate propagation rules
-
-No validation → no save → no push forward
-
-This is not optional if Genesis controls autonomy.
-"""
-
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, UTC
 from enum import Enum
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class ValidationError(Exception):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Raised when Genesis key validation fails."""
     pass
 

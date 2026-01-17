@@ -1,10 +1,3 @@
-"""
-Genesis Key Snapshot System
-
-Captures snapshots of Genesis Keys when system is in stable state.
-Maintains 6 active snapshots, keeps 3 most recent as backups, archives older ones.
-"""
-
 import logging
 import json
 import os
@@ -13,14 +6,10 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-
 from models.genesis_key_models import GenesisKey, GenesisKeyStatus, GenesisKeyType
 from genesis.genesis_key_service import GenesisKeyService
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisKeySnapshot:
+    logger = logging.getLogger(__name__)
     """Represents a snapshot of Genesis Keys at a point in time."""
     
     def __init__(

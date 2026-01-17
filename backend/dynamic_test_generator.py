@@ -1,17 +1,3 @@
-"""
-Dynamic Test Generator for Grace
-
-Enables Grace to automatically generate and execute tests for any new logic,
-code, or implementations. Works with the sandbox for safe execution.
-
-Features:
-- Parse Python code to understand structure
-- Generate appropriate unit tests
-- Generate integration tests
-- Execute in sandbox environment
-- Validate and report results
-"""
-
 import ast
 import os
 import sys
@@ -24,14 +10,10 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
 from dataclasses import dataclass, field
-
-logger = logging.getLogger(__name__)
-
-BACKEND_DIR = Path(__file__).parent
-
-
-@dataclass
 class CodeAnalysis:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Analysis of a code module."""
     module_name: str
     file_path: str

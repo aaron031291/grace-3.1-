@@ -1,37 +1,14 @@
-"""
-Unified Neuro-Symbolic Reasoner - True Neuro-Symbolic Integration
-
-Combines neural (fuzzy, pattern-based) and symbolic (precise, rule-based)
-reasoning into a unified system where both inform each other.
-
-Key Features:
-- Bidirectional integration (neural ↔ symbolic)
-- Joint inference combining both approaches
-- Trust-weighted fusion
-- Context-aware reasoning
-"""
-
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass
 from datetime import datetime
 import logging
-
 from embedding import EmbeddingModel, get_embedding_model
 from retrieval.retriever import DocumentRetriever
 from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext
 from ml_intelligence.neural_to_symbolic_rule_generator import NeuralToSymbolicRuleGenerator, SymbolicRule
-
-try:
-    from cognitive.learning_memory import LearningMemoryManager
-except ImportError:
-    LearningMemoryManager = None
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class ReasoningResult:
+    logger = logging.getLogger(__name__)
     """Unified reasoning result combining neural and symbolic"""
     query: str
     neural_results: List[Dict[str, Any]]

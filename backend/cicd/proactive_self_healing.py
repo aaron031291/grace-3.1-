@@ -1,14 +1,3 @@
-"""
-Proactive Self-Healing CI/CD Integration
-
-Grace's self-healing agent integrated with CI/CD pipeline to:
-1. Continuously monitor for problems BEFORE they occur
-2. Run proactive checks at every pipeline stage
-3. Detect issues early (pre-commit, pre-build, pre-deploy)
-4. Automatically fix issues before they reach production
-5. Prevent problems rather than react to them
-"""
-
 import logging
 import subprocess
 import os
@@ -17,15 +6,11 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 from pathlib import Path
 from enum import Enum
-
 from sqlalchemy.orm import Session
 from cognitive.devops_healing_agent import DevOpsHealingAgent, DevOpsLayer, IssueCategory
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, TaskType
-
-logger = logging.getLogger(__name__)
-
-
 class PipelineStage(str, Enum):
+    logger = logging.getLogger(__name__)
     """CI/CD pipeline stages where proactive checks run."""
     PRE_COMMIT = "pre_commit"          # Before code is committed
     PRE_BUILD = "pre_build"             # Before building

@@ -1,22 +1,13 @@
-"""
-Episodic Memory - Concrete Experiences
-
-Stores what happened, when it happened, and what the outcome was.
-This is different from semantic knowledge - it's experiential.
-
-OPTIMIZED: Now supports semantic similarity using embeddings
-"""
 from sqlalchemy import Column, String, Float, Text, DateTime, JSON
-from database.base import BaseModel
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 import logging
 import json
 import numpy as np
+from database.base import BaseModel
 
 logger = logging.getLogger(__name__)
-
 
 class Episode(BaseModel):
     """

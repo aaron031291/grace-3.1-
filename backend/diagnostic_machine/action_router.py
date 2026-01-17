@@ -1,15 +1,3 @@
-"""
-Layer 4 - Action Router: Response Execution Layer
-
-Routes decisions to appropriate actions:
-- Alert Human: Notify operators of issues
-- Trigger Self-Healing: Attempt automatic fixes
-- Freeze System: Halt operations for safety
-- Recommend Learning: Capture patterns for improvement
-- Do Nothing: System is healthy, no action needed
-- Trigger CI/CD: Initiate pipeline for testing/deployment
-"""
-
 import os
 import json
 import logging
@@ -19,16 +7,22 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-
-from .sensors import SensorData
-from .interpreters import InterpretedData, Pattern, PatternType
-from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
-from .healing import HealingExecutor, HealingActionType, get_healing_executor
-
-logger = logging.getLogger(__name__)
-
-
+from sensors import SensorData
+from interpreters import InterpretedData, Pattern, PatternType
+from judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
+from healing import HealingExecutor, HealingActionType, get_healing_executor
 class ActionType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of actions the router can execute."""
     ALERT_HUMAN = "alert_human"
     TRIGGER_HEALING = "trigger_healing"
@@ -542,6 +536,33 @@ class ActionRouter:
         if sensor_data.code_quality and sensor_data.code_quality.critical_issues > 0:
             healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
         
+        # THREAD ISSUES: Check for specific thread-related issues that need immediate healing
+        if sensor_data.code_quality:
+            thread_issue_types = [
+                'indentation_error', 'potential_indentation_error',
+                'database_datatype_mismatch', 'database_schema_mismatch',
+                'port_conflict', 'missing_backend_file', 'missing_directory',
+                'process_failure', 'connection_failure'
+            ]
+            
+            # Check all issue lists for thread issues
+            all_issues = (
+                sensor_data.code_quality.configuration_issues +
+                sensor_data.code_quality.database_issues +
+                getattr(sensor_data.code_quality, 'syntax_errors', []) +
+                getattr(sensor_data.code_quality, 'infrastructure_issues', [])
+            )
+            
+            thread_critical_issues = [
+                issue for issue in all_issues
+                if any(thread_type in issue.issue_type.lower() for thread_type in thread_issue_types)
+                and issue.severity in ('critical', 'high')
+            ]
+            
+            if thread_critical_issues:
+                logger.info(f"[ACTION-ROUTER] Found {len(thread_critical_issues)} thread-related critical issues, triggering healing")
+                healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
+        
         # Static analysis issues (syntax errors, import errors, missing files)
         if sensor_data.static_analysis:
             static_issues = sensor_data.static_analysis
@@ -814,8 +835,37 @@ class ActionRouter:
     def _heal_clear_cache(self, params: Dict) -> bool:
         """Clear application cache."""
         try:
-            # Placeholder - implement actual cache clearing
-            logger.info("Clearing application cache")
+            # Clear memory mesh cache
+            try:
+                from cognitive.memory_mesh_cache import invalidate_memory_mesh_cache
+                invalidate_memory_mesh_cache()
+                logger.info("[HEAL] Cleared memory mesh cache")
+            except Exception as e:
+                logger.warning(f"[HEAL] Could not clear memory mesh cache: {e}")
+
+            # Clear Redis cache if available
+            try:
+                from cache.redis_cache import get_redis_cache
+                redis_cache = get_redis_cache()
+                if redis_cache:
+                    redis_cache.clear_all()
+                    logger.info("[HEAL] Cleared Redis cache")
+            except Exception as e:
+                logger.debug(f"[HEAL] Redis cache not available or error: {e}")
+
+            # Clear Python function caches
+            import functools
+            functools._cache_clear()
+
+            # Clear any LRU caches in memory mesh
+            try:
+                from cognitive.memory_mesh_cache import get_memory_mesh_cache
+                cache = get_memory_mesh_cache()
+                cache.invalidate_all()
+            except Exception:
+                pass
+
+            logger.info("[HEAL] Application cache cleared successfully")
             return True
         except Exception as e:
             logger.error(f"Cache clear failed: {e}")
@@ -835,9 +885,27 @@ class ActionRouter:
     def _heal_reset_vector_db(self, params: Dict) -> bool:
         """Reset vector database client."""
         try:
-            # Placeholder - implement actual vector DB reset
-            logger.info("Vector DB client reset")
-            return True
+            from vector_db.client import get_qdrant_client
+            import os
+            
+            # Get current Qdrant client and disconnect
+            qdrant_host = os.getenv("QDRANT_HOST", "localhost")
+            qdrant_port = int(os.getenv("QDRANT_PORT", "6333"))
+            
+            # Force a new connection
+            qdrant_client = get_qdrant_client(
+                host=qdrant_host,
+                port=qdrant_port,
+                force_new=True
+            )
+            
+            if qdrant_client.connect():
+                logger.info("[HEAL] Vector DB client reset and reconnected successfully")
+                return True
+            else:
+                logger.warning("[HEAL] Vector DB reset attempted but connection failed")
+                return False
+
         except Exception as e:
             logger.error(f"Vector DB reset failed: {e}")
             return False

@@ -1,8 +1,3 @@
-"""
-Librarian API endpoints.
-Provides REST API for tag management, relationships, rules, approval workflow, and document processing.
-"""
-
 from fastapi import APIRouter, HTTPException, Query, Path, Depends, Body
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -11,12 +6,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 import logging
 import json
-
 from database.session import get_session
-from models.librarian_models import (
-    LibrarianTag, DocumentTag, DocumentRelationship,
-    LibrarianRule, LibrarianAction, LibrarianAudit
-)
+from models.librarian_models import LibrarianTag, DocumentTag, DocumentRelationship, LibrarianRule, LibrarianAction, LibrarianAudit
 from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.rule_categorizer import RuleBasedCategorizer
@@ -27,45 +18,38 @@ from embedding import get_embedding_model
 from ollama_client.client import get_ollama_client
 from vector_db.client import get_qdrant_client
 from settings import settings
-
-logger = logging.getLogger(__name__)
-
-# Create router
-router = APIRouter(prefix="/librarian", tags=["Librarian"])
-
-# Global singleton instances
-_librarian_engine: Optional[LibrarianEngine] = None
-
-
-def get_librarian_engine(session: Session) -> LibrarianEngine:
-    """Get or create librarian engine singleton."""
-    global _librarian_engine
-
-    if _librarian_engine is None:
-        logger.info("[LIBRARIAN-API] Initializing LibrarianEngine singleton")
-        try:
-            _librarian_engine = LibrarianEngine(
-                db_session=session,
-                embedding_model=get_embedding_model(),
-                ollama_client=get_ollama_client(),
-                vector_db_client=get_qdrant_client(),
-                ai_model_name=settings.LIBRARIAN_AI_MODEL,
-                use_ai=settings.LIBRARIAN_USE_AI,
-                detect_relationships=settings.LIBRARIAN_DETECT_RELATIONSHIPS,
-                ai_confidence_threshold=settings.LIBRARIAN_AI_CONFIDENCE_THRESHOLD,
-                similarity_threshold=settings.LIBRARIAN_SIMILARITY_THRESHOLD
-            )
-            logger.info("[LIBRARIAN-API] LibrarianEngine initialized successfully")
-        except Exception as e:
-            logger.error(f"[LIBRARIAN-API] Failed to initialize LibrarianEngine: {e}")
-            raise HTTPException(status_code=503, detail="Librarian engine unavailable")
-
-    return _librarian_engine
-
-
-# ==================== Pydantic Response Models ====================
-
 class TagResponse(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Tag information response."""
     id: int = Field(..., description="Tag ID")
     name: str = Field(..., description="Tag name")

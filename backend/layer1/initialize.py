@@ -1,75 +1,17 @@
-"""
-Layer 1 Initialization - Complete System Setup
-
-Initializes all Layer 1 components and connects them to the message bus
-for autonomous bidirectional communication.
-
-Usage:
-    from backend.layer1.initialize import initialize_layer1
-
-    layer1 = initialize_layer1(
-        session=db_session,
-        kb_path="/path/to/knowledge_base"
-    )
-
-    # All components now communicate autonomously!
-"""
-
 from typing import Dict, Any, Optional
 import logging
 from pathlib import Path
 from sqlalchemy.orm import Session
-
 from layer1.message_bus import get_message_bus, Layer1MessageBus, ComponentType
-from layer1.components import (
-    MemoryMeshConnector,
-    GenesisKeysConnector,
-    RAGConnector,
-    IngestionConnector,
-    LLMOrchestrationConnector
-)
+from layer1.components import MemoryMeshConnector, GenesisKeysConnector, RAGConnector, IngestionConnector, LLMOrchestrationConnector
 from layer1.components.version_control_connector import get_version_control_connector
-
-# Optional neuro-symbolic connector
-try:
-    from layer1.components.neuro_symbolic_connector import (
-        NeuroSymbolicConnector,
-        create_neuro_symbolic_connector
-    )
-    NEURO_SYMBOLIC_AVAILABLE = True
-except ImportError:
-    NeuroSymbolicConnector = None
-    create_neuro_symbolic_connector = None
-    NEURO_SYMBOLIC_AVAILABLE = False
-
-# Optional knowledge base connectors
-try:
-    from layer1.components.knowledge_base_connector import (
-        KnowledgeBaseIngestionConnector,
-        create_knowledge_base_ingestion_connector
-    )
-    from layer1.components.data_integrity_connector import (
-        DataIntegrityConnector,
-        create_data_integrity_connector
-    )
-    KNOWLEDGE_BASE_AVAILABLE = True
-except ImportError:
-    KnowledgeBaseIngestionConnector = None
-    create_knowledge_base_ingestion_connector = None
-    DataIntegrityConnector = None
-    create_data_integrity_connector = None
-    KNOWLEDGE_BASE_AVAILABLE = False
-
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from retrieval.retriever import DocumentRetriever
 from ingestion.service import TextIngestionService
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator
 from embedding import get_embedding_model
-
-logger = logging.getLogger(__name__)
-
-
 class Layer1System:
+    logger = logging.getLogger(__name__)
     """
     Complete Layer 1 system with all components connected.
 

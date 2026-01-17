@@ -1,19 +1,3 @@
-"""
-Diagnostic Engine - Main Orchestrator for 4-Layer Diagnostic Machine
-
-Coordinates:
-- Layer 1: Sensors (data collection)
-- Layer 2: Interpreters (pattern analysis)
-- Layer 3: Judgement (decision making)
-- Layer 4: Action Routing (response execution)
-
-Features:
-- 60-second heartbeat for continuous monitoring
-- Event-driven sensor triggering
-- CI/CD pipeline integration
-- Forensic analysis and AVN/AVM
-"""
-
 import os
 import json
 import logging
@@ -25,17 +9,15 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-
-from .sensors import SensorLayer, SensorData, CodeQualityData
-from .interpreters import InterpreterLayer, InterpretedData
-from .judgement import JudgementLayer, JudgementResult, HealthStatus
-from .action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
-from .healing import HealingExecutor, HealingActionType, get_healing_executor
-
-logger = logging.getLogger(__name__)
-
-
+from sensors import SensorLayer, SensorData, CodeQualityData
+from interpreters import InterpreterLayer, InterpretedData
+from judgement import JudgementLayer, JudgementResult, HealthStatus
+from action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
+from healing import HealingExecutor, HealingActionType, get_healing_executor
 class EngineState(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """State of the diagnostic engine."""
     STOPPED = "stopped"
     STARTING = "starting"
@@ -54,6 +36,11 @@ class TriggerSource(str, Enum):
     WEBHOOK = "webhook"  # External webhook
     PROACTIVE_SCAN = "proactive_scan"  # FIX: Proactive code quality scan
     FILE_CHANGE = "file_change"  # FIX: File watcher detected change
+    STRESS_TEST_CONNECTION_ISSUE = "stress_test_connection_issue"  # Added from stress tests
+    STRESS_TEST_MEMORY_ISSUE = "stress_test_memory_issue"  # Added from stress tests
+    STRESS_TEST_UNKNOWN_ISSUE = "stress_test_unknown_issue"  # Added from stress tests
+    STRESS_TEST_CONCURRENCY_ISSUE = "stress_test_concurrency_issue"  # Added from stress tests
+    STRESS_TEST_DATA_INTEGRITY = "stress_test_data_integrity"  # Added from stress tests
 
 
 @dataclass
@@ -261,28 +248,34 @@ class DiagnosticEngine:
         try:
             cycle_start = datetime.utcnow()
 
-            # Layer 1: Collect sensor data
-            logger.debug("Layer 1: Collecting sensor data...")
-            cycle.sensor_data = self.sensor_layer.collect_all()
+            # TimeSense: Track diagnostic cycle
+            with track_with_timesense(
+                primitive_type=PrimitiveType.COMPLEX_OPERATION if PrimitiveType else None,
+                size=1.0,  # Single cycle
+                fallback_name="diagnostic_cycle"
+            ):
+                # Layer 1: Collect sensor data
+                logger.debug("Layer 1: Collecting sensor data...")
+                cycle.sensor_data = self.sensor_layer.collect_all()
 
-            # Layer 2: Interpret patterns
-            logger.debug("Layer 2: Interpreting patterns...")
-            cycle.interpreted_data = self.interpreter_layer.interpret(cycle.sensor_data)
+                # Layer 2: Interpret patterns
+                logger.debug("Layer 2: Interpreting patterns...")
+                cycle.interpreted_data = self.interpreter_layer.interpret(cycle.sensor_data)
 
-            # Layer 3: Make judgement
-            logger.debug("Layer 3: Making judgement...")
-            cycle.judgement = self.judgement_layer.judge(
-                cycle.sensor_data,
-                cycle.interpreted_data
-            )
+                # Layer 3: Make judgement
+                logger.debug("Layer 3: Making judgement...")
+                cycle.judgement = self.judgement_layer.judge(
+                    cycle.sensor_data,
+                    cycle.interpreted_data
+                )
 
-            # Layer 4: Route actions
-            logger.debug("Layer 4: Routing actions...")
-            cycle.action_decision = self.action_router.route(
-                cycle.sensor_data,
-                cycle.interpreted_data,
-                cycle.judgement
-            )
+                # Layer 4: Route actions
+                logger.debug("Layer 4: Routing actions...")
+                cycle.action_decision = self.action_router.route(
+                    cycle.sensor_data,
+                    cycle.interpreted_data,
+                    cycle.judgement
+                )
 
             cycle_end = datetime.utcnow()
             cycle.cycle_end = cycle_end

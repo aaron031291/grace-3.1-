@@ -1,20 +1,3 @@
-"""
-LLM Fine-Tuning System with User Permission
-
-Enables GRACE to fine-tune open-source LLMs using:
-- High-trust learning examples
-- User-approved training data
-- Autonomous learning patterns
-- Task-specific improvements
-
-All fine-tuning:
-- Requires user permission
-- Generates detailed reports
-- Tracks with Genesis Keys
-- Validates improvements
-- Creates backups
-"""
-
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
@@ -23,15 +6,13 @@ from enum import Enum
 import json
 import uuid
 from pathlib import Path
-
-from .multi_llm_client import MultiLLMClient, TaskType
-from .repo_access import RepositoryAccessLayer
-from .learning_integration import LearningIntegration
-
-logger = logging.getLogger(__name__)
-
-
+from multi_llm_client import MultiLLMClient, TaskType
+from repo_access import RepositoryAccessLayer
+from learning_integration import LearningIntegration
 class FineTuningStatus(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Status of fine-tuning job."""
     PENDING_APPROVAL = "pending_approval"
     APPROVED = "approved"

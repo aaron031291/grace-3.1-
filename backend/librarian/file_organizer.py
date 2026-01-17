@@ -1,30 +1,14 @@
-"""
-File Organizer - Automatic Folder Organization for Librarian
-
-Handles automatic folder creation and file organization based on:
-- Document tags and categories
-- File types and extensions
-- Date-based organization
-- Metadata-driven structure
-
-Part of the full file system librarian capabilities.
-"""
-
 import os
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.utils import sanitize_filename, extract_file_extension
-
-logger = logging.getLogger(__name__)
-
-
 class FileOrganizer:
+    logger = logging.getLogger(__name__)
     """
     Automatic file organization manager.
 

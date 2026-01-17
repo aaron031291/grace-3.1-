@@ -1,33 +1,11 @@
-"""
-Industry-Standard Stress Tests for Grace Quality Systems
-
-Tests:
-1. Code Quality Optimizer - Multi-stage generation
-2. Chain-of-Thought Reasoner - Complex reasoning
-3. Competitive Benchmark - Quality scoring
-4. Parliament Governance - Quorum voting
-5. Enhanced Orchestrator - End-to-end generation
-6. Oracle Intelligence - Predictive systems
-"""
-
 import pytest
 import asyncio
 import time
 import logging
 from typing import Dict, List, Any
 from dataclasses import dataclass
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# Test Infrastructure
-# =============================================================================
-
-@dataclass
 class StressTestResult:
+    logger = logging.getLogger(__name__)
     """Result of a stress test."""
     test_name: str
     passed: bool

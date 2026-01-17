@@ -1,13 +1,3 @@
-"""
-Proactive Code Intelligence System
-
-Makes LLMs always connected to source code and continuously learning:
-- Proactively analyzes code changes
-- Learns from code patterns
-- Provides intelligent code-aware responses
-- Continuously improves understanding of codebase
-"""
-
 import logging
 from typing import Dict, List, Optional, Any, Set
 from datetime import datetime, timedelta
@@ -16,16 +6,11 @@ import hashlib
 import threading
 import time
 from dataclasses import dataclass
-
-from .multi_llm_client import MultiLLMClient, TaskType
-from .repo_access import RepositoryAccessLayer
-from .learning_integration import LearningIntegration
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
+from multi_llm_client import MultiLLMClient, TaskType
+from repo_access import RepositoryAccessLayer
+from learning_integration import LearningIntegration
 class CodeAnalysis:
+    logger = logging.getLogger(__name__)
     """Code analysis result."""
     file_path: str
     analysis_type: str  # "functionality", "pattern", "improvement", "learning"

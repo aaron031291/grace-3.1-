@@ -1,50 +1,3 @@
-"""
-Intelligent CI/CD Orchestrator
-==============================
-The BRAIN that connects all autonomous systems with the CI/CD pipeline.
-
-This orchestrator provides:
-1. CLOSED-LOOP FEEDBACK: Production metrics → Learning → Test selection → Deployment
-2. INTELLIGENT TEST SELECTION: ML-based test prioritization
-3. AUTONOMOUS PIPELINE TRIGGERING: Self-triggering based on system state
-4. GENESIS KEY INTEGRATION: Full traceability across all CI/CD operations
-5. WEBHOOK EVENT PROCESSING: Real-time event-driven automation
-6. SELF-HEALING INTEGRATION: Auto-healing triggered by CI/CD failures
-
-Architecture:
-    ┌─────────────────────────────────────────────────────────────────────┐
-    │                  INTELLIGENT CI/CD ORCHESTRATOR                      │
-    ├─────────────────────────────────────────────────────────────────────┤
-    │                                                                      │
-    │  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐  │
-    │  │   Adaptive   │    │  Autonomous  │    │    Intelligent      │  │
-    │  │    CI/CD     │ ←→ │   Triggers   │ ←→ │   Test Selector     │  │
-    │  └──────────────┘    └──────────────┘    └──────────────────────┘  │
-    │         ↑                   ↑                       ↑              │
-    │         │                   │                       │              │
-    │         ↓                   ↓                       ↓              │
-    │  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐  │
-    │  │  Autonomous  │    │   Webhook    │    │   Learning Memory    │  │
-    │  │   Healing    │ ←→ │  Processor   │ ←→ │     Integration      │  │
-    │  └──────────────┘    └──────────────┘    └──────────────────────┘  │
-    │         ↑                   ↑                       ↑              │
-    │         └───────────────────┴───────────────────────┘              │
-    │                             ↓                                       │
-    │                    ┌──────────────┐                                 │
-    │                    │ Genesis Keys │                                 │
-    │                    │  (Tracking)  │                                 │
-    │                    └──────────────┘                                 │
-    │                                                                      │
-    └─────────────────────────────────────────────────────────────────────┘
-
-GRACE can autonomously:
-- Monitor production health and trigger CI/CD based on anomalies
-- Select optimal tests to run based on code changes and historical data
-- Trigger healing actions when pipelines fail
-- Learn from CI/CD outcomes to improve future decisions
-- Create and track Genesis Keys for all operations
-"""
-
 import asyncio
 import hashlib
 import json
@@ -55,15 +8,15 @@ from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import statistics
-
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# ENUMS & DATA CLASSES
-# =============================================================================
-
+from models.genesis_key_models import GenesisKey, GenesisKeyType
+from genesis.code_change_analyzer import get_code_change_analyzer, CodeChangeAnalyzer, ChangeAnalysis
 class IntelligenceMode(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Intelligence level for CI/CD decisions."""
     RULE_BASED = "rule_based"           # Simple rule-based decisions
     ML_ASSISTED = "ml_assisted"         # ML helps with recommendations
@@ -170,14 +123,16 @@ class IntelligentTestSelector:
     Uses:
     - Multi-armed bandit for test prioritization
     - Historical failure patterns
-    - Code change impact analysis
+    - Code change impact analysis (via Genesis Keys)
     - Test coverage data
+    - AST-based semantic code analysis
     """
 
-    def __init__(self):
+    def __init__(self, base_path: Optional[str] = None):
         self.test_metrics: Dict[str, TestMetrics] = {}
         self.bandit_arms: Dict[str, Dict[str, float]] = {}  # test_id -> {successes, failures}
         self.selection_history: List[Dict] = []
+        self.code_analyzer = get_code_change_analyzer(base_path=base_path)
 
     def record_test_result(
         self,
@@ -345,6 +300,99 @@ class IntelligentTestSelector:
         )
 
         return selected
+
+    def select_tests_from_genesis_key(
+        self,
+        genesis_key: GenesisKey,
+        strategy: TestSelectionStrategy = TestSelectionStrategy.IMPACT_ANALYSIS,
+        max_tests: Optional[int] = None,
+        time_budget: Optional[float] = None
+    ) -> Tuple[List[str], Optional[ChangeAnalysis]]:
+        """
+        Select tests intelligently based on a Genesis Key representing a code change.
+        
+        This is the GRACE WAY - uses semantic code analysis, not just file names.
+        
+        Args:
+            genesis_key: Genesis Key representing the code change
+            strategy: Test selection strategy
+            max_tests: Maximum number of tests to select
+            time_budget: Maximum time budget in seconds
+            
+        Returns:
+            Tuple of (selected_test_ids, change_analysis)
+        """
+        # Analyze the code change using AST parsing
+        change_analysis = self.code_analyzer.analyze_genesis_key(genesis_key)
+        
+        if not change_analysis:
+            logger.warning(f"[TestSelector] Could not analyze Genesis Key {genesis_key.key_id}")
+            # Fallback to file-based selection
+            if genesis_key.file_path:
+                return self.select_tests(
+                    strategy=strategy,
+                    changed_files=[genesis_key.file_path],
+                    max_tests=max_tests,
+                    time_budget=time_budget
+                ), None
+            return [], None
+        
+        # Use the semantic analysis to select tests
+        selected_tests = []
+        
+        # Start with tests directly suggested by the analyzer
+        for test_path in change_analysis.suggested_tests:
+            # Convert file path to test_id
+            test_id = Path(test_path).stem
+            if test_id not in selected_tests:
+                selected_tests.append(test_id)
+        
+        # Add tests from affected files
+        for test_path in change_analysis.affected_tests:
+            test_id = Path(test_path).stem
+            if test_id not in selected_tests:
+                selected_tests.append(test_id)
+        
+        # If we have test metrics, prioritize by historical data
+        if self.test_metrics:
+            # Score tests by priority
+            scored_tests = []
+            for test_id in selected_tests:
+                metrics = self.test_metrics.get(test_id)
+                if metrics:
+                    # Higher priority for tests that:
+                    # - Recently failed (failure_recency)
+                    # - Have good coverage (coverage_value)
+                    # - Are not flaky (1 - flakiness_score)
+                    priority = (
+                        metrics.failure_recency * 0.4 +
+                        metrics.coverage_value * 0.3 +
+                        (1.0 - metrics.flakiness_score) * 0.3
+                    )
+                    scored_tests.append((test_id, priority))
+                else:
+                    # Unknown tests get medium priority
+                    scored_tests.append((test_id, 0.5))
+            
+            # Sort by priority
+            scored_tests.sort(key=lambda x: x[1], reverse=True)
+            selected_tests = [t[0] for t in scored_tests]
+        
+        # Apply limits
+        if max_tests and len(selected_tests) > max_tests:
+            selected_tests = selected_tests[:max_tests]
+        
+        # Apply time budget
+        if time_budget:
+            selected_tests = self._apply_time_budget(selected_tests, time_budget)
+        
+        logger.info(
+            f"[TestSelector] Selected {len(selected_tests)} tests from Genesis Key "
+            f"{genesis_key.key_id} (risk={change_analysis.risk_score:.2f}, "
+            f"confidence={change_analysis.confidence:.2f})"
+        )
+        
+        return selected_tests, change_analysis
 
     def _test_matches_file(self, test_id: str, file_path: str) -> bool:
         """Check if a test is related to a file."""

@@ -1,15 +1,3 @@
-"""
-Autonomous Task Scheduler for Grace OS
-========================================
-
-Enables Grace to:
-1. Schedule and execute tasks autonomously
-2. Manage up to 10 parallel background jobs
-3. Process voice and NLP commands
-4. Notify users of progress ("Hey Omar, I'm adding self-updater module – hold tight")
-5. Learn from task outcomes
-"""
-
 import logging
 import asyncio
 import json
@@ -21,11 +9,14 @@ from pathlib import Path
 import uuid
 import threading
 from collections import deque
-
-logger = logging.getLogger(__name__)
-
-
 class TaskPriority(int, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Task priority levels."""
     CRITICAL = 0   # Immediate execution
     HIGH = 1       # Execute ASAP

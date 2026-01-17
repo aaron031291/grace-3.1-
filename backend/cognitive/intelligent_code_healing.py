@@ -1,14 +1,3 @@
-"""
-Intelligent Code Healing with Cognitive Framework
-
-Grace's intelligent healing system that:
-1. Reads and verifies source code
-2. Applies cognitive framework (7-step-ahead thinking)
-3. Communicates with rest of system
-4. Verifies cascading effects
-5. Routes uncertain actions: LLM → Quorum → User Approval
-"""
-
 import logging
 import ast
 import subprocess
@@ -16,23 +5,12 @@ from typing import Dict, Any, Optional, List, Tuple
 from datetime import datetime, UTC
 from pathlib import Path
 import json
-
 from sqlalchemy.orm import Session
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.devops_healing_agent import DevOpsHealingAgent
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, TaskType
-
-try:
-    from layer1.message_bus import Layer1MessageBus, ComponentType, get_message_bus
-except ImportError:
-    Layer1MessageBus = None
-    ComponentType = None
-    get_message_bus = None
-
-logger = logging.getLogger(__name__)
-
-
 class CascadingEffectAnalyzer:
+    logger = logging.getLogger(__name__)
     """Analyzes potential cascading effects of code changes."""
     
     def __init__(self, message_bus: Optional[Layer1MessageBus] = None):

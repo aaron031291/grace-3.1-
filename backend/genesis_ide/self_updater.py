@@ -1,18 +1,3 @@
-"""
-Self-Updater for Grace OS
-==========================
-
-Enables Grace to:
-1. Read her own code
-2. Understand what's missing
-3. Write the missing piece
-4. Test it
-5. Version it
-6. Commit it back into herself
-
-This is the "living platform" capability that allows Grace to evolve.
-"""
-
 import logging
 import json
 from typing import Dict, Any, List, Optional
@@ -22,11 +7,8 @@ from pathlib import Path
 import subprocess
 import uuid
 import shutil
-
-logger = logging.getLogger(__name__)
-
-
 class UpdateType:
+    logger = logging.getLogger(__name__)
     """Types of self-updates."""
     PATCH = "patch"           # Small fix
     ENHANCEMENT = "enhancement"  # Small improvement

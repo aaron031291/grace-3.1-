@@ -1,18 +1,3 @@
-"""
-Thread-Based Learning Subagent System
-
-Windows-compatible version using threading instead of multiprocessing.
-
-Architecture:
-- Master Thread: Orchestrates learning subagents
-- Study Subagents: Autonomous concept extraction (multi-thread)
-- Practice Subagents: Skill execution and validation (multi-thread)
-- Mirror Subagent: Self-reflection and gap identification (dedicated thread)
-- Result Collector Thread: Collects results from all subagents
-
-All subagents run independently in background threads with IPC via queues.
-"""
-
 import threading
 from queue import Queue, Empty
 import logging
@@ -22,20 +7,9 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import sys
-
-# Import shared types from multiprocessing version
-from .learning_subagent_system import (
-    TaskType, MessageType, LearningTask, Message
-)
-
-logger = logging.getLogger(__name__)
-
-
-# ======================================================================
-# Base Subagent (runs in separate thread)
-# ======================================================================
-
+from learning_subagent_system import TaskType, MessageType, LearningTask, Message
 class BaseThreadSubagent:
+    logger = logging.getLogger(__name__)
     """
     Base class for all learning subagents (thread-based).
 
@@ -520,6 +494,21 @@ class ThreadLearningOrchestrator:
         self.mirror_agent.stop()
 
         logger.info("[ORCHESTRATOR] All subagents stopped")
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get orchestrator statistics."""
+        with self._stats_lock:
+            return {
+                "total_tasks_submitted": self.total_tasks_submitted,
+                "total_tasks_completed": self.total_tasks_completed,
+                "num_study_agents": len(self.study_agents),
+                "num_practice_agents": len(self.practice_agents),
+                "study_queue_size": self.study_queue.qsize(),
+                "practice_queue_size": self.practice_queue.qsize(),
+                "mirror_queue_size": self.mirror_queue.qsize(),
+                "result_queue_size": self.result_queue.qsize(),
+                "collector_running": self._collector_running
+            }
 
     def submit_study_task(self, topic: str, learning_objectives: List[str], priority: int = 5) -> str:
         """Submit study task to available study subagent."""

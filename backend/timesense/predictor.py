@@ -1,25 +1,13 @@
-"""
-Time Prediction Model with Uncertainty Bounds
-
-Composes primitive profiles into task duration estimates.
-Returns predictions as distributions (p50/p90/p95/p99), not single numbers.
-
-The predictor enables Grace to say:
-"I can do 12 tasks of varying sizes in 40-65 minutes (p50-p95)"
-"""
-
 import math
 import logging
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 from enum import Enum
-
 from timesense.primitives import PrimitiveType, PrimitiveCategory, get_primitive_registry
 from timesense.profiles import ProfileManager, TimeProfile, ProfileStatus
 
 logger = logging.getLogger(__name__)
-
 
 class ConfidenceLevel(str, Enum):
     """Confidence levels for predictions."""

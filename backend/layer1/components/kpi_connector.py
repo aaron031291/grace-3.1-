@@ -1,36 +1,10 @@
-"""
-KPI Connector - Layer 1 Integration
-
-Connects KPI tracking system to Layer 1 message bus, enabling autonomous
-KPI tracking and trust score generation from component performance.
-"""
-
 import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    Message,
-    ComponentType,
-    MessageType,
-    get_message_bus,
-)
+from layer1.message_bus import Layer1MessageBus, Message, ComponentType, MessageType, get_message_bus
 from layer1.autonomous_actions import AutonomousAction
-
-# Import KPI tracker
-try:
-    from ml_intelligence.kpi_tracker import get_kpi_tracker, KPITracker
-    KPI_TRACKER_AVAILABLE = True
-except ImportError:
-    get_kpi_tracker = None
-    KPITracker = None
-    KPI_TRACKER_AVAILABLE = False
-
-logger = logging.getLogger(__name__)
-
-
 class KPIConnector:
+    logger = logging.getLogger(__name__)
     """
     Connector for KPI tracking system.
     

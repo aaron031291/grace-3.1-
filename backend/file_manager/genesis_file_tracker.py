@@ -1,19 +1,9 @@
-"""
-Genesis File Tracker
-
-Creates Genesis Keys for ALL file operations.
-Complete provenance and auditability.
-"""
-
 import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisFileTracker:
+    logger = logging.getLogger(__name__)
     """
     Creates Genesis Keys for ALL file operations.
     Complete provenance tracking for file management.
@@ -378,6 +368,13 @@ class GenesisFileTracker:
                 'learned_from': 'processing_outcome'
             }
 
+            # Calculate trust score based on outcome quality
+            trust_score = outcome.get('quality_score', 0.5)
+            if outcome.get('success', False) and trust_score >= 0.7:
+                trust_score = 0.8  # High trust for successful learning
+            elif not outcome.get('success', False):
+                trust_score = 0.4  # Lower trust for failures
+            
             key_id = self.genesis_service.create_key(
                 key_type='LEARNING_TASK',
                 what=f"Learned optimal strategy for {file_type}",
@@ -386,7 +383,15 @@ class GenesisFileTracker:
                 who='strategy_learner',
                 why='Continuous processing improvement',
                 how='outcome_based_learning',
-                context=context
+                context=context,
+                metadata={
+                    'outcome_type': 'file_processing_outcome',
+                    'example_type': 'file_processing_outcome',
+                    'trust_score': trust_score,
+                    'success': outcome.get('success', False),
+                    'file_type': file_type,
+                    'quality_score': outcome.get('quality_score', 0.5)
+                }
             )
 
             logger.info(

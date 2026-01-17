@@ -1,15 +1,3 @@
-"""
-Deterministic Code Pipeline with JSON Contracts
-================================================
-
-Provides deterministic, verifiable code generation through:
-1. Execution Contracts - Formal specification of goals/constraints
-2. Multi-LLM Pipeline - Multiple models for generation/verification
-3. JSON Schema Validation - Structured inputs/outputs
-4. Pre-commit Confidence Scoring - Quality gates
-5. Change Classification - Auto-tagging for KPIs
-"""
-
 import logging
 import json
 import hashlib
@@ -19,11 +7,10 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
-
-
 class RiskLevel(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Risk levels for code changes."""
     LOW = "low"
     MEDIUM = "medium"

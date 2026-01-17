@@ -1,10 +1,3 @@
-"""
-Ingestion API
-=============
-REST API for the Librarian Ingestion Pipeline.
-Provides endpoints for data ingestion, status tracking, and library management.
-"""
-
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, BackgroundTasks
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -14,25 +7,13 @@ import asyncio
 import json
 import base64
 import logging
-
-from genesis.librarian_pipeline import (
-    get_librarian_pipeline,
-    IngestionStatus,
-    ContentType,
-    IngestionRecord,
-    IngestionResult
-)
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/api/ingestion", tags=["Ingestion Pipeline"])
-
-
-# =============================================================================
-# Request/Response Models
-# =============================================================================
-
+from genesis.librarian_pipeline import get_librarian_pipeline, IngestionStatus, ContentType, IngestionRecord, IngestionResult
 class IngestFileRequest(BaseModel):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Request to ingest a file from path."""
     file_path: str = Field(..., description="Path to file to ingest")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Optional metadata")

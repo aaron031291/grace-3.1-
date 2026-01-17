@@ -1,21 +1,3 @@
-"""
-Genesis Runtime Governance System
-
-Decouples Git from Genesis evolution.
-
-Rule:
-- Code merges may add Genesis handlers
-- They may NOT implicitly change Genesis authority
-
-Genesis evolution must be:
-- Runtime-governed
-- Logged
-- Signed
-- Reviewed (human or quorum)
-
-Git is just transport, not the source of truth for Genesis state.
-"""
-
 import logging
 import json
 import hashlib
@@ -24,14 +6,12 @@ from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 from enum import Enum
 from dataclasses import dataclass, field
-
 from models.genesis_key_models import GenesisKey
 from genesis.validation_gate import AuthorityScope, DeltaType
-
-logger = logging.getLogger(__name__)
-
-
 class ReviewStatus(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Status of Genesis change review."""
     PENDING = "pending"
     APPROVED = "approved"
