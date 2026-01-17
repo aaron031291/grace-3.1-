@@ -8,11 +8,11 @@ import uuid
 from execution.bridge import ExecutionBridge, ExecutionConfig, get_execution_bridge
 from execution.actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
 from execution.feedback import FeedbackProcessor, get_feedback_processor, LearningSignal
-from typing import Tuple
-from typing import Tuple
+
+logger = logging.getLogger(__name__)
+
+
 class TaskStatus(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Status of a task."""
     PENDING = "pending"
     PLANNING = "planning"

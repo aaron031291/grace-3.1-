@@ -5,14 +5,13 @@ from datetime import datetime
 from enum import Enum
 import uuid
 from .multi_llm_client import MultiLLMClient, TaskType, LLMModel
-from repo_access import RepositoryAccessLayer
-from hallucination_guard import HallucinationGuard
+from llm_orchestrator.repo_access import RepositoryAccessLayer
+from llm_orchestrator.hallucination_guard import HallucinationGuard
+
+logger = logging.getLogger(__name__)
+
+
 class CollaborationMode(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of collaboration between LLMs."""
     DEBATE = "debate"  # Multiple LLMs debate a topic
     CONSENSUS = "consensus"  # LLMs work to reach consensus

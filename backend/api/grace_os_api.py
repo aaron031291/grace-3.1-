@@ -13,11 +13,6 @@ router = APIRouter(prefix="/grace-os", tags=["grace-os"])
 
 
 class ActionRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request for executing an action."""
     action_type: str = Field(..., description="Type of action to execute")
     parameters: Dict[str, Any] = Field(default_factory=dict)

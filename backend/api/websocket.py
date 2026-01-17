@@ -4,8 +4,14 @@ import json
 import asyncio
 from datetime import datetime
 import logging
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/ws", tags=["WebSocket"])
+
+
 class ConnectionManager:
-    logger = logging.getLogger(__name__)
     """Manages WebSocket connections and broadcasts."""
 
     def __init__(self):

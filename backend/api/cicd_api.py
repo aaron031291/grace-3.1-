@@ -6,10 +6,14 @@ import hashlib
 import hmac
 import logging
 from genesis.cicd import get_cicd, GenesisCICD, Pipeline, PipelineRun, PipelineStage, PipelineStatus, StageType, StageResult, GenesisKeyAction
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/cicd", tags=["CI/CD"])
+
+
 class TriggerPipelineRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to trigger a pipeline."""
     pipeline_id: str = Field(..., description="Pipeline ID to trigger")
     branch: str = Field("main", description="Git branch")

@@ -1014,7 +1014,8 @@ async def check_database_health(session: Session = Depends(get_session)):
     
     try:
         # Test basic connection
-        session.execute("SELECT 1")
+        from sqlalchemy import text
+        session.execute(text("SELECT 1"))
         health_status["database_connection"] = "healthy"
         
         # Check each table

@@ -6,8 +6,8 @@ from enum import Enum
 import base64
 import io
 from pathlib import Path
-from multi_llm_client import MultiLLMClient, TaskType, get_multi_llm_client
-from repo_access import RepositoryAccessLayer, get_repo_access
+from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType, get_multi_llm_client
+from llm_orchestrator.repo_access import RepositoryAccessLayer, get_repo_access
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration
 class MediaType(Enum):
     logger = logging.getLogger(__name__)

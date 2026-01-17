@@ -8,12 +8,11 @@ import json
 import base64
 import logging
 from genesis.librarian_pipeline import get_librarian_pipeline, IngestionStatus, ContentType, IngestionRecord, IngestionResult
+from typing import ClassVar
+
+logger = logging.getLogger(__name__)
+
 class IngestFileRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to ingest a file from path."""
     file_path: str = Field(..., description="Path to file to ingest")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Optional metadata")
@@ -71,6 +70,8 @@ class IngestionRecordResponse(BaseModel):
 # =============================================================================
 # Ingestion Endpoints
 # =============================================================================
+
+router = APIRouter(prefix="/api/ingestion", tags=["ingestion"])
 
 @router.post("/file", response_model=IngestionResponse)
 async def ingest_file(request: IngestFileRequest):

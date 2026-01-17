@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-01-17T15:05:01.932970",
+  "configuration": {
+    "max_problems": null,
+    "use_frontier": true,
+    "full_dataset": true
+  },
+  "results": {
+    "total": 11,
+    "passed": 2,
+    "failed": 9,
+    "pass_rate": 18.181818181818183,
+    "results": [
+      {
+        "task_id": "humaneval_0",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_1",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_2",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_3",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_4",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_5",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_6",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_7",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_8",
+        "status": "FAIL",
+        "passed": false,
+        "error": "No code generated"
+      },
+      {
+        "task_id": "humaneval_9",
+        "status": "PASS",
+        "passed": true,
+        "error": null,
+        "code": "def is_sorted(data):\n    \"\"\"Sort a list.\"\"\"\n    return sorted(data)\n"
+      },
+      {
+        "task_id": "humaneval_10",
+        "status": "PASS",
+        "passed": true,
+        "error": null,
+        "code": "def remove_vowels(s):\n    \"\"\"Count vowels in string.\"\"\"\n    vowels = 'aeiouAEIOU'\n    return sum(1 for c in s if c in vowels)\n"
+      }
+    ]
+  },
+  "elapsed_time_seconds": 12.465299129486084
+}

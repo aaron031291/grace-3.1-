@@ -7,8 +7,8 @@ from datetime import datetime
 from difflib import SequenceMatcher
 from urllib.parse import quote_plus
 import requests
-from multi_llm_client import MultiLLMClient, TaskType
-from repo_access import RepositoryAccessLayer
+from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
+from llm_orchestrator.repo_access import RepositoryAccessLayer
 class ExternalVerifier:
     logger = logging.getLogger(__name__)
     """

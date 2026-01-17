@@ -11,7 +11,7 @@ try:
     from .multi_llm_client import MultiLLMClient, TaskType
 except ImportError:
     try:
-        from multi_llm_client import MultiLLMClient, TaskType
+        from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
     except ImportError:
         MultiLLMClient = None
         TaskType = None
@@ -20,7 +20,7 @@ try:
     from .repo_access import RepositoryAccessLayer
 except ImportError:
     try:
-        from repo_access import RepositoryAccessLayer
+        from llm_orchestrator.repo_access import RepositoryAccessLayer
     except ImportError:
         RepositoryAccessLayer = None
 
@@ -28,7 +28,7 @@ try:
     from .hallucination_guard import HallucinationGuard, VerificationResult
 except ImportError:
     try:
-        from hallucination_guard import HallucinationGuard, VerificationResult
+        from llm_orchestrator.hallucination_guard import HallucinationGuard, VerificationResult
     except ImportError:
         HallucinationGuard = None
         VerificationResult = None
@@ -182,12 +182,23 @@ class LLMOrchestrator:
 
         # Initialize core components with graceful fallbacks
         try:
-            self.multi_llm = MultiLLMClient() if MultiLLMClient else None
-            if self.multi_llm:
-                logger.info("[LLM ORCHESTRATOR] MultiLLMClient initialized")
+            if MultiLLMClient is None:
+                logger.warning("[LLM ORCHESTRATOR] MultiLLMClient module not available - LLM generation will be disabled")
+                self.multi_llm = None
+            else:
+                self.multi_llm = MultiLLMClient()
+                if self.multi_llm:
+                    if self.multi_llm.available_models:
+                        logger.info(f"[LLM ORCHESTRATOR] MultiLLMClient initialized with {len(self.multi_llm.available_models)} models")
+                    else:
+                        logger.warning("[LLM ORCHESTRATOR] MultiLLMClient initialized but no models available - check Ollama service")
+                else:
+                    logger.warning("[LLM ORCHESTRATOR] MultiLLMClient initialization returned None")
         except Exception as e:
-            logger.debug(f"[LLM ORCHESTRATOR] MultiLLMClient not available: {e}")
+            logger.warning(f"[LLM ORCHESTRATOR] MultiLLMClient initialization failed: {e}", exc_info=True)
             self.multi_llm = None
+            # Feed error to self-healing pipeline
+            self._record_error_for_learning(e, "multi_llm_initialization", session)
         
         try:
             self.repo_access = RepositoryAccessLayer(
@@ -197,8 +208,10 @@ class LLMOrchestrator:
             if self.repo_access:
                 logger.info("[LLM ORCHESTRATOR] RepositoryAccessLayer initialized")
         except Exception as e:
-            logger.debug(f"[LLM ORCHESTRATOR] RepositoryAccessLayer not available: {e}")
+            logger.warning(f"[LLM ORCHESTRATOR] RepositoryAccessLayer not available: {e}")
             self.repo_access = None
+            # Feed error to self-healing pipeline
+            self._record_error_for_learning(e, "repository_access_initialization", session)
         
         try:
             self.confidence_scorer = ConfidenceScorer(
@@ -207,8 +220,10 @@ class LLMOrchestrator:
             if self.confidence_scorer:
                 logger.info("[LLM ORCHESTRATOR] ConfidenceScorer initialized")
         except Exception as e:
-            logger.debug(f"[LLM ORCHESTRATOR] ConfidenceScorer not available: {e}")
+            logger.warning(f"[LLM ORCHESTRATOR] ConfidenceScorer not available: {e}")
             self.confidence_scorer = None
+            # Feed error to self-healing pipeline
+            self._record_error_for_learning(e, "confidence_scorer_initialization", session)
 
         try:
             if HallucinationGuard and self.multi_llm:
@@ -224,9 +239,9 @@ class LLMOrchestrator:
                 if not HallucinationGuard:
                     logger.debug("[LLM ORCHESTRATOR] HallucinationGuard module not available")
                 elif not self.multi_llm:
-                    logger.debug("[LLM ORCHESTRATOR] HallucinationGuard requires MultiLLMClient")
+                    logger.warning("[LLM ORCHESTRATOR] HallucinationGuard requires MultiLLMClient")
         except Exception as e:
-            logger.debug(f"[LLM ORCHESTRATOR] HallucinationGuard not available: {e}")
+            logger.warning(f"[LLM ORCHESTRATOR] HallucinationGuard not available: {e}")
             self.hallucination_guard = None
         
         try:
@@ -351,17 +366,26 @@ class LLMOrchestrator:
             learning_integration=learning_integration
         )
         
-        self.autonomous_fine_tuning = get_autonomous_fine_tuning_trigger(
-            multi_llm_client=self.multi_llm,
-            fine_tuning_system=fine_tuning_system,
-            repo_access=self.repo_access,
-            learning_integration=learning_integration,
-            auto_approve=False  # Requires user approval for safety
-        )
+        # Initialize autonomous fine tuning trigger (if available)
+        if get_autonomous_fine_tuning_trigger is not None:
+            try:
+                self.autonomous_fine_tuning = get_autonomous_fine_tuning_trigger(
+                    multi_llm_client=self.multi_llm,
+                    fine_tuning_system=fine_tuning_system,
+                    repo_access=self.repo_access,
+                    learning_integration=learning_integration,
+                    auto_approve=False  # Requires user approval for safety
+                )
+            except Exception as e:
+                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize autonomous fine tuning trigger: {e}")
+                self.autonomous_fine_tuning = None
+        else:
+            self.autonomous_fine_tuning = None
         
         # Start proactive monitoring
         self.code_intelligence.start_monitoring()
-        self.autonomous_fine_tuning.start_monitoring()
+        if self.autonomous_fine_tuning:
+            self.autonomous_fine_tuning.start_monitoring()
 
         # Task registry
         self.active_tasks: Dict[str, LLMTaskRequest] = {}
@@ -1259,6 +1283,44 @@ class LLMOrchestrator:
             "grace_aligned_llm": self.grace_aligned_llm is not None,
             "output_formatter": self.output_formatter is not None,
         }
+    
+    def _record_error_for_learning(
+        self,
+        error: Exception,
+        component: str,
+        session: Optional[Session] = None
+    ):
+        """
+        Record error for learning and self-healing pipeline.
+        
+        Args:
+            error: The exception that occurred
+            component: Component name where error occurred
+            session: Database session
+        """
+        try:
+            from cognitive.error_learning_integration import get_error_learning_integration
+            
+            error_learning = get_error_learning_integration(
+                session=session or self.session,
+                genesis_service=None,  # Will be loaded automatically
+                learning_manager=None,  # Will be loaded automatically
+                healing_system=None  # Will be loaded automatically
+            )
+            
+            error_learning.record_error(
+                error=error,
+                context={
+                    "location": f"llm_orchestrator.{component}",
+                    "reason": f"Initialization failed for {component}",
+                    "method": "__init__"
+                },
+                component=f"llm_orchestrator.{component}",
+                severity="high" if component == "multi_llm_initialization" else "medium"
+            )
+        except Exception as learning_error:
+            # Don't fail initialization if error learning fails
+            logger.debug(f"[LLM ORCHESTRATOR] Failed to record error for learning: {learning_error}")
 
 
 # Global instance

@@ -7,10 +7,14 @@ import logging
 from agent.grace_agent import GraceAgent, AgentConfig, TaskResult, TaskStatus
 from execution.actions import GraceAction, ActionRequest, ActionResult
 from execution.feedback import get_feedback_processor
+
+logger = logging.getLogger(__name__)
+
+# Create router
+router = APIRouter(prefix="/agent", tags=["Grace Agent"])
+
+
 class TaskRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to start a new task."""
     task: str = Field(..., description="Natural language description of the task")
     context: Optional[Dict[str, Any]] = Field(None, description="Additional context")
