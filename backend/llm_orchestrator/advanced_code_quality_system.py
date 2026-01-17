@@ -5,11 +5,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from sqlalchemy.orm import Session
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class QualityEnforcementLevel(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Code quality enforcement levels."""
     BASIC = "basic"  # Static analysis only
     STANDARD = "standard"  # Static + LLM assessment
@@ -82,28 +83,72 @@ class AdvancedCodeQualitySystem:
         self.enforcement_level = enforcement_level
         
         # Import Grace systems
+        self.transform_library = None
+        self.grace_aligned_llm = None
+        self.magma_system = None
+        self.ooda_loop = None
+        
         try:
-            from backend.transform.transformation_library import get_transformation_library
-            from .advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
-            from cognitive.magma_memory_system import MagmaMemorySystem
-            from backend.cognitive.ooda import OODALoop
+            # Try multiple import paths for compatibility
+            try:
+                from backend.transform.transformation_library import get_transformation_library
+            except ImportError:
+                try:
+                    from transform.transformation_library import get_transformation_library
+                except ImportError:
+                    get_transformation_library = None
             
-            self.transform_library = get_transformation_library(session, knowledge_base_path)
+            if get_transformation_library:
+                self.transform_library = get_transformation_library(session, knowledge_base_path)
+                logger.info("[ADV-QUALITY] Transformation Library initialized")
+        except Exception as e:
+            logger.debug(f"[ADV-QUALITY] Transformation Library not available: {e}")
+        
+        try:
+            from .advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
             self.grace_aligned_llm = get_advanced_grace_aligned_llm(
                 session=session,
                 knowledge_base_path=knowledge_base_path,
                 max_context_tokens=max_context_tokens
             )
-            self.magma_system = MagmaMemorySystem(session, knowledge_base_path)
-            self.ooda_loop = OODALoop()
-            
-            logger.info("[ADV-QUALITY] Initialized with Transformation Library + Grace LLM + Magma")
+            logger.info("[ADV-QUALITY] Advanced Grace-Aligned LLM initialized")
         except Exception as e:
-            logger.warning(f"[ADV-QUALITY] Could not initialize all systems: {e}")
-            self.transform_library = None
-            self.grace_aligned_llm = None
-            self.magma_system = None
-            self.ooda_loop = None
+            logger.debug(f"[ADV-QUALITY] Advanced Grace-Aligned LLM not available: {e}")
+        
+        try:
+            # Try multiple import paths for magma
+            try:
+                from backend.cognitive.magma_memory_system import MagmaMemorySystem
+            except ImportError:
+                try:
+                    from cognitive.magma_memory_system import MagmaMemorySystem
+                except ImportError:
+                    MagmaMemorySystem = None
+            
+            if MagmaMemorySystem:
+                self.magma_system = MagmaMemorySystem(session, knowledge_base_path)
+                logger.info("[ADV-QUALITY] Magma Memory System initialized")
+        except Exception as e:
+            logger.debug(f"[ADV-QUALITY] Magma Memory System not available: {e}")
+        
+        try:
+            # Try multiple import paths for ooda
+            try:
+                from backend.cognitive.ooda import OODALoop
+            except ImportError:
+                try:
+                    from cognitive.ooda import OODALoop
+                except ImportError:
+                    OODALoop = None
+            
+            if OODALoop:
+                self.ooda_loop = OODALoop()
+                logger.info("[ADV-QUALITY] OODA Loop initialized")
+        except Exception as e:
+            logger.debug(f"[ADV-QUALITY] OODA Loop not available: {e}")
+        
+        if self.transform_library or self.grace_aligned_llm or self.magma_system or self.ooda_loop:
+            logger.info("[ADV-QUALITY] Advanced Code Quality System initialized (partial initialization OK)")
         
         # Import base quality optimizer
         try:

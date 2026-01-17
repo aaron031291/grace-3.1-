@@ -4,12 +4,12 @@ from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
 from sqlalchemy.orm import Session
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class GraceAlignmentLevel(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Grace alignment levels."""
     NONE = "none"  # No alignment
     BASIC = "basic"  # System prompt only

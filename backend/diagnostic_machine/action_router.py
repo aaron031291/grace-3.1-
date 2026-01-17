@@ -7,22 +7,15 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from sensors import SensorData
-from interpreters import InterpretedData, Pattern, PatternType
-from judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
-from healing import HealingExecutor, HealingActionType, get_healing_executor
+from .sensors import SensorData
+from .interpreters import InterpretedData, Pattern, PatternType
+from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
+from .healing import HealingExecutor, HealingActionType, get_healing_executor
+
+logger = logging.getLogger(__name__)
+
+
 class ActionType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of actions the router can execute."""
     ALERT_HUMAN = "alert_human"
     TRIGGER_HEALING = "trigger_healing"

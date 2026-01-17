@@ -9,10 +9,10 @@ from typing import Dict, Any, Optional, Callable, List
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
 class HealingActionType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of healing actions."""
     DATABASE_RECONNECT = "database_reconnect"
     VECTOR_DB_RESET = "vector_db_reset"

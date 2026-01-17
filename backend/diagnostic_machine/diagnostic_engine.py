@@ -9,15 +9,15 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from sensors import SensorLayer, SensorData, CodeQualityData
-from interpreters import InterpreterLayer, InterpretedData
-from judgement import JudgementLayer, JudgementResult, HealthStatus
-from action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
-from healing import HealingExecutor, HealingActionType, get_healing_executor
+from .sensors import SensorLayer, SensorData, CodeQualityData
+from .interpreters import InterpreterLayer, InterpretedData
+from .judgement import JudgementLayer, JudgementResult, HealthStatus
+from .action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
+from .healing import HealingExecutor, HealingActionType, get_healing_executor
+
+logger = logging.getLogger(__name__)
+
 class EngineState(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """State of the diagnostic engine."""
     STOPPED = "stopped"
     STARTING = "starting"

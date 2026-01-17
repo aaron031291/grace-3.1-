@@ -3,11 +3,12 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-from sensors import SensorData, TestResultData, MetricsData, CodeQualityData, BuildStatusData, TestCoverageData, APIContractData, InfrastructureData
+from .sensors import SensorData, TestResultData, MetricsData, CodeQualityData, BuildStatusData, TestCoverageData, APIContractData, InfrastructureData
+
+logger = logging.getLogger(__name__)
+
+
 class PatternType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of patterns detected."""
     TEST_FAILURE_PATTERN = "test_failure_pattern"
     TEST_SUCCESS_PATTERN = "test_success_pattern"

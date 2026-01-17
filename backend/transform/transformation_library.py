@@ -7,14 +7,12 @@ from pathlib import Path
 import ast
 import hashlib
 import json
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class TransformStatus(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Transform status."""
     PENDING = "pending"
     APPLIED = "applied"
@@ -137,10 +135,16 @@ class TransformationLibrary:
         
         # Genesis service for tracking
         try:
-            from genesis.genesis_key_service import get_genesis_service
+            # Try multiple import paths for compatibility
+            try:
+                from backend.genesis.genesis_key_service import get_genesis_service
+            except ImportError:
+                from genesis.genesis_key_service import get_genesis_service
             self.genesis_service = get_genesis_service(session)
         except Exception as e:
             logger.warning(f"[TRANSFORM-LIB] Genesis service not available: {e}")
+            import traceback
+            logger.debug(f"[TRANSFORM-LIB] Import error details: {traceback.format_exc()}")
             self.genesis_service = None
         
         logger.info("[TRANSFORM-LIB] Initialized with Rule DSL and Outcome Ledger")

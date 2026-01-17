@@ -122,8 +122,12 @@ class GenesisTrackingMiddleware(BaseHTTPMiddleware):
                         parent_key_id=genesis_key_id
                     )
                     db.close()
-            except Exception:
-                pass
+            except Exception as tracking_error:
+                # Log tracking failure but don't suppress the original error
+                logger.error(
+                    f"[GENESIS-MIDDLEWARE] Failed to track error in middleware: {tracking_error}",
+                    exc_info=True
+                )
 
             raise
 

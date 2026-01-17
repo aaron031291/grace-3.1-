@@ -7,11 +7,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
+logger = logging.getLogger(__name__)
+
+
 class ReasoningMode(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of reasoning approaches."""
     SEQUENTIAL = "sequential"       # Step-by-step linear reasoning
     TREE = "tree"                   # Tree of thought (multiple branches)

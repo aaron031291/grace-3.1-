@@ -6,20 +6,116 @@ from sqlalchemy.orm import Session
 import json
 import uuid
 import hashlib
-from multi_llm_client import MultiLLMClient, TaskType
-from repo_access import RepositoryAccessLayer
-from hallucination_guard import HallucinationGuard, VerificationResult
-from cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
-from proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
-from autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
-from grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
-from grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
-from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
-from cognitive.learning_memory import LearningMemoryManager
-from embedding import EmbeddingModel
-from confidence_scorer.confidence_scorer import ConfidenceScorer
+# Import with graceful fallbacks
+try:
+    from .multi_llm_client import MultiLLMClient, TaskType
+except ImportError:
+    try:
+        from multi_llm_client import MultiLLMClient, TaskType
+    except ImportError:
+        MultiLLMClient = None
+        TaskType = None
+
+try:
+    from .repo_access import RepositoryAccessLayer
+except ImportError:
+    try:
+        from repo_access import RepositoryAccessLayer
+    except ImportError:
+        RepositoryAccessLayer = None
+
+try:
+    from .hallucination_guard import HallucinationGuard, VerificationResult
+except ImportError:
+    try:
+        from hallucination_guard import HallucinationGuard, VerificationResult
+    except ImportError:
+        HallucinationGuard = None
+        VerificationResult = None
+
+try:
+    from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
+except ImportError:
+    try:
+        from cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
+    except ImportError:
+        CognitiveEnforcer = None
+        CognitiveConstraints = None
+
+try:
+    from .proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
+except ImportError:
+    try:
+        from proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
+    except ImportError:
+        get_proactive_code_intelligence = None
+        ProactiveCodeIntelligence = None
+
+try:
+    from .autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
+except ImportError:
+    try:
+        from autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
+    except ImportError:
+        get_autonomous_fine_tuning_trigger = None
+        AutonomousFineTuningTrigger = None
+
+try:
+    from .grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
+except ImportError:
+    try:
+        from grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
+    except ImportError:
+        get_grace_system_prompt = None
+        enhance_prompt_with_grace_context = None
+
+try:
+    from .grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
+except ImportError:
+    try:
+        from grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
+    except ImportError:
+        get_grace_aligned_llm_system = None
+        GraceAlignmentLevel = None
+
+try:
+    from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
+except ImportError:
+    try:
+        from backend.genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
+    except ImportError:
+        get_cognitive_layer1_integration = None
+        CognitiveLayer1Integration = None
+
+try:
+    from backend.cognitive.learning_memory import LearningMemoryManager
+except ImportError:
+    try:
+        from cognitive.learning_memory import LearningMemoryManager
+    except ImportError:
+        LearningMemoryManager = None
+
+try:
+    from .embedding import EmbeddingModel
+except ImportError:
+    try:
+        from embedding import EmbeddingModel
+    except ImportError:
+        EmbeddingModel = None
+
+try:
+    from .confidence_scorer.confidence_scorer import ConfidenceScorer
+except ImportError:
+    try:
+        from confidence_scorer.confidence_scorer import ConfidenceScorer
+    except ImportError:
+        ConfidenceScorer = None
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class LLMTaskRequest:
-    logger = logging.getLogger(__name__)
     """LLM task request."""
     task_id: str
     prompt: str
@@ -84,29 +180,82 @@ class LLMOrchestrator:
         self.session = session
         self.embedding_model = embedding_model
 
-        # Initialize core components
-        self.multi_llm = MultiLLMClient()
-        self.repo_access = RepositoryAccessLayer(
-            session=session,
-            embedding_model=embedding_model
-        )
-        self.confidence_scorer = ConfidenceScorer(
-            embedding_model=embedding_model
-        ) if embedding_model else None
+        # Initialize core components with graceful fallbacks
+        try:
+            self.multi_llm = MultiLLMClient() if MultiLLMClient else None
+            if self.multi_llm:
+                logger.info("[LLM ORCHESTRATOR] MultiLLMClient initialized")
+        except Exception as e:
+            logger.debug(f"[LLM ORCHESTRATOR] MultiLLMClient not available: {e}")
+            self.multi_llm = None
+        
+        try:
+            self.repo_access = RepositoryAccessLayer(
+                session=session,
+                embedding_model=embedding_model
+            ) if RepositoryAccessLayer and session else None
+            if self.repo_access:
+                logger.info("[LLM ORCHESTRATOR] RepositoryAccessLayer initialized")
+        except Exception as e:
+            logger.debug(f"[LLM ORCHESTRATOR] RepositoryAccessLayer not available: {e}")
+            self.repo_access = None
+        
+        try:
+            self.confidence_scorer = ConfidenceScorer(
+                embedding_model=embedding_model
+            ) if embedding_model and ConfidenceScorer else None
+            if self.confidence_scorer:
+                logger.info("[LLM ORCHESTRATOR] ConfidenceScorer initialized")
+        except Exception as e:
+            logger.debug(f"[LLM ORCHESTRATOR] ConfidenceScorer not available: {e}")
+            self.confidence_scorer = None
 
-        self.hallucination_guard = HallucinationGuard(
-            multi_llm_client=self.multi_llm,
-            repo_access=self.repo_access,
-            confidence_scorer=self.confidence_scorer
-        )
-        self.cognitive_enforcer = CognitiveEnforcer()
+        try:
+            if HallucinationGuard and self.multi_llm:
+                self.hallucination_guard = HallucinationGuard(
+                    multi_llm_client=self.multi_llm,
+                    repo_access=self.repo_access,
+                    confidence_scorer=self.confidence_scorer,
+                    enable_external_verification=True
+                )
+                logger.info("[LLM ORCHESTRATOR] HallucinationGuard initialized")
+            else:
+                self.hallucination_guard = None
+                if not HallucinationGuard:
+                    logger.debug("[LLM ORCHESTRATOR] HallucinationGuard module not available")
+                elif not self.multi_llm:
+                    logger.debug("[LLM ORCHESTRATOR] HallucinationGuard requires MultiLLMClient")
+        except Exception as e:
+            logger.debug(f"[LLM ORCHESTRATOR] HallucinationGuard not available: {e}")
+            self.hallucination_guard = None
+        
+        try:
+            self.cognitive_enforcer = CognitiveEnforcer() if CognitiveEnforcer else None
+        except Exception as e:
+            logger.warning(f"[LLM ORCHESTRATOR] CognitiveEnforcer not available: {e}")
+            self.cognitive_enforcer = None
 
         # Initialize Cognitive Layer 1 (with OODA + 12 Invariants) and Learning Memory
-        self.cognitive_layer1 = get_cognitive_layer1_integration(session=session) if session else None
-        self.learning_memory = LearningMemoryManager(
-            session=session,
-            knowledge_base_path=knowledge_base_path
-        ) if session and knowledge_base_path else None
+        try:
+            if session and get_cognitive_layer1_integration:
+                self.cognitive_layer1 = get_cognitive_layer1_integration(session=session)
+            else:
+                self.cognitive_layer1 = None
+        except Exception as e:
+            try:
+                logger.warning(f"[LLM ORCHESTRATOR] Cognitive Layer 1 not available: {e}")
+            except NameError:
+                print(f"[LLM ORCHESTRATOR] Cognitive Layer 1 not available: {e}")
+            self.cognitive_layer1 = None
+        
+        try:
+            self.learning_memory = LearningMemoryManager(
+                session=session,
+                knowledge_base_path=knowledge_base_path
+            ) if session and knowledge_base_path and LearningMemoryManager else None
+        except Exception as e:
+            logger.warning(f"[LLM ORCHESTRATOR] Learning Memory Manager not available: {e}")
+            self.learning_memory = None
         
         # Initialize Grace-Aligned LLM System (for Memory Mesh retrieval before generation)
         self.grace_aligned_llm = None
@@ -125,15 +274,35 @@ class LLMOrchestrator:
                     logger.info("[LLM ORCHESTRATOR] Advanced Grace-Aligned LLM System initialized (beyond current capabilities)")
                 except Exception as e:
                     # Fallback to base Grace-Aligned LLM
-                    logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
-                    self.grace_aligned_llm = get_grace_aligned_llm_system(
-                        session=session,
-                        knowledge_base_path=knowledge_base_path,
-                        alignment_level=GraceAlignmentLevel.ADVANCED
-                    )
-                    logger.info("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
+                    try:
+                        logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
+                    except NameError:
+                        print(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
+                    
+                    try:
+                        if get_grace_aligned_llm_system:
+                            self.grace_aligned_llm = get_grace_aligned_llm_system(
+                                session=session,
+                                knowledge_base_path=knowledge_base_path,
+                                alignment_level=GraceAlignmentLevel.ADVANCED if GraceAlignmentLevel else None
+                            )
+                            try:
+                                logger.info("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
+                            except NameError:
+                                print("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
+                        else:
+                            self.grace_aligned_llm = None
+                    except Exception as e2:
+                        try:
+                            logger.warning(f"[LLM ORCHESTRATOR] Could not initialize base Grace-Aligned LLM: {e2}")
+                        except NameError:
+                            print(f"[LLM ORCHESTRATOR] Could not initialize base Grace-Aligned LLM: {e2}")
+                        self.grace_aligned_llm = None
             except Exception as e:
-                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
+                try:
+                    logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
+                except NameError:
+                    print(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
         
         # Initialize Output Formatter (for AI-to-AI JSON and AI-to-Human NLP)
         try:
@@ -1055,8 +1224,40 @@ class LLMOrchestrator:
             "avg_duration_ms": sum(t.duration_ms for t in self.completed_tasks) / total,
             "avg_trust_score": sum(t.trust_score for t in self.completed_tasks) / total,
             "avg_confidence_score": sum(t.confidence_score for t in self.completed_tasks) / total,
-            "multi_llm_stats": self.multi_llm.get_model_stats(),
-            "verification_stats": self.hallucination_guard.get_verification_stats()
+            "multi_llm_stats": self.multi_llm.get_model_stats() if self.multi_llm else {},
+            "verification_stats": self.hallucination_guard.get_verification_stats() if self.hallucination_guard else {}
+        }
+
+    def is_available(self) -> bool:
+        """
+        Check if LLM Orchestrator is available and properly initialized.
+        
+        Returns:
+            True if core components are available, False otherwise
+        """
+        return (
+            self.multi_llm is not None or
+            self.hallucination_guard is not None or
+            self.cognitive_enforcer is not None
+        )
+    
+    def get_availability_status(self) -> Dict[str, bool]:
+        """
+        Get detailed availability status of all components.
+        
+        Returns:
+            Dictionary mapping component names to availability status
+        """
+        return {
+            "multi_llm": self.multi_llm is not None,
+            "repo_access": self.repo_access is not None,
+            "confidence_scorer": self.confidence_scorer is not None,
+            "hallucination_guard": self.hallucination_guard is not None,
+            "cognitive_enforcer": self.cognitive_enforcer is not None,
+            "cognitive_layer1": self.cognitive_layer1 is not None,
+            "learning_memory": self.learning_memory is not None,
+            "grace_aligned_llm": self.grace_aligned_llm is not None,
+            "output_formatter": self.output_formatter is not None,
         }
 
 

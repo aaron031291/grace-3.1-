@@ -79,6 +79,10 @@ class ConfigurationSensor:
         data.issues.extend(self._validate_paths())
         data.components_checked.append("paths")
         
+        # Check system resources (RAM, CPU, etc.)
+        data.issues.extend(self._validate_system_resources())
+        data.components_checked.append("system_resources")
+        
         # Calculate totals
         data.total_issues = len(data.issues)
         data.critical_issues = sum(1 for i in data.issues if i.severity == 'critical')
@@ -357,5 +361,75 @@ class ConfigurationSensor:
                     message=f"Data directory does not exist and cannot be created: {data_path}",
                     fix_suggestion=f"Create directory: {data_path}"
                 ))
+        
+        return issues
+    
+    def _validate_system_resources(self) -> List[ConfigurationIssue]:
+        """Validate system resources (RAM, CPU, etc.)."""
+        issues = []
+        
+        try:
+            import psutil
+            
+            # Check RAM
+            memory = psutil.virtual_memory()
+            total_gb = memory.total / (1024 ** 3)
+            memory_percent_used = memory.percent
+            
+            # On Windows, psutil.virtual_memory().available can be misleading due to
+            # memory compression and caching. Use percentage-based check for better accuracy.
+            # Windows can free cached/compressed memory when needed, so percentage is more reliable.
+            
+            # Configurable recommended RAM threshold
+            # Set to 4GB as recommended for optimal Grace system performance
+            # Can be adjusted via environment variable GRACE_MIN_RAM_GB if needed
+            import os
+            recommended_ram_gb = float(os.getenv('GRACE_MIN_RAM_GB', '4.0'))  # Default: 4GB minimum
+            
+            # Calculate available RAM for display (use free memory as it's more accurate on Windows)
+            free_gb = memory.free / (1024 ** 3)
+            # Also calculate based on percentage for comparison
+            available_by_percent_gb = (total_gb * (100 - memory_percent_used) / 100)
+            
+            # Use the higher of the two values (more optimistic, accounts for Windows memory management)
+            available_gb = max(free_gb, available_by_percent_gb)
+            
+            # Adaptive warning thresholds based on total RAM:
+            # - Systems with >32GB RAM: Only warn if usage >98% AND available < 20GB (very lenient)
+            # - Systems with 16-32GB RAM: Warn if usage >90% AND available < threshold  
+            # - Systems with <16GB RAM: Warn if usage >85% AND available < threshold
+            if total_gb > 32:
+                # Large RAM systems: Very lenient - only warn if critically low
+                # Set to 20GB minimum free for large systems to avoid false warnings
+                warning_threshold_percent = 98  # Only warn at 98%+ usage
+                min_free_gb = 20.0  # Require at least 20GB free on large systems
+            elif total_gb > 16:
+                # Medium RAM systems: Moderate threshold
+                warning_threshold_percent = 90
+                min_free_gb = recommended_ram_gb
+            else:
+                # Small RAM systems: More sensitive
+                warning_threshold_percent = 85
+                min_free_gb = recommended_ram_gb
+            
+            # Only warn if memory usage exceeds threshold AND available is below minimum
+            # This avoids false positives on Windows where memory compression makes "available" look low
+            # For large RAM systems, we're more lenient since even high % usage leaves plenty of RAM
+            if memory_percent_used > warning_threshold_percent and available_gb < min_free_gb:
+                # Use the appropriate threshold in the message (min_free_gb for large systems, recommended_ram_gb for others)
+                threshold_display_gb = min_free_gb if total_gb > 32 else recommended_ram_gb
+                issues.append(ConfigurationIssue(
+                    issue_type='system_resource',
+                    severity='low',  # Low severity - system can still function
+                    component='system_resources',
+                    message=f"RAM: {available_gb:.1f}GB available ({memory_percent_used:.1f}% used), {threshold_display_gb:.1f}GB recommended",
+                    fix_suggestion=f"Consider closing other applications to free up RAM. System has {total_gb:.1f}GB total RAM."
+                ))
+                
+        except ImportError:
+            # psutil not available - skip check
+            pass
+        except Exception as e:
+            logger.debug(f"Could not check system resources: {e}")
         
         return issues

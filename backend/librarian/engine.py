@@ -348,107 +348,105 @@ class LibrarianEngine:
                     if len(rule_matches) == 0 or len(rule_tags) < 3:
                         try:
                             ai_result = self.ai_analyzer.analyze_document(document_id)
-                        result["ai_analysis"] = {
-                            "confidence": ai_result.get("confidence", 0.0),
-                            "category": ai_result.get("category", "unknown"),
-                            "topics": ai_result.get("topics", [])
-                        }
+                            result["ai_analysis"] = {
+                                "confidence": ai_result.get("confidence", 0.0),
+                                "category": ai_result.get("category", "unknown"),
+                                "topics": ai_result.get("topics", [])
+                            }
 
-                        # Use AI-suggested tags if confidence is high enough
-                        if ai_result.get("confidence", 0.0) >= self.ai_confidence_threshold:
-                            ai_tags = set(ai_result.get("tags", []))
+                            # Use AI-suggested tags if confidence is high enough
+                            if ai_result.get("confidence", 0.0) >= self.ai_confidence_threshold:
+                                ai_tags = set(ai_result.get("tags", []))
 
-                            # Remove tags already assigned by rules
-                            ai_tags = ai_tags - rule_tags
+                                # Remove tags already assigned by rules
+                                ai_tags = ai_tags - rule_tags
 
-                            if ai_tags:
-                                self.tag_manager.assign_tags(
-                                    document_id=document_id,
-                                    tag_names=list(ai_tags),
-                                    assigned_by="ai",
-                                    confidence=ai_result["confidence"]
-                                )
-                                result["tags_assigned"] += len(ai_tags)
-                                logger.info(f"Assigned {len(ai_tags)} AI-suggested tags")
-
-                    except Exception as e:
+                                if ai_tags:
+                                    self.tag_manager.assign_tags(
+                                        document_id=document_id,
+                                        tag_names=list(ai_tags),
+                                        assigned_by="ai",
+                                        confidence=ai_result["confidence"]
+                                    )
+                                    result["tags_assigned"] += len(ai_tags)
+                                    logger.info(f"Assigned {len(ai_tags)} AI-suggested tags")
+                        except Exception as e:
                             logger.error(f"AI analysis failed for document {document_id}: {e}")
                             result["ai_analysis"] = {"error": str(e)}
 
                 # Step 3: Relationship detection (if enabled)
                 if detect_rels and self.relationship_manager:
                     try:
-                    relationships = self.relationship_manager.detect_relationships(
-                        document_id=document_id,
-                        similarity_threshold=self.similarity_threshold
-                    )
+                        relationships = self.relationship_manager.detect_relationships(
+                            document_id=document_id,
+                            similarity_threshold=self.similarity_threshold
+                        )
 
-                    if relationships:
-                        # Save relationships
-                        saved_count = self.relationship_manager.save_detected_relationships(relationships)
-                        result["relationships_detected"] = saved_count
-                        logger.info(f"Detected and saved {saved_count} relationships")
-
+                        if relationships:
+                            # Save relationships
+                            saved_count = self.relationship_manager.save_detected_relationships(relationships)
+                            result["relationships_detected"] = saved_count
+                            logger.info(f"Detected and saved {saved_count} relationships")
                     except Exception as e:
                         logger.error(f"Relationship detection failed for document {document_id}: {e}")
 
                 # Step 4: File organization (if auto_organize enabled)
                 if self.file_organizer.auto_organize:
                     try:
-                    old_path = document.file_path
-                    org_result = self.file_organizer.organize_document(document_id)
-                    if org_result.get("success"):
-                        result["organization_path"] = org_result.get("organization_path")
-                        result["file_moved"] = org_result.get("file_moved", False)
-                        result["folder_created"] = org_result.get("folder_created", False)
-                        
-                        # Track organization via Genesis Key
-                        if org_result.get("file_moved"):
-                            self.genesis_integration.track_organization_action(
-                                document_id=document_id,
-                                old_path=old_path,
-                                new_path=org_result.get("organization_path", ""),
-                                organization_pattern=self.file_organizer.organization_pattern
-                            )
-                        
-                        logger.info(f"Organized document {document_id} to: {org_result.get('organization_path')}")
+                        old_path = document.file_path
+                        org_result = self.file_organizer.organize_document(document_id)
+                        if org_result.get("success"):
+                            result["organization_path"] = org_result.get("organization_path")
+                            result["file_moved"] = org_result.get("file_moved", False)
+                            result["folder_created"] = org_result.get("folder_created", False)
+                            
+                            # Track organization via Genesis Key
+                            if org_result.get("file_moved"):
+                                self.genesis_integration.track_organization_action(
+                                    document_id=document_id,
+                                    old_path=old_path,
+                                    new_path=org_result.get("organization_path", ""),
+                                    organization_pattern=self.file_organizer.organization_pattern
+                                )
+                            
+                            logger.info(f"Organized document {document_id} to: {org_result.get('organization_path')}")
                     except Exception as e:
                         logger.warning(f"File organization failed for document {document_id}: {e}")
 
                 # Step 5: File naming (if auto_rename enabled)
                 if self.file_naming_manager.auto_rename:
                     try:
-                    old_filename = document.filename
-                    rename_result = self.file_naming_manager.rename_file(document_id, auto_suggest=True)
-                    if rename_result.get("success") and rename_result.get("renamed"):
-                        result["file_renamed"] = True
-                        result["new_filename"] = rename_result.get("new_filename")
-                        
-                        # Track renaming via Genesis Key
-                        self.genesis_integration.track_renaming_action(
-                            document_id=document_id,
-                            old_filename=old_filename or "",
-                            new_filename=rename_result.get("new_filename", ""),
-                            naming_convention=self.file_naming_manager.naming_convention
-                        )
-                        
-                        logger.info(f"Renamed document {document_id} to: {rename_result.get('new_filename')}")
+                        old_filename = document.filename
+                        rename_result = self.file_naming_manager.rename_file(document_id, auto_suggest=True)
+                        if rename_result.get("success") and rename_result.get("renamed"):
+                            result["file_renamed"] = True
+                            result["new_filename"] = rename_result.get("new_filename")
+                            
+                            # Track renaming via Genesis Key
+                            self.genesis_integration.track_renaming_action(
+                                document_id=document_id,
+                                old_filename=old_filename or "",
+                                new_filename=rename_result.get("new_filename", ""),
+                                naming_convention=self.file_naming_manager.naming_convention
+                            )
+                            
+                            logger.info(f"Renamed document {document_id} to: {rename_result.get('new_filename')}")
                     except Exception as e:
                         logger.warning(f"File naming failed for document {document_id}: {e}")
 
                 # Step 6: Track tag assignments via Genesis Key
                 if result["tags_assigned"] > 0:
                     try:
-                    # Get assigned tags for this document
-                    doc_tags = self.tag_manager.get_document_tags(document_id)
-                    tag_names = [tag.get("tag_name", "") for tag in doc_tags]
-                    
-                    if tag_names:
-                        self.genesis_integration.track_tag_assignment(
-                            document_id=document_id,
-                            tag_names=tag_names,
-                            assigned_by="librarian_engine"
-                        )
+                        # Get assigned tags for this document
+                        doc_tags = self.tag_manager.get_document_tags(document_id)
+                        tag_names = [tag.get("tag_name", "") for tag in doc_tags]
+                        
+                        if tag_names:
+                            self.genesis_integration.track_tag_assignment(
+                                document_id=document_id,
+                                tag_names=tag_names,
+                                assigned_by="librarian_engine"
+                            )
                     except Exception as e:
                         logger.warning(f"Genesis Key tracking for tags failed: {e}")
 
