@@ -497,6 +497,67 @@ class TimeSenseEngine:
     def get_profile_summary(self) -> Dict[str, Any]:
         """Get summary of all profiles."""
         return self.profile_manager.get_summary()
+    
+    def get_cost_model(self, operation_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Get cost model for a named operation (e.g., "training_cycle").
+        
+        This provides a simple interface for operations that don't map directly
+        to primitives. Returns average duration and other metrics.
+        
+        Args:
+            operation_name: Name of the operation (e.g., "training_cycle")
+        
+        Returns:
+            Dict with cost model info, or None if not available
+        """
+        # For training cycles, estimate based on file processing
+        # A training cycle processes ~100 files
+        if operation_name == "training_cycle":
+            # Estimate: 100 files × average file processing time
+            # Use file processing estimate as baseline
+            try:
+                # Average file size: ~10KB
+                avg_file_size = 10 * 1024  # 10KB
+                file_processing = self.estimate_file_processing(
+                    file_size_bytes=avg_file_size,
+                    include_embedding=True
+                )
+                
+                # Training cycle = 100 files + overhead
+                files_per_cycle = 100
+                cycle_time_ms = file_processing.p50_ms * files_per_cycle
+                cycle_time_hours = (cycle_time_ms / 1000.0) / 3600.0
+                
+                # Add overhead for cycle management (20%)
+                cycle_time_hours = cycle_time_hours * 1.2
+                
+                return {
+                    "operation_name": operation_name,
+                    "avg_duration_hours": cycle_time_hours,
+                    "avg_duration_ms": cycle_time_ms,
+                    "p50_hours": cycle_time_hours,
+                    "p95_hours": (file_processing.p95_ms * files_per_cycle * 1.2) / 3600000.0,
+                    "confidence": file_processing.confidence,
+                    "based_on": "file_processing_estimate",
+                    "files_per_cycle": files_per_cycle
+                }
+            except Exception as e:
+                logger.warning(f"[TIMESENSE] Could not estimate {operation_name}: {e}")
+                # Fallback: default 2 hours
+                return {
+                    "operation_name": operation_name,
+                    "avg_duration_hours": 2.0,
+                    "avg_duration_ms": 2.0 * 3600 * 1000,
+                    "p50_hours": 2.0,
+                    "p95_hours": 3.0,
+                    "confidence": 0.3,
+                    "based_on": "fallback_default",
+                    "files_per_cycle": 100
+                }
+        
+        # Unknown operation
+        return None
 
     def force_recalibrate(
         self,
