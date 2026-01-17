@@ -5,14 +5,15 @@ from dataclasses import dataclass
 from enum import Enum
 import threading
 import time
-from multi_llm_client import MultiLLMClient, TaskType
+from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
 from fine_tuning import LLMFineTuningSystem, FineTuningMethod
-from repo_access import RepositoryAccessLayer
-from learning_integration import LearningIntegration
+from llm_orchestrator.repo_access import RepositoryAccessLayer
+from llm_orchestrator.learning_integration import LearningIntegration
+
+logger = logging.getLogger(__name__)
+
+
 class TriggerReason(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Reasons for triggering fine-tuning."""
     ENOUGH_EXAMPLES = "enough_examples"  # Accumulated enough high-trust examples
     PERFORMANCE_GAP = "performance_gap"  # Performance metrics show improvement opportunity

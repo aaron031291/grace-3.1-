@@ -6,10 +6,23 @@ import logging
 from ingestion.service import TextIngestionService
 from embedding import get_embedding_model
 from vector_db.client import get_qdrant_client
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/ingest", tags=["ingestion"])
+
+
+def get_ingestion_service() -> TextIngestionService:
+    """Get or create TextIngestionService instance for dependency injection."""
+    embedding_model = get_embedding_model()
+    return TextIngestionService(
+        collection_name="documents",
+        chunk_size=512,
+        chunk_overlap=100,
+        embedding_model=embedding_model,
+    )
+
 class IngestTextRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request model for text ingestion."""
     text: str = Field(..., description="The text content to ingest")
     filename: str = Field(..., description="Name of the document")

@@ -5,10 +5,10 @@ from dataclasses import dataclass
 from enum import Enum
 from collections import defaultdict
 import json
+
+logger = logging.getLogger(__name__)
+
 class MemoryAbstractionLevel(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Hierarchical memory abstraction levels."""
     RAW = "raw"  # Raw memories
     EPISODE = "episode"  # Concrete episodes

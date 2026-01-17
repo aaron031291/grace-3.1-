@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from sqlalchemy import Column, String, Float, Text, DateTime, JSON
 from datetime import datetime
 from typing import Dict, Any, List, Optional
@@ -107,6 +108,13 @@ class EpisodicBuffer:
 
         self.session.add(episode)
         self.session.commit()
+
+        # Auto-generate embedding if embedder is available
+        if self.embedder:
+            try:
+                self.generate_episode_embedding(episode)
+            except Exception as e:
+                logger.warning(f"[EPISODIC] Failed to generate embedding for new episode: {e}")
 
         return episode
 

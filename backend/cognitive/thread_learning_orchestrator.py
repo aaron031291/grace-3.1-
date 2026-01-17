@@ -7,7 +7,7 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import sys
-from learning_subagent_system import TaskType, MessageType, LearningTask, Message
+from cognitive.learning_subagent_system import TaskType, MessageType, LearningTask, Message
 class BaseThreadSubagent:
     logger = logging.getLogger(__name__)
     """

@@ -5,9 +5,11 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+@dataclass
 class StaticAnalysisIssue:
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """A static analysis issue detected by the sensor."""
     tool: str  # 'mypy', 'pylint', etc.
     file_path: str

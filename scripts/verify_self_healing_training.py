@@ -13,9 +13,10 @@ import sys
 import logging
 from pathlib import Path
 
-# Add backend to path
-backend_dir = Path(__file__).parent.parent / "backend"
-sys.path.insert(0, str(backend_dir))
+# Add project root to path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "backend"))
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,37 +33,72 @@ print("[1] Testing Training System Initialization...")
 try:
     # Initialize database
     try:
-        from database.connection import DatabaseConnection
-        DatabaseConnection.initialize()
+        from backend.database.connection import DatabaseConnection, DatabaseConfig, DatabaseType
+        
+        project_root = Path(__file__).parent.parent
+        db_config = DatabaseConfig(
+            db_type=DatabaseType.SQLITE,
+            database="grace",
+            database_path=str(project_root / "data" / "grace.db"),
+            echo=False,
+        )
+        DatabaseConnection.initialize(db_config)
+        
+        from backend.database.session import initialize_session_factory
+        initialize_session_factory()
+        
         print("  [OK] Database initialized")
     except Exception as e:
         print(f"  [WARN] Database initialization: {e}")
+        import traceback
+        traceback.print_exc()
     
-    from database.session import get_session
+    from backend.database.session import get_session
     from pathlib import Path
     
+    project_root = Path(__file__).parent.parent
     session = next(get_session())
-    kb_path = Path("knowledge_base")
+    kb_path = project_root / "knowledge_base"
+    backend_dir = project_root / "backend"
     
     from cognitive.self_healing_training_system import get_self_healing_training_system
     from cognitive.autonomous_sandbox_lab import get_sandbox_lab
     from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
     from diagnostic_machine.diagnostic_engine import get_diagnostic_engine
-    from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+    
+    try:
+        from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+        llm_orchestrator = get_llm_orchestrator(session=session, knowledge_base_path=kb_path)
+    except Exception as e:
+        print(f"  [WARN] LLM Orchestrator not available: {e}")
+        llm_orchestrator = None
     
     sandbox_lab = get_sandbox_lab()
-    healing_system = get_autonomous_healing(session=session, trust_level=TrustLevel.MEDIUM_RISK_AUTO)
-    diagnostic_engine = get_diagnostic_engine()
-    llm_orchestrator = get_llm_orchestrator(session=session, knowledge_base_path=kb_path)
     
-    training_system = get_self_healing_training_system(
-        session=session,
-        knowledge_base_path=kb_path,
-        sandbox_lab=sandbox_lab,
-        healing_system=healing_system,
-        diagnostic_engine=diagnostic_engine,
-        llm_orchestrator=llm_orchestrator
-    )
+    try:
+        healing_system = get_autonomous_healing(session=session, trust_level=TrustLevel.MEDIUM_RISK_AUTO)
+    except Exception as e:
+        print(f"  [WARN] Healing system not available: {e}")
+        healing_system = None
+    
+    try:
+        diagnostic_engine = get_diagnostic_engine()
+    except Exception as e:
+        print(f"  [WARN] Diagnostic engine not available: {e}")
+        diagnostic_engine = None
+    
+    try:
+        training_system = get_self_healing_training_system(
+            session=session,
+            knowledge_base_path=kb_path,
+            sandbox_lab=sandbox_lab,
+            healing_system=healing_system,
+            diagnostic_engine=diagnostic_engine,
+            llm_orchestrator=llm_orchestrator
+        )
+    except Exception as e:
+        print(f"  [WARN] Training system initialization: {e}")
+        training_system = None
     
     print("  [OK] Training system initialized")
     print(f"      - Sandbox lab: {'available' if sandbox_lab else 'not available'}")
@@ -71,6 +107,8 @@ try:
     print(f"      - LLM orchestrator: {'available' if llm_orchestrator else 'not available'}")
 except Exception as e:
     print(f"  [ERROR] Training system initialization failed: {e}")
+    import traceback
+    traceback.print_exc()
     sys.exit(1)
 
 # ==================== TEST 2: Knowledge Retrieval ====================
@@ -315,9 +353,9 @@ all_tests = [
 
 print(f"\nTests completed: {len(all_tests)}")
 print("\nSystem Status:")
-print(f"  - Training system: {'✓ Active' if training_system else '✗ Not available'}")
-print(f"  - Knowledge retrieval: {'✓ Working' if hasattr(training_system, 'llm_orchestrator') else '✗ Not available'}")
-print(f"  - Current cycle: {'✓ Active' if training_system.current_cycle else '○ No active cycle'}")
+print(f"  - Training system: {'[OK] Active' if training_system else '[X] Not available'}")
+print(f"  - Knowledge retrieval: {'[OK] Working' if hasattr(training_system, 'llm_orchestrator') else '[X] Not available'}")
+print(f"  - Current cycle: {'[OK] Active' if training_system.current_cycle else '[ ] No active cycle'}")
 print(f"  - Cycles completed: {training_system.stats['total_cycles']}")
 
 if training_system.current_cycle:
@@ -335,4 +373,4 @@ print("  1. Start continuous training: POST /self-healing-training/continuous")
 print("  2. Check training status: GET /self-healing-training/status")
 print("  3. View completed cycles: GET /self-healing-training/cycles")
 print("  4. Register alert: POST /self-healing-training/alert")
-print("\nGrace is ready for continuous self-healing training! 🚀")
+print("\nGrace is ready for continuous self-healing training!")

@@ -6,8 +6,17 @@ import json
 import os
 from pathlib import Path
 import logging
+from typing import ClassVar
+
+logger = logging.getLogger(__name__)
+
+# Router for knowledge base CI/CD endpoints
+router = APIRouter(prefix="/knowledge-base-cicd", tags=["Knowledge Base CI/CD"])
+
+# Knowledge base path
+KB_PATH = Path(__file__).parent.parent.parent / "knowledge_base" / "cicd"
+
 class AutonomousAction(BaseModel):
-    logger = logging.getLogger(__name__)
     """An autonomous action that can be triggered."""
     id: str
     name: str

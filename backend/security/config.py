@@ -98,6 +98,23 @@ class SecurityConfig:
     LOG_RATE_LIMIT_EXCEEDED: bool = True
     LOG_SUSPICIOUS_REQUESTS: bool = True
 
+    # ==================== Authentication ====================
+    # Require authentication for all endpoints (except public ones)
+    AUTH_REQUIRED: bool = False  # Set to True to enable authentication enforcement
+    AUTH_PUBLIC_ENDPOINTS: List[str] = field(default_factory=lambda: [
+        "/health",
+        "/health/live",
+        "/health/ready",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+        "/",
+        "/version",
+        "/auth/login",
+        "/auth/logout",
+        "/auth/whoami",
+    ])
+    
     # ==================== Production Mode ====================
     # Set to True in production for stricter security
     PRODUCTION_MODE: bool = False
@@ -132,6 +149,12 @@ class SecurityConfig:
 
         # Security logging
         self.LOG_SECURITY_EVENTS = os.getenv("LOG_SECURITY_EVENTS", "true").lower() == "true"
+        
+        # Authentication
+        self.AUTH_REQUIRED = os.getenv("AUTH_REQUIRED", "false").lower() == "true"
+        env_public_endpoints = os.getenv("AUTH_PUBLIC_ENDPOINTS", "")
+        if env_public_endpoints:
+            self.AUTH_PUBLIC_ENDPOINTS.extend([e.strip() for e in env_public_endpoints.split(",")])
 
     def get_csp_header(self) -> str:
         """Build Content-Security-Policy header value."""

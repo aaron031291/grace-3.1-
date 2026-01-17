@@ -3,8 +3,11 @@ import re
 import logging
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
+
+@dataclass
 class CodeIssue:
-    logger = logging.getLogger(__name__)
     """Represents a code issue detected by the analyzer."""
     issue_type: str
     severity: str  # "low", "medium", "high", "critical"

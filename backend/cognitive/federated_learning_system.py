@@ -132,6 +132,7 @@ class FederatedLearningSystem:
         try:
             # Create Genesis Key for client registration
             genesis_key_id = None
+            genesis_key_id = None
             if self.genesis_service and self.session:
                 try:
                     genesis_key = self.genesis_service.create_key(
@@ -150,9 +151,14 @@ class FederatedLearningSystem:
                         tags=["federated_learning", "client_registration", domain],
                         session=self.session
                     )
-                    genesis_key_id = genesis_key.key_id
+                    genesis_key_id = genesis_key.key_id if genesis_key else None
                 except Exception as e:
-                    logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                    # Use try-except to ensure logger is available
+                    try:
+                        logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                    except NameError:
+                        # Fallback if logger not available
+                        print(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
             
             self.clients[client_id] = {
                 "client_id": client_id,
@@ -246,9 +252,14 @@ class FederatedLearningSystem:
                         tags=["federated_learning", "model_update", domain],
                         session=self.session
                     )
-                    update_genesis_key_id = genesis_key.key_id
+                    update_genesis_key_id = genesis_key.key_id if genesis_key else None
                 except Exception as e:
-                    logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                    # Use try-except to ensure logger is available
+                    try:
+                        logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                    except NameError:
+                        # Fallback if logger not available
+                        print(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
             
             # Extract model weights (patterns as "weights")
             model_weights = {
@@ -446,9 +457,14 @@ class FederatedLearningSystem:
                             tags=["federated_learning", "model_aggregation", domain],
                             session=self.session
                         )
-                        aggregation_genesis_key_id = genesis_key.key_id
+                        aggregation_genesis_key_id = genesis_key.key_id if genesis_key else None
                     except Exception as e:
-                        logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                        # Use try-except to ensure logger is available
+                        try:
+                            logger.warning(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
+                        except NameError:
+                            # Fallback if logger not available
+                            print(f"[FEDERATED-LEARNING] Genesis Key creation error: {e}")
                 
                 # Store Genesis Key ID in aggregated model
                 if aggregation_genesis_key_id:
@@ -594,7 +610,12 @@ class FederatedLearningSystem:
                     session=self.session
                 )
             except Exception as e:
-                logger.debug(f"[FEDERATED-LEARNING] Trust Genesis Key error: {e}")
+                # Use try-except to ensure logger is available
+                try:
+                    logger.debug(f"[FEDERATED-LEARNING] Trust Genesis Key error: {e}")
+                except NameError:
+                    # Silent fail for debug messages
+                    pass
         
         return trust
     
@@ -659,7 +680,12 @@ class FederatedLearningSystem:
                                             )
                                             pattern_genesis_key_id = genesis_key.key_id
                                         except Exception as e:
-                                            logger.debug(f"[FEDERATED-LEARNING] Pattern Genesis Key error: {e}")
+                                            # Use try-except to ensure logger is available
+                                            try:
+                                                logger.debug(f"[FEDERATED-LEARNING] Pattern Genesis Key error: {e}")
+                                            except NameError:
+                                                # Silent fail for debug messages
+                                                pass
                                     
                                     self.learning_memory.ingest_learning_data(
                                         learning_type="federated_pattern",
@@ -687,7 +713,12 @@ class FederatedLearningSystem:
                                         genesis_key_id=pattern_genesis_key_id
                                     )
                                 except Exception as e:
-                                    logger.debug(f"[FEDERATED-LEARNING] Pattern storage error: {e}")
+                                    # Use try-except to ensure logger is available
+                                    try:
+                                        logger.debug(f"[FEDERATED-LEARNING] Pattern storage error: {e}")
+                                    except NameError:
+                                        # Silent fail for debug messages
+                                        pass
                             
                             # Store aggregated topics
                             for topic in aggregated_model.aggregated_topics[:15]:  # Top 15 topics
@@ -717,9 +748,19 @@ class FederatedLearningSystem:
                                         source="federated_learning"
                                     )
                                 except Exception as e:
-                                    logger.debug(f"[FEDERATED-LEARNING] Topic storage error: {e}")
+                                    # Use try-except to ensure logger is available
+                                    try:
+                                        logger.debug(f"[FEDERATED-LEARNING] Topic storage error: {e}")
+                                    except NameError:
+                                        # Silent fail for debug messages
+                                        pass
                         except Exception as e:
-                            logger.warning(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
+                            # Use try-except to ensure logger is available
+                            try:
+                                logger.warning(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
+                            except NameError:
+                                # Fallback if logger not available
+                                print(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
                     
                     logger.info(
                         f"[FEDERATED-LEARNING] Stored aggregated model for {domain} in learning memory: "
@@ -805,17 +846,32 @@ class FederatedLearningSystem:
                                 }
                             )
                         except Exception as e:
-                            logger.debug(f"[FEDERATED-LEARNING] Pattern contribution error: {e}")
+                            # Use try-except to ensure logger is available
+                            try:
+                                logger.debug(f"[FEDERATED-LEARNING] Pattern contribution error: {e}")
+                            except NameError:
+                                # Silent fail for debug messages
+                                pass
                     
                     logger.info(
                         f"[FEDERATED-LEARNING] Contributed aggregated model for {domain} to Grace-Aligned LLM: "
                         f"learning_id={learning_id}"
                     )
                 except Exception as e:
-                    logger.warning(f"[FEDERATED-LEARNING] LLM orchestrator storage error: {e}")
+                    # Use try-except to ensure logger is available
+                    try:
+                        logger.warning(f"[FEDERATED-LEARNING] LLM orchestrator storage error: {e}")
+                    except NameError:
+                        # Fallback if logger not available
+                        print(f"[FEDERATED-LEARNING] LLM orchestrator storage error: {e}")
             
         except Exception as e:
-            logger.error(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
+            # Use try-except to ensure logger is available
+            try:
+                logger.error(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
+            except NameError:
+                # Fallback if logger not available
+                print(f"[FEDERATED-LEARNING] Learning memory storage error: {e}")
     
     def _apply_grace_aligned_enhancements(
         self,
@@ -862,10 +918,20 @@ class FederatedLearningSystem:
                 grace_aligned_fl.integrate_with_memory_mesh(aggregated_model, domain)
                 
             except Exception as e:
-                logger.debug(f"[FEDERATED-LEARNING] Grace-Aligned enhancements not available: {e}")
+                # Use try-except to ensure logger is available
+                try:
+                    logger.debug(f"[FEDERATED-LEARNING] Grace-Aligned enhancements not available: {e}")
+                except NameError:
+                    # Silent fail for debug messages
+                    pass
                 
         except Exception as e:
-            logger.warning(f"[FEDERATED-LEARNING] Grace-Aligned enhancement error: {e}")
+            # Use try-except to ensure logger is available
+            try:
+                logger.warning(f"[FEDERATED-LEARNING] Grace-Aligned enhancement error: {e}")
+            except NameError:
+                # Fallback if logger not available
+                print(f"[FEDERATED-LEARNING] Grace-Aligned enhancement error: {e}")
     
     def get_statistics(self) -> Dict[str, Any]:
         """Get federated learning statistics."""

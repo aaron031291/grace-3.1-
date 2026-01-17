@@ -5,11 +5,11 @@ from dataclasses import dataclass
 from enum import Enum
 from sqlalchemy.orm import Session
 from pathlib import Path
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
 class MemoryRetrievalStrategy(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Memory retrieval strategies for resource optimization."""
     SURFACE_ONLY = "surface_only"  # Fast: Recent, hot memories only
     SURFACE_MANTLE = "surface_mantle"  # Balanced: Surface + patterns

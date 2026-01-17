@@ -12,14 +12,10 @@ from enum import Enum
 from abc import ABC, abstractmethod
 import threading
 from concurrent.futures import ThreadPoolExecutor
+
+logger = logging.getLogger(__name__)
+
 class NotificationPriority(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Priority levels for notifications."""
     LOW = "low"
     MEDIUM = "medium"
