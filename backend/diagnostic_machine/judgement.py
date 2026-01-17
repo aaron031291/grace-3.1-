@@ -1,32 +1,18 @@
-"""
-Layer 3 - Judgement: Decision Making Layer
-
-Evaluates interpreted data to produce:
-- Health score (overall system health)
-- Confidence score (certainty in diagnosis)
-- Risk vectors (potential future issues)
-- Drift detection (deviation from baseline)
-- Forensic analysis (root cause investigation)
-- AVN (Anomaly Violation Notification)
-- AVM (Anomaly Violation Monitor)
-"""
-
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-
-from .sensors import SensorData
-from .interpreters import (
-    InterpretedData, Pattern, Anomaly, InvariantCheck,
-    PatternType, AnomalyType, ClarityLevel
-)
-
-logger = logging.getLogger(__name__)
-
-
+from sensors import SensorData
+from interpreters import InterpretedData, Pattern, Anomaly, InvariantCheck, PatternType, AnomalyType, ClarityLevel
 class HealthStatus(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """System health status levels."""
     HEALTHY = "healthy"
     DEGRADED = "degraded"

@@ -1,28 +1,13 @@
-"""
-Layer 2 - Interpreters: Pattern Analysis Layer
-
-Analyzes raw sensor data to detect:
-- Patterns (recurring issues, success patterns)
-- Anomalies (unusual behavior, outliers)
-- Invariant checks (rule violations)
-- Clarity classification (clear vs ambiguous states)
-"""
-
 import logging
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-
-from .sensors import (
-    SensorData, TestResultData, MetricsData, CodeQualityData,
-    BuildStatusData, TestCoverageData, APIContractData, InfrastructureData
-)
-
-logger = logging.getLogger(__name__)
-
-
+from sensors import SensorData, TestResultData, MetricsData, CodeQualityData, BuildStatusData, TestCoverageData, APIContractData, InfrastructureData
 class PatternType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of patterns detected."""
     TEST_FAILURE_PATTERN = "test_failure_pattern"
     TEST_SUCCESS_PATTERN = "test_success_pattern"

@@ -1,21 +1,10 @@
-"""
-Async Batch Embedding Generator
-
-Wraps synchronous embedding model with async batch processing for scalability.
-
-Performance Improvement: 3-4x faster for batch operations
-"""
-
 import asyncio
 import logging
 from typing import List, Optional, Dict
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
-
-logger = logging.getLogger(__name__)
-
-
 class AsyncBatchEmbedder:
+    logger = logging.getLogger(__name__)
     """
     Asynchronous wrapper for batch embedding generation.
 

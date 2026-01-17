@@ -1,30 +1,13 @@
-"""
-Autonomous Help Requester - Grace's Communication Bridge
-
-This module allows Grace to autonomously request help from the AI assistant
-when she encounters issues she cannot resolve herself.
-
-Grace can:
-- Detect when she needs help
-- Create structured help requests
-- Log requests for tracking
-- Receive and process help responses
-"""
-
 import logging
 import json
 from typing import Dict, Any, Optional, List
 from datetime import datetime, UTC
 from pathlib import Path
 from enum import Enum
-
 from sqlalchemy.orm import Session
 from models.genesis_key_models import GenesisKey, GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class HelpPriority(Enum):
+    logger = logging.getLogger(__name__)
     """Priority levels for help requests."""
     CRITICAL = "critical"  # System failing, immediate help needed
     HIGH = "high"  # Important issue, help needed soon

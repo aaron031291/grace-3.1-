@@ -1,29 +1,13 @@
-"""
-KPI Tracking System - Component Performance Metrics
-
-Tracks Key Performance Indicators (KPIs) for all components, aggregating
-performance data into operational health signals that feed into trust scores.
-
-Key Features:
-- Action frequency tracking (every action increments KPI)
-- Component-level KPI aggregation
-- KPI-to-trust score conversion
-- System-wide trust aggregation
-- Time-windowed metrics (recent vs. historical)
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from collections import defaultdict
 import json
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class KPI:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Key Performance Indicator for a component."""
     component_name: str
     metric_name: str

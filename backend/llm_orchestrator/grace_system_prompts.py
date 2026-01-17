@@ -5,6 +5,8 @@ Provides GRACE-specific system prompts that are injected into all LLM interactio
 to make them understand GRACE's architecture, patterns, and workflows.
 """
 
+from system_specs import get_system_specs
+
 # =============================================================================
 # BASE GRACE ARCHITECTURE PROMPT
 # =============================================================================
@@ -35,6 +37,7 @@ RESPONSE GUIDELINES:
 5. Follow OODA loop for reasoning tasks: Observe → Orient → Decide → Act
 6. Consider 12 OODA invariants for safety-critical tasks
 7. When uncertain, acknowledge ambiguity and suggest verification steps
+8. ALWAYS respect hardware constraints - see SYSTEM SPECIFICATIONS below
 """
 
 # =============================================================================
@@ -156,6 +159,14 @@ def get_grace_system_prompt(task_type: str = "general", include_code: bool = Fal
         Combined GRACE system prompt
     """
     prompts = [GRACE_BASE_PROMPT]
+    
+    # Always include system specs
+    try:
+        specs = get_system_specs()
+        prompts.append(specs.to_prompt_string())
+    except Exception:
+        # If specs can't be loaded, continue without them
+        pass
     
     if task_type == "code" or include_code:
         prompts.append(GRACE_CODE_PROMPT)

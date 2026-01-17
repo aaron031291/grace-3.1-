@@ -1,41 +1,13 @@
-"""
-Genesis Key Autonomous Trigger Pipeline
-
-Genesis Keys are the CENTRAL TRIGGER for all autonomous actions.
-
-Every Genesis Key creation can trigger:
-1. Autonomous learning (study new files)
-2. Recursive practice loops (mirror → study → practice)
-3. Predictive context loading (prefetch related topics)
-4. Memory mesh integration (store high-trust patterns)
-
-Architecture:
-- Genesis Key Created (Layer 1)
-  ↓
-- Trigger Pipeline Checks Type
-  ↓
-- Spawns Appropriate Autonomous Actions
-  ↓
-- Results Create New Genesis Keys
-  ↓
-- RECURSIVE LOOP if needed
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from pathlib import Path
-
 from sqlalchemy.orm import Session
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_subagent_system import LearningOrchestrator, TaskType
 from database.session import initialize_session_factory
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisTriggerPipeline:
+    logger = logging.getLogger(__name__)
     """
     Central trigger pipeline - Genesis Keys trigger autonomous actions.
 
@@ -96,6 +68,10 @@ class GenesisTriggerPipeline:
         if genesis_key.key_type == GenesisKeyType.FILE_OPERATION:
             actions = self._handle_file_operation(genesis_key)
             triggered_actions.extend(actions)
+            
+            # NEW: Trigger intelligent CI/CD for code changes
+            cicd_actions = self._handle_code_change_cicd(genesis_key)
+            triggered_actions.extend(cicd_actions)
 
         elif genesis_key.key_type == GenesisKeyType.USER_INPUT:
             actions = self._handle_user_input(genesis_key)
@@ -111,6 +87,11 @@ class GenesisTriggerPipeline:
 
         elif genesis_key.key_type == GenesisKeyType.GAP_IDENTIFIED:
             actions = self._handle_gap_identified(genesis_key)
+            triggered_actions.extend(actions)
+
+        # Check if this is a learning outcome that should update LLM knowledge
+        if self._should_update_llm_knowledge(genesis_key):
+            actions = self._handle_llm_knowledge_update(genesis_key)
             triggered_actions.extend(actions)
 
         # Check if multi-LLM verification is needed for any response
@@ -664,6 +645,81 @@ class GenesisTriggerPipeline:
         # Trigger every 50 operations
         return self.triggers_fired % 50 == 0
 
+    def _should_update_llm_knowledge(self, genesis_key: GenesisKey) -> bool:
+        """
+        Determine if LLM knowledge should be updated from this Genesis Key.
+        
+        Updates LLM knowledge for high-trust learning outcomes.
+        """
+        metadata = genesis_key.metadata or {}
+        
+        # Check if this is a learning outcome with high trust
+        trust_score = metadata.get('trust_score', 0.0)
+        outcome_type = metadata.get('outcome_type') or metadata.get('example_type')
+        
+        # Update for high-trust outcomes (healing, testing, diagnostic, practice)
+        is_learning_outcome = outcome_type in [
+            'healing_outcome', 'test_outcome', 'diagnostic_outcome', 
+            'practice_outcome', 'learning_outcome'
+        ]
+        
+        return is_learning_outcome and trust_score >= 0.75
+
+    def _handle_llm_knowledge_update(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
+        """
+        Handle LLM knowledge update trigger.
+        
+        Automatically updates LLM knowledge base when high-trust outcomes are created.
+        This closes the feedback loop: Outcomes → Learning → LLM Knowledge → Better Responses
+        """
+        actions = []
+        
+        try:
+            from llm_orchestrator.learning_integration import LearningIntegration
+            from cognitive.learning_memory import LearningMemoryManager
+            
+            metadata = genesis_key.metadata or {}
+            trust_score = metadata.get('trust_score', 0.75)
+            
+            logger.info(
+                f"[GENESIS-TRIGGER] High-trust outcome detected "
+                f"(trust={trust_score:.2f}) → Updating LLM knowledge"
+            )
+            
+            # Initialize learning integration
+            learning_integration = LearningIntegration(
+                learning_memory=LearningMemoryManager(session=self.session),
+                session=self.session
+            )
+            
+            # Update LLM knowledge with recent high-trust examples
+            result = learning_integration.update_llm_knowledge(
+                min_trust_score=trust_score,
+                limit=20  # Include recent high-trust examples
+            )
+            
+            actions.append({
+                "action": "llm_knowledge_update",
+                "trigger": "high_trust_outcome",
+                "genesis_key_id": genesis_key.key_id,
+                "trust_score": trust_score,
+                "examples_included": result.get('examples_included', 0),
+                "patterns_included": result.get('patterns_included', 0),
+                "outcome_type": metadata.get('outcome_type') or metadata.get('example_type')
+            })
+            
+            logger.info(
+                f"[GENESIS-TRIGGER] LLM knowledge updated: "
+                f"{result.get('examples_included', 0)} examples, "
+                f"{result.get('patterns_included', 0)} patterns"
+            )
+            
+        except Exception as e:
+            logger.warning(f"[GENESIS-TRIGGER] LLM knowledge update failed: {e}")
+            # Don't fail the trigger if LLM update fails
+        
+        return actions
+
     def _handle_mirror_analysis_trigger(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
         """
         Handle mirror self-modeling trigger.
@@ -715,6 +771,63 @@ class GenesisTriggerPipeline:
         except Exception as e:
             logger.error(f"Error triggering mirror analysis: {e}")
 
+        return actions
+
+    def _handle_code_change_cicd(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
+        """
+        Handle CODE_CHANGE or FILE_OPERATION Genesis Key for intelligent CI/CD.
+        
+        This is the GRACE WAY - goes beyond traditional Git by:
+        - Analyzing code semantics (AST parsing)
+        - Selecting only affected tests (10x faster)
+        - Triggering intelligent CI/CD pipeline
+        """
+        actions = []
+        
+        # Check if this is a code file
+        file_path = genesis_key.file_path or (genesis_key.metadata or {}).get('file_path', '')
+        if not file_path:
+            return actions
+        
+        # Check if it's a Python file (code change)
+        if not file_path.endswith('.py'):
+            return actions
+        
+        try:
+            from genesis.genesis_cicd_integration import get_genesis_cicd_integration
+            from database.session import SessionLocal
+            
+            # Get CI/CD integration
+            session = SessionLocal()
+            cicd_integration = get_genesis_cicd_integration(session=session)
+            
+            # Trigger intelligent CI/CD
+            result = cicd_integration.on_code_change_genesis_key(genesis_key)
+            
+            if result.get('triggered'):
+                actions.append({
+                    "action": "intelligent_cicd",
+                    "trigger": "code_change",
+                    "genesis_key_id": genesis_key.key_id,
+                    "pipeline_run_id": result.get('pipeline_run_id'),
+                    "tests_selected": result.get('tests_selected', 0),
+                    "test_ids": result.get('test_ids', []),
+                    "risk_score": result.get('change_analysis', {}).get('risk_score', 0.0),
+                    "confidence": result.get('change_analysis', {}).get('confidence', 0.0),
+                    "estimated_time": result.get('change_analysis', {}).get('estimated_test_time', 0.0)
+                })
+                
+                logger.info(
+                    f"[GENESIS-TRIGGER] Intelligent CI/CD triggered for {genesis_key.key_id}: "
+                    f"{result.get('tests_selected', 0)} tests selected "
+                    f"(risk={result.get('change_analysis', {}).get('risk_score', 0.0):.2f})"
+                )
+            
+            session.close()
+            
+        except Exception as e:
+            logger.error(f"[GENESIS-TRIGGER] Error triggering CI/CD: {e}")
+        
         return actions
 
     # ======================================================================

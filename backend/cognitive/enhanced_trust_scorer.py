@@ -161,13 +161,39 @@ class AdaptiveTrustScorer:
         # Get source reliability
         source_reliability = self.source_weights.get(source, 0.5)
         
+        # TimeSense integration: Get time determinism score if available
+        time_determinism_score = None
+        if context:
+            time_determinism = context.get('time_determinism')
+            if time_determinism and isinstance(time_determinism, dict):
+                time_determinism_score = time_determinism.get('determinism_score', 1.0)
+        
         # Calculate base score with adaptive weights
-        base_score = (
-            source_reliability * weights['source_reliability'] +
-            data_confidence * weights['data_confidence'] +
-            (operational_confidence if operational_confidence is not None else outcome_quality) * weights['operational_confidence'] +
-            consistency_score * weights['consistency_score']
-        )
+        # Include time determinism if available (10% weight, reduces other weights slightly)
+        if time_determinism_score is not None:
+            # Adjust weights to accommodate time determinism
+            adjusted_weights = {
+                'source_reliability': weights['source_reliability'] * 0.92,
+                'data_confidence': weights['data_confidence'] * 0.92,
+                'operational_confidence': weights['operational_confidence'] * 0.92,
+                'consistency_score': weights['consistency_score'] * 0.92,
+                'time_determinism': 0.08  # 8% weight for time determinism
+            }
+            base_score = (
+                source_reliability * adjusted_weights['source_reliability'] +
+                data_confidence * adjusted_weights['data_confidence'] +
+                (operational_confidence if operational_confidence is not None else outcome_quality) * adjusted_weights['operational_confidence'] +
+                consistency_score * adjusted_weights['consistency_score'] +
+                time_determinism_score * adjusted_weights['time_determinism']
+            )
+        else:
+            # Original calculation without time determinism
+            base_score = (
+                source_reliability * weights['source_reliability'] +
+                data_confidence * weights['data_confidence'] +
+                (operational_confidence if operational_confidence is not None else outcome_quality) * weights['operational_confidence'] +
+                consistency_score * weights['consistency_score']
+            )
         
         # Apply validation history adjustments
         validated = validation_history.get('validated', 0)
@@ -227,6 +253,7 @@ class AdaptiveTrustScorer:
                 'data_confidence': data_confidence,
                 'operational_confidence': operational_confidence if operational_confidence is not None else outcome_quality,
                 'consistency_score': consistency_score,
+                'time_determinism': time_determinism_score,  # Time determinism factor
                 'validation_ratio': validation_ratio,
                 'validation_count': total_validations,
                 'weights_used': weights,

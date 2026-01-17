@@ -1,22 +1,4 @@
-"""
-Contradiction Detector - Cognitive Consistency Enforcement
-
-Addresses Clarity Class 10 (Contradiction Detection):
-- Detect logical contradictions in reasoning
-- Identify drift from established patterns
-- Flag conflicting outputs
-- Trigger AVN (Ambiguity/Validation/Negotiation) fallback
-
-Contradiction types:
-1. Logical: Direct logical contradictions in reasoning
-2. Temporal: Contradictions with previous outputs
-3. Constitutional: Contradictions with core rules
-4. Pattern: Drift from learned patterns
-5. Confidence: Overconfident claims without support
-"""
-
 from __future__ import annotations
-
 import asyncio
 import logging
 import re
@@ -25,18 +7,14 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Dict, Any, Optional, List, Set, Tuple
-
 from core.base_component import BaseComponent, ComponentRole
 from core.loop_output import GraceLoopOutput, ReasoningStep
-
-logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# ENUMS AND TYPES
-# =============================================================================
-
 class ContradictionType(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of contradictions."""
     LOGICAL = "logical"           # Direct logical contradiction
     TEMPORAL = "temporal"         # Contradicts previous output

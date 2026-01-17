@@ -1,7 +1,3 @@
-"""
-Proactive Code Scanner for Self-Healing System
-Scans code for bugs BEFORE they cause runtime errors
-"""
 import ast
 import importlib
 import logging
@@ -9,12 +5,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class CodeIssue:
+    logger = logging.getLogger(__name__)
     """A code issue detected by proactive scanning."""
     issue_type: str  # 'syntax_error', 'import_error', 'missing_file', 'code_quality'
     severity: str  # 'critical', 'high', 'medium', 'low'

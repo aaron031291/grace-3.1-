@@ -1,40 +1,9 @@
-"""
-Neuro-Symbolic Connector - Unified Reasoning Integration
-
-Connects NeuroSymbolicReasoner to Layer 1 message bus for:
-- Unified neural-symbolic reasoning
-- Trust-weighted retrieval
-- Automatic rule generation from patterns
-- Cross-component neuro-symbolic integration
-"""
-
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    ComponentType,
-    Message,
-    get_message_bus
-)
-
-# Optional imports for neuro-symbolic components
-try:
-    from ml_intelligence.neuro_symbolic_reasoner import NeuroSymbolicReasoner
-    from ml_intelligence.rule_storage import RuleStorage, get_rule_storage
-    from retrieval.retriever import DocumentRetriever
-    NEURO_SYMBOLIC_AVAILABLE = True
-except ImportError:
-    NeuroSymbolicReasoner = None
-    RuleStorage = None
-    DocumentRetriever = None
-    NEURO_SYMBOLIC_AVAILABLE = False
-
-logger = logging.getLogger(__name__)
-
-
+from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 class NeuroSymbolicConnector:
+    logger = logging.getLogger(__name__)
     """
     Connects Neuro-Symbolic Reasoner to Layer 1 message bus.
     

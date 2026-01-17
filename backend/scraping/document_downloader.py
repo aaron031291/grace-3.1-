@@ -1,10 +1,3 @@
-"""
-Document downloader service for web scraping.
-
-This service handles downloading documents (PDFs, DOCXs, PPTs, etc.)
-found during web scraping and storing them in the knowledge base.
-"""
-
 import aiohttp
 import asyncio
 from pathlib import Path
@@ -14,11 +7,8 @@ import logging
 from datetime import datetime
 import re
 import json
-
-logger = logging.getLogger(__name__)
-
-
 class DocumentDownloader:
+    logger = logging.getLogger(__name__)
     """
     Service for downloading documents from URLs.
     """

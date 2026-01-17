@@ -1,22 +1,3 @@
-"""
-Autonomous Sandbox Lab
-
-Grace's self-improvement laboratory where she can:
-1. Practice and experiment autonomously
-2. Build new algorithms and improvements
-3. Test against live data in isolated sandbox
-4. Track trust scores and performance metrics
-5. Graduate experiments to production after 90-day trial
-6. Request user approval for significant changes
-
-Architecture:
-- Sandbox Isolation: Experiments run in isolated environment
-- Trust Scoring: Every experiment tracked with neural trust scorer
-- Performance Monitoring: Continuous metrics collection
-- Trial Period: 90-day validation with live data
-- Promotion Workflow: Automated promotion with user approval gates
-"""
-
 import json
 import logging
 from datetime import datetime, timedelta
@@ -25,11 +6,10 @@ from enum import Enum
 from pathlib import Path
 import hashlib
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class ExperimentStatus(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Experiment lifecycle stages"""
     PROPOSED = "proposed"  # Grace has an idea
     SANDBOX = "sandbox"  # Testing in isolation

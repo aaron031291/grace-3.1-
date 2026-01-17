@@ -1,19 +1,3 @@
-"""
-No-Code Panel System for Grace OS
-==================================
-
-Provides drag-and-drop, visual interface components for non-technical users.
-Enables building workflows, triggering actions, and monitoring Grace without code.
-
-Key Features:
-- Visual workflow builder
-- Drag-and-drop action panels
-- Real-time status dashboards
-- Natural language task input
-- Voice command integration
-- One-click healing and fixes
-"""
-
 import logging
 import json
 from typing import Dict, Any, List, Optional, Callable
@@ -21,11 +5,8 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class PanelType(str, Enum):
+    logger = logging.getLogger(__name__)
     """Types of no-code panels."""
     STATUS = "status"               # Status indicator
     ACTION = "action"               # Single action button

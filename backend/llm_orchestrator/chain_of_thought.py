@@ -1,23 +1,3 @@
-"""
-Chain-of-Thought Reasoning System for Grace
-=============================================
-
-Advanced reasoning system that breaks complex coding tasks into
-step-by-step reasoning chains, enabling Claude/Cursor-level quality
-using local open-source LLMs.
-
-Key Techniques:
-1. Problem Decomposition - Break complex tasks into sub-problems
-2. Step-by-Step Reasoning - Think through each step explicitly
-3. Self-Verification - Verify each reasoning step
-4. Backtracking - Correct mistakes by revisiting steps
-5. Multi-Path Exploration - Explore multiple solution paths
-6. Synthesis - Combine insights into optimal solution
-
-This enables DeepSeek and other open-source models to perform
-at the level of more expensive proprietary models.
-"""
-
 import logging
 import asyncio
 import json
@@ -27,11 +7,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class ReasoningMode(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of reasoning approaches."""
     SEQUENTIAL = "sequential"       # Step-by-step linear reasoning
     TREE = "tree"                   # Tree of thought (multiple branches)

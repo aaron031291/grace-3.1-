@@ -1,19 +1,3 @@
-"""
-Proactive Learning System for Grace
-=====================================
-
-Learns in real-time from all code interactions, user inputs,
-and system events to continuously improve predictions.
-
-Key Capabilities:
-1. Real-time pattern extraction from code
-2. User intent learning
-3. Failure pattern learning
-4. Success pattern reinforcement
-5. Research storage and retrieval
-6. Continuous model improvement
-"""
-
 import logging
 import asyncio
 import json
@@ -25,11 +9,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import uuid
 from collections import defaultdict
-
-logger = logging.getLogger(__name__)
-
-
 class LearningEvent(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of events to learn from."""
     CODE_GENERATED = "code_generated"
     CODE_EDITED = "code_edited"

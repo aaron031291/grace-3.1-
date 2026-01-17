@@ -1,24 +1,9 @@
-"""
-Primitive Operations Catalog for TimeSense
-
-Defines all benchmarkable primitive operations that tasks are composed of.
-Each primitive has a cost function with specific scaling variables.
-
-Primitives scale with different variables:
-- Disk I/O: bytes, block_size, seek_pattern
-- Network I/O: bytes, bandwidth, latency
-- CPU compute: bytes, complexity
-- LLM/Embedding: tokens, model_size
-- Database: num_records, index_type, query_complexity
-"""
-
 from enum import Enum
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional, Callable
 import logging
 
 logger = logging.getLogger(__name__)
-
 
 class PrimitiveCategory(str, Enum):
     """Categories of primitive operations."""

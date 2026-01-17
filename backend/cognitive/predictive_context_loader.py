@@ -1,35 +1,13 @@
-"""
-Predictive Context Loader - Proactive Knowledge Fetching
-
-Grace doesn't just wait for queries - she thinks ahead!
-
-When Grace encounters a whitelisted trigger (e.g., "REST API design"),
-she proactively pre-fetches related topics and brings them into context
-BEFORE they're explicitly requested.
-
-This is deterministic preemptive fetching:
-1. Detect trigger topic
-2. Identify neighboring/related topics
-3. Pre-fetch relevant knowledge
-4. Cache in active context
-5. Ready when needed
-"""
-
 from typing import List, Dict, Any, Set, Optional
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 from collections import defaultdict
 import logging
-
 from sqlalchemy.orm import Session
 from retrieval.retriever import DocumentRetriever
 from cognitive.learning_memory import LearningExample
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class PreFetchedContext:
+    logger = logging.getLogger(__name__)
     """Pre-fetched context ready for use."""
     topic: str
     related_topics: List[str]
@@ -324,8 +302,9 @@ class PredictiveContextLoader:
         related_topics = self.topic_graph.get_related_topics(query, depth=depth)
         logger.info(f"📊 Identified {len(related_topics)} related topics (depth={depth})")
 
-        # Pre-fetch knowledge for each related topic
-        prefetched_contexts = []
+        # TimeSense: Prioritize prefetch by estimated time
+        # Fetch faster topics first to maximize cache hits quickly
+        topics_to_prefetch = []
         for topic in related_topics:
             # Check cache first
             if topic in self.prefetched_cache:
@@ -335,9 +314,36 @@ class PredictiveContextLoader:
                     self.prefetch_hits += 1
                     prefetched_contexts.append(cached)
                     continue
-
-            # Not in cache or expired - fetch now
-            logger.debug(f"→ Pre-fetching: {topic}")
+            
+            # Estimate time for this topic's retrieval
+            estimated_time_ms = None
+            try:
+                from timesense.integration import predict_time
+                from timesense.primitives import PrimitiveType
+                
+                query_tokens = len(topic.split()) * 4  # Rough estimate
+                prediction = predict_time(
+                    PrimitiveType.VECTOR_SEARCH,
+                    size=query_tokens
+                ) if predict_time else None
+                
+                if prediction:
+                    estimated_time_ms = prediction.p50_ms
+            except Exception as e:
+                logger.debug(f"[PREDICTIVE-LOADER] Time estimation failed: {e}")
+            
+            topics_to_prefetch.append({
+                'topic': topic,
+                'estimated_time_ms': estimated_time_ms or 500  # Default 500ms
+            })
+        
+        # Sort by estimated time (fastest first) - maximize early cache hits
+        topics_to_prefetch.sort(key=lambda x: x['estimated_time_ms'])
+        
+        # Pre-fetch topics in time-optimal order
+        for topic_info in topics_to_prefetch:
+            topic = topic_info['topic']
+            logger.debug(f"→ Pre-fetching: {topic} (estimated: {topic_info['estimated_time_ms']:.0f}ms)")
             prefetched = self._prefetch_topic(topic)
             if prefetched:
                 self.prefetched_cache[topic] = prefetched

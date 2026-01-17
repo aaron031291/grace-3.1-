@@ -1,14 +1,3 @@
-"""
-Telemetry service for Grace's self-modeling mechanism.
-
-INTEGRATED with LLM Orchestrator for health monitoring.
-
-This service provides context managers and utilities for tracking
-operations, measuring performance, and enabling replay functionality.
-
-Health checks prioritize LLM Orchestrator availability over direct
-Ollama client access to ensure consistent system status reporting.
-"""
 import uuid
 import time
 import hashlib
@@ -20,17 +9,10 @@ from datetime import datetime, timedelta
 from contextlib import contextmanager
 from typing import Optional, Dict, Any, Generator
 from sqlalchemy.orm import Session
-
-from models.telemetry_models import (
-    OperationLog, OperationType, OperationStatus,
-    PerformanceBaseline, DriftAlert, SystemState
-)
+from models.telemetry_models import OperationLog, OperationType, OperationStatus, PerformanceBaseline, DriftAlert, SystemState
 from database.session import get_session
-
-logger = logging.getLogger(__name__)
-
-
 class TelemetryService:
+    logger = logging.getLogger(__name__)
     """
     Service for emitting and tracking telemetry events.
 

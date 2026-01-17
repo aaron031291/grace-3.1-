@@ -1,18 +1,3 @@
-"""
-SWE Platform Connector for Oracle
-==================================
-
-Deep integration with Software Engineering platforms:
-1. GitHub - repositories, issues, PRs, code search
-2. GitLab - projects, merge requests
-3. StackOverflow - Q&A, best practices
-4. Documentation sites - Python, JS, frameworks
-5. Package managers - PyPI, npm, cargo
-6. CI/CD platforms - GitHub Actions patterns
-
-Enables Grace to learn from the global SWE ecosystem.
-"""
-
 import logging
 import asyncio
 import aiohttp
@@ -24,11 +9,10 @@ from enum import Enum
 from datetime import datetime, timedelta
 from pathlib import Path
 import base64
-
-logger = logging.getLogger(__name__)
-
-
 class Platform(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Supported SWE platforms."""
     GITHUB = "github"
     GITLAB = "gitlab"

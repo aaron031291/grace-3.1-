@@ -1,20 +1,3 @@
-"""
-Genesis State Machine Versioning System
-
-Layer 2: Genesis must be versioned as a state machine, not a value.
-
-Features:
-- Immutable Genesis snapshots
-- Monotonic versioning
-- Explicit upgrade paths
-- Delta tracking
-
-If Genesis can be overwritten, rolled back implicitly, or merged like code → you lose determinism.
-
-Git must never be the source of truth for Genesis state.
-Git is just transport.
-"""
-
 import logging
 import json
 import hashlib
@@ -23,14 +6,10 @@ from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 from sqlalchemy.orm import Session
 from enum import Enum
-
 from models.genesis_key_models import GenesisKey, GenesisKeyStatus
 from genesis.validation_gate import DeltaType, AuthorityScope, get_validation_gate
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisVersionState(str, Enum):
+    logger = logging.getLogger(__name__)
     """State of a Genesis version."""
     PENDING = "pending"  # Created but not yet committed
     ACTIVE = "active"  # Active version

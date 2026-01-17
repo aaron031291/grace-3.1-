@@ -1,10 +1,3 @@
-"""
-Configuration Validation Sensor
-
-Detects configuration issues before they cause runtime errors.
-Validates environment variables, file paths, and service connectivity.
-"""
-
 import os
 import sys
 import logging
@@ -12,12 +5,11 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class ConfigurationIssue:
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """A configuration issue detected by the sensor."""
     issue_type: str  # 'missing_path', 'invalid_value', 'missing_env_var', 'service_unreachable'
     severity: str  # 'low', 'medium', 'high', 'critical'

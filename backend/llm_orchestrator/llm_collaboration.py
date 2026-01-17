@@ -1,35 +1,18 @@
-"""
-Inter-LLM Collaboration System
-
-Enables multiple LLMs to:
-- Communicate with each other
-- Debate and reach consensus
-- Delegate specialized tasks
-- Review each other's outputs
-- Build collaborative knowledge
-
-All collaboration is:
-- Tracked with Genesis Keys
-- Logged for audit
-- Trust-scored
-- Integrated with Learning Memory
-"""
-
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 import uuid
-
-from .multi_llm_client import MultiLLMClient, TaskType, LLMModel
-from .repo_access import RepositoryAccessLayer
-from .hallucination_guard import HallucinationGuard
-
-logger = logging.getLogger(__name__)
-
-
+from multi_llm_client import MultiLLMClient, TaskType, LLMModel
+from repo_access import RepositoryAccessLayer
+from hallucination_guard import HallucinationGuard
 class CollaborationMode(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of collaboration between LLMs."""
     DEBATE = "debate"  # Multiple LLMs debate a topic
     CONSENSUS = "consensus"  # LLMs work to reach consensus

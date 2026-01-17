@@ -1,0 +1,1056 @@
+{
+  "timestamp": "2026-01-16T21:53:01.441667",
+  "anomalies_processed": 2,
+  "healing_actions": [
+    {
+      "anomaly": {
+        "type": "data_inconsistency",
+        "severity": "critical",
+        "details": "Database table errors detected: 122 components affected",
+        "service": "database",
+        "missing_tables": [
+          "learning_patterns",
+          "object",
+          "learning_examples",
+          "operation_log",
+          "procedures",
+          "users",
+          "genesis_key",
+          "episodes"
+        ],
+        "file_paths": [
+          "backend\\layer1\\enterprise_connectors.py",
+          "backend\\models\\database_models.py",
+          "backend\\ingestion\\file_manager_demo.py",
+          "backend\\api\\system_specs_api.py",
+          "backend\\librarian\\seed_default_rules.py",
+          "backend\\layer1\\components\\rag_connector.py",
+          "backend\\api\\directory_hierarchy.py",
+          "backend\\librarian\\content_integrity_verifier.py",
+          "backend\\api\\cicd_api.py",
+          "backend\\database\\migrate_add_confidence_scoring.py",
+          "backend\\api\\layer1.py",
+          "backend\\api\\autonomous_api.py",
+          "backend\\api\\training.py",
+          "backend\\layer1\\components\\kpi_connector.py",
+          "backend\\librarian\\utils.py",
+          "backend\\database\\migrate_add_telemetry.py",
+          "backend\\api\\enterprise_api.py",
+          "backend\\api\\health.py",
+          "backend\\librarian\\file_creator.py",
+          "backend\\api\\file_management.py"
+        ],
+        "error_message": "Table redefinition errors - SQLAlchemy metadata issue",
+        "evidence": [
+          "GK-d60f4d7b0acd4deb89520d550044d38a",
+          "GK-60b08ebcde8f41e9adcb72240421f99a",
+          "GK-44e1e1537f4049d5ba7c35e86ccca554",
+          "GK-30ca1c607e4c4fc2802d81c289b06206",
+          "GK-9e29ad6decfa4467b136d791b59384ec",
+          "GK-97e5f666f1b24ac28a0a488ca8b8885a",
+          "GK-4cdd5039d4df44fba1deb1153cf63ae4",
+          "GK-451fe08af380474e98c9eede37282178",
+          "GK-9c5e998b45f1423fbd1360fcc3399f5c",
+          "GK-9866c517a14d43f4a26ab7d726b39554"
+        ]
+      },
+      "decisions": [
+        {
+          "anomaly": {
+            "type": "data_inconsistency",
+            "severity": "critical",
+            "details": "Database table errors detected: 122 components affected",
+            "service": "database",
+            "missing_tables": [
+              "learning_patterns",
+              "object",
+              "learning_examples",
+              "operation_log",
+              "procedures",
+              "users",
+              "genesis_key",
+              "episodes"
+            ],
+            "file_paths": [
+              "backend\\layer1\\enterprise_connectors.py",
+              "backend\\models\\database_models.py",
+              "backend\\ingestion\\file_manager_demo.py",
+              "backend\\api\\system_specs_api.py",
+              "backend\\librarian\\seed_default_rules.py",
+              "backend\\layer1\\components\\rag_connector.py",
+              "backend\\api\\directory_hierarchy.py",
+              "backend\\librarian\\content_integrity_verifier.py",
+              "backend\\api\\cicd_api.py",
+              "backend\\database\\migrate_add_confidence_scoring.py",
+              "backend\\api\\layer1.py",
+              "backend\\api\\autonomous_api.py",
+              "backend\\api\\training.py",
+              "backend\\layer1\\components\\kpi_connector.py",
+              "backend\\librarian\\utils.py",
+              "backend\\database\\migrate_add_telemetry.py",
+              "backend\\api\\enterprise_api.py",
+              "backend\\api\\health.py",
+              "backend\\librarian\\file_creator.py",
+              "backend\\api\\file_management.py"
+            ],
+            "error_message": "Table redefinition errors - SQLAlchemy metadata issue",
+            "evidence": [
+              "GK-d60f4d7b0acd4deb89520d550044d38a",
+              "GK-60b08ebcde8f41e9adcb72240421f99a",
+              "GK-44e1e1537f4049d5ba7c35e86ccca554",
+              "GK-30ca1c607e4c4fc2802d81c289b06206",
+              "GK-9e29ad6decfa4467b136d791b59384ec",
+              "GK-97e5f666f1b24ac28a0a488ca8b8885a",
+              "GK-4cdd5039d4df44fba1deb1153cf63ae4",
+              "GK-451fe08af380474e98c9eede37282178",
+              "GK-9c5e998b45f1423fbd1360fcc3399f5c",
+              "GK-9866c517a14d43f4a26ab7d726b39554"
+            ]
+          },
+          "healing_action": "database_table_create",
+          "trust_score": 0.95,
+          "execution_mode": "autonomous",
+          "reason": "Detected data_inconsistency with critical severity. Selected database_table_create (trust: 0.95). Evidence: GK-d60f4d7b0acd4deb89520d550044d38a, GK-60b08ebcde8f41e9adcb72240421f99a"
+        }
+      ],
+      "execution_results": {
+        "executed": [
+          {
+            "action": "database_table_create",
+            "status": "success",
+            "service": "database",
+            "message": "Created 7 table(s): learning_patterns, learning_examples, operation_log, procedures, users, genesis_key, episodes",
+            "tables_created": [
+              "learning_patterns",
+              "learning_examples",
+              "operation_log",
+              "procedures",
+              "users",
+              "genesis_key",
+              "episodes"
+            ],
+            "details": {
+              "success": true,
+              "message": "Created 7 table(s): learning_patterns, learning_examples, operation_log, procedures, users, genesis_key, episodes",
+              "tables_created": [
+                "learning_patterns",
+                "learning_examples",
+                "operation_log",
+                "procedures",
+                "users",
+                "genesis_key",
+                "episodes"
+              ],
+              "errors": []
+            }
+          }
+        ],
+        "awaiting_approval": [],
+        "failed": []
+      }
+    },
+    {
+      "anomaly": {
+        "type": "error_spike",
+        "severity": "high",
+        "details": "Import errors detected: 9 components affected",
+        "evidence": [
+          "GK-2d9ae634c778404c9fc26a15acce5d7d",
+          "GK-42eac298128c4019a2dd0b37f3a02a2d",
+          "GK-70dffb7f7d2a4e3f8f0a3786e9ce3342",
+          "GK-e044920542eb4e63984bc06a77ba0730",
+          "GK-a5c367f28a3b457bb286a045ce8aeb21",
+          "GK-00a77bf157e041a8a8b4a08475789d7a",
+          "GK-9bf0608b93a14f6d9abf3c88312d9a97",
+          "GK-09f5c14878584aa496fe6b484b989924",
+          "GK-af997572f609414aaab992506420b132"
+        ]
+      },
+      "decisions": [
+        {
+          "anomaly": {
+            "type": "error_spike",
+            "severity": "high",
+            "details": "Import errors detected: 9 components affected",
+            "evidence": [
+              "GK-2d9ae634c778404c9fc26a15acce5d7d",
+              "GK-42eac298128c4019a2dd0b37f3a02a2d",
+              "GK-70dffb7f7d2a4e3f8f0a3786e9ce3342",
+              "GK-e044920542eb4e63984bc06a77ba0730",
+              "GK-a5c367f28a3b457bb286a045ce8aeb21",
+              "GK-00a77bf157e041a8a8b4a08475789d7a",
+              "GK-9bf0608b93a14f6d9abf3c88312d9a97",
+              "GK-09f5c14878584aa496fe6b484b989924",
+              "GK-af997572f609414aaab992506420b132"
+            ]
+          },
+          "healing_action": "buffer_clear",
+          "trust_score": 0.9,
+          "execution_mode": "autonomous",
+          "reason": "Detected error_spike with high severity. Selected buffer_clear (trust: 0.90). Evidence: GK-2d9ae634c778404c9fc26a15acce5d7d, GK-42eac298128c4019a2dd0b37f3a02a2d"
+        }
+      ],
+      "execution_results": {
+        "executed": [
+          {
+            "action": "buffer_clear",
+            "status": "success",
+            "files_healed": 0,
+            "details": []
+          }
+        ],
+        "awaiting_approval": [],
+        "failed": []
+      }
+    }
+  ],
+  "monitoring_cycle": {
+    "timestamp": "2026-01-16T21:53:07.110044",
+    "health_status": "failing",
+    "anomalies_detected": 23,
+    "decisions_made": 23,
+    "actions_executed": 22,
+    "awaiting_approval": 1,
+    "failures": 0,
+    "assessment": {
+      "timestamp": "2026-01-16T21:53:06.721571",
+      "health_status": "failing",
+      "code_issues": 0,
+      "recent_errors": 498,
+      "anomalies_detected": 23,
+      "anomalies": [
+        {
+          "type": "error_spike",
+          "severity": "critical",
+          "details": "498 errors in last hour",
+          "evidence": [
+            "GK-d4562b89f77b49d0b4a1d5d5734aa4cd",
+            "GK-e2e01f5ae8374845a9257175cb4fd76a",
+            "GK-d8b334b5fc97451a9644e75e5272d714",
+            "GK-3067a1238cb44cac9601db6122b21523",
+            "GK-a94f56afadf843e5b992c0e9fd2ba301"
+          ]
+        },
+        {
+          "type": "data_inconsistency",
+          "severity": "critical",
+          "details": "SQLAlchemy table redefinition errors: 197 components affected",
+          "service": "database",
+          "error_message": "Table redefinition errors - SQLAlchemy metadata issue",
+          "file_paths": [
+            "backend\\layer1\\enterprise_connectors.py",
+            "backend\\models\\database_models.py",
+            "backend\\ingestion\\file_manager_demo.py",
+            "backend\\api\\system_specs_api.py",
+            "backend\\librarian\\seed_default_rules.py",
+            "backend\\layer1\\components\\rag_connector.py",
+            "backend\\api\\directory_hierarchy.py",
+            "backend\\librarian\\content_integrity_verifier.py",
+            "backend\\api\\cicd_api.py",
+            "backend\\database\\migrate_add_confidence_scoring.py",
+            "backend\\api\\layer1.py",
+            "backend\\api\\autonomous_api.py",
+            "backend\\api\\training.py",
+            "backend\\layer1\\components\\kpi_connector.py",
+            "backend\\librarian\\utils.py",
+            "backend\\database\\migrate_add_telemetry.py",
+            "backend\\api\\enterprise_api.py",
+            "backend\\api\\health.py",
+            "backend\\librarian\\file_creator.py",
+            "backend\\api\\file_management.py"
+          ],
+          "file_path": "backend\\api\\adaptive_cicd_api.py",
+          "evidence": [
+            "GK-4a887c4ab0e546f8853e8c36ba63e2f4",
+            "GK-251ec80e9ef441648d87e267d71222a5",
+            "GK-debfce39d1ee40dca6395951564758bc",
+            "GK-21ce63bb8c824f778f50ee36364a9092",
+            "GK-b87ff72a98114d51910757c407cfd6d7",
+            "GK-7abda14f630a46e4a6f15f687f8946ae",
+            "GK-871ac90dc8454627aa2d167041eeb042",
+            "GK-a98a920ed2f342248cf03f315c1b9c4a",
+            "GK-49969370dd334fb18e7e0f8263d457f4",
+            "GK-b112867dabf3404f88101396a134245d"
+          ]
+        },
+        {
+          "type": "service_failure",
+          "severity": "critical",
+          "details": "84 database connection errors detected",
+          "service": "database",
+          "evidence": [
+            "GK-84075e6cd86a49ee856f7dc1088251e6",
+            "GK-d228a71e0cc94dc9b114266453663b06",
+            "GK-b17b77e8fbc64ae98808ebd42c4c1315",
+            "GK-e2bcd5a5660b4e929411a211870285c6",
+            "GK-73d193a5c9494314b078a657b687b876"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\adaptive_cicd_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\adaptive_cicd_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\agent_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\agent_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\auth.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\auth.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\autonomous_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_cicd_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\autonomous_cicd_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_learning.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\autonomous_learning.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\chat_llm_integration.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\chat_llm_integration.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\chat_orchestrator_endpoint.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\chat_orchestrator_endpoint.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\cicd_api.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\cicd_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\cicd_versioning_api.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\cicd_versioning_api.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\diagnostic_machine\\design_pattern_sensor.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\diagnostic_machine\\design_pattern_sensor.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\diagnostic_machine\\static_analysis_sensor.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\diagnostic_machine\\static_analysis_sensor.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\timesense\\models.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\timesense\\models.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\document_downloader.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\document_downloader.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\models.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\models.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\service.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\service.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\url_validator.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\url_validator.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\database\\migrate_add_file_intelligence.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\database\\migrate_add_file_intelligence.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\database\\migrations\\add_scraping_tables.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\database\\migrations\\add_scraping_tables.py"
+          ]
+        },
+        {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "Backend health check timed out",
+          "service": "backend"
+        }
+      ],
+      "trust_level": "MEDIUM_RISK_AUTO"
+    },
+    "decisions": [
+      {
+        "anomaly": {
+          "type": "error_spike",
+          "severity": "critical",
+          "details": "498 errors in last hour",
+          "evidence": [
+            "GK-d4562b89f77b49d0b4a1d5d5734aa4cd",
+            "GK-e2e01f5ae8374845a9257175cb4fd76a",
+            "GK-d8b334b5fc97451a9644e75e5272d714",
+            "GK-3067a1238cb44cac9601db6122b21523",
+            "GK-a94f56afadf843e5b992c0e9fd2ba301"
+          ]
+        },
+        "healing_action": "process_restart",
+        "trust_score": 0.6,
+        "execution_mode": "manual_approval",
+        "reason": "Detected error_spike with critical severity. Selected process_restart (trust: 0.60). Evidence: GK-d4562b89f77b49d0b4a1d5d5734aa4cd, GK-e2e01f5ae8374845a9257175cb4fd76a"
+      },
+      {
+        "anomaly": {
+          "type": "data_inconsistency",
+          "severity": "critical",
+          "details": "SQLAlchemy table redefinition errors: 197 components affected",
+          "service": "database",
+          "error_message": "Table redefinition errors - SQLAlchemy metadata issue",
+          "file_paths": [
+            "backend\\layer1\\enterprise_connectors.py",
+            "backend\\models\\database_models.py",
+            "backend\\ingestion\\file_manager_demo.py",
+            "backend\\api\\system_specs_api.py",
+            "backend\\librarian\\seed_default_rules.py",
+            "backend\\layer1\\components\\rag_connector.py",
+            "backend\\api\\directory_hierarchy.py",
+            "backend\\librarian\\content_integrity_verifier.py",
+            "backend\\api\\cicd_api.py",
+            "backend\\database\\migrate_add_confidence_scoring.py",
+            "backend\\api\\layer1.py",
+            "backend\\api\\autonomous_api.py",
+            "backend\\api\\training.py",
+            "backend\\layer1\\components\\kpi_connector.py",
+            "backend\\librarian\\utils.py",
+            "backend\\database\\migrate_add_telemetry.py",
+            "backend\\api\\enterprise_api.py",
+            "backend\\api\\health.py",
+            "backend\\librarian\\file_creator.py",
+            "backend\\api\\file_management.py"
+          ],
+          "file_path": "backend\\api\\adaptive_cicd_api.py",
+          "evidence": [
+            "GK-4a887c4ab0e546f8853e8c36ba63e2f4",
+            "GK-251ec80e9ef441648d87e267d71222a5",
+            "GK-debfce39d1ee40dca6395951564758bc",
+            "GK-21ce63bb8c824f778f50ee36364a9092",
+            "GK-b87ff72a98114d51910757c407cfd6d7",
+            "GK-7abda14f630a46e4a6f15f687f8946ae",
+            "GK-871ac90dc8454627aa2d167041eeb042",
+            "GK-a98a920ed2f342248cf03f315c1b9c4a",
+            "GK-49969370dd334fb18e7e0f8263d457f4",
+            "GK-b112867dabf3404f88101396a134245d"
+          ]
+        },
+        "healing_action": "code_fix",
+        "trust_score": 0.8,
+        "execution_mode": "autonomous",
+        "reason": "Detected data_inconsistency with critical severity. Selected code_fix (trust: 0.80). Evidence: GK-4a887c4ab0e546f8853e8c36ba63e2f4, GK-251ec80e9ef441648d87e267d71222a5"
+      },
+      {
+        "anomaly": {
+          "type": "service_failure",
+          "severity": "critical",
+          "details": "84 database connection errors detected",
+          "service": "database",
+          "evidence": [
+            "GK-84075e6cd86a49ee856f7dc1088251e6",
+            "GK-d228a71e0cc94dc9b114266453663b06",
+            "GK-b17b77e8fbc64ae98808ebd42c4c1315",
+            "GK-e2bcd5a5660b4e929411a211870285c6",
+            "GK-73d193a5c9494314b078a657b687b876"
+          ]
+        },
+        "healing_action": "code_fix",
+        "trust_score": 0.8,
+        "execution_mode": "autonomous",
+        "reason": "Detected service_failure with critical severity. Selected code_fix (trust: 0.80). Evidence: GK-84075e6cd86a49ee856f7dc1088251e6, GK-d228a71e0cc94dc9b114266453663b06"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\adaptive_cicd_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\adaptive_cicd_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\adaptive_cicd_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\agent_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\agent_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\agent_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\auth.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\auth.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\auth.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\autonomous_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\autonomous_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_cicd_api.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\api\\autonomous_cicd_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\autonomous_cicd_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\autonomous_learning.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\autonomous_learning.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\autonomous_learning.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\chat_llm_integration.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\chat_llm_integration.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\chat_llm_integration.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\chat_orchestrator_endpoint.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\chat_orchestrator_endpoint.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\chat_orchestrator_endpoint.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\cicd_api.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\cicd_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\cicd_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\api\\cicd_versioning_api.py' failing repeatedly (8 times)",
+          "evidence": [
+            "backend\\api\\cicd_versioning_api.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\api\\cicd_versioning_api.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\diagnostic_machine\\design_pattern_sensor.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\diagnostic_machine\\design_pattern_sensor.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\diagnostic_machine\\design_pattern_sensor.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\diagnostic_machine\\static_analysis_sensor.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\diagnostic_machine\\static_analysis_sensor.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\diagnostic_machine\\static_analysis_sensor.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\timesense\\models.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\timesense\\models.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\timesense\\models.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\document_downloader.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\document_downloader.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\scraping\\document_downloader.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\models.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\models.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\scraping\\models.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\service.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\service.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\scraping\\service.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\scraping\\url_validator.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\scraping\\url_validator.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\scraping\\url_validator.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\database\\migrate_add_file_intelligence.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\database\\migrate_add_file_intelligence.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\database\\migrate_add_file_intelligence.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "File 'backend\\database\\migrations\\add_scraping_tables.py' failing repeatedly (9 times)",
+          "evidence": [
+            "backend\\database\\migrations\\add_scraping_tables.py"
+          ]
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: backend\\database\\migrations\\add_scraping_tables.py"
+      },
+      {
+        "anomaly": {
+          "type": "performance_degradation",
+          "severity": "warning",
+          "details": "Backend health check timed out",
+          "service": "backend"
+        },
+        "healing_action": "connection_reset",
+        "trust_score": 0.75,
+        "execution_mode": "autonomous",
+        "reason": "Detected performance_degradation with warning severity. Selected connection_reset (trust: 0.75). Evidence: "
+      }
+    ],
+    "results": {
+      "executed": [
+        {
+          "action": "code_fix",
+          "status": "failed",
+          "error": "cannot access local variable 're' where it is not associated with a value"
+        },
+        {
+          "action": "code_fix",
+          "status": "failed",
+          "error": "No patches generated",
+          "details": {
+            "success": false,
+            "message": "No patches generated",
+            "patches": []
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "unknown",
+          "message": "General connection reset successful (qdrant: 1 collections)",
+          "details": {
+            "success": true,
+            "message": "General connection reset successful (qdrant: 1 collections)"
+          }
+        },
+        {
+          "action": "connection_reset",
+          "status": "success",
+          "service": "backend",
+          "message": "Backend service reset (no-op, service is running)",
+          "details": {
+            "success": true,
+            "message": "Backend service reset (no-op, service is running)"
+          }
+        }
+      ],
+      "awaiting_approval": [
+        {
+          "anomaly": {
+            "type": "error_spike",
+            "severity": "critical",
+            "details": "498 errors in last hour",
+            "evidence": [
+              "GK-d4562b89f77b49d0b4a1d5d5734aa4cd",
+              "GK-e2e01f5ae8374845a9257175cb4fd76a",
+              "GK-d8b334b5fc97451a9644e75e5272d714",
+              "GK-3067a1238cb44cac9601db6122b21523",
+              "GK-a94f56afadf843e5b992c0e9fd2ba301"
+            ]
+          },
+          "healing_action": "process_restart",
+          "trust_score": 0.6,
+          "execution_mode": "manual_approval",
+          "reason": "Detected error_spike with critical severity. Selected process_restart (trust: 0.60). Evidence: GK-d4562b89f77b49d0b4a1d5d5734aa4cd, GK-e2e01f5ae8374845a9257175cb4fd76a"
+        }
+      ],
+      "failed": []
+    }
+  }
+}

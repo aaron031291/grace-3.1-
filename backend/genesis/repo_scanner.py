@@ -1,14 +1,3 @@
-"""
-Repository Genesis Key Scanner.
-
-Scans the entire repository and assigns Genesis Keys to:
-- All directories
-- All subdirectories
-- All files
-
-Stores in immutable memory for complete tracking.
-Integrates with file version tracker for automatic version control.
-"""
 import os
 import uuid
 import json
@@ -17,11 +6,8 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-
-logger = logging.getLogger(__name__)
-
-
 class RepoScanner:
+    logger = logging.getLogger(__name__)
     """
     Scans repository and assigns Genesis Keys to everything.
 
@@ -30,19 +16,7 @@ class RepoScanner:
 
     def __init__(self, repo_path: str):
         self.repo_path = repo_path
-        self.immutable_memory = {
-            "scan_timestamp": datetime.utcnow().isoformat(),
-            "repo_path": repo_path,
-            "root_genesis_key": None,
-            "directories": {},
-            "files": {},
-            "statistics": {
-                "total_directories": 0,
-                "total_files": 0,
-                "total_size_bytes": 0
-            }
-        }
-
+        
         # Skip patterns
         self.skip_patterns = [
             '__pycache__',
@@ -57,6 +31,34 @@ class RepoScanner:
             '*.pyc',
             '.DS_Store'
         ]
+        
+        # Try to load existing immutable memory, otherwise create new
+        immutable_memory_path = os.path.join(repo_path, ".genesis_immutable_memory.json")
+        if os.path.exists(immutable_memory_path):
+            try:
+                with open(immutable_memory_path, 'r', encoding='utf-8') as f:
+                    self.immutable_memory = json.load(f)
+                logger.debug(f"Loaded existing immutable memory from {immutable_memory_path}")
+            except Exception as e:
+                logger.warning(f"Failed to load immutable memory: {e}, creating new")
+                self.immutable_memory = self._create_empty_memory()
+        else:
+            self.immutable_memory = self._create_empty_memory()
+    
+    def _create_empty_memory(self) -> Dict[str, Any]:
+        """Create empty immutable memory structure."""
+        return {
+            "scan_timestamp": datetime.utcnow().isoformat(),
+            "repo_path": self.repo_path,
+            "root_genesis_key": None,
+            "directories": {},
+            "files": {},
+            "statistics": {
+                "total_directories": 0,
+                "total_files": 0,
+                "total_size_bytes": 0
+            }
+        }
 
     def should_skip(self, path: str) -> bool:
         """Check if path should be skipped."""

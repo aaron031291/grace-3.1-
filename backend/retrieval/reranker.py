@@ -1,48 +1,8 @@
-"""
-Reranker module for improving retrieval results using cross-encoders.
-Uses sentence-transformers/msmarco-bert-base-dot-v5 for relevance scoring.
-"""
-
 import logging
 from typing import List, Dict, Any, Optional
 from threading import Lock
-
-logger = logging.getLogger(__name__)
-
-# Lazy imports for torch and sentence_transformers
-_torch = None
-_CrossEncoder = None
-
-def _get_torch():
-    """Lazily import torch only when needed."""
-    global _torch
-    if _torch is None:
-        try:
-            import torch
-            _torch = torch
-        except ImportError:
-            logger.warning("torch not available - reranker will be disabled")
-            return None
-    return _torch
-
-def _get_cross_encoder():
-    """Lazily import CrossEncoder only when needed."""
-    global _CrossEncoder
-    if _CrossEncoder is None:
-        try:
-            from sentence_transformers import CrossEncoder
-            _CrossEncoder = CrossEncoder
-        except ImportError:
-            logger.warning("sentence_transformers not available - reranker will be disabled")
-            return None
-    return _CrossEncoder
-
-# Global reranker instance with lock for thread-safe singleton
-_reranker = None
-_reranker_lock = Lock()
-
-
 class DocumentReranker:
+    logger = logging.getLogger(__name__)
     """Reranks retrieved chunks using cross-encoder models."""
     
     def __init__(

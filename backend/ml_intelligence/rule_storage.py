@@ -1,22 +1,11 @@
-"""
-Rule Storage - Connects Neural-to-Symbolic Rules to Learning Memory
-
-Stores symbolic rules generated from neural patterns into the learning memory system,
-making them available for symbolic reasoning.
-"""
-
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from sqlalchemy.orm import Session
-
 from ml_intelligence.neural_to_symbolic_rule_generator import SymbolicRule
 from cognitive.learning_memory import LearningMemoryManager, LearningPattern
-
-logger = logging.getLogger(__name__)
-
-
 class RuleStorage:
+    logger = logging.getLogger(__name__)
     """
     Stores symbolic rules in learning memory.
     

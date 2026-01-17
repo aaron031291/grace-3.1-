@@ -1,30 +1,14 @@
-"""
-RelationshipManager - Document Relationship Detection and Management
-
-Automatically detects and manages relationships between documents including:
-- Similarity-based relationships (related content)
-- Version relationships (v1, v2, draft, final)
-- Citation relationships (references)
-- Duplicate detection
-
-Builds a knowledge graph of document relationships.
-"""
-
 from typing import List, Dict, Any, Optional, Tuple, Set
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 from datetime import datetime
 import re
 import logging
-
 from models.librarian_models import DocumentRelationship
 from models.database_models import Document, DocumentChunk
 from librarian.utils import calculate_similarity_score
-
-logger = logging.getLogger(__name__)
-
-
 class RelationshipManager:
+    logger = logging.getLogger(__name__)
     """
     Manages document relationships and knowledge graph construction.
 

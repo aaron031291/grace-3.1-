@@ -1,25 +1,16 @@
-"""
-Complete Pipeline Integration: Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
-
-This module ensures all data flows through the complete pipeline symbiotically.
-"""
 import os
 import json
 import logging
 from datetime import datetime
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
-
 from genesis.genesis_key_service import get_genesis_service
 from genesis.symbiotic_version_control import get_symbiotic_version_control
 from genesis.repo_scanner import get_repo_scanner
 from genesis.kb_integration import get_kb_integration
 from models.genesis_key_models import GenesisKeyType
-
-logger = logging.getLogger(__name__)
-
-
 class DataPipeline:
+    logger = logging.getLogger(__name__)
     """
     Complete data pipeline from input to world model.
 

@@ -1,9 +1,3 @@
-"""
-Genesis Key Middleware for FastAPI.
-
-Automatically tracks all API requests and responses with Genesis Keys.
-Assigns Genesis IDs to users on first access.
-"""
 import logging
 import uuid
 from datetime import datetime
@@ -12,15 +6,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 from fastapi import FastAPI
-
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from genesis.kb_integration import get_kb_integration
-
-logger = logging.getLogger(__name__)
-
-
 class GenesisKeyMiddleware(BaseHTTPMiddleware):
+    logger = logging.getLogger(__name__)
     """
     Middleware that tracks all API requests with Genesis Keys.
 

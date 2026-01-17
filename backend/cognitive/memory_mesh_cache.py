@@ -1,25 +1,11 @@
-"""
-Memory Mesh Caching Layer
-
-Multi-tier caching for Memory Mesh scalability:
-- Tier 1: LRU cache for high-trust learning examples
-- Tier 2: Procedure match cache
-- Tier 3: Stats cache
-
-Performance Improvement: 5-10x faster for cached queries
-"""
-
 import logging
 from functools import lru_cache, wraps
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta
 import hashlib
 import json
-
-logger = logging.getLogger(__name__)
-
-
 class MemoryMeshCache:
+    logger = logging.getLogger(__name__)
     """
     Intelligent caching layer for Memory Mesh operations.
 
@@ -48,6 +34,12 @@ class MemoryMeshCache:
             'last_reset': datetime.utcnow()
         }
 
+        # Internal cache storage for stats and other data (beyond LRU cache)
+        self._stats_cache = {}
+        self._learning_cache = {}
+        self._similar_examples_cache = {}
+        self._procedure_cache = {}
+
         logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")
 
     def invalidate_all(self):
@@ -59,6 +51,12 @@ class MemoryMeshCache:
         self._get_high_trust_learning_cached.cache_clear()
         self._get_memory_stats_cached.cache_clear()
         self._find_similar_examples_cached.cache_clear()
+
+        # Clear internal cache dictionaries
+        self._stats_cache.clear()
+        self._learning_cache.clear()
+        self._similar_examples_cache.clear()
+        self._procedure_cache.clear()
 
         logger.info(f"[MEMORY-MESH-CACHE] All caches invalidated (version={self.cache_version})")
 
@@ -117,6 +115,19 @@ class MemoryMeshCache:
 
         # Try cache first
         try:
+            # Check internal cache dict first
+            if hasattr(self, '_learning_cache'):
+                cache_key = (min_trust, limit, self.cache_version)
+                if cache_key in self._learning_cache:
+                    cached_ids = self._learning_cache[cache_key]
+                    if cached_ids:
+                        self.stats['hits'] += 1
+                        # Retrieve from DB by IDs (fast with index)
+                        return session.query(LearningExample).filter(
+                            LearningExample.id.in_(cached_ids)
+                        ).all()
+            
+            # Try LRU cache as fallback
             cached_ids = self._get_high_trust_learning_cached(min_trust, self.cache_version)
             if cached_ids:
                 self.stats['hits'] += 1
@@ -135,10 +146,15 @@ class MemoryMeshCache:
             LearningExample.trust_score.desc()
         ).limit(limit).all()
 
-        # Store IDs in cache
+        # Store IDs in cache by calling the cached function with the result
+        # Since lru_cache stores based on arguments, we need to actually call it
         example_ids = tuple(ex.id for ex in examples)
-        self._get_high_trust_learning_cached.cache_clear()
-        self._get_high_trust_learning_cached(min_trust, self.cache_version)
+        # Note: lru_cache doesn't allow setting values directly
+        # The cache will be populated on next call with same arguments
+        # For now, we store in an internal cache dict for faster access
+        if not hasattr(self, '_learning_cache'):
+            self._learning_cache = {}
+        self._learning_cache[(min_trust, limit, self.cache_version)] = example_ids
 
         return examples
 
@@ -146,10 +162,31 @@ class MemoryMeshCache:
     # MEMORY STATS CACHE
     # ================================================================
 
-    @lru_cache(maxsize=10)
-    def _get_memory_stats_cached(self, cache_version: int) -> Dict[str, Any]:
-        """Cached memory mesh statistics"""
-        return {}  # Placeholder - actual data stored by caller
+    def __init__(self, ttl_seconds: int = 300):
+        """
+        Initialize cache layer.
+
+        Args:
+            ttl_seconds: Time-to-live for cache entries (default 5 minutes)
+        """
+        self.ttl_seconds = ttl_seconds
+        self.cache_version = 0  # Increment to invalidate all caches
+
+        # Cache statistics
+        self.stats = {
+            'hits': 0,
+            'misses': 0,
+            'invalidations': 0,
+            'last_reset': datetime.utcnow()
+        }
+
+        # Internal cache storage for stats and other data
+        self._stats_cache = {}
+        self._learning_cache = {}
+        self._similar_examples_cache = {}
+        self._procedure_cache = {}
+
+        logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")
 
     def get_or_compute_stats(
         self,
@@ -166,11 +203,18 @@ class MemoryMeshCache:
         Returns:
             Memory mesh statistics
         """
-        # Check cache
+        # Check internal cache dict first
+        cache_key = self.cache_version
+        if cache_key in self._stats_cache:
+            self.stats['hits'] += 1
+            return self._stats_cache[cache_key]
+
+        # Check LRU cache as fallback
         try:
             cached = self._get_memory_stats_cached(self.cache_version)
             if cached:
                 self.stats['hits'] += 1
+                self._stats_cache[cache_key] = cached  # Store in internal cache too
                 return cached
         except (KeyError, TypeError, AttributeError):
             pass  # Cache miss or invalid cache state
@@ -179,10 +223,9 @@ class MemoryMeshCache:
         self.stats['misses'] += 1
         stats = compute_func()
 
-        # Store in cache
-        self._get_memory_stats_cached.cache_clear()
-        # Note: LRU cache doesn't support setting the value directly
-        # so we rely on the caller to cache the result
+        # Store in both caches
+        self._stats_cache[cache_key] = stats
+        # Note: LRU cache will be populated on next call with same arguments
 
         return stats
 
@@ -223,7 +266,23 @@ class MemoryMeshCache:
         """
         from models.database_models import LearningExample
 
-        # Try cache
+        # Try internal cache first
+        cache_key = (example_type, min_trust, self.cache_version)
+        if cache_key in self._similar_examples_cache:
+            cached_ids = self._similar_examples_cache[cache_key]
+            if cached_ids:
+                self.stats['hits'] += 1
+                examples = session.query(LearningExample).filter(
+                    LearningExample.id.in_(cached_ids)
+                ).all()
+
+                # Filter out excluded ID
+                if exclude_id:
+                    examples = [ex for ex in examples if ex.id != exclude_id]
+
+                return examples[:limit]
+
+        # Try LRU cache as fallback
         try:
             cached_ids = self._find_similar_examples_cached(
                 example_type,
@@ -232,6 +291,7 @@ class MemoryMeshCache:
             )
             if cached_ids:
                 self.stats['hits'] += 1
+                self._similar_examples_cache[cache_key] = cached_ids  # Store in internal cache
                 examples = session.query(LearningExample).filter(
                     LearningExample.id.in_(cached_ids)
                 ).all()
@@ -255,6 +315,10 @@ class MemoryMeshCache:
             query = query.filter(LearningExample.id != exclude_id)
 
         examples = query.limit(limit).all()
+
+        # Store in cache
+        example_ids = tuple(ex.id for ex in examples)
+        self._similar_examples_cache[cache_key] = example_ids
 
         return examples
 
@@ -296,12 +360,22 @@ class MemoryMeshCache:
 
         cache_key = self._procedure_cache_key(goal, context)
 
-        # Try cache
+        # Try internal cache first
+        internal_cache_key = (cache_key, self.cache_version)
+        if internal_cache_key in self._procedure_cache:
+            cached = self._procedure_cache[internal_cache_key]
+            if cached:
+                self.stats['hits'] += 1
+                procedure_id = cached[0] if isinstance(cached, tuple) else cached
+                return session.query(Procedure).get(procedure_id)
+
+        # Try LRU cache as fallback
         try:
             cached = self._get_procedure_match_cached(cache_key, self.cache_version)
             if cached:
                 self.stats['hits'] += 1
-                procedure_id = cached[0]
+                self._procedure_cache[internal_cache_key] = cached  # Store in internal cache
+                procedure_id = cached[0] if isinstance(cached, tuple) else cached
                 return session.query(Procedure).get(procedure_id)
         except (KeyError, TypeError, AttributeError):
             pass  # Cache miss or invalid cache state
@@ -314,6 +388,10 @@ class MemoryMeshCache:
         ).order_by(
             Procedure.success_rate.desc()
         ).first()
+
+        # Store in cache if found
+        if procedure:
+            self._procedure_cache[internal_cache_key] = (procedure.id,)
 
         return procedure
 

@@ -1,17 +1,3 @@
-"""
-Multi-Plane Reasoning System
-============================
-
-Grace operates on 4 reasoning planes for multi-dimensional problem solving:
-1. Repository Reasoning - Architectural integrity, system evolution
-2. Folder Reasoning - Module responsibility, subsystem cohesion
-3. File Reasoning - Code correctness, logic, edge cases
-4. Genesis-Key Reasoning - Temporal/causal continuity, trajectory
-
-This enables non-linear, "outside the box" thinking where problems
-are solved from multiple angles simultaneously.
-"""
-
 import logging
 import json
 from typing import Dict, Any, List, Optional, Tuple
@@ -20,11 +6,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import asyncio
-
-logger = logging.getLogger(__name__)
-
-
 class ReasoningPlane(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """The 4 reasoning planes Grace operates on."""
     REPOSITORY = "repository"   # Macro: architecture, system integrity
     FOLDER = "folder"           # Meso: module boundaries, cohesion

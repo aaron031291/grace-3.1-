@@ -1,30 +1,13 @@
-"""
-Bulk Operations Manager - Batch Processing for Librarian
-
-Handles bulk operations on multiple documents:
-- Bulk tagging
-- Bulk organization
-- Bulk renaming
-- Bulk processing
-- Batch imports/exports
-
-Part of the full file system librarian capabilities.
-"""
-
 import logging
 from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-
 from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.file_organizer import FileOrganizer
 from librarian.file_naming_manager import FileNamingManager
-
-logger = logging.getLogger(__name__)
-
-
 class BulkOperationsManager:
+    logger = logging.getLogger(__name__)
     """
     Manages bulk operations on documents.
 

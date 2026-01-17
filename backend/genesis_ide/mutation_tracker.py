@@ -1,17 +1,3 @@
-"""
-Mutation Tracker for Genesis IDE
-=================================
-
-Tracks all mutations (changes) after Genesis Key creation.
-Provides version control at the mutation level, not just commit level.
-
-Every change is:
-1. Linked to its parent Genesis Key
-2. Tracked with before/after state
-3. Version controlled
-4. Reversible
-"""
-
 import logging
 import json
 from typing import Dict, Any, List, Optional
@@ -20,12 +6,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import hashlib
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class Mutation:
+    logger = logging.getLogger(__name__)
     """Represents a single mutation (change) to a file."""
     mutation_id: str
     genesis_key_id: str

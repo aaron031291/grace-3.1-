@@ -1,16 +1,3 @@
-"""
-Neural-to-Symbolic Rule Generator - Neuro-Symbolic Integration
-
-Converts neural patterns (clusters, embeddings) into symbolic rules
-that can be used for explicit reasoning.
-
-Key Features:
-- Pattern detection from neural clustering
-- Automatic rule generation from patterns
-- Trust score assignment based on pattern confidence
-- Integration with symbolic knowledge base
-"""
-
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass
@@ -18,20 +5,9 @@ from datetime import datetime
 import logging
 import json
 import uuid
-
 from embedding import EmbeddingModel, get_embedding_model
-
-try:
-    from cognitive.learning_memory import TrustScorer
-except ImportError:
-    # Fallback if not available
-    TrustScorer = None
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
 class NeuralPattern:
+    logger = logging.getLogger(__name__)
     """Neural pattern detected from clustering/embedding analysis"""
     pattern_id: str
     cluster_center: np.ndarray  # Embedding center

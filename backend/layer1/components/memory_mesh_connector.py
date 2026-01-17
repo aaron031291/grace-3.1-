@@ -1,33 +1,12 @@
-"""
-Memory Mesh Connector - Autonomous Learning Memory Integration
-
-Connects the memory mesh to Layer 1 message bus for:
-- Automatic Genesis Key linking
-- Trust-based episodic/procedural routing
-- Cross-component learning coordination
-"""
-
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-
-from layer1.message_bus import (
-    Layer1MessageBus,
-    ComponentType,
-    Message,
-    get_message_bus
-)
+from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
-
-logger = logging.getLogger(__name__)
-
-# Thread pool for CPU-bound operations
-_executor = ThreadPoolExecutor(max_workers=4)
-
-
 class MemoryMeshConnector:
+    logger = logging.getLogger(__name__)
     """
     Connects Memory Mesh to Layer 1 message bus.
 

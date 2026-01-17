@@ -1,26 +1,11 @@
-"""
-Enhanced Consistency Checker - Advanced Deterministic Consistency Validation
-
-This module provides comprehensive consistency checking with:
-- Direct contradiction detection (semantic)
-- Logical consistency validation
-- Temporal conflict detection
-- Source conflict analysis
-- Multi-factor consistency scoring
-
-Maintains 100% determinism while providing rich consistency analysis.
-"""
-
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any, Set
 from enum import Enum
-
-logger = logging.getLogger(__name__)
-
-
 class ContradictionType(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of contradictions detected."""
     DIRECT_NEGATION = "direct_negation"
     SEMANTIC_CONTRADICTION = "semantic_contradiction"

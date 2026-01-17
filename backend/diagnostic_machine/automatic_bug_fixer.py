@@ -1,9 +1,3 @@
-"""
-Automatic Bug Fixer for Self-Healing System
-Automatically fixes bugs and warnings detected by proactive scanner
-
-Enhanced with DeepSeek AI for intelligent, context-aware fixes.
-"""
 import ast
 import re
 import logging
@@ -11,20 +5,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
-
-# DeepSeek integration
-try:
-    from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
-    DEEPSEEK_AVAILABLE = True
-except ImportError:
-    DEEPSEEK_AVAILABLE = False
-    logger.warning("DeepSeek LLM orchestrator not available - using pattern-based fixes only")
-
-
-@dataclass
 class FixResult:
+    logger = logging.getLogger(__name__)
     """Result of an automatic fix."""
     success: bool
     file_path: str

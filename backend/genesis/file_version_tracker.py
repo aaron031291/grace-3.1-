@@ -1,12 +1,3 @@
-"""
-File Version Control through Genesis Keys.
-
-Tracks file changes and versions using Genesis Keys:
-- Every file gets a FILE-prefix Genesis Key
-- Every change to a file creates a new version Genesis Key
-- Versions are linked to the original file Genesis Key
-- Complete history of all file changes
-"""
 import os
 import hashlib
 import json
@@ -15,15 +6,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
-
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from genesis.genesis_key_service import get_genesis_service
 from database.session import get_session
-
-logger = logging.getLogger(__name__)
-
-
 class FileVersionTracker:
+    logger = logging.getLogger(__name__)
     """
     Tracks file versions through Genesis Keys.
 

@@ -1,13 +1,7 @@
-"""
-Retrieval API endpoints for RAG system.
-Provides REST endpoints to retrieve and build context from stored documents.
-"""
-
 from fastapi import APIRouter, HTTPException, Query, Path, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import logging
-
 from retrieval.retriever import DocumentRetriever, get_retriever
 from retrieval.cognitive_retriever import CognitiveRetriever
 from embedding import EmbeddingModel
@@ -15,79 +9,8 @@ from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session
 from sqlalchemy.orm import Session
-
-logger = logging.getLogger(__name__)
-
-# Create router
-router = APIRouter(prefix="/retrieve", tags=["Document Retrieval"])
-
-# Global retriever instances
-_retriever: Optional[DocumentRetriever] = None
-_cognitive_retriever: Optional[CognitiveRetriever] = None
-
-
-def get_document_retriever() -> DocumentRetriever:
-    """Get or create document retriever instance."""
-    global _retriever
-
-    if _retriever is None:
-        try:
-            print("[RETRIEVE] Initializing document retriever...")
-            # Get the embedding model from the ingestion service
-            from api.ingest import get_ingestion_service
-            ingest_service = get_ingestion_service()
-
-            # Reuse the embedding model from ingestion service
-            embedding_model = ingest_service.embedding_model
-            print("[RETRIEVE] [OK] Reusing embedding model from ingestion service")
-
-            _retriever = get_retriever(
-                collection_name="documents",
-                embedding_model=embedding_model,
-            )
-            print("[RETRIEVE] [OK] Document retriever created successfully")
-        except Exception as e:
-            logger.error(f"Failed to initialize retriever: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Retriever initialization failed"
-            )
-
-    return _retriever
-
-
-def get_cognitive_retriever() -> CognitiveRetriever:
-    """Get or create cognitive retriever instance."""
-    global _cognitive_retriever
-
-    if _cognitive_retriever is None:
-        try:
-            print("[COGNITIVE] Initializing cognitive retriever...")
-            # Get base retriever
-            base_retriever = get_document_retriever()
-
-            # Wrap with cognitive layer
-            _cognitive_retriever = CognitiveRetriever(
-                retriever=base_retriever,
-                enable_cognitive=True,
-                enable_learning=True
-            )
-            print("[COGNITIVE] [OK] Cognitive retriever created successfully")
-            print("[COGNITIVE] [OK] OODA loop enforcement enabled")
-            print("[COGNITIVE] [OK] Learning memory integration enabled")
-        except Exception as e:
-            logger.error(f"Failed to initialize cognitive retriever: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Cognitive retriever initialization failed"
-            )
-
-    return _cognitive_retriever
-
-
-# ==================== Pydantic Models ====================
-
 class RetrievalChunk(BaseModel):
+    logger = logging.getLogger(__name__)
     """Retrieved document chunk."""
     chunk_id: int
     document_id: int
@@ -180,14 +103,29 @@ async def retrieve_chunks_cognitive(
         if not genesis_key_id:
             genesis_key_id = created_genesis_key.key_id
 
-        result = cognitive_retriever.retrieve_with_cognition(
-            query=query,
-            limit=limit,
-            score_threshold=threshold,
-            keyword_weight=keyword_weight,
-            user_id=user_id,
-            genesis_key_id=genesis_key_id
-        )
+        # TimeSense: Estimate retrieval time before starting
+        query_tokens = len(query.split()) if query else 50
+        if TIMESENSE_AVAILABLE and TimeEstimator:
+            try:
+                time_estimate = TimeEstimator.estimate_retrieval(
+                    query_tokens=query_tokens,
+                    top_k=limit,
+                    num_vectors=10000  # Default, will be updated with actual count
+                )
+                logger.debug(f"[TIMESENSE] Retrieval estimate: {time_estimate.human_readable()}")
+            except Exception as e:
+                logger.debug(f"[TIMESENSE] Could not estimate retrieval time: {e}")
+
+        # Track retrieval operation with TimeSense
+        with track_operation(PrimitiveType.VECTOR_SEARCH, limit * query_tokens) if TIMESENSE_AVAILABLE else nullcontext():
+            result = cognitive_retriever.retrieve_with_cognition(
+                query=query,
+                limit=limit,
+                score_threshold=threshold,
+                keyword_weight=keyword_weight,
+                user_id=user_id,
+                genesis_key_id=genesis_key_id
+            )
 
         # Convert chunks to RetrievalChunk objects for consistency
         retrieval_chunks = [
@@ -288,13 +226,16 @@ async def retrieve_chunks(
         RetrievalResponse with relevant chunks, ranked by combined score
     """
     try:
-        chunks = retriever.retrieve_hybrid(
-            query=query,
-            limit=limit,
-            score_threshold=threshold,
-            include_metadata=True,
-            keyword_weight=keyword_weight,
-        )
+        # TimeSense: Track retrieval operation
+        query_tokens = len(query.split()) if query else 50
+        with track_operation(PrimitiveType.VECTOR_SEARCH, limit * query_tokens) if TIMESENSE_AVAILABLE else nullcontext():
+            chunks = retriever.retrieve_hybrid(
+                query=query,
+                limit=limit,
+                score_threshold=threshold,
+                include_metadata=True,
+                keyword_weight=keyword_weight,
+            )
         
         if not chunks:
             return RetrievalResponse(

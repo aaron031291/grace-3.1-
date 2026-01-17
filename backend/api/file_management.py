@@ -1,8 +1,3 @@
-"""
-File management API endpoints.
-Handles knowledge_base directory operations and file uploads.
-"""
-
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional, Any, Dict
@@ -11,7 +6,6 @@ import logging
 import os
 import json
 import asyncio
-
 from file_manager.knowledge_base_manager import KnowledgeBaseManager
 from file_manager.file_handler import extract_file_text
 from ingestion.service import TextIngestionService
@@ -20,160 +14,8 @@ from models.database_models import Document
 from database.session import initialize_session_factory
 from database import connection
 from settings import settings
-
-logger = logging.getLogger(__name__)
-
-# Create router
-router = APIRouter(prefix="/files", tags=["File Management"])
-
-# Global instances
-_kb_manager: Optional[KnowledgeBaseManager] = None
-_ingestion_service: Optional[TextIngestionService] = None
-
-
-def _process_with_librarian(document_id: int) -> None:  # type: ignore
-    """
-    Process a document through the librarian system.
-
-    NOW FULLY INTEGRATED with LLM Orchestrator for AI operations.
-
-    Called asynchronously after successful ingestion to automatically:
-    - Categorize with rules and AI (via LLM Orchestrator)
-    - Assign tags (with Genesis Key tracking)
-    - Detect relationships
-    - Create any necessary actions
-
-    All AI operations include:
-    - OODA Loop enforcement
-    - 12 Invariants validation
-    - Genesis Key tracking
-    - Hallucination mitigation
-    - Learning Memory integration
-
-    Args:
-        document_id: Document ID to process
-    """
-    try:
-        from librarian.engine import LibrarianEngine
-        from embedding import get_embedding_model
-        from vector_db.client import get_qdrant_client
-
-        # Import LLM Orchestrator (preferred over direct Ollama)
-        try:
-            from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
-            llm_orchestrator = None  # Will be created with session
-        except ImportError:
-            logger.warning("[LIBRARIAN] LLM Orchestrator not available, AI features may be limited")
-            llm_orchestrator = None
-
-        logger.info(f"[LIBRARIAN] Starting automatic processing for document {document_id}")
-
-        # Get database session
-        db = get_db_session()
-
-        try:
-            # Get LLM Orchestrator with session
-            try:
-                from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
-                llm_orchestrator = get_llm_orchestrator(
-                    session=db,
-                    embedding_model=get_embedding_model(),
-                    knowledge_base_path="knowledge_base"
-                )
-                logger.info("[LIBRARIAN] ✓ Using LLM Orchestrator for AI operations")
-            except Exception as e:
-                logger.warning(f"[LIBRARIAN] Could not initialize LLM Orchestrator: {e}")
-                llm_orchestrator = None
-
-            # Create librarian engine with LLM Orchestrator (no direct Ollama)
-            librarian = LibrarianEngine(
-                db_session=db,
-                embedding_model=get_embedding_model(),
-                llm_orchestrator=llm_orchestrator,  # Use orchestrator instead of ollama_client
-                vector_db_client=get_qdrant_client(),
-                ai_model_name=settings.LIBRARIAN_AI_MODEL,
-                use_ai=settings.LIBRARIAN_USE_AI,
-                detect_relationships=settings.LIBRARIAN_DETECT_RELATIONSHIPS,
-                ai_confidence_threshold=settings.LIBRARIAN_AI_CONFIDENCE_THRESHOLD,
-                similarity_threshold=settings.LIBRARIAN_SIMILARITY_THRESHOLD
-            )
-
-            # Process document
-            result = librarian.process_document(
-                document_id=document_id,
-                auto_execute=True
-            )
-
-            if result["status"] == "success":
-                genesis_key = result.get("genesis_key_id", "N/A")
-                logger.info(
-                    f"[LIBRARIAN] ✓ Processed document {document_id}: "
-                    f"{result['tags_assigned']} tags, "
-                    f"{result['relationships_detected']} relationships, "
-                    f"rules matched: {result['rules_matched']}, "
-                    f"Genesis Key: {genesis_key}"
-                )
-            else:
-                logger.error(
-                    f"[LIBRARIAN] Failed to process document {document_id}: "
-                    f"{result.get('error', 'Unknown error')}"
-                )
-
-        finally:
-            db.close()
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN] Error processing document {document_id}: {e}", exc_info=True)
-
-
-def get_db_session():
-    """Get a database session, initializing if needed."""
-    from database.session import SessionLocal
-    if SessionLocal is None:
-        initialize_session_factory()
-    from database.session import SessionLocal
-    return SessionLocal()
-
-
-def get_kb_manager() -> KnowledgeBaseManager:
-    """Get or create knowledge base manager."""
-    global _kb_manager
-    
-    if _kb_manager is None:
-        _kb_manager = KnowledgeBaseManager(base_path="knowledge_base")
-    
-    return _kb_manager
-
-
-def get_ingestion_service() -> TextIngestionService:
-    """Get or create ingestion service."""
-    global _ingestion_service
-    
-    if _ingestion_service is None:
-        try:
-            print("[FILES] Initializing ingestion service...")
-            embedding_model = get_embedding_model()
-            print("[FILES] [OK] Got embedding model (singleton)")
-            _ingestion_service = TextIngestionService(
-                collection_name="documents",
-                chunk_size=512,
-                chunk_overlap=50,
-                embedding_model=embedding_model,
-            )
-            print("[FILES] [OK] Ingestion service created successfully")
-        except Exception as e:
-            logger.error(f"Failed to initialize ingestion service: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Ingestion service initialization failed"
-            )
-    
-    return _ingestion_service
-
-
-# ==================== Pydantic Models ====================
-
 class DirectoryItem(BaseModel):
+    logger = logging.getLogger(__name__)
     """Item in a directory."""
     name: str
     path: str

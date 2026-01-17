@@ -1,13 +1,3 @@
-"""
-Clarity Framework for Genesis IDE
-==================================
-
-Ensures clear, traceable, and verifiable actions:
-- Clear Intentions: Every action has explicit purpose
-- Traceable Actions: Full audit trail via Genesis Keys
-- Verified Outcomes: Results validated against expectations
-"""
-
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -15,11 +5,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import uuid
-
-logger = logging.getLogger(__name__)
-
-
 class ClarityLevel(str, Enum):
+    logger = logging.getLogger(__name__)
     """Levels of clarity for an action."""
     CRYSTAL = "crystal"     # Fully clear, verified, documented
     CLEAR = "clear"         # Clear intent, good traceability

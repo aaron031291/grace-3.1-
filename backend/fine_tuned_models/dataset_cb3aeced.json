@@ -1,0 +1,10 @@
+{
+  "dataset_id": "dataset_cb3aeced",
+  "name": "auto_code_generation_20260116",
+  "description": "Fine-tuning dataset for code_generation with 0 examples (trust >= 0.8)",
+  "task_type": "code_generation",
+  "num_examples": 0,
+  "train_examples": [],
+  "val_examples": [],
+  "created_at": "2026-01-16T23:24:21.704495"
+}

@@ -1,15 +1,3 @@
-"""
-IDE Bridge - Connects VS Code/Code-Server to Grace's Cognitive Systems
-=======================================================================
-
-The IDE Bridge provides:
-1. Real-time code analysis and healing suggestions
-2. Genesis Key tracking for all editor changes
-3. WebSocket communication for live updates
-4. Command palette integration
-5. Multi-plane reasoning for code understanding
-"""
-
 import logging
 import asyncio
 import json
@@ -19,11 +7,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import hashlib
-
-logger = logging.getLogger(__name__)
-
-
 class IDEEventType(str, Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of IDE events that trigger Grace actions."""
     FILE_OPENED = "file_opened"
     FILE_SAVED = "file_saved"

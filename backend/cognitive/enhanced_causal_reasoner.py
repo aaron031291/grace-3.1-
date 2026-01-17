@@ -1,31 +1,16 @@
-"""
-Enhanced Causal Reasoner - Advanced Deterministic Causal Analysis
-
-This module provides comprehensive causal reasoning with:
-- Temporal ordering analysis
-- Directed co-occurrence patterns
-- Practice sequence analysis
-- Validation chain analysis
-- Causal relationship synthesis
-- Predictive relationship strength
-
-Maintains 100% determinism while providing rich causal insights.
-"""
-
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any, Set
 from collections import defaultdict
 from enum import Enum
-
 from sqlalchemy.orm import Session
 from cognitive.learning_memory import LearningExample
-
-logger = logging.getLogger(__name__)
-
-
 class RelationshipType(Enum):
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     """Types of causal relationships."""
     TEMPORAL_SEQUENCE = "temporal_sequence"
     PRACTICE_SEQUENCE = "practice_sequence"

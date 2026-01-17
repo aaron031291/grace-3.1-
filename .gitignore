@@ -78,6 +78,10 @@ benchmarks/results/
 # Benchmark artifacts
 benchmark_results/
 
+# Generated reports and backups (keep docs/ tracked for documentation)
+reports/
+backups/
+
 # OS files
 Thumbs.db
 data/ 
