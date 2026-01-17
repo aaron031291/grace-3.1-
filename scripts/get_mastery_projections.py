@@ -234,24 +234,24 @@ def display_projections(projections: Dict[str, Dict[str, Any]]):
         # 90% Success Rate
         p90 = proj["90pct_success"]
         if p90["already_achieved"]:
-            print("✅ 90% Success Rate: ALREADY ACHIEVED")
+            print("[ACHIEVED] 90% Success Rate: ALREADY ACHIEVED")
         else:
-            print("🎯 90% Success Rate:")
+            print("[TARGET] 90% Success Rate:")
             print(f"   Estimated Time: {p90['estimated_days']:.1f} days ({p90['estimated_hours']:.1f} hours)")
             print(f"   Estimated Cycles: {p90['estimated_cycles']} cycles")
-            print(f"   Current: {proj['current_success_rate']:.1%} → Target: 90.0%")
+            print(f"   Current: {proj['current_success_rate']:.1%} -> Target: 90.0%")
         print()
         
         # Expert Mastery
         expert = proj["expert_mastery"]
         if expert["already_achieved"]:
-            print("✅ Expert Mastery: ALREADY ACHIEVED")
+            print("[ACHIEVED] Expert Mastery: ALREADY ACHIEVED")
         else:
-            print("🎯 Expert Mastery:")
+            print("[TARGET] Expert Mastery:")
             print(f"   Estimated Time: {expert['estimated_days']:.1f} days ({expert['estimated_hours']:.1f} hours)")
             print(f"   Estimated Cycles: {expert['estimated_cycles']} cycles")
             print(f"   Topics: {proj['current_topics']}/{proj['target_topics']}")
-            print(f"   Success Rate: {proj['current_success_rate']:.1%} → {proj['target_success_rate']:.1%}")
+            print(f"   Success Rate: {proj['current_success_rate']:.1%} -> {proj['target_success_rate']:.1%}")
         print()
         
         # Trajectory
