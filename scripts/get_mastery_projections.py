@@ -164,6 +164,24 @@ def get_mastery_level(topics: int, success_rate: float) -> str:
         return "Novice"
 
 
+def get_timesense_projections() -> Dict[str, Any]:
+    """
+    Get actual TimeSense projections from the API.
+    
+    This calls the real TimeSense-based projection system.
+    """
+    try:
+        import requests
+        response = requests.get("http://localhost:8000/training-knowledge/exceptional-projection")
+        if response.status_code == 200:
+            data = response.json()
+            return data
+    except Exception as e:
+        print(f"WARNING: Could not get TimeSense projections from API: {e}")
+        print("   (Is the API server running? Try: python -m uvicorn backend.app:app)")
+        return None
+
+
 def get_current_stats() -> Dict[str, Dict[str, Any]]:
     """
     Get current stats for coding agent and self-healing.
@@ -270,8 +288,68 @@ def display_projections(projections: Dict[str, Dict[str, Any]]):
 # ==================== MAIN ====================
 
 def main():
-    """Get and display mastery projections."""
-    print("Getting current stats...")
+    """Get and display mastery projections from TimeSense."""
+    print("Getting TimeSense projections...")
+    print()
+    
+    # Try to get actual TimeSense projections
+    timesense_data = get_timesense_projections()
+    
+    if timesense_data and "projections" in timesense_data:
+        print("=" * 80)
+        print("TIMESENSE PROJECTIONS (From Actual TimeSense Engine)")
+        print("=" * 80)
+        print()
+        
+        # Display TimeSense projections
+        if "display" in timesense_data:
+            print(timesense_data["display"])
+        else:
+            # Parse and display projections
+            projections = timesense_data.get("projections", {})
+            
+            print("TimeSense Projections:")
+            print("-" * 80)
+            for category, proj in projections.items():
+                print(f"\n[{category.upper()}]")
+                print(f"Current Mastery: {proj.get('current_mastery', 'Unknown')}")
+                print(f"Current Topics: {proj.get('current_topics', 0)}")
+                print(f"Current Success Rate: {proj.get('current_success_rate', 0.0):.1%}")
+                
+                p90 = proj.get("projections", {}).get("90pct_success", {})
+                if p90.get("already_achieved"):
+                    print("[ACHIEVED] 90% Success Rate: ALREADY ACHIEVED")
+                else:
+                    print(f"[TARGET] 90% Success Rate:")
+                    print(f"   Estimated Time: {p90.get('estimated_days', 0):.1f} days ({p90.get('estimated_days', 0) * 24:.1f} hours)")
+                    print(f"   Estimated Cycles: {p90.get('estimated_cycles', 0)} cycles")
+                
+                expert = proj.get("projections", {}).get("expert", {})
+                if expert.get("already_achieved"):
+                    print("[ACHIEVED] Expert Mastery: ALREADY ACHIEVED")
+                else:
+                    print(f"[TARGET] Expert Mastery:")
+                    print(f"   Estimated Time: {expert.get('estimated_days', 0):.1f} days ({expert.get('estimated_days', 0) * 24:.1f} hours)")
+                    print(f"   Estimated Cycles: {expert.get('estimated_cycles', 0)} cycles")
+                    print(f"   Confidence: {expert.get('confidence', 0.0):.1%}")
+                
+                traj = proj.get("trajectory", {})
+                print(f"\nLearning Trajectory:")
+                print(f"   Velocity: {traj.get('velocity', 0.0):.4f} per cycle")
+                print(f"   Acceleration: {traj.get('acceleration', 0.0):.4f} per cycle")
+                print(f"   Data Points: {traj.get('data_points', 0)}")
+        
+        print()
+        print("=" * 80)
+        print("Note: These projections use TimeSense cost models for cycle duration estimation")
+        print("=" * 80)
+        return
+    
+    # Fallback: Use estimates if TimeSense not available
+    print("WARNING: TimeSense API not available. Using fallback estimates.")
+    print("   (To get real TimeSense projections, start the API server)")
+    print("   (Try: python -m uvicorn backend.app:app)")
+    print()
     
     # Get current stats
     stats = get_current_stats()
@@ -281,20 +359,6 @@ def main():
         print("WARNING: No training data found. Using example estimates.")
         print("   (Run training cycles to get actual projections)")
         print()
-        
-        # Example: Starting from scratch
-        stats = {
-            "coding_agent": {
-                "topics": 0,
-                "success_rate": 0.0,
-                "cycles": 0
-            },
-            "self_healing": {
-                "topics": 0,
-                "success_rate": 0.0,
-                "cycles": 0
-            }
-        }
     
     # Project for coding agent
     coding_projection = project_to_mastery(
@@ -313,6 +377,8 @@ def main():
     )
     
     # Display
+    print("FALLBACK ESTIMATES (Not from TimeSense):")
+    print()
     display_projections({
         "coding_agent": coding_projection,
         "self_healing": healing_projection
