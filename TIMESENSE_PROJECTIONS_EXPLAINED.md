@@ -1,5 +1,13 @@
 # TimeSense Projections Explained ✅
 
+## ⚠️ **Prerequisites for Real TimeSense Projections**
+
+⚠️ **API Server Running** - To get real projections  
+⚠️ **Training Cycles Completed** - For TimeSense to calibrate  
+⚠️ **Cost Models Built** - From actual cycle data  
+
+---
+
 ## 🎯 **What TimeSense Actually Says**
 
 **The projections shown earlier were FALLBACK ESTIMATES, not actual TimeSense projections.**
