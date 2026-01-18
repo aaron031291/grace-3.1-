@@ -16,12 +16,15 @@ import WhitelistTab from "./components/WhitelistTab";
 import OrchestrationConsolidatedTab from "./components/OrchestrationConsolidatedTab";
 import SelfHealingTab from "./components/SelfHealingTab";
 import EnterpriseDashboard from "./components/EnterpriseDashboard";
+import RAGTab from "./components/RAGTab";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
   const [apiHealth, setApiHealth] = useState(null);
   const [lastVoiceResponse, setLastVoiceResponse] = useState("");
   const [isVoiceProcessing, setIsVoiceProcessing] = useState(false);
+  const [chatFolderMode, setChatFolderMode] = useState("chats");
+  const [showChatFolderDropdown, setShowChatFolderDropdown] = useState(false);
 
   useEffect(() => {
     // Check API health on mount
@@ -29,6 +32,15 @@ function App() {
     const interval = setInterval(checkHealth, 30000); // Check every 30 seconds
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (activeTab === "chat") {
+      setChatFolderMode("chats");
+    }
+    if (activeTab === "knowledge-base") {
+      setChatFolderMode("folders");
+    }
+  }, [activeTab]);
 
   const checkHealth = async () => {
     try {
@@ -73,6 +85,16 @@ function App() {
     }
   };
 
+  const handleChatFolderSelect = (mode) => {
+    setChatFolderMode(mode);
+    setShowChatFolderDropdown(false);
+    if (mode === "chats") {
+      setActiveTab("chat");
+    } else {
+      setActiveTab("knowledge-base");
+    }
+  };
+
   return (
     <div className="app">
       {/* Header */}
@@ -105,6 +127,49 @@ function App() {
       <div className="app-container">
         {/* Sidebar */}
         <aside className="sidebar">
+          <div className="sidebar-dropdown">
+            <button
+              className="sidebar-dropdown-toggle"
+              onClick={() => setShowChatFolderDropdown((prev) => !prev)}
+            >
+              <span className="sidebar-dropdown-label">
+                {chatFolderMode === "chats" ? "Chats" : "Folders"}
+              </span>
+              <svg
+                className={`sidebar-dropdown-arrow ${
+                  showChatFolderDropdown ? "open" : ""
+                }`}
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="6,9 12,15 18,9" />
+              </svg>
+            </button>
+            {showChatFolderDropdown && (
+              <div className="sidebar-dropdown-menu">
+                <button
+                  className={`sidebar-dropdown-option ${
+                    chatFolderMode === "chats" ? "active" : ""
+                  }`}
+                  onClick={() => handleChatFolderSelect("chats")}
+                >
+                  Chats
+                </button>
+                <button
+                  className={`sidebar-dropdown-option ${
+                    chatFolderMode === "folders" ? "active" : ""
+                  }`}
+                  onClick={() => handleChatFolderSelect("folders")}
+                >
+                  Folders
+                </button>
+              </div>
+            )}
+          </div>
           <nav className="tabs-nav">
             <button
               className={`tab-button ${activeTab === "chat" ? "active" : ""}`}
@@ -121,6 +186,24 @@ function App() {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
               Chat
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "knowledge-base" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("knowledge-base")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              Knowledge Base
             </button>
             <button
               className={`tab-button ${activeTab === "governance" ? "active" : ""}`}
@@ -196,6 +279,15 @@ function App() {
               Search & Discovery
             </button>
             <button
+              className={`tab-button ${activeTab === "code" ? "active" : ""}`}
+              onClick={() => setActiveTab("code")}
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0" />
+              </svg>
+              Code (IDE)
+            </button>
+            <button
               className={`tab-button ${activeTab === "api" ? "active" : ""}`}
               onClick={() => setActiveTab("api")}
             >
@@ -228,7 +320,7 @@ function App() {
                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                 <line x1="7" y1="7" x2="7.01" y2="7"></line>
               </svg>
-              Librarian
+              Tags
             </button>
             <button
               className={`tab-button ${
@@ -330,7 +422,7 @@ function App() {
                 <path d="M2 17l10 5 10-5"></path>
                 <path d="M2 12l10 5 10-5"></path>
               </svg>
-              Genesis Keys
+              Genesis Key
             </button>
             <button
               className={`tab-button ${
@@ -400,8 +492,10 @@ function App() {
         {/* Tab Content */}
         <main className="main-content">
           {activeTab === "chat" && <ChatTab />}
+          {activeTab === "knowledge-base" && <RAGTab initialTab="files" />}
           {activeTab === "intelligence" && <IntelligenceTab />}
           {activeTab === "search-discovery" && <SearchDiscoveryTab />}
+          {activeTab === "code" && <SearchDiscoveryTab initialView="codebase" />}
           {activeTab === "governance" && <GovernanceTab />}
           {activeTab === "sandbox" && <SandboxTab />}
           {activeTab === "api" && <APITab />}

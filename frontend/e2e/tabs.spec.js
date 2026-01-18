@@ -185,16 +185,18 @@ test.describe('Tab Functionality', () => {
   test('should display all main tabs in sidebar', async ({ page }) => {
     const expectedTabs = [
       'Chat',
+      'Knowledge Base',
       'Governance',
       'Sandbox',
       'Intelligence',
       'Search & Discovery',
+      'Code (IDE)',
       'APIs',
-      'Librarian',
+      'Tags',
       'Monitoring',
       'Version Control',
       'Task Manager',
-      'Genesis Keys',
+      'Genesis Key',
       'Orchestration',
       'Whitelist'
     ];

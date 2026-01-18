@@ -5,12 +5,14 @@ import DirectoryChat from "./DirectoryChat";
 import NotionTab from "./NotionTab";
 import GenesisKeyPanel from "./GenesisKeyPanel";
 
-export default function RAGTab() {
+export default function RAGTab({ initialTab = "files" }) {
+  const allowedTabs = ["files", "search", "vscode", "notion", "genesis"];
+  const normalizeTab = (tab) => (allowedTabs.includes(tab) ? tab : "files");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("files"); // files, search, vscode, notion, genesis
+  const [activeTab, setActiveTab] = useState(() => normalizeTab(initialTab)); // files, search, vscode, notion, genesis
   const [vscodePath, setVscodePath] = useState("");
   const [currentDirectory, setCurrentDirectory] = useState("");
 
@@ -64,6 +66,10 @@ export default function RAGTab() {
 
     createOrGetChat();
   }, [currentDirectory]);
+
+  useEffect(() => {
+    setActiveTab(normalizeTab(initialTab));
+  }, [initialTab]);
 
   // Handle opening VSCode
   const handleOpenVSCode = (currentPath) => {

@@ -9,8 +9,15 @@ import CodeBaseTab from './CodeBaseTab';
  * Combines: Documents (RAG), Research, and Code Base
  * Groups similar search/discovery functions together
  */
-const SearchDiscoveryTab = () => {
-  const [activeView, setActiveView] = useState('documents'); // documents, research, codebase
+const SearchDiscoveryTab = ({ initialView = "documents" }) => {
+  const allowedViews = ["documents", "research", "codebase"];
+  const normalizeView = (view) =>
+    allowedViews.includes(view) ? view : "documents";
+  const [activeView, setActiveView] = useState(() => normalizeView(initialView)); // documents, research, codebase
+
+  React.useEffect(() => {
+    setActiveView(normalizeView(initialView));
+  }, [initialView]);
 
   return (
     <div className="search-discovery-tab">
