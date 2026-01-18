@@ -14,11 +14,11 @@ from pydantic import BaseModel, Field
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
-from backend.database.session import get_session
-from backend.cognitive.enterprise_coding_agent import get_enterprise_coding_agent
-from backend.cognitive.autonomous_healing_system import TrustLevel
-from backend.benchmarking.benchmark_harness import get_benchmark_harness
-from backend.benchmarking.humaneval_integration import get_humaneval_integration
+from database.session import get_session
+from cognitive.enterprise_coding_agent import get_enterprise_coding_agent
+from cognitive.autonomous_healing_system import TrustLevel
+from benchmarking.benchmark_harness import get_benchmark_harness
+from benchmarking.humaneval_integration import get_humaneval_integration
 from pathlib import Path
 
 router = APIRouter(prefix="/benchmark", tags=["benchmark"])

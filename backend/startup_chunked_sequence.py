@@ -89,16 +89,16 @@ class StartupChunkedSequence:
         # Check 3: Database connection
         total_checks += 1
         try:
-            from backend.database.config import DatabaseConfig
-            from backend.database.connection import DatabaseConnection
-            from backend.database.session import initialize_session_factory
+            from database.config import DatabaseConfig
+            from database.connection import DatabaseConnection
+            from database.session import initialize_session_factory
             
             db_config = DatabaseConfig()
             DatabaseConnection.initialize(db_config)
             initialize_session_factory()
             
             # Test connection
-            from backend.database.session import get_session
+            from database.session import get_session
             session = next(get_session())
             from sqlalchemy import text
             session.execute(text("SELECT 1"))
@@ -118,9 +118,9 @@ class StartupChunkedSequence:
         # Check 4: Critical imports
         total_checks += 1
         critical_modules = [
-            "backend.cognitive.autonomous_healing_system",
-            "backend.diagnostic_machine.engine",
-            "backend.genesis.genesis_key_service"
+            "cognitive.autonomous_healing_system",
+            "diagnostic_machine.engine",
+            "genesis.genesis_key_service"
         ]
         missing_modules = []
         for module in critical_modules:
@@ -212,9 +212,9 @@ class StartupChunkedSequence:
         
         try:
             # Initialize database for healing
-            from backend.database.config import DatabaseConfig
-            from backend.database.connection import DatabaseConnection
-            from backend.database.session import initialize_session_factory, get_session
+            from database.config import DatabaseConfig
+            from database.connection import DatabaseConnection
+            from database.session import initialize_session_factory, get_session
             
             try:
                 DatabaseConnection.get_engine()
@@ -227,7 +227,7 @@ class StartupChunkedSequence:
             
             # Initialize self-healing system
             logger.info("[HEALING] Initializing self-healing system...")
-            from backend.cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+            from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
             
             healing_system = get_autonomous_healing(
                 session=session,
@@ -324,9 +324,9 @@ class StartupChunkedSequence:
         elif check_name == "Database Connection":
             # Try to reinitialize database
             try:
-                from backend.database.config import DatabaseConfig
-                from backend.database.connection import DatabaseConnection
-                from backend.database.session import initialize_session_factory
+                from database.config import DatabaseConfig
+                from database.connection import DatabaseConnection
+                from database.session import initialize_session_factory
                 
                 # Try to reset connection
                 try:
@@ -377,9 +377,9 @@ class StartupChunkedSequence:
         
         try:
             # Initialize database (should already be done, but verify)
-            from backend.database.config import DatabaseConfig
-            from backend.database.connection import DatabaseConnection
-            from backend.database.session import initialize_session_factory
+            from database.config import DatabaseConfig
+            from database.connection import DatabaseConnection
+            from database.session import initialize_session_factory
             
             try:
                 DatabaseConnection.get_engine()
@@ -393,10 +393,10 @@ class StartupChunkedSequence:
             logger.info("[STARTUP] Initializing critical systems...")
             
             # Keep self-healing active
-            from backend.database.session import get_session
+            from database.session import get_session
             session = next(get_session())
             
-            from backend.cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
+            from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
             healing_system = get_autonomous_healing(
                 session=session,
                 trust_level=TrustLevel.MEDIUM_RISK_AUTO,
@@ -406,7 +406,7 @@ class StartupChunkedSequence:
             
             # Initialize diagnostic engine
             try:
-                from backend.diagnostic_machine.engine import DiagnosticEngine
+                from diagnostic_machine.engine import DiagnosticEngine
                 diagnostic = DiagnosticEngine()
                 logger.info("[STARTUP] ✓ Diagnostic engine active")
             except Exception as e:

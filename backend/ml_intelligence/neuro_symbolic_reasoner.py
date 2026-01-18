@@ -1,14 +1,43 @@
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Set
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 import logging
-from embedding import EmbeddingModel, get_embedding_model
-from retrieval.retriever import DocumentRetriever
-from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext
-from ml_intelligence.neural_to_symbolic_rule_generator import NeuralToSymbolicRuleGenerator, SymbolicRule
+
+logger = logging.getLogger(__name__)
+
+try:
+    from embedding import EmbeddingModel, get_embedding_model
+except ImportError:
+    EmbeddingModel = None
+    def get_embedding_model():
+        return None
+
+try:
+    from retrieval.retriever import DocumentRetriever
+except ImportError:
+    DocumentRetriever = None
+
+try:
+    from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext
+except ImportError:
+    TrustAwareEmbeddingModel = None
+    TrustContext = None
+
+try:
+    from ml_intelligence.neural_to_symbolic_rule_generator import NeuralToSymbolicRuleGenerator, SymbolicRule
+except ImportError:
+    NeuralToSymbolicRuleGenerator = None
+    SymbolicRule = None
+
+try:
+    from cognitive.learning_memory import LearningMemoryManager
+except ImportError:
+    LearningMemoryManager = None
+
+
+@dataclass
 class ReasoningResult:
-    logger = logging.getLogger(__name__)
     """Unified reasoning result combining neural and symbolic"""
     query: str
     neural_results: List[Dict[str, Any]]

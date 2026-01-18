@@ -73,7 +73,7 @@ class MultimodalLLMSystem:
         
         # Voice manager (if available)
         try:
-            from backend.api.voice_api import VoiceManager
+            from api.voice_api import VoiceManager
             self.voice_manager = VoiceManager()
         except ImportError:
             self.voice_manager = None
@@ -189,7 +189,7 @@ class MultimodalLLMSystem:
         if input_item.content_path:
             # Extract audio and transcribe
             try:
-                from backend.file_manager.file_handler import FileHandler
+                from file_manager.file_handler import FileHandler
                 handler = FileHandler()
                 text, error = handler._extract_video(input_item.content_path)
                 if text:
@@ -203,7 +203,7 @@ class MultimodalLLMSystem:
         """Process audio input - transcribe speech."""
         if input_item.content_path:
             try:
-                from backend.file_manager.file_handler import FileHandler
+                from file_manager.file_handler import FileHandler
                 handler = FileHandler()
                 text, error = handler._extract_audio(input_item.content_path)
                 if text:

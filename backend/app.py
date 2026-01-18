@@ -94,6 +94,7 @@ from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagno
 from api.grace_os_api import router as grace_os_router  # Grace OS - Full IDE integration
 from api.timesense import router as timesense_router  # TimeSense - Time & Cost Model with physics-based time awareness
 from api.enterprise_genesis_api import router as enterprise_genesis_router  # Enterprise Genesis Key Storage
+from api.immutable_audit_api import router as immutable_audit_router  # Immutable Audit Trail - Data cannot disappear
 from api.system_specs_api import router as system_specs_router  # System Specifications - hardware constraints for LLMs
 from api.enterprise_api import router as enterprise_router  # Enterprise Analytics - All enterprise system analytics
 from api.component_testing_api import router as component_testing_router  # Comprehensive Component Testing with Self-Healing
@@ -102,7 +103,18 @@ from api.healing_coding_bridge_api import router as healing_coding_bridge_router
 from api.nlp_file_descriptions_api import router as nlp_descriptions_router  # NLP File Descriptions - Makes filesystem no-code friendly
 from api.external_knowledge_api import router as external_knowledge_router  # External Knowledge Extraction - GitHub, AI Research, LLMs
 from api.benchmark_api import router as benchmark_router  # Benchmark API - HumanEval, BigCodeBench, etc.
+from api.semantic_refactoring_api import router as semantic_refactoring_router  # Multi-file semantic refactoring
+from api.healing_scheduler_api import router as healing_scheduler_router  # Healing scheduler with persistent queue
+from api.oracle_hub_api import router as oracle_hub_router  # Unified Oracle Hub - Central Intelligence Ingestion
+from api.reverse_knn_api import router as reverse_knn_router  # Reverse KNN Proactive Learning - Knowledge Gap Expansion
+from api.enhanced_learning_api import router as enhanced_learning_router  # Enhanced Learning - Max capability with LLM orchestration
 from genesis.middleware import GenesisKeyMiddleware
+from middleware.self_healing_middleware import add_self_healing_middleware, get_error_pattern_stats
+from genesis.immutable_audit_storage import (
+    ImmutableAuditStorage, ImmutableAuditType, get_immutable_audit_storage,
+    audit_system_event, audit_user_input, audit_code_change
+)
+from genesis.audit_middleware import init_audit_middleware, integrate_with_genesis_keys
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -289,6 +301,47 @@ async def lifespan(app: FastAPI):
             logger.info("[OK] Outcome → LLM Bridge initialized (event listener registered)")
         except Exception as e:
             logger.info(f"[WARN] Could not initialize Outcome → LLM Bridge: {e}")
+        
+        # CRITICAL: Initialize Immutable Audit Storage for data integrity
+        # This ensures ALL critical operations are logged immutably for auditability and tracing
+        try:
+            session = next(get_session())
+            
+            # Initialize immutable audit storage
+            audit_storage = get_immutable_audit_storage(session)
+            logger.info("[OK] Immutable Audit Storage initialized")
+            
+            # Initialize audit middleware for automatic capture
+            audit_middleware = init_audit_middleware(session)
+            logger.info("[OK] Audit Middleware initialized")
+            
+            # Integrate with Genesis Keys for full traceability
+            integrate_with_genesis_keys(session)
+            logger.info("[OK] Audit integrated with Genesis Keys")
+            
+            # Record system startup in immutable audit
+            audit_storage.record(
+                audit_type=ImmutableAuditType.SYSTEM_STARTUP,
+                action_description="GRACE System startup initiated",
+                actor_type="system",
+                actor_id="grace-core",
+                component="app",
+                context={
+                    "startup_time": datetime.utcnow().isoformat(),
+                    "version": "3.1"
+                }
+            )
+            logger.info("[OK] System startup recorded in immutable audit trail")
+            
+            # Verify audit chain integrity
+            is_valid, issues = audit_storage.verify_chain_integrity()
+            if is_valid:
+                logger.info("[OK] Immutable audit chain integrity verified")
+            else:
+                logger.warning(f"[WARN] Audit chain issues: {len(issues)}")
+                
+        except Exception as e:
+            logger.info(f"[WARN] Could not initialize Immutable Audit Storage: {e}")
     except Exception as e:
         logger.info(f"[WARN] Database initialization error: {e}")
         raise
@@ -449,6 +502,24 @@ async def lifespan(app: FastAPI):
             mirror_thread = threading.Thread(target=mirror_analysis_background, daemon=True)
             mirror_thread.start()
             
+            # ==================== Start Healing Scheduler ====================
+            # Robust scheduling with persistent queue and file watcher
+            try:
+                from cognitive.healing_scheduler import start_healing_scheduler
+                
+                scheduler = start_healing_scheduler(
+                    healing_system=healing_system,
+                    repo_path=Path.cwd()
+                )
+                
+                logger.info("[HEALING-SCHEDULER] [OK] Scheduler started with:", flush=True)
+                logger.info("  - Persistent healing queue (survives restarts)", flush=True)
+                logger.info("  - File watcher (proactive healing on changes)", flush=True)
+                logger.info("  - Scheduled jobs (health, scan, drift detection)", flush=True)
+                logger.info(f"  - Pending tasks: {scheduler.queue.get_pending_count()}", flush=True)
+            except Exception as e:
+                logger.info(f"[HEALING-SCHEDULER] [WARN] Could not start scheduler: {e}", flush=True)
+            
             logger.info("[AUTONOMOUS-HEALING] [OK] Self-healing system active", flush=True)
             logger.info("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
             logger.info("  - Connection issues -> CONNECTION_RESET", flush=True)
@@ -456,6 +527,7 @@ async def lifespan(app: FastAPI):
             logger.info("  - Service failures -> SERVICE_RESTART", flush=True)
             logger.info("  - Error spikes -> Automatic healing", flush=True)
             logger.info("  - Performance issues -> CACHE_FLUSH / BUFFER_CLEAR", flush=True)
+            logger.info("  - Semantic refactoring -> SEMANTIC_REFACTOR", flush=True)
             logger.info("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
             
         except Exception as e:
@@ -813,6 +885,14 @@ app.add_middleware(RateLimitMiddleware, default_limit=security_config.RATE_LIMIT
 # Add request validation middleware
 app.add_middleware(RequestValidationMiddleware)
 
+# Add self-healing middleware - captures all API errors for learning
+add_self_healing_middleware(
+    app,
+    excluded_paths=["/health", "/metrics", "/docs", "/openapi.json", "/redoc"],
+    min_severity="low"
+)
+logger.info("[APP] Self-healing middleware enabled - all API errors fed to learning pipeline")
+
 # Add optional authentication middleware (enabled via AUTH_REQUIRED env var)
 if security_config.AUTH_REQUIRED:
     app.add_middleware(AuthenticationMiddleware)
@@ -890,6 +970,7 @@ app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, i
 app.include_router(grace_os_router)  # Grace OS - Self-healing IDE, Genesis IDE, autonomous actions
 app.include_router(timesense_router)  # TimeSense - Time & Cost Model with physics-based time predictions
 app.include_router(enterprise_genesis_router)  # Enterprise Genesis Key Storage - Scalable storage for 100k+ keys
+app.include_router(immutable_audit_router)  # Immutable Audit Trail - Cryptographically linked audit records that cannot disappear
 app.include_router(system_specs_router)  # System Specifications - hardware constraints for LLMs and external agents
 app.include_router(enterprise_router)  # Enterprise Analytics - All enterprise system analytics and health monitoring
 app.include_router(component_testing_router)  # Comprehensive Component Testing - Test all components and send bugs to self-healing
@@ -897,6 +978,11 @@ app.include_router(coding_agent_router)  # Enterprise Coding Agent - Same Qualit
 app.include_router(healing_coding_bridge_router)  # Bidirectional Communication: Self-Healing ↔ Coding Agent
 app.include_router(external_knowledge_router)  # External Knowledge Extraction - GitHub, AI Research, LLMs
 app.include_router(benchmark_router)  # Benchmark API - HumanEval, BigCodeBench, MBPP, etc.
+app.include_router(semantic_refactoring_router)  # Semantic Refactoring - Multi-file symbol rename, module moves
+app.include_router(healing_scheduler_router)  # Healing Scheduler - Persistent queue, file watcher, scheduled jobs
+app.include_router(oracle_hub_router)  # Unified Oracle Hub - Central Intelligence Ingestion from ALL sources
+app.include_router(reverse_knn_router)  # Reverse KNN Proactive Learning - Uses gaps to fetch more knowledge
+app.include_router(enhanced_learning_router)  # Enhanced Learning - Calibration, Correlation, LLM Orchestration
 
 # Add Genesis Key middleware for automatic tracking
 app.add_middleware(GenesisKeyMiddleware)
@@ -2259,6 +2345,32 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
             status_code=500,
             detail=f"Error processing directory chat: {str(e)}"
         )
+
+
+# ==================== Error Pattern Stats Endpoint ====================
+
+@app.get("/api/error-patterns", tags=["Self-Healing"])
+async def get_error_patterns():
+    """
+    Get current error pattern statistics from the self-healing middleware.
+    
+    Returns patterns of recurring errors that are being tracked for
+    automatic escalation and healing.
+    """
+    try:
+        patterns = get_error_pattern_stats()
+        return {
+            "status": "ok",
+            "patterns": patterns,
+            "total_patterns": len(patterns),
+            "escalated_count": sum(1 for p in patterns.values() if p.get("escalated", False))
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+            "patterns": {}
+        }
 
 
 # ==================== Run ====================

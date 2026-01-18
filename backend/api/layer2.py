@@ -85,6 +85,7 @@ async def process_cognitive_intent(
     Process intent through Layer 2 Intelligence (OODA Loop).
     
     This endpoint processes user intent through the complete cognitive cycle:
+    0. GOVERNANCE: Layer 3 trust verification and constitutional compliance
     1. OBSERVE: Gather intelligence from all systems
     2. ORIENT: Analyze situation with LLM intelligence
     3. DECIDE: Make intelligent decision
@@ -93,6 +94,29 @@ async def process_cognitive_intent(
     All operations are tracked with Genesis Keys and integrated with Layer 1.
     """
     try:
+        # Layer 3 Governance Enforcement
+        governance_result = None
+        try:
+            from governance.layer_enforcement import enforce_layer2, EnforcementAction
+            governance_result = await enforce_layer2(
+                intent=request.intent,
+                observations=request.entities or {},
+                context=request.context,
+                user_id=request.user_id
+            )
+            
+            if governance_result.action == EnforcementAction.BLOCK:
+                return CognitiveProcessResponse(
+                    intent=request.intent,
+                    observations={"blocked": True, "reason": governance_result.reasoning},
+                    orientation={"governance_failed": True},
+                    decision={"action": "blocked", "trust_score": governance_result.trust_score},
+                    confidence=0.0,
+                    genesis_keys={"governance": governance_result.genesis_key_id}
+                )
+        except ImportError:
+            pass  # Governance module not available
+        
         layer2 = get_layer2_intelligence(session)
         
         # Ensure initialized
@@ -109,13 +133,20 @@ async def process_cognitive_intent(
         # Extract clarity and genesis keys if available
         clarity = result.get("clarity")
         genesis_keys = {}
+        if governance_result and governance_result.genesis_key_id:
+            genesis_keys["governance"] = governance_result.genesis_key_id
         if "observe_key_id" in str(result):
             # Extract genesis key IDs from result
             pass  # Genesis keys are in the result context
         
+        # Add governance info to observations
+        observations = result.get("observations", {})
+        if governance_result:
+            observations["governance"] = governance_result.to_dict()
+        
         return CognitiveProcessResponse(
             intent=result.get("intent", request.intent),
-            observations=result.get("observations", {}),
+            observations=observations,
             orientation=result.get("orientation", {}),
             decision=result.get("decision", {}),
             confidence=result.get("confidence", 0.5),

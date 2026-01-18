@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
-from backend.utils.os_adapter import OS, paths, process, shell
+from utils.os_adapter import OS, paths, process, shell
 class ServiceState(str, Enum):
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

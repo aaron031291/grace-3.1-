@@ -8,8 +8,10 @@ from genesis.code_analyzer import get_code_analyzer
 from genesis.genesis_key_service import get_genesis_service
 from genesis.repo_scanner import get_repo_scanner
 from models.genesis_key_models import GenesisKeyType
+
+logger = logging.getLogger(__name__)
+
 class HealingSystem:
-    logger = logging.getLogger(__name__)
     """
     Scaffolded healing system using Genesis Keys for debugging.
 

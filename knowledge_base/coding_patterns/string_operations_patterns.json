@@ -1,0 +1,3267 @@
+{
+  "count": 193,
+  "mbpp_patterns": [
+    {
+      "task_id": 7,
+      "description": "Write a function to find all words which are at least 4 characters long in a string by using regex.",
+      "solution": "import re\r\ndef find_char_long(text):\r\n  return (re.findall(r\"\\b\\w{4,}\\b\", text))",
+      "test_cases": [
+        "assert find_char_long('Please move back to stream') == ['Please', 'move', 'back', 'stream']",
+        "assert find_char_long('Jing Eco and Tech') == ['Jing', 'Tech']",
+        "assert find_char_long('Jhingai wulu road Zone 3') == ['Jhingai', 'wulu', 'road', 'Zone']"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 9,
+      "description": "Write a python function to find the minimum number of rotations required to get the same string.",
+      "solution": "def find_Rotations(str): \r\n    tmp = str + str\r\n    n = len(str) \r\n    for i in range(1,n + 1): \r\n        substring = tmp[i: i+n] \r\n        if (str == substring): \r\n            return i \r\n    return n ",
+      "test_cases": [
+        "assert find_Rotations(\"aaaa\") == 1",
+        "assert find_Rotations(\"ab\") == 2",
+        "assert find_Rotations(\"abc\") == 3"
+      ],
+      "keywords": [
+        "min",
+        "find",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 11,
+      "description": "Write a python function to remove first and last occurrence of a given character from the string.",
+      "solution": "def remove_Occ(s,ch): \r\n    for i in range(len(s)): \r\n        if (s[i] == ch): \r\n            s = s[0 : i] + s[i + 1:] \r\n            break\r\n    for i in range(len(s) - 1,-1,-1):  \r\n        if (s[i] == ch): \r\n            s = s[0 : i] + s[i + 1:] \r\n            break\r\n    return s ",
+      "test_cases": [
+        "assert remove_Occ(\"hello\",\"l\") == \"heo\"",
+        "assert remove_Occ(\"abcda\",\"a\") == \"bcd\"",
+        "assert remove_Occ(\"PHP\",\"P\") == \"H\""
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 13,
+      "description": "Write a function to count the most common words in a dictionary.",
+      "solution": "from collections import Counter\r\ndef count_common(words):\r\n  word_counts = Counter(words)\r\n  top_four = word_counts.most_common(4)\r\n  return (top_four)\r\n",
+      "test_cases": [
+        "assert count_common(['red','green','black','pink','black','white','black','eyes','white','black','orange','pink','pink','red','red','white','orange','white',\"black\",'pink','green','green','pink','green','pink','white','orange',\"orange\",'red']) == [('pink', 6), ('black', 5), ('white', 5), ('red', 4)]",
+        "assert count_common(['one', 'two', 'three', 'four', 'five', 'one', 'two', 'one', 'three', 'one']) == [('one', 4), ('two', 2), ('three', 2), ('four', 1)]",
+        "assert count_common(['Facebook', 'Apple', 'Amazon', 'Netflix', 'Google', 'Apple', 'Netflix', 'Amazon']) == [('Apple', 2), ('Amazon', 2), ('Netflix', 2), ('Facebook', 1)]"
+      ],
+      "keywords": [
+        "count",
+        "dict",
+        "dictionary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 15,
+      "description": "Write a function to split a string at lowercase letters.",
+      "solution": "import re\r\ndef split_lowerstring(text):\r\n return (re.findall('[a-z][^a-z]*', text))",
+      "test_cases": [
+        "assert split_lowerstring(\"AbCd\")==['bC','d']",
+        "assert split_lowerstring(\"Python\")==['y', 't', 'h', 'o', 'n']",
+        "assert split_lowerstring(\"Programming\")==['r', 'o', 'g', 'r', 'a', 'm', 'm', 'i', 'n', 'g']"
+      ],
+      "keywords": [
+        "string",
+        "split"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 16,
+      "description": "Write a function to find sequences of lowercase letters joined with an underscore.",
+      "solution": "import re\r\ndef text_lowercase_underscore(text):\r\n        patterns = '^[a-z]+_[a-z]+$'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_lowercase_underscore(\"aab_cbbbc\")==('Found a match!')",
+        "assert text_lowercase_underscore(\"aab_Abbbc\")==('Not matched!')",
+        "assert text_lowercase_underscore(\"Aaab_abbbc\")==('Not matched!')"
+      ],
+      "keywords": [
+        "find",
+        "join"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 30,
+      "description": "Write a python function to count all the substrings starting and ending with same characters.",
+      "solution": "def check_Equality(s): \r\n    return (ord(s[0]) == ord(s[len(s) - 1])); \r\ndef count_Substring_With_Equal_Ends(s): \r\n    result = 0; \r\n    n = len(s); \r\n    for i in range(n): \r\n        for j in range(1,n-i+1):  \r\n            if (check_Equality(s[i:i+j])): \r\n                result+=1; \r\n    return result; ",
+      "test_cases": [
+        "assert count_Substring_With_Equal_Ends(\"abc\") == 3",
+        "assert count_Substring_With_Equal_Ends(\"abcda\") == 6",
+        "assert count_Substring_With_Equal_Ends(\"ab\") == 2"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 43,
+      "description": "Write a function to find sequences of lowercase letters joined with an underscore using regex.",
+      "solution": "import re\r\ndef text_match(text):\r\n  patterns = '^[a-z]+_[a-z]+$'\r\n  if re.search(patterns,  text):\r\n    return ('Found a match!')\r\n  else:\r\n    return ('Not matched!')",
+      "test_cases": [
+        "assert text_match(\"aab_cbbbc\") == 'Found a match!'",
+        "assert text_match(\"aab_Abbbc\") == 'Not matched!'",
+        "assert text_match(\"Aaab_abbbc\") == 'Not matched!'"
+      ],
+      "keywords": [
+        "find",
+        "join"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 44,
+      "description": "Write a function that matches a word at the beginning of a string.",
+      "solution": "import re\r\ndef text_match_string(text):\r\n        patterns = '^\\w+'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return 'Not matched!'",
+      "test_cases": [
+        "assert text_match_string(\" python\")==('Not matched!')",
+        "assert text_match_string(\"python\")==('Found a match!')",
+        "assert text_match_string(\"  lang\")==('Not matched!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 53,
+      "description": "Write a python function to check whether the first and last characters of a given string are equal or not.",
+      "solution": "def check_Equality(str):\r\n  if (str[0] == str[-1]):  \r\n    return (\"Equal\") \r\n  else:  \r\n    return (\"Not Equal\") ",
+      "test_cases": [
+        "assert check_Equality(\"abcda\") == \"Equal\"",
+        "assert check_Equality(\"ab\") == \"Not Equal\"",
+        "assert check_Equality(\"mad\") == \"Not Equal\""
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 61,
+      "description": "Write a python function to count number of substrings with the sum of digits equal to their length.",
+      "solution": "from collections import defaultdict\r\ndef count_Substrings(s,n):\r\n    count,sum = 0,0\r\n    mp = defaultdict(lambda : 0)\r\n    mp[0] += 1\r\n    for i in range(n):\r\n        sum += ord(s[i]) - ord('0')\r\n        count += mp[sum - (i + 1)]\r\n        mp[sum - (i + 1)] += 1\r\n    return count",
+      "test_cases": [
+        "assert count_Substrings('112112',6) == 6",
+        "assert count_Substrings('111',3) == 6",
+        "assert count_Substrings('1101112',7) == 12"
+      ],
+      "keywords": [
+        "sum",
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "lambda",
+        "range"
+      ]
+    },
+    {
+      "task_id": 73,
+      "description": "Write a function to split the given string with multiple delimiters by using regex.",
+      "solution": "import re\r\ndef multiple_split(text):\r\n  return (re.split('; |, |\\*|\\n',text))",
+      "test_cases": [
+        "assert multiple_split('Forces of the \\ndarkness*are coming into the play.') == ['Forces of the ', 'darkness', 'are coming into the play.']",
+        "assert multiple_split('Mi Box runs on the \\n Latest android*which has google assistance and chromecast.') == ['Mi Box runs on the ', ' Latest android', 'which has google assistance and chromecast.']",
+        "assert multiple_split('Certain services\\nare subjected to change*over the seperate subscriptions.') == ['Certain services', 'are subjected to change', 'over the seperate subscriptions.']"
+      ],
+      "keywords": [
+        "string",
+        "split"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 79,
+      "description": "Write a python function to check whether the length of the word is odd or not.",
+      "solution": "def word_len(s): \r\n    s = s.split(' ')   \r\n    for word in s:    \r\n        if len(word)%2!=0: \r\n            return True  \r\n        else:\r\n          return False",
+      "test_cases": [
+        "assert word_len(\"Hadoop\") == False",
+        "assert word_len(\"great\") == True",
+        "assert word_len(\"structure\") == True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 83,
+      "description": "Write a python function to find the character made by adding all the characters of the given string.",
+      "solution": "def get_Char(strr):  \r\n    summ = 0\r\n    for i in range(len(strr)): \r\n        summ += (ord(strr[i]) - ord('a') + 1)  \r\n    if (summ % 26 == 0): \r\n        return ord('z') \r\n    else: \r\n        summ = summ % 26\r\n        return chr(ord('a') + summ - 1)",
+      "test_cases": [
+        "assert get_Char(\"abc\") == \"f\"",
+        "assert get_Char(\"gfg\") == \"t\"",
+        "assert get_Char(\"ab\") == \"c\""
+      ],
+      "keywords": [
+        "find",
+        "add",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 100,
+      "description": "Write a function to find the next smallest palindrome of a specified number.",
+      "solution": "import sys\r\ndef next_smallest_palindrome(num):\r\n    numstr = str(num)\r\n    for i in range(num+1,sys.maxsize):\r\n        if str(i) == str(i)[::-1]:\r\n            return i",
+      "test_cases": [
+        "assert next_smallest_palindrome(99)==101",
+        "assert next_smallest_palindrome(1221)==1331",
+        "assert next_smallest_palindrome(120)==121"
+      ],
+      "keywords": [
+        "find",
+        "number"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 102,
+      "description": "Write a function to convert snake case string to camel case string.",
+      "solution": "def snake_to_camel(word):\r\n        import re\r\n        return ''.join(x.capitalize() or '_' for x in word.split('_'))",
+      "test_cases": [
+        "assert snake_to_camel('python_program')=='PythonProgram'",
+        "assert snake_to_camel('python_language')==('PythonLanguage')",
+        "assert snake_to_camel('programming_language')==('ProgrammingLanguage')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 109,
+      "description": "Write a python function to find the count of rotations of a binary string with odd value.",
+      "solution": "def odd_Equivalent(s,n): \r\n    count=0\r\n    for i in range(0,n): \r\n        if (s[i] == '1'): \r\n            count = count + 1\r\n    return count ",
+      "test_cases": [
+        "assert odd_Equivalent(\"011001\",6) == 3",
+        "assert odd_Equivalent(\"11011\",5) == 4",
+        "assert odd_Equivalent(\"1010\",4) == 2"
+      ],
+      "keywords": [
+        "find",
+        "count",
+        "string",
+        "binary"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 113,
+      "description": "Write a function to check if a string represents an integer or not.",
+      "solution": "def check_integer(text):\r\n text = text.strip()\r\n if len(text) < 1:\r\n    return None\r\n else:\r\n     if all(text[i] in \"0123456789\" for i in range(len(text))):\r\n          return True\r\n     elif (text[0] in \"+-\") and \\\r\n         all(text[i] in \"0123456789\" for i in range(1,len(text))):\r\n         return True\r\n     else:\r\n        return False",
+      "test_cases": [
+        "assert check_integer(\"python\")==False",
+        "assert check_integer(\"1\")==True",
+        "assert check_integer(\"12345\")==True"
+      ],
+      "keywords": [
+        "check",
+        "string",
+        "integer"
+      ],
+      "operations": [
+        "len",
+        "range",
+        "all"
+      ]
+    },
+    {
+      "task_id": 125,
+      "description": "Write a function to find the maximum difference between the number of 0s and number of 1s in any sub-string of the given binary string.",
+      "solution": "def find_length(string, n): \r\n\tcurrent_sum = 0\r\n\tmax_sum = 0\r\n\tfor i in range(n): \r\n\t\tcurrent_sum += (1 if string[i] == '0' else -1) \r\n\t\tif current_sum < 0: \r\n\t\t\tcurrent_sum = 0\r\n\t\tmax_sum = max(current_sum, max_sum) \r\n\treturn max_sum if max_sum else 0",
+      "test_cases": [
+        "assert find_length(\"11000010001\", 11) == 6",
+        "assert find_length(\"10111\", 5) == 1",
+        "assert find_length(\"11011101100101\", 14) == 2 "
+      ],
+      "keywords": [
+        "max",
+        "find",
+        "string",
+        "number",
+        "binary"
+      ],
+      "operations": [
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 131,
+      "description": "Write a python function to reverse only the vowels of a given string.",
+      "solution": "def reverse_vowels(str1):\r\n\tvowels = \"\"\r\n\tfor char in str1:\r\n\t\tif char in \"aeiouAEIOU\":\r\n\t\t\tvowels += char\r\n\tresult_string = \"\"\r\n\tfor char in str1:\r\n\t\tif char in \"aeiouAEIOU\":\r\n\t\t\tresult_string += vowels[-1]\r\n\t\t\tvowels = vowels[:-1]\r\n\t\telse:\r\n\t\t\tresult_string += char\r\n\treturn result_string",
+      "test_cases": [
+        "assert reverse_vowels(\"Python\") == \"Python\"",
+        "assert reverse_vowels(\"USA\") == \"ASU\"",
+        "assert reverse_vowels(\"ab\") == \"ab\""
+      ],
+      "keywords": [
+        "string",
+        "reverse"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 136,
+      "description": "Write a function to calculate electricity bill.",
+      "solution": "def cal_electbill(units):\r\n if(units < 50):\r\n    amount = units * 2.60\r\n    surcharge = 25\r\n elif(units <= 100):\r\n    amount = 130 + ((units - 50) * 3.25)\r\n    surcharge = 35\r\n elif(units <= 200):\r\n    amount = 130 + 162.50 + ((units - 100) * 5.26)\r\n    surcharge = 45\r\n else:\r\n    amount = 130 + 162.50 + 526 + ((units - 200) * 8.45)\r\n    surcharge = 75\r\n total = amount + surcharge\r\n return total",
+      "test_cases": [
+        "assert cal_electbill(75)==246.25",
+        "assert cal_electbill(265)==1442.75",
+        "assert cal_electbill(100)==327.5"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 146,
+      "description": "Write a function to find the ascii value of total characters in a string.",
+      "solution": "def ascii_value_string(str1):\r\n  for i in range(len(str1)):\r\n   return ord(str1[i])",
+      "test_cases": [
+        "assert ascii_value_string(\"python\")==112",
+        "assert ascii_value_string(\"Program\")==80",
+        "assert ascii_value_string(\"Language\")==76"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 165,
+      "description": "Write a python function to count characters at same position in a given string (lower and uppercase characters) as in english alphabet.",
+      "solution": "def count_char_position(str1): \r\n    count_chars = 0\r\n    for i in range(len(str1)):\r\n        if ((i == ord(str1[i]) - ord('A')) or \r\n            (i == ord(str1[i]) - ord('a'))): \r\n            count_chars += 1\r\n    return count_chars ",
+      "test_cases": [
+        "assert count_char_position(\"xbcefg\") == 2",
+        "assert count_char_position(\"ABcED\") == 3",
+        "assert count_char_position(\"AbgdeF\") == 5"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 173,
+      "description": "Write a function to remove everything except alphanumeric characters from a string.",
+      "solution": "import re\r\ndef remove_splchar(text): \r\n pattern = re.compile('[\\W_]+')\r\n return (pattern.sub('', text))",
+      "test_cases": [
+        "assert remove_splchar('python  @#&^%$*program123')==('pythonprogram123')",
+        "assert remove_splchar('python %^$@!^&*()  programming24%$^^()    language')==('pythonprogramming24language')",
+        "assert remove_splchar('python   ^%&^()(+_)(_^&67)                  program')==('python67program')"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 178,
+      "description": "Write a function to search some literals strings in a string.",
+      "solution": "import re\r\ndef string_literals(patterns,text):\r\n  for pattern in patterns:\r\n     if re.search(pattern,  text):\r\n       return ('Matched!')\r\n     else:\r\n       return ('Not Matched!')",
+      "test_cases": [
+        "assert string_literals(['language'],'python language')==('Matched!')",
+        "assert string_literals(['program'],'python language')==('Not Matched!')",
+        "assert string_literals(['python'],'programming language')==('Not Matched!')"
+      ],
+      "keywords": [
+        "search",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 181,
+      "description": "Write a function to find the longest common prefix in the given set of strings.",
+      "solution": "def common_prefix_util(str1, str2): \r\n\tresult = \"\"; \r\n\tn1 = len(str1) \r\n\tn2 = len(str2) \r\n\ti = 0\r\n\tj = 0\r\n\twhile i <= n1 - 1 and j <= n2 - 1: \r\n\t\tif (str1[i] != str2[j]): \r\n\t\t\tbreak\r\n\t\tresult += str1[i] \r\n\t\ti += 1\r\n\t\tj += 1\r\n\treturn (result) \r\ndef common_prefix (arr, n): \r\n\tprefix = arr[0] \r\n\tfor i in range (1, n): \r\n\t\tprefix = common_prefix_util(prefix, arr[i]) \r\n\treturn (prefix) ",
+      "test_cases": [
+        "assert common_prefix([\"tablets\", \"tables\", \"taxi\", \"tamarind\"], 4) == 'ta'",
+        "assert common_prefix([\"apples\", \"ape\", \"april\"], 3) == 'ap'",
+        "assert common_prefix([\"teens\", \"teenager\", \"teenmar\"], 3) == 'teen'"
+      ],
+      "keywords": [
+        "find",
+        "string",
+        "set"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 182,
+      "description": "Write a function to find uppercase, lowercase, special character and numeric values using regex.",
+      "solution": "import re\r\ndef find_character(string):\r\n  uppercase_characters = re.findall(r\"[A-Z]\", string) \r\n  lowercase_characters = re.findall(r\"[a-z]\", string) \r\n  numerical_characters = re.findall(r\"[0-9]\", string) \r\n  special_characters = re.findall(r\"[, .!?]\", string) \r\n  return uppercase_characters, lowercase_characters, numerical_characters, special_characters",
+      "test_cases": [
+        "assert find_character(\"ThisIsGeeksforGeeks\") == (['T', 'I', 'G', 'G'], ['h', 'i', 's', 's', 'e', 'e', 'k', 's', 'f', 'o', 'r', 'e', 'e', 'k', 's'], [], [])",
+        "assert find_character(\"Hithere2\") == (['H'], ['i', 't', 'h', 'e', 'r', 'e'], ['2'], [])",
+        "assert find_character(\"HeyFolks32\") == (['H', 'F'], ['e', 'y', 'o', 'l', 'k', 's'], ['3', '2'], [])"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 186,
+      "description": "Write a function to search some literals strings in a string by using regex.",
+      "solution": "import re\r\ndef check_literals(text, patterns):\r\n  for pattern in patterns:\r\n    if re.search(pattern,  text):\r\n        return ('Matched!')\r\n    else:\r\n        return ('Not Matched!')",
+      "test_cases": [
+        "assert check_literals('The quick brown fox jumps over the lazy dog.',['fox']) == 'Matched!'",
+        "assert check_literals('The quick brown fox jumps over the lazy dog.',['horse']) == 'Not Matched!'",
+        "assert check_literals('The quick brown fox jumps over the lazy dog.',['lazy']) == 'Matched!'"
+      ],
+      "keywords": [
+        "search",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 192,
+      "description": "Write a python function to check whether a string has atleast one letter and one number.",
+      "solution": "def check_String(str): \r\n    flag_l = False\r\n    flag_n = False\r\n    for i in str: \r\n        if i.isalpha(): \r\n            flag_l = True  \r\n        if i.isdigit(): \r\n            flag_n = True\r\n    return flag_l and flag_n ",
+      "test_cases": [
+        "assert check_String('thishasboth29') == True",
+        "assert check_String('python') == False",
+        "assert check_String ('string') == False"
+      ],
+      "keywords": [
+        "check",
+        "string",
+        "number"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 202,
+      "description": "Write a function to remove even characters in a string.",
+      "solution": "def remove_even(str1):\r\n str2 = ''\r\n for i in range(1, len(str1) + 1):\r\n    if(i % 2 != 0):\r\n        str2 = str2 + str1[i - 1]\r\n return str2",
+      "test_cases": [
+        "assert remove_even(\"python\")==(\"pto\")",
+        "assert remove_even(\"program\")==(\"porm\")",
+        "assert remove_even(\"language\")==(\"lnug\")"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 204,
+      "description": "Write a python function to count the occurrence of a given character in a string.",
+      "solution": "def count(s,c) : \r\n    res = 0 \r\n    for i in range(len(s)) : \r\n        if (s[i] == c): \r\n            res = res + 1\r\n    return res ",
+      "test_cases": [
+        "assert count(\"abcc\",\"c\") == 2",
+        "assert count(\"ababca\",\"a\") == 3",
+        "assert count(\"mnmm0pm\",\"m\") == 4"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 207,
+      "description": "Write a function to count the longest repeating subsequences such that the two subsequences don’t have same string characters at same positions.",
+      "solution": "def find_longest_repeating_subseq(str): \r\n\tn = len(str) \r\n\tdp = [[0 for k in range(n+1)] for l in range(n+1)] \r\n\tfor i in range(1, n+1): \r\n\t\tfor j in range(1, n+1): \r\n\t\t\tif (str[i-1] == str[j-1] and i != j): \r\n\t\t\t\tdp[i][j] = 1 + dp[i-1][j-1] \r\n\t\t\telse: \r\n\t\t\t\tdp[i][j] = max(dp[i][j-1], dp[i-1][j]) \r\n\treturn dp[n][n]",
+      "test_cases": [
+        "assert find_longest_repeating_subseq(\"AABEBCDD\") == 3",
+        "assert find_longest_repeating_subseq(\"aabb\") == 2",
+        "assert find_longest_repeating_subseq(\"aab\") == 1"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 210,
+      "description": "Write a function to check that the given string contains only a certain set of characters(in this case a-z, a-z and 0-9) by using regex.",
+      "solution": "import re\r\ndef is_allowed_specific_char(string):\r\n    get_char = re.compile(r'[^a-zA-Z0-9.]')\r\n    string = get_char.search(string)\r\n    return not bool(string)",
+      "test_cases": [
+        "assert is_allowed_specific_char(\"ABCDEFabcdef123450\") == True",
+        "assert is_allowed_specific_char(\"*&%@#!}{\") == False",
+        "assert is_allowed_specific_char(\"HELLOhowareyou98765\") == True"
+      ],
+      "keywords": [
+        "check",
+        "string",
+        "set"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 217,
+      "description": "Write a python function to find the first repeated character in a given string.",
+      "solution": "def first_Repeated_Char(str): \r\n    h = {}\r\n    for ch in str:\r\n        if ch in h: \r\n            return ch;\r\n        else: \r\n            h[ch] = 0\r\n    return '\\0'",
+      "test_cases": [
+        "assert first_Repeated_Char(\"Google\") == \"o\"",
+        "assert first_Repeated_Char(\"data\") == \"a\"",
+        "assert first_Repeated_Char(\"python\") == '\\0'"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 220,
+      "description": "Write a function to replace maximum n occurrences of spaces, commas, or dots with a colon.",
+      "solution": "import re\r\ndef replace_max_specialchar(text,n):\r\n return (re.sub(\"[ ,.]\", \":\", text, n))",
+      "test_cases": [
+        "assert replace_max_specialchar('Python language, Programming language.',2)==('Python:language: Programming language.')",
+        "assert replace_max_specialchar('a b c,d e f',3)==('a:b:c:d e f')",
+        "assert replace_max_specialchar('ram reshma,ram rahim',1)==('ram:reshma,ram rahim')"
+      ],
+      "keywords": [
+        "max",
+        "replace"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 226,
+      "description": "Write a python function to remove the characters which have odd index values of a given string.",
+      "solution": "def odd_values_string(str):\r\n  result = \"\" \r\n  for i in range(len(str)):\r\n    if i % 2 == 0:\r\n      result = result + str[i]\r\n  return result",
+      "test_cases": [
+        "assert odd_values_string('abcdef') == 'ace'",
+        "assert odd_values_string('python') == 'pto'",
+        "assert odd_values_string('data') == 'dt'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 230,
+      "description": "Write a function to replace blank spaces with any character in a string.",
+      "solution": "def replace_blank(str1,char):\r\n str2 = str1.replace(' ', char)\r\n return str2",
+      "test_cases": [
+        "assert replace_blank(\"hello people\",'@')==(\"hello@people\")",
+        "assert replace_blank(\"python program language\",'$')==(\"python$program$language\")",
+        "assert replace_blank(\"blank space\",\"-\")==(\"blank-space\")"
+      ],
+      "keywords": [
+        "string",
+        "replace"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 238,
+      "description": "Write a python function to count number of non-empty substrings of a given string.",
+      "solution": "def number_of_substrings(str): \r\n\tstr_len = len(str); \r\n\treturn int(str_len * (str_len + 1) / 2); ",
+      "test_cases": [
+        "assert number_of_substrings(\"abc\") == 6",
+        "assert number_of_substrings(\"abcd\") == 10",
+        "assert number_of_substrings(\"abcde\") == 15"
+      ],
+      "keywords": [
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 242,
+      "description": "Write a function to count total characters in a string.",
+      "solution": "def count_charac(str1):\r\n total = 0\r\n for i in str1:\r\n    total = total + 1\r\n return total",
+      "test_cases": [
+        "assert count_charac(\"python programming\")==18",
+        "assert count_charac(\"language\")==8",
+        "assert count_charac(\"words\")==5"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 247,
+      "description": "Write a function to find the longest palindromic subsequence in the given string.",
+      "solution": "def lps(str): \r\n\tn = len(str) \r\n\tL = [[0 for x in range(n)] for x in range(n)] \r\n\tfor i in range(n): \r\n\t\tL[i][i] = 1\r\n\tfor cl in range(2, n+1): \r\n\t\tfor i in range(n-cl+1): \r\n\t\t\tj = i+cl-1\r\n\t\t\tif str[i] == str[j] and cl == 2: \r\n\t\t\t\tL[i][j] = 2\r\n\t\t\telif str[i] == str[j]: \r\n\t\t\t\tL[i][j] = L[i+1][j-1] + 2\r\n\t\t\telse: \r\n\t\t\t\tL[i][j] = max(L[i][j-1], L[i+1][j]); \r\n\treturn L[0][n-1]",
+      "test_cases": [
+        "assert lps(\"TENS FOR TENS\") == 5 ",
+        "assert lps(\"CARDIO FOR CARDS\") == 7",
+        "assert lps(\"PART OF THE JOURNEY IS PART\") == 9 "
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 269,
+      "description": "Write a function to find the ascii value of a character.",
+      "solution": "def ascii_value(k):\r\n  ch=k\r\n  return ord(ch)",
+      "test_cases": [
+        "assert ascii_value('A')==65",
+        "assert ascii_value('R')==82",
+        "assert ascii_value('S')==83"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 285,
+      "description": "Write a function that matches a string that has an a followed by two to three 'b'.",
+      "solution": "import re\r\ndef text_match_two_three(text):\r\n        patterns = 'ab{2,3}'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match_two_three(\"ac\")==('Not matched!')",
+        "assert text_match_two_three(\"dc\")==('Not matched!')",
+        "assert text_match_two_three(\"abbbba\")==('Found a match!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 315,
+      "description": "Write a python function to find the first maximum length of even word.",
+      "solution": "def find_Max_Len_Even(str): \r\n    n = len(str) \r\n    i = 0\r\n    currlen = 0\r\n    maxlen = 0\r\n    st = -1\r\n    while (i < n): \r\n        if (str[i] == ' '): \r\n            if (currlen % 2 == 0): \r\n                if (maxlen < currlen): \r\n                    maxlen = currlen \r\n                    st = i - currlen \r\n            currlen = 0 \r\n        else : \r\n            currlen += 1\r\n        i += 1\r\n    if (currlen % 2 == 0): \r\n        if (maxlen < currlen): \r\n            maxlen = currlen \r\n            st = i - currlen \r\n    if (st == -1): \r\n        return \"-1\" \r\n    return str[st: st + maxlen] ",
+      "test_cases": [
+        "assert find_Max_Len_Even(\"python language\") == \"language\"",
+        "assert find_Max_Len_Even(\"maximum even length\") == \"length\"",
+        "assert find_Max_Len_Even(\"eve\") == \"-1\""
+      ],
+      "keywords": [
+        "max",
+        "find"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 319,
+      "description": "Write a function to find all five characters long word in the given string by using regex.",
+      "solution": "import re\r\ndef find_long_word(text):\r\n  return (re.findall(r\"\\b\\w{5}\\b\", text))",
+      "test_cases": [
+        "assert find_long_word('Please move back to strem') == ['strem']",
+        "assert find_long_word('4K Ultra HD streaming player') == ['Ultra']",
+        "assert find_long_word('Streaming Media Player') == ['Media']"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 321,
+      "description": "Write a function to find the demlo number for the given number.",
+      "solution": "def find_demlo(s): \r\n\tl = len(s) \r\n\tres = \"\" \r\n\tfor i in range(1,l+1): \r\n\t\tres = res + str(i) \r\n\tfor i in range(l-1,0,-1): \r\n\t\tres = res + str(i) \r\n\treturn res \t",
+      "test_cases": [
+        "assert find_demlo(\"111111\") == '12345654321'",
+        "assert find_demlo(\"1111\") == '1234321'",
+        "assert find_demlo(\"13333122222\") == '123456789101110987654321'"
+      ],
+      "keywords": [
+        "find",
+        "number"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 330,
+      "description": "Write a function to find all three, four, five characters long words in the given string by using regex.",
+      "solution": "import re\r\ndef find_char(text):\r\n  return (re.findall(r\"\\b\\w{3,5}\\b\", text))",
+      "test_cases": [
+        "assert find_char('For the four consumer complaints contact manager AKR reddy') == ['For', 'the', 'four', 'AKR', 'reddy']",
+        "assert find_char('Certain service are subject to change MSR') == ['are', 'MSR']",
+        "assert find_char('Third party legal desclaimers') == ['Third', 'party', 'legal']"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 332,
+      "description": "Write a function to count character frequency of a given string.",
+      "solution": "def char_frequency(str1):\r\n    dict = {}\r\n    for n in str1:\r\n        keys = dict.keys()\r\n        if n in keys:\r\n            dict[n] += 1\r\n        else:\r\n            dict[n] = 1\r\n    return dict",
+      "test_cases": [
+        "assert char_frequency('python')=={'p': 1, 'y': 1, 't': 1, 'h': 1, 'o': 1, 'n': 1}",
+        "assert char_frequency('program')=={'p': 1, 'r': 2, 'o': 1, 'g': 1, 'a': 1, 'm': 1}",
+        "assert char_frequency('language')=={'l': 1, 'a': 2, 'n': 1, 'g': 2, 'u': 1, 'e': 1}"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 337,
+      "description": "Write a function that matches a word at the end of a string, with optional punctuation.",
+      "solution": "import re\r\ndef text_match_word(text):\r\n        patterns = '\\w+\\S*$'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return 'Not matched!'",
+      "test_cases": [
+        "assert text_match_word(\"python.\")==('Found a match!')",
+        "assert text_match_word(\"python.\")==('Found a match!')",
+        "assert text_match_word(\"  lang  .\")==('Not matched!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 338,
+      "description": "Write a python function to count the number of substrings with same first and last characters.",
+      "solution": "def check_Equality(s): \r\n    return (ord(s[0]) == ord(s[len(s) - 1])); \r\ndef count_Substring_With_Equal_Ends(s): \r\n    result = 0; \r\n    n = len(s); \r\n    for i in range(n):\r\n        for j in range(1,n-i+1): \r\n            if (check_Equality(s[i:i+j])): \r\n                result+=1; \r\n    return result; ",
+      "test_cases": [
+        "assert count_Substring_With_Equal_Ends('aba') == 4",
+        "assert count_Substring_With_Equal_Ends('abcab') == 7",
+        "assert count_Substring_With_Equal_Ends('abc') == 3"
+      ],
+      "keywords": [
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 343,
+      "description": "Write a function to calculate the number of digits and letters in a string.",
+      "solution": "def dig_let(s):\r\n d=l=0\r\n for c in s:\r\n    if c.isdigit():\r\n        d=d+1\r\n    elif c.isalpha():\r\n        l=l+1\r\n    else:\r\n        pass\r\n return (l,d)",
+      "test_cases": [
+        "assert dig_let(\"python\")==(6,0)",
+        "assert dig_let(\"program\")==(7,0)",
+        "assert dig_let(\"python3.0\")==(6,2)"
+      ],
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 349,
+      "description": "Write a python function to check whether the given string is a binary string or not.",
+      "solution": "def check(string) :\r\n    p = set(string) \r\n    s = {'0', '1'} \r\n    if s == p or p == {'0'} or p == {'1'}: \r\n        return (\"Yes\") \r\n    else : \r\n        return (\"No\") ",
+      "test_cases": [
+        "assert check(\"01010101010\") == \"Yes\"",
+        "assert check(\"name0\") == \"No\"",
+        "assert check(\"101\") == \"Yes\""
+      ],
+      "keywords": [
+        "check",
+        "string",
+        "binary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 350,
+      "description": "Write a python function to minimize the length of the string by removing occurrence of only one character.",
+      "solution": "def minimum_Length(s) : \r\n    maxOcc = 0\r\n    n = len(s) \r\n    arr = [0]*26\r\n    for i in range(n) : \r\n        arr[ord(s[i]) -ord('a')] += 1\r\n    for i in range(26) : \r\n        if arr[i] > maxOcc : \r\n            maxOcc = arr[i] \r\n    return n - maxOcc ",
+      "test_cases": [
+        "assert minimum_Length(\"mnm\") == 1",
+        "assert minimum_Length(\"abcda\") == 3",
+        "assert minimum_Length(\"abcb\") == 2"
+      ],
+      "keywords": [
+        "min",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 352,
+      "description": "Write a python function to check whether all the characters in a given string are unique.",
+      "solution": "def unique_Characters(str):\r\n    for i in range(len(str)):\r\n        for j in range(i + 1,len(str)): \r\n            if (str[i] == str[j]):\r\n                return False;\r\n    return True;",
+      "test_cases": [
+        "assert unique_Characters('aba') == False",
+        "assert unique_Characters('abc') == True",
+        "assert unique_Characters('abab') == False"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 364,
+      "description": "Write a function to find the number of flips required to make the given binary string a sequence of alternate characters.",
+      "solution": "def make_flip(ch): \r\n\treturn '1' if (ch == '0') else '0'\r\ndef get_flip_with_starting_charcter(str, expected): \r\n\tflip_count = 0\r\n\tfor i in range(len( str)): \r\n\t\tif (str[i] != expected): \r\n\t\t\tflip_count += 1\r\n\t\texpected = make_flip(expected) \r\n\treturn flip_count \r\ndef min_flip_to_make_string_alternate(str): \r\n\treturn min(get_flip_with_starting_charcter(str, '0'),get_flip_with_starting_charcter(str, '1')) ",
+      "test_cases": [
+        "assert min_flip_to_make_string_alternate(\"0001010111\") == 2",
+        "assert min_flip_to_make_string_alternate(\"001\") == 1",
+        "assert min_flip_to_make_string_alternate(\"010111011\") == 2 "
+      ],
+      "keywords": [
+        "find",
+        "string",
+        "number",
+        "binary"
+      ],
+      "operations": [
+        "min",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 386,
+      "description": "Write a function to find out the minimum no of swaps required for bracket balancing in the given string.",
+      "solution": "def swap_count(s):\r\n\tchars = s\r\n\tcount_left = 0\r\n\tcount_right = 0\r\n\tswap = 0\r\n\timbalance = 0; \r\n\tfor i in range(len(chars)):\r\n\t\tif chars[i] == '[':\r\n\t\t\tcount_left += 1\r\n\t\t\tif imbalance > 0:\r\n\t\t\t\tswap += imbalance\r\n\t\t\t\timbalance -= 1\r\n\t\telif chars[i] == ']':\r\n\t\t\tcount_right += 1\r\n\t\t\timbalance = (count_right - count_left) \r\n\treturn swap",
+      "test_cases": [
+        "assert swap_count(\"[]][][\") == 2",
+        "assert swap_count(\"[[][]]\") == 0",
+        "assert swap_count(\"[[][]]][\") == 1"
+      ],
+      "keywords": [
+        "min",
+        "find",
+        "string",
+        "swap"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 396,
+      "description": "Write a function to check whether the given string starts and ends with the same character or not using regex.",
+      "solution": "import re  \r\nregex = r'^[a-z]$|^([a-z]).*\\1$'\r\ndef check_char(string): \r\n\tif(re.search(regex, string)): \r\n\t\treturn \"Valid\" \r\n\telse: \r\n\t\treturn \"Invalid\" ",
+      "test_cases": [
+        "assert check_char(\"abba\") == \"Valid\"",
+        "assert check_char(\"a\") == \"Valid\"",
+        "assert check_char(\"abcd\") == \"Invalid\""
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 403,
+      "description": "Write a function to check if a url is valid or not using regex.",
+      "solution": "import re\r\ndef is_valid_URL(str):\r\n\tregex = (\"((http|https)://)(www.)?\" +\r\n\t\t\t\"[a-zA-Z0-9@:%._\\\\+~#?&//=]\" +\r\n\t\t\t\"{2,256}\\\\.[a-z]\" +\r\n\t\t\t\"{2,6}\\\\b([-a-zA-Z0-9@:%\" +\r\n\t\t\t\"._\\\\+~#?&//=]*)\")\r\n\tp = re.compile(regex)\r\n\tif (str == None):\r\n\t\treturn False\r\n\tif(re.search(p, str)):\r\n\t\treturn True\r\n\telse:\r\n\t\treturn False",
+      "test_cases": [
+        "assert is_valid_URL(\"https://www.google.com\") == True",
+        "assert is_valid_URL(\"https:/www.gmail.com\") == False",
+        "assert is_valid_URL(\"https:// www.redit.com\") == False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 411,
+      "description": "Write a function to convert the given snake case string to camel case string by using regex.",
+      "solution": "import re\r\ndef snake_to_camel(word):\r\n  return ''.join(x.capitalize() or '_' for x in word.split('_'))",
+      "test_cases": [
+        "assert snake_to_camel('android_tv') == 'AndroidTv'",
+        "assert snake_to_camel('google_pixel') == 'GooglePixel'",
+        "assert snake_to_camel('apple_watch') == 'AppleWatch'"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 434,
+      "description": "Write a function that matches a string that has an a followed by one or more b's.",
+      "solution": "import re\r\ndef text_match_one(text):\r\n        patterns = 'ab+?'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')\r\n",
+      "test_cases": [
+        "assert text_match_one(\"ac\")==('Not matched!')",
+        "assert text_match_one(\"dc\")==('Not matched!')",
+        "assert text_match_one(\"abba\")==('Found a match!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 437,
+      "description": "Write a function to remove odd characters in a string.",
+      "solution": "def remove_odd(str1):\r\n str2 = ''\r\n for i in range(1, len(str1) + 1):\r\n    if(i % 2 == 0):\r\n        str2 = str2 + str1[i - 1]\r\n return str2",
+      "test_cases": [
+        "assert remove_odd(\"python\")==(\"yhn\")",
+        "assert remove_odd(\"program\")==(\"rga\")",
+        "assert remove_odd(\"language\")==(\"agae\")"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 440,
+      "description": "Write a function to find all adverbs and their positions in a given sentence.",
+      "solution": "import re\r\ndef find_adverb_position(text):\r\n for m in re.finditer(r\"\\w+ly\", text):\r\n    return (m.start(), m.end(), m.group(0))",
+      "test_cases": [
+        "assert find_adverb_position(\"clearly!! we can see the sky\")==(0, 7, 'clearly')",
+        "assert find_adverb_position(\"seriously!! there are many roses\")==(0, 9, 'seriously')",
+        "assert find_adverb_position(\"unfortunately!! sita is going to home\")==(0, 13, 'unfortunately')"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 451,
+      "description": "Write a function to remove all whitespaces from the given string using regex.",
+      "solution": "import re\r\ndef remove_whitespaces(text1):\r\n  return (re.sub(r'\\s+', '',text1))",
+      "test_cases": [
+        "assert remove_whitespaces(' Google    Flutter ') == 'GoogleFlutter'",
+        "assert remove_whitespaces(' Google    Dart ') == 'GoogleDart'",
+        "assert remove_whitespaces(' iOS    Swift ') == 'iOSSwift'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 454,
+      "description": "Write a function that matches a word containing 'z'.",
+      "solution": "import re\r\ndef text_match_wordz(text):\r\n        patterns = '\\w*z.\\w*'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match_wordz(\"pythonz.\")==('Found a match!')",
+        "assert text_match_wordz(\"xyz.\")==('Found a match!')",
+        "assert text_match_wordz(\"  lang  .\")==('Not matched!')"
+      ],
+      "keywords": [],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 459,
+      "description": "Write a function to remove uppercase substrings from a given string by using regex.",
+      "solution": "import re\r\ndef remove_uppercase(str1):\r\n  remove_upper = lambda text: re.sub('[A-Z]', '', text)\r\n  result =  remove_upper(str1)\r\n  return (result)",
+      "test_cases": [
+        "assert remove_uppercase('cAstyoUrFavoRitETVshoWs') == 'cstyoravoitshos'",
+        "assert remove_uppercase('wAtchTheinTernEtrAdIo') == 'wtchheinerntrdo'",
+        "assert remove_uppercase('VoicESeaRchAndreComMendaTionS') == 'oiceachndreomendaion'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "lambda",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 461,
+      "description": "Write a python function to count the upper case characters in a given string.",
+      "solution": "def upper_ctr(str):\r\n    upper_ctr = 0\r\n    for i in range(len(str)):\r\n          if str[i] >= 'A' and str[i] <= 'Z': upper_ctr += 1\r\n          return upper_ctr",
+      "test_cases": [
+        "assert upper_ctr('PYthon') == 1",
+        "assert upper_ctr('BigData') == 1",
+        "assert upper_ctr('program') == 0"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 474,
+      "description": "Write a function to replace characters in a string.",
+      "solution": "def replace_char(str1,ch,newch):\r\n str2 = str1.replace(ch, newch)\r\n return str2",
+      "test_cases": [
+        "assert replace_char(\"polygon\",'y','l')==(\"pollgon\")",
+        "assert replace_char(\"character\",'c','a')==(\"aharaater\")",
+        "assert replace_char(\"python\",'l','a')==(\"python\")"
+      ],
+      "keywords": [
+        "string",
+        "replace"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 477,
+      "description": "Write a python function to convert the given string to lower case.",
+      "solution": "def is_lower(string):\r\n  return (string.lower())",
+      "test_cases": [
+        "assert is_lower(\"InValid\") == \"invalid\"",
+        "assert is_lower(\"TruE\") == \"true\"",
+        "assert is_lower(\"SenTenCE\") == \"sentence\""
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 478,
+      "description": "Write a function to remove lowercase substrings from a given string.",
+      "solution": "import re\r\ndef remove_lowercase(str1):\r\n remove_lower = lambda text: re.sub('[a-z]', '', text)\r\n result =  remove_lower(str1)\r\n return result",
+      "test_cases": [
+        "assert remove_lowercase(\"PYTHon\")==('PYTH')",
+        "assert remove_lowercase(\"FInD\")==('FID')",
+        "assert remove_lowercase(\"STRinG\")==('STRG')"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "lambda",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 480,
+      "description": "Write a python function to find the maximum occurring character in a given string.",
+      "solution": "def get_max_occuring_char(str1):\r\n  ASCII_SIZE = 256\r\n  ctr = [0] * ASCII_SIZE\r\n  max = -1\r\n  ch = ''\r\n  for i in str1:\r\n    ctr[ord(i)]+=1;\r\n  for i in str1:\r\n    if max < ctr[ord(i)]:\r\n      max = ctr[ord(i)]\r\n      ch = i\r\n  return ch",
+      "test_cases": [
+        "assert get_max_occuring_char(\"data\") == \"a\"",
+        "assert get_max_occuring_char(\"create\") == \"e\"",
+        "assert get_max_occuring_char(\"brilliant girl\") == \"i\""
+      ],
+      "keywords": [
+        "max",
+        "find",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 482,
+      "description": "Write a function to find sequences of one upper case letter followed by lower case letters in the given string by using regex.",
+      "solution": "import re \r\ndef match(text): \r\n\t\tpattern = '[A-Z]+[a-z]+$'\r\n\t\tif re.search(pattern, text): \r\n\t\t\t\treturn('Yes') \r\n\t\telse: \r\n\t\t\t\treturn('No') ",
+      "test_cases": [
+        "assert match(\"Geeks\") == 'Yes'",
+        "assert match(\"geeksforGeeks\") == 'Yes'",
+        "assert match(\"geeks\") == 'No'"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 495,
+      "description": "Write a function to remove lowercase substrings from a given string by using regex.",
+      "solution": "import re\r\ndef remove_lowercase(str1):\r\n  remove_lower = lambda text: re.sub('[a-z]', '', text)\r\n  result =  remove_lower(str1)\r\n  return (result)",
+      "test_cases": [
+        "assert remove_lowercase('KDeoALOklOOHserfLoAJSIskdsf') == 'KDALOOOHLAJSI'",
+        "assert remove_lowercase('ProducTnamEstreAmIngMediAplAYer') == 'PTEAIMAAY'",
+        "assert remove_lowercase('maNufacTuredbYSheZenTechNolOGIes') == 'NTYSZTNOGI'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "lambda",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 526,
+      "description": "Write a python function to capitalize first and last letters of each word of a given string.",
+      "solution": "def capitalize_first_last_letters(str1):\r\n     str1 = result = str1.title()\r\n     result =  \"\"\r\n     for word in str1.split():\r\n        result += word[:-1] + word[-1].upper() + \" \"\r\n     return result[:-1]  ",
+      "test_cases": [
+        "assert capitalize_first_last_letters(\"python\") == \"PythoN\"",
+        "assert capitalize_first_last_letters(\"bigdata\") == \"BigdatA\"",
+        "assert capitalize_first_last_letters(\"Hadoop\") == \"HadooP\""
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 532,
+      "description": "Write a function to check if the two given strings are permutations of each other.",
+      "solution": "def check_permutation(str1, str2):\r\n  n1=len(str1)\r\n  n2=len(str2)\r\n  if(n1!=n2):\r\n    return False\r\n  a=sorted(str1)\r\n  str1=\" \".join(a)\r\n  b=sorted(str2)\r\n  str2=\" \".join(b)\r\n  for i in range(0, n1, 1):\r\n    if(str1[i] != str2[i]):\r\n      return False\r\n  return True",
+      "test_cases": [
+        "assert check_permutation(\"abc\", \"cba\") == True",
+        "assert check_permutation(\"test\", \"ttew\") == False",
+        "assert check_permutation(\"xxyz\", \"yxzx\") == True"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "sorted",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 534,
+      "description": "Write a function to search a literals string in a string and also find the location within the original string where the pattern occurs.",
+      "solution": "import re\r\ndef search_literal(pattern,text):\r\n match = re.search(pattern, text)\r\n s = match.start()\r\n e = match.end()\r\n return (s, e)",
+      "test_cases": [
+        "assert search_literal('python','python programming language')==(0,6)",
+        "assert search_literal('programming','python programming language')==(7,18)",
+        "assert search_literal('language','python programming language')==(19,27)"
+      ],
+      "keywords": [
+        "find",
+        "search",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 537,
+      "description": "Write a python function to find the first repeated word in a given string.",
+      "solution": "def first_repeated_word(str1):\r\n  temp = set()\r\n  for word in str1.split():\r\n    if word in temp:\r\n      return word;\r\n    else:\r\n      temp.add(word)\r\n  return 'None'",
+      "test_cases": [
+        "assert first_repeated_word(\"ab ca bc ab\") == \"ab\"",
+        "assert first_repeated_word(\"ab ca bc\") == 'None'",
+        "assert first_repeated_word(\"ab ca bc ca ab bc\") == \"ca\""
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 542,
+      "description": "Write a function to replace all occurrences of spaces, commas, or dots with a colon in the given string by using regex.",
+      "solution": "import re\r\ndef fill_spaces(text):\r\n  return (re.sub(\"[ ,.]\", \":\", text))",
+      "test_cases": [
+        "assert fill_spaces('Boult Curve Wireless Neckband') == 'Boult:Curve:Wireless:Neckband'",
+        "assert fill_spaces('Stereo Sound Sweatproof') == 'Stereo:Sound:Sweatproof'",
+        "assert fill_spaces('Probass Curve Audio') == 'Probass:Curve:Audio'"
+      ],
+      "keywords": [
+        "string",
+        "replace"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 546,
+      "description": "Write a function to find the last occurrence of a character in a string.",
+      "solution": "def last_occurence_char(string,char):\r\n flag = -1\r\n for i in range(len(string)):\r\n     if(string[i] == char):\r\n         flag = i\r\n if(flag == -1):\r\n    return None\r\n else:\r\n    return flag + 1",
+      "test_cases": [
+        "assert last_occurence_char(\"hello world\",'l')==10",
+        "assert last_occurence_char(\"language\",'g')==7",
+        "assert last_occurence_char(\"little\",'y')==None"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 557,
+      "description": "Write a function to toggle characters case in a string.",
+      "solution": "def toggle_string(string):\r\n string1 = string.swapcase()\r\n return string1",
+      "test_cases": [
+        "assert toggle_string(\"Python\")==(\"pYTHON\")",
+        "assert toggle_string(\"Pangram\")==(\"pANGRAM\")",
+        "assert toggle_string(\"LIttLE\")==(\"liTTle\")"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 558,
+      "description": "Write a python function to find the digit distance between two integers.",
+      "solution": "def digit_distance_nums(n1, n2):\r\n         return sum(map(int,str(abs(n1-n2))))",
+      "test_cases": [
+        "assert digit_distance_nums(1,2) == 1",
+        "assert digit_distance_nums(23,56) == 6",
+        "assert digit_distance_nums(123,256) == 7"
+      ],
+      "keywords": [
+        "find",
+        "integer"
+      ],
+      "operations": [
+        "map",
+        "sum"
+      ]
+    },
+    {
+      "task_id": 563,
+      "description": "Write a function to extract values between quotation marks of a string.",
+      "solution": "import re\r\ndef extract_values(text):\r\n return (re.findall(r'\"(.*?)\"', text))",
+      "test_cases": [
+        "assert extract_values('\"Python\", \"PHP\", \"Java\"')==['Python', 'PHP', 'Java']",
+        "assert extract_values('\"python\",\"program\",\"language\"')==['python','program','language']",
+        "assert extract_values('\"red\",\"blue\",\"green\",\"yellow\"')==['red','blue','green','yellow']"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 565,
+      "description": "Write a python function to split a string into characters.",
+      "solution": "def split(word): \r\n    return [char for char in word] ",
+      "test_cases": [
+        "assert split('python') == ['p','y','t','h','o','n']",
+        "assert split('Name') == ['N','a','m','e']",
+        "assert split('program') == ['p','r','o','g','r','a','m']"
+      ],
+      "keywords": [
+        "string",
+        "split"
+      ],
+      "operations": [
+        "list_comprehension"
+      ]
+    },
+    {
+      "task_id": 584,
+      "description": "Write a function to find all adverbs and their positions in a given sentence by using regex.",
+      "solution": "import re\r\ndef find_adverbs(text):\r\n  for m in re.finditer(r\"\\w+ly\", text):\r\n    return ('%d-%d: %s' % (m.start(), m.end(), m.group(0)))",
+      "test_cases": [
+        "assert find_adverbs(\"Clearly, he has no excuse for such behavior.\") == '0-7: Clearly'",
+        "assert find_adverbs(\"Please handle the situation carefuly\") == '28-36: carefuly'",
+        "assert find_adverbs(\"Complete the task quickly\") == '18-25: quickly'"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 593,
+      "description": "Write a function to remove leading zeroes from an ip address.",
+      "solution": "import re\r\ndef removezero_ip(ip):\r\n string = re.sub('\\.[0]*', '.', ip)\r\n return string\r",
+      "test_cases": [
+        "assert removezero_ip(\"216.08.094.196\")==('216.8.94.196') ",
+        "assert removezero_ip(\"12.01.024\")==('12.1.24') ",
+        "assert removezero_ip(\"216.08.094.0196\")==('216.8.94.196') "
+      ],
+      "keywords": [
+        "remove",
+        "add"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 595,
+      "description": "Write a python function to count minimum number of swaps required to convert one binary string to another.",
+      "solution": "def min_Swaps(str1,str2) : \r\n    count = 0\r\n    for i in range(len(str1)) :  \r\n        if str1[i] != str2[i] : \r\n            count += 1\r\n    if count % 2 == 0 : \r\n        return (count // 2) \r\n    else : \r\n        return (\"Not Possible\") ",
+      "test_cases": [
+        "assert min_Swaps(\"1101\",\"1110\") == 1",
+        "assert min_Swaps(\"111\",\"000\") == \"Not Possible\"",
+        "assert min_Swaps(\"111\",\"110\") == \"Not Possible\""
+      ],
+      "keywords": [
+        "min",
+        "count",
+        "string",
+        "number",
+        "binary",
+        "swap"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 598,
+      "description": "Write a function to check whether the given number is armstrong or not.",
+      "solution": "def armstrong_number(number):\r\n sum = 0\r\n times = 0\r\n temp = number\r\n while temp > 0:\r\n           times = times + 1\r\n           temp = temp // 10\r\n temp = number\r\n while temp > 0:\r\n           reminder = temp % 10\r\n           sum = sum + (reminder ** times)\r\n           temp //= 10\r\n if number == sum:\r\n           return True\r\n else:\r\n           return False",
+      "test_cases": [
+        "assert armstrong_number(153)==True",
+        "assert armstrong_number(259)==False",
+        "assert armstrong_number(4458)==False"
+      ],
+      "keywords": [
+        "check",
+        "number"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 602,
+      "description": "Write a python function to find the first repeated character in a given string.",
+      "solution": "def first_repeated_char(str1):\r\n  for index,c in enumerate(str1):\r\n    if str1[:index+1].count(c) > 1:\r\n      return c \r\n  return \"None\"",
+      "test_cases": [
+        "assert first_repeated_char(\"abcabc\") == \"a\"",
+        "assert first_repeated_char(\"abc\") == \"None\"",
+        "assert first_repeated_char(\"123123\") == \"1\""
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "enumerate"
+      ]
+    },
+    {
+      "task_id": 604,
+      "description": "Write a function to reverse words in a given string.",
+      "solution": "def reverse_words(s):\r\n        return ' '.join(reversed(s.split()))",
+      "test_cases": [
+        "assert reverse_words(\"python program\")==(\"program python\")",
+        "assert reverse_words(\"java language\")==(\"language java\")",
+        "assert reverse_words(\"indian man\")==(\"man indian\")"
+      ],
+      "keywords": [
+        "string",
+        "reverse"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 607,
+      "description": "Write a function to search a literals string in a string and also find the location within the original string where the pattern occurs by using regex.",
+      "solution": "import re\r\npattern = 'fox'\r\ntext = 'The quick brown fox jumps over the lazy dog.'\r\ndef find_literals(text, pattern):\r\n  match = re.search(pattern, text)\r\n  s = match.start()\r\n  e = match.end()\r\n  return (match.re.pattern, s, e)",
+      "test_cases": [
+        "assert find_literals('The quick brown fox jumps over the lazy dog.', 'fox') == ('fox', 16, 19)",
+        "assert find_literals('Its been a very crazy procedure right', 'crazy') == ('crazy', 16, 21)",
+        "assert find_literals('Hardest choices required strongest will', 'will') == ('will', 35, 39)"
+      ],
+      "keywords": [
+        "find",
+        "search",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 619,
+      "description": "Write a function to move all the numbers in it to the given string.",
+      "solution": "def move_num(test_str):\r\n  res = ''\r\n  dig = ''\r\n  for ele in test_str:\r\n    if ele.isdigit():\r\n      dig += ele\r\n    else:\r\n      res += ele\r\n  res += dig\r\n  return (res) ",
+      "test_cases": [
+        "assert move_num('I1love143you55three3000thousand') == 'Iloveyouthreethousand1143553000'",
+        "assert move_num('Avengers124Assemble') == 'AvengersAssemble124'",
+        "assert move_num('Its11our12path13to14see15things16do17things') == 'Itsourpathtoseethingsdothings11121314151617'"
+      ],
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 624,
+      "description": "Write a python function to convert the given string to upper case.",
+      "solution": "def is_upper(string):\r\n  return (string.upper())",
+      "test_cases": [
+        "assert is_upper(\"person\") ==\"PERSON\"",
+        "assert is_upper(\"final\") == \"FINAL\"",
+        "assert is_upper(\"Valid\") == \"VALID\""
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 631,
+      "description": "Write a function to replace whitespaces with an underscore and vice versa in a given string by using regex.",
+      "solution": "import re\r\ntext = 'Python Exercises'\r\ndef replace_spaces(text):\r\n  text =text.replace (\" \", \"_\")\r\n  return (text)\r\n  text =text.replace (\"_\", \" \")\r\n  return (text)",
+      "test_cases": [
+        "assert replace_spaces('Jumanji The Jungle') == 'Jumanji_The_Jungle'",
+        "assert replace_spaces('The Avengers') == 'The_Avengers'",
+        "assert replace_spaces('Fast and Furious') == 'Fast_and_Furious'"
+      ],
+      "keywords": [
+        "string",
+        "replace"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 640,
+      "description": "Write a function to remove the parenthesis area in a string.",
+      "solution": "import re\r\ndef remove_parenthesis(items):\r\n for item in items:\r\n    return (re.sub(r\" ?\\([^)]+\\)\", \"\", item))",
+      "test_cases": [
+        "assert remove_parenthesis([\"python (chrome)\"])==(\"python\")",
+        "assert remove_parenthesis([\"string(.abc)\"])==(\"string\")",
+        "assert remove_parenthesis([\"alpha(num)\"])==(\"alpha\")"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 643,
+      "description": "Write a function that matches a word containing 'z', not at the start or end of the word.",
+      "solution": "import re\r\ndef text_match_wordz_middle(text):\r\n        patterns = '\\Bz\\B'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match_wordz_middle(\"pythonzabc.\")==('Found a match!')",
+        "assert text_match_wordz_middle(\"xyzabc.\")==('Found a match!')",
+        "assert text_match_wordz_middle(\"  lang  .\")==('Not matched!')"
+      ],
+      "keywords": [],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 647,
+      "description": "Write a function to split a string at uppercase letters.",
+      "solution": "import re\r\ndef split_upperstring(text):\r\n return (re.findall('[A-Z][^A-Z]*', text))",
+      "test_cases": [
+        "assert split_upperstring(\"PythonProgramLanguage\")==['Python','Program','Language']",
+        "assert split_upperstring(\"PythonProgram\")==['Python','Program']",
+        "assert split_upperstring(\"ProgrammingLanguage\")==['Programming','Language']"
+      ],
+      "keywords": [
+        "string",
+        "split"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 666,
+      "description": "Write a function to count occurrence of a character in a string.",
+      "solution": "def count_char(string,char):\r\n count = 0\r\n for i in range(len(string)):\r\n    if(string[i] == char):\r\n        count = count + 1\r\n return count",
+      "test_cases": [
+        "assert count_char(\"Python\",'o')==1",
+        "assert count_char(\"little\",'t')==2",
+        "assert count_char(\"assert\",'s')==2"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 667,
+      "description": "Write a python function to count number of vowels in the string.",
+      "solution": "def Check_Vow(string, vowels): \r\n    final = [each for each in string if each in vowels] \r\n    return(len(final)) \r\n",
+      "test_cases": [
+        "assert Check_Vow('corner','AaEeIiOoUu') == 2",
+        "assert Check_Vow('valid','AaEeIiOoUu') == 2",
+        "assert Check_Vow('true','AaEeIiOoUu') ==2"
+      ],
+      "keywords": [
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "list_comprehension",
+        "len"
+      ]
+    },
+    {
+      "task_id": 668,
+      "description": "Write a python function to replace multiple occurence of character by single.",
+      "solution": "import re \r\ndef replace(string, char): \r\n    pattern = char + '{2,}'\r\n    string = re.sub(pattern, char, string) \r\n    return string ",
+      "test_cases": [
+        "assert replace('peep','e') == 'pep'",
+        "assert replace('Greek','e') == 'Grek'",
+        "assert replace('Moon','o') == 'Mon'"
+      ],
+      "keywords": [
+        "replace"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 674,
+      "description": "Write a function to remove duplicate words from a given string using collections module.",
+      "solution": "from collections import OrderedDict\r\ndef remove_duplicate(string):\r\n  result = ' '.join(OrderedDict((w,w) for w in string.split()).keys())\r\n  return result",
+      "test_cases": [
+        "assert remove_duplicate(\"Python Exercises Practice Solution Exercises\")==(\"Python Exercises Practice Solution\")",
+        "assert remove_duplicate(\"Python Exercises Practice Solution Python\")==(\"Python Exercises Practice Solution\")",
+        "assert remove_duplicate(\"Python Exercises Practice Solution Practice\")==(\"Python Exercises Practice Solution\")"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 676,
+      "description": "Write a function to remove everything except alphanumeric characters from the given string by using regex.",
+      "solution": "import re\r\ndef remove_extra_char(text1):\r\n  pattern = re.compile('[\\W_]+')\r\n  return (pattern.sub('', text1))",
+      "test_cases": [
+        "assert remove_extra_char('**//Google Android// - 12. ') == 'GoogleAndroid12'",
+        "assert remove_extra_char('****//Google Flutter//*** - 36. ') == 'GoogleFlutter36'",
+        "assert remove_extra_char('**//Google Firebase// - 478. ') == 'GoogleFirebase478'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 678,
+      "description": "Write a python function to remove spaces from a given string.",
+      "solution": "def remove_spaces(str1):\r\n  str1 = str1.replace(' ','')\r\n  return str1",
+      "test_cases": [
+        "assert remove_spaces(\"a b c\") == \"abc\"",
+        "assert remove_spaces(\"1 2 3\") == \"123\"",
+        "assert remove_spaces(\" b c\") == \"bc\""
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 684,
+      "description": "Write a python function to count occurences of a character in a repeated string.",
+      "solution": "def count_Char(str,x): \r\n    count = 0\r\n    for i in range(len(str)):  \r\n        if (str[i] == x) : \r\n            count += 1\r\n    n = 10\r\n    repititions = n // len(str)  \r\n    count = count * repititions  \r\n    l = n % len(str)  \r\n    for i in range(l): \r\n        if (str[i] == x):  \r\n            count += 1\r\n    return count  ",
+      "test_cases": [
+        "assert count_Char(\"abcac\",'a') == 4",
+        "assert count_Char(\"abca\",'c') == 2",
+        "assert count_Char(\"aba\",'a') == 7"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 693,
+      "description": "Write a function to remove multiple spaces in a string by using regex.",
+      "solution": "import re\r\ndef remove_multiple_spaces(text1):\r\n  return (re.sub(' +',' ',text1))",
+      "test_cases": [
+        "assert remove_multiple_spaces('Google      Assistant') == 'Google Assistant'",
+        "assert remove_multiple_spaces('Quad      Core') == 'Quad Core'",
+        "assert remove_multiple_spaces('ChromeCast      Built-in') == 'ChromeCast Built-in'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 699,
+      "description": "Write a python function to find the minimum number of swaps required to convert one binary string to another.",
+      "solution": "def min_Swaps(str1,str2) : \r\n    count = 0\r\n    for i in range(len(str1)) : \r\n        if str1[i] != str2[i] : \r\n            count += 1\r\n    if count % 2 == 0 : \r\n        return (count // 2) \r\n    else : \r\n        return (\"Not Possible\") ",
+      "test_cases": [
+        "assert min_Swaps(\"1101\",\"1110\") == 1",
+        "assert min_Swaps(\"1111\",\"0100\") == \"Not Possible\"",
+        "assert min_Swaps(\"1110000\",\"0001101\") == 3"
+      ],
+      "keywords": [
+        "min",
+        "find",
+        "string",
+        "number",
+        "binary",
+        "swap"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 719,
+      "description": "Write a function that matches a string that has an a followed by zero or more b's.",
+      "solution": "import re\r\ndef text_match(text):\r\n        patterns = 'ab*?'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match(\"ac\")==('Found a match!')",
+        "assert text_match(\"dc\")==('Not matched!')",
+        "assert text_match(\"abba\")==('Found a match!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 724,
+      "description": "Write a function to calculate the sum of all digits of the base to the specified power.",
+      "solution": "def power_base_sum(base, power):\r\n    return sum([int(i) for i in str(pow(base, power))])",
+      "test_cases": [
+        "assert power_base_sum(2,100)==115",
+        "assert power_base_sum(8,10)==37",
+        "assert power_base_sum(8,15)==62"
+      ],
+      "keywords": [
+        "sum"
+      ],
+      "operations": [
+        "list_comprehension",
+        "sum"
+      ]
+    },
+    {
+      "task_id": 725,
+      "description": "Write a function to extract values between quotation marks of the given string by using regex.",
+      "solution": "import re\r\ndef extract_quotation(text1):\r\n  return (re.findall(r'\"(.*?)\"', text1))",
+      "test_cases": [
+        "assert extract_quotation('Cortex \"A53\" Based \"multi\" tasking \"Processor\"') == ['A53', 'multi', 'Processor']",
+        "assert extract_quotation('Cast your \"favorite\" entertainment \"apps\"') == ['favorite', 'apps']",
+        "assert extract_quotation('Watch content \"4k Ultra HD\" resolution with \"HDR 10\" Support') == ['4k Ultra HD', 'HDR 10']"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 727,
+      "description": "Write a function to remove all characters except letters and numbers using regex",
+      "solution": "import re \r\ndef remove_char(S):\r\n  result = re.sub('[\\W_]+', '', S) \r\n  return result",
+      "test_cases": [
+        "assert remove_char(\"123abcjw:, .@! eiw\") == '123abcjweiw'",
+        "assert remove_char(\"Hello1234:, ! Howare33u\") == 'Hello1234Howare33u'",
+        "assert remove_char(\"Cool543Triks@:, Make@987Trips\") == 'Cool543TriksMake987Trips' "
+      ],
+      "keywords": [
+        "remove",
+        "number"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 732,
+      "description": "Write a function to replace all occurrences of spaces, commas, or dots with a colon.",
+      "solution": "import re\r\ndef replace_specialchar(text):\r\n return (re.sub(\"[ ,.]\", \":\", text))\r",
+      "test_cases": [
+        "assert replace_specialchar('Python language, Programming language.')==('Python:language::Programming:language:')",
+        "assert replace_specialchar('a b c,d e f')==('a:b:c:d:e:f')",
+        "assert replace_specialchar('ram reshma,ram rahim')==('ram:reshma:ram:rahim')"
+      ],
+      "keywords": [
+        "replace"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 737,
+      "description": "Write a function to check whether the given string is starting with a vowel or not using regex.",
+      "solution": "import re \r\nregex = '^[aeiouAEIOU][A-Za-z0-9_]*'\r\ndef check_str(string): \r\n\tif(re.search(regex, string)): \r\n\t\treturn (\"Valid\") \r\n\telse: \r\n\t\treturn (\"Invalid\") ",
+      "test_cases": [
+        "assert check_str(\"annie\") == 'Valid'",
+        "assert check_str(\"dawood\") == 'Invalid'",
+        "assert check_str(\"Else\") == 'Valid'"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 741,
+      "description": "Write a python function to check whether all the characters are same or not.",
+      "solution": "def all_Characters_Same(s) :\r\n    n = len(s)\r\n    for i in range(1,n) :\r\n        if s[i] != s[0] :\r\n            return False\r\n    return True",
+      "test_cases": [
+        "assert all_Characters_Same(\"python\") == False",
+        "assert all_Characters_Same(\"aaa\") == True",
+        "assert all_Characters_Same(\"data\") == False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 745,
+      "description": "Write a function to find numbers within a given range where every number is divisible by every digit it contains.",
+      "solution": "def divisible_by_digits(startnum, endnum):\r\n    return [n for n in range(startnum, endnum+1) \\\r\n                if not any(map(lambda x: int(x) == 0 or n%int(x) != 0, str(n)))]",
+      "test_cases": [
+        "assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]",
+        "assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]",
+        "assert divisible_by_digits(20,25)==[22, 24]"
+      ],
+      "keywords": [
+        "find",
+        "number"
+      ],
+      "operations": [
+        "lambda",
+        "map",
+        "range",
+        "any"
+      ]
+    },
+    {
+      "task_id": 747,
+      "description": "Write a function to find the longest common subsequence for the given three string sequence.",
+      "solution": "def lcs_of_three(X, Y, Z, m, n, o): \r\n\tL = [[[0 for i in range(o+1)] for j in range(n+1)] \r\n\t\tfor k in range(m+1)] \r\n\tfor i in range(m+1): \r\n\t\tfor j in range(n+1): \r\n\t\t\tfor k in range(o+1): \r\n\t\t\t\tif (i == 0 or j == 0 or k == 0): \r\n\t\t\t\t\tL[i][j][k] = 0\r\n\t\t\t\telif (X[i-1] == Y[j-1] and\r\n\t\t\t\t\tX[i-1] == Z[k-1]): \r\n\t\t\t\t\tL[i][j][k] = L[i-1][j-1][k-1] + 1\r\n\t\t\t\telse: \r\n\t\t\t\t\tL[i][j][k] = max(max(L[i-1][j][k], \r\n\t\t\t\t\tL[i][j-1][k]), \r\n\t\t\t\t\t\t\t\t\tL[i][j][k-1]) \r\n\treturn L[m][n][o]",
+      "test_cases": [
+        "assert lcs_of_three('AGGT12', '12TXAYB', '12XBA', 6, 7, 5) == 2",
+        "assert lcs_of_three('Reels', 'Reelsfor', 'ReelsforReels', 5, 8, 13) == 5 ",
+        "assert lcs_of_three('abcd1e2', 'bc12ea', 'bd1ea', 7, 6, 5) == 3"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 748,
+      "description": "Write a function to put spaces between words starting with capital letters in a given string by using regex.",
+      "solution": "import re\r\ndef capital_words_spaces(str1):\r\n  return re.sub(r\"(\\w)([A-Z])\", r\"\\1 \\2\", str1)",
+      "test_cases": [
+        "assert capital_words_spaces(\"Python\") == 'Python'",
+        "assert capital_words_spaces(\"PythonProgrammingExamples\") == 'Python Programming Examples'",
+        "assert capital_words_spaces(\"GetReadyToBeCodingFreak\") == 'Get Ready To Be Coding Freak'"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 756,
+      "description": "Write a function that matches a string that has an a followed by zero or one 'b'.",
+      "solution": "import re\r\ndef text_match_zero_one(text):\r\n        patterns = 'ab?'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match_zero_one(\"ac\")==('Found a match!')",
+        "assert text_match_zero_one(\"dc\")==('Not matched!')",
+        "assert text_match_zero_one(\"abbbba\")==('Found a match!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 764,
+      "description": "Write a python function to count numeric values in a given string.",
+      "solution": "def number_ctr(str):\r\n      number_ctr= 0\r\n      for i in range(len(str)):\r\n          if str[i] >= '0' and str[i] <= '9': number_ctr += 1     \r\n      return  number_ctr",
+      "test_cases": [
+        "assert number_ctr('program2bedone') == 1",
+        "assert number_ctr('3wonders') ==1",
+        "assert number_ctr('123') == 3"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 772,
+      "description": "Write a function to remove all the words with k length in the given string.",
+      "solution": "def remove_length(test_str, K):\r\n  temp = test_str.split()\r\n  res = [ele for ele in temp if len(ele) != K]\r\n  res = ' '.join(res)\r\n  return (res) ",
+      "test_cases": [
+        "assert remove_length('The person is most value tet', 3) == 'person is most value'",
+        "assert remove_length('If you told me about this ok', 4) == 'If you me about ok'",
+        "assert remove_length('Forces of darkeness is come into the play', 4) == 'Forces of darkeness is the'"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension",
+        "len"
+      ]
+    },
+    {
+      "task_id": 773,
+      "description": "Write a function to find the occurrence and position of the substrings within a string.",
+      "solution": "import re\r\ndef occurance_substring(text,pattern):\r\n for match in re.finditer(pattern, text):\r\n    s = match.start()\r\n    e = match.end()\r\n    return (text[s:e], s, e)",
+      "test_cases": [
+        "assert occurance_substring('python programming, python language','python')==('python', 0, 6)",
+        "assert occurance_substring('python programming,programming language','programming')==('programming', 7, 18)",
+        "assert occurance_substring('python programming,programming language','language')==('language', 31, 39)"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 774,
+      "description": "Write a function to check if the string is a valid email address or not using regex.",
+      "solution": "import re \r\nregex = '^[a-z0-9]+[\\._]?[a-z0-9]+[@]\\w+[.]\\w{2,3}$'\r\ndef check_email(email): \r\n\tif(re.search(regex,email)): \r\n\t\treturn (\"Valid Email\") \r\n\telse: \r\n\t\treturn (\"Invalid Email\") ",
+      "test_cases": [
+        "assert check_email(\"ankitrai326@gmail.com\") == 'Valid Email'",
+        "assert check_email(\"my.ownsite@ourearth.org\") == 'Valid Email'",
+        "assert check_email(\"ankitaoie326.com\") == 'Invalid Email'"
+      ],
+      "keywords": [
+        "check",
+        "add",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 787,
+      "description": "Write a function that matches a string that has an a followed by three 'b'.",
+      "solution": "import re\r\ndef text_match_three(text):\r\n        patterns = 'ab{3}?'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_match_three(\"ac\")==('Not matched!')",
+        "assert text_match_three(\"dc\")==('Not matched!')",
+        "assert text_match_three(\"abbbba\")==('Found a match!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 794,
+      "description": "Write a function that matches a string that has an 'a' followed by anything, ending in 'b'.",
+      "solution": "import re\r\ndef text_starta_endb(text):\r\n        patterns = 'a.*?b$'\r\n        if re.search(patterns,  text):\r\n                return 'Found a match!'\r\n        else:\r\n                return('Not matched!')",
+      "test_cases": [
+        "assert text_starta_endb(\"aabbbb\")==('Found a match!')",
+        "assert text_starta_endb(\"aabAbbbc\")==('Not matched!')",
+        "assert text_starta_endb(\"accddbbjjj\")==('Not matched!')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 800,
+      "description": "Write a function to remove all whitespaces from a string.",
+      "solution": "import re\r\ndef remove_all_spaces(text):\r\n return (re.sub(r'\\s+', '',text))",
+      "test_cases": [
+        "assert remove_all_spaces('python  program')==('pythonprogram')",
+        "assert remove_all_spaces('python   programming    language')==('pythonprogramminglanguage')",
+        "assert remove_all_spaces('python                     program')==('pythonprogram')"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 806,
+      "description": "Write a function to find maximum run of uppercase characters in the given string.",
+      "solution": "def max_run_uppercase(test_str):\r\n  cnt = 0\r\n  res = 0\r\n  for idx in range(0, len(test_str)):\r\n    if test_str[idx].isupper():\r\n      cnt += 1\r\n    else:\r\n      res = cnt\r\n      cnt = 0\r\n  if test_str[len(test_str) - 1].isupper():\r\n    res = cnt\r\n  return (res)",
+      "test_cases": [
+        "assert max_run_uppercase('GeMKSForGERksISBESt') == 5",
+        "assert max_run_uppercase('PrECIOusMOVemENTSYT') == 6",
+        "assert max_run_uppercase('GooGLEFluTTER') == 4"
+      ],
+      "keywords": [
+        "max",
+        "find",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 812,
+      "description": "Write a function to abbreviate 'road' as 'rd.' in a given string.",
+      "solution": "import re\r\ndef road_rd(street):\r\n  return (re.sub('Road$', 'Rd.', street))",
+      "test_cases": [
+        "assert road_rd(\"ravipadu Road\")==('ravipadu Rd.')",
+        "assert road_rd(\"palnadu Road\")==('palnadu Rd.')",
+        "assert road_rd(\"eshwar enclave Road\")==('eshwar enclave Rd.')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 813,
+      "description": "Write a function to find length of the string.",
+      "solution": "def string_length(str1):\r\n    count = 0\r\n    for char in str1:\r\n        count += 1\r\n    return count",
+      "test_cases": [
+        "assert string_length('python')==6",
+        "assert string_length('program')==7",
+        "assert string_length('language')==8"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 818,
+      "description": "Write a python function to count lower case letters in a given string.",
+      "solution": "def lower_ctr(str):\r\n      lower_ctr= 0\r\n      for i in range(len(str)):\r\n          if str[i] >= 'a' and str[i] <= 'z': lower_ctr += 1     \r\n      return  lower_ctr",
+      "test_cases": [
+        "assert lower_ctr('abc') == 3",
+        "assert lower_ctr('string') == 6",
+        "assert lower_ctr('Python') == 5"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 822,
+      "description": "Write a function to return true if the password is valid.",
+      "solution": "import re\r\ndef pass_validity(p):\r\n x = True\r\n while x:  \r\n    if (len(p)<6 or len(p)>12):\r\n        break\r\n    elif not re.search(\"[a-z]\",p):\r\n        break\r\n    elif not re.search(\"[0-9]\",p):\r\n        break\r\n    elif not re.search(\"[A-Z]\",p):\r\n        break\r\n    elif not re.search(\"[$#@]\",p):\r\n        break\r\n    elif re.search(\"\\s\",p):\r\n        break\r\n    else:\r\n        return True\r\n        x=False\r\n        break\r\n\r\n if x:\r\n    return False",
+      "test_cases": [
+        "assert pass_validity(\"password\")==False",
+        "assert pass_validity(\"Password@10\")==True",
+        "assert pass_validity(\"password@10\")==False"
+      ],
+      "keywords": [],
+      "operations": [
+        "len",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 823,
+      "description": "Write a function to check if the given string starts with a substring using regex.",
+      "solution": "import re \r\ndef check_substring(string, sample) : \r\n  if (sample in string): \r\n      y = \"\\A\" + sample \r\n      x = re.search(y, string) \r\n      if x : \r\n          return (\"string starts with the given substring\") \r\n      else : \r\n          return (\"string doesnt start with the given substring\") \r\n  else : \r\n      return (\"entered string isnt a substring\")",
+      "test_cases": [
+        "assert check_substring(\"dreams for dreams makes life fun\", \"makes\") == 'string doesnt start with the given substring'",
+        "assert check_substring(\"Hi there how are you Hi alex\", \"Hi\") == 'string starts with the given substring'",
+        "assert check_substring(\"Its been a long day\", \"been\") == 'string doesnt start with the given substring'"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 828,
+      "description": "Write a function to count alphabets,digits and special charactes in a given string.",
+      "solution": "def count_alpha_dig_spl(string):\r\n  alphabets=digits = special = 0\r\n  for i in range(len(string)):\r\n    if(string[i].isalpha()):\r\n        alphabets = alphabets + 1\r\n    elif(string[i].isdigit()):\r\n        digits = digits + 1\r\n    else:\r\n        special = special + 1\r\n  return (alphabets,digits,special)   ",
+      "test_cases": [
+        "assert count_alpha_dig_spl(\"abc!@#123\")==(3,3,3)",
+        "assert count_alpha_dig_spl(\"dgsuy@#$%&1255\")==(5,4,5)",
+        "assert count_alpha_dig_spl(\"fjdsif627348#%$^&\")==(6,6,5)"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 829,
+      "description": "Write a function to find out the second most repeated (or frequent) string in the given sequence.",
+      "solution": "from collections import Counter \r\n\t\r\ndef second_frequent(input): \r\n\tdict = Counter(input) \r\n\tvalue = sorted(dict.values(), reverse=True)  \r\n\tsecond_large = value[1] \r\n\tfor (key, val) in dict.items(): \r\n\t\tif val == second_large: \r\n\t\t\treturn (key) ",
+      "test_cases": [
+        "assert second_frequent(['aaa','bbb','ccc','bbb','aaa','aaa']) == 'bbb'",
+        "assert second_frequent(['abc','bcd','abc','bcd','bcd','bcd']) == 'abc'",
+        "assert second_frequent(['cdma','gsm','hspa','gsm','cdma','cdma']) == 'gsm'"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "sorted"
+      ]
+    },
+    {
+      "task_id": 832,
+      "description": "Write a function to extract the maximum numeric value from a string by using regex.",
+      "solution": "import re \r\ndef extract_max(input): \r\n\tnumbers = re.findall('\\d+',input) \r\n\tnumbers = map(int,numbers) \r\n\treturn max(numbers)",
+      "test_cases": [
+        "assert extract_max('100klh564abc365bg') == 564",
+        "assert extract_max('hello300how546mer231') == 546",
+        "assert extract_max('its233beenalong343journey234') == 343"
+      ],
+      "keywords": [
+        "max",
+        "string"
+      ],
+      "operations": [
+        "map",
+        "max",
+        "all",
+        "regex"
+      ]
+    },
+    {
+      "task_id": 838,
+      "description": "Write a python function to find minimum number swaps required to make two binary strings equal.",
+      "solution": "def min_Swaps(s1,s2) :  \r\n    c0 = 0; c1 = 0;  \r\n    for i in range(len(s1)) :  \r\n        if (s1[i] == '0' and s2[i] == '1') : \r\n            c0 += 1;    \r\n        elif (s1[i] == '1' and s2[i] == '0') : \r\n            c1 += 1;  \r\n    result = c0 // 2 + c1 // 2;  \r\n    if (c0 % 2 == 0 and c1 % 2 == 0) : \r\n        return result;  \r\n    elif ((c0 + c1) % 2 == 0) : \r\n        return result + 2;  \r\n    else : \r\n        return -1;  ",
+      "test_cases": [
+        "assert min_Swaps(\"0011\",\"1111\") == 1",
+        "assert min_Swaps(\"00011\",\"01001\") == 2",
+        "assert min_Swaps(\"111\",\"111\") == 0"
+      ],
+      "keywords": [
+        "min",
+        "find",
+        "string",
+        "number",
+        "binary",
+        "swap"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 860,
+      "description": "Write a function to check whether the given string is ending with only alphanumeric characters or not using regex.",
+      "solution": "import re \r\nregex = '[a-zA-z0-9]$'\r\ndef check_alphanumeric(string): \r\n\tif(re.search(regex, string)): \r\n\t\treturn (\"Accept\") \r\n\telse: \r\n\t\treturn (\"Discard\") ",
+      "test_cases": [
+        "assert check_alphanumeric(\"dawood@\") == 'Discard'",
+        "assert check_alphanumeric(\"skdmsam326\") == 'Accept'",
+        "assert check_alphanumeric(\"cooltricks@\") == 'Discard'"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 868,
+      "description": "Write a python function to find the length of the last word in a given string.",
+      "solution": "def length_Of_Last_Word(a): \r\n    l = 0\r\n    x = a.strip() \r\n    for i in range(len(x)): \r\n        if x[i] == \" \": \r\n            l = 0\r\n        else: \r\n            l += 1\r\n    return l ",
+      "test_cases": [
+        "assert length_Of_Last_Word(\"python language\") == 8",
+        "assert length_Of_Last_Word(\"PHP\") == 3",
+        "assert length_Of_Last_Word(\"\") == 0"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 871,
+      "description": "Write a python function to check whether the given strings are rotations of each other or not.",
+      "solution": "def are_Rotations(string1,string2): \r\n    size1 = len(string1) \r\n    size2 = len(string2) \r\n    temp = '' \r\n    if size1 != size2: \r\n        return False\r\n    temp = string1 + string1 \r\n    if (temp.count(string2)> 0): \r\n        return True\r\n    else: \r\n        return False",
+      "test_cases": [
+        "assert are_Rotations(\"abc\",\"cba\") == False",
+        "assert are_Rotations(\"abcd\",\"cdba\") == False",
+        "assert are_Rotations(\"abacd\",\"cdaba\") == True"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 874,
+      "description": "Write a python function to check if the string is a concatenation of another string.",
+      "solution": "def check_Concat(str1,str2):\r\n    N = len(str1)\r\n    M = len(str2)\r\n    if (N % M != 0):\r\n        return False\r\n    for i in range(N):\r\n        if (str1[i] != str2[i % M]):\r\n            return False         \r\n    return True",
+      "test_cases": [
+        "assert check_Concat(\"abcabcabc\",\"abc\") == True",
+        "assert check_Concat(\"abcab\",\"abc\") == False",
+        "assert check_Concat(\"aba\",\"ab\") == False"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 877,
+      "description": "Write a python function to sort the given string.",
+      "solution": "def sort_String(str) : \r\n    str = ''.join(sorted(str)) \r\n    return (str) ",
+      "test_cases": [
+        "assert sort_String(\"cba\") == \"abc\"",
+        "assert sort_String(\"data\") == \"aadt\"",
+        "assert sort_String(\"zxy\") == \"xyz\""
+      ],
+      "keywords": [
+        "sort",
+        "string"
+      ],
+      "operations": [
+        "sorted"
+      ]
+    },
+    {
+      "task_id": 879,
+      "description": "Write a function that matches a string that has an 'a' followed by anything, ending in 'b' by using regex.",
+      "solution": "import re\r\ndef text_match(text):\r\n  patterns = 'a.*?b$'\r\n  if re.search(patterns,  text):\r\n    return ('Found a match!')\r\n  else:\r\n    return ('Not matched!')",
+      "test_cases": [
+        "assert text_match(\"aabbbbd\") == 'Not matched!'",
+        "assert text_match(\"aabAbbbc\") == 'Not matched!'",
+        "assert text_match(\"accddbbjjjb\") == 'Found a match!'"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 885,
+      "description": "Write a python function to check whether the two given strings are isomorphic to each other or not.",
+      "solution": "def is_Isomorphic(str1,str2):          \r\n    dict_str1 = {}\r\n    dict_str2 = {}\r\n    for i, value in enumerate(str1):\r\n        dict_str1[value] = dict_str1.get(value,[]) + [i]        \r\n    for j, value in enumerate(str2):\r\n        dict_str2[value] = dict_str2.get(value,[]) + [j]\r\n    if sorted(dict_str1.values()) == sorted(dict_str2.values()):\r\n        return True\r\n    else:\r\n        return False",
+      "test_cases": [
+        "assert is_Isomorphic(\"paper\",\"title\") == True",
+        "assert is_Isomorphic(\"ab\",\"ba\") == True",
+        "assert is_Isomorphic(\"ab\",\"aa\") == False"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "sorted",
+        "enumerate"
+      ]
+    },
+    {
+      "task_id": 892,
+      "description": "Write a function to remove multiple spaces in a string.",
+      "solution": "import re\r\ndef remove_spaces(text):\r\n return (re.sub(' +',' ',text))",
+      "test_cases": [
+        "assert remove_spaces('python  program')==('python program')",
+        "assert remove_spaces('python   programming    language')==('python programming language')",
+        "assert remove_spaces('python                     program')==('python program')"
+      ],
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 897,
+      "description": "Write a python function to check whether the word is present in a given sentence or not.",
+      "solution": "def is_Word_Present(sentence,word): \r\n    s = sentence.split(\" \") \r\n    for i in s:  \r\n        if (i == word): \r\n            return True\r\n    return False",
+      "test_cases": [
+        "assert is_Word_Present(\"machine learning\",\"machine\") == True",
+        "assert is_Word_Present(\"easy\",\"fun\") == False",
+        "assert is_Word_Present(\"python language\",\"code\") == False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 900,
+      "description": "Write a function where a string will start with a specific number.",
+      "solution": "import re\r\ndef match_num(string):\r\n    text = re.compile(r\"^5\")\r\n    if text.match(string):\r\n        return True\r\n    else:\r\n        return False",
+      "test_cases": [
+        "assert match_num('5-2345861')==True",
+        "assert match_num('6-2345861')==False",
+        "assert match_num('78910')==False"
+      ],
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 909,
+      "description": "Write a function to find the previous palindrome of a specified number.",
+      "solution": "def previous_palindrome(num):\r\n    for x in range(num-1,0,-1):\r\n        if str(x) == str(x)[::-1]:\r\n            return x",
+      "test_cases": [
+        "assert previous_palindrome(99)==88",
+        "assert previous_palindrome(1221)==1111",
+        "assert previous_palindrome(120)==111"
+      ],
+      "keywords": [
+        "find",
+        "number"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 913,
+      "description": "Write a function to check for a number at the end of a string.",
+      "solution": "import re\r\ndef end_num(string):\r\n    text = re.compile(r\".*[0-9]$\")\r\n    if text.match(string):\r\n        return True\r\n    else:\r\n        return False",
+      "test_cases": [
+        "assert end_num('abcdef')==False",
+        "assert end_num('abcdef7')==True",
+        "assert end_num('abc')==False"
+      ],
+      "keywords": [
+        "check",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 914,
+      "description": "Write a python function to check whether the given string is made up of two alternating characters or not.",
+      "solution": "def is_Two_Alter(s):  \r\n    for i in range (len( s) - 2) : \r\n        if (s[i] != s[i + 2]) : \r\n            return False\r\n    if (s[0] == s[1]): \r\n        return False\r\n    return True",
+      "test_cases": [
+        "assert is_Two_Alter(\"abab\") == True",
+        "assert is_Two_Alter(\"aaaa\") == False",
+        "assert is_Two_Alter(\"xyz\") == False"
+      ],
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 917,
+      "description": "Write a function to find the sequences of one upper case letter followed by lower case letters.",
+      "solution": "import re\r\ndef text_uppercase_lowercase(text):\r\n        patterns = '[A-Z]+[a-z]+$'\r\n        if re.search(patterns, text):\r\n                return 'Found a match!'\r\n        else:\r\n                return ('Not matched!')",
+      "test_cases": [
+        "assert text_uppercase_lowercase(\"AaBbGg\")==('Found a match!')",
+        "assert text_uppercase_lowercase(\"aA\")==('Not matched!')",
+        "assert text_uppercase_lowercase(\"PYTHON\")==('Not matched!')"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 923,
+      "description": "Write a function to find the length of the shortest string that has both str1 and str2 as subsequences.",
+      "solution": "def super_seq(X, Y, m, n):\r\n\tif (not m):\r\n\t\treturn n\r\n\tif (not n):\r\n\t\treturn m\r\n\tif (X[m - 1] == Y[n - 1]):\r\n\t\treturn 1 + super_seq(X, Y, m - 1, n - 1)\r\n\treturn 1 + min(super_seq(X, Y, m - 1, n),\tsuper_seq(X, Y, m, n - 1))",
+      "test_cases": [
+        "assert super_seq(\"AGGTAB\", \"GXTXAYB\", 6, 7) == 9",
+        "assert super_seq(\"feek\", \"eke\", 4, 3) == 5",
+        "assert super_seq(\"PARRT\", \"RTA\", 5, 3) == 6"
+      ],
+      "keywords": [
+        "find",
+        "string"
+      ],
+      "operations": [
+        "min"
+      ]
+    },
+    {
+      "task_id": 930,
+      "description": "Write a function that matches a string that has an a followed by zero or more b's by using regex.",
+      "solution": "import re\r\ndef text_match(text):\r\n        patterns = 'ab*?'\r\n        if re.search(patterns,  text):\r\n                return ('Found a match!')\r\n        else:\r\n                return ('Not matched!')",
+      "test_cases": [
+        "assert text_match(\"msb\") == 'Not matched!'",
+        "assert text_match(\"a0c\") == 'Found a match!'",
+        "assert text_match(\"abbc\") == 'Found a match!'"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 933,
+      "description": "Write a function to convert camel case string to snake case string by using regex.",
+      "solution": "import re\r\ndef camel_to_snake(text):\r\n  str1 = re.sub('(.)([A-Z][a-z]+)', r'\\1_\\2', text)\r\n  return re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', str1).lower()",
+      "test_cases": [
+        "assert camel_to_snake('GoogleAssistant') == 'google_assistant'",
+        "assert camel_to_snake('ChromeCast') == 'chrome_cast'",
+        "assert camel_to_snake('QuadCore') == 'quad_core'"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 937,
+      "description": "Write a function to count the most common character in a given string.",
+      "solution": "from collections import Counter \r\ndef max_char(str1):\r\n    temp = Counter(str1) \r\n    max_char = max(temp, key = temp.get)\r\n    return max_char",
+      "test_cases": [
+        "assert max_char(\"hello world\")==('l')",
+        "assert max_char(\"hello \")==('l')",
+        "assert max_char(\"python pr\")==('p')"
+      ],
+      "keywords": [
+        "count",
+        "string"
+      ],
+      "operations": [
+        "max"
+      ]
+    },
+    {
+      "task_id": 944,
+      "description": "Write a function to separate and print the numbers and their position of a given string.",
+      "solution": "import re\r\ndef num_position(text):\r\n for m in re.finditer(\"\\d+\", text):\r\n    return m.start()",
+      "test_cases": [
+        "assert num_position(\"there are 70 flats in this apartment\")==10",
+        "assert num_position(\"every adult have 32 teeth\")==17",
+        "assert num_position(\"isha has 79 chocolates in her bag\")==9"
+      ],
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 964,
+      "description": "Write a python function to check whether the length of the word is even or not.",
+      "solution": "def word_len(s): \r\n    s = s.split(' ')   \r\n    for word in s:    \r\n        if len(word)%2==0: \r\n            return True  \r\n        else:\r\n          return False",
+      "test_cases": [
+        "assert word_len(\"program\") == False",
+        "assert word_len(\"solution\") == True",
+        "assert word_len(\"data\") == True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 965,
+      "description": "Write a function to convert camel case string to snake case string.",
+      "solution": "def camel_to_snake(text):\r\n        import re\r\n        str1 = re.sub('(.)([A-Z][a-z]+)', r'\\1_\\2', text)\r\n        return re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', str1).lower()",
+      "test_cases": [
+        "assert camel_to_snake('PythonProgram')==('python_program')",
+        "assert camel_to_snake('pythonLanguage')==('python_language')",
+        "assert camel_to_snake('ProgrammingLanguage')==('programming_language')"
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "regex"
+      ]
+    },
+    {
+      "task_id": 967,
+      "description": "Write a python function to accept the strings which contains all vowels.",
+      "solution": "def check(string): \r\n  if len(set(string).intersection(\"AEIOUaeiou\"))>=5: \r\n    return ('accepted') \r\n  else: \r\n    return (\"not accepted\") ",
+      "test_cases": [
+        "assert check(\"SEEquoiaL\") == 'accepted'",
+        "assert check('program') == \"not accepted\"",
+        "assert check('fine') == \"not accepted\""
+      ],
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 973,
+      "description": "Write a python function to left rotate the string.",
+      "solution": "def left_rotate(s,d):\r\n    tmp = s[d : ] + s[0 : d]\r\n    return tmp  ",
+      "test_cases": [
+        "assert left_rotate(\"python\",2) == \"thonpy\"   ",
+        "assert left_rotate(\"bigdata\",3 ) == \"databig\" ",
+        "assert left_rotate(\"hadoop\",1 ) == \"adooph\" "
+      ],
+      "keywords": [
+        "string",
+        "rotate"
+      ],
+      "operations": []
+    }
+  ],
+  "humaneval_patterns": [
+    {
+      "task_id": "HumanEval/15",
+      "description": "\n\ndef string_sequence(n: int) -> str:\n    \"\"\" Return a string containing space-delimited numbers starting from 0 upto n inclusive.\n    >>> string_sequence(0)\n    '0'\n    >>> string_sequence(5)\n    '0 1 2 3 4 5'\n    \"\"\"\n",
+      "solution": "    return ' '.join([str(x) for x in range(n + 1)])\n",
+      "test_cases": [
+        "\n\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate(0) == '0'\n    assert candidate(3) == '0 1 2 3'\n    assert candidate(10) == '0 1 2 3 4 5 6 7 8 9 10'\n"
+      ],
+      "entry_point": "string_sequence",
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": [
+        "list_comprehension",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/16",
+      "description": "\n\ndef count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many distinct characters (regardless of case) does it consist of\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\n",
+      "solution": "    return len(set(string.lower()))\n",
+      "test_cases": [
+        "\n\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('') == 0\n    assert candidate('abcde') == 5\n    assert candidate('abcde' + 'cade' + 'CADE') == 5\n    assert candidate('aaaaAAAAaaaa') == 1\n    assert candidate('Jerry jERRY JeRRRY') == 5\n"
+      ],
+      "entry_point": "count_distinct_characters",
+      "keywords": [
+        "find",
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/18",
+      "description": "\n\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\" Find how many times a given substring can be found in the original string. Count overlaping cases.\n    >>> how_many_times('', 'a')\n    0\n    >>> how_many_times('aaa', 'a')\n    3\n    >>> how_many_times('aaaa', 'aa')\n    3\n    \"\"\"\n",
+      "solution": "    times = 0\n\n    for i in range(len(string) - len(substring) + 1):\n        if string[i:i+len(substring)] == substring:\n            times += 1\n\n    return times\n",
+      "test_cases": [
+        "\n\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('', 'x') == 0\n    assert candidate('xyxyxyx', 'x') == 4\n    assert candidate('cacacacac', 'cac') == 4\n    assert candidate('john doe', 'john') == 1\n"
+      ],
+      "entry_point": "how_many_times",
+      "keywords": [
+        "find",
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/23",
+      "description": "\n\ndef strlen(string: str) -> int:\n    \"\"\" Return length of given string\n    >>> strlen('')\n    0\n    >>> strlen('abc')\n    3\n    \"\"\"\n",
+      "solution": "    return len(string)\n",
+      "test_cases": [
+        "\n\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('') == 0\n    assert candidate('x') == 1\n    assert candidate('asdasnakj') == 9\n"
+      ],
+      "entry_point": "strlen",
+      "keywords": [
+        "string"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/27",
+      "description": "\n\ndef flip_case(string: str) -> str:\n    \"\"\" For a given string, flip lowercase characters to uppercase and uppercase to lowercase.\n    >>> flip_case('Hello')\n    'hELLO'\n    \"\"\"\n",
+      "solution": "    return string.swapcase()\n",
+      "test_cases": [
+        "\n\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('') == ''\n    assert candidate('Hello!') == 'hELLO!'\n    assert candidate('These violent delights have violent ends') == 'tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS'\n"
+      ],
+      "entry_point": "flip_case",
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/41",
+      "description": "\n\ndef car_race_collision(n: int):\n    \"\"\"\n    Imagine a road that's a perfectly straight infinitely long line.\n    n cars are driving left to right;  simultaneously, a different set of n cars\n    are driving right to left.   The two sets of cars start out being very far from\n    each other.  All cars move in the same speed.  Two cars are said to collide\n    when a car that's moving left to right hits a car that's moving right to left.\n    However, the cars are infinitely sturdy and strong; as a result, they continue moving\n    in their trajectory as if they did not collide.\n\n    This function outputs the number of such collisions.\n    \"\"\"\n",
+      "solution": "    return n**2\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate(2) == 4\n    assert candidate(3) == 9\n    assert candidate(4) == 16\n    assert candidate(8) == 64\n    assert candidate(10) == 100\n\n"
+      ],
+      "entry_point": "car_race_collision",
+      "keywords": [
+        "number",
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/44",
+      "description": "\n\ndef change_base(x: int, base: int):\n    \"\"\"Change numerical base of input number x to base.\n    return string representation after the conversion.\n    base numbers are less than 10.\n    >>> change_base(8, 3)\n    '22'\n    >>> change_base(8, 2)\n    '1000'\n    >>> change_base(7, 2)\n    '111'\n    \"\"\"\n",
+      "solution": "    ret = \"\"\n    while x > 0:\n        ret = str(x % base) + ret\n        x //= base\n    return ret\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate(8, 3) == \"22\"\n    assert candidate(9, 3) == \"100\"\n    assert candidate(234, 2) == \"11101010\"\n    assert candidate(16, 2) == \"10000\"\n    assert candidate(8, 2) == \"1000\"\n    assert candidate(7, 2) == \"111\"\n    for x in range(2, 8):\n        assert candidate(x, x + 1) == str(x)\n\n"
+      ],
+      "entry_point": "change_base",
+      "keywords": [
+        "string",
+        "number"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/48",
+      "description": "\n\ndef is_palindrome(text: str):\n    \"\"\"\n    Checks if given string is a palindrome\n    >>> is_palindrome('')\n    True\n    >>> is_palindrome('aba')\n    True\n    >>> is_palindrome('aaaaa')\n    True\n    >>> is_palindrome('zbcd')\n    False\n    \"\"\"\n",
+      "solution": "    for i in range(len(text)):\n        if text[i] != text[len(text) - 1 - i]:\n            return False\n    return True\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate('') == True\n    assert candidate('aba') == True\n    assert candidate('aaaaa') == True\n    assert candidate('zbcd') == False\n    assert candidate('xywyx') == True\n    assert candidate('xywyz') == False\n    assert candidate('xywzx') == False\n\n"
+      ],
+      "entry_point": "is_palindrome",
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/50",
+      "description": "\n\ndef encode_shift(s: str):\n    \"\"\"\n    returns encoded string by shifting every character by 5 in the alphabet.\n    \"\"\"\n    return \"\".join([chr(((ord(ch) + 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n\n\ndef decode_shift(s: str):\n    \"\"\"\n    takes as input string encoded with encode_shift function. Returns decoded string.\n    \"\"\"\n",
+      "solution": "    return \"\".join([chr(((ord(ch) - 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    from random import randint, choice\n    import copy\n    import string\n\n    letters = string.ascii_lowercase\n    for _ in range(100):\n        str = ''.join(choice(letters) for i in range(randint(10, 20)))\n        encoded_str = encode_shift(str)\n        assert candidate(copy.deepcopy(encoded_str)) == str\n\n"
+      ],
+      "entry_point": "decode_shift",
+      "keywords": [
+        "string",
+        "shift",
+        "join"
+      ],
+      "operations": [
+        "list_comprehension"
+      ]
+    },
+    {
+      "task_id": "HumanEval/51",
+      "description": "\n\ndef remove_vowels(text):\n    \"\"\"\n    remove_vowels is a function that takes string and returns string without vowels.\n    >>> remove_vowels('')\n    ''\n    >>> remove_vowels(\"abcdef\\nghijklm\")\n    'bcdf\\nghjklm'\n    >>> remove_vowels('abcdef')\n    'bcdf'\n    >>> remove_vowels('aaaaa')\n    ''\n    >>> remove_vowels('aaBAA')\n    'B'\n    >>> remove_vowels('zbcd')\n    'zbcd'\n    \"\"\"\n",
+      "solution": "    return \"\".join([s for s in text if s.lower() not in [\"a\", \"e\", \"i\", \"o\", \"u\"]])\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate('') == ''\n    assert candidate(\"abcdef\\nghijklm\") == 'bcdf\\nghjklm'\n    assert candidate('fedcba') == 'fdcb'\n    assert candidate('eeeee') == ''\n    assert candidate('acBAA') == 'cB'\n    assert candidate('EcBOO') == 'cB'\n    assert candidate('ybcd') == 'ybcd'\n\n"
+      ],
+      "entry_point": "remove_vowels",
+      "keywords": [
+        "remove",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension"
+      ]
+    },
+    {
+      "task_id": "HumanEval/54",
+      "description": "\n\ndef same_chars(s0: str, s1: str):\n    \"\"\"\n    Check if two words have the same characters.\n    >>> same_chars('eabcdzzzz', 'dddzzzzzzzddeddabc')\n    True\n    >>> same_chars('abcd', 'dddddddabc')\n    True\n    >>> same_chars('dddddddabc', 'abcd')\n    True\n    >>> same_chars('eabcd', 'dddddddabc')\n    False\n    >>> same_chars('abcd', 'dddddddabce')\n    False\n    >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')\n    False\n    \"\"\"\n",
+      "solution": "    return set(s0) == set(s1)\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate('eabcdzzzz', 'dddzzzzzzzddeddabc') == True\n    assert candidate('abcd', 'dddddddabc') == True\n    assert candidate('dddddddabc', 'abcd') == True\n    assert candidate('eabcd', 'dddddddabc') == False\n    assert candidate('abcd', 'dddddddabcf') == False\n    assert candidate('eabcdzzzz', 'dddzzzzzzzddddabc') == False\n    assert candidate('aabb', 'aaccc') == False\n\n"
+      ],
+      "entry_point": "same_chars",
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/56",
+      "description": "\n\ndef correct_bracketing(brackets: str):\n    \"\"\" brackets is a string of \"<\" and \">\".\n    return True if every opening bracket has a corresponding closing bracket.\n\n    >>> correct_bracketing(\"<\")\n    False\n    >>> correct_bracketing(\"<>\")\n    True\n    >>> correct_bracketing(\"<<><>>\")\n    True\n    >>> correct_bracketing(\"><<>\")\n    False\n    \"\"\"\n",
+      "solution": "    depth = 0\n    for b in brackets:\n        if b == \"<\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate(\"<>\")\n    assert candidate(\"<<><>>\")\n    assert candidate(\"<><><<><>><>\")\n    assert candidate(\"<><><<<><><>><>><<><><<>>>\")\n    assert not candidate(\"<<<><>>>>\")\n    assert not candidate(\"><<>\")\n    assert not candidate(\"<\")\n    assert not candidate(\"<<<<\")\n    assert not candidate(\">\")\n    assert not candidate(\"<<>\")\n    assert not candidate(\"<><><<><>><>><<>\")\n    assert not candidate(\"<><><<><>><>>><>\")\n\n"
+      ],
+      "entry_point": "correct_bracketing",
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/61",
+      "description": "\n\ndef correct_bracketing(brackets: str):\n    \"\"\" brackets is a string of \"(\" and \")\".\n    return True if every opening bracket has a corresponding closing bracket.\n\n    >>> correct_bracketing(\"(\")\n    False\n    >>> correct_bracketing(\"()\")\n    True\n    >>> correct_bracketing(\"(()())\")\n    True\n    >>> correct_bracketing(\")(()\")\n    False\n    \"\"\"\n",
+      "solution": "    depth = 0\n    for b in brackets:\n        if b == \"(\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate(\"()\")\n    assert candidate(\"(()())\")\n    assert candidate(\"()()(()())()\")\n    assert candidate(\"()()((()()())())(()()(()))\")\n    assert not candidate(\"((()())))\")\n    assert not candidate(\")(()\")\n    assert not candidate(\"(\")\n    assert not candidate(\"((((\")\n    assert not candidate(\")\")\n    assert not candidate(\"(()\")\n    assert not candidate(\"()()(()())())(()\")\n    assert not candidate(\"()()(()())()))()\")\n\n"
+      ],
+      "entry_point": "correct_bracketing",
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/64",
+      "description": "\nFIX = \"\"\"\nAdd more test cases.\n\"\"\"\n\ndef vowels_count(s):\n    \"\"\"Write a function vowels_count which takes a string representing\n    a word as input and returns the number of vowels in the string.\n    Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a\n    vowel, but only when it is at the end of the given word.\n\n    Example:\n    >>> vowels_count(\"abcde\")\n    2\n    >>> vowels_count(\"ACEDY\")\n    3\n    \"\"\"\n",
+      "solution": "    vowels = \"aeiouAEIOU\"\n    n_vowels = sum(c in vowels for c in s)\n    if s[-1] == 'y' or s[-1] == 'Y':\n        n_vowels += 1\n    return n_vowels\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"abcde\") == 2, \"Test 1\"\n    assert candidate(\"Alone\") == 3, \"Test 2\"\n    assert candidate(\"key\") == 2, \"Test 3\"\n    assert candidate(\"bye\") == 1, \"Test 4\"\n    assert candidate(\"keY\") == 2, \"Test 5\"\n    assert candidate(\"bYe\") == 1, \"Test 6\"\n    assert candidate(\"ACEDY\") == 3, \"Test 7\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "vowels_count",
+      "keywords": [
+        "count",
+        "add",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": "HumanEval/65",
+      "description": "\ndef circular_shift(x, shift):\n    \"\"\"Circular shift the digits of the integer x, shift the digits right by shift\n    and return the result as a string.\n    If shift > number of digits, return digits reversed.\n    >>> circular_shift(12, 1)\n    \"21\"\n    >>> circular_shift(12, 2)\n    \"12\"\n    \"\"\"\n",
+      "solution": "    s = str(x)\n    if shift > len(s):\n        return s[::-1]\n    else:\n        return s[len(s) - shift:] + s[:len(s) - shift]\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(100, 2) == \"001\"\n    assert candidate(12, 2) == \"12\"\n    assert candidate(97, 8) == \"79\"\n    assert candidate(12, 1) == \"21\", \"This prints if this assert fails 1 (good for debugging!)\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(11, 101) == \"11\", \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "circular_shift",
+      "keywords": [
+        "string",
+        "number",
+        "integer",
+        "reverse",
+        "shift"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/66",
+      "description": "\ndef digitSum(s):\n    \"\"\"Task\n    Write a function that takes a string as input and returns the sum of the upper characters only'\n    ASCII codes.\n\n    Examples:\n        digitSum(\"\") => 0\n        digitSum(\"abAB\") => 131\n        digitSum(\"abcCd\") => 67\n        digitSum(\"helloE\") => 69\n        digitSum(\"woArBld\") => 131\n        digitSum(\"aAaaaXa\") => 153\n    \"\"\"\n",
+      "solution": "    if s == \"\": return 0\n    return sum(ord(char) if char.isupper() else 0 for char in s)\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert True, \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate(\"\") == 0, \"Error\"\n    assert candidate(\"abAB\") == 131, \"Error\"\n    assert candidate(\"abcCd\") == 67, \"Error\"\n    assert candidate(\"helloE\") == 69, \"Error\"\n    assert candidate(\"woArBld\") == 131, \"Error\"\n    assert candidate(\"aAaaaXa\") == 153, \"Error\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate(\" How are yOu?\") == 151, \"Error\"\n    assert candidate(\"You arE Very Smart\") == 327, \"Error\"\n\n"
+      ],
+      "entry_point": "digitSum",
+      "keywords": [
+        "sum",
+        "string"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": "HumanEval/78",
+      "description": "\ndef hex_key(num):\n    \"\"\"You have been tasked to write a function that receives \n    a hexadecimal number as a string and counts the number of hexadecimal \n    digits that are primes (prime number, or a prime, is a natural number \n    greater than 1 that is not a product of two smaller natural numbers).\n    Hexadecimal digits are 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F.\n    Prime numbers are 2, 3, 5, 7, 11, 13, 17,...\n    So you have to determine a number of the following digits: 2, 3, 5, 7, \n    B (=decimal 11), D (=decimal 13).\n    Note: you may assume the input is always correct or empty string, \n    and symbols A,B,C,D,E,F are always uppercase.\n    Examples:\n    For num = \"AB\" the output should be 1.\n    For num = \"1077E\" the output should be 2.\n    For num = \"ABED1A33\" the output should be 4.\n    For num = \"123456789ABCDEF0\" the output should be 6.\n    For num = \"2020\" the output should be 2.\n    \"\"\"\n",
+      "solution": "    primes = ('2', '3', '5', '7', 'B', 'D')\n    total = 0\n    for i in range(0, len(num)):\n        if num[i] in primes:\n            total += 1\n    return total\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"AB\") == 1, \"First test error: \" + str(candidate(\"AB\"))      \n    assert candidate(\"1077E\") == 2, \"Second test error: \" + str(candidate(\"1077E\"))  \n    assert candidate(\"ABED1A33\") == 4, \"Third test error: \" + str(candidate(\"ABED1A33\"))      \n    assert candidate(\"2020\") == 2, \"Fourth test error: \" + str(candidate(\"2020\"))  \n    assert candidate(\"123456789ABCDEF0\") == 6, \"Fifth test error: \" + str(candidate(\"123456789ABCDEF0\"))      \n    assert candidate(\"112233445566778899AABBCCDDEEFF00\") == 12, \"Sixth test error: \" + str(candidate(\"112233445566778899AABBCCDDEEFF00\"))  \n\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate([]) == 0\n\n"
+      ],
+      "entry_point": "hex_key",
+      "keywords": [
+        "sum",
+        "min",
+        "count",
+        "string",
+        "number",
+        "prime",
+        "decimal",
+        "hex"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/79",
+      "description": "\ndef decimal_to_binary(decimal):\n    \"\"\"You will be given a number in decimal form and your task is to convert it to\n    binary format. The function should return a string, with each character representing a binary\n    number. Each character in the string will be '0' or '1'.\n\n    There will be an extra couple of characters 'db' at the beginning and at the end of the string.\n    The extra characters are there to help with the format.\n\n    Examples:\n    decimal_to_binary(15)   # returns \"db1111db\"\n    decimal_to_binary(32)   # returns \"db100000db\"\n    \"\"\"\n",
+      "solution": "    return \"db\" + bin(decimal)[2:] + \"db\"\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(0) == \"db0db\"\n    assert candidate(32) == \"db100000db\"\n    assert candidate(103) == \"db1100111db\"\n    assert candidate(15) == \"db1111db\", \"This prints if this assert fails 1 (good for debugging!)\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "decimal_to_binary",
+      "keywords": [
+        "string",
+        "number",
+        "binary",
+        "decimal",
+        "format"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/80",
+      "description": "\ndef is_happy(s):\n    \"\"\"You are given a string s.\n    Your task is to check if the string is happy or not.\n    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct\n    For example:\n    is_happy(a) => False\n    is_happy(aa) => False\n    is_happy(abcd) => True\n    is_happy(aabb) => False\n    is_happy(adb) => True\n    is_happy(xyy) => False\n    \"\"\"\n",
+      "solution": "    if len(s) < 3:\n      return False\n\n    for i in range(len(s) - 2):\n      \n      if s[i] == s[i+1] or s[i+1] == s[i+2] or s[i] == s[i+2]:\n        return False\n    return True\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"a\") == False , \"a\"\n    assert candidate(\"aa\") == False , \"aa\"\n    assert candidate(\"abcd\") == True , \"abcd\"\n    assert candidate(\"aabb\") == False , \"aabb\"\n    assert candidate(\"adb\") == True , \"adb\"\n    assert candidate(\"xyy\") == False , \"xyy\"\n    assert candidate(\"iopaxpoi\") == True , \"iopaxpoi\"\n    assert candidate(\"iopaxioi\") == False , \"iopaxioi\"\n"
+      ],
+      "entry_point": "is_happy",
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/82",
+      "description": "\ndef prime_length(string):\n    \"\"\"Write a function that takes a string and returns True if the string\n    length is a prime number or False otherwise\n    Examples\n    prime_length('Hello') == True\n    prime_length('abcdcba') == True\n    prime_length('kittens') == True\n    prime_length('orange') == False\n    \"\"\"\n",
+      "solution": "    l = len(string)\n    if l == 0 or l == 1:\n        return False\n    for i in range(2, l):\n        if l % i == 0:\n            return False\n    return True\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('Hello') == True\n    assert candidate('abcdcba') == True\n    assert candidate('kittens') == True\n    assert candidate('orange') == False\n    assert candidate('wow') == True\n    assert candidate('world') == True\n    assert candidate('MadaM') == True\n    assert candidate('Wow') == True\n    assert candidate('') == False\n    assert candidate('HI') == True\n    assert candidate('go') == True\n    assert candidate('gogo') == False\n    assert candidate('aaaaaaaaaaaaaaa') == False\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate('Madam') == True\n    assert candidate('M') == False\n    assert candidate('0') == False\n\n"
+      ],
+      "entry_point": "prime_length",
+      "keywords": [
+        "string",
+        "number",
+        "prime"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/84",
+      "description": "\ndef solve(N):\n    \"\"\"Given a positive integer N, return the total sum of its digits in binary.\n    \n    Example\n        For N = 1000, the sum of digits will be 1 the output should be \"1\".\n        For N = 150, the sum of digits will be 6 the output should be \"110\".\n        For N = 147, the sum of digits will be 12 the output should be \"1100\".\n    \n    Variables:\n        @N integer\n             Constraints: 0 ≤ N ≤ 10000.\n    Output:\n         a string of binary number\n    \"\"\"\n",
+      "solution": "    return bin(sum(int(i) for i in str(N)))[2:]\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert True, \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate(1000) == \"1\", \"Error\"\n    assert candidate(150) == \"110\", \"Error\"\n    assert candidate(147) == \"1100\", \"Error\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate(333) == \"1001\", \"Error\"\n    assert candidate(963) == \"10010\", \"Error\"\n\n"
+      ],
+      "entry_point": "solve",
+      "keywords": [
+        "sum",
+        "string",
+        "number",
+        "integer",
+        "binary"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": "HumanEval/89",
+      "description": "\ndef encrypt(s):\n    \"\"\"Create a function encrypt that takes a string as an argument and\n    returns a string encrypted with the alphabet being rotated. \n    The alphabet should be rotated in a manner such that the letters \n    shift down by two multiplied to two places.\n    For example:\n    encrypt('hi') returns 'lm'\n    encrypt('asdfghjkl') returns 'ewhjklnop'\n    encrypt('gf') returns 'kj'\n    encrypt('et') returns 'ix'\n    \"\"\"\n",
+      "solution": "    d = 'abcdefghijklmnopqrstuvwxyz'\n    out = ''\n    for c in s:\n        if c in d:\n            out += d[(d.index(c)+2*2) % 26]\n        else:\n            out += c\n    return out\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('hi') == 'lm', \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate('asdfghjkl') == 'ewhjklnop', \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate('gf') == 'kj', \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate('et') == 'ix', \"This prints if this assert fails 1 (good for debugging!)\"\n\n    assert candidate('faewfawefaewg')=='jeiajeaijeiak', \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate('hellomyfriend')=='lippsqcjvmirh', \"This prints if this assert fails 2 (good for debugging!)\"\n    assert candidate('dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh')=='hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl', \"This prints if this assert fails 3 (good for debugging!)\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate('a')=='e', \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "encrypt",
+      "keywords": [
+        "string",
+        "rotate",
+        "shift"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/91",
+      "description": "\ndef is_bored(S):\n    \"\"\"\n    You'll be given a string of words, and your task is to count the number\n    of boredoms. A boredom is a sentence that starts with the word \"I\".\n    Sentences are delimited by '.', '?' or '!'.\n   \n    For example:\n    >>> is_bored(\"Hello world\")\n    0\n    >>> is_bored(\"The sky is blue. The sun is shining. I love this weather\")\n    1\n    \"\"\"\n",
+      "solution": "    import re\n    sentences = re.split(r'[.?!]\\s*', S)\n    return sum(sentence[0:2] == 'I ' for sentence in sentences)\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"Hello world\") == 0, \"Test 1\"\n    assert candidate(\"Is the sky blue?\") == 0, \"Test 2\"\n    assert candidate(\"I love It !\") == 1, \"Test 3\"\n    assert candidate(\"bIt\") == 0, \"Test 4\"\n    assert candidate(\"I feel good today. I will be productive. will kill It\") == 2, \"Test 5\"\n    assert candidate(\"You and I are going for a walk\") == 0, \"Test 6\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "is_bored",
+      "keywords": [
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "sum",
+        "regex"
+      ]
+    },
+    {
+      "task_id": "HumanEval/93",
+      "description": "\ndef encode(message):\n    \"\"\"\n    Write a function that takes a message, and encodes in such a \n    way that it swaps case of all letters, replaces all vowels in \n    the message with the letter that appears 2 places ahead of that \n    vowel in the english alphabet. \n    Assume only letters. \n    \n    Examples:\n    >>> encode('test')\n    'TGST'\n    >>> encode('This is a message')\n    'tHKS KS C MGSSCGG'\n    \"\"\"\n",
+      "solution": "    vowels = \"aeiouAEIOU\"\n    vowels_replace = dict([(i, chr(ord(i) + 2)) for i in vowels])\n    message = message.swapcase()\n    return ''.join([vowels_replace[i] if i in vowels else i for i in message])\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('TEST') == 'tgst', \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate('Mudasir') == 'mWDCSKR', \"This prints if this assert fails 2 (good for debugging!)\"\n    assert candidate('YES') == 'ygs', \"This prints if this assert fails 3 (good for debugging!)\"\n    \n    # Check some edge cases that are easy to work out by hand.\n    assert candidate('This is a message') == 'tHKS KS C MGSSCGG', \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate(\"I DoNt KnOw WhAt tO WrItE\") == 'k dQnT kNqW wHcT Tq wRkTg', \"This prints if this assert fails 2 (also good for debugging!)\"\n\n"
+      ],
+      "entry_point": "encode",
+      "keywords": [
+        "sum",
+        "swap",
+        "replace"
+      ],
+      "operations": [
+        "list_comprehension"
+      ]
+    },
+    {
+      "task_id": "HumanEval/95",
+      "description": "\ndef check_dict_case(dict):\n    \"\"\"\n    Given a dictionary, return True if all keys are strings in lower \n    case or all keys are strings in upper case, else return False.\n    The function should return False is the given dictionary is empty.\n    Examples:\n    check_dict_case({\"a\":\"apple\", \"b\":\"banana\"}) should return True.\n    check_dict_case({\"a\":\"apple\", \"A\":\"banana\", \"B\":\"banana\"}) should return False.\n    check_dict_case({\"a\":\"apple\", 8:\"banana\", \"a\":\"apple\"}) should return False.\n    check_dict_case({\"Name\":\"John\", \"Age\":\"36\", \"City\":\"Houston\"}) should return False.\n    check_dict_case({\"STATE\":\"NC\", \"ZIP\":\"12345\" }) should return True.\n    \"\"\"\n",
+      "solution": "    if len(dict.keys()) == 0:\n        return False\n    else:\n        state = \"start\"\n        for key in dict.keys():\n\n            if isinstance(key, str) == False:\n                state = \"mixed\"\n                break\n            if state == \"start\":\n                if key.isupper():\n                    state = \"upper\"\n                elif key.islower():\n                    state = \"lower\"\n                else:\n                    break\n            elif (state == \"upper\" and not key.isupper()) or (state == \"lower\" and not key.islower()):\n                    state = \"mixed\"\n                    break\n            else:\n                break\n        return state == \"upper\" or state == \"lower\" \n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate({\"p\":\"pineapple\", \"b\":\"banana\"}) == True, \"First test error: \" + str(candidate({\"p\":\"pineapple\", \"b\":\"banana\"}))\n    assert candidate({\"p\":\"pineapple\", \"A\":\"banana\", \"B\":\"banana\"}) == False, \"Second test error: \" + str(candidate({\"p\":\"pineapple\", \"A\":\"banana\", \"B\":\"banana\"}))\n    assert candidate({\"p\":\"pineapple\", 5:\"banana\", \"a\":\"apple\"}) == False, \"Third test error: \" + str(candidate({\"p\":\"pineapple\", 5:\"banana\", \"a\":\"apple\"}))\n    assert candidate({\"Name\":\"John\", \"Age\":\"36\", \"City\":\"Houston\"}) == False, \"Fourth test error: \" + str(candidate({\"Name\":\"John\", \"Age\":\"36\", \"City\":\"Houston\"}))\n    assert candidate({\"STATE\":\"NC\", \"ZIP\":\"12345\" }) == True, \"Fifth test error: \" + str(candidate({\"STATE\":\"NC\", \"ZIP\":\"12345\" }))      \n    assert candidate({\"fruit\":\"Orange\", \"taste\":\"Sweet\" }) == True, \"Fourth test error: \" + str(candidate({\"fruit\":\"Orange\", \"taste\":\"Sweet\" }))      \n\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate({}) == False, \"1st edge test error: \" + str(candidate({}))\n\n"
+      ],
+      "entry_point": "check_dict_case",
+      "keywords": [
+        "check",
+        "string",
+        "dict",
+        "dictionary"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/98",
+      "description": "\ndef count_upper(s):\n    \"\"\"\n    Given a string s, count the number of uppercase vowels in even indices.\n    \n    For example:\n    count_upper('aBCdEf') returns 1\n    count_upper('abcdefg') returns 0\n    count_upper('dBBE') returns 0\n    \"\"\"\n",
+      "solution": "    count = 0\n    for i in range(0,len(s),2):\n        if s[i] in \"AEIOU\":\n            count += 1\n    return count\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('aBCdEf')  == 1\n    assert candidate('abcdefg') == 0\n    assert candidate('dBBE') == 0\n    assert candidate('B')  == 0\n    assert candidate('U')  == 1\n    assert candidate('') == 0\n    assert candidate('EEEE') == 2\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "count_upper",
+      "keywords": [
+        "count",
+        "string",
+        "number"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/99",
+      "description": "\ndef closest_integer(value):\n    '''\n    Create a function that takes a value (string) representing a number\n    and returns the closest integer to it. If the number is equidistant\n    from two integers, round it away from zero.\n\n    Examples\n    >>> closest_integer(\"10\")\n    10\n    >>> closest_integer(\"15.3\")\n    15\n\n    Note:\n    Rounding away from zero means that if the given number is equidistant\n    from two integers, the one you should return is the one that is the\n    farthest from zero. For example closest_integer(\"14.5\") should\n    return 15 and closest_integer(\"-14.5\") should return -15.\n    '''\n",
+      "solution": "    from math import floor, ceil\n\n    if value.count('.') == 1:\n        # remove trailing zeros\n        while (value[-1] == '0'):\n            value = value[:-1]\n\n    num = float(value)\n    if value[-2:] == '.5':\n        if num > 0:\n            res = ceil(num)\n        else:\n            res = floor(num)\n    elif len(value) > 0:\n        res = int(round(num))\n    else:\n        res = 0\n\n    return res\n\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"10\") == 10, \"Test 1\"\n    assert candidate(\"14.5\") == 15, \"Test 2\"\n    assert candidate(\"-15.5\") == -16, \"Test 3\"\n    assert candidate(\"15.3\") == 15, \"Test 3\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(\"0\") == 0, \"Test 0\"\n\n"
+      ],
+      "entry_point": "closest_integer",
+      "keywords": [
+        "string",
+        "number",
+        "integer"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/115",
+      "description": "\ndef max_fill(grid, capacity):\n    import math\n    \"\"\"\n    You are given a rectangular grid of wells. Each row represents a single well,\n    and each 1 in a row represents a single unit of water.\n    Each well has a corresponding bucket that can be used to extract water from it, \n    and all buckets have the same capacity.\n    Your task is to use the buckets to empty the wells.\n    Output the number of times you need to lower the buckets.\n\n    Example 1:\n        Input: \n            grid : [[0,0,1,0], [0,1,0,0], [1,1,1,1]]\n            bucket_capacity : 1\n        Output: 6\n\n    Example 2:\n        Input: \n            grid : [[0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,1]]\n            bucket_capacity : 2\n        Output: 5\n    \n    Example 3:\n        Input: \n            grid : [[0,0,0], [0,0,0]]\n            bucket_capacity : 5\n        Output: 0\n\n    Constraints:\n        * all wells have the same length\n        * 1 <= grid.length <= 10^2\n        * 1 <= grid[:,1].length <= 10^2\n        * grid[i][j] -> 0 | 1\n        * 1 <= capacity <= 10\n    \"\"\"\n",
+      "solution": "    return sum([math.ceil(sum(arr)/capacity) for arr in grid])\n",
+      "test_cases": [
+        "def check(candidate):\n\n\n    # Check some simple cases\n    assert True, \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate([[0,0,1,0], [0,1,0,0], [1,1,1,1]], 1) == 6, \"Error\"\n    assert candidate([[0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,1]], 2) == 5, \"Error\"\n    assert candidate([[0,0,0], [0,0,0]], 5) == 0, \"Error\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate([[1,1,1,1], [1,1,1,1]], 2) == 4, \"Error\"\n    assert candidate([[1,1,1,1], [1,1,1,1]], 9) == 2, \"Error\"\n\n"
+      ],
+      "entry_point": "max_fill",
+      "keywords": [
+        "max",
+        "number"
+      ],
+      "operations": [
+        "list_comprehension",
+        "sum"
+      ]
+    },
+    {
+      "task_id": "HumanEval/118",
+      "description": "\ndef get_closest_vowel(word):\n    \"\"\"You are given a word. Your task is to find the closest vowel that stands between \n    two consonants from the right side of the word (case sensitive).\n    \n    Vowels in the beginning and ending doesn't count. Return empty string if you didn't\n    find any vowel met the above condition. \n\n    You may assume that the given string contains English letter only.\n\n    Example:\n    get_closest_vowel(\"yogurt\") ==> \"u\"\n    get_closest_vowel(\"FULL\") ==> \"U\"\n    get_closest_vowel(\"quick\") ==> \"\"\n    get_closest_vowel(\"ab\") ==> \"\"\n    \"\"\"\n",
+      "solution": "    if len(word) < 3:\n        return \"\"\n\n    vowels = {\"a\", \"e\", \"i\", \"o\", \"u\", \"A\", \"E\", 'O', 'U', 'I'}\n    for i in range(len(word)-2, 0, -1):\n        if word[i] in vowels:\n            if (word[i+1] not in vowels) and (word[i-1] not in vowels):\n                return word[i]\n    return \"\"\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"yogurt\") == \"u\"\n    assert candidate(\"full\") == \"u\"\n    assert candidate(\"easy\") == \"\"\n    assert candidate(\"eAsy\") == \"\"\n    assert candidate(\"ali\") == \"\"\n    assert candidate(\"bad\") == \"a\"\n    assert candidate(\"most\") == \"o\"\n    assert candidate(\"ab\") == \"\"\n    assert candidate(\"ba\") == \"\"\n    assert candidate(\"quick\") == \"\"\n    assert candidate(\"anime\") == \"i\"\n    assert candidate(\"Asia\") == \"\"\n    assert candidate(\"Above\") == \"o\"\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "get_closest_vowel",
+      "keywords": [
+        "sum",
+        "find",
+        "count",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/124",
+      "description": "\ndef valid_date(date):\n    \"\"\"You have to write a function which validates a given date string and\n    returns True if the date is valid otherwise False.\n    The date is valid if all of the following rules are satisfied:\n    1. The date string is not empty.\n    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.\n    3. The months should not be less than 1 or higher than 12.\n    4. The date should be in the format: mm-dd-yyyy\n\n    for example: \n    valid_date('03-11-2000') => True\n\n    valid_date('15-01-2012') => False\n\n    valid_date('04-0-2040') => False\n\n    valid_date('06-04-2020') => True\n\n    valid_date('06/04/2020') => False\n    \"\"\"\n",
+      "solution": "    try:\n        date = date.strip()\n        month, day, year = date.split('-')\n        month, day, year = int(month), int(day), int(year)\n        if month < 1 or month > 12:\n            return False\n        if month in [1,3,5,7,8,10,12] and day < 1 or day > 31:\n            return False\n        if month in [4,6,9,11] and day < 1 or day > 30:\n            return False\n        if month == 2 and day < 1 or day > 29:\n            return False\n    except:\n        return False\n\n    return True\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('03-11-2000') == True\n\n    assert candidate('15-01-2012') == False\n\n    assert candidate('04-0-2040') == False\n\n    assert candidate('06-04-2020') == True\n\n    assert candidate('01-01-2007') == True\n\n    assert candidate('03-32-2011') == False\n\n    assert candidate('') == False\n\n    assert candidate('04-31-3000') == False\n\n    assert candidate('06-06-2005') == True\n\n    assert candidate('21-31-2000') == False\n\n    assert candidate('04-12-2003') == True\n\n    assert candidate('04122003') == False\n\n    assert candidate('20030412') == False\n\n    assert candidate('2003-04') == False\n\n    assert candidate('2003-04-12') == False\n\n    assert candidate('04-2003') == False\n"
+      ],
+      "entry_point": "valid_date",
+      "keywords": [
+        "string",
+        "number",
+        "format"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/131",
+      "description": "\ndef digits(n):\n    \"\"\"Given a positive integer n, return the product of the odd digits.\n    Return 0 if all digits are even.\n    For example:\n    digits(1)  == 1\n    digits(4)  == 0\n    digits(235) == 15\n    \"\"\"\n",
+      "solution": "    product = 1\n    odd_count = 0\n    for digit in str(n):\n        int_digit = int(digit)\n        if int_digit%2 == 1:\n            product= product*int_digit\n            odd_count+=1\n    if odd_count ==0:\n        return 0\n    else:\n        return product\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(5) == 5\n    assert candidate(54) == 5\n    assert candidate(120) ==1\n    assert candidate(5014) == 5\n    assert candidate(98765) == 315\n    assert candidate(5576543) == 2625\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(2468) == 0\n\n"
+      ],
+      "entry_point": "digits",
+      "keywords": [
+        "integer"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/134",
+      "description": "\ndef check_if_last_char_is_a_letter(txt):\n    '''\n    Create a function that returns True if the last character\n    of a given string is an alphabetical character and is not\n    a part of a word, and False otherwise.\n    Note: \"word\" is a group of characters separated by space.\n\n    Examples:\n    check_if_last_char_is_a_letter(\"apple pie\") ➞ False\n    check_if_last_char_is_a_letter(\"apple pi e\") ➞ True\n    check_if_last_char_is_a_letter(\"apple pi e \") ➞ False\n    check_if_last_char_is_a_letter(\"\") ➞ False \n    '''\n",
+      "solution": " \n    check = txt.split(' ')[-1]\n    return True if len(check) == 1 and (97 <= ord(check.lower()) <= 122) else False\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"apple\") == False\n    assert candidate(\"apple pi e\") == True\n    assert candidate(\"eeeee\") == False\n    assert candidate(\"A\") == True\n    assert candidate(\"Pumpkin pie \") == False\n    assert candidate(\"Pumpkin pie 1\") == False\n    assert candidate(\"\") == False\n    assert candidate(\"eeeee e \") == False\n    assert candidate(\"apple pie\") == False\n    assert candidate(\"apple pi e \") == False\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "check_if_last_char_is_a_letter",
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/137",
+      "description": "\ndef compare_one(a, b):\n    \"\"\"\n    Create a function that takes integers, floats, or strings representing\n    real numbers, and returns the larger variable in its given variable type.\n    Return None if the values are equal.\n    Note: If a real number is represented as a string, the floating point might be . or ,\n\n    compare_one(1, 2.5) ➞ 2.5\n    compare_one(1, \"2,3\") ➞ \"2,3\"\n    compare_one(\"5,1\", \"6\") ➞ \"6\"\n    compare_one(\"1\", 1) ➞ None\n    \"\"\"\n",
+      "solution": "    temp_a, temp_b = a, b\n    if isinstance(temp_a, str): temp_a = temp_a.replace(',','.')\n    if isinstance(temp_b, str): temp_b = temp_b.replace(',','.')\n    if float(temp_a) == float(temp_b): return None\n    return a if float(temp_a) > float(temp_b) else b \n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(1, 2) == 2\n    assert candidate(1, 2.5) == 2.5\n    assert candidate(2, 3) == 3\n    assert candidate(5, 6) == 6\n    assert candidate(1, \"2,3\") == \"2,3\"\n    assert candidate(\"5,1\", \"6\") == \"6\"\n    assert candidate(\"1\", \"2\") == \"2\"\n    assert candidate(\"1\", 1) == None\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "compare_one",
+      "keywords": [
+        "string",
+        "number",
+        "integer",
+        "float"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/140",
+      "description": "\ndef fix_spaces(text):\n    \"\"\"\n    Given a string text, replace all spaces in it with underscores, \n    and if a string has more than 2 consecutive spaces, \n    then replace all consecutive spaces with - \n    \n    fix_spaces(\"Example\") == \"Example\"\n    fix_spaces(\"Example 1\") == \"Example_1\"\n    fix_spaces(\" Example 2\") == \"_Example_2\"\n    fix_spaces(\" Example   3\") == \"_Example-3\"\n    \"\"\"\n",
+      "solution": "    new_text = \"\"\n    i = 0\n    start, end = 0, 0\n    while i < len(text):\n        if text[i] == \" \":\n            end += 1\n        else:\n            if end - start > 2:\n                new_text += \"-\"+text[i]\n            elif end - start > 0:\n                new_text += \"_\"*(end - start)+text[i]\n            else:\n                new_text += text[i]\n            start, end = i+1, i+1\n        i+=1\n    if end - start > 2:\n        new_text += \"-\"\n    elif end - start > 0:\n        new_text += \"_\"\n    return new_text\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"Example\") == \"Example\", \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate(\"Mudasir Hanif \") == \"Mudasir_Hanif_\", \"This prints if this assert fails 2 (good for debugging!)\"\n    assert candidate(\"Yellow Yellow  Dirty  Fellow\") == \"Yellow_Yellow__Dirty__Fellow\", \"This prints if this assert fails 3 (good for debugging!)\"\n    \n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(\"Exa   mple\") == \"Exa-mple\", \"This prints if this assert fails 4 (good for debugging!)\"\n    assert candidate(\"   Exa 1 2 2 mple\") == \"-Exa_1_2_2_mple\", \"This prints if this assert fails 4 (good for debugging!)\"\n\n"
+      ],
+      "entry_point": "fix_spaces",
+      "keywords": [
+        "string",
+        "replace"
+      ],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/141",
+      "description": "\ndef file_name_check(file_name):\n    \"\"\"Create a function which takes a string representing a file's name, and returns\n    'Yes' if the the file's name is valid, and returns 'No' otherwise.\n    A file's name is considered to be valid if and only if all the following conditions \n    are met:\n    - There should not be more than three digits ('0'-'9') in the file's name.\n    - The file's name contains exactly one dot '.'\n    - The substring before the dot should not be empty, and it starts with a letter from \n    the latin alphapet ('a'-'z' and 'A'-'Z').\n    - The substring after the dot should be one of these: ['txt', 'exe', 'dll']\n    Examples:\n    file_name_check(\"example.txt\") # => 'Yes'\n    file_name_check(\"1example.dll\") # => 'No' (the name should start with a latin alphapet letter)\n    \"\"\"\n",
+      "solution": "    suf = ['txt', 'exe', 'dll']\n    lst = file_name.split(sep='.')\n    if len(lst) != 2:\n        return 'No'\n    if not lst[1] in suf:\n        return 'No'\n    if len(lst[0]) == 0:\n        return 'No'\n    if not lst[0][0].isalpha():\n        return 'No'\n    t = len([x for x in lst[0] if x.isdigit()])\n    if t > 3:\n        return 'No'\n    return 'Yes'\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"example.txt\") == 'Yes'\n    assert candidate(\"1example.dll\") == 'No'\n    assert candidate('s1sdf3.asd') == 'No'\n    assert candidate('K.dll') == 'Yes'\n    assert candidate('MY16FILE3.exe') == 'Yes'\n    assert candidate('His12FILE94.exe') == 'No'\n    assert candidate('_Y.txt') == 'No'\n    assert candidate('?aREYA.exe') == 'No'\n    assert candidate('/this_is_valid.dll') == 'No'\n    assert candidate('this_is_valid.wow') == 'No'\n    assert candidate('this_is_valid.txt') == 'Yes'\n    assert candidate('this_is_valid.txtexe') == 'No'\n    assert candidate('#this2_i4s_5valid.ten') == 'No'\n    assert candidate('@this1_is6_valid.exe') == 'No'\n    assert candidate('this_is_12valid.6exe4.txt') == 'No'\n    assert candidate('all.exe.txt') == 'No'\n    assert candidate('I563_No.exe') == 'Yes'\n    assert candidate('Is3youfault.txt') == 'Yes'\n    assert candidate('no_one#knows.dll') == 'Yes'\n    assert candidate('1I563_Yes3.exe') == 'No'\n    assert candidate('I563_Yes3.txtt') == 'No'\n    assert candidate('final..txt') == 'No'\n    assert candidate('final132') == 'No'\n    assert candidate('_f4indsartal132.') == 'No'\n    \n        \n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate('.txt') == 'No'\n    assert candidate('s.') == 'No'\n\n"
+      ],
+      "entry_point": "file_name_check",
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "list_comprehension",
+        "len"
+      ]
+    },
+    {
+      "task_id": "HumanEval/144",
+      "description": "\ndef simplify(x, n):\n    \"\"\"Your task is to implement a function that will simplify the expression\n    x * n. The function returns True if x * n evaluates to a whole number and False\n    otherwise. Both x and n, are string representation of a fraction, and have the following format,\n    <numerator>/<denominator> where both numerator and denominator are positive whole numbers.\n\n    You can assume that x, and n are valid fractions, and do not have zero as denominator.\n\n    simplify(\"1/5\", \"5/1\") = True\n    simplify(\"1/6\", \"2/1\") = False\n    simplify(\"7/10\", \"10/2\") = False\n    \"\"\"\n",
+      "solution": "    a, b = x.split(\"/\")\n    c, d = n.split(\"/\")\n    numerator = int(a) * int(c)\n    denom = int(b) * int(d)\n    if (numerator/denom == int(numerator/denom)):\n        return True\n    return False\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(\"1/5\", \"5/1\") == True, 'test1'\n    assert candidate(\"1/6\", \"2/1\") == False, 'test2'\n    assert candidate(\"5/1\", \"3/1\") == True, 'test3'\n    assert candidate(\"7/10\", \"10/2\") == False, 'test4'\n    assert candidate(\"2/10\", \"50/10\") == True, 'test5'\n    assert candidate(\"7/2\", \"4/2\") == True, 'test6'\n    assert candidate(\"11/6\", \"6/1\") == True, 'test7'\n    assert candidate(\"2/3\", \"5/2\") == False, 'test8'\n    assert candidate(\"5/2\", \"3/5\") == False, 'test9'\n    assert candidate(\"2/4\", \"8/4\") == True, 'test10'\n\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(\"2/4\", \"4/2\") == True, 'test11'\n    assert candidate(\"1/5\", \"5/1\") == True, 'test12'\n    assert candidate(\"1/5\", \"1/5\") == False, 'test13'\n\n"
+      ],
+      "entry_point": "simplify",
+      "keywords": [
+        "sum",
+        "min",
+        "string",
+        "number",
+        "format"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/154",
+      "description": "\ndef cycpattern_check(a , b):\n    \"\"\"You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word\n    cycpattern_check(\"abcd\",\"abd\") => False\n    cycpattern_check(\"hello\",\"ell\") => True\n    cycpattern_check(\"whassup\",\"psus\") => False\n    cycpattern_check(\"abab\",\"baa\") => True\n    cycpattern_check(\"efef\",\"eeff\") => False\n    cycpattern_check(\"himenss\",\"simen\") => True\n\n    \"\"\"\n",
+      "solution": "    l = len(b)\n    pat = b + b\n    for i in range(len(a) - l + 1):\n        for j in range(l + 1):\n            if a[i:i+l] == pat[j:j+l]:\n                return True\n    return False\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    #assert True, \"This prints if this assert fails 1 (good for debugging!)\"\n\n    # Check some edge cases that are easy to work out by hand.\n    #assert True, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert  candidate(\"xyzw\",\"xyw\") == False , \"test #0\"\n    assert  candidate(\"yello\",\"ell\") == True , \"test #1\"\n    assert  candidate(\"whattup\",\"ptut\") == False , \"test #2\"\n    assert  candidate(\"efef\",\"fee\") == True , \"test #3\"\n    assert  candidate(\"abab\",\"aabb\") == False , \"test #4\"\n    assert  candidate(\"winemtt\",\"tinem\") == True , \"test #5\"\n\n"
+      ],
+      "entry_point": "cycpattern_check",
+      "keywords": [
+        "check",
+        "string"
+      ],
+      "operations": [
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": "HumanEval/156",
+      "description": "\ndef int_to_mini_roman(number):\n    \"\"\"\n    Given a positive integer, obtain its roman numeral equivalent as a string,\n    and return it in lowercase.\n    Restrictions: 1 <= num <= 1000\n\n    Examples:\n    >>> int_to_mini_roman(19) == 'xix'\n    >>> int_to_mini_roman(152) == 'clii'\n    >>> int_to_mini_roman(426) == 'cdxxvi'\n    \"\"\"\n",
+      "solution": "    num = [1, 4, 5, 9, 10, 40, 50, 90,  \n           100, 400, 500, 900, 1000] \n    sym = [\"I\", \"IV\", \"V\", \"IX\", \"X\", \"XL\",  \n           \"L\", \"XC\", \"C\", \"CD\", \"D\", \"CM\", \"M\"] \n    i = 12\n    res = ''\n    while number: \n        div = number // num[i] \n        number %= num[i] \n        while div: \n            res += sym[i] \n            div -= 1\n        i -= 1\n    return res.lower()\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(19) == 'xix'\n    assert candidate(152) == 'clii'\n    assert candidate(251) == 'ccli'\n    assert candidate(426) == 'cdxxvi'\n    assert candidate(500) == 'd'\n    assert candidate(1) == 'i'\n    assert candidate(4) == 'iv'\n    assert candidate(43) == 'xliii'\n    assert candidate(90) == 'xc'\n    assert candidate(94) == 'xciv'\n    assert candidate(532) == 'dxxxii'\n    assert candidate(900) == 'cm'\n    assert candidate(994) == 'cmxciv'\n    assert candidate(1000) == 'm'\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "int_to_mini_roman",
+      "keywords": [
+        "min",
+        "string",
+        "number",
+        "integer"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/162",
+      "description": "\ndef string_to_md5(text):\n    \"\"\"\n    Given a string 'text', return its md5 hash equivalent string.\n    If 'text' is an empty string, return None.\n\n    >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'\n    \"\"\"\n",
+      "solution": "    import hashlib\n    return hashlib.md5(text.encode('ascii')).hexdigest() if text else None\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'\n    assert candidate('') == None\n    assert candidate('A B C') == '0ef78513b0cb8cef12743f5aeb35f888'\n    assert candidate('password') == '5f4dcc3b5aa765d61d8327deb882cf99'\n\n    # Check some edge cases that are easy to work out by hand.\n    assert True\n\n"
+      ],
+      "entry_point": "string_to_md5",
+      "keywords": [
+        "string"
+      ],
+      "operations": []
+    }
+  ]
+}

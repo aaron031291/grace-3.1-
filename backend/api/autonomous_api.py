@@ -7,8 +7,12 @@ import asyncio
 import json
 import logging
 from genesis.autonomous_engine import get_autonomous_engine, ActionType, ActionPriority, TriggerType, ActionStatus
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/autonomous", tags=["Autonomous Actions"])
+
 class QueueActionRequest(BaseModel):
-    logger = logging.getLogger(__name__)
     """Request to queue an autonomous action."""
     action_type: str = Field(..., description="Type of action to perform")
     context_data: Optional[Dict[str, Any]] = Field(default=None, description="Context data for the action")

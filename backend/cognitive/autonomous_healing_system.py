@@ -50,6 +50,7 @@ class HealingAction(str, Enum):
     CONNECTION_RESET = "connection_reset"         # Level 3: Reset connections
     DATABASE_TABLE_CREATE = "database_table_create"  # Level 3.5: Create missing database tables
     CODE_FIX = "code_fix"                         # Level 2.5: Fix code issues with scripts/patches
+    SEMANTIC_REFACTOR = "semantic_refactor"       # Level 3: Multi-file symbol rename/move
     PROCESS_RESTART = "process_restart"           # Level 4: Restart process
     SERVICE_RESTART = "service_restart"           # Level 5: Restart service
     STATE_ROLLBACK = "state_rollback"             # Level 6: Rollback to known good state
@@ -102,6 +103,9 @@ class AutonomousHealingSystem:
         self.enable_learning = enable_learning
         self.coding_agent = coding_agent
 
+        # Track degraded components for graceful degradation
+        self.degraded_components: List[Dict[str, Any]] = []
+
         # Initialize healing system
         self.healing_system = get_healing_system(str(repo_path) if repo_path else None)
         
@@ -113,8 +117,13 @@ class AutonomousHealingSystem:
             self.logic_detector = get_logic_error_detector(llm_service=llm_service)
             logger.info("[AUTONOMOUS-HEALING] LLM logic error detector initialized")
         except Exception as e:
-            logger.warning(f"[AUTONOMOUS-HEALING] Could not initialize LLM logic detector: {e}")
+            logger.warning(f"[AUTONOMOUS-HEALING] LLM logic detector DEGRADED: {e}")
             self.logic_detector = None
+            self.degraded_components.append({
+                "component": "llm_logic_detector",
+                "reason": str(e),
+                "impact": "Logic error detection disabled"
+            })
         
         # Initialize LLM import healer (adaptive import error fixing)
         try:
@@ -124,8 +133,13 @@ class AutonomousHealingSystem:
             self.import_healer = get_import_healer(llm_service=llm_service, repo_path=self.repo_path)
             logger.info("[AUTONOMOUS-HEALING] LLM import healer initialized (adaptive for dependency upgrades)")
         except Exception as e:
-            logger.warning(f"[AUTONOMOUS-HEALING] Could not initialize LLM import healer: {e}")
+            logger.warning(f"[AUTONOMOUS-HEALING] LLM import healer DEGRADED: {e}")
             self.import_healer = None
+            self.degraded_components.append({
+                "component": "llm_import_healer",
+                "reason": str(e),
+                "impact": "Adaptive import error fixing disabled"
+            })
         
         # Initialize LLM config healer (adaptive configuration error fixing)
         try:
@@ -135,8 +149,13 @@ class AutonomousHealingSystem:
             self.config_healer = get_config_healer(llm_service=llm_service, repo_path=self.repo_path)
             logger.info("[AUTONOMOUS-HEALING] LLM config healer initialized (adaptive for dependency upgrades)")
         except Exception as e:
-            logger.warning(f"[AUTONOMOUS-HEALING] Could not initialize LLM config healer: {e}")
+            logger.warning(f"[AUTONOMOUS-HEALING] LLM config healer DEGRADED: {e}")
             self.config_healer = None
+            self.degraded_components.append({
+                "component": "llm_config_healer",
+                "reason": str(e),
+                "impact": "Adaptive configuration error fixing disabled"
+            })
         
         # Initialize Genesis service
         self.genesis_service = get_genesis_service()
@@ -166,9 +185,14 @@ class AutonomousHealingSystem:
             self.script_generator = get_healing_script_generator(self.repo_path)
             logger.info("[AUTONOMOUS-HEALING] Healing knowledge base and script generator initialized")
         except Exception as e:
-            logger.warning(f"[AUTONOMOUS-HEALING] Could not initialize knowledge base: {e}")
+            logger.warning(f"[AUTONOMOUS-HEALING] Healing knowledge base DEGRADED: {e}")
             self.knowledge_base = None
             self.script_generator = None
+            self.degraded_components.append({
+                "component": "healing_knowledge_base",
+                "reason": str(e),
+                "impact": "Knowledge-driven healing and script generation disabled"
+            })
         
         # Diagnostic engine integration
         self.diagnostic_enabled = True
@@ -182,15 +206,130 @@ class AutonomousHealingSystem:
             )
             logger.info("[AUTONOMOUS-HEALING] Bidirectional bridge with Coding Agent initialized")
         except Exception as e:
-            logger.warning(f"[AUTONOMOUS-HEALING] Bidirectional bridge not available: {e}")
+            logger.warning(f"[AUTONOMOUS-HEALING] Bidirectional bridge DEGRADED: {e}")
             self.healing_bridge = None
+            self.degraded_components.append({
+                "component": "healing_bridge",
+                "reason": str(e),
+                "impact": "Bidirectional coding agent communication disabled"
+            })
+        
+        # Initialize Healing Validation Pipeline (Plan → Patch → Validate → Rollback)
+        try:
+            from cognitive.healing_validation_pipeline import get_healing_validation_pipeline
+            self.validation_pipeline = get_healing_validation_pipeline(repo_path=self.repo_path)
+            logger.info("[AUTONOMOUS-HEALING] Healing validation pipeline initialized")
+        except Exception as e:
+            logger.warning(f"[AUTONOMOUS-HEALING] Healing validation pipeline DEGRADED: {e}")
+            self.validation_pipeline = None
+            self.degraded_components.append({
+                "component": "validation_pipeline",
+                "reason": str(e),
+                "impact": "Validation gates and rollback disabled"
+            })
+        
+        # Initialize Silent Degradation Detector
+        try:
+            from cognitive.silent_degradation_detector import get_degradation_detector
+            self.degradation_detector = get_degradation_detector(
+                repo_path=self.repo_path,
+                degraded_components=self.degraded_components,
+            )
+            logger.info("[AUTONOMOUS-HEALING] Silent degradation detector initialized")
+        except Exception as e:
+            logger.warning(f"[AUTONOMOUS-HEALING] Silent degradation detector DEGRADED: {e}")
+            self.degradation_detector = None
+            self.degraded_components.append({
+                "component": "degradation_detector",
+                "reason": str(e),
+                "impact": "Silent failure detection disabled"
+            })
+        
+        # Initialize Semantic Refactoring Engine (multi-file symbol rename, module moves)
+        try:
+            from cognitive.semantic_refactoring_engine import get_refactoring_engine
+            self.refactoring_engine = get_refactoring_engine(repo_path=str(self.repo_path))
+            logger.info("[AUTONOMOUS-HEALING] Semantic refactoring engine initialized")
+        except Exception as e:
+            logger.warning(f"[AUTONOMOUS-HEALING] Semantic refactoring engine DEGRADED: {e}")
+            self.refactoring_engine = None
+            self.degraded_components.append({
+                "component": "refactoring_engine",
+                "reason": str(e),
+                "impact": "Multi-file semantic refactoring disabled"
+            })
+        
+        # Log degraded components summary
+        if self.degraded_components:
+            logger.warning(
+                f"[AUTONOMOUS-HEALING] {len(self.degraded_components)} components running in DEGRADED mode: "
+                f"{[c['component'] for c in self.degraded_components]}"
+            )
         
         logger.info(
             f"[AUTONOMOUS-HEALING] Initialized with trust_level={trust_level.name}, "
             f"learning={'ENABLED' if enable_learning else 'DISABLED'}, "
             f"knowledge_base={'ENABLED' if self.knowledge_base else 'DISABLED'}, "
-            f"coding_agent={'CONNECTED' if coding_agent else 'DISCONNECTED'}"
+            f"coding_agent={'CONNECTED' if coding_agent else 'DISCONNECTED'}, "
+            f"degraded_components={len(self.degraded_components)}"
         )
+
+    def get_system_capabilities(self) -> Dict[str, Any]:
+        """
+        Report what capabilities are available vs degraded.
+        
+        Returns:
+            Dict with 'available' and 'degraded' lists of components
+        """
+        available = []
+        degraded = []
+        
+        # Check each component
+        if self.logic_detector is not None:
+            available.append("llm_logic_detector")
+        
+        if self.import_healer is not None:
+            available.append("llm_import_healer")
+        
+        if self.config_healer is not None:
+            available.append("llm_config_healer")
+        
+        if self.knowledge_base is not None:
+            available.append("healing_knowledge_base")
+        
+        if self.script_generator is not None:
+            available.append("healing_script_generator")
+        
+        if self.healing_bridge is not None:
+            available.append("healing_bridge")
+        
+        if self.healing_system is not None:
+            available.append("core_healing_system")
+        
+        if self.genesis_service is not None:
+            available.append("genesis_service")
+        
+        if self.validation_pipeline is not None:
+            available.append("validation_pipeline")
+        
+        if self.degradation_detector is not None:
+            available.append("degradation_detector")
+        
+        # Add degraded components
+        for component in self.degraded_components:
+            degraded.append({
+                "component": component["component"],
+                "reason": component["reason"],
+                "impact": component["impact"]
+            })
+        
+        return {
+            "available": available,
+            "degraded": degraded,
+            "available_count": len(available),
+            "degraded_count": len(degraded),
+            "health_status": "healthy" if len(degraded) == 0 else "degraded"
+        }
 
     def _initialize_trust_scores(self):
         """Initialize trust scores for healing actions (0.0 = no trust, 1.0 = full trust)."""
@@ -201,6 +340,7 @@ class AutonomousHealingSystem:
             HealingAction.CONNECTION_RESET: 0.75,    # Generally safe
             HealingAction.DATABASE_TABLE_CREATE: 0.95,  # Safe - creating missing tables
             HealingAction.CODE_FIX: 0.80,            # Safe - code fixes with knowledge base
+            HealingAction.SEMANTIC_REFACTOR: 0.70,   # Multi-file refactoring with validation
             HealingAction.PROCESS_RESTART: 0.60,     # Moderate risk
             HealingAction.SERVICE_RESTART: 0.50,     # Moderate-high risk
             HealingAction.STATE_ROLLBACK: 0.40,      # High risk
@@ -525,6 +665,38 @@ class AutonomousHealingSystem:
 
         return anomalies
     
+    def detect_silent_degradation(self) -> Dict[str, Any]:
+        """
+        Use SilentDegradationDetector to scan for silently failing components.
+        
+        Returns:
+            Degradation report with all detected issues
+        """
+        if self.degradation_detector is None:
+            logger.warning("[AUTONOMOUS-HEALING] Degradation detector not available")
+            return {"summary": {"total_issues": 0}, "all_issues": []}
+        
+        try:
+            issues = self.degradation_detector.scan_for_silent_failures()
+            telemetry_issues = self.degradation_detector.scan_telemetry_gaps()
+            
+            for issue in issues + telemetry_issues:
+                if hasattr(self, 'degradation_detector') and self.degradation_detector:
+                    self.degradation_detector.register_degraded_component(
+                        component=issue.component,
+                        reason=issue.description,
+                        impact=f"Health impact: {issue.health_impact_score:.2f}"
+                    )
+            
+            report = self.degradation_detector.get_degradation_report()
+            logger.info(
+                f"[AUTONOMOUS-HEALING] Silent degradation scan: {report['summary']['total_issues']} issues found"
+            )
+            return report
+        except Exception as e:
+            logger.error(f"[AUTONOMOUS-HEALING] Error in degradation scan: {e}")
+            return {"summary": {"total_issues": 0}, "error": str(e)}
+
     def _detect_silent_failures(self) -> List[Dict[str, Any]]:
         """
         Detect components that are failing silently without proper logging.
@@ -533,8 +705,28 @@ class AutonomousHealingSystem:
         - TimeSense integration failures (cognitive engine)
         - Missing error logs for expected operations
         - Components returning None/empty without errors
+        - Silent degradation via SilentDegradationDetector
         """
         anomalies = []
+        
+        if self.degradation_detector:
+            try:
+                issues = self.degradation_detector.scan_for_silent_failures(max_files=30)
+                for issue in issues:
+                    if issue.severity.value in ("critical", "high"):
+                        anomalies.append({
+                            "type": AnomalyType.SILENT_FAILURE,
+                            "severity": "critical" if issue.severity.value == "critical" else "warning",
+                            "details": issue.description,
+                            "component": issue.component,
+                            "file_path": issue.file_path,
+                            "line_number": issue.line_number,
+                            "error_message": issue.suggested_fix,
+                            "evidence": [issue.issue_id],
+                            "health_impact": issue.health_impact_score,
+                        })
+            except Exception as e:
+                logger.debug(f"[AUTONOMOUS-HEALING] Degradation detector scan failed: {e}")
         
         try:
             # Check Cognitive Engine degradation metrics
@@ -1295,28 +1487,38 @@ class AutonomousHealingSystem:
         """
         Execute healing actions based on decisions.
 
+        Uses validation pipeline for Plan → Patch → Validate → Rollback loop.
         Only executes autonomous actions. Manual approval actions are logged.
         """
         results = {
             "executed": [],
             "awaiting_approval": [],
-            "failed": []
+            "failed": [],
+            "rolled_back": [],
         }
 
         for decision in decisions:
             if decision["execution_mode"] == "autonomous":
-                # Execute autonomously
                 try:
-                    result = self._execute_action(
+                    result = self._execute_healing_action_with_validation(
                         decision["healing_action"],
                         decision["anomaly"],
                         user_id
                     )
-                    results["executed"].append(result)
-
-                    # Learn from execution
-                    if self.enable_learning:
-                        self._learn_from_healing(decision, result, success=True)
+                    
+                    if result.get("rolled_back"):
+                        results["rolled_back"].append(result)
+                    elif result.get("status") == "success":
+                        results["executed"].append(result)
+                        if self.enable_learning:
+                            self._learn_from_healing(decision, result, success=True)
+                    else:
+                        results["failed"].append({
+                            "decision": decision,
+                            "error": result.get("error", "Unknown error")
+                        })
+                        if self.enable_learning:
+                            self._learn_from_healing(decision, result, success=False)
 
                 except Exception as e:
                     logger.error(
@@ -1327,15 +1529,11 @@ class AutonomousHealingSystem:
                         "error": str(e)
                     })
 
-                    # Learn from failure
                     if self.enable_learning:
                         self._learn_from_healing(decision, None, success=False)
-                        
-                        # Detect knowledge gap and try to fill it
                         error_msg = str(e)
                         self._detect_and_fill_gap(error_msg, decision)
             else:
-                # Requires manual approval
                 results["awaiting_approval"].append(decision)
 
         logger.info(
@@ -1349,6 +1547,70 @@ class AutonomousHealingSystem:
             self._detect_gaps_from_failures(results["failed"])
 
         return results
+
+    def _execute_healing_action_with_validation(
+        self,
+        action_name: str,
+        anomaly: Dict[str, Any],
+        user_id: str
+    ) -> Dict[str, Any]:
+        """
+        Execute healing action with validation pipeline (Plan → Patch → Validate → Rollback).
+        
+        Uses HealingValidationPipeline to:
+        1. Create snapshots of affected files
+        2. Apply the healing action
+        3. Run validation gates (syntax, lint, type, tests)
+        4. Rollback if validation fails
+        """
+        action = HealingAction(action_name)
+        
+        if self.validation_pipeline is None:
+            return self._execute_action(action_name, anomaly, user_id)
+        
+        file_paths = []
+        if "file_path" in anomaly:
+            file_paths.append(anomaly["file_path"])
+        if "file_paths" in anomaly:
+            file_paths.extend(anomaly["file_paths"])
+        
+        if file_paths and action in (HealingAction.CODE_FIX, HealingAction.BUFFER_CLEAR):
+            from cognitive.healing_validation_pipeline import Patch
+            
+            self.validation_pipeline.create_snapshot(file_paths)
+            
+            result = self._execute_action(action_name, anomaly, user_id)
+            
+            if result.get("status") == "success":
+                trust_level_int = self.trust_level.value
+                required_gates = self.validation_pipeline.get_required_gates_for_trust_level(trust_level_int)
+                
+                if required_gates:
+                    all_passed, validation_results = self.validation_pipeline.validate(
+                        required_gates, file_paths
+                    )
+                    
+                    result["validation_results"] = [
+                        {"gate": v.gate.value, "passed": v.passed, "duration_ms": v.duration_ms}
+                        for v in validation_results
+                    ]
+                    
+                    if not all_passed:
+                        failed_gates = [v.gate.value for v in validation_results if not v.passed]
+                        logger.warning(
+                            f"[AUTONOMOUS-HEALING] Validation failed for {action.value}: {failed_gates}"
+                        )
+                        self.validation_pipeline.rollback(f"Validation failed: {failed_gates}")
+                        result["rolled_back"] = True
+                        result["rollback_reason"] = f"Validation failed: {failed_gates}"
+                        result["status"] = "rolled_back"
+                    else:
+                        logger.info(f"[AUTONOMOUS-HEALING] Validation passed for {action.value}")
+                        self.validation_pipeline._snapshots.clear()
+            
+            return result
+        else:
+            return self._execute_action(action_name, anomaly, user_id)
 
     def _execute_action(
         self,
@@ -1530,6 +1792,10 @@ class AutonomousHealingSystem:
         elif action == HealingAction.ISOLATION:
             # Use multi-LLM to analyze isolation strategy
             return self._execute_with_llm_guidance(action, anomaly, file_keys)
+
+        elif action == HealingAction.SEMANTIC_REFACTOR:
+            # Multi-file semantic refactoring (symbol rename, module moves)
+            return self._execute_semantic_refactor(anomaly, user_id)
 
         # Add other action implementations as needed
         else:
@@ -2353,6 +2619,163 @@ Focus on practical, safe, and effective healing."""
             logger.error(f"[AUTONOMOUS-HEALING] Code fix execution failed: {e}")
             return {
                 "action": HealingAction.CODE_FIX.value,
+                "status": "failed",
+                "error": str(e)
+            }
+    
+    def _execute_semantic_refactor(
+        self,
+        anomaly: Dict[str, Any],
+        user_id: str
+    ) -> Dict[str, Any]:
+        """
+        Execute semantic refactoring for multi-file issues.
+        
+        Handles:
+        - Symbol renames across the codebase
+        - Module moves with import updates
+        - Cross-file reference updates
+        
+        Uses the SemanticRefactoringEngine with validation pipeline.
+        """
+        if not self.refactoring_engine:
+            return {
+                "action": HealingAction.SEMANTIC_REFACTOR.value,
+                "status": "failed",
+                "error": "Semantic refactoring engine not available"
+            }
+        
+        try:
+            refactor_type = anomaly.get("refactor_type", "rename")
+            old_name = anomaly.get("old_name") or anomaly.get("symbol_name")
+            new_name = anomaly.get("new_name")
+            source_module = anomaly.get("source_module")
+            target_module = anomaly.get("target_module")
+            symbol_type = anomaly.get("symbol_type")
+            
+            result = None
+            
+            if refactor_type == "rename" and old_name and new_name:
+                # Rename symbol across codebase
+                from cognitive.semantic_refactoring_engine import SymbolType
+                
+                sym_type = None
+                if symbol_type:
+                    sym_type = getattr(SymbolType, symbol_type.upper(), None)
+                
+                plan = self.refactoring_engine.plan_rename_symbol(
+                    old_name=old_name,
+                    new_name=new_name,
+                    symbol_type=sym_type,
+                )
+                
+                result = self.refactoring_engine.execute_plan(
+                    plan_id=plan.plan_id,
+                    dry_run=False,
+                )
+                
+                if result.success:
+                    # Create Genesis Key for successful refactor
+                    try:
+                        self.genesis_service.create_key(
+                            key_type=GenesisKeyType.FIX,
+                            what_description=f"Renamed symbol '{old_name}' to '{new_name}'",
+                            who_actor=user_id,
+                            where_location=str(self.repo_path),
+                            why_reason=f"Semantic refactoring: {anomaly.get('reason', 'code quality')}",
+                            how_method="semantic_refactoring_engine",
+                            context_data={
+                                "plan_id": plan.plan_id,
+                                "files_modified": result.files_modified,
+                                "references_updated": result.references_updated,
+                                "refactor_type": "rename",
+                            }
+                        )
+                    except Exception as e:
+                        logger.debug(f"[AUTONOMOUS-HEALING] Could not create Genesis Key: {e}")
+                    
+                    return {
+                        "action": HealingAction.SEMANTIC_REFACTOR.value,
+                        "status": "success",
+                        "refactor_type": "rename",
+                        "plan_id": plan.plan_id,
+                        "old_name": old_name,
+                        "new_name": new_name,
+                        "files_modified": result.files_modified,
+                        "references_updated": result.references_updated,
+                        "message": f"Renamed '{old_name}' to '{new_name}' in {result.files_modified} files"
+                    }
+                else:
+                    return {
+                        "action": HealingAction.SEMANTIC_REFACTOR.value,
+                        "status": "failed",
+                        "refactor_type": "rename",
+                        "plan_id": plan.plan_id,
+                        "errors": result.errors,
+                        "rollback_performed": plan.status == "rolled_back"
+                    }
+            
+            elif refactor_type == "move_module" and source_module and target_module:
+                # Move module and update imports
+                plan = self.refactoring_engine.plan_move_module(
+                    source_module=source_module,
+                    target_module=target_module,
+                )
+                
+                result = self.refactoring_engine.execute_plan(
+                    plan_id=plan.plan_id,
+                    dry_run=False,
+                )
+                
+                if result.success:
+                    try:
+                        self.genesis_service.create_key(
+                            key_type=GenesisKeyType.FIX,
+                            what_description=f"Moved module '{source_module}' to '{target_module}'",
+                            who_actor=user_id,
+                            where_location=str(self.repo_path),
+                            why_reason=f"Module reorganization: {anomaly.get('reason', 'structure improvement')}",
+                            how_method="semantic_refactoring_engine",
+                            context_data={
+                                "plan_id": plan.plan_id,
+                                "files_modified": result.files_modified,
+                                "refactor_type": "move_module",
+                            }
+                        )
+                    except Exception as e:
+                        logger.debug(f"[AUTONOMOUS-HEALING] Could not create Genesis Key: {e}")
+                    
+                    return {
+                        "action": HealingAction.SEMANTIC_REFACTOR.value,
+                        "status": "success",
+                        "refactor_type": "move_module",
+                        "plan_id": plan.plan_id,
+                        "source_module": source_module,
+                        "target_module": target_module,
+                        "files_modified": result.files_modified,
+                        "message": f"Moved module and updated {result.files_modified} import statements"
+                    }
+                else:
+                    return {
+                        "action": HealingAction.SEMANTIC_REFACTOR.value,
+                        "status": "failed",
+                        "refactor_type": "move_module",
+                        "plan_id": plan.plan_id,
+                        "errors": result.errors,
+                        "rollback_performed": plan.status == "rolled_back"
+                    }
+            
+            else:
+                return {
+                    "action": HealingAction.SEMANTIC_REFACTOR.value,
+                    "status": "failed",
+                    "error": f"Invalid refactor request. Required: old_name+new_name for rename, or source_module+target_module for move"
+                }
+                
+        except Exception as e:
+            logger.error(f"[AUTONOMOUS-HEALING] Semantic refactor execution failed: {e}")
+            return {
+                "action": HealingAction.SEMANTIC_REFACTOR.value,
                 "status": "failed",
                 "error": str(e)
             }
