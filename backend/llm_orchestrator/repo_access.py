@@ -16,11 +16,11 @@ except ImportError:
         return {}
 
 try:
-    from backend.vector_db.client import get_qdrant_client
+    from vector_db.client import get_qdrant_client
     _get_qdrant_client_func = get_qdrant_client
 except ImportError:
     try:
-        from vector_db.client import get_qdrant_client
+        from backend.vector_db.client import get_qdrant_client
         _get_qdrant_client_func = get_qdrant_client
     except ImportError:
         try:
@@ -31,18 +31,18 @@ except ImportError:
                 return None
 
 try:
-    from backend.retrieval.retriever import DocumentRetriever
+    from retrieval.retriever import DocumentRetriever
 except ImportError:
     try:
-        from retrieval.retriever import DocumentRetriever
+        from backend.retrieval.retriever import DocumentRetriever
     except ImportError:
         DocumentRetriever = None
 
 try:
-    from backend.embedding import EmbeddingModel
+    from embedding import EmbeddingModel
 except ImportError:
     try:
-        from embedding import EmbeddingModel
+        from backend.embedding import EmbeddingModel
     except ImportError:
         EmbeddingModel = None
 

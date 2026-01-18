@@ -8,9 +8,10 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import uuid
-class PipelineStage(str, Enum):
-# Module-level logger (removed duplicates)
+
 logger = logging.getLogger(__name__)
+
+class PipelineStage(str, Enum):
     """Stages of the whitelist learning pipeline."""
     # Entry
     WHITELIST_ENTRY = "whitelist_entry"

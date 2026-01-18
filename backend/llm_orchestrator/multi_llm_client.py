@@ -33,10 +33,10 @@ from collections import OrderedDict
 import requests
 
 try:
-    from backend.ollama_client.client import OllamaClient
+    from ollama_client.client import OllamaClient
 except ImportError:
     try:
-        from ollama_client.client import OllamaClient
+        from backend.ollama_client.client import OllamaClient
     except ImportError:
         # Mock for environments without Ollama
         class OllamaClient:
@@ -48,10 +48,10 @@ except ImportError:
                 return {"response": "Mock response - Ollama not available"}
 
 try:
-    from backend.settings import settings
+    from settings import settings
 except ImportError:
     try:
-        from settings import settings
+        from backend.settings import settings
     except ImportError:
         # Mock settings
         class MockSettings:

@@ -7,10 +7,17 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+
+from cognitive.deterministic_primitives import (
+    LogicalClock, Canonicalizer, DeterministicIDGenerator,
+    stable_hash, generate_deterministic_id
+)
+from cognitive.genesis_bound_operations import DeterministicExecutionContext
+
+logger = logging.getLogger(__name__)
+
+
 class RiskLevel(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Risk levels for code changes."""
     LOW = "low"
     MEDIUM = "medium"
@@ -48,6 +55,10 @@ class GateStatus(str, Enum):
     PENDING = "pending"
 
 
+# Module-level ID generator for contracts
+_contract_id_generator = DeterministicIDGenerator(hash_length=16)
+
+
 @dataclass
 class ExecutionContract:
     """
@@ -66,10 +77,52 @@ class ExecutionContract:
     require_lint: bool = True
     auto_commit_allowed: bool = False
 
-    # Auto-generated
-    contract_id: str = field(default_factory=lambda: f"EC-{uuid.uuid4().hex[:16]}")
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    # Deterministic fields
+    contract_id: str = field(default="")
+    logical_tick: int = field(default=0)
     genesis_key_id: Optional[str] = None
+    
+    # Nondeterministic metadata (optional, for observability only)
+    nondeterministic_metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        """Generate deterministic contract_id if not provided."""
+        if not self.contract_id:
+            self.contract_id = _contract_id_generator.generate_id(
+                "EC", self.goal, self.constraints, self.allowed_files
+            )
+        if "created_at" not in self.nondeterministic_metadata:
+            self.nondeterministic_metadata["created_at"] = datetime.utcnow().isoformat()
+
+    @property
+    def contract_digest(self) -> str:
+        """Return stable hash of contract content."""
+        return stable_hash({
+            "goal": self.goal,
+            "constraints": self.constraints,
+            "allowed_files": self.allowed_files,
+            "forbidden_patterns": self.forbidden_patterns,
+            "risk_level": self.risk_level,
+            "success_criteria": self.success_criteria,
+            "max_changes": self.max_changes,
+            "require_tests": self.require_tests,
+            "require_lint": self.require_lint,
+            "auto_commit_allowed": self.auto_commit_allowed
+        })
+
+    # Backward compatibility property
+    @property
+    def created_at(self) -> datetime:
+        """Backward compatible access to created_at from metadata."""
+        created_str = self.nondeterministic_metadata.get("created_at")
+        if created_str:
+            return datetime.fromisoformat(created_str)
+        return datetime.utcnow()
+    
+    @created_at.setter
+    def created_at(self, value: datetime):
+        """Backward compatible setter for created_at."""
+        self.nondeterministic_metadata["created_at"] = value.isoformat()
 
     def to_json(self) -> str:
         """Convert to JSON for storage/transmission."""
@@ -85,8 +138,10 @@ class ExecutionContract:
             "require_tests": self.require_tests,
             "require_lint": self.require_lint,
             "auto_commit_allowed": self.auto_commit_allowed,
-            "created_at": self.created_at.isoformat(),
-            "genesis_key_id": self.genesis_key_id
+            "logical_tick": self.logical_tick,
+            "contract_digest": self.contract_digest,
+            "genesis_key_id": self.genesis_key_id,
+            "nondeterministic_metadata": self.nondeterministic_metadata
         }, indent=2)
 
     @classmethod
@@ -103,11 +158,14 @@ class ExecutionContract:
             max_changes=data.get("max_changes", 100),
             require_tests=data.get("require_tests", True),
             require_lint=data.get("require_lint", True),
-            auto_commit_allowed=data.get("auto_commit_allowed", False)
+            auto_commit_allowed=data.get("auto_commit_allowed", False),
+            contract_id=data.get("contract_id", ""),
+            logical_tick=data.get("logical_tick", 0),
+            nondeterministic_metadata=data.get("nondeterministic_metadata", {})
         )
-        contract.contract_id = data.get("contract_id", contract.contract_id)
-        if data.get("created_at"):
-            contract.created_at = datetime.fromisoformat(data["created_at"])
+        # Backward compatibility: handle old created_at field
+        if data.get("created_at") and "created_at" not in contract.nondeterministic_metadata:
+            contract.nondeterministic_metadata["created_at"] = data["created_at"]
         contract.genesis_key_id = data.get("genesis_key_id")
         return contract
 
@@ -142,7 +200,44 @@ class PreCommitScore:
     regression_risk_score: float
     factors: List[Dict[str, Any]] = field(default_factory=list)
     recommendation: str = "review"  # auto_commit, review, escalate
-    computed_at: datetime = field(default_factory=datetime.utcnow)
+    computed_tick: int = 0  # Logical clock tick when computed
+    
+    # Nondeterministic metadata (optional, for observability only)
+    nondeterministic_metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        """Initialize metadata with current time if not set."""
+        if "computed_at" not in self.nondeterministic_metadata:
+            self.nondeterministic_metadata["computed_at"] = datetime.utcnow().isoformat()
+
+    @property
+    def score_digest(self) -> str:
+        """Return stable hash of score content for verification."""
+        return stable_hash({
+            "score": self.score,
+            "lint_score": self.lint_score,
+            "test_score": self.test_score,
+            "arch_compliance_score": self.arch_compliance_score,
+            "pattern_similarity_score": self.pattern_similarity_score,
+            "regression_risk_score": self.regression_risk_score,
+            "factors": self.factors,
+            "recommendation": self.recommendation,
+            "computed_tick": self.computed_tick
+        })
+
+    # Backward compatibility property
+    @property
+    def computed_at(self) -> datetime:
+        """Backward compatible access to computed_at from metadata."""
+        computed_str = self.nondeterministic_metadata.get("computed_at")
+        if computed_str:
+            return datetime.fromisoformat(computed_str)
+        return datetime.utcnow()
+    
+    @computed_at.setter
+    def computed_at(self, value: datetime):
+        """Backward compatible setter for computed_at."""
+        self.nondeterministic_metadata["computed_at"] = value.isoformat()
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -154,7 +249,9 @@ class PreCommitScore:
             "regression_risk_score": self.regression_risk_score,
             "factors": self.factors,
             "recommendation": self.recommendation,
-            "computed_at": self.computed_at.isoformat()
+            "computed_tick": self.computed_tick,
+            "score_digest": self.score_digest,
+            "nondeterministic_metadata": self.nondeterministic_metadata
         }
 
 
@@ -187,6 +284,55 @@ class PipelineResult:
         }
 
 
+@dataclass
+class PipelineRun:
+    """
+    Tracks a complete pipeline run with deterministic identifiers.
+    
+    All operations within a run share the same logical clock and parent Genesis Key.
+    """
+    contract: ExecutionContract
+    logical_clock: LogicalClock = field(default_factory=LogicalClock)
+    genesis_parent_key: str = ""
+    stage_digests: Dict[str, str] = field(default_factory=dict)
+    
+    # Auto-generated deterministic run_id from contract digest
+    run_id: str = field(default="")
+    
+    def __post_init__(self):
+        """Generate deterministic run_id from contract digest."""
+        if not self.run_id:
+            self.run_id = generate_deterministic_id("PR", self.contract.contract_digest)
+    
+    def record_stage(self, stage: str, stage_data: Dict[str, Any]) -> str:
+        """Record a stage completion and return its digest."""
+        digest = stable_hash({
+            "stage": stage,
+            "data": stage_data,
+            "tick": self.logical_clock.get_tick()
+        })
+        self.stage_digests[stage] = digest
+        return digest
+    
+    def get_current_tick(self) -> int:
+        """Get current logical clock tick."""
+        return self.logical_clock.get_tick()
+    
+    def advance_tick(self) -> int:
+        """Advance logical clock and return new tick."""
+        return self.logical_clock.tick()
+    
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "run_id": self.run_id,
+            "contract_id": self.contract.contract_id,
+            "contract_digest": self.contract.contract_digest,
+            "genesis_parent_key": self.genesis_parent_key,
+            "current_tick": self.get_current_tick(),
+            "stage_digests": self.stage_digests
+        }
+
+
 class DeterministicCodePipeline:
     """
     Deterministic code generation pipeline with multi-LLM support.
@@ -197,6 +343,11 @@ class DeterministicCodePipeline:
     3. Generation - Multi-LLM code production
     4. Verification - Linting, tests, architecture
     5. Memory & Learning - Genesis Keys, Ghost Ledger
+    
+    Uses DeterministicExecutionContext for each pipeline run to ensure:
+    - All operations share the same logical clock
+    - Parent Genesis Key tracks entire run
+    - Each stage creates child Genesis Keys linked to parent
     """
 
     def __init__(
@@ -214,6 +365,10 @@ class DeterministicCodePipeline:
         self._ghost_ledger = None
         self._llm_orchestrator = None
         self._healing_system = None
+        
+        # Current pipeline run context
+        self._current_run: Optional[PipelineRun] = None
+        self._execution_context: Optional[DeterministicExecutionContext] = None
 
         # Known-risk pattern registry
         self.pattern_registry = {
@@ -226,6 +381,104 @@ class DeterministicCodePipeline:
         self._load_pattern_registry()
 
         logger.info("[PIPELINE] Deterministic code pipeline initialized")
+    
+    def create_pipeline_run(self, contract: ExecutionContract) -> PipelineRun:
+        """
+        Create a new pipeline run for a contract.
+        
+        Args:
+            contract: The execution contract for this run
+            
+        Returns:
+            PipelineRun with shared logical clock and genesis parent key
+        """
+        # Create the pipeline run
+        pipeline_run = PipelineRun(contract=contract)
+        
+        # Create parent Genesis Key for the run if genesis service is available
+        if self._genesis_service:
+            from models.genesis_key_models import GenesisKeyType
+            parent_key = self._genesis_service.create_key(
+                key_type=GenesisKeyType.SYSTEM_EVENT,
+                what_description=f"Pipeline run started: {contract.goal}",
+                who_actor="deterministic_code_pipeline",
+                why_reason=contract.goal,
+                how_method="DeterministicCodePipeline.create_pipeline_run",
+                input_data={
+                    "run_id": pipeline_run.run_id,
+                    "contract_id": contract.contract_id,
+                    "contract_digest": contract.contract_digest,
+                    "logical_tick": pipeline_run.get_current_tick()
+                }
+            )
+            pipeline_run.genesis_parent_key = parent_key.key_id
+            contract.genesis_key_id = parent_key.key_id
+        
+        self._current_run = pipeline_run
+        return pipeline_run
+    
+    def get_execution_context(
+        self,
+        contract: ExecutionContract,
+        parent_key_id: Optional[str] = None
+    ) -> DeterministicExecutionContext:
+        """
+        Get or create a DeterministicExecutionContext for pipeline operations.
+        
+        Args:
+            contract: The execution contract
+            parent_key_id: Optional parent Genesis Key ID
+            
+        Returns:
+            DeterministicExecutionContext for use with 'with' statement
+        """
+        if not self._genesis_service:
+            raise RuntimeError("Pipeline not initialized. Call initialize() first.")
+        
+        return DeterministicExecutionContext(
+            goal=contract.goal,
+            genesis_service=self._genesis_service,
+            parent_key_id=parent_key_id or contract.genesis_key_id
+        )
+    
+    def record_stage_completion(
+        self,
+        stage: PipelineStage,
+        stage_data: Dict[str, Any]
+    ) -> Optional[str]:
+        """
+        Record a stage completion in the current pipeline run.
+        
+        Args:
+            stage: The pipeline stage that completed
+            stage_data: Data from the stage execution
+            
+        Returns:
+            Stage digest if current run exists, None otherwise
+        """
+        if self._current_run:
+            self._current_run.advance_tick()
+            digest = self._current_run.record_stage(stage.value, stage_data)
+            
+            # Create child Genesis Key for stage if service available
+            if self._genesis_service and self._current_run.genesis_parent_key:
+                from models.genesis_key_models import GenesisKeyType
+                self._genesis_service.create_key(
+                    key_type=GenesisKeyType.SYSTEM_EVENT,
+                    what_description=f"Stage completed: {stage.value}",
+                    who_actor="deterministic_code_pipeline",
+                    why_reason=f"Pipeline stage {stage.value} execution",
+                    how_method="DeterministicCodePipeline.record_stage_completion",
+                    input_data={
+                        "stage": stage.value,
+                        "stage_digest": digest,
+                        "tick": self._current_run.get_current_tick()
+                    },
+                    parent_key_id=self._current_run.genesis_parent_key
+                )
+            
+            return digest
+        return None
 
     def _load_pattern_registry(self):
         """Load known-risk patterns from VectorDB or config."""
@@ -1043,6 +1296,11 @@ Output: {{"correct": true/false, "issues": ["list of issues"], "fixed_code": "co
         else:
             recommendation = "escalate"
 
+        # Get logical tick from current run if available
+        computed_tick = 0
+        if self._current_run:
+            computed_tick = self._current_run.get_current_tick()
+        
         return PreCommitScore(
             score=overall,
             lint_score=lint_score,
@@ -1051,7 +1309,8 @@ Output: {{"correct": true/false, "issues": ["list of issues"], "fixed_code": "co
             pattern_similarity_score=pattern_score,
             regression_risk_score=regression_score,
             factors=factors,
-            recommendation=recommendation
+            recommendation=recommendation,
+            computed_tick=computed_tick
         )
 
     async def _triage_verification_failures(

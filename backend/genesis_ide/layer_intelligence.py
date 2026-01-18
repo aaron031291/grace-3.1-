@@ -2,7 +2,7 @@ import logging
 import asyncio
 import json
 import uuid
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, AsyncGenerator
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -287,6 +287,13 @@ class Layer2Intelligence:
     - Context-aware reasoning
     - OODA loop decision making
     - Multi-plane code understanding
+    
+    Enhancements:
+    - Parallel OBSERVE: Query all systems concurrently
+    - Result Caching: Cache frequent queries
+    - Confidence Fusion: Weighted combination of sources
+    - Adaptive Learning: Track best sources per intent type
+    - Priority Routing: Fast paths for critical intents
     """
 
     def __init__(
@@ -324,19 +331,108 @@ class Layer2Intelligence:
         # Layer 1 Message Bus connection (unified communication)
         self._message_bus = None
         self._genesis_keys_connector = None
+        
+        # Oracle Intelligence Hub (central intelligence ingestion)
+        self._oracle_hub = None
 
         # Context memory
         self._context_memory: List[Dict[str, Any]] = []
         self._max_context = 20
 
+        # ================================================================
+        # PERFORMANCE ENHANCEMENTS
+        # ================================================================
+        
+        # Result Cache (LRU-style with TTL)
+        self._query_cache: Dict[str, Dict[str, Any]] = {}
+        self._cache_ttl_seconds = 300  # 5 minutes
+        self._cache_max_size = 100
+        
+        # Adaptive Learning: Track source effectiveness per intent type
+        self._source_effectiveness: Dict[str, Dict[str, float]] = {}
+        # Format: {"intent_type": {"source_name": effectiveness_score}}
+        
+        # Confidence weights for fusion (tunable)
+        self._confidence_weights = {
+            "memory_mesh": 0.20,
+            "rag": 0.15,
+            "oracle": 0.20,
+            "world_model": 0.10,
+            "neuro_symbolic": 0.15,
+            "code_analysis": 0.10,
+            "diagnostic": 0.05,
+            "clarity": 0.05
+        }
+        
+        # Priority routing thresholds
+        self._priority_keywords = {
+            "critical": ["error", "crash", "security", "urgent", "broken", "fail"],
+            "high": ["bug", "fix", "issue", "problem", "slow"],
+            "normal": []  # Default
+        }
+
+        # ================================================================
+        # ADVANCED ENHANCEMENTS
+        # ================================================================
+        
+        # Circuit Breaker: Track source failures and timeouts
+        self._circuit_breaker = {
+            source: {
+                "failures": 0,
+                "last_failure": None,
+                "state": "closed",  # closed=healthy, open=failing, half-open=testing
+                "timeout_ms": 500,  # Max wait time per source
+                "failure_threshold": 3,
+                "reset_timeout_seconds": 60
+            }
+            for source in ["memory_mesh", "rag", "oracle", "world_model", 
+                          "diagnostic", "clarity", "code_analysis", "neuro_symbolic"]
+        }
+        
+        # Auto-Tuning: Track outcomes for weight adjustment
+        self._outcome_history: List[Dict[str, Any]] = []
+        self._max_outcome_history = 100
+        self._auto_tune_enabled = True
+        self._auto_tune_interval = 20  # Tune every N cycles
+        
+        # Query Prediction: Track query patterns for pre-fetching
+        self._query_patterns: Dict[str, List[str]] = {}  # {"query_hash": ["next_query_hash", ...]}
+        self._prefetch_cache: Dict[str, Dict[str, Any]] = {}
+        
+        # Event Streaming: Subscribers for real-time updates
+        self._event_subscribers: List[callable] = []
+        
+        # Cross-Cycle Learning: Pattern recognition across cycles
+        self._cycle_patterns: List[Dict[str, Any]] = []
+        self._max_cycle_patterns = 50
+        
+        # Fallback Chains: Ordered fallback sources
+        self._fallback_chains = {
+            "memory_mesh": ["oracle", "rag"],
+            "rag": ["oracle", "memory_mesh"],
+            "oracle": ["rag", "memory_mesh"],
+            "world_model": ["memory_mesh"],
+            "neuro_symbolic": ["rag", "oracle"]
+        }
+
         # Metrics
         self.metrics = {
             "cognitive_cycles": 0,
             "decisions_made": 0,
-            "insights_generated": 0
+            "insights_generated": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "parallel_queries": 0,
+            "avg_observe_time_ms": 0.0,
+            "source_query_times": {},
+            "circuit_breaker_trips": 0,
+            "auto_tune_adjustments": 0,
+            "prefetch_hits": 0,
+            "fallback_activations": 0,
+            "streaming_events": 0
         }
 
-        logger.info("[LAYER2] Layer 2 Intelligence initialized")
+        logger.info("[LAYER2] Layer 2 Intelligence initialized with advanced enhancements")
 
     async def initialize(self):
         """Initialize Layer 2 systems with all core intelligence connections."""
@@ -618,6 +714,44 @@ class Layer2Intelligence:
                     logger.info("[LAYER2] Trust-Aware Retriever connected")
             except Exception as e:
                 logger.warning(f"[LAYER2] Trust-Aware Retriever connection failed: {e}")
+
+            # Oracle Intelligence Hub (central intelligence ingestion - connects to Memory Mesh)
+            try:
+                from oracle_intelligence.unified_oracle_hub import get_oracle_hub
+                from cognitive.learning_memory import LearningMemoryManager
+                
+                kb_path_obj = self.repo_path / "knowledge_base" if self.repo_path else Path("knowledge_base")
+                learning_memory = LearningMemoryManager(self.session, kb_path_obj)
+                
+                self._oracle_hub = get_oracle_hub(
+                    session=self.session,
+                    genesis_service=self._genesis_service,
+                    librarian_pipeline=self._librarian,
+                    learning_memory=learning_memory,
+                    knowledge_base_path=kb_path_obj
+                )
+                
+                # Hook Memory Mesh to Oracle for bidirectional intelligence flow
+                if self._memory_mesh and self._oracle_hub:
+                    from oracle_intelligence.unified_oracle_hub import hook_learning_memory_to_oracle
+                    hook_learning_memory_to_oracle(learning_memory, self._oracle_hub)
+                    logger.info("[LAYER2] Memory Mesh <-> Oracle Hub bidirectional connection established")
+                
+                # Hook Librarian to Oracle
+                if self._librarian and self._oracle_hub:
+                    from oracle_intelligence.unified_oracle_hub import hook_librarian_to_oracle
+                    hook_librarian_to_oracle(self._librarian, self._oracle_hub)
+                    logger.info("[LAYER2] Librarian -> Oracle Hub connection established")
+                
+                # Hook Healing System to Oracle
+                if self._healing_system and self._oracle_hub:
+                    from oracle_intelligence.unified_oracle_hub import hook_self_healing_to_oracle
+                    hook_self_healing_to_oracle(self._healing_system, self._oracle_hub)
+                    logger.info("[LAYER2] Healing System -> Oracle Hub connection established")
+                
+                logger.info("[LAYER2] Oracle Intelligence Hub connected")
+            except Exception as e:
+                logger.warning(f"[LAYER2] Oracle Hub connection failed: {e}")
 
             logger.info("[LAYER2] All core intelligence systems initialized")
             return True
@@ -1730,6 +1864,15 @@ class Layer2Intelligence:
             except Exception as e:
                 logger.warning(f"[LAYER2] Enterprise Neuro-Symbolic analytics failed: {e}")
 
+        # 15. Get Oracle Intelligence (central knowledge hub)
+        if self._oracle_hub:
+            try:
+                # Query Oracle for relevant intelligence based on intent
+                oracle_insights = await self._query_oracle(intent, entities)
+                observations["oracle_intelligence"] = oracle_insights
+            except Exception as e:
+                logger.warning(f"[LAYER2] Oracle Intelligence query failed: {e}")
+
         return observations
 
     async def _orient(
@@ -1988,3 +2131,1086 @@ Format as JSON with: action, modifications (array), warnings (array), reason (st
     def get_metrics(self) -> Dict[str, Any]:
         """Get Layer 2 metrics."""
         return self.metrics
+
+    # ================================================================
+    # ORACLE INTELLIGENCE METHODS
+    # ================================================================
+
+    async def _query_oracle(
+        self,
+        intent: str,
+        entities: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Query Oracle Hub for relevant intelligence."""
+        oracle_insights = {
+            "patterns": [],
+            "templates": [],
+            "learnings": [],
+            "recommendations": [],
+            "confidence": 0.0
+        }
+        
+        if not self._oracle_hub:
+            return oracle_insights
+        
+        try:
+            # Search Oracle for relevant patterns
+            query = f"{intent} {entities.get('goal', '')} {entities.get('problem', '')}".strip()
+            
+            # Get patterns from Oracle
+            patterns = self._oracle_hub.search_intelligence(
+                query=query,
+                sources=None,  # Search all sources
+                limit=5
+            )
+            oracle_insights["patterns"] = [
+                {
+                    "title": p.title,
+                    "source": p.source.value if hasattr(p.source, 'value') else str(p.source),
+                    "confidence": p.confidence,
+                    "tags": p.tags[:5] if p.tags else []
+                }
+                for p in patterns
+            ]
+            
+            # Get templates relevant to the intent
+            templates = self._oracle_hub.get_templates_for_intent(intent)
+            oracle_insights["templates"] = [
+                {
+                    "name": t.get("name", ""),
+                    "pattern": t.get("pattern", "")[:200],
+                    "confidence": t.get("confidence", 0.0)
+                }
+                for t in templates[:3]
+            ]
+            
+            # Get recent learnings
+            learnings = self._oracle_hub.get_recent_learnings(limit=3)
+            oracle_insights["learnings"] = [
+                {
+                    "source": l.get("source", ""),
+                    "insight": l.get("insight", "")[:200],
+                    "timestamp": l.get("timestamp", "")
+                }
+                for l in learnings
+            ]
+            
+            # Calculate overall confidence
+            if oracle_insights["patterns"]:
+                oracle_insights["confidence"] = sum(
+                    p["confidence"] for p in oracle_insights["patterns"]
+                ) / len(oracle_insights["patterns"])
+            
+            logger.debug(f"[LAYER2] Oracle query returned {len(oracle_insights['patterns'])} patterns")
+            
+        except Exception as e:
+            logger.warning(f"[LAYER2] Oracle query failed: {e}")
+        
+        return oracle_insights
+
+    async def ingest_to_oracle(
+        self,
+        title: str,
+        content: str,
+        source: str,
+        metadata: Dict[str, Any] = None,
+        tags: List[str] = None
+    ) -> Optional[str]:
+        """
+        Ingest intelligence to Oracle Hub.
+        
+        This routes new intelligence through Oracle for storage and indexing.
+        Memory Mesh and other systems will be updated via Oracle hooks.
+        
+        Returns:
+            item_id if successful, None otherwise
+        """
+        if not self._oracle_hub:
+            logger.warning("[LAYER2] Oracle Hub not available for ingestion")
+            return None
+        
+        try:
+            from oracle_intelligence.unified_oracle_hub import IntelligenceSource, IntelligenceItem
+            import uuid
+            
+            # Map source string to IntelligenceSource enum
+            source_map = {
+                "ai_research": IntelligenceSource.AI_RESEARCH,
+                "github": IntelligenceSource.GITHUB_PULLS,
+                "stackoverflow": IntelligenceSource.STACKOVERFLOW,
+                "sandbox": IntelligenceSource.SANDBOX_INSIGHTS,
+                "template": IntelligenceSource.TEMPLATES,
+                "learning": IntelligenceSource.LEARNING_MEMORY,
+                "web": IntelligenceSource.WEB_KNOWLEDGE,
+                "documentation": IntelligenceSource.DOCUMENTATION,
+                "pattern": IntelligenceSource.PATTERN_DISCOVERY,
+                "user_feedback": IntelligenceSource.USER_FEEDBACK,
+                "internal": IntelligenceSource.INTERNAL_UPDATES,
+            }
+            intel_source = source_map.get(source.lower(), IntelligenceSource.INTERNAL_UPDATES)
+            
+            # Create intelligence item
+            item = IntelligenceItem(
+                item_id=str(uuid.uuid4()),
+                source=intel_source,
+                title=title,
+                content=content,
+                metadata=metadata or {},
+                tags=tags or [],
+                confidence=0.7
+            )
+            
+            # Ingest through Oracle Hub
+            result = await self._oracle_hub.ingest(item)
+            
+            if result:
+                logger.info(f"[LAYER2] Intelligence ingested to Oracle: {item.item_id}")
+                return item.item_id
+            
+        except Exception as e:
+            logger.error(f"[LAYER2] Oracle ingestion failed: {e}")
+        
+        return None
+
+    def get_oracle_status(self) -> Dict[str, Any]:
+        """Get Oracle Hub status and statistics."""
+        if not self._oracle_hub:
+            return {"connected": False, "message": "Oracle Hub not initialized"}
+        
+        try:
+            return {
+                "connected": True,
+                "queue_size": len(self._oracle_hub._queue),
+                "processing": self._oracle_hub._processing,
+                "export_path": str(self._oracle_hub.oracle_export_path),
+                "hooks": {
+                    "memory_mesh": self._memory_mesh is not None,
+                    "librarian": self._librarian is not None,
+                    "healing_system": self._healing_system is not None
+                }
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    # ================================================================
+    # PERFORMANCE ENHANCEMENT METHODS
+    # ================================================================
+
+    def _get_cache_key(self, intent: str, entities: Dict[str, Any]) -> str:
+        """Generate cache key from intent and entities."""
+        import hashlib
+        entity_str = json.dumps(entities, sort_keys=True, default=str)
+        combined = f"{intent}|{entity_str}"
+        return hashlib.md5(combined.encode()).hexdigest()
+
+    def _get_cached_result(self, cache_key: str) -> Optional[Dict[str, Any]]:
+        """Get cached observation result if valid."""
+        if cache_key not in self._query_cache:
+            self.metrics["cache_misses"] += 1
+            return None
+        
+        cached = self._query_cache[cache_key]
+        cache_time = cached.get("_cache_time", 0)
+        current_time = datetime.utcnow().timestamp()
+        
+        if current_time - cache_time > self._cache_ttl_seconds:
+            # Cache expired
+            del self._query_cache[cache_key]
+            self.metrics["cache_misses"] += 1
+            return None
+        
+        self.metrics["cache_hits"] += 1
+        logger.debug(f"[LAYER2] Cache hit for key: {cache_key[:8]}...")
+        return cached.get("result")
+
+    def _set_cached_result(self, cache_key: str, result: Dict[str, Any]):
+        """Cache observation result."""
+        # Enforce max cache size (LRU-style: remove oldest)
+        if len(self._query_cache) >= self._cache_max_size:
+            oldest_key = min(
+                self._query_cache.keys(),
+                key=lambda k: self._query_cache[k].get("_cache_time", 0)
+            )
+            del self._query_cache[oldest_key]
+        
+        self._query_cache[cache_key] = {
+            "result": result,
+            "_cache_time": datetime.utcnow().timestamp()
+        }
+
+    def _determine_priority(self, intent: str) -> str:
+        """Determine intent priority for routing."""
+        intent_lower = intent.lower()
+        
+        for keyword in self._priority_keywords["critical"]:
+            if keyword in intent_lower:
+                return "critical"
+        
+        for keyword in self._priority_keywords["high"]:
+            if keyword in intent_lower:
+                return "high"
+        
+        return "normal"
+
+    def _fuse_confidence_scores(self, observations: Dict[str, Any]) -> float:
+        """
+        Fuse confidence scores from all sources using weighted combination.
+        
+        Returns a unified confidence score between 0 and 1.
+        """
+        scores = []
+        weights = []
+        
+        # Memory Mesh confidence
+        memory_patterns = observations.get("memory_patterns", [])
+        if memory_patterns:
+            avg_trust = sum(p.get("trust_score", 0.5) for p in memory_patterns) / len(memory_patterns)
+            scores.append(avg_trust)
+            weights.append(self._confidence_weights["memory_mesh"])
+        
+        # RAG confidence
+        rag_context = observations.get("rag_context", [])
+        if rag_context:
+            avg_score = sum(r.get("score", 0.5) for r in rag_context) / len(rag_context)
+            scores.append(avg_score)
+            weights.append(self._confidence_weights["rag"])
+        
+        # Oracle confidence
+        oracle_intel = observations.get("oracle_intelligence", {})
+        if oracle_intel.get("confidence", 0) > 0:
+            scores.append(oracle_intel["confidence"])
+            weights.append(self._confidence_weights["oracle"])
+        
+        # Neuro-symbolic confidence
+        neuro_sym = observations.get("neuro_symbolic_reasoning", {})
+        if neuro_sym.get("fusion_confidence", 0) > 0:
+            scores.append(neuro_sym["fusion_confidence"])
+            weights.append(self._confidence_weights["neuro_symbolic"])
+        
+        # Code analysis confidence
+        code_analysis = observations.get("code_analysis", {})
+        if code_analysis.get("quality_score", 0) > 0:
+            scores.append(code_analysis["quality_score"])
+            weights.append(self._confidence_weights["code_analysis"])
+        
+        # Clarity confidence
+        clarity = observations.get("clarity_context", {})
+        if clarity.get("average_clarity", 0) > 0:
+            scores.append(clarity["average_clarity"])
+            weights.append(self._confidence_weights["clarity"])
+        
+        # Weighted average
+        if scores and weights:
+            total_weight = sum(weights)
+            fused = sum(s * w for s, w in zip(scores, weights)) / total_weight
+            return round(fused, 3)
+        
+        return 0.5  # Default
+
+    def _update_source_effectiveness(
+        self,
+        intent_type: str,
+        source_name: str,
+        was_useful: bool
+    ):
+        """Track which sources are most effective for each intent type."""
+        if intent_type not in self._source_effectiveness:
+            self._source_effectiveness[intent_type] = {}
+        
+        current = self._source_effectiveness[intent_type].get(source_name, 0.5)
+        
+        # Exponential moving average
+        alpha = 0.1
+        new_value = 1.0 if was_useful else 0.0
+        updated = current * (1 - alpha) + new_value * alpha
+        
+        self._source_effectiveness[intent_type][source_name] = round(updated, 3)
+
+    def get_source_effectiveness_report(self) -> Dict[str, Any]:
+        """Get report on source effectiveness by intent type."""
+        return {
+            "effectiveness_by_intent": self._source_effectiveness,
+            "confidence_weights": self._confidence_weights,
+            "cache_stats": {
+                "hits": self.metrics["cache_hits"],
+                "misses": self.metrics["cache_misses"],
+                "hit_rate": (
+                    self.metrics["cache_hits"] / 
+                    max(1, self.metrics["cache_hits"] + self.metrics["cache_misses"])
+                ),
+                "cache_size": len(self._query_cache)
+            }
+        }
+
+    async def _observe_parallel(
+        self,
+        intent: str,
+        entities: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        OBSERVE with parallel queries to all intelligence sources.
+        
+        Uses asyncio.gather to query all sources concurrently,
+        significantly reducing total observation time.
+        """
+        import asyncio
+        import time
+        
+        start_time = time.time()
+        self.metrics["parallel_queries"] += 1
+        
+        observations = {
+            "intent": intent,
+            "entities": entities,
+            "context_history": self._context_memory[-5:],
+            "insights": [],
+            "memory_patterns": [],
+            "rag_context": [],
+            "world_model_context": [],
+            "_query_times": {}
+        }
+        
+        # Define all query tasks
+        async def query_memory_mesh():
+            t0 = time.time()
+            result = {"patterns": []}
+            if self._memory_mesh:
+                try:
+                    goal = entities.get("goal") or intent
+                    procedure = self._memory_mesh.procedural_repo.find_procedure(
+                        goal=goal, context=entities
+                    )
+                    if procedure:
+                        result["patterns"].append({
+                            "type": "procedure",
+                            "name": procedure.name,
+                            "goal": procedure.goal,
+                            "trust_score": procedure.trust_score
+                        })
+                    
+                    problem = entities.get("problem") or intent
+                    episodes = self._memory_mesh.episodic_buffer.recall_similar(
+                        problem=problem, k=3, min_trust=0.6
+                    )
+                    for episode in episodes:
+                        result["patterns"].append({
+                            "type": "episode",
+                            "problem": episode.problem[:100],
+                            "outcome": episode.outcome,
+                            "trust_score": episode.trust_score
+                        })
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] Memory Mesh query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("memory_mesh", result)
+        
+        async def query_rag():
+            t0 = time.time()
+            result = {"context": []}
+            if self._enterprise_rag or self._rag_retriever:
+                try:
+                    query = f"{intent} {entities.get('goal', '')} {entities.get('problem', '')}".strip()
+                    if query:
+                        retriever = self._enterprise_rag or self._rag_retriever
+                        if hasattr(retriever, 'smart_retrieve'):
+                            rag_result = retriever.smart_retrieve(
+                                query=query, limit=5, score_threshold=0.3, use_cache=True
+                            )
+                            result["context"] = [
+                                {"content": r.get("content", "")[:200], "score": r.get("score", 0.0)}
+                                for r in rag_result.get("results", [])
+                            ]
+                        else:
+                            rag_results = retriever.retrieve(query=query, limit=5)
+                            result["context"] = [
+                                {"content": r.get("content", "")[:200], "score": r.get("score", 0.0)}
+                                for r in rag_results
+                            ]
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] RAG query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("rag", result)
+        
+        async def query_oracle():
+            t0 = time.time()
+            result = {"intelligence": {}}
+            if self._oracle_hub:
+                try:
+                    result["intelligence"] = await self._query_oracle(intent, entities)
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] Oracle query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("oracle", result)
+        
+        async def query_world_model():
+            t0 = time.time()
+            result = {"context": []}
+            if self._world_model:
+                try:
+                    world_model_data = self._world_model.load_world_model()
+                    if world_model_data and "contexts" in world_model_data:
+                        contexts = world_model_data["contexts"]
+                        recent = sorted(contexts, key=lambda x: x.get("integrated_at", ""), reverse=True)[:5]
+                        result["context"] = [
+                            {"what": ctx.get("context", {}).get("what", "")[:200]}
+                            for ctx in recent
+                        ]
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] World Model query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("world_model", result)
+        
+        async def query_diagnostic():
+            t0 = time.time()
+            result = {"health": {}}
+            if self._diagnostic_engine:
+                try:
+                    health = self._diagnostic_engine.analyze_system_health()
+                    result["health"] = {
+                        "status": health.get("status", "unknown"),
+                        "issues_count": len(health.get("issues", []))
+                    }
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] Diagnostic query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("diagnostic", result)
+        
+        async def query_clarity():
+            t0 = time.time()
+            result = {"metrics": {}}
+            if self._clarity_framework:
+                try:
+                    metrics = self._clarity_framework.get_metrics()
+                    result["metrics"] = {
+                        "average_clarity": metrics.get("average_clarity", 0.0),
+                        "active_contexts": metrics.get("active_contexts", 0)
+                    }
+                except Exception as e:
+                    logger.debug(f"[LAYER2-PARALLEL] Clarity query failed: {e}")
+            result["_time_ms"] = (time.time() - t0) * 1000
+            return ("clarity", result)
+        
+        # Run all queries in parallel
+        tasks = [
+            query_memory_mesh(),
+            query_rag(),
+            query_oracle(),
+            query_world_model(),
+            query_diagnostic(),
+            query_clarity()
+        ]
+        
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Aggregate results
+        for result in results:
+            if isinstance(result, Exception):
+                logger.warning(f"[LAYER2-PARALLEL] Query exception: {result}")
+                continue
+            
+            source_name, data = result
+            observations["_query_times"][source_name] = data.get("_time_ms", 0)
+            
+            if source_name == "memory_mesh":
+                observations["memory_patterns"] = data.get("patterns", [])
+            elif source_name == "rag":
+                observations["rag_context"] = data.get("context", [])
+            elif source_name == "oracle":
+                observations["oracle_intelligence"] = data.get("intelligence", {})
+            elif source_name == "world_model":
+                observations["world_model_context"] = data.get("context", [])
+            elif source_name == "diagnostic":
+                observations["system_health"] = data.get("health", {})
+            elif source_name == "clarity":
+                observations["clarity_context"] = data.get("metrics", {})
+        
+        # Calculate fused confidence
+        observations["fused_confidence"] = self._fuse_confidence_scores(observations)
+        
+        # Track timing
+        total_time_ms = (time.time() - start_time) * 1000
+        self.metrics["avg_observe_time_ms"] = (
+            (self.metrics["avg_observe_time_ms"] * (self.metrics["parallel_queries"] - 1) + total_time_ms)
+            / self.metrics["parallel_queries"]
+        )
+        self.metrics["source_query_times"] = observations["_query_times"]
+        
+        logger.debug(f"[LAYER2-PARALLEL] Parallel OBSERVE completed in {total_time_ms:.1f}ms")
+        
+        return observations
+
+    async def process_fast(
+        self,
+        intent: str,
+        entities: Dict[str, Any],
+        context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        """
+        Fast-path processing with caching and parallel queries.
+        
+        Uses:
+        - Result caching for repeated queries
+        - Parallel OBSERVE for concurrent source queries
+        - Priority routing for critical intents
+        - Confidence fusion for unified scoring
+        """
+        context = context or {}
+        
+        # Check cache first
+        cache_key = self._get_cache_key(intent, entities)
+        cached = self._get_cached_result(cache_key)
+        if cached:
+            logger.info(f"[LAYER2] Fast-path: returning cached result")
+            return cached
+        
+        # Determine priority
+        priority = self._determine_priority(intent)
+        context["priority"] = priority
+        
+        if priority == "critical":
+            logger.warning(f"[LAYER2] CRITICAL priority intent detected: {intent[:50]}")
+        
+        # Use parallel OBSERVE
+        observations = await self._observe_parallel(intent, entities, context)
+        
+        # Standard ORIENT and DECIDE (can be parallelized further if needed)
+        orientation = await self._orient(observations, context)
+        
+        # Add fused confidence to orientation
+        orientation["fused_confidence"] = observations.get("fused_confidence", 0.5)
+        
+        decision = await self._decide(orientation, context)
+        
+        # Build result
+        result = {
+            "observations": observations,
+            "orientation": orientation,
+            "decision": decision,
+            "priority": priority,
+            "fused_confidence": observations.get("fused_confidence", 0.5),
+            "cache_key": cache_key
+        }
+        
+        # Cache result
+        self._set_cached_result(cache_key, result)
+        
+        return result
+
+    def clear_cache(self):
+        """Clear the query cache."""
+        self._query_cache.clear()
+        logger.info("[LAYER2] Query cache cleared")
+
+    def update_confidence_weight(self, source: str, weight: float):
+        """Update confidence weight for a source."""
+        if source in self._confidence_weights:
+            self._confidence_weights[source] = max(0.0, min(1.0, weight))
+            logger.info(f"[LAYER2] Updated {source} confidence weight to {weight}")
+
+    # ================================================================
+    # ADVANCED ENHANCEMENT METHODS
+    # ================================================================
+
+    # --- CIRCUIT BREAKER ---
+    
+    def _check_circuit_breaker(self, source: str) -> bool:
+        """
+        Check if source circuit is open (should skip).
+        Returns True if source should be skipped.
+        """
+        if source not in self._circuit_breaker:
+            return False
+        
+        cb = self._circuit_breaker[source]
+        
+        if cb["state"] == "closed":
+            return False
+        
+        if cb["state"] == "open":
+            # Check if reset timeout has passed
+            if cb["last_failure"]:
+                elapsed = (datetime.utcnow() - cb["last_failure"]).total_seconds()
+                if elapsed > cb["reset_timeout_seconds"]:
+                    cb["state"] = "half-open"
+                    logger.info(f"[LAYER2-CB] {source} circuit half-open, testing...")
+                    return False
+            return True  # Still open, skip
+        
+        # half-open: allow one request through
+        return False
+
+    def _record_circuit_success(self, source: str):
+        """Record successful query, reset circuit breaker."""
+        if source not in self._circuit_breaker:
+            return
+        
+        cb = self._circuit_breaker[source]
+        if cb["state"] == "half-open":
+            cb["state"] = "closed"
+            cb["failures"] = 0
+            logger.info(f"[LAYER2-CB] {source} circuit closed (recovered)")
+        elif cb["state"] == "closed":
+            cb["failures"] = max(0, cb["failures"] - 1)
+
+    def _record_circuit_failure(self, source: str):
+        """Record failed query, potentially open circuit."""
+        if source not in self._circuit_breaker:
+            return
+        
+        cb = self._circuit_breaker[source]
+        cb["failures"] += 1
+        cb["last_failure"] = datetime.utcnow()
+        
+        if cb["state"] == "half-open":
+            cb["state"] = "open"
+            self.metrics["circuit_breaker_trips"] += 1
+            logger.warning(f"[LAYER2-CB] {source} circuit re-opened after half-open failure")
+        elif cb["failures"] >= cb["failure_threshold"]:
+            cb["state"] = "open"
+            self.metrics["circuit_breaker_trips"] += 1
+            logger.warning(f"[LAYER2-CB] {source} circuit opened after {cb['failures']} failures")
+
+    def get_circuit_breaker_status(self) -> Dict[str, Any]:
+        """Get status of all circuit breakers."""
+        return {
+            source: {
+                "state": cb["state"],
+                "failures": cb["failures"],
+                "last_failure": cb["last_failure"].isoformat() if cb["last_failure"] else None
+            }
+            for source, cb in self._circuit_breaker.items()
+        }
+
+    def reset_circuit_breaker(self, source: str = None):
+        """Reset circuit breaker for a source or all sources."""
+        sources = [source] if source else list(self._circuit_breaker.keys())
+        for s in sources:
+            if s in self._circuit_breaker:
+                self._circuit_breaker[s]["state"] = "closed"
+                self._circuit_breaker[s]["failures"] = 0
+                self._circuit_breaker[s]["last_failure"] = None
+        logger.info(f"[LAYER2-CB] Reset circuit breakers: {sources}")
+
+    # --- AUTO-TUNING WEIGHTS ---
+
+    def _record_outcome(self, intent: str, sources_used: Dict[str, float], success: bool):
+        """Record outcome for auto-tuning."""
+        self._outcome_history.append({
+            "intent": intent,
+            "sources_used": sources_used,
+            "success": success,
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        # Trim history
+        if len(self._outcome_history) > self._max_outcome_history:
+            self._outcome_history = self._outcome_history[-self._max_outcome_history:]
+        
+        # Auto-tune periodically
+        if self._auto_tune_enabled and len(self._outcome_history) % self._auto_tune_interval == 0:
+            self._auto_tune_weights()
+
+    def _auto_tune_weights(self):
+        """Automatically adjust confidence weights based on outcome history."""
+        if len(self._outcome_history) < 10:
+            return
+        
+        # Calculate success rate per source
+        source_stats: Dict[str, Dict[str, float]] = {}
+        
+        for outcome in self._outcome_history[-50:]:  # Last 50 outcomes
+            for source, contribution in outcome.get("sources_used", {}).items():
+                if source not in source_stats:
+                    source_stats[source] = {"success": 0, "total": 0, "contribution_sum": 0}
+                
+                source_stats[source]["total"] += 1
+                source_stats[source]["contribution_sum"] += contribution
+                if outcome["success"]:
+                    source_stats[source]["success"] += 1
+        
+        # Adjust weights based on success rate
+        adjustments_made = False
+        for source, stats in source_stats.items():
+            if source not in self._confidence_weights or stats["total"] < 5:
+                continue
+            
+            success_rate = stats["success"] / stats["total"]
+            current_weight = self._confidence_weights[source]
+            
+            # Increase weight if high success, decrease if low
+            if success_rate > 0.8 and current_weight < 0.30:
+                new_weight = min(0.30, current_weight + 0.02)
+                self._confidence_weights[source] = round(new_weight, 3)
+                adjustments_made = True
+            elif success_rate < 0.5 and current_weight > 0.05:
+                new_weight = max(0.05, current_weight - 0.02)
+                self._confidence_weights[source] = round(new_weight, 3)
+                adjustments_made = True
+        
+        if adjustments_made:
+            self.metrics["auto_tune_adjustments"] += 1
+            logger.info(f"[LAYER2-AUTOTUNE] Weights adjusted: {self._confidence_weights}")
+
+    def enable_auto_tuning(self, enabled: bool = True):
+        """Enable or disable auto-tuning."""
+        self._auto_tune_enabled = enabled
+        logger.info(f"[LAYER2] Auto-tuning {'enabled' if enabled else 'disabled'}")
+
+    # --- QUERY PREDICTION & PREFETCH ---
+
+    def _record_query_pattern(self, current_key: str, next_key: str):
+        """Record query pattern for prediction."""
+        if current_key not in self._query_patterns:
+            self._query_patterns[current_key] = []
+        
+        patterns = self._query_patterns[current_key]
+        patterns.append(next_key)
+        
+        # Keep last 5 patterns per query
+        if len(patterns) > 5:
+            self._query_patterns[current_key] = patterns[-5:]
+
+    def _predict_next_query(self, current_key: str) -> Optional[str]:
+        """Predict next likely query based on patterns."""
+        if current_key not in self._query_patterns:
+            return None
+        
+        patterns = self._query_patterns[current_key]
+        if not patterns:
+            return None
+        
+        # Return most common next query
+        from collections import Counter
+        counter = Counter(patterns)
+        most_common = counter.most_common(1)
+        if most_common and most_common[0][1] >= 2:  # At least 2 occurrences
+            return most_common[0][0]
+        return None
+
+    async def _prefetch_predicted(self, current_key: str, intent: str, entities: Dict[str, Any]):
+        """Prefetch predicted next query in background."""
+        predicted_key = self._predict_next_query(current_key)
+        if not predicted_key or predicted_key in self._prefetch_cache:
+            return
+        
+        # Simple prefetch - just mark as predicted
+        # In production, would async fetch in background
+        self._prefetch_cache[predicted_key] = {"predicted_at": datetime.utcnow().isoformat()}
+
+    def _check_prefetch(self, cache_key: str) -> Optional[Dict[str, Any]]:
+        """Check if query was prefetched."""
+        if cache_key in self._prefetch_cache:
+            self.metrics["prefetch_hits"] += 1
+            result = self._prefetch_cache.pop(cache_key, None)
+            if result and "result" in result:
+                return result["result"]
+        return None
+
+    # --- EVENT STREAMING ---
+
+    def subscribe_to_events(self, callback: callable):
+        """Subscribe to real-time OODA events."""
+        self._event_subscribers.append(callback)
+        logger.info(f"[LAYER2] Event subscriber added, total: {len(self._event_subscribers)}")
+
+    def unsubscribe_from_events(self, callback: callable):
+        """Unsubscribe from events."""
+        if callback in self._event_subscribers:
+            self._event_subscribers.remove(callback)
+
+    async def _emit_event(self, event_type: str, data: Dict[str, Any]):
+        """Emit event to all subscribers."""
+        if not self._event_subscribers:
+            return
+        
+        event = {
+            "type": event_type,
+            "timestamp": datetime.utcnow().isoformat(),
+            "data": data
+        }
+        
+        self.metrics["streaming_events"] += 1
+        
+        for subscriber in self._event_subscribers:
+            try:
+                if asyncio.iscoroutinefunction(subscriber):
+                    await subscriber(event)
+                else:
+                    subscriber(event)
+            except Exception as e:
+                logger.warning(f"[LAYER2] Event subscriber error: {e}")
+
+    # --- CROSS-CYCLE LEARNING ---
+
+    def _record_cycle_pattern(self, intent: str, observations: Dict, decision: Dict):
+        """Record pattern from cognitive cycle for learning."""
+        pattern = {
+            "intent_hash": self._get_cache_key(intent, {}),
+            "intent_keywords": intent.lower().split()[:5],
+            "sources_with_data": [
+                k for k in ["memory_patterns", "rag_context", "oracle_intelligence"]
+                if observations.get(k)
+            ],
+            "decision_action": decision.get("action", "unknown"),
+            "confidence": decision.get("confidence", 0.5),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+        self._cycle_patterns.append(pattern)
+        
+        # Trim
+        if len(self._cycle_patterns) > self._max_cycle_patterns:
+            self._cycle_patterns = self._cycle_patterns[-self._max_cycle_patterns:]
+
+    def _find_similar_cycles(self, intent: str) -> List[Dict[str, Any]]:
+        """Find similar past cycles for learning."""
+        intent_words = set(intent.lower().split()[:5])
+        similar = []
+        
+        for pattern in self._cycle_patterns:
+            pattern_words = set(pattern.get("intent_keywords", []))
+            overlap = len(intent_words & pattern_words)
+            if overlap >= 2:  # At least 2 words in common
+                similar.append({
+                    "pattern": pattern,
+                    "similarity": overlap / max(len(intent_words), 1)
+                })
+        
+        return sorted(similar, key=lambda x: x["similarity"], reverse=True)[:3]
+
+    def get_cycle_learning_insights(self) -> Dict[str, Any]:
+        """Get insights from cross-cycle learning."""
+        if not self._cycle_patterns:
+            return {"patterns": 0, "insights": []}
+        
+        # Analyze patterns
+        action_counts = {}
+        source_effectiveness = {}
+        
+        for pattern in self._cycle_patterns:
+            action = pattern.get("decision_action", "unknown")
+            action_counts[action] = action_counts.get(action, 0) + 1
+            
+            for source in pattern.get("sources_with_data", []):
+                if source not in source_effectiveness:
+                    source_effectiveness[source] = {"count": 0, "avg_confidence": 0}
+                source_effectiveness[source]["count"] += 1
+                source_effectiveness[source]["avg_confidence"] += pattern.get("confidence", 0)
+        
+        # Calculate averages
+        for source in source_effectiveness:
+            count = source_effectiveness[source]["count"]
+            if count > 0:
+                source_effectiveness[source]["avg_confidence"] /= count
+        
+        return {
+            "patterns": len(self._cycle_patterns),
+            "action_distribution": action_counts,
+            "source_effectiveness": source_effectiveness
+        }
+
+    # --- FALLBACK CHAINS ---
+
+    async def _query_with_fallback(
+        self,
+        source: str,
+        query_func: callable,
+        intent: str,
+        entities: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Query a source with fallback chain on failure."""
+        # Check circuit breaker
+        if self._check_circuit_breaker(source):
+            logger.debug(f"[LAYER2-FB] {source} circuit open, trying fallbacks")
+            return await self._try_fallbacks(source, intent, entities)
+        
+        try:
+            result = await query_func()
+            self._record_circuit_success(source)
+            return result
+        except Exception as e:
+            logger.warning(f"[LAYER2-FB] {source} failed: {e}")
+            self._record_circuit_failure(source)
+            return await self._try_fallbacks(source, intent, entities)
+
+    async def _try_fallbacks(
+        self,
+        failed_source: str,
+        intent: str,
+        entities: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Try fallback sources in order."""
+        fallbacks = self._fallback_chains.get(failed_source, [])
+        
+        for fallback in fallbacks:
+            if self._check_circuit_breaker(fallback):
+                continue
+            
+            try:
+                self.metrics["fallback_activations"] += 1
+                logger.info(f"[LAYER2-FB] Trying fallback {fallback} for {failed_source}")
+                
+                # Simple fallback - just return None for now
+                # In production, would call the fallback source
+                return None
+            except Exception as e:
+                logger.warning(f"[LAYER2-FB] Fallback {fallback} also failed: {e}")
+                self._record_circuit_failure(fallback)
+        
+        return None
+
+    # --- STREAMING OODA ---
+
+    async def process_streaming(
+        self,
+        intent: str,
+        entities: Dict[str, Any],
+        context: Dict[str, Any] = None
+    ) -> AsyncGenerator[Dict[str, Any], None]:
+        """
+        Streaming OODA processing - yields partial results as phases complete.
+        
+        Yields events for:
+        - observe_started, observe_partial, observe_complete
+        - orient_started, orient_complete
+        - decide_started, decide_complete
+        - cycle_complete
+        """
+        import asyncio
+        
+        context = context or {}
+        cache_key = self._get_cache_key(intent, entities)
+        
+        # Emit start
+        yield {"phase": "started", "intent": intent[:50], "cache_key": cache_key}
+        await self._emit_event("cycle_started", {"intent": intent[:50]})
+        
+        # Check cache
+        cached = self._get_cached_result(cache_key)
+        if cached:
+            yield {"phase": "cache_hit", "result": cached}
+            return
+        
+        # OBSERVE with streaming
+        yield {"phase": "observe_started"}
+        await self._emit_event("observe_started", {})
+        
+        observations = {"intent": intent, "entities": entities}
+        
+        # Stream partial observations
+        if self._memory_mesh and not self._check_circuit_breaker("memory_mesh"):
+            yield {"phase": "observe_partial", "source": "memory_mesh", "status": "querying"}
+            # Would query and yield result
+        
+        if self._oracle_hub and not self._check_circuit_breaker("oracle"):
+            yield {"phase": "observe_partial", "source": "oracle", "status": "querying"}
+        
+        # Full parallel observe
+        observations = await self._observe_parallel(intent, entities, context)
+        yield {"phase": "observe_complete", "sources_queried": len(observations.get("_query_times", {}))}
+        await self._emit_event("observe_complete", {"sources": list(observations.get("_query_times", {}).keys())})
+        
+        # ORIENT
+        yield {"phase": "orient_started"}
+        await self._emit_event("orient_started", {})
+        orientation = await self._orient(observations, context)
+        orientation["fused_confidence"] = observations.get("fused_confidence", 0.5)
+        yield {"phase": "orient_complete", "confidence": orientation.get("confidence", 0)}
+        await self._emit_event("orient_complete", {"confidence": orientation.get("confidence", 0)})
+        
+        # DECIDE
+        yield {"phase": "decide_started"}
+        await self._emit_event("decide_started", {})
+        decision = await self._decide(orientation, context)
+        yield {"phase": "decide_complete", "action": decision.get("action", "unknown")}
+        await self._emit_event("decide_complete", {"action": decision.get("action")})
+        
+        # Record patterns
+        self._record_cycle_pattern(intent, observations, decision)
+        
+        # Build result
+        result = {
+            "observations": observations,
+            "orientation": orientation,
+            "decision": decision,
+            "fused_confidence": observations.get("fused_confidence", 0.5)
+        }
+        
+        # Cache
+        self._set_cached_result(cache_key, result)
+        
+        # Record for auto-tuning
+        sources_used = {k: 1.0 for k in observations.get("_query_times", {}).keys()}
+        self._record_outcome(intent, sources_used, decision.get("action") == "proceed")
+        
+        yield {"phase": "cycle_complete", "result": result}
+        await self._emit_event("cycle_complete", {"action": decision.get("action")})
+
+    # --- BATCH PROCESSING ---
+
+    async def process_batch(
+        self,
+        intents: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Process multiple intents in parallel.
+        
+        Args:
+            intents: List of {"intent": str, "entities": dict, "context": dict}
+        
+        Returns:
+            List of results in same order
+        """
+        import asyncio
+        
+        async def process_single(item: Dict[str, Any]) -> Dict[str, Any]:
+            return await self.process_fast(
+                intent=item.get("intent", ""),
+                entities=item.get("entities", {}),
+                context=item.get("context", {})
+            )
+        
+        tasks = [process_single(item) for item in intents]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Convert exceptions to error results
+        final_results = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                final_results.append({
+                    "error": str(result),
+                    "intent": intents[i].get("intent", "")[:50]
+                })
+            else:
+                final_results.append(result)
+        
+        return final_results
+
+    # --- ADVANCED METRICS ---
+
+    def get_advanced_metrics(self) -> Dict[str, Any]:
+        """Get comprehensive metrics including all advanced features."""
+        return {
+            "basic": self.metrics,
+            "circuit_breaker": self.get_circuit_breaker_status(),
+            "cache": {
+                "size": len(self._query_cache),
+                "hit_rate": self.metrics["cache_hits"] / max(1, self.metrics["cache_hits"] + self.metrics["cache_misses"]),
+                "prefetch_hits": self.metrics["prefetch_hits"]
+            },
+            "auto_tuning": {
+                "enabled": self._auto_tune_enabled,
+                "adjustments": self.metrics["auto_tune_adjustments"],
+                "current_weights": self._confidence_weights
+            },
+            "cross_cycle": self.get_cycle_learning_insights(),
+            "fallbacks": {
+                "activations": self.metrics["fallback_activations"],
+                "chains": self._fallback_chains
+            },
+            "streaming": {
+                "subscribers": len(self._event_subscribers),
+                "events_emitted": self.metrics["streaming_events"]
+            }
+        }

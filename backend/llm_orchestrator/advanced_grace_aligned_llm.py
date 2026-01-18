@@ -82,7 +82,7 @@ class AdvancedGraceAlignedLLM:
             from cognitive.advanced_memory_cognition import get_advanced_memory_cognition
             from cognitive.smart_memory_retrieval import SmartMemoryRetrieval
             from cognitive.memory_context_formatter import MemoryContextFormatter
-            from backend.cognitive.ooda import OODALoop, OODAPhase
+            from cognitive.ooda import OODALoop, OODAPhase
             
             self.magma_system = MagmaMemorySystem(session, knowledge_base_path)
             self.advanced_cognition = get_advanced_memory_cognition(session, knowledge_base_path)

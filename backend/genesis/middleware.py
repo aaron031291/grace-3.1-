@@ -9,8 +9,12 @@ from fastapi import FastAPI
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from genesis.kb_integration import get_kb_integration
+
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
 class GenesisKeyMiddleware(BaseHTTPMiddleware):
-    logger = logging.getLogger(__name__)
     """
     Middleware that tracks all API requests with Genesis Keys.
 

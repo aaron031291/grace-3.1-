@@ -8,8 +8,11 @@ from enum import Enum
 from datetime import datetime, timedelta
 from pathlib import Path
 import uuid
+
+logger = logging.getLogger(__name__)
+
+
 class InsightType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Types of insights the Oracle can generate."""
     PATTERN = "pattern"               # Recurring code patterns
     FAILURE_PREDICTION = "failure"    # Predicted failures

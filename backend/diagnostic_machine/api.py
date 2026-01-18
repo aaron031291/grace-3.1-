@@ -9,16 +9,12 @@ from .interpreters import InterpreterLayer
 from .judgement import JudgementLayer
 from .action_router import ActionRouter
 from fastapi import WebSocket, WebSocketDisconnect
-from fastapi import WebSocket, WebSocketDisconnect
-from fastapi import WebSocket, WebSocketDisconnect
-from fastapi import WebSocket, WebSocketDisconnect
-from fastapi import WebSocket, WebSocketDisconnect
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/diagnostic", tags=["Diagnostic Machine"])
+
 class DiagnosticTriggerRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to trigger a diagnostic cycle."""
     source: str = Field(default="api", description="Trigger source (api, webhook, cicd)")
     reason: Optional[str] = Field(default=None, description="Reason for trigger")

@@ -7,7 +7,7 @@ when the full dataset isn't available.
 
 # Import expanded problems
 try:
-    from backend.benchmarking.humaneval_expanded_sample import HUMANEVAL_EXPANDED_PROBLEMS
+    from benchmarking.humaneval_expanded_sample import HUMANEVAL_EXPANDED_PROBLEMS
     _expanded = HUMANEVAL_EXPANDED_PROBLEMS
 except:
     _expanded = []

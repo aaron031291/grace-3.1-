@@ -6,8 +6,11 @@ import json
 import gzip
 from pathlib import Path
 from ml_intelligence.neuro_symbolic_reasoner import NeuroSymbolicReasoner, ReasoningResult
+
+logger = logging.getLogger(__name__)
+
+
 class EnterpriseNeuroSymbolic:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade Neuro-Symbolic AI system.
     

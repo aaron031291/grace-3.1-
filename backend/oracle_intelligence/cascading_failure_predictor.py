@@ -6,10 +6,11 @@ from enum import Enum
 from datetime import datetime
 from pathlib import Path
 import uuid
+
+logger = logging.getLogger(__name__)
+
+
 class FailureMode(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of failures that can cascade."""
     CONNECTION_FAILURE = "connection_failure"
     TIMEOUT = "timeout"

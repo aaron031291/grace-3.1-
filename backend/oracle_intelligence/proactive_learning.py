@@ -9,10 +9,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import uuid
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
+
+
 class LearningEvent(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of events to learn from."""
     CODE_GENERATED = "code_generated"
     CODE_EDITED = "code_edited"

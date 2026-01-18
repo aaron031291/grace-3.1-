@@ -10,7 +10,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 import psutil
-from backend.utils.os_adapter import OS, paths, process, get_os_info
+from utils.os_adapter import OS, paths, process, get_os_info
 class ServiceStatus(str, Enum):
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

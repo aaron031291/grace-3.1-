@@ -8,6 +8,20 @@ from cognitive.grace_code_analyzer import GraceCodeAnalyzer, CodeIssue, Severity
 from cognitive.autonomous_healing_system import AutonomousHealingSystem, HealingAction, TrustLevel, HealthStatus
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
+
+# Timesense integration (optional)
+try:
+    from timesense.universal_integration import TIMESENSE_AVAILABLE, track_operation
+    from timesense.engine import TimeEstimator, PrimitiveType
+except ImportError:
+    TIMESENSE_AVAILABLE = False
+    TimeEstimator = None
+    PrimitiveType = None
+    track_operation = None
+
+logger = logging.getLogger(__name__)
+
+
 class ASTCodeTransformer(ast.NodeTransformer):
     logger = logging.getLogger(__name__)
     """AST Transformer for code fixes (inspired by pytest assertion rewriting)"""
@@ -120,17 +134,44 @@ class CodeFixApplicator:
             # Apply fix based on rule type
             fixed_lines = lines.copy()
             
-            if issue.rule_id == 'G006':  # Print statement
+            if issue.rule_id == 'G001':  # Missing docstring
+                # Add placeholder docstring after function/class definition
+                stripped = original_line.rstrip()
+                if stripped.endswith(':'):
+                    # Calculate indentation of the next line
+                    indent = len(original_line) - len(original_line.lstrip())
+                    docstring_indent = ' ' * (indent + 4)
+                    docstring = f'{docstring_indent}"""Placeholder docstring."""'
+                    # Insert docstring after this line
+                    fixed_lines.insert(line_index + 1, docstring)
+            
+            elif issue.rule_id == 'G002':  # Unused import
+                # Remove the import line entirely
+                if 'import' in original_line:
+                    fixed_lines[line_index] = ''  # Remove the line (leave empty)
+            
+            elif issue.rule_id == 'G005':  # Bare except
+                # Replace bare except with except Exception
+                if 'except:' in original_line:
+                    fixed_line = original_line.replace('except:', 'except Exception:')
+                    fixed_lines[line_index] = fixed_line
+            
+            elif issue.rule_id == 'G006':  # Print statement (legacy rule)
                 # Replace print with logger
                 if 'print(' in original_line:
-                    # Simple replacement - in practice would use AST transformation
                     fixed_line = original_line.replace('print(', 'logger.info(')
                     fixed_lines[line_index] = fixed_line
             
-            elif issue.rule_id == 'G007':  # Bare except
+            elif issue.rule_id == 'G007':  # Bare except (legacy rule)
                 # Replace bare except with except Exception
-                if ': except:' in original_line or original_line.strip() == 'except:':
+                if 'except:' in original_line:
                     fixed_line = original_line.replace('except:', 'except Exception:')
+                    fixed_lines[line_index] = fixed_line
+            
+            elif issue.rule_id == 'G011':  # Print statement
+                # Convert print to logger.info
+                if 'print(' in original_line:
+                    fixed_line = original_line.replace('print(', 'logger.info(')
                     fixed_lines[line_index] = fixed_line
             
             elif issue.rule_id == 'G012':  # Missing logger
@@ -227,8 +268,12 @@ class CodeFixApplicator:
         """Check if issue can be auto-fixed safely"""
         # Rules that can be auto-fixed
         auto_fixable_rules = {
-            'G006',  # Print statement
-            'G007',  # Bare except
+            'G001',  # Missing docstring
+            'G002',  # Unused import
+            'G005',  # Bare except
+            'G006',  # Print statement (legacy)
+            'G007',  # Bare except (legacy)
+            'G011',  # Print statement
             'G012',  # Missing logger (with caution)
             'SYNTAX_ERROR',  # Syntax fixes (diagnostic)
             'IMPORT_ERROR',  # Import errors (diagnostic)
@@ -246,10 +291,12 @@ class CodeFixApplicator:
         else:
             # Standard code quality: only LOW/MEDIUM severity
             safe_severities = {Severity.LOW, Severity.MEDIUM}
+            # Rules that can be fixed without suggested_fix (deterministic fixes)
+            deterministic_rules = {'G001', 'G002', 'G005', 'G006', 'G007', 'G011', 'G012'}
             return (
                 issue.rule_id in auto_fixable_rules and
                 issue.severity in safe_severities and
-                (issue.suggested_fix is not None or issue.rule_id == 'G012')  # G012 uses AST transformation
+                (issue.suggested_fix is not None or issue.rule_id in deterministic_rules)
             )
     
     def _ast_to_source(self, tree: ast.AST, original_source: str) -> str:
@@ -361,6 +408,15 @@ class CodeAnalyzerSelfHealing:
         self.fix_applicator = CodeFixApplicator()
         self.genesis_service = get_genesis_service() if self.healing_system else None
         
+        # Initialize validation pipeline for Plan → Patch → Validate → Rollback
+        self.validation_pipeline = None
+        try:
+            from cognitive.healing_validation_pipeline import get_healing_validation_pipeline
+            self.validation_pipeline = get_healing_validation_pipeline()
+            logger.info("[CODE-HEALING] Validation pipeline initialized")
+        except Exception as e:
+            logger.warning(f"[CODE-HEALING] Validation pipeline not available: {e}")
+        
         # Timesense integration
         self.time_estimator = None
         if self.enable_timesense and TimeEstimator:
@@ -376,6 +432,8 @@ class CodeAnalyzerSelfHealing:
         self.fix_outcomes = []
         self.time_predictions = {}  # issue_id -> PredictionResult
         self.actual_times = {}  # issue_id -> actual_time_ms
+        self.validation_results = []  # Track validation gate results
+        self.rollback_count = 0  # Track rollback occurrences
     
     def analyze_and_heal(
         self,
@@ -827,41 +885,82 @@ class CodeAnalyzerSelfHealing:
                         # Update source code for next fix
                         source_code = fixed_code
                 
-                # Write fixed code if changes were made
+                # Write fixed code if changes were made (with validation pipeline)
                 if fixes_applied_count > 0:
+                    validation_passed = True
+                    
+                    if self.validation_pipeline:
+                        self.validation_pipeline.create_snapshot([file_path])
+                    
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(fixed_code)
                     
-                    # Trigger healing action through healing system (unless pre-flight)
-                    if self.healing_system and not pre_flight:
-                        # Convert issues to anomaly format for healing system
-                        anomaly = {
-                            'type': 'CODE_ISSUE',
-                            'severity': 'medium' if fixes_applied_count > 0 else 'low',
-                            'details': f'{fixes_applied_count} code issues fixed in {file_path}',
-                            'file_path': file_path,
-                            'file_paths': [file_path],
-                            'issues_fixed': fixes_applied_count,
-                            'rule_ids': [i.rule_id for i in issues],
-                            'evidence': [i.rule_id for i in issues]
-                        }
+                    # Run validation gates if pipeline available
+                    if self.validation_pipeline:
+                        from cognitive.healing_validation_pipeline import ValidationGate
+                        gates = self.validation_pipeline.get_required_gates_for_trust_level(
+                            self.trust_level.value
+                        )
                         
-                        # Use healing system's decide and execute flow
-                        decisions = self.healing_system.decide_healing_actions([anomaly])
-                        if decisions:
-                            # In pre-flight mode, decisions would require approval
-                            execution_results = self.healing_system.execute_healing(decisions)
-                            logger.info(f"[CODE-HEALING] Healing system executed: {execution_results}")
+                        if gates:
+                            all_passed, val_results = self.validation_pipeline.validate(
+                                gates, [file_path]
+                            )
+                            
+                            self.validation_results.extend([
+                                {"file": file_path, "gate": v.gate.value, "passed": v.passed}
+                                for v in val_results
+                            ])
+                            
+                            if not all_passed:
+                                failed_gates = [v.gate.value for v in val_results if not v.passed]
+                                logger.warning(
+                                    f"[CODE-HEALING] Validation failed for {file_path}: {failed_gates}"
+                                )
+                                self.validation_pipeline.rollback(
+                                    f"Validation failed: {failed_gates}"
+                                )
+                                self.rollback_count += 1
+                                validation_passed = False
+                                
+                                healing_results.append({
+                                    'file': file_path,
+                                    'fixes_applied': 0,
+                                    'status': 'rolled_back',
+                                    'rollback_reason': f"Validation failed: {failed_gates}"
+                                })
+                            else:
+                                self.validation_pipeline._snapshots.clear()
                     
-                    healing_results.append({
-                        'file': file_path,
-                        'fixes_applied': fixes_applied_count,
-                        'status': 'success'
-                    })
-                    
-                    logger.info(
-                        f"[CODE-HEALING] Applied {fixes_applied_count} fixes to {file_path}"
-                    )
+                    if validation_passed:
+                        # Trigger healing action through healing system (unless pre-flight)
+                        if self.healing_system and not pre_flight:
+                            anomaly = {
+                                'type': 'CODE_ISSUE',
+                                'severity': 'medium' if fixes_applied_count > 0 else 'low',
+                                'details': f'{fixes_applied_count} code issues fixed in {file_path}',
+                                'file_path': file_path,
+                                'file_paths': [file_path],
+                                'issues_fixed': fixes_applied_count,
+                                'rule_ids': [i.rule_id for i in issues],
+                                'evidence': [i.rule_id for i in issues]
+                            }
+                            
+                            decisions = self.healing_system.decide_healing_actions([anomaly])
+                            if decisions:
+                                execution_results = self.healing_system.execute_healing(decisions)
+                                logger.info(f"[CODE-HEALING] Healing system executed: {execution_results}")
+                        
+                        healing_results.append({
+                            'file': file_path,
+                            'fixes_applied': fixes_applied_count,
+                            'status': 'success',
+                            'validated': True
+                        })
+                        
+                        logger.info(
+                            f"[CODE-HEALING] Applied {fixes_applied_count} fixes to {file_path} (validated)"
+                        )
             
             except Exception as e:
                 logger.error(f"[CODE-HEALING] Error fixing {file_path}: {e}")

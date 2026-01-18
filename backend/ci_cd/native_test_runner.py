@@ -19,8 +19,8 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
 
-from backend.utils.os_adapter import OS, paths, process, get_os_info
-from backend.utils.safe_print import safe_print
+from utils.os_adapter import OS, paths, process, get_os_info
+from utils.safe_print import safe_print
 
 
 class TestStatus(str, Enum):

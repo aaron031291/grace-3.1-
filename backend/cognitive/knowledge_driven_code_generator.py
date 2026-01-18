@@ -55,7 +55,7 @@ class KnowledgeDrivenCodeGenerator:
         # Initialize template matcher if not provided
         if not self.template_matcher:
             try:
-                from backend.benchmarking.mbpp_templates import get_template_matcher
+                from benchmarking.mbpp_templates import get_template_matcher
                 self.template_matcher = get_template_matcher()
             except Exception as e:
                 logger.warning(f"[KNOWLEDGE-CODING] Could not load template matcher: {e}")

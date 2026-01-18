@@ -6,8 +6,10 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
+
+logger = logging.getLogger(__name__)
+
 class RepoScanner:
-    logger = logging.getLogger(__name__)
     """
     Scans repository and assigns Genesis Keys to everything.
 

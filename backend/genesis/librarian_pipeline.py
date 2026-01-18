@@ -11,8 +11,11 @@ from enum import Enum
 import uuid
 import mimetypes
 import shutil
+
+logger = logging.getLogger(__name__)
+
+
 class IngestionStatus(str, Enum):
-    logger = logging.getLogger(__name__)
     """Status of ingestion process."""
     PENDING = "pending"
     RECEIVING = "receiving"
