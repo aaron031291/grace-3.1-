@@ -6,8 +6,11 @@ import asyncio
 import logging
 import uuid
 import json
+
+logger = logging.getLogger(__name__)
+
+
 class MessageType(Enum):
-    logger = logging.getLogger(__name__)
     """Types of messages in Layer 1 mesh."""
     REQUEST = "request"              # Request-response pattern
     RESPONSE = "response"            # Response to request

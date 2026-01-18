@@ -1,0 +1,66 @@
+{
+  "total_failures": 463,
+  "queries": [
+    {
+      "index": 1,
+      "problem": "Write a function to convert the given binary number to its decimal equivalent.\n\nFunction name should",
+      "query": "python example assertion error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmpbjc2ca_8_test.py\", l"
+    },
+    {
+      "index": 2,
+      "problem": "Write a function to find the top k integers that occur most frequently from given lists of sorted an",
+      "query": "python find sort list example assertion error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmpvckw3yod_test.py\", l"
+    },
+    {
+      "index": 3,
+      "problem": "Write a python function to find the missing number in a sorted array.\n\nFunction name should be: find",
+      "query": "python find sort example assertion error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmpxptwlfu7_test.py\", l"
+    },
+    {
+      "index": 4,
+      "problem": "Write a function to check if the letters of a given string can be rearranged so that two characters ",
+      "query": "python string example assertion error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmp4t5pmm31_test.py\", l"
+    },
+    {
+      "index": 5,
+      "problem": "Write a python function to find the sum of repeated elements in a given array.\n\nFunction name should",
+      "query": "python find example type error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmp8r69kv75_test.py\", l"
+    },
+    {
+      "index": 6,
+      "problem": "",
+      "query": "python example",
+      "error": "No valid code extracted (length: 0)"
+    },
+    {
+      "index": 7,
+      "problem": "Write a function to find the gcd of the given array elements.\n\nFunction name should be: find_gcd",
+      "query": "python find example type error",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\aaron\\AppData\\Local\\Temp\\tmp4azq_bac_test.py\", l"
+    },
+    {
+      "index": 8,
+      "problem": "",
+      "query": "python example",
+      "error": "No valid code extracted (length: 0)"
+    },
+    {
+      "index": 9,
+      "problem": "",
+      "query": "python example",
+      "error": "No valid code extracted (length: 0)"
+    },
+    {
+      "index": 10,
+      "problem": "",
+      "query": "python example",
+      "error": "No valid code extracted (length: 0)"
+    }
+  ],
+  "instructions": "Use these queries to search web, then extract code examples and create templates"
+}

@@ -1,7 +1,7 @@
 """
-Enterprise Coding Agent API
+Grace Coding Agent API
 
-API endpoints for the Enterprise Coding Agent - same quality & standards as self-healing system.
+API endpoints for the unified Coding Agent - enterprise-grade code generation.
 """
 
 from fastapi import APIRouter, HTTPException, Depends
@@ -11,28 +11,39 @@ from sqlalchemy.orm import Session
 from pathlib import Path
 
 from database.session import get_session
-from cognitive.enterprise_coding_agent import (
-    get_enterprise_coding_agent,
-    EnterpriseCodingAgent,
-    CodingTaskType,
-    CodeQualityLevel,
-    CodingAgentState
-)
-from cognitive.autonomous_healing_system import TrustLevel
+
+# Import from unified coding_agent module (with fallback for backward compatibility)
+try:
+    from cognitive.coding_agent import (
+        get_coding_agent as get_agent,
+        CodingAgent,
+        CodingTaskType,
+        CodeQualityLevel,
+        CodingAgentState,
+        TrustLevel
+    )
+except ImportError:
+    from cognitive.enterprise_coding_agent import (
+        get_enterprise_coding_agent as get_agent,
+        EnterpriseCodingAgent as CodingAgent,
+        CodingTaskType,
+        CodeQualityLevel,
+        CodingAgentState
+    )
+    from cognitive.autonomous_healing_system import TrustLevel
 
 router = APIRouter(prefix="/coding-agent", tags=["coding-agent"])
 
 # Global agent instance
-_agent: Optional[EnterpriseCodingAgent] = None
+_agent: Optional[CodingAgent] = None
 
 
-def get_coding_agent(session: Session = Depends(get_session)) -> EnterpriseCodingAgent:
+def get_coding_agent(session: Session = Depends(get_session)) -> CodingAgent:
     """Get or create coding agent instance."""
     global _agent
     
     if _agent is None:
-        from pathlib import Path
-        _agent = get_enterprise_coding_agent(
+        _agent = get_agent(
             session=session,
             repo_path=Path.cwd(),
             trust_level=TrustLevel.MEDIUM_RISK_AUTO,
@@ -104,7 +115,7 @@ class HealthResponse(BaseModel):
 @router.post("/task", response_model=TaskResponse)
 async def create_task(
     request: CreateTaskRequest,
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """
     Create a coding task.
@@ -160,7 +171,7 @@ async def create_task(
 @router.post("/task/{task_id}/execute", response_model=ExecuteTaskResponse)
 async def execute_task(
     task_id: str,
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """
     Execute a coding task using OODA Loop.
@@ -188,7 +199,7 @@ async def execute_task(
 @router.get("/task/{task_id}", response_model=TaskResponse)
 async def get_task(
     task_id: str,
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """Get task information."""
     try:
@@ -215,7 +226,7 @@ async def get_task(
 
 @router.get("/tasks", response_model=List[TaskResponse])
 async def list_tasks(
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """List all active tasks."""
     try:
@@ -239,7 +250,7 @@ async def list_tasks(
 
 @router.get("/metrics", response_model=MetricsResponse)
 async def get_metrics(
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """Get coding agent metrics."""
     try:
@@ -264,7 +275,7 @@ async def get_metrics(
 
 @router.get("/health", response_model=HealthResponse)
 async def get_health(
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """Get coding agent health status."""
     try:
@@ -285,7 +296,7 @@ async def get_health(
 
 @router.post("/sandbox/cleanup")
 async def cleanup_sandbox(
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """Cleanup sandbox."""
     try:
@@ -299,7 +310,7 @@ async def cleanup_sandbox(
 @router.post("/sandbox/practice")
 async def practice_in_sandbox(
     request: CreateTaskRequest,
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """
     Practice coding tasks in sandbox (integrated with self-healing training).
@@ -325,7 +336,7 @@ async def practice_in_sandbox(
 
 @router.get("/learning/connections")
 async def get_learning_connections(
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """
     Get information about learning connections.
@@ -347,7 +358,7 @@ async def get_learning_connections(
 @router.post("/healing/request")
 async def request_healing_assistance(
     request: Dict[str, Any],
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """
     Request assistance from Self-Healing System.
@@ -373,7 +384,7 @@ async def request_healing_assistance(
 @router.post("/healing/diagnostic")
 async def request_diagnostic(
     request: Dict[str, Any],
-    agent: EnterpriseCodingAgent = Depends(get_coding_agent)
+    agent: CodingAgent = Depends(get_coding_agent)
 ):
     """Request diagnostic analysis from Self-Healing System."""
     try:

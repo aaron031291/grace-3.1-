@@ -7,11 +7,12 @@ import asyncio
 import json
 import logging
 from genesis.whitelist_learning_pipeline import get_whitelist_pipeline, DataCategory, TrustLevel, PipelineStage, WhitelistEntry, PipelineResult
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/whitelist", tags=["Whitelist Learning"])
+
 class WhitelistProcessRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to process data through the whitelist pipeline."""
     content: str = Field(..., description="Content to process")
     source: str = Field(..., description="Source of the data (who provided it)")

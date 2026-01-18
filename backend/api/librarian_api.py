@@ -2221,3 +2221,160 @@ async def export_document_metadata(
     except Exception as e:
         logger.error(f"[LIBRARIAN-API] Error exporting metadata: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# UNIFIED LIBRARIAN BRIDGE ENDPOINTS (Amp + Grace Integration)
+# =============================================================================
+
+@router.get("/unified/status", summary="Get unified librarian status")
+async def get_unified_librarian_status(session: Session = Depends(get_session)):
+    """
+    Get status of the unified librarian system.
+    
+    Shows both local Grace librarian and external sources (GitHub, docs).
+    """
+    try:
+        librarian = get_librarian_engine(session)
+        return librarian.get_unified_status()
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error getting unified status: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/unified/search", summary="Unified search across all sources")
+async def unified_librarian_search(
+    query: str = Body(..., description="Search query"),
+    include_external: bool = Body(True, description="Include external sources"),
+    limit: int = Body(20, description="Maximum results"),
+    session: Session = Depends(get_session)
+):
+    """
+    Search across ALL knowledge sources - local AND external.
+    
+    This is the main unified search that queries:
+    - Grace's local knowledge base
+    - Registered GitHub repositories
+    - External documentation sources
+    """
+    try:
+        librarian = get_librarian_engine(session)
+        return librarian.unified_search(
+            query=query,
+            include_external=include_external,
+            limit=limit
+        )
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error in unified search: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/unified/register-github", summary="Register a GitHub repository")
+async def register_github_repository(
+    repo_url: str = Body(..., description="GitHub repo URL"),
+    name: Optional[str] = Body(None, description="Display name"),
+    is_private: bool = Body(False, description="Is private repo"),
+    sync_interval_hours: int = Body(24, description="Sync interval in hours"),
+    session: Session = Depends(get_session)
+):
+    """
+    Register a GitHub repository as an external knowledge source.
+    
+    Once registered, the repo will be synced and searchable via unified search.
+    """
+    try:
+        librarian = get_librarian_engine(session)
+        source = librarian.amp_bridge.register_github_repo(
+            repo_url=repo_url,
+            name=name,
+            is_private=is_private,
+            sync_interval_hours=sync_interval_hours
+        )
+        return {
+            "success": True,
+            "source": {
+                "identifier": source.identifier,
+                "name": source.name,
+                "url": source.url,
+                "type": source.source_type.value
+            }
+        }
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error registering GitHub repo: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/unified/register-docs", summary="Register external documentation")
+async def register_external_documentation(
+    url: str = Body(..., description="Documentation URL"),
+    name: str = Body(..., description="Display name"),
+    doc_type: str = Body("general", description="Documentation type"),
+    session: Session = Depends(get_session)
+):
+    """Register external documentation as a knowledge source."""
+    try:
+        librarian = get_librarian_engine(session)
+        source = librarian.amp_bridge.register_documentation(
+            url=url,
+            name=name,
+            doc_type=doc_type
+        )
+        return {
+            "success": True,
+            "source": {
+                "identifier": source.identifier,
+                "name": source.name,
+                "url": source.url,
+                "type": source.source_type.value
+            }
+        }
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error registering documentation: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/unified/sync/{source_identifier}", summary="Sync external source")
+async def sync_external_source(
+    source_identifier: str = Path(..., description="Source identifier"),
+    session: Session = Depends(get_session)
+):
+    """
+    Sync an external source (pull latest from GitHub, etc.)
+    
+    This updates the local cache with latest content.
+    """
+    import asyncio
+    try:
+        librarian = get_librarian_engine(session)
+        # Run async sync
+        result = await librarian.amp_bridge.sync_github_repo(source_identifier)
+        return result
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error syncing source: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/unified/sources", summary="List all registered sources")
+async def list_registered_sources(session: Session = Depends(get_session)):
+    """List all registered external knowledge sources."""
+    try:
+        librarian = get_librarian_engine(session)
+        status = librarian.amp_bridge.get_status()
+        return {
+            "total_sources": status.get("registered_sources", 0),
+            "sources": status.get("sources", {})
+        }
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error listing sources: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/unified/analytics", summary="Get unified analytics")
+async def get_unified_analytics(session: Session = Depends(get_session)):
+    """Get analytics across all knowledge sources (local + external)."""
+    try:
+        librarian = get_librarian_engine(session)
+        return librarian.amp_bridge.get_unified_analytics()
+    except Exception as e:
+        logger.error(f"[LIBRARIAN-API] Error getting unified analytics: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))

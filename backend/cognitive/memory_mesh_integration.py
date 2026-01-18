@@ -484,3 +484,22 @@ class MemoryMeshIntegration:
                     except Exception as e:
                         print(f"Error ingesting {learning_file}: {e}")
                         continue
+
+
+# Factory function for getting memory mesh integration
+_memory_mesh_instance = None
+
+
+def get_memory_mesh_integration(session: Session = None, knowledge_base_path: Path = None) -> MemoryMeshIntegration:
+    """Get or create the MemoryMeshIntegration singleton."""
+    global _memory_mesh_instance
+    
+    if _memory_mesh_instance is None:
+        if session is None:
+            from database.session import get_session
+            session = next(get_session())
+        if knowledge_base_path is None:
+            knowledge_base_path = Path(__file__).parent.parent / "knowledge_base"
+        _memory_mesh_instance = MemoryMeshIntegration(session, knowledge_base_path)
+    
+    return _memory_mesh_instance

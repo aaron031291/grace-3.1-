@@ -10,8 +10,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import hashlib
 import urllib.parse
+
+logger = logging.getLogger(__name__)
+
+
 class KnowledgeSource(str, Enum):
-    logger = logging.getLogger(__name__)
     """Sources of web knowledge."""
     WEB_SEARCH = "web_search"
     GITHUB = "github"

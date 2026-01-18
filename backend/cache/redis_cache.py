@@ -5,6 +5,35 @@ from typing import Any, Optional, Callable, TypeVar, Union, List
 from functools import wraps
 from datetime import timedelta
 import logging
+
+logger = logging.getLogger(__name__)
+
+
+def _record_cache_error(error: Exception, operation: str) -> None:
+    """Record cache errors to self-healing pipeline."""
+    try:
+        from cognitive.error_learning_integration import get_error_learning_integration
+        from database.session import SessionLocal
+        
+        session = SessionLocal()
+        try:
+            error_learning = get_error_learning_integration(session=session)
+            error_learning.record_error(
+                error=error,
+                context={
+                    "location": "cache.redis",
+                    "reason": f"Redis cache operation failed: {operation}",
+                    "method": operation
+                },
+                component="cache.redis",
+                severity="medium"
+            )
+        finally:
+            session.close()
+    except Exception:
+        pass  # Don't fail cache operations if error recording fails
+
+
 class RedisCache:
     logger = logging.getLogger(__name__)
     """
@@ -74,6 +103,7 @@ class RedisCache:
             self._client = InMemoryFallback()
         except Exception as e:
             logger.warning(f"Failed to connect to Redis: {e}. Using in-memory fallback.")
+            _record_cache_error(e, "connect")
             self._client = InMemoryFallback()
 
     async def disconnect(self):
@@ -122,6 +152,7 @@ class RedisCache:
                 return None
         except Exception as e:
             logger.error(f"Cache get error: {e}")
+            _record_cache_error(e, "get")
             return None
 
     async def set(

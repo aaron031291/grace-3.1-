@@ -14,7 +14,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from threading import Lock
 import time
-from backend.cognitive.enterprise_coding_agent import EnterpriseCodingAgent
+from cognitive.enterprise_coding_agent import EnterpriseCodingAgent
 
 
 class ParallelMBPPIntegration:
@@ -180,17 +180,105 @@ class ParallelMBPPIntegration:
             generation_method = None
             
             if use_templates and template_first:
-                code = mbpp._try_template_generation(problem)
-                if code:
-                    generation_method = "template"
+                # Try template-first with LLM collaboration
+                try:
+                    from backend.benchmarking.template_llm_collaboration import TemplateLLMCollaborator
+                    collaborator = TemplateLLMCollaborator(coding_agent=worker_agent)
+                    
+                    function_name = problem.get("function_name", "solve_task")
+                    if not function_name or function_name == "solve_task":
+                        test_cases = problem.get("test_list", [])
+                        if test_cases:
+                            import re
+                            for test in test_cases:
+                                func_match = re.search(r'(\w+)\s*\(', test)
+                                if func_match:
+                                    function_name = func_match.group(1)
+                                    break
+                    
+                    code = collaborator.generate_hybrid(
+                        problem_text=problem["text"],
+                        function_name=function_name,
+                        test_cases=problem.get("test_list", [])
+                    )
+                    
+                    # ALWAYS fix function name after collaboration
+                    if code and function_name and function_name != "solve_task":
+                        from backend.benchmarking.fix_function_name_extraction import fix_function_name_in_code
+                        code = fix_function_name_in_code(code, function_name)
+                    
+                    if code:
+                        generation_method = "template_llm_collaboration"
+                    else:
+                        # Fallback to pure template
+                        code = mbpp._try_template_generation(problem)
+                        if code:
+                            generation_method = "template"
+                except Exception as e:
+                    # Fallback to pure template
+                    code = mbpp._try_template_generation(problem)
+                    if code:
+                        generation_method = "template"
             
             # If no template, try LLM (using worker's subagent)
             if not code:
                 from backend.cognitive.enterprise_coding_agent import CodingTaskType
                 
+                # Extract function name from test cases - MORE ROBUST
+                function_name = problem.get("function_name")
+                if not function_name or function_name == "solve_task":
+                    test_cases = problem.get("test_list", [])
+                    if test_cases:
+                        import re
+                        # Try multiple patterns to find function name
+                        for test in test_cases:
+                            # Pattern 1: function_name(
+                            func_match = re.search(r'(\w+)\s*\(', test)
+                            if func_match:
+                                potential_name = func_match.group(1)
+                                # Skip common non-function words
+                                if potential_name not in ['assert', 'print', 'len', 'str', 'int', 'list', 'dict', 'set']:
+                                    function_name = potential_name
+                                    break
+                            # Pattern 2: assert function_name(
+                            func_match = re.search(r'assert\s+(\w+)\s*\(', test)
+                            if func_match:
+                                function_name = func_match.group(1)
+                                break
+                            # Pattern 3: function_name ==
+                            func_match = re.search(r'(\w+)\s*==', test)
+                            if func_match:
+                                potential_name = func_match.group(1)
+                                if potential_name not in ['assert', 'print', 'len', 'str', 'int', 'list', 'dict', 'set']:
+                                    function_name = potential_name
+                                    break
+                
+                # Fallback to solve_task only if absolutely nothing found
+                if not function_name:
+                    function_name = "solve_task"
+                
+                # Build enhanced prompt with function name - MAKE IT EXPLICIT
+                enhanced_description = problem["text"]
+                if function_name and function_name != "solve_task":
+                    enhanced_description = f"""{problem["text"]}
+
+CRITICAL REQUIREMENT: The function MUST be named exactly: {function_name}
+The test cases call {function_name}(), so your code must define:
+def {function_name}(...):
+
+DO NOT use 'solve_task', 'to', or any other name. Use exactly: {function_name}"""
+                
+                # Add test cases to context
+                task_context = {
+                    "function_name": function_name,
+                    "test_cases": problem.get("test_list", []),
+                    "test_list": problem.get("test_list", [])
+                }
+                
                 task = worker_agent.create_task(
                     task_type=CodingTaskType.CODE_GENERATION,
-                    description=problem["text"]
+                    description=enhanced_description,
+                    context=task_context
                 )
                 
                 execution_result = worker_agent.execute_task(task.task_id)
@@ -199,20 +287,140 @@ class ParallelMBPPIntegration:
                     generation = execution_result.get("result", {}).get("generation")
                     if generation:
                         generation_method = "llm"
+                        
+                        # Extract code from generation object
                         if hasattr(generation, 'code_after'):
-                            code = generation.code_after
+                            raw_code = generation.code_after
                         elif hasattr(generation, 'code'):
-                            code = generation.code
+                            raw_code = generation.code
                         elif isinstance(generation, dict):
-                            code = generation.get('code', '') or generation.get('code_after', '')
+                            raw_code = generation.get('code', '') or generation.get('code_after', '')
                         else:
-                            code = str(generation)
+                            raw_code = str(generation)
+                        
+                        # Re-extract function name to ensure we have it (should already be set above)
+                        if not function_name or function_name == "solve_task":
+                            # Extract from test cases again
+                            test_cases = problem.get("test_list", [])
+                            if test_cases:
+                                import re
+                                for test in test_cases:
+                                    func_match = re.search(r'(\w+)\s*\(', test)
+                                    if func_match:
+                                        potential_name = func_match.group(1)
+                                        if potential_name not in ['assert', 'print', 'len', 'str', 'int', 'list', 'dict', 'set']:
+                                            function_name = potential_name
+                                            break
+                        
+                        # ALWAYS fix function name in code - replace ANY wrong name
+                        from backend.benchmarking.fix_function_name_extraction import extract_and_fix_code
+                        if function_name and function_name != "solve_task":
+                            code = extract_and_fix_code(raw_code, function_name, problem.get("text", ""))
+                        else:
+                            code = raw_code
             
-            # Template fallback if LLM failed
+            # Template fallback if LLM failed - Use collaboration
             if not code and use_templates and not template_first:
-                code = mbpp._try_template_generation(problem)
-                if code:
-                    generation_method = "template_fallback"
+                try:
+                    from backend.benchmarking.template_llm_collaboration import TemplateLLMCollaborator
+                    collaborator = TemplateLLMCollaborator(coding_agent=worker_agent)
+                    
+                    function_name = problem.get("function_name", "solve_task")
+                    code = collaborator.generate_hybrid(
+                        problem_text=problem["text"],
+                        function_name=function_name,
+                        test_cases=problem.get("test_list", [])
+                    )
+                    
+                    if code:
+                        generation_method = "template_llm_collaboration_fallback"
+                    else:
+                        # Pure template fallback
+                        code = mbpp._try_template_generation(problem)
+                        if code:
+                            generation_method = "template_fallback"
+                except Exception as e:
+                    # Pure template fallback
+                    code = mbpp._try_template_generation(problem)
+                    if code:
+                        generation_method = "template_fallback"
+            
+            # ENHANCED KNOWLEDGE: Search ALL sources (Learning Memory + AI Research + Web)
+            if not code:
+                try:
+                    from backend.benchmarking.enhanced_web_integration import EnhancedWebTemplateIntegration
+                    from backend.oracle_intelligence.web_knowledge import WebKnowledgeIntegration
+                    from backend.retrieval.retriever import DocumentRetriever
+                    from backend.cognitive.learning_memory import LearningMemoryManager
+                    from embedding import get_embedding_model
+                    
+                    # Initialize enhanced integration for this worker
+                    web_service = WebKnowledgeIntegration()
+                    
+                    retriever = None
+                    try:
+                        embedding_model = get_embedding_model()
+                        retriever = DocumentRetriever(embedding_model=embedding_model)
+                    except:
+                        pass
+                    
+                    learning_memory = None
+                    try:
+                        if worker_session:
+                            learning_memory = LearningMemoryManager(worker_session)
+                    except:
+                        pass
+                    
+                    # Find AI research path
+                    from pathlib import Path
+                    project_root = Path(__file__).parent.parent.parent
+                    ai_research_paths = [
+                        project_root / "knowledge_base" / "learning memory" / "ai research",
+                        project_root / "backend" / "knowledge_base" / "learning memory" / "ai research",
+                        project_root / "knowledge_base" / "ai research",
+            project_root / "knowledge_base" / "coding_patterns",
+                    ]
+                    ai_research_path = None
+                    for path in ai_research_paths:
+                        if path.exists():
+                            ai_research_path = str(path)
+                            break
+                    
+                    enhanced_integration = EnhancedWebTemplateIntegration(
+                        web_knowledge_service=web_service,
+                        document_retriever=retriever,
+                        learning_memory_manager=learning_memory,
+                        ai_research_path=ai_research_path
+                    )
+                    
+                    enhanced_template = enhanced_integration.search_all_sources_sync(
+                        problem_text=problem["text"],
+                        test_cases=problem.get("test_list", [])
+                    )
+                    
+                    if enhanced_template:
+                        sources = enhanced_template.get("sources_used", [])
+                        from backend.benchmarking.mbpp_templates import MBPPTemplate
+                        mbpp_template = MBPPTemplate(
+                            name=enhanced_template["name"],
+                            pattern_keywords=enhanced_template["pattern_keywords"],
+                            pattern_regex=enhanced_template["pattern_regex"],
+                            template_code=enhanced_template["template_code"],
+                            description=enhanced_template["description"],
+                            examples=enhanced_template.get("examples", [])
+                        )
+                        
+                        function_name = problem.get("function_name", "solve_task")
+                        code = mbpp_template.generate_code(
+                            function_name=function_name,
+                            problem_text=problem["text"],
+                            test_cases=problem.get("test_list", [])
+                        )
+                        
+                        if code:
+                            generation_method = "enhanced_knowledge"
+                except Exception as e:
+                    pass  # Silently fail - don't break parallel execution
             
             if not code:
                 return {

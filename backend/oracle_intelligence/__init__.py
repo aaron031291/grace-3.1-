@@ -69,6 +69,53 @@ from .swe_platform_connector import (
     CIWorkflow
 )
 
+from .unified_oracle_hub import (
+    UnifiedOracleHub,
+    IntelligenceSource,
+    IntelligenceItem,
+    get_oracle_hub,
+    initialize_oracle_hub_with_hooks,
+    hook_librarian_to_oracle,
+    hook_sandbox_to_oracle,
+    hook_learning_memory_to_oracle,
+    hook_self_healing_to_oracle
+)
+
+from .reverse_knn_learning import (
+    ReverseKNNLearning,
+    KnowledgeCluster,
+    KnowledgeClusterType,
+    ExpansionStrategy,
+    ExpansionQuery,
+    LLMInsight,
+    get_reverse_knn_learning,
+    initialize_reverse_knn_with_oracle
+)
+
+from .enhanced_oracle_memory import (
+    EnhancedOracleMemory,
+    UnifiedMemoryItem,
+    MemoryItemType,
+    EvidenceItem,
+    EvidenceKind,
+    ReasoningChain,
+    ReasoningStep,
+    ConfidenceCalibrator,
+    CrossSourceCorrelator,
+    get_enhanced_oracle_memory
+)
+
+from .enhanced_proactive_learning import (
+    EnhancedProactiveLearning,
+    LearningTarget,
+    LearningMode,
+    LLMPlan,
+    LLMAnalysis,
+    LLMCritique,
+    get_enhanced_proactive_learning,
+    initialize_enhanced_learning
+)
+
 __all__ = [
     # Oracle Core
     'OracleCore',
@@ -110,4 +157,47 @@ __all__ = [
     'CodeSnippet',
     'SWEPattern',
     'CIWorkflow',
+
+    # Unified Oracle Hub - Central Intelligence
+    'UnifiedOracleHub',
+    'IntelligenceSource',
+    'IntelligenceItem',
+    'get_oracle_hub',
+    'initialize_oracle_hub_with_hooks',
+    'hook_librarian_to_oracle',
+    'hook_sandbox_to_oracle',
+    'hook_learning_memory_to_oracle',
+    'hook_self_healing_to_oracle',
+
+    # Reverse KNN Proactive Learning
+    'ReverseKNNLearning',
+    'KnowledgeCluster',
+    'KnowledgeClusterType',
+    'ExpansionStrategy',
+    'ExpansionQuery',
+    'LLMInsight',
+    'get_reverse_knn_learning',
+    'initialize_reverse_knn_with_oracle',
+
+    # Enhanced Oracle Memory
+    'EnhancedOracleMemory',
+    'UnifiedMemoryItem',
+    'MemoryItemType',
+    'EvidenceItem',
+    'EvidenceKind',
+    'ReasoningChain',
+    'ReasoningStep',
+    'ConfidenceCalibrator',
+    'CrossSourceCorrelator',
+    'get_enhanced_oracle_memory',
+
+    # Enhanced Proactive Learning
+    'EnhancedProactiveLearning',
+    'LearningTarget',
+    'LearningMode',
+    'LLMPlan',
+    'LLMAnalysis',
+    'LLMCritique',
+    'get_enhanced_proactive_learning',
+    'initialize_enhanced_learning',
 ]

@@ -7,10 +7,10 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
 class ActionType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of autonomous actions."""
     # Ingestion Actions
     INGEST_FILE = "ingest_file"

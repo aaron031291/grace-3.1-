@@ -6,8 +6,12 @@ import logging
 from timesense.engine import get_timesense_engine, TimeSenseEngine, EngineStatus
 from timesense.primitives import PrimitiveType, PrimitiveCategory, get_primitive_registry
 from timesense.predictor import PredictionResult
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/timesense", tags=["TimeSense"])
+
 class EstimateRequest(BaseModel):
-    logger = logging.getLogger(__name__)
     """Request for time estimate."""
     primitive_type: str = Field(..., description="Type of primitive operation")
     size: float = Field(..., description="Size in the primitive's native unit")

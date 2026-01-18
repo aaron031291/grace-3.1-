@@ -71,10 +71,10 @@ class LLMEnhancedDiagnostic:
         
         # Import Grace systems
         try:
-            from backend.llm_orchestrator.advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
-            from backend.transform.transformation_library import get_transformation_library
+            from llm_orchestrator.advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
+            from transform.transformation_library import get_transformation_library
             from cognitive.magma_memory_system import MagmaMemorySystem
-            from backend.cognitive.ooda import OODALoop
+            from cognitive.ooda import OODALoop
             
             self.grace_llm = get_advanced_grace_aligned_llm(
                 session=session,

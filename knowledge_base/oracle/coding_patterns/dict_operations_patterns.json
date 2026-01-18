@@ -1,0 +1,481 @@
+{
+  "count": 30,
+  "mbpp_patterns": [
+    {
+      "task_id": 12,
+      "description": "Write a function to sort a given matrix in ascending order according to the sum of its rows.",
+      "solution": "def sort_matrix(M):\r\n    result = sorted(M, key=sum)\r\n    return result",
+      "test_cases": [
+        "assert sort_matrix([[1, 2, 3], [2, 4, 5], [1, 1, 1]])==[[1, 1, 1], [1, 2, 3], [2, 4, 5]]",
+        "assert sort_matrix([[1, 2, 3], [-2, 4, -5], [1, -1, 1]])==[[-2, 4, -5], [1, -1, 1], [1, 2, 3]]",
+        "assert sort_matrix([[5,8,9],[6,4,3],[2,1,4]])==[[2, 1, 4], [6, 4, 3], [5, 8, 9]]"
+      ],
+      "keywords": [
+        "sum",
+        "sort"
+      ],
+      "operations": [
+        "sorted"
+      ]
+    },
+    {
+      "task_id": 87,
+      "description": "Write a function to merge three dictionaries into a single expression.",
+      "solution": "import collections as ct\r\ndef merge_dictionaries_three(dict1,dict2, dict3):\r\n    merged_dict = dict(ct.ChainMap({},dict1,dict2,dict3))\r\n    return merged_dict",
+      "test_cases": [
+        "assert merge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" }, { \"G\": \"Green\", \"W\": \"White\" },{ \"O\": \"Orange\", \"W\": \"White\", \"B\": \"Black\" })=={'B': 'Black', 'R': 'Red', 'P': 'Pink', 'G': 'Green', 'W': 'White', 'O': 'Orange'}",
+        "assert merge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" }, { \"G\": \"Green\", \"W\": \"White\" },{\"L\":\"lavender\",\"B\":\"Blue\"})=={'W': 'White', 'P': 'Pink', 'B': 'Black', 'R': 'Red', 'G': 'Green', 'L': 'lavender'}",
+        "assert merge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" },{\"L\":\"lavender\",\"B\":\"Blue\"},{ \"G\": \"Green\", \"W\": \"White\" })=={'B': 'Black', 'P': 'Pink', 'R': 'Red', 'G': 'Green', 'L': 'lavender', 'W': 'White'}"
+      ],
+      "keywords": [
+        "dict"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 93,
+      "description": "Write a function to calculate the value of 'a' to the power 'b'.",
+      "solution": "def power(a,b):\r\n\tif b==0:\r\n\t\treturn 1\r\n\telif a==0:\r\n\t\treturn 0\r\n\telif b==1:\r\n\t\treturn a\r\n\telse:\r\n\t\treturn a*power(a,b-1)",
+      "test_cases": [
+        "assert power(3,4) == 81",
+        "assert power(2,3) == 8",
+        "assert power(5,5) == 3125"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 263,
+      "description": "Write a function to merge two dictionaries.",
+      "solution": "def merge_dict(d1,d2):\r\n d = d1.copy()\r\n d.update(d2)\r\n return d",
+      "test_cases": [
+        "assert merge_dict({'a': 100, 'b': 200},{'x': 300, 'y': 200})=={'x': 300, 'y': 200, 'a': 100, 'b': 200}",
+        "assert merge_dict({'a':900,'b':900,'d':900},{'a':900,'b':900,'d':900})=={'a':900,'b':900,'d':900,'a':900,'b':900,'d':900}",
+        "assert merge_dict({'a':10,'b':20},{'x':30,'y':40})=={'x':30,'y':40,'a':10,'b':20}"
+      ],
+      "keywords": [
+        "dict"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 277,
+      "description": "Write a function to filter a dictionary based on values.",
+      "solution": "def dict_filter(dict,n):\r\n result = {key:value for (key, value) in dict.items() if value >=n}\r\n return result",
+      "test_cases": [
+        "assert dict_filter({'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190},170)=={'Cierra Vega': 175, 'Alden Cantrell': 180, 'Pierre Cox': 190}",
+        "assert dict_filter({'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190},180)=={ 'Alden Cantrell': 180, 'Pierre Cox': 190}",
+        "assert dict_filter({'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190},190)=={ 'Pierre Cox': 190}"
+      ],
+      "keywords": [
+        "filter",
+        "dict",
+        "dictionary"
+      ],
+      "operations": [
+        "filter"
+      ]
+    },
+    {
+      "task_id": 301,
+      "description": "Write a function to find the depth of a dictionary.",
+      "solution": "def dict_depth(d):\r\n    if isinstance(d, dict):\r\n        return 1 + (max(map(dict_depth, d.values())) if d else 0)\r\n    return 0",
+      "test_cases": [
+        "assert dict_depth({'a':1, 'b': {'c': {'d': {}}}})==4",
+        "assert dict_depth({'a':1, 'b': {'c':'python'}})==2",
+        "assert dict_depth({1: 'Sun', 2: {3: {4:'Mon'}}})==3"
+      ],
+      "keywords": [
+        "find",
+        "dict",
+        "dictionary"
+      ],
+      "operations": [
+        "map",
+        "max"
+      ]
+    },
+    {
+      "task_id": 318,
+      "description": "Write a python function to find the maximum volume of a cuboid with given sum of sides.",
+      "solution": "def max_volume (s): \r\n    maxvalue = 0\r\n    i = 1\r\n    for i in range(s - 1): \r\n        j = 1\r\n        for j in range(s): \r\n            k = s - i - j \r\n            maxvalue = max(maxvalue, i * j * k)         \r\n    return maxvalue ",
+      "test_cases": [
+        "assert max_volume(8) == 18",
+        "assert max_volume(4) == 2",
+        "assert max_volume(1) == 0"
+      ],
+      "keywords": [
+        "sum",
+        "max",
+        "find"
+      ],
+      "operations": [
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 348,
+      "description": "Write a function to count sequences of given length having non-negative prefix sums that can be generated by given values.",
+      "solution": "def bin_coff(n, r): \r\n\tval = 1\r\n\tif (r > (n - r)): \r\n\t\tr = (n - r) \r\n\tfor i in range(0, r): \r\n\t\tval *= (n - i) \r\n\t\tval //= (i + 1) \r\n\treturn val \r\ndef find_ways(M): \r\n\tn = M // 2\r\n\ta = bin_coff(2 * n, n) \r\n\tb = a // (n + 1) \r\n\treturn (b) ",
+      "test_cases": [
+        "assert find_ways(4) == 2",
+        "assert find_ways(6) == 5",
+        "assert find_ways(8) == 14"
+      ],
+      "keywords": [
+        "sum",
+        "count"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 402,
+      "description": "Write a function to compute the value of ncr%p.",
+      "solution": "def ncr_modp(n, r, p): \r\n    C = [0 for i in range(r+1)]   \r\n    C[0] = 1\r\n    for i in range(1, n+1): \r\n        for j in range(min(i, r), 0, -1): \r\n            C[j] = (C[j] + C[j-1]) % p   \r\n    return C[r] ",
+      "test_cases": [
+        "assert ncr_modp(10,2,13)==6",
+        "assert ncr_modp(15,12,43)==25",
+        "assert ncr_modp(17,9,18)==10"
+      ],
+      "keywords": [],
+      "operations": [
+        "list_comprehension",
+        "min",
+        "range"
+      ]
+    },
+    {
+      "task_id": 464,
+      "description": "Write a function to check if all values are same in a dictionary.",
+      "solution": "def check_value(dict, n):\r\n    result = all(x == n for x in dict.values()) \r\n    return result",
+      "test_cases": [
+        "assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},10)==False",
+        "assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},12)==True",
+        "assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},5)==False"
+      ],
+      "keywords": [
+        "check",
+        "dict",
+        "dictionary"
+      ],
+      "operations": [
+        "all"
+      ]
+    },
+    {
+      "task_id": 465,
+      "description": "Write a function to drop empty items from a given dictionary.",
+      "solution": "def drop_empty(dict1):\r\n  dict1 = {key:value for (key, value) in dict1.items() if value is not None}\r\n  return dict1",
+      "test_cases": [
+        "assert drop_empty({'c1': 'Red', 'c2': 'Green', 'c3':None})=={'c1': 'Red', 'c2': 'Green'}",
+        "assert drop_empty({'c1': 'Red', 'c2': None, 'c3':None})=={'c1': 'Red'}",
+        "assert drop_empty({'c1': None, 'c2': 'Green', 'c3':None})=={ 'c2': 'Green'}"
+      ],
+      "keywords": [
+        "dict",
+        "dictionary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 475,
+      "description": "Write a function to sort counter by value.",
+      "solution": "from collections import Counter\r\ndef sort_counter(dict1):\r\n x = Counter(dict1)\r\n sort_counter=x.most_common()\r\n return sort_counter",
+      "test_cases": [
+        "assert sort_counter({'Math':81, 'Physics':83, 'Chemistry':87})==[('Chemistry', 87), ('Physics', 83), ('Math', 81)]",
+        "assert sort_counter({'Math':400, 'Physics':300, 'Chemistry':250})==[('Math', 400), ('Physics', 300), ('Chemistry', 250)]",
+        "assert sort_counter({'Math':900, 'Physics':1000, 'Chemistry':1250})==[('Chemistry', 1250), ('Physics', 1000), ('Math', 900)]"
+      ],
+      "keywords": [
+        "sort",
+        "count"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 582,
+      "description": "Write a function to check if a dictionary is empty or not.",
+      "solution": "def my_dict(dict1):\r\n  if bool(dict1):\r\n     return False\r\n  else:\r\n     return True",
+      "test_cases": [
+        "assert my_dict({10})==False",
+        "assert my_dict({11})==False",
+        "assert my_dict({})==True"
+      ],
+      "keywords": [
+        "check",
+        "dict",
+        "dictionary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 585,
+      "description": "Write a function to find the n - expensive price items from a given dataset using heap queue algorithm.",
+      "solution": "import heapq\r\ndef expensive_items(items,n):\r\n  expensive_items = heapq.nlargest(n, items, key=lambda s: s['price'])\r\n  return expensive_items",
+      "test_cases": [
+        "assert expensive_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}],1)==[{'name': 'Item-2', 'price': 555.22}]",
+        "assert expensive_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}, {'name': 'Item-3', 'price': 45.09}],2)==[{'name': 'Item-2', 'price': 555.22},{'name': 'Item-1', 'price': 101.1}]",
+        "assert expensive_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}, {'name': 'Item-3', 'price': 45.09},{'name': 'Item-4', 'price': 22.75}],1)==[{'name': 'Item-2', 'price': 555.22}]"
+      ],
+      "keywords": [
+        "find",
+        "set"
+      ],
+      "operations": [
+        "lambda"
+      ]
+    },
+    {
+      "task_id": 609,
+      "description": "Write a python function to find minimum possible value for the given periodic function.",
+      "solution": "def floor_Min(A,B,N):\r\n    x = max(B - 1,N)\r\n    return (A*x) // B",
+      "test_cases": [
+        "assert floor_Min(10,20,30) == 15",
+        "assert floor_Min(1,2,1) == 0",
+        "assert floor_Min(11,10,9) == 9"
+      ],
+      "keywords": [
+        "min",
+        "find"
+      ],
+      "operations": [
+        "max"
+      ]
+    },
+    {
+      "task_id": 635,
+      "description": "Write a function to push all values into a heap and then pop off the smallest values one at a time.",
+      "solution": "import heapq as hq\r\ndef heap_sort(iterable):\r\n    h = []\r\n    for value in iterable:\r\n        hq.heappush(h, value)\r\n    return [hq.heappop(h) for i in range(len(h))]",
+      "test_cases": [
+        "assert heap_sort([1, 3, 5, 7, 9, 2, 4, 6, 8, 0])==[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "assert heap_sort([25, 35, 22, 85, 14, 65, 75, 25, 58])==[14, 22, 25, 25, 35, 58, 65, 75, 85]",
+        "assert heap_sort( [7, 1, 9, 5])==[1,5,7,9]"
+      ],
+      "keywords": [],
+      "operations": [
+        "list_comprehension",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 663,
+      "description": "Write a function to find the largest possible value of k such that k modulo x is y.",
+      "solution": "import sys \r\ndef find_max_val(n, x, y): \r\n\tans = -sys.maxsize \r\n\tfor k in range(n + 1): \r\n\t\tif (k % x == y): \r\n\t\t\tans = max(ans, k) \r\n\treturn (ans if (ans >= 0 and\r\n\t\t\t\t\tans <= n) else -1) ",
+      "test_cases": [
+        "assert find_max_val(15, 10, 5) == 15",
+        "assert find_max_val(187, 10, 5) == 185",
+        "assert find_max_val(16, 11, 1) == 12"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 703,
+      "description": "Write a function to check whether the given key is present in the dictionary or not.",
+      "solution": "def is_key_present(d,x):\r\n  if x in d:\r\n    return True\r\n  else:\r\n     return False",
+      "test_cases": [
+        "assert is_key_present({1: 10, 2: 20, 3: 30, 4: 40, 5: 50, 6: 60},5)==True",
+        "assert is_key_present({1: 10, 2: 20, 3: 30, 4: 40, 5: 50, 6: 60},6)==True",
+        "assert is_key_present({1: 10, 2: 20, 3: 30, 4: 40, 5: 50, 6: 60},10)==False"
+      ],
+      "keywords": [
+        "check",
+        "dict",
+        "dictionary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 722,
+      "description": "Write a function to filter the height and width of students which are stored in a dictionary.",
+      "solution": "def filter_data(students,h,w):\r\n    result = {k: s for k, s in students.items() if s[0] >=h and s[1] >=w}\r\n    return result    ",
+      "test_cases": [
+        "assert filter_data({'Cierra Vega': (6.2, 70), 'Alden Cantrell': (5.9, 65), 'Kierra Gentry': (6.0, 68), 'Pierre Cox': (5.8, 66)},6.0,70)=={'Cierra Vega': (6.2, 70)}",
+        "assert filter_data({'Cierra Vega': (6.2, 70), 'Alden Cantrell': (5.9, 65), 'Kierra Gentry': (6.0, 68), 'Pierre Cox': (5.8, 66)},5.9,67)=={'Cierra Vega': (6.2, 70),'Kierra Gentry': (6.0, 68)}",
+        "assert filter_data({'Cierra Vega': (6.2, 70), 'Alden Cantrell': (5.9, 65), 'Kierra Gentry': (6.0, 68), 'Pierre Cox': (5.8, 66)},5.7,64)=={'Cierra Vega': (6.2, 70),'Alden Cantrell': (5.9, 65),'Kierra Gentry': (6.0, 68),'Pierre Cox': (5.8, 66)}"
+      ],
+      "keywords": [
+        "filter",
+        "dict",
+        "dictionary"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 736,
+      "description": "Write a function to locate the left insertion point for a specified value in sorted order.",
+      "solution": "import bisect\r\ndef left_insertion(a, x):\r\n    i = bisect.bisect_left(a, x)\r\n    return i",
+      "test_cases": [
+        "assert left_insertion([1,2,4,5],6)==4",
+        "assert left_insertion([1,2,4,5],3)==2",
+        "assert left_insertion([1,2,4,5],7)==4"
+      ],
+      "keywords": [
+        "sort"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 786,
+      "description": "Write a function to locate the right insertion point for a specified value in sorted order.",
+      "solution": "import bisect\r\ndef right_insertion(a, x):\r\n    i = bisect.bisect_right(a, x)\r\n    return i",
+      "test_cases": [
+        "assert right_insertion([1,2,4,5],6)==4",
+        "assert right_insertion([1,2,4,5],3)==2",
+        "assert right_insertion([1,2,4,5],7)==4"
+      ],
+      "keywords": [
+        "sort"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 795,
+      "description": "Write a function to find the n - cheap price items from a given dataset using heap queue algorithm.",
+      "solution": "import heapq\r\ndef cheap_items(items,n):\r\n  cheap_items = heapq.nsmallest(n, items, key=lambda s: s['price'])\r\n  return cheap_items",
+      "test_cases": [
+        "assert cheap_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}],1)==[{'name': 'Item-1', 'price': 101.1}]",
+        "assert cheap_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}],2)==[{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}]",
+        "assert cheap_items([{'name': 'Item-1', 'price': 101.1},{'name': 'Item-2', 'price': 555.22}, {'name': 'Item-3', 'price': 45.09},{'name': 'Item-4', 'price': 22.75}],1)==[{'name': 'Item-4', 'price': 22.75}]"
+      ],
+      "keywords": [
+        "find",
+        "set"
+      ],
+      "operations": [
+        "lambda"
+      ]
+    },
+    {
+      "task_id": 796,
+      "description": "Write function to find the sum of all items in the given dictionary.",
+      "solution": "def return_sum(dict):\r\n  sum = 0\r\n  for i in dict.values():\r\n    sum = sum + i\r\n  return sum",
+      "test_cases": [
+        "assert return_sum({'a': 100, 'b':200, 'c':300}) == 600",
+        "assert return_sum({'a': 25, 'b':18, 'c':45}) == 88",
+        "assert return_sum({'a': 36, 'b':39, 'c':49}) == 124"
+      ],
+      "keywords": [
+        "sum",
+        "find",
+        "dict",
+        "dictionary"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 821,
+      "description": "Write a function to merge two dictionaries into a single expression.",
+      "solution": "import collections as ct\r\ndef merge_dictionaries(dict1,dict2):\r\n    merged_dict = dict(ct.ChainMap({}, dict1, dict2))\r\n    return merged_dict",
+      "test_cases": [
+        "assert merge_dictionaries({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" }, { \"G\": \"Green\", \"W\": \"White\" })=={'B': 'Black', 'R': 'Red', 'P': 'Pink', 'G': 'Green', 'W': 'White'}",
+        "assert merge_dictionaries({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" },{ \"O\": \"Orange\", \"W\": \"White\", \"B\": \"Black\" })=={'O': 'Orange', 'P': 'Pink', 'B': 'Black', 'W': 'White', 'R': 'Red'}",
+        "assert merge_dictionaries({ \"G\": \"Green\", \"W\": \"White\" },{ \"O\": \"Orange\", \"W\": \"White\", \"B\": \"Black\" })=={'W': 'White', 'O': 'Orange', 'G': 'Green', 'B': 'Black'}"
+      ],
+      "keywords": [
+        "dict"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 902,
+      "description": "Write a function to combine two dictionaries by adding values for common keys.",
+      "solution": "from collections import Counter\r\ndef add_dict(d1,d2):\r\n   add_dict = Counter(d1) + Counter(d2)\r\n   return add_dict",
+      "test_cases": [
+        "assert add_dict({'a': 100, 'b': 200, 'c':300},{'a': 300, 'b': 200, 'd':400})==({'b': 400, 'd': 400, 'a': 400, 'c': 300}) ",
+        "assert add_dict({'a': 500, 'b': 700, 'c':900},{'a': 500, 'b': 600, 'd':900})==({'b': 1300, 'd': 900, 'a': 1000, 'c': 900}) ",
+        "assert add_dict({'a':900,'b':900,'d':900},{'a':900,'b':900,'d':900})==({'b': 1800, 'd': 1800, 'a': 1800})"
+      ],
+      "keywords": [
+        "add",
+        "dict"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 910,
+      "description": "Write a function to validate a gregorian date.",
+      "solution": "import datetime\r\ndef check_date(m, d, y):\r\n    try:\r\n        m, d, y = map(int, (m, d, y))\r\n        datetime.date(y, m, d)\r\n        return True\r\n    except ValueError:\r\n        return False",
+      "test_cases": [
+        "assert check_date(11,11,2002)==True",
+        "assert check_date(13,11,2002)==False",
+        "assert check_date('11','11','2002')==True"
+      ],
+      "keywords": [],
+      "operations": [
+        "map"
+      ]
+    },
+    {
+      "task_id": 950,
+      "description": "Write a function to display sign of the chinese zodiac for given year.",
+      "solution": "def chinese_zodiac(year):\r\n if (year - 2000) % 12 == 0:\r\n     sign = 'Dragon'\r\n elif (year - 2000) % 12 == 1:\r\n     sign = 'Snake'\r\n elif (year - 2000) % 12 == 2:\r\n     sign = 'Horse'\r\n elif (year - 2000) % 12 == 3:\r\n     sign = 'sheep'\r\n elif (year - 2000) % 12 == 4:\r\n     sign = 'Monkey'\r\n elif (year - 2000) % 12 == 5:\r\n     sign = 'Rooster'\r\n elif (year - 2000) % 12 == 6:\r\n     sign = 'Dog'\r\n elif (year - 2000) % 12 == 7:\r\n     sign = 'Pig'\r\n elif (year - 2000) % 12 == 8:\r\n     sign = 'Rat'\r\n elif (year - 2000) % 12 == 9:\r\n     sign = 'Ox'\r\n elif (year - 2000) % 12 == 10:\r\n     sign = 'Tiger'\r\n else:\r\n     sign = 'Hare'\r\n return sign",
+      "test_cases": [
+        "assert chinese_zodiac(1997)==('Ox')",
+        "assert chinese_zodiac(1998)==('Tiger')",
+        "assert chinese_zodiac(1994)==('Dog')"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 952,
+      "description": "Write a function to compute the value of ncr mod p.",
+      "solution": "def nCr_mod_p(n, r, p): \r\n\tif (r > n- r): \r\n\t\tr = n - r \r\n\tC = [0 for i in range(r + 1)] \r\n\tC[0] = 1 \r\n\tfor i in range(1, n + 1): \r\n\t\tfor j in range(min(i, r), 0, -1): \r\n\t\t\tC[j] = (C[j] + C[j-1]) % p \r\n\treturn C[r] ",
+      "test_cases": [
+        "assert nCr_mod_p(10, 2, 13) == 6",
+        "assert nCr_mod_p(11, 3, 14) == 11",
+        "assert nCr_mod_p(18, 14, 19) == 1"
+      ],
+      "keywords": [],
+      "operations": [
+        "list_comprehension",
+        "min",
+        "range"
+      ]
+    },
+    {
+      "task_id": 963,
+      "description": "Write a function to calculate the discriminant value.",
+      "solution": "def discriminant_value(x,y,z):\r\n    discriminant = (y**2) - (4*x*z)\r\n    if discriminant > 0:\r\n        return (\"Two solutions\",discriminant)\r\n    elif discriminant == 0:\r\n        return (\"one solution\",discriminant)\r\n    elif discriminant < 0:\r\n        return (\"no real solution\",discriminant)",
+      "test_cases": [
+        "assert discriminant_value(4,8,2)==(\"Two solutions\",32)",
+        "assert discriminant_value(5,7,9)==(\"no real solution\",-131)",
+        "assert discriminant_value(0,0,9)==(\"one solution\",0)"
+      ],
+      "keywords": [
+        "min"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 968,
+      "description": "Write a python function to find maximum possible value for the given periodic function.",
+      "solution": "def floor_Max(A,B,N):\r\n    x = min(B - 1,N)\r\n    return (A*x) // B",
+      "test_cases": [
+        "assert floor_Max(11,10,9) == 9",
+        "assert floor_Max(5,7,4) == 2",
+        "assert floor_Max(2,2,1) == 1"
+      ],
+      "keywords": [
+        "max",
+        "find"
+      ],
+      "operations": [
+        "min"
+      ]
+    }
+  ],
+  "humaneval_patterns": []
+}

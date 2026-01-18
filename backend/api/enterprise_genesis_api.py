@@ -15,12 +15,12 @@ from datetime import datetime
 from pydantic import BaseModel
 from pathlib import Path
 
-from backend.database.session import get_session
-from backend.genesis.enterprise_genesis_storage import (
+from database.session import get_session
+from genesis.enterprise_genesis_storage import (
     get_enterprise_genesis_storage,
     EnterpriseGenesisStorage
 )
-from backend.models.genesis_key_models import GenesisKeyType, GenesisKeyStatus
+from models.genesis_key_models import GenesisKeyType, GenesisKeyStatus
 
 router = APIRouter(prefix="/api/enterprise/genesis", tags=["enterprise-genesis"])
 

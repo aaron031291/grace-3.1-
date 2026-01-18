@@ -1048,15 +1048,15 @@ def pytest_sessionfinish(session, exitstatus):
     print("=" * 70)
 
     # Overall results
-    print(f"\n📊 TEST RESULTS (Pass Rate: {summary['pass_rate']}%)")
-    print(f"   ✅ Passed:  {summary['total_passes']}")
-    print(f"   ❌ Failed:  {summary['total_failures']} (Infrastructure: {summary['infrastructure_failures']}, Code: {summary['code_failures']})")
-    print(f"   ⏭️  Skipped: {summary['total_skips']}")
-    print(f"   ⚠️  Errors:  {report['test_results']['errors']}")
+    print(f"\n[RESULTS] TEST RESULTS (Pass Rate: {summary['pass_rate']}%)")
+    print(f"   [PASS] Passed:  {summary['total_passes']}")
+    print(f"   [FAIL] Failed:  {summary['total_failures']} (Infrastructure: {summary['infrastructure_failures']}, Code: {summary['code_failures']})")
+    print(f"   [SKIP] Skipped: {summary['total_skips']}")
+    print(f"   [WARN] Errors:  {report['test_results']['errors']}")
 
     # Learning insights from passes
     if summary['total_passes'] > 0:
-        print(f"\n📚 LEARNING FROM SUCCESS ({summary['total_passes']} tests):")
+        print(f"\n[LEARN] LEARNING FROM SUCCESS ({summary['total_passes']} tests):")
         print(f"   Validation types working: {', '.join(summary['validation_types_working'][:5])}")
         if summary['category_pass_counts']:
             top_categories = sorted(summary['category_pass_counts'].items(),
@@ -1067,7 +1067,7 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Learning insights from failures
     if summary['total_failures'] > 0:
-        print(f"\n🔧 LEARNING FROM FAILURES ({summary['total_failures']} tests):")
+        print(f"\n[FIX] LEARNING FROM FAILURES ({summary['total_failures']} tests):")
         if summary['infrastructure_failures'] > 0:
             print(f"   Infrastructure issues: {summary['infrastructure_failures']} (external services/deps)")
         if summary['code_failures'] > 0:
@@ -1083,7 +1083,7 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Missing dependencies
     if report["missing_dependencies"]:
-        print(f"\n📦 MISSING DEPENDENCIES ({len(report['missing_dependencies'])}):")
+        print(f"\n[DEPS] MISSING DEPENDENCIES ({len(report['missing_dependencies'])}):")
         for dep in sorted(report["missing_dependencies"])[:5]:
             print(f"   - {dep}")
         if len(report["missing_dependencies"]) > 5:
@@ -1091,15 +1091,15 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Suggested fixes
     if report["suggested_fixes"]:
-        print(f"\n💡 SUGGESTED FIXES:")
+        print(f"\n[HINT] SUGGESTED FIXES:")
         for fix in report["suggested_fixes"][:5]:
             print(f"   $ {fix}")
 
     # Report status
-    print(f"\n📁 Diagnostic report: {report_path}")
+    print(f"\n[FILE] Diagnostic report: {report_path}")
     if reported:
-        print("✅ Diagnostics reported to GRACE API for autonomous learning")
+        print("[OK] Diagnostics reported to GRACE API for autonomous learning")
     else:
-        print("📝 GRACE API not available - diagnostics saved locally for later learning")
+        print("[NOTE] GRACE API not available - diagnostics saved locally for later learning")
 
     print("=" * 70)

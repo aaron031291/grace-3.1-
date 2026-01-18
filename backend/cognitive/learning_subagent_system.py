@@ -515,7 +515,7 @@ class LearningOrchestrator:
         self.knowledge_base_path = knowledge_base_path
 
         # Multiprocessing setup - OS-agnostic via OS adapter
-        from backend.utils.os_adapter import OS
+        from utils.os_adapter import OS
         
         if OS.is_windows:
             # Windows requires 'spawn' method

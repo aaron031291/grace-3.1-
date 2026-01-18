@@ -929,7 +929,7 @@ class EnterpriseCodingAgent:
             
             # Step 1: Try knowledge-driven generation (RAG + Templates + Procedural Memory)
             try:
-                from backend.cognitive.knowledge_driven_code_generator import get_knowledge_driven_generator
+                from cognitive.knowledge_driven_code_generator import get_knowledge_driven_generator
                 
                 # Get retriever if available
                 retriever = None
@@ -1177,7 +1177,7 @@ class EnterpriseCodingAgent:
         This helps the LLM generate code similar to what templates would generate.
         """
         try:
-            from backend.benchmarking.mbpp_templates import get_template_matcher
+            from benchmarking.mbpp_templates import get_template_matcher
             
             template_matcher = get_template_matcher()
             
@@ -1207,21 +1207,54 @@ Example approach: {template.examples[0] if template.examples else 'See pattern k
         # Identify pattern hints from template system
         pattern_hints = self._identify_pattern_hints(task.description)
         
+        # Extract function name from context
+        function_name = None
+        if task.context:
+            function_name = task.context.get("function_name")
+            if not function_name:
+                # Try to extract from test cases
+                test_cases = task.context.get("test_cases", []) or task.context.get("test_list", [])
+                if test_cases:
+                    import re
+                    for test in test_cases:
+                        func_match = re.search(r'(\w+)\s*\(', str(test))
+                        if func_match:
+                            function_name = func_match.group(1)
+                            break
+        
         prompt_parts = [
             f"Task Type: {task.task_type.value}",
-            f"Description: {task.description}",
-            f"Requirements: {json.dumps(task.requirements, indent=2)}",
-            f"Context: {json.dumps(task.context, indent=2)}"
+            f"Description: {task.description}"
         ]
         
+        # CRITICAL: Explicitly state function name
+        if function_name:
+            prompt_parts.append(f"\nIMPORTANT: The function name MUST be '{function_name}'")
+            prompt_parts.append(f"Generate a Python function named '{function_name}' that solves the problem.")
+        else:
+            prompt_parts.append("\nGenerate a Python function that solves the problem.")
+        
+        # Add test cases if available
+        if task.context:
+            test_cases = task.context.get("test_cases", []) or task.context.get("test_list", [])
+            if test_cases:
+                prompt_parts.append("\nTest Cases:")
+                for test in test_cases[:3]:  # First 3 test cases
+                    prompt_parts.append(f"  {test}")
+        
+        if task.requirements:
+            prompt_parts.append(f"\nRequirements: {json.dumps(task.requirements, indent=2)}")
+        
         if pattern_hints:
-            prompt_parts.append(f"Pattern Hints:{pattern_hints}")
+            prompt_parts.append(f"\nPattern Hints: {pattern_hints}")
         
         if task.target_files:
-            prompt_parts.append(f"Target Files: {', '.join(task.target_files)}")
+            prompt_parts.append(f"\nTarget Files: {', '.join(task.target_files)}")
         
         if decision.get("use_patterns"):
-            prompt_parts.append("Use learned patterns from Memory Mesh")
+            prompt_parts.append("\nUse learned patterns from Memory Mesh")
+        
+        prompt_parts.append("\nGenerate ONLY the Python function code. Do not include explanations or markdown.")
         
         return "\n".join(prompt_parts)
     
@@ -1231,7 +1264,7 @@ Example approach: {template.examples[0] if template.examples else 'See pattern k
         try:
             # Try multiple import paths for compatibility
             try:
-                from backend.llm_orchestrator.advanced_code_quality_system import get_advanced_code_quality_system
+                from llm_orchestrator.advanced_code_quality_system import get_advanced_code_quality_system
             except ImportError:
                 from llm_orchestrator.advanced_code_quality_system import get_advanced_code_quality_system
             
@@ -1255,7 +1288,7 @@ Example approach: {template.examples[0] if template.examples else 'See pattern k
         try:
             # Try multiple import paths for compatibility
             try:
-                from backend.transform.transformation_library import get_transformation_library
+                from transform.transformation_library import get_transformation_library
             except ImportError:
                 from transform.transformation_library import get_transformation_library
             
@@ -1548,7 +1581,29 @@ Example approach: {template.examples[0] if template.examples else 'See pattern k
             )
             
             # Parse response
-            code = llm_response.get("content", "")
+            raw_code = llm_response.get("content", "")
+            
+            # Extract function name from context
+            function_name = None
+            if task.context:
+                function_name = task.context.get("function_name")
+                if not function_name:
+                    # Try to extract from test cases
+                    test_cases = task.context.get("test_cases", []) or task.context.get("test_list", [])
+                    if test_cases:
+                        import re
+                        for test in test_cases:
+                            func_match = re.search(r'(\w+)\s*\(', str(test))
+                            if func_match:
+                                function_name = func_match.group(1)
+                                break
+            
+            # Fix function name in code if needed
+            if function_name:
+                from benchmarking.fix_function_name_extraction import extract_and_fix_code
+                code = extract_and_fix_code(raw_code, function_name, task.description)
+            else:
+                code = raw_code
             
             # Create Genesis Key for generation
             genesis_key_id = None
@@ -1606,7 +1661,7 @@ Example approach: {template.examples[0] if template.examples else 'See pattern k
             Generated code or None if no template matches
         """
         try:
-            from backend.benchmarking.mbpp_templates import get_template_matcher
+            from benchmarking.mbpp_templates import get_template_matcher
             
             template_matcher = get_template_matcher()
             
