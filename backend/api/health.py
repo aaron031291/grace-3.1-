@@ -491,10 +491,11 @@ async def check_memory_health() -> Dict[str, Any]:
     Check health of memory systems.
     
     Returns status of:
-    - Memory retrieval system
-    - Procedural memory (total procedures, procedures with embeddings)
-    - Episodic memory (total episodes, episodes with embeddings)
-    - Embedder availability
+    - Procedural memory availability and count
+    - Episodic memory availability and count
+    - Learning memory availability and count
+    - Vector DB (Qdrant) connection status
+    - Memory mesh cache status
     
     Example:
     ```bash
@@ -502,29 +503,12 @@ async def check_memory_health() -> Dict[str, Any]:
     ```
     """
     from database.session import SessionLocal
-    from sqlalchemy.orm import Session
     
     session = SessionLocal()
+    issues: List[str] = []
     
     try:
-        health = {
-            "memory_retrieval": {
-                "status": "unknown",
-                "issues": []
-            },
-            "procedural_memory": {
-                "status": "unknown",
-                "total_procedures": 0,
-                "procedures_with_embeddings": 0,
-                "issues": []
-            },
-            "episodic_memory": {
-                "status": "unknown",
-                "total_episodes": 0,
-                "episodes_with_embeddings": 0,
-                "issues": []
-            }
-        }
+        components: Dict[str, Any] = {}
         
         # Check procedural memory
         try:
@@ -532,27 +516,15 @@ async def check_memory_health() -> Dict[str, Any]:
             
             proc_repo = ProceduralRepository(session)
             total = session.query(Procedure).count()
-            with_embeddings = session.query(Procedure).filter(
-                Procedure.embedding.isnot(None)
-            ).count()
-            
-            health["procedural_memory"]["total_procedures"] = total
-            health["procedural_memory"]["procedures_with_embeddings"] = with_embeddings
             
             if proc_repo.embedder:
-                health["procedural_memory"]["status"] = "operational"
+                components["procedural_memory"] = {"status": "up", "count": total}
             else:
-                health["procedural_memory"]["status"] = "degraded"
-                health["procedural_memory"]["issues"].append("Embedder not available")
-                
-            if total > 0 and with_embeddings == 0:
-                health["procedural_memory"]["status"] = "needs_indexing"
-                health["procedural_memory"]["issues"].append(
-                    "No embeddings generated - run index_all_procedures()"
-                )
+                components["procedural_memory"] = {"status": "degraded", "count": total}
+                issues.append("Procedural memory: embedder not available")
         except Exception as e:
-            health["procedural_memory"]["status"] = "error"
-            health["procedural_memory"]["issues"].append(str(e))
+            components["procedural_memory"] = {"status": "down", "count": 0}
+            issues.append(f"Procedural memory error: {str(e)}")
         
         # Check episodic memory
         try:
@@ -560,56 +532,197 @@ async def check_memory_health() -> Dict[str, Any]:
             
             epi_buffer = EpisodicBuffer(session)
             total = session.query(Episode).count()
-            with_embeddings = session.query(Episode).filter(
-                Episode.embedding.isnot(None)
-            ).count()
-            
-            health["episodic_memory"]["total_episodes"] = total
-            health["episodic_memory"]["episodes_with_embeddings"] = with_embeddings
             
             if epi_buffer.embedder:
-                health["episodic_memory"]["status"] = "operational"
+                components["episodic_memory"] = {"status": "up", "count": total}
             else:
-                health["episodic_memory"]["status"] = "degraded"
-                health["episodic_memory"]["issues"].append("Embedder not available")
-                
-            if total > 0 and with_embeddings == 0:
-                health["episodic_memory"]["status"] = "needs_indexing"
-                health["episodic_memory"]["issues"].append(
-                    "No embeddings generated - run index_all_episodes()"
-                )
+                components["episodic_memory"] = {"status": "degraded", "count": total}
+                issues.append("Episodic memory: embedder not available")
         except Exception as e:
-            health["episodic_memory"]["status"] = "error"
-            health["episodic_memory"]["issues"].append(str(e))
+            components["episodic_memory"] = {"status": "down", "count": 0}
+            issues.append(f"Episodic memory error: {str(e)}")
         
-        # Check memory retrieval (LLM Orchestrator dependency)
+        # Check learning memory
         try:
-            try:
-                from llm_orchestrator.llm_orchestrator import LLMOrchestrator
-            except ImportError:
-                from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+            from cognitive.learning_memory import LearningExample, LearningMemoryManager
             
-            # Check if LLMOrchestrator class exists and has expected attributes
-            if hasattr(LLMOrchestrator, '__init__'):
-                health["memory_retrieval"]["status"] = "operational"
-            else:
-                health["memory_retrieval"]["status"] = "degraded"
-                health["memory_retrieval"]["issues"].append("LLM Orchestrator class structure incomplete")
+            total = session.query(LearningExample).count()
+            components["learning_memory"] = {"status": "up", "count": total}
         except Exception as e:
-            health["memory_retrieval"]["status"] = "degraded"
-            health["memory_retrieval"]["issues"].append(f"LLM Orchestrator dependency issue: {e}")
+            components["learning_memory"] = {"status": "down", "count": 0}
+            issues.append(f"Learning memory error: {str(e)}")
+        
+        # Check vector DB (Qdrant) connection
+        try:
+            from vector_db.client import get_qdrant_client
+            client = get_qdrant_client()
+            collections_response = client.get_collections()
+            collection_names = [c.name for c in collections_response.collections] if collections_response else []
+            components["vector_db"] = {"status": "up", "collections": collection_names}
+        except Exception as e:
+            components["vector_db"] = {"status": "down", "collections": []}
+            issues.append(f"Vector DB (Qdrant) error: {str(e)}")
+        
+        # Check memory mesh cache
+        try:
+            from cognitive.memory_mesh_cache import get_memory_mesh_cache
+            cache = get_memory_mesh_cache()
+            cache_stats = cache.get_cache_stats()
+            components["memory_mesh_cache"] = {"status": "up", "stats": cache_stats}
+        except Exception as e:
+            components["memory_mesh_cache"] = {"status": "down", "stats": {}}
+            issues.append(f"Memory mesh cache error: {str(e)}")
+        
+        # Determine overall status
+        all_statuses = [c.get("status", "unknown") for c in components.values()]
+        if all(s == "up" for s in all_statuses):
+            overall_status = "healthy"
+        elif any(s == "down" for s in all_statuses):
+            overall_status = "unhealthy"
+        else:
+            overall_status = "degraded"
         
         return {
-            "status": "success",
+            "status": overall_status,
             "timestamp": datetime.utcnow().isoformat(),
-            "health": health
+            "components": components,
+            "issues": issues
         }
     except Exception as e:
         logger.error(f"Memory health check failed: {e}", exc_info=True)
         return {
-            "status": "error",
-            "error": str(e),
-            "message": "Failed to check memory system health"
+            "status": "unhealthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "components": {},
+            "issues": [f"Memory health check failed: {str(e)}"]
+        }
+    finally:
+        session.close()
+
+
+@router.get("/systems")
+async def check_systems_health() -> Dict[str, Any]:
+    """
+    Check health of all major systems.
+    
+    Returns status of:
+    - LLM Orchestrator
+    - Diagnostic Engine
+    - Self-Healing System
+    - Code Analyzer
+    - Genesis Service
+    
+    Example:
+    ```bash
+    curl http://localhost:8000/health/systems
+    ```
+    """
+    from database.session import SessionLocal
+    
+    session = SessionLocal()
+    issues: List[str] = []
+    
+    try:
+        components: Dict[str, Any] = {}
+        
+        # Check LLM Orchestrator
+        try:
+            from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+            orchestrator = LLMOrchestrator(session=session)
+            
+            details = {
+                "has_multi_llm_client": hasattr(orchestrator, 'multi_llm_client') and orchestrator.multi_llm_client is not None,
+                "has_hallucination_guard": hasattr(orchestrator, 'hallucination_guard') and orchestrator.hallucination_guard is not None,
+            }
+            components["llm_orchestrator"] = {"status": "up", "details": details}
+        except Exception as e:
+            components["llm_orchestrator"] = {"status": "down", "error": str(e)}
+            issues.append(f"LLM Orchestrator error: {str(e)}")
+        
+        # Check Diagnostic Engine
+        try:
+            from diagnostic_machine.diagnostic_engine import DiagnosticEngine, EngineState
+            engine = DiagnosticEngine(enable_heartbeat=False)
+            
+            details = {
+                "state": engine.state.value if hasattr(engine, 'state') else "unknown",
+                "has_sensors": hasattr(engine, 'sensor_layer'),
+                "has_interpreters": hasattr(engine, 'interpreter_layer'),
+            }
+            components["diagnostic_engine"] = {"status": "up", "details": details}
+        except Exception as e:
+            components["diagnostic_engine"] = {"status": "down", "error": str(e)}
+            issues.append(f"Diagnostic Engine error: {str(e)}")
+        
+        # Check Self-Healing System
+        try:
+            from cognitive.autonomous_healing_system import AutonomousHealingSystem, TrustLevel
+            healing = AutonomousHealingSystem(
+                session=session,
+                trust_level=TrustLevel.SUGGEST_ONLY,
+                enable_learning=False
+            )
+            
+            details = {
+                "trust_level": healing.trust_level.name if hasattr(healing, 'trust_level') else "unknown",
+                "has_healing_system": hasattr(healing, 'healing_system'),
+                "has_genesis_service": hasattr(healing, 'genesis_service'),
+            }
+            components["self_healing_system"] = {"status": "up", "details": details}
+        except Exception as e:
+            components["self_healing_system"] = {"status": "down", "error": str(e)}
+            issues.append(f"Self-Healing System error: {str(e)}")
+        
+        # Check Code Analyzer
+        try:
+            from cognitive.grace_code_analyzer import GraceCodeAnalyzer
+            analyzer = GraceCodeAnalyzer()
+            
+            details = {
+                "has_pattern_matcher": hasattr(analyzer, 'pattern_matcher'),
+                "has_rules": hasattr(analyzer, 'rules') and len(getattr(analyzer, 'rules', [])) > 0,
+            }
+            components["code_analyzer"] = {"status": "up", "details": details}
+        except Exception as e:
+            components["code_analyzer"] = {"status": "down", "error": str(e)}
+            issues.append(f"Code Analyzer error: {str(e)}")
+        
+        # Check Genesis Service
+        try:
+            from genesis.genesis_key_service import GenesisKeyService
+            genesis = GenesisKeyService(session=session)
+            
+            details = {
+                "has_git_service": genesis.git_service is not None,
+                "repo_path": str(genesis.repo_path) if genesis.repo_path else None,
+            }
+            components["genesis_service"] = {"status": "up", "details": details}
+        except Exception as e:
+            components["genesis_service"] = {"status": "down", "error": str(e)}
+            issues.append(f"Genesis Service error: {str(e)}")
+        
+        # Determine overall status
+        all_statuses = [c.get("status", "unknown") for c in components.values()]
+        if all(s == "up" for s in all_statuses):
+            overall_status = "healthy"
+        elif any(s == "down" for s in all_statuses):
+            overall_status = "unhealthy"
+        else:
+            overall_status = "degraded"
+        
+        return {
+            "status": overall_status,
+            "timestamp": datetime.utcnow().isoformat(),
+            "components": components,
+            "issues": issues
+        }
+    except Exception as e:
+        logger.error(f"Systems health check failed: {e}", exc_info=True)
+        return {
+            "status": "unhealthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "components": {},
+            "issues": [f"Systems health check failed: {str(e)}"]
         }
     finally:
         session.close()

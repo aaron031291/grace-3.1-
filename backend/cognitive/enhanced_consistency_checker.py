@@ -1,11 +1,13 @@
 import logging
+import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any, Set
 from enum import Enum
+logger = logging.getLogger(__name__)
+
+
 class ContradictionType(Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of contradictions detected."""
     DIRECT_NEGATION = "direct_negation"
     SEMANTIC_CONTRADICTION = "semantic_contradiction"
@@ -671,14 +673,156 @@ class ConsistencyChecker:
         return overlap >= threshold
     
     def _extract_logical_relationships(self, example: Any) -> List[Dict[str, Any]]:
-        """Extract logical relationships from example (placeholder for future enhancement)."""
-        # TODO: Implement logical relationship extraction
-        # For now, return empty list
-        return []
+        """Extract logical relationships from example."""
+        relationships = []
+        text = str(example) if example else ""
+        
+        if not text.strip():
+            return relationships
+        
+        # Subject-Verb-Object patterns
+        svo_patterns = [
+            r"(\b\w+(?:\s+\w+)?)\s+(is|are|was|were|has|have|had|does|do|did|can|could|will|would|should|must|may|might)\s+(?:not\s+)?(\w+(?:\s+\w+)*)",
+            r"(\b\w+(?:\s+\w+)?)\s+(equals?|contains?|includes?|requires?|needs?|wants?|likes?|loves?|hates?)\s+(\w+(?:\s+\w+)*)",
+        ]
+        
+        for pattern in svo_patterns:
+            for match in re.finditer(pattern, text, re.IGNORECASE):
+                subject = match.group(1).strip()
+                predicate = match.group(2).strip().lower()
+                obj = match.group(3).strip() if match.lastindex >= 3 else ""
+                negated = " not " in match.group(0).lower() or "n't " in match.group(0).lower()
+                
+                relationships.append({
+                    "type": "svo",
+                    "subject": subject,
+                    "predicate": predicate,
+                    "object": obj,
+                    "negated": negated
+                })
+        
+        # Numerical comparison patterns
+        numerical_patterns = [
+            (r"(\b\w+)\s*(?:is\s+)?(?:greater|more|larger|bigger|higher)\s+than\s+(\b\w+)", "greater_than"),
+            (r"(\b\w+)\s*(?:is\s+)?(?:less|smaller|lower|fewer)\s+than\s+(\b\w+)", "less_than"),
+            (r"(\b\w+)\s*(?:is\s+)?(?:equal|equals|same\s+as)\s+(?:to\s+)?(\b\w+)", "equals"),
+            (r"(\b\w+)\s*[>]\s*(\b\w+)", "greater_than"),
+            (r"(\b\w+)\s*[<]\s*(\b\w+)", "less_than"),
+            (r"(\b\w+)\s*[=]=?\s*(\b\w+)", "equals"),
+            (r"(\b\w+)\s*>=\s*(\b\w+)", "greater_equal"),
+            (r"(\b\w+)\s*<=\s*(\b\w+)", "less_equal"),
+        ]
+        
+        for pattern, rel_type in numerical_patterns:
+            for match in re.finditer(pattern, text, re.IGNORECASE):
+                relationships.append({
+                    "type": rel_type,
+                    "subject": match.group(1).strip(),
+                    "predicate": rel_type,
+                    "object": match.group(2).strip(),
+                    "negated": False
+                })
+        
+        # Conditional patterns (if-then)
+        conditional_patterns = [
+            r"if\s+(.+?)\s*,?\s*then\s+(.+?)(?:\.|$)",
+            r"when\s+(.+?)\s*,?\s*(?:then\s+)?(.+?)(?:\.|$)",
+            r"(.+?)\s+implies\s+(.+?)(?:\.|$)",
+        ]
+        
+        for pattern in conditional_patterns:
+            for match in re.finditer(pattern, text, re.IGNORECASE):
+                relationships.append({
+                    "type": "conditional",
+                    "subject": match.group(1).strip(),
+                    "predicate": "implies",
+                    "object": match.group(2).strip(),
+                    "negated": False
+                })
+        
+        # Negation patterns
+        negation_patterns = [
+            r"(\b\w+(?:\s+\w+)?)\s+(?:is\s+not|isn't|are\s+not|aren't|was\s+not|wasn't|does\s+not|doesn't|cannot|can't|will\s+not|won't)\s+(\w+(?:\s+\w+)*)",
+            r"(?:no|not|never)\s+(\b\w+(?:\s+\w+)?)\s+(?:is|are|was|were|has|have)?\s*(\w+(?:\s+\w+)*)?",
+        ]
+        
+        for pattern in negation_patterns:
+            for match in re.finditer(pattern, text, re.IGNORECASE):
+                subject = match.group(1).strip()
+                obj = match.group(2).strip() if match.lastindex >= 2 and match.group(2) else ""
+                
+                relationships.append({
+                    "type": "negation",
+                    "subject": subject,
+                    "predicate": "is_not",
+                    "object": obj,
+                    "negated": True
+                })
+        
+        return relationships
     
     def _are_logically_inconsistent(self, rel1: Dict, rel2: Dict) -> bool:
-        """Check if two relationships are logically inconsistent (placeholder)."""
-        # TODO: Implement logical inconsistency checking
+        """Check if two relationships are logically inconsistent."""
+        if not rel1 or not rel2:
+            return False
+        
+        subj1 = rel1.get("subject", "").lower().strip()
+        subj2 = rel2.get("subject", "").lower().strip()
+        obj1 = rel1.get("object", "").lower().strip()
+        obj2 = rel2.get("object", "").lower().strip()
+        pred1 = rel1.get("predicate", "").lower().strip()
+        pred2 = rel2.get("predicate", "").lower().strip()
+        neg1 = rel1.get("negated", False)
+        neg2 = rel2.get("negated", False)
+        type1 = rel1.get("type", "")
+        type2 = rel2.get("type", "")
+        
+        # Check for negation contradictions: "X is Y" vs "X is not Y"
+        if subj1 == subj2 and obj1 == obj2 and pred1 and pred2:
+            # Same subject, object, predicate but one negated
+            if neg1 != neg2:
+                return True
+        
+        # Check for opposite predicates with same subject/object
+        opposite_predicates = {
+            ("is", "is_not"), ("are", "are_not"), ("has", "has_not"),
+            ("can", "cannot"), ("will", "will_not"), ("does", "does_not"),
+            ("true", "false"), ("yes", "no"), ("enabled", "disabled"),
+            ("active", "inactive"), ("valid", "invalid"), ("exists", "not_exists"),
+        }
+        
+        if subj1 == subj2 and obj1 == obj2:
+            pred_pair = (pred1, pred2)
+            pred_pair_rev = (pred2, pred1)
+            if pred_pair in opposite_predicates or pred_pair_rev in opposite_predicates:
+                return True
+        
+        # Check for numerical contradictions
+        numerical_opposites = {
+            ("greater_than", "less_than"),
+            ("greater_than", "equals"),
+            ("less_than", "equals"),
+            ("greater_than", "less_equal"),
+            ("less_than", "greater_equal"),
+        }
+        
+        # X > Y and X < Y (same operands, opposite comparisons)
+        if subj1 == subj2 and obj1 == obj2:
+            type_pair = (type1, type2)
+            type_pair_rev = (type2, type1)
+            if type_pair in numerical_opposites or type_pair_rev in numerical_opposites:
+                return True
+        
+        # X > Y and Y > X (contradictory ordering)
+        if type1 == type2 and type1 in ("greater_than", "less_than"):
+            if subj1 == obj2 and obj1 == subj2:
+                return True
+        
+        # Check for equality contradictions: X == Y and X != Y
+        if subj1 == subj2 and obj1 == obj2:
+            if type1 == "equals" and type2 == "equals" and neg1 != neg2:
+                return True
+        
         return False
     
     def _get_highest_severity(self, issues: List) -> Optional[Severity]:

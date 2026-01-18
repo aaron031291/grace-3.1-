@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from datetime import datetime
@@ -9,8 +10,27 @@ from pathlib import Path
 from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType, get_multi_llm_client
 from llm_orchestrator.repo_access import RepositoryAccessLayer, get_repo_access
 from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration
+
+try:
+    import openai
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
+
+try:
+    import pyttsx3
+    PYTTSX3_AVAILABLE = True
+except ImportError:
+    PYTTSX3_AVAILABLE = False
+
+try:
+    from diffusers import StableDiffusionPipeline
+    import torch
+    DIFFUSERS_AVAILABLE = True
+except ImportError:
+    DIFFUSERS_AVAILABLE = False
+
 class MediaType(Enum):
-    logger = logging.getLogger(__name__)
     """Types of media that can be processed."""
     IMAGE = "image"
     VIDEO = "video"
@@ -70,6 +90,13 @@ class MultimodalLLMSystem:
         self.repo_access = repo_access or (get_repo_access(session=session) if session else None)
         self.session = session
         self.cognitive_layer1 = get_cognitive_layer1_integration(session=session) if session else None
+        
+        self.vision_model = os.environ.get("GRACE_VISION_MODEL", "llava")
+        self.image_model = os.environ.get("GRACE_IMAGE_MODEL", "dalle")
+        self.tts_model = os.environ.get("GRACE_TTS_MODEL", "local")
+        
+        self._sd_pipeline = None
+        self._tts_engine = None
         
         # Voice manager (if available)
         try:
@@ -170,7 +197,6 @@ class MultimodalLLMSystem:
     def _process_image(self, input_item: MultimodalInput) -> str:
         """Process image input - extract description or use vision model."""
         if input_item.content_path:
-            # Read image file
             try:
                 with open(input_item.content_path, 'rb') as f:
                     image_data = f.read()
@@ -180,9 +206,126 @@ class MultimodalLLMSystem:
         else:
             image_data = input_item.content
         
-        # For now, return placeholder - would use vision model
-        # Vision models: llava, bakllava, minicpm-v, etc.
-        return f"[Image: {len(image_data)} bytes]"
+        result = self.analyze_image(image_data, "Describe this image in detail.")
+        if result.get("success"):
+            return f"[Image Analysis: {result.get('description', '')}]"
+        return f"[Image: {len(image_data) if image_data else 0} bytes]"
+    
+    def analyze_image(self, image_path: str, prompt: str) -> Dict[str, Any]:
+        """
+        Analyze image using vision model.
+        
+        Args:
+            image_path: Path to image file or base64 encoded image bytes
+            prompt: Question/prompt about the image
+            
+        Returns:
+            Dict with 'success', 'description', 'model', 'error'
+        """
+        if isinstance(image_path, bytes):
+            image_data = image_path
+            image_b64 = base64.b64encode(image_data).decode('utf-8')
+        elif isinstance(image_path, str):
+            if image_path.startswith("data:") or len(image_path) > 500:
+                image_b64 = image_path.split(",")[-1] if "," in image_path else image_path
+            else:
+                try:
+                    with open(image_path, 'rb') as f:
+                        image_data = f.read()
+                    image_b64 = base64.b64encode(image_data).decode('utf-8')
+                except Exception as e:
+                    return {"success": False, "error": f"Failed to read image: {e}"}
+        else:
+            return {"success": False, "error": "Invalid image input type"}
+        
+        if self.vision_model in ("gpt4v", "gpt-4-vision", "gpt-4o"):
+            return self._analyze_with_openai_vision(image_b64, prompt)
+        elif self.vision_model == "claude":
+            return self._analyze_with_claude_vision(image_b64, prompt)
+        elif self.vision_model in ("llava", "bakllava", "minicpm-v"):
+            return self._analyze_with_ollama_vision(image_b64, prompt)
+        else:
+            return {"success": False, "error": f"Vision model '{self.vision_model}' not configured"}
+    
+    def _analyze_with_openai_vision(self, image_b64: str, prompt: str) -> Dict[str, Any]:
+        """Analyze image using OpenAI GPT-4 Vision."""
+        if not OPENAI_AVAILABLE:
+            return {"success": False, "error": "OpenAI library not installed"}
+        
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            return {"success": False, "error": "OPENAI_API_KEY not set"}
+        
+        try:
+            client = openai.OpenAI(api_key=api_key)
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
+                    ]
+                }],
+                max_tokens=1000
+            )
+            description = response.choices[0].message.content
+            return {"success": True, "description": description, "model": "gpt-4o"}
+        except Exception as e:
+            logger.error(f"OpenAI vision error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def _analyze_with_claude_vision(self, image_b64: str, prompt: str) -> Dict[str, Any]:
+        """Analyze image using Claude Vision."""
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            return {"success": False, "error": "ANTHROPIC_API_KEY not set"}
+        
+        try:
+            import anthropic
+            client = anthropic.Anthropic(api_key=api_key)
+            response = client.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=1000,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": image_b64}},
+                        {"type": "text", "text": prompt}
+                    ]
+                }]
+            )
+            description = response.content[0].text
+            return {"success": True, "description": description, "model": "claude-3-5-sonnet"}
+        except ImportError:
+            return {"success": False, "error": "anthropic library not installed"}
+        except Exception as e:
+            logger.error(f"Claude vision error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def _analyze_with_ollama_vision(self, image_b64: str, prompt: str) -> Dict[str, Any]:
+        """Analyze image using local Ollama vision model (LLaVA, etc.)."""
+        import requests
+        
+        ollama_url = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+        model = self.vision_model if self.vision_model != "llava" else "llava:latest"
+        
+        try:
+            response = requests.post(
+                f"{ollama_url}/api/generate",
+                json={"model": model, "prompt": prompt, "images": [image_b64], "stream": False},
+                timeout=120
+            )
+            if response.status_code == 200:
+                result = response.json()
+                return {"success": True, "description": result.get("response", ""), "model": model}
+            else:
+                return {"success": False, "error": f"Ollama returned {response.status_code}"}
+        except requests.exceptions.ConnectionError:
+            return {"success": False, "error": "Ollama not running at " + ollama_url}
+        except Exception as e:
+            logger.error(f"Ollama vision error: {e}")
+            return {"success": False, "error": str(e)}
     
     def _process_video(self, input_item: MultimodalInput) -> str:
         """Process video input - extract frames or transcribe audio."""
@@ -249,8 +392,158 @@ class MultimodalLLMSystem:
     
     def _generate_media_output(self, content: str, inputs: List[MultimodalInput]) -> Optional[Any]:
         """Generate media output (image/audio/video) from text if requested."""
-        # Placeholder - would use image generation models, TTS, etc.
+        has_voice_input = any(inp.media_type == MediaType.VOICE for inp in inputs)
+        if has_voice_input:
+            tts_result = self.text_to_speech_sync(content)
+            if tts_result.get("success"):
+                return {"type": "audio", "data": tts_result.get("audio_data")}
         return None
+    
+    def generate_image(self, prompt: str, size: str = "1024x1024") -> Dict[str, Any]:
+        """
+        Generate image from text prompt.
+        
+        Args:
+            prompt: Text description for image generation
+            size: Image size (e.g., "1024x1024", "512x512")
+            
+        Returns:
+            Dict with 'success', 'image_data' or 'image_url', 'model', 'error'
+        """
+        if self.image_model in ("dalle", "dall-e", "dall-e-3"):
+            return self._generate_with_dalle(prompt, size)
+        elif self.image_model in ("sd", "stable-diffusion", "sdxl"):
+            return self._generate_with_stable_diffusion(prompt, size)
+        else:
+            return {"success": False, "error": f"Image model '{self.image_model}' not configured"}
+    
+    def _generate_with_dalle(self, prompt: str, size: str) -> Dict[str, Any]:
+        """Generate image using OpenAI DALL-E."""
+        if not OPENAI_AVAILABLE:
+            return {"success": False, "error": "OpenAI library not installed"}
+        
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            return {"success": False, "error": "OPENAI_API_KEY not set"}
+        
+        try:
+            client = openai.OpenAI(api_key=api_key)
+            response = client.images.generate(
+                model="dall-e-3",
+                prompt=prompt,
+                size=size if size in ("1024x1024", "1024x1792", "1792x1024") else "1024x1024",
+                quality="standard",
+                n=1
+            )
+            image_url = response.data[0].url
+            return {"success": True, "image_url": image_url, "model": "dall-e-3"}
+        except Exception as e:
+            logger.error(f"DALL-E generation error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def _generate_with_stable_diffusion(self, prompt: str, size: str) -> Dict[str, Any]:
+        """Generate image using local Stable Diffusion."""
+        if not DIFFUSERS_AVAILABLE:
+            return {"success": False, "error": "diffusers library not installed"}
+        
+        try:
+            if self._sd_pipeline is None:
+                model_id = os.environ.get("SD_MODEL_ID", "stabilityai/stable-diffusion-xl-base-1.0")
+                self._sd_pipeline = StableDiffusionPipeline.from_pretrained(
+                    model_id,
+                    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+                )
+                if torch.cuda.is_available():
+                    self._sd_pipeline = self._sd_pipeline.to("cuda")
+            
+            width, height = 1024, 1024
+            if "x" in size:
+                parts = size.split("x")
+                width, height = int(parts[0]), int(parts[1])
+            
+            image = self._sd_pipeline(prompt, width=width, height=height).images[0]
+            
+            buffer = io.BytesIO()
+            image.save(buffer, format="PNG")
+            image_data = buffer.getvalue()
+            
+            return {"success": True, "image_data": image_data, "model": "stable-diffusion"}
+        except Exception as e:
+            logger.error(f"Stable Diffusion error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def text_to_speech_sync(self, text: str, voice: str = "default") -> Dict[str, Any]:
+        """
+        Convert text to speech (synchronous version).
+        
+        Args:
+            text: Text to convert to speech
+            voice: Voice identifier
+            
+        Returns:
+            Dict with 'success', 'audio_data', 'model', 'error'
+        """
+        if self.tts_model in ("openai", "openai-tts"):
+            return self._tts_with_openai(text, voice)
+        elif self.tts_model in ("local", "pyttsx3"):
+            return self._tts_with_pyttsx3(text, voice)
+        else:
+            return {"success": False, "error": f"TTS model '{self.tts_model}' not configured"}
+    
+    def _tts_with_openai(self, text: str, voice: str) -> Dict[str, Any]:
+        """Convert text to speech using OpenAI TTS."""
+        if not OPENAI_AVAILABLE:
+            return {"success": False, "error": "OpenAI library not installed"}
+        
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            return {"success": False, "error": "OPENAI_API_KEY not set"}
+        
+        try:
+            client = openai.OpenAI(api_key=api_key)
+            voice_id = voice if voice in ("alloy", "echo", "fable", "onyx", "nova", "shimmer") else "alloy"
+            response = client.audio.speech.create(
+                model="tts-1",
+                voice=voice_id,
+                input=text
+            )
+            audio_data = response.content
+            return {"success": True, "audio_data": audio_data, "model": "openai-tts"}
+        except Exception as e:
+            logger.error(f"OpenAI TTS error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def _tts_with_pyttsx3(self, text: str, voice: str) -> Dict[str, Any]:
+        """Convert text to speech using local pyttsx3."""
+        if not PYTTSX3_AVAILABLE:
+            return {"success": False, "error": "pyttsx3 library not installed"}
+        
+        try:
+            if self._tts_engine is None:
+                self._tts_engine = pyttsx3.init()
+            
+            if voice != "default":
+                voices = self._tts_engine.getProperty('voices')
+                for v in voices:
+                    if voice.lower() in v.name.lower():
+                        self._tts_engine.setProperty('voice', v.id)
+                        break
+            
+            buffer = io.BytesIO()
+            temp_file = Path(os.environ.get("TEMP", "/tmp")) / f"tts_{datetime.now().timestamp()}.wav"
+            
+            self._tts_engine.save_to_file(text, str(temp_file))
+            self._tts_engine.runAndWait()
+            
+            if temp_file.exists():
+                audio_data = temp_file.read_bytes()
+                temp_file.unlink()
+                return {"success": True, "audio_data": audio_data, "model": "pyttsx3"}
+            else:
+                return {"success": False, "error": "Failed to generate audio file"}
+        except Exception as e:
+            logger.error(f"pyttsx3 TTS error: {e}")
+            return {"success": False, "error": str(e)}
     
     def _assign_genesis_key(
         self,
@@ -313,25 +606,23 @@ class MultimodalLLMSystem:
     async def text_to_speech(
         self,
         text: str,
-        voice: str = "en-US-AriaNeural",
+        voice: str = "default",
         user_id: Optional[str] = None
     ) -> Tuple[bytes, Optional[str]]:
         """
-        Convert text to speech with Genesis Key tracking.
+        Convert text to speech with Genesis Key tracking (async version).
         
         Returns:
             (audio_data, genesis_key_id)
         """
-        if not self.voice_manager:
-            raise ValueError("Voice manager not available")
+        if self.voice_manager:
+            audio_data = await self.voice_manager.text_to_speech(text=text, voice=voice)
+        else:
+            result = self.text_to_speech_sync(text, voice)
+            if not result.get("success"):
+                raise ValueError(result.get("error", "TTS not available"))
+            audio_data = result.get("audio_data", b"")
         
-        # Generate audio
-        audio_data = await self.voice_manager.text_to_speech(
-            text=text,
-            voice=voice
-        )
-        
-        # Assign Genesis Key
         genesis_key_id = self._assign_genesis_key(
             inputs=[MultimodalInput(media_type=MediaType.TEXT, content=text)],
             prompt="TTS generation",

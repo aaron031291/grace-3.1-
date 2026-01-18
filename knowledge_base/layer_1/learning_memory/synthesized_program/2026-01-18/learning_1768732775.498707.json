@@ -1,0 +1,15 @@
+{
+  "program_id": "test-prog",
+  "code": "lambda x: x * 2",
+  "spec": {
+    "examples": [
+      [
+        2,
+        4
+      ]
+    ]
+  },
+  "confidence": 0.9,
+  "synthesized_at": "2026-01-18T10:39:35.497851",
+  "source": "layer4_neural_synthesis"
+}

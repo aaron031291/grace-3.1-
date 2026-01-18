@@ -1,11 +1,15 @@
 import logging
+import threading
 from functools import lru_cache, wraps
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta
 import hashlib
 import json
+
+logger = logging.getLogger(__name__)
+
+
 class MemoryMeshCache:
-    logger = logging.getLogger(__name__)
     """
     Intelligent caching layer for Memory Mesh operations.
 
@@ -26,6 +30,9 @@ class MemoryMeshCache:
         self.ttl_seconds = ttl_seconds
         self.cache_version = 0  # Increment to invalidate all caches
 
+        # Thread lock for cache access
+        self._lock = threading.RLock()
+
         # Cache statistics
         self.stats = {
             'hits': 0,
@@ -39,26 +46,31 @@ class MemoryMeshCache:
         self._learning_cache = {}
         self._similar_examples_cache = {}
         self._procedure_cache = {}
+        self._episode_cache = {}
+        self._general_cache = {}
 
         logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")
 
     def invalidate_all(self):
         """Invalidate all cached data"""
-        self.cache_version += 1
-        self.stats['invalidations'] += 1
+        with self._lock:
+            self.cache_version += 1
+            self.stats['invalidations'] += 1
 
-        # Clear function-level LRU caches
-        self._get_high_trust_learning_cached.cache_clear()
-        self._get_memory_stats_cached.cache_clear()
-        self._find_similar_examples_cached.cache_clear()
+            # Clear function-level LRU caches
+            self._get_high_trust_learning_cached.cache_clear()
+            self._get_memory_stats_cached.cache_clear()
+            self._find_similar_examples_cached.cache_clear()
 
-        # Clear internal cache dictionaries
-        self._stats_cache.clear()
-        self._learning_cache.clear()
-        self._similar_examples_cache.clear()
-        self._procedure_cache.clear()
+            # Clear internal cache dictionaries
+            self._stats_cache.clear()
+            self._learning_cache.clear()
+            self._similar_examples_cache.clear()
+            self._procedure_cache.clear()
+            self._episode_cache.clear()
+            self._general_cache.clear()
 
-        logger.info(f"[MEMORY-MESH-CACHE] All caches invalidated (version={self.cache_version})")
+            logger.info(f"[MEMORY-MESH-CACHE] All caches invalidated (version={self.cache_version})")
 
     def get_cache_stats(self) -> Dict[str, Any]:
         """Get cache performance statistics"""
@@ -89,8 +101,14 @@ class MemoryMeshCache:
 
         Returns tuple of IDs for immutability (required for caching)
         """
-        # This is just the cache key - actual query done by caller
-        return ()  # Placeholder
+        with self._lock:
+            cache_key = (min_trust, None, cache_version)
+            if cache_key in self._learning_cache:
+                return self._learning_cache[cache_key]
+            for key, value in self._learning_cache.items():
+                if key[0] == min_trust and key[2] == cache_version:
+                    return value
+            return ()
 
     def get_high_trust_learning(
         self,
@@ -162,31 +180,13 @@ class MemoryMeshCache:
     # MEMORY STATS CACHE
     # ================================================================
 
-    def __init__(self, ttl_seconds: int = 300):
-        """
-        Initialize cache layer.
-
-        Args:
-            ttl_seconds: Time-to-live for cache entries (default 5 minutes)
-        """
-        self.ttl_seconds = ttl_seconds
-        self.cache_version = 0  # Increment to invalidate all caches
-
-        # Cache statistics
-        self.stats = {
-            'hits': 0,
-            'misses': 0,
-            'invalidations': 0,
-            'last_reset': datetime.utcnow()
-        }
-
-        # Internal cache storage for stats and other data
-        self._stats_cache = {}
-        self._learning_cache = {}
-        self._similar_examples_cache = {}
-        self._procedure_cache = {}
-
-        logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")
+    @lru_cache(maxsize=50)
+    def _get_memory_stats_cached(self, cache_version: int) -> Optional[Dict[str, Any]]:
+        """Cached memory stats results"""
+        with self._lock:
+            if cache_version in self._stats_cache:
+                return self._stats_cache[cache_version]
+            return None
 
     def get_or_compute_stats(
         self,
@@ -241,7 +241,11 @@ class MemoryMeshCache:
         cache_version: int
     ) -> Tuple[str, ...]:
         """Cached similar example IDs"""
-        return ()  # Placeholder
+        with self._lock:
+            cache_key = (example_type, min_trust, cache_version)
+            if cache_key in self._similar_examples_cache:
+                return self._similar_examples_cache[cache_key]
+            return ()
 
     def find_similar_examples(
         self,
@@ -335,7 +339,11 @@ class MemoryMeshCache:
     @lru_cache(maxsize=200)
     def _get_procedure_match_cached(self, cache_key: str, cache_version: int) -> Optional[Tuple]:
         """Cached procedure match results"""
-        return None  # Placeholder
+        with self._lock:
+            internal_cache_key = (cache_key, cache_version)
+            if internal_cache_key in self._procedure_cache:
+                return self._procedure_cache[internal_cache_key]
+            return None
 
     def find_matching_procedure(
         self,

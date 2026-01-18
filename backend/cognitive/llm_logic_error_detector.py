@@ -303,6 +303,173 @@ provide specific, actionable fixes with clear reasoning."""
                 
         return errors
 
+    def _apply_ast_based_fix(
+        self,
+        full_code: str,
+        error: LogicError
+    ) -> Tuple[str, bool]:
+        """
+        Apply AST-based fix for detected logic errors.
+        
+        Args:
+            full_code: Full source code
+            error: LogicError containing fix information
+            
+        Returns:
+            Tuple of (fixed_code, success)
+        """
+        try:
+            tree = ast.parse(full_code)
+        except SyntaxError:
+            return full_code, False
+            
+        lines = full_code.split('\n')
+        line_idx = error.line_number - 1
+        
+        if not (0 <= line_idx < len(lines)):
+            return full_code, False
+            
+        original_line = lines[line_idx]
+        fixed_line = original_line
+        error_type = error.error_type.lower()
+        suggested = error.suggested_fix.lower()
+        
+        try:
+            if error_type == "off_by_one" or "off-by-one" in suggested:
+                fixed_line = self._fix_off_by_one(original_line)
+                
+            elif error_type == "incorrect_conditional" or "comparison" in suggested:
+                fixed_line = self._fix_comparison(original_line, suggested)
+                
+            elif error_type == "boolean_logic" or any(x in suggested for x in ["and", "or", "not"]):
+                fixed_line = self._fix_boolean_logic(original_line, suggested)
+                
+            elif error_type == "null_check" or "none" in suggested:
+                fixed_line = self._fix_null_check(original_line)
+                
+            elif error_type == "type_error" or "type" in suggested:
+                fixed_line = self._fix_type_error(original_line, suggested)
+                
+            else:
+                fixed_line = self._apply_suggested_fix_heuristic(original_line, error.suggested_fix)
+            
+            if fixed_line != original_line:
+                lines[line_idx] = fixed_line
+                new_code = '\n'.join(lines)
+                try:
+                    ast.parse(new_code)
+                    return new_code, True
+                except SyntaxError:
+                    return full_code, False
+                    
+        except Exception as e:
+            logger.debug(f"[LOGIC-DETECTOR] AST fix failed: {e}")
+            
+        return full_code, False
+    
+    def _fix_off_by_one(self, line: str) -> str:
+        """Fix off-by-one errors in loop bounds."""
+        patterns = [
+            (r'range\((\w+)\)', r'range(\1 + 1)'),
+            (r'range\((\w+)\s*-\s*1\)', r'range(\1)'),
+            (r'range\((\w+),\s*(\w+)\)', r'range(\1, \2 + 1)'),
+            (r'<\s*len\(', r'<= len('),
+            (r'<=\s*len\((\w+)\)\s*-\s*1', r'< len(\1)'),
+            (r'\[\s*(\w+)\s*-\s*1\s*\]', r'[\1]'),
+        ]
+        result = line
+        for pattern, replacement in patterns:
+            new_result = re.sub(pattern, replacement, result)
+            if new_result != result:
+                return new_result
+        return line
+    
+    def _fix_comparison(self, line: str, suggested: str) -> str:
+        """Fix comparison operator errors."""
+        operator_swaps = {
+            '<': '<=',
+            '<=': '<',
+            '>': '>=',
+            '>=': '>',
+            '==': '!=',
+            '!=': '==',
+        }
+        for op, swap in operator_swaps.items():
+            if op in suggested and swap not in suggested:
+                if f' {op} ' in line and f' {swap} ' not in line:
+                    return line.replace(f' {op} ', f' {swap} ', 1)
+        if '<' in suggested and '>' in line:
+            return line.replace('>', '<', 1)
+        elif '>' in suggested and '<' in line:
+            return line.replace('<', '>', 1)
+        return line
+    
+    def _fix_boolean_logic(self, line: str, suggested: str) -> str:
+        """Fix boolean logic errors (and/or/not)."""
+        if "and" in suggested and " or " in line.lower():
+            return re.sub(r'\bor\b', 'and', line, flags=re.IGNORECASE)
+        elif "or" in suggested and " and " in line.lower():
+            return re.sub(r'\band\b', 'or', line, flags=re.IGNORECASE)
+        if "not" in suggested:
+            if " not " in line:
+                return line.replace(" not ", " ", 1)
+            else:
+                match = re.search(r'if\s+(.+?):', line)
+                if match:
+                    condition = match.group(1)
+                    return line.replace(condition, f"not ({condition})", 1)
+        return line
+    
+    def _fix_null_check(self, line: str) -> str:
+        """Add None checks."""
+        match = re.search(r'(\w+)\.(\w+)', line)
+        if match:
+            var_name = match.group(0)
+            indent = len(line) - len(line.lstrip())
+            return ' ' * indent + f"if {match.group(1)} is not None:\n" + ' ' * (indent + 4) + line.lstrip()
+        match = re.search(r'if\s+(.+?):', line)
+        if match and 'None' not in line:
+            condition = match.group(1)
+            var_match = re.search(r'^(\w+)', condition)
+            if var_match:
+                var = var_match.group(1)
+                new_condition = f"{var} is not None and {condition}"
+                return line.replace(condition, new_condition, 1)
+        return line
+    
+    def _fix_type_error(self, line: str, suggested: str) -> str:
+        """Add type conversions."""
+        type_patterns = [
+            (r'int', r'(\w+)', r'int(\1)'),
+            (r'str', r'(\w+)', r'str(\1)'),
+            (r'float', r'(\w+)', r'float(\1)'),
+            (r'list', r'(\w+)', r'list(\1)'),
+        ]
+        for type_name, var_pattern, replacement in type_patterns:
+            if type_name in suggested.lower():
+                match = re.search(r'=\s*(\w+)\s*$', line)
+                if match:
+                    var = match.group(1)
+                    return line.replace(f'= {var}', f'= {type_name}({var})')
+        return line
+    
+    def _apply_suggested_fix_heuristic(self, line: str, suggested_fix: str) -> str:
+        """Apply suggested fix using heuristics when specific patterns don't match."""
+        code_match = re.search(r'`([^`]+)`', suggested_fix)
+        if code_match:
+            suggested_code = code_match.group(1)
+            if '->' in suggested_fix or 'to' in suggested_fix.lower():
+                parts = re.split(r'\s*(?:->|to)\s*', suggested_fix, flags=re.IGNORECASE)
+                if len(parts) >= 2:
+                    old_match = re.search(r'`([^`]+)`', parts[0])
+                    new_match = re.search(r'`([^`]+)`', parts[1])
+                    if old_match and new_match:
+                        old_code = old_match.group(1)
+                        new_code = new_match.group(1)
+                        if old_code in line:
+                            return line.replace(old_code, new_code, 1)
+        return line
+
     def generate_fix(
         self,
         error: LogicError,
@@ -380,11 +547,10 @@ EXPLANATION:
             else:
                 # Fallback: try to use suggested_fix from error
                 if error.suggested_fix:
-                    # Apply fix manually
-                    lines = full_code.split('\n')
-                    if 0 < error.line_number <= len(lines):
-                        # Simple replacement (could be enhanced)
-                        fixed_code = full_code  # Placeholder
+                    fixed_code, success = self._apply_ast_based_fix(
+                        full_code, error
+                    )
+                    if success:
                         explanation = f"Applied fix: {error.suggested_fix}"
                         return fixed_code, explanation
                         

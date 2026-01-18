@@ -1,10 +1,15 @@
 import logging
+import json
+import threading
 from typing import Dict, Any, Optional, List
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+
 class ProcessingStrategy:
-    logger = logging.getLogger(__name__)
     """Processing strategy for a file type."""
 
     file_type: str
@@ -462,6 +467,18 @@ class StrategyLearner:
             self.session.rollback()
 
 
+@dataclass
+class HistoricalRecord:
+    """A single processing history record."""
+    file_path: str
+    timestamp: str
+    processing_type: str
+    duration_ms: float
+    success: bool
+    result_summary: str
+    error: Optional[str] = None
+
+
 class PerformanceTracker:
     """
     Tracks file processing performance metrics.
@@ -472,6 +489,9 @@ class PerformanceTracker:
     - Detects degradation early
     """
 
+    MAX_HISTORY_PER_FILE = 1000
+    HISTORY_DIR = Path(__file__).parent / "processing_history"
+
     def __init__(self, session=None):
         """
         Initialize Performance Tracker.
@@ -480,7 +500,142 @@ class PerformanceTracker:
             session: Database session
         """
         self.session = session
-        logger.info("[PERFORMANCE-TRACKER] Initialized")
+        self._lock = threading.Lock()
+        self.HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+        logger.info("[PERFORMANCE-TRACKER] Initialized with history storage")
+
+    def _get_history_file(self, file_path: str) -> Path:
+        """Get the history file path for a given file."""
+        safe_name = file_path.replace("/", "_").replace("\\", "_").replace(":", "_")
+        if len(safe_name) > 200:
+            import hashlib
+            safe_name = hashlib.md5(file_path.encode()).hexdigest()
+        return self.HISTORY_DIR / f"{safe_name}.json"
+
+    def _load_history(self, file_path: str) -> List[Dict[str, Any]]:
+        """Load history for a file from storage."""
+        history_file = self._get_history_file(file_path)
+        if history_file.exists():
+            try:
+                with open(history_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, IOError) as e:
+                logger.warning(f"[PERFORMANCE-TRACKER] Error loading history: {e}")
+                return []
+        return []
+
+    def _save_history(self, file_path: str, history: List[Dict[str, Any]]) -> None:
+        """Save history for a file to storage."""
+        history_file = self._get_history_file(file_path)
+        try:
+            with open(history_file, 'w', encoding='utf-8') as f:
+                json.dump(history, f, indent=2, default=str)
+        except IOError as e:
+            logger.error(f"[PERFORMANCE-TRACKER] Error saving history: {e}")
+
+    def record_processing(self, file_path: str, result: Dict[str, Any]) -> None:
+        """
+        Save a processing result to history.
+
+        Args:
+            file_path: Path to the processed file
+            result: Processing result dict with keys:
+                - processing_type: str
+                - duration_ms: float
+                - success: bool
+                - result_summary: str
+                - error: Optional[str]
+        """
+        record = {
+            "file_path": file_path,
+            "timestamp": datetime.now().isoformat(),
+            "processing_type": result.get("processing_type", "unknown"),
+            "duration_ms": result.get("duration_ms", 0.0),
+            "success": result.get("success", False),
+            "result_summary": result.get("result_summary", ""),
+            "error": result.get("error")
+        }
+
+        with self._lock:
+            history = self._load_history(file_path)
+            history.append(record)
+            if len(history) > self.MAX_HISTORY_PER_FILE:
+                history = history[-self.MAX_HISTORY_PER_FILE:]
+            self._save_history(file_path, history)
+
+        logger.debug(f"[PERFORMANCE-TRACKER] Recorded processing for {Path(file_path).name}")
+
+    def get_processing_history(
+        self,
+        file_path: str,
+        limit: int = 100,
+        processing_type: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Query processing history for a file.
+
+        Args:
+            file_path: Path to the file
+            limit: Maximum records to return
+            processing_type: Filter by processing type
+            start_date: Filter records after this date
+            end_date: Filter records before this date
+
+        Returns:
+            List of historical processing records
+        """
+        history = self._load_history(file_path)
+
+        if processing_type:
+            history = [r for r in history if r.get("processing_type") == processing_type]
+
+        if start_date:
+            history = [r for r in history if datetime.fromisoformat(r["timestamp"]) >= start_date]
+
+        if end_date:
+            history = [r for r in history if datetime.fromisoformat(r["timestamp"]) <= end_date]
+
+        return history[-limit:]
+
+    def get_processing_stats(self, file_path: str) -> Dict[str, Any]:
+        """
+        Get processing statistics for a file.
+
+        Args:
+            file_path: Path to the file
+
+        Returns:
+            Dict with stats: avg_time_ms, success_rate, total_processed,
+            processing_types, first_processed, last_processed
+        """
+        history = self._load_history(file_path)
+
+        if not history:
+            return {
+                "total_processed": 0,
+                "success_rate": 0.0,
+                "avg_time_ms": 0.0,
+                "processing_types": [],
+                "first_processed": None,
+                "last_processed": None
+            }
+
+        total = len(history)
+        successes = sum(1 for r in history if r.get("success", False))
+        avg_time = sum(r.get("duration_ms", 0) for r in history) / total
+        types = list(set(r.get("processing_type", "unknown") for r in history))
+        timestamps = [r["timestamp"] for r in history]
+
+        return {
+            "total_processed": total,
+            "success_rate": successes / total if total > 0 else 0.0,
+            "avg_time_ms": avg_time,
+            "processing_types": types,
+            "first_processed": min(timestamps),
+            "last_processed": max(timestamps)
+        }
 
     def record_outcome(self, outcome: ProcessingOutcome) -> None:
         """
@@ -497,8 +652,16 @@ class PerformanceTracker:
             f"time={outcome.processing_time:.2f}s"
         )
 
-        # In a full implementation, this would store outcomes
-        # in a separate tracking table for trend analysis
+        self.record_processing(
+            file_path=outcome.file_path,
+            result={
+                "processing_type": outcome.file_type,
+                "duration_ms": outcome.processing_time * 1000,
+                "success": outcome.success,
+                "result_summary": f"chunks={outcome.num_chunks}, embeddings={outcome.num_embeddings}, quality={outcome.quality_score:.2f}",
+                "error": "; ".join(outcome.errors) if outcome.errors else None
+            }
+        )
 
     def get_performance_summary(
         self,
@@ -515,12 +678,50 @@ class PerformanceTracker:
         Returns:
             Performance summary dict
         """
-        # Placeholder - would query historical data
+        cutoff = datetime.now() - timedelta(days=days)
+        total_processed = 0
+        total_success = 0
+        total_quality = 0.0
+        total_time = 0.0
+
+        try:
+            for history_file in self.HISTORY_DIR.glob("*.json"):
+                try:
+                    with open(history_file, 'r', encoding='utf-8') as f:
+                        records = json.load(f)
+
+                    for record in records:
+                        record_time = datetime.fromisoformat(record["timestamp"])
+                        if record_time < cutoff:
+                            continue
+
+                        if file_type and record.get("processing_type") != file_type:
+                            continue
+
+                        total_processed += 1
+                        if record.get("success", False):
+                            total_success += 1
+                        total_time += record.get("duration_ms", 0) / 1000
+
+                        summary = record.get("result_summary", "")
+                        if "quality=" in summary:
+                            try:
+                                quality_str = summary.split("quality=")[1].split(",")[0].split()[0]
+                                total_quality += float(quality_str)
+                            except (IndexError, ValueError):
+                                pass
+
+                except (json.JSONDecodeError, IOError):
+                    continue
+
+        except Exception as e:
+            logger.warning(f"[PERFORMANCE-TRACKER] Error computing summary: {e}")
+
         return {
-            'total_processed': 0,
-            'success_rate': 0.0,
-            'avg_quality': 0.0,
-            'avg_time': 0.0
+            'total_processed': total_processed,
+            'success_rate': total_success / total_processed if total_processed > 0 else 0.0,
+            'avg_quality': total_quality / total_processed if total_processed > 0 else 0.0,
+            'avg_time': total_time / total_processed if total_processed > 0 else 0.0
         }
 
 

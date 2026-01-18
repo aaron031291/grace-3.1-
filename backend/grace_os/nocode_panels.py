@@ -1,12 +1,19 @@
 import logging
 import json
+import subprocess
+import threading
+import re
 from typing import Dict, Any, List, Optional, Callable
 from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 import uuid
+
+logger = logging.getLogger(__name__)
+
+
 class PanelType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Types of no-code panels."""
     STATUS = "status"               # Status indicator
     ACTION = "action"               # Single action button
@@ -171,6 +178,11 @@ class NoCodePanelSystem:
         # Action handlers
         self._action_handlers: Dict[str, Callable] = {}
 
+        # Build system state
+        self._builds: Dict[str, Dict[str, Any]] = {}
+        self._build_lock = threading.Lock()
+        self._default_build_timeout = 300  # 5 minutes
+
         # Initialize default panels and actions
         self._initialize_defaults()
 
@@ -284,7 +296,21 @@ class NoCodePanelSystem:
             name="Run Build",
             description="Build the project",
             category=ActionCategory.BUILD,
-            icon="build"
+            icon="build",
+            parameters=[
+                {"name": "project_path", "type": "text", "required": False},
+                {"name": "build_type", "type": "select", "options": ["auto", "python", "npm", "cargo", "make", "custom"], "required": False},
+                {"name": "custom_command", "type": "text", "required": False}
+            ]
+        ))
+
+        self.register_action(PanelAction(
+            action_id="get_build_status",
+            name="Build Status",
+            description="Get status of a running or completed build",
+            category=ActionCategory.BUILD,
+            icon="info",
+            parameters=[{"name": "build_id", "type": "text", "required": True}]
         ))
 
         self.register_action(PanelAction(
@@ -564,8 +590,16 @@ class NoCodePanelSystem:
                 }
 
             elif action_id == "run_build":
-                # Placeholder - would integrate with project's build system
-                return {"success": True, "result": "Build command not configured"}
+                project_path = parameters.get("project_path", ".")
+                build_type = parameters.get("build_type", "auto")
+                custom_command = parameters.get("custom_command")
+                build_result = self.trigger_build(project_path, build_type, custom_command)
+                return {"success": True, "result": build_result}
+
+            elif action_id == "get_build_status":
+                build_id = parameters.get("build_id", "")
+                status = self.get_build_status(build_id)
+                return {"success": status is not None, "result": status}
 
             elif action_id == "search_code":
                 from grace_os.reasoning_planes import MultiPlaneReasoner
@@ -602,6 +636,288 @@ class NoCodePanelSystem:
         except Exception as e:
             logger.error(f"[NOCODE] Built-in action {action_id} failed: {e}")
             return {"success": False, "error": str(e)}
+
+    # =========================================================================
+    # Build System Integration
+    # =========================================================================
+
+    def _detect_build_type(self, project_path: str) -> str:
+        """Auto-detect build type based on project files."""
+        path = Path(project_path)
+        if not path.exists():
+            path = Path.cwd() / project_path
+
+        if (path / "Cargo.toml").exists():
+            return "cargo"
+        elif (path / "package.json").exists():
+            return "npm"
+        elif (path / "setup.py").exists() or (path / "pyproject.toml").exists():
+            return "python"
+        elif (path / "Makefile").exists():
+            return "make"
+        else:
+            return "unknown"
+
+    def _get_build_command(self, build_type: str, custom_command: Optional[str] = None) -> List[str]:
+        """Get the build command for a given build type."""
+        if custom_command:
+            return custom_command.split()
+
+        build_commands = {
+            "python": ["pip", "install", "-e", "."],
+            "npm": ["npm", "run", "build"],
+            "cargo": ["cargo", "build"],
+            "make": ["make"],
+        }
+        return build_commands.get(build_type, [])
+
+    def trigger_build(
+        self,
+        project_path: str,
+        build_type: str = "auto",
+        custom_command: Optional[str] = None,
+        timeout: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Trigger a build for the specified project.
+
+        Args:
+            project_path: Path to the project directory
+            build_type: Type of build (python, npm, cargo, make, custom, auto)
+            custom_command: Custom build command (used when build_type is 'custom')
+            timeout: Build timeout in seconds (default: 300)
+
+        Returns:
+            Build info dict with build_id, status, etc.
+        """
+        build_id = f"BUILD-{uuid.uuid4().hex[:12]}"
+        timeout = timeout or self._default_build_timeout
+
+        # Resolve project path
+        path = Path(project_path)
+        if not path.is_absolute():
+            path = Path.cwd() / project_path
+        project_path_str = str(path.resolve())
+
+        # Auto-detect build type if needed
+        if build_type == "auto":
+            build_type = self._detect_build_type(project_path_str)
+
+        # Get build command
+        if build_type == "custom" and custom_command:
+            command = custom_command.split()
+        else:
+            command = self._get_build_command(build_type, custom_command)
+
+        if not command:
+            return {
+                "build_id": build_id,
+                "status": "failed",
+                "start_time": datetime.utcnow().isoformat(),
+                "end_time": datetime.utcnow().isoformat(),
+                "output": "",
+                "errors": [{"line": 0, "message": f"Unknown build type: {build_type}", "file": None}],
+                "warnings": []
+            }
+
+        # Initialize build record
+        build_record = {
+            "build_id": build_id,
+            "status": "pending",
+            "start_time": datetime.utcnow().isoformat(),
+            "end_time": None,
+            "output": "",
+            "errors": [],
+            "warnings": [],
+            "build_type": build_type,
+            "project_path": project_path_str,
+            "command": command
+        }
+
+        with self._build_lock:
+            self._builds[build_id] = build_record
+
+        # Run build in background thread
+        thread = threading.Thread(
+            target=self._run_build_async,
+            args=(build_id, command, project_path_str, timeout),
+            daemon=True
+        )
+        thread.start()
+
+        logger.info(f"[BUILD] Started build {build_id}: {' '.join(command)}")
+        return build_record
+
+    def _run_build_async(
+        self,
+        build_id: str,
+        command: List[str],
+        cwd: str,
+        timeout: int
+    ):
+        """Run build in background thread."""
+        with self._build_lock:
+            if build_id not in self._builds:
+                return
+            self._builds[build_id]["status"] = "running"
+
+        output = ""
+        errors = []
+        warnings = []
+        status = "success"
+
+        try:
+            result = subprocess.run(
+                command,
+                cwd=cwd,
+                capture_output=True,
+                text=True,
+                timeout=timeout
+            )
+            output = result.stdout + result.stderr
+
+            if result.returncode != 0:
+                status = "failed"
+
+            # Parse output for errors and warnings
+            errors, warnings = self.parse_build_output(output)
+
+        except subprocess.TimeoutExpired as e:
+            status = "failed"
+            output = str(e)
+            errors = [{"line": 0, "message": f"Build timed out after {timeout}s", "file": None}]
+        except FileNotFoundError as e:
+            status = "failed"
+            output = str(e)
+            errors = [{"line": 0, "message": f"Build command not found: {command[0]}", "file": None}]
+        except Exception as e:
+            status = "failed"
+            output = str(e)
+            errors = [{"line": 0, "message": f"Build error: {str(e)}", "file": None}]
+
+        # Update build record
+        with self._build_lock:
+            if build_id in self._builds:
+                self._builds[build_id].update({
+                    "status": status,
+                    "end_time": datetime.utcnow().isoformat(),
+                    "output": output,
+                    "errors": errors,
+                    "warnings": warnings
+                })
+
+        logger.info(f"[BUILD] Build {build_id} completed with status: {status}")
+
+    def get_build_status(self, build_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get the status of a build.
+
+        Args:
+            build_id: The build ID to query
+
+        Returns:
+            Build status dict or None if not found
+        """
+        with self._build_lock:
+            build = self._builds.get(build_id)
+            if build:
+                return dict(build)
+        return None
+
+    def parse_build_output(self, output: str) -> tuple[List[Dict], List[Dict]]:
+        """
+        Parse build output to extract errors and warnings.
+
+        Args:
+            output: Raw build output string
+
+        Returns:
+            Tuple of (errors, warnings) lists
+        """
+        errors = []
+        warnings = []
+
+        # Common error patterns
+        error_patterns = [
+            # Python errors
+            r'File "([^"]+)", line (\d+).*\n\s*(.+)\n\s*([\w]+Error: .+)',
+            r'(\S+\.py):(\d+):\s*error:\s*(.+)',
+            # npm/node errors
+            r'(\S+\.[jt]sx?):(\d+):(\d+):\s*error\s+(.+)',
+            r'ERROR in (\S+)\s+\((\d+),\d+\):\s*(.+)',
+            # Cargo/Rust errors
+            r'error\[E\d+\]:\s*(.+)\n\s*-->\s*(\S+):(\d+):\d+',
+            # Generic errors
+            r'error:\s*(.+)',
+            r'Error:\s*(.+)',
+        ]
+
+        # Common warning patterns
+        warning_patterns = [
+            # Python warnings
+            r'(\S+\.py):(\d+):\s*\w*Warning:\s*(.+)',
+            # npm/node warnings
+            r'(\S+\.[jt]sx?):(\d+):(\d+):\s*warning\s+(.+)',
+            r'Warning:\s*(.+)',
+            # Cargo/Rust warnings
+            r'warning:\s*(.+)\n\s*-->\s*(\S+):(\d+):\d+',
+            # Generic warnings
+            r'warn(?:ing)?:\s*(.+)',
+        ]
+
+        lines = output.split('\n')
+
+        for i, line in enumerate(lines):
+            # Check for errors
+            for pattern in error_patterns:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    groups = match.groups()
+                    error_entry = {
+                        "line": int(groups[1]) if len(groups) > 1 and groups[1] and groups[1].isdigit() else i + 1,
+                        "message": groups[-1] if groups else line.strip(),
+                        "file": groups[0] if len(groups) > 1 and not groups[0].isdigit() else None
+                    }
+                    if error_entry not in errors:
+                        errors.append(error_entry)
+                    break
+
+            # Check for warnings
+            for pattern in warning_patterns:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    groups = match.groups()
+                    warning_entry = {
+                        "line": int(groups[1]) if len(groups) > 1 and groups[1] and groups[1].isdigit() else i + 1,
+                        "message": groups[-1] if groups else line.strip(),
+                        "file": groups[0] if len(groups) > 1 and not groups[0].isdigit() else None
+                    }
+                    if warning_entry not in warnings:
+                        warnings.append(warning_entry)
+                    break
+
+        return errors, warnings
+
+    def list_builds(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """List recent builds."""
+        with self._build_lock:
+            builds = list(self._builds.values())
+        builds.sort(key=lambda b: b.get("start_time", ""), reverse=True)
+        return builds[:limit]
+
+    def cancel_build(self, build_id: str) -> bool:
+        """
+        Mark a build as cancelled.
+
+        Note: This only updates the status; the subprocess may still complete.
+        """
+        with self._build_lock:
+            if build_id in self._builds:
+                if self._builds[build_id]["status"] in ("pending", "running"):
+                    self._builds[build_id]["status"] = "cancelled"
+                    self._builds[build_id]["end_time"] = datetime.utcnow().isoformat()
+                    return True
+        return False
 
     # =========================================================================
     # Workflow Management

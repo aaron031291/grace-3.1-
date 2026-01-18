@@ -253,14 +253,35 @@ class EpisodicBuffer:
     def generate_episode_embedding(self, episode: Episode) -> Optional[List[float]]:
         """
         Generate and store embedding for an episode.
+        Uses description (problem) + context (action) + outcome for comprehensive semantic matching.
         """
         if not self.embedder:
+            logger.warning("[EPISODIC] Cannot generate embedding - no embedder available")
             return None
 
         try:
-            embedding = self.embedder.embed_text([episode.problem])[0]
+            # Build comprehensive text from description, context, and outcome
+            parts = [episode.problem]  # description
+            
+            # Add action/context if available
+            if episode.action:
+                action_text = json.dumps(episode.action) if isinstance(episode.action, (dict, list)) else str(episode.action)
+                parts.append(action_text[:300])  # Limit action text
+            
+            # Add outcome for learning context
+            if episode.outcome:
+                outcome_text = json.dumps(episode.outcome) if isinstance(episode.outcome, (dict, list)) else str(episode.outcome)
+                parts.append(outcome_text[:300])  # Limit outcome text
+            
+            # Add source for provenance context
+            if episode.source:
+                parts.append(f"source: {episode.source}")
+            
+            text = " | ".join(parts)
+            embedding = self.embedder.embed_text([text])[0]
             episode.embedding = json.dumps(embedding)
             self.session.commit()
+            logger.debug(f"[EPISODIC] Generated embedding for episode: {episode.id}")
             return embedding
         except Exception as e:
             logger.error(f"[EPISODIC] Error generating embedding: {e}")
@@ -270,6 +291,7 @@ class EpisodicBuffer:
         """
         Generate embeddings for all episodes that don't have them.
         Returns count of episodes indexed.
+        Callable on startup to ensure all episodes are searchable.
         """
         if not self.embedder:
             logger.warning("[EPISODIC] Cannot index - no embedder available")
@@ -284,17 +306,38 @@ class EpisodicBuffer:
             logger.info("[EPISODIC] All episodes already indexed")
             return 0
 
-        # Batch embed
-        problems = [ep.problem for ep in episodes]
-        embeddings = self.embedder.embed_text(problems, batch_size=32)
+        # Build comprehensive texts for each episode
+        texts = []
+        for ep in episodes:
+            parts = [ep.problem]
+            if ep.action:
+                action_text = json.dumps(ep.action) if isinstance(ep.action, (dict, list)) else str(ep.action)
+                parts.append(action_text[:300])
+            if ep.outcome:
+                outcome_text = json.dumps(ep.outcome) if isinstance(ep.outcome, (dict, list)) else str(ep.outcome)
+                parts.append(outcome_text[:300])
+            if ep.source:
+                parts.append(f"source: {ep.source}")
+            texts.append(" | ".join(parts))
+        
+        try:
+            embeddings = self.embedder.embed_text(texts, batch_size=32)
 
-        # Update episodes
-        for ep, emb in zip(episodes, embeddings):
-            ep.embedding = json.dumps(emb)
+            # Update episodes
+            for ep, emb in zip(episodes, embeddings):
+                ep.embedding = json.dumps(emb)
 
-        self.session.commit()
-        logger.info(f"[EPISODIC] Indexed {len(episodes)} episodes")
-        return len(episodes)
+            self.session.commit()
+            logger.info(f"[EPISODIC] Indexed {len(episodes)} episodes")
+            return len(episodes)
+        except Exception as e:
+            logger.error(f"[EPISODIC] Batch indexing failed: {e}")
+            # Fall back to individual indexing
+            indexed = 0
+            for ep in episodes:
+                if self.generate_episode_embedding(ep):
+                    indexed += 1
+            return indexed
 
     def recall_by_topic(
         self,
