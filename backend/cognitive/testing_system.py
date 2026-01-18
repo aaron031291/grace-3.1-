@@ -78,13 +78,35 @@ class TestingSystem:
             try:
                 result = method(file_path)
                 if result:
+                    # Record outcome in aggregator for cross-system learning
+                    self._record_outcome(file_path, result)
                     return result
             except Exception as e:
                 logger.debug(f"[TESTING] Method {method.__name__} failed: {e}")
                 continue
         
         # Fallback to syntax check
-        return self._run_syntax_check(file_path)
+        result = self._run_syntax_check(file_path)
+        self._record_outcome(file_path, result)
+        return result
+    
+    def _record_outcome(self, file_path: str, result: Dict[str, Any]) -> None:
+        """Record test outcome in outcome aggregator for cross-system learning."""
+        try:
+            from cognitive.outcome_aggregator import get_outcome_aggregator
+            aggregator = get_outcome_aggregator()
+            aggregator.record_outcome('testing', {
+                'success': result.get('passed', False),
+                'trust_score': 0.9 if result.get('passed', False) else 0.3,
+                'test_count': result.get('test_count', 0),
+                'passed_count': result.get('passed_count', 0),
+                'failed_count': result.get('failed_count', 0),
+                'method': result.get('method', 'unknown'),
+                'file_path': file_path,
+                'errors': result.get('errors', [])[:3]  # Limit error context
+            })
+        except Exception as e:
+            logger.debug(f"[TESTING] Could not record outcome in aggregator: {e}")
     
     def _run_syntax_check(self, file_path: str) -> Dict[str, Any]:
         """Check Python syntax."""
