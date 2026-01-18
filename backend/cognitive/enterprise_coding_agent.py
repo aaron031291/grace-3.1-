@@ -292,20 +292,41 @@ class EnterpriseCodingAgent:
         
         # Testing System
         try:
-            # Try to import testing system
+            # Import testing system from multiple paths
+            testing_system_imported = False
+            
+            # Try cognitive.testing_system first (standard path)
             try:
                 from cognitive.testing_system import get_testing_system
                 self.testing_system = get_testing_system(session=self.session)
-                logger.info("[CODING-AGENT] Testing System initialized")
-            except ImportError:
+                testing_system_imported = True
+                logger.info("[CODING-AGENT] Testing System initialized from cognitive.testing_system")
+            except ImportError as ie1:
+                logger.debug(f"[CODING-AGENT] cognitive.testing_system not found: {ie1}")
+                
+                # Try direct import from backend path
+                try:
+                    import sys
+                    from pathlib import Path
+                    backend_path = Path(__file__).parent.parent
+                    if str(backend_path) not in sys.path:
+                        sys.path.insert(0, str(backend_path))
+                    from cognitive.testing_system import get_testing_system
+                    self.testing_system = get_testing_system(session=self.session)
+                    testing_system_imported = True
+                    logger.info("[CODING-AGENT] Testing System initialized via path fix")
+                except ImportError as ie2:
+                    logger.debug(f"[CODING-AGENT] Direct import also failed: {ie2}")
+            
+            if not testing_system_imported:
                 # Create a stub testing system if module doesn't exist
                 class StubTestingSystem:
                     def run_tests(self, file_path: str) -> Dict[str, Any]:
-                        return {"success": False, "error": "Testing system not implemented"}
+                        return {"passed": False, "error": "Testing system not implemented", "method": "stub"}
                     def fix_failures(self, failures: List[Dict]) -> Dict[str, Any]:
-                        return {"success": False, "error": "Testing system not implemented"}
+                        return {"passed": False, "error": "Testing system not implemented"}
                 self.testing_system = StubTestingSystem()
-                logger.info("[CODING-AGENT] Testing System using stub (module not available)")
+                logger.warning("[CODING-AGENT] Testing System using stub (module not available)")
         except Exception as e:
             logger.warning(f"[CODING-AGENT] Testing System not available: {e}")
             self.testing_system = None
