@@ -37,6 +37,7 @@ from librarian.content_lifecycle_manager import ContentLifecycleManager
 from librarian.content_integrity_verifier import ContentIntegrityVerifier
 from librarian.content_visualizer import ContentVisualizer
 from librarian.bulk_operations_manager import BulkOperationsManager
+from librarian.amp_librarian_bridge import AmpLibrarianBridge, get_amp_librarian_bridge
 
 # TimeSense integration
 try:
@@ -252,7 +253,14 @@ class LibrarianEngine:
             file_naming_manager=self.file_naming_manager
         )
 
-        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None}, File System: Enabled, Genesis Keys: Enabled, Recommendations: Enabled, Lifecycle: Enabled, Integrity: Enabled, Visualization: Enabled, Bulk Ops: Enabled)")
+        # Amp Librarian Bridge - Unified external knowledge integration
+        self.amp_bridge = get_amp_librarian_bridge(
+            db_session=db_session,
+            knowledge_base_path=knowledge_base_path
+        )
+        self.amp_bridge.connect_librarian_engine(self)
+
+        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None}, File System: Enabled, Genesis Keys: Enabled, Recommendations: Enabled, Lifecycle: Enabled, Integrity: Enabled, Visualization: Enabled, Bulk Ops: Enabled, Amp Bridge: Enabled)")
 
     def process_document(
         self,
@@ -723,4 +731,73 @@ class LibrarianEngine:
             health["file_organizer"] = "degraded"
             health["overall_status"] = "degraded"
 
+        # Check Amp Librarian Bridge
+        if self.amp_bridge:
+            health["amp_librarian_bridge"] = "healthy"
+            bridge_status = self.amp_bridge.get_status()
+            health["external_sources"] = bridge_status.get("registered_sources", 0)
+        else:
+            health["amp_librarian_bridge"] = "unavailable"
+
         return health
+
+    def unified_search(
+        self,
+        query: str,
+        include_external: bool = True,
+        limit: int = 20
+    ) -> Dict[str, Any]:
+        """
+        Unified search across local AND external knowledge sources.
+        
+        This is the main entry point for searching all knowledge.
+        
+        Args:
+            query: Search query
+            include_external: Include GitHub repos and external docs
+            limit: Maximum results
+            
+        Returns:
+            Dict with results from all sources
+        """
+        results = {
+            "query": query,
+            "local_results": [],
+            "external_results": [],
+            "total_results": 0
+        }
+        
+        # Search via Amp Bridge (handles both local and external)
+        if self.amp_bridge:
+            unified = self.amp_bridge.unified_search(
+                query=query,
+                limit=limit
+            )
+            
+            for r in unified:
+                result_dict = {
+                    "content": r.content[:500],
+                    "source": r.source_identifier,
+                    "type": r.source_type.value,
+                    "file_path": r.file_path,
+                    "relevance": r.relevance_score,
+                    "snippet": r.snippet
+                }
+                
+                if r.source_type.value == "local":
+                    results["local_results"].append(result_dict)
+                else:
+                    results["external_results"].append(result_dict)
+            
+            results["total_results"] = len(unified)
+        
+        return results
+
+    def get_unified_status(self) -> Dict[str, Any]:
+        """Get status of the unified librarian system (local + external)."""
+        status = {
+            "local_librarian": self.health_check(),
+            "amp_bridge": self.amp_bridge.get_status() if self.amp_bridge else None,
+            "unified_analytics": self.amp_bridge.get_unified_analytics() if self.amp_bridge else None
+        }
+        return status

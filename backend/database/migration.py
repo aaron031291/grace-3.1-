@@ -60,6 +60,11 @@ from models.librarian_models import (  # noqa: F401
     LibrarianAudit,
 )
 
+# Import Immutable Audit models for data integrity and traceability
+from genesis.immutable_audit_storage import (  # noqa: F401
+    ImmutableAuditRecord,
+)
+
 
 logger = logging.getLogger(__name__)
 

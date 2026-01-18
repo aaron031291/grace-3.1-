@@ -2,8 +2,11 @@ import logging
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
-from layer1.message_bus import Layer1MessageBus, Message, ComponentType, MessageType, get_message_bus
-from layer1.autonomous_actions import AutonomousAction
+from layer1.message_bus import Layer1MessageBus, Message, ComponentType, MessageType, get_message_bus, AutonomousAction
+
+logger = logging.getLogger(__name__)
+
+
 class DataIntegrityConnector:
     logger = logging.getLogger(__name__)
     """

@@ -59,7 +59,7 @@ def main():
         print("[CONFIG] Configuration:")
         print(f"  - Total problems: 500 (full dataset)")
         print(f"  - Parallel workers: {mbpp.max_workers}")
-        print(f"  - Templates: enabled (LLM-first, templates as fallback)")
+        print(f"  - Templates: enabled (Template-first with LLM collaboration)")
         print(f"  - Feedback loop: enabled")
         print(f"  - Multi-candidate: enabled (8 candidates)")
         print(f"  - Timeout: 10 seconds per problem")
@@ -72,7 +72,7 @@ def main():
             max_problems=None,  # Run all 500 problems
             timeout=10,
             use_templates=True,
-            template_first=False,  # LLM first, templates as fallback
+            template_first=True,  # Template first with LLM collaboration
             use_feedback_loop=True,
             use_multi_candidate=True,
             num_candidates=8,

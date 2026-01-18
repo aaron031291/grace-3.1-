@@ -91,10 +91,10 @@ class AdvancedCodeQualitySystem:
         try:
             # Try multiple import paths for compatibility
             try:
-                from backend.transform.transformation_library import get_transformation_library
+                from transform.transformation_library import get_transformation_library
             except ImportError:
                 try:
-                    from transform.transformation_library import get_transformation_library
+                    from backend.transform.transformation_library import get_transformation_library
                 except ImportError:
                     get_transformation_library = None
             
@@ -118,10 +118,10 @@ class AdvancedCodeQualitySystem:
         try:
             # Try multiple import paths for magma
             try:
-                from backend.cognitive.magma_memory_system import MagmaMemorySystem
+                from cognitive.magma_memory_system import MagmaMemorySystem
             except ImportError:
                 try:
-                    from cognitive.magma_memory_system import MagmaMemorySystem
+                    from backend.cognitive.magma_memory_system import MagmaMemorySystem
                 except ImportError:
                     MagmaMemorySystem = None
             
@@ -134,10 +134,10 @@ class AdvancedCodeQualitySystem:
         try:
             # Try multiple import paths for ooda
             try:
-                from backend.cognitive.ooda import OODALoop
+                from cognitive.ooda import OODALoop
             except ImportError:
                 try:
-                    from cognitive.ooda import OODALoop
+                    from backend.cognitive.ooda import OODALoop
                 except ImportError:
                     OODALoop = None
             

@@ -1,0 +1,1658 @@
+{
+  "count": 114,
+  "mbpp_patterns": [
+    {
+      "task_id": 1,
+      "description": "Write a function to find the minimum cost path to reach (m, n) from (0, 0) for the given cost matrix cost[][] and a position (m, n) in cost[][].",
+      "solution": "R = 3\r\nC = 3\r\ndef min_cost(cost, m, n): \r\n\ttc = [[0 for x in range(C)] for x in range(R)] \r\n\ttc[0][0] = cost[0][0] \r\n\tfor i in range(1, m+1): \r\n\t\ttc[i][0] = tc[i-1][0] + cost[i][0] \r\n\tfor j in range(1, n+1): \r\n\t\ttc[0][j] = tc[0][j-1] + cost[0][j] \r\n\tfor i in range(1, m+1): \r\n\t\tfor j in range(1, n+1): \r\n\t\t\ttc[i][j] = min(tc[i-1][j-1], tc[i-1][j], tc[i][j-1]) + cost[i][j] \r\n\treturn tc[m][n]",
+      "test_cases": [
+        "assert min_cost([[1, 2, 3], [4, 8, 2], [1, 5, 3]], 2, 2) == 8",
+        "assert min_cost([[2, 3, 4], [5, 9, 3], [2, 6, 4]], 2, 2) == 12",
+        "assert min_cost([[3, 4, 5], [6, 10, 4], [3, 7, 5]], 2, 2) == 16"
+      ],
+      "keywords": [
+        "min",
+        "find"
+      ],
+      "operations": [
+        "list_comprehension",
+        "min",
+        "range"
+      ]
+    },
+    {
+      "task_id": 14,
+      "description": "Write a python function to find the volume of a triangular prism.",
+      "solution": "def find_Volume(l,b,h) : \r\n    return ((l * b * h) / 2) ",
+      "test_cases": [
+        "assert find_Volume(10,8,6) == 240",
+        "assert find_Volume(3,2,2) == 6",
+        "assert find_Volume(1,2,1) == 1"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 17,
+      "description": "Write a function to find the perimeter of a square.",
+      "solution": "def square_perimeter(a):\r\n  perimeter=4*a\r\n  return perimeter",
+      "test_cases": [
+        "assert square_perimeter(10)==40",
+        "assert square_perimeter(5)==20",
+        "assert square_perimeter(4)==16"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 28,
+      "description": "Write a python function to find binomial co-efficient.",
+      "solution": "def binomial_Coeff(n,k): \r\n    if k > n : \r\n       return 0\r\n    if k==0 or k ==n : \r\n        return 1 \r\n    return binomial_Coeff(n-1,k-1) + binomial_Coeff(n-1,k) ",
+      "test_cases": [
+        "assert binomial_Coeff(5,2) == 10",
+        "assert binomial_Coeff(4,3) == 4",
+        "assert binomial_Coeff(3,2) == 3"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 51,
+      "description": "Write a function to print check if the triangle is equilateral or not.",
+      "solution": "def check_equilateral(x,y,z):\r\n  if x == y == z:\r\n\t   return True\r\n  else:\r\n     return False",
+      "test_cases": [
+        "assert check_equilateral(6,8,12)==False ",
+        "assert check_equilateral(6,6,12)==False",
+        "assert check_equilateral(6,6,6)==True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 52,
+      "description": "Write a function to caluclate area of a parallelogram.",
+      "solution": "def parallelogram_area(b,h):\r\n  area=b*h\r\n  return area",
+      "test_cases": [
+        "assert parallelogram_area(10,20)==200",
+        "assert parallelogram_area(15,20)==300",
+        "assert parallelogram_area(8,9)==72"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 55,
+      "description": "Write a function to find t-nth term of geometric series.",
+      "solution": "import math\r\ndef tn_gp(a,n,r):\r\n  tn = a * (math.pow(r, n - 1))\r\n  return tn",
+      "test_cases": [
+        "assert tn_gp(1,5,2)==16",
+        "assert tn_gp(1,5,4)==256",
+        "assert tn_gp(2,6,3)==486"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 82,
+      "description": "Write a function to find the volume of a sphere.",
+      "solution": "import math\r\ndef volume_sphere(r):\r\n  volume=(4/3)*math.pi*r*r*r\r\n  return volume",
+      "test_cases": [
+        "assert volume_sphere(10)==4188.790204786391",
+        "assert volume_sphere(25)==65449.84694978735",
+        "assert volume_sphere(20)==33510.32163829113"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 85,
+      "description": "Write a function to find the surface area of a sphere.",
+      "solution": "import math\r\ndef surfacearea_sphere(r):\r\n  surfacearea=4*math.pi*r*r\r\n  return surfacearea",
+      "test_cases": [
+        "assert surfacearea_sphere(10)==1256.6370614359173",
+        "assert surfacearea_sphere(15)==2827.4333882308138",
+        "assert surfacearea_sphere(20)==5026.548245743669"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 112,
+      "description": "Write a python function to find the perimeter of a cylinder.",
+      "solution": "def perimeter(diameter,height) : \r\n    return 2*(diameter+height)  ",
+      "test_cases": [
+        "assert perimeter(2,4) == 12",
+        "assert perimeter(1,2) == 6",
+        "assert perimeter(3,1) == 8"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 139,
+      "description": "Write a function to find the circumference of a circle.",
+      "solution": "def circle_circumference(r):\r\n  perimeter=2*3.1415*r\r\n  return perimeter",
+      "test_cases": [
+        "assert circle_circumference(10)==62.830000000000005",
+        "assert circle_circumference(5)==31.415000000000003",
+        "assert circle_circumference(4)==25.132"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 147,
+      "description": "Write a function to find the maximum total path sum in the given triangle.",
+      "solution": "def max_path_sum(tri, m, n): \r\n\tfor i in range(m-1, -1, -1): \r\n\t\tfor j in range(i+1): \r\n\t\t\tif (tri[i+1][j] > tri[i+1][j+1]): \r\n\t\t\t\ttri[i][j] += tri[i+1][j] \r\n\t\t\telse: \r\n\t\t\t\ttri[i][j] += tri[i+1][j+1] \r\n\treturn tri[0][0]",
+      "test_cases": [
+        "assert max_path_sum([[1, 0, 0], [4, 8, 0], [1, 5, 3]], 2, 2) == 14",
+        "assert max_path_sum([[13, 0, 0], [7, 4, 0], [2, 4, 6]], 2, 2) == 24 ",
+        "assert max_path_sum([[2, 0, 0], [11, 18, 0], [21, 25, 33]], 2, 2) == 53"
+      ],
+      "keywords": [
+        "sum",
+        "max",
+        "find"
+      ],
+      "operations": [
+        "sum",
+        "range"
+      ]
+    },
+    {
+      "task_id": 153,
+      "description": "Write a function to find the vertex of a parabola.",
+      "solution": "def parabola_vertex(a, b, c): \r\n  vertex=(((-b / (2 * a)),(((4 * a * c) - (b * b)) / (4 * a))))\r\n  return vertex",
+      "test_cases": [
+        "assert parabola_vertex(5,3,2)==(-0.3, 1.55)",
+        "assert parabola_vertex(9,8,4)==(-0.4444444444444444, 2.2222222222222223)",
+        "assert parabola_vertex(2,4,6)==(-1.0, 4.0)"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 159,
+      "description": "Write a function to print the season for the given month and day.",
+      "solution": "def month_season(month,days):\r\n if month in ('January', 'February', 'March'):\r\n\t season = 'winter'\r\n elif month in ('April', 'May', 'June'):\r\n\t season = 'spring'\r\n elif month in ('July', 'August', 'September'):\r\n\t season = 'summer'\r\n else:\r\n\t season = 'autumn'\r\n if (month == 'March') and (days > 19):\r\n\t season = 'spring'\r\n elif (month == 'June') and (days > 20):\r\n\t season = 'summer'\r\n elif (month == 'September') and (days > 21):\r\n\t season = 'autumn'\r\n elif (month == 'October') and (days > 21):\r\n\t season = 'autumn'\r\n elif (month == 'November') and (days > 21):\r\n\t season = 'autumn'\r\n elif (month == 'December') and (days > 20):\r\n\t season = 'winter'\r\n return season",
+      "test_cases": [
+        "assert month_season('January',4)==('winter')",
+        "assert month_season('October',28)==('autumn')",
+        "assert month_season('June',6)==('spring')"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 160,
+      "description": "Write a function to find x and y that satisfies ax + by = n.",
+      "solution": "def solution (a, b, n): \r\n\ti = 0\r\n\twhile i * a <= n: \r\n\t\tif (n - (i * a)) % b == 0: \r\n\t\t\treturn (\"x = \",i ,\", y = \", \r\n\t\t\tint((n - (i * a)) / b)) \r\n\t\t\treturn 0\r\n\t\ti = i + 1\r\n\treturn (\"No solution\") ",
+      "test_cases": [
+        "assert solution(2, 3, 7) == ('x = ', 2, ', y = ', 1)",
+        "assert solution(4, 2, 7) == 'No solution'",
+        "assert solution(1, 13, 17) == ('x = ', 4, ', y = ', 1)"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 163,
+      "description": "Write a function to calculate the area of a regular polygon.",
+      "solution": "from math import tan, pi\r\ndef area_polygon(s,l):\r\n  area = s * (l ** 2) / (4 * tan(pi / s))\r\n  return area",
+      "test_cases": [
+        "assert area_polygon(4,20)==400.00000000000006",
+        "assert area_polygon(10,15)==1731.1969896610804",
+        "assert area_polygon(9,7)==302.90938549487214"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 164,
+      "description": "Write a python function to check whether the sum of divisors are same or not.",
+      "solution": "import math \r\ndef divSum(n): \r\n    sum = 1; \r\n    i = 2; \r\n    while(i * i <= n): \r\n        if (n % i == 0): \r\n            sum = (sum + i +math.floor(n / i)); \r\n        i += 1; \r\n    return sum; \r\ndef areEquivalent(num1,num2): \r\n    return divSum(num1) == divSum(num2); ",
+      "test_cases": [
+        "assert areEquivalent(36,57) == False",
+        "assert areEquivalent(2,4) == False",
+        "assert areEquivalent(23,47) == True"
+      ],
+      "keywords": [
+        "sum",
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 167,
+      "description": "Write a python function to find smallest power of 2 greater than or equal to n.",
+      "solution": "def next_Power_Of_2(n): \r\n    count = 0; \r\n    if (n and not(n & (n - 1))): \r\n        return n   \r\n    while( n != 0): \r\n        n >>= 1\r\n        count += 1\r\n    return 1 << count; ",
+      "test_cases": [
+        "assert next_Power_Of_2(0) == 1",
+        "assert next_Power_Of_2(5) == 8",
+        "assert next_Power_Of_2(17) == 32"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 171,
+      "description": "Write a function to find the perimeter of a pentagon.",
+      "solution": "import math\r\ndef perimeter_pentagon(a):\r\n  perimeter=(5*a)\r\n  return perimeter",
+      "test_cases": [
+        "assert perimeter_pentagon(5)==25",
+        "assert perimeter_pentagon(10)==50",
+        "assert perimeter_pentagon(15)==75"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 176,
+      "description": "Write a function to find the perimeter of a triangle.",
+      "solution": "def perimeter_triangle(a,b,c):\r\n  perimeter=a+b+c\r\n  return perimeter",
+      "test_cases": [
+        "assert perimeter_triangle(10,20,30)==60",
+        "assert perimeter_triangle(3,4,5)==12",
+        "assert perimeter_triangle(25,35,45)==105"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 180,
+      "description": "Write a function to calculate distance between two points using latitude and longitude.",
+      "solution": "from math import radians, sin, cos, acos\r\ndef distance_lat_long(slat,slon,elat,elon):\r\n dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))\r\n return dist",
+      "test_cases": [
+        "assert distance_lat_long(23.5,67.5,25.5,69.5)==12179.372041317429",
+        "assert distance_lat_long(10.5,20.5,30.5,40.5)==6069.397933300514",
+        "assert distance_lat_long(10,20,30,40)==6783.751974994595"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 185,
+      "description": "Write a function to find the focus of a parabola.",
+      "solution": "def parabola_focus(a, b, c): \r\n  focus= (((-b / (2 * a)),(((4 * a * c) - (b * b) + 1) / (4 * a))))\r\n  return focus",
+      "test_cases": [
+        "assert parabola_focus(5,3,2)==(-0.3, 1.6)",
+        "assert parabola_focus(9,8,4)==(-0.4444444444444444, 2.25)",
+        "assert parabola_focus(2,4,6)==(-1.0, 4.125)"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 187,
+      "description": "Write a function to find the longest common subsequence for the given two sequences.",
+      "solution": "def longest_common_subsequence(X, Y, m, n): \r\n    if m == 0 or n == 0: \r\n       return 0 \r\n    elif X[m-1] == Y[n-1]: \r\n       return 1 + longest_common_subsequence(X, Y, m-1, n-1) \r\n    else: \r\n       return max(longest_common_subsequence(X, Y, m, n-1), longest_common_subsequence(X, Y, m-1, n))",
+      "test_cases": [
+        "assert longest_common_subsequence(\"AGGTAB\" , \"GXTXAYB\", 6, 7) == 4",
+        "assert longest_common_subsequence(\"ABCDGH\" , \"AEDFHR\", 6, 6) == 3",
+        "assert longest_common_subsequence(\"AXYT\" , \"AYZX\", 4, 4) == 2"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "max"
+      ]
+    },
+    {
+      "task_id": 198,
+      "description": "Write a function to find the largest triangle that can be inscribed in an ellipse.",
+      "solution": "import math\r\ndef largest_triangle(a,b): \r\n    if (a < 0 or b < 0): \r\n        return -1 \r\n    area = (3 * math.sqrt(3) * pow(a, 2)) / (4 * b);  \r\n    return area ",
+      "test_cases": [
+        "assert largest_triangle(4,2)==10.392304845413264",
+        "assert largest_triangle(5,7)==4.639421805988064",
+        "assert largest_triangle(9,1)==105.2220865598093"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 214,
+      "description": "Write a function to convert radians to degrees.",
+      "solution": "import math\r\ndef degree_radian(radian):\r\n degree = radian*(180/math.pi)\r\n return degree",
+      "test_cases": [
+        "assert degree_radian(90)==5156.620156177409",
+        "assert degree_radian(60)==3437.746770784939",
+        "assert degree_radian(120)==6875.493541569878"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 228,
+      "description": "Write a python function to check whether all the bits are unset in the given range or not.",
+      "solution": "def all_Bits_Set_In_The_Given_Range(n,l,r):  \r\n    num = (((1 << r) - 1) ^ ((1 << (l - 1)) - 1)) \r\n    new_num = n & num\r\n    if (new_num == 0): \r\n        return True\r\n    return False",
+      "test_cases": [
+        "assert all_Bits_Set_In_The_Given_Range(4,1,2) == True",
+        "assert all_Bits_Set_In_The_Given_Range(17,2,4) == True",
+        "assert all_Bits_Set_In_The_Given_Range(39,4,6) == False"
+      ],
+      "keywords": [
+        "check",
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 233,
+      "description": "Write a function to find the lateral surface area of a cylinder.",
+      "solution": "def lateralsuface_cylinder(r,h):\r\n  lateralsurface= 2*3.1415*r*h\r\n  return lateralsurface",
+      "test_cases": [
+        "assert lateralsuface_cylinder(10,5)==314.15000000000003",
+        "assert lateralsuface_cylinder(4,5)==125.66000000000001",
+        "assert lateralsuface_cylinder(4,10)==251.32000000000002"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 234,
+      "description": "Write a function to find the volume of a cube.",
+      "solution": "def volume_cube(l):\r\n  volume = l * l * l\r\n  return volume",
+      "test_cases": [
+        "assert volume_cube(3)==27",
+        "assert volume_cube(2)==8",
+        "assert volume_cube(5)==125"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 248,
+      "description": "Write a function to calculate the harmonic sum of n-1.",
+      "solution": "def harmonic_sum(n):\r\n  if n < 2:\r\n    return 1\r\n  else:\r\n    return 1 / n + (harmonic_sum(n - 1)) ",
+      "test_cases": [
+        "assert harmonic_sum(7) == 2.5928571428571425",
+        "assert harmonic_sum(4) == 2.083333333333333",
+        "assert harmonic_sum(19) == 3.547739657143682"
+      ],
+      "keywords": [
+        "sum"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 264,
+      "description": "Write a function to calculate a dog's age in dog's years.",
+      "solution": "def dog_age(h_age):\r\n if h_age < 0:\r\n \texit()\r\n elif h_age <= 2:\r\n\t d_age = h_age * 10.5\r\n else:\r\n\t d_age = 21 + (h_age - 2)*4\r\n return d_age",
+      "test_cases": [
+        "assert dog_age(12)==61",
+        "assert dog_age(15)==73",
+        "assert dog_age(24)==109"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 266,
+      "description": "Write a function to find the lateral surface area of a cube.",
+      "solution": "def lateralsurface_cube(l):\r\n  LSA = 4 * (l * l)\r\n  return LSA",
+      "test_cases": [
+        "assert lateralsurface_cube(5)==100",
+        "assert lateralsurface_cube(9)==324",
+        "assert lateralsurface_cube(10)==400"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 276,
+      "description": "Write a function to find the volume of a cylinder.",
+      "solution": "def volume_cylinder(r,h):\r\n  volume=3.1415*r*r*h\r\n  return volume",
+      "test_cases": [
+        "assert volume_cylinder(10,5)==1570.7500000000002",
+        "assert volume_cylinder(4,5)==251.32000000000002",
+        "assert volume_cylinder(4,10)==502.64000000000004"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 293,
+      "description": "Write a function to find the third side of a right angled triangle.",
+      "solution": "import math\r\ndef otherside_rightangle(w,h):\r\n  s=math.sqrt((w*w)+(h*h))\r\n  return s",
+      "test_cases": [
+        "assert otherside_rightangle(7,8)==10.63014581273465",
+        "assert otherside_rightangle(3,4)==5",
+        "assert otherside_rightangle(7,15)==16.55294535724685"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 303,
+      "description": "Write a python function to check whether the count of inversion of two types are same or not.",
+      "solution": "import sys \r\ndef solve(a,n):   \r\n    mx = -sys.maxsize - 1\r\n    for j in range(1,n):  \r\n        if (mx > a[j]):  \r\n            return False  \r\n        mx = max(mx,a[j - 1])    \r\n    return True",
+      "test_cases": [
+        "assert solve([1,0,2],3) == True",
+        "assert solve([1,2,0],3) == False",
+        "assert solve([1,2,1],3) == True"
+      ],
+      "keywords": [
+        "count",
+        "check"
+      ],
+      "operations": [
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 311,
+      "description": "Write a python function to set the left most unset bit.",
+      "solution": "def set_left_most_unset_bit(n): \r\n    if not (n & (n + 1)): \r\n        return n \r\n    pos, temp, count = 0, n, 0 \r\n    while temp: \r\n        if not (temp & 1): \r\n            pos = count      \r\n        count += 1; temp>>=1\r\n    return (n | (1 << (pos))) ",
+      "test_cases": [
+        "assert set_left_most_unset_bit(10) == 14",
+        "assert set_left_most_unset_bit(12) == 14",
+        "assert set_left_most_unset_bit(15) == 15"
+      ],
+      "keywords": [
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 312,
+      "description": "Write a function to find the volume of a cone.",
+      "solution": "import math\r\ndef volume_cone(r,h):\r\n  volume = (1.0/3) * math.pi * r * r * h\r\n  return volume",
+      "test_cases": [
+        "assert volume_cone(5,12)==314.15926535897927",
+        "assert volume_cone(10,15)==1570.7963267948965",
+        "assert volume_cone(19,17)==6426.651371693521"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 327,
+      "description": "Write a function to print check if the triangle is isosceles or not.",
+      "solution": "def check_isosceles(x,y,z):\r\n  if x==y or y==z or z==x:\r\n\t   return True\r\n  else:\r\n     return False",
+      "test_cases": [
+        "assert check_isosceles(6,8,12)==False ",
+        "assert check_isosceles(6,6,12)==True",
+        "assert check_isosceles(6,16,20)==False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 334,
+      "description": "Write a python function to check whether the triangle is valid or not if sides are given.",
+      "solution": "def check_Validity(a,b,c):  \r\n    if (a + b <= c) or (a + c <= b) or (b + c <= a) : \r\n        return False\r\n    else: \r\n        return True        ",
+      "test_cases": [
+        "assert check_Validity(1,2,3) == False",
+        "assert check_Validity(2,3,5) == False",
+        "assert check_Validity(7,10,5) == True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 335,
+      "description": "Write a function to find the sum of arithmetic progression.",
+      "solution": "def ap_sum(a,n,d):\r\n  total = (n * (2 * a + (n - 1) * d)) / 2\r\n  return total",
+      "test_cases": [
+        "assert ap_sum(1,5,2)==25",
+        "assert ap_sum(2,6,4)==72",
+        "assert ap_sum(1,4,5)==34"
+      ],
+      "keywords": [
+        "sum",
+        "find"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 336,
+      "description": "Write a function to check whether the given month name contains 28 days or not.",
+      "solution": "def check_monthnum(monthname1):\r\n  if monthname1 == \"February\":\r\n    return True\r\n  else:\r\n    return False",
+      "test_cases": [
+        "assert check_monthnum(\"February\")==True",
+        "assert check_monthnum(\"January\")==False",
+        "assert check_monthnum(\"March\")==False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 339,
+      "description": "Write a python function to find the maximum occuring divisor in an interval.",
+      "solution": "def find_Divisor(x,y):  \r\n    if (x==y): \r\n        return y \r\n    return 2",
+      "test_cases": [
+        "assert find_Divisor(2,2) == 2",
+        "assert find_Divisor(2,5) == 2",
+        "assert find_Divisor(5,10) == 2"
+      ],
+      "keywords": [
+        "max",
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 354,
+      "description": "Write a function to find t-nth term of arithemetic progression.",
+      "solution": "def tn_ap(a,n,d):\r\n  tn = a + (n - 1) * d\r\n  return tn",
+      "test_cases": [
+        "assert tn_ap(1,5,2)==9",
+        "assert tn_ap(2,6,4)==22",
+        "assert tn_ap(1,4,5)==16"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 356,
+      "description": "Write a function to find the third angle of a triangle using two angles.",
+      "solution": "def find_angle(a,b):\r\n c = 180 - (a + b)\r\n return c\r\n",
+      "test_cases": [
+        "assert find_angle(47,89)==44",
+        "assert find_angle(45,95)==40",
+        "assert find_angle(50,40)==90"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 359,
+      "description": "Write a python function to check whether one root of the quadratic equation is twice of the other or not.",
+      "solution": "def Check_Solution(a,b,c): \r\n    if (2*b*b == 9*a*c): \r\n        return (\"Yes\"); \r\n    else: \r\n        return (\"No\"); ",
+      "test_cases": [
+        "assert Check_Solution(1,3,2) == \"Yes\"",
+        "assert Check_Solution(1,2,3) == \"No\"",
+        "assert Check_Solution(1,-5,6) == \"No\""
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 369,
+      "description": "Write a function to find the lateral surface area of cuboid",
+      "solution": "def lateralsurface_cuboid(l,w,h):\r\n  LSA = 2*h*(l+w)\r\n  return LSA",
+      "test_cases": [
+        "assert lateralsurface_cuboid(8,5,6)==156",
+        "assert lateralsurface_cuboid(7,9,10)==320",
+        "assert lateralsurface_cuboid(10,20,30)==1800"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 373,
+      "description": "Write a function to find the volume of a cuboid.",
+      "solution": "def volume_cuboid(l,w,h):\r\n  volume=l*w*h\r\n  return volume",
+      "test_cases": [
+        "assert volume_cuboid(1,2,3)==6",
+        "assert volume_cuboid(5,7,9)==315",
+        "assert volume_cuboid(10,15,21)==3150"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 379,
+      "description": "Write a function to find the surface area of a cuboid.",
+      "solution": "def surfacearea_cuboid(l,w,h):\r\n  SA = 2*(l*w + l * h + w * h)\r\n  return SA",
+      "test_cases": [
+        "assert surfacearea_cuboid(1,2,3)==22",
+        "assert surfacearea_cuboid(5,7,9)==286",
+        "assert surfacearea_cuboid(10,15,21)==1350"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 388,
+      "description": "Write a python function to find the highest power of 2 that is less than or equal to n.",
+      "solution": "def highest_Power_of_2(n): \r\n    res = 0; \r\n    for i in range(n, 0, -1): \r\n        if ((i & (i - 1)) == 0): \r\n            res = i; \r\n            break; \r\n    return res; ",
+      "test_cases": [
+        "assert highest_Power_of_2(10) == 8",
+        "assert highest_Power_of_2(19) == 16",
+        "assert highest_Power_of_2(32) == 32"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 423,
+      "description": "Write a function to solve gold mine problem.",
+      "solution": "def get_maxgold(gold, m, n): \r\n    goldTable = [[0 for i in range(n)] \r\n                        for j in range(m)]   \r\n    for col in range(n-1, -1, -1): \r\n        for row in range(m):  \r\n            if (col == n-1): \r\n                right = 0\r\n            else: \r\n                right = goldTable[row][col+1] \r\n            if (row == 0 or col == n-1): \r\n                right_up = 0\r\n            else: \r\n                right_up = goldTable[row-1][col+1] \r\n            if (row == m-1 or col == n-1): \r\n                right_down = 0\r\n            else: \r\n                right_down = goldTable[row+1][col+1] \r\n            goldTable[row][col] = gold[row][col] + max(right, right_up, right_down) \r\n    res = goldTable[0][0] \r\n    for i in range(1, m): \r\n        res = max(res, goldTable[i][0])  \r\n    return res ",
+      "test_cases": [
+        "assert get_maxgold([[1, 3, 1, 5],[2, 2, 4, 1],[5, 0, 2, 3],[0, 6, 1, 2]],4,4)==16",
+        "assert get_maxgold([[10,20],[30,40]],2,2)==70",
+        "assert get_maxgold([[4,9],[3,7]],2,2)==13"
+      ],
+      "keywords": [
+        "min"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 430,
+      "description": "Write a function to find the directrix of a parabola.",
+      "solution": "def parabola_directrix(a, b, c): \r\n  directrix=((int)(c - ((b * b) + 1) * 4 * a ))\r\n  return directrix",
+      "test_cases": [
+        "assert parabola_directrix(5,3,2)==-198",
+        "assert parabola_directrix(9,8,4)==-2336",
+        "assert parabola_directrix(2,4,6)==-130"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 432,
+      "description": "Write a function to find the median of a trapezium.",
+      "solution": "def median_trapezium(base1,base2,height):\r\n median = 0.5 * (base1+ base2)\r\n return median",
+      "test_cases": [
+        "assert median_trapezium(15,25,35)==20",
+        "assert median_trapezium(10,20,30)==15",
+        "assert median_trapezium(6,9,4)==7.5"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 441,
+      "description": "Write a function to find the surface area of a cube.",
+      "solution": "def surfacearea_cube(l):\r\n  surfacearea= 6*l*l\r\n  return surfacearea",
+      "test_cases": [
+        "assert surfacearea_cube(5)==150",
+        "assert surfacearea_cube(3)==54",
+        "assert surfacearea_cube(10)==600"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 449,
+      "description": "Write a python function to check whether the triangle is valid or not if 3 points are given.",
+      "solution": "def check_Triangle(x1,y1,x2,y2,x3,y3): \r\n    a = (x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))   \r\n    if a == 0: \r\n        return ('No') \r\n    else: \r\n        return ('Yes') ",
+      "test_cases": [
+        "assert check_Triangle(1,5,2,5,4,6) == 'Yes'",
+        "assert check_Triangle(1,1,1,4,1,5) == 'No'",
+        "assert check_Triangle(1,1,1,1,1,1) == 'No'"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 452,
+      "description": "Write a function that gives loss amount if the given amount has loss else return none.",
+      "solution": "def loss_amount(actual_cost,sale_amount): \r\n  if(sale_amount > actual_cost):\r\n    amount = sale_amount - actual_cost\r\n    return amount\r\n  else:\r\n    return None",
+      "test_cases": [
+        "assert loss_amount(1500,1200)==None",
+        "assert loss_amount(100,200)==100",
+        "assert loss_amount(2000,5000)==3000"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 458,
+      "description": "Write a function to find the area of a rectangle.",
+      "solution": "def rectangle_area(l,b):\r\n  area=l*b\r\n  return area",
+      "test_cases": [
+        "assert rectangle_area(10,20)==200",
+        "assert rectangle_area(10,5)==50",
+        "assert rectangle_area(4,2)==8"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 469,
+      "description": "Write a function to find the maximum profit earned from a maximum of k stock transactions",
+      "solution": "def max_profit(price, k):\r\n    n = len(price)\r\n    final_profit = [[None for x in range(n)] for y in range(k + 1)]\r\n    for i in range(k + 1):\r\n        for j in range(n):\r\n            if i == 0 or j == 0:\r\n                final_profit[i][j] = 0\r\n            else:\r\n                max_so_far = 0\r\n                for x in range(j):\r\n                    curr_price = price[j] - price[x] + final_profit[i-1][x]\r\n                    if max_so_far < curr_price:\r\n                        max_so_far = curr_price\r\n                final_profit[i][j] = max(final_profit[i][j-1], max_so_far)\r\n    return final_profit[k][n-1]",
+      "test_cases": [
+        "assert max_profit([1, 5, 2, 3, 7, 6, 4, 5], 3) == 10",
+        "assert max_profit([2, 4, 7, 5, 4, 3, 5], 2) == 7",
+        "assert max_profit([10, 6, 8, 4, 2], 2) == 2"
+      ],
+      "keywords": [
+        "max",
+        "find"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 481,
+      "description": "Write a function to determine if there is a subset of the given set with sum equal to the given sum.",
+      "solution": "def is_subset_sum(set, n, sum):\r\n\tif (sum == 0):\r\n\t\treturn True\r\n\tif (n == 0):\r\n\t\treturn False\r\n\tif (set[n - 1] > sum):\r\n\t\treturn is_subset_sum(set, n - 1, sum)\r\n\treturn is_subset_sum(set, n-1, sum) or is_subset_sum(set, n-1, sum-set[n-1])",
+      "test_cases": [
+        "assert is_subset_sum([3, 34, 4, 12, 5, 2], 6, 9) == True",
+        "assert is_subset_sum([3, 34, 4, 12, 5, 2], 6, 30) == False",
+        "assert is_subset_sum([3, 34, 4, 12, 5, 2], 6, 15) == True"
+      ],
+      "keywords": [
+        "sum",
+        "min",
+        "set"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 488,
+      "description": "Write a function to find the area of a pentagon.",
+      "solution": "import math\r\ndef area_pentagon(a):\r\n  area=(math.sqrt(5*(5+2*math.sqrt(5)))*pow(a,2))/4.0\r\n  return area",
+      "test_cases": [
+        "assert area_pentagon(5)==43.01193501472417",
+        "assert area_pentagon(10)==172.0477400588967",
+        "assert area_pentagon(15)==387.10741513251753"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 491,
+      "description": "Write a function to find the sum of geometric progression series.",
+      "solution": "import math\r\ndef sum_gp(a,n,r):\r\n total = (a * (1 - math.pow(r, n ))) / (1- r)\r\n return total",
+      "test_cases": [
+        "assert sum_gp(1,5,2)==31",
+        "assert sum_gp(1,5,4)==341",
+        "assert sum_gp(2,6,3)==728"
+      ],
+      "keywords": [
+        "sum",
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 497,
+      "description": "Write a function to find the surface area of a cone.",
+      "solution": "import math\r\ndef surfacearea_cone(r,h):\r\n  l = math.sqrt(r * r + h * h)\r\n  SA = math.pi * r * (r + l)\r\n  return SA",
+      "test_cases": [
+        "assert surfacearea_cone(5,12)==282.7433388230814",
+        "assert surfacearea_cone(10,15)==880.5179353159282",
+        "assert surfacearea_cone(19,17)==2655.923961165254"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 499,
+      "description": "Write a function to find the diameter of a circle.",
+      "solution": "def diameter_circle(r):\r\n  diameter=2*r\r\n  return diameter",
+      "test_cases": [
+        "assert diameter_circle(10)==20",
+        "assert diameter_circle(40)==80",
+        "assert diameter_circle(15)==30"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 506,
+      "description": "Write a function to calculate the permutation coefficient of given p(n, k).",
+      "solution": "def permutation_coefficient(n, k): \r\n\tP = [[0 for i in range(k + 1)] \r\n\t\t\tfor j in range(n + 1)] \r\n\tfor i in range(n + 1): \r\n\t\tfor j in range(min(i, k) + 1): \r\n\t\t\tif (j == 0): \r\n\t\t\t\tP[i][j] = 1\r\n\t\t\telse: \r\n\t\t\t\tP[i][j] = P[i - 1][j] + ( \r\n\t\t\t\t\t\tj * P[i - 1][j - 1]) \r\n\t\t\tif (j < k): \r\n\t\t\t\tP[i][j + 1] = 0\r\n\treturn P[n][k] ",
+      "test_cases": [
+        "assert permutation_coefficient(10, 2) == 90",
+        "assert permutation_coefficient(10, 3) == 720",
+        "assert permutation_coefficient(10, 1) == 10"
+      ],
+      "keywords": [],
+      "operations": [
+        "list_comprehension",
+        "min",
+        "range"
+      ]
+    },
+    {
+      "task_id": 515,
+      "description": "Write a function to check if there is a subset with sum divisible by m.",
+      "solution": "def modular_sum(arr, n, m): \r\n\tif (n > m): \r\n\t\treturn True\r\n\tDP = [False for i in range(m)] \r\n\tfor i in range(n): \r\n\t\tif (DP[0]): \r\n\t\t\treturn True\r\n\t\ttemp = [False for i in range(m)] \r\n\t\tfor j in range(m): \r\n\t\t\tif (DP[j] == True): \r\n\t\t\t\tif (DP[(j + arr[i]) % m] == False): \r\n\t\t\t\t\ttemp[(j + arr[i]) % m] = True\r\n\t\tfor j in range(m): \r\n\t\t\tif (temp[j]): \r\n\t\t\t\tDP[j] = True\r\n\t\tDP[arr[i] % m] = True\r\n\treturn DP[0]",
+      "test_cases": [
+        "assert modular_sum([3, 1, 7, 5], 4, 6) == True",
+        "assert modular_sum([1, 7], 2, 5) == False",
+        "assert modular_sum([1, 6], 2, 5) == False"
+      ],
+      "keywords": [
+        "sum",
+        "check",
+        "set"
+      ],
+      "operations": [
+        "list_comprehension",
+        "sum",
+        "range"
+      ]
+    },
+    {
+      "task_id": 519,
+      "description": "Write a function to calculate volume of a tetrahedron.",
+      "solution": "import math\r\ndef volume_tetrahedron(num):\r\n\tvolume = (num ** 3 / (6 * math.sqrt(2)))\t\r\n\treturn round(volume, 2)",
+      "test_cases": [
+        "assert volume_tetrahedron(10)==117.85",
+        "assert volume_tetrahedron(15)==397.75",
+        "assert volume_tetrahedron(20)==942.81"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 521,
+      "description": "Write a function to print check if the triangle is scalene or not.",
+      "solution": "def check_isosceles(x,y,z):\r\n  if x!=y & y!=z & z!=x:\r\n\t   return True\r\n  else:\r\n     return False",
+      "test_cases": [
+        "assert check_isosceles(6,8,12)==True",
+        "assert check_isosceles(6,6,12)==False",
+        "assert check_isosceles(6,15,20)==True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 525,
+      "description": "Write a python function to check whether two given lines are parallel or not.",
+      "solution": "def parallel_lines(line1, line2):\r\n  return line1[0]/line1[1] == line2[0]/line2[1]",
+      "test_cases": [
+        "assert parallel_lines([2,3,4], [2,3,8]) == True",
+        "assert parallel_lines([2,3,4], [4,-3,8]) == False",
+        "assert parallel_lines([3,3],[5,5]) == True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 535,
+      "description": "Write a function to find the top or bottom surface area of a cylinder.",
+      "solution": "def topbottom_surfacearea(r):\r\n  toporbottomarea=3.1415*r*r\r\n  return toporbottomarea",
+      "test_cases": [
+        "assert topbottom_surfacearea(10)==314.15000000000003",
+        "assert topbottom_surfacearea(5)==78.53750000000001",
+        "assert topbottom_surfacearea(4)==50.264"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 548,
+      "description": "Write a function to find the length of the longest increasing subsequence of the given sequence.",
+      "solution": "def longest_increasing_subsequence(arr): \r\n\tn = len(arr) \r\n\tlongest_increasing_subsequence = [1]*n \r\n\tfor i in range (1 , n): \r\n\t\tfor j in range(0 , i): \r\n\t\t\tif arr[i] > arr[j] and longest_increasing_subsequence[i]< longest_increasing_subsequence[j] + 1 : \r\n\t\t\t\tlongest_increasing_subsequence[i] = longest_increasing_subsequence[j]+1\r\n\tmaximum = 0\r\n\tfor i in range(n): \r\n\t\tmaximum = max(maximum , longest_increasing_subsequence[i]) \r\n\treturn maximum",
+      "test_cases": [
+        "assert longest_increasing_subsequence([10, 22, 9, 33, 21, 50, 41, 60]) == 5",
+        "assert longest_increasing_subsequence([3, 10, 2, 1, 20]) == 3",
+        "assert longest_increasing_subsequence([50, 3, 10, 7, 40, 80]) == 4 "
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": [
+        "max",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 552,
+      "description": "Write a python function to check whether a given sequence is linear or not.",
+      "solution": "def Seq_Linear(seq_nums):\r\n  seq_nums = [seq_nums[x] - seq_nums[x-1] for x in range(1, len(seq_nums))]\r\n  if len(set(seq_nums)) == 1: \r\n    return \"Linear Sequence\"\r\n  else:\r\n    return \"Non Linear Sequence\"",
+      "test_cases": [
+        "assert Seq_Linear([0,2,4,6,8,10]) == \"Linear Sequence\"",
+        "assert Seq_Linear([1,2,3]) == \"Linear Sequence\"",
+        "assert Seq_Linear([1,5,2]) == \"Non Linear Sequence\""
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": [
+        "list_comprehension",
+        "len",
+        "range"
+      ]
+    },
+    {
+      "task_id": 574,
+      "description": "Write a function to find the surface area of a cylinder.",
+      "solution": "def surfacearea_cylinder(r,h):\r\n  surfacearea=((2*3.1415*r*r) +(2*3.1415*r*h))\r\n  return surfacearea",
+      "test_cases": [
+        "assert surfacearea_cylinder(10,5)==942.45",
+        "assert surfacearea_cylinder(4,5)==226.18800000000002",
+        "assert surfacearea_cylinder(4,10)==351.848"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 581,
+      "description": "Write a python function to find the surface area of the square pyramid.",
+      "solution": "def surface_Area(b,s): \r\n    return 2 * b * s + pow(b,2) ",
+      "test_cases": [
+        "assert surface_Area(3,4) == 33",
+        "assert surface_Area(4,5) == 56",
+        "assert surface_Area(1,2) == 5"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 590,
+      "description": "Write a function to convert polar coordinates to rectangular coordinates.",
+      "solution": "import cmath\r\ndef polar_rect(x,y):\r\n cn = complex(x,y)\r\n cn=cmath.polar(cn)\r\n cn1 = cmath.rect(2, cmath.pi)\r\n return (cn,cn1)",
+      "test_cases": [
+        "assert polar_rect(3,4)==((5.0, 0.9272952180016122), (-2+2.4492935982947064e-16j))",
+        "assert polar_rect(4,7)==((8.06225774829855, 1.0516502125483738), (-2+2.4492935982947064e-16j))",
+        "assert polar_rect(15,17)==((22.67156809750927, 0.8478169733934057), (-2+2.4492935982947064e-16j))"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 592,
+      "description": "Write a python function to find sum of product of binomial co-efficients.",
+      "solution": "def binomial_Coeff(n,k): \r\n    C = [0] * (k + 1); \r\n    C[0] = 1; # nC0 is 1 \r\n    for i in range(1,n + 1):  \r\n        for j in range(min(i, k),0,-1): \r\n            C[j] = C[j] + C[j - 1]; \r\n    return C[k]; \r\ndef sum_Of_product(n): \r\n    return binomial_Coeff(2 * n,n - 1); ",
+      "test_cases": [
+        "assert sum_Of_product(3) == 15",
+        "assert sum_Of_product(4) == 56",
+        "assert sum_Of_product(1) == 1"
+      ],
+      "keywords": [
+        "sum",
+        "find"
+      ],
+      "operations": [
+        "min",
+        "range"
+      ]
+    },
+    {
+      "task_id": 601,
+      "description": "Write a function to find the longest chain which can be formed from the given set of pairs.",
+      "solution": "class Pair(object): \r\n\tdef __init__(self, a, b): \r\n\t\tself.a = a \r\n\t\tself.b = b \r\ndef max_chain_length(arr, n): \r\n\tmax = 0\r\n\tmcl = [1 for i in range(n)] \r\n\tfor i in range(1, n): \r\n\t\tfor j in range(0, i): \r\n\t\t\tif (arr[i].a > arr[j].b and\r\n\t\t\t\tmcl[i] < mcl[j] + 1): \r\n\t\t\t\tmcl[i] = mcl[j] + 1\r\n\tfor i in range(n): \r\n\t\tif (max < mcl[i]): \r\n\t\t\tmax = mcl[i] \r\n\treturn max",
+      "test_cases": [
+        "assert max_chain_length([Pair(5, 24), Pair(15, 25),Pair(27, 40), Pair(50, 60)], 4) == 3",
+        "assert max_chain_length([Pair(1, 2), Pair(3, 4),Pair(5, 6), Pair(7, 8)], 4) == 4",
+        "assert max_chain_length([Pair(19, 10), Pair(11, 12),Pair(13, 14), Pair(15, 16), Pair(31, 54)], 5) == 5"
+      ],
+      "keywords": [
+        "find",
+        "set"
+      ],
+      "operations": [
+        "list_comprehension",
+        "range"
+      ]
+    },
+    {
+      "task_id": 606,
+      "description": "Write a function to convert degrees to radians.",
+      "solution": "import math\r\ndef radian_degree(degree):\r\n radian = degree*(math.pi/180)\r\n return radian",
+      "test_cases": [
+        "assert radian_degree(90)==1.5707963267948966",
+        "assert radian_degree(60)==1.0471975511965976",
+        "assert radian_degree(120)==2.0943951023931953"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 620,
+      "description": "Write a function to find the largest subset where each pair is divisible.",
+      "solution": "def largest_subset(a, n):\r\n\tdp = [0 for i in range(n)]\r\n\tdp[n - 1] = 1; \r\n\tfor i in range(n - 2, -1, -1):\r\n\t\tmxm = 0;\r\n\t\tfor j in range(i + 1, n):\r\n\t\t\tif a[j] % a[i] == 0 or a[i] % a[j] == 0:\r\n\t\t\t\tmxm = max(mxm, dp[j])\r\n\t\tdp[i] = 1 + mxm\r\n\treturn max(dp)",
+      "test_cases": [
+        "assert largest_subset([ 1, 3, 6, 13, 17, 18 ], 6) == 4",
+        "assert largest_subset([10, 5, 3, 15, 20], 5) == 3",
+        "assert largest_subset([18, 1, 3, 6, 13, 17], 6) == 4"
+      ],
+      "keywords": [
+        "find",
+        "set"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 626,
+      "description": "Write a python function to find the largest triangle that can be inscribed in the semicircle.",
+      "solution": "def triangle_area(r) :  \r\n    if r < 0 : \r\n        return -1\r\n    return r * r ",
+      "test_cases": [
+        "assert triangle_area(0) == 0",
+        "assert triangle_area(-1) == -1",
+        "assert triangle_area(2) == 4"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 636,
+      "description": "Write a python function to check if roots of a quadratic equation are reciprocal of each other or not.",
+      "solution": "def Check_Solution(a,b,c): \r\n    if (a == c): \r\n        return (\"Yes\"); \r\n    else: \r\n        return (\"No\"); ",
+      "test_cases": [
+        "assert Check_Solution(2,0,2) == \"Yes\"",
+        "assert Check_Solution(2,-5,2) == \"Yes\"",
+        "assert Check_Solution(1,2,3) == \"No\""
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 637,
+      "description": "Write a function to check whether the given amount has no profit and no loss",
+      "solution": "def noprofit_noloss(actual_cost,sale_amount): \r\n  if(sale_amount == actual_cost):\r\n    return True\r\n  else:\r\n    return False",
+      "test_cases": [
+        "assert noprofit_noloss(1500,1200)==False",
+        "assert noprofit_noloss(100,100)==True",
+        "assert noprofit_noloss(2000,5000)==False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 638,
+      "description": "Write a function to calculate wind chill index.",
+      "solution": "import math\r\ndef wind_chill(v,t):\r\n windchill = 13.12 + 0.6215*t -  11.37*math.pow(v, 0.16) + 0.3965*t*math.pow(v, 0.16)\r\n return int(round(windchill, 0))",
+      "test_cases": [
+        "assert wind_chill(120,35)==40",
+        "assert wind_chill(40,70)==86",
+        "assert wind_chill(10,100)==116"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 654,
+      "description": "Write a function to find the perimeter of a rectangle.",
+      "solution": "def rectangle_perimeter(l,b):\r\n  perimeter=2*(l+b)\r\n  return perimeter",
+      "test_cases": [
+        "assert rectangle_perimeter(10,20)==60",
+        "assert rectangle_perimeter(10,5)==30",
+        "assert rectangle_perimeter(4,2)==12"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 660,
+      "description": "Write a python function to choose points from two ranges such that no point lies in both the ranges.",
+      "solution": "def find_Points(l1,r1,l2,r2): \r\n    x = min(l1,l2) if (l1 != l2) else -1\r\n    y = max(r1,r2) if (r1 != r2) else -1\r\n    return (x,y)",
+      "test_cases": [
+        "assert find_Points(5,10,1,5) == (1,10)",
+        "assert find_Points(3,5,7,9) == (3,9)",
+        "assert find_Points(1,5,2,8) == (1,8)"
+      ],
+      "keywords": [],
+      "operations": [
+        "max",
+        "min"
+      ]
+    },
+    {
+      "task_id": 671,
+      "description": "Write a python function to set the right most unset bit.",
+      "solution": "import math \r\ndef get_Pos_Of_Right_most_Set_Bit(n): \r\n    return int(math.log2(n&-n)+1)   \r\ndef set_Right_most_Unset_Bit(n): \r\n    if (n == 0): \r\n        return 1\r\n    if ((n & (n + 1)) == 0):     \r\n        return n \r\n    pos = get_Pos_Of_Right_most_Set_Bit(~n)      \r\n    return ((1 << (pos - 1)) | n) ",
+      "test_cases": [
+        "assert set_Right_most_Unset_Bit(21) == 23",
+        "assert set_Right_most_Unset_Bit(11) == 15",
+        "assert set_Right_most_Unset_Bit(15) == 15"
+      ],
+      "keywords": [
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 677,
+      "description": "Write a function to check if the triangle is valid or not.",
+      "solution": "def validity_triangle(a,b,c):\r\n total = a + b + c\r\n if total == 180:\r\n    return True\r\n else:\r\n    return False",
+      "test_cases": [
+        "assert validity_triangle(60,50,90)==False",
+        "assert validity_triangle(45,75,60)==True",
+        "assert validity_triangle(30,50,100)==True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 704,
+      "description": "Write a function to calculate the harmonic sum of n-1.",
+      "solution": "def harmonic_sum(n):\r\n  if n < 2:\r\n    return 1\r\n  else:\r\n    return 1 / n + (harmonic_sum(n - 1))",
+      "test_cases": [
+        "assert harmonic_sum(10)==2.9289682539682538",
+        "assert harmonic_sum(4)==2.083333333333333",
+        "assert harmonic_sum(7)==2.5928571428571425 "
+      ],
+      "keywords": [
+        "sum"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 707,
+      "description": "Write a python function to count the total set bits from 1 to n.",
+      "solution": "def count_Set_Bits(n) :  \r\n    n += 1; \r\n    powerOf2 = 2;   \r\n    cnt = n // 2;  \r\n    while (powerOf2 <= n) : \r\n        totalPairs = n // powerOf2;  \r\n        cnt += (totalPairs // 2) * powerOf2;  \r\n        if (totalPairs & 1) : \r\n            cnt += (n % powerOf2) \r\n        else : \r\n            cnt += 0\r\n        powerOf2 <<= 1;    \r\n    return cnt;  ",
+      "test_cases": [
+        "assert count_Set_Bits(16) == 33",
+        "assert count_Set_Bits(2) == 2",
+        "assert count_Set_Bits(14) == 28"
+      ],
+      "keywords": [
+        "count",
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 716,
+      "description": "Write a function to find the perimeter of a rombus.",
+      "solution": "def rombus_perimeter(a):\r\n  perimeter=4*a\r\n  return perimeter",
+      "test_cases": [
+        "assert rombus_perimeter(10)==40",
+        "assert rombus_perimeter(5)==20",
+        "assert rombus_perimeter(4)==16"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 717,
+      "description": "Write a function to calculate the standard deviation.",
+      "solution": "import math\r\nimport sys\r\ndef sd_calc(data):\r\n    n = len(data)\r\n    if n <= 1:\r\n        return 0.0\r\n    mean, sd = avg_calc(data), 0.0\r\n    for el in data:\r\n        sd += (float(el) - mean)**2\r\n    sd = math.sqrt(sd / float(n-1))\r\n    return sd\r\ndef avg_calc(ls):\r\n    n, mean = len(ls), 0.0\r\n    if n <= 1:\r\n        return ls[0]\r\n    for el in ls:\r\n        mean = mean + float(el)\r\n    mean = mean / float(n)\r\n    return mean",
+      "test_cases": [
+        "assert sd_calc([4, 2, 5, 8, 6])== 2.23606797749979",
+        "assert sd_calc([1,2,3,4,5,6,7])==2.160246899469287",
+        "assert sd_calc([5,9,10,15,6,4])==4.070217029430577"
+      ],
+      "keywords": [],
+      "operations": [
+        "len"
+      ]
+    },
+    {
+      "task_id": 721,
+      "description": "Write a function to find a path with the maximum average over all existing paths for the given square matrix of size n*n.",
+      "solution": "M = 100\r\ndef maxAverageOfPath(cost, N): \r\n\tdp = [[0 for i in range(N + 1)] for j in range(N + 1)] \r\n\tdp[0][0] = cost[0][0] \r\n\tfor i in range(1, N): \r\n\t\tdp[i][0] = dp[i - 1][0] + cost[i][0] \r\n\tfor j in range(1, N): \r\n\t\tdp[0][j] = dp[0][j - 1] + cost[0][j] \r\n\tfor i in range(1, N): \r\n\t\tfor j in range(1, N): \r\n\t\t\tdp[i][j] = max(dp[i - 1][j], \r\n\t\t\t\t\t\tdp[i][j - 1]) + cost[i][j] \r\n\treturn dp[N - 1][N - 1] / (2 * N - 1)",
+      "test_cases": [
+        "assert maxAverageOfPath([[1, 2, 3], [6, 5, 4], [7, 3, 9]], 3) == 5.2",
+        "assert maxAverageOfPath([[2, 3, 4], [7, 6, 5], [8, 4, 10]], 3) == 6.2",
+        "assert maxAverageOfPath([[3, 4, 5], [8, 7, 6], [9, 5, 11]], 3) == 7.2 "
+      ],
+      "keywords": [
+        "max",
+        "find"
+      ],
+      "operations": [
+        "list_comprehension",
+        "max",
+        "range"
+      ]
+    },
+    {
+      "task_id": 731,
+      "description": "Write a function to find the lateral surface area of a cone.",
+      "solution": "import math\r\ndef lateralsurface_cone(r,h):\r\n  l = math.sqrt(r * r + h * h)\r\n  LSA = math.pi * r  * l\r\n  return LSA",
+      "test_cases": [
+        "assert lateralsurface_cone(5,12)==204.20352248333654",
+        "assert lateralsurface_cone(10,15)==566.3586699569488",
+        "assert lateralsurface_cone(19,17)==1521.8090132193388"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 738,
+      "description": "Write a function to calculate the geometric sum of n-1.",
+      "solution": "def geometric_sum(n):\r\n  if n < 0:\r\n    return 0\r\n  else:\r\n    return 1 / (pow(2, n)) + geometric_sum(n - 1)",
+      "test_cases": [
+        "assert geometric_sum(7) == 1.9921875",
+        "assert geometric_sum(4) == 1.9375",
+        "assert geometric_sum(8) == 1.99609375"
+      ],
+      "keywords": [
+        "sum"
+      ],
+      "operations": [
+        "sum"
+      ]
+    },
+    {
+      "task_id": 742,
+      "description": "Write a function to caluclate the area of a tetrahedron.",
+      "solution": "import math\r\ndef area_tetrahedron(side):\r\n  area = math.sqrt(3)*(side*side)\r\n  return area",
+      "test_cases": [
+        "assert area_tetrahedron(3)==15.588457268119894",
+        "assert area_tetrahedron(20)==692.8203230275509",
+        "assert area_tetrahedron(10)==173.20508075688772"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 746,
+      "description": "Write a function to find area of a sector.",
+      "solution": "def sector_area(r,a):\r\n    pi=22/7\r\n    if a >= 360:\r\n        return None\r\n    sectorarea = (pi*r**2) * (a/360)\r\n    return sectorarea",
+      "test_cases": [
+        "assert sector_area(4,45)==6.285714285714286",
+        "assert sector_area(9,45)==31.82142857142857",
+        "assert sector_area(9,360)==None"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 761,
+      "description": "Write a function to caluclate arc length of an angle.",
+      "solution": "def arc_length(d,a):\r\n    pi=22/7\r\n    if a >= 360:\r\n        return None\r\n    arclength = (pi*d) * (a/360)\r\n    return arclength",
+      "test_cases": [
+        "assert arc_length(9,45)==3.5357142857142856",
+        "assert arc_length(9,480)==None",
+        "assert arc_length(5,270)==11.785714285714285"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 783,
+      "description": "Write a function to convert rgb color to hsv color.",
+      "solution": "def rgb_to_hsv(r, g, b):\r\n    r, g, b = r/255.0, g/255.0, b/255.0\r\n    mx = max(r, g, b)\r\n    mn = min(r, g, b)\r\n    df = mx-mn\r\n    if mx == mn:\r\n        h = 0\r\n    elif mx == r:\r\n        h = (60 * ((g-b)/df) + 360) % 360\r\n    elif mx == g:\r\n        h = (60 * ((b-r)/df) + 120) % 360\r\n    elif mx == b:\r\n        h = (60 * ((r-g)/df) + 240) % 360\r\n    if mx == 0:\r\n        s = 0\r\n    else:\r\n        s = (df/mx)*100\r\n    v = mx*100\r\n    return h, s, v",
+      "test_cases": [
+        "assert rgb_to_hsv(255, 255, 255)==(0, 0.0, 100.0)",
+        "assert rgb_to_hsv(0, 215, 0)==(120.0, 100.0, 84.31372549019608)",
+        "assert rgb_to_hsv(10, 215, 110)==(149.26829268292684, 95.34883720930233, 84.31372549019608)"
+      ],
+      "keywords": [],
+      "operations": [
+        "max",
+        "min"
+      ]
+    },
+    {
+      "task_id": 789,
+      "description": "Write a function to calculate the perimeter of a regular polygon.",
+      "solution": "from math import tan, pi\r\ndef perimeter_polygon(s,l):\r\n  perimeter = s*l\r\n  return perimeter",
+      "test_cases": [
+        "assert perimeter_polygon(4,20)==80",
+        "assert perimeter_polygon(10,15)==150",
+        "assert perimeter_polygon(9,7)==63"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 814,
+      "description": "Write a function to find the area of a rombus.",
+      "solution": "def rombus_area(p,q):\r\n  area=(p*q)/2\r\n  return area",
+      "test_cases": [
+        "assert rombus_area(10,20)==100",
+        "assert rombus_area(10,5)==25",
+        "assert rombus_area(4,2)==4"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 826,
+      "description": "Write a python function to find the type of triangle from the given sides.",
+      "solution": "def check_Type_Of_Triangle(a,b,c): \r\n    sqa = pow(a,2) \r\n    sqb = pow(b,2) \r\n    sqc = pow(c,2) \r\n    if (sqa == sqa + sqb or sqb == sqa + sqc or sqc == sqa + sqb): \r\n        return (\"Right-angled Triangle\") \r\n    elif (sqa > sqc + sqb or sqb > sqa + sqc or sqc > sqa + sqb): \r\n        return (\"Obtuse-angled Triangle\") \r\n    else: \r\n        return (\"Acute-angled Triangle\") ",
+      "test_cases": [
+        "assert check_Type_Of_Triangle(1,2,3) == \"Obtuse-angled Triangle\"",
+        "assert check_Type_Of_Triangle(2,2,2) == \"Acute-angled Triangle\"",
+        "assert check_Type_Of_Triangle(1,0,1) == \"Right-angled Triangle\""
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 835,
+      "description": "Write a python function to find the slope of a line.",
+      "solution": "def slope(x1,y1,x2,y2): \r\n    return (float)(y2-y1)/(x2-x1)  ",
+      "test_cases": [
+        "assert slope(4,2,2,5) == -1.5",
+        "assert slope(2,4,4,6) == 1",
+        "assert slope(1,2,4,2) == 0"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 848,
+      "description": "Write a function to find the area of a trapezium.",
+      "solution": "def area_trapezium(base1,base2,height):\r\n area = 0.5 * (base1 + base2) * height\r\n return area",
+      "test_cases": [
+        "assert area_trapezium(6,9,4)==30",
+        "assert area_trapezium(10,20,30)==450",
+        "assert area_trapezium(15,25,35)==700"
+      ],
+      "keywords": [
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 850,
+      "description": "Write a function to check if a triangle of positive area is possible with the given angles.",
+      "solution": "def is_triangleexists(a,b,c): \r\n    if(a != 0 and b != 0 and c != 0 and (a + b + c)== 180): \r\n        if((a + b)>= c or (b + c)>= a or (a + c)>= b): \r\n            return True \r\n        else:\r\n            return False\r\n    else:\r\n        return False",
+      "test_cases": [
+        "assert is_triangleexists(50,60,70)==True",
+        "assert is_triangleexists(90,45,45)==True",
+        "assert is_triangleexists(150,30,70)==False"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 851,
+      "description": "Write a python function to find sum of inverse of divisors.",
+      "solution": "def Sum_of_Inverse_Divisors(N,Sum): \r\n    ans = float(Sum)*1.0 /float(N);  \r\n    return round(ans,2); ",
+      "test_cases": [
+        "assert Sum_of_Inverse_Divisors(6,12) == 2",
+        "assert Sum_of_Inverse_Divisors(9,13) == 1.44",
+        "assert Sum_of_Inverse_Divisors(1,4) == 4"
+      ],
+      "keywords": [
+        "sum",
+        "find"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 866,
+      "description": "Write a function to check whether the given month name contains 31 days or not.",
+      "solution": "def check_monthnumb(monthname2):\r\n  if(monthname2==\"January\" or monthname2==\"March\"or monthname2==\"May\" or monthname2==\"July\" or monthname2==\"Augest\" or monthname2==\"October\" or monthname2==\"December\"):\r\n    return True\r\n  else:\r\n    return False",
+      "test_cases": [
+        "assert check_monthnumb(\"February\")==False",
+        "assert check_monthnumb(\"January\")==True",
+        "assert check_monthnumb(\"March\")==True"
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 882,
+      "description": "Write a function to caluclate perimeter of a parallelogram.",
+      "solution": "def parallelogram_perimeter(b,h):\r\n  perimeter=2*(b*h)\r\n  return perimeter",
+      "test_cases": [
+        "assert parallelogram_perimeter(10,20)==400",
+        "assert parallelogram_perimeter(15,20)==600",
+        "assert parallelogram_perimeter(8,9)==144"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 884,
+      "description": "Write a python function to check whether all the bits are within a given range or not.",
+      "solution": "def all_Bits_Set_In_The_Given_Range(n,l,r): \r\n    num = ((1 << r) - 1) ^ ((1 << (l - 1)) - 1) \r\n    new_num = n & num \r\n    if (num == new_num): \r\n        return True\r\n    return False",
+      "test_cases": [
+        "assert all_Bits_Set_In_The_Given_Range(10,2,1) == True ",
+        "assert all_Bits_Set_In_The_Given_Range(5,2,4) == False",
+        "assert all_Bits_Set_In_The_Given_Range(22,2,3) == True "
+      ],
+      "keywords": [
+        "check"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 903,
+      "description": "Write a python function to count the total unset bits from 1 to n.",
+      "solution": "def count_Unset_Bits(n) :  \r\n    cnt = 0;  \r\n    for i in range(1,n + 1) : \r\n        temp = i;  \r\n        while (temp) :  \r\n            if (temp % 2 == 0) : \r\n                cnt += 1;  \r\n            temp = temp // 2;  \r\n    return cnt;  ",
+      "test_cases": [
+        "assert count_Unset_Bits(2) == 1",
+        "assert count_Unset_Bits(5) == 4",
+        "assert count_Unset_Bits(14) == 17"
+      ],
+      "keywords": [
+        "count",
+        "set"
+      ],
+      "operations": [
+        "range"
+      ]
+    },
+    {
+      "task_id": 918,
+      "description": "Write a function to count coin change.",
+      "solution": "def coin_change(S, m, n): \r\n    table = [[0 for x in range(m)] for x in range(n+1)] \r\n    for i in range(m): \r\n        table[0][i] = 1\r\n    for i in range(1, n+1): \r\n        for j in range(m): \r\n            x = table[i - S[j]][j] if i-S[j] >= 0 else 0\r\n            y = table[i][j-1] if j >= 1 else 0 \r\n            table[i][j] = x + y   \r\n    return table[n][m-1] ",
+      "test_cases": [
+        "assert coin_change([1, 2, 3],3,4)==4",
+        "assert coin_change([4,5,6,7,8,9],6,9)==2",
+        "assert coin_change([4,5,6,7,8,9],6,4)==1"
+      ],
+      "keywords": [
+        "count"
+      ],
+      "operations": [
+        "list_comprehension",
+        "range"
+      ]
+    },
+    {
+      "task_id": 954,
+      "description": "Write a function that gives profit amount if the given amount has profit else return none.",
+      "solution": "def profit_amount(actual_cost,sale_amount): \r\n if(actual_cost > sale_amount):\r\n    amount = actual_cost - sale_amount\r\n    return amount\r\n else:\r\n    return None",
+      "test_cases": [
+        "assert profit_amount(1500,1200)==300",
+        "assert profit_amount(100,200)==None",
+        "assert profit_amount(2000,5000)==None"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 957,
+      "description": "Write a python function to get the position of rightmost set bit.",
+      "solution": "import math\r\ndef get_First_Set_Bit_Pos(n):\r\n     return math.log2(n&-n)+1",
+      "test_cases": [
+        "assert get_First_Set_Bit_Pos(12) == 3",
+        "assert get_First_Set_Bit_Pos(18) == 2",
+        "assert get_First_Set_Bit_Pos(16) == 5"
+      ],
+      "keywords": [
+        "set"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": 960,
+      "description": "Write a function to solve tiling problem.",
+      "solution": "def get_noOfways(n):\r\n    if (n == 0):\r\n        return 0;\r\n    if (n == 1):\r\n        return 1; \r\n    return get_noOfways(n - 1) + get_noOfways(n - 2);",
+      "test_cases": [
+        "assert get_noOfways(4)==3",
+        "assert get_noOfways(3)==2",
+        "assert get_noOfways(5)==5"
+      ],
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": 974,
+      "description": "Write a function to find the minimum total path sum in the given triangle.",
+      "solution": "def min_sum_path(A): \r\n\tmemo = [None] * len(A) \r\n\tn = len(A) - 1\r\n\tfor i in range(len(A[n])): \r\n\t\tmemo[i] = A[n][i] \r\n\tfor i in range(len(A) - 2, -1,-1): \r\n\t\tfor j in range( len(A[i])): \r\n\t\t\tmemo[j] = A[i][j] + min(memo[j], \r\n\t\t\t\t\t\t\t\t\tmemo[j + 1]) \r\n\treturn memo[0]",
+      "test_cases": [
+        "assert min_sum_path([[ 2 ], [3, 9 ], [1, 6, 7 ]]) == 6",
+        "assert min_sum_path([[ 2 ], [3, 7 ], [8, 5, 6 ]]) == 10 ",
+        "assert min_sum_path([[ 3 ], [6, 4 ], [5, 2, 7 ]]) == 9"
+      ],
+      "keywords": [
+        "sum",
+        "min",
+        "find"
+      ],
+      "operations": [
+        "min",
+        "len",
+        "range"
+      ]
+    }
+  ],
+  "humaneval_patterns": [
+    {
+      "task_id": "HumanEval/45",
+      "description": "\n\ndef triangle_area(a, h):\n    \"\"\"Given length of a side and high return area for a triangle.\n    >>> triangle_area(5, 3)\n    7.5\n    \"\"\"\n",
+      "solution": "    return a * h / 2.0\n",
+      "test_cases": [
+        "\n\nMETADATA = {}\n\n\ndef check(candidate):\n    assert candidate(5, 3) == 7.5\n    assert candidate(2, 2) == 2.0\n    assert candidate(10, 8) == 40.0\n\n"
+      ],
+      "entry_point": "triangle_area",
+      "keywords": [],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/71",
+      "description": "\ndef triangle_area(a, b, c):\n    '''\n    Given the lengths of the three sides of a triangle. Return the area of\n    the triangle rounded to 2 decimal points if the three sides form a valid triangle. \n    Otherwise return -1\n    Three sides make a valid triangle when the sum of any two sides is greater \n    than the third side.\n    Example:\n    triangle_area(3, 4, 5) == 6.00\n    triangle_area(1, 2, 10) == -1\n    '''\n",
+      "solution": "    if a + b <= c or a + c <= b or b + c <= a:\n        return -1 \n    s = (a + b + c)/2    \n    area = (s * (s - a) * (s - b) * (s - c)) ** 0.5\n    area = round(area, 2)\n    return area\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(3, 4, 5) == 6.00, \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate(1, 2, 10) == -1\n    assert candidate(4, 8, 5) == 8.18\n    assert candidate(2, 2, 2) == 1.73\n    assert candidate(1, 2, 3) == -1\n    assert candidate(10, 5, 7) == 16.25\n    assert candidate(2, 6, 3) == -1\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(1, 1, 1) == 0.43, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate(2, 2, 10) == -1\n\n"
+      ],
+      "entry_point": "triangle_area",
+      "keywords": [
+        "sum",
+        "decimal"
+      ],
+      "operations": []
+    },
+    {
+      "task_id": "HumanEval/157",
+      "description": "\ndef right_angle_triangle(a, b, c):\n    '''\n    Given the lengths of the three sides of a triangle. Return True if the three\n    sides form a right-angled triangle, False otherwise.\n    A right-angled triangle is a triangle in which one angle is right angle or \n    90 degree.\n    Example:\n    right_angle_triangle(3, 4, 5) == True\n    right_angle_triangle(1, 2, 3) == False\n    '''\n",
+      "solution": "    return a*a == b*b + c*c or b*b == a*a + c*c or c*c == a*a + b*b\n",
+      "test_cases": [
+        "def check(candidate):\n\n    # Check some simple cases\n    assert candidate(3, 4, 5) == True, \"This prints if this assert fails 1 (good for debugging!)\"\n    assert candidate(1, 2, 3) == False\n    assert candidate(10, 6, 8) == True\n    assert candidate(2, 2, 2) == False\n    assert candidate(7, 24, 25) == True\n    assert candidate(10, 5, 7) == False\n    assert candidate(5, 12, 13) == True\n    assert candidate(15, 8, 17) == True\n    assert candidate(48, 55, 73) == True\n\n    # Check some edge cases that are easy to work out by hand.\n    assert candidate(1, 1, 1) == False, \"This prints if this assert fails 2 (also good for debugging!)\"\n    assert candidate(2, 2, 10) == False\n\n"
+      ],
+      "entry_point": "right_angle_triangle",
+      "keywords": [],
+      "operations": []
+    }
+  ]
+}

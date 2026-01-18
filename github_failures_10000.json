@@ -1,0 +1,472 @@
+{
+  "metadata": {
+    "total_collected": 27,
+    "collection_date": "2026-01-17T17:09:34.598036",
+    "stats": {
+      "total_searched": 0,
+      "total_collected": 27,
+      "api_calls": 14,
+      "rate_limit_hits": 0,
+      "errors": 4,
+      "strategy_code_search": 0,
+      "strategy_issues": 0,
+      "strategy_gists": 0,
+      "strategy_repos": 27
+    }
+  },
+  "examples": [
+    {
+      "id": "django/django_runtests.py_17",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "import shutil\nimport socket\nimport subprocess\nimport sys\nimport tempfile\nimport warnings\nfrom pathlib import Path\n\ntry:\n    import django\nexcept ImportError as e:\n    raise RuntimeError(\n        \"Django module not found, reference tests/README.rst for instructions.\"\n    ) from e\nelse:\n    from django.apps import apps\n    from django.conf import settings\n    from django.core.exceptions import ImproperlyConfigured\n    from django.db import connection, connections\n    from django.test import TestCase, TransactionTestCase",
+      "start_line": 8,
+      "end_line": 27,
+      "error_line": 18,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.554035",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "raise\\s+\\w+Error",
+        "except\\s+\\w+Error",
+        "raise\\s+RuntimeError"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_18",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "import socket\nimport subprocess\nimport sys\nimport tempfile\nimport warnings\nfrom pathlib import Path\n\ntry:\n    import django\nexcept ImportError as e:\n    raise RuntimeError(\n        \"Django module not found, reference tests/README.rst for instructions.\"\n    ) from e\nelse:\n    from django.apps import apps\n    from django.conf import settings\n    from django.core.exceptions import ImproperlyConfigured\n    from django.db import connection, connections\n    from django.test import TestCase, TransactionTestCase\n    from django.test.runner import get_max_test_processes, parallel_type",
+      "start_line": 9,
+      "end_line": 28,
+      "error_line": 19,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.554313",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "raise\\s+\\w+Error",
+        "except\\s+\\w+Error",
+        "raise\\s+RuntimeError"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_38",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "    from django.test.selenium import SeleniumTestCase, SeleniumTestCaseBase\n    from django.test.utils import NullTimeKeeper, TimeKeeper, get_runner\n    from django.utils.deprecation import RemovedInDjango70Warning\n    from django.utils.functional import classproperty\n    from django.utils.log import DEFAULT_LOGGING\n    from django.utils.version import PYPY\n\n\ntry:\n    import MySQLdb\nexcept ImportError:\n    pass\nelse:\n    # Ignore informational warnings from QuerySet.explain().\n    warnings.filterwarnings(\"ignore\", r\"\\(1003, *\", category=MySQLdb.Warning)\n\n# Make deprecation warnings errors to ensure no usage of deprecated features.\nwarnings.simplefilter(\"error\", RemovedInDjango70Warning)\n# Make resource and runtime warning errors to ensure no usage of error prone\n# patterns.",
+      "start_line": 29,
+      "end_line": 48,
+      "error_line": 39,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.554879",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_94",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\nALWAYS_MIDDLEWARE = [\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n]\n\n# Need to add the associated contrib app to INSTALLED_APPS in some cases to\n# avoid \"RuntimeError: Model class X doesn't declare an explicit app_label\n# and isn't in an application in INSTALLED_APPS.\"\nCONTRIB_TESTS_TO_APPS = {\n    \"deprecation\": [\"django.contrib.flatpages\", \"django.contrib.redirects\"],\n    \"flatpages_tests\": [\"django.contrib.flatpages\"],\n    \"redirects_tests\": [\"django.contrib.redirects\"],\n}\n\n\ndef get_test_modules(gis_enabled):",
+      "start_line": 85,
+      "end_line": 104,
+      "error_line": 95,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.556255",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "Error:"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_145",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "def get_label_module(label):\n    \"\"\"Return the top-level module part for a test label.\"\"\"\n    path = Path(label)\n    if len(path.parts) == 1:\n        # Interpret the label as a dotted module name.\n        return label.split(\".\")[0]\n\n    # Otherwise, interpret the label as a path. Check existence first to\n    # provide a better error message than relative_to() if it doesn't exist.\n    if not path.exists():\n        raise RuntimeError(f\"Test label path {label} does not exist\")\n    path = path.resolve()\n    rel_path = path.relative_to(RUNTESTS_DIR)\n    return rel_path.parts[0]\n\n\ndef get_filtered_test_modules(start_at, start_after, gis_enabled, test_labels=None):\n    if test_labels is None:\n        test_labels = []\n    # Reduce each test label to just the top-level module part.",
+      "start_line": 136,
+      "end_line": 155,
+      "error_line": 146,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.557465",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "raise\\s+\\w+Error",
+        "raise\\s+RuntimeError"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_329",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\n\nclass ActionSelenium(argparse.Action):\n    \"\"\"\n    Validate the comma-separated list of requested browsers.\n    \"\"\"\n\n    def __call__(self, parser, namespace, values, option_string=None):\n        try:\n            import selenium  # NOQA\n        except ImportError as e:\n            raise ImproperlyConfigured(f\"Error loading selenium module: {e}\")\n        browsers = values.split(\",\")\n        for browser in browsers:\n            try:\n                SeleniumTestCaseBase.import_webdriver(browser)\n            except ImportError:\n                raise argparse.ArgumentError(\n                    self, \"Selenium browser specification '%s' is not valid.\" % browser\n                )",
+      "start_line": 320,
+      "end_line": 339,
+      "error_line": 330,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.561477",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_335",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\n    def __call__(self, parser, namespace, values, option_string=None):\n        try:\n            import selenium  # NOQA\n        except ImportError as e:\n            raise ImproperlyConfigured(f\"Error loading selenium module: {e}\")\n        browsers = values.split(\",\")\n        for browser in browsers:\n            try:\n                SeleniumTestCaseBase.import_webdriver(browser)\n            except ImportError:\n                raise argparse.ArgumentError(\n                    self, \"Selenium browser specification '%s' is not valid.\" % browser\n                )\n        setattr(namespace, self.dest, browsers)\n\n\ndef django_tests(\n    verbosity,\n    interactive,",
+      "start_line": 326,
+      "end_line": 345,
+      "error_line": 336,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.561779",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_408",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        parallel=parallel,\n        tags=tags,\n        exclude_tags=exclude_tags,\n        test_name_patterns=test_name_patterns,\n        pdb=pdb,\n        buffer=buffer,\n        timing=timing,\n        shuffle=shuffle,\n        durations=durations,\n    )\n    failures = test_runner.run_tests(test_labels)\n    teardown_run_tests(state)\n    return failures\n\n\ndef collect_test_modules(start_at, start_after):\n    test_modules, state = setup_collect_tests(start_at, start_after)\n    teardown_collect_tests(state)\n    return test_modules\n",
+      "start_line": 399,
+      "end_line": 418,
+      "error_line": 409,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.563303",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_410",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        exclude_tags=exclude_tags,\n        test_name_patterns=test_name_patterns,\n        pdb=pdb,\n        buffer=buffer,\n        timing=timing,\n        shuffle=shuffle,\n        durations=durations,\n    )\n    failures = test_runner.run_tests(test_labels)\n    teardown_run_tests(state)\n    return failures\n\n\ndef collect_test_modules(start_at, start_after):\n    test_modules, state = setup_collect_tests(start_at, start_after)\n    teardown_collect_tests(state)\n    return test_modules\n\n\ndef get_subprocess_args(options):",
+      "start_line": 401,
+      "end_line": 420,
+      "error_line": 411,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.563469",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_450",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "    if not test_labels:\n        test_labels = collect_test_modules(start_at, start_after)\n\n    print(\"***** Bisecting test suite: %s\" % \" \".join(test_labels))\n\n    # Make sure the bisection point isn't in the test list\n    # Also remove tests that need to be run in specific combinations\n    for label in [bisection_label, \"model_inheritance_same_model_name\"]:\n        try:\n            test_labels.remove(label)\n        except ValueError:\n            pass\n\n    subprocess_args = get_subprocess_args(options)\n\n    iteration = 1\n    while len(test_labels) > 1:\n        midpoint = len(test_labels) // 2\n        test_labels_a = test_labels[:midpoint] + [bisection_label]\n        test_labels_b = test_labels[midpoint:] + [bisection_label]",
+      "start_line": 441,
+      "end_line": 460,
+      "error_line": 451,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.564409",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:",
+        "ValueError"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_462",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\n    subprocess_args = get_subprocess_args(options)\n\n    iteration = 1\n    while len(test_labels) > 1:\n        midpoint = len(test_labels) // 2\n        test_labels_a = test_labels[:midpoint] + [bisection_label]\n        test_labels_b = test_labels[midpoint:] + [bisection_label]\n        print(\"***** Pass %da: Running the first half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_a))\n        failures_a = subprocess.run(subprocess_args + test_labels_a)\n\n        print(\"***** Pass %db: Running the second half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_b))\n        print(\"\")\n        failures_b = subprocess.run(subprocess_args + test_labels_b)\n\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1",
+      "start_line": 453,
+      "end_line": 472,
+      "error_line": 463,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.564825",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_467",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        midpoint = len(test_labels) // 2\n        test_labels_a = test_labels[:midpoint] + [bisection_label]\n        test_labels_b = test_labels[midpoint:] + [bisection_label]\n        print(\"***** Pass %da: Running the first half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_a))\n        failures_a = subprocess.run(subprocess_args + test_labels_a)\n\n        print(\"***** Pass %db: Running the second half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_b))\n        print(\"\")\n        failures_b = subprocess.run(subprocess_args + test_labels_b)\n\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]",
+      "start_line": 458,
+      "end_line": 477,
+      "error_line": 468,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.565138",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_469",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        test_labels_b = test_labels[midpoint:] + [bisection_label]\n        print(\"***** Pass %da: Running the first half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_a))\n        failures_a = subprocess.run(subprocess_args + test_labels_a)\n\n        print(\"***** Pass %db: Running the second half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_b))\n        print(\"\")\n        failures_b = subprocess.run(subprocess_args + test_labels_b)\n\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")",
+      "start_line": 460,
+      "end_line": 479,
+      "error_line": 470,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.565392",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_473",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\n        print(\"***** Pass %db: Running the second half of the test suite\" % iteration)\n        print(\"***** Test labels: %s\" % \" \".join(test_labels_b))\n        print(\"\")\n        failures_b = subprocess.run(subprocess_args + test_labels_b)\n\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")\n            break\n        else:\n            print(\"***** No source of failure found... try pair execution (--pair)\")\n            break",
+      "start_line": 464,
+      "end_line": 483,
+      "error_line": 474,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.565701",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_477",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        failures_b = subprocess.run(subprocess_args + test_labels_b)\n\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")\n            break\n        else:\n            print(\"***** No source of failure found... try pair execution (--pair)\")\n            break\n\n    if len(test_labels) == 1:\n        print(\"***** Source of error: %s\" % test_labels[0])\n",
+      "start_line": 468,
+      "end_line": 487,
+      "error_line": 478,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.565973",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "Error:",
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_478",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "\n        if failures_a.returncode and not failures_b.returncode:\n            print(\"***** Problem found in first half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")\n            break\n        else:\n            print(\"***** No source of failure found... try pair execution (--pair)\")\n            break\n\n    if len(test_labels) == 1:\n        print(\"***** Source of error: %s\" % test_labels[0])\n\n",
+      "start_line": 469,
+      "end_line": 488,
+      "error_line": 479,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.566165",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "Error:",
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_481",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "            iteration += 1\n            test_labels = test_labels_a[:-1]\n        elif failures_b.returncode and not failures_a.returncode:\n            print(\"***** Problem found in second half. Bisecting again...\")\n            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")\n            break\n        else:\n            print(\"***** No source of failure found... try pair execution (--pair)\")\n            break\n\n    if len(test_labels) == 1:\n        print(\"***** Source of error: %s\" % test_labels[0])\n\n\ndef paired_tests(paired_test, options, test_labels, start_at, start_after):\n    if not test_labels:\n        test_labels = collect_test_modules(start_at, start_after)",
+      "start_line": 472,
+      "end_line": 491,
+      "error_line": 482,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.566379",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "Error:",
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_485",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "            iteration += 1\n            test_labels = test_labels_b[:-1]\n        elif failures_a.returncode and failures_b.returncode:\n            print(\"***** Multiple sources of failure found\")\n            break\n        else:\n            print(\"***** No source of failure found... try pair execution (--pair)\")\n            break\n\n    if len(test_labels) == 1:\n        print(\"***** Source of error: %s\" % test_labels[0])\n\n\ndef paired_tests(paired_test, options, test_labels, start_at, start_after):\n    if not test_labels:\n        test_labels = collect_test_modules(start_at, start_after)\n\n    print(\"***** Trying paired execution\")\n\n    # Make sure the constant member of the pair isn't in the test list",
+      "start_line": 476,
+      "end_line": 495,
+      "error_line": 486,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.566606",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "Error:",
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_499",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "    if not test_labels:\n        test_labels = collect_test_modules(start_at, start_after)\n\n    print(\"***** Trying paired execution\")\n\n    # Make sure the constant member of the pair isn't in the test list\n    # Also remove tests that need to be run in specific combinations\n    for label in [paired_test, \"model_inheritance_same_model_name\"]:\n        try:\n            test_labels.remove(label)\n        except ValueError:\n            pass\n\n    subprocess_args = get_subprocess_args(options)\n\n    for i, label in enumerate(test_labels):\n        print(\n            \"***** %d of %d: Check test pairing with %s\"\n            % (i + 1, len(test_labels), label)\n        )",
+      "start_line": 490,
+      "end_line": 509,
+      "error_line": 500,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.567014",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:",
+        "ValueError"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_509",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        except ValueError:\n            pass\n\n    subprocess_args = get_subprocess_args(options)\n\n    for i, label in enumerate(test_labels):\n        print(\n            \"***** %d of %d: Check test pairing with %s\"\n            % (i + 1, len(test_labels), label)\n        )\n        failures = subprocess.call(subprocess_args + [label, paired_test])\n        if failures:\n            print(\"***** Found problem pair with %s\" % label)\n            return\n\n    print(\"***** No problem pair found\")\n\n\nif __name__ == \"__main__\":\n    # Create a specific subdirectory for the duration of the test suite.",
+      "start_line": 500,
+      "end_line": 519,
+      "error_line": 510,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.567350",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:",
+        "ValueError",
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_510",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "            pass\n\n    subprocess_args = get_subprocess_args(options)\n\n    for i, label in enumerate(test_labels):\n        print(\n            \"***** %d of %d: Check test pairing with %s\"\n            % (i + 1, len(test_labels), label)\n        )\n        failures = subprocess.call(subprocess_args + [label, paired_test])\n        if failures:\n            print(\"***** Found problem pair with %s\" % label)\n            return\n\n    print(\"***** No problem pair found\")\n\n\nif __name__ == \"__main__\":\n    # Create a specific subdirectory for the duration of the test suite.\n    TMPDIR = tempfile.mkdtemp(prefix=\"django_\")",
+      "start_line": 501,
+      "end_line": 520,
+      "error_line": 511,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.567481",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_551",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "    )\n    parser.add_argument(\n        \"--noinput\",\n        action=\"store_false\",\n        dest=\"interactive\",\n        help=\"Tells Django to NOT prompt the user for input of any kind.\",\n    )\n    parser.add_argument(\n        \"--failfast\",\n        action=\"store_true\",\n        help=\"Tells Django to stop running the test suite after first failed test.\",\n    )\n    parser.add_argument(\n        \"--keepdb\",\n        action=\"store_true\",\n        help=\"Tells Django to preserve the test database between runs.\",\n    )\n    parser.add_argument(\n        \"--settings\",\n        help='Python path to settings module, e.g. \"myproject.settings\". If '",
+      "start_line": 542,
+      "end_line": 561,
+      "error_line": 552,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.568434",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILED",
+        "Test.*failed"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_567",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "    )\n    parser.add_argument(\n        \"--settings\",\n        help='Python path to settings module, e.g. \"myproject.settings\". If '\n        \"this isn't provided, either the DJANGO_SETTINGS_MODULE \"\n        'environment variable or \"test_sqlite\" will be used.',\n    )\n    parser.add_argument(\n        \"--bisect\",\n        help=\"Bisect the test suite to discover a test that causes a test \"\n        \"failure when combined with the named test.\",\n    )\n    parser.add_argument(\n        \"--pair\",\n        help=\"Run the test suite in pairs with the named test to find problem pairs.\",\n    )\n    parser.add_argument(\n        \"--shuffle\",\n        nargs=\"?\",\n        default=False,",
+      "start_line": 558,
+      "end_line": 577,
+      "error_line": 568,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.568879",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_661",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        \"--start-after\",\n        dest=\"start_after\",\n        help=\"Run tests starting after the specified top-level module.\",\n    )\n    parser.add_argument(\n        \"--start-at\",\n        dest=\"start_at\",\n        help=\"Run tests starting at the specified top-level module.\",\n    )\n    parser.add_argument(\n        \"--pdb\", action=\"store_true\", help=\"Runs the PDB debugger on error or failure.\"\n    )\n    parser.add_argument(\n        \"-b\",\n        \"--buffer\",\n        action=\"store_true\",\n        help=\"Discard output of passing tests.\",\n    )\n    parser.add_argument(\n        \"--timing\",",
+      "start_line": 652,
+      "end_line": 671,
+      "error_line": 662,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.570856",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_781",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "        paired_tests(\n            options.pair,\n            options,\n            options.modules,\n            options.start_at,\n            options.start_after,\n        )\n    else:\n        time_keeper = TimeKeeper() if options.timing else NullTimeKeeper()\n        with time_keeper.timed(\"Total run\"):\n            failures = django_tests(\n                options.verbosity,\n                options.interactive,\n                options.failfast,\n                options.keepdb,\n                options.reverse,\n                options.modules,\n                options.debug_sql,\n                options.parallel,\n                options.tags,",
+      "start_line": 772,
+      "end_line": 791,
+      "error_line": 782,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.573295",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_runtests.py_802",
+      "repository": "django/django",
+      "file_path": "tests/runtests.py",
+      "url": "https://github.com/django/django/blob/main/tests/runtests.py",
+      "code_snippet": "                options.test_name_patterns,\n                options.start_at,\n                options.start_after,\n                options.pdb,\n                options.buffer,\n                options.timing,\n                options.shuffle,\n                getattr(options, \"durations\", None),\n            )\n        time_keeper.print_results()\n        if failures:\n            sys.exit(1)\n",
+      "start_line": 793,
+      "end_line": 805,
+      "error_line": 803,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:30.573842",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "FAILURE"
+      ]
+    },
+    {
+      "id": "django/django_sitecustomize.py_2",
+      "repository": "django/django",
+      "file_path": "tests/sitecustomize.py",
+      "url": "https://github.com/django/django/blob/main/tests/sitecustomize.py",
+      "code_snippet": "try:\n    import coverage\nexcept ImportError:\n    pass\nelse:\n    coverage.process_startup()\n",
+      "start_line": 1,
+      "end_line": 7,
+      "error_line": 3,
+      "language": "python",
+      "collected_at": "2026-01-17T17:09:32.101478",
+      "source": "github_repo_file",
+      "error_patterns_found": [
+        "except\\s+\\w+Error",
+        "Error:"
+      ]
+    }
+  ]
+}

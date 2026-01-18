@@ -13,10 +13,10 @@ class StaticAnalysisIssue:
     """A static analysis issue detected by the sensor."""
     tool: str  # 'mypy', 'pylint', etc.
     file_path: str
-    line_number: Optional[int] = None
     issue_type: str  # 'type_error', 'code_quality', 'security', etc.
     severity: str  # 'low', 'medium', 'high', 'critical'
     message: str
+    line_number: Optional[int] = None
     fix_suggestion: Optional[str] = None
     detected_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -75,6 +75,12 @@ class StaticAnalysisSensor:
         # Check for missing type hints
         type_hint_issues = self._check_missing_type_hints()
         data.issues.extend(type_hint_issues)
+        
+        # Check for common code issues (import paths, logger placement, etc.)
+        common_issues = self.check_common_code_issues()
+        data.issues.extend(common_issues)
+        if common_issues:
+            data.tools_run.append("grace_analyzer")
         
         # Calculate totals
         data.total_issues = len(data.issues)
@@ -240,3 +246,102 @@ class StaticAnalysisSensor:
             logger.error(f"Failed to check type hints: {e}")
         
         return issues[:20]  # Limit to 20 issues
+    
+    def check_common_code_issues(self) -> List[StaticAnalysisIssue]:
+        """Check for common code issues that cause runtime errors."""
+        issues = []
+        
+        try:
+            for py_file in self.backend_dir.rglob('*.py'):
+                if '__pycache__' in str(py_file) or '.backup' in str(py_file):
+                    continue
+                
+                try:
+                    with open(py_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        lines = content.split('\n')
+                    
+                    # Check 1: Wrong import paths (from backend.xxx)
+                    for i, line in enumerate(lines, 1):
+                        if 'from backend.' in line and 'import' in line:
+                            issues.append(StaticAnalysisIssue(
+                                tool='grace_analyzer',
+                                file_path=str(py_file),
+                                line_number=i,
+                                issue_type='wrong_import_path',
+                                severity='high',
+                                message=f"Import uses 'from backend.' prefix which fails when running from backend directory",
+                                fix_suggestion="Change 'from backend.xxx' to 'from xxx' for relative imports"
+                            ))
+                    
+                    # Check 2: Logger defined inside class
+                    in_class = False
+                    class_indent = 0
+                    for i, line in enumerate(lines, 1):
+                        stripped = line.lstrip()
+                        current_indent = len(line) - len(stripped)
+                        
+                        if stripped.startswith('class ') and stripped.endswith(':'):
+                            in_class = True
+                            class_indent = current_indent
+                        elif in_class and current_indent <= class_indent and stripped and not stripped.startswith('#'):
+                            in_class = False
+                        
+                        if in_class and 'logger = logging.getLogger' in line:
+                            issues.append(StaticAnalysisIssue(
+                                tool='grace_analyzer',
+                                file_path=str(py_file),
+                                line_number=i,
+                                issue_type='logger_in_class',
+                                severity='high',
+                                message="Logger defined inside class - will cause Pydantic/Enum errors",
+                                fix_suggestion="Move 'logger = logging.getLogger(__name__)' to module level (before class definition)"
+                            ))
+                    
+                    # Check 3: Missing router in FastAPI endpoint files
+                    if '_endpoint' in py_file.name or '_api' in py_file.name:
+                        has_router_decorator = '@router.' in content
+                        has_router_definition = 'router = APIRouter' in content or 'router=APIRouter' in content
+                        
+                        if has_router_decorator and not has_router_definition:
+                            issues.append(StaticAnalysisIssue(
+                                tool='grace_analyzer',
+                                file_path=str(py_file),
+                                line_number=1,
+                                issue_type='missing_router_definition',
+                                severity='critical',
+                                message="FastAPI endpoint uses @router decorators but router is not defined",
+                                fix_suggestion="Add 'router = APIRouter(prefix=\"/...\", tags=[\"...\"])' after imports"
+                            ))
+                    
+                    # Check 4: Missing factory function for classes that are imported with get_xxx
+                    import re
+                    class_matches = re.findall(r'^class (\w+)\s*[:\(]', content, re.MULTILINE)
+                    for class_name in class_matches:
+                        # Convert to expected factory function name
+                        snake_case = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', class_name)
+                        snake_case = re.sub('([a-z0-9])([A-Z])', r'\1_\2', snake_case).lower()
+                        expected_func = f"get_{snake_case}"
+                        
+                        # Check if this function is imported elsewhere but doesn't exist
+                        if f"def {expected_func}" not in content:
+                            # Check if it's a singleton-type class (has a state pattern)
+                            if 'Manager' in class_name or 'Integration' in class_name or 'System' in class_name:
+                                # These typically need factory functions
+                                issues.append(StaticAnalysisIssue(
+                                    tool='grace_analyzer',
+                                    file_path=str(py_file),
+                                    line_number=1,
+                                    issue_type='missing_factory_function',
+                                    severity='low',
+                                    message=f"Class '{class_name}' may need factory function '{expected_func}'",
+                                    fix_suggestion=f"Consider adding 'def {expected_func}()' factory function for singleton access"
+                                ))
+                
+                except Exception as e:
+                    logger.debug(f"Error checking {py_file}: {e}")
+                    
+        except Exception as e:
+            logger.error(f"Failed to check common code issues: {e}")
+        
+        return issues

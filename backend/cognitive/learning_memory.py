@@ -13,7 +13,7 @@ import json
 
 # Try backend.database first, then database (for compatibility)
 try:
-    from backend.database.base import BaseModel
+    from database.base import BaseModel
 except ImportError:
     try:
         from database.base import BaseModel

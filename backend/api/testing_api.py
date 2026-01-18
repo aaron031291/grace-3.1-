@@ -6,10 +6,12 @@ from sqlalchemy.orm import Session
 import logging
 import json
 from database.session import get_session
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/testing", tags=["Autonomous Testing"])
+
 class TestRequest(BaseModel):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Request to run tests."""
     source_code: Optional[str] = Field(None, description="Source code to test")
     file_path: Optional[str] = Field(None, description="File path to test")

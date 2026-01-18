@@ -5,12 +5,15 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import uuid
-from code_quality_optimizer import CodeQualityOptimizer, CodeGenerationResult, RefinementStrategy
-from chain_of_thought import ChainOfThoughtReasoner, ReasoningChain, ReasoningMode
-from competitive_benchmark import CompetitiveBenchmark, BenchmarkResult, QualityTier
-from parliament_governance import ParliamentGovernance, ParliamentSession, DecisionType, GovernanceLevel
+from llm_orchestrator.code_quality_optimizer import CodeQualityOptimizer, CodeGenerationResult, RefinementStrategy
+from llm_orchestrator.chain_of_thought import ChainOfThoughtReasoner, ReasoningChain, ReasoningMode
+from llm_orchestrator.competitive_benchmark import CompetitiveBenchmark, BenchmarkResult, QualityTier
+from llm_orchestrator.parliament_governance import ParliamentGovernance, ParliamentSession, DecisionType, GovernanceLevel
+
+logger = logging.getLogger(__name__)
+
+
 class QualityMode(str, Enum):
-    logger = logging.getLogger(__name__)
     """Quality mode for code generation."""
     FAST = "fast"           # Minimal quality checks, speed priority
     STANDARD = "standard"   # Standard quality with basic refinement

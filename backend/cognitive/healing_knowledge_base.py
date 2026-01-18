@@ -3,10 +3,11 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import re
+
+logger = logging.getLogger(__name__)
+
+
 class IssueType(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Types of issues the healing system can fix."""
     SQLALCHEMY_TABLE_REDEFINITION = "sqlalchemy_table_redefinition"
     MISSING_IMPORT = "missing_import"
@@ -29,6 +30,12 @@ class IssueType(str, Enum):
     MISSING_DIRECTORY = "missing_directory"
     PROCESS_FAILURE = "process_failure"
     CONNECTION_ERROR = "connection_error"
+    # New issue types from backend fixes
+    WRONG_IMPORT_PATH = "wrong_import_path"
+    MISSING_FACTORY_FUNCTION = "missing_factory_function"
+    LOGGER_IN_CLASS = "logger_in_class"
+    MISSING_ROUTER_DEFINITION = "missing_router_definition"
+    PYDANTIC_MODEL_ERROR = "pydantic_model_error"
 
 
 @dataclass
@@ -408,6 +415,154 @@ DatabaseConnection.reconnect()""",
                     "backend process crash"
                 ]
             ),
+            
+            # Wrong Import Path (backend.xxx instead of xxx)
+            FixPattern(
+                issue_type=IssueType.WRONG_IMPORT_PATH,
+                pattern=r"ModuleNotFoundError: No module named ['\"]backend\.(\w+)['\"]",
+                fix_template="""# Fix: Wrong import path when running from backend directory
+# When running from within the backend directory, imports should be relative
+# Change: from backend.xxx import yyy
+# To:     from xxx import yyy
+
+# Example:
+# Before: from backend.database.session import get_session
+# After:  from database.session import get_session
+
+# Before: from backend.cognitive.learning_memory import LearningMemoryManager  
+# After:  from cognitive.learning_memory import LearningMemoryManager
+
+# The backend directory IS the package root when running from within it""",
+                confidence=0.95,
+                description="Wrong import path - remove 'backend.' prefix for relative imports",
+                examples=[
+                    "ModuleNotFoundError: No module named 'backend.database'",
+                    "ModuleNotFoundError: No module named 'backend.cognitive'",
+                    "ModuleNotFoundError: No module named 'backend.models'"
+                ]
+            ),
+            
+            # Missing Factory Function
+            FixPattern(
+                issue_type=IssueType.MISSING_FACTORY_FUNCTION,
+                pattern=r"ImportError: cannot import name ['\"]get_(\w+)['\"]",
+                fix_template="""# Fix: Missing factory function (get_xxx pattern)
+# A factory function is expected but not defined in the module
+
+# Add a factory function at the end of the module:
+_instance = None
+
+def get_{class_name_lower}(**kwargs) -> {ClassName}:
+    \"\"\"Get or create the {ClassName} singleton.\"\"\"
+    global _instance
+    
+    if _instance is None:
+        _instance = {ClassName}(**kwargs)
+    
+    return _instance
+
+# This creates a singleton pattern that:
+# 1. Creates the instance once on first call
+# 2. Returns the same instance on subsequent calls
+# 3. Accepts optional initialization parameters""",
+                confidence=0.90,
+                description="Missing factory function - add get_xxx() singleton pattern",
+                examples=[
+                    "ImportError: cannot import name 'get_memory_mesh_integration'",
+                    "ImportError: cannot import name 'get_llm_orchestrator'"
+                ]
+            ),
+            
+            # Logger Defined Inside Class (Pydantic/Enum Error)
+            FixPattern(
+                issue_type=IssueType.LOGGER_IN_CLASS,
+                pattern=r"(PydanticUserError.*logger|logger.*non-annotated attribute|class.*logger.*ClassVar)",
+                fix_template="""# Fix: Logger incorrectly defined inside class
+# Python loggers must be defined at module level, not inside classes
+
+# WRONG - inside class:
+# class MyClass(BaseModel):
+#     logger = logging.getLogger(__name__)  # ERROR!
+#     field: str
+
+# CORRECT - at module level:
+# logger = logging.getLogger(__name__)
+#
+# class MyClass(BaseModel):
+#     field: str
+
+# Move the logger = logging.getLogger(__name__) line BEFORE the class definition
+# and remove it from inside the class body""",
+                confidence=0.98,
+                description="Logger inside class - move to module level",
+                examples=[
+                    "PydanticUserError: A non-annotated attribute was detected: `logger`",
+                    "All model fields require a type annotation; if `logger` is not meant to be a field"
+                ]
+            ),
+            
+            # Missing Router Definition in FastAPI
+            FixPattern(
+                issue_type=IssueType.MISSING_ROUTER_DEFINITION,
+                pattern=r"NameError: name ['\"]router['\"] is not defined",
+                fix_template="""# Fix: Missing FastAPI router definition
+# API endpoints require a router to be defined before use
+
+# Add at the top of the file (after imports):
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/your-prefix", tags=["your-tag"])
+
+# Then you can use:
+# @router.get("/endpoint")
+# @router.post("/endpoint")
+# etc.
+
+# Common prefixes based on file name:
+# - health.py -> prefix="/health"
+# - auth.py -> prefix="/auth"  
+# - chat_orchestrator_endpoint.py -> prefix="/chat"
+""",
+                confidence=0.95,
+                description="Missing router definition - add APIRouter",
+                examples=[
+                    "NameError: name 'router' is not defined",
+                    "@router.post without router defined"
+                ]
+            ),
+            
+            # Pydantic Model Field Error
+            FixPattern(
+                issue_type=IssueType.PYDANTIC_MODEL_ERROR,
+                pattern=r"pydantic.*model.*field.*annotation|PydanticUserError",
+                fix_template="""# Fix: Pydantic model field error
+# All fields in Pydantic models must have type annotations
+
+# Common issues:
+# 1. Logger inside model (move to module level)
+# 2. Class variable without ClassVar annotation
+# 3. Field without type hint
+
+# WRONG:
+# class MyModel(BaseModel):
+#     my_field = "default"  # Missing type!
+
+# CORRECT:
+# class MyModel(BaseModel):
+#     my_field: str = "default"
+
+# For class variables that shouldn't be fields:
+# from typing import ClassVar
+# class MyModel(BaseModel):
+#     class_var: ClassVar[str] = "not a field"
+""",
+                confidence=0.90,
+                description="Pydantic field error - add type annotations",
+                examples=[
+                    "pydantic.errors.PydanticUserError: A non-annotated attribute was detected",
+                    "All model fields require a type annotation"
+                ]
+            ),
         ]
     
     def _load_script_templates(self) -> Dict[str, str]:
@@ -745,6 +900,258 @@ for dir_path in directories:
         created_count += 1
 
 print(f"\\nCreated {{created_count}} directory/directories")
+""",
+            
+            # New fix scripts for backend import issues
+            "fix_backend_import_paths": """#!/usr/bin/env python3
+\"\"\"
+Auto-generated script to fix 'from backend.xxx' import paths.
+When running from within the backend directory, imports should not have 'backend.' prefix.
+\"\"\"
+import re
+from pathlib import Path
+from typing import List, Tuple
+
+def fix_import_paths(file_path: str) -> Tuple[bool, int]:
+    \"\"\"Fix 'from backend.' imports to relative imports.\"\"\"
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        original_content = content
+        fix_count = 0
+        
+        # Pattern to match 'from backend.xxx import yyy'
+        pattern = r'from backend\.(\S+) import'
+        
+        def replace_import(match):
+            nonlocal fix_count
+            fix_count += 1
+            module_path = match.group(1)
+            return f'from {module_path} import'
+        
+        content = re.sub(pattern, replace_import, content)
+        
+        if content != original_content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            return True, fix_count
+        return False, 0
+    except Exception as e:
+        print(f"Error fixing {{file_path}}: {{e}}")
+        return False, 0
+
+def scan_and_fix_directory(directory: str) -> dict:
+    \"\"\"Scan directory and fix all Python files with wrong imports.\"\"\"
+    results = {{'files_fixed': 0, 'imports_fixed': 0, 'files_scanned': 0}}
+    
+    for py_file in Path(directory).rglob('*.py'):
+        if '__pycache__' in str(py_file) or '.backup' in str(py_file):
+            continue
+        
+        results['files_scanned'] += 1
+        fixed, count = fix_import_paths(str(py_file))
+        if fixed:
+            results['files_fixed'] += 1
+            results['imports_fixed'] += count
+            print(f"Fixed {{count}} imports in {{py_file}}")
+    
+    return results
+
+# Run fix on backend directory
+backend_dir = "{backend_directory}"
+results = scan_and_fix_directory(backend_dir)
+print(f"\\nSummary:")
+print(f"  Files scanned: {{results['files_scanned']}}")
+print(f"  Files fixed: {{results['files_fixed']}}")
+print(f"  Imports fixed: {{results['imports_fixed']}}")
+""",
+            
+            "fix_logger_in_class": """#!/usr/bin/env python3
+\"\"\"
+Auto-generated script to fix logger defined inside class (moves to module level).
+\"\"\"
+import re
+from pathlib import Path
+from typing import Tuple
+
+def fix_logger_placement(file_path: str) -> Tuple[bool, str]:
+    \"\"\"Move logger from inside class to module level.\"\"\"
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        
+        original_content = ''.join(lines)
+        
+        # Find class definitions with logger inside
+        class_pattern = re.compile(r'^class\\s+(\\w+).*:\\s*$')
+        logger_pattern = re.compile(r'^\\s+logger\\s*=\\s*logging\\.getLogger\\(__name__\\)')
+        
+        # Track if we need to add logger at module level
+        has_module_logger = any('logger = logging.getLogger(__name__)' in line 
+                                and not line.startswith(' ') for line in lines)
+        
+        fixed_lines = []
+        lines_to_remove = []
+        
+        for i, line in enumerate(lines):
+            # Check if this is a logger line inside a class
+            if logger_pattern.match(line):
+                # Check if previous non-blank line is a class definition or docstring
+                # This means logger is incorrectly inside the class
+                lines_to_remove.append(i)
+                continue
+            
+            fixed_lines.append(line)
+        
+        if lines_to_remove and not has_module_logger:
+            # Add module-level logger after imports
+            # Find the last import line
+            last_import_idx = 0
+            for i, line in enumerate(fixed_lines):
+                if line.startswith('import ') or line.startswith('from '):
+                    last_import_idx = i
+            
+            # Insert logger after imports
+            fixed_lines.insert(last_import_idx + 1, '\\nlogger = logging.getLogger(__name__)\\n')
+        
+        new_content = ''.join(fixed_lines)
+        
+        if new_content != original_content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            return True, f"Moved logger to module level in {{file_path}}"
+        return False, "No changes needed"
+    except Exception as e:
+        return False, f"Error: {{e}}"
+
+# Fix file
+file_to_fix = "{file_path}"
+success, message = fix_logger_placement(file_to_fix)
+print(message)
+""",
+            
+            "add_missing_factory_function": """#!/usr/bin/env python3
+\"\"\"
+Auto-generated script to add a missing factory function (get_xxx pattern).
+\"\"\"
+from pathlib import Path
+
+def add_factory_function(file_path: str, class_name: str) -> bool:
+    \"\"\"Add a factory function for a class.\"\"\"
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Generate factory function name
+        # CamelCase to snake_case
+        import re
+        snake_case = re.sub('(.)([A-Z][a-z]+)', r'\\1_\\2', class_name)
+        snake_case = re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', snake_case).lower()
+        func_name = f"get_{{snake_case}}"
+        
+        # Check if factory function already exists
+        if func_name in content:
+            print(f"Factory function {{func_name}} already exists")
+            return False
+        
+        # Add factory function at end of file
+        factory_code = f'''
+
+# Factory function for getting {{class_name}} instance
+_{{snake_case}}_instance = None
+
+
+def {{func_name}}(**kwargs) -> {{class_name}}:
+    \"\"\"Get or create the {{class_name}} singleton.\"\"\"
+    global _{{snake_case}}_instance
+    
+    if _{{snake_case}}_instance is None:
+        _{{snake_case}}_instance = {{class_name}}(**kwargs)
+    
+    return _{{snake_case}}_instance
+'''
+        
+        with open(file_path, 'a', encoding='utf-8') as f:
+            f.write(factory_code)
+        
+        print(f"Added factory function {{func_name}} to {{file_path}}")
+        return True
+    except Exception as e:
+        print(f"Error adding factory function: {{e}}")
+        return False
+
+# Add factory function
+file_path = "{file_path}"
+class_name = "{class_name}"
+add_factory_function(file_path, class_name)
+""",
+            
+            "add_missing_router": """#!/usr/bin/env python3
+\"\"\"
+Auto-generated script to add missing FastAPI router definition.
+\"\"\"
+import re
+from pathlib import Path
+
+def add_router_definition(file_path: str, prefix: str = None, tag: str = None) -> bool:
+    \"\"\"Add router definition to a FastAPI endpoint file.\"\"\"
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if router already defined
+        if 'router = APIRouter' in content:
+            print("Router already defined")
+            return False
+        
+        # Determine prefix and tag from filename
+        if prefix is None:
+            file_name = Path(file_path).stem
+            prefix = '/' + file_name.replace('_endpoint', '').replace('_api', '').replace('_', '-')
+        
+        if tag is None:
+            tag = Path(file_path).stem.replace('_', '-')
+        
+        # Find where to insert router (after imports, before first function/class)
+        lines = content.split('\\n')
+        insert_line = 0
+        
+        for i, line in enumerate(lines):
+            if line.startswith('import ') or line.startswith('from '):
+                insert_line = i + 1
+            elif line.startswith('def ') or line.startswith('class ') or line.startswith('@'):
+                break
+        
+        # Check if APIRouter import exists
+        if 'from fastapi import' in content and 'APIRouter' not in content:
+            # Add APIRouter to existing import
+            content = re.sub(
+                r'from fastapi import ([^\\n]+)',
+                r'from fastapi import \\1, APIRouter',
+                content,
+                count=1
+            )
+        elif 'from fastapi import' not in content:
+            lines.insert(0, 'from fastapi import APIRouter')
+            insert_line += 1
+        
+        # Add router definition
+        router_line = f'\\nrouter = APIRouter(prefix="{{prefix}}", tags=["{{tag}}"])\\n'
+        lines.insert(insert_line, router_line)
+        
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write('\\n'.join(lines))
+        
+        print(f"Added router definition to {{file_path}}")
+        return True
+    except Exception as e:
+        print(f"Error adding router: {{e}}")
+        return False
+
+# Add router
+file_path = "{file_path}"
+add_router_definition(file_path, prefix="{prefix}", tag="{tag}")
 """
         }
     

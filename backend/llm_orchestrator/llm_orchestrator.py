@@ -82,16 +82,19 @@ try:
     from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
 except ImportError:
     try:
-        from backend.genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
+        from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
     except ImportError:
-        get_cognitive_layer1_integration = None
-        CognitiveLayer1Integration = None
+        try:
+            from backend.genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
+        except ImportError:
+            get_cognitive_layer1_integration = None
+            CognitiveLayer1Integration = None
 
 try:
-    from backend.cognitive.learning_memory import LearningMemoryManager
+    from cognitive.learning_memory import LearningMemoryManager
 except ImportError:
     try:
-        from cognitive.learning_memory import LearningMemoryManager
+        from backend.cognitive.learning_memory import LearningMemoryManager
     except ImportError:
         LearningMemoryManager = None
 

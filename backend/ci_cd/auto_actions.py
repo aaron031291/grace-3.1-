@@ -7,7 +7,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 import threading
-from backend.utils.os_adapter import OS, paths
+from utils.os_adapter import OS, paths
 class ActionType(str, Enum):
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
@@ -186,7 +186,7 @@ class AutoActionsManager:
         
         try:
             import subprocess
-            from backend.utils.os_adapter import process
+            from utils.os_adapter import process
             
             # Parse command
             parts = action.command.split()

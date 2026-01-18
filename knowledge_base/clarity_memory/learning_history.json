@@ -1,0 +1,529 @@
+[
+  {
+    "id": "3f6786e9-8e1",
+    "timestamp": "2026-01-17T23:17:30.597131",
+    "task_id": "92e4e933-272",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that calculates the factorial of n",
+      "template_used": "math_factorial",
+      "template_name": "Factorial",
+      "oracle_consulted": true,
+      "match_score": 0.37
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.37,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7405,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "2f4d9215-3fe",
+    "timestamp": "2026-01-17T23:17:30.602564",
+    "task_id": "9fa4b2a6-dbd",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that returns the nth fibonacci number",
+      "template_used": "math_fibonacci",
+      "template_name": "Fibonacci",
+      "oracle_consulted": true,
+      "match_score": 0.4425
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.4425,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7488750000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "3d44ffed-356",
+    "timestamp": "2026-01-17T23:17:30.607059",
+    "task_id": "70ef6cbd-5ca",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to check if a number is prime",
+      "template_used": "math_prime_check",
+      "template_name": "Prime Check",
+      "oracle_consulted": true,
+      "match_score": 0.44
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.44,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.746,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "a04850be-e5d",
+    "timestamp": "2026-01-17T23:17:30.612146",
+    "task_id": "4b94fa96-da2",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to find the greatest common divisor of two numbers",
+      "template_used": "math_gcd",
+      "template_name": "GCD",
+      "oracle_consulted": true,
+      "match_score": 0.34750000000000003
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.34750000000000003,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7396250000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "c4d76b96-2da",
+    "timestamp": "2026-01-17T23:17:30.616398",
+    "task_id": "3fc8d5a6-8b2",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Calculate factorial",
+      "template_used": "math_factorial",
+      "template_name": "Factorial",
+      "oracle_consulted": true,
+      "match_score": 0.37
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.37,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7405,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "c87f9a83-cff",
+    "timestamp": "2026-01-17T23:17:43.584118",
+    "task_id": "c5f8246e-d6e",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that calculates the factorial of n",
+      "template_used": "math_factorial",
+      "template_name": "Factorial",
+      "oracle_consulted": true,
+      "match_score": 0.37
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.37,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7405,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "c6d3d695-a10",
+    "timestamp": "2026-01-17T23:17:43.589277",
+    "task_id": "4c50f9d8-d1f",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that returns the nth fibonacci number",
+      "template_used": "math_fibonacci",
+      "template_name": "Fibonacci",
+      "oracle_consulted": true,
+      "match_score": 0.4425
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.4425,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7488750000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "30f51193-132",
+    "timestamp": "2026-01-17T23:17:43.593639",
+    "task_id": "32609dcc-b27",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to check if a number is prime",
+      "template_used": "math_prime_check",
+      "template_name": "Prime Check",
+      "oracle_consulted": true,
+      "match_score": 0.44
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.44,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.746,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "f8c31858-a35",
+    "timestamp": "2026-01-17T23:17:43.598408",
+    "task_id": "58fca024-646",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to find the greatest common divisor of two numbers",
+      "template_used": "math_gcd",
+      "template_name": "GCD",
+      "oracle_consulted": true,
+      "match_score": 0.34750000000000003
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.34750000000000003,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7396250000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "3069e792-eec",
+    "timestamp": "2026-01-17T23:17:43.602639",
+    "task_id": "d8ca3891-2bf",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to find the least common multiple of two numbers",
+      "template_used": "math_lcm",
+      "template_name": "LCM",
+      "oracle_consulted": true,
+      "match_score": 0.495
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.495,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.75925,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "443ca084-5c5",
+    "timestamp": "2026-01-17T23:17:43.607050",
+    "task_id": "55d0d086-005",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a binary search function to find an element in a sorted list",
+      "template_used": "list_find",
+      "template_name": "Find Element",
+      "oracle_consulted": true,
+      "match_score": 0.39416666666666667
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.39416666666666667,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": null,
+      "trust_score": 0,
+      "trust_gate": null,
+      "verification_passed": false,
+      "syntax_valid": false,
+      "tests_passed": null
+    },
+    "success": null,
+    "genesis_key": null
+  },
+  {
+    "id": "40052153-f3e",
+    "timestamp": "2026-01-17T23:18:17.210291",
+    "task_id": "cddebf16-d53",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that calculates the factorial of n",
+      "template_used": "math_factorial",
+      "template_name": "Factorial",
+      "oracle_consulted": true,
+      "match_score": 0.37
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.37,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7405,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "9108612b-247",
+    "timestamp": "2026-01-17T23:18:17.216329",
+    "task_id": "0886818d-4ff",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function that returns the nth fibonacci number",
+      "template_used": "math_fibonacci",
+      "template_name": "Fibonacci",
+      "oracle_consulted": true,
+      "match_score": 0.4425
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.4425,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7488750000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "fe534605-34c",
+    "timestamp": "2026-01-17T23:18:17.221217",
+    "task_id": "37908010-a93",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to check if a number is prime",
+      "template_used": "math_prime_check",
+      "template_name": "Prime Check",
+      "oracle_consulted": true,
+      "match_score": 0.44
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.44,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.746,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "d1df1788-b34",
+    "timestamp": "2026-01-17T23:18:17.226259",
+    "task_id": "41e2ceab-160",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to find the greatest common divisor of two numbers",
+      "template_used": "math_gcd",
+      "template_name": "GCD",
+      "oracle_consulted": true,
+      "match_score": 0.34750000000000003
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.34750000000000003,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.7396250000000001,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "0941880f-7c1",
+    "timestamp": "2026-01-17T23:18:17.231344",
+    "task_id": "884e6d1a-1bd",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a function to find the least common multiple of two numbers",
+      "template_used": "math_lcm",
+      "template_name": "LCM",
+      "oracle_consulted": true,
+      "match_score": 0.495
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.495,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": true,
+      "trust_score": 0.75925,
+      "trust_gate": "supervised",
+      "verification_passed": true,
+      "syntax_valid": true,
+      "tests_passed": false
+    },
+    "success": true,
+    "genesis_key": null
+  },
+  {
+    "id": "c8887457-e1e",
+    "timestamp": "2026-01-17T23:18:17.236027",
+    "task_id": "cf368896-1ac",
+    "context": {
+      "task_type": "code_generation",
+      "language": "python",
+      "description": "Write a binary search function to find an element in a sorted list",
+      "template_used": "list_find",
+      "template_name": "Find Element",
+      "oracle_consulted": true,
+      "match_score": 0.39416666666666667
+    },
+    "action": {
+      "phase": "learn",
+      "template_match_score": 0.39416666666666667,
+      "healing_attempts": 0,
+      "llm_escalations": 0,
+      "llm_used": false
+    },
+    "outcome": {
+      "success": null,
+      "trust_score": 0,
+      "trust_gate": null,
+      "verification_passed": false,
+      "syntax_valid": false,
+      "tests_passed": null
+    },
+    "success": null,
+    "genesis_key": null
+  }
+]

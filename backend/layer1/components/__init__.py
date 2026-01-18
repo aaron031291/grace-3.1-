@@ -79,6 +79,24 @@ except ImportError:
     create_kpi_connector = None
     KPI_CONNECTOR_AVAILABLE = False
 
+# Optional TimeSense connector
+try:
+    from .timesense_connector import TimeSenseConnector, create_timesense_connector
+    TIMESENSE_CONNECTOR_AVAILABLE = True
+except ImportError:
+    TimeSenseConnector = None
+    create_timesense_connector = None
+    TIMESENSE_CONNECTOR_AVAILABLE = False
+
+# Optional Diagnostic connector
+try:
+    from .diagnostic_connector import DiagnosticConnector, create_diagnostic_connector
+    DIAGNOSTIC_CONNECTOR_AVAILABLE = True
+except ImportError:
+    DiagnosticConnector = None
+    create_diagnostic_connector = None
+    DIAGNOSTIC_CONNECTOR_AVAILABLE = False
+
 __all__ = [
     "MemoryMeshConnector",
     "GenesisKeysConnector",
@@ -110,4 +128,18 @@ if KPI_CONNECTOR_AVAILABLE:
     __all__.extend([
         "KPIConnector",
         "create_kpi_connector",
+    ])
+
+# Add TimeSense connector to exports if available
+if TIMESENSE_CONNECTOR_AVAILABLE:
+    __all__.extend([
+        "TimeSenseConnector",
+        "create_timesense_connector",
+    ])
+
+# Add Diagnostic connector to exports if available
+if DIAGNOSTIC_CONNECTOR_AVAILABLE:
+    __all__.extend([
+        "DiagnosticConnector",
+        "create_diagnostic_connector",
     ])

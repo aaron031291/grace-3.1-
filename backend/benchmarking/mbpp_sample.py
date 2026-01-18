@@ -7,7 +7,7 @@ when the full dataset isn't available.
 
 # Import expanded problems
 try:
-    from backend.benchmarking.mbpp_expanded_sample import MBPP_EXPANDED_PROBLEMS
+    from benchmarking.mbpp_expanded_sample import MBPP_EXPANDED_PROBLEMS
     _expanded = MBPP_EXPANDED_PROBLEMS
 except:
     _expanded = []

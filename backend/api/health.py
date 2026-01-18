@@ -587,7 +587,7 @@ async def check_memory_health() -> Dict[str, Any]:
             try:
                 from llm_orchestrator.llm_orchestrator import LLMOrchestrator
             except ImportError:
-                from backend.llm_orchestrator.llm_orchestrator import LLMOrchestrator
+                from llm_orchestrator.llm_orchestrator import LLMOrchestrator
             
             # Check if LLMOrchestrator class exists and has expected attributes
             if hasattr(LLMOrchestrator, '__init__'):

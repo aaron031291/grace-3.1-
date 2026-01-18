@@ -1,9 +1,31 @@
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
-from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
+
+logger = logging.getLogger(__name__)
+
+try:
+    from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
+    MESSAGE_BUS_AVAILABLE = True
+except ImportError:
+    MESSAGE_BUS_AVAILABLE = False
+    Layer1MessageBus = None
+    ComponentType = None
+    Message = None
+    def get_message_bus():
+        return None
+
+try:
+    from ml_intelligence.neuro_symbolic_reasoner import NeuroSymbolicReasoner
+    from ml_intelligence.rule_storage import RuleStorage
+    NEURO_SYMBOLIC_AVAILABLE = True
+except ImportError:
+    NEURO_SYMBOLIC_AVAILABLE = False
+    NeuroSymbolicReasoner = None
+    RuleStorage = None
+
+
 class NeuroSymbolicConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects Neuro-Symbolic Reasoner to Layer 1 message bus.
     

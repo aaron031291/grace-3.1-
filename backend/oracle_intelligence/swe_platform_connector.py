@@ -9,10 +9,11 @@ from enum import Enum
 from datetime import datetime, timedelta
 from pathlib import Path
 import base64
+
+logger = logging.getLogger(__name__)
+
+
 class Platform(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Supported SWE platforms."""
     GITHUB = "github"
     GITLAB = "gitlab"
