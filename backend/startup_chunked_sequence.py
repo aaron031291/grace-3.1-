@@ -6,8 +6,9 @@ from typing import Dict, List, Tuple, Optional, Any
 from datetime import datetime
 import threading
 import time
+logger = logging.getLogger(__name__)
+
 class StartupChunkedSequence:
-    logger = logging.getLogger(__name__)
     """
     Chunked startup sequence with preflight → healing → startup.
     

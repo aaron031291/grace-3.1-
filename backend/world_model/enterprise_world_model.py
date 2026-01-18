@@ -5,8 +5,9 @@ from pathlib import Path
 import json
 import gzip
 from collections import defaultdict
+logger = logging.getLogger(__name__)
+
 class EnterpriseWorldModel:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade world model system.
     

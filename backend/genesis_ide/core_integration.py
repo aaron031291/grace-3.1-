@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import json
 import uuid
+logger = logging.getLogger(__name__)
+
 class IDESession:
-    logger = logging.getLogger(__name__)
     """Represents an IDE session with full tracking."""
     session_id: str
     started_at: datetime

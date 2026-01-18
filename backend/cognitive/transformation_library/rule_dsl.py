@@ -3,8 +3,9 @@ import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, asdict
 from pathlib import Path
+logger = logging.getLogger(__name__)
+
 class Rule:
-    logger = logging.getLogger(__name__)
     """A code transformation rule."""
     id: str
     version: str

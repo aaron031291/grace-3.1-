@@ -8,8 +8,9 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 from pathlib import Path
 import os
+logger = logging.getLogger(__name__)
+
 class AutonomousTriggerType(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Types of autonomous triggers."""
     FILE_CHANGE = "file_change"

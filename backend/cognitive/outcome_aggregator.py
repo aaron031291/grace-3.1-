@@ -11,7 +11,7 @@ This addresses the critical gap identified in SYSTEM_GAPS_ANALYSIS.md:
 import logging
 import threading
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, UTC
 from uuid import uuid4
 from collections import defaultdict
 from sqlalchemy.orm import Session
@@ -68,7 +68,7 @@ class OutcomeAggregator:
             "patterns_detected": 0,
             "cross_system_learnings_created": 0,
             "errors": 0,
-            "started_at": datetime.utcnow().isoformat()
+            "started_at": datetime.now(UTC).isoformat()
         }
         
         logger.info("[OUTCOME-AGGREGATOR] Initialized unified outcome aggregation service")
@@ -105,7 +105,7 @@ class OutcomeAggregator:
                 unified_outcome = {
                     'id': outcome_id,
                     'source': source,
-                    'timestamp': datetime.utcnow(),
+                    'timestamp': datetime.now(UTC),
                     'outcome': outcome,
                     'trust_score': float(outcome.get('trust_score', 0.5)),
                     'success': bool(outcome.get('success', False)),
@@ -269,7 +269,7 @@ class OutcomeAggregator:
                         'healing_action': healing_action,
                         'diagnostic_issue': issue_type,
                         'related_outcomes': [healing, diagnostic],
-                        'timestamp': datetime.utcnow()
+                        'timestamp': datetime.now(UTC)
                     })
         
         return patterns
@@ -305,7 +305,7 @@ class OutcomeAggregator:
                         'test_name': test_name,
                         'file_path': file_path,
                         'related_outcomes': [test, file_outcome],
-                        'timestamp': datetime.utcnow()
+                        'timestamp': datetime.now(UTC)
                     })
         
         return patterns
@@ -341,7 +341,7 @@ class OutcomeAggregator:
                         'llm_suggestion': str(suggestion)[:200],
                         'healing_action': healing_action,
                         'related_outcomes': [llm, healing],
-                        'timestamp': datetime.utcnow()
+                        'timestamp': datetime.now(UTC)
                     })
         
         return patterns
@@ -515,7 +515,7 @@ class OutcomeAggregator:
                 "current_outcome_count": len(self._outcomes),
                 "current_pattern_count": len(self._patterns),
                 "started_at": self._stats["started_at"],
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(UTC).isoformat()
             }
     
     def get_patterns(self, min_confidence: float = 0.0) -> List[Dict[str, Any]]:
@@ -547,7 +547,7 @@ class OutcomeAggregator:
                 "patterns_detected": 0,
                 "cross_system_learnings_created": 0,
                 "errors": 0,
-                "started_at": datetime.utcnow().isoformat()
+                "started_at": datetime.now(UTC).isoformat()
             }
         logger.info("[OUTCOME-AGGREGATOR] Cleared all outcomes and patterns")
 

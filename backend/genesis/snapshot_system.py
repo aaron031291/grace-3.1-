@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from models.genesis_key_models import GenesisKey, GenesisKeyStatus, GenesisKeyType
 from genesis.genesis_key_service import GenesisKeyService
+logger = logging.getLogger(__name__)
+
 class GenesisKeySnapshot:
-    logger = logging.getLogger(__name__)
     """Represents a snapshot of Genesis Keys at a point in time."""
     
     def __init__(

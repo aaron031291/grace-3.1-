@@ -5,8 +5,9 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 from sqlalchemy.orm import Session
 from cognitive.magma_memory_system import MagmaMemorySystem, MagmaLayer
+logger = logging.getLogger(__name__)
+
 class TransformationOutcome:
-    logger = logging.getLogger(__name__)
     """A transformation outcome record."""
     rule_id: str
     rule_version: str

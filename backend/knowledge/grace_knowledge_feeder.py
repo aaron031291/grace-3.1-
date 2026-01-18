@@ -14,8 +14,9 @@ from ingestion.service import TextIngestionService
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, LLMTaskRequest, TaskType
 from cognitive.autonomous_sandbox_lab import get_sandbox_lab, ExperimentStatus
 from api.repositories_api import RepositoryConfig, RepositoryType, RepositoryPriority
+logger = logging.getLogger(__name__)
+
 class GraceKnowledgeFeeder:
-    logger = logging.getLogger(__name__)
     """
     Feeds Grace the knowledge she needs to reach 95% success rate.
     

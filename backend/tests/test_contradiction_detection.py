@@ -5,8 +5,9 @@ from unittest.mock import Mock, patch, MagicMock
 import sys
 from pathlib import Path
 from confidence_scorer import ConfidenceScorer, SemanticContradictionDetector
+logger = logging.getLogger(__name__)
+
 class TestSemanticContradictionDetector:
-    logger = logging.getLogger(__name__)
     """Test cases for SemanticContradictionDetector class."""
     
     @pytest.fixture

@@ -10,8 +10,9 @@ from datetime import datetime, UTC
 from typing import Dict, List, Any, Optional
 import traceback
 from autonomous_stress_testing.stress_test_suite import GraceStressTestSuite, run_stress_test_suite
+logger = logging.getLogger(__name__)
+
 class StressTestScheduler:
-    logger = logging.getLogger(__name__)
     """Scheduler for autonomous stress testing."""
     
     def __init__(

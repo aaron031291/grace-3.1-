@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 from collections import defaultdict
 import json
+logger = logging.getLogger(__name__)
+
 class MemoryRelationship:
-    logger = logging.getLogger(__name__)
     """Represents a relationship between two memories."""
     
     def __init__(

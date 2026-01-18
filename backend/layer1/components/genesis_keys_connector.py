@@ -5,8 +5,9 @@ import hashlib
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
+logger = logging.getLogger(__name__)
+
 class GenesisKeysConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects Genesis Keys to Layer 1 message bus.
 

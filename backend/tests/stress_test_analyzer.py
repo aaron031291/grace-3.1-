@@ -3,8 +3,9 @@ import logging
 from pathlib import Path
 from typing import Dict, Any, List
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class StressTestAnalyzer:
-    logger = logging.getLogger(__name__)
     """Analyzes stress test results and identifies issues."""
     
     def __init__(self):

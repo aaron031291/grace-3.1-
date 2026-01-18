@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from database.session import get_session
 from models.genesis_key_models import GenesisKey, GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class GenesisKeyDailyOrganizer:
-    logger = logging.getLogger(__name__)
     """
     Organizes Genesis Keys daily into Layer 1 folder structure.
 

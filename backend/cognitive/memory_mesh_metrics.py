@@ -4,8 +4,9 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 from collections import deque
 import statistics
+logger = logging.getLogger(__name__)
+
 class PerformanceMetrics:
-    logger = logging.getLogger(__name__)
     """
     Tracks performance metrics for Memory Mesh operations.
 

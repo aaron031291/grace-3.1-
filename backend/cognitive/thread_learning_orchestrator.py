@@ -8,8 +8,9 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 import sys
 from cognitive.learning_subagent_system import TaskType, MessageType, LearningTask, Message
+logger = logging.getLogger(__name__)
+
 class BaseThreadSubagent:
-    logger = logging.getLogger(__name__)
     """
     Base class for all learning subagents (thread-based).
 

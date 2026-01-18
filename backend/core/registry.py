@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Set, Type, TYPE_CHECKING
 from base_component import BaseComponent, ComponentState, ComponentRole, ComponentManifest
+logger = logging.getLogger(__name__)
+
 class RegistryEntry:
-    logger = logging.getLogger(__name__)
     """Entry in the component registry."""
     component: BaseComponent
     registered_at: datetime = field(default_factory=datetime.utcnow)

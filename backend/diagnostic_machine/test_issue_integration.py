@@ -3,8 +3,9 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class TestIssueIntegration:
-    logger = logging.getLogger(__name__)
     """Integrates test issues with self-healing and diagnostic systems."""
     
     def __init__(self):

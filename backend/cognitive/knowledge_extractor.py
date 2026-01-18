@@ -5,8 +5,9 @@ import requests
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class KnowledgeExtractor:
-    logger = logging.getLogger(__name__)
     """Extract fix patterns from multiple sources."""
     
     def __init__(self, github_token: Optional[str] = None):

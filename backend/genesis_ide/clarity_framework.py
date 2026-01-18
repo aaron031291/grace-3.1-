@@ -5,8 +5,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import uuid
+logger = logging.getLogger(__name__)
+
 class ClarityLevel(str, Enum):
-    logger = logging.getLogger(__name__)
     """Levels of clarity for an action."""
     CRYSTAL = "crystal"     # Fully clear, verified, documented
     CLEAR = "clear"         # Clear intent, good traceability

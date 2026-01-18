@@ -13,8 +13,9 @@ from database.config import DatabaseConfig
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk
 from vector_db.client import get_qdrant_client
+logger = logging.getLogger(__name__)
+
 class RepositoryStats:
-    logger = logging.getLogger(__name__)
     """Statistics for a single repository."""
     name: str
     category: str

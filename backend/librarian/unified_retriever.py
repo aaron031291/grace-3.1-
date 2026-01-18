@@ -6,8 +6,9 @@ from models.database_models import Document
 from models.librarian_models import DocumentTag, LibrarianTag, DocumentRelationship
 from librarian.tag_manager import TagManager
 from librarian.relationship_manager import RelationshipManager
+logger = logging.getLogger(__name__)
+
 class UnifiedRetriever:
-    logger = logging.getLogger(__name__)
     """
     Unified document retrieval system.
 

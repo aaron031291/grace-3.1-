@@ -5,8 +5,9 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 from retrieval.retriever import DocumentRetriever
+logger = logging.getLogger(__name__)
+
 class RAGConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects RAG to Layer 1 message bus.
 

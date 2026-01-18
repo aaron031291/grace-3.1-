@@ -6,8 +6,9 @@ from typing import Optional, Dict, Any, Callable
 from sqlalchemy.orm import Session
 from models.telemetry_models import OperationLog, OperationReplay, OperationStatus
 from database.session import get_session
+logger = logging.getLogger(__name__)
+
 class ReplayService:
-    logger = logging.getLogger(__name__)
     """
     Service for replaying operations with stored inputs.
 

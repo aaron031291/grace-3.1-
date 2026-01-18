@@ -7,8 +7,9 @@ from sqlalchemy import func, and_
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_memory import LearningExample
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
+logger = logging.getLogger(__name__)
+
 class PatternType:
-    logger = logging.getLogger(__name__)
     """Types of behavioral patterns the mirror can detect."""
     REPEATED_FAILURE = "repeated_failure"           # Same operation failing repeatedly
     SUCCESS_SEQUENCE = "success_sequence"           # Sequence that consistently succeeds

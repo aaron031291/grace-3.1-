@@ -3,8 +3,9 @@ from typing import List, Dict, Optional, Any, Tuple
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 import logging
+logger = logging.getLogger(__name__)
+
 class QdrantVectorDB:
-    logger = logging.getLogger(__name__)
     """Qdrant vector database client wrapper."""
     
     def __init__(

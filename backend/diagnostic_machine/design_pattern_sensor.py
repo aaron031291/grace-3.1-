@@ -4,8 +4,9 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class DesignPatternIssue:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """A design pattern issue detected by the sensor."""

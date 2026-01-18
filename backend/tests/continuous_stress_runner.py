@@ -6,8 +6,9 @@ import os
 from pathlib import Path
 from datetime import datetime
 import threading
+logger = logging.getLogger(__name__)
+
 class ContinuousStressRunner:
-    logger = logging.getLogger(__name__)
     """Runs stress tests continuously every 30 minutes."""
     
     def __init__(self, interval_minutes: int = 30, test_duration_minutes: int = 60):

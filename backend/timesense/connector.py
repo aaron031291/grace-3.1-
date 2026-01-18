@@ -5,8 +5,9 @@ from typing import Dict, Any, Optional
 from timesense.engine import TimeSenseEngine, get_timesense_engine, EngineStatus
 from timesense.primitives import PrimitiveType
 from timesense.predictor import PredictionResult
+logger = logging.getLogger(__name__)
+
 class TimeSenseComponentType:
-    logger = logging.getLogger(__name__)
     """Component type identifier for TimeSense."""
     TIMESENSE = "timesense"
 

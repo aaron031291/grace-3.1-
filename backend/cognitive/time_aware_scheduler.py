@@ -3,8 +3,9 @@ from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+logger = logging.getLogger(__name__)
+
 class TaskPriority(str, Enum):
-    logger = logging.getLogger(__name__)
     """Task priority levels."""
     CRITICAL = "critical"  # Must be done immediately
     HIGH = "high"  # Urgent, deadline approaching

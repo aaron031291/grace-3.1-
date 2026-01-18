@@ -9,8 +9,9 @@ from sqlalchemy.orm import Session
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.devops_healing_agent import DevOpsHealingAgent
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, TaskType
+logger = logging.getLogger(__name__)
+
 class CascadingEffectAnalyzer:
-    logger = logging.getLogger(__name__)
     """Analyzes potential cascading effects of code changes."""
     
     def __init__(self, message_bus: Optional[Layer1MessageBus] = None):

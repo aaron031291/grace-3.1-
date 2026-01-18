@@ -9,8 +9,9 @@ from enum import Enum
 from typing import Dict, Any, Optional, List, Set, Tuple
 from core.base_component import BaseComponent, ComponentRole
 from core.loop_output import GraceLoopOutput, ReasoningStep
+logger = logging.getLogger(__name__)
+
 class ContradictionType(Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

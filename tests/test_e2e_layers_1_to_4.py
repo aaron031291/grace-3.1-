@@ -16,6 +16,7 @@ Flow:
 import asyncio
 import logging
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional
@@ -27,6 +28,58 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "backend"))
+
+
+def initialize_test_database():
+    """Initialize a test database for e2e tests."""
+    try:
+        from database.config import DatabaseConfig, DatabaseType
+        from database.connection import DatabaseConnection
+        import os
+        
+        # Use a temporary SQLite database for tests
+        test_db_path = Path(tempfile.gettempdir()) / "grace_e2e_test.db"
+        
+        # Delete old database to ensure fresh schema
+        if test_db_path.exists():
+            try:
+                os.remove(test_db_path)
+            except Exception:
+                pass
+        
+        config = DatabaseConfig(
+            db_type=DatabaseType.SQLITE,
+            database_path=str(test_db_path),
+            echo=False
+        )
+        
+        DatabaseConnection.initialize(config)
+        engine = DatabaseConnection.get_engine()
+        
+        # Import all model modules to register them with SQLAlchemy
+        try:
+            from models.database_models import BaseModel
+            BaseModel.metadata.create_all(engine)
+        except Exception:
+            pass
+        
+        try:
+            from cognitive.learning_memory import LearningExample as LM_Example
+            LM_Example.metadata.create_all(engine)
+        except Exception:
+            pass
+            
+        try:
+            from models.genesis_key_models import GenesisKey
+            GenesisKey.metadata.create_all(engine)
+        except Exception:
+            pass
+            
+        logger.info(f"[TEST-DB] Initialized test database at {test_db_path}")
+        return True
+    except Exception as e:
+        logger.warning(f"[TEST-DB] Could not initialize test database: {e}")
+        return False
 
 
 class LayerTestResults:
@@ -67,13 +120,13 @@ class LayerTestResults:
         
         for layer, data in self.results.items():
             if data["tests"]:
-                status = "✅" if data["failed"] == 0 else "❌"
+                status = "[PASS]" if data["failed"] == 0 else "[FAIL]"
                 lines.append(f"{status} {layer.upper()}: {data['passed']} passed, {data['failed']} failed")
                 for test in data["tests"]:
-                    icon = "  ✓" if test["passed"] else "  ✗"
+                    icon = "  [+]" if test["passed"] else "  [-]"
                     lines.append(f"  {icon} {test['name']}")
                     if test["details"] and not test["passed"]:
-                        lines.append(f"      → {test['details']}")
+                        lines.append(f"      -> {test['details']}")
         
         lines.append("=" * 70)
         return "\n".join(lines)
@@ -96,12 +149,12 @@ async def test_layer1_message_bus(results: LayerTestResults) -> Optional[Any]:
         results.record("layer1", "Stats retrieval", has_components, 
                       f"{stats.get('registered_components', 0)} components")
         
-        logger.info(f"  ✓ Message bus ready with {stats.get('registered_components', 0)} components")
+        logger.info(f"  [+] Message bus ready with {stats.get('registered_components', 0)} components")
         return message_bus
         
     except Exception as e:
         results.record("layer1", "Message bus initialization", False, str(e))
-        logger.error(f"  ✗ Layer 1 message bus failed: {e}")
+        logger.error(f"  [-] Layer 1 message bus failed: {e}")
         return None
 
 
@@ -110,14 +163,16 @@ async def test_layer1_memory_mesh(results: LayerTestResults) -> Optional[Any]:
     try:
         from database.session import get_db
         from cognitive.memory_mesh_integration import MemoryMeshIntegration
+        from pathlib import Path
         
         session = next(get_db())
-        kb_path = "backend/knowledge_base"
+        kb_path = Path("backend/knowledge_base")
         
         memory_mesh = MemoryMeshIntegration(session, kb_path)
         results.record("layer1", "Memory mesh initialization", True)
         
-        learning_id = await memory_mesh.trigger_learning_ingestion(
+        # Use correct method name: ingest_learning_experience (not trigger_learning_ingestion)
+        learning_id = memory_mesh.ingest_learning_experience(
             experience_type="test_e2e",
             context={"test": "e2e_layer_test", "timestamp": datetime.utcnow().isoformat()},
             action_taken={"action": "test_action"},
@@ -129,31 +184,34 @@ async def test_layer1_memory_mesh(results: LayerTestResults) -> Optional[Any]:
         results.record("layer1", "Learning ingestion", has_learning, 
                       f"ID: {learning_id}" if learning_id else "No ID returned")
         
-        logger.info(f"  ✓ Memory mesh ready, learning ID: {learning_id}")
+        logger.info(f"  [+] Memory mesh ready, learning ID: {learning_id}")
         return memory_mesh
         
     except Exception as e:
         results.record("layer1", "Memory mesh initialization", False, str(e))
-        logger.error(f"  ✗ Layer 1 memory mesh failed: {e}")
+        logger.error(f"  [-] Layer 1 memory mesh failed: {e}")
         return None
 
 
 async def test_layer1_genesis_keys(results: LayerTestResults) -> Optional[Any]:
     """Test Layer 1 Genesis Key creation and tracking."""
     try:
-        from genesis.service import GenesisKeyService
+        from genesis.genesis_key_service import GenesisKeyService
+        from models.genesis_key_models import GenesisKeyType
         from database.session import get_db
         
         session = next(get_db())
         genesis_service = GenesisKeyService(session)
         results.record("layer1", "Genesis key service initialization", True)
         
+        # Use correct API: key_type, what_description, who_actor
         genesis_key = genesis_service.create_key(
-            what="E2E test key creation",
-            who="e2e_test_runner",
-            why="Testing Layer 1-4 integration",
-            how="Automated E2E test",
-            context={"test_type": "e2e_layers_1_to_4"}
+            key_type=GenesisKeyType.SYSTEM_EVENT,
+            what_description="E2E test key creation",
+            who_actor="e2e_test_runner",
+            why_reason="Testing Layer 1-4 integration",
+            how_method="Automated E2E test",
+            context_data={"test_type": "e2e_layers_1_to_4"}
         )
         
         has_key = genesis_key is not None
@@ -161,12 +219,12 @@ async def test_layer1_genesis_keys(results: LayerTestResults) -> Optional[Any]:
         results.record("layer1", "Genesis key creation", has_key, 
                       f"Key: {key_id}" if has_key else "No key created")
         
-        logger.info(f"  ✓ Genesis key service ready, key: {key_id}")
+        logger.info(f"  [+] Genesis key service ready, key: {key_id}")
         return genesis_service
         
     except Exception as e:
         results.record("layer1", "Genesis key service initialization", False, str(e))
-        logger.error(f"  ✗ Layer 1 genesis keys failed: {e}")
+        logger.error(f"  [-] Layer 1 genesis keys failed: {e}")
         return None
 
 
@@ -177,33 +235,42 @@ async def test_layer2_cognitive_engine(results: LayerTestResults) -> Optional[An
     logger.info("=" * 60)
     
     try:
+        from cognitive.engine import CognitiveEngine
         from layer2.enterprise_cognitive_engine import EnterpriseCognitiveEngine
         
-        cognitive_engine = EnterpriseCognitiveEngine()
+        # Create the base cognitive engine first
+        base_engine = CognitiveEngine()
+        cognitive_engine = EnterpriseCognitiveEngine(cognitive_engine=base_engine)
         results.record("layer2", "Cognitive engine initialization", True)
         
-        status = cognitive_engine.get_status()
-        has_status = status is not None
-        results.record("layer2", "Status retrieval", has_status,
-                      f"Active: {status.get('active', False)}" if status else "No status")
+        # EnterpriseCognitiveEngine uses get_analytics() instead of get_status()
+        if hasattr(cognitive_engine, 'get_analytics'):
+            analytics = cognitive_engine.get_analytics()
+            has_analytics = analytics is not None
+            results.record("layer2", "Analytics retrieval", has_analytics)
+        else:
+            # Check underlying cognitive engine
+            has_engine = cognitive_engine.cognitive_engine is not None
+            results.record("layer2", "Engine validation", has_engine)
         
-        logger.info(f"  ✓ Cognitive engine ready")
+        logger.info(f"  [+] Cognitive engine ready")
         return cognitive_engine
         
-    except ImportError:
+    except ImportError as e:
+        # Try fallback to OODA processor directly
         try:
             from cognitive.ooda_loop import OODALoopProcessor
             processor = OODALoopProcessor()
             results.record("layer2", "OODA processor initialization", True)
-            logger.info(f"  ✓ OODA processor ready (fallback)")
+            logger.info(f"  [+] OODA processor ready (fallback)")
             return processor
-        except Exception as e:
+        except Exception as fallback_e:
             results.record("layer2", "Cognitive engine initialization", False, str(e))
-            logger.error(f"  ✗ Layer 2 cognitive engine failed: {e}")
+            logger.error(f"  [-] Layer 2 cognitive engine failed: {e}")
             return None
     except Exception as e:
         results.record("layer2", "Cognitive engine initialization", False, str(e))
-        logger.error(f"  ✗ Layer 2 cognitive engine failed: {e}")
+        logger.error(f"  [-] Layer 2 cognitive engine failed: {e}")
         return None
 
 
@@ -234,12 +301,12 @@ async def test_layer2_enterprise_intelligence(results: LayerTestResults) -> Opti
         has_clusters = clusters is not None
         results.record("layer2", "Intelligence clustering", has_clusters)
         
-        logger.info(f"  ✓ Enterprise intelligence ready")
+        logger.info(f"  [+] Enterprise intelligence ready")
         return enterprise_intel
         
     except Exception as e:
         results.record("layer2", "Enterprise intelligence initialization", False, str(e))
-        logger.error(f"  ✗ Layer 2 enterprise intelligence failed: {e}")
+        logger.error(f"  [-] Layer 2 enterprise intelligence failed: {e}")
         return None
 
 
@@ -251,15 +318,15 @@ async def test_layer3_governance(results: LayerTestResults) -> Optional[Any]:
     
     try:
         from governance.layer3_quorum_verification import (
-            QuorumGovernanceEngine, TrustSource, VerificationResult, QuorumDecision
+            Layer3QuorumVerification, TrustSource, VerificationResult, QuorumDecision
         )
         
-        governance = QuorumGovernanceEngine()
+        governance = Layer3QuorumVerification()
         results.record("layer3", "Governance engine initialization", True)
         
         assessment = await governance.assess_trust(
             data={"test": "data", "source": "e2e_test"},
-            source=TrustSource.INTERNAL_DATA,
+            origin="internal_data",
             genesis_key_id="GK-e2e-test"
         )
         
@@ -270,7 +337,7 @@ async def test_layer3_governance(results: LayerTestResults) -> Optional[Any]:
         
         external_assessment = await governance.assess_trust(
             data={"content": "external data", "url": "https://example.com"},
-            source=TrustSource.WEB,
+            origin="web",
             genesis_key_id="GK-e2e-external"
         )
         
@@ -279,12 +346,12 @@ async def test_layer3_governance(results: LayerTestResults) -> Optional[Any]:
         results.record("layer3", "Trust assessment (external)", has_ext_assessment,
                       f"Result: {ext_result}" if has_ext_assessment else "No assessment")
         
-        logger.info(f"  ✓ Governance engine ready, internal trust: {score:.2f}")
+        logger.info(f"  [+] Governance engine ready, internal trust: {score:.2f}")
         return governance
         
     except Exception as e:
         results.record("layer3", "Governance engine initialization", False, str(e))
-        logger.error(f"  ✗ Layer 3 governance failed: {e}")
+        logger.error(f"  [-] Layer 3 governance failed: {e}")
         return None
 
 
@@ -315,12 +382,12 @@ async def test_layer3_kpi_tracking(results: LayerTestResults, governance: Any) -
             )
             results.record("layer3", "Component outcome recording", True)
         
-        logger.info(f"  ✓ KPI tracking ready, score: {kpi.current_score:.2f}")
+        logger.info(f"  [+] KPI tracking ready, score: {kpi.current_score:.2f}")
         return True
         
     except Exception as e:
         results.record("layer3", "KPI tracking", False, str(e))
-        logger.error(f"  ✗ Layer 3 KPI tracking failed: {e}")
+        logger.error(f"  [-] Layer 3 KPI tracking failed: {e}")
         return False
 
 
@@ -342,12 +409,12 @@ async def test_layer3_constitutional_framework(results: LayerTestResults, govern
         else:
             results.record("layer3", "Constitutional compliance check", True, "Skipped - no method")
         
-        logger.info(f"  ✓ Constitutional framework operational")
+        logger.info(f"  [+] Constitutional framework operational")
         return True
         
     except Exception as e:
         results.record("layer3", "Constitutional compliance check", False, str(e))
-        logger.error(f"  ✗ Layer 3 constitutional framework failed: {e}")
+        logger.error(f"  [-] Layer 3 constitutional framework failed: {e}")
         return False
 
 
@@ -382,12 +449,12 @@ async def test_layer4_pattern_learner(results: LayerTestResults) -> Optional[Any
         results.record("layer4", "Learning cycle execution", has_result,
                       f"Patterns: {patterns_discovered}")
         
-        logger.info(f"  ✓ Pattern learner ready, discovered {patterns_discovered} patterns")
+        logger.info(f"  [+] Pattern learner ready, discovered {patterns_discovered} patterns")
         return layer4
         
     except Exception as e:
         results.record("layer4", "Pattern learner initialization", False, str(e))
-        logger.error(f"  ✗ Layer 4 pattern learner failed: {e}")
+        logger.error(f"  [-] Layer 4 pattern learner failed: {e}")
         return None
 
 
@@ -420,12 +487,12 @@ async def test_layer4_cross_domain_transfer(results: LayerTestResults, layer4: A
             results.record("layer4", "Cross-domain insights", True, "Implicit transfer")
         
         results.record("layer4", "Cross-domain transfer", True)
-        logger.info(f"  ✓ Cross-domain transfer operational")
+        logger.info(f"  [+] Cross-domain transfer operational")
         return True
         
     except Exception as e:
         results.record("layer4", "Cross-domain transfer", False, str(e))
-        logger.error(f"  ✗ Layer 4 cross-domain transfer failed: {e}")
+        logger.error(f"  [-] Layer 4 cross-domain transfer failed: {e}")
         return False
 
 
@@ -448,16 +515,16 @@ async def test_layer4_advanced_capabilities(results: LayerTestResults) -> bool:
             except:
                 results.record("layer4", "Compositional generalization", True, "No patterns to compose")
         
-        logger.info(f"  ✓ Advanced neuro-symbolic capabilities ready")
+        logger.info(f"  [+] Advanced neuro-symbolic capabilities ready")
         return True
         
     except ImportError:
         results.record("layer4", "Advanced neuro-symbolic initialization", True, "Optional module")
-        logger.info(f"  ⚠ Advanced neuro-symbolic module not required")
+        logger.info(f"  [!] Advanced neuro-symbolic module not required")
         return True
     except Exception as e:
         results.record("layer4", "Advanced neuro-symbolic initialization", False, str(e))
-        logger.error(f"  ✗ Layer 4 advanced capabilities failed: {e}")
+        logger.error(f"  [-] Layer 4 advanced capabilities failed: {e}")
         return False
 
 
@@ -475,16 +542,16 @@ async def test_layer4_frontier_reasoning(results: LayerTestResults) -> bool:
             results.record("layer4", "Frontier status", True,
                           f"GPU: {gpu_available}")
         
-        logger.info(f"  ✓ Frontier reasoning capabilities ready")
+        logger.info(f"  [+] Frontier reasoning capabilities ready")
         return True
         
     except ImportError:
         results.record("layer4", "Frontier reasoning initialization", True, "Optional module")
-        logger.info(f"  ⚠ Frontier reasoning module not required")
+        logger.info(f"  [!] Frontier reasoning module not required")
         return True
     except Exception as e:
         results.record("layer4", "Frontier reasoning initialization", False, str(e))
-        logger.error(f"  ✗ Layer 4 frontier reasoning failed: {e}")
+        logger.error(f"  [-] Layer 4 frontier reasoning failed: {e}")
         return False
 
 
@@ -496,7 +563,7 @@ async def test_full_integration_flow(results: LayerTestResults) -> bool:
     
     try:
         from layer1.message_bus import get_message_bus
-        from governance.layer3_quorum_verification import QuorumGovernanceEngine, TrustSource
+        from governance.layer3_quorum_verification import Layer3QuorumVerification, TrustSource
         
         message_bus = get_message_bus()
         
@@ -507,10 +574,10 @@ async def test_full_integration_flow(results: LayerTestResults) -> bool:
         }
         
         try:
-            governance = QuorumGovernanceEngine()
+            governance = Layer3QuorumVerification()
             assessment = await governance.assess_trust(
                 data=test_input,
-                source=TrustSource.HUMAN_TRIGGERED,
+                origin="human_triggered",
                 genesis_key_id="GK-integration-test"
             )
             
@@ -525,11 +592,13 @@ async def test_full_integration_flow(results: LayerTestResults) -> bool:
             try:
                 from database.session import get_db
                 from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                from pathlib import Path
                 
                 session = next(get_db())
-                memory_mesh = MemoryMeshIntegration(session, "backend/knowledge_base")
+                memory_mesh = MemoryMeshIntegration(session, Path("backend/knowledge_base"))
                 
-                learning_id = await memory_mesh.trigger_learning_ingestion(
+                # Use correct method name: ingest_learning_experience
+                learning_id = memory_mesh.ingest_learning_experience(
                     experience_type="code_generation",
                     context=test_input,
                     action_taken={"generated": True},
@@ -579,12 +648,12 @@ async def test_full_integration_flow(results: LayerTestResults) -> bool:
         except Exception as e:
             results.record("integration", "Layer 4 pattern learning", False, str(e))
         
-        logger.info(f"  ✓ Full integration flow completed")
+        logger.info(f"  [+] Full integration flow completed")
         return True
         
     except Exception as e:
         results.record("integration", "Full flow execution", False, str(e))
-        logger.error(f"  ✗ Integration flow failed: {e}")
+        logger.error(f"  [-] Integration flow failed: {e}")
         return False
 
 
@@ -621,17 +690,20 @@ async def test_bidirectional_communication(results: LayerTestResults) -> bool:
         results.record("integration", "Bidirectional communication", communication_works,
                       f"Published: {events_published}, Received: {events_received}")
         
-        logger.info(f"  ✓ Bidirectional communication verified")
+        logger.info(f"  [+] Bidirectional communication verified")
         return True
         
     except Exception as e:
         results.record("integration", "Bidirectional communication", False, str(e))
-        logger.error(f"  ✗ Bidirectional communication failed: {e}")
+        logger.error(f"  [-] Bidirectional communication failed: {e}")
         return False
 
 
 async def main():
     """Run complete E2E test suite for Layers 1-4."""
+    # Initialize test database first
+    initialize_test_database()
+    
     logger.info("\n" + "=" * 70)
     logger.info("GRACE E2E TEST SUITE: LAYERS 1-4 INTEGRATION")
     logger.info("=" * 70)
@@ -662,10 +734,10 @@ async def main():
     
     total_failed = sum(r["failed"] for r in results.results.values())
     if total_failed == 0:
-        logger.info("\n🎉 ALL E2E TESTS PASSED!")
+        logger.info("\n*** ALL E2E TESTS PASSED! ***")
         logger.info("   Layers 1-4 are fully integrated and operational.")
     else:
-        logger.warning(f"\n⚠ {total_failed} test(s) failed. Review the results above.")
+        logger.warning(f"\n[!] {total_failed} test(s) failed. Review the results above.")
     
     return total_failed == 0
 

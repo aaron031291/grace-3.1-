@@ -9,8 +9,9 @@ from cognitive.learning_memory import LearningMemoryManager, TrustScorer, Learni
 from cognitive.predictive_context_loader import PredictiveContextLoader
 from retrieval.retriever import DocumentRetriever
 from database.session import get_session
+logger = logging.getLogger(__name__)
+
 class TrainingSession:
-    logger = logging.getLogger(__name__)
     """
     Represents a focused training session where Grace learns a specific skill.
     """

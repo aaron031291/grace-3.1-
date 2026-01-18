@@ -16,8 +16,9 @@ from database.session import initialize_session_factory
 from cognitive.active_learning_system import GraceActiveLearningSystem
 from retrieval.retriever import DocumentRetriever
 from embedding import get_embedding_model
+logger = logging.getLogger(__name__)
+
 class LearningTask:
-    logger = logging.getLogger(__name__)
     """A learning task for Grace to process."""
     task_id: str
     task_type: str  # "study", "practice", "ingest"

@@ -12,8 +12,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
 from sqlalchemy.orm import Session
 import threading
+logger = logging.getLogger(__name__)
+
 class AggressiveStressTester:
-    logger = logging.getLogger(__name__)
     """Aggressive stress testing designed to break Grace."""
     
     def __init__(self, session: Session, knowledge_base_path: Path):

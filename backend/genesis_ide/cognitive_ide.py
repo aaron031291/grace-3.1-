@@ -3,8 +3,9 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+logger = logging.getLogger(__name__)
+
 class ThinkingMode(str, Enum):
-    logger = logging.getLogger(__name__)
     """Different modes of cognitive thinking."""
     LINEAR = "linear"           # Step-by-step sequential
     DIVERGENT = "divergent"     # Generate many possibilities

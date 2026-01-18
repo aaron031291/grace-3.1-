@@ -5,8 +5,9 @@ from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk
+logger = logging.getLogger(__name__)
+
 class DocumentRetriever:
-    logger = logging.getLogger(__name__)
     """Retrieves relevant document chunks for query context."""
     
     def __init__(

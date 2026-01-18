@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from collections import defaultdict
 import json
+logger = logging.getLogger(__name__)
+
 class MemoryCluster:
-    logger = logging.getLogger(__name__)
     """Represents a cluster of related memories."""
     
     def __init__(

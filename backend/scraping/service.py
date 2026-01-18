@@ -11,8 +11,9 @@ import re
 from models import ScrapingJob, ScrapedPage
 from url_validator import URLValidator
 from document_downloader import DocumentDownloader
+logger = logging.getLogger(__name__)
+
 class WebScrapingService:
-    logger = logging.getLogger(__name__)
     """
     Service for scraping web content with depth control.
     """

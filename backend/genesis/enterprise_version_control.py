@@ -14,8 +14,9 @@ from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStat
 from genesis.file_version_tracker import get_file_version_tracker
 from cognitive.memory_mesh_snapshot import MemoryMeshSnapshot
 from cognitive.incremental_snapshot import IncrementalSnapshot
+logger = logging.getLogger(__name__)
+
 class VersionControlType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Version control operation types."""
     COMMIT = "commit"
     BRANCH = "branch"

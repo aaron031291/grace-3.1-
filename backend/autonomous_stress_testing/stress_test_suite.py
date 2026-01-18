@@ -14,8 +14,9 @@ import traceback
 import psutil
 import subprocess
 from sqlalchemy import text
+logger = logging.getLogger(__name__)
+
 class GraceStressTestSuite:
-    logger = logging.getLogger(__name__)
     """Comprehensive stress test suite for Grace system."""
     
     def __init__(self, base_url: str = "http://localhost:8000"):

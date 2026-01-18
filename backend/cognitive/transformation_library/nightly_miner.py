@@ -11,8 +11,9 @@ from cognitive.magma_memory_system import get_magma_memory_system, MagmaMemorySy
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from database.session import get_session
 from pathlib import Path
+logger = logging.getLogger(__name__)
+
 class NightlyMiner:
-    logger = logging.getLogger(__name__)
     """
     Scheduled pattern mining job.
     

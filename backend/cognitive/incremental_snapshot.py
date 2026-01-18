@@ -6,8 +6,9 @@ from typing import Dict, Any, List, Optional, Set
 from sqlalchemy.orm import Session
 import hashlib
 from cognitive.memory_mesh_snapshot import MemoryMeshSnapshot
+logger = logging.getLogger(__name__)
+
 class IncrementalSnapshot:
-    logger = logging.getLogger(__name__)
     """
     Incremental snapshot system - only saves changes.
     

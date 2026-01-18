@@ -6,8 +6,9 @@ from sqlalchemy.orm import Session
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_subagent_system import LearningOrchestrator, TaskType
 from database.session import initialize_session_factory
+logger = logging.getLogger(__name__)
+
 class GenesisTriggerPipeline:
-    logger = logging.getLogger(__name__)
     """
     Central trigger pipeline - Genesis Keys trigger autonomous actions.
 

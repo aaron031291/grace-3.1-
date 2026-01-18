@@ -5,8 +5,11 @@ from datetime import datetime
 from typing import Optional
 from pathlib import Path
 from models.genesis_key_models import GenesisKey
+
+logger = logging.getLogger(__name__)
+
+
 class GenesisKBIntegration:
-    logger = logging.getLogger(__name__)
     """
     Integrates Genesis Keys with Knowledge Base.
 

@@ -3,8 +3,9 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class DiagnosticSystemUpgrader:
-    logger = logging.getLogger(__name__)
     """Upgrades diagnostic engine and self-healing agent with new issue patterns."""
     
     def __init__(self):

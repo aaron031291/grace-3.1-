@@ -3,8 +3,9 @@ from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 from sqlalchemy.orm import Session
 from transformation_library import get_transformation_library, TransformationLibrary, TransformRule, TransformOutcome, ProofStatus
+logger = logging.getLogger(__name__)
+
 class LLMTransformIntegration:
-    logger = logging.getLogger(__name__)
     """
     Integration between LLMs and Transformation Library.
     

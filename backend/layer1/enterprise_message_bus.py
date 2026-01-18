@@ -7,8 +7,9 @@ import json
 import gzip
 from pathlib import Path
 from layer1.message_bus import Layer1MessageBus, Message, MessageType, ComponentType
+logger = logging.getLogger(__name__)
+
 class EnterpriseMessageBus:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade Layer 1 Message Bus.
     

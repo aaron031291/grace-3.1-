@@ -14,8 +14,9 @@ from models.genesis_key_models import GenesisKeyType
 from genesis.validation_gate import AuthorityScope, DeltaType
 from genesis.capability_binding import check_pipeline_eligibility, GenesisCapability
 from genesis.runtime_governance import get_runtime_governance
+logger = logging.getLogger(__name__)
+
 class DevOpsLayer(str, Enum):
-    logger = logging.getLogger(__name__)
     """DevOps stack layers Grace can heal."""
     FRONTEND = "frontend"           # React, Vue, Angular, HTML/CSS/JS
     BACKEND = "backend"             # Python, Node.js, APIs, services

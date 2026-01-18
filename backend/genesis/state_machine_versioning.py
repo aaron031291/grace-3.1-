@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from enum import Enum
 from models.genesis_key_models import GenesisKey, GenesisKeyStatus
 from genesis.validation_gate import DeltaType, AuthorityScope, get_validation_gate
+logger = logging.getLogger(__name__)
+
 class GenesisVersionState(str, Enum):
-    logger = logging.getLogger(__name__)
     """State of a Genesis version."""
     PENDING = "pending"  # Created but not yet committed
     ACTIVE = "active"  # Active version

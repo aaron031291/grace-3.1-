@@ -6,8 +6,9 @@ import logging
 import json
 import uuid
 from embedding import EmbeddingModel, get_embedding_model
+logger = logging.getLogger(__name__)
+
 class NeuralPattern:
-    logger = logging.getLogger(__name__)
     """Neural pattern detected from clustering/embedding analysis"""
     pattern_id: str
     cluster_center: np.ndarray  # Embedding center

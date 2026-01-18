@@ -3,8 +3,9 @@ from typing import List, Dict, Any, Optional, Tuple, Union
 from dataclasses import dataclass
 import logging
 from embedding import EmbeddingModel, get_embedding_model
+logger = logging.getLogger(__name__)
+
 class TrustContext:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Trust context for embedding generation"""

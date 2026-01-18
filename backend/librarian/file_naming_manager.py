@@ -7,8 +7,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from models.database_models import Document
 from librarian.utils import sanitize_filename, extract_file_extension
+logger = logging.getLogger(__name__)
+
 class FileNamingManager:
-    logger = logging.getLogger(__name__)
     """
     File naming and renaming manager.
 

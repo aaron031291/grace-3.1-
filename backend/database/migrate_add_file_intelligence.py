@@ -4,8 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from database.config import DatabaseConfig
 from database.connection import DatabaseConnection
+logger = logging.getLogger(__name__)
+
 class FileIntelligenceModel(Base):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """File intelligence metadata."""

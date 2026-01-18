@@ -3,8 +3,9 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import Dict, Any, List
+logger = logging.getLogger(__name__)
+
 class TestAgentBuildingCapability:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Test the agent's ability to build real code."""

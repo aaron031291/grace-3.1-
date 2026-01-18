@@ -11,8 +11,9 @@ from cognitive.procedural_memory import Procedure
 from models.genesis_key_models import GenesisKey
 from cognitive.genesis_memory_chains import get_genesis_memory_chain
 from cognitive.decision_log import DecisionLogger
+logger = logging.getLogger(__name__)
+
 class MemoryMeshSnapshot:
-    logger = logging.getLogger(__name__)
     """
     Creates and manages immutable snapshots of memory mesh.
 

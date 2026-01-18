@@ -6,8 +6,9 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from enum import Enum
 from models.genesis_key_models import GenesisKey, GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class ChangeType(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

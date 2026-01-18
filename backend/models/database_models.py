@@ -344,21 +344,49 @@ class GovernanceDecision(BaseModel):
 # ==================== Learning Models ====================
 
 class LearningExample(BaseModel):
-    """Learning example model for storing learning experiences."""
+    """
+    Learning example model for storing learning experiences.
+    
+    This model is shared with cognitive/learning_memory.py - keep schemas in sync.
+    """
     __tablename__ = "learning_examples"
     __table_args__ = {'extend_existing': True}
     
-    # Override id to use String UUID instead of Integer
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    example_type = Column(String, nullable=False)  # e.g., "positive", "negative", "reinforcement"
-    content = Column(Text, nullable=False)
-    context = Column(Text)
-    source = Column(String)  # e.g., "user", "system", "auto-generated"
-    metadata_json = Column(Text)  # JSON string for additional metadata
-    # Note: created_at and updated_at are inherited from BaseModel
+    # What was learned
+    example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
+    input_context = Column(JSON, nullable=False)  # What was the situation
+    expected_output = Column(JSON, nullable=False)  # What should have happened
+    actual_output = Column(JSON, nullable=True)  # What actually happened
     
-    # Relationships
-    # Note: Memory relationship removed - Memory class does not exist
-    # If Memory class is added in the future, uncomment and configure:
-    # memory_id = Column(String, ForeignKey("memories.id"), nullable=True)
-    # memory = relationship("Memory", back_populates="learning_examples", foreign_keys=[memory_id], lazy="select")
+    # Legacy fields for backwards compatibility
+    content = Column(Text, nullable=True)
+    context = Column(Text, nullable=True)
+    metadata_json = Column(Text, nullable=True)
+
+    # Trust scoring
+    trust_score = Column(Float, default=0.5, nullable=False)  # Overall trust (0-1)
+    source_reliability = Column(Float, default=0.5, nullable=False)  # How reliable is the source
+    outcome_quality = Column(Float, default=0.5, nullable=False)  # How good was the outcome
+    consistency_score = Column(Float, default=0.5, nullable=False)  # Consistency with other examples
+    recency_weight = Column(Float, default=1.0, nullable=False)  # Decay over time
+
+    # Provenance
+    source = Column(String, nullable=True)  # user_feedback, system_observation, external_api, etc.
+    source_user_id = Column(String, nullable=True)  # Genesis ID if user-provided
+    genesis_key_id = Column(String, nullable=True)  # Link to Genesis Key
+
+    # Learning metadata
+    times_referenced = Column(Integer, default=0)  # How often used in training
+    times_validated = Column(Integer, default=0)  # How often validated as correct
+    times_invalidated = Column(Integer, default=0)  # How often proven wrong
+    last_used = Column(DateTime, nullable=True)  # Last time referenced
+
+    # Storage location
+    file_path = Column(String, nullable=True)  # Path in learning_memory folder
+
+    # Connections to memory mesh
+    episodic_episode_id = Column(String, nullable=True)  # Link to episodic memory
+    procedure_id = Column(String, nullable=True)  # Link to learned procedure
+
+    # Metadata
+    example_metadata = Column(JSON, nullable=True)

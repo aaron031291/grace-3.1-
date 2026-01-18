@@ -4,8 +4,9 @@ import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from functools import lru_cache
+logger = logging.getLogger(__name__)
+
 class OptimizedHealthChecker:
-    logger = logging.getLogger(__name__)
     """
     Optimized health checker with parallel async checks and caching.
     

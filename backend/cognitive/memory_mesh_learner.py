@@ -5,8 +5,9 @@ from sqlalchemy import func, and_, or_
 from datetime import datetime, timedelta
 from cognitive.learning_memory import TrustScorer, LearningExample
 from genesis.database_error_logger import log_database_error
+logger = logging.getLogger(__name__)
+
 class MemoryMeshLearner:
-    logger = logging.getLogger(__name__)
     """
     Analyzes memory mesh to determine what Grace should learn proactively.
 

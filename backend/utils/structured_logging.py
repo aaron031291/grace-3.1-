@@ -8,8 +8,9 @@ from contextvars import ContextVar
 from functools import wraps
 import time
 import uuid
+logger = logging.getLogger(__name__)
+
 class StructuredLogFormatter(logging.Formatter):
-    logger = logging.getLogger(__name__)
     """
     JSON log formatter for structured logging.
     Outputs logs in a format suitable for log aggregation systems.

@@ -5,8 +5,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from models.genesis_key_models import GenesisKey
 from genesis.code_change_analyzer import ChangeAnalysis, CodeChange
+logger = logging.getLogger(__name__)
+
 class ReviewSeverity(str, Enum):
-    logger = logging.getLogger(__name__)
     """Severity levels for code review issues."""
     INFO = "info"
     SUGGESTION = "suggestion"

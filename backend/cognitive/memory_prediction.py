@@ -8,8 +8,9 @@ import json
 from cognitive.learning_memory import LearningExample
 from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
+logger = logging.getLogger(__name__)
+
 class MemoryPredictionSystem:
-    logger = logging.getLogger(__name__)
     """
     Predicts which memories will be needed and pre-loads them.
     

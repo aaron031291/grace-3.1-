@@ -5,8 +5,9 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
+logger = logging.getLogger(__name__)
+
 class MemoryMeshConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects Memory Mesh to Layer 1 message bus.
 

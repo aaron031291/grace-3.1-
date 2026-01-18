@@ -2,8 +2,9 @@ import logging
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class AgentLoadInfo:
-    logger = logging.getLogger(__name__)
     """Information about an agent's current load."""
     agent_id: str
     current_tasks: int

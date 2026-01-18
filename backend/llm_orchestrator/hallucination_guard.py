@@ -9,8 +9,9 @@ from urllib.parse import quote_plus
 import requests
 from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
 from llm_orchestrator.repo_access import RepositoryAccessLayer
+logger = logging.getLogger(__name__)
+
 class ExternalVerifier:
-    logger = logging.getLogger(__name__)
     """
     External verification system for LLM outputs.
 

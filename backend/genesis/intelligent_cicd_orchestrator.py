@@ -10,8 +10,9 @@ from pathlib import Path
 import statistics
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from genesis.code_change_analyzer import get_code_change_analyzer, CodeChangeAnalyzer, ChangeAnalysis
+logger = logging.getLogger(__name__)
+
 class IntelligenceMode(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

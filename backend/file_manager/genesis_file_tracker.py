@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class GenesisFileTracker:
-    logger = logging.getLogger(__name__)
     """
     Creates Genesis Keys for ALL file operations.
     Complete provenance tracking for file management.

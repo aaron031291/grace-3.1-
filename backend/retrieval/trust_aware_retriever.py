@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 from retrieval.retriever import DocumentRetriever
 from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext, get_trust_aware_embedding_model
 from embedding import EmbeddingModel, get_embedding_model
+logger = logging.getLogger(__name__)
+
 class TrustAwareDocumentRetriever:
-    logger = logging.getLogger(__name__)
     """
     Trust-aware document retriever that incorporates symbolic trust scores.
     

@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 import re
+logger = logging.getLogger(__name__)
+
 class MemoryContextFormatter:
-    logger = logging.getLogger(__name__)
     """
     Formats memories for LLM context windows with token awareness.
     

@@ -9,8 +9,9 @@ from pathlib import Path
 import uuid
 import threading
 from collections import deque
+logger = logging.getLogger(__name__)
+
 class TaskPriority(int, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

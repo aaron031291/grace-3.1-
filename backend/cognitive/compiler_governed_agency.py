@@ -9,8 +9,9 @@ from enum import Enum
 from cognitive.grace_code_analyzer import CodeIssue, Severity
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType, GenesisKey
+logger = logging.getLogger(__name__)
+
 class IntentType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Types of code modification intents (constrained semantic space)"""
     ADD_LOGGING = "add_logging"
     ADD_ERROR_HANDLING = "add_error_handling"

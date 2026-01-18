@@ -1,8 +1,9 @@
 import logging
 from typing import List, Dict, Any, Optional
 from threading import Lock
+logger = logging.getLogger(__name__)
+
 class DocumentReranker:
-    logger = logging.getLogger(__name__)
     """Reranks retrieved chunks using cross-encoder models."""
     
     def __init__(

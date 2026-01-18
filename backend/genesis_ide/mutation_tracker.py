@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import hashlib
 import uuid
+logger = logging.getLogger(__name__)
+
 class Mutation:
-    logger = logging.getLogger(__name__)
     """Represents a single mutation (change) to a file."""
     mutation_id: str
     genesis_key_id: str

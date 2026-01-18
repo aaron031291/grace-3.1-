@@ -1,6 +1,6 @@
 from typing import Dict, Any, Callable, List, Optional, Set
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, UTC
 from enum import Enum
 import asyncio
 import logging
@@ -250,7 +250,7 @@ class Layer1MessageBus:
             to_component=None,  # Broadcast
             topic=topic,
             payload=payload,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(UTC),
             priority=priority
         )
 
@@ -335,7 +335,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=topic,
             payload=payload,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(UTC),
             correlation_id=message_id,
             requires_response=True
         )
@@ -403,7 +403,7 @@ class Layer1MessageBus:
                 to_component=None,
                 topic="response",
                 payload=payload,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(UTC),
                 correlation_id=correlation_id
             )
 
@@ -439,7 +439,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=command,
             payload=payload,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(UTC)
         )
 
         self._add_to_history(message)

@@ -11,8 +11,9 @@ from genesis.genesis_key_service import get_genesis_service
 from genesis.file_version_tracker import get_file_version_tracker
 from genesis.repo_scanner import get_repo_scanner
 from database.session import get_session
+logger = logging.getLogger(__name__)
+
 class SymbioticVersionControl:
-    logger = logging.getLogger(__name__)
     """
     Unified Genesis Key + Version Control System.
 

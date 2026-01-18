@@ -10,8 +10,9 @@ from genesis.pipeline_integration import get_data_pipeline
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType, GenesisKey
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
+logger = logging.getLogger(__name__)
+
 class Layer1Integration:
-    logger = logging.getLogger(__name__)
     """
     Complete Layer 1 Integration - ALL input sources flow through here.
 

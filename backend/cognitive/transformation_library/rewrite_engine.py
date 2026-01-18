@@ -1,8 +1,9 @@
 import ast
 import logging
 from typing import Dict, Any, List, Optional
+logger = logging.getLogger(__name__)
+
 class RewriteEngine:
-    logger = logging.getLogger(__name__)
     """
     Template-based code rewriting engine.
     

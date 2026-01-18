@@ -4,8 +4,11 @@ Provides centralized configuration for the application.
 """
 
 import os
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 # Get the backend directory
 BACKEND_DIR = Path(__file__).parent

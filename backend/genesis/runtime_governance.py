@@ -8,8 +8,9 @@ from enum import Enum
 from dataclasses import dataclass, field
 from models.genesis_key_models import GenesisKey
 from genesis.validation_gate import AuthorityScope, DeltaType
+logger = logging.getLogger(__name__)
+
 class ReviewStatus(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Status of Genesis change review."""

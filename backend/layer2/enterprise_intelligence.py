@@ -5,8 +5,11 @@ from collections import defaultdict
 import json
 import gzip
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+
 class EnterpriseLayer2Intelligence:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade Layer 2 Intelligence.
     

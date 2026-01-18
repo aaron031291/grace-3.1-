@@ -7,8 +7,9 @@ from functools import wraps
 from database.session import SessionLocal
 from genesis.comprehensive_tracker import ComprehensiveTracker
 from models.genesis_key_models import GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class GenesisTrackingMiddleware(BaseHTTPMiddleware):
-    logger = logging.getLogger(__name__)
     """
     Middleware that tracks all API requests with Genesis Keys.
 

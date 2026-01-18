@@ -9,8 +9,9 @@ from cognitive.learning_subagent_system import LearningOrchestrator
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
 from database.session import initialize_session_factory
 from models.genesis_key_models import GenesisKey, GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class AutonomousMasterIntegration:
-    logger = logging.getLogger(__name__)
     """
     Master Integration Layer - Connects ALL systems.
 

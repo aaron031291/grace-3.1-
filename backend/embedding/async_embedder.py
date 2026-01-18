@@ -3,8 +3,9 @@ import logging
 from typing import List, Optional, Dict
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
+logger = logging.getLogger(__name__)
+
 class AsyncBatchEmbedder:
-    logger = logging.getLogger(__name__)
     """
     Asynchronous wrapper for batch embedding generation.
 

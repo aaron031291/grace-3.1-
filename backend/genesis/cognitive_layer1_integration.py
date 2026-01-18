@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 from genesis.layer1_integration import Layer1Integration
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.decision_log import DecisionLogger
+logger = logging.getLogger(__name__)
+
 class CognitiveLayer1Integration:
-    logger = logging.getLogger(__name__)
     """
     Layer 1 Integration with Cognitive Engine enforcement.
 
