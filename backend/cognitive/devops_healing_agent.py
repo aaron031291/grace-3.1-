@@ -43,6 +43,551 @@ class IssueCategory(str, Enum):
     RESOURCE = "resource"               # Memory, disk, CPU issues
 
 
+class MCPBrowserClient:
+    """
+    MCP (Model Context Protocol) Browser Client for browser automation.
+    
+    Provides browser automation capabilities with fallback options:
+    1. MCP Server connection (primary)
+    2. Playwright (if installed)
+    3. Selenium (if installed)
+    4. Graceful "not available" response
+    
+    Configuration via environment variables:
+    - GRACE_MCP_SERVER_URL: MCP server endpoint
+    - GRACE_BROWSER_AUTOMATION: mcp, playwright, selenium, none
+    """
+    
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.mcp_server_url = os.environ.get("GRACE_MCP_SERVER_URL", "http://localhost:3000")
+        self.automation_mode = os.environ.get("GRACE_BROWSER_AUTOMATION", "auto").lower()
+        self._browser = None
+        self._page = None
+        self._playwright = None
+        self._driver = None
+        self._available = False
+        self._mode = "none"
+        self._initialize()
+    
+    def _initialize(self):
+        """Initialize browser automation based on configuration."""
+        if self.automation_mode == "none":
+            self.logger.debug("[MCP-Browser] Browser automation disabled")
+            return
+        
+        if self.automation_mode in ("auto", "mcp"):
+            if self._try_mcp_connection():
+                self._mode = "mcp"
+                self._available = True
+                return
+        
+        if self.automation_mode in ("auto", "playwright"):
+            if self._try_playwright():
+                self._mode = "playwright"
+                self._available = True
+                return
+        
+        if self.automation_mode in ("auto", "selenium"):
+            if self._try_selenium():
+                self._mode = "selenium"
+                self._available = True
+                return
+        
+        self.logger.debug("[MCP-Browser] No browser automation available")
+    
+    def _try_mcp_connection(self) -> bool:
+        """Try to connect to MCP server."""
+        try:
+            import httpx
+            with httpx.Client(timeout=5.0) as client:
+                response = client.get(f"{self.mcp_server_url}/health")
+                if response.status_code == 200:
+                    self.logger.info(f"[MCP-Browser] Connected to MCP server at {self.mcp_server_url}")
+                    return True
+        except ImportError:
+            try:
+                import requests
+                response = requests.get(f"{self.mcp_server_url}/health", timeout=5)
+                if response.status_code == 200:
+                    self.logger.info(f"[MCP-Browser] Connected to MCP server at {self.mcp_server_url}")
+                    return True
+            except Exception:
+                pass
+        except Exception as e:
+            self.logger.debug(f"[MCP-Browser] MCP connection failed: {e}")
+        return False
+    
+    def _try_playwright(self) -> bool:
+        """Try to initialize Playwright."""
+        try:
+            from playwright.sync_api import sync_playwright
+            self._playwright = sync_playwright().start()
+            self._browser = self._playwright.chromium.launch(headless=True)
+            self._page = self._browser.new_page()
+            self.logger.info("[MCP-Browser] Playwright initialized successfully")
+            return True
+        except ImportError:
+            self.logger.debug("[MCP-Browser] Playwright not installed")
+        except Exception as e:
+            self.logger.debug(f"[MCP-Browser] Playwright initialization failed: {e}")
+        return False
+    
+    def _try_selenium(self) -> bool:
+        """Try to initialize Selenium."""
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            self._driver = webdriver.Chrome(options=options)
+            self.logger.info("[MCP-Browser] Selenium initialized successfully")
+            return True
+        except ImportError:
+            self.logger.debug("[MCP-Browser] Selenium not installed")
+        except Exception as e:
+            self.logger.debug(f"[MCP-Browser] Selenium initialization failed: {e}")
+        return False
+    
+    @property
+    def is_available(self) -> bool:
+        """Check if browser automation is available."""
+        return self._available
+    
+    @property
+    def mode(self) -> str:
+        """Get current automation mode."""
+        return self._mode
+    
+    def _mcp_request(self, endpoint: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Send request to MCP server."""
+        try:
+            import httpx
+            with httpx.Client(timeout=30.0) as client:
+                response = client.post(
+                    f"{self.mcp_server_url}/{endpoint}",
+                    json=payload
+                )
+                return response.json()
+        except ImportError:
+            import requests
+            response = requests.post(
+                f"{self.mcp_server_url}/{endpoint}",
+                json=payload,
+                timeout=30
+            )
+            return response.json()
+    
+    def navigate(self, url: str) -> Dict[str, Any]:
+        """
+        Navigate browser to a URL.
+        
+        Args:
+            url: The URL to navigate to
+            
+        Returns:
+            Dict with success status and page info
+        """
+        if not self._available:
+            return {"success": False, "error": "Browser automation not available", "mode": "none"}
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/navigate", {"url": url})
+                return {"success": True, "url": url, "mode": "mcp", "result": result}
+            
+            elif self._mode == "playwright":
+                self._page.goto(url, wait_until="domcontentloaded")
+                return {"success": True, "url": url, "title": self._page.title(), "mode": "playwright"}
+            
+            elif self._mode == "selenium":
+                self._driver.get(url)
+                return {"success": True, "url": url, "title": self._driver.title, "mode": "selenium"}
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Navigation failed: {e}")
+            return {"success": False, "error": str(e), "mode": self._mode}
+        
+        return {"success": False, "error": "Unknown mode", "mode": self._mode}
+    
+    def click(self, selector: str) -> Dict[str, Any]:
+        """
+        Click an element on the page.
+        
+        Args:
+            selector: CSS selector for the element
+            
+        Returns:
+            Dict with success status
+        """
+        if not self._available:
+            return {"success": False, "error": "Browser automation not available", "mode": "none"}
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/click", {"selector": selector})
+                return {"success": True, "selector": selector, "mode": "mcp", "result": result}
+            
+            elif self._mode == "playwright":
+                self._page.click(selector)
+                return {"success": True, "selector": selector, "mode": "playwright"}
+            
+            elif self._mode == "selenium":
+                from selenium.webdriver.common.by import By
+                element = self._driver.find_element(By.CSS_SELECTOR, selector)
+                element.click()
+                return {"success": True, "selector": selector, "mode": "selenium"}
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Click failed: {e}")
+            return {"success": False, "error": str(e), "mode": self._mode}
+        
+        return {"success": False, "error": "Unknown mode", "mode": self._mode}
+    
+    def type_text(self, selector: str, text: str) -> Dict[str, Any]:
+        """
+        Type text into an element.
+        
+        Args:
+            selector: CSS selector for the input element
+            text: Text to type
+            
+        Returns:
+            Dict with success status
+        """
+        if not self._available:
+            return {"success": False, "error": "Browser automation not available", "mode": "none"}
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/type", {"selector": selector, "text": text})
+                return {"success": True, "selector": selector, "mode": "mcp", "result": result}
+            
+            elif self._mode == "playwright":
+                self._page.fill(selector, text)
+                return {"success": True, "selector": selector, "mode": "playwright"}
+            
+            elif self._mode == "selenium":
+                from selenium.webdriver.common.by import By
+                element = self._driver.find_element(By.CSS_SELECTOR, selector)
+                element.clear()
+                element.send_keys(text)
+                return {"success": True, "selector": selector, "mode": "selenium"}
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Type text failed: {e}")
+            return {"success": False, "error": str(e), "mode": self._mode}
+        
+        return {"success": False, "error": "Unknown mode", "mode": self._mode}
+    
+    def screenshot(self) -> bytes:
+        """
+        Take a screenshot of the current page.
+        
+        Returns:
+            Screenshot as bytes (PNG format), or empty bytes if unavailable
+        """
+        if not self._available:
+            return b""
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/screenshot", {})
+                import base64
+                return base64.b64decode(result.get("screenshot", ""))
+            
+            elif self._mode == "playwright":
+                return self._page.screenshot()
+            
+            elif self._mode == "selenium":
+                return self._driver.get_screenshot_as_png()
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Screenshot failed: {e}")
+        
+        return b""
+    
+    def get_page_content(self) -> str:
+        """
+        Get the HTML content of the current page.
+        
+        Returns:
+            Page HTML content or empty string if unavailable
+        """
+        if not self._available:
+            return ""
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/content", {})
+                return result.get("content", "")
+            
+            elif self._mode == "playwright":
+                return self._page.content()
+            
+            elif self._mode == "selenium":
+                return self._driver.page_source
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Get content failed: {e}")
+        
+        return ""
+    
+    def execute_script(self, script: str) -> Any:
+        """
+        Execute JavaScript on the page.
+        
+        Args:
+            script: JavaScript code to execute
+            
+        Returns:
+            Result of script execution or None
+        """
+        if not self._available:
+            return None
+        
+        try:
+            if self._mode == "mcp":
+                result = self._mcp_request("browser/execute", {"script": script})
+                return result.get("result")
+            
+            elif self._mode == "playwright":
+                return self._page.evaluate(script)
+            
+            elif self._mode == "selenium":
+                return self._driver.execute_script(script)
+                
+        except Exception as e:
+            self.logger.error(f"[MCP-Browser] Execute script failed: {e}")
+        
+        return None
+    
+    def check_web_service_health(self, url: str) -> Dict[str, Any]:
+        """
+        Check health of a web service by loading it and checking for errors.
+        
+        Args:
+            url: URL of the web service to check
+            
+        Returns:
+            Health check result with status, response time, and any errors
+        """
+        import time
+        start_time = time.time()
+        
+        result = {
+            "url": url,
+            "healthy": False,
+            "response_time_ms": 0,
+            "status": "unknown",
+            "errors": [],
+            "mode": self._mode
+        }
+        
+        if not self._available:
+            result["status"] = "browser_unavailable"
+            result["errors"].append("Browser automation not available")
+            return result
+        
+        try:
+            nav_result = self.navigate(url)
+            result["response_time_ms"] = int((time.time() - start_time) * 1000)
+            
+            if not nav_result.get("success"):
+                result["status"] = "navigation_failed"
+                result["errors"].append(nav_result.get("error", "Unknown navigation error"))
+                return result
+            
+            console_errors = self.execute_script(
+                "return window.__consoleErrors || []"
+            ) or []
+            
+            if console_errors:
+                result["errors"].extend(console_errors[:5])
+            
+            page_title = nav_result.get("title", "")
+            if "error" in page_title.lower() or "404" in page_title or "500" in page_title:
+                result["status"] = "error_page"
+                result["errors"].append(f"Error page detected: {page_title}")
+            else:
+                result["healthy"] = True
+                result["status"] = "healthy"
+                result["title"] = page_title
+                
+        except Exception as e:
+            result["status"] = "exception"
+            result["errors"].append(str(e))
+            result["response_time_ms"] = int((time.time() - start_time) * 1000)
+        
+        return result
+    
+    def capture_issue_evidence(self, url: str, description: str = "") -> Dict[str, Any]:
+        """
+        Capture evidence of an issue for debugging/healing purposes.
+        
+        Args:
+            url: URL where the issue occurred
+            description: Description of the issue
+            
+        Returns:
+            Evidence package with screenshot, page content, console logs, etc.
+        """
+        evidence = {
+            "url": url,
+            "description": description,
+            "timestamp": datetime.now(UTC).isoformat(),
+            "screenshot": None,
+            "page_content": None,
+            "console_logs": None,
+            "network_errors": None,
+            "mode": self._mode,
+            "captured": False
+        }
+        
+        if not self._available:
+            evidence["error"] = "Browser automation not available"
+            return evidence
+        
+        try:
+            self.navigate(url)
+            
+            screenshot_bytes = self.screenshot()
+            if screenshot_bytes:
+                import base64
+                evidence["screenshot"] = base64.b64encode(screenshot_bytes).decode("utf-8")
+            
+            evidence["page_content"] = self.get_page_content()[:50000]
+            
+            evidence["console_logs"] = self.execute_script("""
+                return {
+                    errors: window.__consoleErrors || [],
+                    warnings: window.__consoleWarnings || [],
+                    logs: window.__consoleLogs || []
+                };
+            """)
+            
+            evidence["captured"] = True
+            
+        except Exception as e:
+            evidence["error"] = str(e)
+        
+        return evidence
+    
+    def run_ui_test(self, test_steps: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Run automated UI test with a series of steps.
+        
+        Args:
+            test_steps: List of test steps, each with:
+                - action: navigate, click, type, check
+                - target: URL or selector
+                - value: text to type or expected value
+                
+        Returns:
+            Test result with pass/fail status and step details
+        """
+        result = {
+            "passed": True,
+            "steps_completed": 0,
+            "total_steps": len(test_steps),
+            "step_results": [],
+            "mode": self._mode
+        }
+        
+        if not self._available:
+            result["passed"] = False
+            result["error"] = "Browser automation not available"
+            return result
+        
+        for i, step in enumerate(test_steps):
+            step_result = {"step": i + 1, "action": step.get("action"), "passed": False}
+            
+            try:
+                action = step.get("action", "").lower()
+                target = step.get("target", "")
+                value = step.get("value", "")
+                
+                if action == "navigate":
+                    nav_result = self.navigate(target)
+                    step_result["passed"] = nav_result.get("success", False)
+                    step_result["details"] = nav_result
+                    
+                elif action == "click":
+                    click_result = self.click(target)
+                    step_result["passed"] = click_result.get("success", False)
+                    step_result["details"] = click_result
+                    
+                elif action == "type":
+                    type_result = self.type_text(target, value)
+                    step_result["passed"] = type_result.get("success", False)
+                    step_result["details"] = type_result
+                    
+                elif action == "check":
+                    content = self.get_page_content()
+                    step_result["passed"] = value in content
+                    step_result["details"] = {"found": value in content}
+                    
+                elif action == "wait":
+                    import time
+                    time.sleep(float(value) if value else 1.0)
+                    step_result["passed"] = True
+                    
+                else:
+                    step_result["error"] = f"Unknown action: {action}"
+                    
+            except Exception as e:
+                step_result["error"] = str(e)
+            
+            result["step_results"].append(step_result)
+            
+            if step_result["passed"]:
+                result["steps_completed"] += 1
+            else:
+                result["passed"] = False
+                break
+        
+        return result
+    
+    def close(self):
+        """Clean up browser resources."""
+        try:
+            if self._mode == "playwright":
+                if self._page:
+                    self._page.close()
+                if self._browser:
+                    self._browser.close()
+                if self._playwright:
+                    self._playwright.stop()
+            elif self._mode == "selenium":
+                if self._driver:
+                    self._driver.quit()
+        except Exception as e:
+            self.logger.debug(f"[MCP-Browser] Cleanup error: {e}")
+        
+        self._available = False
+        self._mode = "none"
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
+
+_mcp_browser_client: Optional["MCPBrowserClient"] = None
+
+
+def get_mcp_browser_client() -> MCPBrowserClient:
+    """Get or create global MCP browser client instance."""
+    global _mcp_browser_client
+    if _mcp_browser_client is None:
+        _mcp_browser_client = MCPBrowserClient()
+    return _mcp_browser_client
+
+
 class DevOpsHealingAgent:
     """
     Full-stack DevOps healing agent for Grace.
@@ -476,6 +1021,17 @@ class DevOpsHealingAgent:
         except Exception as e:
             logger.warning(f"[DEVOPS-HEALING] Web access initialization failed: {e}")
             self.web_access = None
+        
+        # 9. MCP Browser Client (Browser Automation)
+        try:
+            self.browser_client = get_mcp_browser_client()
+            if self.browser_client.is_available:
+                logger.info(f"[DEVOPS-HEALING] Browser automation connected via: {self.browser_client.mode}")
+            else:
+                logger.debug("[DEVOPS-HEALING] Browser automation not available (optional)")
+        except Exception as e:
+            logger.debug(f"[DEVOPS-HEALING] Browser automation initialization failed: {e}")
+            self.browser_client = None
     
     def detect_and_heal(
         self,
@@ -1591,29 +2147,97 @@ This knowledge was provided by LLM to help Grace fix issues related to: {topic}
         Search web via MCP browser extension (SurfAPI).
         
         Uses MCP server interface to access browser capabilities.
+        Supports MCP, Playwright, and Selenium backends with automatic fallback.
         """
         results = []
         
         try:
-            # Try to use MCP browser resources if available
-            # This would use the MCP client to access browser tools
-            logger.debug(f"[DEVOPS-HEALING] Attempting MCP browser search via {server}")
+            browser_client = get_mcp_browser_client()
             
-            # Note: MCP browser access requires MCP client integration
-            # For now, we'll try to use it if available through the system
-            # The actual implementation would depend on how MCP is integrated
+            if not browser_client.is_available:
+                logger.debug(f"[DEVOPS-HEALING] MCP browser not available, mode: {browser_client.mode}")
+                return results
             
-            # Placeholder for MCP browser integration
-            # In a full implementation, this would:
-            # 1. Connect to MCP server (cursor-browser-extension or cursor-ide-browser)
-            # 2. Use browser tools to navigate/search
-            # 3. Extract content from web pages
-            # 4. Return structured results
+            logger.debug(f"[DEVOPS-HEALING] Using browser automation via {browser_client.mode}")
             
-            logger.debug(f"[DEVOPS-HEALING] MCP browser ({server}) available but integration pending")
+            search_urls = [
+                f"https://stackoverflow.com/search?q={query.replace(' ', '+')}",
+                f"https://github.com/search?q={query.replace(' ', '+')}&type=code",
+                f"https://docs.python.org/3/search.html?q={query.replace(' ', '+')}"
+            ]
+            
+            for search_url in search_urls:
+                try:
+                    nav_result = browser_client.navigate(search_url)
+                    if not nav_result.get("success"):
+                        continue
+                    
+                    page_content = browser_client.get_page_content()
+                    if not page_content:
+                        continue
+                    
+                    extracted = self._extract_search_results_from_html(page_content, search_url)
+                    results.extend(extracted[:5])
+                    
+                    if len(results) >= 10:
+                        break
+                        
+                except Exception as e:
+                    logger.debug(f"[DEVOPS-HEALING] Error searching {search_url}: {e}")
+                    continue
+            
+            if results:
+                logger.info(f"[DEVOPS-HEALING] MCP browser search found {len(results)} results via {browser_client.mode}")
             
         except Exception as e:
             logger.debug(f"[DEVOPS-HEALING] MCP browser search error: {e}")
+        
+        return results
+    
+    def _extract_search_results_from_html(self, html: str, source_url: str) -> List[Dict[str, Any]]:
+        """Extract search results from HTML content."""
+        results = []
+        
+        try:
+            import re
+            
+            if "stackoverflow.com" in source_url:
+                pattern = r'<a[^>]*href="(/questions/\d+/[^"]+)"[^>]*class="[^"]*s-link[^"]*"[^>]*>([^<]+)</a>'
+                matches = re.findall(pattern, html, re.IGNORECASE)
+                for href, title in matches[:5]:
+                    results.append({
+                        "title": title.strip(),
+                        "url": f"https://stackoverflow.com{href}",
+                        "source": "Stack Overflow",
+                        "type": "mcp_browser"
+                    })
+                    
+            elif "github.com" in source_url:
+                pattern = r'<a[^>]*href="(/[^/]+/[^/]+/blob/[^"]+)"[^>]*>([^<]+)</a>'
+                matches = re.findall(pattern, html, re.IGNORECASE)
+                for href, title in matches[:5]:
+                    results.append({
+                        "title": title.strip(),
+                        "url": f"https://github.com{href}",
+                        "source": "GitHub",
+                        "type": "mcp_browser"
+                    })
+                    
+            elif "docs.python.org" in source_url:
+                pattern = r'<a[^>]*href="([^"]+\.html[^"]*)"[^>]*>([^<]+)</a>'
+                matches = re.findall(pattern, html, re.IGNORECASE)
+                for href, title in matches[:5]:
+                    if not href.startswith("http"):
+                        href = f"https://docs.python.org/3/{href}"
+                    results.append({
+                        "title": title.strip(),
+                        "url": href,
+                        "source": "Python Docs",
+                        "type": "mcp_browser"
+                    })
+                    
+        except Exception as e:
+            logger.debug(f"[DEVOPS-HEALING] Error extracting results: {e}")
         
         return results
     
@@ -4673,6 +5297,83 @@ Be specific and actionable. I can modify code files, update configuration, insta
             "snapshots": self.snapshot_system.get_active_snapshots()
         }
     
+    def check_web_service_health(self, url: str) -> Dict[str, Any]:
+        """
+        Check health of a web service using browser automation.
+        
+        Args:
+            url: URL of the web service to check
+            
+        Returns:
+            Health check result with status and details
+        """
+        if not self.browser_client or not self.browser_client.is_available:
+            return {
+                "url": url,
+                "healthy": None,
+                "status": "browser_unavailable",
+                "error": "Browser automation not available for health check"
+            }
+        
+        return self.browser_client.check_web_service_health(url)
+    
+    def run_automated_ui_test(self, test_steps: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Run automated UI test for healing verification.
+        
+        Args:
+            test_steps: List of test steps (navigate, click, type, check)
+            
+        Returns:
+            Test result with pass/fail status
+        """
+        if not self.browser_client or not self.browser_client.is_available:
+            return {
+                "passed": False,
+                "error": "Browser automation not available for UI testing",
+                "steps_completed": 0,
+                "total_steps": len(test_steps)
+            }
+        
+        return self.browser_client.run_ui_test(test_steps)
+    
+    def capture_issue_evidence(self, url: str, description: str = "") -> Dict[str, Any]:
+        """
+        Capture evidence of a web-based issue for debugging.
+        
+        Args:
+            url: URL where issue occurred
+            description: Issue description
+            
+        Returns:
+            Evidence package with screenshot, content, logs
+        """
+        if not self.browser_client or not self.browser_client.is_available:
+            return {
+                "url": url,
+                "description": description,
+                "captured": False,
+                "error": "Browser automation not available"
+            }
+        
+        return self.browser_client.capture_issue_evidence(url, description)
+    
+    def get_browser_automation_status(self) -> Dict[str, Any]:
+        """Get the status of browser automation capabilities."""
+        if not self.browser_client:
+            return {
+                "available": False,
+                "mode": "none",
+                "error": "Browser client not initialized"
+            }
+        
+        return {
+            "available": self.browser_client.is_available,
+            "mode": self.browser_client.mode,
+            "mcp_server_url": self.browser_client.mcp_server_url,
+            "automation_mode_config": self.browser_client.automation_mode
+        }
+    
     def get_statistics(self) -> Dict[str, Any]:
         """Get healing agent statistics."""
         # Use getattr with defaults to handle missing attributes gracefully
@@ -4704,7 +5405,9 @@ Be specific and actionable. I can modify code files, update configuration, insta
             "mirror_system": self.mirror_system is not None,
             "cognitive_framework": self.cognitive_engine is not None,
             "proactive_learning": self.proactive_learner is not None,
-            "sandbox_lab": self.sandbox_lab is not None
+            "sandbox_lab": self.sandbox_lab is not None,
+            "browser_automation": self.browser_client is not None and self.browser_client.is_available,
+            "browser_mode": self.browser_client.mode if self.browser_client else "none"
         }
         
         return stats

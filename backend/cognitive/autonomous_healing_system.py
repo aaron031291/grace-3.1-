@@ -1683,11 +1683,68 @@ class AutonomousHealingSystem:
             }
 
         elif action == HealingAction.CACHE_FLUSH:
-            # Clear caches (placeholder - would implement actual cache clearing)
+            cleared_caches = []
+            errors = []
+            
+            # Clear memory mesh cache
+            try:
+                from cognitive.memory_mesh_cache import get_memory_mesh_cache
+                mesh_cache = get_memory_mesh_cache()
+                mesh_cache.invalidate_all()
+                cleared_caches.append("memory_mesh_cache")
+                logger.info("[CACHE-FLUSH] Cleared memory mesh cache")
+            except Exception as e:
+                errors.append(f"memory_mesh_cache: {str(e)}")
+                logger.warning(f"[CACHE-FLUSH] Failed to clear memory mesh cache: {e}")
+            
+            # Clear Redis cache if available
+            try:
+                import redis
+                redis_client = redis.Redis(host='localhost', port=6379, db=0)
+                if redis_client.ping():
+                    redis_client.flushdb()
+                    cleared_caches.append("redis")
+                    logger.info("[CACHE-FLUSH] Cleared Redis cache")
+            except Exception as e:
+                logger.debug(f"[CACHE-FLUSH] Redis not available or error: {e}")
+            
+            # Clear any LRU caches on this class or healing system
+            try:
+                import gc
+                for obj in gc.get_objects():
+                    if hasattr(obj, 'cache_clear') and callable(obj.cache_clear):
+                        try:
+                            obj.cache_clear()
+                        except Exception:
+                            pass
+                cleared_caches.append("lru_caches")
+                logger.info("[CACHE-FLUSH] Cleared LRU caches via gc inspection")
+            except Exception as e:
+                errors.append(f"lru_caches: {str(e)}")
+                logger.warning(f"[CACHE-FLUSH] Failed to clear LRU caches: {e}")
+            
+            # Clear internal healing system caches if present
+            try:
+                if hasattr(self, 'healing_system') and self.healing_system:
+                    if hasattr(self.healing_system, '_cache'):
+                        self.healing_system._cache.clear()
+                        cleared_caches.append("healing_system._cache")
+                    if hasattr(self.healing_system, '_pattern_cache'):
+                        self.healing_system._pattern_cache.clear()
+                        cleared_caches.append("healing_system._pattern_cache")
+                logger.info("[CACHE-FLUSH] Cleared healing system internal caches")
+            except Exception as e:
+                errors.append(f"healing_system_caches: {str(e)}")
+                logger.warning(f"[CACHE-FLUSH] Failed to clear healing system caches: {e}")
+            
+            logger.info(f"[CACHE-FLUSH] Completed - cleared: {cleared_caches}, errors: {len(errors)}")
+            
             return {
                 "action": action.value,
-                "status": "success",
-                "message": "Cache flushed successfully"
+                "status": "success" if cleared_caches else "partial",
+                "message": f"Cache flush completed. Cleared: {', '.join(cleared_caches)}",
+                "cleared_caches": cleared_caches,
+                "errors": errors if errors else None
             }
         
         elif action == HealingAction.CODE_FIX:

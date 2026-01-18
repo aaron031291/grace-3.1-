@@ -1,12 +1,17 @@
 import os
 import json
 import logging
+import smtplib
 import subprocess
 from datetime import datetime
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+
+import requests
 from .sensors import SensorData
 from .interpreters import InterpretedData, Pattern, PatternType
 from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
@@ -201,7 +206,10 @@ class ActionRouter:
         log_dir: str = None,
         enable_healing: bool = True,
         enable_freeze: bool = True,
-        dry_run: bool = False
+        dry_run: bool = False,
+        webhook_url: Optional[str] = None,
+        slack_webhook_url: Optional[str] = None,
+        email_config: Optional[Dict] = None
     ):
         """Initialize the action router."""
         self.alert_config = alert_config or AlertConfig()
@@ -213,12 +221,34 @@ class ActionRouter:
         self._decision_counter = 0
         self._action_counter = 0
 
+        # Notification configuration (with environment variable fallbacks)
+        self.webhook_url: Optional[str] = webhook_url or os.getenv("GRACE_WEBHOOK_URL")
+        self.slack_webhook_url: Optional[str] = slack_webhook_url or os.getenv("GRACE_SLACK_WEBHOOK_URL")
+        self.email_config: Optional[Dict] = email_config or self._load_email_config_from_env()
+
         # Ensure log directory exists
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         # Healing function registry
         self._healing_functions: Dict[str, Callable] = {}
         self._register_default_healing_functions()
+
+    def _load_email_config_from_env(self) -> Optional[Dict]:
+        """Load email configuration from environment variables."""
+        smtp_host = os.getenv("GRACE_SMTP_HOST")
+        if not smtp_host:
+            return None
+        
+        to_emails_str = os.getenv("GRACE_ALERT_EMAILS", "")
+        to_emails = [e.strip() for e in to_emails_str.split(",") if e.strip()]
+        
+        return {
+            "smtp_host": smtp_host,
+            "smtp_port": int(os.getenv("GRACE_SMTP_PORT", "587")),
+            "smtp_user": os.getenv("GRACE_SMTP_USER"),
+            "smtp_password": os.getenv("GRACE_SMTP_PASSWORD"),
+            "to_emails": to_emails,
+        }
 
     def _register_default_healing_functions(self):
         """Register default healing functions."""
@@ -468,9 +498,19 @@ class ActionRouter:
 
             logger.warning(f"ALERT: {decision.reason}")
 
-            # TODO: Send to webhook if configured
-            # TODO: Send email if configured
-            # TODO: Post to Slack if configured
+            # Send notifications (failures are logged but don't fail the alert)
+            notification_results = []
+            if self.webhook_url:
+                notification_results.append(("webhook", self._send_webhook_notification(alert_payload)))
+            if self.email_config and self.email_config.get("to_emails"):
+                notification_results.append(("email", self._send_email_notification(alert_payload)))
+            if self.slack_webhook_url:
+                notification_results.append(("slack", self._send_slack_notification(alert_payload)))
+            
+            if notification_results:
+                alert_payload["notifications_sent"] = {
+                    name: success for name, success in notification_results
+                }
 
             end_time = datetime.utcnow()
             return ActionResult(
@@ -489,6 +529,144 @@ class ActionRouter:
                 status=ActionStatus.FAILED,
                 message=f"Alert failed: {str(e)}",
             )
+
+    def _send_webhook_notification(self, alert_payload: Dict) -> bool:
+        """Send alert to configured webhook URL."""
+        if not self.webhook_url:
+            return False
+        
+        try:
+            response = requests.post(
+                self.webhook_url,
+                json=alert_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            response.raise_for_status()
+            logger.info(f"Webhook notification sent successfully to {self.webhook_url}")
+            return True
+        except requests.RequestException as e:
+            logger.warning(f"Failed to send webhook notification: {e}")
+            return False
+
+    def _send_email_notification(self, alert_payload: Dict) -> bool:
+        """Send alert via email using SMTP."""
+        if not self.email_config:
+            return False
+        
+        smtp_host = self.email_config.get("smtp_host")
+        smtp_port = self.email_config.get("smtp_port", 587)
+        smtp_user = self.email_config.get("smtp_user")
+        smtp_password = self.email_config.get("smtp_password")
+        to_emails = self.email_config.get("to_emails", [])
+        
+        if not smtp_host or not to_emails:
+            logger.warning("Email notification skipped: missing smtp_host or to_emails")
+            return False
+        
+        try:
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = f"[GRACE Alert] {alert_payload.get('severity', 'warning').upper()}: {alert_payload.get('alert_id', 'Unknown')}"
+            msg["From"] = smtp_user or f"grace-alerts@{smtp_host}"
+            msg["To"] = ", ".join(to_emails)
+            
+            text_body = f"""
+GRACE System Alert
+
+Alert ID: {alert_payload.get('alert_id')}
+Severity: {alert_payload.get('severity', 'unknown').upper()}
+Timestamp: {alert_payload.get('timestamp')}
+
+Reason: {alert_payload.get('reason')}
+
+Health Status: {alert_payload.get('health_status')}
+Health Score: {alert_payload.get('health_score')}
+
+Critical Components: {', '.join(alert_payload.get('critical_components', [])) or 'None'}
+Degraded Components: {', '.join(alert_payload.get('degraded_components', [])) or 'None'}
+
+AVN Alerts: {alert_payload.get('avn_alerts', 0)}
+Risk Vectors: {alert_payload.get('risk_vectors', 0)}
+"""
+            
+            html_body = f"""
+<html>
+<body>
+<h2>GRACE System Alert</h2>
+<table border="1" cellpadding="5">
+<tr><td><strong>Alert ID</strong></td><td>{alert_payload.get('alert_id')}</td></tr>
+<tr><td><strong>Severity</strong></td><td style="color: {'red' if alert_payload.get('severity') == 'critical' else 'orange'};">{alert_payload.get('severity', 'unknown').upper()}</td></tr>
+<tr><td><strong>Timestamp</strong></td><td>{alert_payload.get('timestamp')}</td></tr>
+<tr><td><strong>Reason</strong></td><td>{alert_payload.get('reason')}</td></tr>
+<tr><td><strong>Health Status</strong></td><td>{alert_payload.get('health_status')}</td></tr>
+<tr><td><strong>Health Score</strong></td><td>{alert_payload.get('health_score')}</td></tr>
+<tr><td><strong>Critical Components</strong></td><td>{', '.join(alert_payload.get('critical_components', [])) or 'None'}</td></tr>
+<tr><td><strong>Degraded Components</strong></td><td>{', '.join(alert_payload.get('degraded_components', [])) or 'None'}</td></tr>
+</table>
+</body>
+</html>
+"""
+            
+            msg.attach(MIMEText(text_body, "plain"))
+            msg.attach(MIMEText(html_body, "html"))
+            
+            with smtplib.SMTP(smtp_host, smtp_port) as server:
+                server.starttls()
+                if smtp_user and smtp_password:
+                    server.login(smtp_user, smtp_password)
+                server.sendmail(msg["From"], to_emails, msg.as_string())
+            
+            logger.info(f"Email notification sent to {len(to_emails)} recipient(s)")
+            return True
+        except Exception as e:
+            logger.warning(f"Failed to send email notification: {e}")
+            return False
+
+    def _send_slack_notification(self, alert_payload: Dict) -> bool:
+        """Send alert to Slack via webhook."""
+        if not self.slack_webhook_url:
+            return False
+        
+        try:
+            severity = alert_payload.get('severity', 'warning')
+            color = "#dc3545" if severity == "critical" else "#ffc107"
+            
+            slack_message = {
+                "attachments": [
+                    {
+                        "color": color,
+                        "title": f"GRACE Alert: {alert_payload.get('alert_id')}",
+                        "text": alert_payload.get('reason', 'System alert triggered'),
+                        "fields": [
+                            {"title": "Severity", "value": severity.upper(), "short": True},
+                            {"title": "Health Score", "value": str(alert_payload.get('health_score', 'N/A')), "short": True},
+                            {"title": "Health Status", "value": alert_payload.get('health_status', 'unknown'), "short": True},
+                            {"title": "Timestamp", "value": alert_payload.get('timestamp', ''), "short": True},
+                        ],
+                        "footer": "GRACE Diagnostic System",
+                    }
+                ]
+            }
+            
+            if alert_payload.get('critical_components'):
+                slack_message["attachments"][0]["fields"].append({
+                    "title": "Critical Components",
+                    "value": ", ".join(alert_payload['critical_components']),
+                    "short": False
+                })
+            
+            response = requests.post(
+                self.slack_webhook_url,
+                json=slack_message,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            response.raise_for_status()
+            logger.info("Slack notification sent successfully")
+            return True
+        except requests.RequestException as e:
+            logger.warning(f"Failed to send Slack notification: {e}")
+            return False
 
     def _execute_healing(
         self,

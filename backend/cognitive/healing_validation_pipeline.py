@@ -599,12 +599,86 @@ class HealingValidationPipeline:
             )
 
     def _run_integration_tests(self) -> ValidationResult:
-        """Run integration tests (placeholder for project-specific implementation)."""
+        """Run integration tests using pytest markers or integration test directory."""
+        import subprocess
+        
+        # Look for integration tests in common locations
+        integration_paths = [
+            self.repo_path / "tests" / "integration",
+            self.repo_path / "integration_tests",
+            self.repo_path / "tests" / "e2e",
+        ]
+        
+        # Check for pytest markers first
+        if self._has_tool("pytest"):
+            # Try running tests marked as integration
+            try:
+                result = subprocess.run(
+                    ["pytest", "-m", "integration", "--tb=short", "-q"],
+                    capture_output=True,
+                    text=True,
+                    timeout=300,
+                    cwd=str(self.repo_path),
+                )
+                
+                if "no tests ran" not in result.stdout.lower() and result.returncode != 5:  # 5 = no tests collected
+                    passed = result.returncode == 0
+                    return ValidationResult(
+                        gate=ValidationGate.INTEGRATION_TESTS,
+                        passed=passed,
+                        output=result.stdout + result.stderr,
+                        details={
+                            "method": "pytest_marker",
+                            "return_code": result.returncode,
+                        },
+                    )
+            except subprocess.TimeoutExpired:
+                return ValidationResult(
+                    gate=ValidationGate.INTEGRATION_TESTS,
+                    passed=False,
+                    error="Integration tests timed out (5 min limit)",
+                )
+            except Exception as e:
+                logger.debug(f"[HEALING-VALIDATION] Pytest marker approach failed: {e}")
+        
+        # Try running from integration test directories
+        for int_path in integration_paths:
+            if int_path.exists() and int_path.is_dir():
+                try:
+                    result = subprocess.run(
+                        ["pytest", str(int_path), "--tb=short", "-q"],
+                        capture_output=True,
+                        text=True,
+                        timeout=300,
+                        cwd=str(self.repo_path),
+                    )
+                    
+                    passed = result.returncode == 0
+                    return ValidationResult(
+                        gate=ValidationGate.INTEGRATION_TESTS,
+                        passed=passed,
+                        output=result.stdout + result.stderr,
+                        details={
+                            "method": "directory",
+                            "path": str(int_path),
+                            "return_code": result.returncode,
+                        },
+                    )
+                except subprocess.TimeoutExpired:
+                    return ValidationResult(
+                        gate=ValidationGate.INTEGRATION_TESTS,
+                        passed=False,
+                        error=f"Integration tests in {int_path} timed out",
+                    )
+                except Exception as e:
+                    logger.debug(f"[HEALING-VALIDATION] Failed running tests in {int_path}: {e}")
+        
+        # No integration tests found - this is acceptable
         return ValidationResult(
             gate=ValidationGate.INTEGRATION_TESTS,
             passed=True,
-            output="Integration tests not configured - skipping",
-            details={"skipped": True},
+            output="No integration tests found - skipping",
+            details={"skipped": True, "reason": "no_tests_found"},
         )
 
     def _detect_linter(self) -> Optional[str]:

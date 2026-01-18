@@ -1,0 +1,11 @@
+[
+  {
+    "file_path": "/test/file.py",
+    "timestamp": "2026-01-18T14:06:59.295561",
+    "processing_type": "parse",
+    "duration_ms": 150,
+    "success": true,
+    "result_summary": "parsed ok",
+    "error": null
+  }
+]

@@ -20,6 +20,8 @@ Compares on:
 import logging
 import time
 import asyncio
+import os
+import requests
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 from dataclasses import dataclass, field
@@ -306,22 +308,82 @@ class AIComparisonBenchmark:
         self,
         task: BenchmarkTask
     ) -> Optional[AIResponse]:
-        """Run task on Claude."""
+        """Run task on Claude (Anthropic API)."""
         try:
             start_time = time.time()
             
-            # TODO: Implement Claude API call
-            # For now, return placeholder
-            await asyncio.sleep(0.1)  # Simulate API call
+            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            if not api_key:
+                logger.warning("[BENCHMARK] ANTHROPIC_API_KEY not set")
+                return AIResponse(
+                    provider=AIProvider.CLAUDE,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=0,
+                    error="ANTHROPIC_API_KEY not configured",
+                    metadata={"api_integration": "missing_key"}
+                )
+            
+            headers = {
+                "x-api-key": api_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json"
+            }
+            
+            payload = {
+                "model": "claude-3-5-sonnet-20241022",
+                "max_tokens": 4096,
+                "messages": [
+                    {"role": "user", "content": task.prompt}
+                ]
+            }
+            
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: requests.post(
+                    "https://api.anthropic.com/v1/messages",
+                    headers=headers,
+                    json=payload,
+                    timeout=120
+                )
+            )
             
             duration_ms = (time.time() - start_time) * 1000
             
+            if response.status_code == 200:
+                data = response.json()
+                content = data.get("content", [])
+                text = content[0].get("text", "") if content else ""
+                return AIResponse(
+                    provider=AIProvider.CLAUDE,
+                    task_id=task.task_id,
+                    response=text,
+                    duration_ms=duration_ms,
+                    metadata={
+                        "model": data.get("model"),
+                        "usage": data.get("usage", {})
+                    }
+                )
+            else:
+                error_msg = f"API error {response.status_code}: {response.text[:200]}"
+                logger.error(f"[BENCHMARK] Claude API error: {error_msg}")
+                return AIResponse(
+                    provider=AIProvider.CLAUDE,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=duration_ms,
+                    error=error_msg
+                )
+                
+        except requests.Timeout:
+            logger.error("[BENCHMARK] Claude API timeout")
             return AIResponse(
                 provider=AIProvider.CLAUDE,
                 task_id=task.task_id,
-                response="[Claude response - API integration needed]",
-                duration_ms=duration_ms,
-                metadata={"api_integration": "pending"}
+                response="",
+                duration_ms=(time.time() - start_time) * 1000,
+                error="Request timeout"
             )
         except Exception as e:
             logger.error(f"[BENCHMARK] Claude error: {e}")
@@ -331,21 +393,82 @@ class AIComparisonBenchmark:
         self,
         task: BenchmarkTask
     ) -> Optional[AIResponse]:
-        """Run task on Gemini."""
+        """Run task on Gemini (Google API)."""
         try:
             start_time = time.time()
             
-            # TODO: Implement Gemini API call
-            await asyncio.sleep(0.1)
+            api_key = os.environ.get("GOOGLE_API_KEY")
+            if not api_key:
+                logger.warning("[BENCHMARK] GOOGLE_API_KEY not set")
+                return AIResponse(
+                    provider=AIProvider.GEMINI,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=0,
+                    error="GOOGLE_API_KEY not configured",
+                    metadata={"api_integration": "missing_key"}
+                )
+            
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
+            
+            payload = {
+                "contents": [
+                    {"parts": [{"text": task.prompt}]}
+                ],
+                "generationConfig": {
+                    "maxOutputTokens": 4096
+                }
+            }
+            
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: requests.post(
+                    url,
+                    json=payload,
+                    timeout=120
+                )
+            )
             
             duration_ms = (time.time() - start_time) * 1000
             
+            if response.status_code == 200:
+                data = response.json()
+                candidates = data.get("candidates", [])
+                text = ""
+                if candidates:
+                    content = candidates[0].get("content", {})
+                    parts = content.get("parts", [])
+                    text = parts[0].get("text", "") if parts else ""
+                return AIResponse(
+                    provider=AIProvider.GEMINI,
+                    task_id=task.task_id,
+                    response=text,
+                    duration_ms=duration_ms,
+                    metadata={
+                        "model": "gemini-pro",
+                        "usage": data.get("usageMetadata", {})
+                    }
+                )
+            else:
+                error_msg = f"API error {response.status_code}: {response.text[:200]}"
+                logger.error(f"[BENCHMARK] Gemini API error: {error_msg}")
+                return AIResponse(
+                    provider=AIProvider.GEMINI,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=duration_ms,
+                    error=error_msg
+                )
+                
+        except requests.Timeout:
+            logger.error("[BENCHMARK] Gemini API timeout")
             return AIResponse(
                 provider=AIProvider.GEMINI,
                 task_id=task.task_id,
-                response="[Gemini response - API integration needed]",
-                duration_ms=duration_ms,
-                metadata={"api_integration": "pending"}
+                response="",
+                duration_ms=(time.time() - start_time) * 1000,
+                error="Request timeout"
             )
         except Exception as e:
             logger.error(f"[BENCHMARK] Gemini error: {e}")
@@ -355,45 +478,106 @@ class AIComparisonBenchmark:
         self,
         task: BenchmarkTask
     ) -> Optional[AIResponse]:
-        """Run task on Cursor."""
-        try:
-            start_time = time.time()
-            
-            # TODO: Implement Cursor API call
-            await asyncio.sleep(0.1)
-            
-            duration_ms = (time.time() - start_time) * 1000
-            
-            return AIResponse(
-                provider=AIProvider.CURSOR,
-                task_id=task.task_id,
-                response="[Cursor response - API integration needed]",
-                duration_ms=duration_ms,
-                metadata={"api_integration": "pending"}
-            )
-        except Exception as e:
-            logger.error(f"[BENCHMARK] Cursor error: {e}")
-            return None
+        """
+        Run task on Cursor.
+        
+        NOTE: Cursor is an IDE-only AI assistant and does not provide a public API.
+        It operates within the Cursor IDE environment and cannot be called programmatically.
+        This method returns an informational response indicating Cursor benchmarking
+        requires manual testing within the Cursor IDE.
+        """
+        return AIResponse(
+            provider=AIProvider.CURSOR,
+            task_id=task.task_id,
+            response="",
+            duration_ms=0,
+            error="Cursor is IDE-only and has no public API. Manual benchmarking required.",
+            metadata={
+                "api_integration": "not_available",
+                "reason": "Cursor AI is embedded in the Cursor IDE and does not expose a REST API",
+                "workaround": "For Cursor benchmarking, manually test within Cursor IDE and record results"
+            }
+        )
     
     async def _run_chatgpt(
         self,
         task: BenchmarkTask
     ) -> Optional[AIResponse]:
-        """Run task on ChatGPT."""
+        """Run task on ChatGPT (OpenAI API)."""
         try:
             start_time = time.time()
             
-            # TODO: Implement ChatGPT API call
-            await asyncio.sleep(0.1)
+            api_key = os.environ.get("OPENAI_API_KEY")
+            if not api_key:
+                logger.warning("[BENCHMARK] OPENAI_API_KEY not set")
+                return AIResponse(
+                    provider=AIProvider.CHATGPT,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=0,
+                    error="OPENAI_API_KEY not configured",
+                    metadata={"api_integration": "missing_key"}
+                )
+            
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            payload = {
+                "model": "gpt-4o",
+                "messages": [
+                    {"role": "user", "content": task.prompt}
+                ],
+                "max_tokens": 4096
+            }
+            
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: requests.post(
+                    "https://api.openai.com/v1/chat/completions",
+                    headers=headers,
+                    json=payload,
+                    timeout=120
+                )
+            )
             
             duration_ms = (time.time() - start_time) * 1000
             
+            if response.status_code == 200:
+                data = response.json()
+                choices = data.get("choices", [])
+                text = choices[0].get("message", {}).get("content", "") if choices else ""
+                return AIResponse(
+                    provider=AIProvider.CHATGPT,
+                    task_id=task.task_id,
+                    response=text,
+                    duration_ms=duration_ms,
+                    metadata={
+                        "model": data.get("model"),
+                        "usage": data.get("usage", {})
+                    }
+                )
+            else:
+                error_msg = f"API error {response.status_code}: {response.text[:200]}"
+                logger.error(f"[BENCHMARK] ChatGPT API error: {error_msg}")
+                return AIResponse(
+                    provider=AIProvider.CHATGPT,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=duration_ms,
+                    error=error_msg
+                )
+                
+        except requests.Timeout:
+            logger.error("[BENCHMARK] ChatGPT API timeout")
             return AIResponse(
                 provider=AIProvider.CHATGPT,
                 task_id=task.task_id,
-                response="[ChatGPT response - API integration needed]",
-                duration_ms=duration_ms,
-                metadata={"api_integration": "pending"}
+                response="",
+                duration_ms=(time.time() - start_time) * 1000,
+                error="Request timeout"
             )
         except Exception as e:
             logger.error(f"[BENCHMARK] ChatGPT error: {e}")
@@ -403,21 +587,81 @@ class AIComparisonBenchmark:
         self,
         task: BenchmarkTask
     ) -> Optional[AIResponse]:
-        """Run task on DeepSeek."""
+        """Run task on DeepSeek API."""
         try:
             start_time = time.time()
             
-            # TODO: Implement DeepSeek API call
-            await asyncio.sleep(0.1)
+            api_key = os.environ.get("DEEPSEEK_API_KEY")
+            if not api_key:
+                logger.warning("[BENCHMARK] DEEPSEEK_API_KEY not set")
+                return AIResponse(
+                    provider=AIProvider.DEEPSEEK,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=0,
+                    error="DEEPSEEK_API_KEY not configured",
+                    metadata={"api_integration": "missing_key"}
+                )
+            
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            payload = {
+                "model": "deepseek-coder",
+                "messages": [
+                    {"role": "user", "content": task.prompt}
+                ],
+                "max_tokens": 4096
+            }
+            
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: requests.post(
+                    "https://api.deepseek.com/v1/chat/completions",
+                    headers=headers,
+                    json=payload,
+                    timeout=120
+                )
+            )
             
             duration_ms = (time.time() - start_time) * 1000
             
+            if response.status_code == 200:
+                data = response.json()
+                choices = data.get("choices", [])
+                text = choices[0].get("message", {}).get("content", "") if choices else ""
+                return AIResponse(
+                    provider=AIProvider.DEEPSEEK,
+                    task_id=task.task_id,
+                    response=text,
+                    duration_ms=duration_ms,
+                    metadata={
+                        "model": data.get("model"),
+                        "usage": data.get("usage", {})
+                    }
+                )
+            else:
+                error_msg = f"API error {response.status_code}: {response.text[:200]}"
+                logger.error(f"[BENCHMARK] DeepSeek API error: {error_msg}")
+                return AIResponse(
+                    provider=AIProvider.DEEPSEEK,
+                    task_id=task.task_id,
+                    response="",
+                    duration_ms=duration_ms,
+                    error=error_msg
+                )
+                
+        except requests.Timeout:
+            logger.error("[BENCHMARK] DeepSeek API timeout")
             return AIResponse(
                 provider=AIProvider.DEEPSEEK,
                 task_id=task.task_id,
-                response="[DeepSeek response - API integration needed]",
-                duration_ms=duration_ms,
-                metadata={"api_integration": "pending"}
+                response="",
+                duration_ms=(time.time() - start_time) * 1000,
+                error="Request timeout"
             )
         except Exception as e:
             logger.error(f"[BENCHMARK] DeepSeek error: {e}")

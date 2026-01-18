@@ -1,0 +1,15 @@
+{
+  "program_id": "prog-123",
+  "code": "double(x)",
+  "spec": {
+    "examples": [
+      [
+        2,
+        4
+      ]
+    ]
+  },
+  "confidence": 0.9,
+  "synthesized_at": "2026-01-18T10:39:35.361347",
+  "source": "layer4_neural_synthesis"
+}

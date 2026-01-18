@@ -1,9 +1,12 @@
 import logging
+import difflib
+import re
 from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import uuid
+from collections import defaultdict
 from .multi_llm_client import MultiLLMClient, TaskType, LLMModel
 from llm_orchestrator.repo_access import RepositoryAccessLayer
 from llm_orchestrator.hallucination_guard import HallucinationGuard
@@ -803,9 +806,283 @@ SUGGESTIONS: [improvements]
         }
 
     def _aggregate_review_ratings(self, reviews: List[Dict], aspects: List[str]) -> Dict[str, float]:
-        """Aggregate review ratings."""
-        # Simplified: would parse ratings from reviews
-        return {aspect: 7.5 for aspect in aspects}  # Placeholder
+        """Aggregate review ratings from parsed reviews."""
+        aspect_scores: Dict[str, List[float]] = defaultdict(list)
+        
+        for review in reviews:
+            content = review.get("review", "")
+            for aspect in aspects:
+                score = self._extract_aspect_score(content, aspect)
+                if score is not None:
+                    aspect_scores[aspect].append(score)
+        
+        aggregated = {}
+        for aspect in aspects:
+            scores = aspect_scores.get(aspect, [])
+            if scores:
+                aggregated[aspect] = sum(scores) / len(scores)
+            else:
+                aggregated[aspect] = 5.0  # Default neutral score
+        
+        return aggregated
+    
+    def _extract_aspect_score(self, content: str, aspect: str) -> Optional[float]:
+        """Extract a numeric score for an aspect from review content."""
+        content_lower = content.lower()
+        aspect_lower = aspect.lower()
+        
+        patterns = [
+            rf'{aspect_lower}\s*:\s*(\d+(?:\.\d+)?)\s*/\s*10',
+            rf'{aspect_lower}\s*:\s*(\d+(?:\.\d+)?)',
+            rf'{aspect_lower}\s+score\s*:\s*(\d+(?:\.\d+)?)',
+            rf'{aspect_lower}\s*=\s*(\d+(?:\.\d+)?)',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, content_lower)
+            if match:
+                try:
+                    score = float(match.group(1))
+                    # Normalize to 0-10 scale if needed
+                    if score > 10:
+                        score = 10.0
+                    return score
+                except ValueError:
+                    continue
+        
+        return None
+
+    def calculate_consensus_scores(
+        self,
+        responses: List[Dict[str, Any]],
+        similarity_threshold: float = 0.7
+    ) -> Dict[str, Any]:
+        """
+        Calculate comprehensive consensus scores from multiple LLM responses.
+        
+        Args:
+            responses: List of response dicts with keys:
+                - model: str (model name/id)
+                - content: str (response content)
+                - confidence: float (0.0-1.0, optional)
+                - historical_accuracy: float (0.0-1.0, optional)
+            similarity_threshold: Minimum similarity to group responses together
+            
+        Returns:
+            Dict with consensus metrics:
+                - consensus_score: Overall weighted consensus (0.0-1.0)
+                - agreement_rate: Fraction of LLMs agreeing on winning response
+                - winning_response: The consensus response content
+                - vote_distribution: Votes per response group
+                - participating_models: List of model names
+                - individual_scores: Per-model breakdown
+                - response_groups: Grouped similar responses
+        """
+        if not responses:
+            return {
+                "consensus_score": 0.0,
+                "agreement_rate": 0.0,
+                "winning_response": "",
+                "vote_distribution": {},
+                "participating_models": [],
+                "individual_scores": {},
+                "response_groups": []
+            }
+        
+        # Extract response contents and metadata
+        contents = []
+        models = []
+        confidences = []
+        historical_accuracies = []
+        
+        for resp in responses:
+            contents.append(resp.get("content", ""))
+            models.append(resp.get("model", f"model_{len(models)}"))
+            confidences.append(resp.get("confidence", 0.5))
+            historical_accuracies.append(resp.get("historical_accuracy", 0.5))
+        
+        # Group similar responses using text similarity
+        response_groups = self._group_similar_responses(
+            contents, models, similarity_threshold
+        )
+        
+        # Calculate weighted votes for each group
+        vote_distribution = {}
+        group_weighted_scores = {}
+        
+        for group_id, group in enumerate(response_groups):
+            group_name = f"response_{group_id + 1}"
+            vote_count = len(group["members"])
+            vote_distribution[group_name] = vote_count
+            
+            # Calculate weighted score for this group
+            weighted_score = 0.0
+            for member_idx in group["member_indices"]:
+                confidence_weight = confidences[member_idx]
+                accuracy_weight = historical_accuracies[member_idx]
+                # Combined weight: 60% confidence, 40% historical accuracy
+                combined_weight = 0.6 * confidence_weight + 0.4 * accuracy_weight
+                weighted_score += combined_weight
+            
+            group_weighted_scores[group_name] = weighted_score
+        
+        # Find winning response group
+        if group_weighted_scores:
+            winning_group_name = max(group_weighted_scores, key=group_weighted_scores.get)
+            winning_group_idx = int(winning_group_name.split("_")[1]) - 1
+            winning_response = response_groups[winning_group_idx]["representative"]
+            winning_vote_count = vote_distribution[winning_group_name]
+        else:
+            winning_response = contents[0] if contents else ""
+            winning_vote_count = 1
+        
+        # Calculate agreement rate
+        total_responses = len(responses)
+        agreement_rate = winning_vote_count / total_responses if total_responses > 0 else 0.0
+        
+        # Calculate overall consensus score
+        # Combines: agreement rate, weighted confidence, response similarity within groups
+        avg_confidence = sum(confidences) / len(confidences) if confidences else 0.5
+        avg_accuracy = sum(historical_accuracies) / len(historical_accuracies) if historical_accuracies else 0.5
+        
+        # Intra-group similarity bonus
+        intra_group_similarity = self._calculate_intra_group_similarity(response_groups)
+        
+        # Consensus score formula:
+        # 40% agreement rate + 25% confidence + 20% historical accuracy + 15% similarity
+        consensus_score = (
+            0.40 * agreement_rate +
+            0.25 * avg_confidence +
+            0.20 * avg_accuracy +
+            0.15 * intra_group_similarity
+        )
+        consensus_score = min(1.0, max(0.0, consensus_score))
+        
+        # Individual scores per model
+        individual_scores = {}
+        for i, model in enumerate(models):
+            # Find which group this model belongs to
+            model_group = None
+            for g_idx, group in enumerate(response_groups):
+                if i in group["member_indices"]:
+                    model_group = f"response_{g_idx + 1}"
+                    break
+            
+            individual_scores[model] = {
+                "confidence": confidences[i],
+                "historical_accuracy": historical_accuracies[i],
+                "response_group": model_group,
+                "agrees_with_consensus": model_group == winning_group_name if winning_group_name else False
+            }
+        
+        return {
+            "consensus_score": round(consensus_score, 4),
+            "agreement_rate": round(agreement_rate, 4),
+            "winning_response": winning_response,
+            "vote_distribution": vote_distribution,
+            "participating_models": models,
+            "individual_scores": individual_scores,
+            "response_groups": [
+                {
+                    "group_id": f"response_{i+1}",
+                    "members": g["members"],
+                    "representative": g["representative"][:200] + "..." if len(g["representative"]) > 200 else g["representative"],
+                    "avg_similarity": g["avg_similarity"]
+                }
+                for i, g in enumerate(response_groups)
+            ]
+        }
+    
+    def _group_similar_responses(
+        self,
+        contents: List[str],
+        models: List[str],
+        threshold: float
+    ) -> List[Dict[str, Any]]:
+        """
+        Group similar responses together using text similarity.
+        
+        Uses difflib.SequenceMatcher for text similarity comparison.
+        """
+        if not contents:
+            return []
+        
+        n = len(contents)
+        assigned = [False] * n
+        groups = []
+        
+        for i in range(n):
+            if assigned[i]:
+                continue
+            
+            # Start new group with this response
+            group = {
+                "members": [models[i]],
+                "member_indices": [i],
+                "representative": contents[i],
+                "similarities": []
+            }
+            assigned[i] = True
+            
+            # Find similar responses
+            for j in range(i + 1, n):
+                if assigned[j]:
+                    continue
+                
+                similarity = self._calculate_text_similarity(contents[i], contents[j])
+                
+                if similarity >= threshold:
+                    group["members"].append(models[j])
+                    group["member_indices"].append(j)
+                    group["similarities"].append(similarity)
+                    assigned[j] = True
+            
+            # Calculate average similarity within group
+            if group["similarities"]:
+                group["avg_similarity"] = sum(group["similarities"]) / len(group["similarities"])
+            else:
+                group["avg_similarity"] = 1.0  # Single member = perfect self-similarity
+            
+            groups.append(group)
+        
+        return groups
+    
+    def _calculate_text_similarity(self, text1: str, text2: str) -> float:
+        """
+        Calculate similarity between two texts using difflib.
+        
+        Returns a float between 0.0 (no similarity) and 1.0 (identical).
+        """
+        if not text1 or not text2:
+            return 0.0
+        
+        # Normalize texts
+        text1_normalized = text1.lower().strip()
+        text2_normalized = text2.lower().strip()
+        
+        # Use SequenceMatcher for similarity
+        matcher = difflib.SequenceMatcher(None, text1_normalized, text2_normalized)
+        return matcher.ratio()
+    
+    def _calculate_intra_group_similarity(self, groups: List[Dict[str, Any]]) -> float:
+        """
+        Calculate average intra-group similarity across all groups.
+        
+        Higher value means responses within groups are more similar.
+        """
+        if not groups:
+            return 0.0
+        
+        total_similarity = 0.0
+        total_weight = 0
+        
+        for group in groups:
+            group_size = len(group["members"])
+            # Weight by group size - larger groups matter more
+            total_similarity += group["avg_similarity"] * group_size
+            total_weight += group_size
+        
+        return total_similarity / total_weight if total_weight > 0 else 0.0
 
     # =======================================================================
     # UTILITY METHODS
