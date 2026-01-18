@@ -6,8 +6,9 @@ from pathlib import Path
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent, FileCreatedEvent, FileDeletedEvent
+logger = logging.getLogger(__name__)
+
 class GenesisFileWatcher(FileSystemEventHandler):
-    logger = logging.getLogger(__name__)
     """
     Watches file system changes and creates Genesis Keys + Versions automatically.
 

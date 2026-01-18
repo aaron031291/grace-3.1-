@@ -3,8 +3,9 @@ import logging
 from pathlib import Path
 from typing import Tuple, Optional
 import mimetypes
+logger = logging.getLogger(__name__)
+
 class FileHandler:
-    logger = logging.getLogger(__name__)
     """Handles extraction of text from different file types."""
 
     SUPPORTED_TYPES = {

@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import asyncio
+logger = logging.getLogger(__name__)
+
 class ReasoningPlane(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """The 4 reasoning planes Grace operates on."""
     REPOSITORY = "repository"   # Macro: architecture, system integrity

@@ -7,7 +7,7 @@ This closes the feedback loop: Detect → Heal → Learn → Apply (LLM Updates)
 import logging
 import threading
 from typing import Optional, Dict, Any, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from sqlalchemy.orm import Session
 from sqlalchemy import event
 
@@ -148,7 +148,7 @@ class OutcomeLLMBridge:
                 "trust_score": trust_score,
                 "example_type": getattr(example, 'example_type', 'unknown'),
                 "queue_size": len(self.update_queue),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(UTC).isoformat()
             }
             
         except Exception as e:
@@ -182,7 +182,7 @@ class OutcomeLLMBridge:
                 return  # Already processing, don't start another
             
             queue_size = len(self.update_queue)
-            now = datetime.utcnow()
+            now = datetime.now(UTC)
             
             # Process if:
             # 1. Queue is full enough (batch_size)
@@ -216,8 +216,19 @@ class OutcomeLLMBridge:
         ✅ FIXED: Re-queries examples from IDs to avoid DetachedInstanceError.
         """
         # ✅ CRITICAL FIX: Create new session for background thread
-        from database.session import SessionLocal
-        session = SessionLocal()
+        try:
+            from database.session import SessionLocal
+            if SessionLocal is None:
+                logger.warning("[OUTCOME-LLM-BRIDGE] SessionLocal not initialized, skipping batch update")
+                with self.update_lock:
+                    self.pending_update_thread = None
+                return
+            session = SessionLocal()
+        except Exception as e:
+            logger.warning(f"[OUTCOME-LLM-BRIDGE] Could not create session: {e}")
+            with self.update_lock:
+                self.pending_update_thread = None
+            return
         
         try:
             # Get example IDs from queue
@@ -272,7 +283,7 @@ class OutcomeLLMBridge:
             )
             
             with self.update_lock:
-                self.last_update_time = datetime.utcnow()
+                self.last_update_time = datetime.now(UTC)
                 self.stats["llm_updates_triggered"] += 1
             
             logger.info(
@@ -313,7 +324,7 @@ class OutcomeLLMBridge:
             **self.stats,
             "queue_size": queue_size,
             "last_update_time": self.last_update_time.isoformat() if self.last_update_time else None,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(UTC).isoformat()
         }
 
 

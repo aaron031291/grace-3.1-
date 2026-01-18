@@ -334,34 +334,57 @@ class FormatPreservingEncryptor:
         self.key = key
         self.tweak = tweak
     
-    def _feistel_round(self, data: list, round_key: bytes, alphabet: str) -> list:
-        """Single Feistel round."""
+    def _feistel_round(self, data: list, round_key: bytes, alphabet: str, encrypt: bool = True) -> list:
+        """Single Feistel round - balanced Feistel network."""
         import hmac
         n = len(alphabet)
         mid = len(data) // 2
         left, right = data[:mid], data[mid:]
+        
+        # F function: hash the right half with round key
         right_bytes = ''.join(alphabet[i] for i in right).encode('utf-8')
         f_output = hmac.new(round_key, right_bytes + self.tweak, 'sha256').digest()
-        new_left = [(left[i] + f_output[i % len(f_output)]) % n for i in range(len(left))]
+        
+        # XOR left with F(right) - for encrypt add, for decrypt subtract
+        if encrypt:
+            new_left = [(left[i] + f_output[i % len(f_output)]) % n for i in range(len(left))]
+        else:
+            new_left = [(left[i] - f_output[i % len(f_output)]) % n for i in range(len(left))]
+        
+        # Swap: new state is (right, new_left)
         return right + new_left
     
     def _encrypt_with_alphabet(self, plaintext: str, alphabet: str, rounds: int = 10) -> str:
-        """Encrypt preserving character set."""
+        """Encrypt preserving character set using unbalanced Feistel for odd lengths."""
         import hmac
         if not plaintext:
             return plaintext
         
         char_to_idx = {c: i for i, c in enumerate(alphabet)}
+        n = len(alphabet)
         data = [char_to_idx.get(c, 0) for c in plaintext]
+        
+        # For odd-length data, use unbalanced split
+        mid = len(data) // 2
         
         for round_num in range(rounds):
             round_key = hmac.new(self.key, round_num.to_bytes(4, 'big'), 'sha256').digest()
-            data = self._feistel_round(data, round_key, alphabet)
+            left, right = data[:mid], data[mid:]
+            
+            # F function on right half
+            right_bytes = ''.join(alphabet[i] for i in right).encode('utf-8')
+            f_output = hmac.new(round_key, right_bytes + self.tweak, 'sha256').digest()
+            
+            # Modify left
+            new_left = [(left[i] + f_output[i % len(f_output)]) % n for i in range(len(left))]
+            
+            # Swap halves
+            data = right + new_left
         
         return ''.join(alphabet[i] for i in data)
     
     def _decrypt_with_alphabet(self, ciphertext: str, alphabet: str, rounds: int = 10) -> str:
-        """Decrypt preserving character set."""
+        """Decrypt preserving character set - reverse the Feistel network."""
         import hmac
         if not ciphertext:
             return ciphertext
@@ -370,13 +393,28 @@ class FormatPreservingEncryptor:
         n = len(alphabet)
         data = [char_to_idx.get(c, 0) for c in ciphertext]
         
+        # Same split as encrypt
+        total_len = len(data)
+        left_len = total_len // 2
+        right_len = total_len - left_len
+        
+        # Reverse rounds
         for round_num in range(rounds - 1, -1, -1):
             round_key = hmac.new(self.key, round_num.to_bytes(4, 'big'), 'sha256').digest()
-            mid = len(data) // 2
-            right, new_left = data[:mid], data[mid:]
+            
+            # After encrypt swap: data = (right, new_left)
+            # So first right_len elements are original right, rest are modified left
+            right = data[:right_len]
+            new_left = data[right_len:]
+            
+            # Compute F(right) to reverse the modification
             right_bytes = ''.join(alphabet[i] for i in right).encode('utf-8')
             f_output = hmac.new(round_key, right_bytes + self.tweak, 'sha256').digest()
+            
+            # Recover original left
             left = [(new_left[i] - f_output[i % len(f_output)]) % n for i in range(len(new_left))]
+            
+            # Restore original order: (left, right)
             data = left + right
         
         return ''.join(alphabet[i] for i in data)

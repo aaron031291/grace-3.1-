@@ -9,8 +9,9 @@ from llm_orchestrator.llm_orchestrator import LLMOrchestrator, LLMTaskRequest, T
 from llm_orchestrator.hallucination_guard import VerificationResult
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class MessageType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Types of messages in Grace-LLM communication."""
     GRACE_TO_LLM = "grace_to_llm"  # Grace asking LLM
     LLM_TO_GRACE = "llm_to_grace"  # LLM responding to Grace

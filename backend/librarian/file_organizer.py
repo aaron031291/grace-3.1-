@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.utils import sanitize_filename, extract_file_extension
+logger = logging.getLogger(__name__)
+
 class FileOrganizer:
-    logger = logging.getLogger(__name__)
     """
     Automatic file organization manager.
 

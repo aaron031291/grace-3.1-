@@ -6,8 +6,9 @@ from collections import defaultdict
 import statistics
 from models.genesis_key_models import GenesisKey
 from genesis.code_change_analyzer import ChangeAnalysis
+logger = logging.getLogger(__name__)
+
 class FailurePrediction:
-    logger = logging.getLogger(__name__)
     """Prediction of a test failure."""
     test_id: str
     failure_probability: float  # 0.0-1.0

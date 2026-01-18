@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, Optional, Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+logger = logging.getLogger(__name__)
+
 class CachePolicy:
-    logger = logging.getLogger(__name__)
     """Cache policy based on operation characteristics."""
     ttl_seconds: int  # Time to live
     priority: int  # Cache priority (higher = keep longer)

@@ -1,8 +1,9 @@
 import logging
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
+logger = logging.getLogger(__name__)
+
 class CostEstimate:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Cost estimate for an operation."""

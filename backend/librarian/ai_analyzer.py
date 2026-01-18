@@ -4,8 +4,9 @@ import json
 import logging
 from models.database_models import Document, DocumentChunk
 from librarian.utils import truncate_text, parse_confidence_label, safe_json_loads, normalize_tag_name
+logger = logging.getLogger(__name__)
+
 class AIContentAnalyzer:
-    logger = logging.getLogger(__name__)
     """
     LLM-powered content analysis for intelligent document categorization.
 

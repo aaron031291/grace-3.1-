@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from models.database_models import Document
+logger = logging.getLogger(__name__)
+
 class ContentLifecycleManager:
-    logger = logging.getLogger(__name__)
     """
     Content lifecycle management.
 

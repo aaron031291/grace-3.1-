@@ -9,8 +9,9 @@ from cognitive.learning_memory import LearningExample
 from cognitive.enhanced_trust_scorer import TrustScoreResult, get_adaptive_trust_scorer
 from cognitive.enhanced_consistency_checker import ConsistencyResult, get_consistency_checker
 from cognitive.enhanced_causal_reasoner import CausalAnalysis, get_causal_reasoner
+logger = logging.getLogger(__name__)
+
 class BatchProcessingStats:
-    logger = logging.getLogger(__name__)
     """Statistics for batch processing operations."""
     total_items: int
     processed_items: int

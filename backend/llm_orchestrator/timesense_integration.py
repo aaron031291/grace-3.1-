@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, Optional, Tuple, List
 from datetime import datetime, timedelta
 from dataclasses import dataclass
+logger = logging.getLogger(__name__)
+
 class LLMTimeEstimate:
-    logger = logging.getLogger(__name__)
     """Time estimate for LLM operation."""
     model_name: str
     prompt_tokens: int

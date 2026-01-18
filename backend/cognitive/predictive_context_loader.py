@@ -6,8 +6,9 @@ import logging
 from sqlalchemy.orm import Session
 from retrieval.retriever import DocumentRetriever
 from cognitive.learning_memory import LearningExample
+logger = logging.getLogger(__name__)
+
 class PreFetchedContext:
-    logger = logging.getLogger(__name__)
     """Pre-fetched context ready for use."""
     topic: str
     related_topics: List[str]

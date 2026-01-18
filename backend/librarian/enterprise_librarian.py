@@ -9,8 +9,9 @@ import json
 import gzip
 from models.database_models import Document, DocumentChunk
 from models.librarian_models import LibrarianTag, DocumentTag
+logger = logging.getLogger(__name__)
+
 class EnterpriseLibrarian:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade librarian system.
     

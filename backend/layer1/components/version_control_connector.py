@@ -3,8 +3,9 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+logger = logging.getLogger(__name__)
+
 class VersionControlConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects Layer 1 inputs to symbiotic version control system.
 

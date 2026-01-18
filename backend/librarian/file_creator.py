@@ -6,8 +6,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from models.database_models import Document
 from librarian.tag_manager import TagManager
+logger = logging.getLogger(__name__)
+
 class FileCreator:
-    logger = logging.getLogger(__name__)
     """
     File creation manager for librarian.
 

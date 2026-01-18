@@ -7,8 +7,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 import hashlib
+logger = logging.getLogger(__name__)
+
 class IDEEventType(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

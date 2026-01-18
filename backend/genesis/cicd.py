@@ -12,8 +12,9 @@ from pathlib import Path
 import logging
 import hashlib
 import tempfile
+logger = logging.getLogger(__name__)
+
 class PipelineStatus(str, Enum):
-    logger = logging.getLogger(__name__)
     """Pipeline execution status."""
     PENDING = "pending"
     QUEUED = "queued"

@@ -11,8 +11,9 @@ from sqlalchemy import create_engine, event
 from collections import defaultdict
 from enum import Enum
 import pickle
+logger = logging.getLogger(__name__)
+
 class GenesisKeyArchiveLevel(str, Enum):
-    logger = logging.getLogger(__name__)
     """Archive levels for Genesis Keys."""
     ACTIVE = "active"  # In main database
     WARM = "warm"  # Compressed in database

@@ -5,8 +5,9 @@ from datetime import datetime
 import logging
 from models.librarian_models import LibrarianAction
 from models.database_models import Document
+logger = logging.getLogger(__name__)
+
 class ApprovalWorkflow:
-    logger = logging.getLogger(__name__)
     """
     Manages approval workflow for librarian actions.
 

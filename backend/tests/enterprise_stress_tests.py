@@ -8,8 +8,9 @@ from typing import Dict, Any, List, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
 from sqlalchemy.orm import Session
+logger = logging.getLogger(__name__)
+
 class EnterpriseStressTester:
-    logger = logging.getLogger(__name__)
     """Comprehensive stress testing for all enterprise systems."""
     
     def __init__(self, session: Session, knowledge_base_path: Path):

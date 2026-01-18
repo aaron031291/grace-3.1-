@@ -9,8 +9,9 @@ from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
 from cognitive.memory_relationships import get_memory_relationships_graph
 from cognitive.memory_lifecycle_manager import get_memory_lifecycle_manager
+logger = logging.getLogger(__name__)
+
 class SmartMemoryRetrieval:
-    logger = logging.getLogger(__name__)
     """
     Smart, context-aware memory retrieval system.
     

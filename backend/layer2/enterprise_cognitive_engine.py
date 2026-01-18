@@ -7,8 +7,11 @@ import json
 import gzip
 from pathlib import Path
 from cognitive.engine import CognitiveEngine, DecisionContext
+
+logger = logging.getLogger(__name__)
+
+
 class EnterpriseCognitiveEngine:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade Layer 2 Cognitive Engine.
     

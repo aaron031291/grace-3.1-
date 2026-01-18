@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 from dataclasses import dataclass
+logger = logging.getLogger(__name__)
+
 class PerformanceAlert:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Performance alert."""

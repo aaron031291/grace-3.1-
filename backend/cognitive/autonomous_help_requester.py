@@ -6,8 +6,9 @@ from pathlib import Path
 from enum import Enum
 from sqlalchemy.orm import Session
 from models.genesis_key_models import GenesisKey, GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class HelpPriority(Enum):
-    logger = logging.getLogger(__name__)
     """Priority levels for help requests."""
     CRITICAL = "critical"  # System failing, immediate help needed
     HIGH = "high"  # Important issue, help needed soon

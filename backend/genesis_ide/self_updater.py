@@ -7,8 +7,9 @@ from pathlib import Path
 import subprocess
 import uuid
 import shutil
+logger = logging.getLogger(__name__)
+
 class UpdateType:
-    logger = logging.getLogger(__name__)
     """Types of self-updates."""
     PATCH = "patch"           # Small fix
     ENHANCEMENT = "enhancement"  # Small improvement

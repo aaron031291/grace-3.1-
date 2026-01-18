@@ -7,8 +7,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Dict, Any, Optional, List, Set, TYPE_CHECKING
+logger = logging.getLogger(__name__)
+
 class ComponentState(Enum):
-    logger = logging.getLogger(__name__)
     """Component lifecycle states."""
     UNINITIALIZED = "uninitialized"
     INITIALIZING = "initializing"

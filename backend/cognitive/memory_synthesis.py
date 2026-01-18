@@ -6,8 +6,9 @@ from collections import defaultdict
 from cognitive.learning_memory import LearningExample
 from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
+logger = logging.getLogger(__name__)
+
 class MemorySynthesis:
-    logger = logging.getLogger(__name__)
     """
     Synthesizes multiple memories into consolidated insights.
     

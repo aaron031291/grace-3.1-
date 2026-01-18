@@ -5,8 +5,9 @@ import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
+logger = logging.getLogger(__name__)
+
 class KnowledgeBaseManager:
-    logger = logging.getLogger(__name__)
     """Manages file storage and directory structure in knowledge_base."""
     
     def __init__(self, base_path: str = "backend/knowledge_base"):

@@ -2,8 +2,9 @@ import logging
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from collections import defaultdict
+logger = logging.getLogger(__name__)
+
 class EnterpriseLayer1Connectors:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade unified analytics for Layer 1 connectors.
     

@@ -1,8 +1,9 @@
 import ast
 import logging
 from typing import Dict, Any, List, Optional, Tuple
+logger = logging.getLogger(__name__)
+
 class ConstraintValidator:
-    logger = logging.getLogger(__name__)
     """
     Validates pre and post conditions for transformations.
     

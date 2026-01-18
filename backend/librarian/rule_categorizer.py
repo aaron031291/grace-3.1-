@@ -6,8 +6,9 @@ import re
 from models.librarian_models import LibrarianRule
 from models.database_models import Document
 from librarian.utils import match_pattern, extract_file_extension, normalize_tag_name
+logger = logging.getLogger(__name__)
+
 class RuleBasedCategorizer:
-    logger = logging.getLogger(__name__)
     """
     Pattern-based automatic categorization engine.
 

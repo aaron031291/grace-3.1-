@@ -5,8 +5,9 @@ from dataclasses import dataclass
 import re
 import time
 from cognitive.gap_detector import KnowledgeGap
+logger = logging.getLogger(__name__)
+
 class SimilarProblem:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """A similar problem found via reverse KNN."""

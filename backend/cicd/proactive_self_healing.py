@@ -9,8 +9,9 @@ from enum import Enum
 from sqlalchemy.orm import Session
 from cognitive.devops_healing_agent import DevOpsHealingAgent, DevOpsLayer, IssueCategory
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator, TaskType
+logger = logging.getLogger(__name__)
+
 class PipelineStage(str, Enum):
-    logger = logging.getLogger(__name__)
     """CI/CD pipeline stages where proactive checks run."""
     PRE_COMMIT = "pre_commit"          # Before code is committed
     PRE_BUILD = "pre_build"             # Before building

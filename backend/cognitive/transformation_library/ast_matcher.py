@@ -3,8 +3,9 @@ import logging
 from typing import Dict, Any, Optional, List, Tuple
 import hashlib
 from genesis.code_analyzer import get_code_analyzer
+logger = logging.getLogger(__name__)
+
 class ASTMatcher:
-    logger = logging.getLogger(__name__)
     """
     AST pattern matching engine.
     

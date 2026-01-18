@@ -13,8 +13,9 @@ except ImportError:
         ActionResult = None
         ActionStatus = None
         GraceAction = None
+logger = logging.getLogger(__name__)
+
 class LearningSignal:
-    logger = logging.getLogger(__name__)
     """A signal extracted from execution for learning."""
 
     signal_type: str  # success, failure, pattern, correction

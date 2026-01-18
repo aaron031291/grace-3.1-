@@ -9,8 +9,9 @@ from pathlib import Path
 from collections import defaultdict
 import difflib
 import uuid
+logger = logging.getLogger(__name__)
+
 class ChangeType(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Types of code changes tracked."""

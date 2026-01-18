@@ -15,8 +15,9 @@ from database.session import SessionLocal
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.autonomous_healing_system import AutonomousHealingSystem, HealthStatus, AnomalyType, TrustLevel
 from genesis.genesis_key_service import get_genesis_service
+logger = logging.getLogger(__name__)
+
 class TestStatus(str, Enum):
-    logger = logging.getLogger(__name__)
     """Test execution status."""
     PASSED = "passed"
     FAILED = "failed"

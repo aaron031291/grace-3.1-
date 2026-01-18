@@ -7,8 +7,9 @@ from enum import Enum
 from pathlib import Path
 import hashlib
 import uuid
+logger = logging.getLogger(__name__)
+
 class FailureType(str, Enum):
-    logger = logging.getLogger(__name__)
     """Types of failures to track."""
     SYNTAX_ERROR = "syntax_error"
     RUNTIME_ERROR = "runtime_error"

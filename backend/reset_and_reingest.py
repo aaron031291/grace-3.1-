@@ -3,8 +3,9 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import time
+logger = logging.getLogger(__name__)
+
 class ColoredFormatter(logging.Formatter):
-    logger = logging.getLogger(__name__)
     """Formatter that adds colors and better formatting."""
     
     COLORS = {

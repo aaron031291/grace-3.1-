@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 from cognitive.learning_memory import LearningExample
 from cognitive.enhanced_trust_scorer import TrustScoreResult
 from cognitive.enhanced_consistency_checker import ConsistencyResult
+logger = logging.getLogger(__name__)
+
 class ValidationRuleType(Enum):
-    logger = logging.getLogger(__name__)
     """Types of validation rules."""
     TRUST_SCORE = "trust_score"
     CONSISTENCY = "consistency"

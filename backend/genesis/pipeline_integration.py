@@ -9,8 +9,9 @@ from genesis.symbiotic_version_control import get_symbiotic_version_control
 from genesis.repo_scanner import get_repo_scanner
 from genesis.kb_integration import get_kb_integration
 from models.genesis_key_models import GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class DataPipeline:
-    logger = logging.getLogger(__name__)
     """
     Complete data pipeline from input to world model.
 

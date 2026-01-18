@@ -4,8 +4,9 @@ from datetime import datetime
 from typing import Optional, Dict, Any, List
 from sqlalchemy.orm import Session
 from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus, UserProfile
+logger = logging.getLogger(__name__)
+
 class ComprehensiveTracker:
-    logger = logging.getLogger(__name__)
     """
     Comprehensive tracker for all system inputs and actions.
 

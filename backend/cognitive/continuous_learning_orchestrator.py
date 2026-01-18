@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Set
 from pathlib import Path
 import json
+logger = logging.getLogger(__name__)
+
 class ContinuousLearningOrchestrator:
-    logger = logging.getLogger(__name__)
     """
     Orchestrates continuous autonomous learning and self-improvement
 

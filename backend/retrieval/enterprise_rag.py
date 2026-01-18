@@ -9,8 +9,9 @@ import json
 from retrieval.retriever import DocumentRetriever
 from models.database_models import Document, DocumentChunk
 from embedding import EmbeddingModel
+logger = logging.getLogger(__name__)
+
 class EnterpriseRAG:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade RAG system.
     

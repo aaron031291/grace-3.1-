@@ -12,8 +12,9 @@ from embedding import EmbeddingModel, get_embedding_model
 from vector_db.client import get_qdrant_client
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk
+logger = logging.getLogger(__name__)
+
 class FileChange:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)

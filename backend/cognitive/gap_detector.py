@@ -4,8 +4,9 @@ from dataclasses import dataclass
 from datetime import datetime
 import json
 from cognitive.healing_knowledge_base import get_healing_knowledge_base, IssueType
+logger = logging.getLogger(__name__)
+
 class KnowledgeGap:
-    logger = logging.getLogger(__name__)
     """Represents a gap in Grace's knowledge."""
     error_message: str
     error_type: Optional[str] = None

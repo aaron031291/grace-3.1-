@@ -6,8 +6,9 @@ from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from models.database_models import Document
+logger = logging.getLogger(__name__)
+
 class ContentIntegrityVerifier:
-    logger = logging.getLogger(__name__)
     """
     Content integrity verification system.
 

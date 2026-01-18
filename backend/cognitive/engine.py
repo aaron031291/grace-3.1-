@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -64,7 +64,7 @@ class DecisionContext:
     future_flexibility_metric: float = 1.0
 
     # Invariant 11: Time Bounds
-    planning_start: datetime = field(default_factory=datetime.utcnow)
+    planning_start: datetime = field(default_factory=lambda: datetime.now(UTC))
     planning_deadline: Optional[datetime] = None
     decision_freeze_point: Optional[datetime] = None
 
@@ -75,7 +75,7 @@ class DecisionContext:
 
     # Metadata
     parent_decision_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -266,7 +266,7 @@ class CognitiveEngine:
                         
                         # Check if alternative exceeds deadline
                         if context.planning_deadline:
-                            deadline_ms = (context.planning_deadline - datetime.utcnow()).total_seconds() * 1000
+                            deadline_ms = (context.planning_deadline - datetime.now(UTC)).total_seconds() * 1000
                             if time_estimate.p95_ms > deadline_ms:
                                 # Penalize alternatives that exceed deadline
                                 score *= 0.5
@@ -466,7 +466,7 @@ class CognitiveEngine:
         if context.decision_freeze_point is None:
             return False
 
-        return datetime.utcnow() >= context.decision_freeze_point
+        return datetime.now(UTC) >= context.decision_freeze_point
 
     def check_recursion_bounds(self, context: DecisionContext) -> bool:
         """

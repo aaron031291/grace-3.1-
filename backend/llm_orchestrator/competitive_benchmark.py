@@ -8,8 +8,9 @@ from enum import Enum
 from datetime import datetime
 from pathlib import Path
 import uuid
+logger = logging.getLogger(__name__)
+
 class QualityTier(str, Enum):
-    logger = logging.getLogger(__name__)
     """Quality tiers for comparison."""
     ELITE = "elite"           # Top 5% - Claude/Cursor level
     EXCELLENT = "excellent"   # Top 20%

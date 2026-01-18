@@ -6,8 +6,9 @@ from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.file_organizer import FileOrganizer
 from librarian.file_naming_manager import FileNamingManager
+logger = logging.getLogger(__name__)
+
 class BulkOperationsManager:
-    logger = logging.getLogger(__name__)
     """
     Manages bulk operations on documents.
 

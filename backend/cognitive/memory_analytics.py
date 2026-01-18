@@ -4,8 +4,9 @@ from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
 from collections import defaultdict
+logger = logging.getLogger(__name__)
+
 class MemoryAnalytics:
-    logger = logging.getLogger(__name__)
     """
     Comprehensive memory system analytics.
     

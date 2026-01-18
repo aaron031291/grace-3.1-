@@ -16,7 +16,7 @@ import threading
 import time
 import asyncio
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from unittest.mock import MagicMock, patch
 from typing import List, Dict, Any
 
@@ -403,7 +403,7 @@ class TestEnterpriseMessageBusReal:
                 to_component=None,
                 topic="tracking.test",
                 payload={},
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(UTC),
                 priority=5 + (i % 5)
             )
             enterprise_bus.track_message(message, processing_time_ms=10.0 + i)
@@ -432,7 +432,7 @@ class TestEnterpriseMessageBusReal:
             to_component=ComponentType.LLM_ORCHESTRATION,
             topic="slow.request",
             payload={"query": "complex query"},
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(UTC)
         )
         
         enterprise_bus.track_message(slow_message, processing_time_ms=250.0)

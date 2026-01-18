@@ -7,8 +7,9 @@ import logging
 from models.librarian_models import DocumentRelationship
 from models.database_models import Document, DocumentChunk
 from librarian.utils import calculate_similarity_score
+logger = logging.getLogger(__name__)
+
 class RelationshipManager:
-    logger = logging.getLogger(__name__)
     """
     Manages document relationships and knowledge graph construction.
 

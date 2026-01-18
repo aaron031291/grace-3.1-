@@ -10,8 +10,9 @@ from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
 from cognitive.memory_mesh_snapshot import MemoryMeshSnapshot
 from cognitive.advanced_memory_cognition import get_advanced_memory_cognition, AdvancedMemoryCognition
+logger = logging.getLogger(__name__)
+
 class MagmaLayer(str, Enum):
-    logger = logging.getLogger(__name__)
     """Magma memory layers."""
     SURFACE = "surface"  # Active, fluid (recent, frequently accessed)
     MANTLE = "mantle"  # Semi-crystallized (patterns, validated)

@@ -23,8 +23,9 @@ try:
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
+logger = logging.getLogger(__name__)
+
 class GenesisCICDIntegration:
-    logger = logging.getLogger(__name__)
     """
     Integrates Genesis Keys with CI/CD for intelligent, autonomous testing.
     

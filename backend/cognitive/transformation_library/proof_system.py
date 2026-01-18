@@ -1,8 +1,9 @@
 import ast
 import logging
 from typing import Dict, Any, List, Optional, Tuple
+logger = logging.getLogger(__name__)
+
 class ProofSystem:
-    logger = logging.getLogger(__name__)
     """
     Proof generation and verification system.
     

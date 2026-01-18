@@ -4,7 +4,7 @@ Learning Memory System - Connects to Memory Mesh
 Manages training data from learning memory folders and feeds it
 to the memory mesh with trust scores for continuous improvement.
 """
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session
@@ -497,7 +497,7 @@ class LearningMemoryManager:
             raise ValueError("Cannot extract pattern from empty examples list")
         
         # Simple pattern extraction (can be enhanced with ML)
-        pattern_name = f"pattern_{examples[0].example_type}_{datetime.utcnow().timestamp()}"
+        pattern_name = f"pattern_{examples[0].example_type}_{datetime.now(UTC).timestamp()}"
 
         # Extract common preconditions
         preconditions = self._extract_common_preconditions(examples)
@@ -606,7 +606,7 @@ class LearningMemoryManager:
 
         # Update usage tracking
         example.times_referenced += 1
-        example.last_used = datetime.utcnow()
+        example.last_used = datetime.now(UTC)
 
         # Update trust based on outcome
         new_trust = self.trust_scorer.update_trust_on_validation(
@@ -625,7 +625,7 @@ class LearningMemoryManager:
         examples = self.session.query(LearningExample).all()
 
         for example in examples:
-            age_days = (datetime.utcnow() - example.created_at).days
+            age_days = (datetime.now(UTC) - example.created_at).days
             example.recency_weight = self.trust_scorer._calculate_recency_weight(age_days)
 
             # Recalculate trust with new recency weight

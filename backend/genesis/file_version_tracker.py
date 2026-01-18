@@ -9,8 +9,9 @@ from sqlalchemy.orm import Session
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from genesis.genesis_key_service import get_genesis_service
 from database.session import get_session
+logger = logging.getLogger(__name__)
+
 class FileVersionTracker:
-    logger = logging.getLogger(__name__)
     """
     Tracks file versions through Genesis Keys.
 

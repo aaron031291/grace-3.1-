@@ -8,8 +8,9 @@ from embedding import get_embedding_model
 from file_manager.file_handler import FileHandler
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig
+logger = logging.getLogger(__name__)
+
 class AIResearchIngestionManager:
-    logger = logging.getLogger(__name__)
     """Manages ingestion of AI research repositories."""
 
     # File extensions to ingest

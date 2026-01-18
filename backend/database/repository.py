@@ -5,8 +5,9 @@ import logging
 
 T = TypeVar('T')  # Define TypeVar before using it
 
+logger = logging.getLogger(__name__)
+
 class BaseRepository(Generic[T]):
-    logger = logging.getLogger(__name__)
     """
     Base repository class providing common CRUD operations.
     

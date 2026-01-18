@@ -6,8 +6,9 @@ from cognitive.gap_detector import get_gap_detector, KnowledgeGap
 from cognitive.reverse_knn_searcher import get_reverse_knn_searcher, SimilarProblem
 from cognitive.healing_knowledge_base import get_healing_knowledge_base, IssueType, FixPattern
 import re
+logger = logging.getLogger(__name__)
+
 class GapFiller:
-    logger = logging.getLogger(__name__)
     """
     Fills knowledge gaps by learning from similar problems.
     

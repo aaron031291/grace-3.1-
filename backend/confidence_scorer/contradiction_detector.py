@@ -1,8 +1,9 @@
 import logging
 import numpy as np
 from typing import List, Tuple, Dict, Optional
+logger = logging.getLogger(__name__)
+
 class SemanticContradictionDetector:
-    logger = logging.getLogger(__name__)
     """
     Uses NLI (Natural Language Inference) to detect semantic contradictions.
     

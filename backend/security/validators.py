@@ -12,6 +12,7 @@ import re
 import html
 from typing import Any, Optional, List, Union
 from pathlib import Path, PurePosixPath, PureWindowsPath
+from urllib.parse import unquote
 
 from .config import get_security_config
 
@@ -40,7 +41,10 @@ class InputValidator:
             re.compile(r"\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER|CREATE|EXEC)\b.*\b(FROM|INTO|TABLE|DATABASE)\b", re.IGNORECASE),
             re.compile(r";\s*(SELECT|INSERT|UPDATE|DELETE|DROP)", re.IGNORECASE),
             re.compile(r"'\s*(OR|AND)\s*'?\s*\d*\s*=\s*\d*", re.IGNORECASE),  # ' OR '1'='1
+            re.compile(r"'\s*(OR|AND)\s*'[^']*'\s*=\s*'[^']*'", re.IGNORECASE),  # ' OR '1'='1' pattern
+            re.compile(r"\d+'\s*(OR|AND)\s*'[^']*'\s*=\s*'", re.IGNORECASE),  # 1' OR '1'='1
             re.compile(r"--\s*$", re.MULTILINE),  # SQL comment
+            re.compile(r"/\*.*\*/", re.DOTALL),  # Block comments /* */
         ]
 
         self.path_traversal_patterns = [
@@ -125,13 +129,23 @@ class InputValidator:
         if not isinstance(value, str):
             return (False, None, f"{field_name} must be a string")
 
-        # Check for path traversal patterns
-        for pattern in self.path_traversal_patterns:
-            if pattern.search(value):
-                return (False, None, f"{field_name} contains invalid path sequence")
+        # URL-decode the value to catch encoded traversal attempts
+        # Decode multiple times to catch double-encoding
+        decoded_value = value
+        for _ in range(3):
+            prev = decoded_value
+            decoded_value = unquote(decoded_value)
+            if decoded_value == prev:
+                break
+
+        # Check for path traversal patterns on both original and decoded
+        for check_value in [value, decoded_value]:
+            for pattern in self.path_traversal_patterns:
+                if pattern.search(check_value):
+                    return (False, None, f"{field_name} contains invalid path sequence")
 
         # Check for null bytes
-        if "\x00" in value:
+        if "\x00" in value or "\x00" in decoded_value:
             return (False, None, f"{field_name} contains invalid characters")
 
         try:
@@ -219,9 +233,13 @@ class InputValidator:
         if not isinstance(value, str):
             return (False, None, f"{field_name} must be a string")
 
-        # Basic email pattern
+        # Check for consecutive dots (invalid in domain)
+        if ".." in value:
+            return (False, None, f"Invalid {field_name} format")
+
+        # Basic email pattern - requires no consecutive dots
         email_pattern = re.compile(
-            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)+$'
         )
 
         if not email_pattern.match(value):

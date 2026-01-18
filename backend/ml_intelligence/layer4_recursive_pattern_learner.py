@@ -327,6 +327,16 @@ class Layer4RecursivePatternLearner:
         
         return cycle
     
+    def run_learning_cycle(
+        self,
+        domain: PatternDomain,
+        data: List[Dict[str, Any]],
+        context: Optional[Dict[str, Any]] = None,
+        max_iterations: int = 3,
+    ) -> RecursiveLearningCycle:
+        """Alias for run_recursive_cycle for backwards compatibility."""
+        return self.run_recursive_cycle(domain, data, context, max_iterations)
+    
     def _discover_patterns(
         self,
         domain: PatternDomain,

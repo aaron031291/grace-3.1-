@@ -7,8 +7,9 @@ import logging
 from datetime import datetime
 import re
 import json
+logger = logging.getLogger(__name__)
+
 class DocumentDownloader:
-    logger = logging.getLogger(__name__)
     """
     Service for downloading documents from URLs.
     """

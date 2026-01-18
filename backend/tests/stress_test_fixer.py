@@ -3,8 +3,9 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
+logger = logging.getLogger(__name__)
+
 class StressTestFixer:
-    logger = logging.getLogger(__name__)
     """Automatically fixes issues found in stress tests."""
     
     def __init__(self, session: Session = None, knowledge_base_path: Path = None):

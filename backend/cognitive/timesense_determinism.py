@@ -2,8 +2,9 @@ import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+logger = logging.getLogger(__name__)
+
 class DeterministicTimeProof:
-    logger = logging.getLogger(__name__)
     """
     Proof that an operation's time is deterministic based on TimeSense predictions.
     """

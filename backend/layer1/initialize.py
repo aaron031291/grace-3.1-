@@ -10,8 +10,9 @@ from retrieval.retriever import DocumentRetriever
 from ingestion.service import TextIngestionService
 from llm_orchestrator.llm_orchestrator import LLMOrchestrator
 from embedding import get_embedding_model
+logger = logging.getLogger(__name__)
+
 class Layer1System:
-    logger = logging.getLogger(__name__)
     """
     Complete Layer 1 system with all components connected.
 

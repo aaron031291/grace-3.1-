@@ -4,8 +4,9 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from models.genesis_key_models import GenesisKey
 from genesis.code_change_analyzer import ChangeAnalysis, CodeChange, CodeEntity
+logger = logging.getLogger(__name__)
+
 class GeneratedTest:
-    logger = logging.getLogger(__name__)
     """A generated test case."""
     test_name: str
     test_code: str

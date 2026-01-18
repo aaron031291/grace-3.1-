@@ -4,8 +4,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from models.database_models import Document
 from models.genesis_key_models import GenesisKey, GenesisKeyType
+logger = logging.getLogger(__name__)
+
 class LibrarianGenesisIntegration:
-    logger = logging.getLogger(__name__)
     """
     Genesis Key integration for librarian operations.
 

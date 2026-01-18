@@ -11,8 +11,11 @@ from database.session import get_session
 from version_control.git_service import GitService
 from genesis.kb_integration import get_kb_integration
 import os
+
+logger = logging.getLogger(__name__)
+
+
 class GenesisKeyService:
-    logger = logging.getLogger(__name__)
     """
     Service for creating and managing Genesis Keys.
 

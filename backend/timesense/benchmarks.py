@@ -16,8 +16,9 @@ from typing import Dict, List, Tuple, Optional, Any, Callable
 from dataclasses import dataclass, field
 from timesense.primitives import PrimitiveType, PrimitiveCategory, Primitive, PrimitiveRegistry, get_primitive_registry, CacheState
 from timesense.profiles import TimeProfile, ProfileManager, DistributionStats
+logger = logging.getLogger(__name__)
+
 class BenchmarkResult:
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Result of a single benchmark run."""

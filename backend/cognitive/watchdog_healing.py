@@ -12,8 +12,9 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 from enum import Enum
 from backend.utils.os_adapter import OS, process, shell
+logger = logging.getLogger(__name__)
+
 class SystemState(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """System state."""
     RUNNING = "running"

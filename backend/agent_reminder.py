@@ -4,8 +4,9 @@ from typing import Optional, Dict, Any
 from datetime import datetime
 import json
 from system_specs import get_system_specs, SystemSpecs
+logger = logging.getLogger(__name__)
+
 class AgentReminder:
-    logger = logging.getLogger(__name__)
     """
     Manages polite reminders to external coding agents about system specifications.
     

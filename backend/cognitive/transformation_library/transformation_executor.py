@@ -7,8 +7,9 @@ from cognitive.transformation_library.rewrite_engine import RewriteEngine
 from cognitive.transformation_library.constraint_validator import ConstraintValidator
 from cognitive.transformation_library.proof_system import ProofSystem
 from cognitive.transformation_library.outcome_ledger import OutcomeLedger
+logger = logging.getLogger(__name__)
+
 class TransformationExecutor:
-    logger = logging.getLogger(__name__)
     """
     Main orchestrator for code transformations.
     

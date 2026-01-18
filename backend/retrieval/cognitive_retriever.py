@@ -7,8 +7,9 @@ from retrieval.retriever import DocumentRetriever
 from database.session import get_session
 from pathlib import Path
 from settings import KNOWLEDGE_BASE_PATH
+logger = logging.getLogger(__name__)
+
 class CognitiveRetriever:
-    logger = logging.getLogger(__name__)
     """
     Retrieval system integrated with Cognitive Engine.
 

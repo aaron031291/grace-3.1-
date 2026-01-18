@@ -9,8 +9,9 @@ from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLev
 from cognitive.mirror_self_modeling import get_mirror_system
 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
 from cognitive.learning_subagent_system import LearningOrchestrator
+logger = logging.getLogger(__name__)
+
 class IngestionSelfHealingIntegration:
-    logger = logging.getLogger(__name__)
     """
     Unified system connecting ingestion, learning, and self-healing.
 

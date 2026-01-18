@@ -6,8 +6,9 @@ from sqlalchemy import func, and_, or_
 import json
 import gzip
 from pathlib import Path
+logger = logging.getLogger(__name__)
+
 class MemoryLifecycleManager:
-    logger = logging.getLogger(__name__)
     """
     Enterprise-grade memory lifecycle management.
     

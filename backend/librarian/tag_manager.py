@@ -6,8 +6,9 @@ import logging
 from models.librarian_models import LibrarianTag, DocumentTag
 from models.database_models import Document
 from librarian.utils import normalize_tag_name, validate_tag_name, validate_hex_color, generate_default_color, deduplicate_list
+logger = logging.getLogger(__name__)
+
 class TagManager:
-    logger = logging.getLogger(__name__)
     """
     Manages tag lifecycle operations for the Librarian System.
 

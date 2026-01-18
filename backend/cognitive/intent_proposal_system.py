@@ -4,8 +4,9 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 from cognitive.compiler_governed_agency import CodeIntent, IntentType, CompilerGovernedAgency, get_compiler_governed_agency
+logger = logging.getLogger(__name__)
+
 class IntentValidationError(Exception):
-    logger = logging.getLogger(__name__)
     """Intent validation failed"""
     pass
 

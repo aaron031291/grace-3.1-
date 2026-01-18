@@ -4,8 +4,9 @@ from datetime import datetime, UTC
 from enum import Enum
 from dataclasses import dataclass, field
 from models.genesis_key_models import GenesisKey
+logger = logging.getLogger(__name__)
+
 class GenesisCapability(str, Enum):
-    logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     logger = logging.getLogger(__name__)
     """Genesis capabilities that pipelines can bind to."""

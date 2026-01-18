@@ -4,8 +4,9 @@ from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
+logger = logging.getLogger(__name__)
+
 class LLMOrchestrationConnector:
-    logger = logging.getLogger(__name__)
     """
     Connects LLM Orchestration to Layer 1 message bus.
 

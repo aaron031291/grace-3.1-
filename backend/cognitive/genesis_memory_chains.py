@@ -8,8 +8,9 @@ from models.database_models import LearningExample
 from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
 from models.genesis_key_models import GenesisKey
+logger = logging.getLogger(__name__)
+
 class GenesisMemoryChain:
-    logger = logging.getLogger(__name__)
     """
     Tracks complete memory chain for a Genesis Key.
 
