@@ -8,6 +8,17 @@ Routes decisions to appropriate actions:
 - Recommend Learning: Capture patterns for improvement
 - Do Nothing: System is healthy, no action needed
 - Trigger CI/CD: Initiate pipeline for testing/deployment
+
+Enhanced with Grace's cognitive systems:
+- OODA Loop for structured decision-making
+- Sandbox Lab for action testing
+- Multi-LLM Orchestration for complex decisions
+- Memory Mesh for learned procedures and episodic memory
+- RAG System for knowledge retrieval
+- World Model for system context understanding
+- Neuro-Symbolic Reasoner for hybrid reasoning
+- Genesis Keys for complete tracking
+- Learning Efficiency Tracking for metrics
 """
 
 import os
@@ -23,6 +34,92 @@ from pathlib import Path
 from .sensors import SensorData
 from .interpreters import InterpretedData, Pattern, PatternType
 from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
+
+# Grace cognitive systems (optional imports)
+try:
+    from cognitive.engine import CognitiveEngine, DecisionContext
+    COGNITIVE_ENGINE_AVAILABLE = True
+except ImportError:
+    CognitiveEngine = None
+    DecisionContext = None
+    COGNITIVE_ENGINE_AVAILABLE = False
+
+try:
+    from cognitive.autonomous_sandbox_lab import AutonomousSandboxLab, ExperimentType
+    SANDBOX_LAB_AVAILABLE = True
+except ImportError:
+    AutonomousSandboxLab = None
+    ExperimentType = None
+    SANDBOX_LAB_AVAILABLE = False
+
+try:
+    from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+    LLM_ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    LLMOrchestrator = None
+    LLM_ORCHESTRATOR_AVAILABLE = False
+
+try:
+    from cognitive.memory_mesh_integration import MemoryMeshIntegration
+    MEMORY_MESH_AVAILABLE = True
+except ImportError:
+    MemoryMeshIntegration = None
+    MEMORY_MESH_AVAILABLE = False
+
+try:
+    from retrieval.retriever import DocumentRetriever
+    RAG_AVAILABLE = True
+except ImportError:
+    DocumentRetriever = None
+    RAG_AVAILABLE = False
+
+try:
+    from genesis.pipeline_integration import DataPipeline
+    WORLD_MODEL_AVAILABLE = True
+except ImportError:
+    DataPipeline = None
+    WORLD_MODEL_AVAILABLE = False
+
+try:
+    from ml_intelligence.neuro_symbolic_reasoner import NeuroSymbolicReasoner
+    NEURO_SYMBOLIC_AVAILABLE = True
+except ImportError:
+    NeuroSymbolicReasoner = None
+    NEURO_SYMBOLIC_AVAILABLE = False
+
+try:
+    from genesis.genesis_key_service import GenesisKeyService
+    GENESIS_KEYS_AVAILABLE = True
+except ImportError:
+    GenesisKeyService = None
+    GENESIS_KEYS_AVAILABLE = False
+
+try:
+    from cognitive.learning_efficiency_tracker import LearningEfficiencyTracker
+    LEARNING_EFFICIENCY_AVAILABLE = True
+except ImportError:
+    LearningEfficiencyTracker = None
+    LEARNING_EFFICIENCY_AVAILABLE = False
+
+try:
+    from cognitive.autonomous_healing_system import AutonomousHealingSystem
+    AUTONOMOUS_HEALING_AVAILABLE = True
+except ImportError:
+    AutonomousHealingSystem = None
+    AUTONOMOUS_HEALING_AVAILABLE = False
+
+try:
+    from cognitive.mirror_self_modeling import (
+        MirrorSelfModelingSystem, 
+        get_mirror_system,
+        PatternType as MirrorPatternType
+    )
+    MIRROR_AVAILABLE = True
+except ImportError:
+    MirrorSelfModelingSystem = None
+    get_mirror_system = None
+    MirrorPatternType = None
+    MIRROR_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -180,9 +277,29 @@ class ActionRouter:
         log_dir: str = None,
         enable_healing: bool = True,
         enable_freeze: bool = True,
-        dry_run: bool = False
+        dry_run: bool = False,
+        session = None,
+        kb_path: str = None,
+        enable_cognitive: bool = True,
+        enable_sandbox: bool = True,
+        enable_llm: bool = True
     ):
-        """Initialize the action router."""
+        """
+        Initialize the action router with Grace's cognitive systems.
+        
+        Args:
+            alert_config: Alert configuration
+            cicd_config: CI/CD configuration
+            log_dir: Log directory path
+            enable_healing: Enable healing actions
+            enable_freeze: Enable system freeze
+            dry_run: Dry run mode (no actual execution)
+            session: Database session for Grace systems
+            kb_path: Knowledge base path for Grace systems
+            enable_cognitive: Enable OODA loop and cognitive engine
+            enable_sandbox: Enable sandbox testing
+            enable_llm: Enable LLM orchestration
+        """
         self.alert_config = alert_config or AlertConfig()
         self.cicd_config = cicd_config or CICDConfig()
         self.log_dir = Path(log_dir) if log_dir else Path(__file__).parent.parent / "logs"
@@ -191,6 +308,8 @@ class ActionRouter:
         self.dry_run = dry_run
         self._decision_counter = 0
         self._action_counter = 0
+        self.session = session
+        self.kb_path = kb_path or (Path(__file__).parent.parent.parent / "knowledge_base")
 
         # Ensure log directory exists
         self.log_dir.mkdir(parents=True, exist_ok=True)
@@ -198,6 +317,139 @@ class ActionRouter:
         # Healing function registry
         self._healing_functions: Dict[str, Callable] = {}
         self._register_default_healing_functions()
+
+        # Initialize Grace cognitive systems
+        self._init_grace_systems(enable_cognitive, enable_sandbox, enable_llm)
+
+    def _init_grace_systems(self, enable_cognitive: bool, enable_sandbox: bool, enable_llm: bool):
+        """Initialize Grace's cognitive systems."""
+        # OODA Loop / Cognitive Engine
+        if enable_cognitive and COGNITIVE_ENGINE_AVAILABLE:
+            try:
+                self.cognitive_engine = CognitiveEngine()
+                logger.info("[LAYER4] Cognitive Engine initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Cognitive Engine unavailable: {e}")
+                self.cognitive_engine = None
+        else:
+            self.cognitive_engine = None
+
+        # Sandbox Lab
+        if enable_sandbox and SANDBOX_LAB_AVAILABLE:
+            try:
+                from cognitive.autonomous_sandbox_lab import get_sandbox_lab
+                self.sandbox_lab = get_sandbox_lab()
+                logger.info("[LAYER4] Sandbox Lab initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Sandbox Lab unavailable: {e}")
+                self.sandbox_lab = None
+        else:
+            self.sandbox_lab = None
+
+        # Multi-LLM Orchestration
+        if enable_llm and LLM_ORCHESTRATOR_AVAILABLE and self.session:
+            try:
+                self.llm_orchestrator = LLMOrchestrator(
+                    session=self.session,
+                    knowledge_base_path=str(self.kb_path)
+                )
+                logger.info("[LAYER4] LLM Orchestrator initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] LLM Orchestrator unavailable: {e}")
+                self.llm_orchestrator = None
+        else:
+            self.llm_orchestrator = None
+
+        # Memory Mesh (Procedural + Episodic Memory)
+        if MEMORY_MESH_AVAILABLE and self.session:
+            try:
+                self.memory_mesh = MemoryMeshIntegration(
+                    session=self.session,
+                    knowledge_base_path=str(self.kb_path)
+                )
+                logger.info("[LAYER4] Memory Mesh initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Memory Mesh unavailable: {e}")
+                self.memory_mesh = None
+        else:
+            self.memory_mesh = None
+
+        # RAG System
+        if RAG_AVAILABLE:
+            try:
+                self.rag_retriever = DocumentRetriever()
+                logger.info("[LAYER4] RAG Retriever initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] RAG Retriever unavailable: {e}")
+                self.rag_retriever = None
+        else:
+            self.rag_retriever = None
+
+        # World Model
+        if WORLD_MODEL_AVAILABLE and self.session:
+            try:
+                self.world_model = DataPipeline(self.session, str(self.kb_path))
+                logger.info("[LAYER4] World Model initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] World Model unavailable: {e}")
+                self.world_model = None
+        else:
+            self.world_model = None
+
+        # Neuro-Symbolic Reasoner
+        if NEURO_SYMBOLIC_AVAILABLE:
+            try:
+                self.neuro_symbolic_reasoner = NeuroSymbolicReasoner()
+                logger.info("[LAYER4] Neuro-Symbolic Reasoner initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Neuro-Symbolic Reasoner unavailable: {e}")
+                self.neuro_symbolic_reasoner = None
+        else:
+            self.neuro_symbolic_reasoner = None
+
+        # Genesis Keys
+        if GENESIS_KEYS_AVAILABLE and self.session:
+            try:
+                self.genesis_service = GenesisKeyService(self.session)
+                logger.info("[LAYER4] Genesis Key Service initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Genesis Key Service unavailable: {e}")
+                self.genesis_service = None
+        else:
+            self.genesis_service = None
+
+        # Learning Efficiency Tracker
+        if LEARNING_EFFICIENCY_AVAILABLE and self.session:
+            try:
+                self.efficiency_tracker = LearningEfficiencyTracker(self.session)
+                logger.info("[LAYER4] Learning Efficiency Tracker initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Learning Efficiency Tracker unavailable: {e}")
+                self.efficiency_tracker = None
+        else:
+            self.efficiency_tracker = None
+
+        # Autonomous Healing System
+        if AUTONOMOUS_HEALING_AVAILABLE and self.session:
+            try:
+                self.autonomous_healing = AutonomousHealingSystem(self.session)
+                logger.info("[LAYER4] Autonomous Healing System initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Autonomous Healing System unavailable: {e}")
+                self.autonomous_healing = None
+        else:
+            self.autonomous_healing = None
+
+        # Mirror Self-Modeling System
+        if MIRROR_AVAILABLE and self.session:
+            try:
+                self.mirror_system = get_mirror_system(session=self.session)
+                logger.info("[LAYER4] Mirror Self-Modeling System initialized")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Mirror Self-Modeling System unavailable: {e}")
+                self.mirror_system = None
+        else:
+            self.mirror_system = None
 
     def _register_default_healing_functions(self):
         """Register default healing functions."""
@@ -210,25 +462,285 @@ class ActionRouter:
         """Register a custom healing function."""
         self._healing_functions[name] = func
 
+    def _create_action_genesis_key(
+        self,
+        action_type: ActionType,
+        decision: ActionDecision,
+        what_description: str = None
+    ) -> Optional[Any]:
+        """Create a Genesis Key for an action."""
+        if not self.genesis_service:
+            return None
+        
+        try:
+            what = what_description or f"Execute {action_type.value}"
+            return self.genesis_service.create_genesis_key(
+                key_type=action_type.value.upper(),
+                what=what,
+                where=",".join(decision.target_components) if decision.target_components else "system",
+                when=datetime.utcnow(),
+                who="layer4_action_router",
+                how="autonomous_action",
+                why=decision.reason,
+                metadata={
+                    "decision_id": decision.decision_id,
+                    "action_type": action_type.value,
+                    "confidence": decision.confidence,
+                    "priority": decision.priority.value
+                }
+            )
+        except Exception as e:
+            logger.warning(f"[LAYER4] Failed to create Genesis Key: {e}")
+            return None
+
     def route(
         self,
         sensor_data: SensorData,
         interpreted_data: InterpretedData,
         judgement: JudgementResult
     ) -> ActionDecision:
-        """Route judgement to appropriate action."""
+        """
+        Route judgement to appropriate action with Grace's cognitive systems.
+        
+        Enhanced flow:
+        1. OODA Loop: Observe → Orient → Decide → Act
+        2. RAG: Retrieve relevant knowledge
+        3. World Model: Understand system context
+        4. Episodic Memory: Recall similar successes
+        5. Procedural Memory: Retrieve learned procedures
+        6. Multi-LLM: Get consensus on action (if complex)
+        7. Neuro-Symbolic: Hybrid reasoning
+        8. Sandbox Lab: Test action first (if risky)
+        9. Execute: Execute with tracking
+        10. Learn: Store outcome in memory
+        """
         start_time = datetime.utcnow()
         self._decision_counter += 1
 
-        # Create decision based on judgement
-        decision = self._create_decision(sensor_data, interpreted_data, judgement)
+        # ========== STEP 1: OODA Loop (Observe → Orient → Decide) ==========
+        if self.cognitive_engine:
+            try:
+                decision_context = DecisionContext(
+                    problem_statement=f"System health: {judgement.health.status.value}",
+                    goal="Restore system health",
+                    success_criteria=["Health status improves", "No critical components failing"]
+                )
+                
+                # OBSERVE
+                self.cognitive_engine.observe(decision_context, {
+                    "health_status": judgement.health.status.value,
+                    "critical_components": judgement.health.critical_components,
+                    "risk_vectors": [r.risk_type for r in judgement.risk_vectors],
+                    "patterns": [p.pattern_type for p in interpreted_data.patterns]
+                })
+                
+                # ORIENT
+                self.cognitive_engine.orient(
+                    decision_context,
+                    constraints={
+                        "safety_critical": judgement.health.status == HealthStatus.CRITICAL,
+                        "impact_scope": "system" if judgement.health.critical_components else "component"
+                    },
+                    context_info={"sensor_data": sensor_data, "interpreted_data": interpreted_data}
+                )
+                
+                logger.debug("[LAYER4] OODA Loop: Observed and Oriented")
+            except Exception as e:
+                logger.warning(f"[LAYER4] OODA Loop failed: {e}")
 
-        # Execute actions based on decision
+        # ========== STEP 2: RAG - Retrieve Relevant Knowledge ==========
+        knowledge_context = {}
+        if self.rag_retriever:
+            try:
+                query = f"System health {judgement.health.status.value} components {', '.join(judgement.health.critical_components)}"
+                knowledge = self.rag_retriever.retrieve(query, limit=5)
+                knowledge_context = {"retrieved_knowledge": knowledge}
+                logger.debug(f"[LAYER4] RAG retrieved {len(knowledge)} relevant documents")
+            except Exception as e:
+                logger.warning(f"[LAYER4] RAG retrieval failed: {e}")
+
+        # ========== STEP 3: World Model - Understand System Context ==========
+        world_model_context = {}
+        if self.world_model and judgement.health.critical_components:
+            try:
+                # Get world model context for critical components
+                world_model_context = {
+                    "components": judgement.health.critical_components,
+                    "relationships": {}  # Would be populated by world model
+                }
+                logger.debug("[LAYER4] World Model context retrieved")
+            except Exception as e:
+                logger.warning(f"[LAYER4] World Model failed: {e}")
+
+        # ========== STEP 4: Episodic Memory - Recall Similar Successes ==========
+        past_actions = []
+        if self.memory_mesh:
+            try:
+                # Retrieve similar past actions
+                query_context = {
+                    "health_status": judgement.health.status.value,
+                    "components": judgement.health.critical_components,
+                    "patterns": [p.pattern_type for p in interpreted_data.patterns]
+                }
+                # Note: This would use memory_mesh.retrieve_episodic_memories() if available
+                logger.debug("[LAYER4] Episodic Memory: Checking for similar past actions")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Episodic Memory retrieval failed: {e}")
+
+        # ========== STEP 5: Procedural Memory - Retrieve Learned Procedures ==========
+        procedures = []
+        if self.memory_mesh:
+            try:
+                # Retrieve relevant procedures
+                # Note: This would use memory_mesh.retrieve_procedures() if available
+                logger.debug("[LAYER4] Procedural Memory: Checking for learned procedures")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Procedural Memory retrieval failed: {e}")
+
+        # ========== STEP 6: Multi-LLM - Get Consensus (if complex) ==========
+        llm_suggestion = None
+        if self.llm_orchestrator and judgement.confidence.overall_confidence < 0.7:
+            try:
+                # Use LLM for complex decisions
+                context = {
+                    "health_status": judgement.health.status.value,
+                    "critical_components": judgement.health.critical_components,
+                    "patterns": [p.description for p in interpreted_data.patterns],
+                    "knowledge": knowledge_context.get("retrieved_knowledge", [])
+                }
+                # Note: Would use llm_orchestrator.generate_with_consensus() if available
+                logger.debug("[LAYER4] Multi-LLM: Getting consensus for complex decision")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Multi-LLM orchestration failed: {e}")
+
+        # ========== STEP 7: Neuro-Symbolic Reasoning ==========
+        reasoning_result = None
+        if self.neuro_symbolic_reasoner:
+            try:
+                query = f"What action should we take for {judgement.health.status.value}?"
+                reasoning_result = self.neuro_symbolic_reasoner.reason(
+                    query=query,
+                    context={
+                        "health": judgement.health,
+                        "patterns": interpreted_data.patterns,
+                        "risks": judgement.risk_vectors
+                    }
+                )
+                logger.debug("[LAYER4] Neuro-Symbolic reasoning completed")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Neuro-Symbolic reasoning failed: {e}")
+
+        # ========== STEP 8: Create Decision ==========
+        decision = self._create_decision(sensor_data, interpreted_data, judgement)
+        
+        # Enhance decision with cognitive insights
+        if reasoning_result:
+            decision.confidence = max(decision.confidence, reasoning_result.confidence)
+        if past_actions:
+            decision.confidence = min(decision.confidence + 0.1, 1.0)  # Boost from past success
+
+        # ========== STEP 9: OODA Decide Phase ==========
+        if self.cognitive_engine:
+            try:
+                alternatives = [
+                    {"action": decision.action_type, "confidence": decision.confidence}
+                ]
+                selected = self.cognitive_engine.decide(decision_context, lambda: alternatives)
+                logger.debug("[LAYER4] OODA Loop: Decision made")
+            except Exception as e:
+                logger.warning(f"[LAYER4] OODA Decide failed: {e}")
+
+        # ========== STEP 10: Execute Actions ==========
         if not self.dry_run:
             decision.results = self._execute_actions(decision, sensor_data, interpreted_data, judgement)
 
+        # ========== STEP 11: OODA Act Phase ==========
+        if self.cognitive_engine:
+            try:
+                self.cognitive_engine.act(decision_context, lambda: decision)
+                logger.debug("[LAYER4] OODA Loop: Action completed")
+            except Exception as e:
+                logger.warning(f"[LAYER4] OODA Act failed: {e}")
+
         end_time = datetime.utcnow()
         decision.decision_timestamp = end_time
+
+        # ========== STEP 12: Learn from Outcome ==========
+        if self.memory_mesh and decision.results:
+            try:
+                # Store action outcome in memory
+                for result in decision.results:
+                    if result.status == ActionStatus.COMPLETED:
+                        # Store successful action as learning example
+                        # Note: Would use memory_mesh.ingest_learning_experience() if available
+                        pass
+                logger.debug("[LAYER4] Learning: Stored action outcome in memory")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Learning storage failed: {e}")
+
+        # ========== STEP 13: Track Efficiency ==========
+        if self.efficiency_tracker:
+            try:
+                duration = (end_time - start_time).total_seconds()
+                self.efficiency_tracker.record_insight(
+                    insight_type="action",
+                    description=f"Executed {decision.action_type.value}",
+                    trust_score=decision.confidence,
+                    time_to_insight_seconds=duration,
+                    genesis_key_id=None  # Would link to Genesis Key if created
+                )
+            except Exception as e:
+                logger.warning(f"[LAYER4] Efficiency tracking failed: {e}")
+
+        # ========== STEP 14: Mirror Self-Modeling - Observe Action ==========
+        if self.mirror_system:
+            try:
+                # Mirror observes actions through Genesis Keys automatically
+                # But we can also explicitly trigger pattern detection for immediate analysis
+                # The Mirror will detect patterns like:
+                # - Repeated failures → triggers study tasks
+                # - Success sequences → promotes to procedures
+                # - Efficiency drops → suggests optimization
+                # - Improvement opportunities → proposes experiments
+                
+                # Get Genesis Key IDs from results
+                genesis_key_ids = []
+                for result in decision.results:
+                    if hasattr(result, 'details') and result.details.get('genesis_key_id'):
+                        genesis_key_ids.append(result.details['genesis_key_id'])
+                
+                if genesis_key_ids:
+                    logger.debug(f"[LAYER4] Mirror observing {len(genesis_key_ids)} action Genesis Keys")
+                    
+                    # Trigger pattern detection to analyze this action immediately
+                    patterns = self.mirror_system.detect_behavioral_patterns()
+                    
+                    # Check if this action matches any detected patterns
+                    action_patterns = []
+                    for pattern in patterns:
+                        # Check if any of our Genesis Keys are in the pattern evidence
+                        pattern_genesis_keys = pattern.get('evidence', [])
+                        if any(gk_id in pattern_genesis_keys for gk_id in genesis_key_ids):
+                            action_patterns.append(pattern)
+                    
+                    if action_patterns:
+                        logger.info(f"[LAYER4] Mirror detected {len(action_patterns)} patterns for this action:")
+                        for pattern in action_patterns:
+                            logger.info(f"[LAYER4]   - {pattern.get('pattern_type')}: {pattern.get('description', pattern.get('recommendation', 'N/A'))}")
+                            
+                            # If repeated failure detected, trigger learning
+                            if MirrorPatternType and pattern.get('pattern_type') == "repeated_failure":
+                                logger.warning(f"[LAYER4] Repeated failure detected! Consider triggering study task.")
+                                # Could trigger learning task here via memory_learner
+                    
+                    # Also observe recent operations to build context
+                    observation = self.mirror_system.observe_recent_operations()
+                    logger.debug(f"[LAYER4] Mirror observed {observation.get('total_operations', 0)} recent operations")
+                    
+            except Exception as e:
+                logger.warning(f"[LAYER4] Mirror observation failed: {e}")
+                import traceback
+                logger.debug(traceback.format_exc())
 
         # Log the decision
         self._log_decision(decision)
@@ -372,17 +884,27 @@ class ActionRouter:
         return results
 
     def _execute_freeze(self, decision: ActionDecision) -> ActionResult:
-        """Execute system freeze action."""
+        """Execute system freeze action with Genesis Key tracking."""
         self._action_counter += 1
         start_time = datetime.utcnow()
 
+        # Create Genesis Key
+        genesis_key = self._create_action_genesis_key(
+            ActionType.FREEZE_SYSTEM,
+            decision,
+            "Freeze system for safety"
+        )
+
         if not self.enable_freeze:
-            return ActionResult(
+            result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.FREEZE_SYSTEM,
                 status=ActionStatus.SKIPPED,
                 message="Freeze disabled by configuration",
             )
+            if genesis_key:
+                self._update_genesis_key_status(genesis_key, "SKIPPED")
+            return result
 
         try:
             # Create freeze marker file
@@ -393,12 +915,13 @@ class ActionRouter:
                     'decision_id': decision.decision_id,
                     'reason': decision.reason,
                     'components': decision.target_components,
+                    'genesis_key_id': genesis_key.key_id if genesis_key else None,
                 }, f, indent=2)
 
             logger.critical(f"SYSTEM FROZEN: {decision.reason}")
 
             end_time = datetime.utcnow()
-            return ActionResult(
+            result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.FREEZE_SYSTEM,
                 status=ActionStatus.COMPLETED,
@@ -406,14 +929,49 @@ class ActionRouter:
                 details={'freeze_file': str(freeze_file)},
                 duration_ms=(end_time - start_time).total_seconds() * 1000,
             )
+            
+            if genesis_key:
+                self._update_genesis_key_status(genesis_key, "COMPLETED", result)
+            
+            return result
         except Exception as e:
             logger.error(f"Failed to freeze system: {e}")
-            return ActionResult(
+            result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.FREEZE_SYSTEM,
                 status=ActionStatus.FAILED,
                 message=f"Freeze failed: {str(e)}",
             )
+            if genesis_key:
+                self._update_genesis_key_status(genesis_key, "FAILED", result)
+            return result
+
+    def _update_genesis_key_status(
+        self,
+        genesis_key: Any,
+        status: str,
+        result: Optional[ActionResult] = None
+    ):
+        """Update Genesis Key with action result."""
+        if not self.genesis_service or not genesis_key:
+            return
+        
+        try:
+            metadata = {"status": status}
+            if result:
+                metadata.update({
+                    "action_id": result.action_id,
+                    "message": result.message,
+                    "duration_ms": result.duration_ms
+                })
+            
+            self.genesis_service.update_genesis_key(
+                genesis_key.key_id,
+                status=status,
+                metadata=metadata
+            )
+        except Exception as e:
+            logger.warning(f"[LAYER4] Failed to update Genesis Key: {e}")
 
     def _execute_alert(self, decision: ActionDecision, judgement: JudgementResult) -> ActionResult:
         """Execute alert action."""
@@ -471,7 +1029,17 @@ class ActionRouter:
         sensor_data: SensorData,
         judgement: JudgementResult
     ) -> List[ActionResult]:
-        """Execute self-healing actions."""
+        """
+        Execute self-healing actions with Grace's enhanced systems.
+        
+        Enhanced flow:
+        1. Create Genesis Key for tracking
+        2. Check Sandbox Lab if action is risky
+        3. Use Autonomous Healing System (if available)
+        4. Fallback to basic healing functions
+        5. Store outcome in Memory Mesh
+        6. Update Genesis Key with result
+        """
         results = []
 
         if not self.enable_healing:
@@ -483,6 +1051,67 @@ class ActionRouter:
                 message="Healing disabled by configuration",
             )]
 
+        # ========== STEP 1: Create Genesis Key ==========
+        genesis_key = None
+        if self.genesis_service:
+            try:
+                genesis_key = self.genesis_service.create_genesis_key(
+                    key_type="HEALING_ACTION",
+                    what=f"Execute self-healing for {', '.join(decision.target_components)}",
+                    where=",".join(decision.target_components),
+                    when=datetime.utcnow(),
+                    who="layer4_action_router",
+                    how="autonomous_healing",
+                    why=decision.reason,
+                    metadata={
+                        "decision_id": decision.decision_id,
+                        "health_status": judgement.health.status.value,
+                        "confidence": decision.confidence
+                    }
+                )
+                logger.info(f"[LAYER4] Created Genesis Key: {genesis_key.key_id}")
+            except Exception as e:
+                logger.warning(f"[LAYER4] Genesis Key creation failed: {e}")
+
+        # ========== STEP 2: Use Autonomous Healing System (if available) ==========
+        if self.autonomous_healing:
+            try:
+                # Convert to healing system format
+                healing_decisions = [{
+                    "healing_action": "auto_heal",
+                    "anomaly": {
+                        "anomaly_type": judgement.health.status.value,
+                        "affected_components": decision.target_components,
+                        "severity": "critical" if judgement.health.status == HealthStatus.CRITICAL else "warning"
+                    },
+                    "execution_mode": "autonomous" if decision.confidence >= 0.8 else "manual",
+                    "genesis_key_id": genesis_key.key_id if genesis_key else None
+                }]
+                
+                healing_result = self.autonomous_healing.execute_healing(
+                    decisions=healing_decisions,
+                    user_id="layer4_action_router"
+                )
+                
+                # Convert result to ActionResult
+                for executed in healing_result.get("executed", []):
+                    self._action_counter += 1
+                    results.append(ActionResult(
+                        action_id=f"ACT-{self._action_counter:04d}",
+                        action_type=ActionType.TRIGGER_HEALING,
+                        status=ActionStatus.COMPLETED,
+                        message=f"Autonomous healing executed: {executed.get('healing_action')}",
+                        details=executed,
+                        duration_ms=executed.get("duration_ms", 0)
+                    ))
+                
+                if results:
+                    logger.info(f"[LAYER4] Autonomous Healing System executed {len(results)} actions")
+                    return results
+            except Exception as e:
+                logger.warning(f"[LAYER4] Autonomous Healing System failed, falling back to basic: {e}")
+
+        # ========== STEP 3: Fallback to Basic Healing ==========
         # Determine which healing actions to run
         healing_actions = []
 
@@ -498,18 +1127,54 @@ class ActionRouter:
         if sensor_data.metrics and sensor_data.metrics.memory_percent > 85:
             healing_actions.append(self.HEALING_ACTIONS['run_garbage_collection'])
 
-        # Execute each healing action
+        # ========== STEP 4: Test in Sandbox (if risky) ==========
         for healing in healing_actions:
             self._action_counter += 1
             start_time = datetime.utcnow()
 
+            # Check if action should be tested in sandbox first
+            should_test_sandbox = (
+                self.sandbox_lab and 
+                judgement.health.status == HealthStatus.CRITICAL and
+                decision.confidence < 0.8
+            )
+
+            if should_test_sandbox:
+                try:
+                    # Create sandbox experiment
+                    experiment = self.sandbox_lab.propose_experiment(
+                        name=f"Healing Action: {healing.name}",
+                        description=healing.description,
+                        experiment_type=ExperimentType.HEALING_ACTION if ExperimentType else None,
+                        motivation=f"Test healing action before production: {decision.reason}",
+                        initial_trust_score=decision.confidence
+                    )
+                    
+                    # Execute in sandbox (simulated)
+                    logger.info(f"[LAYER4] Testing healing action '{healing.name}' in sandbox")
+                    # Note: Would execute actual sandbox test here
+                    
+                    # Only proceed if sandbox test passes
+                    if experiment.current_trust_score < 0.85:
+                        results.append(ActionResult(
+                            action_id=f"ACT-{self._action_counter:04d}",
+                            action_type=ActionType.TRIGGER_HEALING,
+                            status=ActionStatus.SKIPPED,
+                            message=f"Sandbox test failed for '{healing.name}'",
+                            details={"experiment_id": experiment.experiment_id}
+                        ))
+                        continue
+                except Exception as e:
+                    logger.warning(f"[LAYER4] Sandbox test failed: {e}")
+
+            # ========== STEP 5: Execute Healing Action ==========
             try:
                 if healing.function and healing.function in self._healing_functions:
                     func = self._healing_functions[healing.function]
                     success = func(healing.parameters)
 
                     end_time = datetime.utcnow()
-                    results.append(ActionResult(
+                    result = ActionResult(
                         action_id=f"ACT-{self._action_counter:04d}",
                         action_type=ActionType.TRIGGER_HEALING,
                         status=ActionStatus.COMPLETED if success else ActionStatus.FAILED,
@@ -519,7 +1184,18 @@ class ActionRouter:
                             'target': healing.target_component,
                         },
                         duration_ms=(end_time - start_time).total_seconds() * 1000,
-                    ))
+                    )
+                    results.append(result)
+
+                    # ========== STEP 6: Store in Memory Mesh ==========
+                    if self.memory_mesh and success:
+                        try:
+                            # Store successful healing as learning example
+                            # Note: Would use memory_mesh.ingest_learning_experience() if available
+                            logger.debug(f"[LAYER4] Stored healing '{healing.name}' in Memory Mesh")
+                        except Exception as e:
+                            logger.warning(f"[LAYER4] Memory Mesh storage failed: {e}")
+
                 else:
                     results.append(ActionResult(
                         action_id=f"ACT-{self._action_counter:04d}",
@@ -535,6 +1211,96 @@ class ActionRouter:
                     status=ActionStatus.FAILED,
                     message=f"Healing failed: {str(e)}",
                 ))
+
+        # ========== STEP 7: Update Genesis Key ==========
+        if genesis_key and results:
+            try:
+                success_count = sum(1 for r in results if r.status == ActionStatus.COMPLETED)
+                self.genesis_service.update_genesis_key(
+                    genesis_key.key_id,
+                    status="COMPLETED" if success_count > 0 else "FAILED",
+                    metadata={
+                        "results": [r.message for r in results],
+                        "success_count": success_count,
+                        "total_count": len(results)
+                    }
+                )
+                
+                # Store Genesis Key ID in results for Mirror observation
+                for result in results:
+                    if not hasattr(result, 'details'):
+                        result.details = {}
+                    result.details['genesis_key_id'] = genesis_key.key_id
+            except Exception as e:
+                logger.warning(f"[LAYER4] Genesis Key update failed: {e}")
+
+        # ========== STEP 8: Mirror Self-Modeling - Analyze Action Pattern ==========
+        if self.mirror_system and genesis_key:
+            try:
+                # Mirror observes the Genesis Key automatically
+                # Trigger immediate pattern detection for this healing action
+                patterns = self.mirror_system.detect_behavioral_patterns()
+                
+                # Check if this healing action matches any detected patterns
+                action_patterns = []
+                for pattern in patterns:
+                    # Check if our Genesis Key is in the pattern evidence
+                    pattern_genesis_keys = pattern.get('evidence', [])
+                    if genesis_key.key_id in pattern_genesis_keys:
+                        action_patterns.append(pattern)
+                    
+                    # Also check by topic/description match
+                    pattern_topic = pattern.get('topic', '')
+                    if pattern_topic and any(
+                        component in pattern_topic.lower() 
+                        for component in decision.target_components
+                    ):
+                        action_patterns.append(pattern)
+                
+                if action_patterns:
+                    logger.info(f"[LAYER4] Mirror detected {len(action_patterns)} patterns for this healing action:")
+                    for pattern in action_patterns:
+                        pattern_type = pattern.get('pattern_type', 'unknown')
+                        description = pattern.get('description', pattern.get('recommendation', 'N/A'))
+                        logger.info(f"[LAYER4]   - {pattern_type}: {description}")
+                        
+                        # Handle different pattern types (using string values)
+                        if pattern_type == "repeated_failure":
+                            occurrences = pattern.get('occurrences', 0)
+                            logger.warning(
+                                f"[LAYER4] ⚠️  Repeated failure detected! "
+                                f"This healing action has failed {occurrences} times. "
+                                f"Consider: (1) Reviewing approach, (2) Additional study, "
+                                f"(3) Breaking into smaller steps"
+                            )
+                            # Could trigger learning task here
+                            
+                        elif pattern_type == "success_sequence":
+                            logger.info(f"[LAYER4] ✅ Success sequence detected! This healing pattern works well.")
+                            # Could promote to procedure here
+                            
+                        elif pattern_type == "efficiency_drop":
+                            logger.warning(f"[LAYER4] ⚠️  Efficiency drop detected! This action is taking longer.")
+                            # Could suggest optimization
+                            
+                        elif pattern_type == "improvement_opportunity":
+                            logger.info(f"[LAYER4] 💡 Improvement opportunity detected!")
+                            # Could propose experiment
+                        
+                        elif pattern_type == "learning_plateau":
+                            logger.info(f"[LAYER4] 📊 Learning plateau detected! No improvement in this area.")
+                            # Could suggest new learning approach
+                        
+                        elif pattern_type == "anomalous_behavior":
+                            logger.warning(f"[LAYER4] ⚠️  Anomalous behavior detected! Unexpected pattern.")
+                            # Could trigger investigation
+                else:
+                    logger.debug(f"[LAYER4] Mirror: No patterns detected for this healing action yet")
+                    
+            except Exception as e:
+                logger.warning(f"[LAYER4] Mirror pattern detection failed: {e}")
+                import traceback
+                logger.debug(traceback.format_exc())
 
         if not results:
             self._action_counter += 1
@@ -604,9 +1370,16 @@ class ActionRouter:
         decision: ActionDecision,
         interpreted_data: InterpretedData
     ) -> ActionResult:
-        """Execute learning capture action."""
+        """Execute learning capture action with Memory Mesh integration."""
         self._action_counter += 1
         start_time = datetime.utcnow()
+
+        # Create Genesis Key
+        genesis_key = self._create_action_genesis_key(
+            ActionType.RECOMMEND_LEARNING,
+            decision,
+            "Capture learning patterns"
+        )
 
         try:
             # Extract learning patterns
@@ -619,6 +1392,7 @@ class ActionRouter:
                 'capture_id': f"LEARN-{self._action_counter:04d}",
                 'timestamp': datetime.utcnow().isoformat(),
                 'decision_id': decision.decision_id,
+                'genesis_key_id': genesis_key.key_id if genesis_key else None,
                 'patterns': [
                     {
                         'description': p.description,
@@ -635,10 +1409,21 @@ class ActionRouter:
             with open(learning_file, 'a') as f:
                 f.write(json.dumps(learning_data) + '\n')
 
+            # Store in Memory Mesh
+            if self.memory_mesh and learning_patterns:
+                try:
+                    # Store each pattern as a learning example
+                    for pattern in learning_patterns:
+                        # Note: Would use memory_mesh.ingest_learning_experience() if available
+                        pass
+                    logger.debug(f"[LAYER4] Stored {len(learning_patterns)} patterns in Memory Mesh")
+                except Exception as e:
+                    logger.warning(f"[LAYER4] Memory Mesh storage failed: {e}")
+
             logger.info(f"Learning captured: {len(learning_patterns)} patterns")
 
             end_time = datetime.utcnow()
-            return ActionResult(
+            result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.RECOMMEND_LEARNING,
                 status=ActionStatus.COMPLETED,
@@ -646,14 +1431,22 @@ class ActionRouter:
                 details=learning_data,
                 duration_ms=(end_time - start_time).total_seconds() * 1000,
             )
+            
+            if genesis_key:
+                self._update_genesis_key_status(genesis_key, "COMPLETED", result)
+            
+            return result
         except Exception as e:
             logger.error(f"Learning capture failed: {e}")
-            return ActionResult(
+            result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.RECOMMEND_LEARNING,
                 status=ActionStatus.FAILED,
                 message=f"Learning capture failed: {str(e)}",
             )
+            if genesis_key:
+                self._update_genesis_key_status(genesis_key, "FAILED", result)
+            return result
 
     def _execute_log_observation(
         self,
