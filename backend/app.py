@@ -63,6 +63,7 @@ from api.streaming import router as streaming_router  # SSE Streaming chat respo
 from api.websocket import router as websocket_router  # WebSocket real-time updates
 from api.health import router as health_router  # Comprehensive health checks
 from api.metrics import router as metrics_router  # Prometheus metrics endpoint
+from api.learning_efficiency_api import router as learning_efficiency_router  # Learning Efficiency - Data-to-Insight tracking
 from api.cicd_api import router as cicd_router  # Genesis CI/CD pipelines
 from api.cicd_versioning_api import router as cicd_versioning_router  # CI/CD version control
 from api.knowledge_base_cicd import router as kb_cicd_router  # Knowledge base CI/CD integration
@@ -483,6 +484,7 @@ app.include_router(retrieve_router)
 app.include_router(version_control_router)
 app.include_router(file_management_router)
 app.include_router(file_ingestion_router)
+app.include_router(learning_efficiency_router)  # Learning Efficiency - Data-to-Insight tracking
 app.include_router(genesis_keys_router)
 app.include_router(auth_router)
 app.include_router(directory_hierarchy_router)
