@@ -172,8 +172,31 @@ class CertificateAuthority:
         """
         self.stats["certificates_verified"] += 1
 
-        # Check signature
+        # Check revocation first (most authoritative check)
+        if check_revocation:
+            if certificate.certificate_id in self.revoked_certificates:
+                reason = self.revoked_certificates[certificate.certificate_id]
+                return False, f"Certificate revoked: {reason}"
+
+        # Check if unsigned
+        if not certificate.signature:
+            self.stats["verification_failures"] += 1
+            return False, "Certificate is unsigned"
+
+        # Get original certificate from store to verify signature
+        # (revocation may have changed the status on this object)
+        original_status = certificate.status
+        stored_cert = self.issued_certificates.get(certificate.certificate_id)
+        if stored_cert and stored_cert.status != original_status:
+            # Restore original status for signature check
+            original_status = CertificateStatus.VALID
+
+        # Check signature using original status
+        temp_status = certificate.status
+        certificate.status = original_status
         expected_signature = self._sign_certificate(certificate)
+        certificate.status = temp_status
+
         if certificate.signature != expected_signature:
             self.stats["verification_failures"] += 1
             return False, "Invalid signature"
@@ -182,15 +205,9 @@ class CertificateAuthority:
         if certificate.expires_at and datetime.utcnow() > certificate.expires_at:
             return False, "Certificate expired"
 
-        # Check status
+        # Check current status
         if certificate.status != CertificateStatus.VALID:
             return False, f"Certificate status is {certificate.status.value}"
-
-        # Check revocation
-        if check_revocation:
-            if certificate.certificate_id in self.revoked_certificates:
-                reason = self.revoked_certificates[certificate.certificate_id]
-                return False, f"Certificate revoked: {reason}"
 
         return True, "Certificate is valid"
 
