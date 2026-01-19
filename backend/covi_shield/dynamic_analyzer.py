@@ -144,7 +144,7 @@ class RuntimePropertyChecker:
                 description=description,
                 severity=severity,
                 function_name=function_name,
-                stack_trace=traceback.format_stack()[-3]
+                stack_trace=traceback.format_stack()[-3] if len(traceback.format_stack()) >= 3 else ""
             ))
             return False
         return True
@@ -168,7 +168,7 @@ class RuntimePropertyChecker:
                 severity=severity,
                 function_name=function_name,
                 actual_value=actual_value,
-                stack_trace=traceback.format_stack()[-3]
+                stack_trace=traceback.format_stack()[-3] if len(traceback.format_stack()) >= 3 else ""
             ))
             return False
         return True
@@ -188,7 +188,7 @@ class RuntimePropertyChecker:
                 property_name="Invariant",
                 description=description,
                 severity=severity,
-                stack_trace=traceback.format_stack()[-3]
+                stack_trace=traceback.format_stack()[-3] if len(traceback.format_stack()) >= 3 else ""
             ))
             return False
         return True
@@ -218,7 +218,7 @@ class RuntimePropertyChecker:
                 severity=RiskLevel.MEDIUM,
                 actual_value=value,
                 expected_constraint=f"[{min_val}, {max_val}]",
-                stack_trace=traceback.format_stack()[-3]
+                stack_trace=traceback.format_stack()[-3] if len(traceback.format_stack()) >= 3 else ""
             ))
             return False
         return True
@@ -240,7 +240,7 @@ class RuntimePropertyChecker:
                 severity=RiskLevel.HIGH,
                 actual_value=type(value).__name__,
                 expected_constraint=expected_type.__name__,
-                stack_trace=traceback.format_stack()[-3]
+                stack_trace=traceback.format_stack()[-3] if len(traceback.format_stack()) >= 3 else ""
             ))
             return False
         return True
