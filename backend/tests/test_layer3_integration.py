@@ -434,29 +434,27 @@ class TestGovernanceAPIIntegration:
     def test_get_governance_status_endpoint(self, client):
         """Test /governance/status endpoint."""
         response = client.get("/governance/status")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert "success" in data
-            if data.get("success"):
-                assert "governance" in data
+        assert response.status_code == 200, f"Governance status failed: {response.text}"
+        data = response.json()
+        assert "success" in data
+        if data.get("success"):
+            assert "governance" in data, "Response must include governance data"
 
     def test_get_all_kpis_endpoint(self, client):
         """Test /governance/kpi/all endpoint."""
         response = client.get("/governance/kpi/all")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert "success" in data
+        assert response.status_code == 200, f"Get all KPIs failed: {response.text}"
+        data = response.json()
+        assert "success" in data
+        assert data["success"] is True, "KPI endpoint should return success"
 
     def test_get_constitutional_principles_endpoint(self, client):
         """Test /governance/constitutional/principles endpoint."""
         response = client.get("/governance/constitutional/principles")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert "success" in data
-            assert "principles" in data
+        assert response.status_code == 200, f"Get principles failed: {response.text}"
+        data = response.json()
+        assert "success" in data
+        assert "principles" in data, "Response must include principles"
 
     def test_trust_assessment_endpoint(self, client):
         """Test /governance/trust/assess endpoint."""
@@ -466,10 +464,12 @@ class TestGovernanceAPIIntegration:
             "correlation_check": False,
             "timesense_validate": False
         })
-        assert response.status_code in [200, 422, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert "success" in data
+        assert response.status_code == 200, f"Trust assessment failed: {response.text}"
+        data = response.json()
+        assert "success" in data
+        # Human triggered should be trusted
+        if "trust_score" in data:
+            assert data["trust_score"] >= 0.7
 
     def test_record_kpi_endpoint(self, client):
         """Test /governance/kpi/record endpoint."""
@@ -479,14 +479,18 @@ class TestGovernanceAPIIntegration:
             "meets_grace_standard": True,
             "meets_user_standard": True
         })
-        assert response.status_code in [200, 422, 500]
+        assert response.status_code == 200, f"Record KPI failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_whitelist_add_endpoint(self, client):
         """Test /governance/whitelist/add endpoint."""
         response = client.post("/governance/whitelist/add", json={
             "source": "test_trusted_source"
         })
-        assert response.status_code in [200, 422, 500]
+        assert response.status_code == 200, f"Add whitelist failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_constitutional_check_endpoint(self, client):
         """Test /governance/constitutional/check endpoint."""
@@ -494,10 +498,9 @@ class TestGovernanceAPIIntegration:
             "type": "test_action",
             "reasoning": "Testing compliance check"
         })
-        assert response.status_code in [200, 422, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert "compliant" in data
+        assert response.status_code == 200, f"Constitutional check failed: {response.text}"
+        data = response.json()
+        assert "compliant" in data, "Response must include compliant field"
 
 
 # ==================== Cross-Layer Integration Tests ====================
