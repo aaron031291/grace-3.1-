@@ -731,18 +731,18 @@ class TestDiagnosticAPI:
     def test_health_endpoint(self, client):
         """Test /diagnostic/health endpoint."""
         response = client.get("/diagnostic/health")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'status' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'status' in data
 
     def test_status_endpoint(self, client):
         """Test /diagnostic/status endpoint."""
         response = client.get("/diagnostic/status")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'state' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'state' in data
 
     def test_trigger_endpoint(self, client):
         """Test /diagnostic/trigger endpoint."""
@@ -750,7 +750,8 @@ class TestDiagnosticAPI:
             "/diagnostic/trigger",
             json={"source": "api", "reason": "test"}
         )
-        assert response.status_code in [200, 500]
+        assert response.status_code in [200, 422], f"Expected 200 or 422, got {response.status_code}: {response.text}"
+
         if response.status_code == 200:
             data = response.json()
             assert 'cycle_id' in data
@@ -758,10 +759,10 @@ class TestDiagnosticAPI:
     def test_history_endpoint(self, client):
         """Test /diagnostic/history endpoint."""
         response = client.get("/diagnostic/history?limit=5")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'cycles' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'cycles' in data
 
     def test_cicd_webhook_endpoint(self, client):
         """Test /diagnostic/webhook/cicd endpoint."""
@@ -773,7 +774,7 @@ class TestDiagnosticAPI:
                 "status": "success"
             }
         )
-        assert response.status_code in [200, 500]
+        assert response.status_code in [200, 422], f"Expected 200 or 422, got {response.status_code}: {response.text}"
 
     def test_sensor_flag_endpoint(self, client):
         """Test /diagnostic/sensor/flag endpoint."""
@@ -785,36 +786,36 @@ class TestDiagnosticAPI:
                 "message": "test message"
             }
         )
-        assert response.status_code in [200, 500]
+        assert response.status_code in [200, 422], f"Expected 200 or 422, got {response.status_code}: {response.text}"
 
     def test_avn_alerts_endpoint(self, client):
         """Test /diagnostic/avn/alerts endpoint."""
         response = client.get("/diagnostic/avn/alerts")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'alerts' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'alerts' in data
 
     def test_avm_status_endpoint(self, client):
         """Test /diagnostic/avm/status endpoint."""
         response = client.get("/diagnostic/avm/status")
-        assert response.status_code in [200, 500]
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
 
     def test_forensics_endpoint(self, client):
         """Test /diagnostic/forensics endpoint."""
         response = client.get("/diagnostic/forensics")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'findings' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'findings' in data
 
     def test_full_report_endpoint(self, client):
         """Test /diagnostic/full-report endpoint."""
         response = client.get("/diagnostic/full-report")
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert 'report_id' in data
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+
+        data = response.json()
+        assert 'report_id' in data
 
 
 # ==================== Integration Tests ====================
