@@ -76,15 +76,7 @@ try:
         RuleStorage,
         get_rule_storage
     )
-    from .layer4_recursive_pattern_learner import (
-        Layer4RecursivePatternLearner,
-        PatternDomain,
-        AbstractPattern,
-        RecursiveLearningCycle,
-        get_layer4_recursive_learner
-    )
     ML_INTELLIGENCE_AVAILABLE = True
-    LAYER4_AVAILABLE = True
 except ImportError as e:
     import logging
     logging.getLogger(__name__).warning(f"ML Intelligence components not available: {e}")
@@ -128,12 +120,6 @@ except ImportError as e:
     get_neuro_symbolic_reasoner = None
     RuleStorage = None
     get_rule_storage = None
-    Layer4RecursivePatternLearner = None
-    PatternDomain = None
-    AbstractPattern = None
-    RecursiveLearningCycle = None
-    get_layer4_recursive_learner = None
-    LAYER4_AVAILABLE = False
 
 __all__ = [
     # Neural Trust Scorer
@@ -190,15 +176,6 @@ __all__ = [
     'get_neuro_symbolic_reasoner',
     'RuleStorage',
     'get_rule_storage',
-    
-    # Layer 4: Recursive Pattern Learning
-    'Layer4RecursivePatternLearner',
-    'PatternDomain',
-    'AbstractPattern',
-    'RecursiveLearningCycle',
-    'get_layer4_recursive_learner',
-    'LAYER4_AVAILABLE',
-    
     # KPI Tracking
     'KPITracker',
     'KPI',

@@ -24,74 +24,74 @@ logger = logging.getLogger(__name__)
 
 def scan_entire_repo():
     """Scan entire repository and assign Genesis Keys."""
-    logger.info("\n" + "="*80)
-    logger.info("REPOSITORY GENESIS KEY SCANNER")
-    logger.info("="*80)
-    logger.info("Scanning entire GRACE repository...")
-    logger.info("This will assign Genesis Keys to EVERY directory and file.\n")
+    print("\n" + "="*80)
+    print("REPOSITORY GENESIS KEY SCANNER")
+    print("="*80)
+    print("Scanning entire GRACE repository...")
+    print("This will assign Genesis Keys to EVERY directory and file.\n")
 
     try:
         # Get repo root (grace_3 directory)
         backend_dir = Path(__file__).parent
         repo_root = backend_dir.parent
 
-        logger.info(f"Repository Root: {repo_root}")
-        logger.info(f"Backend Dir: {backend_dir}\n")
+        print(f"Repository Root: {repo_root}")
+        print(f"Backend Dir: {backend_dir}\n")
 
         # Import after path setup
         from genesis.repo_scanner import get_repo_scanner, scan_and_save_repo
 
         # Scan repository
-        logger.info("Starting repository scan...")
-        logger.info("This may take a moment for large repositories...\n")
+        print("Starting repository scan...")
+        print("This may take a moment for large repositories...\n")
 
         result = scan_and_save_repo(repo_path=str(repo_root))
 
         # Display results
-        logger.info("\n" + "="*80)
-        logger.info("SCAN COMPLETE")
-        logger.info("="*80)
-        logger.info(f"\nScan Timestamp: {result['scan_timestamp']}")
-        logger.info(f"Repository Path: {result['repo_path']}")
-        logger.info(f"Root Genesis Key: {result['root_genesis_key']}")
+        print("\n" + "="*80)
+        print("SCAN COMPLETE")
+        print("="*80)
+        print(f"\nScan Timestamp: {result['scan_timestamp']}")
+        print(f"Repository Path: {result['repo_path']}")
+        print(f"Root Genesis Key: {result['root_genesis_key']}")
 
         stats = result['statistics']
-        logger.info(f"\nStatistics:")
-        logger.info(f"  - Total Directories: {stats['total_directories']}")
-        logger.info(f"  - Total Files: {stats['total_files']}")
-        logger.info(f"  - Total Size: {stats['total_size_bytes']:,} bytes ({stats['total_size_bytes'] / (1024**2):.2f} MB)")
+        print(f"\nStatistics:")
+        print(f"  - Total Directories: {stats['total_directories']}")
+        print(f"  - Total Files: {stats['total_files']}")
+        print(f"  - Total Size: {stats['total_size_bytes']:,} bytes ({stats['total_size_bytes'] / (1024**2):.2f} MB)")
 
-        logger.info(f"\nImmutable Memory Saved To:")
-        logger.info(f"  {result.get('immutable_memory_path', 'N/A')}")
+        print(f"\nImmutable Memory Saved To:")
+        print(f"  {result.get('immutable_memory_path', 'N/A')}")
 
         # Show sample of directories
-        logger.info(f"\nSample Directories with Genesis Keys:")
+        print(f"\nSample Directories with Genesis Keys:")
         dirs = result.get('directories', {})
         for i, (path, info) in enumerate(list(dirs.items())[:10]):
-            logger.info(f"  [{info['genesis_key']}] {path}")
+            print(f"  [{info['genesis_key']}] {path}")
             if i >= 9:
-                logger.info(f"  ... and {len(dirs) - 10} more directories")
+                print(f"  ... and {len(dirs) - 10} more directories")
                 break
 
         # Show sample of files
-        logger.info(f"\nSample Files with Genesis Keys:")
+        print(f"\nSample Files with Genesis Keys:")
         files = result.get('files', {})
         for i, (path, info) in enumerate(list(files.items())[:10]):
-            logger.info(f"  [{info['genesis_key']}] {path}")
+            print(f"  [{info['genesis_key']}] {path}")
             if i >= 9:
-                logger.info(f"  ... and {len(files) - 10} more files")
+                print(f"  ... and {len(files) - 10} more files")
                 break
 
-        logger.info("\n" + "="*80)
-        logger.info("SUCCESS - Repository Genesis Keys Assigned")
-        logger.info("="*80)
-        logger.info("\nEvery directory and file now has a unique Genesis Key.")
-        logger.info("All future changes will be tracked through the Genesis Key pipeline.")
+        print("\n" + "="*80)
+        print("SUCCESS - Repository Genesis Keys Assigned")
+        print("="*80)
+        print("\nEvery directory and file now has a unique Genesis Key.")
+        print("All future changes will be tracked through the Genesis Key pipeline.")
 
         return result
 
     except Exception as e:
-        logger.info(f"\nERROR: Failed to scan repository: {e}")
+        print(f"\nERROR: Failed to scan repository: {e}")
         import traceback
         traceback.print_exc()
         return None
@@ -99,29 +99,29 @@ def scan_entire_repo():
 
 def verify_scan():
     """Verify that the scan worked."""
-    logger.info("\n" + "="*80)
-    logger.info("VERIFICATION")
-    logger.info("="*80)
+    print("\n" + "="*80)
+    print("VERIFICATION")
+    print("="*80)
 
     try:
         backend_dir = Path(__file__).parent
         immutable_memory_dir = backend_dir / "knowledge_base" / "layer_1" / "immutable_memory"
 
         if immutable_memory_dir.exists():
-            logger.info(f"\n[OK] Immutable memory directory exists")
+            print(f"\n[OK] Immutable memory directory exists")
             files = list(immutable_memory_dir.glob("*.json"))
-            logger.info(f"[OK] Found {len(files)} immutable memory file(s)")
+            print(f"[OK] Found {len(files)} immutable memory file(s)")
 
             for file in files:
-                logger.info(f"  - {file.name}")
+                print(f"  - {file.name}")
 
             return True
         else:
-            logger.info(f"\n[FAIL] Immutable memory directory not found")
+            print(f"\n[FAIL] Immutable memory directory not found")
             return False
 
     except Exception as e:
-        logger.info(f"\n[FAIL] Verification failed: {e}")
+        print(f"\n[FAIL] Verification failed: {e}")
         return False
 
 
@@ -135,17 +135,17 @@ def main():
         verified = verify_scan()
 
         if verified:
-            logger.info("\n\n[SUCCESS] Repository scan complete and verified!")
-            logger.info("\nNext steps:")
-            logger.info("  1. Every file change will now create a Genesis Key")
-            logger.info("  2. All Genesis Keys flow through the autonomous pipeline")
-            logger.info("  3. The system learns from every interaction")
+            print("\n\n[SUCCESS] Repository scan complete and verified!")
+            print("\nNext steps:")
+            print("  1. Every file change will now create a Genesis Key")
+            print("  2. All Genesis Keys flow through the autonomous pipeline")
+            print("  3. The system learns from every interaction")
             return 0
         else:
-            logger.info("\n\n[WARNING] Scan completed but verification failed")
+            print("\n\n[WARNING] Scan completed but verification failed")
             return 1
     else:
-        logger.info("\n\n[FAIL] Repository scan failed")
+        print("\n\n[FAIL] Repository scan failed")
         return 1
 
 

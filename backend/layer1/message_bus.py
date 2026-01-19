@@ -1,6 +1,25 @@
+"""
+Layer 1 Message Bus - Bidirectional Component Communication
+
+Enables all Layer 1 components to communicate, coordinate, and trigger
+autonomous actions intelligently.
+
+Components:
+- Genesis Keys
+- Memory Mesh
+- Learning Memory
+- RAG (Retrieval)
+- Ingestion
+- World Model
+- Autonomous Learning
+- LLM Orchestration
+- Version Control
+- Librarian
+"""
+
 from typing import Dict, Any, Callable, List, Optional, Set
 from dataclasses import dataclass, field
-from datetime import datetime, UTC
+from datetime import datetime
 from enum import Enum
 import asyncio
 import logging
@@ -33,8 +52,6 @@ class ComponentType(Enum):
     AUTONOMOUS_LEARNING = "autonomous_learning"
     LLM_ORCHESTRATION = "llm_orchestration"
     COGNITIVE_ENGINE = "cognitive_engine"
-    TIMESENSE = "timesense"  # Time & Cost Model - empirical time calibration
-    DIAGNOSTIC_ENGINE = "diagnostic_engine"  # Diagnostic machine
 
 
 @dataclass
@@ -250,7 +267,7 @@ class Layer1MessageBus:
             to_component=None,  # Broadcast
             topic=topic,
             payload=payload,
-            timestamp=datetime.now(UTC),
+            timestamp=datetime.utcnow(),
             priority=priority
         )
 
@@ -335,7 +352,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=topic,
             payload=payload,
-            timestamp=datetime.now(UTC),
+            timestamp=datetime.utcnow(),
             correlation_id=message_id,
             requires_response=True
         )
@@ -403,7 +420,7 @@ class Layer1MessageBus:
                 to_component=None,
                 topic="response",
                 payload=payload,
-                timestamp=datetime.now(UTC),
+                timestamp=datetime.utcnow(),
                 correlation_id=correlation_id
             )
 
@@ -439,7 +456,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=command,
             payload=payload,
-            timestamp=datetime.now(UTC)
+            timestamp=datetime.utcnow()
         )
 
         self._add_to_history(message)

@@ -8,9 +8,9 @@ logging.basicConfig(level=logging.WARNING)
 from vector_db.client import get_qdrant_client
 from embedding import EmbeddingModel
 
-logger.info("=" * 80)
-logger.info("VECTOR ID TO CHUNK MAPPING DEBUG")
-logger.info("=" * 80)
+print("=" * 80)
+print("VECTOR ID TO CHUNK MAPPING DEBUG")
+print("=" * 80)
 
 # Load embedding model
 embedding_model = EmbeddingModel(
@@ -30,12 +30,12 @@ results = qdrant.search_vectors(
     limit=15
 )
 
-logger.info(f"\nQuery: '{query}'")
-logger.info(f"Total results: {len(results)}\n")
+print(f"\nQuery: '{query}'")
+print(f"Total results: {len(results)}\n")
 
 # Show what Qdrant returns
-logger.info("QDRANT RESULTS (from vector search):")
-logger.info("-" * 80)
+print("QDRANT RESULTS (from vector search):")
+print("-" * 80)
 for i, result in enumerate(results[:8], 1):
     payload = result.get('payload', {})
     doc_name = payload.get('filename', 'unknown')
@@ -43,14 +43,14 @@ for i, result in enumerate(results[:8], 1):
     vector_id = result.get('id')
     score = result.get('score', 'N/A')
     
-    logger.info(f"{i}. Vector ID: {vector_id}, Score: {score:.4f}")
-    logger.info(f"   File: {doc_name}")
-    logger.info(f"   Text: {text_preview}...")
-    logger.info()
+    print(f"{i}. Vector ID: {vector_id}, Score: {score:.4f}")
+    print(f"   File: {doc_name}")
+    print(f"   Text: {text_preview}...")
+    print()
 
-logger.info("\n" + "=" * 80)
-logger.info("NOW CHECKING WHAT RETRIEVER GETS FROM DATABASE:")
-logger.info("=" * 80)
+print("\n" + "=" * 80)
+print("NOW CHECKING WHAT RETRIEVER GETS FROM DATABASE:")
+print("=" * 80)
 
 # Now simulate what the retriever does
 try:
@@ -76,12 +76,12 @@ try:
     SessionLocal = sessionmaker(bind=DatabaseConnection.get_engine())
     db = SessionLocal()
     
-    logger.info("\nDOCUMENTS IN DATABASE:")
+    print("\nDOCUMENTS IN DATABASE:")
     for doc in db.query(Document).all():
-        logger.info(f"  ID {doc.id}: {doc.filename}")
+        print(f"  ID {doc.id}: {doc.filename}")
     
-    logger.info("\nMAPPING FOR TOP QDRANT RESULTS:")
-    logger.info("-" * 80)
+    print("\nMAPPING FOR TOP QDRANT RESULTS:")
+    print("-" * 80)
     
     for i, result in enumerate(results[:8], 1):
         vector_id = result.get('id')
@@ -101,13 +101,13 @@ try:
             db_file = "NO CHUNK FOUND"
             db_text = ""
         
-        logger.info(f"{i}. Vector ID {vector_id}:")
-        logger.info(f"   QDRANT file: {payload_file}")
-        logger.info(f"   DB file:     {db_file}")
-        logger.info(f"   MATCH: {'✓' if payload_file == db_file else '✗ MISMATCH'}")
-        logger.info()
+        print(f"{i}. Vector ID {vector_id}:")
+        print(f"   QDRANT file: {payload_file}")
+        print(f"   DB file:     {db_file}")
+        print(f"   MATCH: {'✓' if payload_file == db_file else '✗ MISMATCH'}")
+        print()
 
 except Exception as e:
     import traceback
-    logger.info(f"\nError: {e}")
+    print(f"\nError: {e}")
     traceback.print_exc()

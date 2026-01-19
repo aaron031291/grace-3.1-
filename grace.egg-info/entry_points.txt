@@ -1,4 +1,0 @@
-[console_scripts]
-grace = launcher.launcher:main
-grace-cli = backend.cli:main
-grace-health = launcher.health_checker:main

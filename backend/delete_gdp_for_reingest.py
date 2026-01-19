@@ -4,8 +4,6 @@ Delete a document completely to allow re-ingestion.
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 sys.path.insert(0, '.')
 
 from pathlib import Path
@@ -15,9 +13,9 @@ from database.session import initialize_session_factory, get_session
 from models.database_models import Document, DocumentChunk
 import requests
 
-logger.info("="*80)
-logger.info("DELETE DOCUMENT 3 (GDP) FOR RE-INGESTION")
-logger.info("="*80)
+print("="*80)
+print("DELETE DOCUMENT 3 (GDP) FOR RE-INGESTION")
+print("="*80)
 
 # Initialize database
 db_config = DatabaseConfig(
@@ -29,7 +27,7 @@ initialize_session_factory()
 
 # Get database session via app's running instance
 # We'll use a workaround by calling the API directly
-logger.info("\n1. Deleting vectors from Qdrant for document 3...")
+print("\n1. Deleting vectors from Qdrant for document 3...")
 qdrant_url = "http://localhost:6333"
 
 # Get all point IDs for document 3
@@ -47,7 +45,7 @@ try:
     if response.status_code == 200:
         points = response.json()['result']
         doc3_ids = [p['id'] for p in points if p['payload'].get('document_id') == 3]
-        logger.info(f"   Found {len(doc3_ids)} vectors for document 3: {doc3_ids}")
+        print(f"   Found {len(doc3_ids)} vectors for document 3: {doc3_ids}")
         
         if doc3_ids:
             # Delete these vectors
@@ -56,13 +54,13 @@ try:
                 json={"point_ids": doc3_ids}
             )
             if delete_response.status_code == 200:
-                logger.info(f"   ✓ Deleted {len(doc3_ids)} vectors from Qdrant")
+                print(f"   ✓ Deleted {len(doc3_ids)} vectors from Qdrant")
             else:
-                logger.info(f"   ⚠ Error deleting vectors: {delete_response.status_code}")
+                print(f"   ⚠ Error deleting vectors: {delete_response.status_code}")
 except Exception as e:
-    logger.info(f"   ⚠ Error accessing Qdrant: {e}")
+    print(f"   ⚠ Error accessing Qdrant: {e}")
 
-logger.info("\n2. Deleting document 3 from database...")
+print("\n2. Deleting document 3 from database...")
 try:
     # Use raw database connection instead of SessionLocal
     from sqlalchemy import text
@@ -76,13 +74,13 @@ try:
         # Delete document 3
         conn.execute(text("DELETE FROM documents WHERE id = 3"))
     
-    logger.info("   ✓ Deleted document 3 and all associated chunks from database")
+    print("   ✓ Deleted document 3 and all associated chunks from database")
     
 except Exception as e:
-    logger.info(f"   ⚠ Error deleting from database: {e}")
+    print(f"   ⚠ Error deleting from database: {e}")
     import traceback
     traceback.print_exc()
 
-logger.info("\n" + "="*80)
-logger.info("NEXT STEP: Re-upload the GDP PDF file via the UI or API")
-logger.info("="*80)
+print("\n" + "="*80)
+print("NEXT STEP: Re-upload the GDP PDF file via the UI or API")
+print("="*80)

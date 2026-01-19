@@ -1,11 +1,19 @@
+"""
+Document retriever module for RAG (Retrieval-Augmented Generation).
+Retrieves relevant document chunks based on semantic similarity to queries.
+"""
+
 import logging
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
+
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk
+
 logger = logging.getLogger(__name__)
+
 
 class DocumentRetriever:
     """Retrieves relevant document chunks for query context."""
@@ -56,41 +64,9 @@ class DocumentRetriever:
                 logger.warning("Empty query provided")
                 return []
             
-            # TimeSense: Estimate and track retrieval time
-            query_tokens = len(query.split())
-            retrieval_prediction = None
-            if TIMESENSE_AVAILABLE and TimeEstimator:
-                try:
-                    # Get collection size for better estimation
-                    collection_info = self.qdrant_client.get_collection_info(self.collection_name)
-                    num_vectors = collection_info.get('points_count', 10000) if collection_info else 10000
-                    
-                    retrieval_prediction = TimeEstimator.estimate_retrieval(
-                        query_tokens=query_tokens,
-                        top_k=limit,
-                        num_vectors=num_vectors
-                    )
-                    if retrieval_prediction:
-                        logger.debug(
-                            f"[RETRIEVER] [TIMESENSE] Estimated retrieval time: "
-                            f"{retrieval_prediction.human_readable()}"
-                        )
-                except Exception as e:
-                    logger.debug(f"[RETRIEVER] TimeSense estimation failed: {e}")
-            
             # Generate embedding for query with retry logic
             try:
-                # TimeSense: Track embedding generation
-                if TIMESENSE_AVAILABLE:
-                    with track_operation(
-                        PrimitiveType.EMBED_TEXT,
-                        size=query_tokens,
-                        task_id=f"retrieval_embed_{id(query)}",
-                        model_name=getattr(self.embedding_model, 'model_name', None)
-                    ):
-                        query_embedding = self.embedding_model.embed_text([query])[0]
-                else:
-                    query_embedding = self.embedding_model.embed_text([query])[0]
+                query_embedding = self.embedding_model.embed_text([query])[0]
             except RuntimeError as e:
                 # Check if it's a CUDA out of memory error
                 if "CUDA out of memory" in str(e) or "out of memory" in str(e).lower():
@@ -104,33 +80,13 @@ class DocumentRetriever:
                 else:
                     raise
             
-            # Search in Qdrant with TimeSense tracking
-            if TIMESENSE_AVAILABLE:
-                # Get collection size for tracking
-                try:
-                    collection_info = self.qdrant_client.get_collection_info(self.collection_name)
-                    num_vectors = collection_info.get('points_count', 10000) if collection_info else 10000
-                except:
-                    num_vectors = 10000
-                
-                with track_operation(
-                    PrimitiveType.VECTOR_SEARCH,
-                    size=num_vectors,
-                    task_id=f"retrieval_search_{id(query)}"
-                ):
-                    search_results = self.qdrant_client.search_vectors(
-                        collection_name=self.collection_name,
-                        query_vector=query_embedding,
-                        limit=limit,
-                        score_threshold=score_threshold,
-                    )
-            else:
-                search_results = self.qdrant_client.search_vectors(
-                    collection_name=self.collection_name,
-                    query_vector=query_embedding,
-                    limit=limit,
-                    score_threshold=score_threshold,
-                )
+            # Search in Qdrant
+            search_results = self.qdrant_client.search_vectors(
+                collection_name=self.collection_name,
+                query_vector=query_embedding,
+                limit=limit,
+                score_threshold=score_threshold,
+            )
             
             if not search_results:
                 logger.debug(f"No results found for query: {query}")

@@ -1,3 +1,18 @@
+"""
+Self-Healing Actions for Diagnostic Machine
+
+Implements concrete healing actions for:
+- Database connection recovery
+- Vector database reset
+- Cache clearing
+- Memory management
+- Service restart coordination
+- Log rotation
+- Configuration reload
+
+All actions are reversible where possible (Invariant 4).
+"""
+
 import gc
 import os
 import logging
@@ -12,6 +27,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class HealingActionType(str, Enum):
     """Types of healing actions."""
     DATABASE_RECONNECT = "database_reconnect"
@@ -24,8 +40,6 @@ class HealingActionType(str, Enum):
     CONNECTION_POOL_RESET = "connection_pool_reset"
     EMBEDDING_MODEL_RELOAD = "embedding_model_reload"
     SESSION_CLEANUP = "session_cleanup"
-    # FIX: Added code fix healing action for proactive self-healing
-    CODE_FIX = "code_fix"
 
 
 class HealingRisk(str, Enum):
@@ -122,13 +136,6 @@ class HealingActionRegistry:
                 risk_level=HealingRisk.MEDIUM,
                 timeout_seconds=120,
             ),
-            # FIX: Code fix action for automatic vulnerability remediation
-            HealingActionConfig(
-                action_type=HealingActionType.CODE_FIX,
-                risk_level=HealingRisk.HIGH,  # Code changes require careful handling
-                timeout_seconds=300,
-                requires_confirmation=True,  # Should be reviewed before applying
-            ),
         ]
 
         for config in defaults:
@@ -214,11 +221,6 @@ class HealingExecutor:
         self.registry.register_handler(
             HealingActionType.EMBEDDING_MODEL_RELOAD,
             self._heal_embedding_model
-        )
-        # FIX: Register code fix handler for automatic vulnerability remediation
-        self.registry.register_handler(
-            HealingActionType.CODE_FIX,
-            self._heal_code_issues
         )
 
     def execute(
@@ -716,199 +718,6 @@ class HealingExecutor:
                 action_type=HealingActionType.EMBEDDING_MODEL_RELOAD,
                 success=False,
                 message=f"Embedding model reload error: {str(e)}",
-            )
-
-    def _heal_code_issues(self, params: Dict) -> HealingResult:
-        """
-        FIX: This healing action provides proactive code remediation for:
-        - Syntax errors (including indentation errors - THREAD ISSUE)
-        - Import errors
-        - Missing files (THREAD ISSUE)
-        - Code quality issues (bare except, mutable defaults, etc.)
-        - Security vulnerabilities
-        - Type errors
-        - Database datatype mismatches (THREAD ISSUE)
-        - Port conflicts (THREAD ISSUE)
-        - Process failures (THREAD ISSUE)
-        
-        Uses both the automatic bug fixer AND the autonomous healing knowledge base
-        to ensure all thread issues are properly handled.
-        """
-        try:
-            from .automatic_bug_fixer import get_automatic_fixer
-            from .proactive_code_scanner import get_proactive_scanner
-            from pathlib import Path
-            
-            backend_dir = Path(__file__).parent.parent
-            # Enable DeepSeek for intelligent fixes (can be disabled via params)
-            use_deepseek = params.get('use_deepseek', True)
-            fixer = get_automatic_fixer(backend_dir=backend_dir, use_deepseek=use_deepseek)
-            scanner = get_proactive_scanner(backend_dir=backend_dir)
-            
-            # THREAD ISSUES: Also try autonomous healing system for thread-specific issues
-            autonomous_healing_attempted = False
-            autonomous_fixes = []
-            try:
-                from database.session import get_db_session
-                from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
-                
-                session = next(get_db_session())
-                healing_system = get_autonomous_healing(
-                    session=session,
-                    repo_path=backend_dir,
-                    trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-                    enable_learning=True
-                )
-                
-                # Run a monitoring cycle which will detect and attempt to fix issues
-                cycle_result = healing_system.run_monitoring_cycle()
-                
-                if cycle_result.get("actions_executed", 0) > 0:
-                    autonomous_healing_attempted = True
-                    autonomous_fixes = cycle_result.get("results", {}).get("executed", [])
-                    logger.info(f"[HEALING] Autonomous healing system executed {len(autonomous_fixes)} fixes")
-            except Exception as e:
-                logger.debug(f"[HEALING] Autonomous healing system not available: {e}")
-            
-            # Scan for issues
-            issues = scanner.scan_all()
-            
-            if not issues and not autonomous_fixes:
-                return HealingResult(
-                    action_type=HealingActionType.CODE_FIX,
-                    success=True,
-                    message="No code issues detected",
-                )
-            
-            # Filter by severity - only auto-fix critical and high issues
-            critical_issues = [i for i in issues if i.severity == 'critical']
-            high_issues = [i for i in issues if i.severity == 'high']
-            
-            # Fix critical issues first
-            critical_fixes = fixer.fix_all_issues(critical_issues)
-            high_fixes = fixer.fix_all_issues(high_issues)
-            
-            successful_fixes = [f for f in critical_fixes + high_fixes if f.success]
-            failed_fixes = [f for f in critical_fixes + high_fixes if not f.success]
-            
-            # Also fix common warnings if requested
-            warning_fixes = []
-            if params.get('fix_warnings', False):
-                warning_fixes = fixer.fix_all_warnings(max_files=50)
-                successful_fixes.extend([f for f in warning_fixes if f.success])
-            
-            total_fixed = len(successful_fixes) + len(autonomous_fixes)
-            total_failed = len(failed_fixes)
-            
-            message = f"Fixed {total_fixed} code issues"
-            if autonomous_healing_attempted:
-                message += f" ({len(autonomous_fixes)} via autonomous healing system)"
-            if total_failed > 0:
-                message += f", {total_failed} failed"
-            if warning_fixes:
-                message += f", {len([f for f in warning_fixes if f.success])} warnings fixed"
-            
-            return HealingResult(
-                action_type=HealingActionType.CODE_FIX,
-                success=total_fixed > 0,
-                message=message,
-                pre_state={'issues_before': len(issues)},
-                post_state={
-                    'issues_after': len(issues) - total_fixed + len(autonomous_fixes),
-                    'fixes_applied': total_fixed,
-                    'fixes_failed': total_failed,
-                    'autonomous_healing_used': autonomous_healing_attempted,
-                    'autonomous_fixes': len(autonomous_fixes)
-                },
-                rollback_available=True,  # Backups created
-            )
-            
-        except Exception as e:
-            logger.error(f"Code fix healing failed: {e}")
-            import traceback
-            traceback.print_exc()
-            return HealingResult(
-                action_type=HealingActionType.CODE_FIX,
-                success=False,
-                message=f"Code fix error: {str(e)}",
-            )
-
-    def _get_code_fix_patterns(self) -> Dict[str, tuple]:
-        """
-        Get automatic code fix patterns.
-
-        Returns dict mapping issue_type to (pattern, replacement, description).
-        """
-        return {
-            # Security fixes
-            'command_injection': (
-                r'shell\s*=\s*True',
-                'shell=False',
-                'Disabled shell execution to prevent command injection'
-            ),
-            'yaml_unsafe_load': (
-                r'yaml\.load\s*\(([^)]+)\)',
-                r'yaml.safe_load(\1)',
-                'Changed yaml.load to yaml.safe_load'
-            ),
-            'os_system_injection': (
-                r'os\.system\s*\(([^)]+)\)',
-                r'subprocess.run(\1, shell=False, check=True)',
-                'Replaced os.system with subprocess.run'
-            ),
-            # Configuration fixes
-            'ssl_verify_disabled': (
-                r'verify\s*=\s*False',
-                'verify=True',
-                'Enabled SSL verification'
-            ),
-            'debug_enabled': (
-                r'DEBUG\s*=\s*True',
-                'DEBUG = os.getenv("DEBUG", "false").lower() == "true"',
-                'Made DEBUG configurable via environment'
-            ),
-            # Resource management fixes
-            'file_not_closed': (
-                r'(\w+)\s*=\s*open\s*\(([^)]+)\)(?!\s*as\s)',
-                r'with open(\2) as \1:',
-                'Wrapped file open in context manager'
-            ),
-        }
-
-    def rollback_code_fix(self, backup_path: str, original_path: str) -> HealingResult:
-        """
-        Rollback a code fix using the backup file.
-
-        Parameters:
-            backup_path: Path to backup file
-            original_path: Path to original file to restore
-        """
-        try:
-            backup = Path(backup_path)
-            original = Path(original_path)
-
-            if not backup.exists():
-                return HealingResult(
-                    action_type=HealingActionType.CODE_FIX,
-                    success=False,
-                    message=f"Backup file not found: {backup_path}",
-                )
-
-            # Restore from backup
-            shutil.copy2(backup, original)
-
-            return HealingResult(
-                action_type=HealingActionType.CODE_FIX,
-                success=True,
-                message=f"Successfully rolled back {original_path} from backup",
-            )
-
-        except Exception as e:
-            logger.error(f"Code fix rollback failed: {e}")
-            return HealingResult(
-                action_type=HealingActionType.CODE_FIX,
-                success=False,
-                message=f"Rollback error: {str(e)}",
             )
 
 

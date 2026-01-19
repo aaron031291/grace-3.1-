@@ -1,15 +1,35 @@
+"""
+Grace Active Learning System
+
+Transforms passive RAG into active learning where Grace:
+1. Studies training materials from AI research folder
+2. Practices skills in the sandbox environment
+3. Learns from successes and failures
+4. Builds persistent knowledge and abilities
+
+Architecture:
+- AI Research Folder = Curriculum (what to learn)
+- Cognitive Framework = How to think and learn
+- Learning Memory = What has been learned
+- Sandbox = Practice environment
+- File Manager = Her world to interact with
+"""
+
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime, timedelta
 from pathlib import Path
 from sqlalchemy.orm import Session
 import json
 import logging
+
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.learning_memory import LearningMemoryManager, TrustScorer, LearningExample, LearningPattern
 from cognitive.predictive_context_loader import PredictiveContextLoader
 from retrieval.retriever import DocumentRetriever
 from database.session import get_session
+
 logger = logging.getLogger(__name__)
+
 
 class TrainingSession:
     """
@@ -348,21 +368,6 @@ class GraceActiveLearningSystem:
             self.session.add(example)
             self.session.commit()
             example_ids.append(str(example.id))
-            
-            # ✅ Record outcome in OutcomeAggregator for cross-system learning
-            try:
-                from cognitive.outcome_aggregator import get_outcome_aggregator
-                aggregator = get_outcome_aggregator(self.session)
-                aggregator.record_outcome('active_learning', {
-                    'topic': topic,
-                    'learning_type': learning_type,
-                    'success': True,
-                    'trust_score': trust_score,
-                    'example_id': str(example.id),
-                    'source_reliability': source_reliability
-                })
-            except Exception as e:
-                logger.debug(f"[ACTIVE-LEARNING] Could not record outcome in aggregator: {e}")
 
         return example_ids
 
@@ -659,21 +664,6 @@ class GraceActiveLearningSystem:
 
         self.session.add(example)
         self.session.commit()
-        
-        # ✅ Record outcome in OutcomeAggregator for cross-system learning
-        try:
-            from cognitive.outcome_aggregator import get_outcome_aggregator
-            aggregator = get_outcome_aggregator(self.session)
-            aggregator.record_outcome('active_learning_practice', {
-                'skill_name': skill_name,
-                'success': success,
-                'trust_score': trust_score,
-                'example_id': str(example.id) if hasattr(example, 'id') else None,
-                'task_description': task.get('description'),
-                'practice_iteration': self.skill_levels.get(skill_name, SkillLevel(skill_name)).tasks_completed + 1
-            })
-        except Exception as e:
-            logger.debug(f"[ACTIVE-LEARNING] Could not record practice outcome in aggregator: {e}")
 
         # Update operational confidence for related knowledge examples
         self._update_related_knowledge_confidence(skill_name, operational_confidence)

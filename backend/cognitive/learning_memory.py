@@ -4,27 +4,14 @@ Learning Memory System - Connects to Memory Mesh
 Manages training data from learning memory folders and feeds it
 to the memory mesh with trust scores for continuous improvement.
 """
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boolean, ForeignKey
 import json
 
-# Try backend.database first, then database (for compatibility)
-try:
-    from database.base import BaseModel
-except ImportError:
-    try:
-        from database.base import BaseModel
-    except ImportError:
-        # Fallback: try to import from models if available
-        try:
-            from models.database_models import BaseModel
-        except ImportError:
-            # Last resort: use SQLAlchemy Base directly
-            from sqlalchemy.ext.declarative import declarative_base
-            BaseModel = declarative_base()
+from database.base import BaseModel
 
 
 class LearningExample(BaseModel):
@@ -34,7 +21,6 @@ class LearningExample(BaseModel):
     Stores experiences that Grace learns from.
     """
     __tablename__ = "learning_examples"
-    __table_args__ = ({'extend_existing': True},)  # Allow table to be redefined if already exists
 
     # What was learned
     example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
@@ -78,7 +64,6 @@ class LearningPattern(BaseModel):
     Higher-level abstractions learned from concrete examples.
     """
     __tablename__ = "learning_patterns"
-    __table_args__ = ({'extend_existing': True},)  # Allow table to be redefined if already exists
 
     pattern_name = Column(String, nullable=False, unique=True)
     pattern_type = Column(String, nullable=False)  # behavioral, optimization, error_recovery, etc.
@@ -115,19 +100,9 @@ class TrustScorer:
     3. Consistency (alignment with other knowledge)
     4. Recency (newer is often better)
     5. Validation history (proven right/wrong)
-    
-    Can optionally use enhanced trust scorer for advanced features.
     """
 
-    def __init__(self, use_enhanced: bool = False):
-        """
-        Initialize trust scorer.
-        
-        Args:
-            use_enhanced: If True, use enhanced trust scorer with confidence intervals
-        """
-        self.use_enhanced = use_enhanced
-        
+    def __init__(self):
         # Source reliability weights
         self.source_weights = {
             'user_feedback_positive': 0.9,
@@ -139,17 +114,6 @@ class TrustScorer:
             'inferred': 0.3,
             'assumed': 0.1
         }
-        
-        # Initialize enhanced scorer if requested
-        if self.use_enhanced:
-            try:
-                from cognitive.enhanced_trust_scorer import get_adaptive_trust_scorer
-                self.enhanced_scorer = get_adaptive_trust_scorer()
-            except ImportError:
-                self.use_enhanced = False
-                self.enhanced_scorer = None
-        else:
-            self.enhanced_scorer = None
 
     def calculate_trust_score(
         self,
@@ -157,9 +121,7 @@ class TrustScorer:
         outcome_quality: float,
         consistency_score: float,
         validation_history: Dict[str, int],
-        age_days: float,
-        context: Optional[Dict[str, Any]] = None,
-        operational_confidence: Optional[float] = None
+        age_days: float
     ) -> float:
         """
         Calculate comprehensive trust score.
@@ -170,26 +132,10 @@ class TrustScorer:
             consistency_score: Consistency with other knowledge (0-1)
             validation_history: {'validated': N, 'invalidated': M}
             age_days: Age in days
-            context: Optional context for enhanced scoring
-            operational_confidence: Optional operational confidence (0-1)
 
         Returns:
             Trust score (0-1)
         """
-        # Use enhanced scorer if available and requested
-        if self.use_enhanced and self.enhanced_scorer:
-            result = self.enhanced_scorer.calculate_trust_score(
-                source=source,
-                outcome_quality=outcome_quality,
-                consistency_score=consistency_score,
-                validation_history=validation_history,
-                age_days=age_days,
-                operational_confidence=operational_confidence,
-                context=context or {}
-            )
-            return result.trust_score
-        
-        # Original implementation (backward compatible)
         # 1. Source reliability (40% weight)
         source_score = self.source_weights.get(source, 0.5)
 
@@ -277,14 +223,10 @@ class LearningMemoryManager:
     5. Update trust based on outcomes
     """
 
-    def __init__(self, session: Session, knowledge_base_path):
+    def __init__(self, session: Session, knowledge_base_path: Path):
         self.session = session
-        # Convert to Path if it's a string
-        if isinstance(knowledge_base_path, str):
-            self.kb_path = Path(knowledge_base_path)
-        else:
-            self.kb_path = knowledge_base_path
-        self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
+        self.kb_path = knowledge_base_path
+        self.learning_memory_path = knowledge_base_path / "layer_1" / "learning_memory"
         self.trust_scorer = TrustScorer()
 
     def ingest_learning_data(
@@ -396,58 +338,22 @@ class LearningMemoryManager:
     def _calculate_consistency(
         self,
         input_context: Dict[str, Any],
-        expected_output: Dict[str, Any],
-        use_enhanced: bool = False
+        expected_output: Dict[str, Any]
     ) -> float:
         """
         Calculate consistency with existing knowledge.
 
         Checks if this aligns with other learning examples.
-        
-        Args:
-            input_context: Input context for the learning example
-            expected_output: Expected output
-            use_enhanced: If True, use enhanced consistency checker
-            
-        Returns:
-            Consistency score (0-1)
         """
         # Find similar learning examples
-        topic = input_context.get('topic', '')
         similar_examples = self.session.query(LearningExample).filter(
             LearningExample.trust_score > 0.7
-        ).limit(50).all()  # Get more examples for enhanced checking
+        ).limit(10).all()
 
         if not similar_examples:
             return 0.5  # Neutral if no comparison data
 
-        # Use enhanced consistency checker if available
-        if use_enhanced:
-            try:
-                from cognitive.enhanced_consistency_checker import get_consistency_checker
-                checker = get_consistency_checker(use_semantic_detection=True)
-                
-                # Create a temporary example dict for checking
-                temp_example = {
-                    'input_context': input_context,
-                    'expected_output': expected_output,
-                    'topic': topic
-                }
-                
-                # Run comprehensive consistency check
-                result = checker.check_consistency(
-                    new_example=temp_example,
-                    existing_examples=similar_examples,
-                    topic=topic
-                )
-                
-                # Return the consistency score
-                return result.consistency_score
-            except ImportError:
-                logger.warning("Enhanced consistency checker not available, using simple check")
-                use_enhanced = False
-
-        # Simple consistency check (fallback)
+        # Simple consistency check (can be enhanced)
         consistent_count = 0
         total_count = len(similar_examples)
 
@@ -492,12 +398,8 @@ class LearningMemoryManager:
         """
         Extract pattern from multiple learning examples.
         """
-        # Safety check: ensure examples list is not empty
-        if not examples:
-            raise ValueError("Cannot extract pattern from empty examples list")
-        
         # Simple pattern extraction (can be enhanced with ML)
-        pattern_name = f"pattern_{examples[0].example_type}_{datetime.now(UTC).timestamp()}"
+        pattern_name = f"pattern_{examples[0].example_type}_{datetime.utcnow().timestamp()}"
 
         # Extract common preconditions
         preconditions = self._extract_common_preconditions(examples)
@@ -508,8 +410,8 @@ class LearningMemoryManager:
         # Extract expected outcomes
         outcomes = self._extract_common_outcomes(examples)
 
-        # Calculate pattern trust (with division by zero protection)
-        avg_trust = sum(e.trust_score for e in examples) / len(examples) if examples else 0.0
+        # Calculate pattern trust
+        avg_trust = sum(e.trust_score for e in examples) / len(examples)
 
         # Create pattern
         pattern = LearningPattern(
@@ -606,7 +508,7 @@ class LearningMemoryManager:
 
         # Update usage tracking
         example.times_referenced += 1
-        example.last_used = datetime.now(UTC)
+        example.last_used = datetime.utcnow()
 
         # Update trust based on outcome
         new_trust = self.trust_scorer.update_trust_on_validation(
@@ -625,7 +527,7 @@ class LearningMemoryManager:
         examples = self.session.query(LearningExample).all()
 
         for example in examples:
-            age_days = (datetime.now(UTC) - example.created_at).days
+            age_days = (datetime.utcnow() - example.created_at).days
             example.recency_weight = self.trust_scorer._calculate_recency_weight(age_days)
 
             # Recalculate trust with new recency weight

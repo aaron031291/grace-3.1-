@@ -1,3 +1,10 @@
+"""
+Knowledge Base CI/CD Integration
+================================
+Enables autonomous CI/CD triggers from the knowledge base.
+Integrates with the Genesis Key CI/CD system.
+"""
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Any
@@ -6,15 +13,14 @@ import json
 import os
 from pathlib import Path
 import logging
-from typing import ClassVar
 
 logger = logging.getLogger(__name__)
 
-# Router for knowledge base CI/CD endpoints
-router = APIRouter(prefix="/knowledge-base-cicd", tags=["Knowledge Base CI/CD"])
+router = APIRouter(prefix="/api/knowledge-base/cicd", tags=["Knowledge Base - CI/CD"])
 
 # Knowledge base path
-KB_PATH = Path(__file__).parent.parent.parent / "knowledge_base" / "cicd"
+KB_PATH = Path(__file__).parent.parent.parent / "knowledge_base" / "cicd_pipelines"
+
 
 class AutonomousAction(BaseModel):
     """An autonomous action that can be triggered."""

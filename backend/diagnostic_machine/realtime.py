@@ -1,3 +1,16 @@
+"""
+Real-time WebSocket Updates for Diagnostic Machine
+
+Provides live streaming of:
+- Diagnostic cycle results
+- Health status changes
+- Alert notifications
+- Healing action progress
+- System metrics
+
+Supports multiple concurrent clients with room-based subscriptions.
+"""
+
 import asyncio
 import json
 import logging
@@ -10,6 +23,7 @@ from starlette.websockets import WebSocketState
 import weakref
 
 logger = logging.getLogger(__name__)
+
 
 class EventType(str, Enum):
     """Types of real-time events."""

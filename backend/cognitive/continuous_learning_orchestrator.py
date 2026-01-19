@@ -1,3 +1,20 @@
+"""
+Continuous Learning Orchestrator
+
+Connects the Autonomous Sandbox Lab to continuous training data ingestion.
+
+Grace continuously:
+1. Ingests new documents and data
+2. Learns from them using autonomous learning
+3. Identifies improvement opportunities via Mirror
+4. Proposes experiments to Sandbox Lab
+5. Tests improvements with new data
+6. Promotes validated improvements
+7. Repeats - continuous evolution
+
+This creates a never-ending self-improvement loop.
+"""
+
 import logging
 import asyncio
 import threading
@@ -6,7 +23,9 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Set
 from pathlib import Path
 import json
+
 logger = logging.getLogger(__name__)
+
 
 class ContinuousLearningOrchestrator:
     """
@@ -82,7 +101,7 @@ class ContinuousLearningOrchestrator:
 
     def initialize_components(self):
         """Initialize all required components"""
-        print("[CONTINUOUS_LEARNING] Initializing components...", flush=True)
+        # print("[CONTINUOUS_LEARNING] Initializing components...", flush=True)
         logger.info("[CONTINUOUS_LEARNING] Initializing components...")
 
         # Get Sandbox Lab
@@ -94,7 +113,6 @@ class ContinuousLearningOrchestrator:
             logger.warning(f"[CONTINUOUS_LEARNING] Sandbox Lab unavailable: {e}")
 
         # Get Mirror System (requires database session)
-        session = None
         try:
             from cognitive.mirror_self_modeling import get_mirror_system
             from database.session import SessionLocal
@@ -103,9 +121,6 @@ class ContinuousLearningOrchestrator:
             logger.info("[CONTINUOUS_LEARNING] [OK] Mirror System initialized")
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Mirror System unavailable: {e}")
-        finally:
-            if session:
-                session.close()
 
         # Get Learning Orchestrator
         try:
@@ -113,7 +128,7 @@ class ContinuousLearningOrchestrator:
             self.learning_orchestrator = get_learning_orchestrator()
             logger.info("[CONTINUOUS_LEARNING] [OK] Learning Orchestrator initialized")
         except Exception as e:
-            logger.warning(f"[CONTINUOUS_LEARNING] Learning Orchestrator unavailable: {e}")
+            logger.debug(f"[CONTINUOUS_LEARNING] Learning Orchestrator unavailable: {e}")
 
         # Get Ingestion Service
         try:
@@ -124,7 +139,7 @@ class ContinuousLearningOrchestrator:
             self.ingestion_service = TextIngestionService(
                 embedding_model=embedding_model
             )
-            print("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized", flush=True)
+            # print("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized", flush=True)
             logger.info("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized")
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")

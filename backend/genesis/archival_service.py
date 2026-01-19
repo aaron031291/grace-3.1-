@@ -1,3 +1,8 @@
+"""
+Genesis Key Archival Service.
+
+Collects keys every 24 hours, generates reports, and organizes them by date.
+"""
 import uuid
 import json
 import logging
@@ -7,9 +12,15 @@ from typing import List, Dict, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from models.genesis_key_models import GenesisKey, GenesisKeyArchive, UserProfile, FixSuggestion, GenesisKeyType, GenesisKeyStatus
+
+from models.genesis_key_models import (
+    GenesisKey, GenesisKeyArchive, UserProfile, FixSuggestion,
+    GenesisKeyType, GenesisKeyStatus
+)
 from database.session import get_session
+
 logger = logging.getLogger(__name__)
+
 
 class ArchivalService:
     """

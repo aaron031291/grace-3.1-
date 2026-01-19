@@ -1,9 +1,38 @@
+"""
+Version Control Connector for Layer 1 Message Bus.
+
+Automatically creates Genesis Keys + Version entries for all file operations.
+This connector makes version control AUTONOMOUS - any file change processed
+through Layer 1 automatically gets tracked with full version history.
+
+UPDATED: Now fully integrated with Layer 1 message bus with autonomous actions.
+"""
 import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
+
+# Optional import for message bus integration
+try:
+    from layer1.message_bus import (
+        Layer1MessageBus,
+        ComponentType,
+        Message,
+        get_message_bus
+    )
+    _HAS_MESSAGE_BUS = True
+except ImportError:
+    _HAS_MESSAGE_BUS = False
+    Layer1MessageBus = None
+    ComponentType = None
+    Message = None
+
 
 class VersionControlConnector:
     """

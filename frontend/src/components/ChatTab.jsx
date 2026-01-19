@@ -106,7 +106,7 @@ export default function ChatTab() {
       />
       <ChatWindow
         chatId={selectedChatId}
-        folderPath={selectedFolder}
+        folderPath={chats.find((c) => c.id === selectedChatId)?.folder_path || selectedFolder}
         onChatCreated={fetchChats}
       />
     </div>

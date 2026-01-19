@@ -1,3 +1,17 @@
+"""
+Librarian Ingestion Pipeline
+============================
+Full data ingestion flow with Genesis Key tracking.
+Data comes in → Genesis Key → Indexed → Files created/named → Saved in memory → Shows in UI
+
+Integrations:
+- Genesis Key Service: Every ingestion gets a properly tracked Genesis Key
+- Mirror Self-Modeling: Ingestions are observed for pattern learning
+- Cognitive Framework: Decisions about filing and categorization
+- Trust Scores: Ingestion reliability tracking
+- Version Control: All ingestions are version controlled
+"""
+
 import os
 import json
 import hashlib
@@ -13,6 +27,30 @@ import mimetypes
 import shutil
 
 logger = logging.getLogger(__name__)
+
+
+def get_genesis_key_service():
+    """Get the Genesis Key Service for proper key creation."""
+    try:
+        from genesis.genesis_key_service import GenesisKeyService
+        from database.session import get_session
+        session = next(get_session())
+        return GenesisKeyService(session=session)
+    except Exception as e:
+        logger.debug(f"[LIBRARIAN] Genesis Key Service not available: {e}")
+        return None
+
+
+def get_mirror_system():
+    """Get the Mirror Self-Modeling System for observation."""
+    try:
+        from cognitive.mirror_self_modeling import MirrorSelfModelingSystem
+        from database.session import get_session
+        session = next(get_session())
+        return MirrorSelfModelingSystem(session)
+    except Exception as e:
+        logger.debug(f"[LIBRARIAN] Mirror System not available: {e}")
+        return None
 
 
 class IngestionStatus(str, Enum):

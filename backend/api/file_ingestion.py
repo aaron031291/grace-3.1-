@@ -1,8 +1,14 @@
+"""
+API endpoints for file-based ingestion management.
+Provides REST endpoints to trigger and monitor file-based ingestion.
+"""
+
 from fastapi import APIRouter, HTTPException, Query, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 import logging
+
 from ingestion.file_manager import IngestionFileManager, IngestionResult
 from api.ingest import get_ingestion_service
 from embedding import get_embedding_model
@@ -10,29 +16,48 @@ from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session
 from sqlalchemy.orm import Session
-from contextlib import nullcontext
-from pathlib import Path
-from settings import KNOWLEDGE_BASE_PATH
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/file-ingestion", tags=["file-ingestion"])
+# Create router
+router = APIRouter(prefix="/file-ingest", tags=["File-Based Ingestion"])
 
-# Singleton instance
+# Global file manager instance
 _file_manager: Optional[IngestionFileManager] = None
 
+
 def get_file_manager() -> IngestionFileManager:
-    """Get or create IngestionFileManager singleton for dependency injection."""
+    """Get or create file ingestion manager."""
     global _file_manager
+    
     if _file_manager is None:
-        embedding_model = get_embedding_model()
-        ingestion_service = get_ingestion_service()
-        _file_manager = IngestionFileManager(
-            knowledge_base_path=KNOWLEDGE_BASE_PATH,
-            embedding_model=embedding_model,
-            ingestion_service=ingestion_service,
-        )
+        try:
+            from pathlib import Path
+            import os
+            logger.info("[FILE_INGEST] Initializing file ingestion manager...")
+            ingestion_service = get_ingestion_service()
+            embedding_model = get_embedding_model()
+            
+            # Use absolute path to knowledge base
+            kb_path = Path(os.path.dirname(__file__)).parent / "knowledge_base"
+            
+            _file_manager = IngestionFileManager(
+                knowledge_base_path=kb_path,
+                embedding_model=embedding_model,
+                ingestion_service=ingestion_service,
+            )
+            logger.info(f"[FILE_INGEST] [OK] File manager initialized with path: {kb_path}")
+        except Exception as e:
+            logger.error(f"Failed to initialize file manager: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="File manager initialization failed"
+            )
+    
     return _file_manager
+
+
+# ==================== Pydantic Models ====================
 
 class FileIngestionResultItem(BaseModel):
     """Result of a file ingestion operation."""
@@ -110,23 +135,7 @@ async def scan_knowledge_base(
         )
         logger.info(f"✅ Genesis Key created for file scan: {genesis_key.key_id}")
 
-        # TimeSense: Track file scanning operation
-        import os
-        kb_path = file_manager.knowledge_base_path
-        total_size = 0
-        file_count = 0
-        for root, dirs, files in os.walk(kb_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                try:
-                    total_size += os.path.getsize(file_path)
-                    file_count += 1
-                except:
-                    pass
-
-        # Track operation with TimeSense
-        with track_operation(PrimitiveType.FILE_READ, total_size) if TIMESENSE_AVAILABLE else nullcontext():
-            results = file_manager.scan_directory()
+        results = file_manager.scan_directory()
         
         successful = sum(1 for r in results if r.success)
         failed = sum(1 for r in results if not r.success)

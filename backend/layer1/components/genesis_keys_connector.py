@@ -1,11 +1,31 @@
+"""
+Genesis Keys Connector - Universal Tracking Integration
+
+Connects Genesis Keys system to Layer 1 message bus for:
+- Automatic key creation on ingestion
+- User contribution tracking
+- Cross-component provenance
+"""
+
 from typing import Dict, Any, Optional
 import logging
 from datetime import datetime
 import hashlib
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from layer1.message_bus import Layer1MessageBus, ComponentType, Message, get_message_bus
+
+from layer1.message_bus import (
+    Layer1MessageBus,
+    ComponentType,
+    Message,
+    get_message_bus
+)
+
 logger = logging.getLogger(__name__)
+
+# Thread pool for CPU-bound operations (SCALABILITY)
+_executor = ThreadPoolExecutor(max_workers=4)
+
 
 class GenesisKeysConnector:
     """
@@ -208,13 +228,7 @@ class GenesisKeysConnector:
             handler=self._handle_create_file_key
         )
 
-        self.message_bus.register_request_handler(
-            component=ComponentType.GENESIS_KEYS,
-            topic="create_cognitive_key",
-            handler=self._handle_create_cognitive_key
-        )
-
-        logger.info("[GENESIS-KEYS-CONNECTOR] 🔧 Registered 4 request handlers")
+        logger.info("[GENESIS-KEYS-CONNECTOR] 🔧 Registered 3 request handlers")
 
     async def _handle_create_file_key(self, message: Message) -> Dict[str, Any]:
         """Handle request to create Genesis Key for a file."""
@@ -302,57 +316,6 @@ class GenesisKeysConnector:
                 }
                 for key in keys
             ]
-        }
-
-    async def _handle_create_cognitive_key(self, message: Message) -> Dict[str, Any]:
-        """Handle request to create Genesis Key for cognitive cycle."""
-        key_type = message.payload.get("key_type", "cognitive_cycle")
-        what = message.payload.get("what", "")
-        who = message.payload.get("who", "system")
-        why = message.payload.get("why", "")
-        how = message.payload.get("how", "")
-        context = message.payload.get("context", {})
-
-        def _create_key():
-            from genesis.genesis_key_service import GenesisKeyService
-            from models.genesis_key_models import GenesisKeyType
-            
-            genesis_service = GenesisKeyService(
-                session=self.session,
-                repo_path=self.kb_path
-            )
-            
-            # Map key_type string to GenesisKeyType enum
-            genesis_key_type = GenesisKeyType.COGNITIVE_CYCLE
-            if key_type == "cognitive_cycle":
-                genesis_key_type = GenesisKeyType.COGNITIVE_CYCLE
-            elif key_type == "file":
-                genesis_key_type = GenesisKeyType.FILE_INGESTION
-            elif key_type == "learning":
-                genesis_key_type = GenesisKeyType.LEARNING_EXPERIENCE
-            
-            return genesis_service.create_key(
-                key_type=genesis_key_type,
-                what_description=what,
-                who_actor=who,
-                why_reason=why,
-                how_method=how,
-                context_data=context,
-                session=self.session
-            )
-
-        # Run database operation asynchronously (SCALABILITY)
-        loop = asyncio.get_event_loop()
-        genesis_key = await loop.run_in_executor(_executor, _create_key)
-
-        logger.info(
-            f"[GENESIS-KEYS-CONNECTOR] ✓ Created cognitive Genesis Key: {genesis_key.key_id}"
-        )
-
-        return {
-            "genesis_key_id": genesis_key.key_id,
-            "key_type": key_type,
-            "created": True
         }
 
     # ================================================================

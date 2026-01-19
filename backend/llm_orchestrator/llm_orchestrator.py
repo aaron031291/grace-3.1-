@@ -1,3 +1,25 @@
+"""
+Complete LLM Orchestration System
+
+Integrates all components:
+- Multiple LLMs (DeepSeek, Qwen, Llama, etc.)
+- Read-only repository access
+- Hallucination mitigation (5-layer pipeline)
+- Cognitive framework enforcement (12 OODA invariants)
+- Genesis Key tracking
+- Layer 1 integration
+- Learning Memory integration
+- Version control
+- Trust system verification
+
+All LLM operations are:
+- Tracked with Genesis Keys
+- Logged for audit
+- Trust-scored
+- Cognitively enforced
+- Integrated with learning memory
+"""
+
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
@@ -5,119 +27,20 @@ from dataclasses import dataclass
 from sqlalchemy.orm import Session
 import json
 import uuid
-import hashlib
-# Import with graceful fallbacks
-try:
-    from .multi_llm_client import MultiLLMClient, TaskType
-except ImportError:
-    try:
-        from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
-    except ImportError:
-        MultiLLMClient = None
-        TaskType = None
 
-try:
-    from .repo_access import RepositoryAccessLayer
-except ImportError:
-    try:
-        from llm_orchestrator.repo_access import RepositoryAccessLayer
-    except ImportError:
-        RepositoryAccessLayer = None
+from .multi_llm_client import MultiLLMClient, TaskType
+from .repo_access import RepositoryAccessLayer
+from .hallucination_guard import HallucinationGuard, VerificationResult
+from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
+from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
+from cognitive.learning_memory import LearningMemoryManager
+from embedding import EmbeddingModel
+from confidence_scorer.confidence_scorer import ConfidenceScorer
 
-try:
-    from .hallucination_guard import HallucinationGuard, VerificationResult
-except ImportError:
-    try:
-        from llm_orchestrator.hallucination_guard import HallucinationGuard, VerificationResult
-    except ImportError:
-        HallucinationGuard = None
-        VerificationResult = None
-
-try:
-    from .cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
-except ImportError:
-    try:
-        from cognitive_enforcer import CognitiveEnforcer, CognitiveConstraints
-    except ImportError:
-        CognitiveEnforcer = None
-        CognitiveConstraints = None
-
-try:
-    from .proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
-except ImportError:
-    try:
-        from proactive_code_intelligence import get_proactive_code_intelligence, ProactiveCodeIntelligence
-    except ImportError:
-        get_proactive_code_intelligence = None
-        ProactiveCodeIntelligence = None
-
-try:
-    from .autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
-except ImportError:
-    try:
-        from autonomous_fine_tuning_trigger import get_autonomous_fine_tuning_trigger, AutonomousFineTuningTrigger
-    except ImportError:
-        get_autonomous_fine_tuning_trigger = None
-        AutonomousFineTuningTrigger = None
-
-try:
-    from .grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
-except ImportError:
-    try:
-        from grace_system_prompts import get_grace_system_prompt, enhance_prompt_with_grace_context
-    except ImportError:
-        get_grace_system_prompt = None
-        enhance_prompt_with_grace_context = None
-
-try:
-    from .grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
-except ImportError:
-    try:
-        from grace_aligned_llm import get_grace_aligned_llm_system, GraceAlignmentLevel
-    except ImportError:
-        get_grace_aligned_llm_system = None
-        GraceAlignmentLevel = None
-
-try:
-    from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
-except ImportError:
-    try:
-        from genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
-    except ImportError:
-        try:
-            from backend.genesis.cognitive_layer1_integration import get_cognitive_layer1_integration, CognitiveLayer1Integration
-        except ImportError:
-            get_cognitive_layer1_integration = None
-            CognitiveLayer1Integration = None
-
-try:
-    from cognitive.learning_memory import LearningMemoryManager
-except ImportError:
-    try:
-        from backend.cognitive.learning_memory import LearningMemoryManager
-    except ImportError:
-        LearningMemoryManager = None
-
-try:
-    from .embedding import EmbeddingModel
-except ImportError:
-    try:
-        from embedding import EmbeddingModel
-    except ImportError:
-        EmbeddingModel = None
-
-try:
-    from .confidence_scorer.confidence_scorer import ConfidenceScorer
-except ImportError:
-    try:
-        from confidence_scorer.confidence_scorer import ConfidenceScorer
-    except ImportError:
-        ConfidenceScorer = None
-
-# Module-level logger
 logger = logging.getLogger(__name__)
 
 
+@dataclass
 class LLMTaskRequest:
     """LLM task request."""
     task_id: str
@@ -183,212 +106,29 @@ class LLMOrchestrator:
         self.session = session
         self.embedding_model = embedding_model
 
-        # Initialize core components with graceful fallbacks
-        try:
-            if MultiLLMClient is None:
-                logger.warning("[LLM ORCHESTRATOR] MultiLLMClient module not available - LLM generation will be disabled")
-                self.multi_llm = None
-            else:
-                self.multi_llm = MultiLLMClient()
-                if self.multi_llm:
-                    if self.multi_llm.available_models:
-                        logger.info(f"[LLM ORCHESTRATOR] MultiLLMClient initialized with {len(self.multi_llm.available_models)} models")
-                    else:
-                        logger.warning("[LLM ORCHESTRATOR] MultiLLMClient initialized but no models available - check Ollama service")
-                else:
-                    logger.warning("[LLM ORCHESTRATOR] MultiLLMClient initialization returned None")
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] MultiLLMClient initialization failed: {e}", exc_info=True)
-            self.multi_llm = None
-            # Feed error to self-healing pipeline
-            self._record_error_for_learning(e, "multi_llm_initialization", session)
-        
-        try:
-            self.repo_access = RepositoryAccessLayer(
-                session=session,
-                embedding_model=embedding_model
-            ) if RepositoryAccessLayer and session else None
-            if self.repo_access:
-                logger.info("[LLM ORCHESTRATOR] RepositoryAccessLayer initialized")
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] RepositoryAccessLayer not available: {e}")
-            self.repo_access = None
-            # Feed error to self-healing pipeline
-            self._record_error_for_learning(e, "repository_access_initialization", session)
-        
-        try:
-            self.confidence_scorer = ConfidenceScorer(
-                embedding_model=embedding_model
-            ) if embedding_model and ConfidenceScorer else None
-            if self.confidence_scorer:
-                logger.info("[LLM ORCHESTRATOR] ConfidenceScorer initialized")
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] ConfidenceScorer not available: {e}")
-            self.confidence_scorer = None
-            # Feed error to self-healing pipeline
-            self._record_error_for_learning(e, "confidence_scorer_initialization", session)
+        # Initialize core components
+        self.multi_llm = MultiLLMClient()
+        self.repo_access = RepositoryAccessLayer(
+            session=session,
+            embedding_model=embedding_model
+        )
+        self.confidence_scorer = ConfidenceScorer(
+            embedding_model=embedding_model
+        ) if embedding_model else None
 
-        try:
-            if HallucinationGuard and self.multi_llm:
-                self.hallucination_guard = HallucinationGuard(
-                    multi_llm_client=self.multi_llm,
-                    repo_access=self.repo_access,
-                    confidence_scorer=self.confidence_scorer,
-                    enable_external_verification=True
-                )
-                logger.info("[LLM ORCHESTRATOR] HallucinationGuard initialized")
-            else:
-                self.hallucination_guard = None
-                if not HallucinationGuard:
-                    logger.debug("[LLM ORCHESTRATOR] HallucinationGuard module not available")
-                elif not self.multi_llm:
-                    logger.warning("[LLM ORCHESTRATOR] HallucinationGuard requires MultiLLMClient")
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] HallucinationGuard not available: {e}")
-            self.hallucination_guard = None
-        
-        try:
-            self.cognitive_enforcer = CognitiveEnforcer() if CognitiveEnforcer else None
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] CognitiveEnforcer not available: {e}")
-            self.cognitive_enforcer = None
+        self.hallucination_guard = HallucinationGuard(
+            multi_llm_client=self.multi_llm,
+            repo_access=self.repo_access,
+            confidence_scorer=self.confidence_scorer
+        )
+        self.cognitive_enforcer = CognitiveEnforcer()
 
         # Initialize Cognitive Layer 1 (with OODA + 12 Invariants) and Learning Memory
-        try:
-            if session and get_cognitive_layer1_integration:
-                self.cognitive_layer1 = get_cognitive_layer1_integration(session=session)
-            else:
-                self.cognitive_layer1 = None
-        except Exception as e:
-            try:
-                logger.warning(f"[LLM ORCHESTRATOR] Cognitive Layer 1 not available: {e}")
-            except NameError:
-                print(f"[LLM ORCHESTRATOR] Cognitive Layer 1 not available: {e}")
-            self.cognitive_layer1 = None
-        
-        try:
-            self.learning_memory = LearningMemoryManager(
-                session=session,
-                knowledge_base_path=knowledge_base_path
-            ) if session and knowledge_base_path and LearningMemoryManager else None
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] Learning Memory Manager not available: {e}")
-            self.learning_memory = None
-        
-        # Initialize Grace-Aligned LLM System (for Memory Mesh retrieval before generation)
-        self.grace_aligned_llm = None
-        if session and knowledge_base_path:
-            try:
-                # Try Advanced Grace-Aligned LLM first (beyond current capabilities)
-                try:
-                    from .advanced_grace_aligned_llm import get_advanced_grace_aligned_llm
-                    self.grace_aligned_llm = get_advanced_grace_aligned_llm(
-                        session=session,
-                        knowledge_base_path=knowledge_base_path,
-                        max_context_tokens=4096,  # PC limitation
-                        memory_strategy="smart_adaptive",
-                        compression_level="moderate"
-                    )
-                    logger.info("[LLM ORCHESTRATOR] Advanced Grace-Aligned LLM System initialized (beyond current capabilities)")
-                except Exception as e:
-                    # Fallback to base Grace-Aligned LLM
-                    try:
-                        logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
-                    except NameError:
-                        print(f"[LLM ORCHESTRATOR] Could not initialize Advanced Grace-Aligned LLM: {e}, falling back to base")
-                    
-                    try:
-                        if get_grace_aligned_llm_system:
-                            self.grace_aligned_llm = get_grace_aligned_llm_system(
-                                session=session,
-                                knowledge_base_path=knowledge_base_path,
-                                alignment_level=GraceAlignmentLevel.ADVANCED if GraceAlignmentLevel else None
-                            )
-                            try:
-                                logger.info("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
-                            except NameError:
-                                print("[LLM ORCHESTRATOR] Base Grace-Aligned LLM System initialized")
-                        else:
-                            self.grace_aligned_llm = None
-                    except Exception as e2:
-                        try:
-                            logger.warning(f"[LLM ORCHESTRATOR] Could not initialize base Grace-Aligned LLM: {e2}")
-                        except NameError:
-                            print(f"[LLM ORCHESTRATOR] Could not initialize base Grace-Aligned LLM: {e2}")
-                        self.grace_aligned_llm = None
-            except Exception as e:
-                try:
-                    logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
-                except NameError:
-                    print(f"[LLM ORCHESTRATOR] Could not initialize Grace-Aligned LLM: {e}")
-        
-        # Initialize Output Formatter (for AI-to-AI JSON and AI-to-Human NLP)
-        try:
-            from .output_formatter import get_output_formatter, OutputRecipient
-            self.output_formatter = get_output_formatter()
-            self.output_recipient = OutputRecipient
-            logger.info("[LLM ORCHESTRATOR] Output Formatter initialized")
-        except Exception as e:
-            logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Output Formatter: {e}")
-            self.output_formatter = None
-            self.output_recipient = None
-        
-        # Initialize LLM-Transform Integration (for deterministic transforms)
-        self.transform_integration = None
-        if session and knowledge_base_path:
-            try:
-                self.transform_integration = get_llm_transform_integration(
-                    session=session,
-                    knowledge_base_path=knowledge_base_path
-                )
-                logger.info("[LLM ORCHESTRATOR] LLM-Transform Integration initialized")
-            except Exception as e:
-                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize Transform Integration: {e}")
-
-        # Initialize proactive code intelligence (makes LLMs always code-aware)
-        self.code_intelligence = get_proactive_code_intelligence(
-            multi_llm_client=self.multi_llm,
-            repo_access=self.repo_access,
-            learning_integration=None  # Will be set after learning_integration is created
-        )
-        
-        # Initialize autonomous fine-tuning trigger (continuous improvement)
-        from .learning_integration import get_learning_integration
-        learning_integration = get_learning_integration(
-            multi_llm_client=self.multi_llm,
-            repo_access=self.repo_access,
-            learning_memory=self.learning_memory,
-            cognitive_layer1=self.cognitive_layer1,
-            session=session
-        )
-        
-        from .fine_tuning import get_fine_tuning_system
-        fine_tuning_system = get_fine_tuning_system(
-            multi_llm_client=self.multi_llm,
-            repo_access=self.repo_access,
-            learning_integration=learning_integration
-        )
-        
-        # Initialize autonomous fine tuning trigger (if available)
-        if get_autonomous_fine_tuning_trigger is not None:
-            try:
-                self.autonomous_fine_tuning = get_autonomous_fine_tuning_trigger(
-                    multi_llm_client=self.multi_llm,
-                    fine_tuning_system=fine_tuning_system,
-                    repo_access=self.repo_access,
-                    learning_integration=learning_integration,
-                    auto_approve=False  # Requires user approval for safety
-                )
-            except Exception as e:
-                logger.warning(f"[LLM ORCHESTRATOR] Could not initialize autonomous fine tuning trigger: {e}")
-                self.autonomous_fine_tuning = None
-        else:
-            self.autonomous_fine_tuning = None
-        
-        # Start proactive monitoring
-        self.code_intelligence.start_monitoring()
-        if self.autonomous_fine_tuning:
-            self.autonomous_fine_tuning.start_monitoring()
+        self.cognitive_layer1 = get_cognitive_layer1_integration(session=session) if session else None
+        self.learning_memory = LearningMemoryManager(
+            session=session,
+            knowledge_base_path=knowledge_base_path
+        ) if session and knowledge_base_path else None
 
         # Task registry
         self.active_tasks: Dict[str, LLMTaskRequest] = {}
@@ -460,142 +200,21 @@ class LLMOrchestrator:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # STEP 2: Generate LLM Response (with optional deterministic transforms)
-            # Check if we can use deterministic transforms instead of free-form generation
-            use_transforms = task_request.task_type in [
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_DEBUGGING,
-                TaskType.CODE_EXPLANATION
-            ] and self.transform_integration is not None
-            
-            if use_transforms:
-                # Try deterministic transforms first
-                try:
-                    transformed_code, transform_outcomes = self.transform_integration.generate_with_transforms(
-                        code_intent=task_request.prompt,
-                        use_proofs=True
-                    )
-                    
-                    if transformed_code and transform_outcomes:
-                        # Transforms worked - use deterministic output
-                        llm_response = {
-                            "success": True,
-                            "content": transformed_code,
-                            "model_name": "deterministic_transform",
-                            "duration_ms": 100.0,  # Faster than LLM
-                            "transform_applied": True,
-                            "transform_outcomes": transform_outcomes
-                        }
-                        
-                        audit_trail.append({
-                            "step": "deterministic_transform",
-                            "transforms_applied": len(transform_outcomes),
-                            "proofs_passed": sum(
-                                1 for o in transform_outcomes
-                                if all(p == ProofStatus.PASSED or p == ProofStatus.SKIPPED for p in o.proof_results.values())
-                            ),
-                            "timestamp": datetime.now().isoformat()
-                        })
-                        
-                        logger.info(
-                            f"[LLM ORCHESTRATOR] Used deterministic transforms: "
-                            f"{len(transform_outcomes)} transforms applied"
-                        )
-                    else:
-                        # Transforms didn't match - fall back to LLM
-                        use_transforms = False
-                except Exception as e:
-                    logger.warning(f"[LLM ORCHESTRATOR] Transform generation error: {e}, falling back to LLM")
-                    use_transforms = False
-            
-            if not use_transforms:
-                # Generate with LLM (original method)
-                llm_response = self._generate_llm_response(task_request)
-                audit_trail.append({
-                    "step": "llm_generation",
-                    "model": llm_response.get("model_name"),
-                    "duration_ms": llm_response.get("duration_ms"),
-                    "timestamp": datetime.now().isoformat()
-                })
+            # STEP 2: Generate LLM Response
+            llm_response = self._generate_llm_response(task_request)
+            audit_trail.append({
+                "step": "llm_generation",
+                "model": llm_response.get("model_name"),
+                "duration_ms": llm_response.get("duration_ms"),
+                "timestamp": datetime.now().isoformat()
+            })
 
-                if not llm_response.get("success"):
-                    raise Exception(f"LLM generation failed: {llm_response.get('error')}")
+            if not llm_response.get("success"):
+                raise Exception(f"LLM generation failed: {llm_response.get('error')}")
 
-            raw_content = llm_response.get("content", "")
-            
-            # NEW: Enhance LLM output with deterministic transforms (if transform integration available)
-            transform_metadata = None
-            if self.transform_integration and not use_transforms:
-                try:
-                    enhanced_content, transform_metadata = self.transform_integration.enhance_llm_generation(
-                        llm_output=raw_content,
-                        use_transforms=True,
-                        proof_gate=True
-                    )
-                    
-                    if enhanced_content and transform_metadata.get("transforms_applied", 0) > 0:
-                        raw_content = enhanced_content
-                        audit_trail.append({
-                            "step": "llm_output_enhancement",
-                            "transforms_applied": transform_metadata["transforms_applied"],
-                            "proofs_passed": transform_metadata["proofs_passed"],
-                            "rules_used": transform_metadata["rules_used"],
-                            "timestamp": datetime.now().isoformat()
-                        })
-                        logger.info(
-                            f"[LLM ORCHESTRATOR] Enhanced LLM output: "
-                            f"{transform_metadata['transforms_applied']} transforms, "
-                            f"{transform_metadata['proofs_passed']} proofs passed"
-                        )
-                except Exception as e:
-                    logger.warning(f"[LLM ORCHESTRATOR] LLM enhancement error: {e}, using raw output")
-            
-            # NEW: Format output based on recipient type (AI-to-AI JSON or AI-to-Human NLP)
-            # Determine recipient type (default: human for user-facing, ai for system-to-system)
-            recipient_type = "ai" if task_request.context_documents and "ai" in str(task_request.context_documents).lower() else "human"
-            if task_request.task_type in [TaskType.CODE_GENERATION, TaskType.REASONING]:
-                recipient_type = "ai"  # Code generation and reasoning are AI-to-AI
-            
-            formatted_output = None
-            if self.output_formatter:
-                try:
-                    if recipient_type == "ai":
-                        # AI-to-AI: Deterministic JSON
-                        formatted_output = self.output_formatter.format_for_ai(
-                            raw_output=raw_content,
-                            verify=True
-                        )
-                    else:
-                        # AI-to-Human: Natural language
-                        formatted_output = self.output_formatter.format_for_human(
-                            raw_output=raw_content,
-                            verify=True
-                        )
-                    
-                    # Use formatted content
-                    content = formatted_output.content
-                    
-                    audit_trail.append({
-                        "step": "output_formatting",
-                        "format": formatted_output.format.value,
-                        "recipient": formatted_output.recipient.value,
-                        "verified": formatted_output.verified,
-                        "is_json": formatted_output.is_json,
-                        "deterministic": formatted_output.deterministic,
-                        "timestamp": datetime.now().isoformat()
-                    })
-                    
-                    logger.info(
-                        f"[LLM ORCHESTRATOR] Output formatted: {formatted_output.format.value} "
-                        f"for {formatted_output.recipient.value}, verified={formatted_output.verified}"
-                    )
-                except Exception as e:
-                    logger.warning(f"[LLM ORCHESTRATOR] Output formatting error: {e}, using raw content")
-                    content = raw_content
-            else:
-                content = raw_content
+            content = llm_response.get("content", "")
 
-            # STEP 3: Hallucination Mitigation (additional verification)
+            # STEP 3: Hallucination Mitigation
             verification_result = None
             if require_verification:
                 verification_result = self._verify_content(
@@ -630,7 +249,7 @@ class LLMOrchestrator:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # STEP 6: Learning Memory Integration + Grace Evolution
+            # STEP 6: Learning Memory Integration
             learning_example_id = None
             if enable_learning:
                 learning_example_id = self._integrate_learning_memory(
@@ -644,66 +263,6 @@ class LLMOrchestrator:
                     "learning_example_id": learning_example_id,
                     "timestamp": datetime.now().isoformat()
                 })
-                
-                # NEW: Contribute to Grace's learning (if Grace-Aligned LLM available)
-                if self.grace_aligned_llm:
-                    try:
-                        # Calculate trust score
-                        trust_score = verification_result.trust_score if verification_result else 0.8
-                        
-                        grace_learning_id = self.grace_aligned_llm.contribute_to_grace_learning(
-                            llm_output=content,
-                            query=task_request.prompt,
-                            trust_score=trust_score,
-                            genesis_key_id=genesis_key_id
-                        )
-                        if grace_learning_id:
-                            audit_trail.append({
-                                "step": "grace_learning_contribution",
-                                "grace_learning_id": grace_learning_id,
-                                "timestamp": datetime.now().isoformat()
-                            })
-                            logger.info(f"[GRACE-ALIGNED-LLM] Contributed to Grace learning: {grace_learning_id}")
-                    except Exception as e:
-                        logger.warning(f"[GRACE-ALIGNED-LLM] Learning contribution error: {e}")
-                
-                # NEW: Learn from transform outcomes (if transform integration available)
-                if self.transform_integration:
-                    try:
-                        # Learn from outcomes if we used transforms
-                        if llm_response.get("transform_outcomes"):
-                            transform_outcomes = llm_response.get("transform_outcomes", [])
-                            if transform_outcomes:
-                                self.transform_integration.learn_from_outcomes(
-                                    outcomes=transform_outcomes,
-                                    update_rules=True
-                                )
-                                audit_trail.append({
-                                    "step": "transform_outcome_learning",
-                                    "outcomes_processed": len(transform_outcomes),
-                                    "timestamp": datetime.now().isoformat()
-                                })
-                                logger.info(f"[TRANSFORM-LIB] Learned from {len(transform_outcomes)} transform outcomes")
-                    except Exception as e:
-                        logger.warning(f"[TRANSFORM-LIB] Outcome learning error: {e}")
-                
-                # NEW: Learn from transform outcomes (if transform integration available)
-                if self.transform_integration and llm_response.get("transform_outcomes"):
-                    try:
-                        transform_outcomes = llm_response.get("transform_outcomes", [])
-                        if transform_outcomes:
-                            self.transform_integration.learn_from_outcomes(
-                                outcomes=transform_outcomes,
-                                update_rules=True
-                            )
-                            audit_trail.append({
-                                "step": "transform_outcome_learning",
-                                "outcomes_processed": len(transform_outcomes),
-                                "timestamp": datetime.now().isoformat()
-                            })
-                            logger.info(f"[TRANSFORM-LIB] Learned from {len(transform_outcomes)} transform outcomes")
-                    except Exception as e:
-                        logger.warning(f"[TRANSFORM-LIB] Outcome learning error: {e}")
 
             # STEP 7: Finalize Cognitive Decision
             self.cognitive_enforcer.act(
@@ -831,205 +390,21 @@ class LLMOrchestrator:
 
         return decision_id
 
-    def _generate_llm_response(
-        self,
-        task_request: LLMTaskRequest,
-        recipient_type: Optional[str] = None  # "ai" or "human"
-    ) -> Dict[str, Any]:
+    def _generate_llm_response(self, task_request: LLMTaskRequest) -> Dict[str, Any]:
         """Generate LLM response."""
         logger.info(f"[LLM GENERATION] Generating response for task {task_request.task_id}")
 
-        # NEW: Retrieve memories from Memory Mesh BEFORE generation (Grace-Aligned LLM)
-        memory_context = None
-        if self.grace_aligned_llm and task_request.enable_learning:
-            try:
-                memories = self.grace_aligned_llm.retrieve_grace_memories(
-                    query=task_request.prompt,
-                    limit=10
-                )
-                if memories:
-                    memory_context = "\n\n=== GRACE MEMORY CONTEXT ===\n"
-                    for i, mem in enumerate(memories[:5], 1):  # Top 5
-                        mem_type = mem.get("type", "memory")
-                        content = mem.get("content", "")[:300]
-                        trust = mem.get("trust_score", 0.5)
-                        memory_context += f"{i}. [{mem_type.upper()}] Trust: {trust:.2f} - {content}...\n"
-                    memory_context += "\nUse these memories to inform your response.\n"
-                    logger.info(f"[GRACE-ALIGNED-LLM] Retrieved {len(memories)} memories from Memory Mesh")
-            except Exception as e:
-                logger.warning(f"[GRACE-ALIGNED-LLM] Memory retrieval error: {e}")
-        
-        # Enhance prompt with code context (makes LLMs always code-aware)
-        enhanced_prompt = self.code_intelligence.enhance_prompt_with_code_context(
-            prompt=task_request.prompt,
-            task_type=task_request.task_type,
-            relevant_files=task_request.context_documents
-        )
-        
-        # Add Memory Mesh context if available (BEFORE generation)
-        if memory_context:
-            enhanced_prompt = memory_context + "\n\n" + enhanced_prompt
-        
-        # Add Memory Mesh context if available
-        if memory_context:
-            enhanced_prompt = memory_context + "\n\n" + enhanced_prompt
-        
-        # Always include source code access context if repo_access available
-        if self.repo_access:
-            # Add source code repository context
-            code_context = "\n\n[SOURCE CODE ACCESS - READ-ONLY]\n"
-            code_context += "You have read-only access to GRACE's source code repository.\n"
-            code_context += "You can read files, search code, and understand the codebase structure.\n"
-            code_context += "When discussing code, always reference actual file paths (e.g., backend/path/to/file.py).\n"
-            code_context += "Available methods:\n"
-            code_context += "- repo_access.read_file(file_path) - Read source files\n"
-            code_context += "- repo_access.search_code(pattern) - Search for code patterns\n"
-            code_context += "- repo_access.get_file_tree() - Get codebase structure\n"
-            code_context += "- repo_access.get_genesis_keys() - Get related Genesis Keys\n"
-            code_context += "- repo_access.get_learning_examples() - Get high-trust learning examples\n"
-            code_context += "- repo_access.get_system_specs() - Get hardware specifications\n"
-            code_context += "- repo_access.get_system_specs_prompt() - Get formatted specs for prompts\n"
-            code_context += "All access is logged and read-only - you cannot modify code.\n"
-            
-            # Add system specs context
-            try:
-                specs_prompt = self.repo_access.get_system_specs_prompt()
-                code_context += f"\n\n{specs_prompt}\n"
-            except Exception as e:
-                logger.debug(f"Could not add system specs to prompt: {e}")
-            
-            enhanced_prompt = code_context + "\n\n" + enhanced_prompt
-        
-        # Enhance prompt with GRACE context (Genesis Keys, trust scores, learning examples)
-        # Get relevant learning examples if available
-        learning_examples = None
-        if self.learning_memory and task_request.enable_learning:
-            try:
-                # Get high-trust learning examples from learning memory
-                # Use repo_access if available, otherwise use learning_memory directly
-                if self.repo_access:
-                    examples = self.repo_access.get_learning_examples(
-                        min_trust_score=0.8,
-                        limit=5
-                    )
-                    learning_examples = [
-                        {
-                            "content": ex.get("input_context", {}).get("text", "")[:200] if isinstance(ex.get("input_context"), dict) else str(ex.get("input_context", ""))[:200],
-                            "trust_score": ex.get("trust_score", 0.8),
-                            "example_type": ex.get("example_type", "general")
-                        }
-                        for ex in examples[:3]  # Top 3
-                    ]
-                elif hasattr(self.learning_memory, 'get_examples'):
-                    # Direct access to learning memory
-                    examples = self.learning_memory.get_examples(
-                        min_trust_score=0.8,
-                        limit=5
-                    )
-                    learning_examples = [
-                        {
-                            "content": str(ex.input_context)[:200] if hasattr(ex, 'input_context') else "",
-                            "trust_score": ex.trust_score if hasattr(ex, 'trust_score') else 0.8,
-                            "example_type": ex.example_type if hasattr(ex, 'example_type') else "general"
-                        }
-                        for ex in examples[:3] if hasattr(ex, 'trust_score')
-                    ]
-            except Exception as e:
-                logger.warning(f"Could not retrieve learning examples: {e}")
-                learning_examples = None
-        
-        # Enhance with GRACE context
-        enhanced_prompt = enhance_prompt_with_grace_context(
-            prompt=enhanced_prompt,
-            task_type=task_request.task_type.value,
-            include_code=task_request.task_type in [
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_DEBUGGING,
-                TaskType.CODE_EXPLANATION,
-                TaskType.CODE_REVIEW
-            ],
-            learning_examples=learning_examples
-        )
-
-        # Add GRACE system prompt (makes LLMs GRACE-aligned)
-        grace_prompt = get_grace_system_prompt(
-            task_type=task_request.task_type.value,
-            include_code=task_request.task_type in [
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_DEBUGGING,
-                TaskType.CODE_EXPLANATION,
-                TaskType.CODE_REVIEW
-            ]
-        )
-        
-        # Combine with user-provided system prompt
+        # Add repository context to system prompt if grounding required
         system_prompt = task_request.system_prompt or ""
-        if system_prompt:
-            system_prompt = f"{grace_prompt}\n\n{system_prompt}"
-        else:
-            system_prompt = grace_prompt
-        
-        # Add repository context if grounding required
         if task_request.require_grounding and self.repo_access:
             system_prompt += "\n\nYou have read-only access to the repository. Always reference actual files when making claims about code."
 
-        # TimeSense: Estimate LLM response time
-        # Estimate token counts (rough: 4 chars per token)
-        prompt_tokens = len(enhanced_prompt.split())  # Rough token estimate
-        max_output_tokens = 512  # Default max output
-        
-        llm_prediction = None
-        model_name = None
-        if TIMESENSE_AVAILABLE and TimeEstimator:
-            try:
-                # Try to get model name from multi_llm
-                selected_model = self.multi_llm.select_model(
-                    task_type=task_request.task_type,
-                    prefer_speed=False
-                )
-                model_name = selected_model.model_id if selected_model else None
-                
-                llm_prediction = TimeEstimator.estimate_llm_response(
-                    prompt_tokens=prompt_tokens,
-                    max_output_tokens=max_output_tokens,
-                    model_name=model_name
-                )
-                if llm_prediction:
-                    logger.info(
-                        f"[LLM GENERATION] [TIMESENSE] Estimated response time: "
-                        f"{llm_prediction.human_readable()} (confidence: {llm_prediction.confidence:.2f})"
-                    )
-            except Exception as e:
-                logger.debug(f"[LLM GENERATION] TimeSense estimation failed: {e}")
-
-        # Generate response with TimeSense tracking
-        if TIMESENSE_AVAILABLE:
-            with track_operation(
-                PrimitiveType.LLM_TOKENS_GENERATE,
-                size=max_output_tokens,
-                task_id=f"llm_gen_{task_request.task_id}",
-                model_name=model_name
-            ):
-                response = self.multi_llm.generate(
-                    prompt=enhanced_prompt,
-                    task_type=task_request.task_type,
-                    system_prompt=system_prompt
-                )
-        else:
-            response = self.multi_llm.generate(
-                prompt=enhanced_prompt,
-                task_type=task_request.task_type,
-                system_prompt=system_prompt
-            )
-        
-        # Add prediction to response if available
-        if llm_prediction and response:
-            response['timesense_prediction'] = {
-                'estimated_ms': llm_prediction.p50_ms,
-                'estimated_range': f"{llm_prediction.p50_ms:.0f}-{llm_prediction.p95_ms:.0f}ms",
-                'human_readable': llm_prediction.human_readable(),
-                'confidence': llm_prediction.confidence
-            }
+        # Generate response
+        response = self.multi_llm.generate(
+            prompt=task_request.prompt,
+            task_type=task_request.task_type,
+            system_prompt=system_prompt
+        )
 
         return response
 
@@ -1061,55 +436,26 @@ class LLMOrchestrator:
         task_request: LLMTaskRequest,
         content: str
     ) -> Optional[str]:
-        """Assign Genesis Key to LLM interaction - ALL outputs tracked."""
+        """Assign Genesis Key to LLM interaction."""
         logger.info(f"[GENESIS KEY] Assigning Genesis Key for task {task_request.task_id}")
 
         if not self.cognitive_layer1:
-            logger.warning("Cognitive Layer 1 not available - cannot assign Genesis Key")
-            return f"GK-LLM-{task_request.task_id}"  # Fallback ID
+            return None
 
-        try:
-            # Create comprehensive metadata for Genesis Key
-            metadata = {
-                "task_id": task_request.task_id,
-                "task_type": task_request.task_type.value,
-                "user_id": task_request.user_id,
-                "prompt": task_request.prompt[:500],  # Truncate for storage
-                "content_length": len(content),
-                "content_hash": hashlib.sha256(content.encode()).hexdigest()[:16],
-                "model_used": "auto-selected",  # Will be updated with actual model
-                "verification_required": task_request.require_verification,
-                "consensus_required": task_request.require_consensus,
-                "grounding_required": task_request.require_grounding,
-                "timestamp": datetime.now().isoformat()
-            }
+        # Create metadata for Genesis Key
+        metadata = {
+            "task_id": task_request.task_id,
+            "task_type": task_request.task_type.value,
+            "user_id": task_request.user_id,
+            "prompt": task_request.prompt[:500],  # Truncate for storage
+            "content_length": len(content),
+            "timestamp": datetime.now().isoformat()
+        }
 
-            # Process through Layer 1 to create Genesis Key
-            result = self.cognitive_layer1.process_system_event(
-                event_type="llm_interaction",
-                event_data={
-                    "task_id": task_request.task_id,
-                    "prompt": task_request.prompt,
-                    "content": content[:2000],  # Truncate for storage
-                    "task_type": task_request.task_type.value
-                },
-                metadata=metadata
-            )
-            
-            genesis_key_id = result.get("genesis_key_id")
-            
-            if genesis_key_id:
-                logger.info(f"[GENESIS KEY] ✓ Assigned: {genesis_key_id}")
-                return genesis_key_id
-            else:
-                logger.warning(f"[GENESIS KEY] Layer 1 did not return Genesis Key ID")
-                return f"GK-LLM-{task_request.task_id}"  # Fallback
-                
-        except Exception as e:
-            logger.error(f"[GENESIS KEY] Error assigning Genesis Key: {e}")
-            import traceback
-            traceback.print_exc()
-            return f"GK-LLM-{task_request.task_id}"  # Fallback
+        # Genesis Keys will be created via Layer 1 integration
+        # For now, return a placeholder
+        genesis_key_id = f"GK-LLM-{task_request.task_id}"
+        return genesis_key_id
 
     def _integrate_layer1(
         self,
@@ -1251,79 +597,9 @@ class LLMOrchestrator:
             "avg_duration_ms": sum(t.duration_ms for t in self.completed_tasks) / total,
             "avg_trust_score": sum(t.trust_score for t in self.completed_tasks) / total,
             "avg_confidence_score": sum(t.confidence_score for t in self.completed_tasks) / total,
-            "multi_llm_stats": self.multi_llm.get_model_stats() if self.multi_llm else {},
-            "verification_stats": self.hallucination_guard.get_verification_stats() if self.hallucination_guard else {}
+            "multi_llm_stats": self.multi_llm.get_model_stats(),
+            "verification_stats": self.hallucination_guard.get_verification_stats()
         }
-
-    def is_available(self) -> bool:
-        """
-        Check if LLM Orchestrator is available and properly initialized.
-        
-        Returns:
-            True if core components are available, False otherwise
-        """
-        return (
-            self.multi_llm is not None or
-            self.hallucination_guard is not None or
-            self.cognitive_enforcer is not None
-        )
-    
-    def get_availability_status(self) -> Dict[str, bool]:
-        """
-        Get detailed availability status of all components.
-        
-        Returns:
-            Dictionary mapping component names to availability status
-        """
-        return {
-            "multi_llm": self.multi_llm is not None,
-            "repo_access": self.repo_access is not None,
-            "confidence_scorer": self.confidence_scorer is not None,
-            "hallucination_guard": self.hallucination_guard is not None,
-            "cognitive_enforcer": self.cognitive_enforcer is not None,
-            "cognitive_layer1": self.cognitive_layer1 is not None,
-            "learning_memory": self.learning_memory is not None,
-            "grace_aligned_llm": self.grace_aligned_llm is not None,
-            "output_formatter": self.output_formatter is not None,
-        }
-    
-    def _record_error_for_learning(
-        self,
-        error: Exception,
-        component: str,
-        session: Optional[Session] = None
-    ):
-        """
-        Record error for learning and self-healing pipeline.
-        
-        Args:
-            error: The exception that occurred
-            component: Component name where error occurred
-            session: Database session
-        """
-        try:
-            from cognitive.error_learning_integration import get_error_learning_integration
-            
-            error_learning = get_error_learning_integration(
-                session=session or self.session,
-                genesis_service=None,  # Will be loaded automatically
-                learning_manager=None,  # Will be loaded automatically
-                healing_system=None  # Will be loaded automatically
-            )
-            
-            error_learning.record_error(
-                error=error,
-                context={
-                    "location": f"llm_orchestrator.{component}",
-                    "reason": f"Initialization failed for {component}",
-                    "method": "__init__"
-                },
-                component=f"llm_orchestrator.{component}",
-                severity="high" if component == "multi_llm_initialization" else "medium"
-            )
-        except Exception as learning_error:
-            # Don't fail initialization if error learning fails
-            logger.debug(f"[LLM ORCHESTRATOR] Failed to record error for learning: {learning_error}")
 
 
 # Global instance

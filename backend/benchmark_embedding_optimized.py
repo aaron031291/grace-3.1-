@@ -10,8 +10,6 @@ Usage:
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 import time
 from pathlib import Path
 from typing import List, Tuple
@@ -140,13 +138,13 @@ def combine_chunks_for_throughput(chunks: List[str], target_size: int = 512, max
 
 def load_model_optimized(model_path: str, device: str = "cuda") -> SentenceTransformer:
     """Load model with optimizations for speed."""
-    logger.info(f"\n⏳ Loading model: {model_path}")
-    logger.info(f"   Device: {device}")
-    logger.info(f"   PyTorch version: {torch.__version__}")
+    print(f"\n⏳ Loading model: {model_path}")
+    print(f"   Device: {device}")
+    print(f"   PyTorch version: {torch.__version__}")
     
     if device == "cuda":
-        logger.info(f"   GPU: {torch.cuda.get_device_name(0)}")
-        logger.info(f"   CUDA Compute Capability: {torch.cuda.get_device_capability(0)}")
+        print(f"   GPU: {torch.cuda.get_device_name(0)}")
+        print(f"   CUDA Compute Capability: {torch.cuda.get_device_capability(0)}")
     
     # Load with trust_remote_code for custom models
     model = SentenceTransformer(model_path, device=device, trust_remote_code=True)
@@ -157,12 +155,12 @@ def load_model_optimized(model_path: str, device: str = "cuda") -> SentenceTrans
     # Optimization: Disable gradients
     torch.set_grad_enabled(False)
     
-    logger.info(f"✅ Model loaded successfully")
+    print(f"✅ Model loaded successfully")
     
     if device == "cuda" and torch.cuda.is_available():
         allocated = torch.cuda.memory_allocated(0) / 1e9
         reserved = torch.cuda.memory_reserved(0) / 1e9
-        logger.info(f"   GPU Memory - Allocated: {allocated:.2f}GB, Reserved: {reserved:.2f}GB")
+        print(f"   GPU Memory - Allocated: {allocated:.2f}GB, Reserved: {reserved:.2f}GB")
     
     return model
 
@@ -189,22 +187,22 @@ def benchmark_embedding_direct(
     Returns:
         Tuple of (elapsed_time, total_tokens)
     """
-    logger.info(f"\n{'='*70}")
-    logger.info(f"DIRECT EMBEDDING BENCHMARK")
-    logger.info(f"{'='*70}")
-    logger.info(f"\nConfiguration:")
-    logger.info(f"  Number of texts: {len(texts)}")
-    logger.info(f"  Batch size: {batch_size}")
-    logger.info(f"  Group size: {chunk_group_size}")
-    logger.info(f"  Precision: {precision}")
-    logger.info(f"  Total characters: {sum(len(t) for t in texts):,}")
-    logger.info(f"  Total words: {sum(len(t.split()) for t in texts):,}")
+    print(f"\n{'='*70}")
+    print(f"DIRECT EMBEDDING BENCHMARK")
+    print(f"{'='*70}")
+    print(f"\nConfiguration:")
+    print(f"  Number of texts: {len(texts)}")
+    print(f"  Batch size: {batch_size}")
+    print(f"  Group size: {chunk_group_size}")
+    print(f"  Precision: {precision}")
+    print(f"  Total characters: {sum(len(t) for t in texts):,}")
+    print(f"  Total words: {sum(len(t.split()) for t in texts):,}")
     
     total_tokens = sum(len(t.split()) / 1.3 for t in texts)
-    logger.info(f"  Estimated total tokens: {total_tokens:,.0f}")
+    print(f"  Estimated total tokens: {total_tokens:,.0f}")
     
     # Warmup
-    logger.info(f"\n⏳ Warming up model...")
+    print(f"\n⏳ Warming up model...")
     with torch.no_grad():
         _ = model.encode("Warmup text", batch_size=batch_size, show_progress_bar=False)
     
@@ -213,7 +211,7 @@ def benchmark_embedding_direct(
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.empty_cache()
     
-    logger.info(f"🚀 Starting embedding benchmark...\n")
+    print(f"🚀 Starting embedding benchmark...\n")
     
     start_time = time.time()
     all_embeddings = []
@@ -227,7 +225,7 @@ def benchmark_embedding_direct(
         group_texts = texts[group_start:group_end]
         
         if show_progress or num_groups > 1:
-            logger.info(f"  Processing group {group_idx + 1}/{num_groups} ({len(group_texts)} texts)...")
+            print(f"  Processing group {group_idx + 1}/{num_groups} ({len(group_texts)} texts)...")
         
         try:
             with torch.no_grad():
@@ -264,10 +262,10 @@ def benchmark_embedding_direct(
         
         except RuntimeError as e:
             if "out of memory" in str(e).lower():
-                logger.info(f"\n⚠️  OOM with batch_size={batch_size}, reducing...")
+                print(f"\n⚠️  OOM with batch_size={batch_size}, reducing...")
                 # Retry with smaller batch size
                 smaller_batch_size = max(4, batch_size // 2)
-                logger.info(f"  Retrying with batch_size={smaller_batch_size}...")
+                print(f"  Retrying with batch_size={smaller_batch_size}...")
                 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
@@ -316,23 +314,23 @@ def benchmark_embedding_direct(
     
     elapsed = time.time() - start_time
     
-    logger.info(f"\n✅ Embedding complete!")
+    print(f"\n✅ Embedding complete!")
     
     # Handle both tensor and list outputs
     if isinstance(embeddings, torch.Tensor):
-        logger.info(f"  Embeddings shape: {embeddings.shape}")
+        print(f"  Embeddings shape: {embeddings.shape}")
     elif isinstance(embeddings, list):
-        logger.info(f"  Embeddings: {len(embeddings)} vectors of dimension {len(embeddings[0]) if embeddings else 0}")
+        print(f"  Embeddings: {len(embeddings)} vectors of dimension {len(embeddings[0]) if embeddings else 0}")
     else:
-        logger.info(f"  Embeddings shape: {embeddings.shape}")
+        print(f"  Embeddings shape: {embeddings.shape}")
     
-    logger.info(f"  ⏱️  Time elapsed: {elapsed:.2f}s")
-    logger.info(f"  📊 Throughput: {total_tokens / elapsed:,.0f} tokens/sec")
-    logger.info(f"  📊 Texts/sec: {len(texts) / elapsed:.1f}")
+    print(f"  ⏱️  Time elapsed: {elapsed:.2f}s")
+    print(f"  📊 Throughput: {total_tokens / elapsed:,.0f} tokens/sec")
+    print(f"  📊 Texts/sec: {len(texts) / elapsed:.1f}")
     
     if torch.cuda.is_available():
         peak_memory = torch.cuda.max_memory_allocated(0) / 1e9
-        logger.info(f"  🧠 Peak GPU Memory: {peak_memory:.2f}GB")
+        print(f"  🧠 Peak GPU Memory: {peak_memory:.2f}GB")
     
     return elapsed, total_tokens
 
@@ -402,41 +400,41 @@ def main():
     else:
         model_path = args.model_path
     
-    logger.info("\n" + "="*70)
-    logger.info("⚡ ULTRA-OPTIMIZED EMBEDDING BENCHMARK")
-    logger.info("="*70)
-    logger.info(f"\nBenchmark Configuration:")
-    logger.info(f"  Model: {Path(model_path).name}")
-    logger.info(f"  Device: {args.device}")
-    logger.info(f"  Precision: {args.precision.upper()}")
-    logger.info(f"  Batch size: {args.batch_size}")
-    logger.info(f"  Total tokens: ~{args.tokens}")
+    print("\n" + "="*70)
+    print("⚡ ULTRA-OPTIMIZED EMBEDDING BENCHMARK")
+    print("="*70)
+    print(f"\nBenchmark Configuration:")
+    print(f"  Model: {Path(model_path).name}")
+    print(f"  Device: {args.device}")
+    print(f"  Precision: {args.precision.upper()}")
+    print(f"  Batch size: {args.batch_size}")
+    print(f"  Total tokens: ~{args.tokens}")
     if args.num_texts:
-        logger.info(f"  Number of texts: {args.num_texts}")
+        print(f"  Number of texts: {args.num_texts}")
     else:
-        logger.info(f"  Number of texts: AUTO (1 large text for max throughput)")
+        print(f"  Number of texts: AUTO (1 large text for max throughput)")
     
     # Check CUDA
     if args.device == "cuda":
         if not torch.cuda.is_available():
-            logger.info("\n❌ CUDA requested but not available!")
+            print("\n❌ CUDA requested but not available!")
             sys.exit(1)
-        logger.info(f"  CUDA available: Yes")
-        logger.info(f"  CUDA version: {torch.version.cuda}")
+        print(f"  CUDA available: Yes")
+        print(f"  CUDA version: {torch.version.cuda}")
     
     # Load model
     try:
         model = load_model_optimized(model_path, args.device)
     except Exception as e:
-        logger.info(f"\n❌ Failed to load model: {e}")
+        print(f"\n❌ Failed to load model: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
     
     # Generate text
-    logger.info(f"\n⏳ Generating sample text (~{args.tokens} tokens)...")
+    print(f"\n⏳ Generating sample text (~{args.tokens} tokens)...")
     full_text = generate_sample_text(args.tokens)
-    logger.info(f"✅ Generated text: {len(full_text):,} characters")
+    print(f"✅ Generated text: {len(full_text):,} characters")
     
     # Create texts
     if args.num_texts is None:
@@ -449,20 +447,20 @@ def main():
             num_texts = (len(full_text) + max_chars_per_text - 1) // max_chars_per_text
             texts_to_embed = split_text_into_chunks(full_text, num_texts)
             texts_to_embed = [t for t in texts_to_embed if len(t.strip()) > 50]
-            logger.info(f"✅ Auto-split into {len(texts_to_embed)} texts (max {max_chars_per_text} chars each)")
+            print(f"✅ Auto-split into {len(texts_to_embed)} texts (max {max_chars_per_text} chars each)")
         else:
             texts_to_embed = [full_text]
-            logger.info(f"✅ Using 1 text for maximum throughput")
+            print(f"✅ Using 1 text for maximum throughput")
     else:
         # User specified number of texts
         texts_to_embed = split_text_into_chunks(full_text, args.num_texts)
         texts_to_embed = [t for t in texts_to_embed if len(t.strip()) > 50]
-        logger.info(f"✅ Split into {len(texts_to_embed)} texts")
+        print(f"✅ Split into {len(texts_to_embed)} texts")
     
-    logger.info(f"\nText Statistics:")
+    print(f"\nText Statistics:")
     for i, text in enumerate(texts_to_embed):
         tokens = len(text.split()) / 1.3
-        logger.info(f"  Text {i+1}: {len(text):,} chars, ~{tokens:,.0f} tokens")
+        print(f"  Text {i+1}: {len(text):,} chars, ~{tokens:,.0f} tokens")
     
     # Run benchmark
     elapsed, total_tokens = benchmark_embedding_direct(
@@ -475,9 +473,9 @@ def main():
     )
     
     # Summary
-    logger.info("\n" + "="*70)
-    logger.info("📊 BENCHMARK RESULTS")
-    logger.info("="*70)
+    print("\n" + "="*70)
+    print("📊 BENCHMARK RESULTS")
+    print("="*70)
     
     results = {
         "configuration": {
@@ -496,22 +494,22 @@ def main():
         }
     }
     
-    logger.info(f"\n📈 Performance Metrics:")
-    logger.info(f"  ⏱️  Total time: {elapsed:.2f}s")
-    logger.info(f"  📊 Throughput: {total_tokens / elapsed:,.0f} tokens/sec")
-    logger.info(f"  📊 Speed: {len(texts_to_embed) / elapsed:.2f} texts/sec")
-    logger.info(f"  ✅ Tokens processed: {total_tokens:,.0f}")
+    print(f"\n📈 Performance Metrics:")
+    print(f"  ⏱️  Total time: {elapsed:.2f}s")
+    print(f"  📊 Throughput: {total_tokens / elapsed:,.0f} tokens/sec")
+    print(f"  📊 Speed: {len(texts_to_embed) / elapsed:.2f} texts/sec")
+    print(f"  ✅ Tokens processed: {total_tokens:,.0f}")
     
     # Save results
     output_file = backend_dir / "benchmark_optimized_results.json"
     try:
         with open(output_file, "w") as f:
             json.dump(results, f, indent=2)
-        logger.info(f"\n✅ Results saved to: {output_file}")
+        print(f"\n✅ Results saved to: {output_file}")
     except Exception as e:
-        logger.info(f"\n⚠️  Failed to save results: {e}")
+        print(f"\n⚠️  Failed to save results: {e}")
     
-    logger.info("\n" + "="*70 + "\n")
+    print("\n" + "="*70 + "\n")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,27 @@
+"""
+Whitelist Learning Pipeline
+===========================
+Complete pipeline for human-approved data to flow through GRACE's learning systems.
+
+Flow:
+Whitelist Entry → Trust Verification → Genesis Key → Data Processing →
+Learning Memory → Cognitive Framework → ML Intelligence → Knowledge Application
+
+Integrations:
+- Genesis Key Service: Every input tracked
+- Trust Score System: Verify source reliability
+- Librarian: File organization and naming
+- Cognitive Engine: Understanding and reasoning
+- Clarity Framework: Clear explanations
+- Mirror Self-Modeling: Self-observation
+- Active Learning: Proactive learning triggers
+- Memory Mesh: Connected memory storage
+- ML Intelligence: Pattern recognition
+- Knowledge Base: Stored knowledge
+- RAG/Retrieval: Finding relevant info
+- Embedder: Vector embeddings
+"""
+
 import asyncio
 import hashlib
 import json
@@ -10,6 +34,11 @@ from enum import Enum
 import uuid
 
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# Pipeline Status and Types
+# =============================================================================
 
 class PipelineStage(str, Enum):
     """Stages of the whitelist learning pipeline."""

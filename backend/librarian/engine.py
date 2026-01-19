@@ -27,30 +27,6 @@ from librarian.rule_categorizer import RuleBasedCategorizer
 from librarian.ai_analyzer import AIContentAnalyzer
 from librarian.relationship_manager import RelationshipManager
 from librarian.approval_workflow import ApprovalWorkflow
-from librarian.file_organizer import FileOrganizer
-from librarian.file_naming_manager import FileNamingManager
-from librarian.file_creator import FileCreator
-from librarian.unified_retriever import UnifiedRetriever
-from librarian.genesis_integration import LibrarianGenesisIntegration
-from librarian.content_recommender import ContentRecommender
-from librarian.content_lifecycle_manager import ContentLifecycleManager
-from librarian.content_integrity_verifier import ContentIntegrityVerifier
-from librarian.content_visualizer import ContentVisualizer
-from librarian.bulk_operations_manager import BulkOperationsManager
-from librarian.amp_librarian_bridge import AmpLibrarianBridge, get_amp_librarian_bridge
-
-# TimeSense integration
-try:
-    from timesense.universal_integration import track_with_timesense, estimate_operation_time, TIMESENSE_AVAILABLE
-    from timesense.primitives import PrimitiveType
-except ImportError:
-    TIMESENSE_AVAILABLE = False
-    from contextlib import nullcontext
-    def track_with_timesense(*args, **kwargs):
-        return nullcontext()
-    def estimate_operation_time(*args, **kwargs):
-        return None
-    PrimitiveType = None
 
 logger = logging.getLogger(__name__)
 
@@ -117,12 +93,7 @@ class LibrarianEngine:
         use_ai: bool = True,
         detect_relationships: bool = True,
         ai_confidence_threshold: float = 0.6,
-        similarity_threshold: float = 0.7,
-        knowledge_base_path: str = "backend/knowledge_base",
-        auto_organize: bool = True,
-        auto_rename: bool = False,
-        organization_pattern: str = "category/type",
-        naming_convention: str = "sanitized"
+        similarity_threshold: float = 0.7
     ):
         """
         Initialize LibrarianEngine with all components.
@@ -196,71 +167,7 @@ class LibrarianEngine:
                 vector_db_client
             )
 
-        # File system librarian components
-        self.file_organizer = FileOrganizer(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path,
-            auto_organize=auto_organize,
-            organization_pattern=organization_pattern
-        )
-
-        self.file_naming_manager = FileNamingManager(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path,
-            naming_convention=naming_convention,
-            auto_rename=auto_rename
-        )
-
-        self.file_creator = FileCreator(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path
-        )
-
-        self.unified_retriever = UnifiedRetriever(
-            db_session=db_session,
-            relationship_manager=self.relationship_manager
-        )
-
-        # Genesis Key integration
-        self.genesis_integration = LibrarianGenesisIntegration(db_session)
-
-        # Content management modules
-        self.content_recommender = ContentRecommender(
-            db_session=db_session,
-            relationship_manager=self.relationship_manager
-        )
-
-        self.lifecycle_manager = ContentLifecycleManager(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path
-        )
-
-        self.integrity_verifier = ContentIntegrityVerifier(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path
-        )
-
-        self.content_visualizer = ContentVisualizer(
-            db_session=db_session,
-            tag_manager=self.tag_manager,
-            relationship_manager=self.relationship_manager
-        )
-
-        self.bulk_operations = BulkOperationsManager(
-            db_session=db_session,
-            tag_manager=self.tag_manager,
-            file_organizer=self.file_organizer,
-            file_naming_manager=self.file_naming_manager
-        )
-
-        # Amp Librarian Bridge - Unified external knowledge integration
-        self.amp_bridge = get_amp_librarian_bridge(
-            db_session=db_session,
-            knowledge_base_path=knowledge_base_path
-        )
-        self.amp_bridge.connect_librarian_engine(self)
-
-        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None}, File System: Enabled, Genesis Keys: Enabled, Recommendations: Enabled, Lifecycle: Enabled, Integrity: Enabled, Visualization: Enabled, Bulk Ops: Enabled, Amp Bridge: Enabled)")
+        logger.info(f"[LIBRARIAN] Engine initialized (AI: {self.ai_analyzer is not None}, Relationships: {self.relationship_manager is not None})")
 
     def process_document(
         self,
@@ -296,12 +203,6 @@ class LibrarianEngine:
         use_ai_analysis = use_ai if use_ai is not None else self.use_ai
         detect_rels = detect_relationships if detect_relationships is not None else self.detect_relationships
 
-        # TimeSense: Track document processing
-        # Get document size for estimation
-        from models.database_models import Document
-        doc = self.db_session.query(Document).filter(Document.id == document_id).first()
-        doc_size = len(doc.text) if doc and doc.text else 1000  # Default estimate
-        
         result = {
             "document_id": document_id,
             "tags_assigned": 0,
@@ -313,178 +214,94 @@ class LibrarianEngine:
         }
 
         try:
-            # Track with TimeSense
-            with track_with_timesense(
-                primitive_type=PrimitiveType.FILE_PROCESSING if PrimitiveType else None,
-                size=doc_size,
-                fallback_name="document_processing"
-            ):
-                # Verify document exists
-                document = self.db.query(Document).filter(Document.id == document_id).first()
-                if not document:
-                    result["status"] = "error"
-                    result["error"] = f"Document {document_id} not found"
-                    return result
+            # Verify document exists
+            document = self.db.query(Document).filter(Document.id == document_id).first()
+            if not document:
+                result["status"] = "error"
+                result["error"] = f"Document {document_id} not found"
+                return result
 
-                # Step 1: Rule-based categorization
-                logger.info(f"Processing document {document_id}: {document.filename}")
-                rule_matches = self.rule_categorizer.categorize_document(document_id)
-                result["rules_matched"] = [match["rule_name"] for match in rule_matches]
+            # Step 1: Rule-based categorization
+            logger.info(f"Processing document {document_id}: {document.filename}")
+            rule_matches = self.rule_categorizer.categorize_document(document_id)
+            result["rules_matched"] = [match["rule_name"] for match in rule_matches]
 
-                # Collect tags from rules
-                rule_tags = set()
-                for match in rule_matches:
-                    if match["action_type"] == "assign_tag":
-                        tag_names = match["action_params"].get("tag_names", [])
-                        rule_tags.update(tag_names)
+            # Collect tags from rules
+            rule_tags = set()
+            for match in rule_matches:
+                if match["action_type"] == "assign_tag":
+                    tag_names = match["action_params"].get("tag_names", [])
+                    rule_tags.update(tag_names)
 
-                # Assign rule-based tags
-                if rule_tags:
-                    self.tag_manager.assign_tags(
-                        document_id=document_id,
-                        tag_names=list(rule_tags),
-                        assigned_by="rule",
-                        confidence=0.95
-                    )
-                    result["tags_assigned"] += len(rule_tags)
-                    logger.info(f"Assigned {len(rule_tags)} rule-based tags")
+            # Assign rule-based tags
+            if rule_tags:
+                self.tag_manager.assign_tags(
+                    document_id=document_id,
+                    tag_names=list(rule_tags),
+                    assigned_by="rule",
+                    confidence=0.95
+                )
+                result["tags_assigned"] += len(rule_tags)
+                logger.info(f"Assigned {len(rule_tags)} rule-based tags")
 
-                # Step 2: AI content analysis (if enabled and needed)
-                ai_tags = set()
-                if use_ai_analysis and self.ai_analyzer:
-                    # Use AI if: no rules matched OR AI is available for refinement
-                    if len(rule_matches) == 0 or len(rule_tags) < 3:
-                        try:
-                            ai_result = self.ai_analyzer.analyze_document(document_id)
-                            result["ai_analysis"] = {
-                                "confidence": ai_result.get("confidence", 0.0),
-                                "category": ai_result.get("category", "unknown"),
-                                "topics": ai_result.get("topics", [])
-                            }
-
-                            # Use AI-suggested tags if confidence is high enough
-                            if ai_result.get("confidence", 0.0) >= self.ai_confidence_threshold:
-                                ai_tags = set(ai_result.get("tags", []))
-
-                                # Remove tags already assigned by rules
-                                ai_tags = ai_tags - rule_tags
-
-                                if ai_tags:
-                                    self.tag_manager.assign_tags(
-                                        document_id=document_id,
-                                        tag_names=list(ai_tags),
-                                        assigned_by="ai",
-                                        confidence=ai_result["confidence"]
-                                    )
-                                    result["tags_assigned"] += len(ai_tags)
-                                    logger.info(f"Assigned {len(ai_tags)} AI-suggested tags")
-                        except Exception as e:
-                            logger.error(f"AI analysis failed for document {document_id}: {e}")
-                            result["ai_analysis"] = {"error": str(e)}
-
-                # Step 3: Relationship detection (if enabled)
-                if detect_rels and self.relationship_manager:
+            # Step 2: AI content analysis (if enabled and needed)
+            ai_tags = set()
+            if use_ai_analysis and self.ai_analyzer:
+                # Use AI if: no rules matched OR AI is available for refinement
+                if len(rule_matches) == 0 or len(rule_tags) < 3:
                     try:
-                        relationships = self.relationship_manager.detect_relationships(
-                            document_id=document_id,
-                            similarity_threshold=self.similarity_threshold
-                        )
-
-                        if relationships:
-                            # Save relationships
-                            saved_count = self.relationship_manager.save_detected_relationships(relationships)
-                            result["relationships_detected"] = saved_count
-                            logger.info(f"Detected and saved {saved_count} relationships")
-                    except Exception as e:
-                        logger.error(f"Relationship detection failed for document {document_id}: {e}")
-
-                # Step 4: File organization (if auto_organize enabled)
-                if self.file_organizer.auto_organize:
-                    try:
-                        old_path = document.file_path
-                        org_result = self.file_organizer.organize_document(document_id)
-                        if org_result.get("success"):
-                            result["organization_path"] = org_result.get("organization_path")
-                            result["file_moved"] = org_result.get("file_moved", False)
-                            result["folder_created"] = org_result.get("folder_created", False)
-                            
-                            # Track organization via Genesis Key
-                            if org_result.get("file_moved"):
-                                self.genesis_integration.track_organization_action(
-                                    document_id=document_id,
-                                    old_path=old_path,
-                                    new_path=org_result.get("organization_path", ""),
-                                    organization_pattern=self.file_organizer.organization_pattern
-                                )
-                            
-                            logger.info(f"Organized document {document_id} to: {org_result.get('organization_path')}")
-                    except Exception as e:
-                        logger.warning(f"File organization failed for document {document_id}: {e}")
-
-                # Step 5: File naming (if auto_rename enabled)
-                if self.file_naming_manager.auto_rename:
-                    try:
-                        old_filename = document.filename
-                        rename_result = self.file_naming_manager.rename_file(document_id, auto_suggest=True)
-                        if rename_result.get("success") and rename_result.get("renamed"):
-                            result["file_renamed"] = True
-                            result["new_filename"] = rename_result.get("new_filename")
-                            
-                            # Track renaming via Genesis Key
-                            self.genesis_integration.track_renaming_action(
-                                document_id=document_id,
-                                old_filename=old_filename or "",
-                                new_filename=rename_result.get("new_filename", ""),
-                                naming_convention=self.file_naming_manager.naming_convention
-                            )
-                            
-                            logger.info(f"Renamed document {document_id} to: {rename_result.get('new_filename')}")
-                    except Exception as e:
-                        logger.warning(f"File naming failed for document {document_id}: {e}")
-
-                # Step 6: Track tag assignments via Genesis Key
-                if result["tags_assigned"] > 0:
-                    try:
-                        # Get assigned tags for this document
-                        doc_tags = self.tag_manager.get_document_tags(document_id)
-                        tag_names = [tag.get("tag_name", "") for tag in doc_tags]
-                        
-                        if tag_names:
-                            self.genesis_integration.track_tag_assignment(
-                                document_id=document_id,
-                                tag_names=tag_names,
-                                assigned_by="librarian_engine"
-                            )
-                    except Exception as e:
-                        logger.warning(f"Genesis Key tracking for tags failed: {e}")
-
-                # Step 7: Create Genesis Key for document processing
-                try:
-                    genesis_key_id = self.genesis_integration.create_genesis_key_for_document(
-                        document_id=document_id,
-                        action_type="process",
-                        description=f"Librarian processing: {result['tags_assigned']} tags, {result['relationships_detected']} relationships",
-                        metadata={
-                            "tags_assigned": result["tags_assigned"],
-                            "relationships_detected": result["relationships_detected"],
-                            "rules_matched": result["rules_matched"],
-                            "organization_path": result.get("organization_path"),
-                            "file_moved": result.get("file_moved", False),
-                            "file_renamed": result.get("file_renamed", False)
+                        ai_result = self.ai_analyzer.analyze_document(document_id)
+                        result["ai_analysis"] = {
+                            "confidence": ai_result.get("confidence", 0.0),
+                            "category": ai_result.get("category", "unknown"),
+                            "topics": ai_result.get("topics", [])
                         }
-                    )
-                    if genesis_key_id:
-                        result["genesis_key_id"] = genesis_key_id
-                except Exception as e:
-                    logger.warning(f"Genesis Key creation for processing failed: {e}")
 
-                # Step 6: Auto-execute approved actions (if enabled)
-                if auto_execute:
-                    approved_count = self.approval_workflow.auto_approve_safe_actions(
-                        min_confidence=0.8
+                        # Use AI-suggested tags if confidence is high enough
+                        if ai_result.get("confidence", 0.0) >= self.ai_confidence_threshold:
+                            ai_tags = set(ai_result.get("tags", []))
+
+                            # Remove tags already assigned by rules
+                            ai_tags = ai_tags - rule_tags
+
+                            if ai_tags:
+                                self.tag_manager.assign_tags(
+                                    document_id=document_id,
+                                    tag_names=list(ai_tags),
+                                    assigned_by="ai",
+                                    confidence=ai_result["confidence"]
+                                )
+                                result["tags_assigned"] += len(ai_tags)
+                                logger.info(f"Assigned {len(ai_tags)} AI-suggested tags")
+
+                    except Exception as e:
+                        logger.error(f"AI analysis failed for document {document_id}: {e}")
+                        result["ai_analysis"] = {"error": str(e)}
+
+            # Step 3: Relationship detection (if enabled)
+            if detect_rels and self.relationship_manager:
+                try:
+                    relationships = self.relationship_manager.detect_relationships(
+                        document_id=document_id,
+                        similarity_threshold=self.similarity_threshold
                     )
-                    if approved_count > 0:
-                        logger.info(f"Auto-approved {approved_count} actions")
+
+                    if relationships:
+                        # Save relationships
+                        saved_count = self.relationship_manager.save_detected_relationships(relationships)
+                        result["relationships_detected"] = saved_count
+                        logger.info(f"Detected and saved {saved_count} relationships")
+
+                except Exception as e:
+                    logger.error(f"Relationship detection failed for document {document_id}: {e}")
+
+            # Step 4: Auto-execute approved actions (if enabled)
+            if auto_execute:
+                approved_count = self.approval_workflow.auto_approve_safe_actions(
+                    min_confidence=0.8
+                )
+                if approved_count > 0:
+                    logger.info(f"Auto-approved {approved_count} actions")
 
             result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
@@ -656,27 +473,8 @@ class LibrarianEngine:
             "rules": self.rule_categorizer.get_rule_statistics(),
             "actions": self.approval_workflow.get_action_statistics(),
             "ai_available": self.ai_analyzer.is_available() if self.ai_analyzer else False,
-            "relationships_enabled": self.relationship_manager is not None,
-            "file_system": {
-                "organization_enabled": self.file_organizer.auto_organize,
-                "organization_pattern": self.file_organizer.organization_pattern,
-                "naming_enabled": self.file_naming_manager.auto_rename,
-                "naming_convention": self.file_naming_manager.naming_convention
-            },
-            "genesis_keys": "enabled",
-            "content_recommendations": "enabled",
-            "lifecycle_management": "enabled",
-            "integrity_verification": "enabled",
-            "content_visualization": "enabled",
-            "bulk_operations": "enabled"
+            "relationships_enabled": self.relationship_manager is not None
         }
-
-        # Add organization statistics if available
-        try:
-            org_stats = self.file_organizer.get_organization_statistics()
-            stats["file_system"]["organization_stats"] = org_stats
-        except Exception:
-            pass
 
         return stats
 
@@ -698,16 +496,6 @@ class LibrarianEngine:
             "approval_workflow": "healthy",
             "ai_analyzer": "unavailable",
             "relationship_manager": "unavailable",
-            "file_organizer": "healthy",
-            "file_naming_manager": "healthy",
-            "file_creator": "healthy",
-            "unified_retriever": "healthy",
-            "genesis_integration": "healthy",
-            "content_recommender": "healthy",
-            "lifecycle_manager": "healthy",
-            "integrity_verifier": "healthy",
-            "content_visualizer": "healthy",
-            "bulk_operations": "healthy",
             "overall_status": "healthy"
         }
 
@@ -723,81 +511,4 @@ class LibrarianEngine:
         if self.relationship_manager:
             health["relationship_manager"] = "healthy"
 
-        # Check file system components
-        try:
-            # Test file organizer
-            _ = self.file_organizer.kb_path.exists()
-        except Exception:
-            health["file_organizer"] = "degraded"
-            health["overall_status"] = "degraded"
-
-        # Check Amp Librarian Bridge
-        if self.amp_bridge:
-            health["amp_librarian_bridge"] = "healthy"
-            bridge_status = self.amp_bridge.get_status()
-            health["external_sources"] = bridge_status.get("registered_sources", 0)
-        else:
-            health["amp_librarian_bridge"] = "unavailable"
-
         return health
-
-    def unified_search(
-        self,
-        query: str,
-        include_external: bool = True,
-        limit: int = 20
-    ) -> Dict[str, Any]:
-        """
-        Unified search across local AND external knowledge sources.
-        
-        This is the main entry point for searching all knowledge.
-        
-        Args:
-            query: Search query
-            include_external: Include GitHub repos and external docs
-            limit: Maximum results
-            
-        Returns:
-            Dict with results from all sources
-        """
-        results = {
-            "query": query,
-            "local_results": [],
-            "external_results": [],
-            "total_results": 0
-        }
-        
-        # Search via Amp Bridge (handles both local and external)
-        if self.amp_bridge:
-            unified = self.amp_bridge.unified_search(
-                query=query,
-                limit=limit
-            )
-            
-            for r in unified:
-                result_dict = {
-                    "content": r.content[:500],
-                    "source": r.source_identifier,
-                    "type": r.source_type.value,
-                    "file_path": r.file_path,
-                    "relevance": r.relevance_score,
-                    "snippet": r.snippet
-                }
-                
-                if r.source_type.value == "local":
-                    results["local_results"].append(result_dict)
-                else:
-                    results["external_results"].append(result_dict)
-            
-            results["total_results"] = len(unified)
-        
-        return results
-
-    def get_unified_status(self) -> Dict[str, Any]:
-        """Get status of the unified librarian system (local + external)."""
-        status = {
-            "local_librarian": self.health_check(),
-            "amp_bridge": self.amp_bridge.get_status() if self.amp_bridge else None,
-            "unified_analytics": self.amp_bridge.get_unified_analytics() if self.amp_bridge else None
-        }
-        return status

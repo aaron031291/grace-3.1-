@@ -1,10 +1,30 @@
+#!/usr/bin/env python
+"""
+Complete reset and re-ingestion script for Grace Knowledge Base.
+
+This script:
+1. Clears all data from PostgreSQL/SQLite database
+2. Clears all data from Qdrant vector database
+3. Resets the file ingestion tracking state
+4. Triggers fresh auto-ingestion of all files in knowledge_base/
+
+Enhanced logging shows:
+- Which files are being ingested
+- Progress updates in real-time
+- Timestamps for all operations
+- Success/failure status for each file
+"""
+
 import sys
 import logging
 from pathlib import Path
 from datetime import datetime
 import time
-logger = logging.getLogger(__name__)
 
+# Add backend to path
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Configure enhanced logging with timestamps and colors
 class ColoredFormatter(logging.Formatter):
     """Formatter that adds colors and better formatting."""
     

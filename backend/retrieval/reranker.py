@@ -1,7 +1,46 @@
+"""
+Reranker module for improving retrieval results using cross-encoders.
+Uses sentence-transformers/msmarco-bert-base-dot-v5 for relevance scoring.
+"""
+
 import logging
 from typing import List, Dict, Any, Optional
 from threading import Lock
+
 logger = logging.getLogger(__name__)
+
+# Lazy imports for torch and sentence_transformers
+_torch = None
+_CrossEncoder = None
+
+def _get_torch():
+    """Lazily import torch only when needed."""
+    global _torch
+    if _torch is None:
+        try:
+            import torch
+            _torch = torch
+        except ImportError:
+            logger.warning("torch not available - reranker will be disabled")
+            return None
+    return _torch
+
+def _get_cross_encoder():
+    """Lazily import CrossEncoder only when needed."""
+    global _CrossEncoder
+    if _CrossEncoder is None:
+        try:
+            from sentence_transformers import CrossEncoder
+            _CrossEncoder = CrossEncoder
+        except ImportError:
+            logger.warning("sentence_transformers not available - reranker will be disabled")
+            return None
+    return _CrossEncoder
+
+# Global reranker instance with lock for thread-safe singleton
+_reranker = None
+_reranker_lock = Lock()
+
 
 class DocumentReranker:
     """Reranks retrieved chunks using cross-encoder models."""
@@ -53,17 +92,7 @@ class DocumentReranker:
             print("[OK] Model converted to FP16")
 
         print("[OK] Reranker model loaded successfully")
-
-    def _add_default_scores(self, chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Add default rerank scores to chunks when model is unavailable."""
-        scored_chunks = []
-        for i, chunk in enumerate(chunks):
-            chunk_copy = chunk.copy()
-            # Assign decreasing scores based on original order (assumes pre-sorted by initial retrieval)
-            chunk_copy["rerank_score"] = max(0.0, 1.0 - (i * 0.1))
-            scored_chunks.append(chunk_copy)
-        return scored_chunks
-
+    
     def rerank(
         self,
         query: str,
@@ -88,13 +117,13 @@ class DocumentReranker:
             return chunks
 
         if self.model is None:
-            logger.debug("Reranker model not available - returning chunks with default scores")
-            return self._add_default_scores(chunks)
+            logger.debug("Reranker model not available - returning chunks unchanged")
+            return chunks
 
         torch = _get_torch()
         if torch is None:
-            logger.debug("torch not available - returning chunks with default scores")
-            return self._add_default_scores(chunks)
+            logger.debug("torch not available - returning chunks unchanged")
+            return chunks
 
         try:
             # Prepare pairs for cross-encoder (query, chunk_text)
@@ -140,8 +169,8 @@ class DocumentReranker:
 
         except Exception as e:
             logger.error(f"Reranking error: {e}", exc_info=True)
-            # Return chunks with default scores if reranking fails
-            return self._add_default_scores(chunks)
+            # Return original chunks if reranking fails
+            return chunks
     
     def unload_model(self):
         """

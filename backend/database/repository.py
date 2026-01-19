@@ -1,11 +1,18 @@
+"""
+Database repository base class for common CRUD operations.
+Provides reusable methods for database operations.
+"""
+
 from sqlalchemy.orm import Session
 from sqlalchemy import select, desc, asc
 from typing import TypeVar, Generic, Type, Optional, List, Any
 import logging
 
-T = TypeVar('T')  # Define TypeVar before using it
 
 logger = logging.getLogger(__name__)
+
+T = TypeVar("T")
+
 
 class BaseRepository(Generic[T]):
     """

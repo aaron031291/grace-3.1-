@@ -1,3 +1,9 @@
+"""
+Librarian Genesis Key Curator.
+
+The Librarian automatically organizes Genesis Keys every 24 hours.
+Runs as a background task and creates daily summaries.
+"""
 import os
 import logging
 import schedule
@@ -6,9 +12,12 @@ import threading
 from datetime import datetime, timedelta
 from typing import Optional
 from sqlalchemy.orm import Session
+
 from database.session import get_session
 from genesis.daily_organizer import get_daily_organizer
+
 logger = logging.getLogger(__name__)
+
 
 class GenesisKeyCurator:
     """

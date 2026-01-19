@@ -1,3 +1,14 @@
+"""
+Historical Trend Analysis for Diagnostic Machine
+
+Provides:
+- Time-series storage of diagnostic metrics
+- Trend detection and visualization data
+- Predictive alerting based on trends
+- Baseline auto-calibration from historical data
+- Anomaly detection using historical context
+"""
+
 import json
 import logging
 import statistics
@@ -9,6 +20,7 @@ from pathlib import Path
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)
+
 
 class TrendDirection(str, Enum):
     """Direction of a trend."""

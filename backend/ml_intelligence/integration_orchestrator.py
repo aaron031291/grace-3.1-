@@ -89,22 +89,22 @@ class MLIntelligenceOrchestrator:
     def initialize(self):
         """Initialize all ML components"""
         try:
-            # Neural Trust Scorer
+            # Initialize neural trust scorer
             if self.enabled_features['neural_trust_scoring']:
                 self.neural_trust_scorer = get_neural_trust_scorer()
-                print("[ML Intelligence] Neural Trust Scorer initialized")
+                # print("[ML Intelligence] Neural Trust Scorer initialized")
 
-            # Multi-Armed Bandit for topic selection
+            # Initialize bandit
             if self.enabled_features['bandit_exploration']:
                 self.bandit = get_bandit(algorithm=BanditAlgorithm.THOMPSON_SAMPLING)
-                print("[ML Intelligence] Multi-Armed Bandit initialized (Thompson Sampling)")
+                # print("[ML Intelligence] Multi-Armed Bandit initialized (Thompson Sampling)")
 
-            # Meta-Learning
+            # Initialize meta-learning
             if self.enabled_features['meta_learning']:
                 self.meta_learner = get_meta_learner()
-                print("[ML Intelligence] Meta-Learning Module initialized")
+                # print("[ML Intelligence] Meta-Learning Module initialized")
 
-            print("[ML Intelligence] All components initialized successfully")
+            # print("[ML Intelligence] All components initialized successfully")
 
         except Exception as e:
             print(f"[ML Intelligence] Initialization error: {e}")

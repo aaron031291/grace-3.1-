@@ -4,11 +4,8 @@ Provides centralized configuration for the application.
 """
 
 import os
-import logging
 from pathlib import Path
 from dotenv import load_dotenv
-
-logger = logging.getLogger(__name__)
 
 # Get the backend directory
 BACKEND_DIR = Path(__file__).parent
@@ -33,6 +30,19 @@ class Settings:
     EMBEDDING_MODEL_PATH: str = str(BACKEND_DIR / "models" / "embedding" / EMBEDDING_DEFAULT)
     EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cuda")  # cuda or cpu
     EMBEDDING_NORMALIZE: bool = os.getenv("EMBEDDING_NORMALIZE", "true").lower() == "true"
+    
+    # ==================== Lightweight Mode & Component Disabling ====================
+    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
+    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
+    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
+    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
+    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
+    
+    # ==================== Error Handling Configuration ====================
+    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
+    
+    # ==================== Genesis Key Tracking ====================
+    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     
     # ==================== Database Configuration ====================
     DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite")
@@ -69,6 +79,30 @@ class Settings:
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
     MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "512"))
 
+    # ==================== Component Control Flags ====================
+    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
+    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
+    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
+    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
+    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
+    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
+
+    # ==================== Error Handling Configuration ====================
+    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
+    SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
+    SUPPRESS_QDRANT_ERRORS: bool = os.getenv("SUPPRESS_QDRANT_ERRORS", "false").lower() == "true"
+    SUPPRESS_EMBEDDING_ERRORS: bool = os.getenv("SUPPRESS_EMBEDDING_ERRORS", "false").lower() == "true"
+
+    # ==================== Ingestion Configuration ====================
+    EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
+
+    # ==================== SerpAPI Configuration ====================
+    SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")
+    SERPAPI_ENABLED: bool = os.getenv("SERPAPI_ENABLED", "true").lower() == "true"
+    SERPAPI_MAX_RESULTS: int = int(os.getenv("SERPAPI_MAX_RESULTS", "5"))
+    SERPAPI_AUTO_SCRAPE: bool = os.getenv("SERPAPI_AUTO_SCRAPE", "true").lower() == "true"
+
+
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     
@@ -94,18 +128,8 @@ class Settings:
         # Validate Embedding settings
         if not cls.EMBEDDING_DEFAULT:
             errors.append("EMBEDDING_DEFAULT is not set")
-        
-        # Embedding model path validation - note but don't warn (model can be downloaded later)
         if not Path(cls.EMBEDDING_MODEL_PATH).exists():
-            # Model will be downloaded on first use - this is expected behavior
-            # Only log at debug level to avoid cluttering startup logs
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.debug(
-                f"Embedding model path does not exist: {cls.EMBEDDING_MODEL_PATH} "
-                f"(model will be downloaded on first use)"
-            )
-        
+            errors.append(f"Embedding model path does not exist: {cls.EMBEDDING_MODEL_PATH}")
         if cls.EMBEDDING_DEVICE not in ["cuda", "cpu"]:
             errors.append(f"EMBEDDING_DEVICE must be 'cuda' or 'cpu', got '{cls.EMBEDDING_DEVICE}'")
         
@@ -147,6 +171,13 @@ class Settings:
             "DEBUG": cls.DEBUG,
             "LOG_LEVEL": cls.LOG_LEVEL,
             "MAX_NUM_PREDICT": cls.MAX_NUM_PREDICT,
+            "SKIP_QDRANT_CHECK": cls.SKIP_QDRANT_CHECK,
+            "SKIP_OLLAMA_CHECK": cls.SKIP_OLLAMA_CHECK,
+            "SKIP_AUTO_INGESTION": cls.SKIP_AUTO_INGESTION,
+            "SKIP_EMBEDDING_LOAD": cls.SKIP_EMBEDDING_LOAD,
+            "LIGHTWEIGHT_MODE": cls.LIGHTWEIGHT_MODE,
+            "DISABLE_GENESIS_TRACKING": cls.DISABLE_GENESIS_TRACKING,
+            "SUPPRESS_INGESTION_ERRORS": cls.SUPPRESS_INGESTION_ERRORS,
         }
     
     @classmethod
@@ -170,13 +201,13 @@ settings = Settings()
 try:
     Settings.validate()
 except ValueError as e:
-    logger.info(f"[WARN] Warning: {e}")
-    logger.info("Using default values for missing settings")
+    print(f"[WARN] Warning: {e}")
+    print("Using default values for missing settings")
 
 
 if __name__ == "__main__":
     # Display settings when run directly
-    logger.info(Settings)
-    logger.info("\nDetailed Settings:")
+    print(Settings)
+    print("\nDetailed Settings:")
     for key, value in Settings.to_dict().items():
-        logger.info(f"  {key}: {value}")
+        print(f"  {key}: {value}")

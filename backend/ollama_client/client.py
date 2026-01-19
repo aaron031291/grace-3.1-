@@ -67,48 +67,6 @@ class OllamaClient:
         self.api_show_url = f"{base_url}/api/show"
         self.api_ps_url = f"{base_url}/api/ps"
     
-    def _record_ollama_error_for_learning(
-        self,
-        error: Exception,
-        error_type: str,
-        context: Optional[Dict[str, Any]] = None
-    ):
-        """
-        Record Ollama error for learning and self-healing pipeline.
-        
-        Args:
-            error: The exception that occurred
-            error_type: Type of error (connection_error, server_error_500, etc.)
-            context: Additional context about the error
-        """
-        try:
-            from cognitive.error_learning_integration import get_error_learning_integration
-            from database.session import SessionLocal
-            
-            session = SessionLocal()
-            try:
-                error_learning = get_error_learning_integration(session=session)
-                
-                error_learning.record_error(
-                    error=error,
-                    context={
-                        "location": f"ollama_client.{error_type}",
-                        "reason": f"Ollama API error: {error_type}",
-                        "method": "generate_response",
-                        "base_url": self.base_url,
-                        **(context or {})
-                    },
-                    component=f"ollama_client.{error_type}",
-                    severity="high" if "500" in error_type or "connection" in error_type else "medium"
-                )
-            finally:
-                session.close()
-        except Exception as learning_error:
-            # Don't fail Ollama operation if error learning fails
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.debug(f"[OLLAMA] Failed to record error for learning: {learning_error}")
-    
     def is_running(self) -> bool:
         """
         Check if Ollama service is running.
@@ -117,8 +75,7 @@ class OllamaClient:
             bool: True if service is accessible, False otherwise
         """
         try:
-            # Fast check - 1 second timeout (reduced from 5s for better performance)
-            response = requests.get(self.base_url, timeout=1)
+            response = requests.get(self.base_url, timeout=5)
             return response.status_code == 200
         except (requests.ConnectionError, requests.Timeout):
             return False
@@ -137,8 +94,7 @@ class OllamaClient:
             requests.RequestException: If API request fails
         """
         try:
-            # Reduced timeout from 10s to 5s for better performance
-            response = requests.get(self.api_list_url, timeout=5)
+            response = requests.get(self.api_list_url, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -311,39 +267,10 @@ class OllamaClient:
             else:
                 return response.json().get("response", "")
         
-        except requests.ConnectionError as e:
-            error = ConnectionError(f"Failed to connect to Ollama service at {self.base_url}. Is Ollama running? Error: {e}")
-            # Feed error to self-healing pipeline
-            self._record_ollama_error_for_learning(error, "connection_error")
-            raise error
-        except requests.HTTPError as e:
-            if response.status_code == 500:
-                error_detail = "Internal server error"
-                try:
-                    error_data = response.json()
-                    if "error" in error_data:
-                        error_detail = error_data["error"]
-                except:
-                    pass
-                error = requests.RequestException(
-                    f"Ollama server returned 500 error: {error_detail}. "
-                    f"This usually means: (1) Model not loaded/available, (2) Out of memory, "
-                    f"(3) Model file corrupted, or (4) Server configuration issue. "
-                    f"Check Ollama logs for details."
-                )
-                # Feed error to self-healing pipeline
-                self._record_ollama_error_for_learning(error, "server_error_500", {"error_detail": error_detail, "model": payload.get("model")})
-                raise error
-            else:
-                error = requests.RequestException(f"HTTP error {response.status_code}: {e}")
-                # Feed error to self-healing pipeline
-                self._record_ollama_error_for_learning(error, f"http_error_{response.status_code}")
-                raise error
+        except requests.ConnectionError:
+            raise ConnectionError(f"Failed to connect to Ollama service at {self.base_url}")
         except requests.RequestException as e:
-            error = requests.RequestException(f"Failed to generate response: {e}")
-            # Feed error to self-healing pipeline
-            self._record_ollama_error_for_learning(error, "request_error")
-            raise error
+            raise requests.RequestException(f"Failed to generate response: {e}")
     
     def _process_streamed_response(self, response: requests.Response) -> str:
         """

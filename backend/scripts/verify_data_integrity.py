@@ -1,3 +1,17 @@
+"""
+Data Integrity Verification System for Grace AI Research Repository Ingestion
+
+This script provides comprehensive verification that:
+1. All repositories were cloned correctly
+2. All files are accessible and readable
+3. All ingested documents match source files
+4. Vector embeddings are stored correctly
+5. Database records are complete and accurate
+
+Usage:
+    python verify_data_integrity.py [--detailed] [--category CATEGORY]
+"""
+
 import os
 import sys
 import json
@@ -8,13 +22,26 @@ from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 from dataclasses import dataclass, asdict
 import sqlite3
+
+# Add backend to path
+backend_path = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_path))
+
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk
 from vector_db.client import get_qdrant_client
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
+
+@dataclass
 class RepositoryStats:
     """Statistics for a single repository."""
     name: str

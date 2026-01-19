@@ -1,3 +1,18 @@
+"""
+Autonomous Test Runner for Grace Self-Testing
+
+This module enables Grace to autonomously run tests to verify her own
+implementation and logic. Integrates with the sandbox lab and can be
+triggered via API, scheduled tasks, or autonomous actions.
+
+Features:
+- Run all tests or specific test suites
+- Generate detailed reports
+- Track test history and trends
+- Integrate with Genesis Keys for change tracking
+- Sandbox isolation for safe execution
+"""
+
 import subprocess
 import json
 import os
@@ -11,35 +26,13 @@ import asyncio
 
 logger = logging.getLogger(__name__)
 
-
-def _record_test_error(error: Exception, operation: str, context: Dict[str, Any] = None) -> None:
-    """Record test runner errors to self-healing pipeline."""
-    try:
-        from cognitive.error_learning_integration import get_error_learning_integration
-        from database.session import SessionLocal
-        
-        session = SessionLocal()
-        try:
-            error_learning = get_error_learning_integration(session=session)
-            error_learning.record_error(
-                error=error,
-                context={
-                    "location": "test_runner",
-                    "reason": f"Test execution failed: {operation}",
-                    "method": operation,
-                    **(context or {})
-                },
-                component="test_runner",
-                severity="high"
-            )
-        finally:
-            session.close()
-    except Exception:
-        pass  # Don't fail test operations if error recording fails
+# Add backend to path
+BACKEND_DIR = Path(__file__).parent
+sys.path.insert(0, str(BACKEND_DIR))
 
 
+@dataclass
 class TestResult:
-    logger = logging.getLogger(__name__)
     """Individual test result."""
     test_name: str
     test_file: str
@@ -257,10 +250,8 @@ class AutonomousTestRunner:
 
             return suite_result
 
-        except subprocess.TimeoutExpired as e:
+        except subprocess.TimeoutExpired:
             logger.error(f"Test suite {suite_name} timed out")
-            # Record timeout to self-healing pipeline
-            _record_test_error(e, "run_test_suite", {"suite_name": suite_name, "error_type": "timeout"})
             return TestSuiteResult(
                 suite_name=suite_config["name"],
                 total_tests=0,
@@ -280,8 +271,6 @@ class AutonomousTestRunner:
             )
         except Exception as e:
             logger.error(f"Error running test suite {suite_name}: {e}")
-            # Record error to self-healing pipeline
-            _record_test_error(e, "run_test_suite", {"suite_name": suite_name})
             return TestSuiteResult(
                 suite_name=suite_config["name"],
                 total_tests=0,

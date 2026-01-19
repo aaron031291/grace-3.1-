@@ -1,11 +1,22 @@
+"""
+Test suite for semantic contradiction detection using NLI model.
+Tests the SemanticContradictionDetector and its integration with ConfidenceScorer.
+"""
+
 import pytest
 import logging
 from datetime import datetime
 from unittest.mock import Mock, patch, MagicMock
+
+# Setup path for imports
 import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from confidence_scorer import ConfidenceScorer, SemanticContradictionDetector
+
 logger = logging.getLogger(__name__)
+
 
 class TestSemanticContradictionDetector:
     """Test cases for SemanticContradictionDetector class."""

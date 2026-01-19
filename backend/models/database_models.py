@@ -7,13 +7,11 @@ from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, 
 from sqlalchemy.orm import relationship
 from database.base import BaseModel
 from datetime import datetime
-import uuid
 
 
 class User(BaseModel):
     """User model for storing user information."""
     __tablename__ = "users"
-    __table_args__ = {'extend_existing': True}
     
     username = Column(String(255), unique=True, nullable=False, index=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
@@ -46,13 +44,12 @@ class Conversation(BaseModel):
 class Message(BaseModel):
     """Message model for storing individual messages in conversations."""
     __tablename__ = "messages"
-
+    
     conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=False, index=True)
     role = Column(String(50), nullable=False)  # "user", "assistant", "system"
     content = Column(Text, nullable=False)
-    tokens = Column(Integer, nullable=True)  # FIX: Number of tokens (consistent with ChatHistory)
-    token_ids = Column(Text, nullable=True)  # JSON array of token IDs (if needed)
-
+    tokens = Column(String, nullable=True)  # JSON array of token IDs
+    
     # Relationships
     conversation = relationship("Conversation", back_populates="messages")
     
@@ -71,7 +68,7 @@ class Embedding(BaseModel):
     text = Column(Text, nullable=False)
     embedding = Column(Text, nullable=False)  # Store as JSON array string
     dimension = Column(Integer, nullable=False, default=384)
-    model = Column(String(255), nullable=False, default="qwen_4b")
+    model = Column(String(255), nullable=False)  # Model name set by application code
     source = Column(String(255), nullable=True)  # Source of the embedding (e.g., "document_id", "message_id")
     
     __table_args__ = (
@@ -177,10 +174,6 @@ class Document(BaseModel):
         Index("idx_content_hash", "content_hash"),
         Index("idx_upload_method", "upload_method"),
         Index("idx_confidence_score", "confidence_score"),
-        Index("idx_source_reliability", "source_reliability"),
-        Index("idx_content_quality", "content_quality"),
-        Index("idx_consensus_score", "consensus_score"),
-        Index("idx_recency_score", "recency_score"),
     )
     
     def __repr__(self) -> str:
@@ -196,7 +189,7 @@ class DocumentChunk(BaseModel):
     text_content = Column(Text, nullable=False)
     token_count = Column(Integer, nullable=True)  # Number of tokens in chunk
     embedding_vector_id = Column(String(64), nullable=True, index=True)  # ID in Qdrant
-    embedding_model = Column(String(255), nullable=False, default="qwen_4b")
+    embedding_model = Column(String(255), nullable=False)  # Model name set by application code
     char_start = Column(Integer, nullable=True)  # Starting character position in original text
     char_end = Column(Integer, nullable=True)  # Ending character position in original text
     chunk_metadata = Column(Text, nullable=True)  # JSON metadata (page number, section, etc.)
@@ -339,54 +332,3 @@ class GovernanceDecision(BaseModel):
             "action_type": self.action_type,
             "target_resource": self.target_resource,
         }
-
-
-# ==================== Learning Models ====================
-
-class LearningExample(BaseModel):
-    """
-    Learning example model for storing learning experiences.
-    
-    This model is shared with cognitive/learning_memory.py - keep schemas in sync.
-    """
-    __tablename__ = "learning_examples"
-    __table_args__ = {'extend_existing': True}
-    
-    # What was learned
-    example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
-    input_context = Column(JSON, nullable=False)  # What was the situation
-    expected_output = Column(JSON, nullable=False)  # What should have happened
-    actual_output = Column(JSON, nullable=True)  # What actually happened
-    
-    # Legacy fields for backwards compatibility
-    content = Column(Text, nullable=True)
-    context = Column(Text, nullable=True)
-    metadata_json = Column(Text, nullable=True)
-
-    # Trust scoring
-    trust_score = Column(Float, default=0.5, nullable=False)  # Overall trust (0-1)
-    source_reliability = Column(Float, default=0.5, nullable=False)  # How reliable is the source
-    outcome_quality = Column(Float, default=0.5, nullable=False)  # How good was the outcome
-    consistency_score = Column(Float, default=0.5, nullable=False)  # Consistency with other examples
-    recency_weight = Column(Float, default=1.0, nullable=False)  # Decay over time
-
-    # Provenance
-    source = Column(String, nullable=True)  # user_feedback, system_observation, external_api, etc.
-    source_user_id = Column(String, nullable=True)  # Genesis ID if user-provided
-    genesis_key_id = Column(String, nullable=True)  # Link to Genesis Key
-
-    # Learning metadata
-    times_referenced = Column(Integer, default=0)  # How often used in training
-    times_validated = Column(Integer, default=0)  # How often validated as correct
-    times_invalidated = Column(Integer, default=0)  # How often proven wrong
-    last_used = Column(DateTime, nullable=True)  # Last time referenced
-
-    # Storage location
-    file_path = Column(String, nullable=True)  # Path in learning_memory folder
-
-    # Connections to memory mesh
-    episodic_episode_id = Column(String, nullable=True)  # Link to episodic memory
-    procedure_id = Column(String, nullable=True)  # Link to learned procedure
-
-    # Metadata
-    example_metadata = Column(JSON, nullable=True)

@@ -1,9 +1,19 @@
+"""
+Qdrant vector database client for managing vector embeddings and search.
+Handles connection to Qdrant, collection management, and vector operations.
+"""
+
 import os
 from typing import List, Dict, Optional, Any, Tuple
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 import logging
+
 logger = logging.getLogger(__name__)
+
+# Global Qdrant client instance
+_qdrant_client: Optional['QdrantVectorDB'] = None
+
 
 class QdrantVectorDB:
     """Qdrant vector database client wrapper."""
@@ -304,72 +314,19 @@ class QdrantVectorDB:
     def list_collections(self) -> List[str]:
         """
         List all collections.
-
+        
         Returns:
             List of collection names
         """
         if not self.is_connected():
             return []
-
+        
         try:
             collections = self.client.get_collections()
             return [c.name for c in collections.collections]
-
+        
         except Exception as e:
             logger.error(f"[FAIL] Failed to list collections: {e}")
-            return []
-
-    def scroll_all_points(
-        self,
-        collection_name: str,
-        limit: int = 100,
-        with_payload: bool = False,
-        with_vectors: bool = False
-    ) -> List[Any]:
-        """
-        Scroll through all points in a collection.
-
-        Args:
-            collection_name: Name of the collection
-            limit: Number of points to retrieve per page
-            with_payload: Whether to include payloads
-            with_vectors: Whether to include vectors
-
-        Returns:
-            List of point records
-        """
-        if not self.is_connected():
-            logger.error("Not connected to Qdrant")
-            return []
-
-        try:
-            all_points = []
-            offset = None
-
-            while True:
-                points, next_offset = self.client.scroll(
-                    collection_name=collection_name,
-                    limit=limit,
-                    offset=offset,
-                    with_payload=with_payload,
-                    with_vectors=with_vectors
-                )
-
-                if not points:
-                    break
-
-                all_points.extend(points)
-
-                if next_offset is None:
-                    break
-
-                offset = next_offset
-
-            logger.debug(f"[OK] Scrolled {len(all_points)} points from '{collection_name}'")
-            return all_points
-
-        except Exception as e:
-            logger.error(f"[FAIL] Failed to scroll points from '{collection_name}': {e}")
             return []
 
 

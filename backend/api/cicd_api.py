@@ -1,3 +1,9 @@
+"""
+Genesis CI/CD API
+=================
+REST API for the Genesis Key-powered CI/CD pipeline system.
+"""
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Request
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Any
@@ -5,13 +11,27 @@ from datetime import datetime
 import hashlib
 import hmac
 import logging
-from genesis.cicd import get_cicd, GenesisCICD, Pipeline, PipelineRun, PipelineStage, PipelineStatus, StageType, StageResult, GenesisKeyAction
+
+from genesis.cicd import (
+    get_cicd,
+    GenesisCICD,
+    Pipeline,
+    PipelineRun,
+    PipelineStage,
+    PipelineStatus,
+    StageType,
+    StageResult,
+    GenesisKeyAction
+)
 
 logger = logging.getLogger(__name__)
 
-# Create router
-router = APIRouter(prefix="/cicd", tags=["CI/CD"])
+router = APIRouter(prefix="/api/cicd", tags=["CI/CD"])
 
+
+# =============================================================================
+# Request/Response Models
+# =============================================================================
 
 class TriggerPipelineRequest(BaseModel):
     """Request to trigger a pipeline."""

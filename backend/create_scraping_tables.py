@@ -4,8 +4,6 @@ Run this from the backend directory with: ./venv/bin/python create_scraping_tabl
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 import os
 
 # Add backend directory to path
@@ -60,7 +58,7 @@ class ScrapedPage(Base):
 def create_tables():
     """Create scraping tables in the database."""
     try:
-        logger.info("Creating scraping tables...")
+        print("Creating scraping tables...")
         
         # Initialize database connection
         from database.config import DatabaseConfig, DatabaseType
@@ -78,14 +76,14 @@ def create_tables():
             tables=[ScrapingJob.__table__, ScrapedPage.__table__]
         )
         
-        logger.info("✓ Created scraping_jobs table")
-        logger.info("✓ Created scraped_pages table")
-        logger.info("✓ Migration completed successfully!")
-        logger.info("\nYou can now restart your backend server to use the web scraping feature.")
+        print("✓ Created scraping_jobs table")
+        print("✓ Created scraped_pages table")
+        print("✓ Migration completed successfully!")
+        print("\nYou can now restart your backend server to use the web scraping feature.")
         
         return True
     except Exception as e:
-        logger.info(f"✗ Migration failed: {str(e)}")
+        print(f"✗ Migration failed: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

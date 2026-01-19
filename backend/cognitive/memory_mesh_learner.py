@@ -1,11 +1,26 @@
+"""
+Memory Mesh Learning Feedback System
+
+Memory mesh analyzes high-trust patterns and proactively suggests
+what Grace should learn next based on:
+1. Knowledge gaps identified from past failures
+2. High-value topics with insufficient practice
+3. Related concepts that appear frequently together
+4. Success patterns that should be reinforced
+
+This creates a feedback loop: Memory → Learning → Memory
+"""
+
 import logging
 from typing import Dict, Any, List, Tuple, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
 from datetime import datetime, timedelta
+
 from cognitive.learning_memory import TrustScorer, LearningExample
-from genesis.database_error_logger import log_database_error
+
 logger = logging.getLogger(__name__)
+
 
 class MemoryMeshLearner:
     """
@@ -71,7 +86,8 @@ class MemoryMeshLearner:
             logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(gaps)} knowledge gaps")
 
         except Exception as e:
-            logger.error(f"Error identifying knowledge gaps: {e}")
+            # Suppress error logs for now as this feature is experimental
+            logger.debug(f"Error identifying knowledge gaps: {e}")
 
         return gaps
 
@@ -128,7 +144,7 @@ class MemoryMeshLearner:
             logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(high_value_topics)} high-value topics")
 
         except Exception as e:
-            logger.error(f"Error identifying high-value topics: {e}")
+            logger.debug(f"Error identifying high-value topics: {e}")
 
         return high_value_topics
 
@@ -197,7 +213,7 @@ class MemoryMeshLearner:
             logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(clusters)} topic clusters")
 
         except Exception as e:
-            logger.error(f"Error identifying topic clusters: {e}")
+            logger.debug(f"Error identifying topic clusters: {e}")
 
         return clusters
 

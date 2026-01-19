@@ -2,30 +2,20 @@
 Grace API - FastAPI application for Ollama-based chat and embeddings.
 """
 
-# Windows multiprocessing setup - MUST be first, before any other imports
-# This ensures multiprocessing is properly configured for Windows before
-# any code that might use it (including uvicorn's reloader)
-import sys
-if sys.platform == "win32":
-    import multiprocessing
-    try:
-        multiprocessing.set_start_method('spawn', force=True)
-    except RuntimeError:
-        # Already set, continue
-        pass
-    multiprocessing.freeze_support()
-
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import time
-import threading
-import logging
 from contextlib import asynccontextmanager
 from datetime import datetime
+import os
+import sys
+from pathlib import Path
 
-logger = logging.getLogger(__name__)
+# Configure logging FIRST before any other imports
+from logging_config import setup_logging
+setup_logging()
 
 # Security imports
 from security.config import get_security_config
@@ -48,7 +38,6 @@ from api.auth import router as auth_router
 from api.directory_hierarchy import router as directory_hierarchy_router
 from api.repo_genesis import router as repo_genesis_router
 from api.layer1 import router as layer1_router
-from api.layer2 import router as layer2_router
 from api.learning_memory_api import router as learning_memory_router
 from api.librarian_api import router as librarian_router
 from api.cognitive import router as cognitive_router
@@ -56,19 +45,11 @@ from api.training import router as training_router
 from api.autonomous_learning import router as autonomous_learning_router
 from api.master_integration import router as master_router
 from api.llm_orchestration import router as llm_orchestration_router
-# Third-party LLM API - optional
-try:
-    from api.third_party_llm_api import router as third_party_llm_router
-except ImportError as e:
-    logger.warning(f"Third-party LLM API not available: {e}")
-    third_party_llm_router = None
-from api.chat_llm_integration import get_chat_llm_integration, ChatLLMIntegration
 from api.ingestion_integration import router as ingestion_integration_router  # Complete autonomous cycle
 from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
 from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
 from api.notion import router as notion_router  # Notion task management system
 from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
-from api.multimodal_api import router as multimodal_router  # Multimodal API - Vision, Voice, Audio, Video with Genesis Keys
 from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
 from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
 from api.codebase_api import router as codebase_router  # Codebase Browser - file browsing, search, analysis
@@ -90,31 +71,9 @@ from api.ingestion_api import router as ingestion_router  # Librarian Ingestion 
 from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
 from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
 from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
+from api.scraping import router as scraping_router  # Web Scraping - URL scraping and crawling
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
-from api.grace_os_api import router as grace_os_router  # Grace OS - Full IDE integration
-from api.timesense import router as timesense_router  # TimeSense - Time & Cost Model with physics-based time awareness
-from api.enterprise_genesis_api import router as enterprise_genesis_router  # Enterprise Genesis Key Storage
-from api.immutable_audit_api import router as immutable_audit_router  # Immutable Audit Trail - Data cannot disappear
-from api.system_specs_api import router as system_specs_router  # System Specifications - hardware constraints for LLMs
-from api.enterprise_api import router as enterprise_router  # Enterprise Analytics - All enterprise system analytics
-from api.component_testing_api import router as component_testing_router  # Comprehensive Component Testing with Self-Healing
-from api.coding_agent_api import router as coding_agent_router  # Enterprise Coding Agent - Same Quality & Standards as Self-Healing
-from api.healing_coding_bridge_api import router as healing_coding_bridge_router  # Bidirectional Communication: Self-Healing ↔ Coding Agent
-from api.nlp_file_descriptions_api import router as nlp_descriptions_router  # NLP File Descriptions - Makes filesystem no-code friendly
-from api.external_knowledge_api import router as external_knowledge_router  # External Knowledge Extraction - GitHub, AI Research, LLMs
-from api.benchmark_api import router as benchmark_router  # Benchmark API - HumanEval, BigCodeBench, etc.
-from api.semantic_refactoring_api import router as semantic_refactoring_router  # Multi-file semantic refactoring
-from api.healing_scheduler_api import router as healing_scheduler_router  # Healing scheduler with persistent queue
-from api.oracle_hub_api import router as oracle_hub_router  # Unified Oracle Hub - Central Intelligence Ingestion
-from api.reverse_knn_api import router as reverse_knn_router  # Reverse KNN Proactive Learning - Knowledge Gap Expansion
-from api.enhanced_learning_api import router as enhanced_learning_router  # Enhanced Learning - Max capability with LLM orchestration
 from genesis.middleware import GenesisKeyMiddleware
-from middleware.self_healing_middleware import add_self_healing_middleware, get_error_pattern_stats
-from genesis.immutable_audit_storage import (
-    ImmutableAuditStorage, ImmutableAuditType, get_immutable_audit_storage,
-    audit_system_event, audit_user_input, audit_code_change
-)
-from genesis.audit_middleware import init_audit_middleware, integrate_with_genesis_keys
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 
@@ -166,7 +125,7 @@ class ChatResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     """Response model for health check endpoint."""
-    status: str = Field(..., description="Health status: 'healthy', 'degraded', or 'unhealthy'")
+    status: str = Field(..., description="Health status: 'healthy' or 'unhealthy'")
     ollama_running: bool = Field(..., description="Whether Ollama service is running")
     models_available: int = Field(..., description="Number of available models")
 
@@ -257,15 +216,7 @@ class PromptResponse(BaseModel):
 async def lifespan(app: FastAPI):
     """Manage app startup and shutdown events."""
     # Startup
-    logger.info("Grace API starting up...")
-    
-    # Create reminder files for external agents
-    try:
-        from agent_reminder import create_reminder_files
-        create_reminder_files()
-        logger.info("[OK] System specs reminder files created")
-    except Exception as e:
-        logger.info(f"[WARN] Could not create reminder files: {e}")
+    print("Grace API starting up...")
     
     # Initialize database
     try:
@@ -281,383 +232,96 @@ async def lifespan(app: FastAPI):
             echo=settings.DATABASE_ECHO if settings else False,
         )
         DatabaseConnection.initialize(db_config)
-        logger.info("[OK] Database connection initialized")
+        print("[OK] Database connection initialized")
         
         # Initialize session factory
         initialize_session_factory()
-        logger.info("[OK] Database session factory initialized")
+        print("[OK] Database session factory initialized")
         
         # Create tables
         create_tables()
-        logger.info("[OK] Database tables created/verified")
-        
-        # CRITICAL: Import outcome_llm_bridge to register SQLAlchemy event listener
-        # This ensures the event listener is registered before any LearningExample is created
-        try:
-            from cognitive.outcome_llm_bridge import get_outcome_bridge
-            # Initialize bridge with session to ensure it's ready
-            session = next(get_session())
-            bridge = get_outcome_bridge(session=session)
-            logger.info("[OK] Outcome → LLM Bridge initialized (event listener registered)")
-        except Exception as e:
-            logger.info(f"[WARN] Could not initialize Outcome → LLM Bridge: {e}")
-        
-        # CRITICAL: Initialize Immutable Audit Storage for data integrity
-        # This ensures ALL critical operations are logged immutably for auditability and tracing
-        try:
-            session = next(get_session())
-            
-            # Initialize immutable audit storage
-            audit_storage = get_immutable_audit_storage(session)
-            logger.info("[OK] Immutable Audit Storage initialized")
-            
-            # Initialize audit middleware for automatic capture
-            audit_middleware = init_audit_middleware(session)
-            logger.info("[OK] Audit Middleware initialized")
-            
-            # Integrate with Genesis Keys for full traceability
-            integrate_with_genesis_keys(session)
-            logger.info("[OK] Audit integrated with Genesis Keys")
-            
-            # Record system startup in immutable audit
-            audit_storage.record(
-                audit_type=ImmutableAuditType.SYSTEM_STARTUP,
-                action_description="GRACE System startup initiated",
-                actor_type="system",
-                actor_id="grace-core",
-                component="app",
-                context={
-                    "startup_time": datetime.utcnow().isoformat(),
-                    "version": "3.1"
-                }
-            )
-            logger.info("[OK] System startup recorded in immutable audit trail")
-            
-            # Verify audit chain integrity
-            is_valid, issues = audit_storage.verify_chain_integrity()
-            if is_valid:
-                logger.info("[OK] Immutable audit chain integrity verified")
-            else:
-                logger.warning(f"[WARN] Audit chain issues: {len(issues)}")
-                
-        except Exception as e:
-            logger.info(f"[WARN] Could not initialize Immutable Audit Storage: {e}")
+        print("[OK] Database tables created/verified")
     except Exception as e:
-        logger.info(f"[WARN] Database initialization error: {e}")
+        print(f"[WARN] Database initialization error: {e}")
         raise
     
-    # ==================== Start Self-Healing in Background ====================
-    # Initialize self-healing in background so it doesn't block server startup
-    def initialize_self_healing_background():
-        """Initialize self-healing system in background thread."""
-        try:
-            import time
-            from pathlib import Path
-            from database.session import get_db
-            from genesis.autonomous_triggers import get_genesis_trigger_pipeline
-            from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
-            from cognitive.mirror_self_modeling import get_mirror_system
-            
-            logger.info("\n[AUTONOMOUS-HEALING] Initializing self-healing system (background)...", flush=True)
-            
-            # Get session for healing system
-            session = next(get_db())
-            # Try to resolve knowledge_base path (could be in root or backend/)
-            knowledge_base_path = Path("knowledge_base")
-            if not knowledge_base_path.exists():
-                knowledge_base_path = Path("backend/knowledge_base")
-            knowledge_base_path = knowledge_base_path.resolve()
-            
-            # Initialize healing system FIRST
-            healing_system = get_autonomous_healing(
-                session=session,
-                trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-                enable_learning=True
-            )
-            
-            # Initialize trigger pipeline (for error-triggered healing)
-            trigger_pipeline = get_genesis_trigger_pipeline(
-                session=session,
-                knowledge_base_path=knowledge_base_path,
-                orchestrator=None
-            )
-            
-            # Initialize mirror system
-            mirror_system = get_mirror_system(
-                session=session,
-                observation_window_hours=24,
-                min_pattern_occurrences=3
-            )
-            
-            # Initialize Code Analyzer Self-Healing System
-            logger.info("[CODE-ANALYZER-HEALING] Initializing code analyzer self-healing...", flush=True)
-            try:
-                from cognitive.code_analyzer_self_healing import get_code_analyzer_healing
-                from cognitive.autonomous_healing_system import TrustLevel
-                
-                code_analyzer_healing = get_code_analyzer_healing(
-                    healing_system=healing_system,
-                    trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-                    enable_auto_fix=False,  # Pre-flight mode on boot - analysis only
-                    enable_timesense=True
-                )
-                logger.info("[CODE-ANALYZER-HEALING] Code analyzer self-healing initialized", flush=True)
-                logger.info("[CODE-ANALYZER-HEALING] Mode: Pre-flight (analysis on boot, fixes require approval)", flush=True)
-            except Exception as e:
-                logger.info(f"[CODE-ANALYZER-HEALING] Warning: Could not initialize: {e}", flush=True)
-            
-            # Run initial code analysis in pre-flight mode (check for issues without auto-fixing)
-            logger.info("[CODE-ANALYZER-HEALING] Running initial code analysis (pre-flight)...", flush=True)
-            try:
-                from cognitive.code_analyzer_self_healing import trigger_code_healing
-                from cognitive.autonomous_healing_system import TrustLevel
-                
-                # Run analysis in pre-flight mode (no auto-fix on boot)
-                analysis_results = trigger_code_healing(
-                    directory='backend',
-                    trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-                    auto_fix=False,  # Pre-flight mode - analysis only
-                    pre_flight=True,
-                    enable_timesense=True
-                )
-                
-                issues_found = analysis_results.get('issues_found', 0)
-                fixable = analysis_results.get('fixable_issues', 0)
-                health_status = analysis_results.get('health_status', 'healthy')
-                timesense_enabled = analysis_results.get('timesense_enabled', False)
-                
-                logger.info(
-                    f"[CODE-ANALYZER-HEALING] Initial analysis complete: "
-                    f"Issues={issues_found}, Fixable={fixable}, "
-                    f"Health={health_status}, Timesense={timesense_enabled}",
-                    flush=True
-                )
-                
-                if fixable > 0:
-                    logger.info(
-                        f"[CODE-ANALYZER-HEALING] Note: {fixable} issues ready for approval. "
-                        f"Use /grace/code-healing/apply to review and apply fixes.",
-                        flush=True
-                    )
-            except Exception as e:
-                logger.info(f"[CODE-ANALYZER-HEALING] Warning: Initial analysis failed: {e}", flush=True)
-            
-            # Run initial health check immediately to catch startup issues
-            logger.info("[AUTONOMOUS-HEALING] Running initial health check...", flush=True)
-            try:
-                initial_check = healing_system.run_monitoring_cycle()
-                logger.info(
-                    f"[AUTONOMOUS-HEALING] Initial check: Status={initial_check['health_status']}, "
-                    f"Anomalies={initial_check['anomalies_detected']}, "
-                    f"Actions executed={initial_check['actions_executed']}",
-                    flush=True
-                )
-                if initial_check['actions_executed'] > 0:
-                    logger.info("[AUTONOMOUS-HEALING] [OK] Startup issues detected and healed!", flush=True)
-            except Exception as check_error:
-                # Safely handle Unicode in error messages
-                error_msg = str(check_error).encode('ascii', 'replace').decode('ascii')
-                logger.info(f"[AUTONOMOUS-HEALING] [WARN] Initial health check error: {error_msg}", flush=True)
-            
-            # Background health monitoring thread (runs every 5 minutes)
-            def health_monitor_background():
-                """Run health checks every 5 minutes in background."""
-                while True:
-                    try:
-                        time.sleep(300)  # Check every 5 minutes
-                        if healing_system:
-                            cycle_result = healing_system.run_monitoring_cycle()
-                            logger.info(
-                                f"[HEALTH] Status: {cycle_result['health_status']}, "
-                                f"Anomalies: {cycle_result['anomalies_detected']}, "
-                                f"Actions executed: {cycle_result['actions_executed']}",
-                                flush=True
-                            )
-                    except Exception as e:
-                        logger.info(f"[HEALTH-MONITOR] Error: {e}", flush=True)
-                        time.sleep(60)
-            
-            # Background mirror analysis thread (runs every 10 minutes)
-            def mirror_analysis_background():
-                """Run mirror self-modeling every 10 minutes in background."""
-                while True:
-                    try:
-                        time.sleep(600)  # Analyze every 10 minutes
-                        if mirror_system:
-                            self_model = mirror_system.build_self_model()
-                            logger.info(
-                                f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
-                                f"Suggestions: {len(self_model['improvement_suggestions'])}, "
-                                f"Self-awareness: {self_model['self_awareness_score']:.2f}",
-                                flush=True
-                            )
-                    except Exception as e:
-                        logger.info(f"[MIRROR-ANALYSIS] Error: {e}", flush=True)
-                        time.sleep(60)
-            
-            # Start background threads
-            health_thread = threading.Thread(target=health_monitor_background, daemon=True)
-            health_thread.start()
-            
-            mirror_thread = threading.Thread(target=mirror_analysis_background, daemon=True)
-            mirror_thread.start()
-            
-            # ==================== Start Healing Scheduler ====================
-            # Robust scheduling with persistent queue and file watcher
-            try:
-                from cognitive.healing_scheduler import start_healing_scheduler
-                
-                scheduler = start_healing_scheduler(
-                    healing_system=healing_system,
-                    repo_path=Path.cwd()
-                )
-                
-                logger.info("[HEALING-SCHEDULER] [OK] Scheduler started with:", flush=True)
-                logger.info("  - Persistent healing queue (survives restarts)", flush=True)
-                logger.info("  - File watcher (proactive healing on changes)", flush=True)
-                logger.info("  - Scheduled jobs (health, scan, drift detection)", flush=True)
-                logger.info(f"  - Pending tasks: {scheduler.queue.get_pending_count()}", flush=True)
-            except Exception as e:
-                logger.info(f"[HEALING-SCHEDULER] [WARN] Could not start scheduler: {e}", flush=True)
-            
-            logger.info("[AUTONOMOUS-HEALING] [OK] Self-healing system active", flush=True)
-            logger.info("[AUTONOMOUS-HEALING] Can now fix runtime/startup issues:", flush=True)
-            logger.info("  - Connection issues -> CONNECTION_RESET", flush=True)
-            logger.info("  - Process errors -> PROCESS_RESTART", flush=True)
-            logger.info("  - Service failures -> SERVICE_RESTART", flush=True)
-            logger.info("  - Error spikes -> Automatic healing", flush=True)
-            logger.info("  - Performance issues -> CACHE_FLUSH / BUFFER_CLEAR", flush=True)
-            logger.info("  - Semantic refactoring -> SEMANTIC_REFACTOR", flush=True)
-            logger.info("[AUTONOMOUS-HEALING] Trust Level: MEDIUM_RISK_AUTO\n", flush=True)
-            
-        except Exception as e:
-            logger.info(f"[AUTONOMOUS-HEALING] [WARN] Could not start self-healing: {e}", flush=True)
-            import traceback
-            traceback.print_exc()
-    
-    # Start self-healing in background (non-blocking)
-    healing_thread = threading.Thread(target=initialize_self_healing_background, daemon=True)
-    healing_thread.start()
-    logger.info("[AUTONOMOUS-HEALING] Self-healing initialization started in background")
-    
-    # Pre-initialize embedding model in background (non-blocking)
-    # This allows server to start accepting connections faster
-    def load_embedding_model_background():
-        """Load embedding model in background thread."""
+    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
+    if not settings.SKIP_EMBEDDING_LOAD:
         try:
             from embedding import get_embedding_model
-            logger.info("\n[STARTUP] Pre-initializing embedding model (background)...")
+            print("\n[STARTUP] Pre-initializing embedding model...")
             embedding_model = get_embedding_model()
-            logger.info("[STARTUP] [OK] Embedding model loaded and ready\n")
+            print("[STARTUP] [OK] Embedding model loaded and ready\n")
         except Exception as e:
-            logger.info(f"[STARTUP] [INFO] Embedding model not pre-loaded: {e}")
-            logger.info("[STARTUP] [INFO] Model will be loaded on first use\n")
+            print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
+            print("[STARTUP] [WARN] Model will be loaded on first use\n")
+    else:
+        print("[STARTUP] Embedding model loading skipped (SKIP_EMBEDDING_LOAD=true)\n")
     
-    embedding_thread = threading.Thread(target=load_embedding_model_background, daemon=True)
-    embedding_thread.start()
-    logger.info("[STARTUP] Embedding model loading started in background")
-
-    # ==================== Initialize TimeSense Engine ====================
-    # Grace's empirical time calibration - gives her a "clock" grounded in physics
-    # Also moved to background to speed up server startup
-    def initialize_timesense_background():
-        """Initialize TimeSense in background thread."""
+    # Check Ollama
+    if not settings.SKIP_OLLAMA_CHECK:
         try:
-            from timesense.engine import get_timesense_engine
-            logger.info("\n[TIMESENSE] Initializing Time & Cost Model (background)...")
-
-            timesense_engine = get_timesense_engine(auto_calibrate=True)
-
-            # Run quick calibration at startup
-            initialized = timesense_engine.initialize_sync(quick_calibration=True)
-
-            if initialized:
-                logger.info("[TIMESENSE] [OK] TimeSense engine ready")
-                logger.info(f"[TIMESENSE] Calibrated profiles: {timesense_engine.stats.stable_profiles}")
-                logger.info(f"[TIMESENSE] Average confidence: {timesense_engine.stats.average_confidence:.2f}")
-                logger.info("[TIMESENSE] Grace now has empirical time awareness:")
-                logger.info("  - Disk I/O throughput calibrated")
-                logger.info("  - CPU compute benchmarked")
-                logger.info("  - Can predict task durations with uncertainty bounds")
-                logger.info("[TIMESENSE] Time predictions: p50/p90/p95/p99 latencies available\n")
+            client = get_ollama_client()
+            if client.is_running():
+                models = client.get_all_models()
+                print(f"[OK] Ollama is running with {len(models)} model(s)")
             else:
-                logger.info("[TIMESENSE] [WARN] Engine initialized but calibration incomplete\n")
+                print("[WARN] Ollama is not running - chat endpoint will be unavailable")
         except Exception as e:
-            logger.info(f"[TIMESENSE] [WARN] Could not initialize TimeSense: {e}")
-            import traceback
-            traceback.print_exc()
-            logger.info("[TIMESENSE] [WARN] Time predictions will use default estimates\n")
+            print(f"[WARN] Could not connect to Ollama: {e}")
+    else:
+        print("[SKIP] Ollama check skipped (SKIP_OLLAMA_CHECK=true)")
     
-    timesense_thread = threading.Thread(target=initialize_timesense_background, daemon=True)
-    timesense_thread.start()
-    logger.info("[TIMESENSE] TimeSense initialization started in background")
-
-    # CRITICAL: Yield FIRST to let server start listening
-    # Move non-critical checks to after server is available
-    logger.info("[OK] Database initialized, starting server...")
-    yield  # ← SERVER STARTS LISTENING HERE
-    
-    # Non-critical initialization happens AFTER server is running
-    # This way server can accept connections even if these fail
-    logger.info("\n[STARTUP] Continuing background initialization...")
-    
-    # Check Ollama (non-blocking check)
-    try:
-        client = get_ollama_client()
-        if client.is_running():
-            models = client.get_all_models()
-            logger.info(f"[OK] Ollama is running with {len(models)} model(s)")
-        else:
-            logger.info("[WARN] Ollama is not running - chat endpoint will be unavailable")
-    except Exception as e:
-        logger.info(f"[WARN] Could not connect to Ollama: {e}")
-    
-    # Check Qdrant (non-blocking check)
-    try:
-        qdrant = get_qdrant_client()
-        if qdrant.is_connected():
-            collections = qdrant.list_collections()
-            logger.info(f"[OK] Qdrant is running with {len(collections)} collection(s)")
-        else:
-            logger.info("[WARN] Qdrant is not running - document ingestion will be unavailable")
-    except Exception as e:
-        logger.info(f"[WARN] Could not connect to Qdrant: {e}")
+    # Check Qdrant
+    if not settings.SKIP_QDRANT_CHECK:
+        try:
+            qdrant = get_qdrant_client()
+            if qdrant.is_connected():
+                collections = qdrant.list_collections()
+                print(f"[OK] Qdrant is running with {len(collections)} collection(s)")
+            else:
+                print("[WARN] Qdrant is not running - document ingestion will be unavailable")
+        except Exception as e:
+            print(f"[WARN] Could not connect to Qdrant: {e}")
+    else:
+        print("[SKIP] Qdrant check skipped (SKIP_QDRANT_CHECK=true)")
 
     # ==================== Initialize File Watcher ====================
     # Start file system watcher for automatic version control
-    try:
-        from genesis.file_watcher import start_watching_workspace
+    if not settings.DISABLE_GENESIS_TRACKING:
+        try:
+            from genesis.file_watcher import start_watching_workspace
+            import threading
 
-        def run_file_watcher():
-            """Run file watcher in background thread"""
-            try:
-                logger.info("[FILE-WATCHER] Starting file system monitoring...")
-                start_watching_workspace()
-            except Exception as e:
-                logger.info(f"[FILE-WATCHER] [WARN] Error: {e}")
+            def run_file_watcher():
+                """Run file watcher in background thread"""
+                try:
+                    print("[FILE-WATCHER] Starting file system monitoring...")
+                    start_watching_workspace()
+                except Exception as e:
+                    print(f"[FILE-WATCHER] [WARN] Error: {e}")
 
-        watcher_thread = threading.Thread(target=run_file_watcher, daemon=True)
-        watcher_thread.start()
-        logger.info("[OK] File watcher started - automatic version tracking enabled")
-    except Exception as e:
-        logger.info(f"[WARN] Could not start file watcher: {e}")
+            watcher_thread = threading.Thread(target=run_file_watcher, daemon=True)
+            watcher_thread.start()
+            print("[OK] File watcher started - automatic version tracking enabled")
+        except Exception as e:
+            print(f"[WARN] Could not start file watcher: {e}")
+    else:
+        print("[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)")
 
     # ==================== Initialize ML Intelligence ====================
-    # Initialize ML Intelligence orchestrator (moved after yield - non-critical)
-    def init_ml_intelligence():
-        try:
-            from api.ml_intelligence_api import get_orchestrator
-            orchestrator = get_orchestrator()
-            logger.info(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
-        except Exception as e:
-            logger.info(f"[WARN] ML Intelligence not available: {e}")
-    
-    ml_thread = threading.Thread(target=init_ml_intelligence, daemon=True)
-    ml_thread.start()
+    # Initialize ML Intelligence orchestrator
+    try:
+        from api.ml_intelligence_api import get_orchestrator
+        orchestrator = get_orchestrator()
+        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
+    except Exception as e:
+        print(f"[WARN] ML Intelligence not available: {e}")
 
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
+    import threading
     
     auto_ingest_task = None
     
@@ -671,25 +335,25 @@ async def lifespan(app: FastAPI):
             from database.session import initialize_session_factory
             
             # Ensure database is initialized in this thread context
-            logger.info("\n[AUTO-INGEST] Verifying database connection...", flush=True)
+            print("\n[AUTO-INGEST] Verifying database connection...", flush=True)
             try:
                 engine = DatabaseConnection.get_engine()
                 if engine:
-                    logger.info("[AUTO-INGEST] [OK] Database engine verified", flush=True)
+                    print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
             except RuntimeError as e:
-                logger.info(f"[AUTO-INGEST] [WARN] Database not initialized yet: {e}", flush=True)
-                logger.info("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
+                print(f"[AUTO-INGEST] [WARN] Database not initialized yet: {e}", flush=True)
+                print("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
                 time.sleep(2)
             
             # Initialize session factory in this thread if needed
-            logger.info("[AUTO-INGEST] Initializing session factory...", flush=True)
+            print("[AUTO-INGEST] Initializing session factory...", flush=True)
             session_factory = initialize_session_factory()
             if session_factory:
-                logger.info("[AUTO-INGEST] [OK] Session factory initialized", flush=True)
+                print("[AUTO-INGEST] [OK] Session factory initialized", flush=True)
             else:
-                logger.info("[AUTO-INGEST] [FAIL] Failed to initialize session factory", flush=True)
+                print("[AUTO-INGEST] [FAIL] Failed to initialize session factory", flush=True)
             
-            logger.info("[AUTO-INGEST] Starting auto-ingestion monitor...", flush=True)
+            print("[AUTO-INGEST] Starting auto-ingestion monitor...", flush=True)
             
             # Get the file manager instance
             file_manager = get_file_manager()
@@ -697,170 +361,87 @@ async def lifespan(app: FastAPI):
             # Initialize git if needed
             file_manager.git_tracker.initialize_git()
             
-            # Do initial scan on startup (defer to avoid blocking server start)
-            logger.info("[AUTO-INGEST] Will run initial scan after server starts...", flush=True)
-            time.sleep(5)  # Wait for server to be fully up
-            
-            logger.info("[AUTO-INGEST] Running initial scan of knowledge base...", flush=True)
+            # Do initial scan on startup
+            # print("[AUTO-INGEST] Running initial scan of knowledge base...", flush=True)
             max_retries = 3
-            retry_count = 0
             results = []
             
-            while retry_count < max_retries:
+            for retry_count in range(max_retries):
                 try:
                     results = file_manager.scan_directory()
                     break
                 except Exception as e:
-                    retry_count += 1
-                    if retry_count < max_retries:
-                        logger.info(f"[AUTO-INGEST] Scan attempt {retry_count} failed, retrying in 2 seconds: {e}", flush=True)
+                    if retry_count < max_retries - 1:
+                        # print(f"[AUTO-INGEST] Scan attempt {retry_count + 1} failed, retrying: {e}", flush=True)
                         time.sleep(2)
                     else:
-                        logger.info(f"[AUTO-INGEST] [FAIL] Initial scan failed after {max_retries} attempts: {e}", flush=True)
+                        if settings.SUPPRESS_INGESTION_ERRORS:
+                            # print("[AUTO-INGEST] [WARN] Error suppressed (SUPPRESS_INGESTION_ERRORS=true)", flush=True)
+                            results = []
+                        else:
+                            raise
             
+            # Summarize results (compact output)
             if results:
-                logger.info(f"[AUTO-INGEST] Initial scan found {len(results)} changes:", flush=True)
-                for result in results[:10]:  # Only show first 10 to avoid spam
-                    status = "[OK]" if result.success else "[FAIL]"
-                    logger.info(f"  {status} {result.change_type}: {result.filepath}", flush=True)
-                if len(results) > 10:
-                    logger.info(f"  ... and {len(results) - 10} more changes", flush=True)
-            else:
-                logger.info("[AUTO-INGEST] No changes detected in initial scan", flush=True)
+                fail_count = sum(1 for r in results if not r.success)
+                success_count = sum(1 for r in results if r.success)
+                if fail_count > 0:
+                    print(f"[AUTO-INGEST] Excluded {fail_count} files (Genesis/already ingested)", flush=True)
+                if success_count > 0:
+                    print(f"[AUTO-INGEST] Ingested {success_count} new files", flush=True)
+            # Don't print anything if no changes - just continue silently
             
-            # Continue monitoring in background
-            logger.info("[AUTO-INGEST] Auto-ingestion monitor started (will check every 30 seconds)\n", flush=True)
-            file_manager.watch_and_process(continuous=True)
+            # Continue monitoring in background - suppress the message
+            # print("[AUTO-INGEST] Auto-ingestion monitor started (will check every 30 seconds)\n", flush=True)
+            
+            try:
+                file_manager.watch_and_process(continuous=True)
+            except Exception as e:
+                if settings.SUPPRESS_INGESTION_ERRORS:
+                    print(f"[AUTO-INGEST] [WARN] Error in continuous monitoring (suppressed): {e}", flush=True)
+                else:
+                    raise
         except Exception as e:
-            logger.info(f"[AUTO-INGEST] [FAIL] Error in auto-ingestion: {e}", flush=True)
+            print(f"[AUTO-INGEST] [FAIL] Error in auto-ingestion: {e}", flush=True)
             import traceback
             traceback.print_exc()
     
     # Start auto-ingestion in a daemon thread
-    try:
-        auto_ingest_thread = threading.Thread(target=run_auto_ingestion, daemon=True)
-        auto_ingest_thread.start()
-    except Exception as e:
-        logger.info(f"[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: {e}")
+    if not settings.SKIP_AUTO_INGESTION:
+        try:
+            auto_ingest_thread = threading.Thread(target=run_auto_ingestion, daemon=True)
+            auto_ingest_thread.start()
+        except Exception as e:
+            print(f"[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: {e}")
+    else:
+        print("[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)")
+
 
     # ==================== Start Continuous Learning Orchestrator ====================
-    # Connect sandbox lab to continuous training data (moved after yield - non-critical)
-    def init_continuous_learning():
+    # Connect sandbox lab to continuous training data
+    if not settings.SKIP_AUTO_INGESTION:
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning
-            logger.info("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
+            # print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
             orchestrator = start_continuous_learning()
-            logger.info("[CONTINUOUS_LEARNING] [OK] Continuous learning activated", flush=True)
-            logger.info("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
-            logger.info("  - Ingest new data from knowledge_base", flush=True)
-            logger.info("  - Learn autonomously from content", flush=True)
-            logger.info("  - Mirror observes and proposes experiments", flush=True)
-            logger.info("  - Run sandbox experiments and trials", flush=True)
-            logger.info("  - Request approval for validated improvements", flush=True)
-            logger.info("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
+            print("[OK] Continuous learning activated", flush=True)
+            # Suppress verbose startup messages
+            # print("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
+            # print("  - Ingest new data from knowledge_base", flush=True)
+            # print("  - Learn autonomously from content", flush=True)
+            # print("  - Mirror observes and proposes experiments", flush=True)
+            # print("  - Run sandbox experiments and trials", flush=True)
+            # print("  - Request approval for validated improvements", flush=True)
+            # print("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
         except Exception as e:
-            logger.info(f"[CONTINUOUS_LEARNING] [WARN] Could not start continuous learning: {e}", flush=True)
-    
-    continuous_learning_thread = threading.Thread(target=init_continuous_learning, daemon=True)
-    continuous_learning_thread.start()
+            print(f"[WARN] Could not start continuous learning: {e}", flush=True)
+    else:
+        print("[SKIP] Continuous learning disabled (SKIP_AUTO_INGESTION=true)")
 
-    # ==================== Start Real-Time Stability Monitor ====================
-    def init_stability_monitoring():
-        """Initialize real-time stability monitoring."""
-        try:
-            from cognitive.realtime_stability_monitor import start_stability_monitoring
-            logger.info("\n[STABILITY-MONITOR] Starting real-time stability proof system...", flush=True)
-            start_stability_monitoring(
-                check_interval_seconds=60,  # Check every minute
-                alert_on_degradation=True
-            )
-            logger.info("[STABILITY-MONITOR] [OK] Real-time stability monitoring active", flush=True)
-            logger.info("[STABILITY-MONITOR] Grace will continuously:", flush=True)
-            logger.info("  - Generate deterministic stability proofs every 60 seconds", flush=True)
-            logger.info("  - Detect stability degradation automatically", flush=True)
-            logger.info("  - Maintain proof history for analysis", flush=True)
-            logger.info("  - Provide mathematical verification of system stability", flush=True)
-            logger.info("[STABILITY-MONITOR] Access via: GET /health/stability-proof\n", flush=True)
-        except Exception as e:
-            logger.info(f"[STABILITY-MONITOR] [WARN] Could not start stability monitoring: {e}", flush=True)
-            import traceback
-            traceback.print_exc()
-    
-    stability_monitor_thread = threading.Thread(target=init_stability_monitoring, daemon=True)
-    stability_monitor_thread.start()
-
-    # Server is ready to accept connections
-    logger.info("\n" + "="*60)
-    # Start diagnostic engine
-    try:
-        from diagnostic_machine.diagnostic_engine import start_diagnostic_engine
-        logger.info("\n[STARTUP] Starting diagnostic engine...")
-        diagnostic_engine = start_diagnostic_engine(
-            heartbeat_interval=300,  # 5 minutes
-            enable_healing=True,     # Enable automatic healing
-            enable_heartbeat=True    # Enable continuous monitoring
-        )
-        logger.info("[STARTUP] [OK] Diagnostic engine started - running every 5 minutes")
-        logger.info("[STARTUP] Diagnostic engine will continuously:")
-        logger.info("  - Scan for code issues proactively")
-        logger.info("  - Detect bugs, warnings, and errors")
-        logger.info("  - Automatically fix issues when possible")
-        logger.info("  - Log all actions with Genesis Keys")
-        logger.info("[STARTUP] Diagnostic engine heartbeat: 5 minutes")
-    except Exception as e:
-        logger.info(f"[STARTUP] [WARN] Failed to start diagnostic engine: {e}")
-        import traceback
-        traceback.print_exc()
-    
-    # Start autonomous stress test scheduler
-    try:
-        from autonomous_stress_testing.scheduler import start_stress_test_scheduler
-        logger.info("\n[STARTUP] Starting autonomous stress test scheduler...")
-        start_stress_test_scheduler(
-            interval_minutes=10,
-            base_url="http://localhost:8000",
-            enable_genesis_logging=True,
-            enable_diagnostic_alerts=True
-        )
-        logger.info("[STARTUP] [OK] Stress test scheduler started - running every 10 minutes")
-    except Exception as e:
-        logger.info(f"[STARTUP] [WARN] Failed to start stress test scheduler: {e}")
-    
-    logger.info("[OK] GRACE API STARTUP COMPLETE")
-    logger.info("="*60)
-    logger.info("Server is ready to accept connections on http://0.0.0.0:8000")
-    logger.info("Health check: http://localhost:8000/health/live")
-    logger.info("="*60 + "\n")
+    yield
     
     # Shutdown
-    logger.info("\nGrace API shutting down...")
-    
-    # Stop diagnostic engine
-    try:
-        from diagnostic_machine.diagnostic_engine import stop_diagnostic_engine
-        logger.info("[SHUTDOWN] Stopping diagnostic engine...")
-        stop_diagnostic_engine()
-        logger.info("[SHUTDOWN] [OK] Diagnostic engine stopped")
-    except Exception as e:
-        logger.info(f"[SHUTDOWN] [WARN] Failed to stop diagnostic engine: {e}")
-    
-    # Stop stress test scheduler
-    try:
-        from autonomous_stress_testing.scheduler import stop_stress_test_scheduler
-        logger.info("[SHUTDOWN] Stopping stress test scheduler...")
-        stop_stress_test_scheduler()
-        logger.info("[SHUTDOWN] [OK] Stress test scheduler stopped")
-    except Exception as e:
-        logger.info(f"[SHUTDOWN] [WARN] Failed to stop stress test scheduler: {e}")
-    
-    # Stop stability monitoring
-    try:
-        from cognitive.realtime_stability_monitor import stop_stability_monitoring
-        logger.info("[SHUTDOWN] Stopping stability monitoring...")
-        stop_stability_monitoring()
-        logger.info("[SHUTDOWN] [OK] Stability monitoring stopped")
-    except Exception as e:
-        logger.info(f"[SHUTDOWN] [WARN] Failed to stop stability monitoring: {e}")
+    print("Grace API shutting down...")
 
 
 # ==================== FastAPI App ====================
@@ -885,21 +466,6 @@ app.add_middleware(RateLimitMiddleware, default_limit=security_config.RATE_LIMIT
 # Add request validation middleware
 app.add_middleware(RequestValidationMiddleware)
 
-# Add self-healing middleware - captures all API errors for learning
-add_self_healing_middleware(
-    app,
-    excluded_paths=["/health", "/metrics", "/docs", "/openapi.json", "/redoc"],
-    min_severity="low"
-)
-logger.info("[APP] Self-healing middleware enabled - all API errors fed to learning pipeline")
-
-# Add optional authentication middleware (enabled via AUTH_REQUIRED env var)
-if security_config.AUTH_REQUIRED:
-    app.add_middleware(AuthenticationMiddleware)
-    logger.info("[APP] Authentication middleware enabled - endpoints require authentication")
-else:
-    logger.info("[APP] Authentication middleware disabled - endpoints are publicly accessible")
-
 # Add CORS middleware with secure configuration
 # IMPORTANT: In production, set CORS_ALLOWED_ORIGINS env var to your specific domains
 app.add_middleware(
@@ -922,7 +488,6 @@ app.include_router(auth_router)
 app.include_router(directory_hierarchy_router)
 app.include_router(repo_genesis_router)
 app.include_router(layer1_router)
-app.include_router(layer2_router)
 app.include_router(learning_memory_router)
 app.include_router(librarian_router)
 app.include_router(cognitive_router)
@@ -930,24 +495,14 @@ app.include_router(training_router)
 app.include_router(master_router)  # Master integration - unified access to ALL systems
 app.include_router(autonomous_learning_router)
 app.include_router(llm_orchestration_router)
-if third_party_llm_router:
-    app.include_router(third_party_llm_router)  # Third-Party LLM Integration - automatic handshake for Gemini, OpenAI, Claude, etc.
-from api.chat_orchestrator_endpoint import router as chat_orchestrator_router
-app.include_router(chat_orchestrator_router)  # Full LLM orchestrator for chats with world model integration
 app.include_router(ingestion_integration_router)  # Complete autonomous cycle with self-healing
 app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
 app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
-from api.self_healing_training_api import router as self_healing_training_router
-app.include_router(self_healing_training_router)  # Self-Healing Training System - continuous learning
-from api.training_knowledge_api import router as training_knowledge_router
-app.include_router(training_knowledge_router)  # Training Knowledge Tracker - what Grace has learned
 app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
 app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
-app.include_router(multimodal_router)  # Multimodal API - Vision, Voice, Audio, Video with Genesis Key tracking
 app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
 app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
 app.include_router(codebase_router)  # Codebase Browser - file browsing, code search, commit history, analysis
-app.include_router(nlp_descriptions_router)  # NLP File Descriptions - makes every file/folder no-code friendly
 app.include_router(knowledge_base_router)  # Knowledge Base Connectors - external knowledge sources
 app.include_router(kpi_router)  # KPI Dashboard - system health and performance metrics
 app.include_router(proactive_learning_router)  # Proactive Learning - task queue and autonomous learning
@@ -966,115 +521,48 @@ app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-t
 app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
 app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
 app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
+app.include_router(scraping_router)  # Web Scraping - URL scraping and crawling
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
-app.include_router(grace_os_router)  # Grace OS - Self-healing IDE, Genesis IDE, autonomous actions
-app.include_router(timesense_router)  # TimeSense - Time & Cost Model with physics-based time predictions
-app.include_router(enterprise_genesis_router)  # Enterprise Genesis Key Storage - Scalable storage for 100k+ keys
-app.include_router(immutable_audit_router)  # Immutable Audit Trail - Cryptographically linked audit records that cannot disappear
-app.include_router(system_specs_router)  # System Specifications - hardware constraints for LLMs and external agents
-app.include_router(enterprise_router)  # Enterprise Analytics - All enterprise system analytics and health monitoring
-app.include_router(component_testing_router)  # Comprehensive Component Testing - Test all components and send bugs to self-healing
-app.include_router(coding_agent_router)  # Enterprise Coding Agent - Same Quality & Standards as Self-Healing System
-app.include_router(healing_coding_bridge_router)  # Bidirectional Communication: Self-Healing ↔ Coding Agent
-app.include_router(external_knowledge_router)  # External Knowledge Extraction - GitHub, AI Research, LLMs
-app.include_router(benchmark_router)  # Benchmark API - HumanEval, BigCodeBench, MBPP, etc.
-app.include_router(semantic_refactoring_router)  # Semantic Refactoring - Multi-file symbol rename, module moves
-app.include_router(healing_scheduler_router)  # Healing Scheduler - Persistent queue, file watcher, scheduled jobs
-app.include_router(oracle_hub_router)  # Unified Oracle Hub - Central Intelligence Ingestion from ALL sources
-app.include_router(reverse_knn_router)  # Reverse KNN Proactive Learning - Uses gaps to fetch more knowledge
-app.include_router(enhanced_learning_router)  # Enhanced Learning - Calibration, Correlation, LLM Orchestration
 
-# Add Genesis Key middleware for automatic tracking
-app.add_middleware(GenesisKeyMiddleware)
+# Add Genesis Key middleware for automatic tracking (if not disabled)
+if not (settings and settings.DISABLE_GENESIS_TRACKING):
+    app.add_middleware(GenesisKeyMiddleware)
+    print("[GENESIS] Genesis Key tracking enabled")
+else:
+    print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
 
-# ==================== Health Check Endpoints ====================
-
-@app.get("/health/live", tags=["Health"])
-async def health_live():
-    """
-    Liveness check endpoint - indicates the process is running.
-    
-    This is a lightweight check used by the launcher to verify the backend
-    process has started and is accepting connections. It does not check
-    service health - use /health for that.
-    
-    Returns:
-        dict: Simple status indicating the process is alive
-    """
-    return {"status": "alive"}
-
+# ==================== Health Check Endpoint ====================
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check():
     """
-    Optimized health check endpoint with parallel checks and caching.
+    Health check endpoint.
     
     Returns:
         HealthResponse: Status of the API and Ollama service
-        
-    Status values:
-    - "healthy": All services running
-    - "degraded": Backend functional but optional services (Ollama, Qdrant) unavailable
-    - "unhealthy": NEVER RETURNED - if this endpoint responds, backend is functional
     """
-    # CRITICAL: Backend is ALWAYS functional if this endpoint responds
-    # NEVER return "unhealthy" - if we can respond, backend works
-    
     try:
-        # Use optimized parallel health checker
-        from cognitive.optimized_health_checker import get_optimized_health_checker
+        client = get_ollama_client()
+        ollama_running = client.is_running()
         
-        checker = get_optimized_health_checker(cache_ttl=30)
-        service_health = await checker.check_all_services_parallel()
+        if ollama_running:
+            models = client.get_all_models()
+            models_available = len(models)
+            status = "healthy"
+        else:
+            models_available = 0
+            status = "unhealthy"
         
-        # Extract service statuses
-        ollama_status = service_health.get("ollama", {}).get("status", "unknown")
-        qdrant_status = service_health.get("qdrant", {}).get("status", "unknown")
-        database_status = service_health.get("database", {}).get("status", "unknown")
-        
-        # Determine overall status
-        ollama_running = ollama_status == "healthy"
-        
-        # Backend is always functional - Ollama is optional
-        # Return "healthy" if Ollama is running, "degraded" if not
-        # ABSOLUTELY NEVER return "unhealthy" - if this endpoint responds, backend works
-        status = "healthy" if ollama_running else "degraded"
-        
-        # Triple-check: ensure we NEVER return "unhealthy"
-        if status == "unhealthy" or status not in ["healthy", "degraded"]:
-            status = "degraded"
-        
-        response = HealthResponse(
-            status=status,
-            ollama_running=ollama_running,
-            models_available=0  # Don't enumerate - too slow
-        )
-        
-        # Final safety check on the response object itself
-        if response.status == "unhealthy":
-            response.status = "degraded"
-        
-        return response
-        
-    except Exception as e:
-        # Fallback to simple check if optimized checker fails
-        logger.warning(f"[HEALTH] Optimized check failed, using fallback: {e}")
-        
-        # Simple fallback
-        try:
-            import requests
-            from settings import settings
-            ollama_url = getattr(settings, 'OLLAMA_URL', 'http://localhost:11434')
-            response = requests.get(ollama_url, timeout=0.5)
-            ollama_running = response.status_code == 200
-        except Exception:
-            ollama_running = False
-        
-        status = "healthy" if ollama_running else "degraded"
         return HealthResponse(
             status=status,
             ollama_running=ollama_running,
+            models_available=models_available
+        )
+    except Exception as e:
+        return HealthResponse(
+            status="unhealthy",
+            ollama_running=False,
             models_available=0
         )
 
@@ -1153,13 +641,7 @@ async def chat(request: ChatRequest):
     """
     try:
         # Get the Ollama client
-        try:
-            client = get_ollama_client()
-        except Exception as e:
-            raise HTTPException(
-                status_code=503,
-                detail=f"Failed to initialize Ollama client: {str(e)}"
-            )
+        client = get_ollama_client()
         
         # Check if Ollama is running
         if not client.is_running():
@@ -1228,7 +710,7 @@ async def chat(request: ChatRequest):
                     for chunk in retrieval_result
                 ]
         except Exception as e:
-            logger.info(f"[WARN] RAG retrieval error: {str(e)}")
+            print(f"[WARN] RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         # Core enforcement: No knowledge = reject response
@@ -1676,39 +1158,9 @@ async def add_message_to_chat(chat_id: int, request: MessageCreateRequest, sessi
     except HTTPException:
         raise
     except Exception as e:
-        # Include context in error message for better debugging
-        error_msg = f"Error adding message to chat {chat_id}"
-        if hasattr(request, 'role') and hasattr(request, 'content'):
-            error_msg += f" (role: {request.role}, content_length: {len(request.content) if request.content else 0})"
-        
-        # Feed error to self-healing pipeline
-        try:
-            from cognitive.error_learning_integration import get_error_learning_integration
-            from database.session import SessionLocal
-            error_session = SessionLocal()
-            try:
-                error_learning = get_error_learning_integration(session=error_session)
-                error_learning.record_error(
-                    error=e,
-                    context={
-                        "location": f"api.chat_messages",
-                        "reason": "Error adding message to chat",
-                        "method": "POST /chats/{chat_id}/messages",
-                        "chat_id": chat_id,
-                        "role": getattr(request, 'role', None),
-                        "content_length": len(request.content) if hasattr(request, 'content') and request.content else 0
-                    },
-                    component="api.chat_messages",
-                    severity="medium"
-                )
-            finally:
-                error_session.close()
-        except Exception:
-            pass  # Don't fail API call if error learning fails
-        
         raise HTTPException(
             status_code=500,
-            detail=f"{error_msg}: {str(e)}"
+            detail=f"Error adding message: {str(e)}"
         )
 
 
@@ -1799,14 +1251,6 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 detail=f"Chat {chat_id} not found"
             )
         
-        # Verify Ollama is running
-        client = get_ollama_client()
-        if not client.is_running():
-            raise HTTPException(
-                status_code=503,
-                detail="Ollama service is not running"
-            )
-        
         # Add user message to chat
         user_message = history_repo.add_message(
             chat_id=chat_id,
@@ -1880,13 +1324,13 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                     for chunk in retrieval_result
                 ]
         except Exception as e:
-            logger.info(f"[WARN] RAG retrieval error: {str(e)}")
+            print(f"[WARN] RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         # Core enforcement: No knowledge in database = reject response
         if not rag_context:
-            # Delete the user message since we're rejecting the query
-            session.delete(user_message)
+            # KEEP THE MESSAGE so history is preserved
+            # session.delete(user_message)
             session.commit()
 
             # Context-aware rejection message
@@ -1898,6 +1342,15 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             raise HTTPException(
                 status_code=404,
                 detail=detail_msg
+            )
+
+        # ==================== VERIFY OLLAMA IS RUNNING ====================
+        # Only check Ollama after retrieval succeeds (so auto-search can work)
+        client = get_ollama_client()
+        if not client.is_running():
+            raise HTTPException(
+                status_code=503,
+                detail="Ollama service is not running. Please start Ollama to generate responses."
             )
 
         # Get chat history for context
@@ -1937,33 +1390,6 @@ IMPORTANT CONSTRAINTS:
         # Inject RAG context into the user message
         augmented_content = build_rag_prompt(request.content, rag_context)
         messages.append({"role": "user", "content": augmented_content})
-        
-        # TimeSense: Estimate LLM generation time before starting
-        time_estimate = None
-        try:
-            from timesense.integration import TimeEstimator
-            if TimeEstimator:
-                # Estimate tokens (rough: 4 chars per token)
-                prompt_tokens = len(augmented_content.split())
-                max_output_tokens = settings.MAX_NUM_PREDICT if settings else 512
-                
-                llm_estimate = TimeEstimator.estimate_llm_response(
-                    prompt_tokens=prompt_tokens,
-                    max_output_tokens=max_output_tokens,
-                    model_name=chat.model
-                )
-                
-                if llm_estimate:
-                    time_estimate = {
-                        'estimated_ms': llm_estimate.p50_ms,
-                        'estimated_range': f"{llm_estimate.p50_seconds:.1f}-{llm_estimate.p95_seconds:.1f}s",
-                        'human_readable': llm_estimate.human_readable(),
-                        'confidence': llm_estimate.confidence,
-                        'confidence_level': llm_estimate.confidence_level.value
-                    }
-        except Exception as e:
-            # TimeSense not available or error - continue without estimate
-            pass
         
         # Generate response with strict constraints
         start_time = time.time()
@@ -2137,37 +1563,6 @@ async def root():
     }
 
 
-@app.get("/version", tags=["System"])
-async def get_version():
-    """
-    Version endpoint for launcher handshake.
-    
-    Returns version information for compatibility checking.
-    This endpoint is used by the launcher to verify protocol compatibility.
-    
-    Returns:
-        dict: Version information including backend, embeddings, and protocol versions
-    """
-    # Get embedding model version if available
-    embeddings_version = None
-    try:
-        from embedding import get_embedding_model
-        embedding_model = get_embedding_model()
-        if embedding_model and hasattr(embedding_model, 'get_model_info'):
-            model_info = embedding_model.get_model_info()
-            embeddings_version = model_info.get("version", "1.0.0")
-    except Exception:
-        # Embeddings not loaded yet, that's ok
-        pass
-    
-    return {
-        "version": "1.0.0",  # Backend API version
-        "protocol_version": "1.0",  # API protocol version
-        "embeddings_version": embeddings_version,  # Embeddings service version
-        "name": "Grace API"
-    }
-
-
 # ==================== Directory-Scoped Chat ====================
 
 class DirectoryPromptRequest(BaseModel):
@@ -2288,7 +1683,7 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
                     ]
         
         except Exception as e:
-            logger.info(f"[WARN] Directory RAG retrieval error: {str(e)}")
+            print(f"[WARN] Directory RAG retrieval error: {str(e)}")
         
         # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
         if not rag_context:
@@ -2339,7 +1734,7 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         raise
     except Exception as e:
         import traceback
-        logger.info(f"Error in directory chat: {str(e)}")
+        print(f"Error in directory chat: {str(e)}")
         traceback.print_exc()
         raise HTTPException(
             status_code=500,
@@ -2347,74 +1742,15 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         )
 
 
-# ==================== Error Pattern Stats Endpoint ====================
-
-@app.get("/api/error-patterns", tags=["Self-Healing"])
-async def get_error_patterns():
-    """
-    Get current error pattern statistics from the self-healing middleware.
-    
-    Returns patterns of recurring errors that are being tracked for
-    automatic escalation and healing.
-    """
-    try:
-        patterns = get_error_pattern_stats()
-        return {
-            "status": "ok",
-            "patterns": patterns,
-            "total_patterns": len(patterns),
-            "escalated_count": sum(1 for p in patterns.values() if p.get("escalated", False))
-        }
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e),
-            "patterns": {}
-        }
-
-
 # ==================== Run ====================
 
 if __name__ == "__main__":
     import uvicorn
-    import asyncio
     
-    # On Windows, handle event loop manually to avoid asyncio conflicts
-    # On other platforms, use standard uvicorn.run
-    if sys.platform == "win32":
-        # Use Config and Server with manual event loop handling
-        # Pass app object directly (we're already in this module)
-        config = uvicorn.Config(
-            app=app,  # Pass app object directly instead of string
-            host="0.0.0.0",
-            port=8000,
-            reload=False,  # Disabled on Windows
-            log_level="info"
-        )
-        server = uvicorn.Server(config)
-        
-        # Manually handle the event loop to avoid asyncio.run() issues on Windows
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_closed():
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-        
-        try:
-            loop.run_until_complete(server.serve())
-        except KeyboardInterrupt:
-            pass
-        finally:
-            loop.close()
-    else:
-        # Standard uvicorn.run on non-Windows platforms
-        uvicorn.run(
-            "app:app",
-            host="0.0.0.0",
-            port=8000,
-            reload=True,
-            workers=1
-        )
+    # Run the app
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )

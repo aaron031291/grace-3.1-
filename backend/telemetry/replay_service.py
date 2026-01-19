@@ -1,12 +1,23 @@
+"""
+Replay service for Grace's self-modeling mechanism.
+
+Enables replaying failed or anomalous operations with the same inputs
+to debug issues and compare results.
+"""
 import json
 import hashlib
 import logging
 from datetime import datetime
 from typing import Optional, Dict, Any, Callable
 from sqlalchemy.orm import Session
-from models.telemetry_models import OperationLog, OperationReplay, OperationStatus
+
+from models.telemetry_models import (
+    OperationLog, OperationReplay, OperationStatus
+)
 from database.session import get_session
+
 logger = logging.getLogger(__name__)
+
 
 class ReplayService:
     """

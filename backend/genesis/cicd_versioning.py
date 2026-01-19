@@ -1,3 +1,10 @@
+"""
+CI/CD Pipeline Version Control
+==============================
+Version control for all pipeline mutations.
+Tracks every change with Genesis Keys for full audit trail.
+"""
+
 import json
 import hashlib
 import os
@@ -10,6 +17,7 @@ import shutil
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class MutationType(str, Enum):
     """Types of pipeline mutations."""

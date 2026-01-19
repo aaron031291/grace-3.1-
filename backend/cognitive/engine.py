@@ -1,23 +1,27 @@
+"""
+Core Cognitive Engine for Grace.
+
+Implements the Central Cortex that orchestrates OODA loops,
+enforces invariants, and manages decision-making.
+"""
 import uuid
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
+
 from .ooda import OODALoop, OODAPhase
 from .ambiguity import AmbiguityLedger, AmbiguityLevel
 from .invariants import InvariantValidator
 from .decision_log import DecisionLogger
 
-logger = logging.getLogger(__name__)
 
 class DecisionType(str, Enum):
     """Types of decisions Grace can make."""
     REVERSIBLE = "reversible"
     IRREVERSIBLE = "irreversible"
-    PROBABILISTIC = "probabilistic"  # DEPRECATED: Use DETERMINISTIC instead
+    PROBABILISTIC = "probabilistic"
     DETERMINISTIC = "deterministic"
-    ULTRA_DETERMINISTIC = "ultra_deterministic"  # Maximum determinism with proofs
 
 
 @dataclass
@@ -64,7 +68,7 @@ class DecisionContext:
     future_flexibility_metric: float = 1.0
 
     # Invariant 11: Time Bounds
-    planning_start: datetime = field(default_factory=lambda: datetime.now(UTC))
+    planning_start: datetime = field(default_factory=datetime.utcnow)
     planning_deadline: Optional[datetime] = None
     decision_freeze_point: Optional[datetime] = None
 
@@ -75,7 +79,7 @@ class DecisionContext:
 
     # Metadata
     parent_decision_id: Optional[str] = None
-    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    created_at: datetime = field(default_factory=datetime.utcnow)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -106,9 +110,6 @@ class CognitiveEngine:
 
         # Active decision contexts
         self._active_contexts: Dict[str, DecisionContext] = {}
-        
-        # Degradation tracking for monitoring
-        self._degradation_count: Dict[str, int] = {}
 
     def begin_decision(
         self,
@@ -233,61 +234,13 @@ class CognitiveEngine:
         alternatives = generate_alternatives()[:max_alternatives]
         context.alternative_paths = alternatives
 
-        # Score each alternative (with TimeSense integration)
+        # Score each alternative
         scored_alternatives = []
         for alt in alternatives:
             score = self._score_alternative(context, alt)
-            
-            # TimeSense: Get time estimates for alternative if available
-            time_estimate = None
-            time_awareness = {}
-            if 'primitive_type' in alt or 'operation_type' in alt:
-                try:
-                    from timesense.integration import TimeEstimator
-                    from timesense.primitives import PrimitiveType
-                    
-                    # Try to estimate time for this alternative
-                    if 'primitive_type' in alt:
-                        from timesense.integration import predict_time
-                        ptype = PrimitiveType(alt['primitive_type']) if isinstance(alt['primitive_type'], str) else alt['primitive_type']
-                        size = alt.get('size', 1.0)
-                        time_estimate = predict_time(
-                            primitive_type=ptype,
-                            size=size,
-                            model_name=alt.get('model_name')
-                        )
-                    
-                    if time_estimate:
-                        time_awareness = {
-                            'estimated_time_ms': time_estimate.p50_ms,
-                            'time_confidence': time_estimate.confidence,
-                            'time_human_readable': time_estimate.human_readable()
-                        }
-                        
-                        # Check if alternative exceeds deadline
-                        if context.planning_deadline:
-                            deadline_ms = (context.planning_deadline - datetime.now(UTC)).total_seconds() * 1000
-                            if time_estimate.p95_ms > deadline_ms:
-                                # Penalize alternatives that exceed deadline
-                                score *= 0.5
-                                time_awareness['exceeds_deadline'] = True
-                except Exception as e:
-                    # TimeSense not available or error - continue without time awareness
-                    logger.warning(
-                        f"[COGNITIVE ENGINE] TimeSense unavailable for decision {context.decision_id}: {e}. "
-                        f"Continuing without time awareness - deadline checking disabled."
-                    )
-                    # Track degradation for monitoring
-                    if hasattr(self, '_degradation_count'):
-                        self._degradation_count['timesense_unavailable'] = \
-                            self._degradation_count.get('timesense_unavailable', 0) + 1
-                    else:
-                        self._degradation_count = {'timesense_unavailable': 1}
-            
             scored_alternatives.append({
                 'alternative': alt,
                 'score': score,
-                'time_awareness': time_awareness,
                 'breakdown': {
                     'immediate_value': alt.get('immediate_value', 0),
                     'future_options': alt.get('future_options', 0),
@@ -350,27 +303,12 @@ class CognitiveEngine:
                         f"Invariant violation: {violation}"
                     )
 
-        # Execute action with TimeSense tracking
+        # Execute action
         if dry_run:
             result = {"dry_run": True, "would_execute": str(action)}
         else:
-            # Estimate action execution time if possible
-            action_size = context.metadata.get('action_size', 1.0)
-            action_primitive = context.metadata.get('action_primitive_type')
-            
             try:
-                # Try to track with TimeSense if primitive type is known
-                if TIMESENSE_AVAILABLE and action_primitive:
-                    try:
-                        ptype = PrimitiveType(action_primitive) if isinstance(action_primitive, str) else action_primitive
-                        with track_operation(ptype, action_size, task_id=context.decision_id):
-                            result = self.ooda.act(action)
-                    except Exception as e:
-                        logger.debug(f"[TIMESENSE] Could not track action: {e}")
-                        result = self.ooda.act(action)
-                else:
-                    result = self.ooda.act(action)
-                
+                result = self.ooda.act(action)
                 context.metadata['action_result'] = result
                 context.metadata['action_status'] = 'success'
             except Exception as e:
@@ -393,7 +331,6 @@ class CognitiveEngine:
         Score an alternative path based on multiple criteria.
 
         Implements Invariant 10: Optionality > Optimization.
-        TimeSense Integration: Includes time efficiency in scoring.
 
         Args:
             context: Decision context
@@ -416,38 +353,11 @@ class CognitiveEngine:
         # Bonus for reversibility (Invariant 3)
         reversibility_bonus = 1.5 if reversibility > 0.8 else 1.0
 
-        base_score = (
+        score = (
             immediate_value +
             (future_options * option_value_factor) +
             (simplicity * complexity_penalty) * reversibility_bonus
         )
-        
-        # TimeSense Integration: Factor in time efficiency (20% weight)
-        time_efficiency_factor = 1.0
-        time_confidence_factor = 1.0
-        
-        # Check if alternative has time estimate
-        if 'estimated_time_ms' in alternative:
-            estimated_time = alternative.get('estimated_time_ms', float('inf'))
-            time_confidence = alternative.get('time_confidence', 0.5)
-            
-            # Prefer faster alternatives (inverse time relationship)
-            # Normalize: 0-10s = full score, 10-60s = 0.8x, 60s+ = 0.5x
-            if estimated_time < 10000:  # < 10 seconds
-                time_efficiency_factor = 1.0
-            elif estimated_time < 60000:  # < 1 minute
-                time_efficiency_factor = 0.8
-            else:  # > 1 minute
-                time_efficiency_factor = 0.5
-            
-            # Factor in time prediction confidence
-            time_confidence_factor = 0.8 + (time_confidence * 0.2)  # 0.8-1.0 range
-            
-            # Apply time factors (20% of score affected by time)
-            score = base_score * (0.8 + (time_efficiency_factor * time_confidence_factor * 0.2))
-        else:
-            # No time estimate - use base score
-            score = base_score
 
         return score
 
@@ -466,7 +376,7 @@ class CognitiveEngine:
         if context.decision_freeze_point is None:
             return False
 
-        return datetime.now(UTC) >= context.decision_freeze_point
+        return datetime.utcnow() >= context.decision_freeze_point
 
     def check_recursion_bounds(self, context: DecisionContext) -> bool:
         """
@@ -525,12 +435,3 @@ class CognitiveEngine:
 
         if context.decision_id in self._active_contexts:
             del self._active_contexts[context.decision_id]
-
-    def get_degradation_metrics(self) -> Dict[str, int]:
-        """
-        Get current degradation metrics for monitoring.
-        
-        Returns:
-            Dictionary mapping degradation type to count
-        """
-        return self._degradation_count.copy()

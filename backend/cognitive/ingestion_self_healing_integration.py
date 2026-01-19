@@ -1,15 +1,36 @@
+"""
+Ingestion + Self-Healing + Autonomous Learning Integration
+
+This connects:
+1. File ingestion → Genesis Keys track what/where/when/who/how/why
+2. Autonomous learning learns from ingested content
+3. Self-healing monitors and fixes ingestion/learning issues
+4. Mirror observes patterns and improves the process
+5. Complete iteration cycle in sandbox
+
+Every ingestion creates Genesis Keys that trigger:
+- Autonomous study of the content
+- Health monitoring of ingestion process
+- Mirror observation of learning patterns
+- Self-healing if issues occur
+- Continuous improvement loop
+"""
+
 import logging
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from datetime import datetime
 from sqlalchemy.orm import Session
+
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from genesis.genesis_key_service import get_genesis_service
 from cognitive.autonomous_healing_system import get_autonomous_healing, TrustLevel
 from cognitive.mirror_self_modeling import get_mirror_system
 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
 from cognitive.learning_subagent_system import LearningOrchestrator
+
 logger = logging.getLogger(__name__)
+
 
 class IngestionSelfHealingIntegration:
     """

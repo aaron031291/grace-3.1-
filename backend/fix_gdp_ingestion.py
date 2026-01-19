@@ -14,12 +14,12 @@ from models.database_models import Document, DocumentChunk
 from sqlalchemy.orm import sessionmaker
 from pathlib import Path
 
-logger.info("=" * 80)
-logger.info("FIX: GDP DOCUMENT RE-INGESTION")
-logger.info("=" * 80)
+print("=" * 80)
+print("FIX: GDP DOCUMENT RE-INGESTION")
+print("=" * 80)
 
 # Initialize database
-logger.info("\n1. Initializing database...")
+print("\n1. Initializing database...")
 db_type = DatabaseType(settings.DATABASE_TYPE) if settings else DatabaseType.SQLITE
 db_config = DatabaseConfig(
     db_type=db_type,
@@ -34,7 +34,7 @@ SessionLocal = sessionmaker(bind=DatabaseConnection.get_engine())
 db = SessionLocal()
 
 # Step 1: Check for orphaned vectors
-logger.info("\n2. Checking for orphaned vectors...")
+print("\n2. Checking for orphaned vectors...")
 orphaned_vector_ids = []
 for vector_id in range(2000, 2010):
     chunk = db.query(DocumentChunk).filter(
@@ -44,10 +44,10 @@ for vector_id in range(2000, 2010):
         orphaned_vector_ids.append(vector_id)
 
 if orphaned_vector_ids:
-    logger.info(f"   Found {len(orphaned_vector_ids)} orphaned vectors: {orphaned_vector_ids}")
+    print(f"   Found {len(orphaned_vector_ids)} orphaned vectors: {orphaned_vector_ids}")
     
     # Delete orphaned vectors from Qdrant
-    logger.info(f"\n3. Removing orphaned vectors from Qdrant...")
+    print(f"\n3. Removing orphaned vectors from Qdrant...")
     qdrant = get_qdrant_client()
     try:
         for vector_id in orphaned_vector_ids:
@@ -55,18 +55,18 @@ if orphaned_vector_ids:
                 collection_name="documents",
                 vector_ids=[vector_id],
             )
-        logger.info(f"   ✓ Removed {len(orphaned_vector_ids)} orphaned vectors")
+        print(f"   ✓ Removed {len(orphaned_vector_ids)} orphaned vectors")
     except Exception as e:
-        logger.info(f"   ✗ Error removing vectors: {e}")
+        print(f"   ✗ Error removing vectors: {e}")
 else:
-    logger.info("   No orphaned vectors found")
+    print("   No orphaned vectors found")
 
 # Step 2: Re-ingest GDP document
-logger.info("\n4. Re-ingesting GDP document...")
+print("\n4. Re-ingesting GDP document...")
 gdp_path = Path("/home/umer/Public/projects/grace_3/backend/knowledge_base/forensic/gdp_volatility.pdf")
 
 if gdp_path.exists():
-    logger.info(f"   Found GDP file: {gdp_path}")
+    print(f"   Found GDP file: {gdp_path}")
     
     # Get file manager
     file_manager = get_file_manager()
@@ -102,27 +102,27 @@ if gdp_path.exists():
     result = result_obj
     
     if result.success:
-        logger.info(f"   ✓ Re-ingestion successful")
-        logger.info(f"     Document ID: {result.document_id}")
-        logger.info(f"     Message: {result.message}")
+        print(f"   ✓ Re-ingestion successful")
+        print(f"     Document ID: {result.document_id}")
+        print(f"     Message: {result.message}")
         
         # Verify in database
         doc = db.query(Document).filter(Document.id == result.document_id).first()
         if doc:
-            logger.info(f"\n5. Verification:")
-            logger.info(f"   ✓ Document found in database")
-            logger.info(f"     ID: {doc.id}")
-            logger.info(f"     Filename: {doc.filename}")
-            logger.info(f"     Status: {doc.status}")
+            print(f"\n5. Verification:")
+            print(f"   ✓ Document found in database")
+            print(f"     ID: {doc.id}")
+            print(f"     Filename: {doc.filename}")
+            print(f"     Status: {doc.status}")
             chunk_count = db.query(DocumentChunk).filter(DocumentChunk.document_id == doc.id).count()
-            logger.info(f"     Chunks: {chunk_count}")
+            print(f"     Chunks: {chunk_count}")
     else:
-        logger.info(f"   ✗ Re-ingestion failed: {result.error}")
+        print(f"   ✗ Re-ingestion failed: {result.error}")
 else:
-    logger.info(f"   ✗ GDP file not found at {gdp_path}")
+    print(f"   ✗ GDP file not found at {gdp_path}")
 
-logger.info("\n" + "=" * 80)
-logger.info("FIX COMPLETE")
-logger.info("=" * 80)
+print("\n" + "=" * 80)
+print("FIX COMPLETE")
+print("=" * 80)
 
 db.close()

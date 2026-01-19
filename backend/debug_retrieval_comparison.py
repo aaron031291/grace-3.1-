@@ -12,9 +12,9 @@ try:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
-    logger.info("=" * 80)
-    logger.info("DOCUMENT COMPARISON: WORKING vs NON-WORKING")
-    logger.info("=" * 80)
+    print("=" * 80)
+    print("DOCUMENT COMPARISON: WORKING vs NON-WORKING")
+    print("=" * 80)
     
     # Get all documents
     cursor.execute("""
@@ -26,19 +26,19 @@ try:
     
     docs = cursor.fetchall()
     
-    logger.info(f"\nFound {len(docs)} documents:\n")
+    print(f"\nFound {len(docs)} documents:\n")
     
     for i, (doc_id, filename, status, chunks, text_len, conf_score, 
             source_rel, content_qual) in enumerate(docs, 1):
-        logger.info(f"{i}. {filename}")
-        logger.info(f"   ID: {doc_id}")
-        logger.info(f"   Status: {status}")
-        logger.info(f"   Chunks: {chunks}")
-        logger.info(f"   Text length: {text_len}")
-        logger.info(f"   Confidence scores:")
-        logger.info(f"     - Overall: {conf_score:.3f}")
-        logger.info(f"     - Source reliability: {source_rel:.3f}")
-        logger.info(f"     - Content quality: {content_qual:.3f}")
+        print(f"{i}. {filename}")
+        print(f"   ID: {doc_id}")
+        print(f"   Status: {status}")
+        print(f"   Chunks: {chunks}")
+        print(f"   Text length: {text_len}")
+        print(f"   Confidence scores:")
+        print(f"     - Overall: {conf_score:.3f}")
+        print(f"     - Source reliability: {source_rel:.3f}")
+        print(f"     - Content quality: {content_qual:.3f}")
         
         # Check if chunks exist and have vectors
         cursor.execute("""
@@ -52,15 +52,15 @@ try:
         """, (doc_id,))
         chunks_with_vectors = cursor.fetchone()[0]
         
-        logger.info(f"   Chunks in DB: {actual_chunks}")
-        logger.info(f"   Chunks with vectors: {chunks_with_vectors}")
+        print(f"   Chunks in DB: {actual_chunks}")
+        print(f"   Chunks with vectors: {chunks_with_vectors}")
         
         if actual_chunks == 0:
-            logger.info(f"   ⚠️  WARNING: No chunks found in database!")
+            print(f"   ⚠️  WARNING: No chunks found in database!")
         elif chunks_with_vectors == 0:
-            logger.info(f"   ⚠️  WARNING: No vector IDs assigned!")
+            print(f"   ⚠️  WARNING: No vector IDs assigned!")
         else:
-            logger.info(f"   ✓ All chunks have vectors")
+            print(f"   ✓ All chunks have vectors")
         
         # Sample first chunk
         cursor.execute("""
@@ -73,19 +73,19 @@ try:
         
         if chunk:
             chunk_id, text, chunk_conf, vector_id = chunk
-            logger.info(f"   First chunk:")
-            logger.info(f"     - ID: {chunk_id}")
-            logger.info(f"     - Vector ID: {vector_id}")
-            logger.info(f"     - Confidence: {chunk_conf:.3f}")
-            logger.info(f"     - Text length: {len(text)}")
-            logger.info(f"     - Text preview: {text[:60].replace(chr(10), ' ')}...")
+            print(f"   First chunk:")
+            print(f"     - ID: {chunk_id}")
+            print(f"     - Vector ID: {vector_id}")
+            print(f"     - Confidence: {chunk_conf:.3f}")
+            print(f"     - Text length: {len(text)}")
+            print(f"     - Text preview: {text[:60].replace(chr(10), ' ')}...")
         
-        logger.info()
+        print()
     
     # Now test if the issue is query-specific
-    logger.info("\n" + "=" * 80)
-    logger.info("TESTING RETRIEVAL FOR EACH DOCUMENT")
-    logger.info("=" * 80)
+    print("\n" + "=" * 80)
+    print("TESTING RETRIEVAL FOR EACH DOCUMENT")
+    print("=" * 80)
     
     try:
         from embedding import EmbeddingModel
@@ -94,10 +94,10 @@ try:
         logging.basicConfig(level=logging.WARNING)
         logging.getLogger('pdfminer').setLevel(logging.WARNING)
         
-        logger.info("\nLoading embedding model...")
+        print("\nLoading embedding model...")
         embedder = EmbeddingModel()
         qdrant = get_qdrant_client()
-        logger.info("✓ Loaded\n")
+        print("✓ Loaded\n")
         
         # Test different queries
         test_queries = [
@@ -108,7 +108,7 @@ try:
         ]
         
         for doc_id, filename, _, _, _, _, _, _ in docs:
-            logger.info(f"\n📄 Testing retrieval for: {filename}")
+            print(f"\n📄 Testing retrieval for: {filename}")
             
             # Get a sample chunk text to use as query
             cursor.execute("""
@@ -119,7 +119,7 @@ try:
             
             if result:
                 sample_text = result[0][:50]
-                logger.info(f"   Using sample text: '{sample_text}...'")
+                print(f"   Using sample text: '{sample_text}...'")
                 
                 # Generate embedding and search
                 try:
@@ -135,21 +135,21 @@ try:
                     matching = sum(1 for r in search_results 
                                  if r['payload']['document_id'] == doc_id)
                     
-                    logger.info(f"   ✓ Search returned {len(search_results)} results")
-                    logger.info(f"   ✓ {matching} results from this document")
+                    print(f"   ✓ Search returned {len(search_results)} results")
+                    print(f"   ✓ {matching} results from this document")
                     
                     if matching == 0:
-                        logger.info(f"   ⚠️  Document chunks not in search results!")
+                        print(f"   ⚠️  Document chunks not in search results!")
                 
                 except Exception as e:
-                    logger.info(f"   ❌ Search error: {e}")
+                    print(f"   ❌ Search error: {e}")
             
     except Exception as e:
-        logger.info(f"⚠️  Could not test retrieval: {e}")
+        print(f"⚠️  Could not test retrieval: {e}")
     
     conn.close()
 
 except Exception as e:
-    logger.info(f"Error: {e}")
+    print(f"Error: {e}")
     import traceback
     traceback.print_exc()

@@ -1,26 +1,59 @@
+"""
+Text ingestion API endpoints.
+Provides REST endpoints for uploading and managing documents.
+"""
+
 from fastapi import APIRouter, HTTPException, File, UploadFile, Form, Query, Depends, Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Any
 from datetime import datetime
 import logging
+
 from ingestion.service import TextIngestionService
 from embedding import get_embedding_model
 from vector_db.client import get_qdrant_client
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/ingest", tags=["ingestion"])
+# Create router
+router = APIRouter(prefix="/ingest", tags=["Document Ingestion"])
+
+# Global ingestion service instance
+_ingestion_service: Optional[TextIngestionService] = None
 
 
-def get_ingestion_service() -> TextIngestionService:
-    """Get or create TextIngestionService instance for dependency injection."""
-    embedding_model = get_embedding_model()
-    return TextIngestionService(
-        collection_name="documents",
-        chunk_size=512,
-        chunk_overlap=100,
-        embedding_model=embedding_model,
-    )
+def get_ingestion_service() -> Optional[TextIngestionService]:
+    """Get or create ingestion service.
+
+    Returns None if service cannot be initialized (e.g., in test environments
+    without embedding models). Endpoints should handle None gracefully.
+    """
+    global _ingestion_service
+
+    if _ingestion_service is None:
+        try:
+            print("[INGEST] Initializing ingestion service...")
+            # Use singleton instance to avoid loading model multiple times
+            embedding_model = get_embedding_model()
+            if embedding_model is None:
+                logger.warning("Embedding model not available, ingestion service disabled")
+                return None
+            print("[INGEST] [OK] Got embedding model (singleton)")
+            _ingestion_service = TextIngestionService(
+                collection_name="documents",
+                chunk_size=512,
+                chunk_overlap=50,
+                embedding_model=embedding_model,
+            )
+            print("[INGEST] [OK] Ingestion service created successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize ingestion service: {e}")
+            return None
+
+    return _ingestion_service
+
+
+# ==================== Pydantic Models ====================
 
 class IngestTextRequest(BaseModel):
     """Request model for text ingestion."""
@@ -129,35 +162,16 @@ async def ingest_text(
 
     try:
         print("Ingesting text document...")
-        
-        # TimeSense: Estimate ingestion time
-        text_length = len(request.text)
-        estimated_tokens = text_length // 4  # Rough approximation
-        
-        if TIMESENSE_AVAILABLE:
-            time_estimate = estimate_operation_time(
-                primitive_type=PrimitiveType.FILE_PROCESSING if PrimitiveType else None,
-                size=text_length,
-            )
-            if time_estimate:
-                logger.debug(f"[TIMESENSE] Ingestion estimate: {time_estimate.get('human_readable', 'N/A')}")
-        
-        # Track ingestion operation
-        with track_with_timesense(
-            primitive_type=PrimitiveType.FILE_PROCESSING if PrimitiveType else None,
-            size=text_length,
-            fallback_name="text_ingestion"
-        ):
-            document_id, message = service.ingest_text_fast(
-                text_content=request.text,
-                filename=request.filename,
-                source=request.source,
-                upload_method=request.upload_method,
-                source_type=request.source_type,
-                description=request.description,
-                tags=request.tags,
-                metadata=request.metadata,
-            )
+        document_id, message = service.ingest_text_fast(
+            text_content=request.text,
+            filename=request.filename,
+            source=request.source,
+            upload_method=request.upload_method,
+            source_type=request.source_type,
+            description=request.description,
+            tags=request.tags,
+            metadata=request.metadata,
+        )
         
         if document_id is None:
             raise HTTPException(status_code=400, detail=message)
@@ -228,15 +242,8 @@ async def ingest_file(
                 temp_path = temp_file.name
             
             try:
-                # TimeSense: Track file extraction
-                file_size = len(content)
-                with track_with_timesense(
-                    primitive_type=PrimitiveType.FILE_READ if PrimitiveType else None,
-                    size=file_size,
-                    fallback_name="file_extraction"
-                ):
-                    # Extract text using FileHandler
-                    text, error = FileHandler.extract_text(temp_path)
+                # Extract text using FileHandler
+                text, error = FileHandler.extract_text(temp_path)
                 
                 if error:
                     logger.error(f"[API_FILE_INGEST] Extraction failed: {error}")

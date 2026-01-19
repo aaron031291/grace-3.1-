@@ -1,21 +1,25 @@
+"""
+Learning Memory API Endpoints
+
+Provides access to learning memory system with trust scoring
+and integration with memory mesh.
+"""
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError, SQLAlchemyError
 from pathlib import Path
-import logging
-import traceback
-from datetime import datetime
+
 from database.session import get_session
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
 from cognitive.memory_mesh_snapshot import MemoryMeshSnapshot, create_memory_mesh_snapshot
 from settings import KNOWLEDGE_BASE_PATH
-from datetime import datetime
 
-logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/learning-memory", tags=["learning-memory"])
+router = APIRouter(prefix="/learning-memory", tags=["Learning Memory"])
+
+
+# ==================== Pydantic Models ====================
 
 class LearningExperienceRequest(BaseModel):
     """Request to record a learning experience."""
@@ -64,103 +68,28 @@ async def record_learning_experience(
     3. Feeds to episodic memory if high trust
     4. Creates/updates procedures if applicable
     """
-    start_time = datetime.utcnow()
-    duration_ms = None
-    
-    # Get time prediction if Timesense available
-    prediction = None
-    if TIMESENSE_AVAILABLE and track_operation:
-        try:
-            # Predict time for database insert operation
-            prediction = predict_time(PrimitiveType.DB_INSERT_SINGLE, 1)
-        except Exception:
-            pass
-    
     try:
-        # Track operation with Timesense if available
-        if TIMESENSE_AVAILABLE and track_operation:
-            with track_operation(PrimitiveType.DB_INSERT_SINGLE, 1, model_name=None):
-                mesh = MemoryMeshIntegration(session, Path(KNOWLEDGE_BASE_PATH))
-                example_id = mesh.ingest_learning_experience(
-                    experience_type=request.experience_type,
-                    context=request.context,
-                    action_taken=request.action_taken,
-                    outcome=request.outcome,
-                    expected_outcome=request.expected_outcome,
-                    source=request.source,
-                    user_id=request.user_id,
-                    genesis_key_id=request.genesis_key_id
-                )
-        else:
-            mesh = MemoryMeshIntegration(session, Path(KNOWLEDGE_BASE_PATH))
-            example_id = mesh.ingest_learning_experience(
-                experience_type=request.experience_type,
-                context=request.context,
-                action_taken=request.action_taken,
-                outcome=request.outcome,
-                expected_outcome=request.expected_outcome,
-                source=request.source,
-                user_id=request.user_id,
-                genesis_key_id=request.genesis_key_id
-            )
-        
-        duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-        
-        response = {
+        mesh = MemoryMeshIntegration(session, Path(KNOWLEDGE_BASE_PATH))
+
+        example_id = mesh.ingest_learning_experience(
+            experience_type=request.experience_type,
+            context=request.context,
+            action_taken=request.action_taken,
+            outcome=request.outcome,
+            expected_outcome=request.expected_outcome,
+            source=request.source,
+            user_id=request.user_id,
+            genesis_key_id=request.genesis_key_id
+        )
+
+        return {
             "success": True,
             "learning_example_id": example_id,
             "message": "Learning experience recorded and integrated into memory mesh"
         }
-        
-        # Add time estimate info if available
-        if prediction:
-            response["time_info"] = {
-                "predicted_ms": prediction.p50_ms,
-                "actual_ms": duration_ms,
-                "within_prediction": duration_ms <= prediction.p95_ms
-            }
-        
-        return response
 
-    except IntegrityError as e:
-        session.rollback()
-        duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-        log_database_error(
-            "record_learning_experience",
-            e,
-            {
-                "experience_type": request.experience_type,
-                "source": request.source,
-                "genesis_key_id": request.genesis_key_id,
-                "num_records": 1
-            },
-            duration_ms
-        )
-        raise HTTPException(
-            status_code=409,
-            detail=f"Database integrity error: {str(e)}. This may indicate duplicate data or constraint violation."
-        )
-    except OperationalError as e:
-        session.rollback()
-        duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-        log_database_error("record_learning_experience", e, {"experience_type": request.experience_type}, duration_ms)
-        raise HTTPException(
-            status_code=503,
-            detail=f"Database operational error: {str(e)}. Database may be unavailable or connection lost."
-        )
-    except DatabaseError as e:
-        session.rollback()
-        duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-        log_database_error("record_learning_experience", e, {"experience_type": request.experience_type}, duration_ms)
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {str(e)}. Check database logs for details."
-        )
     except Exception as e:
-        session.rollback()
-        duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-        log_database_error("record_learning_experience", e, {"experience_type": request.experience_type}, duration_ms)
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/user-feedback")
@@ -223,17 +152,7 @@ async def record_user_feedback(
             "message": "User feedback recorded and integrated"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -270,17 +189,7 @@ async def get_training_data(
             "data": training_data
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -322,17 +231,7 @@ async def export_training_data(
             "message": f"Training data exported to {filename}"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -357,17 +256,7 @@ async def get_memory_mesh_stats(session: Session = Depends(get_session)):
             "stats": stats
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -394,17 +283,7 @@ async def sync_learning_folders(session: Session = Depends(get_session)):
             "message": "Learning memory folders synced to memory mesh"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -440,17 +319,7 @@ async def update_from_feedback_loop(
             "message": "Trust scores updated based on outcome"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -472,17 +341,7 @@ async def decay_trust_scores(session: Session = Depends(get_session)):
             "message": "Trust scores decayed based on age"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -505,27 +364,15 @@ async def create_immutable_snapshot(
     - All episodic memories
     - All procedural memories
     - All extracted patterns
-    - Genesis Keys (provenance tracking)
-    - Decision logs (decision history)
-    - Genesis Memory Chains (learning narratives)
 
     The snapshot is saved as .genesis_immutable_memory_mesh.json
     and serves as a recoverable, permanent record.
     """
     try:
-        # Try to get decision logger if available
-        decision_logger = None
-        try:
-            from api.cognitive import get_decision_logger
-            decision_logger = get_decision_logger()
-        except:
-            pass  # Decision logger not available, continue without it
-
         snapshot = create_memory_mesh_snapshot(
             session=session,
             knowledge_base_path=Path(KNOWLEDGE_BASE_PATH),
-            save=save_to_file,
-            decision_logger=decision_logger
+            save=save_to_file
         )
 
         return {
@@ -540,17 +387,7 @@ async def create_immutable_snapshot(
             "message": "Immutable memory mesh snapshot created"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -568,15 +405,7 @@ async def create_versioned_snapshot(session: Session = Depends(get_session)):
     - Recovery points
     """
     try:
-        # Try to get decision logger if available
-        decision_logger = None
-        try:
-            from api.cognitive import get_decision_logger
-            decision_logger = get_decision_logger()
-        except:
-            pass  # Decision logger not available, continue without it
-
-        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH), decision_logger)
+        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH))
         file_path = snapshotter.create_versioned_snapshot()
 
         return {
@@ -585,17 +414,7 @@ async def create_versioned_snapshot(session: Session = Depends(get_session)):
             "message": "Versioned snapshot created"
         }
 
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -608,7 +427,7 @@ async def load_immutable_snapshot(session: Session = Depends(get_session)):
     Use this to inspect what's in the snapshot.
     """
     try:
-        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH), None)
+        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH))
         snapshot = snapshotter.load_snapshot()
 
         if not snapshot:
@@ -622,17 +441,7 @@ async def load_immutable_snapshot(session: Session = Depends(get_session)):
 
     except HTTPException:
         raise
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -650,7 +459,7 @@ async def restore_from_snapshot(session: Session = Depends(get_session)):
     - Restoring to known good state
     """
     try:
-        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH), None)
+        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH))
         snapshot = snapshotter.load_snapshot()
 
         if not snapshot:
@@ -666,17 +475,7 @@ async def restore_from_snapshot(session: Session = Depends(get_session)):
 
     except HTTPException:
         raise
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -703,7 +502,7 @@ async def compare_snapshots(
         with open(snapshot2_path, 'r') as f:
             snapshot2 = json.load(f)
 
-        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH), None)
+        snapshotter = MemoryMeshSnapshot(session, Path(KNOWLEDGE_BASE_PATH))
         comparison = snapshotter.compare_snapshots(snapshot1, snapshot2)
 
         return {
@@ -714,17 +513,7 @@ async def compare_snapshots(
 
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=f"Snapshot file not found: {str(e)}")
-    except IntegrityError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e, {"feedback_type": request.feedback_type})
-        raise HTTPException(status_code=409, detail=f"Database integrity error: {str(e)}")
-    except OperationalError as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
-        raise HTTPException(status_code=503, detail=f"Database operational error: {str(e)}")
     except Exception as e:
-        session.rollback()
-        log_database_error("record_user_feedback", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -992,320 +781,3 @@ async def delete_pattern(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete pattern: {str(e)}")
-
-
-# ==================== Database Monitoring Endpoints ====================
-
-@router.get("/monitor/database-health")
-async def check_database_health(session: Session = Depends(get_session)):
-    """
-    Check database health and connection status for learning memory tables.
-    
-    Returns health status, table counts, recent errors, and Timesense temporal analysis.
-    """
-    health_status = {
-        "timestamp": datetime.utcnow().isoformat(),
-        "database_connection": "unknown",
-        "tables_accessible": {},
-        "recent_errors": [],
-        "statistics": {},
-        "timesense_analysis": {}
-    }
-    
-    try:
-        # Test basic connection
-        from sqlalchemy import text
-        session.execute(text("SELECT 1"))
-        health_status["database_connection"] = "healthy"
-        
-        # Check each table
-        from cognitive.learning_memory import LearningExample, LearningPattern
-        from cognitive.episodic_memory import Episode
-        from cognitive.procedural_memory import Procedure
-        
-        try:
-            count = session.query(LearningExample).count()
-            health_status["tables_accessible"]["learning_examples"] = True
-            health_status["statistics"]["learning_examples_count"] = count
-        except Exception as e:
-            health_status["tables_accessible"]["learning_examples"] = False
-            health_status["recent_errors"].append({
-                "table": "learning_examples",
-                "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
-            })
-        
-        try:
-            count = session.query(Episode).count()
-            health_status["tables_accessible"]["episodes"] = True
-            health_status["statistics"]["episodes_count"] = count
-        except Exception as e:
-            health_status["tables_accessible"]["episodes"] = False
-            health_status["recent_errors"].append({
-                "table": "episodes",
-                "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
-            })
-        
-        try:
-            count = session.query(Procedure).count()
-            health_status["tables_accessible"]["procedures"] = True
-            health_status["statistics"]["procedures_count"] = count
-        except Exception as e:
-            health_status["tables_accessible"]["procedures"] = False
-            health_status["recent_errors"].append({
-                "table": "procedures",
-                "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
-            })
-        
-        try:
-            count = session.query(LearningPattern).count()
-            health_status["tables_accessible"]["learning_patterns"] = True
-            health_status["statistics"]["learning_patterns_count"] = count
-        except Exception as e:
-            health_status["tables_accessible"]["learning_patterns"] = False
-            health_status["recent_errors"].append({
-                "table": "learning_patterns",
-                "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
-            })
-        
-        # Try to read recent errors from log file
-        try:
-            log_file = Path(KNOWLEDGE_BASE_PATH).parent / "backend" / "logs" / "database_errors.log"
-            if log_file.exists():
-                with open(log_file, "r", encoding="utf-8") as f:
-                    lines = f.readlines()
-                    # Get last 50 error entries (rough estimate)
-                    recent_lines = lines[-100:] if len(lines) > 100 else lines
-                    health_status["recent_errors_from_log"] = recent_lines[-20:]  # Last 20 lines
-        except Exception:
-            pass  # Can't read log file, that's ok
-        
-        # Add Timesense analysis
-        if TIMESENSE_AVAILABLE:
-            try:
-                monitor = get_performance_monitor()
-                timesense_health = monitor.check_performance_health()
-                health_status["timesense_analysis"] = {
-                    "available": True,
-                    "health": timesense_health.get("status", "unknown"),
-                    "healthy": timesense_health.get("healthy", False),
-                    "prediction_accuracy": timesense_health.get("accuracy", {}),
-                    "issues": timesense_health.get("issues", []),
-                    "recommendations": timesense_health.get("recommendations", [])
-                }
-                
-                # Add database operation predictions
-                try:
-                    db_insert_pred = predict_time(PrimitiveType.DB_INSERT_SINGLE, 1)
-                    db_query_pred = predict_time(PrimitiveType.DB_QUERY_SIMPLE, 1)
-                    health_status["timesense_analysis"]["database_predictions"] = {
-                        "insert_single": {
-                            "p50_ms": db_insert_pred.p50_ms if db_insert_pred else None,
-                            "p95_ms": db_insert_pred.p95_ms if db_insert_pred else None,
-                            "confidence": db_insert_pred.confidence if db_insert_pred else None
-                        },
-                        "query_simple": {
-                            "p50_ms": db_query_pred.p50_ms if db_query_pred else None,
-                            "p95_ms": db_query_pred.p95_ms if db_query_pred else None,
-                            "confidence": db_query_pred.confidence if db_query_pred else None
-                        }
-                    }
-                except Exception as e:
-                    logger.debug(f"Failed to get database predictions: {e}")
-            except Exception as e:
-                logger.debug(f"Timesense analysis failed: {e}")
-                health_status["timesense_analysis"] = {
-                    "available": True,
-                    "error": str(e)
-                }
-        else:
-            health_status["timesense_analysis"] = {
-                "available": False,
-                "message": "Timesense not available"
-            }
-        
-        return {
-            "success": True,
-            "health": health_status
-        }
-        
-    except OperationalError as e:
-        health_status["database_connection"] = "error"
-        health_status["recent_errors"].append({
-            "operation": "connection_test",
-            "error": str(e),
-            "error_type": type(e).__name__,
-            "timestamp": datetime.utcnow().isoformat()
-        })
-        log_database_error("check_database_health", e)
-        return {
-            "success": False,
-            "health": health_status,
-            "error": "Database connection failed"
-        }
-    except Exception as e:
-        log_database_error("check_database_health", e)
-        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
-
-
-@router.get("/monitor/recent-errors")
-async def get_recent_database_errors(limit: int = 100):
-    """
-    Get recent database errors from the error log with temporal analysis.
-    
-    Args:
-        limit: Number of lines to retrieve (default 100)
-    """
-    try:
-        log_file = Path(KNOWLEDGE_BASE_PATH).parent / "backend" / "logs" / "database_errors.log"
-        
-        if not log_file.exists():
-            return {
-                "success": True,
-                "errors": [],
-                "message": "No error log file found. No database errors recorded yet.",
-                "temporal_analysis": {}
-            }
-        
-        with open(log_file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-            recent_lines = lines[-limit:] if len(lines) > limit else lines
-        
-        # Add temporal analysis if Timesense available
-        temporal_analysis = {}
-        if TIMESENSE_AVAILABLE:
-            try:
-                monitor = get_performance_monitor()
-                degradation = monitor.check_degradation(window_minutes=60)
-                temporal_analysis = {
-                    "performance_degraded": degradation.get("degraded", False),
-                    "trend": degradation.get("trend", "unknown"),
-                    "current_accuracy": degradation.get("current_accuracy", 100),
-                    "analysis_window_minutes": 60
-                }
-            except Exception as e:
-                logger.debug(f"Temporal analysis failed: {e}")
-        
-        return {
-            "success": True,
-            "total_errors": len(lines),
-            "returned": len(recent_lines),
-            "errors": recent_lines,
-            "log_file": str(log_file),
-            "temporal_analysis": temporal_analysis,
-            "timesense_available": TIMESENSE_AVAILABLE
-        }
-        
-    except Exception as e:
-        logger.error(f"Failed to read error log: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to read error log: {str(e)}")
-
-
-@router.get("/monitor/temporal-analysis")
-async def get_temporal_analysis(
-    window_hours: int = 24,
-    session: Session = Depends(get_session)
-):
-    """
-    Get temporal analysis of database operations and errors.
-    
-    Provides:
-    - Error rate trends over time
-    - Operation performance patterns
-    - Timesense predictions vs actual
-    - Temporal anomaly detection
-    
-    Args:
-        window_hours: Time window for analysis (default 24 hours)
-    """
-    analysis = {
-        "timestamp": datetime.utcnow().isoformat(),
-        "window_hours": window_hours,
-        "timesense_available": TIMESENSE_AVAILABLE
-    }
-    
-    if not TIMESENSE_AVAILABLE:
-        analysis["message"] = "Timesense not available. Install Timesense for temporal analysis."
-        return {
-            "success": True,
-            "analysis": analysis
-        }
-    
-    try:
-        from timesense.monitor import get_performance_monitor
-        from timesense.engine import get_timesense_engine
-        
-        monitor = get_performance_monitor()
-        engine = get_timesense_engine()
-        
-        # Get performance health
-        health = monitor.check_performance_health()
-        
-        # Get degradation analysis
-        degradation = monitor.check_degradation(window_minutes=window_hours * 60)
-        
-        # Get engine status for temporal stats
-        engine_status = engine.get_status() if hasattr(engine, 'get_status') else {}
-        
-        # Get database operation predictions
-        predictions = {}
-        try:
-            predictions["db_insert_single"] = predict_time(PrimitiveType.DB_INSERT_SINGLE, 1)
-            predictions["db_insert_batch_10"] = predict_time(PrimitiveType.DB_INSERT_BATCH, 10)
-            predictions["db_query_simple"] = predict_time(PrimitiveType.DB_QUERY_SIMPLE, 1)
-            predictions["db_query_complex"] = predict_time(PrimitiveType.DB_QUERY_COMPLEX, 100)
-        except Exception as e:
-            logger.debug(f"Failed to get predictions: {e}")
-        
-        analysis.update({
-            "performance_health": {
-                "status": health.get("status", "unknown"),
-                "healthy": health.get("healthy", False),
-                "issues": health.get("issues", []),
-                "recommendations": health.get("recommendations", [])
-            },
-            "degradation_analysis": {
-                "degraded": degradation.get("degraded", False),
-                "trend": degradation.get("trend", "unknown"),
-                "current_accuracy": degradation.get("current_accuracy", 100),
-                "threshold": degradation.get("threshold", 80)
-            },
-            "prediction_accuracy": health.get("accuracy", {}),
-            "engine_status": {
-                "status": engine_status.get("status", {}).get("status", "unknown") if isinstance(engine_status.get("status"), dict) else "unknown",
-                "total_profiles": engine_status.get("engine", {}).get("total_profiles", 0),
-                "stable_profiles": engine_status.get("engine", {}).get("stable_profiles", 0),
-                "predictions_count": engine_status.get("prediction", {}).get("total_predictions", 0)
-            },
-            "database_predictions": {
-                k: {
-                    "p50_ms": v.p50_ms if v else None,
-                    "p95_ms": v.p95_ms if v else None,
-                    "confidence": v.confidence if v else None,
-                    "human_readable": v.human_readable() if v else None
-                }
-                for k, v in predictions.items()
-            }
-        })
-        
-        # Check if auto-calibration should be triggered
-        calibration_check = monitor.check_and_trigger_calibration()
-        if calibration_check.get("calibration_triggered"):
-            analysis["auto_calibration"] = calibration_check
-        
-        return {
-            "success": True,
-            "analysis": analysis
-        }
-        
-    except Exception as e:
-        logger.error(f"Temporal analysis failed: {e}")
-        analysis["error"] = str(e)
-        return {
-            "success": False,
-            "analysis": analysis,
-            "error": str(e)
-        }

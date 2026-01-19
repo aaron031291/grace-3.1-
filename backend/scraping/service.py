@@ -1,3 +1,14 @@
+"""
+Web scraping service using trafilatura.
+
+This service handles the core scraping logic including:
+- Fetching web pages
+- Extracting content with trafilatura
+- Following links with depth control
+- Filtering relevant links
+- Storing results
+"""
+
 import trafilatura
 from typing import List, Set, Optional, Dict
 from urllib.parse import urljoin, urlparse
@@ -8,10 +19,19 @@ from sqlalchemy.orm import Session
 import os
 from pathlib import Path
 import re
-from models import ScrapingJob, ScrapedPage
-from url_validator import URLValidator
-from document_downloader import DocumentDownloader
+import requests
+
+from .models import ScrapingJob, ScrapedPage
+from .url_validator import URLValidator
+from .document_downloader import DocumentDownloader
+
+try:
+    from settings import settings
+except ImportError:
+    settings = None
+
 logger = logging.getLogger(__name__)
+
 
 class WebScrapingService:
     """
@@ -182,11 +202,45 @@ class WebScrapingService:
             return
         
         try:
-            # Fetch content using trafilatura
+            # Fetch content using requests with headers to bypass 403s
             logger.info(f"Scraping {url} at depth {current_depth}")
-            downloaded = trafilatura.fetch_url(url)
             
-            if not downloaded:
+            downloaded = None
+            try:
+                # Mimic a real browser
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Referer': 'https://www.google.com/'
+                }
+                response = requests.get(url, headers=headers, timeout=15)
+                if response.status_code == 200:
+                    downloaded = response.text
+                else:
+                    logger.warning(f"Request failed with status {response.status_code} for {url}")
+            except Exception as e:
+                logger.warning(f"Requests fetch failed for {url}: {e}")
+            
+            # Fallback to trafilatura if requests failed
+            if downloaded is None:
+                logger.info("Falling back to trafilatura native fetch...")
+                downloaded = trafilatura.fetch_url(url)
+            
+            # Safe check for empty content (handles potential numpy array ambiguity)
+            is_empty = False
+            if downloaded is None:
+                is_empty = True
+            elif isinstance(downloaded, str):
+                is_empty = len(downloaded) == 0
+            else:
+                # Fallback for unexpected types
+                try:
+                    is_empty = len(downloaded) == 0
+                except:
+                    is_empty = True
+
+            if is_empty:
                 self._mark_page_failed(
                     job_id, url, current_depth, parent_url,
                     "Failed to fetch content"
@@ -194,22 +248,29 @@ class WebScrapingService:
                 return
             
             # Check content size
-            if len(downloaded) > self.max_content_size:
-                self._mark_page_failed(
-                    job_id, url, current_depth, parent_url,
-                    f"Content too large (>{self.max_content_size} bytes)"
-                )
-                return
+            try:
+                if len(downloaded) > self.max_content_size:
+                    self._mark_page_failed(
+                        job_id, url, current_depth, parent_url,
+                        f"Content too large (>{self.max_content_size} bytes)"
+                    )
+                    return
+            except:
+                pass # Ignore size check if len() fails
             
             # Extract main content
-            content = trafilatura.extract(
-                downloaded,
-                include_links=False,
-                include_images=False,
-                include_tables=True,
-                output_format='txt',
-                favor_precision=True
-            )
+            try:
+                content = trafilatura.extract(
+                    downloaded,
+                    include_links=False,
+                    include_images=False,
+                    include_tables=True,
+                    output_format='txt',
+                    favor_precision=True
+                )
+            except Exception as e:
+                logger.warning(f"Content extraction failed for {url}: {e}")
+                content = None
             
             if not content:
                 self._mark_page_failed(
@@ -443,11 +504,24 @@ class WebScrapingService:
         """
         try:
             import numpy as np
+            
+            # Flatten arrays to ensure 1D vectors
+            vec1 = np.array(vec1).flatten()
+            vec2 = np.array(vec2).flatten()
+            
             dot_product = np.dot(vec1, vec2)
             norm1 = np.linalg.norm(vec1)
             norm2 = np.linalg.norm(vec2)
-            return float(dot_product / (norm1 * norm2))
-        except:
+            
+            similarity = dot_product / (norm1 * norm2)
+            
+            # Ensure we return a Python float, not numpy scalar or array
+            if isinstance(similarity, np.ndarray):
+                similarity = similarity.item()  # Extract scalar from 0-d array
+            
+            return float(similarity)
+        except Exception as e:
+            logger.error(f"Error calculating cosine similarity: {e}")
             return 0.5  # Default to neutral if calculation fails
     
     def _store_page_success(

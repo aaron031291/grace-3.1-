@@ -1,3 +1,18 @@
+"""
+Layer 1 Complete Integration: All Input Sources
+
+Layer 1 includes ALL input pathways:
+- User inputs (chat, commands, interactions)
+- File uploads
+- External APIs
+- Web scraping / HTML
+- Memory mesh
+- Learning memory
+- Whitelist operations
+- System events
+
+Everything flows through Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
+"""
 import os
 import json
 import hashlib
@@ -6,11 +21,26 @@ from datetime import datetime
 from typing import Optional, Dict, List, Any, BinaryIO
 from pathlib import Path
 from sqlalchemy.orm import Session
+
 from genesis.pipeline_integration import get_data_pipeline
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType, GenesisKey
 from cognitive.memory_mesh_integration import MemoryMeshIntegration
+
 logger = logging.getLogger(__name__)
+
+# Import trigger pipeline (lazy import to avoid circular dependency)
+_genesis_trigger_pipeline = None
+
+
+def _get_trigger_pipeline():
+    """Lazy import to avoid circular dependency."""
+    global _genesis_trigger_pipeline
+    if _genesis_trigger_pipeline is None:
+        from genesis.autonomous_triggers import get_genesis_trigger_pipeline
+        _genesis_trigger_pipeline = get_genesis_trigger_pipeline
+    return _genesis_trigger_pipeline
+
 
 class Layer1Integration:
     """

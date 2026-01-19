@@ -32,32 +32,8 @@ from datetime import datetime, timedelta
 from collections import OrderedDict
 import requests
 
-try:
-    from ollama_client.client import OllamaClient
-except ImportError:
-    try:
-        from backend.ollama_client.client import OllamaClient
-    except ImportError:
-        # Mock for environments without Ollama
-        class OllamaClient:
-            def __init__(self, *args, **kwargs):
-                pass
-            def generate(self, *args, **kwargs):
-                return {"response": "Mock response - Ollama not available"}
-            async def generate_async(self, *args, **kwargs):
-                return {"response": "Mock response - Ollama not available"}
-
-try:
-    from settings import settings
-except ImportError:
-    try:
-        from backend.settings import settings
-    except ImportError:
-        # Mock settings
-        class MockSettings:
-            def __getattr__(self, name):
-                return None
-        settings = MockSettings()
+from ollama_client.client import OllamaClient
+from settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -297,19 +273,11 @@ class MultiLLMClient:
     Routes requests to appropriate models based on task type.
     """
 
-    # Model registry optimized for GRACE Memory System
-    # These models work best WITH memory system (RAG, code intelligence, learning memory)
-    # Memory system provides context, reducing need for larger models
-    # Updated: 2026-01-15
+    # Model registry with recommended configurations
     MODEL_REGISTRY = {
-        # ===================================================================
-        # TIER 1: CORE INTELLIGENCE MODELS (Optimized for Memory System)
-        # ===================================================================
-        
-        # Best Code Intelligence - Memory system provides code context automatically
-        "deepseek-coder-v2-16b": LLMModel(
-            name="DeepSeek Coder V2 16B",
-            model_id="deepseek-coder-v2:16b-instruct",
+        "deepseek-coder-33b": LLMModel(
+            name="DeepSeek Coder 33B",
+            model_id="deepseek-coder:33b-instruct",
             capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
             context_window=16384,
             recommended_tasks=[
@@ -318,26 +286,42 @@ class MultiLLMClient:
                 TaskType.CODE_EXPLANATION,
                 TaskType.CODE_REVIEW
             ],
-            priority=12  # Highest - Best code model, memory system provides context
+            priority=10
         ),
-        
-        # Best General Intelligence - Memory system fills knowledge gaps
-        "qwen2.5-32b": LLMModel(
-            name="Qwen 2.5 32B",
-            model_id="qwen2.5:32b-instruct",
-            capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
-            context_window=32768,  # Large context for RAG results
+        "deepseek-coder-6.7b": LLMModel(
+            name="DeepSeek Coder 6.7B",
+            model_id="deepseek-coder:6.7b-instruct",
+            capabilities=[ModelCapability.CODE],
+            context_window=16384,
             recommended_tasks=[
-                TaskType.GENERAL,
-                TaskType.REASONING,
-                TaskType.PLANNING
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_DEBUGGING
             ],
-            priority=11  # High - Sweet spot with memory system
+            priority=8
         ),
-        
-        # Best Reasoning Intelligence - Best for complex reasoning
-        # NOTE: 70B model (~40GB) - max_model_size_gb increased to 40 to accommodate
-        # When this model is loaded, max_concurrent_models should be 1
+        "qwen2.5-coder-32b": LLMModel(
+            name="Qwen 2.5 Coder 32B",
+            model_id="qwen2.5-coder:32b-instruct",
+            capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.CODE_GENERATION,
+                TaskType.CODE_EXPLANATION,
+                TaskType.CODE_REVIEW
+            ],
+            priority=9
+        ),
+        "qwen2.5-coder-7b": LLMModel(
+            name="Qwen 2.5 Coder 7B",
+            model_id="qwen2.5-coder:7b-instruct",
+            capabilities=[ModelCapability.CODE],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.CODE_GENERATION,
+                TaskType.QUICK_QUERY
+            ],
+            priority=7
+        ),
         "deepseek-r1-70b": LLMModel(
             name="DeepSeek-R1 70B",
             model_id="deepseek-r1:70b",
@@ -347,53 +331,74 @@ class MultiLLMClient:
                 TaskType.REASONING,
                 TaskType.PLANNING
             ],
-            priority=11  # High - Best reasoning, memory system enhances it
+            priority=10
         ),
-        
-        # ===================================================================
-        # TIER 2: FAST INTELLIGENCE MODELS (Memory System Makes Them Smart)
-        # ===================================================================
-        
-        # Fast Code - Memory system provides code context
-        "codeqwen1.5-7b": LLMModel(
-            name="CodeQwen 1.5 7B",
-            model_id="codeqwen1.5:7b",
-            capabilities=[ModelCapability.CODE, ModelCapability.SPEED],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.CODE_GENERATION,
-                TaskType.CODE_DEBUGGING,
-                TaskType.QUICK_QUERY
-            ],
-            priority=10  # High - Fast, memory system makes it smart
-        ),
-        
-        # Fast Reasoning - Memory system provides examples
-        "deepseek-r1-distill-1.3b": LLMModel(
-            name="DeepSeek-R1 Distill 1.3B",
-            model_id="deepseek-r1-distill:1.3b",
-            capabilities=[ModelCapability.REASONING, ModelCapability.SPEED],
+        "deepseek-r1-7b": LLMModel(
+            name="DeepSeek-R1 7B",
+            model_id="deepseek-r1:7b",
+            capabilities=[ModelCapability.REASONING],
             context_window=16384,
             recommended_tasks=[
                 TaskType.REASONING,
-                TaskType.VALIDATION,
-                TaskType.QUICK_QUERY
+                TaskType.VALIDATION
             ],
-            priority=9  # High - Fast reasoning, memory system enhances
+            priority=7
         ),
-        
-        # Efficient General - MoE architecture + memory system
-        "mixtral-8x7b": LLMModel(
-            name="Mixtral 8x7B",
-            model_id="mixtral:8x7b",
-            capabilities=[ModelCapability.GENERAL, ModelCapability.REASONING],
+        "qwen2.5-72b": LLMModel(
+            name="Qwen 2.5 72B",
+            model_id="qwen2.5:72b-instruct",
+            capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
             context_window=32768,
             recommended_tasks=[
-                TaskType.GENERAL,
                 TaskType.REASONING,
-                TaskType.PLANNING
+                TaskType.PLANNING,
+                TaskType.GENERAL
             ],
-            priority=10  # High - Efficient MoE, memory system provides context
+            priority=9
+        ),
+        "mistral-small": LLMModel(
+            name="Mistral Small",
+            model_id="mistral-small:22b",
+            capabilities=[ModelCapability.SPEED, ModelCapability.GENERAL],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.QUICK_QUERY,
+                TaskType.VALIDATION
+            ],
+            priority=8
+        ),
+        "llama3.3-70b": LLMModel(
+            name="Llama 3.3 70B",
+            model_id="llama3.3:70b-instruct",
+            capabilities=[ModelCapability.GENERAL, ModelCapability.REASONING],
+            context_window=8192,
+            recommended_tasks=[
+                TaskType.GENERAL,
+                TaskType.REASONING
+            ],
+            priority=8
+        ),
+        "gemma2-27b": LLMModel(
+            name="Gemma 2 27B",
+            model_id="gemma2:27b-instruct",
+            capabilities=[ModelCapability.GENERAL],
+            context_window=8192,
+            recommended_tasks=[
+                TaskType.VALIDATION,
+                TaskType.GENERAL
+            ],
+            priority=7
+        ),
+        "mistral-7b": LLMModel(
+            name="Mistral 7B",
+            model_id="mistral:7b",
+            capabilities=[ModelCapability.GENERAL],
+            context_window=8192,
+            recommended_tasks=[
+                TaskType.QUICK_QUERY,
+                TaskType.GENERAL
+            ],
+            priority=6
         ),
     }
 
@@ -407,7 +412,7 @@ class MultiLLMClient:
         requests_per_minute: int = 60,
         requests_per_hour: int = 1000,
         max_retries: int = 3,
-        max_concurrent_requests: int = 1  # Limited to 1 when running large models (70B) to prevent OOM
+        max_concurrent_requests: int = 10
     ):
         """
         Initialize Multi-LLM client with production hardening.
@@ -479,38 +484,30 @@ class MultiLLMClient:
                 )
 
         except Exception as e:
-            logger.warning(f"[MULTI-LLM] Error discovering models (Ollama may not be running): {e}")
+            logger.error(f"Error discovering models: {e}")
             # Initialize with default fallback
-            default_model_id = getattr(settings, 'OLLAMA_LLM_DEFAULT', 'mistral:7b')
             self.available_models["fallback"] = LLMModel(
                 name="Fallback Model",
-                model_id=default_model_id,
+                model_id=settings.OLLAMA_LLM_DEFAULT,
                 capabilities=[ModelCapability.GENERAL],
                 context_window=4096,
                 recommended_tasks=[TaskType.GENERAL],
                 priority=1
             )
-            logger.info(f"[MULTI-LLM] Using fallback model: {default_model_id}")
 
     def select_model(
         self,
         task_type: TaskType,
         required_capabilities: Optional[List[ModelCapability]] = None,
-        prefer_speed: bool = False,
-        num_tokens: int = 500,
-        time_budget_ms: Optional[float] = None
+        prefer_speed: bool = False
     ) -> Optional[LLMModel]:
         """
         Select best model for task.
-        
-        TimeSense Integration: Now considers predicted generation time when selecting models.
 
         Args:
             task_type: Type of task
             required_capabilities: Required model capabilities
             prefer_speed: Prefer faster models
-            num_tokens: Expected number of tokens to generate (for time estimation)
-            time_budget_ms: Maximum time budget in milliseconds (if provided)
 
         Returns:
             Best matching model or None
@@ -547,87 +544,14 @@ class MultiLLMClient:
             logger.warning(f"No suitable model for task: {task_type}")
             return list(self.available_models.values())[0]  # Fallback to first available
 
-        # TimeSense: Estimate time for each candidate and score accordingly
-        scored_candidates = []
-        for model in candidates:
-            # Base score (priority)
-            base_score = model.priority
-            
-            # Time-aware scoring
-            time_score = 1.0
-            time_confidence = 0.5
-            estimated_time_ms = None
-            
-            try:
-                from timesense.integration import predict_time
-                from timesense.primitives import PrimitiveType
-                
-                # Estimate generation time for this model
-                prediction = predict_time(
-                    primitive_type=PrimitiveType.LLM_TOKENS_GENERATE,
-                    size=num_tokens,
-                    model_name=model.model_id
-                )
-                
-                if prediction:
-                    estimated_time_ms = prediction.p50_ms
-                    time_confidence = prediction.confidence
-                    
-                    # Check if within time budget
-                    if time_budget_ms and estimated_time_ms > time_budget_ms:
-                        # Model exceeds budget, penalize heavily
-                        time_score = 0.1
-                    else:
-                        # Faster models score higher (when prefer_speed or time budget)
-                        if prefer_speed or time_budget_ms:
-                            # Inverse time relationship: faster = higher score
-                            # Normalize: 0-2s = 1.0, 2-5s = 0.8, 5-10s = 0.6, 10s+ = 0.4
-                            if estimated_time_ms < 2000:
-                                time_score = 1.0
-                            elif estimated_time_ms < 5000:
-                                time_score = 0.8
-                            elif estimated_time_ms < 10000:
-                                time_score = 0.6
-                            else:
-                                time_score = 0.4
-                        else:
-                            # No time preference, neutral score
-                            time_score = 1.0
-            except Exception as e:
-                logger.debug(f"[TIME-AWARE-SELECT] Time estimation failed: {e}")
-                # Use historical stats if available
-                model_key = next(
-                    (k for k, v in self.available_models.items() if v.model_id == model.model_id),
-                    None
-                )
-                if model_key and model_key in self.model_stats:
-                    avg_time = self.model_stats[model_key].get('avg_duration_ms', 5000)
-                    if prefer_speed:
-                        # Use historical average
-                        time_score = 1.0 / (1.0 + avg_time / 5000)  # Normalized
-            
-            # Composite score: priority + time efficiency
-            # Weight time more if prefer_speed or time_budget
-            if prefer_speed or time_budget_ms:
-                composite_score = (base_score * 0.6) + (time_score * time_confidence * 0.4)
-            else:
-                composite_score = (base_score * 0.9) + (time_score * time_confidence * 0.1)
-            
-            scored_candidates.append({
-                'model': model,
-                'score': composite_score,
-                'base_score': base_score,
-                'time_score': time_score,
-                'estimated_time_ms': estimated_time_ms
-            })
-        
-        # Sort by composite score
-        scored_candidates.sort(key=lambda x: x['score'], reverse=True)
-        
-        selected = scored_candidates[0]['model']
-        time_info = f" (estimated: {scored_candidates[0]['estimated_time_ms']:.0f}ms)" if scored_candidates[0]['estimated_time_ms'] else ""
-        logger.info(f"Selected model: {selected.name} for task: {task_type.value}{time_info}")
-        
+        # Sort by priority (higher is better)
+        candidates.sort(key=lambda m: (
+            -m.priority if not prefer_speed else m.priority,
+            -m.context_window
+        ))
+
+        selected = candidates[0]
+        logger.info(f"Selected model: {selected.name} for task: {task_type.value}")
         return selected
 
     def generate(

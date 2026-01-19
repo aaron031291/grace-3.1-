@@ -1,18 +1,26 @@
+"""
+Grace Agent API
+
+REST API endpoints for Grace's software engineering agent.
+"""
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 import asyncio
 import logging
+
 from agent.grace_agent import GraceAgent, AgentConfig, TaskResult, TaskStatus
 from execution.actions import GraceAction, ActionRequest, ActionResult
 from execution.feedback import get_feedback_processor
 
 logger = logging.getLogger(__name__)
 
-# Create router
-router = APIRouter(prefix="/agent", tags=["Grace Agent"])
+router = APIRouter(prefix="/agent", tags=["agent"])
 
+
+# ==================== Request/Response Models ====================
 
 class TaskRequest(BaseModel):
     """Request to start a new task."""

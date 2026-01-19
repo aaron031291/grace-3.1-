@@ -186,19 +186,19 @@ def benchmark_sequential(embedding_model: EmbeddingModel, chunks: List[str]) -> 
     Returns:
         Tuple of (total_elapsed, total_tokens)
     """
-    logger.info(f"\n{'='*70}")
-    logger.info(f"SEQUENTIAL BENCHMARK: {len(chunks)} chunks")
-    logger.info(f"{'='*70}")
+    print(f"\n{'='*70}")
+    print(f"SEQUENTIAL BENCHMARK: {len(chunks)} chunks")
+    print(f"{'='*70}")
     
     total_tokens = sum(len(c.split()) / 1.3 for c in chunks)
-    logger.info(f"\n⏳ Warming up model...")
+    print(f"\n⏳ Warming up model...")
     
     try:
         _ = embedding_model.embed_text("Warmup text")
     except Exception as e:
         logger.warning(f"Warmup failed: {e}")
     
-    logger.info(f"🚀 Starting sequential embedding...\n")
+    print(f"🚀 Starting sequential embedding...\n")
     start_time = time.time()
     
     try:
@@ -208,19 +208,19 @@ def benchmark_sequential(embedding_model: EmbeddingModel, chunks: List[str]) -> 
             chunk_elapsed = time.time() - chunk_start
             
             tokens = len(chunk.split()) / 1.3
-            logger.info(f"  [{i+1:2d}/{len(chunks)}] Chunk {i}: {tokens:6.0f} tokens in {chunk_elapsed:6.2f}s ({tokens/chunk_elapsed:6.1f} tok/s)")
+            print(f"  [{i+1:2d}/{len(chunks)}] Chunk {i}: {tokens:6.0f} tokens in {chunk_elapsed:6.2f}s ({tokens/chunk_elapsed:6.1f} tok/s)")
         
         total_elapsed = time.time() - start_time
         
-        logger.info(f"\n✅ Sequential embedding complete!")
-        logger.info(f"  ⏱️  Total time: {total_elapsed:.2f}s")
-        logger.info(f"  📊 Total tokens: {total_tokens:.0f}")
-        logger.info(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
+        print(f"\n✅ Sequential embedding complete!")
+        print(f"  ⏱️  Total time: {total_elapsed:.2f}s")
+        print(f"  📊 Total tokens: {total_tokens:.0f}")
+        print(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
         
         return total_elapsed, total_tokens
     
     except Exception as e:
-        logger.info(f"\n❌ Sequential embedding failed: {e}")
+        print(f"\n❌ Sequential embedding failed: {e}")
         import traceback
         traceback.print_exc()
         return None, total_tokens
@@ -242,19 +242,19 @@ def benchmark_parallel(
     Returns:
         Tuple of (total_elapsed, total_tokens)
     """
-    logger.info(f"\n{'='*70}")
-    logger.info(f"PARALLEL BENCHMARK: {len(chunks)} chunks x {num_workers} workers")
-    logger.info(f"{'='*70}")
+    print(f"\n{'='*70}")
+    print(f"PARALLEL BENCHMARK: {len(chunks)} chunks x {num_workers} workers")
+    print(f"{'='*70}")
     
     total_tokens = sum(len(c.split()) / 1.3 for c in chunks)
-    logger.info(f"\n⏳ Warming up model...")
+    print(f"\n⏳ Warming up model...")
     
     try:
         _ = embedding_model.embed_text("Warmup text")
     except Exception as e:
         logger.warning(f"Warmup failed: {e}")
     
-    logger.info(f"🚀 Starting parallel embedding with {num_workers} workers...\n")
+    print(f"🚀 Starting parallel embedding with {num_workers} workers...\n")
     start_time = time.time()
     
     try:
@@ -274,23 +274,23 @@ def benchmark_parallel(
                 try:
                     chunk_id, elapsed, tokens, dim = future.result()
                     chunk_results[chunk_id] = (elapsed, tokens, dim)
-                    logger.info(f"  ✓ Chunk {chunk_id:2d}: {tokens:6.0f} tokens in {elapsed:6.2f}s ({tokens/elapsed:6.1f} tok/s)")
+                    print(f"  ✓ Chunk {chunk_id:2d}: {tokens:6.0f} tokens in {elapsed:6.2f}s ({tokens/elapsed:6.1f} tok/s)")
                 except Exception as e:
                     logger.error(f"  ✗ Chunk {futures[future]}: {e}")
                     raise
             
             total_elapsed = time.time() - start_time
             
-            logger.info(f"\n✅ Parallel embedding complete!")
-            logger.info(f"  ⏱️  Total time: {total_elapsed:.2f}s")
-            logger.info(f"  📊 Total tokens: {total_tokens:.0f}")
-            logger.info(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
-            logger.info(f"  👷 Workers: {num_workers}")
+            print(f"\n✅ Parallel embedding complete!")
+            print(f"  ⏱️  Total time: {total_elapsed:.2f}s")
+            print(f"  📊 Total tokens: {total_tokens:.0f}")
+            print(f"  📊 Throughput: {total_tokens / total_elapsed:.1f} tokens/sec")
+            print(f"  👷 Workers: {num_workers}")
             
             return total_elapsed, total_tokens
     
     except Exception as e:
-        logger.info(f"\n❌ Parallel embedding failed: {e}")
+        print(f"\n❌ Parallel embedding failed: {e}")
         import traceback
         traceback.print_exc()
         return None, total_tokens
@@ -334,40 +334,40 @@ def main():
     
     args = parser.parse_args()
     
-    logger.info("\n" + "="*70)
-    logger.info("🔬 QWEN 4B PARALLEL EMBEDDING BENCHMARK")
-    logger.info("="*70)
-    logger.info(f"\nBenchmark Configuration:")
-    logger.info(f"  Parallel workers: {args.workers}")
-    logger.info(f"  Text chunks: {args.chunks}")
-    logger.info(f"  Total tokens: ~{args.tokens}")
-    logger.info(f"  Device: {args.device or 'auto-detect'}")
-    logger.info(f"  Include sequential: {not args.skip_sequential}")
+    print("\n" + "="*70)
+    print("🔬 QWEN 4B PARALLEL EMBEDDING BENCHMARK")
+    print("="*70)
+    print(f"\nBenchmark Configuration:")
+    print(f"  Parallel workers: {args.workers}")
+    print(f"  Text chunks: {args.chunks}")
+    print(f"  Total tokens: ~{args.tokens}")
+    print(f"  Device: {args.device or 'auto-detect'}")
+    print(f"  Include sequential: {not args.skip_sequential}")
     
     # Initialize embedding model
-    logger.info(f"\n⏳ Initializing Qwen 4B embedding model...")
+    print(f"\n⏳ Initializing Qwen 4B embedding model...")
     try:
         model = EmbeddingModel(device=args.device)
-        logger.info(f"✅ Model initialized successfully")
+        print(f"✅ Model initialized successfully")
     except Exception as e:
-        logger.info(f"❌ Failed to initialize model: {e}")
+        print(f"❌ Failed to initialize model: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
     
     # Generate text and split into chunks
-    logger.info(f"\n⏳ Generating sample text (~{args.tokens} tokens)...")
+    print(f"\n⏳ Generating sample text (~{args.tokens} tokens)...")
     full_text = generate_sample_text(args.tokens)
-    logger.info(f"✅ Generated text: {len(full_text)} characters")
+    print(f"✅ Generated text: {len(full_text)} characters")
     
-    logger.info(f"\n⏳ Splitting text into {args.chunks} chunks...")
+    print(f"\n⏳ Splitting text into {args.chunks} chunks...")
     chunks = split_text_into_chunks(full_text, args.chunks)
     chunks = [c for c in chunks if len(c.strip()) > 50]  # Filter out tiny chunks
-    logger.info(f"✅ Created {len(chunks)} chunks")
+    print(f"✅ Created {len(chunks)} chunks")
     
     for i, chunk in enumerate(chunks):
         tokens = len(chunk.split()) / 1.3
-        logger.info(f"   Chunk {i}: {len(chunk):6d} chars, ~{tokens:6.0f} tokens")
+        print(f"   Chunk {i}: {len(chunk):6d} chars, ~{tokens:6.0f} tokens")
     
     results = {
         "config": {
@@ -417,39 +417,39 @@ def main():
         }
     
     # Summary
-    logger.info("\n\n" + "="*70)
-    logger.info("📊 BENCHMARK SUMMARY")
-    logger.info("="*70)
+    print("\n\n" + "="*70)
+    print("📊 BENCHMARK SUMMARY")
+    print("="*70)
     
     if results["sequential"]:
         seq = results["sequential"]
-        logger.info(f"\n✅ Sequential Execution:")
-        logger.info(f"   ⏱️  Time: {seq['elapsed']:.2f}s")
-        logger.info(f"   📊 Throughput: {seq['throughput']:.1f} tokens/sec")
+        print(f"\n✅ Sequential Execution:")
+        print(f"   ⏱️  Time: {seq['elapsed']:.2f}s")
+        print(f"   📊 Throughput: {seq['throughput']:.1f} tokens/sec")
     
     if results["parallel"]:
         par = results["parallel"]
-        logger.info(f"\n✅ Parallel Execution ({par['workers']} workers):")
-        logger.info(f"   ⏱️  Time: {par['elapsed']:.2f}s")
-        logger.info(f"   📊 Throughput: {par['throughput']:.1f} tokens/sec")
+        print(f"\n✅ Parallel Execution ({par['workers']} workers):")
+        print(f"   ⏱️  Time: {par['elapsed']:.2f}s")
+        print(f"   📊 Throughput: {par['throughput']:.1f} tokens/sec")
     
     if results["comparison"]:
         cmp = results["comparison"]
-        logger.info(f"\n📈 Comparison:")
-        logger.info(f"   🚀 Speedup: {cmp['speedup']:.2f}x")
-        logger.info(f"   ⚡ Efficiency: {cmp['efficiency_percent']:.1f}%")
-        logger.info(f"   ⏱️  Time saved: {cmp['time_saved']:.2f}s")
+        print(f"\n📈 Comparison:")
+        print(f"   🚀 Speedup: {cmp['speedup']:.2f}x")
+        print(f"   ⚡ Efficiency: {cmp['efficiency_percent']:.1f}%")
+        print(f"   ⏱️  Time saved: {cmp['time_saved']:.2f}s")
     
-    logger.info("\n" + "="*70 + "\n")
+    print("\n" + "="*70 + "\n")
     
     # Save results to JSON
     output_file = backend_dir / "benchmark_parallel_results.json"
     try:
         with open(output_file, "w") as f:
             json.dump(results, f, indent=2)
-        logger.info(f"✅ Results saved to: {output_file}\n")
+        print(f"✅ Results saved to: {output_file}\n")
     except Exception as e:
-        logger.info(f"⚠️  Failed to save results: {e}\n")
+        print(f"⚠️  Failed to save results: {e}\n")
 
 
 if __name__ == "__main__":

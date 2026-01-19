@@ -3,12 +3,10 @@ Minimal test of auto-ingestion flow with database initialized.
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 sys.path.insert(0, '.')
 
 # Initialize database FIRST
-logger.info("[TEST] Initializing database...")
+print("[TEST] Initializing database...")
 from database.connection import DatabaseConnection, DatabaseConfig, DatabaseType
 from database.session import initialize_session_factory
 from database.migration import create_tables
@@ -21,10 +19,10 @@ db_config = DatabaseConfig(
 DatabaseConnection.initialize(db_config)
 initialize_session_factory()
 create_tables()
-logger.info("[TEST] ✓ Database initialized\n")
+print("[TEST] ✓ Database initialized\n")
 
 # Now test the file manager
-logger.info("[TEST] Setting up file manager...")
+print("[TEST] Setting up file manager...")
 from ingestion.file_manager import IngestionFileManager
 from embedding import get_embedding_model
 from pathlib import Path
@@ -36,42 +34,42 @@ embedding_model = get_embedding_model()
 state_file = kb_path / ".ingestion_state.json"
 if state_file.exists():
     state_file.unlink()
-    logger.info("[TEST] Cleared state file")
+    print("[TEST] Cleared state file")
 
 fm = IngestionFileManager(kb_path, embedding_model=embedding_model)
-logger.info(f"[TEST] File manager created")
-logger.info(f"[TEST] Tracked files: {len(fm.file_states)}\n")
+print(f"[TEST] File manager created")
+print(f"[TEST] Tracked files: {len(fm.file_states)}\n")
 
 # Run scan
-logger.info("[TEST] Running scan_directory()...")
+print("[TEST] Running scan_directory()...")
 results = fm.scan_directory()
 
-logger.info(f"\n[TEST] Scan results: {len(results)} changes")
+print(f"\n[TEST] Scan results: {len(results)} changes")
 for r in results:
     status = "✓" if r.success else "✗"
     error_msg = f" ({r.error})" if r.error else ""
-    logger.info(f"  {status} {r.change_type}: {r.filepath}{error_msg}")
+    print(f"  {status} {r.change_type}: {r.filepath}{error_msg}")
 
 # Check database
-logger.info("\n[TEST] Checking database...")
+print("\n[TEST] Checking database...")
 from database.session import SessionLocal
 from models.database_models import Document
 
 db = SessionLocal()
 docs = db.query(Document).all()
-logger.info(f"[TEST] Documents in database: {len(docs)}")
+print(f"[TEST] Documents in database: {len(docs)}")
 for doc in docs:
-    logger.info(f"  - {doc.filename} (path: {doc.file_path})")
+    print(f"  - {doc.filename} (path: {doc.file_path})")
 db.close()
 
 # Check state file
-logger.info("\n[TEST] Checking state file...")
+print("\n[TEST] Checking state file...")
 import json
 if state_file.exists():
     with open(state_file, 'r') as f:
         state = json.load(f)
-    logger.info(f"[TEST] State file contains: {len(state)} files")
+    print(f"[TEST] State file contains: {len(state)} files")
     for filepath in state:
-        logger.info(f"  - {filepath}")
+        print(f"  - {filepath}")
 else:
-    logger.info("[TEST] State file NOT created")
+    print("[TEST] State file NOT created")

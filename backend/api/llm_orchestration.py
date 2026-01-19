@@ -1,22 +1,59 @@
+"""
+LLM Orchestration API Endpoints
+
+Provides REST API access to the multi-LLM orchestration system.
+
+All endpoints:
+- Track with Genesis Keys
+- Enforce cognitive framework
+- Verify outputs through 5-layer pipeline
+- Integrate with learning memory
+- Log for audit
+"""
+
 import logging
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends, Body
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
-from llm_orchestrator.llm_orchestrator import get_llm_orchestrator, LLMOrchestrator, LLMTaskResult
+
+from llm_orchestrator.llm_orchestrator import (
+    get_llm_orchestrator,
+    LLMOrchestrator,
+    LLMTaskResult
+)
 from llm_orchestrator.multi_llm_client import TaskType
 from llm_orchestrator.cognitive_enforcer import CognitiveConstraints
-from llm_orchestrator.llm_collaboration import get_collaboration_hub, CollaborationMode
-from llm_orchestrator.fine_tuning import get_fine_tuning_system, FineTuningMethod
+from llm_orchestrator.llm_collaboration import (
+    get_collaboration_hub,
+    CollaborationMode
+)
+from llm_orchestrator.fine_tuning import (
+    get_fine_tuning_system,
+    FineTuningMethod
+)
 from database.session import get_db
 from embedding import EmbeddingModel, get_embedding_model
 
 logger = logging.getLogger(__name__)
 
-# Create router
+# Lazy-loaded embedding model singleton
+_embedding_model: Optional[EmbeddingModel] = None
+
+def get_or_create_embedding_model() -> EmbeddingModel:
+    """Get or create singleton embedding model instance."""
+    global _embedding_model
+    if _embedding_model is None:
+        _embedding_model = get_embedding_model()
+    return _embedding_model
+
 router = APIRouter(prefix="/llm", tags=["LLM Orchestration"])
 
+
+# =======================================================================
+# REQUEST/RESPONSE MODELS
+# =======================================================================
 
 class LLMTaskRequest(BaseModel):
     """LLM task request."""
@@ -134,11 +171,10 @@ def get_orchestrator(db: Session = Depends(get_db)) -> LLMOrchestrator:
         logger.warning(f"Failed to initialize embedding model: {e}, proceeding without")
         embedding_model = None
 
-    from pathlib import Path
     return get_llm_orchestrator(
         session=db,
         embedding_model=embedding_model,
-        knowledge_base_path=Path("backend/knowledge_base")
+        knowledge_base_path="backend/knowledge_base"
     )
 
 
