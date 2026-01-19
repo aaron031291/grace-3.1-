@@ -35,6 +35,22 @@ from .repair_engine import RepairEngine
 from .learning_module import LearningModule
 from .certificate_authority import CertificateAuthority
 from .genesis_integration import COVIShieldGenesisIntegration
+from .knowledge_base import (
+    COVIShieldKnowledgeBase,
+    get_covi_shield_knowledge_base,
+    COVIShieldTrustIntegration,
+    COVIShieldKPIIntegration,
+    COVIShieldComplianceIntegration,
+    COVIShieldAuditIntegration,
+    COVIShieldGovernanceIntegration,
+    COVIShieldFailurePredictorIntegration,
+    COVIShieldDiagnosticIntegration,
+    COVIShieldPatternMinerIntegration,
+    COVIShieldTimeSenseIntegration,
+    COVIShieldZeroTrustIntegration,
+    COVIShieldHallucinationGuardIntegration,
+    COVIShieldMemoryMeshIntegration
+)
 
 __version__ = "1.0.0"
 __all__ = [
@@ -60,5 +76,20 @@ __all__ = [
     "LearningModule",
     "CertificateAuthority",
     # Integration
-    "COVIShieldGenesisIntegration"
+    "COVIShieldGenesisIntegration",
+    # Knowledge Base
+    "COVIShieldKnowledgeBase",
+    "get_covi_shield_knowledge_base",
+    "COVIShieldTrustIntegration",
+    "COVIShieldKPIIntegration",
+    "COVIShieldComplianceIntegration",
+    "COVIShieldAuditIntegration",
+    "COVIShieldGovernanceIntegration",
+    "COVIShieldFailurePredictorIntegration",
+    "COVIShieldDiagnosticIntegration",
+    "COVIShieldPatternMinerIntegration",
+    "COVIShieldTimeSenseIntegration",
+    "COVIShieldZeroTrustIntegration",
+    "COVIShieldHallucinationGuardIntegration",
+    "COVIShieldMemoryMeshIntegration"
 ]
