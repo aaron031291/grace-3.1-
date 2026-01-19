@@ -58,8 +58,8 @@ class TestRateLimitingBasic:
             else:
                 response = client.post(endpoint, json={"query": "test", "top_k": 1})
 
-            # Should have response (200 or 422 for missing data)
-            assert response.status_code in [200, 400, 422, 429, 500]
+            # Should have response (200, 422 for missing data, or 429 for rate limited)
+            assert response.status_code in [200, 400, 422, 429], f"Unexpected {response.status_code}: {response.text}"
 
 
 class TestRateLimitingEnforcement:
