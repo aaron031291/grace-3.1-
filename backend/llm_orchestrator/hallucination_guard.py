@@ -1,3 +1,18 @@
+"""
+Hallucination Mitigation Pipeline
+
+Multi-layered approach to minimize LLM hallucinations:
+
+Layer 1: Repository Grounding - Claims must reference actual files/code
+Layer 2: Cross-Model Consensus - Multiple LLMs must agree
+Layer 3: Contradiction Detection - Check against existing knowledge
+Layer 4: Confidence Scoring - Trust score calculation
+Layer 5: Trust System Verification - Validate against learning memory
+Layer 6: External Verification - Web search and documentation lookup
+
+All operations are tracked and logged.
+"""
+
 import logging
 import re
 import json
@@ -7,9 +22,18 @@ from datetime import datetime
 from difflib import SequenceMatcher
 from urllib.parse import quote_plus
 import requests
-from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
-from llm_orchestrator.repo_access import RepositoryAccessLayer
+
+from .multi_llm_client import MultiLLMClient, TaskType
+from .repo_access import RepositoryAccessLayer
+from confidence_scorer.confidence_scorer import ConfidenceScorer
+from confidence_scorer.contradiction_detector import SemanticContradictionDetector
+
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# EXTERNAL VERIFICATION: Web Search and Documentation Lookup
+# =============================================================================
 
 class ExternalVerifier:
     """

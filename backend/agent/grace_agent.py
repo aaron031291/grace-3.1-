@@ -1,3 +1,17 @@
+"""
+Grace Agent
+
+The complete software engineering agent that combines Grace's cognitive
+systems with execution capabilities to solve real programming tasks.
+
+This is the main agent loop that:
+1. Understands tasks using RAG
+2. Plans approach using OODA
+3. Executes using the execution bridge
+4. Learns from outcomes
+5. Iterates until complete
+"""
+
 import asyncio
 import logging
 from typing import Dict, Any, List, Optional, Callable, Tuple
@@ -5,8 +19,15 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import uuid
+
 from execution.bridge import ExecutionBridge, ExecutionConfig, get_execution_bridge
-from execution.actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
+from execution.actions import (
+    GraceAction,
+    ActionRequest,
+    ActionResult,
+    ActionStatus,
+    create_action,
+)
 from execution.feedback import FeedbackProcessor, get_feedback_processor, LearningSignal
 
 logger = logging.getLogger(__name__)

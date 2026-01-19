@@ -1,3 +1,8 @@
+"""
+Librarian API endpoints.
+Provides REST API for tag management, relationships, rules, approval workflow, and document processing.
+"""
+
 from fastapi import APIRouter, HTTPException, Query, Path, Depends, Body
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -6,8 +11,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 import logging
 import json
+
 from database.session import get_session
-from models.librarian_models import LibrarianTag, DocumentTag, DocumentRelationship, LibrarianRule, LibrarianAction, LibrarianAudit
+from models.librarian_models import (
+    LibrarianTag, DocumentTag, DocumentRelationship,
+    LibrarianRule, LibrarianAction, LibrarianAudit
+)
 from models.database_models import Document
 from librarian.tag_manager import TagManager
 from librarian.rule_categorizer import RuleBasedCategorizer
@@ -21,7 +30,40 @@ from settings import settings
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/librarian", tags=["librarian"])
+# Create router
+router = APIRouter(prefix="/librarian", tags=["Librarian"])
+
+# Global singleton instances
+_librarian_engine: Optional[LibrarianEngine] = None
+
+
+def get_librarian_engine(session: Session) -> LibrarianEngine:
+    """Get or create librarian engine singleton."""
+    global _librarian_engine
+
+    if _librarian_engine is None:
+        logger.info("[LIBRARIAN-API] Initializing LibrarianEngine singleton")
+        try:
+            _librarian_engine = LibrarianEngine(
+                db_session=session,
+                embedding_model=get_embedding_model(),
+                ollama_client=get_ollama_client(),
+                vector_db_client=get_qdrant_client(),
+                ai_model_name=settings.LIBRARIAN_AI_MODEL,
+                use_ai=settings.LIBRARIAN_USE_AI,
+                detect_relationships=settings.LIBRARIAN_DETECT_RELATIONSHIPS,
+                ai_confidence_threshold=settings.LIBRARIAN_AI_CONFIDENCE_THRESHOLD,
+                similarity_threshold=settings.LIBRARIAN_SIMILARITY_THRESHOLD
+            )
+            logger.info("[LIBRARIAN-API] LibrarianEngine initialized successfully")
+        except Exception as e:
+            logger.error(f"[LIBRARIAN-API] Failed to initialize LibrarianEngine: {e}")
+            raise HTTPException(status_code=503, detail="Librarian engine unavailable")
+
+    return _librarian_engine
+
+
+# ==================== Pydantic Response Models ====================
 
 class TagResponse(BaseModel):
     """Tag information response."""
@@ -261,7 +303,6 @@ class StatisticsResponse(BaseModel):
     documents_processed: int = Field(..., description="Number of documents processed")
     ai_available: bool = Field(..., description="Whether AI is available")
     relationships_enabled: bool = Field(..., description="Whether relationships are enabled")
-    file_system: Optional[Dict[str, Any]] = Field(None, description="File system statistics")
 
 
 class HealthCheckResponse(BaseModel):
@@ -1313,11 +1354,10 @@ async def get_statistics(
         return StatisticsResponse(
             tags=stats["tags"],
             rules=stats["rules"],
-            relationships=stats.get("relationships", {}),
+            relationships=stats["relationships"],
             documents_processed=stats.get("documents_processed", 0),
             ai_available=stats["ai_available"],
-            relationships_enabled=stats["relationships_enabled"],
-            file_system=stats.get("file_system")
+            relationships_enabled=stats["relationships_enabled"]
         )
 
     except Exception as e:
@@ -1334,308 +1374,14 @@ async def health_check(
         librarian = get_librarian_engine(session)
         health = librarian.health_check()
 
-        # Convert health dict to components format (exclude overall_status and version)
-        components = {k: v for k, v in health.items() if k not in ["overall_status"]}
-        
         return HealthCheckResponse(
             overall_status=health["overall_status"],
-            components=components,
+            components=health["components"],
             version="1.0.0"
         )
 
     except Exception as e:
         logger.error(f"[LIBRARIAN-API] Error checking health: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== File System Operations Endpoints ====================
-
-class OrganizeDocumentRequest(BaseModel):
-    """Request to organize a document."""
-    target_folder: Optional[str] = Field(None, description="Explicit target folder (overrides auto-organization)")
-    folder_hierarchy: Optional[List[str]] = Field(None, description="List of folder names for nested structure (e.g., ['ai', 'research', 'papers'])")
-    tag_names: Optional[List[str]] = Field(None, description="List of tags to organize by (creates nested folders)")
-    max_depth: int = Field(5, ge=1, le=10, description="Maximum folder depth when using tags")
-    auto_create_folders: bool = Field(True, description="Automatically create folders if missing")
-
-
-class OrganizeDocumentResponse(BaseModel):
-    """Response for document organization."""
-    success: bool = Field(..., description="Whether organization succeeded")
-    target_path: Optional[str] = Field(None, description="Target organization path")
-    folder_created: bool = Field(False, description="Whether folder was created")
-    file_moved: bool = Field(False, description="Whether file was moved")
-    organization_path: Optional[str] = Field(None, description="Final organization path")
-    error: Optional[str] = Field(None, description="Error message if failed")
-
-
-class RenameFileRequest(BaseModel):
-    """Request to rename a file."""
-    new_filename: Optional[str] = Field(None, description="New filename (if None, will suggest)")
-    auto_suggest: bool = Field(True, description="Automatically suggest if new_filename not provided")
-
-
-class RenameFileResponse(BaseModel):
-    """Response for file renaming."""
-    success: bool = Field(..., description="Whether rename succeeded")
-    renamed: bool = Field(False, description="Whether file was actually renamed")
-    old_filename: Optional[str] = Field(None, description="Old filename")
-    new_filename: Optional[str] = Field(None, description="New filename")
-    old_path: Optional[str] = Field(None, description="Old file path")
-    new_path: Optional[str] = Field(None, description="New file path")
-    error: Optional[str] = Field(None, description="Error message if failed")
-
-
-class SuggestFilenameResponse(BaseModel):
-    """Response for filename suggestion."""
-    success: bool = Field(..., description="Whether suggestion succeeded")
-    suggested_filename: Optional[str] = Field(None, description="Suggested filename")
-    current_filename: Optional[str] = Field(None, description="Current filename")
-    confidence: float = Field(0.0, description="Confidence in suggestion")
-    reason: Optional[str] = Field(None, description="Reason for suggestion")
-    needs_rename: bool = Field(False, description="Whether rename is needed")
-    error: Optional[str] = Field(None, description="Error message if failed")
-
-
-class CreateIndexFileRequest(BaseModel):
-    """Request to create an index file."""
-    folder_path: str = Field(..., description="Folder path relative to knowledge base")
-    document_ids: Optional[List[int]] = Field(None, description="Optional list of document IDs")
-    include_metadata: bool = Field(True, description="Include document metadata in index")
-
-
-class CreateIndexFileResponse(BaseModel):
-    """Response for index file creation."""
-    success: bool = Field(..., description="Whether creation succeeded")
-    index_path: Optional[str] = Field(None, description="Path to created index file")
-    documents_count: int = Field(0, description="Number of documents indexed")
-    error: Optional[str] = Field(None, description="Error message if failed")
-
-
-class CreateSummaryFileRequest(BaseModel):
-    """Request to create a summary file."""
-    folder_path: str = Field(..., description="Folder path relative to knowledge base")
-    document_ids: List[int] = Field(..., description="List of document IDs to summarize")
-    summary_type: str = Field("overview", description="Type of summary (overview, detailed, tags)")
-
-
-class CreateSummaryFileResponse(BaseModel):
-    """Response for summary file creation."""
-    success: bool = Field(..., description="Whether creation succeeded")
-    summary_path: Optional[str] = Field(None, description="Path to created summary file")
-    documents_count: int = Field(0, description="Number of documents summarized")
-    error: Optional[str] = Field(None, description="Error message if failed")
-
-
-class UnifiedRetrievalRequest(BaseModel):
-    """Request for unified retrieval."""
-    query: Optional[str] = Field(None, description="Optional text query")
-    tag_names: Optional[List[str]] = Field(None, description="Optional list of tags to filter by")
-    match_all_tags: bool = Field(False, description="Require all tags (AND) or any tag (OR)")
-    relationship_from: Optional[int] = Field(None, description="Optional document ID to find related documents")
-    relationship_types: Optional[List[str]] = Field(None, description="Optional list of relationship types")
-    metadata_filters: Optional[Dict[str, Any]] = Field(None, description="Optional metadata filters")
-    limit: int = Field(50, ge=1, le=500, description="Maximum results to return")
-    min_confidence: float = Field(0.0, ge=0.0, le=1.0, description="Minimum confidence score")
-
-
-class UnifiedRetrievalResponse(BaseModel):
-    """Response for unified retrieval."""
-    documents: List[Dict[str, Any]] = Field(..., description="List of matching documents")
-    total: int = Field(..., description="Total number of results")
-    methods_used: List[str] = Field(..., description="Retrieval methods used")
-    search_params: Dict[str, Any] = Field(..., description="Search parameters used")
-
-
-@router.post("/organize/{document_id}", response_model=OrganizeDocumentResponse, summary="Organize document")
-async def organize_document(
-    document_id: int = Path(..., description="Document ID"),
-    request: OrganizeDocumentRequest = Body(...),
-    session: Session = Depends(get_session)
-):
-    """
-    Organize a document into appropriate folder structure.
-    
-    Supports multiple organization methods:
-    1. Explicit folder: Use target_folder
-    2. Folder hierarchy: Use folder_hierarchy to create nested structure
-    3. Tag-based: Use tag_names to create nested folders from tags
-    4. Auto: Use organization pattern if none specified
-    """
-    try:
-        librarian = get_librarian_engine(session)
-        
-        # Determine organization method
-        if request.folder_hierarchy:
-            # Use explicit folder hierarchy
-            result = librarian.file_organizer.organize_into_subfolder(
-                document_id=document_id,
-                folder_hierarchy=request.folder_hierarchy,
-                base_path="documents"
-            )
-        elif request.tag_names:
-            # Use tags to create nested folders
-            result = librarian.file_organizer.organize_by_tags(
-                document_id=document_id,
-                tag_names=request.tag_names,
-                base_path="documents",
-                max_depth=request.max_depth
-            )
-        else:
-            # Use target_folder or auto-organization
-            result = librarian.file_organizer.organize_document(
-                document_id=document_id,
-                target_folder=request.target_folder,
-                auto_create_folders=request.auto_create_folders
-            )
-        
-        return OrganizeDocumentResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error organizing document {document_id}: {e}", exc_info=True)
-        return OrganizeDocumentResponse(
-            success=False,
-            error=str(e)
-        )
-
-
-@router.post("/rename/{document_id}", response_model=RenameFileResponse, summary="Rename document file")
-async def rename_document_file(
-    document_id: int = Path(..., description="Document ID"),
-    request: RenameFileRequest = Body(...),
-    session: Session = Depends(get_session)
-):
-    """Rename a document's file."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.file_naming_manager.rename_file(
-            document_id=document_id,
-            new_filename=request.new_filename,
-            auto_suggest=request.auto_suggest
-        )
-        return RenameFileResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error renaming document {document_id}: {e}", exc_info=True)
-        return RenameFileResponse(
-            success=False,
-            error=str(e)
-        )
-
-
-@router.get("/rename/{document_id}/suggest", response_model=SuggestFilenameResponse, summary="Suggest filename")
-async def suggest_filename(
-    document_id: int = Path(..., description="Document ID"),
-    based_on: str = Query("content", description="What to base name on (content, tags, metadata, current)"),
-    max_length: int = Query(100, ge=20, le=255, description="Maximum filename length"),
-    session: Session = Depends(get_session)
-):
-    """Suggest a better filename for a document."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.file_naming_manager.suggest_filename(
-            document_id=document_id,
-            based_on=based_on,
-            max_length=max_length
-        )
-        return SuggestFilenameResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error suggesting filename for document {document_id}: {e}", exc_info=True)
-        return SuggestFilenameResponse(
-            success=False,
-            error=str(e)
-        )
-
-
-@router.post("/create-index", response_model=CreateIndexFileResponse, summary="Create index file")
-async def create_index_file(
-    request: CreateIndexFileRequest = Body(...),
-    session: Session = Depends(get_session)
-):
-    """Create index file listing all documents in a folder."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.file_creator.create_index_file(
-            folder_path=request.folder_path,
-            document_ids=request.document_ids,
-            include_metadata=request.include_metadata
-        )
-        return CreateIndexFileResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error creating index file: {e}", exc_info=True)
-        return CreateIndexFileResponse(
-            success=False,
-            error=str(e)
-        )
-
-
-@router.post("/create-summary", response_model=CreateSummaryFileResponse, summary="Create summary file")
-async def create_summary_file(
-    request: CreateSummaryFileRequest = Body(...),
-    session: Session = Depends(get_session)
-):
-    """Create summary file for a collection of documents."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.file_creator.create_summary_file(
-            folder_path=request.folder_path,
-            document_ids=request.document_ids,
-            summary_type=request.summary_type
-        )
-        return CreateSummaryFileResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error creating summary file: {e}", exc_info=True)
-        return CreateSummaryFileResponse(
-            success=False,
-            error=str(e)
-        )
-
-
-@router.post("/retrieve-unified", response_model=UnifiedRetrievalResponse, summary="Unified document retrieval")
-async def retrieve_unified(
-    request: UnifiedRetrievalRequest = Body(...),
-    session: Session = Depends(get_session)
-):
-    """Unified retrieval combining tags, relationships, and metadata search."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.unified_retriever.retrieve(
-            query=request.query,
-            tag_names=request.tag_names,
-            match_all_tags=request.match_all_tags,
-            relationship_from=request.relationship_from,
-            relationship_types=request.relationship_types,
-            metadata_filters=request.metadata_filters,
-            limit=request.limit,
-            min_confidence=request.min_confidence
-        )
-        return UnifiedRetrievalResponse(**result)
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in unified retrieval: {e}", exc_info=True)
-        return UnifiedRetrievalResponse(
-            documents=[],
-            total=0,
-            methods_used=[],
-            search_params={}
-        )
-
-
-@router.get("/organization/statistics", summary="Get organization statistics")
-async def get_organization_statistics(
-    session: Session = Depends(get_session)
-):
-    """Get statistics about file organization."""
-    try:
-        librarian = get_librarian_engine(session)
-        stats = librarian.file_organizer.get_organization_statistics()
-        return stats
-
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting organization statistics: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -1775,606 +1521,4 @@ async def get_daily_summary(
         raise
     except Exception as e:
         logger.error(f"[LIBRARIAN-API] Error getting daily summary: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Content Recommendations Endpoints ====================
-
-@router.get("/recommendations/related/{document_id}", summary="Get related document recommendations")
-async def get_related_recommendations(
-    document_id: int = Path(..., description="Source document ID"),
-    limit: int = Query(10, ge=1, le=50, description="Maximum recommendations"),
-    min_score: float = Query(0.3, ge=0.0, le=1.0, description="Minimum recommendation score"),
-    session: Session = Depends(get_session)
-):
-    """Get related document recommendations based on tags, relationships, and metadata."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_recommender.recommend_related(
-            document_id=document_id,
-            limit=limit,
-            min_score=min_score
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting recommendations: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/recommendations/by-tags", summary="Recommend documents by tags")
-async def recommend_by_tags(
-    tag_names: List[str] = Body(..., description="List of tags to match"),
-    limit: int = Body(10, ge=1, le=50),
-    match_all: bool = Body(False, description="Require all tags (AND) or any tag (OR)"),
-    session: Session = Depends(get_session)
-):
-    """Recommend documents based on tags."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_recommender.recommend_by_tags(
-            tag_names=tag_names,
-            limit=limit,
-            match_all=match_all
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error recommending by tags: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/recommendations/trending", summary="Get trending documents")
-async def get_trending_documents(
-    days: int = Query(7, ge=1, le=90, description="Number of days to look back"),
-    limit: int = Query(10, ge=1, le=100, description="Maximum recommendations"),
-    min_confidence: float = Query(0.5, ge=0.0, le=1.0, description="Minimum confidence score"),
-    session: Session = Depends(get_session)
-):
-    """Get trending documents (recently created with high confidence)."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_recommender.recommend_trending(
-            days=days,
-            limit=limit,
-            min_confidence=min_confidence
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting trending documents: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Content Lifecycle Management Endpoints ====================
-
-@router.post("/lifecycle/archive-old", summary="Archive old documents")
-async def archive_old_documents(
-    age_days: int = Body(365, ge=1, description="Age threshold in days"),
-    min_confidence: float = Body(0.0, ge=0.0, le=1.0, description="Only archive documents below this confidence"),
-    dry_run: bool = Body(False, description="If true, don't actually archive (just report)"),
-    session: Session = Depends(get_session)
-):
-    """Archive documents older than specified age."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.lifecycle_manager.archive_old_documents(
-            age_days=age_days,
-            min_confidence=min_confidence,
-            dry_run=dry_run
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error archiving old documents: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/lifecycle/expire-temporary", summary="Expire temporary documents")
-async def expire_temporary_documents(
-    expiration_days: int = Body(30, ge=1, description="Days before expiration"),
-    dry_run: bool = Body(False, description="If true, don't actually expire (just report)"),
-    session: Session = Depends(get_session)
-):
-    """Delete or archive temporary documents after expiration."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.lifecycle_manager.expire_temporary_documents(
-            expiration_days=expiration_days,
-            dry_run=dry_run
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error expiring temporary documents: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/lifecycle/apply-retention", summary="Apply retention policies")
-async def apply_retention_policies(
-    policies: List[Dict[str, Any]] = Body(..., description="List of retention policies"),
-    dry_run: bool = Body(False, description="If true, don't actually apply (just report)"),
-    session: Session = Depends(get_session)
-):
-    """Apply retention policies to documents."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.lifecycle_manager.apply_retention_policies(
-            policies=policies,
-            dry_run=dry_run
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error applying retention policies: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Content Integrity Verification Endpoints ====================
-
-@router.get("/integrity/verify/{document_id}", summary="Verify document integrity")
-async def verify_document_integrity(
-    document_id: int = Path(..., description="Document ID"),
-    recompute_hash: bool = Query(True, description="Recompute hash from file"),
-    session: Session = Depends(get_session)
-):
-    """Verify integrity of a single document."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.integrity_verifier.verify_document_integrity(
-            document_id=document_id,
-            recompute_hash=recompute_hash
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error verifying document integrity: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/integrity/batch-verify", summary="Batch verify document integrity")
-async def batch_verify_integrity(
-    limit: int = Body(1000, ge=1, le=10000, description="Maximum documents to verify"),
-    document_ids: Optional[List[int]] = Body(None, description="Optional list of specific document IDs"),
-    recompute_all: bool = Body(True, description="Recompute all hashes"),
-    session: Session = Depends(get_session)
-):
-    """Verify integrity of multiple documents."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.integrity_verifier.batch_verify_integrity(
-            limit=limit,
-            document_ids=document_ids,
-            recompute_all=recompute_all
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error batch verifying integrity: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/integrity/detect-corruption", summary="Detect corrupted or modified files")
-async def detect_corruption(
-    limit: int = Body(1000, ge=1, le=10000, description="Maximum documents to scan"),
-    session: Session = Depends(get_session)
-):
-    """Scan for corrupted or modified files."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.integrity_verifier.detect_corruption(limit=limit)
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error detecting corruption: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/integrity/revalidate-hashes", summary="Revalidate document hashes")
-async def revalidate_hashes(
-    document_ids: Optional[List[int]] = Body(None, description="Optional list of document IDs"),
-    update_database: bool = Body(False, description="Update database with recomputed hashes"),
-    session: Session = Depends(get_session)
-):
-    """Recompute and validate all document hashes."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.integrity_verifier.revalidate_hashes(
-            document_ids=document_ids,
-            update_database=update_database
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error revalidating hashes: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Genesis Key Integration Endpoints ====================
-
-@router.get("/genesis-keys/document/{document_id}", summary="Get Genesis Keys for document")
-async def get_document_genesis_keys(
-    document_id: int = Path(..., description="Document ID"),
-    limit: int = Query(10, ge=1, le=100, description="Maximum keys to return"),
-    session: Session = Depends(get_session)
-):
-    """Get all Genesis Keys associated with a document."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.genesis_integration.get_document_genesis_keys(
-            document_id=document_id,
-            limit=limit
-        )
-        return {
-            "document_id": document_id,
-            "genesis_keys": result,
-            "total": len(result)
-        }
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting Genesis Keys: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/genesis-keys/organize/{document_id}", summary="Organize document by Genesis Key metadata")
-async def organize_by_genesis_metadata(
-    document_id: int = Path(..., description="Document ID"),
-    genesis_key_id: Optional[str] = Body(None, description="Optional Genesis Key ID"),
-    session: Session = Depends(get_session)
-):
-    """Organize document based on Genesis Key metadata (user, session, type)."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.genesis_integration.organize_by_genesis_metadata(
-            document_id=document_id,
-            genesis_key_id=genesis_key_id
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error organizing by Genesis metadata: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Content Visualization Endpoints ====================
-
-@router.get("/visualization/tag-cloud", summary="Get tag cloud data")
-async def get_tag_cloud(
-    min_usage: int = Query(1, ge=0, description="Minimum usage count"),
-    limit: int = Query(100, ge=1, le=500, description="Maximum tags"),
-    session: Session = Depends(get_session)
-):
-    """Get tag cloud visualization data."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_visualizer.get_tag_cloud_data(
-            min_usage=min_usage,
-            limit=limit
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting tag cloud: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/visualization/relationship-graph", summary="Get relationship graph")
-async def get_relationship_graph(
-    document_id: Optional[int] = Query(None, description="Root document ID"),
-    max_depth: int = Query(2, ge=1, le=5, description="Maximum depth"),
-    limit_per_level: int = Query(10, ge=1, le=100, description="Max relationships per level"),
-    session: Session = Depends(get_session)
-):
-    """Get relationship graph structure."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_visualizer.get_relationship_graph(
-            document_id=document_id,
-            max_depth=max_depth,
-            limit_per_level=limit_per_level
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting relationship graph: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/visualization/organization-hierarchy", summary="Get organization hierarchy")
-async def get_organization_hierarchy(
-    base_path: str = Query("documents", description="Base path"),
-    session: Session = Depends(get_session)
-):
-    """Get organization hierarchy tree structure."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_visualizer.get_organization_hierarchy(base_path=base_path)
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting hierarchy: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/visualization/statistics-timeline", summary="Get statistics timeline")
-async def get_statistics_timeline(
-    days: int = Query(30, ge=1, le=365, description="Number of days"),
-    interval: str = Query("day", description="Time interval (day, week, month)"),
-    session: Session = Depends(get_session)
-):
-    """Get statistics timeline data."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_visualizer.get_statistics_timeline(
-            days=days,
-            interval=interval
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting timeline: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/visualization/analytics", summary="Get content analytics")
-async def get_content_analytics(
-    session: Session = Depends(get_session)
-):
-    """Get comprehensive content analytics."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.content_visualizer.get_content_analytics()
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting analytics: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ==================== Bulk Operations Endpoints ====================
-
-@router.post("/bulk/tag", summary="Bulk tag documents")
-async def bulk_tag_documents(
-    document_ids: List[int] = Body(..., description="List of document IDs"),
-    tag_names: List[str] = Body(..., description="List of tags to assign"),
-    assigned_by: str = Body("bulk_operation", description="Who assigned the tags"),
-    skip_errors: bool = Body(True, description="Continue on errors"),
-    session: Session = Depends(get_session)
-):
-    """Tag multiple documents at once."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.bulk_operations.bulk_tag_documents(
-            document_ids=document_ids,
-            tag_names=tag_names,
-            assigned_by=assigned_by,
-            skip_errors=skip_errors
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in bulk tagging: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/bulk/tag-by-query", summary="Tag documents by query")
-async def bulk_tag_by_query(
-    query_filters: Dict[str, Any] = Body(..., description="Query filters"),
-    tag_names: List[str] = Body(..., description="List of tags"),
-    assigned_by: str = Body("bulk_operation", description="Who assigned"),
-    limit: int = Body(1000, ge=1, le=10000, description="Maximum documents"),
-    session: Session = Depends(get_session)
-):
-    """Tag documents matching query filters."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.bulk_operations.bulk_tag_by_query(
-            query_filters=query_filters,
-            tag_names=tag_names,
-            assigned_by=assigned_by,
-            limit=limit
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in bulk tag by query: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/bulk/organize", summary="Bulk organize documents")
-async def bulk_organize_documents(
-    document_ids: List[int] = Body(..., description="List of document IDs"),
-    organization_pattern: Optional[str] = Body(None, description="Organization pattern"),
-    skip_errors: bool = Body(True, description="Continue on errors"),
-    session: Session = Depends(get_session)
-):
-    """Organize multiple documents."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.bulk_operations.bulk_organize_documents(
-            document_ids=document_ids,
-            organization_pattern=organization_pattern,
-            skip_errors=skip_errors
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in bulk organization: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/bulk/rename", summary="Bulk rename documents")
-async def bulk_rename_documents(
-    document_ids: List[int] = Body(..., description="List of document IDs"),
-    naming_convention: Optional[str] = Body(None, description="Naming convention"),
-    skip_errors: bool = Body(True, description="Continue on errors"),
-    session: Session = Depends(get_session)
-):
-    """Rename multiple documents."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.bulk_operations.bulk_rename_documents(
-            document_ids=document_ids,
-            naming_convention=naming_convention,
-            skip_errors=skip_errors
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in bulk renaming: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/bulk/export-metadata", summary="Export document metadata")
-async def export_document_metadata(
-    document_ids: Optional[List[int]] = Body(None, description="Optional list of document IDs"),
-    format: str = Body("json", description="Export format (json, csv)"),
-    session: Session = Depends(get_session)
-):
-    """Export document metadata."""
-    try:
-        librarian = get_librarian_engine(session)
-        result = librarian.bulk_operations.export_document_metadata(
-            document_ids=document_ids,
-            format=format
-        )
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error exporting metadata: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# =============================================================================
-# UNIFIED LIBRARIAN BRIDGE ENDPOINTS (Amp + Grace Integration)
-# =============================================================================
-
-@router.get("/unified/status", summary="Get unified librarian status")
-async def get_unified_librarian_status(session: Session = Depends(get_session)):
-    """
-    Get status of the unified librarian system.
-    
-    Shows both local Grace librarian and external sources (GitHub, docs).
-    """
-    try:
-        librarian = get_librarian_engine(session)
-        return librarian.get_unified_status()
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting unified status: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/unified/search", summary="Unified search across all sources")
-async def unified_librarian_search(
-    query: str = Body(..., description="Search query"),
-    include_external: bool = Body(True, description="Include external sources"),
-    limit: int = Body(20, description="Maximum results"),
-    session: Session = Depends(get_session)
-):
-    """
-    Search across ALL knowledge sources - local AND external.
-    
-    This is the main unified search that queries:
-    - Grace's local knowledge base
-    - Registered GitHub repositories
-    - External documentation sources
-    """
-    try:
-        librarian = get_librarian_engine(session)
-        return librarian.unified_search(
-            query=query,
-            include_external=include_external,
-            limit=limit
-        )
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error in unified search: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/unified/register-github", summary="Register a GitHub repository")
-async def register_github_repository(
-    repo_url: str = Body(..., description="GitHub repo URL"),
-    name: Optional[str] = Body(None, description="Display name"),
-    is_private: bool = Body(False, description="Is private repo"),
-    sync_interval_hours: int = Body(24, description="Sync interval in hours"),
-    session: Session = Depends(get_session)
-):
-    """
-    Register a GitHub repository as an external knowledge source.
-    
-    Once registered, the repo will be synced and searchable via unified search.
-    """
-    try:
-        librarian = get_librarian_engine(session)
-        source = librarian.amp_bridge.register_github_repo(
-            repo_url=repo_url,
-            name=name,
-            is_private=is_private,
-            sync_interval_hours=sync_interval_hours
-        )
-        return {
-            "success": True,
-            "source": {
-                "identifier": source.identifier,
-                "name": source.name,
-                "url": source.url,
-                "type": source.source_type.value
-            }
-        }
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error registering GitHub repo: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/unified/register-docs", summary="Register external documentation")
-async def register_external_documentation(
-    url: str = Body(..., description="Documentation URL"),
-    name: str = Body(..., description="Display name"),
-    doc_type: str = Body("general", description="Documentation type"),
-    session: Session = Depends(get_session)
-):
-    """Register external documentation as a knowledge source."""
-    try:
-        librarian = get_librarian_engine(session)
-        source = librarian.amp_bridge.register_documentation(
-            url=url,
-            name=name,
-            doc_type=doc_type
-        )
-        return {
-            "success": True,
-            "source": {
-                "identifier": source.identifier,
-                "name": source.name,
-                "url": source.url,
-                "type": source.source_type.value
-            }
-        }
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error registering documentation: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/unified/sync/{source_identifier}", summary="Sync external source")
-async def sync_external_source(
-    source_identifier: str = Path(..., description="Source identifier"),
-    session: Session = Depends(get_session)
-):
-    """
-    Sync an external source (pull latest from GitHub, etc.)
-    
-    This updates the local cache with latest content.
-    """
-    import asyncio
-    try:
-        librarian = get_librarian_engine(session)
-        # Run async sync
-        result = await librarian.amp_bridge.sync_github_repo(source_identifier)
-        return result
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error syncing source: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/unified/sources", summary="List all registered sources")
-async def list_registered_sources(session: Session = Depends(get_session)):
-    """List all registered external knowledge sources."""
-    try:
-        librarian = get_librarian_engine(session)
-        status = librarian.amp_bridge.get_status()
-        return {
-            "total_sources": status.get("registered_sources", 0),
-            "sources": status.get("sources", {})
-        }
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error listing sources: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/unified/analytics", summary="Get unified analytics")
-async def get_unified_analytics(session: Session = Depends(get_session)):
-    """Get analytics across all knowledge sources (local + external)."""
-    try:
-        librarian = get_librarian_engine(session)
-        return librarian.amp_bridge.get_unified_analytics()
-    except Exception as e:
-        logger.error(f"[LIBRARIAN-API] Error getting unified analytics: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))

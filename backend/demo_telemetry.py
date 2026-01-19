@@ -8,8 +8,6 @@ This script demonstrates:
 4. Capturing system state
 """
 import sys
-import logging
-logger = logging.getLogger(__name__)
 from pathlib import Path
 
 # Add backend to path
@@ -23,34 +21,34 @@ from models.telemetry_models import OperationType
 from database.connection import DatabaseConnection
 from database.session import initialize_session_factory
 
-logger.info("=" * 60)
-logger.info("Grace Self-Modeling Telemetry System - Test Script")
-logger.info("=" * 60)
+print("=" * 60)
+print("Grace Self-Modeling Telemetry System - Test Script")
+print("=" * 60)
 
 # Initialize database
-logger.info("\n[1/5] Initializing database connection...")
+print("\n[1/5] Initializing database connection...")
 try:
     DatabaseConnection.initialize()
     initialize_session_factory()
-    logger.info("✓ Database initialized")
+    print("✓ Database initialized")
 except Exception as e:
-    logger.info(f"✗ Failed to initialize database: {e}")
+    print(f"✗ Failed to initialize database: {e}")
     sys.exit(1)
 
 # Run migration
-logger.info("\n[2/5] Running telemetry table migration...")
+print("\n[2/5] Running telemetry table migration...")
 try:
     from database.migrate_add_telemetry import migrate
     migrate()
-    logger.info("✓ Migration complete")
+    print("✓ Migration complete")
 except Exception as e:
-    logger.info(f"✗ Migration failed: {e}")
+    print(f"✗ Migration failed: {e}")
     import traceback
     traceback.print_exc()
     # Continue anyway - tables might already exist
 
 # Test telemetry tracking
-logger.info("\n[3/5] Testing operation tracking...")
+print("\n[3/5] Testing operation tracking...")
 
 @track_operation(OperationType.INGESTION, "test_ingestion", capture_inputs=True)
 def test_ingestion_operation(filename: str, size_kb: int):
@@ -66,7 +64,7 @@ def test_retrieval_operation(query: str, limit: int = 5):
 
 try:
     # Run some operations to generate telemetry data
-    logger.info("   Running test operations...")
+    print("   Running test operations...")
 
     # Successful operations
     for i in range(5):
@@ -77,31 +75,31 @@ try:
     time.sleep(0.3)
     test_ingestion_operation("large_doc.pdf", size_kb=1000)
 
-    logger.info("✓ Operations tracked successfully")
+    print("✓ Operations tracked successfully")
 except Exception as e:
-    logger.info(f"✗ Operation tracking failed: {e}")
+    print(f"✗ Operation tracking failed: {e}")
     import traceback
     traceback.print_exc()
 
 # Capture system state
-logger.info("\n[4/5] Capturing system state...")
+print("\n[4/5] Capturing system state...")
 try:
     telemetry = get_telemetry_service()
     state = telemetry.capture_system_state()
-    logger.info(f"✓ System state captured:")
-    logger.info(f"   - Ollama running: {state.ollama_running}")
-    logger.info(f"   - Qdrant connected: {state.qdrant_connected}")
-    logger.info(f"   - Documents: {state.document_count}")
-    logger.info(f"   - Chunks: {state.chunk_count}")
-    logger.info(f"   - CPU: {state.cpu_percent:.1f}%")
-    logger.info(f"   - Memory: {state.memory_percent:.1f}%")
+    print(f"✓ System state captured:")
+    print(f"   - Ollama running: {state.ollama_running}")
+    print(f"   - Qdrant connected: {state.qdrant_connected}")
+    print(f"   - Documents: {state.document_count}")
+    print(f"   - Chunks: {state.chunk_count}")
+    print(f"   - CPU: {state.cpu_percent:.1f}%")
+    print(f"   - Memory: {state.memory_percent:.1f}%")
 except Exception as e:
-    logger.info(f"⚠ System state capture failed: {e}")
+    print(f"⚠ System state capture failed: {e}")
     import traceback
     traceback.print_exc()
 
 # Query telemetry data
-logger.info("\n[5/5] Querying telemetry data...")
+print("\n[5/5] Querying telemetry data...")
 try:
     from database.session import get_session
     from models.telemetry_models import OperationLog, PerformanceBaseline, DriftAlert
@@ -113,17 +111,17 @@ try:
         OperationLog.started_at.desc()
     ).limit(5).all()
 
-    logger.info(f"✓ Recent operations ({len(recent_ops)}):")
+    print(f"✓ Recent operations ({len(recent_ops)}):")
     for op in recent_ops:
         status_icon = "✓" if op.status.value == "completed" else "✗"
-        logger.info(f"   {status_icon} {op.operation_name}: {op.duration_ms:.1f}ms ({op.status.value})")
+        print(f"   {status_icon} {op.operation_name}: {op.duration_ms:.1f}ms ({op.status.value})")
 
     # Baselines
     baselines = session.query(PerformanceBaseline).all()
-    logger.info(f"\n✓ Performance baselines ({len(baselines)}):")
+    print(f"\n✓ Performance baselines ({len(baselines)}):")
     for baseline in baselines:
-        logger.info(f"   - {baseline.operation_name}:")
-        logger.info(f"     Mean: {baseline.mean_duration_ms:.1f}ms, "
+        print(f"   - {baseline.operation_name}:")
+        print(f"     Mean: {baseline.mean_duration_ms:.1f}ms, "
               f"P95: {baseline.p95_duration_ms:.1f}ms, "
               f"Success rate: {baseline.success_rate:.1%}")
 
@@ -131,25 +129,25 @@ try:
     alerts = session.query(DriftAlert).filter(
         DriftAlert.resolved == False
     ).all()
-    logger.info(f"\n✓ Active drift alerts ({len(alerts)}):")
+    print(f"\n✓ Active drift alerts ({len(alerts)}):")
     for alert in alerts:
-        logger.info(f"   ⚠ {alert.drift_type} - {alert.operation_name} "
+        print(f"   ⚠ {alert.drift_type} - {alert.operation_name} "
               f"(deviation: {alert.deviation_percent:.1f}%, severity: {alert.severity})")
 
     session.close()
 
 except Exception as e:
-    logger.info(f"⚠ Query failed: {e}")
+    print(f"⚠ Query failed: {e}")
     import traceback
     traceback.print_exc()
 
-logger.info("\n" + "=" * 60)
-logger.info("Test complete!")
-logger.info("\nTelemetry API endpoints are now available:")
-logger.info("  - GET  /telemetry/operations      - View operation logs")
-logger.info("  - GET  /telemetry/baselines        - View performance baselines")
-logger.info("  - GET  /telemetry/drift-alerts     - View drift alerts")
-logger.info("  - GET  /telemetry/system-state/current  - Current system state")
-logger.info("  - GET  /telemetry/stats            - Aggregated statistics")
-logger.info("  - GET  /telemetry/health           - Telemetry system health")
-logger.info("=" * 60)
+print("\n" + "=" * 60)
+print("Test complete!")
+print("\nTelemetry API endpoints are now available:")
+print("  - GET  /telemetry/operations      - View operation logs")
+print("  - GET  /telemetry/baselines        - View performance baselines")
+print("  - GET  /telemetry/drift-alerts     - View drift alerts")
+print("  - GET  /telemetry/system-state/current  - Current system state")
+print("  - GET  /telemetry/stats            - Aggregated statistics")
+print("  - GET  /telemetry/health           - Telemetry system health")
+print("=" * 60)

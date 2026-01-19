@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 import VoiceButton from "./VoiceButton";
+import SearchInternetButton from "./SearchInternetButton";
 
 export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
@@ -11,6 +12,8 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [showTempControl, setShowTempControl] = useState(false);
   const [expandedSources, setExpandedSources] = useState({});
   const [lastAssistantMessage, setLastAssistantMessage] = useState("");
+  const [showSearchInternet, setShowSearchInternet] = useState(false);
+  const [lastQuery, setLastQuery] = useState("");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -198,14 +201,18 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     }
   };
 
-  const sendMessage = async (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim() || !chatId || loading) return;
 
     const userMessage = input.trim();
+    setInput("");
+    setLoading(true);
+    // Reset search internet button state for new query
+    setShowSearchInternet(false);
+
     const isFirstMessage = messages.length === 0;
     const currentChatTitle = chatInfo?.title;
-    setInput("");
 
     // Add user message immediately
     const newUserMessage = {
@@ -218,23 +225,17 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     setLoading(true);
 
     try {
-      // Use full LLM orchestrator with world model integration
-      // Build conversation history
-      const conversationHistory = messages.slice(-10).map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }));
-
+      // Send prompt and get response
       const response = await fetch(
-        `http://localhost:8000/chat/orchestrator`,
+        `http://localhost:8000/chats/${chatId}/prompt`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: userMessage,
-            chat_id: chatId,
-            folder_path: folderPath || null,
-            conversation_history: conversationHistory,
+            content: userMessage,
+            temperature: chatInfo?.temperature || 0.7,
+            top_p: 0.9,
+            top_k: 40,
           }),
         }
       );
@@ -247,10 +248,15 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         // Context-aware message based on whether this is a folder-scoped chat
         let notFoundMessage;
         if (folderPath) {
-          notFoundMessage = `No relevant information found in folder "${folderPath.split(/[/\\]/).pop()}". This chat is scoped to that folder's learning memory. Please upload documents to this folder or switch to a General Chat for broader queries.`;
+          notFoundMessage = `No relevant information found in folder "${folderPath.split(/[/\\]/).pop()}". You can search the internet to add knowledge to this folder, or switch to a General Chat.`;
+          // Allow search button for folder chats so users can populate them!
+          setShowSearchInternet(true);
         } else {
-          notFoundMessage = "Knowledge not found. Please upload relevant documents to the knowledge base so I can learn and answer your questions better.";
+          notFoundMessage = "I don't have any information about that in my knowledge base yet.";
+          // Show search internet button for general chats
+          setShowSearchInternet(true);
         }
+        setLastQuery(userMessage);
 
         // Add assistant message about scope limitation
         const assistantMessage = {
@@ -260,6 +266,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
           tokens: null,
           sources: [],
           isSystemMessage: true, // Mark as system message
+          showSearchButton: true, // Show button for all chats now that we have folder scoping
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
@@ -276,19 +283,13 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       const result = await response.json();
 
-      // Add assistant message with full orchestrator metadata
+      // Add assistant message with sources if available
       const assistantMessage = {
-        id: result.assistant_message_id || Date.now() + Math.random(),
+        id: result.assistant_message_id,
         role: "assistant",
-        content: result.content || result.message,
+        content: result.message,
         tokens: null,
-        sources: result.sources || [],
-        genesis_key_id: result.genesis_key_id,
-        trust_score: result.trust_score,
-        confidence_score: result.confidence_score,
-        model_used: result.model_used,
-        world_model_integrated: result.world_model_integrated,
-        verification: result.verification,
+        sources: result.sources || [], // Include sources from response
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -417,9 +418,8 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`message message-${msg.role}${
-              msg.isSystemMessage ? " message-system" : ""
-            }`}
+            className={`message message-${msg.role}${msg.isSystemMessage ? " message-system" : ""
+              }`}
           >
             <div className="message-avatar">
               {msg.role === "user" ? "👤" : msg.isSystemMessage ? "⚙️" : "🤖"}
@@ -430,44 +430,15 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
               {msg.tokens && (
                 <div className="message-meta">Tokens: {msg.tokens}</div>
               )}
-              {/* LLM Orchestrator Metadata */}
-              {msg.role === "assistant" && (msg.genesis_key_id || msg.trust_score || msg.model_used) && (
-                <div className="message-orchestrator-metadata">
-                  {msg.genesis_key_id && (
-                    <div className="metadata-item">
-                      <span className="metadata-label">🔑 Genesis Key:</span>
-                      <span className="metadata-value">{msg.genesis_key_id}</span>
-                    </div>
-                  )}
-                  {msg.trust_score !== undefined && (
-                    <div className="metadata-item">
-                      <span className="metadata-label">✓ Trust:</span>
-                      <span className={`metadata-value ${msg.trust_score >= 0.8 ? 'high-trust' : msg.trust_score >= 0.6 ? 'medium-trust' : 'low-trust'}`}>
-                        {(msg.trust_score * 100).toFixed(0)}%
-                      </span>
-                    </div>
-                  )}
-                  {msg.confidence_score !== undefined && (
-                    <div className="metadata-item">
-                      <span className="metadata-label">🎯 Confidence:</span>
-                      <span className="metadata-value">
-                        {(msg.confidence_score * 100).toFixed(0)}%
-                      </span>
-                    </div>
-                  )}
-                  {msg.model_used && (
-                    <div className="metadata-item">
-                      <span className="metadata-label">🤖 Model:</span>
-                      <span className="metadata-value">{msg.model_used}</span>
-                    </div>
-                  )}
-                  {msg.world_model_integrated && (
-                    <div className="metadata-item">
-                      <span className="metadata-label">🌐 World Model:</span>
-                      <span className="metadata-value">✓ Integrated</span>
-                    </div>
-                  )}
-                </div>
+              {msg.showSearchButton && showSearchInternet && (
+                <SearchInternetButton
+                  query={lastQuery}
+                  folderPath={folderPath}
+                  chatId={chatId}
+                  onSearchComplete={() => {
+                    setShowSearchInternet(false);
+                  }}
+                />
               )}
               {msg.sources && msg.sources.length > 0 && (
                 <div className="message-sources">
@@ -586,7 +557,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={sendMessage} className="message-input-form">
+      <form onSubmit={handleSendMessage} className="message-input-form">
         <div className="input-wrapper">
           <VoiceButton
             onTranscript={handleVoiceTranscript}

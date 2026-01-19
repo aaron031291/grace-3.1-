@@ -1,10 +1,32 @@
+"""
+AIContentAnalyzer - LLM-based Content Analysis
+
+Uses LLM Orchestrator to analyze document content and suggest categorization when
+rule-based matching is insufficient or ambiguous.
+
+FULLY INTEGRATED with:
+- Cognitive Framework (OODA Loop + 12 Invariants)
+- Genesis Key tracking
+- Hallucination mitigation
+- Learning Memory integration
+- Layer 1 Message Bus
+"""
+
 from typing import List, Dict, Any, Optional, Tuple
 from sqlalchemy.orm import Session
 import json
 import logging
+
 from models.database_models import Document, DocumentChunk
-from librarian.utils import truncate_text, parse_confidence_label, safe_json_loads, normalize_tag_name
+from librarian.utils import (
+    truncate_text,
+    parse_confidence_label,
+    safe_json_loads,
+    normalize_tag_name
+)
+
 logger = logging.getLogger(__name__)
+
 
 class AIContentAnalyzer:
     """

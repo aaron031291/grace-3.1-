@@ -1,6 +1,4 @@
 import sqlite3
-import logging
-logger = logging.getLogger(__name__)
 
 db_path = "data/grace.db"
 conn = sqlite3.connect(db_path)
@@ -18,8 +16,8 @@ cursor.execute("""
 job = cursor.fetchone()
 if job:
     job_id, url, status = job
-    logger.info(f"Latest sample.cat job: ID={job_id}, Status={status}")
-    logger.info(f"URL: {url}\n")
+    print(f"Latest sample.cat job: ID={job_id}, Status={status}")
+    print(f"URL: {url}\n")
     
     # Get all URLs found during scraping
     cursor.execute("""
@@ -31,13 +29,13 @@ if job:
     """, (job_id,))
     
     pages = cursor.fetchall()
-    logger.info(f"Found {len(pages)} pages:\n")
+    print(f"Found {len(pages)} pages:\n")
     for page_url, page_status, title in pages:
-        logger.info(f"[{page_status}] {page_url[:80]}")
+        print(f"[{page_status}] {page_url[:80]}")
         if title:
-            logger.info(f"  Title: {title[:60]}")
-        logger.info()
+            print(f"  Title: {title[:60]}")
+        print()
 else:
-    logger.info("No sample.cat jobs found")
+    print("No sample.cat jobs found")
 
 conn.close()

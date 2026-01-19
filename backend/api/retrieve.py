@@ -1,10 +1,16 @@
+"""
+Retrieval API endpoints for RAG system.
+Provides REST endpoints to retrieve and build context from stored documents.
+"""
+
 from fastapi import APIRouter, HTTPException, Query, Path, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import logging
+
 from retrieval.retriever import DocumentRetriever, get_retriever
 from retrieval.cognitive_retriever import CognitiveRetriever
-from embedding import EmbeddingModel, get_embedding_model
+from embedding import EmbeddingModel
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from database.session import get_session
@@ -12,7 +18,74 @@ from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/retrieve", tags=["retrieval"])
+# Create router
+router = APIRouter(prefix="/retrieve", tags=["Document Retrieval"])
+
+# Global retriever instances
+_retriever: Optional[DocumentRetriever] = None
+_cognitive_retriever: Optional[CognitiveRetriever] = None
+
+
+def get_document_retriever() -> DocumentRetriever:
+    """Get or create document retriever instance."""
+    global _retriever
+
+    if _retriever is None:
+        try:
+            print("[RETRIEVE] Initializing document retriever...")
+            # Get the embedding model from the ingestion service
+            from api.ingest import get_ingestion_service
+            ingest_service = get_ingestion_service()
+
+            # Reuse the embedding model from ingestion service
+            embedding_model = ingest_service.embedding_model
+            print("[RETRIEVE] [OK] Reusing embedding model from ingestion service")
+
+            _retriever = get_retriever(
+                collection_name="documents",
+                embedding_model=embedding_model,
+            )
+            print("[RETRIEVE] [OK] Document retriever created successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize retriever: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Retriever initialization failed"
+            )
+
+    return _retriever
+
+
+def get_cognitive_retriever() -> CognitiveRetriever:
+    """Get or create cognitive retriever instance."""
+    global _cognitive_retriever
+
+    if _cognitive_retriever is None:
+        try:
+            print("[COGNITIVE] Initializing cognitive retriever...")
+            # Get base retriever
+            base_retriever = get_document_retriever()
+
+            # Wrap with cognitive layer
+            _cognitive_retriever = CognitiveRetriever(
+                retriever=base_retriever,
+                enable_cognitive=True,
+                enable_learning=True
+            )
+            print("[COGNITIVE] [OK] Cognitive retriever created successfully")
+            print("[COGNITIVE] [OK] OODA loop enforcement enabled")
+            print("[COGNITIVE] [OK] Learning memory integration enabled")
+        except Exception as e:
+            logger.error(f"Failed to initialize cognitive retriever: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Cognitive retriever initialization failed"
+            )
+
+    return _cognitive_retriever
+
+
+# ==================== Pydantic Models ====================
 
 class RetrievalChunk(BaseModel):
     """Retrieved document chunk."""
@@ -31,6 +104,12 @@ class RetrievalResponse(BaseModel):
     chunks: List[RetrievalChunk]
     total: int
     context: Optional[str] = None
+    
+    # Auto-search fields
+    auto_search_triggered: bool = False
+    auto_search_job_ids: Optional[List[int]] = None
+    auto_search_urls: Optional[List[str]] = None
+    auto_search_message: Optional[str] = None
 
 
 class ContextRequest(BaseModel):
@@ -38,27 +117,6 @@ class ContextRequest(BaseModel):
     chunks: List[dict] = Field(..., description="List of chunk dictionaries")
     max_length: Optional[int] = Field(None, description="Maximum context length")
     include_sources: bool = Field(True, description="Include source attribution")
-
-
-# ==================== Dependency Functions ====================
-
-def get_document_retriever() -> DocumentRetriever:
-    """Get DocumentRetriever instance for dependency injection."""
-    embedding_model = get_embedding_model()
-    return get_retriever(
-        collection_name="documents",
-        embedding_model=embedding_model,
-    )
-
-
-def get_cognitive_retriever() -> CognitiveRetriever:
-    """Get CognitiveRetriever instance for dependency injection."""
-    retriever = get_document_retriever()
-    return CognitiveRetriever(
-        retriever=retriever,
-        enable_cognitive=True,
-        enable_learning=True,
-    )
 
 
 # ==================== Endpoints ====================
@@ -128,29 +186,14 @@ async def retrieve_chunks_cognitive(
         if not genesis_key_id:
             genesis_key_id = created_genesis_key.key_id
 
-        # TimeSense: Estimate retrieval time before starting
-        query_tokens = len(query.split()) if query else 50
-        if TIMESENSE_AVAILABLE and TimeEstimator:
-            try:
-                time_estimate = TimeEstimator.estimate_retrieval(
-                    query_tokens=query_tokens,
-                    top_k=limit,
-                    num_vectors=10000  # Default, will be updated with actual count
-                )
-                logger.debug(f"[TIMESENSE] Retrieval estimate: {time_estimate.human_readable()}")
-            except Exception as e:
-                logger.debug(f"[TIMESENSE] Could not estimate retrieval time: {e}")
-
-        # Track retrieval operation with TimeSense
-        with track_operation(PrimitiveType.VECTOR_SEARCH, limit * query_tokens) if TIMESENSE_AVAILABLE else nullcontext():
-            result = cognitive_retriever.retrieve_with_cognition(
-                query=query,
-                limit=limit,
-                score_threshold=threshold,
-                keyword_weight=keyword_weight,
-                user_id=user_id,
-                genesis_key_id=genesis_key_id
-            )
+        result = cognitive_retriever.retrieve_with_cognition(
+            query=query,
+            limit=limit,
+            score_threshold=threshold,
+            keyword_weight=keyword_weight,
+            user_id=user_id,
+            genesis_key_id=genesis_key_id
+        )
 
         # Convert chunks to RetrievalChunk objects for consistency
         retrieval_chunks = [
@@ -251,16 +294,13 @@ async def retrieve_chunks(
         RetrievalResponse with relevant chunks, ranked by combined score
     """
     try:
-        # TimeSense: Track retrieval operation
-        query_tokens = len(query.split()) if query else 50
-        with track_operation(PrimitiveType.VECTOR_SEARCH, limit * query_tokens) if TIMESENSE_AVAILABLE else nullcontext():
-            chunks = retriever.retrieve_hybrid(
-                query=query,
-                limit=limit,
-                score_threshold=threshold,
-                include_metadata=True,
-                keyword_weight=keyword_weight,
-            )
+        chunks = retriever.retrieve_hybrid(
+            query=query,
+            limit=limit,
+            score_threshold=threshold,
+            include_metadata=True,
+            keyword_weight=keyword_weight,
+        )
         
         if not chunks:
             return RetrievalResponse(
@@ -674,3 +714,139 @@ async def retrieve_directory_chunks(
     except Exception as e:
         logger.error(f"Directory retrieval error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Directory retrieval failed")
+
+@router.post("/search-with-auto", response_model=RetrievalResponse, summary="Retrieve with auto-search fallback")
+async def retrieve_with_auto_search(
+    query: str = Query(..., description="Query text to search for"),
+    limit: int = Query(5, description="Maximum number of chunks to return"),
+    threshold: float = Query(0.3, description="Minimum similarity score (0-1)"),
+    enable_auto_search: bool = Query(True, description="Enable auto-search fallback"),
+    folder_path: Optional[str] = Query(None, description="Folder path for scoped search"),
+    retriever: DocumentRetriever = Depends(get_document_retriever)
+) -> RetrievalResponse:
+    """
+    Retrieve document chunks with automatic web search fallback.
+    
+    If no results are found in the vector database and auto-search is enabled,
+    this endpoint will automatically:
+    1. Search Google using SerpAPI
+    2. Scrape top 3 results
+    3. Save to knowledge_base for auto-ingestion
+    4. Return job IDs for tracking
+    
+    Args:
+        query: Query text to search for
+        limit: Maximum number of chunks to return
+        threshold: Minimum similarity score (0-1)
+        enable_auto_search: Whether to trigger auto-search on no results
+        retriever: DocumentRetriever instance
+        
+    Returns:
+        RetrievalResponse with chunks or auto-search info
+    """
+    try:
+        # First, try normal retrieval
+        chunks = retriever.retrieve(
+            query=query,
+            limit=limit,
+            score_threshold=threshold,
+            include_metadata=True,
+        )
+        
+        # If we have results, return them
+        if chunks:
+            retrieval_chunks = [
+                RetrievalChunk(
+                    chunk_id=chunk["chunk_id"],
+                    document_id=chunk["document_id"],
+                    chunk_index=chunk["chunk_index"],
+                    text=chunk["text"],
+                    score=chunk.get("score"),
+                    confidence_score=chunk.get("confidence_score"),
+                    metadata=chunk.get("metadata")
+                )
+                for chunk in chunks
+            ]
+            
+            context = retriever.build_context(chunks, include_sources=True)
+            
+            return RetrievalResponse(
+                query=query,
+                chunks=retrieval_chunks,
+                total=len(retrieval_chunks),
+                context=context
+            )
+        
+        # No results found - trigger auto-search if enabled
+        if enable_auto_search:
+            try:
+                from settings import settings
+                from search.auto_search import AutoSearchService
+                
+                # Check if SerpAPI is enabled
+                if not settings.SERPAPI_ENABLED or not settings.SERPAPI_KEY:
+                    logger.warning("[AUTO-SEARCH] SerpAPI not enabled or no API key configured")
+                    return RetrievalResponse(
+                        query=query,
+                        chunks=[],
+                        total=0,
+                        context="",
+                        auto_search_triggered=False,
+                        auto_search_message="Auto-search not available (SerpAPI not configured)"
+                    )
+                
+                logger.info(f"[AUTO-SEARCH] No results found for query: {query}. Triggering auto-search...")
+                
+                # Initialize auto-search service
+                auto_search = AutoSearchService(settings.SERPAPI_KEY)
+                
+                # Search and scrape
+                result = await auto_search.search_and_scrape(
+                    query=query,
+                    max_urls=settings.SERPAPI_MAX_RESULTS,
+                    folder_path=folder_path
+                )
+                
+                if result["success"]:
+                    return RetrievalResponse(
+                        query=query,
+                        chunks=[],
+                        total=0,
+                        context="",
+                        auto_search_triggered=True,
+                        auto_search_job_ids=result["job_ids"],
+                        auto_search_urls=result["urls"],
+                        auto_search_message=f"No results found. Searching the web and scraping {len(result['urls'])} websites. Check back in 30-60 seconds."
+                    )
+                else:
+                    return RetrievalResponse(
+                        query=query,
+                        chunks=[],
+                        total=0,
+                        context="",
+                        auto_search_triggered=False,
+                        auto_search_message=f"Auto-search failed: {result['message']}"
+                    )
+            
+            except Exception as e:
+                logger.error(f"[AUTO-SEARCH] Error: {e}", exc_info=True)
+                return RetrievalResponse(
+                    query=query,
+                    chunks=[],
+                    total=0,
+                    context="",
+                    auto_search_triggered=False,
+                    auto_search_message=f"Auto-search error: {str(e)}"
+                )
+        
+        # Auto-search disabled, return empty results
+        return RetrievalResponse(
+            query=query,
+            chunks=[],
+            total=0,
+            context=""
+        )
+    
+    except Exception as e:
+        logger.error(f"Retrieval error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Retrieval failed")

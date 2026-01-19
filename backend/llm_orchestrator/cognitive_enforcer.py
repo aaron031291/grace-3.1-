@@ -1,3 +1,15 @@
+"""
+Cognitive Framework Enforcer for LLMs
+
+Ensures all LLM operations follow GRACE's cognitive blueprint:
+- 12 OODA Invariants
+- Deterministic decision-making
+- Observability and traceability
+- Trust-based reasoning
+
+All LLM interactions are logged with Genesis Keys and tracked.
+"""
+
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
@@ -5,6 +17,8 @@ from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
+
+@dataclass
 class CognitiveConstraints:
     """Cognitive constraints for LLM operation."""
     requires_determinism: bool = False
@@ -307,27 +321,6 @@ class CognitiveEnforcer:
             if decision.ambiguity_ledger["assumed"]:
                 logger.warning(f"[DETERMINISM] Decision {decision_id} has assumptions but requires determinism")
                 return False
-            
-            # TimeSense integration: Check time determinism
-            time_determinism = decision.metadata.get('time_determinism')
-            if time_determinism:
-                is_time_deterministic = time_determinism.get('is_deterministic', True)
-                time_confidence = time_determinism.get('time_confidence', 1.0)
-                
-                if not is_time_deterministic:
-                    logger.warning(
-                        f"[DETERMINISM] Decision {decision_id} has non-deterministic timing "
-                        f"(violations: {time_determinism.get('violations', [])})"
-                    )
-                    return False
-                
-                # Low time confidence reduces determinism confidence
-                if time_confidence < 0.7:
-                    logger.warning(
-                        f"[DETERMINISM] Decision {decision_id} has low time confidence "
-                        f"({time_confidence:.2f}) which reduces determinism"
-                    )
-                    # Don't fail, but warn - operations with low time confidence are less deterministic
 
         return True
 

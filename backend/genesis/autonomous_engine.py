@@ -1,3 +1,25 @@
+"""
+GRACE Autonomous Action Engine
+==============================
+The brain that allows GRACE to take autonomous actions.
+
+Observes → Decides → Validates → Executes → Learns
+
+Actions are triggered by:
+- Events (file changes, errors, anomalies)
+- Schedules (periodic maintenance)
+- Conditions (thresholds, patterns)
+- Self-improvement needs
+
+Integrations:
+- Genesis Key Service: Every action generates a tracked Genesis Key
+- Mirror Self-Modeling: Actions are observed for self-improvement
+- Cognitive Framework: Uses clarity framework for decision making
+- Trust Scores: Actions are scored for reliability
+- KPIs: Performance metrics tracked for all actions
+- Version Control: All mutations are version controlled
+"""
+
 import asyncio
 import hashlib
 import json
@@ -9,6 +31,54 @@ import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+# =============================================================================
+# Core System Integration Helpers
+# =============================================================================
+
+def get_genesis_key_service():
+    """Get the Genesis Key Service for proper key creation."""
+    try:
+        from genesis.genesis_key_service import GenesisKeyService
+        from database.session import get_session
+        session = next(get_session())
+        return GenesisKeyService(session=session)
+    except Exception as e:
+        logger.debug(f"[Autonomous] Genesis Key Service not available: {e}")
+        return None
+
+
+def get_mirror_system():
+    """Get the Mirror Self-Modeling System for observation."""
+    try:
+        from cognitive.mirror_self_modeling import MirrorSelfModelingSystem
+        from database.session import get_session
+        session = next(get_session())
+        return MirrorSelfModelingSystem(session)
+    except Exception as e:
+        logger.debug(f"[Autonomous] Mirror System not available: {e}")
+        return None
+
+
+def get_cognitive_engine():
+    """Get the Cognitive Engine for decision making."""
+    try:
+        from cognitive.engine import get_cognitive_engine as get_cog
+        return get_cog()
+    except Exception as e:
+        logger.debug(f"[Autonomous] Cognitive Engine not available: {e}")
+        return None
+
+
+def get_kpi_tracker():
+    """Get the KPI tracker for performance metrics."""
+    try:
+        from genesis.adaptive_cicd import AdaptiveCICD
+        return AdaptiveCICD()
+    except Exception as e:
+        logger.debug(f"[Autonomous] KPI tracker not available: {e}")
+        return None
+
 
 class ActionType(str, Enum):
     """Types of autonomous actions."""

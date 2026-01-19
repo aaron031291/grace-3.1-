@@ -187,65 +187,6 @@ services:
     profiles:
       - cache
 
-  # ---------------------------------------------------------------------------
-  # Code-Server (VS Code in Browser) - Grace OS IDE
-  # ---------------------------------------------------------------------------
-  code-server:
-    image: codercom/code-server:latest
-    container_name: grace-code-server
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    environment:
-      - PASSWORD=${CODE_SERVER_PASSWORD:-grace}
-      - DOCKER_USER=${USER:-grace}
-    volumes:
-      - ./:/home/coder/workspace
-      - code-server-data:/home/coder/.local/share/code-server
-      - code-server-config:/home/coder/.config/code-server
-    command: ["--auth", "password", "--bind-addr", "0.0.0.0:8080", "/home/coder/workspace"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - grace-network
-    profiles:
-      - ide
-
-  # ---------------------------------------------------------------------------
-  # Grace OS IDE (Full Integration - Code-Server + Grace Backend)
-  # ---------------------------------------------------------------------------
-  grace-ide:
-    image: codercom/code-server:latest
-    container_name: grace-ide
-    restart: unless-stopped
-    ports:
-      - "8888:8080"
-    environment:
-      - PASSWORD=${GRACE_IDE_PASSWORD:-grace123}
-      - GRACE_BACKEND_URL=http://backend:8000
-      - GRACE_QDRANT_URL=http://qdrant:6333
-      - GRACE_OLLAMA_URL=http://ollama:11434
-    volumes:
-      - ./:/home/coder/workspace
-      - grace-ide-data:/home/coder/.local/share/code-server
-      - grace-ide-config:/home/coder/.config/code-server
-    command: ["--auth", "password", "--bind-addr", "0.0.0.0:8080", "/home/coder/workspace"]
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - grace-network
-    profiles:
-      - grace-os
-
 # =============================================================================
 # Networks
 # =============================================================================
@@ -272,11 +213,3 @@ volumes:
     name: grace-postgres-data
   redis-data:
     name: grace-redis-data
-  code-server-data:
-    name: grace-code-server-data
-  code-server-config:
-    name: grace-code-server-config
-  grace-ide-data:
-    name: grace-ide-data
-  grace-ide-config:
-    name: grace-ide-config

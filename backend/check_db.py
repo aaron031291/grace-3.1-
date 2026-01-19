@@ -1,6 +1,4 @@
 import sqlite3
-import logging
-logger = logging.getLogger(__name__)
 import sys
 
 db_path = "data/grace.db"
@@ -10,8 +8,8 @@ cursor = conn.cursor()
 # Get the latest scraping job
 cursor.execute("SELECT id, url, status FROM scraping_jobs ORDER BY id DESC LIMIT 1")
 job = cursor.fetchone()
-logger.info(f"Latest job: ID={job[0]}, URL={job[1]}, Status={job[2]}")
-logger.info()
+print(f"Latest job: ID={job[0]}, URL={job[1]}, Status={job[2]}")
+print()
 
 # Get scraped pages for this job
 cursor.execute("""
@@ -23,10 +21,10 @@ cursor.execute("""
 """, (job[0],))
 
 pages = cursor.fetchall()
-logger.info(f"Pages for job {job[0]}:")
+print(f"Pages for job {job[0]}:")
 for url, status, error in pages:
-    logger.info(f"\nURL: {url}")
-    logger.info(f"Status: {status}")
-    logger.info(f"Error: {error}")
+    print(f"\nURL: {url}")
+    print(f"Status: {status}")
+    print(f"Error: {error}")
 
 conn.close()

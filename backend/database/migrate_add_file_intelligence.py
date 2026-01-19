@@ -1,14 +1,30 @@
+"""
+Database Migration: Add File Intelligence Tables
+
+Adds tables for Grace-aligned file management:
+- file_intelligence: Deep content understanding
+- file_relationships: Semantic connections between files
+- processing_strategies: Learning-based optimization
+- file_health_checks: Health monitoring history
+"""
+
 import logging
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, JSON, ForeignKey, create_engine
+from sqlalchemy import (
+    Column, Integer, String, Text, Float, DateTime, JSON,
+    ForeignKey, create_engine
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from database.config import DatabaseConfig
 from database.connection import DatabaseConnection
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+Base = declarative_base()
+
+
 class FileIntelligenceModel(Base):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """File intelligence metadata."""
     __tablename__ = 'file_intelligence'
 

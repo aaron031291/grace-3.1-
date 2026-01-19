@@ -1,3 +1,19 @@
+"""
+Diagnostic Engine - Main Orchestrator for 4-Layer Diagnostic Machine
+
+Coordinates:
+- Layer 1: Sensors (data collection)
+- Layer 2: Interpreters (pattern analysis)
+- Layer 3: Judgement (decision making)
+- Layer 4: Action Routing (response execution)
+
+Features:
+- 60-second heartbeat for continuous monitoring
+- Event-driven sensor triggering
+- CI/CD pipeline integration
+- Forensic analysis and AVN/AVM
+"""
+
 import os
 import json
 import logging
@@ -9,13 +25,14 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from .sensors import SensorLayer, SensorData, CodeQualityData
+
+from .sensors import SensorLayer, SensorData
 from .interpreters import InterpreterLayer, InterpretedData
 from .judgement import JudgementLayer, JudgementResult, HealthStatus
 from .action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
-from .healing import HealingExecutor, HealingActionType, get_healing_executor
 
 logger = logging.getLogger(__name__)
+
 
 class EngineState(str, Enum):
     """State of the diagnostic engine."""
@@ -34,13 +51,6 @@ class TriggerSource(str, Enum):
     MANUAL = "manual"  # User-initiated
     API = "api"  # API call
     WEBHOOK = "webhook"  # External webhook
-    PROACTIVE_SCAN = "proactive_scan"  # FIX: Proactive code quality scan
-    FILE_CHANGE = "file_change"  # FIX: File watcher detected change
-    STRESS_TEST_CONNECTION_ISSUE = "stress_test_connection_issue"  # Added from stress tests
-    STRESS_TEST_MEMORY_ISSUE = "stress_test_memory_issue"  # Added from stress tests
-    STRESS_TEST_UNKNOWN_ISSUE = "stress_test_unknown_issue"  # Added from stress tests
-    STRESS_TEST_CONCURRENCY_ISSUE = "stress_test_concurrency_issue"  # Added from stress tests
-    STRESS_TEST_DATA_INTEGRITY = "stress_test_data_integrity"  # Added from stress tests
 
 
 @dataclass
@@ -213,9 +223,6 @@ class DiagnosticEngine:
             if self._heartbeat_thread and self._heartbeat_thread.is_alive():
                 self._heartbeat_thread.join(timeout=5)
 
-            # FIX: Also stop file watcher if running
-            self.stop_file_watcher()
-
             self._state = EngineState.STOPPED
             self._save_stats()
             logger.info("DiagnosticEngine stopped")
@@ -248,51 +255,28 @@ class DiagnosticEngine:
         try:
             cycle_start = datetime.utcnow()
 
-            # TimeSense: Track diagnostic cycle (optional)
-            try:
-                from timesense.decorators import track_with_timesense
-                from timesense.types import PrimitiveType
-                timesense_available = True
-            except ImportError:
-                # TimeSense not available, use context manager that does nothing
-                from contextlib import nullcontext as track_with_timesense
-                PrimitiveType = None
-                timesense_available = False
-            
-            # Use TimeSense if available, otherwise no-op context manager
-            if timesense_available and PrimitiveType:
-                timesense_context = track_with_timesense(
-                    primitive_type=PrimitiveType.COMPLEX_OPERATION,
-                    size=1.0,
-                    fallback_name="diagnostic_cycle"
-                )
-            else:
-                from contextlib import nullcontext
-                timesense_context = nullcontext()
-            
-            with timesense_context:
-                # Layer 1: Collect sensor data
-                logger.debug("Layer 1: Collecting sensor data...")
-                cycle.sensor_data = self.sensor_layer.collect_all()
+            # Layer 1: Collect sensor data
+            logger.debug("Layer 1: Collecting sensor data...")
+            cycle.sensor_data = self.sensor_layer.collect_all()
 
-                # Layer 2: Interpret patterns
-                logger.debug("Layer 2: Interpreting patterns...")
-                cycle.interpreted_data = self.interpreter_layer.interpret(cycle.sensor_data)
+            # Layer 2: Interpret patterns
+            logger.debug("Layer 2: Interpreting patterns...")
+            cycle.interpreted_data = self.interpreter_layer.interpret(cycle.sensor_data)
 
-                # Layer 3: Make judgement
-                logger.debug("Layer 3: Making judgement...")
-                cycle.judgement = self.judgement_layer.judge(
-                    cycle.sensor_data,
-                    cycle.interpreted_data
-                )
+            # Layer 3: Make judgement
+            logger.debug("Layer 3: Making judgement...")
+            cycle.judgement = self.judgement_layer.judge(
+                cycle.sensor_data,
+                cycle.interpreted_data
+            )
 
-                # Layer 4: Route actions
-                logger.debug("Layer 4: Routing actions...")
-                cycle.action_decision = self.action_router.route(
-                    cycle.sensor_data,
-                    cycle.interpreted_data,
-                    cycle.judgement
-                )
+            # Layer 4: Route actions
+            logger.debug("Layer 4: Routing actions...")
+            cycle.action_decision = self.action_router.route(
+                cycle.sensor_data,
+                cycle.interpreted_data,
+                cycle.judgement
+            )
 
             cycle_end = datetime.utcnow()
             cycle.cycle_end = cycle_end
@@ -359,279 +343,6 @@ class DiagnosticEngine:
         """Trigger diagnostic cycle from external webhook."""
         logger.info(f"Webhook trigger: {payload or {}}")
         return self.run_cycle(TriggerSource.WEBHOOK)
-
-    # ==================== PROACTIVE SCANNING CAPABILITIES ====================
-
-    def run_proactive_scan(self, auto_heal: bool = False) -> Dict[str, Any]:
-        """
-        Run a proactive code quality scan.
-
-        FIX: This method performs comprehensive static analysis to detect:
-        - Security vulnerabilities
-        - Configuration issues
-        - Database schema problems
-        - Dependency issues
-
-        Parameters:
-            auto_heal: If True, automatically apply fixes for detected issues
-
-        Returns:
-            Dictionary with scan results and any healing actions taken
-        """
-        logger.info("Running proactive code quality scan...")
-        scan_start = datetime.utcnow()
-
-        # Run the code quality sensor directly
-        code_quality = self.sensor_layer._collect_code_quality()
-
-        if not code_quality:
-            return {
-                'success': False,
-                'error': 'Code quality sensor failed',
-                'timestamp': scan_start.isoformat(),
-            }
-
-        result = {
-            'success': True,
-            'timestamp': scan_start.isoformat(),
-            'scan_duration_ms': code_quality.scan_duration_ms,
-            'files_scanned': code_quality.files_scanned,
-            'total_issues': code_quality.total_issues,
-            'critical_issues': code_quality.critical_issues,
-            'high_issues': code_quality.high_issues,
-            'medium_issues': code_quality.medium_issues,
-            'low_issues': code_quality.low_issues,
-            'security_vulnerabilities': len(code_quality.security_vulnerabilities),
-            'configuration_issues': len(code_quality.configuration_issues),
-            'database_issues': len(code_quality.database_issues),
-            'dependency_issues': len(code_quality.dependency_issues),
-            'healing_actions': [],
-        }
-
-        # Auto-heal if requested and issues found
-        if auto_heal and code_quality.critical_issues > 0:
-            result['healing_actions'] = self._auto_heal_code_issues(code_quality)
-        
-        # Also scan for Pydantic logger issues
-        try:
-            from .proactive_code_scanner import get_proactive_scanner
-            scanner = get_proactive_scanner()
-            pydantic_issues = scanner.scan_pydantic_logger_issues()
-            if pydantic_issues:
-                result['pydantic_logger_issues'] = len(pydantic_issues)
-                if auto_heal:
-                    from .automatic_bug_fixer import AutomaticBugFixer
-                    fixer = AutomaticBugFixer(create_backups=True)
-                    pydantic_fixes = fixer.fix_all_issues(pydantic_issues)
-                    result['pydantic_fixes'] = [f.fix_applied for f in pydantic_fixes if f.success]
-        except Exception as e:
-            logger.debug(f"Could not scan for Pydantic logger issues: {e}")
-
-        # Also trigger a full diagnostic cycle to update system health
-        cycle = self.run_cycle(TriggerSource.PROACTIVE_SCAN)
-        result['diagnostic_cycle_id'] = cycle.cycle_id
-
-        logger.info(
-            f"Proactive scan complete: {code_quality.total_issues} issues found "
-            f"({code_quality.critical_issues} critical)"
-        )
-
-        return result
-
-    def _auto_heal_code_issues(self, code_quality: CodeQualityData) -> List[Dict]:
-        """
-        Automatically apply fixes for detected code issues.
-
-        FIX: Uses the healing system to apply safe, reversible fixes.
-        Only applies fixes for issues that have well-defined remediation patterns.
-        """
-        healing_results = []
-        healer = get_healing_executor()
-
-        # Focus on critical security issues first
-        for issue in code_quality.security_vulnerabilities:
-            if issue.severity in ('critical', 'high'):
-                try:
-                    heal_result = healer.execute(
-                        HealingActionType.CODE_FIX,
-                        {
-                            'issue_type': issue.issue_type,
-                            'file_path': issue.file_path,
-                            'line_number': issue.line_number,
-                        }
-                    )
-
-                    healing_results.append({
-                        'issue_type': issue.issue_type,
-                        'file_path': issue.file_path,
-                        'line_number': issue.line_number,
-                        'success': heal_result.success,
-                        'message': heal_result.message,
-                        'rollback_available': heal_result.rollback_available,
-                    })
-
-                    if heal_result.success:
-                        logger.info(f"Auto-healed: {issue.issue_type} in {issue.file_path}")
-                    else:
-                        logger.warning(f"Auto-heal failed: {issue.issue_type} - {heal_result.message}")
-
-                except Exception as e:
-                    logger.error(f"Auto-heal error for {issue.issue_type}: {e}")
-                    healing_results.append({
-                        'issue_type': issue.issue_type,
-                        'file_path': issue.file_path,
-                        'success': False,
-                        'message': str(e),
-                    })
-
-        return healing_results
-
-    def start_file_watcher(self, watch_paths: List[str] = None, scan_interval: int = 30):
-        """
-        Start watching for file changes and trigger scans.
-
-        FIX: Provides continuous monitoring of the codebase for changes.
-        When files change, triggers a proactive scan to detect new issues.
-
-        Parameters:
-            watch_paths: List of paths to watch (defaults to backend directory)
-            scan_interval: Seconds between change checks
-        """
-        if not hasattr(self, '_file_watcher_thread') or self._file_watcher_thread is None:
-            self._file_watcher_stop = threading.Event()
-            self._file_watcher_thread = threading.Thread(
-                target=self._file_watcher_loop,
-                args=(watch_paths, scan_interval),
-                name="CodeQualityWatcher",
-                daemon=True
-            )
-            self._file_watcher_thread.start()
-            logger.info(f"File watcher started (interval: {scan_interval}s)")
-
-    def stop_file_watcher(self):
-        """Stop the file watcher."""
-        if hasattr(self, '_file_watcher_stop'):
-            self._file_watcher_stop.set()
-            if hasattr(self, '_file_watcher_thread') and self._file_watcher_thread:
-                self._file_watcher_thread.join(timeout=5)
-                self._file_watcher_thread = None
-            logger.info("File watcher stopped")
-
-    def _file_watcher_loop(self, watch_paths: List[str], scan_interval: int):
-        """Background loop to watch for file changes."""
-        backend_dir = Path(__file__).parent.parent
-        paths_to_watch = watch_paths or [str(backend_dir)]
-        file_mtimes: Dict[str, float] = {}
-
-        # Initial scan to establish baseline
-        for path in paths_to_watch:
-            for py_file in Path(path).rglob("*.py"):
-                if '__pycache__' not in str(py_file):
-                    file_mtimes[str(py_file)] = py_file.stat().st_mtime
-
-        logger.info(f"File watcher monitoring {len(file_mtimes)} Python files")
-
-        while not self._file_watcher_stop.is_set():
-            try:
-                if self._file_watcher_stop.wait(timeout=scan_interval):
-                    break
-
-                # Check for changes
-                changes_detected = False
-                for path in paths_to_watch:
-                    for py_file in Path(path).rglob("*.py"):
-                        if '__pycache__' not in str(py_file):
-                            file_path = str(py_file)
-                            current_mtime = py_file.stat().st_mtime
-
-                            if file_path not in file_mtimes:
-                                # New file
-                                file_mtimes[file_path] = current_mtime
-                                changes_detected = True
-                                logger.debug(f"New file detected: {file_path}")
-                            elif file_mtimes[file_path] < current_mtime:
-                                # Modified file
-                                file_mtimes[file_path] = current_mtime
-                                changes_detected = True
-                                logger.debug(f"File modified: {file_path}")
-
-                if changes_detected:
-                    logger.info("File changes detected, triggering proactive scan...")
-                    self.run_cycle(TriggerSource.FILE_CHANGE)
-
-            except Exception as e:
-                logger.error(f"File watcher error: {e}")
-
-        logger.info("File watcher loop stopped")
-
-    def get_code_quality_report(self) -> Dict[str, Any]:
-        """
-        Get a comprehensive code quality report.
-
-        FIX: Provides detailed insights into codebase health for proactive maintenance.
-        """
-        code_quality = self.sensor_layer._collect_code_quality()
-
-        if not code_quality:
-            return {'error': 'Code quality sensor not available'}
-
-        # Group issues by severity and type
-        issues_by_type: Dict[str, List] = {}
-        issues_by_file: Dict[str, List] = {}
-
-        all_issues = (
-            code_quality.security_vulnerabilities +
-            code_quality.configuration_issues +
-            code_quality.database_issues +
-            code_quality.dependency_issues
-        )
-
-        for issue in all_issues:
-            # Group by type
-            if issue.issue_type not in issues_by_type:
-                issues_by_type[issue.issue_type] = []
-            issues_by_type[issue.issue_type].append({
-                'file': issue.file_path,
-                'line': issue.line_number,
-                'severity': issue.severity,
-                'description': issue.description,
-                'cwe': issue.cwe_id,
-            })
-
-            # Group by file
-            if issue.file_path not in issues_by_file:
-                issues_by_file[issue.file_path] = []
-            issues_by_file[issue.file_path].append({
-                'type': issue.issue_type,
-                'line': issue.line_number,
-                'severity': issue.severity,
-            })
-
-        return {
-            'timestamp': datetime.utcnow().isoformat(),
-            'summary': {
-                'files_scanned': code_quality.files_scanned,
-                'total_issues': code_quality.total_issues,
-                'critical': code_quality.critical_issues,
-                'high': code_quality.high_issues,
-                'medium': code_quality.medium_issues,
-                'low': code_quality.low_issues,
-            },
-            'issues_by_type': issues_by_type,
-            'issues_by_file': issues_by_file,
-            'most_affected_files': sorted(
-                issues_by_file.items(),
-                key=lambda x: len(x[1]),
-                reverse=True
-            )[:10],
-            'recommended_priorities': [
-                issue_type for issue_type, issues in sorted(
-                    issues_by_type.items(),
-                    key=lambda x: sum(1 for i in x[1] if i['severity'] in ('critical', 'high')),
-                    reverse=True
-                )
-            ][:5],
-        }
 
     def _heartbeat_loop(self):
         """Main heartbeat loop running at configured interval."""

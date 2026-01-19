@@ -21,18 +21,6 @@ import subprocess
 import time
 from pathlib import Path
 
-# Windows multiprocessing setup - MUST be first, before any other imports
-# This ensures multiprocessing is properly configured for Windows before
-# any code that might use it (including uvicorn's reloader)
-if sys.platform == "win32":
-    import multiprocessing
-    try:
-        multiprocessing.set_start_method('spawn', force=True)
-    except RuntimeError:
-        # Already set, continue
-        pass
-    multiprocessing.freeze_support()
-
 # Add backend to path
 backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
@@ -283,53 +271,14 @@ def start_server(port=8000, host="0.0.0.0"):
 
     try:
         import uvicorn
-        import asyncio
-        
-        # On Windows, handle event loop manually to avoid asyncio conflicts
-        # On other platforms, use standard uvicorn.run
-        if sys.platform == "win32":
-            # Import app directly to avoid import_from_string issues
-            # Ensure we're in the backend directory for imports to work
-            import app
-            app_instance = app.app
-            
-            # Use Config and Server with manual event loop handling
-            config = uvicorn.Config(
-                app=app_instance,  # Pass app object directly instead of string
-                host=host,
-                port=port,
-                reload=False,  # Disabled on Windows
-                log_level="info"
-            )
-            server = uvicorn.Server(config)
-            
-            # Manually handle the event loop to avoid asyncio.run() issues on Windows
-            try:
-                loop = asyncio.get_event_loop()
-                if loop.is_closed():
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-            
-            try:
-                loop.run_until_complete(server.serve())
-            except KeyboardInterrupt:
-                pass
-            finally:
-                loop.close()
-        else:
-            # Standard uvicorn.run on non-Windows platforms
-            uvicorn.run(
-                "app:app",
-                host=host,
-                port=port,
-                reload=True,
-                reload_dirs=[str(backend_dir)],
-                log_level="info",
-                workers=1
-            )
+        uvicorn.run(
+            "app:app",
+            host=host,
+            port=port,
+            reload=True,
+            reload_dirs=[str(backend_dir)],
+            log_level="info"
+        )
     except KeyboardInterrupt:
         print("\n\nGrace shutting down...")
     except Exception as e:

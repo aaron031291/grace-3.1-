@@ -1,21 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import ChatTab from "./components/ChatTab";
-import IntelligenceTab from "./components/IntelligenceTab";
-import SearchDiscoveryTab from "./components/SearchDiscoveryTab";
-import MonitoringConsolidatedTab from "./components/MonitoringConsolidatedTab";
+import RAGTab from "./components/RAGTab";
+import MonitoringTab from "./components/MonitoringTab";
 import VersionControl from "./components/VersionControl";
+import CognitiveTab from "./components/CognitiveTab";
 import NotionTab from "./components/NotionTab";
 import GovernanceTab from "./components/GovernanceTab";
+import CodeBaseTab from "./components/CodeBaseTab";
+import ResearchTab from "./components/ResearchTab";
 import SandboxTab from "./components/SandboxTab";
+import InsightsTab from "./components/InsightsTab";
 import APITab from "./components/APITab";
 import LibrarianTab from "./components/LibrarianTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import GenesisKeyTab from "./components/GenesisKeyTab";
+import LearningTab from "./components/LearningTab";
+import MLIntelligenceTab from "./components/MLIntelligenceTab";
 import WhitelistTab from "./components/WhitelistTab";
-import OrchestrationConsolidatedTab from "./components/OrchestrationConsolidatedTab";
-import SelfHealingTab from "./components/SelfHealingTab";
-import EnterpriseDashboard from "./components/EnterpriseDashboard";
+import ExperimentTab from "./components/ExperimentTab";
+import ConnectorsTab from "./components/ConnectorsTab";
+import OrchestrationTab from "./components/OrchestrationTab";
+import TelemetryTab from "./components/TelemetryTab";
+import WebScraper from "./components/WebScraper";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -83,9 +90,8 @@ function App() {
             {apiHealth ? (
               <>
                 <span
-                  className={`status-dot ${
-                    apiHealth.ollama_running ? "healthy" : "unhealthy"
-                  }`}
+                  className={`status-dot ${apiHealth.ollama_running ? "healthy" : "unhealthy"
+                    }`}
                 ></span>
                 <span className="status-text">
                   {apiHealth.ollama_running ? "Connected" : "Disconnected"}
@@ -162,8 +168,8 @@ function App() {
               Sandbox
             </button>
             <button
-              className={`tab-button ${activeTab === "intelligence" ? "active" : ""}`}
-              onClick={() => setActiveTab("intelligence")}
+              className={`tab-button ${activeTab === "insights" ? "active" : ""}`}
+              onClick={() => setActiveTab("insights")}
             >
               <svg
                 width="20"
@@ -173,14 +179,30 @@ function App() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M12 1v6m0 6v6m5-9l-4 4m-2 2l-4 4m10-12l-4 4m-2 2l-4 4M1 12h6m6 0h6"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4"></path>
+                <path d="M12 8h.01"></path>
               </svg>
-              Intelligence
+              Insights
             </button>
             <button
-              className={`tab-button ${activeTab === "search-discovery" ? "active" : ""}`}
-              onClick={() => setActiveTab("search-discovery")}
+              className={`tab-button ${activeTab === "codebase" ? "active" : ""}`}
+              onClick={() => setActiveTab("codebase")}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0" />
+              </svg>
+              Code Base
+            </button>
+            <button
+              className={`tab-button ${activeTab === "rag" ? "active" : ""}`}
+              onClick={() => setActiveTab("rag")}
             >
               <svg
                 width="20"
@@ -190,10 +212,32 @@ function App() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
               </svg>
-              Search & Discovery
+              Documents
+            </button>
+            <button
+              className={`tab-button ${activeTab === "research" ? "active" : ""}`}
+              onClick={() => setActiveTab("research")}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                width={20}
+                height={20}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+                />
+              </svg>
+              Research
             </button>
             <button
               className={`tab-button ${activeTab === "api" ? "active" : ""}`}
@@ -231,9 +275,26 @@ function App() {
               Librarian
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "monitoring" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "cognitive" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("cognitive")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6m0 6v6m5-9l-4 4m-2 2l-4 4m10-12l-4 4m-2 2l-4 4M1 12h6m6 0h6"></path>
+              </svg>
+              Cognitive
+            </button>
+            <button
+              className={`tab-button ${activeTab === "monitoring" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("monitoring")}
             >
               <svg
@@ -252,27 +313,8 @@ function App() {
               Monitoring
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "self-healing" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("self-healing")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M14.121 1.879a3 3 0 0 0-4.242 0L8.733 3.026l4.261 4.26 1.127-1.165a3 3 0 0 0 0-4.242M12.293 8 8.027 3.734 3.738 8.031 8 12.293zm-5.006 4.994L3.03 8.737 1.879 9.88a3 3 0 0 0 4.241 4.24l.006-.006 1.16-1.121Z" />
-              </svg>
-              Self-Healing
-            </button>
-            <button
-              className={`tab-button ${
-                activeTab === "version-control" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "version-control" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("version-control")}
             >
               <svg
@@ -292,9 +334,8 @@ function App() {
               Version Control
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "notion" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "notion" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("notion")}
             >
               <svg
@@ -313,9 +354,8 @@ function App() {
               Task Manager
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "genesis" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "genesis" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("genesis")}
             >
               <svg
@@ -333,9 +373,45 @@ function App() {
               Genesis Keys
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "whitelist" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "learning" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("learning")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+              </svg>
+              Learning
+            </button>
+            <button
+              className={`tab-button ${activeTab === "ml-intelligence" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("ml-intelligence")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+              ML Intelligence
+            </button>
+            <button
+              className={`tab-button ${activeTab === "whitelist" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("whitelist")}
             >
               <svg
@@ -352,9 +428,45 @@ function App() {
               Whitelist
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "orchestration" ? "active" : ""
-              }`}
+              className={`tab-button ${activeTab === "experiments" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("experiments")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 3h6v2H9z"></path>
+                <path d="M10 5v4l-4 8h12l-4-8V5"></path>
+                <circle cx="12" cy="15" r="1"></circle>
+              </svg>
+              Experiments
+            </button>
+            <button
+              className={`tab-button ${activeTab === "connectors" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("connectors")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              Connectors
+            </button>
+            <button
+              className={`tab-button ${activeTab === "orchestration" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("orchestration")}
             >
               <svg
@@ -374,10 +486,9 @@ function App() {
               Orchestration
             </button>
             <button
-              className={`tab-button ${
-                activeTab === "enterprise" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("enterprise")}
+              className={`tab-button ${activeTab === "telemetry" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("telemetry")}
             >
               <svg
                 width="20"
@@ -387,12 +498,28 @@ function App() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-                <circle cx="12" cy="12" r="2" fill="currentColor"></circle>
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
               </svg>
-              Enterprise
+              Telemetry
+            </button>
+            <button
+              className={`tab-button ${activeTab === "webscraper" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("webscraper")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              Web Scraper
             </button>
           </nav>
         </aside>
@@ -400,20 +527,27 @@ function App() {
         {/* Tab Content */}
         <main className="main-content">
           {activeTab === "chat" && <ChatTab />}
-          {activeTab === "intelligence" && <IntelligenceTab />}
-          {activeTab === "search-discovery" && <SearchDiscoveryTab />}
           {activeTab === "governance" && <GovernanceTab />}
           {activeTab === "sandbox" && <SandboxTab />}
+          {activeTab === "insights" && <InsightsTab />}
+          {activeTab === "codebase" && <CodeBaseTab />}
+          {activeTab === "rag" && <RAGTab />}
+          {activeTab === "research" && <ResearchTab />}
           {activeTab === "api" && <APITab />}
           {activeTab === "librarian" && <LibrarianTab />}
-          {activeTab === "monitoring" && <MonitoringConsolidatedTab />}
-          {activeTab === "self-healing" && <SelfHealingTab />}
+          {activeTab === "cognitive" && <CognitiveTab />}
+          {activeTab === "monitoring" && <MonitoringTab />}
           {activeTab === "version-control" && <VersionControl />}
           {activeTab === "notion" && <NotionTab />}
           {activeTab === "genesis" && <GenesisKeyTab />}
+          {activeTab === "learning" && <LearningTab />}
+          {activeTab === "ml-intelligence" && <MLIntelligenceTab />}
           {activeTab === "whitelist" && <WhitelistTab />}
-          {activeTab === "orchestration" && <OrchestrationConsolidatedTab />}
-          {activeTab === "enterprise" && <EnterpriseDashboard />}
+          {activeTab === "experiments" && <ExperimentTab />}
+          {activeTab === "connectors" && <ConnectorsTab />}
+          {activeTab === "orchestration" && <OrchestrationTab />}
+          {activeTab === "telemetry" && <TelemetryTab />}
+          {activeTab === "webscraper" && <WebScraper />}
         </main>
       </div>
 

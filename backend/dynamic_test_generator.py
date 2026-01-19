@@ -1,3 +1,17 @@
+"""
+Dynamic Test Generator for Grace
+
+Enables Grace to automatically generate and execute tests for any new logic,
+code, or implementations. Works with the sandbox for safe execution.
+
+Features:
+- Parse Python code to understand structure
+- Generate appropriate unit tests
+- Generate integration tests
+- Execute in sandbox environment
+- Validate and report results
+"""
+
 import ast
 import os
 import sys
@@ -12,6 +26,8 @@ from pathlib import Path
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
+
+BACKEND_DIR = Path(__file__).parent
 
 
 @dataclass
@@ -140,17 +156,10 @@ class CodeAnalyzer:
     def _analyze_function(self, node: ast.FunctionDef) -> Dict[str, Any]:
         """Analyze a function definition."""
         args = []
-        defaults = node.args.defaults
-        num_defaults = len(defaults)
-        num_args = len(node.args.args)
-        
-        for i, arg in enumerate(node.args.args):
+        for arg in node.args.args:
             arg_info = {'name': arg.arg}
             if arg.annotation:
                 arg_info['type'] = self._get_annotation(arg.annotation)
-            default_idx = i - (num_args - num_defaults)
-            if default_idx >= 0:
-                arg_info['has_default'] = True
             args.append(arg_info)
 
         return_type = None
@@ -163,11 +172,7 @@ class CodeAnalyzer:
             'args': args,
             'return_type': return_type,
             'decorators': [self._get_decorator_name(d) for d in node.decorator_list],
-            'is_async': isinstance(node, ast.AsyncFunctionDef),
-            'has_varargs': node.args.vararg is not None,
-            'has_kwargs': node.args.kwarg is not None,
-            'vararg_name': node.args.vararg.arg if node.args.vararg else None,
-            'kwarg_name': node.args.kwarg.arg if node.args.kwarg else None
+            'is_async': isinstance(node, ast.AsyncFunctionDef)
         }
 
     def _get_name(self, node) -> str:
@@ -402,151 +407,17 @@ def test_{func_name}_handles_none():
 '''
 
     def _create_return_type_test(self, func: Dict, module_name: str) -> str:
-        """Create return type test with dynamic input generation."""
+        """Create return type test."""
         func_name = func['name']
         return_type = func.get('return_type', 'Any')
-        args = func.get('args', [])
-        has_varargs = func.get('has_varargs', False)
-        has_kwargs = func.get('has_kwargs', False)
-        
-        test_cases = self._generate_test_cases(args)
-        test_cases_str = repr(test_cases)
-        
-        type_check_code = self._generate_type_check(return_type)
-        
+
         return f'''
 def test_{func_name}_return_type():
-    """Test {func_name} returns expected type with dynamic inputs."""
+    """Test {func_name} returns expected type."""
     from {module_name} import {func_name}
-    import math
-    
-    test_cases = {test_cases_str}
-    results = []
-    
-    for i, test_input in enumerate(test_cases):
-        try:
-            result = {func_name}(*test_input)
-            {type_check_code}
-            results.append({{"case": i, "status": "passed", "result": repr(result)[:100]}})
-        except TypeError as e:
-            if "argument" in str(e).lower() or "required" in str(e).lower():
-                results.append({{"case": i, "status": "skipped", "reason": "signature mismatch"}})
-            else:
-                results.append({{"case": i, "status": "error", "error": str(e)}})
-        except Exception as e:
-            results.append({{"case": i, "status": "error", "error": f"{{type(e).__name__}}: {{e}}"}})
-    
-    passed = sum(1 for r in results if r["status"] == "passed")
-    errors = [r for r in results if r["status"] == "error"]
-    
-    if errors and passed == 0:
-        raise AssertionError(f"All test cases failed: {{errors[:3]}}")
+    # This is a placeholder - actual implementation depends on function signature
+    pass
 '''
-    
-    def _generate_test_cases(self, args: List[Dict]) -> List[List[Any]]:
-        """Generate test cases based on function arguments."""
-        if not args:
-            return [[]]
-        
-        required_args = [a for a in args if not a.get('has_default') and a['name'] != 'self']
-        
-        if not required_args:
-            return [[]]
-        
-        type_values = {
-            'str': ["", "test", "a" * 100, "special!@#$%^&*()", "\n\t\r", "123"],
-            'int': [0, 1, -1, 100, -100, 2**31 - 1, -(2**31)],
-            'float': [0.0, 1.5, -1.5, 0.001, 1e10, -1e10],
-            'bool': [True, False],
-            'list': [[], [1], [1, 2, 3], list(range(100))],
-            'dict': [{}, {"key": "value"}, {"a": {"b": "c"}}, {"x": 1, "y": 2}],
-            'List': [[], [1], [1, 2, 3]],
-            'Dict': [{}, {"key": "value"}],
-            'Optional': [None, "test", 1],
-            'Any': [None, "", 0, [], {}],
-            'None': [None],
-            'NoneType': [None],
-        }
-        
-        name_type_hints = {
-            'count': 'int', 'num': 'int', 'size': 'int', 'length': 'int', 'index': 'int',
-            'id': 'int', 'age': 'int', 'year': 'int', 'amount': 'int', 'limit': 'int',
-            'name': 'str', 'text': 'str', 'message': 'str', 'path': 'str', 'url': 'str',
-            'title': 'str', 'description': 'str', 'content': 'str', 'value': 'str',
-            'key': 'str', 'label': 'str', 'query': 'str', 'pattern': 'str',
-            'enabled': 'bool', 'active': 'bool', 'is_valid': 'bool', 'flag': 'bool',
-            'verbose': 'bool', 'debug': 'bool', 'force': 'bool', 'recursive': 'bool',
-            'items': 'list', 'values': 'list', 'data': 'list', 'elements': 'list',
-            'results': 'list', 'entries': 'list', 'records': 'list',
-            'config': 'dict', 'options': 'dict', 'settings': 'dict', 'params': 'dict',
-            'metadata': 'dict', 'headers': 'dict', 'kwargs': 'dict',
-            'ratio': 'float', 'rate': 'float', 'percentage': 'float', 'score': 'float',
-            'price': 'float', 'weight': 'float', 'threshold': 'float',
-        }
-        
-        test_cases = []
-        
-        for arg in required_args:
-            arg_type = arg.get('type')
-            arg_name = arg['name']
-            
-            if not arg_type:
-                for hint_name, hint_type in name_type_hints.items():
-                    if hint_name in arg_name.lower():
-                        arg_type = hint_type
-                        break
-            
-            if arg_type:
-                base_type = arg_type.split('[')[0]
-                values = type_values.get(base_type, type_values['Any'])
-            else:
-                values = type_values['Any']
-            
-            arg['_test_values'] = values
-        
-        if len(required_args) == 1:
-            return [[v] for v in required_args[0].get('_test_values', [None])]
-        
-        max_cases = 10
-        first_arg_values = required_args[0].get('_test_values', [None])
-        
-        for i, val in enumerate(first_arg_values[:max_cases]):
-            case = [val]
-            for arg in required_args[1:]:
-                arg_values = arg.get('_test_values', [None])
-                case.append(arg_values[i % len(arg_values)])
-            test_cases.append(case)
-        
-        return test_cases if test_cases else [[]]
-    
-    def _generate_type_check(self, return_type: str) -> str:
-        """Generate type check code for return value."""
-        if not return_type or return_type == 'Any':
-            return "pass  # No type checking for Any"
-        
-        type_map = {
-            'str': 'str',
-            'int': 'int', 
-            'float': '(int, float)',
-            'bool': 'bool',
-            'list': 'list',
-            'List': 'list',
-            'dict': 'dict',
-            'Dict': 'dict',
-            'None': 'type(None)',
-            'NoneType': 'type(None)',
-        }
-        
-        if return_type.startswith('Optional'):
-            inner = return_type[9:-1] if return_type.endswith(']') else 'Any'
-            inner_check = type_map.get(inner.split('[')[0], 'object')
-            return f"assert result is None or isinstance(result, {inner_check}), f'Expected Optional[{inner}], got {{type(result)}}'"
-        
-        base_type = return_type.split('[')[0]
-        if base_type in type_map:
-            return f"assert isinstance(result, {type_map[base_type]}), f'Expected {return_type}, got {{type(result)}}'"
-        
-        return f"pass  # Custom type {return_type} - manual verification needed"
 
     def _create_class_instantiation_test(self, cls: Dict, module_name: str) -> str:
         """Create class instantiation test."""

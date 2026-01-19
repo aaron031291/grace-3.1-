@@ -1,8 +1,16 @@
+"""
+Procedural Memory - Learned Skills and Procedures
+
+Stores HOW to do things, not just WHAT is true.
+This is the difference between knowing and doing.
+
+OPTIMIZED: Now supports semantic similarity for procedure finding
+"""
 from sqlalchemy import Column, String, Float, Integer, Text, JSON, ForeignKey
+from database.base import BaseModel
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
-from database.base import BaseModel
 import logging
 import json
 import numpy as np
@@ -100,13 +108,6 @@ class ProceduralRepository:
 
         self.session.add(procedure)
         self.session.commit()
-
-        # Auto-generate embedding if embedder is available
-        if self.embedder:
-            try:
-                self.generate_procedure_embedding(procedure)
-            except Exception as e:
-                logger.warning(f"[PROCEDURAL] Failed to generate embedding for new procedure: {e}")
 
         return procedure
 
@@ -248,33 +249,16 @@ class ProceduralRepository:
     def generate_procedure_embedding(self, procedure: Procedure) -> Optional[List[float]]:
         """
         Generate and store embedding for a procedure.
-        Uses title + description + content for comprehensive semantic matching.
         """
         if not self.embedder:
-            logger.warning("[PROCEDURAL] Cannot generate embedding - no embedder available")
             return None
 
         try:
-            # Build comprehensive text from title (name), description (goal), and content (steps)
-            parts = [procedure.name, procedure.goal]
-            
-            # Add steps content if available
-            if procedure.steps:
-                steps_text = json.dumps(procedure.steps) if isinstance(procedure.steps, (dict, list)) else str(procedure.steps)
-                parts.append(steps_text[:500])  # Limit steps text length
-            
-            # Add procedure type and preconditions for context
-            if procedure.procedure_type:
-                parts.append(f"type: {procedure.procedure_type}")
-            if procedure.preconditions:
-                precond_text = json.dumps(procedure.preconditions) if isinstance(procedure.preconditions, (dict, list)) else str(procedure.preconditions)
-                parts.append(precond_text[:200])  # Limit preconditions length
-            
-            text = " | ".join(parts)
+            # Embed goal + name for better matching
+            text = f"{procedure.name}: {procedure.goal}"
             embedding = self.embedder.embed_text([text])[0]
             procedure.embedding = json.dumps(embedding)
             self.session.commit()
-            logger.debug(f"[PROCEDURAL] Generated embedding for procedure: {procedure.name}")
             return embedding
         except Exception as e:
             logger.error(f"[PROCEDURAL] Error generating embedding: {e}")
@@ -284,7 +268,6 @@ class ProceduralRepository:
         """
         Generate embeddings for all procedures that don't have them.
         Returns count of procedures indexed.
-        Callable on startup to ensure all procedures are searchable.
         """
         if not self.embedder:
             logger.warning("[PROCEDURAL] Cannot index - no embedder available")
@@ -299,38 +282,17 @@ class ProceduralRepository:
             logger.info("[PROCEDURAL] All procedures already indexed")
             return 0
 
-        # Build comprehensive texts for each procedure
-        texts = []
-        for p in procedures:
-            parts = [p.name, p.goal]
-            if p.steps:
-                steps_text = json.dumps(p.steps) if isinstance(p.steps, (dict, list)) else str(p.steps)
-                parts.append(steps_text[:500])
-            if p.procedure_type:
-                parts.append(f"type: {p.procedure_type}")
-            if p.preconditions:
-                precond_text = json.dumps(p.preconditions) if isinstance(p.preconditions, (dict, list)) else str(p.preconditions)
-                parts.append(precond_text[:200])
-            texts.append(" | ".join(parts))
-        
-        try:
-            embeddings = self.embedder.embed_text(texts, batch_size=32)
-            
-            # Update procedures
-            for proc, emb in zip(procedures, embeddings):
-                proc.embedding = json.dumps(emb)
+        # Batch embed
+        texts = [f"{p.name}: {p.goal}" for p in procedures]
+        embeddings = self.embedder.embed_text(texts, batch_size=32)
 
-            self.session.commit()
-            logger.info(f"[PROCEDURAL] Indexed {len(procedures)} procedures")
-            return len(procedures)
-        except Exception as e:
-            logger.error(f"[PROCEDURAL] Batch indexing failed: {e}")
-            # Fall back to individual indexing
-            indexed = 0
-            for proc in procedures:
-                if self.generate_procedure_embedding(proc):
-                    indexed += 1
-            return indexed
+        # Update procedures
+        for proc, emb in zip(procedures, embeddings):
+            proc.embedding = json.dumps(emb)
+
+        self.session.commit()
+        logger.info(f"[PROCEDURAL] Indexed {len(procedures)} procedures")
+        return len(procedures)
 
     def suggest_procedure(
         self,

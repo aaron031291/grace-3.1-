@@ -1,3 +1,9 @@
+"""
+Genesis Key Service - Comprehensive tracking and version control system.
+
+Automatically tracks every input, change, and action with full metadata
+for what, where, when, why, who, and how.
+"""
 import uuid
 import json
 import hashlib
@@ -6,7 +12,11 @@ from datetime import datetime
 from typing import Optional, Dict, Any, List
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
-from models.genesis_key_models import GenesisKey, FixSuggestion, GenesisKeyArchive, UserProfile, GenesisKeyType, GenesisKeyStatus, FixSuggestionStatus
+
+from models.genesis_key_models import (
+    GenesisKey, FixSuggestion, GenesisKeyArchive, UserProfile,
+    GenesisKeyType, GenesisKeyStatus, FixSuggestionStatus
+)
 from database.session import get_session
 from version_control.git_service import GitService
 from genesis.kb_integration import get_kb_integration
@@ -78,10 +88,6 @@ class GenesisKeyService:
                 sess.commit()
                 logger.info(f"Created new user profile: {user_id}")
 
-            # Expunge the object from session if we're closing it to avoid binding errors
-            if close_session:
-                sess.expunge(user)
-            
             return user
         finally:
             if close_session:
@@ -262,32 +268,12 @@ class GenesisKeyService:
             # CRITICAL: Trigger autonomous pipeline for every Genesis Key
             try:
                 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
-                from pathlib import Path
-                
-                # Try to get orchestrator if available
-                orchestrator = None
-                try:
-                    from api.autonomous_learning import get_orchestrator
-                    orchestrator = get_orchestrator()
-                except Exception:
-                    pass  # Orchestrator not available, that's ok
-                
-                kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
-                trigger_pipeline = get_genesis_trigger_pipeline(
-                    session=sess,
-                    knowledge_base_path=kb_path,
-                    orchestrator=orchestrator
-                )
+                trigger_pipeline = get_genesis_trigger_pipeline(session=sess)
                 trigger_result = trigger_pipeline.on_genesis_key_created(key)
                 if trigger_result.get("triggered"):
                     logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {key_id}")
             except Exception as trigger_error:
-                # Only log at debug level - orchestrator may not be initialized yet
-                logger.debug(f"Autonomous pipeline not available: {trigger_error}")
-
-            # Expunge the object from session if we're closing it to avoid binding errors
-            if close_session:
-                sess.expunge(key)
+                logger.warning(f"Failed to trigger autonomous pipeline: {trigger_error}")
 
             logger.info(f"Created Genesis Key: {key_id} - {what_description}")
             return key

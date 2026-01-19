@@ -1,13 +1,22 @@
+"""
+Cognitive Retrieval Service - Integration Layer
+
+Connects Cognitive Engine → RAG → Learning Memory
+Every retrieval goes through OODA loop with decision logging and trust scoring.
+"""
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import logging
+
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.learning_memory import LearningMemoryManager, TrustScorer
 from retrieval.retriever import DocumentRetriever
 from database.session import get_session
 from pathlib import Path
 from settings import KNOWLEDGE_BASE_PATH
+
 logger = logging.getLogger(__name__)
+
 
 class CognitiveRetriever:
     """
@@ -136,81 +145,35 @@ class CognitiveRetriever:
         def generate_alternatives() -> List[Dict[str, Any]]:
             alternatives = []
 
-            # TimeSense: Get time estimates for each strategy
-            query_tokens = len(query.split()) * 4  # Rough token estimate
-            
-            try:
-                from timesense.integration import predict_time
-                from timesense.primitives import PrimitiveType
-                
-                # Estimate time for semantic search
-                semantic_time = predict_time(
-                    PrimitiveType.VECTOR_SEARCH,
-                    size=query_tokens
-                ) if predict_time else None
-                
-                # Estimate time for hybrid (slightly slower)
-                hybrid_time = predict_time(
-                    PrimitiveType.VECTOR_SEARCH,
-                    size=query_tokens * 1.2  # Hybrid is ~20% slower
-                ) if predict_time else None
-                
-                # Estimate time for reranked (slowest)
-                rerank_time = predict_time(
-                    PrimitiveType.VECTOR_SEARCH,
-                    size=query_tokens * 2.0  # Reranking is ~2x slower
-                ) if predict_time else None
-            except Exception as e:
-                logger.debug(f"[COGNITIVE-RETRIEVAL] Time estimation failed: {e}")
-                semantic_time = hybrid_time = rerank_time = None
-            
             # Alternative 1: Pure semantic search
-            alt1 = {
+            alternatives.append({
                 "strategy": "semantic",
                 "immediate_value": 0.7,
                 "future_options": 0.9,  # Can always add keywords later
                 "simplicity": 1.0,  # Simplest approach
                 "reversibility": 1.0,
                 "complexity": 0.1
-            }
-            if semantic_time:
-                alt1["primitive_type"] = "vector_search"
-                alt1["size"] = query_tokens
-                alt1["estimated_time_ms"] = semantic_time.p50_ms
-                alt1["time_confidence"] = semantic_time.confidence
-            alternatives.append(alt1)
+            })
 
             # Alternative 2: Hybrid search (semantic + keyword)
-            alt2 = {
+            alternatives.append({
                 "strategy": "hybrid",
                 "immediate_value": 0.85,  # Better for most queries
                 "future_options": 0.8,
                 "simplicity": 0.8,
                 "reversibility": 1.0,
                 "complexity": 0.3
-            }
-            if hybrid_time:
-                alt2["primitive_type"] = "vector_search"
-                alt2["size"] = query_tokens * 1.2
-                alt2["estimated_time_ms"] = hybrid_time.p50_ms
-                alt2["time_confidence"] = hybrid_time.confidence
-            alternatives.append(alt2)
+            })
 
             # Alternative 3: Hybrid + Reranking
-            alt3 = {
+            alternatives.append({
                 "strategy": "reranked",
                 "immediate_value": 0.9,  # Best quality
                 "future_options": 0.7,  # More committed
                 "simplicity": 0.6,  # More complex
                 "reversibility": 1.0,
                 "complexity": 0.5
-            }
-            if rerank_time:
-                alt3["primitive_type"] = "vector_search"
-                alt3["size"] = query_tokens * 2.0
-                alt3["estimated_time_ms"] = rerank_time.p50_ms
-                alt3["time_confidence"] = rerank_time.confidence
-            alternatives.append(alt3)
+            })
 
             return alternatives
 

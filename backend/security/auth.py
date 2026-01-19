@@ -200,18 +200,15 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Cookie"},
         )
 
-    # SECURITY FIX: Enable session validation for production
-    # Validates that the session is active and not expired
-    config = get_security_config()
-    if config.PRODUCTION_MODE or session_id:
-        session_manager = get_session_manager()
-        session = session_manager.validate_session(session_id)
-        if not session:
-            logger.log_access_denied("API", request, "Invalid or expired session")
-            raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED,
-                detail="Session expired. Please login again.",
-            )
+    # For strict session validation, uncomment below:
+    # session_manager = get_session_manager()
+    # session = session_manager.validate_session(session_id)
+    # if not session:
+    #     logger.log_access_denied("API", request, "Invalid session")
+    #     raise HTTPException(
+    #         status_code=HTTP_401_UNAUTHORIZED,
+    #         detail="Session expired. Please login again.",
+    #     )
 
     return {
         "genesis_id": genesis_id,

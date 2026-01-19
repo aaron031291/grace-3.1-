@@ -1,13 +1,46 @@
+"""
+Component Registry - Central Component Management
+
+Addresses Clarity Class 4 (Subsystem Activation Ambiguity):
+- Component registration and discovery
+- Lifecycle orchestration
+- Dependency management
+- Health monitoring
+
+The registry enables:
+- Centralized component tracking
+- Dependency-aware startup/shutdown
+- Component discovery by role/capability
+- System-wide health monitoring
+"""
+
 from __future__ import annotations
+
 import asyncio
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Set, Type, TYPE_CHECKING
-from base_component import BaseComponent, ComponentState, ComponentRole, ComponentManifest
+
+from .base_component import (
+    BaseComponent,
+    ComponentState,
+    ComponentRole,
+    ComponentManifest,
+)
+
+if TYPE_CHECKING:
+    from layer1.message_bus import Layer1MessageBus
+
 logger = logging.getLogger(__name__)
 
+
+# =============================================================================
+# REGISTRY
+# =============================================================================
+
+@dataclass
 class RegistryEntry:
     """Entry in the component registry."""
     component: BaseComponent

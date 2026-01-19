@@ -1,6 +1,4 @@
 import sqlite3
-import logging
-logger = logging.getLogger(__name__)
 
 db_path = "data/grace.db"
 conn = sqlite3.connect(db_path)
@@ -16,11 +14,11 @@ cursor.execute("""
 """)
 
 pages = cursor.fetchall()
-logger.info("Failed pages in database:")
+print("Failed pages in database:")
 for url, status, error, title in pages:
-    logger.info(f"\nURL: {url[:60]}...")
-    logger.info(f"Status: {status}")
-    logger.info(f"Error: {error}")
-    logger.info(f"Title: {title}")
+    print(f"\nURL: {url[:60]}...")
+    print(f"Status: {status}")
+    print(f"Error: {error}")
+    print(f"Title: {title}")
 
 conn.close()

@@ -1,14 +1,33 @@
+"""
+Script to ingest all AI research repositories into Grace's training data.
+
+This script processes the cloned repositories in data/ai_research and ingests
+relevant documentation and code files into the knowledge base.
+"""
+
 import os
 import sys
 import logging
 from pathlib import Path
 from typing import List, Set
+
+# Add backend to path
+backend_path = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_path))
+
 from ingestion.service import TextIngestionService
 from embedding import get_embedding_model
 from file_manager.file_handler import FileHandler
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
+
 
 class AIResearchIngestionManager:
     """Manages ingestion of AI research repositories."""

@@ -1,6 +1,0 @@
-{
-  "primary_model": "fastembed",
-  "model_name": "BAAI/bge-small-en-v1.5",
-  "fallback_enabled": true,
-  "dimension": 384
-}

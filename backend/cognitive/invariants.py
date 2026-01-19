@@ -127,16 +127,6 @@ class InvariantValidator:
                 violations.append(
                     "Invariant 11: Decision freeze point exceeded - must decide now"
                 )
-        
-        # TimeSense integration: Check time determinism for Invariant 11
-        time_determinism = context.metadata.get('time_determinism')
-        if time_determinism:
-            is_time_deterministic = time_determinism.get('is_deterministic', True)
-            if not is_time_deterministic and context.requires_determinism:
-                violations.append(
-                    f"Invariant 11: Operation timing is non-deterministic. "
-                    f"Violations: {time_determinism.get('violations', [])}"
-                )
 
         # Invariant 12: Forward Simulation
         if len(context.alternative_paths) == 0:

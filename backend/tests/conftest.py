@@ -51,10 +51,6 @@ _diagnostics: Dict[str, Any] = {
 _app_available = False
 _app = None
 
-# FIX: Track database initialization to prevent multiple initializations
-_database_initialized = False
-_test_db_path = None
-
 # Diagnostic report path
 DIAGNOSTIC_REPORT_PATH = backend_dir / "tests" / "diagnostic_report.json"
 
@@ -438,51 +434,10 @@ class DiagnosticCollector:
 
 def _try_import_app():
     """Try to import the FastAPI app, handling missing dependencies gracefully."""
-    global _app_available, _app, _database_initialized, _test_db_path
+    global _app_available, _app
     import_chain = []
 
     try:
-        # Initialize database BEFORE importing app to ensure middleware has DB access
-        import_chain.append("database initialization")
-        try:
-            from database.connection import DatabaseConnection
-            from database.config import DatabaseConfig, DatabaseType
-            from database.base import Base
-            import tempfile
-            import time
-
-            # FIX: Use global flag to prevent multiple initializations
-            if not _database_initialized:
-                try:
-                    DatabaseConnection.get_engine()
-                    # Already initialized by another path
-                    _database_initialized = True
-                except RuntimeError:
-                    # Not initialized, set it up
-                    temp_dir = tempfile.gettempdir()
-                    timestamp = int(time.time() * 1000)
-                    _test_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
-
-                    test_config = DatabaseConfig(
-                        db_type=DatabaseType.SQLITE,
-                        database_path=_test_db_path,
-                        echo=False,
-                    )
-                    DatabaseConnection.initialize(test_config)
-
-                    # Import models and create tables
-                    from models import database_models, genesis_key_models
-                    Base.metadata.create_all(bind=DatabaseConnection.get_engine())
-
-                    # Also initialize session factory
-                    from database.session import initialize_session_factory
-                    initialize_session_factory()
-
-                    _database_initialized = True
-        except Exception as db_err:
-            import logging
-            logging.warning(f"Test database pre-initialization failed: {db_err}")
-
         import_chain.append("fastapi.testclient")
         from fastapi.testclient import TestClient
 
@@ -526,8 +481,6 @@ def app(request):
 @pytest.fixture(scope="session")
 def client(app, request):
     """Create a test client for the application."""
-    global _database_initialized, _test_db_path
-
     if app is None:
         DiagnosticCollector.record_skip(
             test_name=request.node.name if hasattr(request, 'node') else "client_fixture",
@@ -535,112 +488,64 @@ def client(app, request):
         )
         pytest.skip("Full app dependencies not available")
 
-    # FIX: Database should already be initialized by _try_import_app()
-    # Use the global flag to check - only initialize if absolutely necessary
-    if not _database_initialized:
-        try:
-            from database.connection import DatabaseConnection
-            from database.config import DatabaseConfig, DatabaseType
-            from database.session import initialize_session_factory
-            from database.base import Base
-            import tempfile
-            import time
-
-            # Check if already initialized via DatabaseConnection
-            try:
-                DatabaseConnection.get_engine()
-                _database_initialized = True
-            except RuntimeError:
-                # Not initialized, set it up
-                temp_dir = tempfile.gettempdir()
-                timestamp = int(time.time() * 1000)
-                _test_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
-
-                test_config = DatabaseConfig(
-                    db_type=DatabaseType.SQLITE,
-                    database_path=_test_db_path,
-                    echo=False,
-                )
-                DatabaseConnection.initialize(test_config)
-                initialize_session_factory()
-
-                # Import all models and create tables
-                try:
-                    from models import database_models, genesis_key_models
-                except ImportError as e:
-                    import logging
-                    logging.warning(f"Could not import all models: {e}")
-
-                Base.metadata.create_all(bind=DatabaseConnection.get_engine())
-                _database_initialized = True
-
-        except Exception as e:
-            import logging
-            logging.warning(f"Could not initialize test database: {e}")
-
-    from fastapi.testclient import TestClient
-    return TestClient(app)
-
-
-@pytest.fixture(scope="session", autouse=True)
-def ensure_database_initialized():
-    """Ensure database is initialized for the entire test session.
-
-    FIX: Uses global flag to prevent multiple initializations.
-    """
-    global _database_initialized, _test_db_path
-
+    # Initialize database for test environment before creating test client
     try:
         from database.connection import DatabaseConnection
         from database.config import DatabaseConfig, DatabaseType
         from database.session import initialize_session_factory
         from database.base import Base
-        import tempfile
+        import os
         import time
 
-        # FIX: Check global flag first
-        if not _database_initialized:
-            try:
-                DatabaseConnection.get_engine()
-                _database_initialized = True
-            except RuntimeError:
-                # Initialize database
-                temp_dir = tempfile.gettempdir()
-                timestamp = int(time.time() * 1000)
-                _test_db_path = os.path.join(temp_dir, f"grace_test_session_{timestamp}.db")
+        # Always create a fresh database for tests using unique timestamp
+        import tempfile
+        temp_dir = tempfile.gettempdir()
+        timestamp = int(time.time() * 1000)
+        temp_db_path = os.path.join(temp_dir, f"grace_test_{timestamp}_{os.getpid()}.db")
 
-                test_config = DatabaseConfig(
-                    db_type=DatabaseType.SQLITE,
-                    database_path=_test_db_path,
-                    echo=False,
-                )
-                DatabaseConnection.initialize(test_config)
-                initialize_session_factory()
-
-                # Import and create tables
-                from models import database_models, genesis_key_models
-                Base.metadata.create_all(bind=DatabaseConnection.get_engine())
-                _database_initialized = True
-
-        yield
-
-        # Cleanup after all tests
-        try:
-            engine = DatabaseConnection.get_engine()
-            if engine:
-                engine.dispose()
-            # Clean up temp database file
-            if _test_db_path and os.path.exists(_test_db_path):
+        # Clean up any stale test DBs from previous runs
+        for f in os.listdir(temp_dir):
+            if f.startswith("grace_test_") and f.endswith(".db"):
                 try:
-                    os.remove(_test_db_path)
-                except Exception:
-                    pass
-        except Exception:
-            pass
+                    old_path = os.path.join(temp_dir, f)
+                    os.unlink(old_path)
+                except (OSError, PermissionError):
+                    pass  # Ignore if can't delete
+
+        # Reset singleton to force fresh initialization
+        DatabaseConnection._engine = None
+        DatabaseConnection._config = None
+
+        test_config = DatabaseConfig(
+            db_type=DatabaseType.SQLITE,
+            database_path=temp_db_path,
+            echo=False,
+        )
+        DatabaseConnection.initialize(test_config)
+
+        # Initialize session factory
+        initialize_session_factory()
+
+        # Import all models to register them with Base before create_all
+        try:
+            from models import database_models  # Core models like GovernanceRule
+            from models import genesis_key_models  # GenesisKey, UserProfile, etc.
+        except ImportError as e:
+            import logging
+            logging.warning(f"Could not import all models: {e}")
+
+        # Create all tables
+        Base.metadata.create_all(bind=DatabaseConnection.get_engine())
+
     except Exception as e:
+        # Log but continue - some tests may not need DB
         import logging
-        logging.warning(f"Database initialization fixture failed: {e}")
-        yield
+        logging.warning(f"Could not initialize test database: {e}")
+        import traceback
+        traceback.print_exc()
+
+    from fastapi.testclient import TestClient
+    return TestClient(app)
 
 
 @pytest.fixture(scope="function")
@@ -819,66 +724,6 @@ def pytest_runtest_makereport(item, call):
                     "assertions_likely_validated": _infer_assertions(test_function),
                 }
             )
-            
-            # ✅ NEW: Record outcome in OutcomeAggregator for cross-system learning
-            try:
-                from cognitive.outcome_aggregator import get_outcome_aggregator
-                from database.session import get_db
-                
-                session = next(get_db())
-                aggregator = get_outcome_aggregator(session)
-                aggregator.record_outcome('testing', {
-                    'test_name': test_name,
-                    'success': True,
-                    'trust_score': 0.9,  # High trust for passing tests
-                    'duration': duration_ms,
-                    'test_module': test_module,
-                    'test_class': test_class,
-                    'test_function': test_function
-                })
-            except Exception as e:
-                # Don't fail tests if aggregator fails
-                pass
-            
-            # ✅ NEW: Create Genesis Key for test outcome to trigger LLM knowledge update
-            try:
-                from genesis.genesis_key_service import get_genesis_service
-                from models.genesis_key_models import GenesisKeyType
-                from database.session import get_db
-                
-                session = next(get_db())
-                genesis_service = get_genesis_service()
-                
-                genesis_key = genesis_service.create_key(
-                    key_type=GenesisKeyType.SYSTEM_EVENT,
-                    what_description=f"Test passed: {test_name}",
-                    who_actor="pytest",
-                    where_location=str(item.fspath) if hasattr(item, 'fspath') else None,
-                    why_reason="Test outcome for LLM knowledge update",
-                    how_method="pytest_execution",
-                    file_path=str(item.fspath) if hasattr(item, 'fspath') else None,
-                    context_data={
-                        'test_name': test_name,
-                        'test_module': test_module,
-                        'test_class': test_class,
-                        'test_function': test_function,
-                        'duration_ms': duration_ms,
-                        'outcome': 'passed'
-                    },
-                    metadata={
-                        'outcome_type': 'test_outcome',
-                        'example_type': 'test_outcome',
-                        'trust_score': 0.9,  # High trust for passing tests
-                        'success': True,
-                        'test_name': test_name,
-                        'duration_ms': duration_ms
-                    },
-                    session=session
-                )
-            except Exception as e:
-                # Don't fail tests if Genesis Key creation fails
-                pass
-        
         elif report.failed:
             # Record failed test with error details
             error_type = call.excinfo.typename if call.excinfo else "Unknown"
@@ -899,72 +744,6 @@ def pytest_runtest_makereport(item, call):
                     "full_traceback": "".join(tb_lines) if len(tb_lines) < 50 else "Traceback too long",
                 }
             )
-            
-            # ✅ NEW: Record outcome in OutcomeAggregator for cross-system learning
-            try:
-                from cognitive.outcome_aggregator import get_outcome_aggregator
-                from database.session import get_db
-                
-                session = next(get_db())
-                aggregator = get_outcome_aggregator(session)
-                aggregator.record_outcome('testing', {
-                    'test_name': test_name,
-                    'success': False,
-                    'trust_score': 0.7,  # Medium trust - failures are still valuable
-                    'duration': duration_ms,
-                    'error_type': error_type,
-                    'error_message': error_message,
-                    'test_module': test_module,
-                    'test_class': test_class,
-                    'test_function': test_function
-                })
-            except Exception as e:
-                # Don't fail tests if aggregator fails
-                pass
-            
-            # ✅ NEW: Create Genesis Key for test failure outcome
-            try:
-                from genesis.genesis_key_service import get_genesis_service
-                from models.genesis_key_models import GenesisKeyType
-                from database.session import get_db
-                
-                session = next(get_db())
-                genesis_service = get_genesis_service()
-                
-                genesis_key = genesis_service.create_key(
-                    key_type=GenesisKeyType.ERROR,
-                    what_description=f"Test failed: {test_name}",
-                    who_actor="pytest",
-                    where_location=str(item.fspath) if hasattr(item, 'fspath') else None,
-                    why_reason="Test failure outcome for LLM knowledge update",
-                    how_method="pytest_execution",
-                    file_path=str(item.fspath) if hasattr(item, 'fspath') else None,
-                    is_error=True,
-                    error_type=error_type,
-                    error_message=error_message,
-                    context_data={
-                        'test_name': test_name,
-                        'test_module': test_module,
-                        'test_class': test_class,
-                        'test_function': test_function,
-                        'duration_ms': duration_ms,
-                        'outcome': 'failed',
-                        'error_type': error_type
-                    },
-                    metadata={
-                        'outcome_type': 'test_outcome',
-                        'example_type': 'test_outcome',
-                        'trust_score': 0.7,  # Medium trust - failures are still valuable for learning
-                        'success': False,
-                        'test_name': test_name,
-                        'error_type': error_type,
-                        'duration_ms': duration_ms
-                    },
-                    session=session
-                )
-            except Exception as e:
-                # Don't fail tests if Genesis Key creation fails
-                pass
         elif report.skipped:
             # Skip is already recorded elsewhere, but update count if needed
             pass
@@ -1048,15 +827,15 @@ def pytest_sessionfinish(session, exitstatus):
     print("=" * 70)
 
     # Overall results
-    print(f"\n[RESULTS] TEST RESULTS (Pass Rate: {summary['pass_rate']}%)")
-    print(f"   [PASS] Passed:  {summary['total_passes']}")
-    print(f"   [FAIL] Failed:  {summary['total_failures']} (Infrastructure: {summary['infrastructure_failures']}, Code: {summary['code_failures']})")
-    print(f"   [SKIP] Skipped: {summary['total_skips']}")
-    print(f"   [WARN] Errors:  {report['test_results']['errors']}")
+    print(f"\n📊 TEST RESULTS (Pass Rate: {summary['pass_rate']}%)")
+    print(f"   ✅ Passed:  {summary['total_passes']}")
+    print(f"   ❌ Failed:  {summary['total_failures']} (Infrastructure: {summary['infrastructure_failures']}, Code: {summary['code_failures']})")
+    print(f"   ⏭️  Skipped: {summary['total_skips']}")
+    print(f"   ⚠️  Errors:  {report['test_results']['errors']}")
 
     # Learning insights from passes
     if summary['total_passes'] > 0:
-        print(f"\n[LEARN] LEARNING FROM SUCCESS ({summary['total_passes']} tests):")
+        print(f"\n📚 LEARNING FROM SUCCESS ({summary['total_passes']} tests):")
         print(f"   Validation types working: {', '.join(summary['validation_types_working'][:5])}")
         if summary['category_pass_counts']:
             top_categories = sorted(summary['category_pass_counts'].items(),
@@ -1067,7 +846,7 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Learning insights from failures
     if summary['total_failures'] > 0:
-        print(f"\n[FIX] LEARNING FROM FAILURES ({summary['total_failures']} tests):")
+        print(f"\n🔧 LEARNING FROM FAILURES ({summary['total_failures']} tests):")
         if summary['infrastructure_failures'] > 0:
             print(f"   Infrastructure issues: {summary['infrastructure_failures']} (external services/deps)")
         if summary['code_failures'] > 0:
@@ -1083,7 +862,7 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Missing dependencies
     if report["missing_dependencies"]:
-        print(f"\n[DEPS] MISSING DEPENDENCIES ({len(report['missing_dependencies'])}):")
+        print(f"\n📦 MISSING DEPENDENCIES ({len(report['missing_dependencies'])}):")
         for dep in sorted(report["missing_dependencies"])[:5]:
             print(f"   - {dep}")
         if len(report["missing_dependencies"]) > 5:
@@ -1091,15 +870,15 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Suggested fixes
     if report["suggested_fixes"]:
-        print(f"\n[HINT] SUGGESTED FIXES:")
+        print(f"\n💡 SUGGESTED FIXES:")
         for fix in report["suggested_fixes"][:5]:
             print(f"   $ {fix}")
 
     # Report status
-    print(f"\n[FILE] Diagnostic report: {report_path}")
+    print(f"\n📁 Diagnostic report: {report_path}")
     if reported:
-        print("[OK] Diagnostics reported to GRACE API for autonomous learning")
+        print("✅ Diagnostics reported to GRACE API for autonomous learning")
     else:
-        print("[NOTE] GRACE API not available - diagnostics saved locally for later learning")
+        print("📝 GRACE API not available - diagnostics saved locally for later learning")
 
     print("=" * 70)

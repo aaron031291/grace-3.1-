@@ -4,8 +4,6 @@ These files were uploaded but failed to ingest before the 5GB limit update.
 """
 
 import os
-import logging
-logger = logging.getLogger(__name__)
 import sys
 import sqlite3
 import json
@@ -69,7 +67,7 @@ def get_missing_files():
 async def ingest_file(file_info: dict, ingestion_service: TextIngestionService, session_factory):
     """Ingest a single file."""
     try:
-        logger.info(f"\nProcessing: {file_info['filename']} ({file_info['size_mb']:.2f} MB)")
+        print(f"\nProcessing: {file_info['filename']} ({file_info['size_mb']:.2f} MB)")
 
         # Extract text from file (returns tuple of (text, error))
         result = extract_file_text(file_info['full_path'])
@@ -77,16 +75,16 @@ async def ingest_file(file_info: dict, ingestion_service: TextIngestionService, 
         if isinstance(result, tuple):
             text, error = result
             if error:
-                logger.info(f"  [ERROR] Extraction error: {error}")
+                print(f"  [ERROR] Extraction error: {error}")
                 return False
         else:
             text = result
 
         if not text or len(text.strip()) == 0:
-            logger.info(f"  [WARN] No text extracted from {file_info['filename']}")
+            print(f"  [WARN] No text extracted from {file_info['filename']}")
             return False
 
-        logger.info(f"  [OK] Extracted {len(text)} characters")
+        print(f"  [OK] Extracted {len(text)} characters")
 
         # Create document record
         db = session_factory()
@@ -98,7 +96,7 @@ async def ingest_file(file_info: dict, ingestion_service: TextIngestionService, 
             ).first()
 
             if existing:
-                logger.info(f"  [WARN] Document already exists in database, skipping")
+                print(f"  [WARN] Document already exists in database, skipping")
                 return True
 
             # Create new document
@@ -111,7 +109,7 @@ async def ingest_file(file_info: dict, ingestion_service: TextIngestionService, 
             db.commit()
             db.refresh(doc)
 
-            logger.info(f"  [OK] Created document record (ID: {doc.id})")
+            print(f"  [OK] Created document record (ID: {doc.id})")
 
             # Ingest into vector database
             await ingestion_service.ingest_text(
@@ -124,49 +122,49 @@ async def ingest_file(file_info: dict, ingestion_service: TextIngestionService, 
                 document_id=doc.id
             )
 
-            logger.info(f"  [OK] Ingested into vector database")
+            print(f"  [OK] Ingested into vector database")
             return True
 
         except Exception as e:
             db.rollback()
-            logger.info(f"  [ERROR] Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             return False
         finally:
             db.close()
 
     except Exception as e:
-        logger.info(f"  [ERROR] Failed to process {file_info['filename']}: {e}")
+        print(f"  [ERROR] Failed to process {file_info['filename']}: {e}")
         return False
 
 
 async def main():
     """Main re-ingestion process."""
-    logger.info("=" * 80)
-    logger.info("Re-ingesting Missing Files from AI Research Folder")
-    logger.info("=" * 80)
+    print("=" * 80)
+    print("Re-ingesting Missing Files from AI Research Folder")
+    print("=" * 80)
 
     # Get missing files
-    logger.info("\n[1/4] Identifying missing files...")
+    print("\n[1/4] Identifying missing files...")
     missing_files = get_missing_files()
 
     if not missing_files:
-        logger.info("[OK] No missing files found - all files are already ingested!")
+        print("[OK] No missing files found - all files are already ingested!")
         return
 
-    logger.info(f"[OK] Found {len(missing_files)} missing files")
+    print(f"[OK] Found {len(missing_files)} missing files")
 
     # Sort by size (smallest first to test the process)
     missing_files.sort(key=lambda x: x['size_mb'])
 
     # Show summary
-    logger.info(f"\n[2/4] Missing files summary:")
-    logger.info(f"  Total files: {len(missing_files)}")
-    logger.info(f"  Total size: {sum(f['size_mb'] for f in missing_files):.2f} MB")
-    logger.info(f"  Smallest: {missing_files[0]['filename']} ({missing_files[0]['size_mb']:.2f} MB)")
-    logger.info(f"  Largest: {missing_files[-1]['filename']} ({missing_files[-1]['size_mb']:.2f} MB)")
+    print(f"\n[2/4] Missing files summary:")
+    print(f"  Total files: {len(missing_files)}")
+    print(f"  Total size: {sum(f['size_mb'] for f in missing_files):.2f} MB")
+    print(f"  Smallest: {missing_files[0]['filename']} ({missing_files[0]['size_mb']:.2f} MB)")
+    print(f"  Largest: {missing_files[-1]['filename']} ({missing_files[-1]['size_mb']:.2f} MB)")
 
     # Initialize database
-    logger.info(f"\n[3/5] Initializing database...")
+    print(f"\n[3/5] Initializing database...")
     db_config = DatabaseConfig(
         db_type='sqlite',
         database='grace',
@@ -174,10 +172,10 @@ async def main():
     )
     DatabaseConnection.initialize(db_config)
     session_factory = initialize_session_factory()
-    logger.info("[OK] Database initialized")
+    print("[OK] Database initialized")
 
     # Initialize ingestion service
-    logger.info(f"\n[4/5] Initializing ingestion service...")
+    print(f"\n[4/5] Initializing ingestion service...")
     embedding_model = get_embedding_model()
     ingestion_service = TextIngestionService(
         collection_name="documents",
@@ -185,17 +183,17 @@ async def main():
         chunk_overlap=50,
         embedding_model=embedding_model,
     )
-    logger.info("[OK] Ingestion service ready")
+    print("[OK] Ingestion service ready")
 
     # Process files
-    logger.info(f"\n[5/5] Processing {len(missing_files)} files...")
-    logger.info("=" * 80)
+    print(f"\n[5/5] Processing {len(missing_files)} files...")
+    print("=" * 80)
 
     success_count = 0
     failed_files = []
 
     for i, file_info in enumerate(missing_files, 1):
-        logger.info(f"\n[{i}/{len(missing_files)}] ", end="")
+        print(f"\n[{i}/{len(missing_files)}] ", end="")
 
         success = await ingest_file(file_info, ingestion_service, session_factory)
 
@@ -205,17 +203,17 @@ async def main():
             failed_files.append(file_info['filename'])
 
     # Summary
-    logger.info("\n" + "=" * 80)
-    logger.info("Re-ingestion Complete")
-    logger.info("=" * 80)
-    logger.info(f"[OK] Successfully ingested: {success_count}/{len(missing_files)} files")
+    print("\n" + "=" * 80)
+    print("Re-ingestion Complete")
+    print("=" * 80)
+    print(f"[OK] Successfully ingested: {success_count}/{len(missing_files)} files")
 
     if failed_files:
-        logger.info(f"\n[WARN] Failed files ({len(failed_files)}):")
+        print(f"\n[WARN] Failed files ({len(failed_files)}):")
         for filename in failed_files:
-            logger.info(f"  - {filename}")
+            print(f"  - {filename}")
     else:
-        logger.info("\n[SUCCESS] All files successfully ingested!")
+        print("\n[SUCCESS] All files successfully ingested!")
 
 
 if __name__ == "__main__":

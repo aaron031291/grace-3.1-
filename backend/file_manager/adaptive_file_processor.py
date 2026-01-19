@@ -1,14 +1,20 @@
+"""
+Grace Adaptive File Processor
+
+Learns optimal processing strategies from experience.
+Continuously improves file processing quality.
+"""
+
 import logging
-import json
-import threading
 from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 
+@dataclass
 class ProcessingStrategy:
     """Processing strategy for a file type."""
 
@@ -77,8 +83,6 @@ class StrategyLearner:
     ) -> ProcessingStrategy:
         """
         Get optimal processing strategy for a file type.
-        
-        TimeSense Integration: Now considers time efficiency when selecting strategies.
 
         Args:
             file_type: File extension (.pdf, .py, etc.)
@@ -95,111 +99,20 @@ class StrategyLearner:
             return self.strategy_cache[cache_key]
 
         # Query database for learned strategies
-        strategies = []
         if self.session:
-            learned_strategy = self._get_learned_strategy(file_type, complexity_level)
-            if learned_strategy:
-                strategies.append(learned_strategy)
+            strategy = self._get_learned_strategy(file_type, complexity_level)
+            if strategy:
+                self.strategy_cache[cache_key] = strategy
+                return strategy
 
-        # Always include default strategy for comparison
-        default_strategy = self._get_default_strategy(file_type, file_size, complexity_level)
-        if default_strategy not in strategies:
-            strategies.append(default_strategy)
-        
-        # TimeSense: Score strategies with time efficiency
-        if len(strategies) > 1:
-            strategy = self._select_time_aware_strategy(strategies, file_size)
-        else:
-            strategy = strategies[0] if strategies else default_strategy
-        
-        self.strategy_cache[cache_key] = strategy
-        
+        # Fall back to default strategy
+        strategy = self._get_default_strategy(file_type, file_size, complexity_level)
         logger.info(
-            f"[STRATEGY-LEARNER] Selected strategy for {file_type}: "
-            f"chunk_size={strategy.chunk_size}, "
-            f"quality={strategy.avg_quality_score:.2f if hasattr(strategy, 'avg_quality_score') else 'N/A'}"
+            f"[STRATEGY-LEARNER] Using default strategy for {file_type}: "
+            f"chunk_size={strategy.chunk_size}"
         )
 
         return strategy
-    
-    def _select_time_aware_strategy(
-        self,
-        strategies: List['ProcessingStrategy'],
-        file_size: int
-    ) -> 'ProcessingStrategy':
-        """
-        Select best strategy considering both quality AND time efficiency.
-        
-        TimeSense Integration: Scores strategies by quality (70%) + time efficiency (30%).
-        """
-        scored_strategies = []
-        
-        for strategy in strategies:
-            # Quality score (from historical performance)
-            quality_score = (
-                (strategy.success_rate * 0.6 + strategy.avg_quality_score * 0.4)
-                if hasattr(strategy, 'success_rate') and hasattr(strategy, 'avg_quality_score')
-                else 0.7  # Default quality for new strategies
-            )
-            
-            # TimeSense: Get time estimate for this strategy
-            time_efficiency_score = 1.0
-            time_confidence = 0.5
-            
-            try:
-                from timesense.integration import TimeEstimator
-                from timesense.primitives import PrimitiveType
-                
-                # Estimate time for file processing with this strategy
-                # Rough estimate: embedding time depends on chunk size
-                num_chunks = max(1, file_size // (strategy.chunk_size or 1024))
-                chunk_tokens = (strategy.chunk_size or 1024) // 4  # Rough token estimate
-                
-                # Estimate embedding time (main bottleneck)
-                embedding_time_est = TimeEstimator.estimate_file_processing(
-                    file_size_bytes=file_size,
-                    include_embedding=True
-                ) if TimeEstimator else None
-                
-                if embedding_time_est:
-                    # Normalize time efficiency: faster = higher score
-                    # Scale: 0-10s = 1.0, 10-60s = 0.8, 60s+ = 0.5
-                    estimated_ms = embedding_time_est.p50_ms
-                    if estimated_ms < 10000:  # < 10 seconds
-                        time_efficiency_score = 1.0
-                    elif estimated_ms < 60000:  # < 1 minute
-                        time_efficiency_score = 0.8
-                    else:
-                        time_efficiency_score = 0.5
-                    
-                    time_confidence = embedding_time_est.confidence
-            except Exception as e:
-                logger.debug(f"[STRATEGY-LEARNER] Time estimation failed: {e}")
-            
-            # Composite score: 70% quality + 30% time efficiency
-            composite_score = (
-                quality_score * 0.7 +
-                time_efficiency_score * time_confidence * 0.3
-            )
-            
-            scored_strategies.append({
-                'strategy': strategy,
-                'quality_score': quality_score,
-                'time_efficiency': time_efficiency_score,
-                'time_confidence': time_confidence,
-                'composite_score': composite_score
-            })
-            
-            logger.debug(
-                f"[STRATEGY-LEARNER] Strategy scored: "
-                f"quality={quality_score:.2f}, "
-                f"time_eff={time_efficiency_score:.2f}, "
-                f"composite={composite_score:.2f}"
-            )
-        
-        # Select strategy with highest composite score
-        best = max(scored_strategies, key=lambda s: s['composite_score'])
-        return best['strategy']
 
     def _get_learned_strategy(
         self,
@@ -248,7 +161,7 @@ class StrategyLearner:
                     chunk_size=strategy_data.get('chunk_size', 1024),
                     overlap=strategy_data.get('overlap', 100),
                     use_semantic_chunking=strategy_data.get('use_semantic', False),
-                    embedding_batch_size=strategy_data.get('batch_size', 4),  # Reduced from 32 to match system specs
+                    embedding_batch_size=strategy_data.get('batch_size', 32),
                     quality_threshold=strategy_data.get('quality_threshold', 0.5),
                     additional_params=strategy_data.get('additional', {}),
                     success_rate=result[2],
@@ -292,7 +205,7 @@ class StrategyLearner:
         chunk_size = 1024
         overlap = 100
         use_semantic = False
-        batch_size = 4  # Reduced from 32 to match system specs (recommended_batch_size: 4)
+        batch_size = 32
         quality_threshold = 0.5
 
         # Adjust based on file type
@@ -318,10 +231,10 @@ class StrategyLearner:
         # Adjust based on file size
         if file_size > 1_000_000:  # > 1MB
             chunk_size = int(chunk_size * 1.5)
-            batch_size = 4  # Reduced from 16 to match system specs
+            batch_size = 16
         elif file_size < 10_000:  # < 10KB
             chunk_size = int(chunk_size * 0.5)
-            batch_size = 4  # Reduced from 64 to match system specs
+            batch_size = 64
 
         return ProcessingStrategy(
             file_type=file_type,
@@ -467,18 +380,6 @@ class StrategyLearner:
             self.session.rollback()
 
 
-@dataclass
-class HistoricalRecord:
-    """A single processing history record."""
-    file_path: str
-    timestamp: str
-    processing_type: str
-    duration_ms: float
-    success: bool
-    result_summary: str
-    error: Optional[str] = None
-
-
 class PerformanceTracker:
     """
     Tracks file processing performance metrics.
@@ -489,9 +390,6 @@ class PerformanceTracker:
     - Detects degradation early
     """
 
-    MAX_HISTORY_PER_FILE = 1000
-    HISTORY_DIR = Path(__file__).parent / "processing_history"
-
     def __init__(self, session=None):
         """
         Initialize Performance Tracker.
@@ -500,142 +398,7 @@ class PerformanceTracker:
             session: Database session
         """
         self.session = session
-        self._lock = threading.Lock()
-        self.HISTORY_DIR.mkdir(parents=True, exist_ok=True)
-        logger.info("[PERFORMANCE-TRACKER] Initialized with history storage")
-
-    def _get_history_file(self, file_path: str) -> Path:
-        """Get the history file path for a given file."""
-        safe_name = file_path.replace("/", "_").replace("\\", "_").replace(":", "_")
-        if len(safe_name) > 200:
-            import hashlib
-            safe_name = hashlib.md5(file_path.encode()).hexdigest()
-        return self.HISTORY_DIR / f"{safe_name}.json"
-
-    def _load_history(self, file_path: str) -> List[Dict[str, Any]]:
-        """Load history for a file from storage."""
-        history_file = self._get_history_file(file_path)
-        if history_file.exists():
-            try:
-                with open(history_file, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except (json.JSONDecodeError, IOError) as e:
-                logger.warning(f"[PERFORMANCE-TRACKER] Error loading history: {e}")
-                return []
-        return []
-
-    def _save_history(self, file_path: str, history: List[Dict[str, Any]]) -> None:
-        """Save history for a file to storage."""
-        history_file = self._get_history_file(file_path)
-        try:
-            with open(history_file, 'w', encoding='utf-8') as f:
-                json.dump(history, f, indent=2, default=str)
-        except IOError as e:
-            logger.error(f"[PERFORMANCE-TRACKER] Error saving history: {e}")
-
-    def record_processing(self, file_path: str, result: Dict[str, Any]) -> None:
-        """
-        Save a processing result to history.
-
-        Args:
-            file_path: Path to the processed file
-            result: Processing result dict with keys:
-                - processing_type: str
-                - duration_ms: float
-                - success: bool
-                - result_summary: str
-                - error: Optional[str]
-        """
-        record = {
-            "file_path": file_path,
-            "timestamp": datetime.now().isoformat(),
-            "processing_type": result.get("processing_type", "unknown"),
-            "duration_ms": result.get("duration_ms", 0.0),
-            "success": result.get("success", False),
-            "result_summary": result.get("result_summary", ""),
-            "error": result.get("error")
-        }
-
-        with self._lock:
-            history = self._load_history(file_path)
-            history.append(record)
-            if len(history) > self.MAX_HISTORY_PER_FILE:
-                history = history[-self.MAX_HISTORY_PER_FILE:]
-            self._save_history(file_path, history)
-
-        logger.debug(f"[PERFORMANCE-TRACKER] Recorded processing for {Path(file_path).name}")
-
-    def get_processing_history(
-        self,
-        file_path: str,
-        limit: int = 100,
-        processing_type: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None
-    ) -> List[Dict[str, Any]]:
-        """
-        Query processing history for a file.
-
-        Args:
-            file_path: Path to the file
-            limit: Maximum records to return
-            processing_type: Filter by processing type
-            start_date: Filter records after this date
-            end_date: Filter records before this date
-
-        Returns:
-            List of historical processing records
-        """
-        history = self._load_history(file_path)
-
-        if processing_type:
-            history = [r for r in history if r.get("processing_type") == processing_type]
-
-        if start_date:
-            history = [r for r in history if datetime.fromisoformat(r["timestamp"]) >= start_date]
-
-        if end_date:
-            history = [r for r in history if datetime.fromisoformat(r["timestamp"]) <= end_date]
-
-        return history[-limit:]
-
-    def get_processing_stats(self, file_path: str) -> Dict[str, Any]:
-        """
-        Get processing statistics for a file.
-
-        Args:
-            file_path: Path to the file
-
-        Returns:
-            Dict with stats: avg_time_ms, success_rate, total_processed,
-            processing_types, first_processed, last_processed
-        """
-        history = self._load_history(file_path)
-
-        if not history:
-            return {
-                "total_processed": 0,
-                "success_rate": 0.0,
-                "avg_time_ms": 0.0,
-                "processing_types": [],
-                "first_processed": None,
-                "last_processed": None
-            }
-
-        total = len(history)
-        successes = sum(1 for r in history if r.get("success", False))
-        avg_time = sum(r.get("duration_ms", 0) for r in history) / total
-        types = list(set(r.get("processing_type", "unknown") for r in history))
-        timestamps = [r["timestamp"] for r in history]
-
-        return {
-            "total_processed": total,
-            "success_rate": successes / total if total > 0 else 0.0,
-            "avg_time_ms": avg_time,
-            "processing_types": types,
-            "first_processed": min(timestamps),
-            "last_processed": max(timestamps)
-        }
+        logger.info("[PERFORMANCE-TRACKER] Initialized")
 
     def record_outcome(self, outcome: ProcessingOutcome) -> None:
         """
@@ -652,16 +415,8 @@ class PerformanceTracker:
             f"time={outcome.processing_time:.2f}s"
         )
 
-        self.record_processing(
-            file_path=outcome.file_path,
-            result={
-                "processing_type": outcome.file_type,
-                "duration_ms": outcome.processing_time * 1000,
-                "success": outcome.success,
-                "result_summary": f"chunks={outcome.num_chunks}, embeddings={outcome.num_embeddings}, quality={outcome.quality_score:.2f}",
-                "error": "; ".join(outcome.errors) if outcome.errors else None
-            }
-        )
+        # In a full implementation, this would store outcomes
+        # in a separate tracking table for trend analysis
 
     def get_performance_summary(
         self,
@@ -678,50 +433,12 @@ class PerformanceTracker:
         Returns:
             Performance summary dict
         """
-        cutoff = datetime.now() - timedelta(days=days)
-        total_processed = 0
-        total_success = 0
-        total_quality = 0.0
-        total_time = 0.0
-
-        try:
-            for history_file in self.HISTORY_DIR.glob("*.json"):
-                try:
-                    with open(history_file, 'r', encoding='utf-8') as f:
-                        records = json.load(f)
-
-                    for record in records:
-                        record_time = datetime.fromisoformat(record["timestamp"])
-                        if record_time < cutoff:
-                            continue
-
-                        if file_type and record.get("processing_type") != file_type:
-                            continue
-
-                        total_processed += 1
-                        if record.get("success", False):
-                            total_success += 1
-                        total_time += record.get("duration_ms", 0) / 1000
-
-                        summary = record.get("result_summary", "")
-                        if "quality=" in summary:
-                            try:
-                                quality_str = summary.split("quality=")[1].split(",")[0].split()[0]
-                                total_quality += float(quality_str)
-                            except (IndexError, ValueError):
-                                pass
-
-                except (json.JSONDecodeError, IOError):
-                    continue
-
-        except Exception as e:
-            logger.warning(f"[PERFORMANCE-TRACKER] Error computing summary: {e}")
-
+        # Placeholder - would query historical data
         return {
-            'total_processed': total_processed,
-            'success_rate': total_success / total_processed if total_processed > 0 else 0.0,
-            'avg_quality': total_quality / total_processed if total_processed > 0 else 0.0,
-            'avg_time': total_time / total_processed if total_processed > 0 else 0.0
+            'total_processed': 0,
+            'success_rate': 0.0,
+            'avg_quality': 0.0,
+            'avg_time': 0.0
         }
 
 
@@ -850,53 +567,6 @@ class AdaptiveFileProcessor:
 
         # Learn from outcome
         self.strategy_learner.learn_from_outcome(outcome)
-
-        # ✅ NEW: Create Genesis Key for file processing outcome to trigger LLM knowledge update
-        try:
-            from genesis.genesis_key_service import get_genesis_service
-            from models.genesis_key_models import GenesisKeyType
-            
-            genesis_service = get_genesis_service()
-            
-            # Calculate trust score based on outcome
-            trust_score = quality_score if success else max(0.3, quality_score - 0.3)
-            if success and quality_score >= 0.8:
-                trust_score = 0.85  # High trust for high-quality successes
-            
-            genesis_key = genesis_service.create_key(
-                key_type=GenesisKeyType.FILE_OPERATION,
-                what_description=f"File processing outcome: {Path(file_path).name} ({'success' if success else 'failure'})",
-                who_actor="adaptive_file_processor",
-                where_location=str(file_path),
-                why_reason="File processing outcome for LLM knowledge update",
-                how_method=strategy.get('name', 'adaptive_processing') if isinstance(strategy, dict) else str(strategy),
-                file_path=str(file_path),
-                context_data={
-                    'file_id': file_id,
-                    'file_type': Path(file_path).suffix.lower(),
-                    'strategy_used': strategy,
-                    'success': success,
-                    'quality_score': quality_score,
-                    'processing_time': processing_time,
-                    'num_chunks': num_chunks,
-                    'num_embeddings': num_embeddings
-                },
-                metadata={
-                    'outcome_type': 'file_processing_outcome',
-                    'example_type': 'file_processing_outcome',
-                    'trust_score': trust_score,
-                    'success': success,
-                    'file_type': Path(file_path).suffix.lower(),
-                    'quality_score': quality_score,
-                    'strategy': strategy.get('name', str(strategy)) if isinstance(strategy, dict) else str(strategy)
-                }
-            )
-            logger.debug(
-                f"[ADAPTIVE-PROCESSOR] Created Genesis Key for processing outcome: "
-                f"{genesis_key.key_id} (trust={trust_score:.2f})"
-            )
-        except Exception as e:
-            logger.warning(f"[ADAPTIVE-PROCESSOR] Could not create Genesis Key for outcome: {e}")
 
         logger.info(
             f"[ADAPTIVE-PROCESSOR] Recorded outcome and learned from it: "

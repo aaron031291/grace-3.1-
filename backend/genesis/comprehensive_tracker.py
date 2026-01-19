@@ -1,10 +1,33 @@
+"""
+Comprehensive Genesis Key Tracker
+
+Tracks ALL inputs and actions in the Grace system:
+- User inputs (messages, commands)
+- AI responses (decisions, code generation)
+- Coding agent actions
+- External API calls
+- File uploads
+- HTML/web fetches
+- Database changes
+- System events
+
+Every action gets a Genesis Key for complete audit trail.
+"""
+
 import logging
 import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 from sqlalchemy.orm import Session
-from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus, UserProfile
+from models.genesis_key_models import (
+    GenesisKey,
+    GenesisKeyType,
+    GenesisKeyStatus,
+    UserProfile
+)
+
 logger = logging.getLogger(__name__)
+
 
 class ComprehensiveTracker:
     """

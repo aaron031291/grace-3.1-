@@ -1,1 +1,0 @@
-The out-of-bounds symlinks can negatively affect the other testcases, therefore it is separated in its own testdata directory.

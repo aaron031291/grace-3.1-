@@ -1,20 +1,21 @@
+"""
+Grace Feedback Processor
+
+Processes execution results and feeds them to Grace's learning systems.
+This is the critical component that enables Grace to learn from doing.
+"""
+
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dataclasses import dataclass, field
-try:
-    from execution.actions import ActionRequest, ActionResult, ActionStatus, GraceAction
-except ImportError:
-    try:
-        from actions import ActionRequest, ActionResult, ActionStatus, GraceAction
-    except ImportError:
-        # Make optional
-        ActionRequest = None
-        ActionResult = None
-        ActionStatus = None
-        GraceAction = None
+
+from .actions import ActionRequest, ActionResult, ActionStatus, GraceAction
+
 logger = logging.getLogger(__name__)
 
+
+@dataclass
 class LearningSignal:
     """A signal extracted from execution for learning."""
 

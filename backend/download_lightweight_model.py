@@ -17,8 +17,6 @@ Usage:
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 import os
 from pathlib import Path
 
@@ -28,25 +26,25 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 def download_model():
     """Download and save the lightweight embedding model."""
     try:
-        logger.info("=" * 60)
-        logger.info("Downloading Lightweight Embedding Model")
-        logger.info("=" * 60)
-        logger.info()
-        logger.info("Model: all-MiniLM-L6-v2")
-        logger.info("Size: ~90 MB")
-        logger.info("RAM Usage: ~500 MB")
-        logger.info()
-        logger.info("This may take a few minutes depending on your internet speed...")
-        logger.info()
+        print("=" * 60)
+        print("Downloading Lightweight Embedding Model")
+        print("=" * 60)
+        print()
+        print("Model: all-MiniLM-L6-v2")
+        print("Size: ~90 MB")
+        print("RAM Usage: ~500 MB")
+        print()
+        print("This may take a few minutes depending on your internet speed...")
+        print()
         
         # Import sentence-transformers
         try:
             from sentence_transformers import SentenceTransformer
         except ImportError:
-            logger.info("❌ Error: sentence-transformers not installed")
-            logger.info()
-            logger.info("Please install it with:")
-            logger.info("  pip install sentence-transformers")
+            print("❌ Error: sentence-transformers not installed")
+            print()
+            print("Please install it with:")
+            print("  pip install sentence-transformers")
             return False
         
         # Create models directory
@@ -58,43 +56,43 @@ def download_model():
         
         # Check if model already exists
         if model_path.exists():
-            logger.info(f"⚠️  Model already exists at: {model_path}")
+            print(f"⚠️  Model already exists at: {model_path}")
             response = input("Do you want to re-download? (y/N): ").strip().lower()
             if response != 'y':
-                logger.info("✓ Using existing model")
+                print("✓ Using existing model")
                 return True
         
         # Download model
-        logger.info("📥 Downloading model from HuggingFace...")
+        print("📥 Downloading model from HuggingFace...")
         model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
         
         # Save model
-        logger.info(f"💾 Saving model to: {model_path}")
+        print(f"💾 Saving model to: {model_path}")
         model.save(str(model_path))
         
-        logger.info()
-        logger.info("=" * 60)
-        logger.info("✅ Model downloaded successfully!")
-        logger.info("=" * 60)
-        logger.info()
-        logger.info("Next steps:")
-        logger.info("1. Update your .env file with:")
-        logger.info("   EMBEDDING_DEFAULT=all-MiniLM-L6-v2")
-        logger.info("   EMBEDDING_MODEL_PATH=./models/embedding/all-MiniLM-L6-v2")
-        logger.info()
-        logger.info("2. Set SKIP_EMBEDDING_LOAD=false to enable the model")
-        logger.info()
-        logger.info("3. Restart your backend server")
-        logger.info()
-        logger.info("To switch back to Qwen-4B for deployment:")
-        logger.info("   EMBEDDING_DEFAULT=qwen_4b")
-        logger.info("   EMBEDDING_MODEL_PATH=./models/embedding/qwen_4b")
-        logger.info()
+        print()
+        print("=" * 60)
+        print("✅ Model downloaded successfully!")
+        print("=" * 60)
+        print()
+        print("Next steps:")
+        print("1. Update your .env file with:")
+        print("   EMBEDDING_DEFAULT=all-MiniLM-L6-v2")
+        print("   EMBEDDING_MODEL_PATH=./models/embedding/all-MiniLM-L6-v2")
+        print()
+        print("2. Set SKIP_EMBEDDING_LOAD=false to enable the model")
+        print()
+        print("3. Restart your backend server")
+        print()
+        print("To switch back to Qwen-4B for deployment:")
+        print("   EMBEDDING_DEFAULT=qwen_4b")
+        print("   EMBEDDING_MODEL_PATH=./models/embedding/qwen_4b")
+        print()
         
         return True
         
     except Exception as e:
-        logger.info(f"❌ Error downloading model: {str(e)}")
+        print(f"❌ Error downloading model: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

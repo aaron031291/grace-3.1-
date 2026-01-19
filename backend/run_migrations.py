@@ -4,8 +4,6 @@ This script initializes the database connection and creates all necessary tables
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig
 from database.base import BaseModel
@@ -23,7 +21,7 @@ try:
     )
     genesis_models_available = True
 except ImportError as e:
-    logger.info(f"Warning: Genesis models not available: {e}")
+    print(f"Warning: Genesis models not available: {e}")
     genesis_models_available = False
 
 try:
@@ -33,7 +31,7 @@ try:
     )
     librarian_models_available = True
 except ImportError as e:
-    logger.info(f"Warning: Librarian models not available: {e}")
+    print(f"Warning: Librarian models not available: {e}")
     librarian_models_available = False
 
 try:
@@ -43,7 +41,7 @@ try:
     )
     telemetry_models_available = True
 except ImportError as e:
-    logger.info(f"Warning: Telemetry models not available: {e}")
+    print(f"Warning: Telemetry models not available: {e}")
     telemetry_models_available = False
 
 # Memory mesh models (may be in database_models or separate)
@@ -51,56 +49,56 @@ except ImportError as e:
 
 def run_all_migrations():
     """Run all database migrations."""
-    logger.info("=" * 60)
-    logger.info("Grace Database Migration Script")
-    logger.info("=" * 60)
+    print("=" * 60)
+    print("Grace Database Migration Script")
+    print("=" * 60)
 
     # Initialize database connection
-    logger.info("\n1. Initializing database connection...")
+    print("\n1. Initializing database connection...")
     config = DatabaseConfig.from_env()
-    logger.info(f"   Database: {config.db_type}")
-    logger.info(f"   Path: {config.database_path if config.db_type.value == 'sqlite' else f'{config.host}:{config.port}/{config.database}'}")
+    print(f"   Database: {config.db_type}")
+    print(f"   Path: {config.database_path if config.db_type.value == 'sqlite' else f'{config.host}:{config.port}/{config.database}'}")
 
     DatabaseConnection.initialize(config)
     engine = DatabaseConnection.get_engine()
 
     # Check existing tables
-    logger.info("\n2. Checking existing tables...")
+    print("\n2. Checking existing tables...")
     inspector = inspect(engine)
     existing_tables = inspector.get_table_names()
-    logger.info(f"   Found {len(existing_tables)} existing tables:")
+    print(f"   Found {len(existing_tables)} existing tables:")
     for table in sorted(existing_tables):
-        logger.info(f"      - {table}")
+        print(f"      - {table}")
 
     # Create all tables
-    logger.info("\n3. Creating/updating all tables...")
+    print("\n3. Creating/updating all tables...")
     BaseModel.metadata.create_all(engine)
 
     # Check what was created
-    logger.info("\n4. Verifying tables...")
+    print("\n4. Verifying tables...")
     inspector = inspect(engine)
     all_tables = inspector.get_table_names()
     new_tables = set(all_tables) - set(existing_tables)
 
     if new_tables:
-        logger.info(f"   Created {len(new_tables)} new tables:")
+        print(f"   Created {len(new_tables)} new tables:")
         for table in sorted(new_tables):
-            logger.info(f"      + {table}")
+            print(f"      + {table}")
     else:
-        logger.info("   No new tables created (all tables already exist)")
+        print("   No new tables created (all tables already exist)")
 
-    logger.info(f"\n   Total tables in database: {len(all_tables)}")
+    print(f"\n   Total tables in database: {len(all_tables)}")
 
     # Show model availability
-    logger.info("\n5. Model Availability:")
-    logger.info(f"   [OK] Core models: Available")
-    logger.info(f"   [{'OK' if genesis_models_available else 'SKIP'}] Genesis Key models: {'Available' if genesis_models_available else 'Not available'}")
-    logger.info(f"   [{'OK' if librarian_models_available else 'SKIP'}] Librarian models: {'Available' if librarian_models_available else 'Not available'}")
-    logger.info(f"   [{'OK' if telemetry_models_available else 'SKIP'}] Telemetry models: {'Available' if telemetry_models_available else 'Not available'}")
+    print("\n5. Model Availability:")
+    print(f"   [OK] Core models: Available")
+    print(f"   [{'OK' if genesis_models_available else 'SKIP'}] Genesis Key models: {'Available' if genesis_models_available else 'Not available'}")
+    print(f"   [{'OK' if librarian_models_available else 'SKIP'}] Librarian models: {'Available' if librarian_models_available else 'Not available'}")
+    print(f"   [{'OK' if telemetry_models_available else 'SKIP'}] Telemetry models: {'Available' if telemetry_models_available else 'Not available'}")
 
-    logger.info("\n" + "=" * 60)
-    logger.info("Migration Complete!")
-    logger.info("=" * 60)
+    print("\n" + "=" * 60)
+    print("Migration Complete!")
+    print("=" * 60)
 
     return True
 
@@ -109,7 +107,7 @@ if __name__ == "__main__":
         run_all_migrations()
         sys.exit(0)
     except Exception as e:
-        logger.info(f"\n[ERROR] Migration failed: {e}")
+        print(f"\n[ERROR] Migration failed: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

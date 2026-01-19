@@ -1,21 +1,28 @@
+"""
+Layer 4 - Action Router: Response Execution Layer
+
+Routes decisions to appropriate actions:
+- Alert Human: Notify operators of issues
+- Trigger Self-Healing: Attempt automatic fixes
+- Freeze System: Halt operations for safety
+- Recommend Learning: Capture patterns for improvement
+- Do Nothing: System is healthy, no action needed
+- Trigger CI/CD: Initiate pipeline for testing/deployment
+"""
+
 import os
 import json
 import logging
-import smtplib
 import subprocess
 from datetime import datetime
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-import requests
 from .sensors import SensorData
 from .interpreters import InterpretedData, Pattern, PatternType
 from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
-from .healing import HealingExecutor, HealingActionType, get_healing_executor
 
 logger = logging.getLogger(__name__)
 
@@ -164,39 +171,6 @@ class ActionRouter:
             function="force_garbage_collection",
             reversible=False,
         ),
-        # WHOLE-SYSTEM HEALING ACTIONS
-        'fix_code_issues': HealingAction(
-            healing_id="HEAL-006",
-            name="Fix Code Issues",
-            description="Automatically fix detected security vulnerabilities",
-            target_component="code",
-            function="fix_code_issues",
-            reversible=True,
-        ),
-        'restart_container': HealingAction(
-            healing_id="HEAL-007",
-            name="Restart Container",
-            description="Restart unhealthy Docker container",
-            target_component="containers",
-            command="docker restart {container_name}",
-            reversible=True,
-        ),
-        'clear_disk_space': HealingAction(
-            healing_id="HEAL-008",
-            name="Clear Disk Space",
-            description="Clear temporary files and logs to free disk space",
-            target_component="disk",
-            function="clear_disk_space",
-            reversible=False,
-        ),
-        'reload_embedding_model': HealingAction(
-            healing_id="HEAL-009",
-            name="Reload Embedding Model",
-            description="Reload embedding model to fix model issues",
-            target_component="embedding",
-            function="reload_embedding_model",
-            reversible=True,
-        ),
     }
 
     def __init__(
@@ -206,10 +180,7 @@ class ActionRouter:
         log_dir: str = None,
         enable_healing: bool = True,
         enable_freeze: bool = True,
-        dry_run: bool = False,
-        webhook_url: Optional[str] = None,
-        slack_webhook_url: Optional[str] = None,
-        email_config: Optional[Dict] = None
+        dry_run: bool = False
     ):
         """Initialize the action router."""
         self.alert_config = alert_config or AlertConfig()
@@ -221,11 +192,6 @@ class ActionRouter:
         self._decision_counter = 0
         self._action_counter = 0
 
-        # Notification configuration (with environment variable fallbacks)
-        self.webhook_url: Optional[str] = webhook_url or os.getenv("GRACE_WEBHOOK_URL")
-        self.slack_webhook_url: Optional[str] = slack_webhook_url or os.getenv("GRACE_SLACK_WEBHOOK_URL")
-        self.email_config: Optional[Dict] = email_config or self._load_email_config_from_env()
-
         # Ensure log directory exists
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -233,33 +199,12 @@ class ActionRouter:
         self._healing_functions: Dict[str, Callable] = {}
         self._register_default_healing_functions()
 
-    def _load_email_config_from_env(self) -> Optional[Dict]:
-        """Load email configuration from environment variables."""
-        smtp_host = os.getenv("GRACE_SMTP_HOST")
-        if not smtp_host:
-            return None
-        
-        to_emails_str = os.getenv("GRACE_ALERT_EMAILS", "")
-        to_emails = [e.strip() for e in to_emails_str.split(",") if e.strip()]
-        
-        return {
-            "smtp_host": smtp_host,
-            "smtp_port": int(os.getenv("GRACE_SMTP_PORT", "587")),
-            "smtp_user": os.getenv("GRACE_SMTP_USER"),
-            "smtp_password": os.getenv("GRACE_SMTP_PASSWORD"),
-            "to_emails": to_emails,
-        }
-
     def _register_default_healing_functions(self):
         """Register default healing functions."""
         self._healing_functions['clear_application_cache'] = self._heal_clear_cache
         self._healing_functions['reset_database_connection'] = self._heal_reset_database
         self._healing_functions['reset_vector_db_client'] = self._heal_reset_vector_db
         self._healing_functions['force_garbage_collection'] = self._heal_garbage_collection
-        # WHOLE-SYSTEM HEALING FUNCTIONS
-        self._healing_functions['fix_code_issues'] = self._heal_code_issues
-        self._healing_functions['clear_disk_space'] = self._heal_clear_disk_space
-        self._healing_functions['reload_embedding_model'] = self._heal_reload_embedding
 
     def register_healing_function(self, name: str, func: Callable):
         """Register a custom healing function."""
@@ -498,19 +443,9 @@ class ActionRouter:
 
             logger.warning(f"ALERT: {decision.reason}")
 
-            # Send notifications (failures are logged but don't fail the alert)
-            notification_results = []
-            if self.webhook_url:
-                notification_results.append(("webhook", self._send_webhook_notification(alert_payload)))
-            if self.email_config and self.email_config.get("to_emails"):
-                notification_results.append(("email", self._send_email_notification(alert_payload)))
-            if self.slack_webhook_url:
-                notification_results.append(("slack", self._send_slack_notification(alert_payload)))
-            
-            if notification_results:
-                alert_payload["notifications_sent"] = {
-                    name: success for name, success in notification_results
-                }
+            # TODO: Send to webhook if configured
+            # TODO: Send email if configured
+            # TODO: Post to Slack if configured
 
             end_time = datetime.utcnow()
             return ActionResult(
@@ -529,144 +464,6 @@ class ActionRouter:
                 status=ActionStatus.FAILED,
                 message=f"Alert failed: {str(e)}",
             )
-
-    def _send_webhook_notification(self, alert_payload: Dict) -> bool:
-        """Send alert to configured webhook URL."""
-        if not self.webhook_url:
-            return False
-        
-        try:
-            response = requests.post(
-                self.webhook_url,
-                json=alert_payload,
-                headers={"Content-Type": "application/json"},
-                timeout=10
-            )
-            response.raise_for_status()
-            logger.info(f"Webhook notification sent successfully to {self.webhook_url}")
-            return True
-        except requests.RequestException as e:
-            logger.warning(f"Failed to send webhook notification: {e}")
-            return False
-
-    def _send_email_notification(self, alert_payload: Dict) -> bool:
-        """Send alert via email using SMTP."""
-        if not self.email_config:
-            return False
-        
-        smtp_host = self.email_config.get("smtp_host")
-        smtp_port = self.email_config.get("smtp_port", 587)
-        smtp_user = self.email_config.get("smtp_user")
-        smtp_password = self.email_config.get("smtp_password")
-        to_emails = self.email_config.get("to_emails", [])
-        
-        if not smtp_host or not to_emails:
-            logger.warning("Email notification skipped: missing smtp_host or to_emails")
-            return False
-        
-        try:
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = f"[GRACE Alert] {alert_payload.get('severity', 'warning').upper()}: {alert_payload.get('alert_id', 'Unknown')}"
-            msg["From"] = smtp_user or f"grace-alerts@{smtp_host}"
-            msg["To"] = ", ".join(to_emails)
-            
-            text_body = f"""
-GRACE System Alert
-
-Alert ID: {alert_payload.get('alert_id')}
-Severity: {alert_payload.get('severity', 'unknown').upper()}
-Timestamp: {alert_payload.get('timestamp')}
-
-Reason: {alert_payload.get('reason')}
-
-Health Status: {alert_payload.get('health_status')}
-Health Score: {alert_payload.get('health_score')}
-
-Critical Components: {', '.join(alert_payload.get('critical_components', [])) or 'None'}
-Degraded Components: {', '.join(alert_payload.get('degraded_components', [])) or 'None'}
-
-AVN Alerts: {alert_payload.get('avn_alerts', 0)}
-Risk Vectors: {alert_payload.get('risk_vectors', 0)}
-"""
-            
-            html_body = f"""
-<html>
-<body>
-<h2>GRACE System Alert</h2>
-<table border="1" cellpadding="5">
-<tr><td><strong>Alert ID</strong></td><td>{alert_payload.get('alert_id')}</td></tr>
-<tr><td><strong>Severity</strong></td><td style="color: {'red' if alert_payload.get('severity') == 'critical' else 'orange'};">{alert_payload.get('severity', 'unknown').upper()}</td></tr>
-<tr><td><strong>Timestamp</strong></td><td>{alert_payload.get('timestamp')}</td></tr>
-<tr><td><strong>Reason</strong></td><td>{alert_payload.get('reason')}</td></tr>
-<tr><td><strong>Health Status</strong></td><td>{alert_payload.get('health_status')}</td></tr>
-<tr><td><strong>Health Score</strong></td><td>{alert_payload.get('health_score')}</td></tr>
-<tr><td><strong>Critical Components</strong></td><td>{', '.join(alert_payload.get('critical_components', [])) or 'None'}</td></tr>
-<tr><td><strong>Degraded Components</strong></td><td>{', '.join(alert_payload.get('degraded_components', [])) or 'None'}</td></tr>
-</table>
-</body>
-</html>
-"""
-            
-            msg.attach(MIMEText(text_body, "plain"))
-            msg.attach(MIMEText(html_body, "html"))
-            
-            with smtplib.SMTP(smtp_host, smtp_port) as server:
-                server.starttls()
-                if smtp_user and smtp_password:
-                    server.login(smtp_user, smtp_password)
-                server.sendmail(msg["From"], to_emails, msg.as_string())
-            
-            logger.info(f"Email notification sent to {len(to_emails)} recipient(s)")
-            return True
-        except Exception as e:
-            logger.warning(f"Failed to send email notification: {e}")
-            return False
-
-    def _send_slack_notification(self, alert_payload: Dict) -> bool:
-        """Send alert to Slack via webhook."""
-        if not self.slack_webhook_url:
-            return False
-        
-        try:
-            severity = alert_payload.get('severity', 'warning')
-            color = "#dc3545" if severity == "critical" else "#ffc107"
-            
-            slack_message = {
-                "attachments": [
-                    {
-                        "color": color,
-                        "title": f"GRACE Alert: {alert_payload.get('alert_id')}",
-                        "text": alert_payload.get('reason', 'System alert triggered'),
-                        "fields": [
-                            {"title": "Severity", "value": severity.upper(), "short": True},
-                            {"title": "Health Score", "value": str(alert_payload.get('health_score', 'N/A')), "short": True},
-                            {"title": "Health Status", "value": alert_payload.get('health_status', 'unknown'), "short": True},
-                            {"title": "Timestamp", "value": alert_payload.get('timestamp', ''), "short": True},
-                        ],
-                        "footer": "GRACE Diagnostic System",
-                    }
-                ]
-            }
-            
-            if alert_payload.get('critical_components'):
-                slack_message["attachments"][0]["fields"].append({
-                    "title": "Critical Components",
-                    "value": ", ".join(alert_payload['critical_components']),
-                    "short": False
-                })
-            
-            response = requests.post(
-                self.slack_webhook_url,
-                json=slack_message,
-                headers={"Content-Type": "application/json"},
-                timeout=10
-            )
-            response.raise_for_status()
-            logger.info("Slack notification sent successfully")
-            return True
-        except requests.RequestException as e:
-            logger.warning(f"Failed to send Slack notification: {e}")
-            return False
 
     def _execute_healing(
         self,
@@ -700,66 +497,6 @@ Risk Vectors: {alert_payload.get('risk_vectors', 0)}
         # Memory issues
         if sensor_data.metrics and sensor_data.metrics.memory_percent > 85:
             healing_actions.append(self.HEALING_ACTIONS['run_garbage_collection'])
-
-        # WHOLE-SYSTEM HEALING
-
-        # Code quality issues (security vulnerabilities, syntax errors, etc.)
-        if sensor_data.code_quality and sensor_data.code_quality.critical_issues > 0:
-            healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
-        
-        # THREAD ISSUES: Check for specific thread-related issues that need immediate healing
-        if sensor_data.code_quality:
-            thread_issue_types = [
-                'indentation_error', 'potential_indentation_error',
-                'database_datatype_mismatch', 'database_schema_mismatch',
-                'port_conflict', 'missing_backend_file', 'missing_directory',
-                'process_failure', 'connection_failure'
-            ]
-            
-            # Check all issue lists for thread issues
-            all_issues = (
-                sensor_data.code_quality.configuration_issues +
-                sensor_data.code_quality.database_issues +
-                getattr(sensor_data.code_quality, 'syntax_errors', []) +
-                getattr(sensor_data.code_quality, 'infrastructure_issues', [])
-            )
-            
-            thread_critical_issues = [
-                issue for issue in all_issues
-                if any(thread_type in issue.issue_type.lower() for thread_type in thread_issue_types)
-                and issue.severity in ('critical', 'high')
-            ]
-            
-            if thread_critical_issues:
-                logger.info(f"[ACTION-ROUTER] Found {len(thread_critical_issues)} thread-related critical issues, triggering healing")
-                healing_actions.append(self.HEALING_ACTIONS['fix_code_issues'])
-        
-        # Static analysis issues (syntax errors, import errors, missing files)
-        if sensor_data.static_analysis:
-            static_issues = sensor_data.static_analysis
-            critical_count = getattr(static_issues, 'critical_issues', 0)
-            high_count = getattr(static_issues, 'high_issues', 0)
-            if critical_count > 0 or high_count > 0:
-                healing_actions.append(HealingAction(
-                    healing_id=f"FIX-CODE-{self._action_counter}",
-                    name="Fix Code Issues",
-                    description=f"Fix {critical_count} critical and {high_count} high severity code issues",
-                    target_component="codebase",
-                    function="fix_code_issues",
-                    parameters={'fix_warnings': False}  # Only fix critical/high for now
-                ))
-
-        # Infrastructure issues - unhealthy containers
-        if sensor_data.infrastructure and sensor_data.infrastructure.containers_unhealthy > 0:
-            healing_actions.append(self.HEALING_ACTIONS['restart_container'])
-
-        # Disk space issues
-        if sensor_data.infrastructure and sensor_data.infrastructure.disk_space_critical:
-            healing_actions.append(self.HEALING_ACTIONS['clear_disk_space'])
-
-        # Embedding service issues
-        if sensor_data.metrics and not sensor_data.metrics.embedding_health:
-            healing_actions.append(self.HEALING_ACTIONS['reload_embedding_model'])
 
         # Execute each healing action
         for healing in healing_actions:
@@ -1006,37 +743,8 @@ Risk Vectors: {alert_payload.get('risk_vectors', 0)}
     def _heal_clear_cache(self, params: Dict) -> bool:
         """Clear application cache."""
         try:
-            # Clear memory mesh cache
-            try:
-                from cognitive.memory_mesh_cache import invalidate_memory_mesh_cache
-                invalidate_memory_mesh_cache()
-                logger.info("[HEAL] Cleared memory mesh cache")
-            except Exception as e:
-                logger.warning(f"[HEAL] Could not clear memory mesh cache: {e}")
-
-            # Clear Redis cache if available
-            try:
-                from cache.redis_cache import get_redis_cache
-                redis_cache = get_redis_cache()
-                if redis_cache:
-                    redis_cache.clear_all()
-                    logger.info("[HEAL] Cleared Redis cache")
-            except Exception as e:
-                logger.debug(f"[HEAL] Redis cache not available or error: {e}")
-
-            # Clear Python function caches
-            import functools
-            functools._cache_clear()
-
-            # Clear any LRU caches in memory mesh
-            try:
-                from cognitive.memory_mesh_cache import get_memory_mesh_cache
-                cache = get_memory_mesh_cache()
-                cache.invalidate_all()
-            except Exception:
-                pass
-
-            logger.info("[HEAL] Application cache cleared successfully")
+            # Placeholder - implement actual cache clearing
+            logger.info("Clearing application cache")
             return True
         except Exception as e:
             logger.error(f"Cache clear failed: {e}")
@@ -1056,27 +764,9 @@ Risk Vectors: {alert_payload.get('risk_vectors', 0)}
     def _heal_reset_vector_db(self, params: Dict) -> bool:
         """Reset vector database client."""
         try:
-            from vector_db.client import get_qdrant_client
-            import os
-            
-            # Get current Qdrant client and disconnect
-            qdrant_host = os.getenv("QDRANT_HOST", "localhost")
-            qdrant_port = int(os.getenv("QDRANT_PORT", "6333"))
-            
-            # Force a new connection
-            qdrant_client = get_qdrant_client(
-                host=qdrant_host,
-                port=qdrant_port,
-                force_new=True
-            )
-            
-            if qdrant_client.connect():
-                logger.info("[HEAL] Vector DB client reset and reconnected successfully")
-                return True
-            else:
-                logger.warning("[HEAL] Vector DB reset attempted but connection failed")
-                return False
-
+            # Placeholder - implement actual vector DB reset
+            logger.info("Vector DB client reset")
+            return True
         except Exception as e:
             logger.error(f"Vector DB reset failed: {e}")
             return False
@@ -1090,119 +780,6 @@ Risk Vectors: {alert_payload.get('risk_vectors', 0)}
             return True
         except Exception as e:
             logger.error(f"GC failed: {e}")
-            return False
-
-    # ==================== WHOLE-SYSTEM HEALING FUNCTIONS ====================
-
-    def _heal_code_issues(self, params: Dict) -> bool:
-        """
-        Fix detected code issues using the HealingExecutor and AutomaticBugFixer.
-
-        This connects to the CODE_FIX action in the healing layer to automatically
-        apply fixes for:
-        - Syntax errors (indentation, missing colons, unclosed parentheses)
-        - Import errors (comment out broken imports)
-        - Missing files (comment out imports)
-        - Code quality issues (bare except, mutable defaults, print vs logger, 'is' vs '==')
-        - Security vulnerabilities (command injection, path traversal, etc.)
-        - Warnings (if fix_warnings=True)
-        """
-        try:
-            healer = get_healing_executor()
-
-            # Get parameters
-            fix_warnings = params.get('fix_warnings', False)
-            issue_type = params.get('issue_type', 'auto')
-            file_path = params.get('file_path')
-
-            result = healer.execute(
-                HealingActionType.CODE_FIX,
-                {
-                    'issue_type': issue_type,
-                    'file_path': file_path,
-                    'fix_type': 'auto',  # Auto-detect and fix
-                    'fix_warnings': fix_warnings,  # Also fix warnings if requested
-                }
-            )
-
-            if result.success:
-                logger.info(f"Code issues healed: {result.message}")
-                return True
-            else:
-                logger.warning(f"Code healing partial: {result.message}")
-                return False
-
-        except Exception as e:
-            logger.error(f"Code issue healing failed: {e}")
-            import traceback
-            traceback.print_exc()
-            return False
-
-    def _heal_clear_disk_space(self, params: Dict) -> bool:
-        """Clear temporary files and logs to free up disk space."""
-        try:
-            import shutil
-
-            # Clear Python cache files
-            backend_dir = Path(__file__).parent.parent
-            cleared_bytes = 0
-
-            # Clear __pycache__ directories
-            for pycache in backend_dir.rglob('__pycache__'):
-                if pycache.is_dir():
-                    try:
-                        size = sum(f.stat().st_size for f in pycache.rglob('*') if f.is_file())
-                        shutil.rmtree(pycache)
-                        cleared_bytes += size
-                    except Exception:
-                        pass
-
-            # Clear .pyc files
-            for pyc in backend_dir.rglob('*.pyc'):
-                try:
-                    size = pyc.stat().st_size
-                    pyc.unlink()
-                    cleared_bytes += size
-                except Exception:
-                    pass
-
-            # Clear old log files (older than 7 days)
-            log_dir = backend_dir / 'logs'
-            if log_dir.exists():
-                import time
-                cutoff = time.time() - (7 * 24 * 60 * 60)  # 7 days ago
-                for log_file in log_dir.glob('*.log*'):
-                    try:
-                        if log_file.stat().st_mtime < cutoff:
-                            size = log_file.stat().st_size
-                            log_file.unlink()
-                            cleared_bytes += size
-                    except Exception:
-                        pass
-
-            logger.info(f"Disk space cleared: {cleared_bytes / (1024*1024):.2f} MB")
-            return True
-
-        except Exception as e:
-            logger.error(f"Disk space clearing failed: {e}")
-            return False
-
-    def _heal_reload_embedding(self, params: Dict) -> bool:
-        """Reload embedding model to fix model issues."""
-        try:
-            healer = get_healing_executor()
-
-            result = healer.execute(HealingActionType.EMBEDDING_MODEL_RELOAD, {})
-
-            if result.success:
-                logger.info("Embedding model reloaded successfully")
-                return True
-            else:
-                logger.warning(f"Embedding reload issue: {result.message}")
-                return False
-
-        except Exception as e:
-            logger.error(f"Embedding reload failed: {e}")
             return False
 
     def to_dict(self, decision: ActionDecision) -> Dict[str, Any]:

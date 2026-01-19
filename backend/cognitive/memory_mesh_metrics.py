@@ -1,10 +1,25 @@
+"""
+Memory Mesh Performance Monitoring & Metrics
+
+Tracks performance metrics for Memory Mesh scalability:
+- Query latencies
+- Cache hit rates
+- Embedding generation times
+- Vector search performance
+- Throughput metrics
+
+Provides real-time monitoring and alerting for performance degradation.
+"""
+
 import logging
 import time
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 from collections import deque
 import statistics
+
 logger = logging.getLogger(__name__)
+
 
 class PerformanceMetrics:
     """

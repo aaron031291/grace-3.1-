@@ -1,12 +1,26 @@
+"""
+RuleBasedCategorizer - Pattern Matching for Automatic Categorization
+
+Executes pattern-matching rules to automatically categorize and tag documents
+based on file extensions, names, paths, MIME types, and content.
+"""
+
 from typing import List, Dict, Any, Optional, Tuple
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import logging
 import re
+
 from models.librarian_models import LibrarianRule
 from models.database_models import Document
-from librarian.utils import match_pattern, extract_file_extension, normalize_tag_name
+from librarian.utils import (
+    match_pattern,
+    extract_file_extension,
+    normalize_tag_name
+)
+
 logger = logging.getLogger(__name__)
+
 
 class RuleBasedCategorizer:
     """

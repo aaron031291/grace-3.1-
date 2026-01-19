@@ -1,10 +1,20 @@
+"""
+Database connection management module.
+Handles engine creation and connection pooling.
+"""
+
 from sqlalchemy import create_engine, Engine, event, text
 from sqlalchemy.pool import QueuePool, StaticPool
 from typing import Optional
 import logging
-from database.config import DatabaseConfig, DatabaseType
+
+from .config import DatabaseConfig, DatabaseType
+
+
+logger = logging.getLogger(__name__)
+
+
 class DatabaseConnection:
-    logger = logging.getLogger(__name__)
     """Manages SQLAlchemy engine and connection lifecycle."""
     
     _instance: Optional["DatabaseConnection"] = None
@@ -46,7 +56,6 @@ class DatabaseConnection:
         """
         instance = cls()
         if instance._engine is None:
-            # Don't try to reconnect or check health here - just fail fast
             raise RuntimeError(
                 "Database not initialized. Call DatabaseConnection.initialize() first."
             )
@@ -82,7 +91,7 @@ class DatabaseConnection:
         """
         connection_string = config.get_connection_string()
         
-        self.logger.info(f"Creating database engine for {config.db_type}")
+        logger.info(f"Creating database engine for {config.db_type}")
         
         # SQLite uses a different pool strategy
         if config.db_type == DatabaseType.SQLITE:
@@ -110,7 +119,7 @@ class DatabaseConnection:
                 echo=config.echo,
             )
         
-        self.logger.info(f"Database engine created successfully: {config.get_connection_string()}")
+        logger.info(f"Database engine created successfully: {config.get_connection_string()}")
         return engine
     
     @classmethod
@@ -120,7 +129,7 @@ class DatabaseConnection:
         if instance._engine:
             instance._engine.dispose()
             instance._engine = None
-            cls.logger.info("Database connection closed")
+            logger.info("Database connection closed")
     
     @classmethod
     def health_check(cls) -> bool:
@@ -130,21 +139,13 @@ class DatabaseConnection:
         Returns:
             bool: True if connection is healthy, False otherwise
         """
-        instance = cls()
-        
-        # Quick check: engine must exist
-        if instance._engine is None:
-            cls.logger.warning("Database health check: Engine not initialized")
-            return False
-        
-        # Try to execute a simple query
         try:
-            with instance._engine.connect() as connection:
+            engine = cls.get_engine()
+            with engine.connect() as connection:
                 connection.execute(text("SELECT 1"))
-                connection.commit()
             return True
         except Exception as e:
-            cls.logger.error(f"Database health check failed: {e}")
+            logger.error(f"Database health check failed: {e}")
             return False
 
 

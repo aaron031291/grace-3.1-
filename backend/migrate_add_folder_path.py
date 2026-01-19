@@ -5,8 +5,6 @@ This script adds the folder_path column to existing chats if it doesn't exist.
 """
 
 import sys
-import logging
-logger = logging.getLogger(__name__)
 from sqlalchemy import Column, String, inspect, text
 from sqlalchemy.exc import OperationalError
 
@@ -33,11 +31,11 @@ def migrate():
         
         # Check if folder_path column already exists
         if 'folder_path' in columns:
-            logger.info("✓ folder_path column already exists in chats table")
+            print("✓ folder_path column already exists in chats table")
             session.close()
             return True
         
-        logger.info("Adding folder_path column to chats table...")
+        print("Adding folder_path column to chats table...")
         
         # Get the database connection
         with session.begin():
@@ -58,22 +56,22 @@ def migrate():
                 except Exception:
                     pass
             else:
-                logger.info("Unknown database type")
+                print("Unknown database type")
                 return False
         
         session.close()
-        logger.info("✓ Successfully added folder_path column to chats table")
+        print("✓ Successfully added folder_path column to chats table")
         return True
         
     except OperationalError as e:
         if "already exists" in str(e) or "duplicate column" in str(e):
-            logger.info("✓ folder_path column already exists")
+            print("✓ folder_path column already exists")
             return True
         else:
-            logger.info(f"✗ Database error: {e}")
+            print(f"✗ Database error: {e}")
             return False
     except Exception as e:
-        logger.info(f"✗ Migration failed: {e}")
+        print(f"✗ Migration failed: {e}")
         import traceback
         traceback.print_exc()
         return False

@@ -201,4 +201,4 @@ SAFETY:
 """
 
 if __name__ == "__main__":
-    logger.info(__doc__)
+    print(__doc__)

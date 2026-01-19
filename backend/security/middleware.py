@@ -1,6 +1,13 @@
+"""
+Security Middleware for GRACE
+
+Provides:
+- Security headers middleware
+- Rate limiting middleware
+"""
+
 import time
 import hashlib
-import logging
 from typing import Dict, Callable, Optional
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -8,10 +15,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 from fastapi import HTTPException
+
 from .config import get_security_config
 from .logging import log_security_event
 
-logger = logging.getLogger(__name__)
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """

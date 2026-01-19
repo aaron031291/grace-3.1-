@@ -1,17 +1,32 @@
+"""
+Memory Mesh Snapshot System
+
+Creates immutable snapshots of the entire memory mesh state.
+This allows recovery, versioning, and persistent storage of learned knowledge.
+
+The immutable memory stores:
+1. All learning examples with trust scores
+2. All episodic memories
+3. All procedural memories
+4. All extracted patterns
+5. Complete statistics and metadata
+
+Snapshots are saved as .genesis_immutable_memory_mesh.json
+"""
+
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Set
+from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import distinct
+
 from cognitive.learning_memory import LearningExample, LearningPattern
 from cognitive.episodic_memory import Episode
 from cognitive.procedural_memory import Procedure
-from models.genesis_key_models import GenesisKey
-from cognitive.genesis_memory_chains import get_genesis_memory_chain
-from cognitive.decision_log import DecisionLogger
+
 logger = logging.getLogger(__name__)
+
 
 class MemoryMeshSnapshot:
     """
@@ -20,16 +35,10 @@ class MemoryMeshSnapshot:
     The snapshot is a complete, recoverable state of all learned knowledge.
     """
 
-    def __init__(
-        self, 
-        session: Session, 
-        knowledge_base_path: Path,
-        decision_logger: Optional[DecisionLogger] = None
-    ):
+    def __init__(self, session: Session, knowledge_base_path: Path):
         self.session = session
         self.kb_path = knowledge_base_path
         self.snapshot_path = knowledge_base_path / ".genesis_immutable_memory_mesh.json"
-        self.decision_logger = decision_logger
 
     def create_snapshot(self) -> Dict[str, Any]:
         """
@@ -43,16 +52,13 @@ class MemoryMeshSnapshot:
         snapshot = {
             "snapshot_metadata": {
                 "timestamp": datetime.utcnow().isoformat(),
-                "version": "2.0",  # Updated version to include new data
+                "version": "1.0",
                 "type": "memory_mesh_immutable_snapshot"
             },
             "learning_memory": self._snapshot_learning_memory(),
             "episodic_memory": self._snapshot_episodic_memory(),
             "procedural_memory": self._snapshot_procedural_memory(),
             "pattern_memory": self._snapshot_pattern_memory(),
-            "genesis_keys": self._snapshot_genesis_keys(),
-            "decision_logs": self._snapshot_decision_logs(),
-            "genesis_memory_chains": self._snapshot_genesis_memory_chains(),
             "statistics": self._calculate_statistics(),
             "integrity": self._calculate_integrity_hash()
         }
@@ -216,30 +222,12 @@ class MemoryMeshSnapshot:
             Procedure.success_rate >= 0.7
         ).count()
 
-        # Count unique Genesis Keys
-        genesis_key_count = self.session.query(
-            distinct(LearningExample.genesis_key_id)
-        ).filter(
-            LearningExample.genesis_key_id.isnot(None)
-        ).count()
-
-        # Decision log stats
-        decision_log_count = 0
-        if self.decision_logger:
-            try:
-                all_logs = self.decision_logger.get_all_logs()
-                decision_log_count = len(all_logs)
-            except:
-                pass
-
         return {
             "total_memories": learning_count + episodic_count + procedural_count + pattern_count,
             "learning_examples": learning_count,
             "episodic_memories": episodic_count,
             "procedural_memories": procedural_count,
             "extracted_patterns": pattern_count,
-            "genesis_keys_referenced": genesis_key_count,
-            "decision_logs": decision_log_count,
             "high_trust_learning": high_trust_learning,
             "high_trust_episodes": high_trust_episodes,
             "high_success_procedures": high_success_procedures,
@@ -248,175 +236,12 @@ class MemoryMeshSnapshot:
             "procedural_success_ratio": high_success_procedures / procedural_count if procedural_count > 0 else 0.0
         }
 
-    def _snapshot_genesis_keys(self) -> Dict[str, Any]:
-        """Snapshot all Genesis Keys referenced by learning examples and episodes."""
-        # Collect all unique genesis_key_ids from learning examples and episodes
-        learning_genesis_ids = set(
-            self.session.query(distinct(LearningExample.genesis_key_id))
-            .filter(LearningExample.genesis_key_id.isnot(None))
-            .all()
-        )
-        learning_genesis_ids = {id[0] for id in learning_genesis_ids if id[0]}
-
-        episodic_genesis_ids = set(
-            self.session.query(distinct(Episode.genesis_key_id))
-            .filter(Episode.genesis_key_id.isnot(None))
-            .all()
-        )
-        episodic_genesis_ids = {id[0] for id in episodic_genesis_ids if id[0]}
-
-        # Combine all referenced Genesis Key IDs
-        all_genesis_ids = learning_genesis_ids | episodic_genesis_ids
-
-        # Fetch all referenced Genesis Keys
-        genesis_keys = []
-        if all_genesis_ids:
-            # Query by key_id (not id)
-            genesis_keys = self.session.query(GenesisKey).filter(
-                GenesisKey.key_id.in_(list(all_genesis_ids))
-            ).all()
-
-        return {
-            "total_keys": len(genesis_keys),
-            "referenced_from_learning": len(learning_genesis_ids),
-            "referenced_from_episodic": len(episodic_genesis_ids),
-            "keys": [
-                {
-                    "key_id": gk.key_id,
-                    "parent_key_id": gk.parent_key_id,
-                    "key_type": gk.key_type.value if hasattr(gk.key_type, 'value') else str(gk.key_type),
-                    "status": gk.status.value if hasattr(gk.status, 'value') else str(gk.status),
-                    "user_id": gk.user_id,
-                    "user_profile": gk.user_profile,
-                    "session_id": gk.session_id,
-                    "what_description": gk.what_description,
-                    "where_location": gk.where_location,
-                    "when_timestamp": gk.when_timestamp.isoformat() if gk.when_timestamp else None,
-                    "why_reason": gk.why_reason,
-                    "who_actor": gk.who_actor,
-                    "how_method": gk.how_method,
-                    "file_path": gk.file_path,
-                    "line_number": gk.line_number,
-                    "function_name": gk.function_name,
-                    "code_before": gk.code_before,
-                    "code_after": gk.code_after,
-                    "is_error": gk.is_error,
-                    "error_type": gk.error_type,
-                    "error_message": gk.error_message,
-                    "error_traceback": gk.error_traceback,
-                    "has_fix_suggestion": gk.has_fix_suggestion,
-                    "fix_applied": gk.fix_applied,
-                    "fix_key_id": gk.fix_key_id,
-                    "commit_sha": gk.commit_sha,
-                    "branch_name": gk.branch_name,
-                    "version_number": gk.version_number,
-                    "metadata_human": gk.metadata_human,
-                    "metadata_ai": gk.metadata_ai,
-                    "archived_at": gk.archived_at.isoformat() if gk.archived_at else None,
-                    "archive_path": gk.archive_path,
-                    "input_data": gk.input_data,
-                    "output_data": gk.output_data,
-                    "context_data": gk.context_data,
-                    "tags": gk.tags,
-                    "created_at": gk.created_at.isoformat() if gk.created_at else None,
-                    "updated_at": gk.updated_at.isoformat() if gk.updated_at else None
-                }
-                for gk in genesis_keys
-            ]
-        }
-
-    def _snapshot_decision_logs(self) -> Dict[str, Any]:
-        """Snapshot recent decision logs."""
-        if not self.decision_logger:
-            logger.warning("[MEMORY-MESH-SNAPSHOT] No decision logger provided, skipping decision logs")
-            return {
-                "total_logs": 0,
-                "recent_decisions": [],
-                "all_logs": [],
-                "note": "Decision logger not available"
-            }
-
-        try:
-            # Get all logs
-            all_logs = self.decision_logger.get_all_logs()
-            
-            # Get recent decisions (last 100)
-            recent_decisions = self.decision_logger.get_recent_decisions(limit=100)
-            
-            # Get active decisions
-            active_decisions = self.decision_logger.get_active_decisions()
-
-            return {
-                "total_logs": len(all_logs),
-                "recent_decisions_count": len(recent_decisions),
-                "active_decisions_count": len(active_decisions),
-                "recent_decisions": recent_decisions,
-                "active_decisions": active_decisions,
-                "all_logs": all_logs[:1000],  # Limit to 1000 most recent logs
-                "snapshot_timestamp": datetime.utcnow().isoformat()
-            }
-        except Exception as e:
-            logger.error(f"[MEMORY-MESH-SNAPSHOT] Error snapshotting decision logs: {e}")
-            return {
-                "total_logs": 0,
-                "recent_decisions": [],
-                "all_logs": [],
-                "error": str(e)
-            }
-
-    def _snapshot_genesis_memory_chains(self) -> Dict[str, Any]:
-        """Snapshot Genesis Memory Chains for all Genesis Keys with learning data."""
-        try:
-            chain_tracker = get_genesis_memory_chain(self.session)
-            
-            # Get all Genesis Keys that have learning examples
-            genesis_keys_with_learning = self.session.query(
-                distinct(LearningExample.genesis_key_id)
-            ).filter(
-                LearningExample.genesis_key_id.isnot(None)
-            ).all()
-            
-            genesis_key_ids = [id[0] for id in genesis_keys_with_learning if id[0]]
-            
-            # Get memory chains for each Genesis Key
-            chains = []
-            for gk_id in genesis_key_ids[:100]:  # Limit to 100 most important chains
-                try:
-                    chain = chain_tracker.get_memory_chain(
-                        genesis_key_id=gk_id,
-                        include_timeline=True
-                    )
-                    if chain:
-                        chains.append(chain)
-                except Exception as e:
-                    logger.warning(f"[MEMORY-MESH-SNAPSHOT] Error getting chain for {gk_id}: {e}")
-                    continue
-
-            # Also get all chains summary
-            all_chains_summary = chain_tracker.get_all_genesis_chains(min_learning_examples=1)
-
-            return {
-                "total_chains": len(chains),
-                "total_genesis_keys_with_learning": len(genesis_key_ids),
-                "detailed_chains": chains,
-                "all_chains_summary": all_chains_summary[:200],  # Limit summary
-                "snapshot_timestamp": datetime.utcnow().isoformat()
-            }
-        except Exception as e:
-            logger.error(f"[MEMORY-MESH-SNAPSHOT] Error snapshotting Genesis Memory Chains: {e}")
-            return {
-                "total_chains": 0,
-                "detailed_chains": [],
-                "all_chains_summary": [],
-                "error": str(e)
-            }
-
     def _calculate_integrity_hash(self) -> str:
         """Calculate hash for integrity verification."""
         import hashlib
 
         # Create hash from counts and timestamps
-        hash_input = f"{datetime.utcnow().isoformat()}_mesh_snapshot_v2"
+        hash_input = f"{datetime.utcnow().isoformat()}_mesh_snapshot"
         return hashlib.sha256(hash_input.encode()).hexdigest()[:16]
 
     def _group_by_type(self, examples: List[LearningExample]) -> Dict[str, int]:
@@ -674,8 +499,7 @@ class MemoryMeshSnapshot:
 def create_memory_mesh_snapshot(
     session: Session,
     knowledge_base_path: Path,
-    save: bool = True,
-    decision_logger: Optional[DecisionLogger] = None
+    save: bool = True
 ) -> Dict[str, Any]:
     """
     Convenience function to create memory mesh snapshot.
@@ -684,12 +508,11 @@ def create_memory_mesh_snapshot(
         session: Database session
         knowledge_base_path: Path to knowledge base
         save: Whether to save to file
-        decision_logger: Optional DecisionLogger instance to include decision logs
 
     Returns:
         Snapshot data
     """
-    snapshotter = MemoryMeshSnapshot(session, knowledge_base_path, decision_logger)
+    snapshotter = MemoryMeshSnapshot(session, knowledge_base_path)
     snapshot = snapshotter.create_snapshot()
 
     if save:

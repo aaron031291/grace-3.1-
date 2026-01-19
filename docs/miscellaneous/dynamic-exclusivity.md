@@ -1,3 +1,0 @@
-# Dynamic exclusivity (DynamicExclusivity)
-
-Experimental

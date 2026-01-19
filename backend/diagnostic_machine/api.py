@@ -1,19 +1,39 @@
+"""
+Diagnostic Machine API Endpoints
+
+Provides REST API for:
+- Running diagnostic cycles
+- Getting health status
+- Viewing diagnostic history
+- Managing the diagnostic engine
+- CI/CD integration webhooks
+"""
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 import logging
-from .diagnostic_engine import DiagnosticEngine, get_diagnostic_engine, start_diagnostic_engine, stop_diagnostic_engine, TriggerSource, EngineState
+
+from .diagnostic_engine import (
+    DiagnosticEngine,
+    get_diagnostic_engine,
+    start_diagnostic_engine,
+    stop_diagnostic_engine,
+    TriggerSource,
+    EngineState,
+)
 from .sensors import SensorLayer
 from .interpreters import InterpreterLayer
 from .judgement import JudgementLayer
 from .action_router import ActionRouter
-from fastapi import WebSocket, WebSocketDisconnect
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/diagnostic", tags=["Diagnostic Machine"])
+router = APIRouter(prefix="/diagnostic", tags=["Diagnostic Machine"])
 
+
+# Request/Response models
 class DiagnosticTriggerRequest(BaseModel):
     """Request to trigger a diagnostic cycle."""
     source: str = Field(default="api", description="Trigger source (api, webhook, cicd)")

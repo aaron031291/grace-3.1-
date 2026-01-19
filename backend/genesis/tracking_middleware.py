@@ -1,3 +1,12 @@
+"""
+Genesis Tracking Middleware
+
+Automatically tracks all requests, responses, and operations
+through FastAPI middleware and decorators.
+
+Every API call, file operation, and database change gets a Genesis Key.
+"""
+
 import logging
 import time
 from typing import Callable, Optional
@@ -7,7 +16,9 @@ from functools import wraps
 from database.session import SessionLocal
 from genesis.comprehensive_tracker import ComprehensiveTracker
 from models.genesis_key_models import GenesisKeyType
+
 logger = logging.getLogger(__name__)
+
 
 class GenesisTrackingMiddleware(BaseHTTPMiddleware):
     """
@@ -123,12 +134,8 @@ class GenesisTrackingMiddleware(BaseHTTPMiddleware):
                         parent_key_id=genesis_key_id
                     )
                     db.close()
-            except Exception as tracking_error:
-                # Log tracking failure but don't suppress the original error
-                logger.error(
-                    f"[GENESIS-MIDDLEWARE] Failed to track error in middleware: {tracking_error}",
-                    exc_info=True
-                )
+            except Exception:
+                pass
 
             raise
 

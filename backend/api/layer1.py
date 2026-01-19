@@ -33,9 +33,6 @@ router = APIRouter(prefix="/layer1", tags=["Layer 1 Input"])
 # Enable/disable cognitive integration globally
 ENABLE_COGNITIVE_INTEGRATION = True  # Set to False to disable OODA loop enforcement
 
-# Enable Layer 3 Governance Enforcement
-ENABLE_GOVERNANCE_ENFORCEMENT = True  # Set to False to disable trust verification
-
 
 # ==================== Pydantic Models ====================
 
@@ -107,40 +104,11 @@ async def process_user_input(
     Process user input through Layer 1.
 
     Flows through complete pipeline:
-    Layer 3 Governance → Cognitive Engine (OODA + Invariants) → Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
+    Cognitive Engine (OODA + Invariants) → Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
 
-    Returns result with cognitive metadata showing decision_id, invariant validation, and governance enforcement.
+    Returns result with cognitive metadata showing decision_id and invariant validation.
     """
     try:
-        # Layer 3 Governance Enforcement
-        governance_result = None
-        if ENABLE_GOVERNANCE_ENFORCEMENT:
-            from governance.layer_enforcement import enforce_layer1, EnforcementAction
-            governance_result = await enforce_layer1(
-                data=request.user_input,
-                origin="user_input",
-                input_type=request.input_type,
-                user_id=request.user_id,
-                metadata=request.metadata
-            )
-            
-            # Block if governance denies
-            if governance_result.action == EnforcementAction.BLOCK:
-                return {
-                    "success": False,
-                    "blocked": True,
-                    "reason": governance_result.reasoning,
-                    "trust_score": governance_result.trust_score,
-                    "governance": governance_result.to_dict()
-                }
-            
-            # Quarantine requires acknowledgment (still process but flag)
-            if governance_result.action == EnforcementAction.QUARANTINE:
-                # Add quarantine flag to metadata
-                request.metadata = request.metadata or {}
-                request.metadata["quarantined"] = True
-                request.metadata["quarantine_reason"] = governance_result.reasoning
-        
         if ENABLE_COGNITIVE_INTEGRATION:
             # Use cognitive-enhanced Layer 1
             cognitive_layer1 = get_cognitive_layer1_integration(session=session)
@@ -160,10 +128,6 @@ async def process_user_input(
                 metadata=request.metadata
             )
 
-        # Add governance metadata to result
-        if governance_result and isinstance(result, dict):
-            result["governance"] = governance_result.to_dict()
-
         return result
 
     except Exception as e:
@@ -180,31 +144,11 @@ async def process_file_upload(
     Process file upload through Layer 1.
 
     Accepts any file type and processes through complete pipeline.
-    FILE UPLOADS ARE IRREVERSIBLE - enforces cognitive validation and governance.
+    FILE UPLOADS ARE IRREVERSIBLE - enforces cognitive validation.
     """
     try:
         # Read file content
         file_content = await file.read()
-
-        # Layer 3 Governance Enforcement (files are external, require verification)
-        governance_result = None
-        if ENABLE_GOVERNANCE_ENFORCEMENT:
-            from governance.layer_enforcement import enforce_layer1, EnforcementAction
-            governance_result = await enforce_layer1(
-                data={"filename": file.filename, "size": len(file_content)},
-                origin="file_upload",
-                input_type="upload",
-                user_id=user_id,
-                metadata={"content_type": file.content_type}
-            )
-            
-            if governance_result.action == EnforcementAction.BLOCK:
-                return {
-                    "success": False,
-                    "blocked": True,
-                    "reason": governance_result.reasoning,
-                    "governance": governance_result.to_dict()
-                }
 
         if ENABLE_COGNITIVE_INTEGRATION:
             cognitive_layer1 = get_cognitive_layer1_integration(session=session)
@@ -223,9 +167,6 @@ async def process_file_upload(
                 user_id=user_id
             )
 
-        if governance_result and isinstance(result, dict):
-            result["governance"] = governance_result.to_dict()
-
         return result
 
     except Exception as e:
@@ -241,36 +182,8 @@ async def process_external_api(
     Process external API data through Layer 1 with cognitive validation.
 
     Use this to ingest data from external APIs (OpenAI, GitHub, etc.)
-    EXTERNAL SOURCES REQUIRE VERIFICATION - enforces governance trust scoring.
     """
     try:
-        # Layer 3 Governance Enforcement (external APIs require verification)
-        governance_result = None
-        if ENABLE_GOVERNANCE_ENFORCEMENT:
-            from governance.layer_enforcement import enforce_layer1, EnforcementAction
-            governance_result = await enforce_layer1(
-                data=request.api_data,
-                origin=f"api_{request.api_name}",
-                input_type="api",
-                user_id=request.user_id,
-                metadata={"api_name": request.api_name, "endpoint": request.api_endpoint}
-            )
-            
-            if governance_result.action == EnforcementAction.BLOCK:
-                return {
-                    "success": False,
-                    "blocked": True,
-                    "reason": governance_result.reasoning,
-                    "trust_score": governance_result.trust_score,
-                    "governance": governance_result.to_dict()
-                }
-            
-            # For quarantined data, add flag
-            if governance_result.action == EnforcementAction.QUARANTINE:
-                request.metadata = request.metadata or {}
-                request.metadata["quarantined"] = True
-                request.metadata["governance_score"] = governance_result.trust_score
-
         if ENABLE_COGNITIVE_INTEGRATION:
             cognitive_layer1 = get_cognitive_layer1_integration(session=session)
             result = cognitive_layer1.process_external_api(
@@ -289,9 +202,6 @@ async def process_external_api(
                 user_id=request.user_id,
                 metadata=request.metadata
             )
-
-        if governance_result and isinstance(result, dict):
-            result["governance"] = governance_result.to_dict()
 
         return result
 

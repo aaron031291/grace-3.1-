@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 def check_document_status(filename_pattern: str):
     """Check document status in database."""
-    logger.info("\n" + "="*80)
-    logger.info("DOCUMENT STATUS CHECK")
-    logger.info("="*80)
+    print("\n" + "="*80)
+    print("DOCUMENT STATUS CHECK")
+    print("="*80)
     
     db = SessionLocal()
     try:
@@ -29,34 +29,34 @@ def check_document_status(filename_pattern: str):
         ).all()
         
         if not documents:
-            logger.info(f"\n❌ No documents found matching: {filename_pattern}")
+            print(f"\n❌ No documents found matching: {filename_pattern}")
             return
         
         for doc in documents:
-            logger.info(f"\n📄 Document: {doc.filename}")
-            logger.info(f"   ID: {doc.id}")
-            logger.info(f"   Status: {doc.status}")
-            logger.info(f"   Created: {doc.created_at}")
-            logger.info(f"   Text length: {doc.extracted_text_length} chars")
-            logger.info(f"   Total chunks: {doc.total_chunks}")
-            logger.info(f"   Confidence score: {doc.confidence_score:.3f}")
+            print(f"\n📄 Document: {doc.filename}")
+            print(f"   ID: {doc.id}")
+            print(f"   Status: {doc.status}")
+            print(f"   Created: {doc.created_at}")
+            print(f"   Text length: {doc.extracted_text_length} chars")
+            print(f"   Total chunks: {doc.total_chunks}")
+            print(f"   Confidence score: {doc.confidence_score:.3f}")
             
             # Check chunks
             chunks = db.query(DocumentChunk).filter(
                 DocumentChunk.document_id == doc.id
             ).all()
             
-            logger.info(f"\n   📦 Chunks ({len(chunks)} total):")
+            print(f"\n   📦 Chunks ({len(chunks)} total):")
             for i, chunk in enumerate(chunks[:3]):  # Show first 3
-                logger.info(f"      Chunk {i}: {len(chunk.text_content)} chars")
-                logger.info(f"        Vector ID: {chunk.embedding_vector_id}")
-                logger.info(f"        Text preview: {chunk.text_content[:50]}...")
+                print(f"      Chunk {i}: {len(chunk.text_content)} chars")
+                print(f"        Vector ID: {chunk.embedding_vector_id}")
+                print(f"        Text preview: {chunk.text_content[:50]}...")
             
             if len(chunks) > 3:
-                logger.info(f"      ... and {len(chunks) - 3} more chunks")
+                print(f"      ... and {len(chunks) - 3} more chunks")
             
             # Check vectors in Qdrant
-            logger.info(f"\n   🔍 Checking Qdrant vectors...")
+            print(f"\n   🔍 Checking Qdrant vectors...")
             qdrant = get_qdrant_client()
             
             if chunks and chunks[0].embedding_vector_id:
@@ -69,30 +69,30 @@ def check_document_status(filename_pattern: str):
                             ids=[vector_id]
                         )
                         if result:
-                            logger.info(f"      ✓ Vector {vector_id} found in Qdrant")
+                            print(f"      ✓ Vector {vector_id} found in Qdrant")
                         else:
-                            logger.info(f"      ❌ Vector {vector_id} NOT found in Qdrant")
+                            print(f"      ❌ Vector {vector_id} NOT found in Qdrant")
                     except Exception as e:
-                        logger.info(f"      ❌ Error checking vector: {e}")
+                        print(f"      ❌ Error checking vector: {e}")
                 except Exception as e:
-                    logger.info(f"      ❌ Error: {e}")
+                    print(f"      ❌ Error: {e}")
             
             # Summary
-            logger.info(f"\n   📊 Status Summary:")
+            print(f"\n   📊 Status Summary:")
             if doc.status != "completed":
-                logger.info(f"      ⚠️  Document status is '{doc.status}' (should be 'completed')")
+                print(f"      ⚠️  Document status is '{doc.status}' (should be 'completed')")
             else:
-                logger.info(f"      ✓ Document status is 'completed'")
+                print(f"      ✓ Document status is 'completed'")
             
             if doc.total_chunks == 0:
-                logger.info(f"      ❌ No chunks recorded (total_chunks = 0)")
+                print(f"      ❌ No chunks recorded (total_chunks = 0)")
             else:
-                logger.info(f"      ✓ {doc.total_chunks} chunks recorded")
+                print(f"      ✓ {doc.total_chunks} chunks recorded")
             
             if not chunks:
-                logger.info(f"      ❌ No chunk records in database")
+                print(f"      ❌ No chunk records in database")
             else:
-                logger.info(f"      ✓ {len(chunks)} chunk records found")
+                print(f"      ✓ {len(chunks)} chunk records found")
     
     finally:
         db.close()
@@ -102,8 +102,8 @@ def main():
     import sys
     
     if len(sys.argv) < 2:
-        logger.info("Usage: python debug_document_status.py <filename_pattern>")
-        logger.info("Example: python debug_document_status.py gdp_volatility")
+        print("Usage: python debug_document_status.py <filename_pattern>")
+        print("Example: python debug_document_status.py gdp_volatility")
         sys.exit(1)
     
     pattern = sys.argv[1]

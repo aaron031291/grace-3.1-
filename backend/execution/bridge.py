@@ -1,3 +1,10 @@
+"""
+Grace Execution Bridge
+
+Bridges Grace's cognitive layer with code execution capabilities.
+Provides safe, sandboxed execution with full audit trail.
+"""
+
 import asyncio
 import subprocess
 import os
@@ -9,46 +16,14 @@ from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime
 from pathlib import Path
 import shutil
-try:
-    from execution.actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
-except ImportError:
-    try:
-        from actions import GraceAction, ActionRequest, ActionResult, ActionStatus, create_action
-    except ImportError:
-        # Make optional - define basic types if not available
-        from enum import Enum
-        from dataclasses import dataclass
-        from typing import Optional, Dict, Any
-        
-        class GraceAction(Enum):
-            READ_FILE = "read_file"
-            WRITE_FILE = "write_file"
-        
-        class ActionStatus(str, Enum):
-            SUCCESS = "success"
-            FAILURE = "failure"
-            TIMEOUT = "timeout"
-        
-        @dataclass
-        class ActionRequest:
-            action_id: str = ""
-            action_type: GraceAction = None
-            parameters: Dict[str, Any] = None
-            timeout: int = 300
-        
-        @dataclass
-        class ActionResult:
-            action_id: str = ""
-            action_type: GraceAction = None
-            status: ActionStatus = ActionStatus.FAILURE
-            output: str = ""
-            error: Optional[str] = None
-            execution_time: float = 0.0
-            exit_code: int = 0
-            data: Optional[Dict[str, Any]] = None
-        
-        def create_action(*args, **kwargs):
-            return None
+
+from .actions import (
+    GraceAction,
+    ActionRequest,
+    ActionResult,
+    ActionStatus,
+    create_action,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -404,13 +379,11 @@ class ExecutionBridge:
 
     async def _handle_run_bash(self, action: ActionRequest) -> ActionResult:
         """Execute a bash command."""
-        import shlex
-
         command = action.parameters.get("command")
         working_dir = action.parameters.get("working_dir", self.config.workspace_dir)
         timeout = action.parameters.get("timeout", self.config.timeout)
 
-        # Security check - block dangerous commands
+        # Security check
         for blocked in self.config.blocked_commands:
             if blocked in command:
                 return ActionResult(
@@ -420,21 +393,9 @@ class ExecutionBridge:
                     error=f"Command blocked for security: contains '{blocked}'",
                 )
 
-        # SECURITY FIX: Parse command into list to avoid shell injection
-        # Use shlex.split() to safely parse the command string
-        try:
-            command_list = shlex.split(command)
-        except ValueError as e:
-            return ActionResult(
-                action_id=action.action_id,
-                action_type=action.action_type,
-                status=ActionStatus.FAILURE,
-                error=f"Invalid command syntax: {str(e)}",
-            )
-
         result = await self._run_subprocess(
-            command_list,
-            shell=False,  # SECURITY FIX: Never use shell=True with user input
+            command,
+            shell=True,
             timeout=timeout,
             cwd=working_dir,
         )

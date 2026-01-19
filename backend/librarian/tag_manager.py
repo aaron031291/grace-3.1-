@@ -1,12 +1,28 @@
+"""
+TagManager - Tag Lifecycle Management
+
+Handles creation, assignment, removal, and search of tags for documents.
+Implements flat tag system where documents can have multiple tags.
+"""
+
 from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
 from datetime import datetime
 import logging
+
 from models.librarian_models import LibrarianTag, DocumentTag
 from models.database_models import Document
-from librarian.utils import normalize_tag_name, validate_tag_name, validate_hex_color, generate_default_color, deduplicate_list
+from librarian.utils import (
+    normalize_tag_name,
+    validate_tag_name,
+    validate_hex_color,
+    generate_default_color,
+    deduplicate_list
+)
+
 logger = logging.getLogger(__name__)
+
 
 class TagManager:
     """

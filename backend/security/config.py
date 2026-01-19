@@ -56,11 +56,9 @@ class SecurityConfig:
 
     # ==================== Security Headers ====================
     # Content Security Policy
-    # FIX: unsafe-inline should only be used in development mode
-    # Production mode uses stricter CSP (set dynamically in __post_init__)
     CSP_DEFAULT_SRC: str = "'self'"
-    CSP_SCRIPT_SRC: str = "'self'"   # No unsafe-inline by default (see __post_init__)
-    CSP_STYLE_SRC: str = "'self'"    # No unsafe-inline by default (see __post_init__)
+    CSP_SCRIPT_SRC: str = "'self' 'unsafe-inline'"   # Allow inline scripts (adjust as needed)
+    CSP_STYLE_SRC: str = "'self' 'unsafe-inline'"    # Allow inline styles
     CSP_IMG_SRC: str = "'self' data: blob:"
     CSP_CONNECT_SRC: str = "'self'"
     CSP_FRAME_ANCESTORS: str = "'none'"              # Prevent clickjacking
@@ -98,23 +96,6 @@ class SecurityConfig:
     LOG_RATE_LIMIT_EXCEEDED: bool = True
     LOG_SUSPICIOUS_REQUESTS: bool = True
 
-    # ==================== Authentication ====================
-    # Require authentication for all endpoints (except public ones)
-    AUTH_REQUIRED: bool = False  # Set to True to enable authentication enforcement
-    AUTH_PUBLIC_ENDPOINTS: List[str] = field(default_factory=lambda: [
-        "/health",
-        "/health/live",
-        "/health/ready",
-        "/docs",
-        "/openapi.json",
-        "/redoc",
-        "/",
-        "/version",
-        "/auth/login",
-        "/auth/logout",
-        "/auth/whoami",
-    ])
-    
     # ==================== Production Mode ====================
     # Set to True in production for stricter security
     PRODUCTION_MODE: bool = False
@@ -133,14 +114,9 @@ class SecurityConfig:
         if self.PRODUCTION_MODE:
             self.SESSION_COOKIE_SECURE = True
             self.HSTS_ENABLED = True
-            # FIX: Strict CSP in production - no unsafe-inline
-            # Use nonces or hashes for inline scripts/styles instead
         else:
             # Allow insecure cookies in development
             self.SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
-            # FIX: Only allow unsafe-inline in development mode for convenience
-            self.CSP_SCRIPT_SRC = "'self' 'unsafe-inline'"
-            self.CSP_STYLE_SRC = "'self' 'unsafe-inline'"
 
         # Rate limiting
         self.RATE_LIMIT_ENABLED = os.getenv("RATE_LIMIT_ENABLED", "true").lower() == "true"
@@ -149,12 +125,6 @@ class SecurityConfig:
 
         # Security logging
         self.LOG_SECURITY_EVENTS = os.getenv("LOG_SECURITY_EVENTS", "true").lower() == "true"
-        
-        # Authentication
-        self.AUTH_REQUIRED = os.getenv("AUTH_REQUIRED", "false").lower() == "true"
-        env_public_endpoints = os.getenv("AUTH_PUBLIC_ENDPOINTS", "")
-        if env_public_endpoints:
-            self.AUTH_PUBLIC_ENDPOINTS.extend([e.strip() for e in env_public_endpoints.split(",")])
 
     def get_csp_header(self) -> str:
         """Build Content-Security-Policy header value."""

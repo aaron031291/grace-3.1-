@@ -1,15 +1,24 @@
+"""
+Complete Pipeline Integration: Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
+
+This module ensures all data flows through the complete pipeline symbiotically.
+"""
 import os
 import json
 import logging
 from datetime import datetime
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
+
+from pathlib import Path
 from genesis.genesis_key_service import get_genesis_service
 from genesis.symbiotic_version_control import get_symbiotic_version_control
 from genesis.repo_scanner import get_repo_scanner
 from genesis.kb_integration import get_kb_integration
 from models.genesis_key_models import GenesisKeyType
+
 logger = logging.getLogger(__name__)
+
 
 class DataPipeline:
     """
@@ -31,8 +40,9 @@ class DataPipeline:
         self.symbiotic_vc = get_symbiotic_version_control(session=session)
         self.kb_integration = get_kb_integration()
 
-        # Pipeline metadata
-        self.pipeline_metadata_file = "backend/.genesis_pipeline_metadata.json"
+        # Pipeline metadata - use absolute path to prevent nested directory creation
+        backend_dir = Path(__file__).parent.parent
+        self.pipeline_metadata_file = str(backend_dir / ".genesis_pipeline_metadata.json")
         self._load_or_create_metadata()
 
     def _load_or_create_metadata(self):
@@ -337,8 +347,9 @@ class DataPipeline:
             "immutable": True
         }
 
-        # Store in .genesis_immutable_pipeline.json
-        immutable_file = "backend/.genesis_immutable_pipeline.json"
+        # Store in .genesis_immutable_pipeline.json - use absolute path
+        backend_dir = Path(__file__).parent.parent
+        immutable_file = str(backend_dir / ".genesis_immutable_pipeline.json")
 
         if os.path.exists(immutable_file):
             with open(immutable_file, 'r') as f:
@@ -388,8 +399,9 @@ class DataPipeline:
             "indexed_at": datetime.utcnow().isoformat()
         }
 
-        # Store RAG index
-        rag_index_file = "backend/.genesis_rag_index.json"
+        # Store RAG index - use absolute path
+        backend_dir = Path(__file__).parent.parent
+        rag_index_file = str(backend_dir / ".genesis_rag_index.json")
 
         if os.path.exists(rag_index_file):
             with open(rag_index_file, 'r') as f:
@@ -439,8 +451,9 @@ class DataPipeline:
             "integrated_at": datetime.utcnow().isoformat()
         }
 
-        # Store world model context
-        world_model_file = "backend/.genesis_world_model.json"
+        # Store world model context - use absolute path
+        backend_dir = Path(__file__).parent.parent
+        world_model_file = str(backend_dir / ".genesis_world_model.json")
 
         if os.path.exists(world_model_file):
             with open(world_model_file, 'r') as f:
@@ -486,9 +499,9 @@ class DataPipeline:
             "genesis_key": self.genesis_service is not None,
             "version_control": self.symbiotic_vc is not None,
             "librarian": self.kb_integration is not None,
-            "immutable_memory": os.path.exists("backend/.genesis_immutable_pipeline.json") if self.metadata["total_inputs_processed"] > 0 else True,
-            "rag": os.path.exists("backend/.genesis_rag_index.json") if self.metadata["total_inputs_processed"] > 0 else True,
-            "world_model": os.path.exists("backend/.genesis_world_model.json") if self.metadata["total_inputs_processed"] > 0 else True
+            "immutable_memory": os.path.exists(str(Path(__file__).parent.parent / ".genesis_immutable_pipeline.json")) if self.metadata["total_inputs_processed"] > 0 else True,
+            "rag": os.path.exists(str(Path(__file__).parent.parent / ".genesis_rag_index.json")) if self.metadata["total_inputs_processed"] > 0 else True,
+            "world_model": os.path.exists(str(Path(__file__).parent.parent / ".genesis_world_model.json")) if self.metadata["total_inputs_processed"] > 0 else True
         }
 
         all_operational = all(verification.values())

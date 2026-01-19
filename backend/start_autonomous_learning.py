@@ -157,80 +157,48 @@ def monitor_learning_cycle():
             cycle_count += 1
             current_time = time.time()
 
-            # Get orchestrator stats (optional - don't block health monitoring if this fails)
+            # Get orchestrator stats
             if orchestrator:
-                try:
-                    # Try get_status() first (ThreadLearningOrchestrator)
-                    if hasattr(orchestrator, 'get_status'):
-                        status = orchestrator.get_status()
-                        if cycle_count % 6 == 0:  # Every minute
-                            logger.info(
-                                f"[STATS] Tasks: {status.get('total_tasks_submitted', 0)} submitted, "
-                                f"{status.get('total_tasks_completed', 0)} completed, "
-                                f"Study queue: {status.get('study_queue_size', 0)}, "
-                                f"Practice queue: {status.get('practice_queue_size', 0)}"
-                            )
-                    # Fallback to get_stats() if available (for other orchestrator types)
-                    elif hasattr(orchestrator, 'get_stats'):
-                        stats = orchestrator.get_stats()
-                        if cycle_count % 6 == 0:  # Every minute
-                            logger.info(
-                                f"[STATS] Tasks: {stats.get('total_submitted', stats.get('total_tasks_submitted', 0))} submitted, "
-                                f"{stats.get('total_completed', stats.get('total_tasks_completed', 0))} completed, "
-                                f"Study queue: {stats.get('study_queue_size', 0)}, "
-                                f"Practice queue: {stats.get('practice_queue_size', 0)}"
-                            )
-                except Exception as stats_error:
-                    # Log but don't fail - health monitoring is more important
-                    if cycle_count % 6 == 0:
-                        logger.debug(f"[STATS] Could not get orchestrator stats: {stats_error}")
+                stats = orchestrator.get_stats()
 
-            # Periodic health check (every 5 minutes) - CRITICAL: This must run independently
+                if cycle_count % 6 == 0:  # Every minute
+                    logger.info(
+                        f"[STATS] Tasks: {stats['total_submitted']} submitted, "
+                        f"{stats['total_completed']} completed, "
+                        f"Study queue: {stats['study_queue_size']}, "
+                        f"Practice queue: {stats['practice_queue_size']}"
+                    )
+
+            # Periodic health check (every 5 minutes)
             if current_time - last_health_check > 300:
-                try:
-                    logger.info("[HEALTH] Running periodic health check...")
-                    if healing_system:
-                        cycle_result = healing_system.run_monitoring_cycle()
-                        logger.info(
-                            f"[HEALTH] Status: {cycle_result['health_status']}, "
-                            f"Anomalies: {cycle_result['anomalies_detected']}, "
-                            f"Actions executed: {cycle_result['actions_executed']}"
-                        )
-                    else:
-                        logger.warning("[HEALTH] Healing system not available")
-                    last_health_check = current_time
-                except Exception as health_error:
-                    logger.error(f"[HEALTH] Error during health check: {health_error}", exc_info=True)
-                    # Still update timestamp to avoid spamming errors
-                    last_health_check = current_time
+                logger.info("[HEALTH] Running periodic health check...")
+                if healing_system:
+                    cycle_result = healing_system.run_monitoring_cycle()
+                    logger.info(
+                        f"[HEALTH] Status: {cycle_result['health_status']}, "
+                        f"Anomalies: {cycle_result['anomalies_detected']}, "
+                        f"Actions executed: {cycle_result['actions_executed']}"
+                    )
+                last_health_check = current_time
 
             # Periodic mirror analysis (every 10 minutes)
             if current_time - last_mirror_analysis > 600:
-                try:
-                    logger.info("[MIRROR] Running self-modeling analysis...")
-                    if mirror_system:
-                        self_model = mirror_system.build_self_model()
-                        if orchestrator:
-                            improvement_result = mirror_system.trigger_improvement_actions(orchestrator)
-                        else:
-                            improvement_result = {"actions_triggered": 0}
-                        logger.info(
-                            f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
-                            f"Suggestions: {len(self_model['improvement_suggestions'])}, "
-                            f"Actions triggered: {improvement_result.get('actions_triggered', 0)}, "
-                            f"Self-awareness: {self_model['self_awareness_score']:.2f}"
-                        )
-                    else:
-                        logger.warning("[MIRROR] Mirror system not available")
-                    last_mirror_analysis = current_time
-                except Exception as mirror_error:
-                    logger.error(f"[MIRROR] Error during mirror analysis: {mirror_error}", exc_info=True)
-                    last_mirror_analysis = current_time
+                logger.info("[MIRROR] Running self-modeling analysis...")
+                if mirror_system and orchestrator:
+                    self_model = mirror_system.build_self_model()
+                    improvement_result = mirror_system.trigger_improvement_actions(orchestrator)
+                    logger.info(
+                        f"[MIRROR] Patterns: {self_model['behavioral_patterns']['total_detected']}, "
+                        f"Suggestions: {len(self_model['improvement_suggestions'])}, "
+                        f"Actions triggered: {improvement_result['actions_triggered']}, "
+                        f"Self-awareness: {self_model['self_awareness_score']:.2f}"
+                    )
+                last_mirror_analysis = current_time
 
         except KeyboardInterrupt:
             break
         except Exception as e:
-            logger.error(f"[ERROR] Monitoring error: {e}", exc_info=True)
+            logger.error(f"[ERROR] Monitoring error: {e}")
 
 
 def shutdown_systems():

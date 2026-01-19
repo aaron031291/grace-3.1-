@@ -1,15 +1,26 @@
+"""
+Scaffolded Healing System using Genesis Keys.
+
+Uses Genesis Keys to:
+- Detect issues in code/files
+- Provide contextual healing/fixes
+- Debug using Genesis Key navigation
+- Auto-repair broken code
+"""
 import os
 import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from pathlib import Path
+
 from genesis.code_analyzer import get_code_analyzer
 from genesis.genesis_key_service import get_genesis_service
 from genesis.repo_scanner import get_repo_scanner
 from models.genesis_key_models import GenesisKeyType
 
 logger = logging.getLogger(__name__)
+
 
 class HealingSystem:
     """
@@ -71,23 +82,11 @@ class HealingSystem:
                 logger.warning("No immutable memory found. Run scan first.")
                 return []
 
-            files_processed = 0
-            files_with_errors = 0
             for file_path, file_info in self.immutable_memory["files"].items():
                 ext = file_info.get("extension", "")
                 if ext in [".py", ".js", ".jsx", ".ts", ".tsx"]:
-                    files_processed += 1
-                    try:
-                        file_issues = self._scan_file_by_genesis_key(file_info["genesis_key"])
-                        issues.extend(file_issues)
-                    except Exception as e:
-                        files_with_errors += 1
-                        logger.debug(f"Error scanning {file_path}: {e}")
-            
-            if files_processed > 0:
-                logger.info(f"Scanned {files_processed} files, found {len(issues)} issues, {files_with_errors} errors")
-            else:
-                logger.warning(f"No code files found to scan in immutable memory ({len(self.immutable_memory.get('files', {}))} total files)")
+                    file_issues = self._scan_file_by_genesis_key(file_info["genesis_key"])
+                    issues.extend(file_issues)
 
         return issues
 
@@ -99,28 +98,7 @@ class HealingSystem:
             return []
 
         file_info = file_result["info"]
-        
-        # Resolve file path: use relative path from memory combined with current repo_path
-        # This handles cases where the repo was moved or the absolute paths are stale
-        rel_path = file_info.get("path", "")
-        if rel_path:
-            # Build path relative to current repo_path
-            abs_path = os.path.join(self.repo_path, rel_path)
-            # Normalize path separators
-            abs_path = os.path.normpath(abs_path)
-        else:
-            # Fallback to absolute_path from memory if relative path not available
-            abs_path = file_info.get("absolute_path", "")
-        
-        # Verify file exists
-        if not os.path.exists(abs_path):
-            # Try the absolute path from memory as fallback
-            old_abs_path = file_info.get("absolute_path", "")
-            if old_abs_path and os.path.exists(old_abs_path):
-                abs_path = old_abs_path
-            else:
-                logger.warning(f"File not found: {abs_path} (from path: {rel_path})")
-                return []
+        abs_path = file_info["absolute_path"]
 
         # Read file content
         try:

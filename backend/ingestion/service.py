@@ -1,3 +1,8 @@
+"""
+Text ingestion service for processing documents and storing embeddings.
+Handles chunking, embedding generation, and vector storage.
+"""
+
 import hashlib
 import logging
 import json
@@ -6,14 +11,29 @@ from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
 from datetime import datetime
 import numpy as np
+
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from confidence_scorer import ConfidenceScorer
 from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
-from cognitive.decorators import cognitive_operation
+from settings import settings
+
+# Import cognitive blueprint decorators
+try:
+    from cognitive.decorators import cognitive_operation
+    COGNITIVE_AVAILABLE = True
+except ImportError:
+    COGNITIVE_AVAILABLE = False
+    # Fallback: no-op decorator
+    def cognitive_operation(operation_name, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
 logger = logging.getLogger(__name__)
+
 
 class TextChunker:
     """Handles text chunking with semantic and structure-aware strategies."""
@@ -345,7 +365,7 @@ class TextIngestionService:
             ).first()
             
             if existing:
-                logger.warning(f"[INGEST_FAST] Document with hash {content_hash} already exists (ID: {existing.id})")
+                logger.info(f"[INGEST_FAST] Document with hash {content_hash} already exists (ID: {existing.id})")
                 return existing.id, "Document already ingested"
             
             logger.info(f"[INGEST_FAST] No duplicates found, proceeding with ingestion")
@@ -411,40 +431,13 @@ class TextIngestionService:
                 debug_log.write(f"{chunk_texts}\n")
             logger.debug(f"[INGEST_FAST] Batch embedding {len(chunk_texts)} texts...")
             
-            # TimeSense: Estimate embedding time and track
-            estimated_tokens = sum(len(text.split()) for text in chunk_texts)
-            embedding_prediction = None
-            if TIMESENSE_AVAILABLE and TimeEstimator:
-                try:
-                    embedding_prediction = TimeEstimator.estimate_embedding(
-                        num_tokens=estimated_tokens,
-                        model_name=getattr(self.embedding_model, 'model_name', None)
-                    )
-                    if embedding_prediction:
-                        logger.info(
-                            f"[INGEST_FAST] [TIMESENSE] Estimated embedding time: "
-                            f"{embedding_prediction.human_readable()} (confidence: {embedding_prediction.confidence:.2f})"
-                        )
-                except Exception as e:
-                    logger.debug(f"[INGEST_FAST] TimeSense estimation failed: {e}")
-            
             # Use smaller batch size to avoid CUDA OOM errors
             # Fallback: if CUDA fails, automatically reduce batch size and retry
             all_embeddings = None
-            batch_size = 4  # Reduced from 32 to match system specs (recommended_batch_size: 4)
+            batch_size = 32  # Start with smaller batch size for VRAM-constrained systems
             
             try:
-                # Track embedding operation with TimeSense
-                if TIMESENSE_AVAILABLE:
-                    with track_operation(
-                        PrimitiveType.EMBED_TEXT,
-                        size=estimated_tokens,
-                        task_id=f"ingest_embed_{document_id}",
-                        model_name=getattr(self.embedding_model, 'model_name', None)
-                    ):
-                        all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
-                else:
-                    all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
+                all_embeddings = self.embedding_model.embed_text(chunk_texts, batch_size=batch_size)
                 logger.info(f"[INGEST_FAST] [OK] Generated batch embeddings for all {len(chunks)} chunks (batch_size={batch_size})")
             except RuntimeError as e:
                 if "out of memory" in str(e).lower() or "cuda" in str(e).lower():
@@ -500,7 +493,7 @@ class TextIngestionService:
                     chunk_index=chunk_index,
                     text_content=chunk_text,
                     embedding_vector_id=str(vector_id),
-                    embedding_model="qwen_4b",
+                    embedding_model=settings.EMBEDDING_DEFAULT,
                     confidence_score=0.5,
                     chunk_metadata=json.dumps({
                         "source": source,
@@ -520,23 +513,10 @@ class TextIngestionService:
                     batch = vectors_to_upsert[batch_start:batch_end]
                     
                     logger.debug(f"[INGEST_FAST] Upserting batch {batch_start}-{batch_end} ({len(batch)} vectors)...")
-                    
-                    # TimeSense: Track vector insertion
-                    if TIMESENSE_AVAILABLE:
-                        with track_operation(
-                            PrimitiveType.VECTOR_INSERT,
-                            size=len(batch),
-                            task_id=f"ingest_vector_insert_{document_id}_{batch_start}"
-                        ):
-                            success = self.qdrant_client.upsert_vectors(
-                                collection_name=self.collection_name,
-                                vectors=batch,
-                            )
-                    else:
-                        success = self.qdrant_client.upsert_vectors(
-                            collection_name=self.collection_name,
-                            vectors=batch,
-                        )
+                    success = self.qdrant_client.upsert_vectors(
+                        collection_name=self.collection_name,
+                        vectors=batch,
+                    )
                     
                     if not success:
                         logger.error(f"[INGEST_FAST] Failed to store embeddings batch {batch_start}-{batch_end}")
@@ -584,10 +564,17 @@ class TextIngestionService:
             return document_id, "Document ingested successfully"
         
         except Exception as e:
-            logger.error(f"[INGEST_FAST] [FAIL][FAIL][FAIL] ERROR DURING INGESTION [FAIL][FAIL][FAIL]", exc_info=True)
-            logger.error(f"[INGEST_FAST] Error details: {str(e)}")
-            db.rollback()
-            return None, f"Ingestion failed: {str(e)}"
+            # Check if error suppression is enabled
+            if settings.SUPPRESS_INGESTION_ERRORS:
+                logger.warning(f"[INGEST_FAST] Ingestion error suppressed: {str(e)}")
+                logger.debug(f"[INGEST_FAST] Suppressed error details:", exc_info=True)
+                db.rollback()
+                return None, "Ingestion failed (error suppressed)"
+            else:
+                logger.error(f"[INGEST_FAST] [FAIL][FAIL][FAIL] ERROR DURING INGESTION [FAIL][FAIL][FAIL]", exc_info=True)
+                logger.error(f"[INGEST_FAST] Error details: {str(e)}")
+                db.rollback()
+                return None, f"Ingestion failed: {str(e)}"
         finally:
             db.close()
             logger.info(f"[INGEST_FAST] Database session closed")
@@ -756,7 +743,7 @@ class TextIngestionService:
                     text_content=chunk_text,
                     token_count=len(chunk_text.split()),  # Rough estimate
                     embedding_vector_id=str(vector_id),
-                    embedding_model="qwen_4b",
+                    embedding_model=settings.EMBEDDING_DEFAULT,
                     char_start=chunk["char_start"],
                     char_end=chunk["char_end"],
                     chunk_metadata=json.dumps(chunk_metadata),

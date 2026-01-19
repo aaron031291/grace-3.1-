@@ -1,11 +1,19 @@
+"""
+Grace File Intelligence Agent
+
+Understands file content deeply, not just formats.
+Builds semantic understanding of knowledge base.
+"""
+
 import logging
-import ast
-from typing import Dict, Any, List, Optional, Set
+from typing import Dict, Any, List, Optional
 from pathlib import Path
 from dataclasses import dataclass
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+
+
 @dataclass
 class FileIntelligence:
     """Deep intelligence about a file's content."""
@@ -83,8 +91,8 @@ class FileIntelligenceAgent:
                 complexity=complexity
             )
 
-            # 5. Extract file relationships using AST analysis
-            relationships = self._analyze_file_relationships(file_path, content)
+            # 5. Relationship hints (actual detection happens in RelationshipEngine)
+            relationships = []  # Placeholder for now
 
             # 6. Additional metadata
             metadata = {
@@ -347,301 +355,6 @@ Summary:"""
             strategy['embedding_batch_size'] = 16
 
         return strategy
-
-    def _analyze_file_relationships(
-        self,
-        file_path: str,
-        content: str
-    ) -> List[Dict[str, Any]]:
-        """
-        Analyze file relationships using AST parsing.
-
-        Extracts:
-        - Import relationships (what files/modules this file imports)
-        - Export relationships (what this file exports)
-        - Dependency relationships (external packages used)
-        - Call relationships (function/method calls)
-        - Inheritance relationships (class hierarchies)
-
-        Args:
-            file_path: Path to the file
-            content: File content
-
-        Returns:
-            List of relationship dictionaries
-        """
-        relationships = []
-        file_ext = Path(file_path).suffix.lower()
-
-        if file_ext == '.py':
-            relationships = self._analyze_python_relationships(file_path, content)
-
-        return relationships
-
-    def _analyze_python_relationships(
-        self,
-        file_path: str,
-        content: str
-    ) -> List[Dict[str, Any]]:
-        """
-        Analyze Python file relationships using AST.
-
-        Args:
-            file_path: Path to the Python file
-            content: File content
-
-        Returns:
-            List of relationship dictionaries
-        """
-        relationships = []
-
-        try:
-            tree = ast.parse(content, filename=file_path)
-        except SyntaxError as e:
-            logger.debug(f"[FILE-INTELLIGENCE] Syntax error parsing {file_path}: {e}")
-            return relationships
-        except Exception as e:
-            logger.debug(f"[FILE-INTELLIGENCE] Failed to parse {file_path}: {e}")
-            return relationships
-
-        # Extract imports
-        relationships.extend(self._extract_imports(file_path, tree))
-
-        # Extract exports (top-level definitions)
-        relationships.extend(self._extract_exports(file_path, tree))
-
-        # Extract function/method calls
-        relationships.extend(self._extract_calls(file_path, tree))
-
-        # Extract class inheritance
-        relationships.extend(self._extract_inheritance(file_path, tree))
-
-        return relationships
-
-    def _extract_imports(
-        self,
-        file_path: str,
-        tree: ast.AST
-    ) -> List[Dict[str, Any]]:
-        """Extract import relationships from AST."""
-        relationships = []
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                for alias in node.names:
-                    relationships.append({
-                        "type": "imports",
-                        "source": file_path,
-                        "target": alias.name,
-                        "details": {
-                            "imported_names": [alias.asname or alias.name],
-                            "line": node.lineno,
-                            "import_type": "module"
-                        }
-                    })
-
-            elif isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                imported_names = [
-                    alias.asname or alias.name for alias in node.names
-                ]
-                relationships.append({
-                    "type": "imports",
-                    "source": file_path,
-                    "target": module,
-                    "details": {
-                        "imported_names": imported_names,
-                        "line": node.lineno,
-                        "import_type": "from",
-                        "level": node.level  # relative import level
-                    }
-                })
-
-                # Track external dependencies (stdlib vs third-party)
-                if node.level == 0 and module:
-                    top_level_module = module.split('.')[0]
-                    if not self._is_local_module(file_path, top_level_module):
-                        relationships.append({
-                            "type": "dependency",
-                            "source": file_path,
-                            "target": top_level_module,
-                            "details": {
-                                "full_module": module,
-                                "imported_names": imported_names,
-                                "line": node.lineno
-                            }
-                        })
-
-        return relationships
-
-    def _extract_exports(
-        self,
-        file_path: str,
-        tree: ast.AST
-    ) -> List[Dict[str, Any]]:
-        """Extract exported definitions (top-level functions/classes)."""
-        relationships = []
-
-        for node in ast.iter_child_nodes(tree):
-            if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
-                is_private = node.name.startswith('_')
-                relationships.append({
-                    "type": "exports",
-                    "source": file_path,
-                    "target": node.name,
-                    "details": {
-                        "kind": "function",
-                        "is_async": isinstance(node, ast.AsyncFunctionDef),
-                        "is_private": is_private,
-                        "line": node.lineno,
-                        "args": [arg.arg for arg in node.args.args]
-                    }
-                })
-
-            elif isinstance(node, ast.ClassDef):
-                is_private = node.name.startswith('_')
-                methods = [
-                    n.name for n in node.body
-                    if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-                ]
-                relationships.append({
-                    "type": "exports",
-                    "source": file_path,
-                    "target": node.name,
-                    "details": {
-                        "kind": "class",
-                        "is_private": is_private,
-                        "line": node.lineno,
-                        "methods": methods
-                    }
-                })
-
-        return relationships
-
-    def _extract_calls(
-        self,
-        file_path: str,
-        tree: ast.AST
-    ) -> List[Dict[str, Any]]:
-        """Extract function/method call relationships."""
-        relationships = []
-        seen_calls: Set[str] = set()
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call):
-                call_info = self._get_call_info(node)
-                if call_info:
-                    call_key = f"{call_info['name']}:{call_info.get('attribute', '')}"
-                    if call_key not in seen_calls:
-                        seen_calls.add(call_key)
-                        relationships.append({
-                            "type": "calls",
-                            "source": file_path,
-                            "target": call_info['name'],
-                            "details": {
-                                "function": call_info.get('attribute') or call_info['name'],
-                                "line": node.lineno,
-                                "is_method": call_info.get('is_method', False)
-                            }
-                        })
-
-        return relationships
-
-    def _get_call_info(self, node: ast.Call) -> Optional[Dict[str, Any]]:
-        """Extract call information from a Call node."""
-        if isinstance(node.func, ast.Name):
-            return {
-                "name": node.func.id,
-                "is_method": False
-            }
-        elif isinstance(node.func, ast.Attribute):
-            # Get the base object name
-            base = node.func.value
-            if isinstance(base, ast.Name):
-                return {
-                    "name": base.id,
-                    "attribute": node.func.attr,
-                    "is_method": True
-                }
-            elif isinstance(base, ast.Attribute):
-                # Nested attribute access (e.g., a.b.c())
-                parts = []
-                current = base
-                while isinstance(current, ast.Attribute):
-                    parts.append(current.attr)
-                    current = current.value
-                if isinstance(current, ast.Name):
-                    parts.append(current.id)
-                parts.reverse()
-                return {
-                    "name": ".".join(parts),
-                    "attribute": node.func.attr,
-                    "is_method": True
-                }
-        return None
-
-    def _extract_inheritance(
-        self,
-        file_path: str,
-        tree: ast.AST
-    ) -> List[Dict[str, Any]]:
-        """Extract class inheritance relationships."""
-        relationships = []
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.bases:
-                base_names = []
-                for base in node.bases:
-                    if isinstance(base, ast.Name):
-                        base_names.append(base.id)
-                    elif isinstance(base, ast.Attribute):
-                        # Handle module.ClassName
-                        parts = []
-                        current = base
-                        while isinstance(current, ast.Attribute):
-                            parts.append(current.attr)
-                            current = current.value
-                        if isinstance(current, ast.Name):
-                            parts.append(current.id)
-                        parts.reverse()
-                        base_names.append(".".join(parts))
-
-                if base_names:
-                    relationships.append({
-                        "type": "inheritance",
-                        "source": file_path,
-                        "target": node.name,
-                        "details": {
-                            "child_class": node.name,
-                            "parent_classes": base_names,
-                            "line": node.lineno
-                        }
-                    })
-
-        return relationships
-
-    def _is_local_module(self, file_path: str, module_name: str) -> bool:
-        """Check if a module is local to the project."""
-        # Common standard library modules (subset)
-        stdlib_modules = {
-            'os', 'sys', 'typing', 'pathlib', 'datetime', 'json', 'logging',
-            'ast', 're', 'collections', 'itertools', 'functools', 'dataclasses',
-            'abc', 'io', 'time', 'math', 'random', 'hashlib', 'base64',
-            'urllib', 'http', 'socket', 'threading', 'multiprocessing',
-            'subprocess', 'shutil', 'tempfile', 'glob', 'fnmatch', 'pickle',
-            'copy', 'enum', 'contextlib', 'traceback', 'warnings', 'inspect',
-            'importlib', 'unittest', 'pytest', 'asyncio', 'concurrent'
-        }
-
-        if module_name in stdlib_modules:
-            return True
-
-        # Check if module exists in the same directory or parent
-        file_dir = Path(file_path).parent
-        potential_module = file_dir / f"{module_name}.py"
-        potential_package = file_dir / module_name / "__init__.py"
-
-        return potential_module.exists() or potential_package.exists()
 
     def _get_default_strategy(self) -> Dict[str, Any]:
         """Get default chunking strategy."""

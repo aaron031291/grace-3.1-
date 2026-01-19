@@ -1,3 +1,8 @@
+"""
+Git-based ingestion file manager for tracking knowledge base files.
+Monitors backend/knowledge_base for changes and triggers appropriate ingestion actions.
+"""
+
 import os
 import json
 import logging
@@ -7,17 +12,18 @@ from typing import List, Dict, Optional, Tuple, Set
 from datetime import datetime
 from dataclasses import dataclass, field
 import hashlib
+
 from ingestion.service import TextIngestionService
 from embedding import EmbeddingModel, get_embedding_model
 from vector_db.client import get_qdrant_client
 from database.session import SessionLocal
 from models.database_models import Document, DocumentChunk
+
 logger = logging.getLogger(__name__)
 
+
+@dataclass
 class FileChange:
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Represents a change to a file in the knowledge base."""
     filepath: str
     change_type: str  # 'added', 'modified', 'deleted'
@@ -347,6 +353,31 @@ class IngestionFileManager:
             logger.error(f"Error computing file hash: {e}")
             return ""
     
+    def _should_exclude_from_ingestion(self, rel_path: str) -> bool:
+        """
+        Check if file should be excluded from ingestion based on settings.
+        
+        Args:
+            rel_path: Relative path from knowledge base
+            
+        Returns:
+            bool: True if file should be excluded
+        """
+        try:
+            from settings import settings
+            
+            # Check if Genesis folder exclusion is enabled
+            if settings.EXCLUDE_GENESIS_FROM_INGESTION:
+                # Exclude files in genesis_key folders
+                if 'genesis_key' in rel_path or 'layer_1/genesis_key' in rel_path:
+                    logger.info(f"[SKIP] Excluding Genesis tracking file from ingestion: {rel_path}")
+                    return True
+            
+            return False
+        except Exception as e:
+            logger.error(f"Error checking exclusion rules: {e}")
+            return False
+    
     def _read_file_content(self, filepath: Path) -> Optional[str]:
         """
         Read file content safely with proper format-specific extraction.
@@ -433,7 +464,11 @@ class IngestionFileManager:
             Document record or None
         """
         try:
-            db = SessionLocal()
+            db = self._get_db_session()
+            if not db:
+                logger.warning(f"Database session not available, cannot find document: {filepath}")
+                return None
+            
             # Search by file_path or filename
             doc = db.query(Document).filter(
                 (Document.file_path == str(filepath)) |
@@ -457,7 +492,10 @@ class IngestionFileManager:
             bool: True if successful
         """
         try:
-            db = SessionLocal()
+            db = self._get_db_session()
+            if not db:
+                logger.warning(f"Database session not available, cannot delete embeddings for document {document_id}")
+                return False
             
             # Get all chunks for document
             chunks = db.query(DocumentChunk).filter(
@@ -490,7 +528,8 @@ class IngestionFileManager:
             logger.error(f"Error deleting embeddings: {e}")
             return False
         finally:
-            db.close()
+            if db:
+                db.close()
     
     def _delete_document_from_db(self, document_id: int) -> bool:
         """
@@ -503,12 +542,17 @@ class IngestionFileManager:
             bool: True if successful
         """
         try:
-            db = SessionLocal()
+            db = self._get_db_session()
+            if not db:
+                logger.warning(f"Database session not available, cannot delete document {document_id}")
+                return False
+            
             doc = db.query(Document).filter(Document.id == document_id).first()
             if doc:
                 db.delete(doc)
                 db.commit()
                 logger.info(f"[OK] Deleted document record {document_id} from database")
+                db.close()
                 return True
             db.close()
             return False
@@ -516,7 +560,8 @@ class IngestionFileManager:
             logger.error(f"Error deleting document from database: {e}")
             return False
         finally:
-            db.close()
+            if db:
+                db.close()
     
     def process_new_file(self, filepath: Path, rel_path: str = None) -> IngestionResult:
         """
@@ -535,6 +580,15 @@ class IngestionFileManager:
         # Compute relative path if not provided
         if rel_path is None:
             rel_path = str(filepath.relative_to(self.knowledge_base_path))
+        
+        # Check if file should be excluded
+        if self._should_exclude_from_ingestion(rel_path):
+            return IngestionResult(
+                success=False,
+                filepath=rel_path,
+                change_type="added",
+                message="File excluded from ingestion (Genesis tracking folder)",
+            )
         
         file_size_kb = filepath.stat().st_size / 512
         
@@ -669,6 +723,15 @@ class IngestionFileManager:
             # Normalize to forward slashes for cross-platform compatibility
             rel_path = str(filepath.relative_to(self.knowledge_base_path)).replace("\\", "/")
         
+        # Check if file should be excluded
+        if self._should_exclude_from_ingestion(rel_path):
+            return IngestionResult(
+                success=False,
+                filepath=rel_path,
+                change_type="modified",
+                message="File excluded from ingestion (Genesis tracking folder)",
+            )
+        
         file_size_kb = filepath.stat().st_size / 512
         
         logger.info("="*80)
@@ -726,11 +789,14 @@ class IngestionFileManager:
             # Delete and re-create document for clean ingestion
             logger.info(f"[INGESTION] Preparing clean document record...")
             try:
-                db = SessionLocal()
-                db.delete(document)
-                db.commit()
-                db.close()
-                logger.info(f"[INGESTION] [OK] Old document record removed")
+                db = self._get_db_session()
+                if db:
+                    db.delete(document)
+                    db.commit()
+                    db.close()
+                    logger.info(f"[INGESTION] [OK] Old document record removed")
+                else:
+                    logger.warning(f"[INGESTION] Database session not available, skipping document deletion")
             except Exception as e:
                 logger.error(f"[INGESTION] Error deleting document: {e}")
             
@@ -752,13 +818,16 @@ class IngestionFileManager:
                 # Update file path
                 logger.info(f"[INGESTION] Updating document metadata...")
                 try:
-                    db = SessionLocal()
-                    doc = db.query(Document).filter(Document.id == new_doc_id).first()
-                    if doc:
-                        doc.file_path = rel_path
-                        db.commit()
-                    db.close()
-                    logger.info(f"[INGESTION] [OK] Document metadata updated")
+                    db = self._get_db_session()
+                    if db:
+                        doc = db.query(Document).filter(Document.id == new_doc_id).first()
+                        if doc:
+                            doc.file_path = rel_path
+                            db.commit()
+                        db.close()
+                        logger.info(f"[INGESTION] [OK] Document metadata updated")
+                    else:
+                        logger.warning(f"[INGESTION] Database session not available, skipping metadata update")
                 except Exception as e:
                     logger.error(f"[INGESTION] Error updating document file_path: {e}")
                 
@@ -930,20 +999,22 @@ class IngestionFileManager:
         """
         logger.info(f"[SCAN] Scanning knowledge base: {self.knowledge_base_path}")
         import os
-        print(f"[DEBUG] Current working directory: {os.getcwd()}")
-        print(f"[DEBUG] Knowledge base path: {self.knowledge_base_path}")
-        print(f"[DEBUG] Absolute path: {self.knowledge_base_path.resolve()}")
-        print(f"[DEBUG] Path exists: {self.knowledge_base_path.exists()}")
-        print(f"[DEBUG] Path is directory: {self.knowledge_base_path.is_dir()}")
+        # print(f"[DEBUG] Current working directory: {os.getcwd()}")
+        # print(f"[DEBUG] Knowledge base path: {self.knowledge_base_path}")
+        # print(f"[DEBUG] Absolute path: {self.knowledge_base_path.resolve()}")
+        # print(f"[DEBUG] Path exists: {self.knowledge_base_path.exists()}")
+        # print(f"[DEBUG] Path is directory: {self.knowledge_base_path.is_dir()}")
         if self.knowledge_base_path.exists():
-            print(f"[DEBUG] Contents of directory:")
+            # print(f"[DEBUG] Contents of directory:")
             try:
                 for item in self.knowledge_base_path.iterdir():
-                    print(f"  - {item.name}")
+                    # print(f"  - {item.name}")
+                    pass # Keep the loop structure, but comment out the print
             except Exception as e:
-                print(f"  ERROR reading directory: {e}")
+                # print(f"  ERROR reading directory: {e}")
+                pass # Keep the exception block, but comment out the print
         logger.info(f"[SCAN] Current tracked files: {len(self.file_states)}")
-        print(f"\n[DEBUG] Tracked files in state: {list(self.file_states.keys())}")
+        # print(f"\n[DEBUG] Tracked files in state: {list(self.file_states.keys())}")
         
         results = []
         
@@ -962,7 +1033,7 @@ class IngestionFileManager:
         logger.info(f"[SCAN] Found {len(current_files)} files on disk")
         for rel_path in sorted(current_files.keys()):
             logger.debug(f"[SCAN]   File: {rel_path}")
-        print(f"[DEBUG] Found files on disk: {list(current_files.keys())}")
+        # print(f"[DEBUG] Found files on disk: {list(current_files.keys())}")
         
         # Process new and modified files
         for rel_path, filepath in current_files.items():

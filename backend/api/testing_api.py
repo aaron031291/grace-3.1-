@@ -1,3 +1,13 @@
+"""
+Autonomous Testing API - Self-testing with KPI and Trust Score validation.
+
+Enables Grace to autonomously test her implementations with governance:
+- Run tests against KPI thresholds
+- Validate trust scores before integration
+- Track all test activities with Genesis Keys
+- Sandbox execution for safety
+"""
+
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
@@ -5,11 +15,15 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 import logging
 import json
+
 from database.session import get_session
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/testing", tags=["Autonomous Testing"])
+router = APIRouter(prefix="/test", tags=["Autonomous Testing"])
+
+
+# ==================== Pydantic Models ====================
 
 class TestRequest(BaseModel):
     """Request to run tests."""

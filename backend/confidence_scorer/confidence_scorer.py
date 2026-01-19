@@ -1,3 +1,24 @@
+"""
+Confidence scoring system for knowledge quality assessment.
+
+Calculates confidence scores based on multiple factors:
+- source_reliability: Type and trustworthiness of the source
+- content_quality: Quality indicators of the content itself
+- consensus_score: Agreement with existing knowledge base (with contradiction detection)
+- recency: How recent the information is
+
+Formula:
+confidence_score = (
+    source_reliability * 0.35 +
+    content_quality * 0.25 +
+    consensus_score * 0.25 +
+    recency * 0.10
+)
+
+Now includes semantic contradiction detection to prevent contradictory chunks
+from artificially boosting consensus scores.
+"""
+
 import logging
 import numpy as np
 from typing import List, Optional, Dict, Any, Tuple
@@ -5,7 +26,9 @@ from datetime import datetime
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from .contradiction_detector import SemanticContradictionDetector
+
 logger = logging.getLogger(__name__)
+
 
 class ConfidenceScorer:
     """

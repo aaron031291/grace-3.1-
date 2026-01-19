@@ -1,3 +1,9 @@
+"""
+Genesis Key Middleware for FastAPI.
+
+Automatically tracks all API requests and responses with Genesis Keys.
+Assigns Genesis IDs to users on first access.
+"""
 import logging
 import uuid
 from datetime import datetime
@@ -6,11 +12,16 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 from fastapi import FastAPI
+
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
 from genesis.kb_integration import get_kb_integration
 
-# Module-level logger
+try:
+    from settings import settings
+except ImportError:
+    settings = None
+
 logger = logging.getLogger(__name__)
 
 
@@ -71,7 +82,8 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 tags=["api_request", request.method.lower(), "input"]
             )
         except Exception as e:
-            logger.error(f"Failed to create request Genesis Key: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Failed to create request Genesis Key: {e}")
 
         # Process request
         response = await call_next(request)
@@ -79,15 +91,6 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
         # Track response
         try:
             duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
-
-            # Extract key_id safely - handle case where object might be detached from session
-            parent_key_id = None
-            if request_key:
-                try:
-                    parent_key_id = request_key.key_id
-                except Exception:
-                    # Object is detached, parent_key_id will be None
-                    pass
 
             # Create Genesis Key for response
             self.genesis_service.create_key(
@@ -99,7 +102,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 how_method=f"HTTP Response {response.status_code}",
                 user_id=genesis_id,
                 session_id=session_id,
-                parent_key_id=parent_key_id,
+                parent_key_id=request_key.key_id if request_key else None,
                 output_data={
                     "status_code": response.status_code,
                     "duration_ms": duration_ms,
@@ -114,7 +117,8 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
             response.headers["X-Session-ID"] = session_id
 
         except Exception as e:
-            logger.error(f"Failed to create response Genesis Key: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Failed to create response Genesis Key: {e}")
 
         return response
 
@@ -148,22 +152,13 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 email=None
             )
 
-            # Extract data safely - handle case where object might be detached from session
-            try:
-                first_seen = user.first_seen.isoformat() if user.first_seen else None
-                username = user.username
-            except Exception:
-                # Object is detached, use fallback values
-                first_seen = datetime.utcnow().isoformat()
-                username = f"User_{genesis_id[-8:]}"
-
             # Save profile to knowledge base
             self.kb_integration.save_user_profile(
                 user_id=genesis_id,
                 profile_data={
                     "user_id": genesis_id,
-                    "username": username,
-                    "first_seen": first_seen,
+                    "username": user.username,
+                    "first_seen": user.first_seen.isoformat(),
                     "user_agent": request.headers.get("user-agent"),
                     "initial_ip": request.client.host if request.client else None,
                     "initial_path": request.url.path
@@ -173,7 +168,8 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
             logger.info(f"Created new Genesis ID: {genesis_id}")
 
         except Exception as e:
-            logger.error(f"Failed to create user profile: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Failed to create user profile: {e}")
 
         return genesis_id
 
