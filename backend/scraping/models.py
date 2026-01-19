@@ -10,9 +10,9 @@ from database.base import Base
 
 class ScrapingJob(Base):
     """Model for tracking web scraping jobs."""
-    
+
     __tablename__ = 'scraping_jobs'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String(2048), nullable=False)
     depth = Column(Integer, nullable=False, default=0)
@@ -23,13 +23,20 @@ class ScrapingJob(Base):
     pages_filtered = Column(Integer, default=0)  # Pages filtered by semantic similarity
     pages_downloaded = Column(Integer, default=0)  # Documents downloaded (PDFs, DOCXs, etc.)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     error_message = Column(Text, nullable=True)
     folder_path = Column(String(512), nullable=True)
     same_domain_only = Column(Integer, default=1)  # SQLite doesn't have boolean
     max_pages = Column(Integer, default=100)
-    
+
+    # User association
+    user_id = Column(Integer, nullable=True)  # Who initiated this scraping job
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True)  # Track job creation
+
     # Relationship to scraped pages
     pages = relationship("ScrapedPage", back_populates="job", cascade="all, delete-orphan")
     
@@ -61,9 +68,9 @@ class ScrapingJob(Base):
 
 class ScrapedPage(Base):
     """Model for individual scraped pages."""
-    
+
     __tablename__ = 'scraped_pages'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     job_id = Column(Integer, ForeignKey('scraping_jobs.id', ondelete='CASCADE'), nullable=False)
     url = Column(String(2048), nullable=False)
@@ -76,11 +83,18 @@ class ScrapedPage(Base):
     error_message = Column(Text, nullable=True)
     similarity_score = Column(String(10), nullable=True)  # Semantic similarity score (stored as string for SQLite)
     scraped_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
     document_id = Column(Integer, nullable=True)  # FK to documents table after ingestion
     file_path = Column(String(1024), nullable=True)  # Path to downloaded document
     file_size = Column(Integer, nullable=True)  # Size in bytes for downloaded documents
     file_type = Column(String(50), nullable=True)  # File extension (e.g., 'pdf', 'docx')
-    
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True)  # Track page scraping
+
+    # Embedding tracking
+    embedding_vector_id = Column(String(64), nullable=True)  # ID in Qdrant if indexed
+
     # Relationship to job
     job = relationship("ScrapingJob", back_populates="pages")
     

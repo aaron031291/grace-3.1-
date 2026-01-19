@@ -24,11 +24,15 @@ import re
 logger = logging.getLogger(__name__)
 
 # Import Grace systems
+_HAS_GRACE_SYSTEMS = False
+MemoryMeshIntegration = None
+LLMOrchestrator = None
 try:
     from genesis.genesis_key_service import get_genesis_service
     from models.genesis_key_models import GenesisKeyType
     from cognitive.memory_mesh_integration import MemoryMeshIntegration
     from llm_orchestrator.llm_orchestrator import LLMOrchestrator
+    _HAS_GRACE_SYSTEMS = True
 except ImportError as e:
     logger.warning(f"[EXTERNAL-KNOWLEDGE] Could not import Grace systems: {e}")
 

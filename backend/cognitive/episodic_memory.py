@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from sqlalchemy import Column, String, Float, Text, DateTime, JSON
 from datetime import datetime
 from typing import Dict, Any, List, Optional

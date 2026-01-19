@@ -25,9 +25,9 @@ class TestAdaptiveCICDAPI:
         assert router is not None
 
     def test_adaptive_pipeline_request(self):
-        from api.adaptive_cicd_api import AdaptivePipelineRequest
-        req = AdaptivePipelineRequest(pipeline_name="test", adaptation_mode="auto")
-        assert req.pipeline_name == "test"
+        from api.adaptive_cicd_api import TriggerRequest
+        req = TriggerRequest(pipeline_id="test", reason="autonomous_decision")
+        assert req.pipeline_id == "test"
 
 
 # =============================================================================
@@ -42,9 +42,9 @@ class TestBenchmarkAPI:
         assert router is not None
 
     def test_benchmark_request(self):
-        from api.benchmark_api import BenchmarkRequest
-        req = BenchmarkRequest(benchmark_type="humaneval", samples=10)
-        assert req.benchmark_type == "humaneval"
+        from api.benchmark_api import BenchmarkRunRequest
+        req = BenchmarkRunRequest(benchmark_name="humaneval", max_problems=10)
+        assert req.benchmark_name == "humaneval"
 
 
 # =============================================================================
@@ -54,9 +54,9 @@ class TestBenchmarkAPI:
 class TestChatLLMIntegrationAPI:
     """Tests for chat_llm_integration.py"""
 
-    def test_router_exists(self):
-        from api.chat_llm_integration import router
-        assert router is not None
+    def test_integration_class_exists(self):
+        from api.chat_llm_integration import ChatLLMIntegration
+        assert ChatLLMIntegration is not None
 
 
 # =============================================================================
@@ -83,9 +83,9 @@ class TestCICDAPI:
         assert router is not None
 
     def test_pipeline_request(self):
-        from api.cicd_api import PipelineRequest
-        req = PipelineRequest(pipeline_name="build", trigger="manual")
-        assert req.pipeline_name == "build"
+        from api.cicd_api import TriggerPipelineRequest
+        req = TriggerPipelineRequest(pipeline_id="build", branch="main")
+        assert req.pipeline_id == "build"
 
 
 # =============================================================================
@@ -107,14 +107,13 @@ class TestCICDVersioningAPI:
 class TestClarityAPI:
     """Tests for clarity_api.py"""
 
-    def test_router_exists(self):
-        from api.clarity_api import router
-        assert router is not None
+    def test_blueprint_exists(self):
+        from api.clarity_api import bp
+        assert bp is not None
 
-    def test_verification_request(self):
-        from api.clarity_api import VerificationRequest
-        req = VerificationRequest(code="def foo(): pass", specification={})
-        assert req.code == "def foo(): pass"
+    def test_get_framework_exists(self):
+        from api.clarity_api import get_framework
+        assert get_framework is not None
 
 
 # =============================================================================
@@ -140,10 +139,10 @@ class TestCodingAgentAPI:
         from api.coding_agent_api import router
         assert router is not None
 
-    def test_code_generation_request(self):
-        from api.coding_agent_api import CodeGenerationRequest
-        req = CodeGenerationRequest(task="Write a function", language="python")
-        assert req.task == "Write a function"
+    def test_create_task_request(self):
+        from api.coding_agent_api import CreateTaskRequest
+        req = CreateTaskRequest(task_type="code_generation", description="Write a function")
+        assert req.description == "Write a function"
 
 
 # =============================================================================

@@ -1,8 +1,12 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, TYPE_CHECKING
 from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+
+if TYPE_CHECKING:
+    from layer1.message_bus import Layer1MessageBus
+
 logger = logging.getLogger(__name__)
 
 class VersionControlConnector:
@@ -18,7 +22,7 @@ class VersionControlConnector:
     This makes version control AUTONOMOUS - no manual calls needed.
     """
 
-    def __init__(self, message_bus: Optional[Layer1MessageBus] = None):
+    def __init__(self, message_bus: Optional["Layer1MessageBus"] = None):
         self.connector_id = "version_control"
         self.enabled = True
         self.operations_tracked = 0
@@ -300,7 +304,7 @@ class VersionControlConnector:
     # AUTONOMOUS EVENT HANDLERS
     # ================================================================
 
-    async def _on_file_ingested(self, message: Message):
+    async def _on_file_ingested(self, message: "Message"):
         """Handle file ingestion - auto-track version."""
         file_path = message.payload.get("file_path")
         genesis_key_id = message.payload.get("genesis_key_id")
@@ -331,7 +335,7 @@ class VersionControlConnector:
                 from_component=ComponentType.VERSION_CONTROL
             )
 
-    async def _on_file_uploaded(self, message: Message):
+    async def _on_file_uploaded(self, message: "Message"):
         """Handle file upload - auto-track version."""
         file_path = message.payload.get("file_path")
         user_id = message.payload.get("user_id", "system")
@@ -362,7 +366,7 @@ class VersionControlConnector:
                 from_component=ComponentType.VERSION_CONTROL
             )
 
-    async def _on_genesis_key_created(self, message: Message):
+    async def _on_genesis_key_created(self, message: "Message"):
         """Handle Genesis Key creation - link to version control."""
         genesis_key_id = message.payload.get("genesis_key_id")
         file_path = message.payload.get("file_path")
@@ -378,7 +382,7 @@ class VersionControlConnector:
     # REQUEST HANDLERS
     # ================================================================
 
-    async def _handle_get_file_history(self, message: Message) -> Dict[str, Any]:
+    async def _handle_get_file_history(self, message: "Message") -> Dict[str, Any]:
         """Handle request for file version history."""
         file_path = message.payload.get("file_path")
 
@@ -397,7 +401,7 @@ class VersionControlConnector:
             "history": history
         }
 
-    async def _handle_track_file_change(self, message: Message) -> Dict[str, Any]:
+    async def _handle_track_file_change(self, message: "Message") -> Dict[str, Any]:
         """Handle request to track a file change."""
         file_path = message.payload.get("file_path")
         user_id = message.payload.get("user_id", "system")

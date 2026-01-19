@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, event
 from collections import defaultdict
 from enum import Enum
 import pickle
+from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus
 logger = logging.getLogger(__name__)
 
 class GenesisKeyArchiveLevel(str, Enum):

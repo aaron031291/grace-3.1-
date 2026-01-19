@@ -8,9 +8,9 @@ from sqlalchemy.orm import Session
 import os
 from pathlib import Path
 import re
-from models import ScrapingJob, ScrapedPage
-from url_validator import URLValidator
-from document_downloader import DocumentDownloader
+from scraping.models import ScrapingJob, ScrapedPage
+from scraping.url_validator import URLValidator
+from scraping.document_downloader import DocumentDownloader
 logger = logging.getLogger(__name__)
 
 class WebScrapingService:

@@ -42,6 +42,9 @@ class LibrarianTag(BaseModel):
     parent_tag_id = Column(Integer, ForeignKey("librarian_tags.id"), nullable=True)  # Optional for future hierarchy
     tag_metadata = Column(JSON, nullable=True)  # Extensible metadata
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track tag creation
+
     # Relationships
     parent_tag = relationship("LibrarianTag", remote_side="LibrarianTag.id", backref="child_tags")
 
@@ -49,6 +52,7 @@ class LibrarianTag(BaseModel):
         Index("idx_tag_name", "name"),
         Index("idx_tag_category", "category"),
         Index("idx_tag_usage", "usage_count"),
+        Index("idx_tags_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -70,6 +74,9 @@ class DocumentTag(BaseModel):
     assigned_at = Column(DateTime, default=datetime.utcnow)
     assignment_metadata = Column(JSON, nullable=True)  # Additional context (e.g., rule_id, ai_reasoning)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track tag assignment
+
     # Relationships
     tag = relationship("LibrarianTag", backref="document_assignments")
 
@@ -78,6 +85,7 @@ class DocumentTag(BaseModel):
         Index("idx_document_id", "document_id"),
         Index("idx_tag_id", "tag_id"),
         Index("idx_assigned_by", "assigned_by"),
+        Index("idx_doc_tags_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -113,12 +121,16 @@ class DocumentRelationship(BaseModel):
     bidirectional = Column(Boolean, default=False)  # If True, relationship goes both ways
     relationship_metadata = Column(JSON, nullable=True)  # Additional context (similarity_score, matched_pattern, etc.)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track relationship detection
+
     __table_args__ = (
         CheckConstraint("source_document_id != target_document_id", name="check_not_self_referential"),
         Index("idx_source_document", "source_document_id"),
         Index("idx_target_document", "target_document_id"),
         Index("idx_relationship_type", "relationship_type"),
         Index("idx_source_target_type", "source_document_id", "target_document_id", "relationship_type"),
+        Index("idx_doc_rel_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -174,10 +186,17 @@ class LibrarianRule(BaseModel):
     matches_count = Column(Integer, default=0)
     last_matched_at = Column(DateTime, nullable=True)
 
+    # User association
+    created_by = Column(String(255), nullable=True)  # Who created this rule
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track rule creation
+
     __table_args__ = (
         Index("idx_enabled_priority", "enabled", "priority"),
         Index("idx_pattern_type", "pattern_type"),
         Index("idx_action_type", "action_type"),
+        Index("idx_lib_rules_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -220,11 +239,15 @@ class LibrarianAction(BaseModel):
     executed_at = Column(DateTime, nullable=True)
     execution_error = Column(Text, nullable=True)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track action authorization
+
     __table_args__ = (
         Index("idx_libaction_status_tier", "status", "permission_tier"),
         Index("idx_libaction_document_status", "document_id", "status"),
         Index("idx_libaction_type", "action_type"),
         Index("idx_libaction_triggered_by", "triggered_by"),
+        Index("idx_lib_actions_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -260,12 +283,16 @@ class LibrarianAudit(BaseModel):
     error_message = Column(Text, nullable=True)  # Error details if status="failed"
     rollback_data = Column(JSON, nullable=True)  # Data needed to undo this action
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track action execution
+
     __table_args__ = (
         Index("idx_libaudit_action_id", "action_id"),
         Index("idx_libaudit_document_id", "document_id"),
         Index("idx_libaudit_action_type", "action_type"),
         Index("idx_libaudit_status_created", "status", "created_at"),
         Index("idx_libaudit_executed_by", "executed_by"),
+        Index("idx_lib_audit_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:

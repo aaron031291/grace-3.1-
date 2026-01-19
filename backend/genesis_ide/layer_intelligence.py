@@ -983,7 +983,7 @@ class Layer2Intelligence:
     # LAYER 1 EVENT HANDLERS (Bidirectional - Layer 1 → Layer 2)
     # ================================================================
 
-    async def _on_file_ingested(self, message: Message):
+    async def _on_file_ingested(self, message: "Message"):
         """Handle file ingestion event from Layer 1."""
         file_path = message.payload.get("file_path")
         genesis_key_id = message.payload.get("genesis_key_id")
@@ -1002,7 +1002,7 @@ class Layer2Intelligence:
         
         # Update internal knowledge of available procedures
 
-    async def _on_episode_recorded(self, message: Message):
+    async def _on_episode_recorded(self, message: "Message"):
         """Handle episode recording event from Layer 1."""
         episode_id = message.payload.get("episode_id")
         
@@ -1018,7 +1018,7 @@ class Layer2Intelligence:
         
         # Could enhance RAG queries with cognitive context
 
-    async def _on_diagnostic_issue(self, message: Message):
+    async def _on_diagnostic_issue(self, message: "Message"):
         """Handle diagnostic issue event from Layer 1."""
         issue = message.payload.get("issue")
         severity = message.payload.get("severity")

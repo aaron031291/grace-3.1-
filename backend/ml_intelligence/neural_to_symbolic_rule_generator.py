@@ -1,11 +1,15 @@
 import numpy as np
-from typing import List, Dict, Any, Optional, Tuple, Set
+from typing import List, Dict, Any, Optional, Tuple, Set, TYPE_CHECKING
 from dataclasses import dataclass
 from datetime import datetime
 import logging
 import json
 import uuid
 from embedding import EmbeddingModel, get_embedding_model
+
+if TYPE_CHECKING:
+    from ml_intelligence.neural_trust_scorer import TrustScorer
+
 logger = logging.getLogger(__name__)
 
 class NeuralPattern:
@@ -56,7 +60,7 @@ class NeuralToSymbolicRuleGenerator:
         embedding_model: Optional[EmbeddingModel] = None,
         min_confidence: float = 0.7,
         min_support: int = 3,
-        trust_scorer: Optional[TrustScorer] = None,
+        trust_scorer: Optional["TrustScorer"] = None,
     ):
         """
         Initialize neural-to-symbolic rule generator.

@@ -9,6 +9,8 @@ from urllib.parse import quote_plus
 import requests
 from llm_orchestrator.multi_llm_client import MultiLLMClient, TaskType
 from llm_orchestrator.repo_access import RepositoryAccessLayer
+from confidence_scorer.confidence_scorer import ConfidenceScorer
+from confidence_scorer.contradiction_detector import SemanticContradictionDetector
 logger = logging.getLogger(__name__)
 
 class ExternalVerifier:

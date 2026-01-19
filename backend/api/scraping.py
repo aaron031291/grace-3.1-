@@ -10,6 +10,8 @@ from scraping.models import ScrapingJob, ScrapedPage
 from scraping.url_validator import URLValidator
 logger = logging.getLogger(__name__)
 
+router = APIRouter(prefix="/scraping", tags=["Scraping"])
+
 class ScrapeSubmitRequest(BaseModel):
     """Request model for submitting a scraping job."""
     url: str = Field(..., description="URL to scrape")

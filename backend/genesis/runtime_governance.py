@@ -11,8 +11,6 @@ from genesis.validation_gate import AuthorityScope, DeltaType
 logger = logging.getLogger(__name__)
 
 class ReviewStatus(str, Enum):
-    logger = logging.getLogger(__name__)
-    logger = logging.getLogger(__name__)
     """Status of Genesis change review."""
     PENDING = "pending"
     APPROVED = "approved"

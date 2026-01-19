@@ -14,12 +14,15 @@ class User(BaseModel):
     """User model for storing user information."""
     __tablename__ = "users"
     __table_args__ = {'extend_existing': True}
-    
+
     username = Column(String(255), unique=True, nullable=False, index=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
     full_name = Column(String(255))
     is_active = Column(Boolean, default=True, nullable=False)
-    
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track user creation/actions
+
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"
 
@@ -27,16 +30,23 @@ class User(BaseModel):
 class Conversation(BaseModel):
     """Conversation model for storing chat conversations."""
     __tablename__ = "conversations"
-    
+
     title = Column(String(255), nullable=True)
     description = Column(Text, nullable=True)
     model = Column(String(255), nullable=False, default="mistral:7b")
-    
+
+    # User association
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track conversation creation
+
     # Relationships
     messages = relationship("Message", back_populates="conversation", cascade="all, delete-orphan")
-    
+
     __table_args__ = (
         Index("idx_conversations_created", "created_at"),
+        Index("idx_conversations_user", "user_id"),
     )
 
     def __repr__(self) -> str:
@@ -53,11 +63,15 @@ class Message(BaseModel):
     tokens = Column(Integer, nullable=True)  # FIX: Number of tokens (consistent with ChatHistory)
     token_ids = Column(Text, nullable=True)  # JSON array of token IDs (if needed)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track message creation
+
     # Relationships
     conversation = relationship("Conversation", back_populates="messages")
-    
+
     __table_args__ = (
         Index("idx_conversation_created", "conversation_id", "created_at"),
+        Index("idx_messages_genesis", "genesis_key_id"),
     )
     
     def __repr__(self) -> str:
@@ -67,15 +81,19 @@ class Message(BaseModel):
 class Embedding(BaseModel):
     """Embedding model for storing vector embeddings."""
     __tablename__ = "embeddings"
-    
+
     text = Column(Text, nullable=False)
     embedding = Column(Text, nullable=False)  # Store as JSON array string
     dimension = Column(Integer, nullable=False, default=384)
     model = Column(String(255), nullable=False, default="qwen_4b")
     source = Column(String(255), nullable=True)  # Source of the embedding (e.g., "document_id", "message_id")
-    
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track embedding creation
+
     __table_args__ = (
         Index("idx_model_source", "model", "source"),
+        Index("idx_embeddings_genesis", "genesis_key_id"),
     )
     
     def __repr__(self) -> str:
@@ -85,7 +103,7 @@ class Embedding(BaseModel):
 class Chat(BaseModel):
     """Chat session model for storing chat sessions."""
     __tablename__ = "chats"
-    
+
     title = Column(String(255), nullable=True)
     description = Column(Text, nullable=True)
     model = Column(String(255), nullable=False, default="mistral:7b")
@@ -93,15 +111,22 @@ class Chat(BaseModel):
     is_active = Column(Boolean, default=True, nullable=False, index=True)
     last_message_at = Column(DateTime, nullable=True)
     folder_path = Column(String(512), nullable=True, default="", index=True)  # Path to folder context for this chat
-    
+
+    # User association
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track chat creation
+
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="chat", cascade="all, delete-orphan")
-    
+
     __table_args__ = (
         Index("idx_chats_created", "created_at"),
         Index("idx_chats_active", "is_active"),
         Index("idx_chats_updated", "updated_at"),
         Index("idx_chats_folder_path", "folder_path"),
+        Index("idx_chats_user", "user_id"),
     )
     
     def __repr__(self) -> str:
@@ -111,7 +136,7 @@ class Chat(BaseModel):
 class ChatHistory(BaseModel):
     """Chat history model for storing individual messages in a chat session."""
     __tablename__ = "chat_history"
-    
+
     chat_id = Column(Integer, ForeignKey("chats.id"), nullable=False, index=True)
     role = Column(String(50), nullable=False)  # "user", "assistant", "system"
     content = Column(Text, nullable=False)
@@ -122,14 +147,18 @@ class ChatHistory(BaseModel):
     edited_at = Column(DateTime, nullable=True)
     edited_content = Column(Text, nullable=True)  # Original content before edit
     message_metadata = Column(Text, nullable=True)  # JSON metadata for additional info
-    
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track message creation
+
     # Relationships
     chat = relationship("Chat", back_populates="chat_history")
-    
+
     __table_args__ = (
         Index("idx_chat_created", "chat_id", "created_at"),
         Index("idx_chat_role", "chat_id", "role"),
         Index("idx_role_created", "role", "created_at"),
+        Index("idx_chat_history_genesis", "genesis_key_id"),
     )
     
     def __repr__(self) -> str:
@@ -167,10 +196,19 @@ class Document(BaseModel):
     consensus_score = Column(Float, default=0.5, nullable=False)  # Consensus with existing knowledge
     recency_score = Column(Float, default=0.5, nullable=False)  # Recency component
     confidence_metadata = Column(Text, nullable=True)  # JSON field with detailed confidence calculation data
-    
+
+    # User association
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)  # Who uploaded this document
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track document ingestion
+
+    # Version tracking
+    version = Column(Integer, default=1, nullable=False)  # Document version for evolution tracking
+
     # Relationships
     chunks = relationship("DocumentChunk", back_populates="document", cascade="all, delete-orphan")
-    
+
     __table_args__ = (
         Index("idx_status_created", "status", "created_at"),
         Index("idx_source_created", "source", "created_at"),
@@ -181,6 +219,8 @@ class Document(BaseModel):
         Index("idx_content_quality", "content_quality"),
         Index("idx_consensus_score", "consensus_score"),
         Index("idx_recency_score", "recency_score"),
+        Index("idx_documents_user", "user_id"),
+        Index("idx_documents_genesis", "genesis_key_id"),
     )
     
     def __repr__(self) -> str:
@@ -204,15 +244,23 @@ class DocumentChunk(BaseModel):
     # ==================== Confidence Scoring Fields ====================
     confidence_score = Column(Float, default=0.5, nullable=False)  # Auto-calculated confidence score (0.0-1.0)
     consensus_similarity_scores = Column(Text, nullable=True)  # JSON array of similarity scores from consensus calculation
-    
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track chunk processing
+
+    # Indexing status
+    is_indexed = Column(Boolean, default=False, nullable=False)  # Track if indexed in vector DB
+
     # Relationships
     document = relationship("Document", back_populates="chunks")
-    
+
     __table_args__ = (
         Index("idx_document_chunks", "document_id", "chunk_index"),
         Index("idx_embedding_vector_id", "embedding_vector_id"),
         Index("idx_embedding_model", "embedding_model"),
         Index("idx_chunk_confidence_score", "confidence_score"),
+        Index("idx_chunks_genesis", "genesis_key_id"),
+        Index("idx_chunks_indexed", "is_indexed"),
     )
     
     def __repr__(self) -> str:
@@ -234,9 +282,19 @@ class GovernanceRule(BaseModel):
     action = Column(String(50), default="warn", nullable=False)  # warn, block, flag, redact
     source = Column(String(255), nullable=True)  # e.g., "ISO 27001", "GDPR", "User-defined"
 
+    # User association
+    created_by = Column(String(255), nullable=True)  # Who created this rule
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track rule creation/modification
+
+    # Version tracking
+    version = Column(Integer, default=1, nullable=False)  # Rule version for evolution
+
     __table_args__ = (
         Index("idx_pillar_enabled", "pillar_type", "enabled"),
         Index("idx_severity", "severity"),
+        Index("idx_rules_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -270,8 +328,15 @@ class GovernanceDocument(BaseModel):
     processed_at = Column(DateTime, nullable=True)
     error_message = Column(Text, nullable=True)
 
+    # User association
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)  # Who uploaded
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track document processing
+
     __table_args__ = (
         Index("idx_doc_pillar_status", "pillar_type", "status"),
+        Index("idx_gov_docs_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:
@@ -310,11 +375,18 @@ class GovernanceDecision(BaseModel):
     action_type = Column(String(100), nullable=True)  # The action that triggered this decision
     target_resource = Column(String(255), nullable=True)  # Resource affected by the action
 
+    # User association
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)  # User who initiated
+
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track decision creation
+
     __table_args__ = (
         Index("idx_decision_status", "status"),
         Index("idx_decision_pillar", "pillar_type", "status"),
         Index("idx_decision_severity", "severity"),
         Index("idx_decision_approval", "approval_id"),
+        Index("idx_decisions_genesis", "genesis_key_id"),
     )
 
     def __repr__(self) -> str:

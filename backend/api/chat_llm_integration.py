@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 class ChatLLMIntegration:
-    logger = logging.getLogger(__name__)
     """
     Integrates full LLM orchestrator into chat system.
     

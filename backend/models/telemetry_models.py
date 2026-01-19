@@ -82,11 +82,15 @@ class OperationLog(BaseModel):
     input_hash = Column(String(64), nullable=True, index=True)  # SHA256 of inputs for replay
     operation_metadata = Column(JSON, nullable=True)  # Flexible storage for operation-specific data
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track operation execution
+
     # Indexing for performance
     __table_args__ = (
         Index('idx_operation_type_status', 'operation_type', 'status'),
         Index('idx_started_at', 'started_at'),
         Index('idx_duration', 'duration_ms'),
+        Index('idx_oplog_genesis', 'genesis_key_id'),
     )
 
     def __repr__(self):
@@ -129,9 +133,13 @@ class PerformanceBaseline(BaseModel):
     last_updated = Column(DateTime, nullable=False, default=datetime.utcnow)
     baseline_window_days = Column(Integer, nullable=False, default=7)  # Rolling window
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track baseline creation/update
+
     # Unique constraint on operation type + name
     __table_args__ = (
         Index('idx_operation_baseline', 'operation_type', 'operation_name', unique=True),
+        Index('idx_baseline_genesis', 'genesis_key_id'),
     )
 
     def __repr__(self):
@@ -170,9 +178,13 @@ class DriftAlert(BaseModel):
     # Metadata
     alert_metadata = Column(JSON, nullable=True)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track alert generation
+
     __table_args__ = (
         Index('idx_drift_severity', 'severity', 'resolved'),
         Index('idx_drift_type', 'drift_type'),
+        Index('idx_drift_genesis', 'genesis_key_id'),
     )
 
     def __repr__(self):
@@ -210,8 +222,12 @@ class OperationReplay(BaseModel):
     differences = Column(JSON, nullable=True)  # Detailed diff of outputs
     insights = Column(Text, nullable=True)  # Human or AI-generated insights
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track replay execution
+
     __table_args__ = (
         Index('idx_replay_original', 'original_run_id'),
+        Index('idx_replay_genesis', 'genesis_key_id'),
     )
 
     def __repr__(self):
@@ -260,8 +276,12 @@ class SystemState(BaseModel):
     # Extended metrics
     state_metadata = Column(JSON, nullable=True)
 
+    # Genesis Key tracking
+    genesis_key_id = Column(String(36), nullable=True, index=True)  # Track snapshot creation
+
     __table_args__ = (
         Index('idx_state_timestamp', 'created_at'),
+        Index('idx_state_genesis', 'genesis_key_id'),
     )
 
     def __repr__(self):

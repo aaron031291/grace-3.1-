@@ -1,13 +1,15 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, TYPE_CHECKING
 from datetime import datetime
 from layer1.message_bus import Layer1MessageBus, Message, ComponentType, MessageType, get_message_bus, AutonomousAction
+
+if TYPE_CHECKING:
+    from ml_intelligence.kpi_tracker import KPITracker
 
 logger = logging.getLogger(__name__)
 
 
 class KPIConnector:
-    logger = logging.getLogger(__name__)
     """
     Connector for KPI tracking system.
     
@@ -22,7 +24,7 @@ class KPIConnector:
     def __init__(
         self,
         message_bus: Optional[Layer1MessageBus] = None,
-        kpi_tracker: Optional[KPITracker] = None,
+        kpi_tracker: Optional["KPITracker"] = None,
     ):
         """
         Initialize KPI connector.
@@ -278,7 +280,7 @@ class KPIConnector:
 
 def create_kpi_connector(
     message_bus: Optional[Layer1MessageBus] = None,
-    kpi_tracker: Optional[KPITracker] = None,
+    kpi_tracker: Optional["KPITracker"] = None,
 ) -> KPIConnector:
     """
     Factory function to create KPI connector.
