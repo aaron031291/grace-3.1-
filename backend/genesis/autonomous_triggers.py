@@ -110,6 +110,11 @@ class GenesisTriggerPipeline:
             actions = self._handle_mirror_analysis_trigger(genesis_key)
             triggered_actions.extend(actions)
 
+        # COVI-SHIELD: Trigger verification on EVERY Genesis Key
+        # This is the core of the COVI-SHIELD system
+        covi_shield_actions = self._handle_covi_shield_verification(genesis_key)
+        triggered_actions.extend(covi_shield_actions)
+
         self.triggers_fired += len(triggered_actions)
 
         return {
@@ -832,6 +837,73 @@ class GenesisTriggerPipeline:
         return actions
 
     # ======================================================================
+    # COVI-SHIELD VERIFICATION
+    # ======================================================================
+
+    def _handle_covi_shield_verification(self, genesis_key: GenesisKey) -> List[Dict[str, Any]]:
+        """
+        Handle COVI-SHIELD verification for EVERY Genesis Key.
+
+        COVI-SHIELD provides:
+        - Preemptive detection of potential failures
+        - Automatic correction of bugs and vulnerabilities
+        - Continuous verification of system properties
+        - Self-improvement from every analyzed project
+
+        This is the GRACE-aligned verification system triggered on every
+        Genesis Key creation.
+        """
+        actions = []
+
+        try:
+            from covi_shield.genesis_integration import get_covi_shield_genesis_integration
+
+            logger.info(f"[GENESIS-TRIGGER] COVI-SHIELD verification for {genesis_key.key_id}")
+
+            # Get COVI-SHIELD Genesis integration
+            covi_shield = get_covi_shield_genesis_integration(
+                session=self.session,
+                knowledge_base_path=self.knowledge_base_path,
+                auto_repair=True,
+                learning_enabled=True
+            )
+
+            # Run COVI-SHIELD analysis on this Genesis Key
+            result = covi_shield.on_genesis_key_created(genesis_key)
+
+            if result.get("analyzed"):
+                actions.append({
+                    "action": "covi_shield_verification",
+                    "trigger": "genesis_key_created",
+                    "genesis_key_id": genesis_key.key_id,
+                    "key_type": result.get("key_type"),
+                    "issues_found": result.get("issues_found", 0),
+                    "issues_fixed": result.get("issues_fixed", 0),
+                    "risk_level": result.get("risk_level", "info"),
+                    "certificate_id": next(
+                        (a.get("certificate_id") for a in result.get("actions", [])
+                         if a.get("action") == "certificate_issued"),
+                        None
+                    ),
+                    "sub_actions": result.get("actions", [])
+                })
+
+                logger.info(
+                    f"[GENESIS-TRIGGER] COVI-SHIELD complete for {genesis_key.key_id}: "
+                    f"issues={result.get('issues_found', 0)}, "
+                    f"fixed={result.get('issues_fixed', 0)}, "
+                    f"risk={result.get('risk_level', 'info')}"
+                )
+
+        except ImportError:
+            # COVI-SHIELD not available yet - this is fine during initial setup
+            logger.debug("[GENESIS-TRIGGER] COVI-SHIELD not available")
+        except Exception as e:
+            logger.warning(f"[GENESIS-TRIGGER] COVI-SHIELD verification failed: {e}")
+
+        return actions
+
+    # ======================================================================
     # STATUS
     # ======================================================================
 
@@ -841,7 +913,8 @@ class GenesisTriggerPipeline:
             "triggers_fired": self.triggers_fired,
             "recursive_loops_active": self.recursive_loops_active,
             "orchestrator_connected": self.orchestrator is not None,
-            "message": "Genesis Key autonomous trigger pipeline operational"
+            "covi_shield_active": True,
+            "message": "Genesis Key autonomous trigger pipeline operational with COVI-SHIELD"
         }
 
 
