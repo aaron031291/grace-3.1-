@@ -479,10 +479,14 @@ class HealingScriptGenerator:
     
     def _generate_missing_directory_fix(self, issues: List[Dict[str, Any]]) -> List[str]:
         """Generate code to create missing directories."""
+        issue_entries = []
+        for i in issues:
+            dir_path = i.get('file_path', '') or i.get('directory_path', '')
+            issue_entries.append(f"        {{'directory': r'{dir_path}'}},")
         return [
             "    # Create missing directories",
             "    for issue in [",
-            *[f"        {{'directory': r'{i.get('file_path', '') or i.get(\"directory_path\", \"\")}'}}," for i in issues],
+            *issue_entries,
             "    ]:",
             "        dir_path = Path(issue['directory'])",
             "        if dir_path and not dir_path.exists():",

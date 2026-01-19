@@ -79,10 +79,6 @@ def fix_model_file(file_path: Path) -> bool:
                             # The real fix is in migration.py using extend_existing=True in create_all()
                             found_tablename = False
                             break
-                            else:
-                                # Already has __table_args__ as dict or other format
-                                found_tablename = False
-                                break
                     
                     j += 1
                 

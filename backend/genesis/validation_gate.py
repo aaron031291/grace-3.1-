@@ -3,9 +3,12 @@ from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, UTC
 from enum import Enum
 from models.genesis_key_models import GenesisKey, GenesisKeyType
-class ValidationError(Exception):
+
 # Module-level logger (removed duplicates)
 logger = logging.getLogger(__name__)
+
+
+class ValidationError(Exception):
     """Raised when Genesis key validation fails."""
     pass
 
