@@ -31,26 +31,35 @@ class TestLayer1UserInputIntegration:
             "input_type": "chat",
             "metadata": {"source": "integration_test"}
         })
-        
-        assert response.status_code in [200, 422, 500]
-        if response.status_code == 200:
-            data = response.json()
-            # Should include governance info if enabled
-            if "governance" in data:
-                assert "action" in data["governance"]
-                assert "trust_score" in data["governance"]
+
+        # Should succeed for valid input
+        assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+        data = response.json()
+
+        # Verify response structure
+        assert "success" in data or "status" in data or "genesis_key_id" in data
+
+        # Should include governance info if enabled
+        if "governance" in data:
+            assert "action" in data["governance"], "Governance must include action"
+            assert "trust_score" in data["governance"], "Governance must include trust_score"
+            # Human input should be trusted
+            assert data["governance"]["trust_score"] >= 0.7
 
     def test_user_input_different_types(self, client):
         """Test different input types are processed correctly."""
         input_types = ["chat", "command", "ui_interaction"]
-        
+
         for input_type in input_types:
             response = client.post("/layer1/user-input", json={
                 "user_input": f"Test {input_type} input",
                 "user_id": "test-user",
                 "input_type": input_type
             })
-            assert response.status_code in [200, 422, 500]
+            assert response.status_code == 200, f"Input type '{input_type}' failed: {response.text}"
+            data = response.json()
+            # Each type should be processed successfully
+            assert data is not None
 
     def test_user_input_with_metadata(self, client):
         """Test user input with rich metadata."""
@@ -64,17 +73,22 @@ class TestLayer1UserInputIntegration:
                 "selection": "def hello():"
             }
         })
-        assert response.status_code in [200, 422, 500]
+        assert response.status_code == 200, f"Metadata input failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_user_input_empty_rejected(self, client):
-        """Test empty user input is handled."""
+        """Test empty user input is properly rejected."""
         response = client.post("/layer1/user-input", json={
             "user_input": "",
             "user_id": "test-user",
             "input_type": "chat"
         })
-        # May be accepted or rejected depending on validation
-        assert response.status_code in [200, 422, 500]
+        # Empty input should be rejected with 422 or handled gracefully
+        assert response.status_code in [200, 422], f"Unexpected status: {response.status_code}"
+        if response.status_code == 422:
+            data = response.json()
+            assert "detail" in data or "error" in data
 
 
 # ==================== Layer 1 File Upload Integration Tests ====================
@@ -87,43 +101,49 @@ class TestLayer1FileUploadIntegration:
         """Test basic file upload through Layer 1."""
         # Create a simple test file content
         file_content = b"# Test Python File\nprint('hello')"
-        
+
         response = client.post(
             "/layer1/upload",
             files={"file": ("test.py", file_content, "text/x-python")},
             data={"user_id": "test-user"}
         )
-        
-        assert response.status_code in [200, 422, 500]
-        if response.status_code == 200:
-            data = response.json()
-            # May include governance info
-            if "governance" in data:
-                assert data["governance"]["trust_score"] >= 0
+
+        assert response.status_code == 200, f"File upload failed: {response.text}"
+        data = response.json()
+        assert data is not None
+
+        # Verify governance is applied
+        if "governance" in data:
+            assert data["governance"]["trust_score"] >= 0
+            assert data["governance"]["trust_score"] <= 1.0
 
     def test_file_upload_markdown(self, client):
         """Test markdown file upload."""
         file_content = b"# README\n\nThis is a test document."
-        
+
         response = client.post(
             "/layer1/upload",
             files={"file": ("README.md", file_content, "text/markdown")},
             data={"user_id": "test-user"}
         )
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Markdown upload failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_file_upload_json(self, client):
         """Test JSON file upload."""
         file_content = b'{"name": "test", "value": 42}'
-        
+
         response = client.post(
             "/layer1/upload",
             files={"file": ("config.json", file_content, "application/json")},
             data={"user_id": "test-user"}
         )
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"JSON upload failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 External API Integration Tests ====================
@@ -144,15 +164,16 @@ class TestLayer1ExternalAPIIntegration:
             },
             "user_id": "test-user"
         })
-        
-        assert response.status_code in [200, 422, 500]
-        if response.status_code == 200:
-            data = response.json()
-            # External API should have governance enforcement
-            if "governance" in data:
-                # External sources should not be 100% trusted
-                assert data["governance"]["trust_score"] < 1.0 or \
-                       data["governance"]["source_classification"] == "human_triggered"
+
+        assert response.status_code == 200, f"External API ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
+
+        # External API should have governance enforcement
+        if "governance" in data:
+            # External sources should not be 100% trusted
+            assert data["governance"]["trust_score"] < 1.0 or \
+                   data["governance"]["source_classification"] == "human_triggered"
 
     def test_external_api_without_user(self, client):
         """Test external API ingestion without user (autonomous)."""
@@ -165,8 +186,10 @@ class TestLayer1ExternalAPIIntegration:
             }
             # No user_id - autonomous
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Autonomous API ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_external_api_different_sources(self, client):
         """Test various external API sources."""
@@ -175,15 +198,17 @@ class TestLayer1ExternalAPIIntegration:
             ("GitHub", "/repos/owner/repo", {"stars": 100}),
             ("Monitoring", "/health", {"status": "ok"})
         ]
-        
-        for api_name, endpoint, data in apis:
+
+        for api_name, endpoint, api_data in apis:
             response = client.post("/layer1/external-api", json={
                 "api_name": api_name,
                 "api_endpoint": endpoint,
-                "api_data": data,
+                "api_data": api_data,
                 "user_id": "test-user"
             })
-            assert response.status_code in [200, 422, 500]
+            assert response.status_code == 200, f"API {api_name} ingestion failed: {response.text}"
+            data = response.json()
+            assert data is not None
 
 
 # ==================== Layer 1 Web Scraping Integration Tests ====================
@@ -203,8 +228,10 @@ class TestLayer1WebScrapingIntegration:
             },
             "user_id": "test-user"
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Web scraping failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_web_scraping_without_user(self, client):
         """Test autonomous web scraping."""
@@ -214,8 +241,10 @@ class TestLayer1WebScrapingIntegration:
             "parsed_data": {"content": "Python documentation"}
             # No user_id
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Autonomous web scraping failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 Memory/Learning Integration Tests ====================
@@ -234,8 +263,10 @@ class TestLayer1MemoryIntegration:
             },
             "user_id": "test-user"
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Memory mesh ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_learning_memory_ingestion(self, client):
         """Test learning memory data ingestion."""
@@ -247,8 +278,10 @@ class TestLayer1MemoryIntegration:
             },
             "user_id": "test-user"
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Learning memory ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 Whitelist Integration Tests ====================
@@ -267,8 +300,10 @@ class TestLayer1WhitelistIntegration:
             },
             "user_id": "admin-user"
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Whitelist ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 System Events Integration Tests ====================
@@ -287,8 +322,10 @@ class TestLayer1SystemEventsIntegration:
                 "traceback": "..."
             }
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Error event ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_system_event_telemetry(self, client):
         """Test telemetry event ingestion."""
@@ -300,8 +337,10 @@ class TestLayer1SystemEventsIntegration:
                 "unit": "seconds"
             }
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Telemetry event ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_system_event_log(self, client):
         """Test log event ingestion."""
@@ -312,8 +351,10 @@ class TestLayer1SystemEventsIntegration:
                 "message": "System started successfully"
             }
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        assert response.status_code == 200, f"Log event ingestion failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 Stats/Status Integration Tests ====================
@@ -325,17 +366,20 @@ class TestLayer1StatusIntegration:
     def test_get_layer1_stats(self, client):
         """Test getting Layer 1 statistics."""
         response = client.get("/layer1/stats")
-        
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert isinstance(data, dict)
+
+        assert response.status_code == 200, f"Stats endpoint failed: {response.text}"
+        data = response.json()
+        assert isinstance(data, dict)
+        # Verify stats structure
+        assert data is not None
 
     def test_verify_layer1_structure(self, client):
         """Test Layer 1 structure verification."""
         response = client.get("/layer1/verify")
-        
-        assert response.status_code in [200, 500]
+
+        assert response.status_code == 200, f"Verify endpoint failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 Cognitive Integration Tests ====================
@@ -347,23 +391,26 @@ class TestLayer1CognitiveIntegration:
     def test_cognitive_status(self, client):
         """Test cognitive integration status."""
         response = client.get("/layer1/cognitive/status")
-        
-        assert response.status_code in [200, 500]
-        if response.status_code == 200:
-            data = response.json()
-            assert isinstance(data, dict)
+
+        assert response.status_code == 200, f"Cognitive status failed: {response.text}"
+        data = response.json()
+        assert isinstance(data, dict)
 
     def test_cognitive_decisions(self, client):
         """Test getting cognitive decisions."""
         response = client.get("/layer1/cognitive/decisions")
-        
-        assert response.status_code in [200, 500]
+
+        assert response.status_code == 200, f"Cognitive decisions failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
     def test_cognitive_active(self, client):
         """Test getting active cognitive processes."""
         response = client.get("/layer1/cognitive/active")
-        
-        assert response.status_code in [200, 500]
+
+        assert response.status_code == 200, f"Cognitive active failed: {response.text}"
+        data = response.json()
+        assert data is not None
 
 
 # ==================== Layer 1 Full Pipeline Tests ====================
@@ -381,42 +428,39 @@ class TestLayer1FullPipeline:
             "input_type": "command",
             "metadata": {"test": "full_pipeline"}
         })
-        
-        assert response.status_code in [200, 422, 500]
-        
-        if response.status_code == 200:
-            data = response.json()
-            
-            # 2. Check governance was applied
-            if "governance" in data:
-                assert "action" in data["governance"]
-                assert "trust_score" in data["governance"]
-                # User input should be trusted
-                assert data["governance"]["trust_score"] == 1.0 or \
-                       data["governance"]["action"] == "allow"
-            
-            # 3. Check for Genesis Key
-            if "genesis_key_id" in data or "genesis_key" in data:
-                # Genesis tracking is working
-                pass
+
+        assert response.status_code == 200, f"Full pipeline failed: {response.text}"
+        data = response.json()
+        assert data is not None
+
+        # 2. Check governance was applied
+        if "governance" in data:
+            assert "action" in data["governance"], "Governance must have action"
+            assert "trust_score" in data["governance"], "Governance must have trust_score"
+            # User input should be trusted
+            assert data["governance"]["trust_score"] == 1.0 or \
+                   data["governance"]["action"] == "allow"
+
+        # 3. Check for Genesis Key (if tracking is enabled)
+        # Genesis tracking should work for user input
+        if "genesis_key_id" in data:
+            assert data["genesis_key_id"] is not None
 
     def test_full_pipeline_with_governance_block(self, client):
         """Test pipeline handles governance blocks."""
-        # This would require a malicious input that triggers block
-        # For now, just test the path exists
         response = client.post("/layer1/user-input", json={
             "user_input": "Normal user message",
             "user_id": "test-user",
             "input_type": "chat"
         })
-        
-        assert response.status_code in [200, 422, 500]
-        
-        if response.status_code == 200:
-            data = response.json()
-            # Should not be blocked for normal input
-            if "blocked" in data:
-                assert data.get("blocked") is not True
+
+        assert response.status_code == 200, f"Normal input should not fail: {response.text}"
+        data = response.json()
+        assert data is not None
+
+        # Should not be blocked for normal input
+        if "blocked" in data:
+            assert data.get("blocked") is not True, "Normal input should not be blocked"
 
 
 # ==================== Layer 1 + Layer 3 Integration Tests ====================
@@ -489,17 +533,20 @@ class TestLayer1ErrorHandling:
             "user_id": "test-user",
             "input_type": "invalid_type_xyz"
         })
-        
-        # Should handle gracefully
-        assert response.status_code in [200, 422, 500]
+
+        # Should handle gracefully - either accept with default type or reject
+        assert response.status_code in [200, 422], f"Invalid input type handling: {response.status_code}"
 
     def test_missing_required_fields(self, client):
         """Test handling of missing required fields."""
         response = client.post("/layer1/user-input", json={
             # Missing user_input and user_id
         })
-        
-        assert response.status_code in [422, 500]
+
+        # Should reject with 422 Unprocessable Entity
+        assert response.status_code == 422, f"Missing fields should return 422: {response.status_code}"
+        data = response.json()
+        assert "detail" in data or "error" in data
 
     def test_empty_api_data(self, client):
         """Test handling of empty API data."""
@@ -508,8 +555,9 @@ class TestLayer1ErrorHandling:
             "api_endpoint": "/test",
             "api_data": {}  # Empty
         })
-        
-        assert response.status_code in [200, 422, 500]
+
+        # Should handle empty data gracefully
+        assert response.status_code in [200, 422], f"Empty API data handling: {response.status_code}"
 
     def test_malformed_json(self, client):
         """Test handling of malformed data."""
@@ -518,8 +566,9 @@ class TestLayer1ErrorHandling:
             content="not json at all",
             headers={"Content-Type": "application/json"}
         )
-        
-        assert response.status_code in [422, 500]
+
+        # Should reject malformed JSON
+        assert response.status_code == 422, f"Malformed JSON should return 422: {response.status_code}"
 
 
 # ==================== Layer 1 Performance Tests ====================
@@ -530,13 +579,18 @@ class TestLayer1Performance:
 
     def test_multiple_user_inputs(self, client):
         """Test processing multiple user inputs."""
+        success_count = 0
         for i in range(5):
             response = client.post("/layer1/user-input", json={
                 "user_input": f"Test message {i}",
                 "user_id": "perf-test-user",
                 "input_type": "chat"
             })
-            assert response.status_code in [200, 422, 500]
+            if response.status_code == 200:
+                success_count += 1
+
+        # All inputs should succeed
+        assert success_count == 5, f"Only {success_count}/5 requests succeeded"
 
     def test_concurrent_inputs(self, client):
         """Test handling concurrent inputs (sequential for now)."""
@@ -548,6 +602,6 @@ class TestLayer1Performance:
                 "input_type": "chat"
             })
             responses.append(response.status_code)
-        
-        # All should complete
-        assert all(code in [200, 422, 500] for code in responses)
+
+        # All should complete successfully
+        assert all(code == 200 for code in responses), f"Not all requests succeeded: {responses}"
