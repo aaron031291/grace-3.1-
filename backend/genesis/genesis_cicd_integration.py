@@ -23,6 +23,17 @@ try:
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
+
+# COVI-SHIELD integration for pre-pipeline verification
+try:
+    from covi_shield.cicd_integration import (
+        get_covi_shield_cicd_integration,
+        PipelineGateDecision
+    )
+    COVI_SHIELD_AVAILABLE = True
+except ImportError:
+    COVI_SHIELD_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 class GenesisCICDIntegration:
@@ -50,6 +61,18 @@ class GenesisCICDIntegration:
         self.test_generator = get_proactive_test_generator()
         self.intent_analyzer = get_semantic_intent_analyzer()
         self.integrations_count = 0
+
+        # Initialize COVI-SHIELD for pre-pipeline verification
+        self._covi_shield = None
+        if COVI_SHIELD_AVAILABLE:
+            try:
+                self._covi_shield = get_covi_shield_cicd_integration(
+                    strict_mode=False,
+                    auto_fix=True
+                )
+                logger.info("[GenesisCICD] COVI-SHIELD verification enabled")
+            except Exception as e:
+                logger.warning(f"[GenesisCICD] COVI-SHIELD not available: {e}")
 
     def on_code_change_genesis_key(
         self,
@@ -270,16 +293,23 @@ class GenesisCICDIntegration:
         self,
         pipeline_name: str,
         branch: str = "main",
-        parameters: Dict[str, Any] = None
+        parameters: Dict[str, Any] = None,
+        code_changes: List[Dict[str, Any]] = None,
+        skip_covi_shield: bool = False
     ) -> Dict[str, Any]:
         """
         Trigger a CI/CD pipeline across multiple providers.
-        
+
+        COVI-SHIELD Integration:
+        - Verifies code before pipeline execution
+        - Blocks pipelines with CRITICAL risk
+        - Auto-fixes issues when possible
+
         Supports:
         - GitHub Actions (via workflow_dispatch)
         - GitLab CI (via pipeline triggers)
         - Jenkins (via build triggers)
-        
+
         Configuration via environment variables:
         - GRACE_CICD_PROVIDER: 'github', 'gitlab', or 'jenkins'
         - GRACE_GITHUB_TOKEN: GitHub personal access token
@@ -291,15 +321,60 @@ class GenesisCICDIntegration:
         - GRACE_JENKINS_URL: Jenkins server URL
         - GRACE_JENKINS_USER: Jenkins username
         - GRACE_JENKINS_TOKEN: Jenkins API token
-        
+
         Args:
             pipeline_name: Name/ID of the pipeline/workflow to trigger
             branch: Branch to run the pipeline on (default: main)
             parameters: Additional parameters to pass to the pipeline
-            
+            code_changes: Optional list of code changes to verify
+            skip_covi_shield: Skip COVI-SHIELD verification (not recommended)
+
         Returns:
-            Dict with keys: triggered, run_id, url, error
+            Dict with keys: triggered, run_id, url, error, covi_shield_result
         """
+        import uuid
+        run_id = str(uuid.uuid4())[:8]
+
+        # COVI-SHIELD Pre-Pipeline Verification
+        covi_shield_result = None
+        if self._covi_shield and code_changes and not skip_covi_shield:
+            logger.info(
+                f"[GenesisCICD] Running COVI-SHIELD verification before pipeline {pipeline_name}"
+            )
+            try:
+                covi_shield_result = self._covi_shield.verify_before_pipeline(
+                    pipeline_id=pipeline_name,
+                    run_id=run_id,
+                    code_changes=code_changes,
+                    pipeline_type="build"
+                )
+
+                # Block on CRITICAL or if explicitly blocked
+                if covi_shield_result.decision == PipelineGateDecision.BLOCK:
+                    logger.warning(
+                        f"[GenesisCICD] COVI-SHIELD blocked pipeline {pipeline_name}: "
+                        f"{covi_shield_result.risk_level.value} risk"
+                    )
+                    return {
+                        "triggered": False,
+                        "run_id": run_id,
+                        "url": None,
+                        "error": f"COVI-SHIELD blocked: {covi_shield_result.risk_level.value} risk detected",
+                        "covi_shield_result": covi_shield_result.to_dict(),
+                        "recommendations": covi_shield_result.recommendations
+                    }
+
+                logger.info(
+                    f"[GenesisCICD] COVI-SHIELD approved pipeline: "
+                    f"decision={covi_shield_result.decision.value}, "
+                    f"issues={covi_shield_result.issues_found}, "
+                    f"fixed={covi_shield_result.issues_fixed}"
+                )
+
+            except Exception as e:
+                logger.warning(f"[GenesisCICD] COVI-SHIELD verification failed: {e}")
+                # Continue with warning, don't block on verification failure
+
         provider = os.environ.get("GRACE_CICD_PROVIDER", "").lower()
         
         if not provider:

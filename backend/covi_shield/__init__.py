@@ -35,6 +35,14 @@ from .repair_engine import RepairEngine
 from .learning_module import LearningModule
 from .certificate_authority import CertificateAuthority
 from .genesis_integration import COVIShieldGenesisIntegration
+from .cicd_integration import (
+    COVIShieldCICDIntegration,
+    get_covi_shield_cicd_integration,
+    create_covi_shield_pipeline_hook,
+    covi_shield_verified,
+    PipelineGateDecision,
+    PipelineVerificationResult
+)
 from .knowledge_base import (
     COVIShieldKnowledgeBase,
     get_covi_shield_knowledge_base,
@@ -75,8 +83,15 @@ __all__ = [
     "RepairEngine",
     "LearningModule",
     "CertificateAuthority",
-    # Integration
+    # Genesis Integration
     "COVIShieldGenesisIntegration",
+    # CI/CD Integration
+    "COVIShieldCICDIntegration",
+    "get_covi_shield_cicd_integration",
+    "create_covi_shield_pipeline_hook",
+    "covi_shield_verified",
+    "PipelineGateDecision",
+    "PipelineVerificationResult",
     # Knowledge Base
     "COVIShieldKnowledgeBase",
     "get_covi_shield_knowledge_base",
