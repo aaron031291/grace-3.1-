@@ -1602,6 +1602,204 @@ class TestDecisionLogging:
 
 
 # ======================================================================
+# Notification System Tests
+# ======================================================================
+
+class TestNotificationSystem:
+    """Tests for webhook, email, and Slack notification features."""
+
+    @pytest.fixture
+    def router_with_notifications(self, temp_log_dir):
+        """Create router with all notification channels configured."""
+        alert_config = AlertConfig(
+            webhook_url="https://example.com/webhook",
+            email_recipients=["admin@example.com", "ops@example.com"],
+            slack_channel="#alerts"
+        )
+        return ActionRouter(
+            log_dir=temp_log_dir,
+            alert_config=alert_config,
+            enable_healing=False
+        )
+
+    def test_webhook_notification_success(self, router_with_notifications):
+        """Test successful webhook notification."""
+        alert_payload = {
+            'alert_id': 'ALERT-0001',
+            'severity': 'critical',
+            'reason': 'Test alert',
+            'timestamp': datetime.utcnow().isoformat()
+        }
+
+        with patch('urllib.request.urlopen') as mock_urlopen:
+            mock_response = MagicMock()
+            mock_response.getcode.return_value = 200
+            mock_response.read.return_value = b'{"ok": true}'
+            mock_response.__enter__ = MagicMock(return_value=mock_response)
+            mock_response.__exit__ = MagicMock(return_value=False)
+            mock_urlopen.return_value = mock_response
+
+            result = router_with_notifications._send_webhook_notification(alert_payload)
+
+            assert result['success'] == True
+            assert result['status_code'] == 200
+            mock_urlopen.assert_called_once()
+
+    def test_webhook_notification_failure(self, router_with_notifications):
+        """Test webhook notification handles failure gracefully."""
+        import urllib.error
+
+        alert_payload = {'alert_id': 'ALERT-0001', 'severity': 'warning'}
+
+        with patch('urllib.request.urlopen') as mock_urlopen:
+            mock_urlopen.side_effect = urllib.error.URLError('Connection refused')
+
+            result = router_with_notifications._send_webhook_notification(alert_payload)
+
+            assert result['success'] == False
+            assert 'error' in result
+
+    def test_email_notification_success(self, router_with_notifications):
+        """Test successful email notification."""
+        alert_payload = {
+            'alert_id': 'ALERT-0002',
+            'severity': 'warning',
+            'reason': 'Test email alert',
+            'timestamp': datetime.utcnow().isoformat(),
+            'health_status': 'degraded',
+            'health_score': 0.65,
+            'critical_components': [],
+            'degraded_components': ['api_server'],
+            'avn_alerts': 1,
+            'risk_vectors': 2
+        }
+
+        with patch('smtplib.SMTP') as mock_smtp:
+            mock_server = MagicMock()
+            mock_smtp.return_value.__enter__ = MagicMock(return_value=mock_server)
+            mock_smtp.return_value.__exit__ = MagicMock(return_value=False)
+
+            result = router_with_notifications._send_email_notification(alert_payload)
+
+            assert result['success'] == True
+            assert result['recipients'] == ['admin@example.com', 'ops@example.com']
+            assert '[GRACE WARNING]' in result['subject']
+            mock_server.sendmail.assert_called_once()
+
+    def test_email_notification_failure(self, router_with_notifications):
+        """Test email notification handles SMTP failure gracefully."""
+        alert_payload = {'alert_id': 'ALERT-0003', 'severity': 'critical'}
+
+        with patch('smtplib.SMTP') as mock_smtp:
+            mock_smtp.side_effect = Exception('SMTP connection failed')
+
+            result = router_with_notifications._send_email_notification(alert_payload)
+
+            assert result['success'] == False
+            assert 'error' in result
+
+    def test_slack_notification_success(self, router_with_notifications):
+        """Test successful Slack notification."""
+        alert_payload = {
+            'alert_id': 'ALERT-0004',
+            'severity': 'critical',
+            'reason': 'Critical system failure',
+            'timestamp': datetime.utcnow().isoformat(),
+            'health_status': 'critical',
+            'health_score': 0.25,
+            'critical_components': ['database', 'cache'],
+            'degraded_components': ['api_server']
+        }
+
+        with patch.dict('os.environ', {'SLACK_WEBHOOK_URL': 'https://hooks.slack.com/test'}):
+            with patch('urllib.request.urlopen') as mock_urlopen:
+                mock_response = MagicMock()
+                mock_response.getcode.return_value = 200
+                mock_response.__enter__ = MagicMock(return_value=mock_response)
+                mock_response.__exit__ = MagicMock(return_value=False)
+                mock_urlopen.return_value = mock_response
+
+                result = router_with_notifications._send_slack_notification(alert_payload)
+
+                assert result['success'] == True
+                assert result['channel'] == '#alerts'
+                mock_urlopen.assert_called_once()
+
+    def test_slack_notification_missing_webhook(self, router_with_notifications):
+        """Test Slack notification fails gracefully when webhook not configured."""
+        alert_payload = {'alert_id': 'ALERT-0005', 'severity': 'warning'}
+
+        with patch.dict('os.environ', {}, clear=True):
+            # Remove SLACK_WEBHOOK_URL if it exists
+            import os
+            os.environ.pop('SLACK_WEBHOOK_URL', None)
+
+            result = router_with_notifications._send_slack_notification(alert_payload)
+
+            assert result['success'] == False
+            assert 'not configured' in result['error']
+
+    def test_alert_sends_all_notifications(self, router_with_notifications, sample_judgement_critical):
+        """Test that alert execution sends to all configured channels."""
+        decision = ActionDecision(
+            decision_id="DEC-001",
+            action_type=ActionType.ALERT_HUMAN,
+            priority=ActionPriority.HIGH,
+            confidence=0.9,
+            reason="Test multi-channel alert",
+            target_components=["test"]
+        )
+
+        with patch.object(router_with_notifications, '_send_webhook_notification') as mock_webhook, \
+             patch.object(router_with_notifications, '_send_email_notification') as mock_email, \
+             patch.object(router_with_notifications, '_send_slack_notification') as mock_slack:
+
+            mock_webhook.return_value = {'success': True, 'status_code': 200}
+            mock_email.return_value = {'success': True, 'recipients': ['admin@example.com']}
+            mock_slack.return_value = {'success': True, 'channel': '#alerts'}
+
+            result = router_with_notifications._execute_alert(decision, sample_judgement_critical)
+
+            assert result.status == ActionStatus.COMPLETED
+            mock_webhook.assert_called_once()
+            mock_email.assert_called_once()
+            mock_slack.assert_called_once()
+
+            # Check notification results are included
+            assert 'notification_results' in result.details
+            assert len(result.details['notification_results']) == 3
+
+    def test_alert_continues_if_one_notification_fails(self, router_with_notifications, sample_judgement_critical):
+        """Test that alert continues even if one notification channel fails."""
+        decision = ActionDecision(
+            decision_id="DEC-002",
+            action_type=ActionType.ALERT_HUMAN,
+            priority=ActionPriority.HIGH,
+            confidence=0.85,
+            reason="Partial notification failure test",
+            target_components=["test"]
+        )
+
+        with patch.object(router_with_notifications, '_send_webhook_notification') as mock_webhook, \
+             patch.object(router_with_notifications, '_send_email_notification') as mock_email, \
+             patch.object(router_with_notifications, '_send_slack_notification') as mock_slack:
+
+            mock_webhook.return_value = {'success': False, 'error': 'Connection timeout'}
+            mock_email.return_value = {'success': True, 'recipients': ['admin@example.com']}
+            mock_slack.return_value = {'success': True, 'channel': '#alerts'}
+
+            result = router_with_notifications._execute_alert(decision, sample_judgement_critical)
+
+            # Alert should still complete even with partial notification failure
+            assert result.status == ActionStatus.COMPLETED
+
+            # All channels should have been attempted
+            mock_webhook.assert_called_once()
+            mock_email.assert_called_once()
+            mock_slack.assert_called_once()
+
+
+# ======================================================================
 # Run Tests
 # ======================================================================
 

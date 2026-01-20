@@ -549,7 +549,8 @@ class AutonomousSandboxLab:
 
         logger.info(f"[SANDBOX_LAB] Experiment {experiment_id} promoted to PRODUCTION!")
         logger.info(f"[SANDBOX_LAB] Final trust score: {exp.current_trust_score:.2f}")
-        logger.info(f"[SANDBOX_LAB] Improvement: {exp.improvement_percentage:.1f}%")
+        improvement_str = f"{exp.improvement_percentage:.1f}%" if exp.improvement_percentage is not None else "N/A"
+        logger.info(f"[SANDBOX_LAB] Improvement: {improvement_str}")
 
         return True
 

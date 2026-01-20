@@ -189,10 +189,11 @@ class ThreadStudySubagent(BaseThreadSubagent):
     """
 
     def _initialize(self):
-        """Initialize database and retriever."""
+        """Initialize database, retriever, and active learning system."""
         from database.session import get_session_factory
         from embedding import get_embedding_model
         from retrieval.retriever import DocumentRetriever
+        from cognitive.active_learning_system import GraceActiveLearningSystem
 
         self.session_factory = get_session_factory()
         self.embedding_model = get_embedding_model()
@@ -201,7 +202,19 @@ class ThreadStudySubagent(BaseThreadSubagent):
             embedding_model=self.embedding_model
         )
 
+        # Initialize the active learning system
+        self._learning_system = None  # Lazy initialization per session
+
         logger.info(f"[{self.agent_id}] Study subagent initialized")
+
+    def _get_learning_system(self, session):
+        """Get or create learning system instance."""
+        from cognitive.active_learning_system import GraceActiveLearningSystem
+        return GraceActiveLearningSystem(
+            session=session,
+            retriever=self.retriever,
+            knowledge_base_path=self.knowledge_base_path
+        )
 
     def _process_task(self, task: LearningTask):
         """Process study task."""
@@ -219,31 +232,53 @@ class ThreadStudySubagent(BaseThreadSubagent):
             session = self.session_factory()
 
             try:
+                # Get active learning system
+                learning_system = self._get_learning_system(session)
+
                 # Extract concepts from topic/file
                 if task.file_path:
-                    # Study from file
-                    concepts = self._study_file(session, task.file_path, task.learning_objectives)
+                    # Study from file - extract topic from file path
+                    file_topic = Path(task.file_path).stem.replace('_', ' ').replace('-', ' ')
+                    result = learning_system.study_topic(
+                        topic=file_topic,
+                        learning_objectives=task.learning_objectives or [f"Learn from {task.file_path}"],
+                        max_materials=10
+                    )
                 elif task.topic:
-                    # Study topic
-                    concepts = self._study_topic(session, task.topic, task.learning_objectives)
+                    # Study topic using active learning system
+                    result = learning_system.study_topic(
+                        topic=task.topic,
+                        learning_objectives=task.learning_objectives or [f"Learn about {task.topic}"],
+                        max_materials=10
+                    )
                 else:
                     raise ValueError("Task must have file_path or topic")
 
                 task.status = "completed"
                 task.completed_at = time.time()
                 task.result = {
-                    "concepts_extracted": len(concepts),
-                    "concepts": concepts[:10]  # First 10 for logging
+                    "concepts_extracted": result.get("concepts_learned", 0),
+                    "materials_studied": result.get("materials_studied", 0),
+                    "focus_areas": result.get("focus_areas", []),
+                    "examples_stored": result.get("examples_stored", 0),
+                    "prefetched_topics": result.get("prefetched_topics", [])
                 }
 
                 with self._lock:
                     self.tasks_processed += 1
+
+                logger.info(
+                    f"[{self.agent_id}] Study completed: {result.get('concepts_learned', 0)} concepts, "
+                    f"{result.get('examples_stored', 0)} examples stored"
+                )
 
             finally:
                 session.close()
 
         except Exception as e:
             logger.error(f"[{self.agent_id}] Task failed: {e}")
+            import traceback
+            traceback.print_exc()
             task.status = "failed"
             task.error = str(e)
             task.completed_at = time.time()
@@ -252,16 +287,6 @@ class ThreadStudySubagent(BaseThreadSubagent):
 
         finally:
             self._send_result(task)
-
-    def _study_file(self, session, file_path: str, learning_objectives: List[str]) -> List[Dict[str, Any]]:
-        """Study concepts from file."""
-        # Simplified - would integrate with actual study system
-        return [{"concept": "example", "trust": 0.8}]
-
-    def _study_topic(self, session, topic: str, learning_objectives: List[str]) -> List[Dict[str, Any]]:
-        """Study concepts for topic."""
-        # Simplified - would integrate with actual study system
-        return [{"concept": topic, "trust": 0.8}]
 
 
 # ======================================================================
@@ -279,17 +304,28 @@ class ThreadPracticeSubagent(BaseThreadSubagent):
     """
 
     def _initialize(self):
-        """Initialize database and learning system."""
+        """Initialize database, retriever, and learning system."""
         from database.session import get_session_factory
-        from cognitive.active_learning_system import GraceActiveLearningSystem
+        from embedding import get_embedding_model
+        from retrieval.retriever import DocumentRetriever
 
         self.session_factory = get_session_factory()
-        self.learning_system = GraceActiveLearningSystem(
-            session=self.session_factory(),
-            knowledge_base_path=str(self.knowledge_base_path)
+        self.embedding_model = get_embedding_model()
+        self.retriever = DocumentRetriever(
+            collection_name="documents",
+            embedding_model=self.embedding_model
         )
 
         logger.info(f"[{self.agent_id}] Practice subagent initialized")
+
+    def _get_learning_system(self, session):
+        """Get or create learning system instance."""
+        from cognitive.active_learning_system import GraceActiveLearningSystem
+        return GraceActiveLearningSystem(
+            session=session,
+            retriever=self.retriever,
+            knowledge_base_path=self.knowledge_base_path
+        )
 
     def _process_task(self, task: LearningTask):
         """Process practice task."""
@@ -303,25 +339,51 @@ class ThreadPracticeSubagent(BaseThreadSubagent):
 
             logger.info(f"[{self.agent_id}] Processing practice task: {task.skill_name}")
 
-            # Practice skill
-            outcome = self._practice_skill(
-                task.skill_name,
-                task.task_description,
-                task.complexity
-            )
+            # Get session
+            session = self.session_factory()
 
-            task.status = "completed"
-            task.completed_at = time.time()
-            task.result = {
-                "outcome": outcome,
-                "success": outcome.get("success", False)
-            }
+            try:
+                # Get learning system
+                learning_system = self._get_learning_system(session)
 
-            with self._lock:
-                self.tasks_processed += 1
+                # Create task dict for practice
+                practice_task = {
+                    "description": task.task_description or f"Practice {task.skill_name}",
+                    "complexity": task.complexity or 0.5,
+                    "requirements": []
+                }
+
+                # Practice skill using active learning system
+                result = learning_system.practice_skill(
+                    skill_name=task.skill_name or "general",
+                    task=practice_task,
+                    sandbox_context={}
+                )
+
+                task.status = "completed"
+                task.completed_at = time.time()
+                task.result = {
+                    "outcome": result.get("outcome", {}),
+                    "success": result.get("success", False),
+                    "approach": result.get("approach", {}),
+                    "feedback": result.get("feedback", "")
+                }
+
+                with self._lock:
+                    self.tasks_processed += 1
+
+                logger.info(
+                    f"[{self.agent_id}] Practice completed: "
+                    f"{'SUCCESS' if result.get('success') else 'NEEDS_WORK'}"
+                )
+
+            finally:
+                session.close()
 
         except Exception as e:
             logger.error(f"[{self.agent_id}] Task failed: {e}")
+            import traceback
+            traceback.print_exc()
             task.status = "failed"
             task.error = str(e)
             task.completed_at = time.time()
@@ -330,11 +392,6 @@ class ThreadPracticeSubagent(BaseThreadSubagent):
 
         finally:
             self._send_result(task)
-
-    def _practice_skill(self, skill_name: str, task_description: str, complexity: float) -> Dict[str, Any]:
-        """Practice a skill."""
-        # Simplified - would integrate with actual practice system
-        return {"success": True, "confidence": 0.8}
 
 
 # ======================================================================
@@ -356,6 +413,7 @@ class ThreadMirrorSubagent(BaseThreadSubagent):
         from database.session import get_session_factory
         from cognitive.mirror_self_modeling import get_mirror_system
 
+        self.session_factory = get_session_factory()
         session = self.session_factory()
         self.mirror_system = get_mirror_system(session)
 
@@ -369,8 +427,17 @@ class ThreadMirrorSubagent(BaseThreadSubagent):
 
             logger.info(f"[{self.agent_id}] Processing reflection task")
 
-            # Analyze patterns
-            analysis = self.mirror_system.analyze_learning_patterns()
+            # Build self-model which includes patterns and suggestions
+            self_model = self.mirror_system.build_self_model()
+
+            # Extract patterns and improvement suggestions
+            analysis = {
+                "behavioral_patterns": self_model.get("behavioral_patterns", {}),
+                "learning_progress": self_model.get("learning_progress", {}),
+                "improvement_suggestions": self_model.get("improvement_suggestions", []),
+                "self_awareness_score": self_model.get("self_awareness_score", 0.0),
+                "operations_observed": self_model.get("operations_observed", 0)
+            }
 
             task.status = "completed"
             task.completed_at = time.time()
