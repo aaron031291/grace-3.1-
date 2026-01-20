@@ -65,8 +65,35 @@ def get_session() -> Generator[Session, None, None]:
 def get_db() -> Generator[Session, None, None]:
     """
     Alternative alias for get_session().
-    
+
     Yields:
         Session: SQLAlchemy session instance
     """
     yield from get_session()
+
+
+def get_session_factory() -> sessionmaker:
+    """
+    Get the session factory for creating sessions directly.
+
+    Useful for background tasks and thread-based operations
+    that need to manage their own session lifecycle.
+
+    Returns:
+        sessionmaker: Session factory that can be called to create sessions
+
+    Example:
+        session_factory = get_session_factory()
+        session = session_factory()
+        try:
+            # do work
+            session.commit()
+        finally:
+            session.close()
+    """
+    global SessionLocal
+
+    if SessionLocal is None:
+        initialize_session_factory()
+
+    return SessionLocal
