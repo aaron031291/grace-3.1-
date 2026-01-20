@@ -309,7 +309,15 @@ class Layer1Integration:
         logger.info(f"Layer 1: Processing web scraping from {url}")
 
         # Save scraping data to Layer 1 web_scraping folder
-        domain = url.split("//")[1].split("/")[0].replace(".", "_")
+        # Safely extract domain from URL
+        try:
+            if "://" in url:
+                domain_part = url.split("://")[1]
+                domain = domain_part.split("/")[0].replace(".", "_")
+            else:
+                domain = url.split("/")[0].replace(".", "_") if "/" in url else url.replace(".", "_")
+        except (IndexError, AttributeError):
+            domain = "unknown_domain"
         scraping_path = os.path.join(
             self.layer1_base,
             "web_scraping",
