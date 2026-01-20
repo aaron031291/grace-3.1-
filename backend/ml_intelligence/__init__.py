@@ -76,6 +76,12 @@ try:
         RuleStorage,
         get_rule_storage
     )
+    from .kpi_tracker import (
+        KPITracker,
+        KPI,
+        ComponentKPIs,
+        get_kpi_tracker
+    )
     ML_INTELLIGENCE_AVAILABLE = True
 except ImportError as e:
     import logging
@@ -120,6 +126,10 @@ except ImportError as e:
     get_neuro_symbolic_reasoner = None
     RuleStorage = None
     get_rule_storage = None
+    KPITracker = None
+    KPI = None
+    ComponentKPIs = None
+    get_kpi_tracker = None
 
 __all__ = [
     # Neural Trust Scorer
