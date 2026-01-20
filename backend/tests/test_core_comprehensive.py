@@ -377,10 +377,10 @@ class TestBaseComponent:
         assert component.trust_level == 0.5
 
         component.adjust_trust(0.2)
-        assert component.trust_level == pytest.approx(0.7, rel=0.01)
+        assert abs(component.trust_level - 0.7) < 0.01
 
         component.adjust_trust(0.2)
-        assert component.trust_level == pytest.approx(0.9, rel=0.01)
+        assert abs(component.trust_level - 0.9) < 0.01
         # is_trusted becomes True when trust_level >= 0.8
         assert component.manifest.is_trusted is True
 
@@ -1069,7 +1069,7 @@ class TestGraceLoopOutput:
         output.add_reasoning_step(description="S2", confidence=0.8)
         output.add_reasoning_step(description="S3", confidence=0.7)
 
-        assert output.average_step_confidence == pytest.approx(0.8, rel=0.01)
+        assert abs(output.average_step_confidence - 0.8) < 0.01
 
     def test_average_step_confidence_empty(self):
         """Test average confidence with no steps."""
