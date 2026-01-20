@@ -252,13 +252,13 @@ Present your argument or response (keep it concise, 2-3 paragraphs):"""
                     temperature=0.7
                 )
 
-                if response["success"]:
+                if response.get("success") and "content" in response:
                     # Record message
                     message = CollaborationMessage(
                         message_id=f"msg_{uuid.uuid4().hex[:8]}",
                         from_agent_id=agent.agent_id,
                         to_agent_id=None,  # Broadcast
-                        content=response["content"],
+                        content=response.get("content", ""),
                         message_type="argument",
                         timestamp=datetime.now(),
                         metadata={
@@ -351,8 +351,8 @@ Respond with ONLY the position name: {' or '.join(positions)}"""
             temperature=0.3  # Low temperature for objective judgment
         )
 
-        if response["success"]:
-            vote = response["content"].strip().lower()
+        if response.get("success") and "content" in response:
+            vote = response.get("content", "").strip().lower()
             for position in positions:
                 if position.lower() in vote:
                     vote_counts[position] += 1
@@ -734,7 +734,7 @@ Synthesize the specialist outputs into a coherent final result:"""
                 system_prompt=coordinator.system_prompt
             )
 
-            final_output = synthesis_response["content"] if synthesis_response["success"] else specialist_outputs[0]["output"]
+            final_output = synthesis_response.get("content", specialist_outputs[0]["output"]) if synthesis_response.get("success") else specialist_outputs[0]["output"]
         else:
             final_output = specialist_outputs[0]["output"]
 

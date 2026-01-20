@@ -865,8 +865,9 @@ async def list_chat_folders(session = Depends(get_session)):
             chat_count = row.chat_count if hasattr(row, 'chat_count') else row[1]
             last_updated = row.last_updated if hasattr(row, 'last_updated') else row[2]
 
-            # Extract folder name from path
-            folder_name = folder_path.split('/')[-1] or folder_path.split('\\')[-1] or folder_path
+            # Extract folder name from path safely
+            parts = folder_path.split('/') if '/' in folder_path else folder_path.split('\\')
+            folder_name = parts[-1] if parts and parts[-1] else folder_path
 
             folders.append({
                 "path": folder_path,

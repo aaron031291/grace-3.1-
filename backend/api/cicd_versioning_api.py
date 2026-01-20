@@ -251,7 +251,10 @@ async def export_version_history(pipeline_id: str, format: str = "json"):
         }
 
     import json
-    return json.loads(export)
+    try:
+        return json.loads(export)
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail=f"Invalid JSON in version history: {str(e)}")
 
 
 # =============================================================================
