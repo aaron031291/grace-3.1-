@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
+import { API_BASE_URL, API_ENDPOINTS } from "./config/api";
 import ChatTab from "./components/ChatTab";
 import RAGTab from "./components/RAGTab";
 import MonitoringTab from "./components/MonitoringTab";
@@ -39,7 +40,7 @@ function App() {
 
   const checkHealth = async () => {
     try {
-      const response = await fetch("http://localhost:8000/health");
+      const response = await fetch(API_ENDPOINTS.health);
       const data = await response.json();
       setApiHealth(data);
     } catch (error) {
@@ -53,7 +54,7 @@ function App() {
     setIsVoiceProcessing(true);
     try {
       // Send voice message to Grace's chat API
-      const response = await fetch("http://localhost:8000/chat", {
+      const response = await fetch(API_ENDPOINTS.chat, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
