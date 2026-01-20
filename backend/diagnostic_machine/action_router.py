@@ -1001,9 +1001,25 @@ class ActionRouter:
 
             logger.warning(f"ALERT: {decision.reason}")
 
-            # TODO: Send to webhook if configured
-            # TODO: Send email if configured
-            # TODO: Post to Slack if configured
+            # Send to external notification channels
+            notification_results = []
+
+            # Send to webhook if configured
+            if self.alert_config.webhook_url:
+                webhook_result = self._send_webhook_notification(alert_payload)
+                notification_results.append(('webhook', webhook_result))
+
+            # Send email if configured
+            if self.alert_config.email_recipients:
+                email_result = self._send_email_notification(alert_payload)
+                notification_results.append(('email', email_result))
+
+            # Post to Slack if configured
+            if self.alert_config.slack_channel:
+                slack_result = self._send_slack_notification(alert_payload)
+                notification_results.append(('slack', slack_result))
+
+            alert_payload['notification_results'] = notification_results
 
             end_time = datetime.utcnow()
             return ActionResult(
@@ -1022,6 +1038,224 @@ class ActionRouter:
                 status=ActionStatus.FAILED,
                 message=f"Alert failed: {str(e)}",
             )
+
+    def _send_webhook_notification(self, alert_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Send notification to configured webhook URL.
+
+        Args:
+            alert_payload: Alert data to send
+
+        Returns:
+            Dict with success status and any response data
+        """
+        try:
+            import urllib.request
+            import urllib.error
+
+            url = self.alert_config.webhook_url
+            data = json.dumps(alert_payload).encode('utf-8')
+            headers = {
+                'Content-Type': 'application/json',
+                'User-Agent': 'GRACE-ActionRouter/1.0'
+            }
+
+            request = urllib.request.Request(url, data=data, headers=headers, method='POST')
+
+            with urllib.request.urlopen(request, timeout=10) as response:
+                status_code = response.getcode()
+                response_text = response.read().decode('utf-8')
+                logger.info(f"[LAYER4] Webhook notification sent: {status_code}")
+                return {
+                    'success': True,
+                    'status_code': status_code,
+                    'response': response_text[:500]  # Truncate for logging
+                }
+
+        except urllib.error.URLError as e:
+            logger.error(f"[LAYER4] Webhook notification failed: {e}")
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            logger.error(f"[LAYER4] Webhook notification error: {e}")
+            return {'success': False, 'error': str(e)}
+
+    def _send_email_notification(self, alert_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Send email notification to configured recipients.
+
+        Args:
+            alert_payload: Alert data to include in email
+
+        Returns:
+            Dict with success status and delivery info
+        """
+        try:
+            import smtplib
+            from email.mime.text import MIMEText
+            from email.mime.multipart import MIMEMultipart
+
+            # Get email configuration from environment
+            smtp_host = os.environ.get('SMTP_HOST', 'localhost')
+            smtp_port = int(os.environ.get('SMTP_PORT', '25'))
+            smtp_user = os.environ.get('SMTP_USER', '')
+            smtp_pass = os.environ.get('SMTP_PASS', '')
+            from_addr = os.environ.get('ALERT_FROM_EMAIL', 'grace@localhost')
+
+            # Build email content
+            severity = alert_payload.get('severity', 'warning').upper()
+            subject = f"[GRACE {severity}] {alert_payload.get('reason', 'System Alert')}"
+
+            body = f"""
+GRACE Autonomous System Alert
+=============================
+
+Alert ID: {alert_payload.get('alert_id', 'N/A')}
+Timestamp: {alert_payload.get('timestamp', 'N/A')}
+Severity: {severity}
+
+Reason: {alert_payload.get('reason', 'N/A')}
+
+Health Status: {alert_payload.get('health_status', 'N/A')}
+Health Score: {alert_payload.get('health_score', 'N/A')}
+
+Critical Components: {', '.join(alert_payload.get('critical_components', [])) or 'None'}
+Degraded Components: {', '.join(alert_payload.get('degraded_components', [])) or 'None'}
+
+AVN Alerts: {alert_payload.get('avn_alerts', 0)}
+Risk Vectors: {alert_payload.get('risk_vectors', 0)}
+
+---
+This is an automated message from GRACE Action Router.
+"""
+
+            msg = MIMEMultipart()
+            msg['Subject'] = subject
+            msg['From'] = from_addr
+            msg['To'] = ', '.join(self.alert_config.email_recipients)
+            msg.attach(MIMEText(body, 'plain'))
+
+            # Send email
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as server:
+                if smtp_user and smtp_pass:
+                    server.starttls()
+                    server.login(smtp_user, smtp_pass)
+                server.sendmail(from_addr, self.alert_config.email_recipients, msg.as_string())
+
+            logger.info(f"[LAYER4] Email notification sent to {len(self.alert_config.email_recipients)} recipients")
+            return {
+                'success': True,
+                'recipients': self.alert_config.email_recipients,
+                'subject': subject
+            }
+
+        except Exception as e:
+            logger.error(f"[LAYER4] Email notification failed: {e}")
+            return {'success': False, 'error': str(e)}
+
+    def _send_slack_notification(self, alert_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Send notification to configured Slack channel.
+
+        Args:
+            alert_payload: Alert data to post
+
+        Returns:
+            Dict with success status and response info
+        """
+        try:
+            import urllib.request
+            import urllib.error
+
+            # Get Slack webhook URL from environment or config
+            slack_webhook = os.environ.get('SLACK_WEBHOOK_URL')
+            if not slack_webhook:
+                return {'success': False, 'error': 'SLACK_WEBHOOK_URL not configured'}
+
+            severity = alert_payload.get('severity', 'warning')
+            emoji = ':red_circle:' if severity == 'critical' else ':warning:'
+            color = '#dc3545' if severity == 'critical' else '#ffc107'
+
+            # Build Slack message with blocks for rich formatting
+            slack_message = {
+                'channel': self.alert_config.slack_channel,
+                'username': 'GRACE Alert Bot',
+                'icon_emoji': ':robot_face:',
+                'attachments': [
+                    {
+                        'color': color,
+                        'blocks': [
+                            {
+                                'type': 'header',
+                                'text': {
+                                    'type': 'plain_text',
+                                    'text': f'{emoji} GRACE System Alert',
+                                    'emoji': True
+                                }
+                            },
+                            {
+                                'type': 'section',
+                                'fields': [
+                                    {'type': 'mrkdwn', 'text': f'*Alert ID:*\n{alert_payload.get("alert_id", "N/A")}'},
+                                    {'type': 'mrkdwn', 'text': f'*Severity:*\n{severity.upper()}'},
+                                    {'type': 'mrkdwn', 'text': f'*Health Status:*\n{alert_payload.get("health_status", "N/A")}'},
+                                    {'type': 'mrkdwn', 'text': f'*Health Score:*\n{alert_payload.get("health_score", "N/A")}'}
+                                ]
+                            },
+                            {
+                                'type': 'section',
+                                'text': {
+                                    'type': 'mrkdwn',
+                                    'text': f'*Reason:*\n{alert_payload.get("reason", "Unknown")}'
+                                }
+                            },
+                            {
+                                'type': 'context',
+                                'elements': [
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': f'Timestamp: {alert_payload.get("timestamp", "N/A")}'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+
+            # Add critical/degraded components if present
+            critical = alert_payload.get('critical_components', [])
+            degraded = alert_payload.get('degraded_components', [])
+            if critical or degraded:
+                component_text = ''
+                if critical:
+                    component_text += f':x: *Critical:* {", ".join(critical)}\n'
+                if degraded:
+                    component_text += f':warning: *Degraded:* {", ".join(degraded)}'
+                slack_message['attachments'][0]['blocks'].insert(3, {
+                    'type': 'section',
+                    'text': {'type': 'mrkdwn', 'text': component_text}
+                })
+
+            data = json.dumps(slack_message).encode('utf-8')
+            headers = {'Content-Type': 'application/json'}
+
+            request = urllib.request.Request(slack_webhook, data=data, headers=headers, method='POST')
+
+            with urllib.request.urlopen(request, timeout=10) as response:
+                status_code = response.getcode()
+                logger.info(f"[LAYER4] Slack notification sent to {self.alert_config.slack_channel}")
+                return {
+                    'success': True,
+                    'channel': self.alert_config.slack_channel,
+                    'status_code': status_code
+                }
+
+        except urllib.error.URLError as e:
+            logger.error(f"[LAYER4] Slack notification failed: {e}")
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            logger.error(f"[LAYER4] Slack notification error: {e}")
+            return {'success': False, 'error': str(e)}
 
     def _execute_healing(
         self,
