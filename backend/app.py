@@ -75,6 +75,8 @@ from api.testing_api import router as test_router  # Autonomous Testing - self-t
 from api.scraping import router as scraping_router  # Web Scraping - URL scraping and crawling
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
 from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
+from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
+from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -527,6 +529,8 @@ app.include_router(test_router)  # Autonomous Testing - self-testing with KPI va
 app.include_router(scraping_router)  # Web Scraping - URL scraping and crawling
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
 app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
+app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
+app.include_router(grace_planning_router)  # Grace Planning - concept->questions->tech->decisions->execute->IDE workflow
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
