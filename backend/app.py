@@ -74,6 +74,7 @@ from api.whitelist_api import router as whitelist_router  # Whitelist Learning P
 from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
 from api.scraping import router as scraping_router  # Web Scraping - URL scraping and crawling
 from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
+from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -525,6 +526,7 @@ app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human inpu
 app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
 app.include_router(scraping_router)  # Web Scraping - URL scraping and crawling
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
+app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
