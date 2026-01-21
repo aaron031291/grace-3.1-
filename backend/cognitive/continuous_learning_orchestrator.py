@@ -135,14 +135,20 @@ class ContinuousLearningOrchestrator:
             from ingestion.service import TextIngestionService
             from embedding import get_embedding_model
 
-            embedding_model = get_embedding_model()
-            self.ingestion_service = TextIngestionService(
-                embedding_model=embedding_model
-            )
-            # print("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized", flush=True)
-            logger.info("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized")
+            try:
+                embedding_model = get_embedding_model()
+                self.ingestion_service = TextIngestionService(
+                    embedding_model=embedding_model
+                )
+                # print("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized", flush=True)
+                logger.info("[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized")
+            except FileNotFoundError as e:
+                # Model not available - this is okay, ingestion service will be unavailable
+                logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")
+                self.ingestion_service = None
         except Exception as e:
             logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")
+            self.ingestion_service = None
 
         logger.info("[CONTINUOUS_LEARNING] Component initialization complete")
 

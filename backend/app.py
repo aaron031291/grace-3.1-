@@ -420,7 +420,7 @@ async def lifespan(app: FastAPI):
 
     # ==================== Start Continuous Learning Orchestrator ====================
     # Connect sandbox lab to continuous training data
-    if not settings.SKIP_AUTO_INGESTION:
+    if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning
             # print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
@@ -437,7 +437,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Could not start continuous learning: {e}", flush=True)
     else:
-        print("[SKIP] Continuous learning disabled (SKIP_AUTO_INGESTION=true)")
+        print("[SKIP] Continuous learning disabled (DISABLE_CONTINUOUS_LEARNING=true)")
 
     yield
     

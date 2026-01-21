@@ -77,19 +77,51 @@ class EmbeddingModel:
         
         self.device = device
         
-        # Determine model path
+        # Determine model path with smart resolution
         if model_path is None:
             if USE_SETTINGS:
-                model_path = settings.EMBEDDING_MODEL_PATH
+                # Try to get from settings first
+                model_path = getattr(settings, 'EMBEDDING_MODEL_PATH', None)
+                
+                # If not set or doesn't exist, use EMBEDDING_DEFAULT
+                if not model_path or not Path(model_path).exists():
+                    embedding_default = settings.EMBEDDING_DEFAULT
+                    backend_dir = Path(__file__).parent.parent
+                    local_path = backend_dir / "models" / "embedding" / embedding_default
+                    
+                    # Check if local model exists
+                    if local_path.exists():
+                        model_path = str(local_path)
+                        # print(f"[EMBEDDING] Using local model: {model_path}")
+                    else:
+                        # Use model name directly - SentenceTransformer will download from HuggingFace
+                        model_path = embedding_default
+                        # print(f"[EMBEDDING] Model not found locally, will download from HuggingFace: {model_path}")
             else:
                 # Fallback: Read directly from environment variable
                 import os
-                embedding_default = os.getenv("EMBEDDING_DEFAULT", "qwen_4b")
+                embedding_default = os.getenv("EMBEDDING_DEFAULT", "all-MiniLM-L6-v2")
                 backend_dir = Path(__file__).parent.parent
-                model_path = str(backend_dir / "models" / "embedding" / embedding_default)
+                local_path = backend_dir / "models" / "embedding" / embedding_default
+                
+                # Check if local model exists
+                if local_path.exists():
+                    model_path = str(local_path)
+                else:
+                    # Use model name directly for HuggingFace download
+                    model_path = embedding_default
         
-        if not Path(model_path).exists():
-            raise FileNotFoundError(f"Model path does not exist: {model_path}")
+        # If model_path is provided explicitly, check if it's a local path or model ID
+        if model_path:
+            path_obj = Path(model_path)
+            if path_obj.exists():
+                # Local path exists, use it
+                pass  # model_path is already set
+            elif "/" in model_path or path_obj.is_absolute():
+                # Looks like a path but doesn't exist - this is an error
+                raise FileNotFoundError(f"Model path does not exist: {model_path}")
+            # else: assume it's a HuggingFace model ID, let SentenceTransformer handle it
+        
         
         # print(f"[EMBEDDING] [LOADING] Instantiating EmbeddingModel class...")
         # print(f"[EMBEDDING]   Model path: {model_path}")
