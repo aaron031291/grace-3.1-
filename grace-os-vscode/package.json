@@ -440,15 +440,32 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "bundle": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node"
+    "test:unit": "mocha --require ts-node/register 'src/test/suite/**/*.test.ts'",
+    "test:core": "mocha --require ts-node/register 'src/test/suite/GraceOSCore.test.ts'",
+    "test:diagnostics": "mocha --require ts-node/register 'src/test/suite/DiagnosticMachine.test.ts'",
+    "test:memory": "mocha --require ts-node/register 'src/test/suite/DeepMagmaMemory.test.ts'",
+    "test:security": "mocha --require ts-node/register 'src/test/suite/SecurityLayer.test.ts'",
+    "test:agent": "mocha --require ts-node/register 'src/test/suite/EnterpriseAgent.test.ts'",
+    "test:neural": "mocha --require ts-node/register 'src/test/suite/NeuralSymbolicAI.test.ts'",
+    "test:ingestion": "mocha --require ts-node/register 'src/test/suite/IngestionPipeline.test.ts'",
+    "test:all": "npm run test:core && npm run test:diagnostics && npm run test:memory && npm run test:security && npm run test:agent && npm run test:neural && npm run test:ingestion",
+    "bundle": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
     "esbuild": "^0.19.8",
     "eslint": "^8.54.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.2"
   },
   "dependencies": {
