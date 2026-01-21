@@ -24,6 +24,8 @@ import ConnectorsTab from "./components/ConnectorsTab";
 import OrchestrationTab from "./components/OrchestrationTab";
 import TelemetryTab from "./components/TelemetryTab";
 import WebScraper from "./components/WebScraper";
+import GraceTodosTab from "./components/GraceTodosTab";
+import GracePlanningTab from "./components/GracePlanningTab";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -355,6 +357,43 @@ function App() {
               Task Manager
             </button>
             <button
+              className={`tab-button ${activeTab === "grace-todos" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("grace-todos")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+              </svg>
+              Grace Todos
+            </button>
+            <button
+              className={`tab-button ${activeTab === "grace-planning" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("grace-planning")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              Planning
+            </button>
+            <button
               className={`tab-button ${activeTab === "genesis" ? "active" : ""
                 }`}
               onClick={() => setActiveTab("genesis")}
@@ -549,6 +588,8 @@ function App() {
           {activeTab === "orchestration" && <OrchestrationTab />}
           {activeTab === "telemetry" && <TelemetryTab />}
           {activeTab === "webscraper" && <WebScraper />}
+          {activeTab === "grace-todos" && <GraceTodosTab />}
+          {activeTab === "grace-planning" && <GracePlanningTab />}
         </main>
       </div>
 
