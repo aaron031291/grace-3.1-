@@ -1,0 +1,459 @@
+{
+  "name": "grace-os",
+  "displayName": "Grace OS - Cognitive IDE",
+  "description": "Grace Operating System - Full cognitive infrastructure integrated into VSCode with memory mesh, genesis keys, diagnostics, and autonomous learning",
+  "version": "3.1.0",
+  "publisher": "grace-ai",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Other",
+    "Programming Languages",
+    "Machine Learning",
+    "Education"
+  ],
+  "keywords": [
+    "grace",
+    "cognitive",
+    "ai",
+    "memory",
+    "genesis",
+    "learning",
+    "autonomous"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "graceOS.activate",
+        "title": "Grace OS: Activate Cognitive Mode",
+        "icon": "$(brain)"
+      },
+      {
+        "command": "graceOS.chat",
+        "title": "Grace OS: Open Chat Panel",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "graceOS.memory.query",
+        "title": "Grace OS: Query Memory Mesh",
+        "icon": "$(database)"
+      },
+      {
+        "command": "graceOS.memory.store",
+        "title": "Grace OS: Store to Memory",
+        "icon": "$(save)"
+      },
+      {
+        "command": "graceOS.genesis.createKey",
+        "title": "Grace OS: Create Genesis Key",
+        "icon": "$(key)"
+      },
+      {
+        "command": "graceOS.genesis.viewLineage",
+        "title": "Grace OS: View Code Lineage",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "graceOS.diagnostic.runCheck",
+        "title": "Grace OS: Run Diagnostic Check",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "graceOS.diagnostic.viewHealth",
+        "title": "Grace OS: View System Health",
+        "icon": "$(heart)"
+      },
+      {
+        "command": "graceOS.cognitive.analyze",
+        "title": "Grace OS: Analyze Selection",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "graceOS.cognitive.explain",
+        "title": "Grace OS: Explain Code",
+        "icon": "$(info)"
+      },
+      {
+        "command": "graceOS.cognitive.refactor",
+        "title": "Grace OS: Suggest Refactoring",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "graceOS.learning.recordInsight",
+        "title": "Grace OS: Record Learning Insight",
+        "icon": "$(mortar-board)"
+      },
+      {
+        "command": "graceOS.learning.viewHistory",
+        "title": "Grace OS: View Learning History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "graceOS.librarian.search",
+        "title": "Grace OS: Search Knowledge Base",
+        "icon": "$(search)"
+      },
+      {
+        "command": "graceOS.librarian.tag",
+        "title": "Grace OS: Tag Current File",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "graceOS.ghostLedger.toggle",
+        "title": "Grace OS: Toggle Ghost Ledger",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "graceOS.ghostLedger.viewChanges",
+        "title": "Grace OS: View Line History",
+        "icon": "$(git-commit)"
+      },
+      {
+        "command": "graceOS.autonomous.scheduleTask",
+        "title": "Grace OS: Schedule Autonomous Task",
+        "icon": "$(clock)"
+      },
+      {
+        "command": "graceOS.autonomous.viewTasks",
+        "title": "Grace OS: View Scheduled Tasks",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "graceOS.magma.ingest",
+        "title": "Grace OS: Ingest to Magma Memory",
+        "icon": "$(flame)"
+      },
+      {
+        "command": "graceOS.magma.consolidate",
+        "title": "Grace OS: Trigger Memory Consolidation",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "graceOS.whitelist.propose",
+        "title": "Grace OS: Propose Whitelist Entry",
+        "icon": "$(check)"
+      },
+      {
+        "command": "graceOS.cicd.trigger",
+        "title": "Grace OS: Trigger CI/CD Pipeline",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "graceOS.settings",
+        "title": "Grace OS: Open Settings",
+        "icon": "$(gear)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "grace-os",
+          "title": "Grace OS",
+          "icon": "media/grace-icon.svg"
+        }
+      ],
+      "panel": [
+        {
+          "id": "grace-os-panel",
+          "title": "Grace OS",
+          "icon": "$(brain)"
+        }
+      ]
+    },
+    "views": {
+      "grace-os": [
+        {
+          "id": "graceOS.dashboard",
+          "name": "Dashboard",
+          "type": "webview"
+        },
+        {
+          "id": "graceOS.chat",
+          "name": "Chat",
+          "type": "webview"
+        },
+        {
+          "id": "graceOS.memory",
+          "name": "Memory Mesh",
+          "type": "tree"
+        },
+        {
+          "id": "graceOS.genesis",
+          "name": "Genesis Keys",
+          "type": "tree"
+        },
+        {
+          "id": "graceOS.diagnostics",
+          "name": "Diagnostics",
+          "type": "tree"
+        },
+        {
+          "id": "graceOS.learning",
+          "name": "Learning",
+          "type": "tree"
+        },
+        {
+          "id": "graceOS.tasks",
+          "name": "Autonomous Tasks",
+          "type": "tree"
+        }
+      ],
+      "grace-os-panel": [
+        {
+          "id": "graceOS.ghostLedger",
+          "name": "Ghost Ledger",
+          "type": "webview"
+        },
+        {
+          "id": "graceOS.cognitiveOutput",
+          "name": "Cognitive Output",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "graceOS.contextMenu",
+          "group": "graceOS"
+        }
+      ],
+      "graceOS.contextMenu": [
+        {
+          "command": "graceOS.cognitive.analyze",
+          "group": "cognitive@1"
+        },
+        {
+          "command": "graceOS.cognitive.explain",
+          "group": "cognitive@2"
+        },
+        {
+          "command": "graceOS.cognitive.refactor",
+          "group": "cognitive@3"
+        },
+        {
+          "command": "graceOS.genesis.createKey",
+          "group": "genesis@1"
+        },
+        {
+          "command": "graceOS.ghostLedger.viewChanges",
+          "group": "genesis@2"
+        },
+        {
+          "command": "graceOS.memory.store",
+          "group": "memory@1"
+        },
+        {
+          "command": "graceOS.learning.recordInsight",
+          "group": "learning@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "graceOS.diagnostic.runCheck",
+          "when": "view == graceOS.diagnostics",
+          "group": "navigation"
+        },
+        {
+          "command": "graceOS.magma.consolidate",
+          "when": "view == graceOS.memory",
+          "group": "navigation"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "graceOS.contextMenu",
+        "label": "Grace OS"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "graceOS.chat",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g"
+      },
+      {
+        "command": "graceOS.cognitive.analyze",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "graceOS.cognitive.explain",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "graceOS.memory.query",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      },
+      {
+        "command": "graceOS.genesis.viewLineage",
+        "key": "ctrl+shift+l",
+        "mac": "cmd+shift+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "graceOS.ghostLedger.toggle",
+        "key": "ctrl+shift+h",
+        "mac": "cmd+shift+h"
+      },
+      {
+        "command": "graceOS.diagnostic.runCheck",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d"
+      }
+    ],
+    "configuration": {
+      "title": "Grace OS",
+      "properties": {
+        "graceOS.backendUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "Grace backend server URL"
+        },
+        "graceOS.wsUrl": {
+          "type": "string",
+          "default": "ws://localhost:8000/ws",
+          "description": "Grace WebSocket URL for real-time communication"
+        },
+        "graceOS.autoActivate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically activate Grace OS on startup"
+        },
+        "graceOS.ghostLedger.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Ghost Ledger line tracking"
+        },
+        "graceOS.ghostLedger.showInlineAnnotations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline annotations for code changes"
+        },
+        "graceOS.memory.autoStore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically store significant code patterns to memory"
+        },
+        "graceOS.memory.consolidationInterval": {
+          "type": "number",
+          "default": 300000,
+          "description": "Memory consolidation interval in milliseconds"
+        },
+        "graceOS.cognitive.inlineSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline cognitive suggestions"
+        },
+        "graceOS.cognitive.autoAnalyze": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze code on save"
+        },
+        "graceOS.genesis.autoTrack": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically create genesis keys for changes"
+        },
+        "graceOS.genesis.showLineage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show lineage information in hover"
+        },
+        "graceOS.diagnostics.autoRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically run diagnostics periodically"
+        },
+        "graceOS.diagnostics.interval": {
+          "type": "number",
+          "default": 60000,
+          "description": "Diagnostic check interval in milliseconds"
+        },
+        "graceOS.learning.recordPatterns": {
+          "type": "boolean",
+          "default": true,
+          "description": "Record coding patterns for learning"
+        },
+        "graceOS.autonomous.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable autonomous task scheduling"
+        },
+        "graceOS.telemetry.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Send telemetry to Grace backend"
+        }
+      }
+    },
+    "colors": [
+      {
+        "id": "graceOS.genesisKeyHighlight",
+        "description": "Background color for genesis key tracked lines",
+        "defaults": {
+          "dark": "#1e3a5f40",
+          "light": "#1e90ff20"
+        }
+      },
+      {
+        "id": "graceOS.ghostLedgerChange",
+        "description": "Background color for recently changed lines",
+        "defaults": {
+          "dark": "#2d4a1f40",
+          "light": "#90ee9020"
+        }
+      },
+      {
+        "id": "graceOS.memorySuggestion",
+        "description": "Background color for memory-based suggestions",
+        "defaults": {
+          "dark": "#4a1f4a40",
+          "light": "#da70d620"
+        }
+      },
+      {
+        "id": "graceOS.diagnosticWarning",
+        "description": "Background color for diagnostic warnings",
+        "defaults": {
+          "dark": "#5a4a1f40",
+          "light": "#ffa50020"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "bundle": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "esbuild": "^0.19.8",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "uuid": "^9.0.0",
+    "ws": "^8.14.2"
+  }
+}
