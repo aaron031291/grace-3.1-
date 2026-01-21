@@ -95,6 +95,18 @@ class VersionControlConnector:
         if not self.enabled:
             return {"status": "disabled", "connector": self.connector_id}
 
+        # Check if Genesis tracking is disabled
+        try:
+            from settings import settings
+            if settings.DISABLE_GENESIS_TRACKING:
+                return {
+                    "status": "skipped",
+                    "reason": "Genesis tracking disabled (DISABLE_GENESIS_TRACKING=true)",
+                    "connector": self.connector_id
+                }
+        except Exception:
+            pass  # If settings unavailable, continue
+
         try:
             # Extract file operation details from message
             input_type = message.get("input_type")

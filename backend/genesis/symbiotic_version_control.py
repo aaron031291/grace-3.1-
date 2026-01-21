@@ -119,12 +119,16 @@ class SymbioticVersionControl:
                 session=self.session
             )
 
+            # Store key_id immediately while object is still bound to session
+            # This prevents DetachedInstanceError when accessing the attribute later
+            operation_key_id = operation_genesis_key.key_id
+
             # Create version entry (linked to Genesis Key)
             version_result = self.version_tracker.track_file_version(
                 file_genesis_key=file_genesis_key,
                 file_path=abs_path,
                 user_id=user_id,
-                version_note=f"Genesis Key: {operation_genesis_key.key_id}",
+                version_note=f"Genesis Key: {operation_key_id}",
                 auto_detect_change=True
             )
 
@@ -138,7 +142,7 @@ class SymbioticVersionControl:
 
             return {
                 "file_genesis_key": file_genesis_key,
-                "operation_genesis_key": operation_genesis_key.key_id,
+                "operation_genesis_key": operation_key_id,
                 "version_key_id": version_result.get("version_key_id"),
                 "version_number": version_result.get("version_number"),
                 "changed": version_result.get("changed", True),
