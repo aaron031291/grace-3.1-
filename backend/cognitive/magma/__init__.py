@@ -1,5 +1,5 @@
 """
-Magma Memory System
+Magma Memory System - Grace's Unified Memory Architecture
 
 Advanced memory architecture that extends Grace's Memory Mesh with:
 1. Relation Graphs (Semantic, Temporal, Causal, Entity)
@@ -11,21 +11,51 @@ Advanced memory architecture that extends Grace's Memory Mesh with:
 7. Neighbor Retrieval
 8. LLM Causal Inference
 
-Hybrid of existing Memory Mesh + Graph-based memory architecture.
+Deep Integration with Grace Layers:
+- Layer 1: Message Bus connector (event-driven memory)
+- Layer 2: Interpreter pattern memory (recurring issues)
+- Layer 3: Judgement decision memory (precedents)
+- Layer 4: Action Router memory (learned procedures)
 
-Usage:
-    from cognitive.magma import MagmaMemory
+Security Integrations:
+- Genesis Keys: Full provenance tracking
+- Trust Scoring: Neural trust-aware retrieval
+- Governance: Constitutional enforcement
 
-    magma = MagmaMemory()
+RECOMMENDED: Use GraceMagmaSystem for the unified experience:
 
-    # Ingest content
-    result = magma.ingest("Machine learning causes better predictions.")
+    from cognitive.magma import get_grace_magma
 
-    # Query
+    magma = get_grace_magma()
+
+    # Ingest content (tracked, validated, linked)
+    magma.ingest("Machine learning causes better predictions.")
+
+    # Query with trust-aware retrieval
     results = magma.query("What causes better predictions?")
 
     # Get context for LLM
-    context = magma.get_context(results)
+    context = magma.get_context("What causes better predictions?")
+
+    # Causal inference
+    causes = magma.why("Why did the prediction fail?")
+
+    # Store/find patterns (Layer 2)
+    magma.store_pattern("error_cluster", "Database timeout pattern")
+
+    # Store/find decisions (Layer 3)
+    magma.store_decision("heal", "database", "Reconnect database")
+
+    # Store/find procedures (Layer 4)
+    magma.store_procedure("heal", "Reconnect DB", ["Stop pool", "Restart"])
+
+Alternative: Use MagmaMemory for low-level access:
+
+    from cognitive.magma import MagmaMemory
+
+    magma = MagmaMemory()
+    result = magma.ingest("Content here")
+    results = magma.query("Query here")
 """
 
 # Core relation graphs
@@ -109,6 +139,30 @@ from cognitive.magma.causal_inference import (
     CausalChain,
     CausalExplanation,
     CausalRelationStrength
+)
+
+# Unified Grace Magma System (RECOMMENDED)
+from cognitive.magma.grace_magma_system import (
+    GraceMagmaSystem,
+    GraceMagmaConfig,
+    get_grace_magma,
+    reset_grace_magma,
+    ingest,
+    query,
+    get_context,
+    why
+)
+
+# Layer integrations
+from cognitive.magma.layer_integrations import (
+    MagmaMessageBusConnector,
+    InterpreterPatternMemory,
+    JudgementDecisionMemory,
+    ActionRouterMemory,
+    MagmaGenesisIntegration,
+    MagmaTrustIntegration,
+    MagmaGovernanceIntegration,
+    create_magma_layer_integrations
 )
 
 
@@ -231,7 +285,27 @@ class MagmaMemory:
 
 
 __all__ = [
-    # Main interface
+    # UNIFIED SYSTEM (RECOMMENDED)
+    "GraceMagmaSystem",
+    "GraceMagmaConfig",
+    "get_grace_magma",
+    "reset_grace_magma",
+    "ingest",
+    "query",
+    "get_context",
+    "why",
+
+    # Layer Integrations
+    "MagmaMessageBusConnector",
+    "InterpreterPatternMemory",
+    "JudgementDecisionMemory",
+    "ActionRouterMemory",
+    "MagmaGenesisIntegration",
+    "MagmaTrustIntegration",
+    "MagmaGovernanceIntegration",
+    "create_magma_layer_integrations",
+
+    # Low-level interface
     "MagmaMemory",
 
     # Relation Graphs
