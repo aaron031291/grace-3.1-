@@ -35,6 +35,7 @@ import os
 import sys
 import subprocess
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
@@ -222,6 +223,46 @@ def get_github_token() -> Optional[str]:
         return None
 
 
+def build_git_url(repo_url: str, github_token: Optional[str] = None) -> str:
+    """
+    Build a git URL for cloning from GitHub.
+    
+    Args:
+        repo_url: GitHub repository URL (owner/repo format)
+        github_token: Optional GitHub personal access token for authentication
+    
+    Returns:
+        Full git URL with or without authentication
+    """
+    if github_token:
+        return f"https://{github_token}@github.com/{repo_url}.git"
+    else:
+        return f"https://github.com/{repo_url}.git"
+
+
+def sanitize_error_message(error_msg: str, github_token: Optional[str]) -> str:
+    """
+    Remove any token references from error messages for security.
+    
+    Args:
+        error_msg: The error message to sanitize
+        github_token: The token to remove from the message
+    
+    Returns:
+        Sanitized error message
+    """
+    if not github_token:
+        return error_msg
+    
+    # Remove token from error messages using multiple patterns
+    # Pattern 1: Token in URLs (https://TOKEN@github.com)
+    error_msg = error_msg.replace(f"https://{github_token}@", "https://***TOKEN***@")
+    # Pattern 2: Direct token match (case-insensitive)
+    error_msg = re.sub(re.escape(github_token), "***TOKEN***", error_msg, flags=re.IGNORECASE)
+    
+    return error_msg
+
+
 def clone_repository(
     repo_url: str,
     target_path: Path,
@@ -253,12 +294,8 @@ def clone_repository(
         # Create parent directory
         target_path.mkdir(parents=True, exist_ok=True)
         
-        # Build the URL - with token if provided (standard GitHub approach)
-        # Note: Token is only used for the subprocess and not logged
-        if github_token:
-            full_url = f"https://{github_token}@github.com/{repo_url}.git"
-        else:
-            full_url = f"https://github.com/{repo_url}.git"
+        # Build the URL using helper function
+        full_url = build_git_url(repo_url, github_token)
         
         # Build git clone command
         cmd = ["git", "clone"]
@@ -287,9 +324,7 @@ def clone_repository(
             return True, "Success"
         else:
             # Sanitize error message to remove any token references
-            error_msg = result.stderr.strip()
-            if github_token and github_token in error_msg:
-                error_msg = error_msg.replace(github_token, "***TOKEN***")
+            error_msg = sanitize_error_message(result.stderr.strip(), github_token)
             logger.error(f"✗ Failed to clone {repo_name}: {error_msg}")
             return False, error_msg
             
