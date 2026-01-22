@@ -254,11 +254,13 @@ def sanitize_error_message(error_msg: str, github_token: Optional[str]) -> str:
     if not github_token:
         return error_msg
     
-    # Remove token from error messages using multiple patterns
+    # Apply patterns in specific order to avoid conflicts
+    # More specific patterns first, general patterns last
+    
     # Pattern 1: Token in HTTPS URLs (https://TOKEN@github.com)
     error_msg = error_msg.replace(f"https://{github_token}@", "https://***TOKEN***@")
     
-    # Pattern 2: Token in SSH-style URLs (though less common for tokens)
+    # Pattern 2: Token in SSH-style URLs
     # git@github.com:TOKEN/repo or similar patterns
     error_msg = error_msg.replace(f":{github_token}/", ":***TOKEN***/")
     error_msg = error_msg.replace(f":{github_token}@", ":***TOKEN***@")
@@ -269,13 +271,9 @@ def sanitize_error_message(error_msg: str, github_token: Optional[str]) -> str:
     # Pattern 4: Token in Authorization headers
     error_msg = re.sub(f"Authorization:.*{re.escape(github_token)}", "Authorization: ***TOKEN***", error_msg, flags=re.IGNORECASE)
     
-    # Pattern 5: Direct token match (case-insensitive) - catch any remaining occurrences
+    # Pattern 5: Direct full token match (case-insensitive)
+    # This is the primary catch-all for exact token matches
     error_msg = re.sub(re.escape(github_token), "***TOKEN***", error_msg, flags=re.IGNORECASE)
-    
-    # Pattern 6: Partial token matches (in case of truncation) - first 8 characters
-    if len(github_token) > 8:
-        token_prefix = github_token[:8]
-        error_msg = re.sub(re.escape(token_prefix) + r'\w*', "***TOKEN***", error_msg, flags=re.IGNORECASE)
     
     return error_msg
 
