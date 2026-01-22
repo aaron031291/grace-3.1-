@@ -242,14 +242,6 @@ def clone_repository(
     Returns:
         (success, message)
     """
-    # Build the full URL with token if provided
-    if github_token:
-        # Use token in URL for authentication
-        full_url = f"https://{github_token}@github.com/{repo_url}.git"
-    else:
-        # Use anonymous access
-        full_url = f"https://github.com/{repo_url}.git"
-    
     clone_path = target_path / repo_name
     
     # Check if already exists
@@ -261,6 +253,13 @@ def clone_repository(
         # Create parent directory
         target_path.mkdir(parents=True, exist_ok=True)
         
+        # Build the URL - with token if provided (standard GitHub approach)
+        # Note: Token is only used for the subprocess and not logged
+        if github_token:
+            full_url = f"https://{github_token}@github.com/{repo_url}.git"
+        else:
+            full_url = f"https://github.com/{repo_url}.git"
+        
         # Build git clone command
         cmd = ["git", "clone"]
         
@@ -271,9 +270,11 @@ def clone_repository(
         # Add URL and target path
         cmd.extend([full_url, str(clone_path)])
         
+        # Log without token for security
         logger.info(f"Cloning {repo_url} to {clone_path}...")
         
         # Run git clone
+        # Git will automatically hide credentials from error messages
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -285,7 +286,10 @@ def clone_repository(
             logger.info(f"✓ Successfully cloned {repo_name}")
             return True, "Success"
         else:
+            # Sanitize error message to remove any token references
             error_msg = result.stderr.strip()
+            if github_token and github_token in error_msg:
+                error_msg = error_msg.replace(github_token, "***TOKEN***")
             logger.error(f"✗ Failed to clone {repo_name}: {error_msg}")
             return False, error_msg
             
