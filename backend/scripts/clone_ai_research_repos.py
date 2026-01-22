@@ -5,7 +5,30 @@ This script clones all repositories listed in the documentation into the appropr
 directory structure for ingestion.
 
 Usage:
+    # Without GitHub token (subject to rate limits):
     python backend/scripts/clone_ai_research_repos.py
+    
+    # With GitHub token (recommended):
+    # 1. Set GITHUB_TOKEN environment variable:
+    export GITHUB_TOKEN=ghp_your_token_here  # Linux/macOS
+    set GITHUB_TOKEN=ghp_your_token_here     # Windows CMD
+    $env:GITHUB_TOKEN="ghp_your_token_here"  # Windows PowerShell
+    
+    # 2. Or add to backend/.env file:
+    GITHUB_TOKEN=ghp_your_token_here
+    
+    # 3. Then run the script:
+    python backend/scripts/clone_ai_research_repos.py
+
+GitHub Token Setup:
+    1. Generate a token at: https://github.com/settings/tokens
+    2. Select scopes: 'public_repo' (or 'repo' for private repos)
+    3. Copy the token and set it in your environment or .env file
+    
+Benefits of using a GitHub token:
+    - Increased API rate limits (5,000/hour vs 60 for anonymous)
+    - Access to private repositories (if needed)
+    - Avoid rate limiting when cloning many repositories
 """
 
 import os
@@ -13,7 +36,7 @@ import sys
 import subprocess
 import logging
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 # Configure logging
 logging.basicConfig(
@@ -21,6 +44,13 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Load environment variables
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    logger.warning("python-dotenv not installed. Environment variables must be set manually.")
 
 
 # Repository definitions by category
@@ -174,11 +204,30 @@ REPOSITORIES = {
 }
 
 
+def get_github_token() -> Optional[str]:
+    """
+    Get GitHub personal access token from environment variable.
+    
+    Returns:
+        GitHub token if set, None otherwise
+    """
+    token = os.getenv('GITHUB_TOKEN', '').strip()
+    if token:
+        logger.info("GitHub token found - using authenticated requests")
+        return token
+    else:
+        logger.warning("No GitHub token found - using anonymous requests (subject to rate limits)")
+        logger.warning("To use authenticated requests, set GITHUB_TOKEN environment variable")
+        logger.warning("Generate token at: https://github.com/settings/tokens")
+        return None
+
+
 def clone_repository(
     repo_url: str,
     target_path: Path,
     repo_name: str,
-    depth: int = 1
+    depth: int = 1,
+    github_token: Optional[str] = None
 ) -> Tuple[bool, str]:
     """
     Clone a repository from GitHub.
@@ -188,11 +237,19 @@ def clone_repository(
         target_path: Path where repository should be cloned
         repo_name: Local directory name for the repository
         depth: Git clone depth (1 = shallow clone, None = full clone)
+        github_token: Optional GitHub personal access token for authentication
     
     Returns:
         (success, message)
     """
-    full_url = f"https://github.com/{repo_url}.git"
+    # Build the full URL with token if provided
+    if github_token:
+        # Use token in URL for authentication
+        full_url = f"https://{github_token}@github.com/{repo_url}.git"
+    else:
+        # Use anonymous access
+        full_url = f"https://github.com/{repo_url}.git"
+    
     clone_path = target_path / repo_name
     
     # Check if already exists
@@ -245,7 +302,8 @@ def clone_repository(
 def clone_all_repositories(
     base_path: str,
     depth: int = 1,
-    categories: List[str] = None
+    categories: List[str] = None,
+    github_token: Optional[str] = None
 ) -> Dict[str, Dict[str, any]]:
     """
     Clone all repositories.
@@ -254,6 +312,7 @@ def clone_all_repositories(
         base_path: Base path for ai_research directory
         depth: Git clone depth (1 = shallow clone)
         categories: List of categories to clone (None = all)
+        github_token: Optional GitHub personal access token for authentication
     
     Returns:
         Statistics dictionary
@@ -265,6 +324,7 @@ def clone_all_repositories(
     logger.info(f"Cloning AI Research Repositories")
     logger.info(f"Base path: {ai_research_path}")
     logger.info(f"Clone depth: {depth} ({'shallow' if depth else 'full'})")
+    logger.info(f"Authentication: {'Enabled (using token)' if github_token else 'Anonymous (rate limited)'}")
     logger.info(f"{'='*80}\n")
     
     stats = {
@@ -301,7 +361,8 @@ def clone_all_repositories(
                 repo_url=repo_url,
                 target_path=category_path,
                 repo_name=repo_name,
-                depth=depth
+                depth=depth,
+                github_token=github_token
             )
             
             if success:
@@ -355,13 +416,17 @@ def main():
         logger.error("Git is not installed or not in PATH")
         sys.exit(1)
     
+    # Get GitHub token from environment
+    github_token = get_github_token()
+    
     # Clone repositories
     # Use depth=1 for shallow clones (faster, less disk space)
     # Set depth=None for full clones (if you need full history)
     stats = clone_all_repositories(
         base_path=str(base_path),
         depth=1,  # Shallow clone for faster setup
-        categories=None  # Clone all categories
+        categories=None,  # Clone all categories
+        github_token=github_token
     )
     
     if stats["failed"] > 0:

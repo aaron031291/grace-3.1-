@@ -168,6 +168,11 @@ python run_all_migrations.py  # or run_migrations.bat
 DATABASE_URL=sqlite:///./data/grace.db
 DEBUG=True
 LOG_LEVEL=INFO
+
+# Optional: GitHub Personal Access Token for cloning repositories
+# Generate at: https://github.com/settings/tokens
+# Required scopes: 'public_repo' or 'repo'
+GITHUB_TOKEN=
 ```
 
 See `.env.example` for all options.

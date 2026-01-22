@@ -83,8 +83,44 @@ Located in: `data/ai_research/references/`
 
 ## Ingestion Process
 
+### Prerequisites
+
+Before cloning repositories, it's recommended to set up a GitHub Personal Access Token to avoid rate limiting issues.
+
+#### Setting up GitHub Token (Recommended)
+
+1. **Generate a Personal Access Token**:
+   - Go to https://github.com/settings/tokens
+   - Click "Generate new token" (classic)
+   - Give it a descriptive name (e.g., "GRACE Repository Cloning")
+   - Select scopes:
+     - For public repositories only: Select `public_repo`
+     - For private repositories: Select `repo`
+   - Click "Generate token" and copy the token
+
+2. **Configure the Token**:
+   - Copy `backend/.env.example` to `backend/.env` if you haven't already
+   - Add the token to your `.env` file:
+     ```
+     GITHUB_TOKEN=ghp_your_token_here
+     ```
+   - Or set it as an environment variable:
+     ```bash
+     export GITHUB_TOKEN=ghp_your_token_here  # Linux/macOS
+     set GITHUB_TOKEN=ghp_your_token_here     # Windows CMD
+     $env:GITHUB_TOKEN="ghp_your_token_here"  # Windows PowerShell
+     ```
+
+3. **Benefits of Using a Token**:
+   - Increased API rate limits (5,000 requests/hour vs 60 for anonymous)
+   - Access to private repositories (if needed)
+   - More reliable cloning of multiple repositories
+   - Avoid rate limiting errors during bulk operations
+
+**Note**: If no token is provided, the script will use anonymous access but may encounter rate limits when cloning many repositories.
+
 ### Script Location
-`backend/scripts/ingest_ai_research_repos.py`
+`backend/scripts/clone_ai_research_repos.py`
 
 ### Ingestion Strategy
 - **File Types**: Markdown, code files (.py, .js, .ts, .java, .go, .rs, etc.), JSON, YAML, XML
