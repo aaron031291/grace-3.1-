@@ -37,7 +37,7 @@ import subprocess
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
 
 # Configure logging
 logging.basicConfig(
@@ -328,7 +328,7 @@ def clone_repository(
         logger.info(f"Cloning {repo_url} to {clone_path}...")
         
         # Run git clone
-        # Git will automatically hide credentials from error messages
+        # Note: Additional sanitization is applied to error messages below
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -362,7 +362,7 @@ def clone_all_repositories(
     depth: int = 1,
     categories: List[str] = None,
     github_token: Optional[str] = None
-) -> Dict[str, Dict[str, any]]:
+) -> Dict[str, Dict[str, Any]]:
     """
     Clone all repositories.
     
