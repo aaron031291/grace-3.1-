@@ -266,10 +266,12 @@ def sanitize_error_message(error_msg: str, github_token: Optional[str]) -> str:
     error_msg = error_msg.replace(f":{github_token}@", ":***TOKEN***@")
     
     # Pattern 3: Token as URL parameter (token=...)
-    error_msg = re.sub(f"token={re.escape(github_token)}", "token=***TOKEN***", error_msg, flags=re.IGNORECASE)
+    pattern = "token=" + re.escape(github_token)
+    error_msg = re.sub(pattern, "token=***TOKEN***", error_msg, flags=re.IGNORECASE)
     
     # Pattern 4: Token in Authorization headers
-    error_msg = re.sub(f"Authorization:.*{re.escape(github_token)}", "Authorization: ***TOKEN***", error_msg, flags=re.IGNORECASE)
+    pattern = "Authorization:.*" + re.escape(github_token)
+    error_msg = re.sub(pattern, "Authorization: ***TOKEN***", error_msg, flags=re.IGNORECASE)
     
     # Pattern 5: Direct full token match (case-insensitive)
     # This is the primary catch-all for exact token matches
