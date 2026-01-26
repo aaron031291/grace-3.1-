@@ -10,8 +10,6 @@ Every Genesis Key creation can trigger:
 4. Memory mesh integration (store high-trust patterns)
 
 Architecture:
-- Genesis Key Created (Layer 1)
-  ↓
 - Trigger Pipeline Checks Type
   ↓
 - Spawns Appropriate Autonomous Actions
@@ -28,6 +26,7 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from settings import settings  # ADDED THIS
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_subagent_system import LearningOrchestrator, TaskType
 from database.session import initialize_session_factory
@@ -742,25 +741,47 @@ def get_genesis_trigger_pipeline(
     knowledge_base_path: Optional[Path] = None,
     orchestrator: Optional[LearningOrchestrator] = None
 ) -> GenesisTriggerPipeline:
-    """Get or create global Genesis trigger pipeline instance."""
+    """Get or create Genesis trigger pipeline instance."""
     global _trigger_pipeline
 
-    if _trigger_pipeline is None:
-        if session is None:
+    # If orchestrator provided, we might want to update the global reference logic
+    # But mainly we want to ensure we use the provided session.
+
+    # Default knowledge base path
+    # Default knowledge base path
+    if knowledge_base_path is None:
+        knowledge_base_path = Path(settings.KNOWLEDGE_BASE_PATH)
+
+    # CASE 1: Session is NOT provided - use global singleton (default behavior)
+    if session is None:
+        if _trigger_pipeline is None:
             session_factory = initialize_session_factory()
-            session = session_factory()
+            default_session = session_factory()
+            
+            _trigger_pipeline = GenesisTriggerPipeline(
+                session=default_session,
+                knowledge_base_path=knowledge_base_path,
+                orchestrator=orchestrator
+            )
+        
+        # Update orchestrator on global if provided
+        if orchestrator is not None:
+            _trigger_pipeline.set_orchestrator(orchestrator)
+            
+        return _trigger_pipeline
 
-        if knowledge_base_path is None:
-            knowledge_base_path = Path("knowledge_base")
+    # CASE 2: Session IS provided - return ephemeral instance bound to this session
+    # This prevents using a stale/closed session from the singleton
+    
+    # Try to reuse orchestrator from global if not provided
+    current_orchestrator = orchestrator
+    if current_orchestrator is None and _trigger_pipeline is not None:
+        current_orchestrator = _trigger_pipeline.orchestrator
 
-        _trigger_pipeline = GenesisTriggerPipeline(
-            session=session,
-            knowledge_base_path=knowledge_base_path,
-            orchestrator=orchestrator
-        )
-
-    # Update orchestrator if provided
-    if orchestrator is not None:
-        _trigger_pipeline.set_orchestrator(orchestrator)
-
-    return _trigger_pipeline
+    pipeline = GenesisTriggerPipeline(
+        session=session,
+        knowledge_base_path=knowledge_base_path,
+        orchestrator=current_orchestrator
+    )
+    
+    return pipeline

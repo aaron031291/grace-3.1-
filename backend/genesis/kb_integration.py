@@ -11,6 +11,7 @@ from typing import Optional
 from pathlib import Path
 
 from models.genesis_key_models import GenesisKey
+from filelock import FileLock
 
 logger = logging.getLogger(__name__)
 
@@ -94,72 +95,85 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 filename = f"keys_{date_str}.json"
 
             file_path = os.path.join(user_folder, filename)
+            lock_path = f"{file_path}.lock"
+            lock = FileLock(lock_path, timeout=10)
 
-            # Load existing keys or create new list
-            if os.path.exists(file_path):
-                with open(file_path, 'r') as f:
-                    keys_data = json.load(f)
-            else:
-                keys_data = {
-                    "user_id": key.user_id,
-                    "session_id": key.session_id,
-                    "created_at": datetime.utcnow().isoformat(),
-                    "keys": []
+            with lock:
+                # Load existing keys or create new list
+                if os.path.exists(file_path):
+                    with open(file_path, 'r') as f:
+                        try:
+                            keys_data = json.load(f)
+                        except json.JSONDecodeError:
+                            # Handle corrupted file by creating new
+                            logger.error(f"Corrupted KB file found: {file_path}, creating new")
+                            keys_data = {
+                                "user_id": key.user_id,
+                                "session_id": key.session_id,
+                                "created_at": datetime.utcnow().isoformat(),
+                                "keys": []
+                            }
+                else:
+                    keys_data = {
+                        "user_id": key.user_id,
+                        "session_id": key.session_id,
+                        "created_at": datetime.utcnow().isoformat(),
+                        "keys": []
+                    }
+
+                # Add this key
+                key_dict = {
+                    "key_id": key.key_id,
+                    "key_type": key.key_type.value,
+                    "status": key.status.value,
+                    "timestamp": key.when_timestamp.isoformat(),
+
+                    # What, Where, When, Why, Who, How
+                    "what": key.what_description,
+                    "where": key.where_location,
+                    "when": key.when_timestamp.isoformat(),
+                    "why": key.why_reason,
+                    "who": key.who_actor,
+                    "how": key.how_method,
+
+                    # Code tracking
+                    "file_path": key.file_path,
+                    "line_number": key.line_number,
+                    "function_name": key.function_name,
+                    "code_before": key.code_before,
+                    "code_after": key.code_after,
+
+                    # Error tracking
+                    "is_error": key.is_error,
+                    "error_type": key.error_type,
+                    "error_message": key.error_message,
+                    "has_fix_suggestion": key.has_fix_suggestion,
+                    "fix_applied": key.fix_applied,
+
+                    # Metadata
+                    "metadata_human": key.metadata_human,
+                    "metadata_ai": key.metadata_ai,
+
+                    # Input/Output tracking
+                    "input_data": key.input_data,
+                    "output_data": key.output_data,
+                    "context_data": key.context_data,
+
+                    # Version control
+                    "commit_sha": key.commit_sha,
+                    "branch_name": key.branch_name,
+
+                    # Tags
+                    "tags": key.tags
                 }
 
-            # Add this key
-            key_dict = {
-                "key_id": key.key_id,
-                "key_type": key.key_type.value,
-                "status": key.status.value,
-                "timestamp": key.when_timestamp.isoformat(),
+                keys_data["keys"].append(key_dict)
+                keys_data["last_updated"] = datetime.utcnow().isoformat()
+                keys_data["total_keys"] = len(keys_data["keys"])
 
-                # What, Where, When, Why, Who, How
-                "what": key.what_description,
-                "where": key.where_location,
-                "when": key.when_timestamp.isoformat(),
-                "why": key.why_reason,
-                "who": key.who_actor,
-                "how": key.how_method,
-
-                # Code tracking
-                "file_path": key.file_path,
-                "line_number": key.line_number,
-                "function_name": key.function_name,
-                "code_before": key.code_before,
-                "code_after": key.code_after,
-
-                # Error tracking
-                "is_error": key.is_error,
-                "error_type": key.error_type,
-                "error_message": key.error_message,
-                "has_fix_suggestion": key.has_fix_suggestion,
-                "fix_applied": key.fix_applied,
-
-                # Metadata
-                "metadata_human": key.metadata_human,
-                "metadata_ai": key.metadata_ai,
-
-                # Input/Output tracking
-                "input_data": key.input_data,
-                "output_data": key.output_data,
-                "context_data": key.context_data,
-
-                # Version control
-                "commit_sha": key.commit_sha,
-                "branch_name": key.branch_name,
-
-                # Tags
-                "tags": key.tags
-            }
-
-            keys_data["keys"].append(key_dict)
-            keys_data["last_updated"] = datetime.utcnow().isoformat()
-            keys_data["total_keys"] = len(keys_data["keys"])
-
-            # Save to file
-            with open(file_path, 'w') as f:
-                json.dump(keys_data, f, indent=2, default=str)
+                # Save to file
+                with open(file_path, 'w') as f:
+                    json.dump(keys_data, f, indent=2, default=str)
 
             logger.info(f"Genesis Key saved to KB: {file_path}")
             return file_path

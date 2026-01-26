@@ -75,3 +75,4 @@ pydub
 moviepy
 ffmpeg-python
 schedule
+filelock==3.13.1

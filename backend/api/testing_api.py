@@ -435,6 +435,9 @@ async def validate_tests(
         except Exception as e:
             logger.warning(f"Could not create Genesis Key: {e}")
 
+        # Store validation result for later integration check
+        _validation_results[validation_result['validation_id']] = validation_result
+
         return validation_result
 
     except Exception as e:
@@ -453,17 +456,32 @@ async def integrate_tests(
     Only allows integration if validation passed.
     """
     try:
-        # TODO: Load validation result and verify it passed
-        # For now, create a record of integration request
-
+        # Load validation result and verify it passed
+        validation_result = _validation_results.get(request.validation_id)
+        
+        if not validation_result:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Validation {request.validation_id} not found. Tests must be validated before integration."
+            )
+        
+        if not validation_result.get('valid', False):
+            issues = validation_result.get('issues', [])
+            raise HTTPException(
+                status_code=400,
+                detail=f"Cannot integrate tests that failed validation. Issues: {'; '.join(issues)}"
+            )
+        
+        # Validation passed, proceed with integration
         integration_result = {
             "integration_id": f"int_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
             "test_run_id": request.test_run_id,
             "validation_id": request.validation_id,
-            "status": "pending_approval",
+            "status": "approved",
             "target_path": request.target_path,
             "auto_commit": request.auto_commit,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
+            "trust_score": validation_result.get('trust_score', {}).get('value', 0.0)
         }
 
         # Create Genesis Key for integration
@@ -649,6 +667,10 @@ class DiagnosticReport(BaseModel):
 
 # Storage for diagnostic reports (in-memory for now, could be persisted)
 _diagnostic_history: List[Dict[str, Any]] = []
+
+# Storage for validation results (in-memory for now)
+_validation_results: Dict[str, Dict[str, Any]] = {}
+
 
 
 @router.post("/diagnostics")

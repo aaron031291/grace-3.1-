@@ -3,10 +3,17 @@ Example models demonstrating database usage.
 These are templates - modify or replace with your actual models.
 """
 
-from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON
+from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from database.base import BaseModel
 from datetime import datetime
+import enum
+
+
+class ChatType(str, enum.Enum):
+    """Types of chat sessions."""
+    GENERAL = "general"      # General purpose chat
+    FORENSIC = "forensic"    # Forensic/diagnostic chat
 
 
 class User(BaseModel):
@@ -87,6 +94,7 @@ class Chat(BaseModel):
     description = Column(Text, nullable=True)
     model = Column(String(255), nullable=False, default="mistral:7b")
     temperature = Column(Float, default=0.7, nullable=False)
+    chat_type = Column(SQLEnum(ChatType), nullable=False, default=ChatType.GENERAL, index=True)  # Chat type for context-aware search
     is_active = Column(Boolean, default=True, nullable=False, index=True)
     last_message_at = Column(DateTime, nullable=True)
     folder_path = Column(String(512), nullable=True, default="", index=True)  # Path to folder context for this chat

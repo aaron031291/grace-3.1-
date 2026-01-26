@@ -225,7 +225,11 @@ class GenesisKeyService:
             )
 
             sess.add(key)
-            sess.commit()
+            
+            # Only commit if we created our own session
+            # If a session was passed in, let the caller handle commits
+            if close_session:
+                sess.commit()
 
             # Update user statistics if user_id provided
             if user_id:
@@ -280,7 +284,8 @@ class GenesisKeyService:
 
         except Exception as e:
             logger.error(f"Failed to create Genesis Key: {e}")
-            sess.rollback()
+            if close_session:
+                sess.rollback()
             raise
         finally:
             if close_session:
@@ -512,7 +517,7 @@ class GenesisKeyService:
                 if key_type == GenesisKeyType.FIX:
                     user.total_fixes += 1
 
-                session.commit()
+                # session.commit()  # Removed to prevent nested commit
         except Exception as e:
             logger.warning(f"Failed to update user stats: {e}")
 

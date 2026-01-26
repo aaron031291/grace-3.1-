@@ -47,7 +47,7 @@ class SymbioticVersionControl:
     def _get_default_base_path(self) -> str:
         """Get default base path."""
         backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        return os.path.dirname(backend_dir)  # grace_3 root
+        return backend_dir  # Return backend directory, not project root
 
     def track_file_change(
         self,
@@ -58,22 +58,17 @@ class SymbioticVersionControl:
     ) -> Dict[str, Any]:
         """
         Track a file change - SYMBIOTIC operation.
-
-        This creates:
-        1. Genesis Key for the operation
-        2. Version entry linked to Genesis Key
-        3. Updates both systems simultaneously
-        4. They reference each other bidirectionally
-
-        Args:
-            file_path: Path to file
-            user_id: User making change
-            change_description: What changed
-            operation_type: Type of operation (create, modify, delete)
-
-        Returns:
-            Unified result with both Genesis Key and version info
         """
+        # Manage session lifecycle to prevent DetachedInstanceError
+        local_session = None
+        session = self.session
+        
+        if not session:
+            # Create a new session if one doesn't exist
+            gen = get_session()
+            session = next(gen)
+            local_session = session
+
         try:
             # Normalize path
             if not os.path.isabs(file_path):
@@ -82,7 +77,11 @@ class SymbioticVersionControl:
             else:
                 abs_path = file_path
                 rel_path = os.path.relpath(abs_path, self.base_path)
+            
+            # DEBUG: Log path resolution
+            logger.debug(f"[SYMBIOTIC] Path resolution: input={file_path}, abs={abs_path}, rel={rel_path}")
 
+            # Get or create file Genesis Key
             # Get or create file Genesis Key
             file_genesis_key = self._get_or_create_file_genesis_key(rel_path)
 
@@ -116,7 +115,7 @@ class SymbioticVersionControl:
                     "symbiotic": True
                 },
                 tags=["file_change", operation_type, "symbiotic"],
-                session=self.session
+                session=session
             )
 
             # Store key_id immediately while object is still bound to session
@@ -129,16 +128,17 @@ class SymbioticVersionControl:
                 file_path=abs_path,
                 user_id=user_id,
                 version_note=f"Genesis Key: {operation_key_id}",
-                auto_detect_change=True
+                auto_detect_change=True,
+                session=session
             )
 
             # Update Genesis Key with version info
             if version_result.get("changed", True):
                 operation_genesis_key.context_data["version_key_id"] = version_result["version_key_id"]
                 operation_genesis_key.context_data["version_number"] = version_result["version_number"]
-
-                if self.session:
-                    self.session.commit()
+                
+                # Commit updates
+                session.commit()
 
             return {
                 "file_genesis_key": file_genesis_key,
@@ -154,7 +154,15 @@ class SymbioticVersionControl:
 
         except Exception as e:
             logger.error(f"Error in symbiotic tracking: {e}")
+            # CRITICAL: Always rollback the active session on error
+            # This prevents "PendingRollbackError" for subsequent operations
+            if session:
+                session.rollback()
             raise
+        finally:
+            # Close local session if we created it
+            if local_session:
+                local_session.close()
 
     def get_complete_history(
         self,

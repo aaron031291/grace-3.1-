@@ -292,8 +292,9 @@ class LearningMemoryManager:
             genesis_key_id=genesis_key_id
         )
 
+
         self.session.add(example)
-        self.session.commit()
+        self.session.flush()  # Use flush instead of commit to keep object attached
 
         # Check if this contributes to a pattern
         self._check_pattern_extraction(example)

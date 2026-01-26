@@ -322,7 +322,8 @@ class ContinuousLearningOrchestrator:
                         doc_id, error = self.ingestion_service.ingest_text_fast(
                             text_content=content,
                             filename=file_path.name,
-                            source="continuous_learning"
+                            source="continuous_learning",
+                            metadata={"file_path": str(file_path.absolute())}
                         )
 
                         if doc_id:

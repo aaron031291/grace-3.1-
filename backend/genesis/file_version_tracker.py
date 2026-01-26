@@ -80,7 +80,8 @@ class FileVersionTracker:
         file_path: str,
         user_id: Optional[str] = None,
         version_note: Optional[str] = None,
-        auto_detect_change: bool = True
+        auto_detect_change: bool = True,
+        session: Optional[Session] = None
     ) -> Dict[str, Any]:
         """
         Track a new version of a file.
@@ -102,7 +103,14 @@ class FileVersionTracker:
             abs_file_path = file_path
 
         if not os.path.exists(abs_file_path):
-            raise FileNotFoundError(f"File not found: {abs_file_path}")
+            # Race condition: file was deleted before we could track it
+            logger.warning(f"File vanished before tracking: {abs_file_path}")
+            return {
+                "changed": False,
+                "version_number": 0,
+                "version_key_id": None,
+                "message": "File not found (vanished)"
+            }
 
         # Initialize file tracking if not exists
         if file_genesis_key not in self.version_metadata["files"]:
@@ -172,14 +180,17 @@ class FileVersionTracker:
                     "modified_time": datetime.fromtimestamp(file_stats.st_mtime).isoformat()
                 },
                 tags=["file_version", "version_control", version_key_id],
-                session=self.session
+                session=session or self.session
             )
+
+            # Store key_id immediately to prevent DetachedInstanceError
+            version_key_db_id = version_key.key_id
 
             # Store version info
             version_info = {
                 "version_number": version_number,
                 "version_key_id": version_key_id,
-                "genesis_key_db_id": version_key.key_id,
+                "genesis_key_db_id": version_key_db_id,
                 "timestamp": datetime.utcnow().isoformat(),
                 "file_hash": current_hash,
                 "file_size": file_stats.st_size,

@@ -49,6 +49,11 @@ def setup_logging():
     logging.getLogger("watchfiles").setLevel(logging.WARNING)
     logging.getLogger("sqlalchemy").setLevel(logging.WARNING)
     
+    # CRITICAL: Suppress watchdog library DEBUG logs to prevent infinite loop
+    logging.getLogger("watchdog").setLevel(logging.WARNING)
+    logging.getLogger("watchdog.observers").setLevel(logging.WARNING)
+    logging.getLogger("watchdog.observers.inotify_buffer").setLevel(logging.WARNING)
+    
     # Suppress verbose internal loggers
     logging.getLogger("ingestion").setLevel(logging.WARNING)
     logging.getLogger("auto_ingest").setLevel(logging.WARNING)

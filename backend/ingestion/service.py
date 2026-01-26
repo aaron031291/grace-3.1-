@@ -543,8 +543,15 @@ class TextIngestionService:
                 from layer1.components.version_control_connector import get_version_control_connector
 
                 vc_connector = get_version_control_connector()
+                
+                # Use actual file path from metadata if available, otherwise fallback to filename
+                # This ensures absolute paths are passed for version control tracking
+                real_file_path = filename
+                if metadata and "file_path" in metadata:
+                    real_file_path = metadata["file_path"]
+                
                 version_result = vc_connector.on_file_ingest(
-                    file_path=filename,
+                    file_path=real_file_path,
                     user_id=metadata.get("user_id", "system") if metadata else "system",
                     chunks_created=len(chunks)
                 )

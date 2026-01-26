@@ -47,7 +47,8 @@ class GenesisFileWatcher(FileSystemEventHandler):
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
             'grace.db', 'grace.db-shm', 'grace.db-wal',
-            '.log', 'embedding_debug.log'
+            '.log', 'embedding_debug.log', 'logs',  # Exclude logs directory to prevent infinite loop
+            'genesis_key'  # Exclude KB genesis_key folder to prevent recursive tracking
         }
         self.debounce_seconds = debounce_seconds
 
@@ -109,7 +110,7 @@ class GenesisFileWatcher(FileSystemEventHandler):
 
             symbiotic = self._get_symbiotic_vc()
             result = symbiotic.track_file_change(
-                file_path=rel_path,
+                file_path=file_path,  # Use absolute path to avoid /backend/backend/ duplication
                 user_id="file_watcher",
                 change_description=f"File {operation_type} detected by watcher",
                 operation_type=operation_type
@@ -360,6 +361,6 @@ def start_watching_workspace(workspace_path: Optional[str] = None) -> bool:
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
             'grace.db', 'grace.db-shm', 'grace.db-wal',
-            '.log', 'embedding_debug.log', 'nul'
+            '.log', 'embedding_debug.log', 'nul', 'logs'  # Exclude logs directory
         }
     )

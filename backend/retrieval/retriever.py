@@ -43,6 +43,7 @@ class DocumentRetriever:
         limit: int = 5,
         score_threshold: float = 0.3,
         include_metadata: bool = True,
+        filter_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Retrieve relevant document chunks for a query.
@@ -52,6 +53,7 @@ class DocumentRetriever:
             limit: Maximum number of chunks to retrieve
             score_threshold: Minimum similarity score (0-1)
             include_metadata: Whether to include chunk metadata
+            filter_path: Optional path prefix to filter results (e.g., "forensic/auto_search/")
             
         Returns:
             List of relevant chunks with scores and metadata
@@ -80,12 +82,27 @@ class DocumentRetriever:
                 else:
                     raise
             
+            # Build Qdrant filter if path is specified
+            qdrant_filter = None
+            if filter_path:
+                from qdrant_client.models import Filter, FieldCondition, MatchText
+                qdrant_filter = Filter(
+                    must=[
+                        FieldCondition(
+                            key="file_path",
+                            match=MatchText(text=filter_path)
+                        )
+                    ]
+                )
+                logger.debug(f"Applying path filter: {filter_path}")
+            
             # Search in Qdrant
             search_results = self.qdrant_client.search_vectors(
                 collection_name=self.collection_name,
                 query_vector=query_embedding,
                 limit=limit,
                 score_threshold=score_threshold,
+                query_filter=qdrant_filter,
             )
             
             if not search_results:

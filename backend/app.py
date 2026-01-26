@@ -804,7 +804,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
         
         # Verify model exists
         client = get_ollama_client()
-        if not client.model_exists(model):
+        if not getattr(settings, 'SKIP_OLLAMA_CHECK', False) and not client.model_exists(model):
             raise HTTPException(
                 status_code=400,
                 detail=f"Model '{model}' not found"

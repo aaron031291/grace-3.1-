@@ -516,9 +516,12 @@ class WebScrapingService:
             similarity = dot_product / (norm1 * norm2)
             
             # Ensure we return a Python float, not numpy scalar or array
-            if isinstance(similarity, np.ndarray):
-                similarity = similarity.item()  # Extract scalar from 0-d array
-            
+            if hasattr(similarity, 'item'):
+                return float(similarity.item())
+            if hasattr(similarity, '__len__') and len(similarity) > 1:
+                # Fallback: take mean if we somehow got multiple values
+                return float(np.mean(similarity))
+                
             return float(similarity)
         except Exception as e:
             logger.error(f"Error calculating cosine similarity: {e}")
