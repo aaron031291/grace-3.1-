@@ -104,7 +104,7 @@ class ErrorBoundary extends Component {
             )}
 
             {/* Error details (only in development) */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {import.meta.env.MODE === 'development' && this.state.error && (
               <Alert severity="error" sx={{ mb: 3, textAlign: 'left' }}>
                 <Typography variant="subtitle2" gutterBottom>
                   {this.state.error.toString()}

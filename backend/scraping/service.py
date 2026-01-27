@@ -284,7 +284,8 @@ class WebScrapingService:
             title = metadata.title if metadata else url
             
             # Store base page embedding for semantic filtering (only for root page)
-            if current_depth == 0 and self.embedding_model and not self.base_page_embedding:
+            # Use 'is None' check to avoid numpy array truth value ambiguity
+            if current_depth == 0 and self.embedding_model and self.base_page_embedding is None:
                 try:
                     logger.info(f"🔍 Creating base page embedding (depth={current_depth})...")
                     # Create embedding from title + first 500 chars of content

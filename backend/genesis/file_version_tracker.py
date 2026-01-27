@@ -102,8 +102,29 @@ class FileVersionTracker:
         else:
             abs_file_path = file_path
 
+        # Log path resolution for debugging
+        logger.info(f"[VERSION-TRACKER] Path received: file_path={file_path}, is_abs={os.path.isabs(file_path)}, abs_file_path={abs_file_path}, base_path={self.base_path}")
+
+        # If primary path missing, try knowledge_base prefix (scraped files saved there)
         if not os.path.exists(abs_file_path):
-            # Race condition: file was deleted before we could track it
+            # If the path is absolute and missing knowledge_base, inject it after base_path
+            alt_path = None
+            base_prefix = os.path.join(self.base_path, "auto_search")
+            kb_prefix = os.path.join(self.base_path, "knowledge_base", "auto_search")
+
+            if os.path.isabs(abs_file_path) and abs_file_path.startswith(base_prefix):
+                alt_path = abs_file_path.replace(base_prefix, kb_prefix, 1)
+            else:
+                # If relative, simply prepend knowledge_base
+                rel_path = file_path if not os.path.isabs(file_path) else os.path.relpath(file_path, self.base_path)
+                alt_path = os.path.join(self.base_path, "knowledge_base", rel_path)
+
+            if alt_path and os.path.exists(alt_path):
+                logger.info(f"[VERSION-TRACKER] Fallback path resolved: {alt_path}")
+                abs_file_path = alt_path
+
+        if not os.path.exists(abs_file_path):
+            # Race condition or path mismatch: file was deleted/mis-located
             logger.warning(f"File vanished before tracking: {abs_file_path}")
             return {
                 "changed": False,

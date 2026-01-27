@@ -48,7 +48,10 @@ class GenesisFileWatcher(FileSystemEventHandler):
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
             'grace.db', 'grace.db-shm', 'grace.db-wal',
             '.log', 'embedding_debug.log', 'logs',  # Exclude logs directory to prevent infinite loop
-            'genesis_key'  # Exclude KB genesis_key folder to prevent recursive tracking
+            'genesis_key',  # Exclude KB genesis_key folder to prevent recursive tracking
+            'layer_1',  # Exclude entire layer_1 folder which contains genesis_key data
+            'GU-',  # Exclude Genesis User folders (pattern prefix)
+            'session_SS-',  # Exclude session files (pattern prefix)
         }
         self.debounce_seconds = debounce_seconds
 
@@ -69,20 +72,35 @@ class GenesisFileWatcher(FileSystemEventHandler):
     def _should_ignore(self, file_path: str) -> bool:
         """Check if file should be ignored based on exclude patterns."""
         path_parts = Path(file_path).parts
+        file_path_str = str(file_path)
+
+        # CRITICAL: Explicitly check for genesis_key folder anywhere in path
+        # This prevents recursive tracking of Genesis Key files
+        if 'genesis_key' in file_path_str or '/layer_1/' in file_path_str:
+            return True
+        
+        # Check for Genesis User folders (GU-xxxxx pattern)
+        if '/GU-' in file_path_str:
+            return True
+        
+        # Check for session files (session_SS- pattern)
+        if 'session_SS-' in file_path_str:
+            return True
 
         # Check each part of the path against exclude patterns
         for part in path_parts:
             for pattern in self.exclude_patterns:
-                if pattern in part or part.endswith(pattern):
+                if pattern in part or part.endswith(pattern) or part.startswith(pattern):
                     return True
 
         # Also check the full filename
         filename = os.path.basename(file_path)
         for pattern in self.exclude_patterns:
-            if filename.endswith(pattern) or pattern in filename:
+            if filename.endswith(pattern) or pattern in filename or filename.startswith(pattern):
                 return True
 
         return False
+
 
     def _is_debounced(self, file_path: str) -> bool:
         """
@@ -107,6 +125,9 @@ class GenesisFileWatcher(FileSystemEventHandler):
         try:
             # Get relative path from watch root
             rel_path = os.path.relpath(file_path, self.watch_path)
+            
+            # Log the absolute path received from watchdog
+            logger.info(f"[FILE_WATCHER] Received event: file_path={file_path}, watch_path={self.watch_path}, rel_path={rel_path}")
 
             symbiotic = self._get_symbiotic_vc()
             result = symbiotic.track_file_change(

@@ -1,11 +1,13 @@
 /* Web Scraper Component Styles - Matching Grace Theme */
 
 .web-scraper {
-    padding: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
+    padding: 2rem 3rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
     height: 100%;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .scraper-header {
@@ -38,6 +40,8 @@
     padding: 2.5rem;
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-group {
@@ -316,6 +320,8 @@
     padding: 2.5rem;
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .progress-header {
@@ -422,6 +428,8 @@
     padding: 2.5rem;
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .results-header {
@@ -458,8 +466,8 @@
 
 .results-summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 2.5rem;
 }
 
@@ -525,8 +533,8 @@
 }
 
 .pages-table {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 1rem;
 }
 
@@ -687,5 +695,9 @@
 
     .scraper-header h2 {
         font-size: 1.5rem;
+    }
+
+    .pages-table {
+        grid-template-columns: 1fr;
     }
 }

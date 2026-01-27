@@ -76,12 +76,16 @@ class SymbioticVersionControl:
                 rel_path = file_path
             else:
                 abs_path = file_path
-                rel_path = os.path.relpath(abs_path, self.base_path)
+                # Calculate relative path from base_path
+                try:
+                    rel_path = os.path.relpath(abs_path, self.base_path)
+                except ValueError:
+                    # If paths are on different drives (Windows), use absolute
+                    rel_path = abs_path
             
-            # DEBUG: Log path resolution
-            logger.debug(f"[SYMBIOTIC] Path resolution: input={file_path}, abs={abs_path}, rel={rel_path}")
+            # Log path resolution (INFO level for visibility)
+            logger.info(f"[SYMBIOTIC] Path resolution: input={file_path}, abs={abs_path}, rel={rel_path}, base={self.base_path}")
 
-            # Get or create file Genesis Key
             # Get or create file Genesis Key
             file_genesis_key = self._get_or_create_file_genesis_key(rel_path)
 

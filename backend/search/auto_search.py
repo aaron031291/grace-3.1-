@@ -96,11 +96,14 @@ class AutoSearchService:
             logger.info(f"[AUTO-SEARCH] Found {len(urls)} URLs to scrape")
             
             # Determine save directory based on folder_path
+            # Use relative path from KNOWLEDGE_BASE_PATH (don't duplicate knowledge_base)
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             if folder_path:
                 base_save_dir = f"{folder_path}/auto_search/{timestamp}"
             else:
+                # Use relative path - KNOWLEDGE_BASE_PATH already includes 'backend/knowledge_base'
                 base_save_dir = f"auto_search/{timestamp}"
+            
             
             # Step 3: Create scraping jobs
             job_ids = []

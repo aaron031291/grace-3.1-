@@ -9,6 +9,9 @@
 // In production, set VITE_API_BASE_URL environment variable
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
+// Backward compatibility alias for components using the old name
+export const API_BASE = API_BASE_URL;
+
 // Ollama LLM service URL
 export const OLLAMA_BASE_URL = import.meta.env.VITE_OLLAMA_URL || 'http://localhost:11434';
 

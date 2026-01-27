@@ -104,9 +104,17 @@ All user actions, inputs, and outputs are tracked here from the first login.
                     with open(file_path, 'r') as f:
                         try:
                             keys_data = json.load(f)
-                        except json.JSONDecodeError:
-                            # Handle corrupted file by creating new
-                            logger.error(f"Corrupted KB file found: {file_path}, creating new")
+                        except json.JSONDecodeError as e:
+                            # Handle corrupted file by backing up and creating new
+                            backup_path = f"{file_path}.corrupt.{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+                            try:
+                                import shutil
+                                shutil.copy2(file_path, backup_path)
+                                logger.warning(f"Corrupted KB file backed up to: {backup_path}")
+                            except Exception as backup_err:
+                                logger.error(f"Failed to backup corrupted file: {backup_err}")
+                            
+                            logger.error(f"JSON decode error in {file_path}: {e}")
                             keys_data = {
                                 "user_id": key.user_id,
                                 "session_id": key.session_id,

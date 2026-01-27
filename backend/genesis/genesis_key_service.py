@@ -154,8 +154,19 @@ class GenesisKeyService:
         close_session = session is None and self.session is None
 
         try:
+            # CRITICAL: Clean up session state before new operations
+            # This prevents NULL identity key errors from dirty session state
+            try:
+                # If session has pending changes from failed operations, roll them back
+                if sess.new or sess.dirty or sess.deleted:
+                    logger.warning("[GENESIS] Session has pending changes, expiring all objects")
+                    sess.expire_all()
+            except Exception as cleanup_error:
+                logger.warning(f"[GENESIS] Session cleanup warning: {cleanup_error}")
+            
             # Generate key ID
             key_id = f"GK-{uuid.uuid4().hex}"
+
 
             # Get current commit info if available
             commit_sha = None
@@ -226,6 +237,34 @@ class GenesisKeyService:
 
             sess.add(key)
             
+            # CRITICAL: Always flush to ensure key_id is accessible
+            # This prevents DetachedInstanceError when caller accesses key.key_id
+            sess.flush()
+            
+            # CRITICAL: Extract all key data IMMEDIATELY after flush
+            # This prevents DetachedInstanceError if session is rolled back later
+            extracted_key_id = key.key_id
+            extracted_key_data = {
+                "key_id": key.key_id,
+                "key_type": key.key_type.value if hasattr(key.key_type, 'value') else str(key.key_type),
+                "what_description": key.what_description,
+                "who_actor": key.who_actor,
+                "where_location": key.where_location,
+                "why_reason": key.why_reason,
+                "how_method": key.how_method,
+                "file_path": key.file_path,
+                "user_id": key.user_id,
+                "session_id": key.session_id,
+                "is_error": key.is_error,
+                "code_before": key.code_before,
+                "code_after": key.code_after,
+                "input_data": key.input_data,
+                "output_data": key.output_data,
+                "context_data": key.context_data,
+                "tags": key.tags,
+                "when_timestamp": key.when_timestamp.isoformat() if key.when_timestamp else None
+            }
+            
             # Only commit if we created our own session
             # If a session was passed in, let the caller handle commits
             if close_session:
@@ -235,14 +274,24 @@ class GenesisKeyService:
             if user_id:
                 self._update_user_stats(user_id, key_type, is_error, sess)
 
-            # Auto-populate to knowledge base
+            # Post-creation hooks - use extracted data to prevent DetachedInstanceError
+            # These hooks should NEVER cause the main Genesis Key creation to fail
+            
+            # Hook 1: Auto-populate to knowledge base
             try:
                 kb_integration = get_kb_integration()
-                kb_integration.save_genesis_key(key)
+                # Use extracted data instead of object to avoid session issues
+                kb_integration.save_genesis_key_data(extracted_key_data)
+            except AttributeError:
+                # Fallback: try old method if new method doesn't exist
+                try:
+                    kb_integration.save_genesis_key(key)
+                except Exception as kb_error:
+                    logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
             except Exception as kb_error:
                 logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
 
-            # CRITICAL: Feed into Memory Mesh for learning
+            # Hook 2: Feed into Memory Mesh for learning
             try:
                 from cognitive.memory_mesh_integration import MemoryMeshIntegration
                 from pathlib import Path
@@ -250,36 +299,45 @@ class GenesisKeyService:
                 kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
                 memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
 
-                # Ingest Genesis Key as learning experience
+                # Use extracted data instead of accessing object attributes
                 memory_mesh.ingest_learning_experience(
-                    experience_type=key_type.value,
+                    experience_type=extracted_key_data["key_type"],
                     context={
-                        "what": what_description,
-                        "where": where_location or file_path,
-                        "why": why_reason,
-                        "how": how_method
+                        "what": extracted_key_data["what_description"],
+                        "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
+                        "why": extracted_key_data["why_reason"],
+                        "how": extracted_key_data["how_method"]
                     },
-                    action_taken=input_data or {},
-                    outcome=output_data or {},
+                    action_taken=extracted_key_data.get("input_data") or {},
+                    outcome=extracted_key_data.get("output_data") or {},
                     source="genesis_key",
-                    user_id=user_id,
-                    genesis_key_id=key_id
+                    user_id=extracted_key_data.get("user_id"),
+                    genesis_key_id=extracted_key_id
                 )
-                logger.info(f"✅ Genesis Key fed into Memory Mesh: {key_id}")
+                logger.info(f"✅ Genesis Key fed into Memory Mesh: {extracted_key_id}")
             except Exception as mesh_error:
                 logger.warning(f"Failed to feed Genesis Key to Memory Mesh: {mesh_error}")
 
-            # CRITICAL: Trigger autonomous pipeline for every Genesis Key
+            # Hook 3: Trigger autonomous pipeline
             try:
                 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
                 trigger_pipeline = get_genesis_trigger_pipeline(session=sess)
-                trigger_result = trigger_pipeline.on_genesis_key_created(key)
+                # Pass extracted data instead of object
+                trigger_result = trigger_pipeline.on_genesis_key_created_data(extracted_key_data)
                 if trigger_result.get("triggered"):
-                    logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {key_id}")
+                    logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {extracted_key_id}")
+            except AttributeError:
+                # Fallback: try old method if new method doesn't exist
+                try:
+                    trigger_result = trigger_pipeline.on_genesis_key_created(key)
+                    if trigger_result.get("triggered"):
+                        logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {extracted_key_id}")
+                except Exception as trigger_error:
+                    logger.warning(f"Failed to trigger autonomous pipeline: {trigger_error}")
             except Exception as trigger_error:
                 logger.warning(f"Failed to trigger autonomous pipeline: {trigger_error}")
 
-            logger.info(f"Created Genesis Key: {key_id} - {what_description}")
+            logger.info(f"Created Genesis Key: {extracted_key_id} - {what_description}")
             return key
 
         except Exception as e:

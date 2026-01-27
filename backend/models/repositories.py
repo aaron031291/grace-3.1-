@@ -221,7 +221,7 @@ class ChatHistoryRepository(BaseRepository[ChatHistory]):
         completion_time: Optional[float] = None,
     ) -> ChatHistory:
         """Add a message to chat history."""
-        return self.create(
+        message = self.create(
             chat_id=chat_id,
             role=role,
             content=content,
@@ -230,6 +230,9 @@ class ChatHistoryRepository(BaseRepository[ChatHistory]):
             completion_time=completion_time,
             is_edited=False,
         )
+        # Refresh to ensure all fields are populated from DB
+        self.session.refresh(message)
+        return message
     
     def edit_message(
         self,

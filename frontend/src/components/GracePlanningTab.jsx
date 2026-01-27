@@ -32,8 +32,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import './GracePlanningTab.css';
 
-// API Configuration
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+import { API_BASE } from '../config/api.js';
 
 // ============================================================================
 // CONSTANTS
