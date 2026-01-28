@@ -234,7 +234,18 @@ class BaseSubagent:
 
     def _process_task(self, task: LearningTask):
         """Process a task (override in subclass)."""
-        raise NotImplementedError
+        # Default handler for unimplemented task types; keeps process alive and reports failure.
+        task.status = "failed"
+        task.error = f"Unhandled task type for base subagent: {task.task_type}"
+        task.assigned_to = self.agent_id
+        task.started_at = task.started_at or time.time()
+        task.completed_at = time.time()
+        self.tasks_failed.value += 1
+        logger.warning(f"[{self.agent_id}] {task.error}")
+        try:
+            self._send_result(task)
+        except Exception:
+            logger.exception(f"[{self.agent_id}] Failed to send result for unhandled task")
 
     def _send_result(self, task: LearningTask):
         """Send task result back to master."""

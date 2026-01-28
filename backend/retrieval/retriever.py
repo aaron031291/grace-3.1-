@@ -41,7 +41,7 @@ class DocumentRetriever:
         self,
         query: str,
         limit: int = 5,
-        score_threshold: float = 0.3,
+        score_threshold: float = 0.5,
         include_metadata: bool = True,
         filter_path: Optional[str] = None,
     ) -> List[Dict[str, Any]]:

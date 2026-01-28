@@ -96,6 +96,12 @@ class FileVersionTracker:
         Returns:
             Version information
         """
+        # Manage session lifecycle locally to avoid detached/expired objects
+        local_session = session or self.session or next(get_session())
+        close_session = session is None and self.session is None
+        # Ensure we use a fresh service bound to the active session
+        genesis_service = get_genesis_service(local_session)
+
         # Get absolute path
         if not os.path.isabs(file_path):
             abs_file_path = os.path.join(self.base_path, file_path)
@@ -181,7 +187,7 @@ class FileVersionTracker:
 
         # Create version Genesis Key
         try:
-            version_key = self.genesis_service.create_key(
+            version_key = genesis_service.create_key(
                 key_type=GenesisKeyType.FILE_OPERATION,
                 what_description=f"File version {version_number}: {os.path.basename(file_path)}",
                 who_actor=user_id or "system",
@@ -201,11 +207,17 @@ class FileVersionTracker:
                     "modified_time": datetime.fromtimestamp(file_stats.st_mtime).isoformat()
                 },
                 tags=["file_version", "version_control", version_key_id],
-                session=session or self.session
+                session=local_session
             )
 
             # Store key_id immediately to prevent DetachedInstanceError
-            version_key_db_id = version_key.key_id
+            try:
+                version_key_db_id = version_key.key_id
+            except Exception:
+                # Defensive refresh in case the object was expired
+                local_session.flush()
+                local_session.refresh(version_key)
+                version_key_db_id = version_key.key_id
 
             # Store version info
             version_info = {
@@ -226,6 +238,10 @@ class FileVersionTracker:
 
             self._save_metadata()
 
+            # Commit if we own the session
+            if close_session:
+                local_session.commit()
+
             logger.info(f"Created version {version_number} for file {file_genesis_key}")
 
             return {
@@ -240,7 +256,13 @@ class FileVersionTracker:
 
         except Exception as e:
             logger.error(f"Failed to create file version: {e}")
+            if close_session:
+                local_session.rollback()
+                local_session.close()
             raise
+        finally:
+            if close_session:
+                local_session.close()
 
     def get_file_versions(self, file_genesis_key: str) -> Optional[Dict[str, Any]]:
         """Get all versions for a file."""
