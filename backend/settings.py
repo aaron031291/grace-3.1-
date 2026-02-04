@@ -37,6 +37,7 @@ class Settings:
     SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
     SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
     SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
+    HEALING_SIMULATION_MODE: bool = os.getenv("HEALING_SIMULATION_MODE", "false").lower() == "true"
     
     # ==================== Error Handling Configuration ====================
     SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
@@ -129,8 +130,9 @@ class Settings:
         # Validate Embedding settings
         if not cls.EMBEDDING_DEFAULT:
             errors.append("EMBEDDING_DEFAULT is not set")
-        if not Path(cls.EMBEDDING_MODEL_PATH).exists():
-            errors.append(f"Embedding model path does not exist: {cls.EMBEDDING_MODEL_PATH}")
+        # Note: Don't validate EMBEDDING_MODEL_PATH existence - SentenceTransformer
+        # will fall back to HuggingFace cache (~/.cache/torch/sentence_transformers/)
+        # if local path doesn't exist
         if cls.EMBEDDING_DEVICE not in ["cuda", "cpu"]:
             errors.append(f"EMBEDDING_DEVICE must be 'cuda' or 'cpu', got '{cls.EMBEDDING_DEVICE}'")
         
@@ -177,6 +179,7 @@ class Settings:
             "SKIP_AUTO_INGESTION": cls.SKIP_AUTO_INGESTION,
             "SKIP_EMBEDDING_LOAD": cls.SKIP_EMBEDDING_LOAD,
             "LIGHTWEIGHT_MODE": cls.LIGHTWEIGHT_MODE,
+            "HEALING_SIMULATION_MODE": cls.HEALING_SIMULATION_MODE,
             "DISABLE_GENESIS_TRACKING": cls.DISABLE_GENESIS_TRACKING,
             "SUPPRESS_INGESTION_ERRORS": cls.SUPPRESS_INGESTION_ERRORS,
         }

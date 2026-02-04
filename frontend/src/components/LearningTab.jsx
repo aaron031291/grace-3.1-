@@ -11,6 +11,10 @@ const LearningTab = () => {
   const [analytics, setAnalytics] = useState(null);
   const [memoryStats, setMemoryStats] = useState(null);
   const [trainingData, setTrainingData] = useState([]);
+  const [studyTopic, setStudyTopic] = useState('API design best practices');
+  const [practiceSkillName, setPracticeSkillName] = useState('Code refactoring patterns');
+  const [practiceTaskDescription, setPracticeTaskDescription] = useState('Refactor a function to improve readability and add error handling');
+  const [trainingActionStatus, setTrainingActionStatus] = useState(null);
 
   useEffect(() => {
     fetchAllData();
@@ -30,7 +34,7 @@ const LearningTab = () => {
 
   const fetchAutonomousStatus = async () => {
     try {
-      const response = await fetch('/api/autonomous-learning/status');
+      const response = await fetch('/autonomous-learning/status');
       if (response.ok) {
         const data = await response.json();
         setAutonomousStatus(data);
@@ -51,7 +55,7 @@ const LearningTab = () => {
 
   const fetchProactiveStatus = async () => {
     try {
-      const response = await fetch('/api/proactive-learning/status');
+      const response = await fetch('/proactive-learning/status');
       if (response.ok) {
         const data = await response.json();
         setProactiveStatus(data);
@@ -71,7 +75,7 @@ const LearningTab = () => {
 
   const fetchTaskQueue = async () => {
     try {
-      const response = await fetch('/api/proactive-learning/tasks/queue');
+      const response = await fetch('/proactive-learning/tasks/queue');
       if (response.ok) {
         const data = await response.json();
         setTaskQueue(data.tasks || []);
@@ -90,7 +94,7 @@ const LearningTab = () => {
 
   const fetchSkills = async () => {
     try {
-      const response = await fetch('/api/training/skills');
+      const response = await fetch('/training/skills');
       if (response.ok) {
         const data = await response.json();
         setSkills(data.skills || []);
@@ -111,7 +115,7 @@ const LearningTab = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch('/api/training/analytics/progress');
+      const response = await fetch('/training/analytics/progress');
       if (response.ok) {
         const data = await response.json();
         setAnalytics(data);
@@ -139,7 +143,7 @@ const LearningTab = () => {
 
   const fetchMemoryStats = async () => {
     try {
-      const response = await fetch('/api/learning-memory/stats');
+      const response = await fetch('/learning-memory/stats');
       if (response.ok) {
         const data = await response.json();
         setMemoryStats(data);
@@ -161,7 +165,7 @@ const LearningTab = () => {
 
   const handleStartAutonomous = async () => {
     try {
-      await fetch('/api/autonomous-learning/start', { method: 'POST' });
+      await fetch('/autonomous-learning/start', { method: 'POST' });
       fetchAutonomousStatus();
     } catch (error) {
       console.error('Error starting autonomous learning:', error);
@@ -170,7 +174,7 @@ const LearningTab = () => {
 
   const handleStopAutonomous = async () => {
     try {
-      await fetch('/api/autonomous-learning/stop', { method: 'POST' });
+      await fetch('/autonomous-learning/stop', { method: 'POST' });
       fetchAutonomousStatus();
     } catch (error) {
       console.error('Error stopping autonomous learning:', error);
@@ -179,7 +183,7 @@ const LearningTab = () => {
 
   const handleStartProactive = async () => {
     try {
-      await fetch('/api/proactive-learning/start', { method: 'POST' });
+      await fetch('/proactive-learning/start', { method: 'POST' });
       fetchProactiveStatus();
     } catch (error) {
       console.error('Error starting proactive learning:', error);
@@ -188,7 +192,7 @@ const LearningTab = () => {
 
   const handleStopProactive = async () => {
     try {
-      await fetch('/api/proactive-learning/stop', { method: 'POST' });
+      await fetch('/proactive-learning/stop', { method: 'POST' });
       fetchProactiveStatus();
     } catch (error) {
       console.error('Error stopping proactive learning:', error);
@@ -197,7 +201,7 @@ const LearningTab = () => {
 
   const handleAddTask = async (type, topic) => {
     try {
-      await fetch('/api/proactive-learning/tasks/add', {
+      await fetch('/proactive-learning/tasks/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, topic }),
@@ -210,10 +214,81 @@ const LearningTab = () => {
 
   const handleCreateSnapshot = async () => {
     try {
-      await fetch('/api/learning-memory/snapshot/create', { method: 'POST' });
+      await fetch('/learning-memory/snapshot/create', { method: 'POST' });
       fetchMemoryStats();
     } catch (error) {
       console.error('Error creating snapshot:', error);
+    }
+  };
+
+  const handleSubmitStudyTask = async () => {
+    setTrainingActionStatus(null);
+    try {
+      const response = await fetch('/autonomous-learning/tasks/study', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: studyTopic,
+          learning_objectives: [],
+          priority: 5,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.detail || `Request failed (${response.status})`);
+      }
+      
+      // Show success with task ID and queue info
+      const queueInfo = data.queue_size ? ` (${data.queue_size} tasks in queue)` : '';
+      setTrainingActionStatus({ 
+        type: 'success', 
+        message: `✓ ${data.message || 'Study task queued'}${queueInfo}\nTask ID: ${data.task_id}` 
+      });
+      
+      // Refresh status after a short delay
+      setTimeout(() => {
+        fetchAutonomousStatus();
+      }, 1000);
+    } catch (error) {
+      console.error('Error submitting study task:', error);
+      setTrainingActionStatus({ type: 'error', message: `✗ Study task failed: ${error.message}` });
+    }
+  };
+
+  const handleSubmitPracticeTask = async () => {
+    setTrainingActionStatus(null);
+    try {
+      const response = await fetch('/autonomous-learning/tasks/practice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          skill_name: practiceSkillName,
+          task_description: practiceTaskDescription,
+          complexity: 0.5,
+          priority: 5,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.detail || `Request failed (${response.status})`);
+      }
+      
+      // Show success with task ID and queue info
+      const queueInfo = data.queue_size ? ` (${data.queue_size} tasks in queue)` : '';
+      setTrainingActionStatus({ 
+        type: 'success', 
+        message: `✓ ${data.message || 'Practice task queued'}${queueInfo}\nTask ID: ${data.task_id}` 
+      });
+      
+      // Refresh status after a short delay
+      setTimeout(() => {
+        fetchAutonomousStatus();
+      }, 1000);
+    } catch (error) {
+      console.error('Error submitting practice task:', error);
+      setTrainingActionStatus({ type: 'error', message: `✗ Practice task failed: ${error.message}` });
     }
   };
 
@@ -360,7 +435,7 @@ const LearningTab = () => {
                 <h4>Weekly Activity</h4>
                 {analytics && (
                   <div className="activity-chart">
-                    {analytics.weekly_progress.map((day) => (
+                    {(analytics.weekly_progress || []).map((day) => (
                       <div key={day.day} className="activity-bar-container">
                         <div className="activity-bar" style={{ height: `${(day.hours / 6) * 100}%` }}>
                           <span className="activity-value">{day.tasks}</span>
@@ -376,7 +451,7 @@ const LearningTab = () => {
                 <h4>Current Focus Areas</h4>
                 {analytics && (
                   <div className="focus-list">
-                    {analytics.focus_areas.map((area, idx) => (
+                    {(analytics.focus_areas || []).map((area, idx) => (
                       <div key={idx} className="focus-item">
                         <span className="focus-icon">📚</span>
                         <span className="focus-name">{area}</span>
@@ -547,14 +622,45 @@ const LearningTab = () => {
 
             <div className="training-actions">
               <h4>Training Actions</h4>
+              <div className="action-form" style={{ marginBottom: '12px' }}>
+                <label style={{ display: 'block', marginBottom: '6px' }}>Study topic</label>
+                <input
+                  type="text"
+                  value={studyTopic}
+                  onChange={(e) => setStudyTopic(e.target.value)}
+                  placeholder="e.g., Python decorators"
+                  style={{ width: '100%', marginBottom: '10px' }}
+                />
+                <label style={{ display: 'block', marginBottom: '6px' }}>Practice skill</label>
+                <input
+                  type="text"
+                  value={practiceSkillName}
+                  onChange={(e) => setPracticeSkillName(e.target.value)}
+                  placeholder="e.g., Python programming"
+                  style={{ width: '100%', marginBottom: '10px' }}
+                />
+                <label style={{ display: 'block', marginBottom: '6px' }}>Practice task</label>
+                <input
+                  type="text"
+                  value={practiceTaskDescription}
+                  onChange={(e) => setPracticeTaskDescription(e.target.value)}
+                  placeholder="e.g., Write a factorial function"
+                  style={{ width: '100%' }}
+                />
+              </div>
               <div className="action-buttons">
-                <button className="btn-action" onClick={() => fetch('/api/training/study', { method: 'POST' })}>
+                <button className="btn-action" onClick={handleSubmitStudyTask}>
                   📖 Start Study Session
                 </button>
-                <button className="btn-action" onClick={() => fetch('/api/training/practice', { method: 'POST' })}>
+                <button className="btn-action" onClick={handleSubmitPracticeTask}>
                   ⚡ Start Practice Session
                 </button>
               </div>
+              {trainingActionStatus && (
+                <div className={`training-action-status ${trainingActionStatus.type}`} style={{ marginTop: '10px' }}>
+                  {trainingActionStatus.message}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -592,10 +698,10 @@ const LearningTab = () => {
                 <button className="btn-snapshot" onClick={handleCreateSnapshot}>
                   📸 Create Snapshot
                 </button>
-                <button className="btn-export" onClick={() => fetch('/api/learning-memory/export-training-data', { method: 'POST' })}>
+                <button className="btn-export" onClick={() => fetch('/learning-memory/export-training-data', { method: 'POST' })}>
                   📤 Export Training Data
                 </button>
-                <button className="btn-decay" onClick={() => fetch('/api/learning-memory/decay-trust-scores', { method: 'POST' })}>
+                <button className="btn-decay" onClick={() => fetch('/learning-memory/decay-trust-scores', { method: 'POST' })}>
                   📉 Apply Trust Decay
                 </button>
               </div>

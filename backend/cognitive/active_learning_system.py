@@ -153,11 +153,14 @@ class GraceActiveLearningSystem:
 
         # Use cognitive engine to analyze learning objectives
         context = DecisionContext(
-            query=f"Study {topic}: {', '.join(learning_objectives)}",
-            task_type="learning",
+            problem_statement=f"Study {topic}: {', '.join(learning_objectives)}",
+            goal="Extract concepts, patterns, and examples for long-term learning",
             complexity_score=0.7,
-            time_pressure=0.0,  # No rush when learning
-            user_intent="skill_building"
+            metadata={
+                "task_type": "learning",
+                "time_pressure": 0.0,
+                "user_intent": "skill_building"
+            }
         )
 
         # 🔮 PREDICTIVE FETCHING: Pre-load related topics
@@ -215,7 +218,8 @@ class GraceActiveLearningSystem:
 
         # Group by document
         materials_by_doc = {}
-        for chunk in results.get('chunks', []):
+        # Results is a list of chunks, not a dict
+        for chunk in results:
             doc_id = chunk.get('document_id')
             if doc_id not in materials_by_doc:
                 materials_by_doc[doc_id] = {
@@ -500,11 +504,14 @@ class GraceActiveLearningSystem:
 
         # Use cognitive engine for decision-making
         context = DecisionContext(
-            query=task.get('description', ''),
-            task_type="skill_practice",
+            problem_statement=task.get('description', ''),
+            goal="Practice skill and validate learning through execution",
             complexity_score=task.get('complexity', 0.5),
-            time_pressure=0.3,
-            user_intent="skill_building"
+            metadata={
+                "task_type": "skill_practice",
+                "time_pressure": 0.3,
+                "user_intent": "skill_building"
+            }
         )
 
         # OODA Loop: Observe - What is the task?

@@ -48,11 +48,11 @@ class GenesisTriggerPipeline:
 
     def __init__(
         self,
-        session: Session,
         knowledge_base_path: Path,
         orchestrator: Optional[LearningOrchestrator] = None
     ):
-        self.session = session
+        # Use session factory instead of storing session (prevents pickle errors)
+        self.session_factory = initialize_session_factory()
         self.knowledge_base_path = knowledge_base_path
         self.orchestrator = orchestrator
 
@@ -148,7 +148,7 @@ class GenesisTriggerPipeline:
         - Re-study for modified files
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         # Check if this is a new file or modification
         operation_type = metadata.get('operation_type', '')
@@ -190,7 +190,7 @@ class GenesisTriggerPipeline:
         - Predictive context prefetch for related topics
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         user_input = metadata.get('input_text', '')
 
@@ -230,7 +230,7 @@ class GenesisTriggerPipeline:
         - Auto-practice if skill is practice-worthy
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         skill_learned = metadata.get('skill_name', '')
         concepts_learned = metadata.get('concepts_learned', 0)
@@ -270,7 +270,7 @@ class GenesisTriggerPipeline:
         THIS IS THE RECURSIVE LOOP!
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         success = metadata.get('success', False)
         skill_name = metadata.get('skill_name', '')
@@ -302,8 +302,13 @@ class GenesisTriggerPipeline:
                 }
             )
 
-            self.session.add(gap_genesis_key)
-            self.session.commit()
+            # Create fresh session for database operation
+            session = self.session_factory()
+            try:
+                session.add(gap_genesis_key)
+                session.commit()
+            finally:
+                session.close()
 
             # This will trigger _handle_gap_identified recursively
             actions.append({
@@ -342,7 +347,7 @@ class GenesisTriggerPipeline:
         THIS COMPLETES THE RECURSIVE LOOP!
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         skill_name = metadata.get('skill_name', '')
         gap_reason = metadata.get('gap_reason', '')
@@ -500,7 +505,7 @@ class GenesisTriggerPipeline:
         - Uncertain or low-confidence responses
         - Contradictory information detected
         """
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         # Check for markers that indicate verification needed
         needs_verification = False
@@ -540,7 +545,7 @@ class GenesisTriggerPipeline:
         - Provide consensus answer
         """
         actions = []
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         try:
             # Import LLM orchestration (lazy import)
@@ -591,7 +596,7 @@ class GenesisTriggerPipeline:
         - Critical failures
         - System anomalies
         """
-        metadata = genesis_key.metadata or {}
+        metadata = genesis_key.context_data or {}
 
         # Trigger on error Genesis Keys
         if genesis_key.key_type == GenesisKeyType.ERROR:
@@ -620,24 +625,29 @@ class GenesisTriggerPipeline:
 
             logger.info("[GENESIS-TRIGGER] Error/failure detected → Triggering health check")
 
-            # Get healing system
-            healing = get_autonomous_healing(
-                session=self.session,
-                trust_level=TrustLevel.MEDIUM_RISK_AUTO,
-                enable_learning=True
-            )
+            # Create fresh session for healing system
+            session = self.session_factory()
+            try:
+                # Get healing system
+                healing = get_autonomous_healing(
+                    session=session,
+                    trust_level=TrustLevel.MEDIUM_RISK_AUTO,
+                    enable_learning=True
+                )
 
-            # Run monitoring cycle
-            cycle_result = healing.run_monitoring_cycle()
+                # Run monitoring cycle
+                cycle_result = healing.run_monitoring_cycle()
 
-            actions.append({
-                "action": "health_check_and_healing",
-                "trigger": "error_or_failure_detected",
-                "health_status": cycle_result["health_status"],
-                "anomalies_detected": cycle_result["anomalies_detected"],
-                "actions_executed": cycle_result["actions_executed"],
-                "awaiting_approval": cycle_result["awaiting_approval"]
-            })
+                actions.append({
+                    "action": "health_check_and_healing",
+                    "trigger": "error_or_failure_detected",
+                    "health_status": cycle_result["health_status"],
+                    "anomalies_detected": cycle_result["anomalies_detected"],
+                    "actions_executed": cycle_result["actions_executed"],
+                    "awaiting_approval": cycle_result["awaiting_approval"]
+                })
+            finally:
+                session.close()
 
             logger.info(
                 f"[GENESIS-TRIGGER] Health check complete: {cycle_result['health_status']}, "
@@ -680,35 +690,40 @@ class GenesisTriggerPipeline:
 
             logger.info("[GENESIS-TRIGGER] Triggering mirror self-modeling analysis")
 
-            # Get mirror system
-            mirror = get_mirror_system(
-                session=self.session,
-                observation_window_hours=24,
-                min_pattern_occurrences=3
-            )
-
-            # Build self-model
-            self_model = mirror.build_self_model()
-
-            # Trigger improvement actions if orchestrator available
-            if self.orchestrator:
-                improvement_result = mirror.trigger_improvement_actions(self.orchestrator)
-
-                actions.append({
-                    "action": "mirror_self_modeling",
-                    "trigger": "periodic_self_reflection",
-                    "patterns_detected": self_model["behavioral_patterns"]["total_detected"],
-                    "improvement_suggestions": len(self_model["improvement_suggestions"]),
-                    "actions_triggered": improvement_result["actions_triggered"],
-                    "self_awareness_score": self_model["self_awareness_score"]
-                })
-
-                logger.info(
-                    f"[GENESIS-TRIGGER] Mirror analysis complete: "
-                    f"{self_model['behavioral_patterns']['total_detected']} patterns, "
-                    f"{len(self_model['improvement_suggestions'])} suggestions, "
-                    f"{improvement_result['actions_triggered']} actions triggered"
+            # Create fresh session for mirror system
+            session = self.session_factory()
+            try:
+                # Get mirror system
+                mirror = get_mirror_system(
+                    session=session,
+                    observation_window_hours=24,
+                    min_pattern_occurrences=3
                 )
+
+                # Build self-model
+                self_model = mirror.build_self_model()
+
+                # Trigger improvement actions if orchestrator available
+                if self.orchestrator:
+                    improvement_result = mirror.trigger_improvement_actions(self.orchestrator)
+
+                    actions.append({
+                        "action": "mirror_self_modeling",
+                        "trigger": "periodic_self_reflection",
+                        "patterns_detected": self_model["behavioral_patterns"]["total_detected"],
+                        "improvement_suggestions": len(self_model["improvement_suggestions"]),
+                        "actions_triggered": improvement_result["actions_triggered"],
+                        "self_awareness_score": self_model["self_awareness_score"]
+                    })
+
+                    logger.info(
+                        f"[GENESIS-TRIGGER] Mirror analysis complete: "
+                        f"{self_model['behavioral_patterns']['total_detected']} patterns, "
+                        f"{len(self_model['improvement_suggestions'])} suggestions, "
+                        f"{improvement_result['actions_triggered']} actions triggered"
+                    )
+            finally:
+                session.close()
 
         except Exception as e:
             logger.error(f"Error triggering mirror analysis: {e}")
@@ -741,47 +756,31 @@ def get_genesis_trigger_pipeline(
     knowledge_base_path: Optional[Path] = None,
     orchestrator: Optional[LearningOrchestrator] = None
 ) -> GenesisTriggerPipeline:
-    """Get or create Genesis trigger pipeline instance."""
+    """
+    Get or create Genesis trigger pipeline instance.
+    
+    NOTE: 'session' parameter is deprecated and ignored. 
+    Pipeline creates fresh sessions on-demand to avoid pickle errors.
+    """
     global _trigger_pipeline
 
-    # If orchestrator provided, we might want to update the global reference logic
-    # But mainly we want to ensure we use the provided session.
+    # Warn if session is passed (deprecated)
+    if session is not None:
+        logger.warning("[GENESIS-TRIGGER] Session parameter is deprecated and ignored (uses session factory instead)")
 
-    # Default knowledge base path
     # Default knowledge base path
     if knowledge_base_path is None:
         knowledge_base_path = Path(settings.KNOWLEDGE_BASE_PATH)
 
-    # CASE 1: Session is NOT provided - use global singleton (default behavior)
-    if session is None:
-        if _trigger_pipeline is None:
-            session_factory = initialize_session_factory()
-            default_session = session_factory()
-            
-            _trigger_pipeline = GenesisTriggerPipeline(
-                session=default_session,
-                knowledge_base_path=knowledge_base_path,
-                orchestrator=orchestrator
-            )
+    # Always use global singleton (session created on-demand via factory)
+    if _trigger_pipeline is None:
+        _trigger_pipeline = GenesisTriggerPipeline(
+            knowledge_base_path=knowledge_base_path,
+            orchestrator=orchestrator
+        )
+    
+    # Update orchestrator on global if provided
+    if orchestrator is not None:
+        _trigger_pipeline.set_orchestrator(orchestrator)
         
-        # Update orchestrator on global if provided
-        if orchestrator is not None:
-            _trigger_pipeline.set_orchestrator(orchestrator)
-            
-        return _trigger_pipeline
-
-    # CASE 2: Session IS provided - return ephemeral instance bound to this session
-    # This prevents using a stale/closed session from the singleton
-    
-    # Try to reuse orchestrator from global if not provided
-    current_orchestrator = orchestrator
-    if current_orchestrator is None and _trigger_pipeline is not None:
-        current_orchestrator = _trigger_pipeline.orchestrator
-
-    pipeline = GenesisTriggerPipeline(
-        session=session,
-        knowledge_base_path=knowledge_base_path,
-        orchestrator=current_orchestrator
-    )
-    
-    return pipeline
+    return _trigger_pipeline

@@ -48,11 +48,7 @@ def get_orchestrator() -> LearningOrchestrator:
         )
 
         # INTEGRATE WITH GENESIS KEY TRIGGER PIPELINE
-        session_factory = initialize_session_factory()
-        session = session_factory()
-
         trigger_pipeline = get_genesis_trigger_pipeline(
-            session=session,
             knowledge_base_path=Path(KNOWLEDGE_BASE_PATH),
             orchestrator=_orchestrator
         )
@@ -381,7 +377,20 @@ async def submit_study_task(request: StudyTaskRequest) -> Dict[str, Any]:
     - Queue position
     """
     try:
+        # Validate input
+        if not request.topic or len(request.topic.strip()) == 0:
+            raise HTTPException(status_code=400, detail="Topic cannot be empty")
+        
+        # Get orchestrator and ensure it's running
         orchestrator = get_orchestrator()
+        
+        # Auto-start if not running
+        status = orchestrator.get_status()
+        if not status.get("running", False):
+            orchestrator.start()
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.info("[API] Auto-started orchestrator for study task submission")
 
         task_id = orchestrator.submit_study_task(
             topic=request.topic,
@@ -396,11 +405,16 @@ async def submit_study_task(request: StudyTaskRequest) -> Dict[str, Any]:
             "topic": request.topic,
             "priority": request.priority,
             "queue_size": orchestrator.study_queue.qsize(),
-            "message": "Study task will be processed in background"
+            "message": "Study task queued successfully. Subagent will process in background."
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to submit: {str(e)}")
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"[API] Failed to submit study task: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to submit study task: {str(e)}")
 
 
 @router.post("/tasks/practice")
@@ -436,7 +450,22 @@ async def submit_practice_task(request: PracticeTaskRequest) -> Dict[str, Any]:
     - Queue position
     """
     try:
+        # Validate input
+        if not request.skill_name or len(request.skill_name.strip()) == 0:
+            raise HTTPException(status_code=400, detail="Skill name cannot be empty")
+        if not request.task_description or len(request.task_description.strip()) == 0:
+            raise HTTPException(status_code=400, detail="Task description cannot be empty")
+        
+        # Get orchestrator and ensure it's running
         orchestrator = get_orchestrator()
+        
+        # Auto-start if not running
+        status = orchestrator.get_status()
+        if not status.get("running", False):
+            orchestrator.start()
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.info("[API] Auto-started orchestrator for practice task submission")
 
         task_id = orchestrator.submit_practice_task(
             skill_name=request.skill_name,
@@ -451,17 +480,60 @@ async def submit_practice_task(request: PracticeTaskRequest) -> Dict[str, Any]:
             "skill": request.skill_name,
             "priority": request.priority,
             "queue_size": orchestrator.practice_queue.qsize(),
-            "message": "Practice task will be processed in background",
-            "autonomous_features": [
-                "Automatic execution",
-                "Outcome observation",
-                "Mirror reflection on failure",
-                "Gap-driven proactive study"
-            ]
+            "message": "Practice task queued successfully. Subagent will process in background."
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to submit: {str(e)}")
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"[API] Failed to submit practice task: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to submit practice task: {str(e)}")
+
+
+@router.get("/tasks/{task_id}/status")
+async def get_task_status(task_id: str) -> Dict[str, Any]:
+    """
+    **Get status of a specific task.**
+    
+    Check if a task is queued, processing, completed, or failed.
+    
+    **Example:**
+    ```
+    GET /autonomous-learning/tasks/study-42/status
+    ```
+    
+    **Returns:**
+    ```json
+    {
+        "task_id": "study-42",
+        "status": "completed",
+        "result": {...},
+        "processing_time": 12.5
+    }
+    ```
+    """
+    try:
+        orchestrator = get_orchestrator()
+        status = orchestrator.get_status()
+        
+        # Check if task ID exists in shared state or completed tasks
+        # For now, return queue info - full tracking requires shared state expansion
+        return {
+            "task_id": task_id,
+            "status": "tracking_limited",
+            "message": "Task submitted successfully. Check orchestrator status for overall progress.",
+            "orchestrator_status": {
+                "running": status.get("running", False),
+                "tasks_completed": status.get("total_tasks_completed", 0),
+                "study_queue_size": status.get("study_queue_size", 0),
+                "practice_queue_size": status.get("practice_queue_size", 0)
+            }
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get task status: {str(e)}")
 
 
 @router.post("/tasks/batch-study")

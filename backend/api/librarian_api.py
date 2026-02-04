@@ -1354,7 +1354,7 @@ async def get_statistics(
         return StatisticsResponse(
             tags=stats["tags"],
             rules=stats["rules"],
-            relationships=stats["relationships"],
+            relationships=stats.get("actions", {}),  # Use 'actions' key from engine
             documents_processed=stats.get("documents_processed", 0),
             ai_available=stats["ai_available"],
             relationships_enabled=stats["relationships_enabled"]

@@ -6,19 +6,35 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Proxy /api requests to backend server
-      // This allows frontend to use /api/... paths which get rewritten to http://localhost:8000/...
-      '/api': {
+      // Proxy backend API requests to FastAPI server
+      '/autonomous-learning': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        // Enable for debugging proxy issues
-        // configure: (proxy, options) => {
-        //   proxy.on('proxyReq', (proxyReq, req, res) => {
-        //     console.log('Proxying:', req.method, req.url, '->', options.target + proxyReq.path);
-        //   });
-        // }
-      }
+      },
+      '/proactive-learning': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/training': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/learning-memory': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/chat': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/documents': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/genesis': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
     }
   }
 })

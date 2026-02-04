@@ -11,7 +11,7 @@ from datetime import datetime
 
 from .serpapi_service import SerpAPIService
 from scraping.service import WebScrapingService
-from database.session import SessionLocal
+from database.session import get_session_factory
 from scraping.models import ScrapingJob
 
 logger = logging.getLogger(__name__)
@@ -107,6 +107,16 @@ class AutoSearchService:
             
             # Step 3: Create scraping jobs
             job_ids = []
+            SessionLocal = get_session_factory()
+            if not SessionLocal:
+                logger.error("[AUTO-SEARCH] SessionLocal not initialized")
+                return {
+                    "success": False,
+                    "query": query,
+                    "urls": [],
+                    "job_ids": [],
+                    "message": "Database session not available"
+                }
             db = SessionLocal()
             
             try:
@@ -179,6 +189,13 @@ class AutoSearchService:
             Dictionary with job statuses
         """
         try:
+            SessionLocal = get_session_factory()
+            if not SessionLocal:
+                return {
+                    "overall_status": "error",
+                    "jobs": [],
+                    "error": "Database session not available"
+                }
             db = SessionLocal()
             try:
                 jobs = db.query(ScrapingJob).filter(

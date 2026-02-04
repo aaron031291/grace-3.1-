@@ -321,7 +321,7 @@ class GenesisKeyService:
             # Hook 3: Trigger autonomous pipeline
             try:
                 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
-                trigger_pipeline = get_genesis_trigger_pipeline(session=sess)
+                trigger_pipeline = get_genesis_trigger_pipeline()
                 # Pass extracted data instead of object
                 trigger_result = trigger_pipeline.on_genesis_key_created_data(extracted_key_data)
                 if trigger_result.get("triggered"):

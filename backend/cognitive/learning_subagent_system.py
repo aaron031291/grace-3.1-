@@ -16,6 +16,7 @@ All subagents run independently in background with IPC via queues.
 
 import multiprocessing as mp
 from multiprocessing import Process, Queue, Value, Manager, Lock
+import threading
 import logging
 import time
 from pathlib import Path
@@ -25,6 +26,8 @@ from datetime import datetime
 import signal
 import sys
 from enum import Enum
+
+from settings import settings
 
 from sqlalchemy.orm import Session
 from watchdog.observers import Observer
@@ -116,6 +119,17 @@ class Message:
         return cls(**data)
 
 
+class NullRetriever:
+    """Fallback retriever for lightweight mode.
+
+    Implements the minimal interface used by the learning system.
+    Returns no chunks/materials, but keeps the pipeline operational.
+    """
+
+    def retrieve(self, query: str, limit: int = 10, score_threshold: float = 0.0) -> Dict[str, Any]:
+        return {"chunks": [], "query": query, "limit": limit, "score_threshold": score_threshold}
+
+
 # ======================================================================
 # Base Subagent (runs in separate process)
 # ======================================================================
@@ -193,7 +207,9 @@ class BaseSubagent:
         signal.signal(signal.SIGTERM, self._signal_handler)
 
         try:
+            logger.debug(f"[{self.agent_id}] Initializing resources")
             self._initialize()
+            logger.debug(f"[{self.agent_id}] Initialization complete")
 
             while self.is_running.value:
                 try:
@@ -209,18 +225,26 @@ class BaseSubagent:
                         task = LearningTask.from_dict(msg.data)
                         self._process_task(task)
 
+                    else:
+                        logger.warning(f"[{self.agent_id}] Unhandled message type: {msg.msg_type}")
+
                 except mp.queues.Empty:
                     # No tasks, send heartbeat
                     self._send_heartbeat()
                     continue
 
                 except Exception as e:
-                    logger.error(f"[{self.agent_id}] Error in loop: {e}")
+                    logger.exception(f"[{self.agent_id}] Error in loop")
                     import traceback
                     traceback.print_exc()
 
         finally:
-            self._cleanup()
+            try:
+                logger.debug(f"[{self.agent_id}] Cleaning up resources")
+                self._cleanup()
+                logger.debug(f"[{self.agent_id}] Cleanup complete")
+            except Exception:
+                logger.exception(f"[{self.agent_id}] Cleanup failed")
             self.is_running.value = False
             logger.info(f"[{self.agent_id}] Execution loop ended")
 
@@ -241,11 +265,15 @@ class BaseSubagent:
         task.started_at = task.started_at or time.time()
         task.completed_at = time.time()
         self.tasks_failed.value += 1
-        logger.warning(f"[{self.agent_id}] {task.error}")
+        logger.warning(
+            f"[{self.agent_id}] {task.error} | task_id={task.task_id}"
+        )
         try:
             self._send_result(task)
         except Exception:
-            logger.exception(f"[{self.agent_id}] Failed to send result for unhandled task")
+            logger.exception(
+                f"[{self.agent_id}] Failed to send result for unhandled task | task_id={task.task_id}"
+            )
 
     def _send_result(self, task: LearningTask):
         """Send task result back to master."""
@@ -291,17 +319,36 @@ class StudySubagent(BaseSubagent):
 
     def _initialize(self):
         """Initialize database and retriever."""
-        from database.session import get_session_factory
-        from embedding import get_embedding_model
-        from retrieval.retriever import DocumentRetriever
-        from cognitive.active_learning_system import GraceActiveLearningSystem
+        # Initialize database connection for this subprocess
+        from database.connection import DatabaseConnection
+        from database.config import DatabaseConfig
+        config = DatabaseConfig.from_env()
+        DatabaseConnection.initialize(config)
 
+        from database.session import get_session_factory
         self.session_factory = get_session_factory()
-        self.embedding_model = get_embedding_model()
-        self.retriever = DocumentRetriever(
-            collection_name="documents",
-            embedding_model=self.embedding_model
-        )
+
+        self.embedding_model = None
+        self.retriever = None
+
+        if settings.LIGHTWEIGHT_MODE or settings.SKIP_EMBEDDING_LOAD:
+            self.retriever = NullRetriever()
+            logger.info(f"[{self.agent_id}] Study subagent using NullRetriever (lightweight/skip embedding)")
+            return
+
+        try:
+            from embedding import get_embedding_model
+            from retrieval.retriever import DocumentRetriever
+
+            self.embedding_model = get_embedding_model()
+            self.retriever = DocumentRetriever(
+                collection_name="documents",
+                embedding_model=self.embedding_model
+            )
+        except Exception as e:
+            self.embedding_model = None
+            self.retriever = NullRetriever()
+            logger.warning(f"[{self.agent_id}] Falling back to NullRetriever (embedding/retriever unavailable): {e}")
 
         logger.info(f"[{self.agent_id}] Study subagent initialized")
 
@@ -376,16 +423,36 @@ class PracticeSubagent(BaseSubagent):
 
     def _initialize(self):
         """Initialize practice environment."""
-        from database.session import get_session_factory
-        from embedding import get_embedding_model
-        from retrieval.retriever import DocumentRetriever
+        # Initialize database connection for this subprocess
+        from database.connection import DatabaseConnection
+        from database.config import DatabaseConfig
+        config = DatabaseConfig.from_env()
+        DatabaseConnection.initialize(config)
 
+        from database.session import get_session_factory
         self.session_factory = get_session_factory()
-        self.embedding_model = get_embedding_model()
-        self.retriever = DocumentRetriever(
-            collection_name="documents",
-            embedding_model=self.embedding_model
-        )
+
+        self.embedding_model = None
+        self.retriever = None
+
+        if settings.LIGHTWEIGHT_MODE or settings.SKIP_EMBEDDING_LOAD:
+            self.retriever = NullRetriever()
+            logger.info(f"[{self.agent_id}] Practice subagent using NullRetriever (lightweight/skip embedding)")
+            return
+
+        try:
+            from embedding import get_embedding_model
+            from retrieval.retriever import DocumentRetriever
+
+            self.embedding_model = get_embedding_model()
+            self.retriever = DocumentRetriever(
+                collection_name="documents",
+                embedding_model=self.embedding_model
+            )
+        except Exception as e:
+            self.embedding_model = None
+            self.retriever = NullRetriever()
+            logger.warning(f"[{self.agent_id}] Falling back to NullRetriever (embedding/retriever unavailable): {e}")
 
         logger.info(f"[{self.agent_id}] Practice subagent initialized")
 
@@ -461,6 +528,12 @@ class MirrorSubagent(BaseSubagent):
 
     def _initialize(self):
         """Initialize mirror."""
+        # Initialize database connection for this subprocess
+        from database.connection import DatabaseConnection
+        from database.config import DatabaseConfig
+        config = DatabaseConfig.from_env()
+        DatabaseConnection.initialize(config)
+
         from database.session import get_session_factory
         self.session_factory = get_session_factory()
         logger.info(f"[{self.agent_id}] Mirror subagent initialized")
@@ -623,8 +696,8 @@ class LearningOrchestrator:
 
         self.mirror_agent.start()
 
-        # Start result collector
-        self.result_collector = Process(
+        # Start result collector (thread avoids pickling orchestrator instance)
+        self.result_collector = threading.Thread(
             target=self._collect_results,
             daemon=True
         )
@@ -651,9 +724,7 @@ class LearningOrchestrator:
         if self.result_collector and self.result_collector.is_alive():
             self.result_collector.join(timeout=10)
             if self.result_collector.is_alive():
-                logger.warning("[ORCHESTRATOR] Force terminating result collector")
-                self.result_collector.terminate()
-                self.result_collector.join(timeout=2)
+                logger.warning("[ORCHESTRATOR] Result collector still running after timeout")
 
         # Cleanup manager resources
         try:

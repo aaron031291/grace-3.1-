@@ -105,7 +105,9 @@ class BaseThreadSubagent:
         logger.info(f"[{self.agent_id}] Execution loop started")
 
         try:
+            logger.debug(f"[{self.agent_id}] Initializing resources")
             self._initialize()
+            logger.debug(f"[{self.agent_id}] Initialization complete")
 
             while self.is_running:
                 try:
@@ -121,6 +123,9 @@ class BaseThreadSubagent:
                         task = LearningTask.from_dict(msg.data)
                         self._process_task(task)
 
+                    else:
+                        logger.warning(f"[{self.agent_id}] Unhandled message type: {msg.msg_type}")
+
                 except Empty:
                     # No tasks, send heartbeat
                     if self.is_running:
@@ -128,14 +133,19 @@ class BaseThreadSubagent:
                     continue
 
                 except Exception as e:
-                    logger.error(f"[{self.agent_id}] Error in loop: {e}")
+                    logger.exception(f"[{self.agent_id}] Error in loop")
                     import traceback
                     traceback.print_exc()
                     with self._lock:
                         self.tasks_failed += 1
 
         finally:
-            self._cleanup()
+            try:
+                logger.debug(f"[{self.agent_id}] Cleaning up resources")
+                self._cleanup()
+                logger.debug(f"[{self.agent_id}] Cleanup complete")
+            except Exception:
+                logger.exception(f"[{self.agent_id}] Cleanup failed")
             self.is_running = False
             logger.info(f"[{self.agent_id}] Execution loop ended")
 
@@ -157,11 +167,15 @@ class BaseThreadSubagent:
         task.completed_at = time.time()
         with self._lock:
             self.tasks_failed += 1
-        logger.warning(f"[{self.agent_id}] {task.error}")
+        logger.warning(
+            f"[{self.agent_id}] {task.error} | task_id={task.task_id}"
+        )
         try:
             self._send_result(task)
         except Exception:
-            logger.exception(f"[{self.agent_id}] Failed to send result for unhandled task")
+            logger.exception(
+                f"[{self.agent_id}] Failed to send result for unhandled task | task_id={task.task_id}"
+            )
 
     def _send_result(self, task: LearningTask):
         """Send task result back to master."""

@@ -40,6 +40,11 @@ class GenesisKeyType(str, enum.Enum):
     DATABASE_CHANGE = "database_change"          # Database modifications
     LIBRARIAN_ACTION = "librarian_action"        # Librarian auto-categorization
 
+    # Autonomous learning operations
+    LEARNING_COMPLETE = "learning_complete"      # Study session completed
+    GAP_IDENTIFIED = "gap_identified"            # Knowledge gap detected
+    PRACTICE_OUTCOME = "practice_outcome"        # Practice task result
+
     # System operations
     CONFIGURATION = "configuration"              # Config changes
     SYSTEM_EVENT = "system_event"               # System-level events

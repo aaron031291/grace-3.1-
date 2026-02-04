@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
+import re
 import time
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -80,6 +81,7 @@ from api.grace_planning_api import router as grace_planning_router  # Grace Plan
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
+from search.serpapi_service import SerpAPIService
 
 try:
     from settings import settings
@@ -361,18 +363,22 @@ async def lifespan(app: FastAPI):
             
             # Get the file manager instance
             file_manager = get_file_manager()
+            print("[AUTO-INGEST] File manager initialized", flush=True)
             
             # Initialize git if needed
             file_manager.git_tracker.initialize_git()
+            print("[AUTO-INGEST] Git tracker initialized", flush=True)
             
             # Do initial scan on startup
             # print("[AUTO-INGEST] Running initial scan of knowledge base...", flush=True)
             max_retries = 3
             results = []
             
+            print("[AUTO-INGEST] Starting directory scan...", flush=True)
             for retry_count in range(max_retries):
                 try:
                     results = file_manager.scan_directory()
+                    print(f"[AUTO-INGEST] Scan completed with {len(results)} results", flush=True)
                     break
                 except Exception as e:
                     if retry_count < max_retries - 1:
@@ -671,18 +677,42 @@ async def chat(request: ChatRequest):
                 detail=f"Model '{model_name}' not found. Available models: {[m.name for m in client.get_all_models()]}"
             )
         
-        # ==================== RAG-FIRST RETRIEVAL ====================
+        # ==================== ROUTING: SMALL-TALK vs RAG vs WEB ====================
         # Get the last user message as the query
         user_query = ""
         for msg in reversed(request.messages):
             if msg.role == "user":
-                user_query = msg.content
+                user_query = msg.content.strip()
                 break
-        
+
         if not user_query:
             raise HTTPException(
                 status_code=400,
                 detail="No user message found in conversation"
+            )
+
+        # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
+        greeting_pattern = re.compile(r"^(hi|hello|hey|hola|yo|sup|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye)\b", re.IGNORECASE)
+        if greeting_pattern.match(user_query):
+            messages = [
+                {"role": "system", "content": "You are a concise, friendly assistant. Keep casual greetings short and do not cite sources."},
+                {"role": "user", "content": user_query},
+            ]
+
+            response = client.chat(
+                model=model_name,
+                messages=messages,
+                stream=False,
+                temperature=request.temperature or 0.4,
+                num_predict=request.top_k or 256,
+            )
+
+            return ChatResponse(
+                response=response,
+                sources=[],
+                model=model_name,
+                temperature=request.temperature,
+                max_tokens=request.top_k
             )
         
         # Retrieve RAG context
@@ -719,9 +749,34 @@ async def chat(request: ChatRequest):
                 ]
         except Exception as e:
             print(f"[WARN] RAG retrieval error: {str(e)}")
-        
-        # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
-        # Core enforcement: No knowledge = reject response
+
+        # If KB empty, try SerpAPI before failing
+        if not rag_context and settings and settings.SERPAPI_ENABLED and settings.SERPAPI_KEY:
+            try:
+                serp = SerpAPIService(api_key=settings.SERPAPI_KEY)
+                serp_results = serp.search(query=user_query, num=settings.SERPAPI_MAX_RESULTS)
+                snippets = [r.get("snippet") or r.get("title", "") for r in serp_results]
+                rag_context = "\n\n".join([s for s in snippets if s]).strip()
+                sources = [
+                    {
+                        "text": r.get("snippet", ""),
+                        "score": 0.0,
+                        "chunk_id": None,
+                        "document_id": None,
+                        "filename": r.get("title", "web"),
+                        "source": r.get("link", "web"),
+                        "upload_method": "serpapi",
+                        "chunk_index": idx,
+                        "trust_score": 0.0,
+                        "created_at": None,
+                        "description": r.get("title", "")
+                    }
+                    for idx, r in enumerate(serp_results)
+                ]
+            except Exception as e:
+                print(f"[WARN] SerpAPI retrieval error: {str(e)}")
+
+        # ==================== REJECT IF STILL NO KNOWLEDGE ====================
         if not rag_context:
             raise HTTPException(
                 status_code=404,
@@ -1266,6 +1321,61 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             role="user",
             content=request.content
         )
+
+        # ==================== SMALL-TALK / GREETING ROUTE ====================
+        # Short-circuit simple greetings to avoid RAG/SerpAPI and keep UI tidy
+        user_query = request.content.strip()
+        greeting_pattern = re.compile(r"^(hi|hello|hey|hola|yo|sup|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye)\b", re.IGNORECASE)
+        if greeting_pattern.match(user_query):
+            client = get_ollama_client()
+            if not client.is_running():
+                raise HTTPException(
+                    status_code=503,
+                    detail="Ollama service is not running. Please start Ollama to generate responses."
+                )
+
+            small_talk_messages = [
+                {
+                    "role": "system",
+                    "content": "You are a concise, friendly assistant. Keep casual greetings short and do not cite sources."
+                },
+                {"role": "user", "content": user_query},
+            ]
+
+            start_time = time.time()
+            temperature = request.temperature or chat.temperature or 0.4
+            response_text = client.chat(
+                model=chat.model,
+                messages=small_talk_messages,
+                stream=False,
+                temperature=min(temperature, 0.7),
+                top_p=request.top_p if request.top_p else 0.8,
+                top_k=request.top_k if request.top_k else 40,
+                num_predict=settings.MAX_NUM_PREDICT if settings else 256
+            )
+            generation_time = time.time() - start_time
+
+            assistant_message = history_repo.add_message(
+                chat_id=chat_id,
+                role="assistant",
+                content=response_text,
+                completion_time=generation_time
+            )
+
+            chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+            total_tokens = history_repo.count_tokens_in_chat(chat_id)
+
+            return PromptResponse(
+                chat_id=chat_id,
+                user_message_id=user_message.id,
+                assistant_message_id=assistant_message.id,
+                message=response_text,
+                model=chat.model,
+                generation_time=generation_time,
+                tokens_used=None,
+                total_tokens_in_chat=total_tokens,
+                sources=[]
+            )
         
         # ==================== RAG-FIRST RETRIEVAL ====================
         # Retrieve RAG context for the user query - MANDATORY

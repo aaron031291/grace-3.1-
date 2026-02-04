@@ -11,11 +11,13 @@ API for Grace's active learning system where she:
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 from pathlib import Path
 
 from database.session import get_session
+from cognitive.learning_memory import LearningExample
 from retrieval.retriever import DocumentRetriever
 from cognitive.active_learning_system import (
     GraceActiveLearningSystem,
@@ -285,6 +287,7 @@ async def create_training_curriculum(
 
 @router.get("/analytics/progress")
 async def get_learning_progress(
+    session: Session = Depends(get_session),
     learning_system: GraceActiveLearningSystem = Depends(get_learning_system)
 ) -> Dict[str, Any]:
     """
@@ -303,29 +306,59 @@ async def get_learning_progress(
     - Track training effectiveness
     """
     try:
-        # Get all skill assessments
+        # Query database for practice outcomes grouped by skill
+        practice_stats = session.query(
+            func.json_extract(LearningExample.example_metadata, '$.skill_name').label('skill'),
+            func.count(LearningExample.id).label('tasks'),
+            func.avg(LearningExample.trust_score).label('avg_trust'),
+            func.avg(LearningExample.outcome_quality).label('success_rate')
+        ).filter(
+            LearningExample.example_type == 'practice_outcome',
+            func.json_extract(LearningExample.example_metadata, '$.skill_name').isnot(None)
+        ).group_by('skill').all()
+        
         skills = []
         total_tasks = 0
         total_success = 0.0
-
-        for skill_name, skill_level in learning_system.skill_levels.items():
-            skills.append({
-                "skill": skill_name,
-                "level": skill_level.current_level,
-                "proficiency": skill_level.proficiency_score,
-                "tasks": skill_level.tasks_completed,
-                "success_rate": skill_level.success_rate
-            })
-            total_tasks += skill_level.tasks_completed
-            total_success += skill_level.success_rate * skill_level.tasks_completed
-
+        
+        for stat in practice_stats:
+            if stat.skill:  # Only include if skill name exists
+                skill_name = stat.skill
+                tasks_count = stat.tasks or 0
+                avg_trust = stat.avg_trust or 0.0
+                success_rate = stat.success_rate or 0.0
+                
+                # Determine proficiency level based on trust score
+                if avg_trust >= 0.9:
+                    level = "expert"
+                    proficiency = 0.9 + (avg_trust - 0.9)
+                elif avg_trust >= 0.8:
+                    level = "advanced"
+                    proficiency = 0.7 + (avg_trust - 0.8) * 2
+                elif avg_trust >= 0.6:
+                    level = "intermediate"
+                    proficiency = 0.4 + (avg_trust - 0.6) * 1.5
+                else:
+                    level = "beginner"
+                    proficiency = avg_trust * 0.67
+                
+                skills.append({
+                    "skill": skill_name,
+                    "level": level,
+                    "proficiency": round(proficiency, 3),
+                    "tasks": tasks_count,
+                    "success_rate": round(success_rate, 3)
+                })
+                total_tasks += tasks_count
+                total_success += success_rate * tasks_count
+        
         overall_success_rate = (total_success / total_tasks) if total_tasks > 0 else 0.0
 
         return {
             "total_skills": len(skills),
             "skills": skills,
             "total_tasks_completed": total_tasks,
-            "overall_success_rate": overall_success_rate,
+            "overall_success_rate": round(overall_success_rate, 3),
             "timestamp": datetime.utcnow().isoformat()
         }
 
