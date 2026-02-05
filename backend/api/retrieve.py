@@ -715,138 +715,148 @@ async def retrieve_directory_chunks(
         logger.error(f"Directory retrieval error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Directory retrieval failed")
 
-@router.post("/search-with-auto", response_model=RetrievalResponse, summary="Retrieve with auto-search fallback")
-async def retrieve_with_auto_search(
-    query: str = Query(..., description="Query text to search for"),
-    limit: int = Query(5, description="Maximum number of chunks to return"),
-    threshold: float = Query(0.3, description="Minimum similarity score (0-1)"),
-    enable_auto_search: bool = Query(True, description="Enable auto-search fallback"),
-    folder_path: Optional[str] = Query(None, description="Folder path for scoped search"),
-    retriever: DocumentRetriever = Depends(get_document_retriever)
-) -> RetrievalResponse:
-    """
-    Retrieve document chunks with automatic web search fallback.
-    
-    If no results are found in the vector database and auto-search is enabled,
-    this endpoint will automatically:
-    1. Search Google using SerpAPI
-    2. Scrape top 3 results
-    3. Save to knowledge_base for auto-ingestion
-    4. Return job IDs for tracking
-    
-    Args:
-        query: Query text to search for
-        limit: Maximum number of chunks to return
-        threshold: Minimum similarity score (0-1)
-        enable_auto_search: Whether to trigger auto-search on no results
-        retriever: DocumentRetriever instance
-        
-    Returns:
-        RetrievalResponse with chunks or auto-search info
-    """
-    try:
-        # First, try normal retrieval
-        chunks = retriever.retrieve(
-            query=query,
-            limit=limit,
-            score_threshold=threshold,
-            include_metadata=True,
-        )
-        
-        # If we have results, return them
-        if chunks:
-            retrieval_chunks = [
-                RetrievalChunk(
-                    chunk_id=chunk["chunk_id"],
-                    document_id=chunk["document_id"],
-                    chunk_index=chunk["chunk_index"],
-                    text=chunk["text"],
-                    score=chunk.get("score"),
-                    confidence_score=chunk.get("confidence_score"),
-                    metadata=chunk.get("metadata")
-                )
-                for chunk in chunks
-            ]
-            
-            context = retriever.build_context(chunks, include_sources=True)
-            
-            return RetrievalResponse(
-                query=query,
-                chunks=retrieval_chunks,
-                total=len(retrieval_chunks),
-                context=context
-            )
-        
-        # No results found - trigger auto-search if enabled
-        if enable_auto_search:
-            try:
-                from settings import settings
-                from search.auto_search import AutoSearchService
-                
-                # Check if SerpAPI is enabled
-                if not settings.SERPAPI_ENABLED or not settings.SERPAPI_KEY:
-                    logger.warning("[AUTO-SEARCH] SerpAPI not enabled or no API key configured")
-                    return RetrievalResponse(
-                        query=query,
-                        chunks=[],
-                        total=0,
-                        context="",
-                        auto_search_triggered=False,
-                        auto_search_message="Auto-search not available (SerpAPI not configured)"
-                    )
-                
-                logger.info(f"[AUTO-SEARCH] No results found for query: {query}. Triggering auto-search...")
-                
-                # Initialize auto-search service
-                auto_search = AutoSearchService(settings.SERPAPI_KEY)
-                
-                # Search and scrape
-                result = await auto_search.search_and_scrape(
-                    query=query,
-                    max_urls=settings.SERPAPI_MAX_RESULTS,
-                    folder_path=folder_path
-                )
-                
-                if result["success"]:
-                    return RetrievalResponse(
-                        query=query,
-                        chunks=[],
-                        total=0,
-                        context="",
-                        auto_search_triggered=True,
-                        auto_search_job_ids=result["job_ids"],
-                        auto_search_urls=result["urls"],
-                        auto_search_message=f"No results found. Searching the web and scraping {len(result['urls'])} websites. Check back in 30-60 seconds."
-                    )
-                else:
-                    return RetrievalResponse(
-                        query=query,
-                        chunks=[],
-                        total=0,
-                        context="",
-                        auto_search_triggered=False,
-                        auto_search_message=f"Auto-search failed: {result['message']}"
-                    )
-            
-            except Exception as e:
-                logger.error(f"[AUTO-SEARCH] Error: {e}", exc_info=True)
-                return RetrievalResponse(
-                    query=query,
-                    chunks=[],
-                    total=0,
-                    context="",
-                    auto_search_triggered=False,
-                    auto_search_message=f"Auto-search error: {str(e)}"
-                )
-        
-        # Auto-search disabled, return empty results
-        return RetrievalResponse(
-            query=query,
-            chunks=[],
-            total=0,
-            context=""
-        )
-    
-    except Exception as e:
-        logger.error(f"Retrieval error: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Retrieval failed")
+# ==================== OLD AUTO-SEARCH ENDPOINT (DISABLED) ====================
+# This endpoint has been replaced by the multi-tier query handler in app.py
+# The multi-tier system uses direct ingestion (no file creation) which is cleaner
+# and avoids "file vanished" warnings from the file watcher.
+#
+# If you need to re-enable this, uncomment the code below.
+# However, it's recommended to use the multi-tier system instead.
+# ==============================================================================
+
+# @router.post("/search-with-auto", response_model=RetrievalResponse, summary="Retrieve with auto-search fallback")
+# async def retrieve_with_auto_search(
+#     query: str = Query(..., description="Query text to search for"),
+#     limit: int = Query(5, description="Maximum number of chunks to return"),
+#     threshold: float = Query(0.3, description="Minimum similarity score (0-1)"),
+#     enable_auto_search: bool = Query(True, description="Enable auto-search fallback"),
+#     folder_path: Optional[str] = Query(None, description="Folder path for scoped search"),
+#     retriever: DocumentRetriever = Depends(get_document_retriever)
+# ) -> RetrievalResponse:
+#     """
+#     Retrieve document chunks with automatic web search fallback.
+#     
+#     If no results are found in the vector database and auto-search is enabled,
+#     this endpoint will automatically:
+#     1. Search Google using SerpAPI
+#     2. Scrape top 3 results
+#     3. Save to knowledge_base for auto-ingestion
+#     4. Return job IDs for tracking
+#     
+#     Args:
+#         query: Query text to search for
+#         limit: Maximum number of chunks to return
+#         threshold: Minimum similarity score (0-1)
+#         enable_auto_search: Whether to trigger auto-search on no results
+#         retriever: DocumentRetriever instance
+#         
+#     Returns:
+#         RetrievalResponse with chunks or auto-search info
+#     """
+#     try:
+#         # First, try normal retrieval
+#         chunks = retriever.retrieve(
+#             query=query,
+#             limit=limit,
+#             score_threshold=threshold,
+#             include_metadata=True,
+#         )
+#         
+#         # If we have results, return them
+#         if chunks:
+#             retrieval_chunks = [
+#                 RetrievalChunk(
+#                     chunk_id=chunk["chunk_id"],
+#                     document_id=chunk["document_id"],
+#                     chunk_index=chunk["chunk_index"],
+#                     text=chunk["text"],
+#                     score=chunk.get("score"),
+#                     confidence_score=chunk.get("confidence_score"),
+#                     metadata=chunk.get("metadata")
+#                 )
+#                 for chunk in chunks
+#             ]
+#             
+#             context = retriever.build_context(chunks, include_sources=True)
+#             
+#             return RetrievalResponse(
+#                 query=query,
+#                 chunks=retrieval_chunks,
+#                 total=len(retrieval_chunks),
+#                 context=context
+#             )
+#         
+#         # No results found - trigger auto-search if enabled
+#         if enable_auto_search:
+#             try:
+#                 from settings import settings
+#                 from search.auto_search import AutoSearchService
+#                 
+#                 # Check if SerpAPI is enabled
+#                 if not settings.SERPAPI_ENABLED or not settings.SERPAPI_KEY:
+#                     logger.warning("[AUTO-SEARCH] SerpAPI not enabled or no API key configured")
+#                     return RetrievalResponse(
+#                         query=query,
+#                         chunks=[],
+#                         total=0,
+#                         context="",
+#                         auto_search_triggered=False,
+#                         auto_search_message="Auto-search not available (SerpAPI not configured)"
+#                     )
+#                 
+#                 logger.info(f"[AUTO-SEARCH] No results found for query: {query}. Triggering auto-search...")
+#                 
+#                 # Initialize auto-search service
+#                 auto_search = AutoSearchService(settings.SERPAPI_KEY)
+#                 
+#                 # Search and scrape
+#                 result = await auto_search.search_and_scrape(
+#                     query=query,
+#                     max_urls=settings.SERPAPI_MAX_RESULTS,
+#                     folder_path=folder_path
+#                 )
+#                 
+#                 if result["success"]:
+#                     return RetrievalResponse(
+#                         query=query,
+#                         chunks=[],
+#                         total=0,
+#                         context="",
+#                         auto_search_triggered=True,
+#                         auto_search_job_ids=result["job_ids"],
+#                         auto_search_urls=result["urls"],
+#                         auto_search_message=f"No results found. Searching the web and scraping {len(result['urls'])} websites. Check back in 30-60 seconds."
+#                     )
+#                 else:
+#                     return RetrievalResponse(
+#                         query=query,
+#                         chunks=[],
+#                         total=0,
+#                         context="",
+#                         auto_search_triggered=False,
+#                         auto_search_message=f"Auto-search failed: {result['message']}"
+#                     )
+#             
+#             except Exception as e:
+#                 logger.error(f"[AUTO-SEARCH] Error: {e}", exc_info=True)
+#                 return RetrievalResponse(
+#                     query=query,
+#                     chunks=[],
+#                     total=0,
+#                     context="",
+#                     auto_search_triggered=False,
+#                     auto_search_message=f"Auto-search error: {str(e)}"
+#                 )
+#         
+#         # Auto-search disabled, return empty results
+#         return RetrievalResponse(
+#             query=query,
+#             chunks=[],
+#             total=0,
+#             context=""
+#         )
+#     
+#     except Exception as e:
+#         logger.error(f"Retrieval error: {e}", exc_info=True)
+#         raise HTTPException(status_code=500, detail="Retrieval failed")
+

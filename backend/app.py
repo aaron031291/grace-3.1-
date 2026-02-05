@@ -58,6 +58,7 @@ from api.knowledge_base_api import router as knowledge_base_router  # Knowledge 
 from api.kpi_api import router as kpi_router  # KPI Dashboard tracking
 from api.proactive_learning import router as proactive_learning_router  # Proactive Learning system
 from api.repositories_api import router as repositories_router  # Enterprise Repository Management
+from api.context_api import router as context_router  # Context submission for multi-tier queries
 from api.telemetry import router as telemetry_router  # System Telemetry and monitoring
 from api.monitoring_api import router as monitoring_router  # System Monitoring - organs, health, metrics
 from api.streaming import router as streaming_router  # SSE Streaming chat responses
@@ -127,6 +128,11 @@ class ChatResponse(BaseModel):
     prompt_tokens: Optional[int] = Field(None, description="Number of tokens in the prompt")
     response_tokens: Optional[int] = Field(None, description="Number of tokens in the response")
     sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
+    # Multi-tier query handling fields
+    tier: Optional[str] = Field(None, description="Query tier used: VECTORDB, MODEL_KNOWLEDGE, or USER_CONTEXT")
+    confidence: Optional[float] = Field(None, description="Confidence score (0.0-1.0)")
+    knowledge_gaps: Optional[List[dict]] = Field(None, description="Knowledge gaps identified (Tier 3)")
+    warnings: Optional[List[str]] = Field(None, description="Warnings about response quality")
 
 
 class HealthResponse(BaseModel):
@@ -536,7 +542,8 @@ app.include_router(scraping_router)  # Web Scraping - URL scraping and crawling
 app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
 app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
-app.include_router(grace_planning_router)  # Grace Planning - concept->questions->tech->decisions->execute->IDE workflow
+app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
+app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -692,7 +699,10 @@ async def chat(request: ChatRequest):
             )
 
         # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
-        greeting_pattern = re.compile(r"^(hi|hello|hey|hola|yo|sup|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye)\b", re.IGNORECASE)
+        greeting_pattern = re.compile(
+            r"^(hi|hello|hey|hola|yo|sup|what'?s\s+up|wassup|howdy|greetings|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye|see\s+ya)\b",
+            re.IGNORECASE
+        )
         if greeting_pattern.match(user_query):
             messages = [
                 {"role": "system", "content": "You are a concise, friendly assistant. Keep casual greetings short and do not cite sources."},
@@ -714,125 +724,38 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature,
                 max_tokens=request.top_k
             )
+        # ==================== MULTI-TIER QUERY HANDLING ====================
+        # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
+        from retrieval.multi_tier_integration import (
+            create_multi_tier_handler,
+            log_query_handling,
+            format_chat_response
+        )
         
-        # Retrieve RAG context
-        rag_context = ""
-        sources = []  # Track source chunks
-        try:
-            retriever = get_document_retriever()
-            retrieval_result = retriever.retrieve(
-                query=user_query,
-                limit=5,
-                include_metadata=True  # Include metadata for source attribution
-            )
-            
-            if retrieval_result:
-                rag_context = "\n\n".join([chunk["text"] for chunk in retrieval_result])
-                rag_context = rag_context.strip()
-                
-                # Prepare sources for response
-                sources = [
-                    {
-                        "text": chunk["text"],
-                        "score": chunk.get("score", 0),
-                        "chunk_id": chunk.get("chunk_id"),
-                        "document_id": chunk.get("document_id"),
-                        "filename": chunk.get("metadata", {}).get("filename", "Unknown"),
-                        "source": chunk.get("metadata", {}).get("source", "Unknown"),
-                        "upload_method": chunk.get("metadata", {}).get("upload_method", "Unknown"),
-                        "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
-                        "trust_score": chunk.get("metadata", {}).get("trust_score", 0.0),
-                        "created_at": chunk.get("metadata", {}).get("created_at"),
-                        "description": chunk.get("metadata", {}).get("description"),
-                    }
-                    for chunk in retrieval_result
-                ]
-        except Exception as e:
-            print(f"[WARN] RAG retrieval error: {str(e)}")
-
-        # If KB empty, try SerpAPI before failing
-        if not rag_context and settings and settings.SERPAPI_ENABLED and settings.SERPAPI_KEY:
-            try:
-                serp = SerpAPIService(api_key=settings.SERPAPI_KEY)
-                serp_results = serp.search(query=user_query, num=settings.SERPAPI_MAX_RESULTS)
-                snippets = [r.get("snippet") or r.get("title", "") for r in serp_results]
-                rag_context = "\n\n".join([s for s in snippets if s]).strip()
-                sources = [
-                    {
-                        "text": r.get("snippet", ""),
-                        "score": 0.0,
-                        "chunk_id": None,
-                        "document_id": None,
-                        "filename": r.get("title", "web"),
-                        "source": r.get("link", "web"),
-                        "upload_method": "serpapi",
-                        "chunk_index": idx,
-                        "trust_score": 0.0,
-                        "created_at": None,
-                        "description": r.get("title", "")
-                    }
-                    for idx, r in enumerate(serp_results)
-                ]
-            except Exception as e:
-                print(f"[WARN] SerpAPI retrieval error: {str(e)}")
-
-        # ==================== REJECT IF STILL NO KNOWLEDGE ====================
-        if not rag_context:
-            raise HTTPException(
-                status_code=404,
-                detail="I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
-            )
+        # Create multi-tier handler
+        handler = create_multi_tier_handler(client)
         
-        # Prepare messages with RAG context
-        messages = []
-        
-        # Add strict system prompt
-        messages.append({
-            "role": "system",
-            "content": build_rag_system_prompt()
-        })
-        
-        # Add conversation history, injecting RAG context into the last user message
-        for i, msg in enumerate(request.messages):
-            if i == len(request.messages) - 1 and msg.role == "user":
-                # Last message is user query - inject RAG context
-                augmented_content = build_rag_prompt(msg.content, rag_context)
-                messages.append({
-                    "role": msg.role,
-                    "content": augmented_content
-                })
-            else:
-                messages.append({
-                    "role": msg.role,
-                    "content": msg.content
-                })
-        
-        # Generate response with strict constraints
+        # Handle query with tier fallback
         start_time = time.time()
-        temperature = request.temperature if request.temperature is not None else 0.7
-        # Use lower temperature to enforce deterministic, knowledge-based responses
-        temperature = min(temperature, 0.3)  # Cap temperature at 0.3 for strict RAG
-        max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
-        
-        response = client.chat(
-            model=model_name,
-            messages=messages,
-            stream=False,
-            temperature=temperature,
-            top_p=request.top_p if request.top_p else 0.5,  # Lower top_p
-            top_k=request.top_k if request.top_k else 10,   # Lower top_k
-            num_predict=max_num_predict
+        tier_result = handler.handle_query(
+            query=user_query,
+            user_id=None,  # TODO: Get from auth
+            genesis_key_id=None  # TODO: Get from Genesis tracking
         )
         generation_time = time.time() - start_time
         
-        return ChatResponse(
-            message=response,
-            model=model_name,
-            generation_time=generation_time,
-            prompt_tokens=None,
-            response_tokens=None,
-            sources=sources  # Include source chunks
+        # Log query handling for tracking and learning
+        log_query_handling(
+            query_id=tier_result.metadata.get("query_id", "unknown"),
+            query_text=user_query,
+            tier_result=tier_result,
+            response_time_ms=tier_result.metadata.get("response_time_ms", 0)
         )
+        
+        # Format response
+        response_data = format_chat_response(tier_result, model_name, generation_time)
+        
+        return ChatResponse(**response_data)
     
     except HTTPException:
         raise
@@ -1377,156 +1300,48 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 sources=[]
             )
         
-        # ==================== RAG-FIRST RETRIEVAL ====================
-        # Retrieve RAG context for the user query - MANDATORY
-        # CONTEXT SCOPING:
-        #   - General chats (no folder_path): Full access to world model + all knowledge
-        #   - Folder chats (has folder_path): Scoped to folder's learning memory only
-        rag_context = ""
-        sources = []  # Track source chunks
-        is_folder_scoped = bool(chat.folder_path and chat.folder_path.strip())
-
-        try:
-            retriever = get_document_retriever()
-            retrieval_result = retriever.retrieve(
-                query=request.content,
-                limit=10 if is_folder_scoped else 5,  # Get more for folder filtering
-                include_metadata=True  # Include metadata for source attribution
-            )
-
-            # Apply folder scoping if this is a folder chat
-            if is_folder_scoped and retrieval_result:
-                folder_path = chat.folder_path.replace("\\", "/").strip("/")
-                filtered_chunks = []
-                for chunk in retrieval_result:
-                    file_path = chunk.get("metadata", {}).get("file_path", "")
-                    file_path = file_path.replace("\\", "/") if file_path else ""
-                    # Check if file is within the folder scope
-                    if file_path.startswith(folder_path + "/") or file_path.startswith(folder_path):
-                        filtered_chunks.append(chunk)
-                retrieval_result = filtered_chunks[:5]  # Limit to 5 after filtering
-
-            # Check if any relevant data was found
-            if retrieval_result:
-                # Build context with metadata enrichment for each chunk
-                context_parts = []
-                for chunk in retrieval_result:
-                    filename = chunk.get("metadata", {}).get("filename", "Unknown")
-                    created_at = chunk.get("metadata", {}).get("created_at", "Unknown")
-                    confidence = chunk.get("confidence_score", 0.0)
-                    chunk_text = chunk["text"]
-                    chunk_index = chunk.get("chunk_index", 0)
-
-                    # Format chunk with metadata for LLM context
-                    enriched_chunk = f"""[Source: {filename} | Date: {created_at} | Confidence: {confidence:.1%} | Chunk {chunk_index}]
-{chunk_text}"""
-                    context_parts.append(enriched_chunk)
-
-                rag_context = "\n\n".join(context_parts)
-                rag_context = rag_context.strip()
-
-                # Prepare sources for response
-                sources = [
-                    {
-                        "text": chunk["text"],
-                        "score": chunk.get("score", 0),
-                        "chunk_id": chunk.get("chunk_id"),
-                        "document_id": chunk.get("document_id"),
-                        "filename": chunk.get("metadata", {}).get("filename", "Unknown"),
-                        "source": chunk.get("metadata", {}).get("source", "Unknown"),
-                        "upload_method": chunk.get("metadata", {}).get("upload_method", "Unknown"),
-                        "chunk_index": chunk.get("metadata", {}).get("chunk_index", 0),
-                        "trust_score": chunk.get("confidence_score", 0.0),  # Get confidence_score from chunk, not metadata
-                        "created_at": chunk.get("metadata", {}).get("created_at"),
-                        "description": chunk.get("metadata", {}).get("description"),
-                    }
-                    for chunk in retrieval_result
-                ]
-        except Exception as e:
-            print(f"[WARN] RAG retrieval error: {str(e)}")
+        # ==================== MULTI-TIER QUERY HANDLING ====================
+        # Use multi-tier system: VectorDB → Model Knowledge → Internet Search → Context Request
+        from retrieval.multi_tier_integration import (
+            create_multi_tier_handler,
+            log_query_handling
+        )
         
-        # ==================== REJECT IF NO KNOWLEDGE FOUND ====================
-        # Core enforcement: No knowledge in database = reject response
-        if not rag_context:
-            # KEEP THE MESSAGE so history is preserved
-            # session.delete(user_message)
-            session.commit()
-
-            # Context-aware rejection message
-            if is_folder_scoped:
-                detail_msg = f"No relevant information found in folder '{chat.folder_path}'. This chat is scoped to that folder's learning memory. Please upload documents to this folder or use a General Chat for broader queries."
-            else:
-                detail_msg = "I cannot answer this question. No relevant information found in the knowledge base. Please upload documents related to your query."
-
-            raise HTTPException(
-                status_code=404,
-                detail=detail_msg
-            )
-
-        # ==================== VERIFY OLLAMA IS RUNNING ====================
-        # Only check Ollama after retrieval succeeds (so auto-search can work)
+        # Create multi-tier handler
         client = get_ollama_client()
-        if not client.is_running():
-            raise HTTPException(
-                status_code=503,
-                detail="Ollama service is not running. Please start Ollama to generate responses."
-            )
-
-        # Get chat history for context
-        chat_history = history_repo.get_by_chat(chat_id, skip=0, limit=100)
-
-        # Prepare messages for Ollama
-        messages = []
-
-        # Build context-aware system prompt
-        if is_folder_scoped:
-            # Folder-scoped: Focus on folder-specific knowledge
-            folder_system_prompt = f"""You are Grace, an intelligent assistant with access to the learning memory for the folder: {chat.folder_path}
-
-Your knowledge is SCOPED to this specific folder's documents and learning memory only.
-You can apply your intelligence and reasoning within this context, but you cannot access or reference information from other folders or the general knowledge base.
-
-IMPORTANT CONSTRAINTS:
-- Only use information from the provided context (from folder: {chat.folder_path})
-- If asked about topics outside this folder's scope, acknowledge the limitation
-- Be precise and reference the source documents when possible
-- Apply your full reasoning capabilities within this folder's context"""
-            messages.append({
-                "role": "system",
-                "content": folder_system_prompt
-            })
-        else:
-            # General chat: Full world model access
-            messages.append({
-                "role": "system",
-                "content": build_rag_system_prompt()
-            })
+        handler = create_multi_tier_handler(client)
         
-        # Add chat history (excluding the latest user message for now)
-        for msg in chat_history[:-1]:  # All messages except the last user message
-            messages.append({"role": msg.role, "content": msg.content})
-        
-        # Inject RAG context into the user message
-        augmented_content = build_rag_prompt(request.content, rag_context)
-        messages.append({"role": "user", "content": augmented_content})
-        
-        # Generate response with strict constraints
+        # Handle query with tier fallback
         start_time = time.time()
-        temperature = request.temperature or chat.temperature
-        # Use lower temperature to enforce deterministic, knowledge-based responses
-        temperature = min(temperature, 0.3) if temperature else 0.1  # Cap temperature at 0.3 for strict RAG
-        max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
-        
-        response_text = client.chat(
-            model=chat.model,
-            messages=messages,
-            stream=False,
-            temperature=temperature,
-            top_p=request.top_p if request.top_p else 0.5,  # Lower top_p for deterministic output
-            top_k=request.top_k if request.top_k else 10,   # Lower top_k for stricter sampling
-            num_predict=max_num_predict
+        tier_result = handler.handle_query(
+            query=request.content,
+            user_id=None,  # TODO: Get from auth
+            genesis_key_id=None  # TODO: Get from Genesis tracking
         )
         generation_time = time.time() - start_time
+        
+        # Log query handling for tracking and learning
+        log_query_handling(
+            query_id=tier_result.metadata.get("query_id", "unknown"),
+            query_text=request.content,
+            tier_result=tier_result,
+            response_time_ms=tier_result.metadata.get("response_time_ms", 0)
+        )
+        
+        # Check if query was successful
+        if not tier_result.success:
+            # All tiers failed - return error
+            session.commit()
+            raise HTTPException(
+                status_code=404,
+                detail=tier_result.response or "Unable to answer query. No relevant information found."
+            )
+        
+        # Extract response and sources from tier result
+        response_text = tier_result.response
+        sources = tier_result.sources or []
+
+
         
         # Verify response is not a rejection/failure message from the model
         response_text = response_text.strip()

@@ -2316,7 +2316,7 @@
       "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/.ingestion_state.json",
       "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/.ingestion_state.json",
       "created_at": "2026-01-28T12:44:57.834804",
-      "version_count": 6,
+      "version_count": 11,
       "versions": [
         {
           "version_number": 1,
@@ -2383,10 +2383,65 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-08d35269f65741698878f42626df4bc1",
           "has_content": true
+        },
+        {
+          "version_number": 7,
+          "version_key_id": "VER-b2852a141d20-7",
+          "genesis_key_db_id": "GK-cc6752d6d9e144df9c88f28be0d8d3b9",
+          "timestamp": "2026-02-05T11:34:32.523515",
+          "file_hash": "da4e402e310e9de759d9fa2f77c1fa4688fa5dfac905e5eb980137d261e613d8",
+          "file_size": 4800,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-16f9000b1a7348899693cfc871a4b337",
+          "has_content": true
+        },
+        {
+          "version_number": 8,
+          "version_key_id": "VER-b2852a141d20-8",
+          "genesis_key_db_id": "GK-633558f2506e4a76a3080309bb77eef8",
+          "timestamp": "2026-02-05T13:06:52.863170",
+          "file_hash": "5f37d858b908b292cf84ecba4256b54c268a8f0461da9ded4155f964e679c8a8",
+          "file_size": 5076,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-66267de78c454e13a3a0f792835830c0",
+          "has_content": true
+        },
+        {
+          "version_number": 9,
+          "version_key_id": "VER-b2852a141d20-9",
+          "genesis_key_db_id": "GK-5ac86830a92e411182dcf5e3be9ddc8a",
+          "timestamp": "2026-02-05T13:15:06.017851",
+          "file_hash": "716e5ecc6cc6c33e64a429a772b7c667a6ca89d1be3015fb3762f347e59775a0",
+          "file_size": 5204,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b0ea0993693a4e0eac8d7724ce0c6aa1",
+          "has_content": true
+        },
+        {
+          "version_number": 10,
+          "version_key_id": "VER-b2852a141d20-10",
+          "genesis_key_db_id": "GK-bfd21d54a585415db4dfa2a997b20373",
+          "timestamp": "2026-02-05T13:19:39.799638",
+          "file_hash": "9c045b9290b3e76c99d710914400e9efc2ef6cd3ebc91041f67bfe73319ad8fc",
+          "file_size": 5352,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c27e56ec0cdf49eca3cefc8d1949a61c",
+          "has_content": true
+        },
+        {
+          "version_number": 11,
+          "version_key_id": "VER-b2852a141d20-11",
+          "genesis_key_db_id": "GK-720c9a04213645798b43b362691c2d1c",
+          "timestamp": "2026-02-05T14:02:42.321209",
+          "file_hash": "28c90f8da60ccf125959bb01e34a64ec171005427c57a0e251aa3888015caed6",
+          "file_size": 5628,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0233804f3e064e2a882b9e306ffb2ce1",
+          "has_content": true
         }
       ],
-      "last_hash": "041a6773c0477d5ff4023a348c7bb4bf12ca57d6ff3b0f7120118a2a3191a057",
-      "last_updated": "2026-01-29T14:00:53.858755"
+      "last_hash": "28c90f8da60ccf125959bb01e34a64ec171005427c57a0e251aa3888015caed6",
+      "last_updated": "2026-02-05T14:02:42.321237"
     },
     "FILE-6eee8b2069be": {
       "file_genesis_key": "FILE-6eee8b2069be",
@@ -2668,7 +2723,7 @@
       "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/app.py",
       "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/app.py",
       "created_at": "2026-01-29T12:09:54.198535",
-      "version_count": 3,
+      "version_count": 4,
       "versions": [
         {
           "version_number": 1,
@@ -2702,10 +2757,21 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-5586282bd2514728b4fafd31404daab3",
           "has_content": true
+        },
+        {
+          "version_number": 4,
+          "version_key_id": "VER-3f41e546893d-4",
+          "genesis_key_db_id": "GK-06a30e1410d84b0e83baf466b70b09dd",
+          "timestamp": "2026-02-05T11:05:20.139346",
+          "file_hash": "248f4b17b31af3ebee4dac6723fb65a0c513b3d3eb7c46ae1ff2f57f53117c0e",
+          "file_size": 74165,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-99ca5ecd4f9344bf836b64cb667ed459",
+          "has_content": true
         }
       ],
-      "last_hash": "c9407b3d00272420d4a0cab01ed031c5bc47abdbe3819d741e7dcc83cd02320f",
-      "last_updated": "2026-01-29T12:17:40.344751"
+      "last_hash": "248f4b17b31af3ebee4dac6723fb65a0c513b3d3eb7c46ae1ff2f57f53117c0e",
+      "last_updated": "2026-02-05T11:05:20.139363"
     },
     "FILE-d5cdcd0ba4bb": {
       "file_genesis_key": "FILE-d5cdcd0ba4bb",
@@ -3179,6 +3245,358 @@
       ],
       "last_hash": "1a1a06732d8344e59533acc317c0844c8f6885c4668a91eb6ab1f034d3224072",
       "last_updated": "2026-02-02T10:53:08.466316"
+    },
+    "FILE-13496ba63f65": {
+      "file_genesis_key": "FILE-13496ba63f65",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/retrieval/query_intelligence.py",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/retrieval/query_intelligence.py",
+      "created_at": "2026-02-05T11:07:49.261338",
+      "version_count": 5,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-13496ba63f65-1",
+          "genesis_key_db_id": "GK-7144311824d746f697ac0239fe75a4ea",
+          "timestamp": "2026-02-05T11:07:49.305219",
+          "file_hash": "de10959604f6684727cff8a35f31d003975548d05a1e47e152714efd7b493703",
+          "file_size": 21179,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3c92ce709c914e03848e7d2d1e2e3eef",
+          "has_content": true
+        },
+        {
+          "version_number": 2,
+          "version_key_id": "VER-13496ba63f65-2",
+          "genesis_key_db_id": "GK-5411d50f68de4f9eb166485da77f786a",
+          "timestamp": "2026-02-05T12:56:41.097076",
+          "file_hash": "62408f3047946a7f76869102c28fb0361e79f3cbc111a620fecacc3cd1170e35",
+          "file_size": 32485,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a213e93efdad43089af3f05afc30dd8e",
+          "has_content": true
+        },
+        {
+          "version_number": 3,
+          "version_key_id": "VER-13496ba63f65-3",
+          "genesis_key_db_id": "GK-45bb797c10564a78ac0bcd126bc8a162",
+          "timestamp": "2026-02-05T13:50:47.400916",
+          "file_hash": "698c3179d7eae1064cf9fac1d96bf2c7b99f3de152122ec7f619770b2f467288",
+          "file_size": 33629,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-88c558496f814e008629466071b408d7",
+          "has_content": true
+        },
+        {
+          "version_number": 4,
+          "version_key_id": "VER-13496ba63f65-4",
+          "genesis_key_db_id": "GK-ff4ee1fa48ed40b1863e03ab6f995160",
+          "timestamp": "2026-02-05T13:51:22.799758",
+          "file_hash": "a050b840fc4649348183658738f495875f917fc4be00ef1c905c216ec884771e",
+          "file_size": 34051,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-521ba4e973ab422fb03c8f6e44bb95c0",
+          "has_content": true
+        },
+        {
+          "version_number": 5,
+          "version_key_id": "VER-13496ba63f65-5",
+          "genesis_key_db_id": "GK-7a44f46bb86f4fcab5eccd111e449c10",
+          "timestamp": "2026-02-05T14:35:50.452186",
+          "file_hash": "3c96b1587d72f5ba0e02873611e26169d0e71599a62d7b2d33e7f67c2c0c0d91",
+          "file_size": 34787,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-422327311df545d09329afd48b18d1ee",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3c96b1587d72f5ba0e02873611e26169d0e71599a62d7b2d33e7f67c2c0c0d91",
+      "last_updated": "2026-02-05T14:35:50.452453"
+    },
+    "FILE-c51416663eff": {
+      "file_genesis_key": "FILE-c51416663eff",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_163350/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_163350/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T11:33:52.414304",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c51416663eff-1",
+          "genesis_key_db_id": "GK-437bc63043b74e24af2710f7394eb7a8",
+          "timestamp": "2026-02-05T11:33:52.444662",
+          "file_hash": "febb587d97fd5a514f224b7cc6b57f6cb71f2e43bac86328807be88b2221f02b",
+          "file_size": 8858,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3e7929a0742b4c25be4e0aca53684868",
+          "has_content": true
+        }
+      ],
+      "last_hash": "febb587d97fd5a514f224b7cc6b57f6cb71f2e43bac86328807be88b2221f02b",
+      "last_updated": "2026-02-05T11:33:52.444684"
+    },
+    "FILE-47c6e851950d": {
+      "file_genesis_key": "FILE-47c6e851950d",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_163350/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_163350/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T11:34:32.213745",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-47c6e851950d-1",
+          "genesis_key_db_id": "GK-4f3fc3262ab9493f83a0ac3c93bfd885",
+          "timestamp": "2026-02-05T11:34:32.285782",
+          "file_hash": "febb587d97fd5a514f224b7cc6b57f6cb71f2e43bac86328807be88b2221f02b",
+          "file_size": 8858,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-da77fb74b2f6465fb568346e075f79ac",
+          "has_content": true
+        }
+      ],
+      "last_hash": "febb587d97fd5a514f224b7cc6b57f6cb71f2e43bac86328807be88b2221f02b",
+      "last_updated": "2026-02-05T11:34:32.286292"
+    },
+    "FILE-25abda0c0ba7": {
+      "file_genesis_key": "FILE-25abda0c0ba7",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_163350/Sadness_and_Depression.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_163350/Sadness_and_Depression.txt",
+      "created_at": "2026-02-05T11:34:32.854699",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-25abda0c0ba7-1",
+          "genesis_key_db_id": "GK-da2050529b994b9a8fda72b7c1e0b08c",
+          "timestamp": "2026-02-05T11:34:32.874769",
+          "file_hash": "3597122428eb250a9c3f34a7fbf6df0fca9e9b51eb88672c01b4f9d6fb5752ae",
+          "file_size": 3195,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-757cdb412fb64233bbf3d59540d896d3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3597122428eb250a9c3f34a7fbf6df0fca9e9b51eb88672c01b4f9d6fb5752ae",
+      "last_updated": "2026-02-05T11:34:32.874797"
+    },
+    "FILE-4f68c0092045": {
+      "file_genesis_key": "FILE-4f68c0092045",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_180613/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_180613/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T13:06:16.708533",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4f68c0092045-1",
+          "genesis_key_db_id": "GK-ae7640a8946a4a26aef5518bdb55a5c7",
+          "timestamp": "2026-02-05T13:06:16.748664",
+          "file_hash": "81d85f55d149e9671653be30b68bb73ecc746abbac5f372977d74bcd4e86a0d2",
+          "file_size": 8858,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-491c95d0bdcd474c8c4121a1a7cfe8cc",
+          "has_content": true
+        }
+      ],
+      "last_hash": "81d85f55d149e9671653be30b68bb73ecc746abbac5f372977d74bcd4e86a0d2",
+      "last_updated": "2026-02-05T13:06:16.748686"
+    },
+    "FILE-dd5ecec734b5": {
+      "file_genesis_key": "FILE-dd5ecec734b5",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_180613/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_180613/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T13:06:52.514640",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-dd5ecec734b5-1",
+          "genesis_key_db_id": "GK-a2562999eaa54d0db570ba9e77769599",
+          "timestamp": "2026-02-05T13:06:52.579369",
+          "file_hash": "81d85f55d149e9671653be30b68bb73ecc746abbac5f372977d74bcd4e86a0d2",
+          "file_size": 8858,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-1f1a25e2f7b74a8fa02b46e30c396558",
+          "has_content": true
+        }
+      ],
+      "last_hash": "81d85f55d149e9671653be30b68bb73ecc746abbac5f372977d74bcd4e86a0d2",
+      "last_updated": "2026-02-05T13:06:52.579464"
+    },
+    "FILE-205a8cd02155": {
+      "file_genesis_key": "FILE-205a8cd02155",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/genesis/file_watcher.py",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/genesis/file_watcher.py",
+      "created_at": "2026-02-05T13:07:17.797806",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-205a8cd02155-1",
+          "genesis_key_db_id": "GK-aad5779ec4de41a0a9959bf88db666b0",
+          "timestamp": "2026-02-05T13:07:17.828276",
+          "file_hash": "64d685bb0bbf33f799ee25c3f21ecba480948b753a1b2ec4c34ad04ac1b51cd3",
+          "file_size": 13750,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f409719e550c45b3b4a92e252de3ecdb",
+          "has_content": true
+        }
+      ],
+      "last_hash": "64d685bb0bbf33f799ee25c3f21ecba480948b753a1b2ec4c34ad04ac1b51cd3",
+      "last_updated": "2026-02-05T13:07:17.828298"
+    },
+    "FILE-a0c56abbaa9d": {
+      "file_genesis_key": "FILE-a0c56abbaa9d",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_180613/Sadness_and_Depression.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_180613/Sadness_and_Depression.txt",
+      "created_at": "2026-02-05T13:15:05.810827",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a0c56abbaa9d-1",
+          "genesis_key_db_id": "GK-87b465b3f4d7406aba52a3a4e388ea43",
+          "timestamp": "2026-02-05T13:15:05.898686",
+          "file_hash": "7ad673f3f5edb36b6b0b4fdbd953bac29924c068534828ca46251ff478c34c0d",
+          "file_size": 3195,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-6c37e31956bd403a833c51b6bc4aaeda",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7ad673f3f5edb36b6b0b4fdbd953bac29924c068534828ca46251ff478c34c0d",
+      "last_updated": "2026-02-05T13:15:05.898773"
+    },
+    "FILE-acb3ce9a99b0": {
+      "file_genesis_key": "FILE-acb3ce9a99b0",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_181849/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_181849/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T13:19:39.538883",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-acb3ce9a99b0-1",
+          "genesis_key_db_id": "GK-bbef5e478dff453bafe17345b8bf50c9",
+          "timestamp": "2026-02-05T13:19:39.611359",
+          "file_hash": "71a6851ae272421179b277d6ac73d49addf11845f0b55420de0d41d2529b08e3",
+          "file_size": 8858,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-58f159aaf02343ee8ddbc7f20de1a308",
+          "has_content": true
+        }
+      ],
+      "last_hash": "71a6851ae272421179b277d6ac73d49addf11845f0b55420de0d41d2529b08e3",
+      "last_updated": "2026-02-05T13:19:39.611586"
+    },
+    "FILE-6ed6e94231c8": {
+      "file_genesis_key": "FILE-6ed6e94231c8",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_181849/Sadness_and_Depression.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_181849/Sadness_and_Depression.txt",
+      "created_at": "2026-02-05T13:19:40.053563",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6ed6e94231c8-1",
+          "genesis_key_db_id": "GK-62101e8a66064223b870ae811dc763b8",
+          "timestamp": "2026-02-05T13:19:40.073010",
+          "file_hash": "2f9f47acdc0f5cf025d8a3880dab2a150310fd647998f5fab1b24867ba9dacc1",
+          "file_size": 3195,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-1b5031a695ff40088852aea6f17215cf",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2f9f47acdc0f5cf025d8a3880dab2a150310fd647998f5fab1b24867ba9dacc1",
+      "last_updated": "2026-02-05T13:19:40.073029"
+    },
+    "FILE-2fb28c7ffe90": {
+      "file_genesis_key": "FILE-2fb28c7ffe90",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/retrieval/multi_tier_integration.py",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/retrieval/multi_tier_integration.py",
+      "created_at": "2026-02-05T13:42:30.694904",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2fb28c7ffe90-1",
+          "genesis_key_db_id": "GK-7a12573f835a40fc8d4dc06fc2a76f91",
+          "timestamp": "2026-02-05T13:42:30.746864",
+          "file_hash": "4789aa0015b2ee4618d99cda634bd2e312202241445848303fad7757d684829d",
+          "file_size": 5470,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c18bb6082f8c42d8bdcf025da5216a1f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4789aa0015b2ee4618d99cda634bd2e312202241445848303fad7757d684829d",
+      "last_updated": "2026-02-05T13:42:30.746888"
+    },
+    "FILE-d81dbd34b666": {
+      "file_genesis_key": "FILE-d81dbd34b666",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_190149/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_190149/Im_Feeling_Depressed_9_Ways_to_Feel_Better.txt",
+      "created_at": "2026-02-05T14:02:42.154610",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d81dbd34b666-1",
+          "genesis_key_db_id": "GK-2694863eb8b2427cb6cf6030f76cb653",
+          "timestamp": "2026-02-05T14:02:42.189915",
+          "file_hash": "c5a930d04c2decf1d25d72ebc5cd58e5ab787edab3e20eda0ba01033d2b74d6e",
+          "file_size": 8858,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-7ab840e68d384e67be76bf53b5563cc8",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c5a930d04c2decf1d25d72ebc5cd58e5ab787edab3e20eda0ba01033d2b74d6e",
+      "last_updated": "2026-02-05T14:02:42.189939"
+    },
+    "FILE-056961374d8a": {
+      "file_genesis_key": "FILE-056961374d8a",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/auto_search/20260205_190149/Sadness_and_Depression.txt",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/backend/knowledge_base/auto_search/20260205_190149/Sadness_and_Depression.txt",
+      "created_at": "2026-02-05T14:02:42.558431",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-056961374d8a-1",
+          "genesis_key_db_id": "GK-7d364667a33f479eb3c3372af3d382bf",
+          "timestamp": "2026-02-05T14:02:42.589193",
+          "file_hash": "5f5150e24fa442c75c68cdb5294d7412e708ca49575c8e27054652fed5c3c5b4",
+          "file_size": 3195,
+          "user_id": "system",
+          "version_note": "Genesis Key: GK-bf86003c22604678ac0ebfbd55920015",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5f5150e24fa442c75c68cdb5294d7412e708ca49575c8e27054652fed5c3c5b4",
+      "last_updated": "2026-02-05T14:02:42.589307"
+    },
+    "FILE-fbbfebedf228": {
+      "file_genesis_key": "FILE-fbbfebedf228",
+      "file_path": "/home/zair/Documents/grace/test/grace-3.1-/EMBEDDING_MODEL_UNLOAD_FIXED.md",
+      "absolute_path": "/home/zair/Documents/grace/test/grace-3.1-/EMBEDDING_MODEL_UNLOAD_FIXED.md",
+      "created_at": "2026-02-05T14:36:21.250744",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-fbbfebedf228-1",
+          "genesis_key_db_id": "GK-61e990eefdc04d419049fe806f24fd41",
+          "timestamp": "2026-02-05T14:36:21.289672",
+          "file_hash": "fe15dbbd26837b9392f235eac0aaa416467d84ca675728e70daf8cbb8d0def4e",
+          "file_size": 2631,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-73d621ef67024eeda16892dae5114972",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fe15dbbd26837b9392f235eac0aaa416467d84ca675728e70daf8cbb8d0def4e",
+      "last_updated": "2026-02-05T14:36:21.289699"
     }
   }
 }
