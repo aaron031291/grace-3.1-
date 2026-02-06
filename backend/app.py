@@ -18,6 +18,10 @@ from pathlib import Path
 from logging_config import setup_logging
 setup_logging()
 
+# Get logger instance
+import logging
+logger = logging.getLogger(__name__)
+
 # Security imports
 from security.config import get_security_config
 from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, RequestValidationMiddleware
@@ -1257,19 +1261,36 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                     detail="Ollama service is not running. Please start Ollama to generate responses."
                 )
 
+            # Fetch conversation history for context-aware greetings
+            recent_messages = history_repo.get_by_chat_reverse(
+                chat_id=chat_id,
+                skip=0,
+                limit=5  # Last 5 messages for greetings
+            )
+            
+            # Build small talk messages with conversation history
             small_talk_messages = [
                 {
                     "role": "system",
-                    "content": "You are a concise, friendly assistant. Keep casual greetings short and do not cite sources."
-                },
-                {"role": "user", "content": user_query},
+                    "content": "You are a concise, friendly assistant with conversation memory. Keep casual greetings short and remember what the user told you earlier. Do not cite sources."
+                }
             ]
+            
+            # Add recent conversation history
+            for msg in reversed(recent_messages):
+                small_talk_messages.append({
+                    "role": msg.role,
+                    "content": msg.content
+                })
+            
+            # Add current greeting
+            small_talk_messages.append({"role": "user", "content": user_query})
 
             start_time = time.time()
             temperature = request.temperature or chat.temperature or 0.4
             response_text = client.chat(
                 model=chat.model,
-                messages=small_talk_messages,
+                messages=small_talk_messages,  # Now includes conversation history
                 stream=False,
                 temperature=min(temperature, 0.7),
                 top_p=request.top_p if request.top_p else 0.8,
@@ -1301,22 +1322,47 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             )
         
         # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: VectorDB → Model Knowledge → Internet Search → Context Request
+        # Use multi-tier system: Model Knowledge → Internet Search → Context Request
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling
         )
         
+        # ==================== CONVERSATION CONTEXT RETRIEVAL ====================
+        # Fetch recent conversation history for context-aware responses
+        recent_messages = history_repo.get_by_chat_reverse(
+            chat_id=chat_id,
+            skip=0,
+            limit=10  # Last 10 messages (excluding current user message)
+        )
+        
+        # Build conversation context array (reverse to chronological order)
+        conversation_context = []
+        for msg in reversed(recent_messages):
+            conversation_context.append({
+                "role": msg.role,
+                "content": msg.content
+            })
+        
+        # Add current user message to context
+        conversation_context.append({
+            "role": "user",
+            "content": request.content
+        })
+        
+        logger.info(f"[CONTEXT] Built conversation context with {len(conversation_context)} messages")
+        
         # Create multi-tier handler
         client = get_ollama_client()
         handler = create_multi_tier_handler(client)
         
-        # Handle query with tier fallback
+        # Handle query with tier fallback and conversation context
         start_time = time.time()
         tier_result = handler.handle_query(
             query=request.content,
             user_id=None,  # TODO: Get from auth
-            genesis_key_id=None  # TODO: Get from Genesis tracking
+            genesis_key_id=None,  # TODO: Get from Genesis tracking
+            conversation_history=conversation_context  # Pass conversation context
         )
         generation_time = time.time() - start_time
         

@@ -202,12 +202,18 @@ export default function VoiceButton({
     setIsSpeaking(false);
   };
 
-  // Handle speakText prop changes
-  useEffect(() => {
-    if (speakText) {
+  // Manual speak function (triggered by button click)
+  const handleSpeakClick = () => {
+    if (isSpeaking) {
+      stopSpeaking();
+    } else if (speakText) {
       speak(speakText);
     }
-  }, [speakText, speak]);
+  };
+
+  // REMOVED: Auto-trigger on speakText change
+  // This was causing automatic speech for every response
+  // Now TTS is manual-only (user must click speaker button)
 
   // Cleanup
   useEffect(() => {
@@ -249,9 +255,8 @@ export default function VoiceButton({
     <div className={`voice-button-container ${size}`}>
       {/* Microphone button */}
       <button
-        className={`voice-button mic-button ${isListening ? "listening" : ""} ${
-          disabled ? "disabled" : ""
-        }`}
+        className={`voice-button mic-button ${isListening ? "listening" : ""} ${disabled ? "disabled" : ""
+          }`}
         onClick={toggleListening}
         disabled={disabled || isSpeaking}
         title={isListening ? "Stop listening" : "Start voice input"}
@@ -264,9 +269,9 @@ export default function VoiceButton({
       {showTTSButton && (
         <button
           className={`voice-button speaker-button ${isSpeaking ? "speaking" : ""}`}
-          onClick={isSpeaking ? stopSpeaking : () => {}}
-          disabled={!isSpeaking}
-          title={isSpeaking ? "Stop speaking" : "Not speaking"}
+          onClick={handleSpeakClick}
+          disabled={!speakText && !isSpeaking}
+          title={isSpeaking ? "Stop speaking" : "Click to speak response"}
         >
           {isSpeaking ? <SpeakerActiveIcon /> : <SpeakerIcon />}
         </button>

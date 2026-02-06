@@ -177,7 +177,8 @@ class MultiTierQueryHandler:
         query: str,
         user_id: Optional[str] = None,
         genesis_key_id: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        conversation_history: Optional[List[Dict[str, str]]] = None  # NEW: Conversation context
     ) -> QueryResult:
         """
         Main entry point for query handling.
@@ -192,6 +193,7 @@ class MultiTierQueryHandler:
             user_id: Optional user identifier
             genesis_key_id: Optional Genesis Key for tracking
             context: Optional user-provided context from previous Tier 3 request
+            conversation_history: Optional conversation history for context-aware responses
             
         Returns:
             QueryResult with response and metadata
@@ -200,6 +202,10 @@ class MultiTierQueryHandler:
         start_time = time.time()
         
         logger.info(f"[{query_id}] Handling query: {query[:100]}...")
+        
+        # Log conversation context if available
+        if conversation_history:
+            logger.info(f"[{query_id}] Using conversation context with {len(conversation_history)} messages")
         
         # If context provided, integrate it
         if context:
@@ -213,7 +219,7 @@ class MultiTierQueryHandler:
         tier2_result = None
         if self.enable_tier2:
             logger.info(f"[{query_id}] Trying Model Knowledge first...")
-            tier2_result = self._try_model_knowledge(query, query_id, None)
+            tier2_result = self._try_model_knowledge(query, query_id, None, conversation_history)
             
             # Check if model is confident and certain
             if tier2_result.success and tier2_result.confidence.is_high_quality(self.model_confidence_threshold):
@@ -337,7 +343,8 @@ class MultiTierQueryHandler:
         self,
         query: str,
         query_id: str,
-        tier1_result: QueryResult
+        tier1_result: QueryResult,
+        conversation_history: Optional[List[Dict[str, str]]] = None  # NEW
     ) -> QueryResult:
         """
         Tier 2: Try model's built-in knowledge.
@@ -346,13 +353,14 @@ class MultiTierQueryHandler:
             query: User query
             query_id: Query identifier
             tier1_result: Result from Tier 1 (may have partial info)
+            conversation_history: Optional conversation history for context
             
         Returns:
             QueryResult with model-generated response and confidence
         """
         try:
-            # Generate response using only model knowledge
-            response = self._generate_model_response(query)
+            # Generate response using model knowledge (with conversation context)
+            response = self._generate_model_response(query, conversation_history)
             
             # Assess confidence
             confidence_metrics = self._assess_model_confidence(response, query)
@@ -590,13 +598,14 @@ class MultiTierQueryHandler:
         try:
             # Import ingestion service
             from ingestion.service import TextIngestionService
+            from embedding import get_embedding_model  # Get global singleton
             import datetime
             
-            # CRITICAL: Reuse existing embedding model from retriever to prevent unload
-            # Creating a new instance causes the model to be garbage collected and unloaded
-            embedding_model = self.retriever.embedding_model
+            # CRITICAL: Use global singleton embedding model to prevent unload
+            # The singleton is kept alive for the entire application lifecycle
+            embedding_model = get_embedding_model()
             
-            # Create ingestion service with existing model
+            # Create ingestion service with singleton model
             ingestion_service = TextIngestionService(
                 collection_name="documents",
                 embedding_model=embedding_model
@@ -887,25 +896,52 @@ Answer:"""
         
         return response
     
-    def _generate_model_response(self, query: str) -> str:
-        """Generate response using only model knowledge (no RAG)."""
-        prompt = f"""You are a helpful AI assistant. Follow these guidelines when answering:
+    def _generate_model_response(self, query: str, conversation_history: Optional[List[Dict[str, str]]] = None) -> str:
+        """Generate response using model knowledge (with optional conversation context)."""
+        
+        # Build messages array
+        messages = []
+        
+        # Add system prompt with conversation memory instructions
+        system_prompt = """You are a helpful AI assistant with conversation memory. Follow these guidelines:
 
-1. **If the question is CLEAR and you know the answer**: Provide a direct, concise, and accurate answer.
+**IMPORTANT: Use Conversation History**
+- You can see the previous messages in this conversation
+- ALWAYS check if the answer is in the conversation history before saying you don't know
+- Reference previous messages when relevant
+- Remember what the user told you earlier
 
-2. **If the question is AMBIGUOUS or lacks context**: Ask 2-3 specific clarifying questions to understand what the user needs. Be helpful and guide them.
+**Response Guidelines:**
 
-3. **If you don't have the information**: Say "I don't know" or "I don't have information about this" clearly. Don't make up answers.
+1. **If the question is about something mentioned earlier**: Use the conversation history to answer. Don't say you don't know if it was already discussed.
 
-Examples:
+2. **If the question is CLEAR and you know the answer**: Provide a direct, concise, and accurate answer.
+
+3. **If the question is AMBIGUOUS or lacks context**: Ask 2-3 specific clarifying questions to understand what the user needs.
+
+4. **If you genuinely don't have the information AND it wasn't mentioned earlier**: Say "I don't know" or "I don't have information about this" clearly.
+
+**Examples:**
+- Previous: "I love red" → Later: "What's my favorite color?" → Answer: "Red! You mentioned earlier that you love the color red."
 - "What is Python?" → Answer directly with definition
-- "How do I fix it?" → Ask: "What are you trying to fix? What error message are you seeing? What have you tried so far?"
-- "Tell me about the project" → Ask: "Which project are you referring to? What aspect would you like to know about?"
-- "What's the latest version?" → Ask: "Latest version of what software or tool?"
+- "How do I fix it?" → Ask: "What are you trying to fix? What error are you seeing?"
+- "Tell me about the project" → Ask: "Which project? What aspect interests you?"
 
-Question: {query}
-
-Answer:"""
+**Remember**: Always check the conversation history first!
+"""
+        
+        messages.append({"role": "system", "content": system_prompt})
+        
+        # Add conversation history if available
+        if conversation_history and len(conversation_history) > 0:
+            # Use conversation history (already includes current query)
+            messages.extend(conversation_history)
+            logger.info(f"[CONVERSATION-MEMORY] Passing {len(conversation_history)} messages to model")
+            logger.debug(f"[CONVERSATION-MEMORY] Messages: {conversation_history}")
+        else:
+            # No history, just add current query
+            messages.append({"role": "user", "content": f"Question: {query}\n\nAnswer:"})
+            logger.info("[CONVERSATION-MEMORY] No conversation history available")
         
         # Get model from settings or use available model
         from settings import settings
@@ -913,7 +949,7 @@ Answer:"""
         
         response = self.llm_client.chat(
             model=model_name,
-            messages=[{"role": "user", "content": prompt}],
+            messages=messages,  # Full conversation with history
             stream=False,
             temperature=0.5
         )

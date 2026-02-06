@@ -32,7 +32,7 @@ export default function PersistentVoicePanel({
   // Settings
   const [settings, setSettings] = useState({
     voice: "en-US-AriaNeural",
-    autoSpeak: true,
+    autoSpeak: false,  // Changed from true - only speak when explicitly enabled
     continuousListen: true,
     wakeWord: "grace",
     useWakeWord: false,
