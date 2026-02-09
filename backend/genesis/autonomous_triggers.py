@@ -83,7 +83,7 @@ class GenesisTriggerPipeline:
             Dict with triggered actions and results
         """
         if not self.orchestrator:
-            logger.warning("[GENESIS-TRIGGER] No orchestrator set, cannot trigger actions")
+            logger.debug("[GENESIS-TRIGGER] No orchestrator set, skipping autonomous actions")
             return {"triggered": False, "reason": "No orchestrator"}
 
         logger.info(f"[GENESIS-TRIGGER] Processing: {genesis_key.key_id} (type={genesis_key.key_type})")

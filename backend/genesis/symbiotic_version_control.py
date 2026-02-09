@@ -122,9 +122,10 @@ class SymbioticVersionControl:
                 session=session
             )
 
-            # Store key_id immediately while object is still bound to session
-            # This prevents DetachedInstanceError when accessing the attribute later
+            # CRITICAL: Store key_id and context_data IMMEDIATELY while object is still bound to session
+            # This prevents DetachedInstanceError when accessing these attributes later
             operation_key_id = operation_genesis_key.key_id
+            operation_context_data = operation_genesis_key.context_data.copy() if operation_genesis_key.context_data else {}
 
             # Create version entry (linked to Genesis Key)
             version_result = self.version_tracker.track_file_version(
@@ -136,10 +137,14 @@ class SymbioticVersionControl:
                 session=session
             )
 
-            # Update Genesis Key with version info
+            # Update Genesis Key with version info using the copied context_data
             if version_result.get("changed", True):
-                operation_genesis_key.context_data["version_key_id"] = version_result["version_key_id"]
-                operation_genesis_key.context_data["version_number"] = version_result["version_number"]
+                operation_context_data["version_key_id"] = version_result["version_key_id"]
+                operation_context_data["version_number"] = version_result["version_number"]
+                
+                # Re-fetch the object to ensure it's attached to the session
+                session.refresh(operation_genesis_key)
+                operation_genesis_key.context_data = operation_context_data
                 
                 # Commit updates
                 session.commit()
