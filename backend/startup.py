@@ -343,6 +343,27 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print(f"[STARTUP] [WARN] Cross-wiring error (non-fatal): {e}")
 
     # =========================================================================
+    # FEEDBACK LOOPS: Wire ALL remaining subsystem connections
+    # =========================================================================
+    try:
+        from system_loops import wire_all_feedback_loops
+        loop_result = wire_all_feedback_loops(
+            message_bus=subs.message_bus,
+            self_mirror=subs.self_mirror,
+            timesense=subs.timesense,
+            unified_memory=subs.unified_memory,
+            diagnostic_engine=subs.diagnostic_engine,
+            cortex=subs.cortex,
+            magma=subs.magma,
+        )
+        loops = loop_result.get("loops_wired", [])
+        print(f"[STARTUP] [OK] {len(loops)} feedback loops wired:")
+        for loop_name in loops:
+            print(f"[STARTUP]   - {loop_name}")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Feedback loop wiring error: {e}")
+
+    # =========================================================================
     # SUMMARY
     # =========================================================================
     total = len(subs._active_subsystems)
