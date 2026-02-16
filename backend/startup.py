@@ -258,50 +258,48 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print(f"[STARTUP] [WARN] Self-Mirror failed: {e}")
 
     # =========================================================================
-    # CROSS-WIRE: Connect subsystems to each other
+    # CROSS-WIRE: Connect ALL subsystems to each other
     # =========================================================================
     try:
-        # Connect TimeSense to Self-Mirror (timing feeds telemetry)
+        # Connect TimeSense to Self-Mirror
         if subs.timesense and subs.self_mirror:
             subs.timesense.self_mirror = subs.self_mirror
             print("[STARTUP] [OK] TimeSense -> Self-Mirror connected")
 
-        # Connect Diagnostic Engine to Self-Mirror (scans feed telemetry)
-        if subs.diagnostic_engine and subs.self_mirror:
-            def on_diagnostic_cycle(cycle):
-                """Feed diagnostic cycle timing into Self-Mirror."""
-                try:
-                    from cognitive.self_mirror import TelemetryVector
-                    vector = TelemetryVector(
-                        T=cycle.total_duration_ms,
-                        M=0.0,
-                        P=0.0 if cycle.success else 0.8,
-                        component="diagnostic_engine",
-                        task_domain="diagnostic_scan",
-                    )
-                    subs.self_mirror.receive_vector(vector)
-                except Exception:
-                    pass
-            subs.diagnostic_engine._on_cycle_complete.append(on_diagnostic_cycle)
-            print("[STARTUP] [OK] Diagnostic Engine -> Self-Mirror connected")
+        # FULL Diagnostic Engine wiring (message bus + self-mirror + timesense + genesis healing)
+        if subs.diagnostic_engine:
+            try:
+                from diagnostic_machine.full_integration import wire_diagnostic_engine
+                wired = wire_diagnostic_engine(
+                    diagnostic_engine=subs.diagnostic_engine,
+                    message_bus=subs.message_bus,
+                    self_mirror=subs.self_mirror,
+                    timesense=subs.timesense,
+                )
+                print(f"[STARTUP] [OK] Diagnostic Engine fully wired: {', '.join(wired)}")
+            except Exception as e:
+                print(f"[STARTUP] [WARN] Diagnostic full wiring failed: {e}")
 
-        # Connect Diagnostic Engine to Message Bus
-        if subs.diagnostic_engine and subs.message_bus:
-            def on_diagnostic_alert(alert_data):
-                """Broadcast diagnostic alerts through message bus."""
-                try:
-                    import asyncio
-                    from layer1.message_bus import ComponentType
-                    asyncio.ensure_future(subs.message_bus.publish(
-                        topic="diagnostic.alert",
-                        payload={"alert": str(alert_data)},
-                        from_component=ComponentType.COGNITIVE_ENGINE,
-                        priority=8,
-                    ))
-                except Exception:
-                    pass
-            subs.diagnostic_engine._on_alert.append(on_diagnostic_alert)
-            print("[STARTUP] [OK] Diagnostic Engine -> Message Bus connected")
+        # Magma persistence - load saved state
+        if subs.magma:
+            try:
+                from cognitive.magma.persistence import MagmaPersistence
+                subs._magma_persistence = MagmaPersistence()
+                loaded = subs._magma_persistence.load(subs.magma)
+                if loaded:
+                    print("[STARTUP] [OK] Magma Memory state restored from disk")
+                else:
+                    print("[STARTUP] [OK] Magma Memory starting fresh (no saved state)")
+            except Exception as e:
+                print(f"[STARTUP] [WARN] Magma persistence load failed: {e}")
+
+            # Start Magma consolidation background worker
+            try:
+                if hasattr(subs.magma, 'start_background_processing'):
+                    subs.magma.start_background_processing()
+                    print("[STARTUP] [OK] Magma consolidation worker started")
+            except Exception as e:
+                print(f"[STARTUP] [WARN] Magma consolidation worker failed: {e}")
 
     except Exception as e:
         print(f"[STARTUP] [WARN] Cross-wiring error (non-fatal): {e}")

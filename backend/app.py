@@ -491,12 +491,44 @@ async def lifespan(app: FastAPI):
     try:
         from startup import get_subsystems
         subs = get_subsystems()
+        
+        # Save TimeSense state
+        if subs.timesense:
+            try:
+                subs.timesense.save_state()
+                print("[SHUTDOWN] TimeSense state saved")
+            except Exception:
+                pass
+        
+        # Save Self-Mirror state
+        if subs.self_mirror:
+            try:
+                subs.self_mirror.save_state()
+                subs.self_mirror.stop_heartbeat()
+                print("[SHUTDOWN] Self-Mirror state saved")
+            except Exception:
+                pass
+        
+        # Save Magma state
+        if subs.magma:
+            try:
+                if hasattr(subs, '_magma_persistence') and subs._magma_persistence:
+                    subs._magma_persistence.save(subs.magma)
+                    print("[SHUTDOWN] Magma Memory state saved")
+                if hasattr(subs.magma, 'stop_background_processing'):
+                    subs.magma.stop_background_processing()
+            except Exception:
+                pass
+        
+        # Stop Diagnostic Engine
         if subs.diagnostic_engine:
             try:
                 subs.diagnostic_engine.stop()
                 print("[SHUTDOWN] Diagnostic Engine stopped")
             except Exception:
                 pass
+        
+        print("[SHUTDOWN] All subsystems stopped gracefully")
     except Exception:
         pass
 
@@ -778,13 +810,20 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature,
                 max_tokens=request.top_k
             )
-        # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
+        # ==================== MAGMA-ENHANCED MULTI-TIER QUERY HANDLING ====================
+        # Magma graph memory enriches the retrieval before multi-tier handles it
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling,
             format_chat_response
         )
+        
+        # Try Magma-enhanced context first
+        try:
+            from cognitive.magma.chat_integration import get_magma_enhanced_context
+            magma_result = get_magma_enhanced_context(user_query, limit=3)
+        except Exception:
+            magma_result = None
         
         # Create multi-tier handler
         handler = create_multi_tier_handler(client)
@@ -793,8 +832,8 @@ async def chat(request: ChatRequest):
         start_time = time.time()
         tier_result = handler.handle_query(
             query=user_query,
-            user_id=None,  # TODO: Get from auth
-            genesis_key_id=None  # TODO: Get from Genesis tracking
+            user_id=None,
+            genesis_key_id=None
         )
         generation_time = time.time() - start_time
         
@@ -806,8 +845,28 @@ async def chat(request: ChatRequest):
             response_time_ms=tier_result.metadata.get("response_time_ms", 0)
         )
         
-        # Format response
-        response_data = format_chat_response(tier_result, model_name, generation_time)
+        # Track in TimeSense
+        try:
+            from cognitive.timesense import get_timesense
+            get_timesense().record_operation(
+                "chat.query", generation_time * 1000, "chat",
+                data_bytes=float(len(user_query)),
+            )
+        except Exception:
+            pass
+        
+        # Feed interaction back to Magma for learning
+        try:
+            from cognitive.magma.chat_integration import ingest_chat_interaction
+            response_data = format_chat_response(tier_result, model_name, generation_time)
+            ingest_chat_interaction(user_query, response_data.get("message", ""))
+        except Exception:
+            response_data = format_chat_response(tier_result, model_name, generation_time)
+        
+        # Add Magma sources if available
+        if magma_result and "sources" in magma_result:
+            existing_sources = response_data.get("sources") or []
+            response_data["sources"] = existing_sources + magma_result["sources"]
         
         return ChatResponse(**response_data)
     
