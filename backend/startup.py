@@ -35,6 +35,7 @@ class GraceSubsystems:
         self.diagnostic_engine = None
         self.systems_integration = None
         self.autonomous_engine = None
+        self.timesense = None
         self.self_mirror = None
         self._active_subsystems = []
 
@@ -51,6 +52,7 @@ class GraceSubsystems:
             "diagnostic_engine": "active" if self.diagnostic_engine else "inactive",
             "systems_integration": "active" if self.systems_integration else "inactive",
             "autonomous_engine": "active" if self.autonomous_engine else "inactive",
+            "timesense": "active" if self.timesense else "inactive",
             "self_mirror": "active" if self.self_mirror else "inactive",
         }
 
@@ -228,7 +230,22 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print(f"[STARTUP] [WARN] Autonomous Engine failed: {e}")
 
     # =========================================================================
-    # 8. SELF-MIRROR (Unified Telemetry Core - [T,M,P] vectors)
+    # 8. TIMESENSE ENGINE (Temporal reasoning + OODA timing)
+    # =========================================================================
+    try:
+        from cognitive.timesense import get_timesense
+
+        subs.timesense = get_timesense(
+            message_bus=subs.message_bus,
+            self_mirror=getattr(subs, 'self_mirror', None),
+        )
+        subs._active_subsystems.append("timesense")
+        print("[STARTUP] [OK] TimeSense Engine initialized (temporal reasoning, OODA timing, predictions)")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] TimeSense failed: {e}")
+
+    # =========================================================================
+    # 9. SELF-MIRROR (Unified Telemetry Core - [T,M,P] vectors)
     # =========================================================================
     try:
         from cognitive.self_mirror import get_self_mirror
@@ -239,6 +256,55 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print("[STARTUP] [OK] Self-Mirror initialized (telemetry vectors, pillar triggers, challenges)")
     except Exception as e:
         print(f"[STARTUP] [WARN] Self-Mirror failed: {e}")
+
+    # =========================================================================
+    # CROSS-WIRE: Connect subsystems to each other
+    # =========================================================================
+    try:
+        # Connect TimeSense to Self-Mirror (timing feeds telemetry)
+        if subs.timesense and subs.self_mirror:
+            subs.timesense.self_mirror = subs.self_mirror
+            print("[STARTUP] [OK] TimeSense -> Self-Mirror connected")
+
+        # Connect Diagnostic Engine to Self-Mirror (scans feed telemetry)
+        if subs.diagnostic_engine and subs.self_mirror:
+            def on_diagnostic_cycle(cycle):
+                """Feed diagnostic cycle timing into Self-Mirror."""
+                try:
+                    from cognitive.self_mirror import TelemetryVector
+                    vector = TelemetryVector(
+                        T=cycle.total_duration_ms,
+                        M=0.0,
+                        P=0.0 if cycle.success else 0.8,
+                        component="diagnostic_engine",
+                        task_domain="diagnostic_scan",
+                    )
+                    subs.self_mirror.receive_vector(vector)
+                except Exception:
+                    pass
+            subs.diagnostic_engine._on_cycle_complete.append(on_diagnostic_cycle)
+            print("[STARTUP] [OK] Diagnostic Engine -> Self-Mirror connected")
+
+        # Connect Diagnostic Engine to Message Bus
+        if subs.diagnostic_engine and subs.message_bus:
+            def on_diagnostic_alert(alert_data):
+                """Broadcast diagnostic alerts through message bus."""
+                try:
+                    import asyncio
+                    from layer1.message_bus import ComponentType
+                    asyncio.ensure_future(subs.message_bus.publish(
+                        topic="diagnostic.alert",
+                        payload={"alert": str(alert_data)},
+                        from_component=ComponentType.COGNITIVE_ENGINE,
+                        priority=8,
+                    ))
+                except Exception:
+                    pass
+            subs.diagnostic_engine._on_alert.append(on_diagnostic_alert)
+            print("[STARTUP] [OK] Diagnostic Engine -> Message Bus connected")
+
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Cross-wiring error (non-fatal): {e}")
 
     # =========================================================================
     # SUMMARY
