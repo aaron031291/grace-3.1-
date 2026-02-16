@@ -88,6 +88,7 @@ from api.websocket_manager import router as ws_manager_router  # Central WebSock
 from api.self_mirror_api import router as self_mirror_router  # Self-Mirror telemetry dashboard - [T,M,P] vectors
 from api.timesense_api import router as timesense_router  # TimeSense - temporal reasoning, predictions, OODA timing
 from api.magma_api import router as magma_router  # Magma Memory - graph memory, causal inference, intent routing
+from api.unified_memory_api import router as unified_memory_router  # Unified Memory - all 6 memory types in one system
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -630,6 +631,7 @@ app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time e
 app.include_router(self_mirror_router)  # Self-Mirror Telemetry - [T,M,P] vectors, pillar triggers, challenges, RFIs
 app.include_router(timesense_router)  # TimeSense - temporal reasoning, predictions, cost estimation, OODA timing
 app.include_router(magma_router)  # Magma Memory - query, ingest, causal inference, relation graphs
+app.include_router(unified_memory_router)  # Unified Memory - remember, recall, consolidate, forget, working memory
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

@@ -37,6 +37,7 @@ class GraceSubsystems:
         self.autonomous_engine = None
         self.timesense = None
         self.self_mirror = None
+        self.unified_memory = None
         self._active_subsystems = []
 
     def get_status(self) -> Dict[str, Any]:
@@ -54,6 +55,7 @@ class GraceSubsystems:
             "autonomous_engine": "active" if self.autonomous_engine else "inactive",
             "timesense": "active" if self.timesense else "inactive",
             "self_mirror": "active" if self.self_mirror else "inactive",
+            "unified_memory": "active" if self.unified_memory else "inactive",
         }
 
 
@@ -256,6 +258,23 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print("[STARTUP] [OK] Self-Mirror initialized (telemetry vectors, pillar triggers, challenges)")
     except Exception as e:
         print(f"[STARTUP] [WARN] Self-Mirror failed: {e}")
+
+    # =========================================================================
+    # 10. UNIFIED MEMORY (connects Memory Mesh + Magma + all memory types)
+    # =========================================================================
+    try:
+        from cognitive.unified_memory import get_unified_memory
+
+        subs.unified_memory = get_unified_memory(
+            message_bus=subs.message_bus,
+            self_mirror=subs.self_mirror,
+            timesense=subs.timesense,
+        )
+        subs.unified_memory.start_consolidation_loop()
+        subs._active_subsystems.append("unified_memory")
+        print("[STARTUP] [OK] Unified Memory initialized (all 6 memory types + consolidation + forgetting)")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Unified Memory failed: {e}")
 
     # =========================================================================
     # CROSS-WIRE: Connect ALL subsystems to each other
