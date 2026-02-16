@@ -35,6 +35,7 @@ class GraceSubsystems:
         self.diagnostic_engine = None
         self.systems_integration = None
         self.autonomous_engine = None
+        self.self_mirror = None
         self._active_subsystems = []
 
     def get_status(self) -> Dict[str, Any]:
@@ -50,6 +51,7 @@ class GraceSubsystems:
             "diagnostic_engine": "active" if self.diagnostic_engine else "inactive",
             "systems_integration": "active" if self.systems_integration else "inactive",
             "autonomous_engine": "active" if self.autonomous_engine else "inactive",
+            "self_mirror": "active" if self.self_mirror else "inactive",
         }
 
 
@@ -224,6 +226,19 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print("[STARTUP] [OK] Grace Autonomous Engine initialized")
     except Exception as e:
         print(f"[STARTUP] [WARN] Autonomous Engine failed: {e}")
+
+    # =========================================================================
+    # 8. SELF-MIRROR (Unified Telemetry Core - [T,M,P] vectors)
+    # =========================================================================
+    try:
+        from cognitive.self_mirror import get_self_mirror
+
+        subs.self_mirror = get_self_mirror(message_bus=subs.message_bus)
+        subs.self_mirror.start_heartbeat()
+        subs._active_subsystems.append("self_mirror")
+        print("[STARTUP] [OK] Self-Mirror initialized (telemetry vectors, pillar triggers, challenges)")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Self-Mirror failed: {e}")
 
     # =========================================================================
     # SUMMARY

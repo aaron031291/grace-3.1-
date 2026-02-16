@@ -85,6 +85,7 @@ from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from api.system_health import router as system_health_router  # Unified system health - all subsystems in one endpoint
 from api.websocket_manager import router as ws_manager_router  # Central WebSocket manager - real-time event bridge
+from api.self_mirror_api import router as self_mirror_router  # Self-Mirror telemetry dashboard - [T,M,P] vectors
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -584,6 +585,7 @@ app.include_router(grace_planning_router)  # Grace Planning - concept→question
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
 app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time event bridge to frontend
+app.include_router(self_mirror_router)  # Self-Mirror Telemetry - [T,M,P] vectors, pillar triggers, challenges, RFIs
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
