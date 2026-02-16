@@ -653,6 +653,16 @@ class TimeSenseEngine:
         self._capacity: Optional[CapacitySnapshot] = None
         self._capacity_last_check: Optional[datetime] = None
 
+        # Enhanced capabilities
+        from cognitive.timesense_enhanced import (
+            TaskPlanner, ThroughputTracker,
+            MemoryPressurePredictor, PerformanceTrendTracker,
+        )
+        self.task_planner = TaskPlanner(timesense=self)
+        self.throughput = ThroughputTracker()
+        self.memory_predictor = MemoryPressurePredictor()
+        self.trends = PerformanceTrendTracker()
+
         self._session_start = datetime.utcnow()
         self._last_action_time = datetime.utcnow()
         self._action_timestamps: deque = deque(maxlen=1000)
@@ -719,6 +729,9 @@ class TimeSenseEngine:
                 f"[TIMESENSE] ANOMALY: {operation} took {duration_ms:.0f}ms "
                 f"(expected {anomaly.expected_ms:.0f}ms, {anomaly.severity})"
             )
+
+        # Feed enhanced trackers
+        self.trends.record(operation, duration_ms, success)
 
         if self.self_mirror:
             try:

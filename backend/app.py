@@ -514,6 +514,14 @@ app = FastAPI(
 # Load security configuration
 security_config = get_security_config()
 
+# Add TimeSense auto-instrumentation (times every API request automatically)
+try:
+    from cognitive.timesense_enhanced import TimeSenseMiddleware
+    app.add_middleware(TimeSenseMiddleware)
+    print("[TIMESENSE] Auto-instrumentation middleware active (timing all API requests)")
+except Exception as e:
+    print(f"[TIMESENSE] Auto-instrumentation not available: {e}")
+
 # Add security headers middleware (runs last, so added first)
 app.add_middleware(SecurityHeadersMiddleware)
 

@@ -138,3 +138,75 @@ async def timesense_stats() -> Dict[str, Any]:
     """TimeSense engine statistics."""
     from cognitive.timesense import get_timesense
     return get_timesense().get_stats()
+
+
+# =============================================================================
+# ENHANCED CAPABILITIES
+# =============================================================================
+
+@router.get("/plan/{task_type}/{size_bytes}")
+async def plan_task(task_type: str, size_bytes: float) -> Dict[str, Any]:
+    """Plan a complex task with step-by-step time estimates.
+
+    Grace breaks down a task and estimates each step.
+    task_type: ingest_repository, ingest_document, chat_query,
+               knowledge_base_rebuild, web_scrape
+    """
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    plan = ts.task_planner.plan(task_type, size_bytes)
+    return plan.to_dict()
+
+
+@router.get("/plan/types")
+async def available_task_types() -> Dict[str, Any]:
+    """List available task types for planning."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return {"task_types": ts.task_planner.get_available_tasks()}
+
+
+@router.get("/throughput")
+async def throughput_budgets() -> Dict[str, Any]:
+    """Get throughput budgets for all operations.
+
+    Shows how many concurrent operations Grace can safely handle.
+    """
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return ts.throughput.get_all_budgets()
+
+
+@router.get("/throughput/{operation}")
+async def throughput_budget(operation: str) -> Dict[str, Any]:
+    """Get throughput budget for a specific operation."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return ts.throughput.get_budget(operation).to_dict()
+
+
+@router.get("/memory-impact/{operation}/{size_bytes}")
+async def predict_memory_impact(operation: str, size_bytes: float) -> Dict[str, Any]:
+    """Predict memory impact before starting a heavy operation.
+
+    Grace tells you: 'This will push RAM to 85%. Consider batching.'
+    """
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return ts.memory_predictor.predict_memory_impact(operation, size_bytes)
+
+
+@router.get("/trends")
+async def performance_trends(days: int = 7) -> Dict[str, Any]:
+    """Is Grace getting faster or slower? Performance trends over time."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return ts.trends.get_all_trends(days)
+
+
+@router.get("/trends/{operation}")
+async def operation_trend(operation: str, days: int = 7) -> Dict[str, Any]:
+    """Performance trend for a specific operation."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    return ts.trends.get_trend(operation, days)
