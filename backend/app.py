@@ -83,6 +83,8 @@ from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagno
 from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
+from api.system_health import router as system_health_router  # Unified system health - all subsystems in one endpoint
+from api.websocket_manager import router as ws_manager_router  # Central WebSocket manager - real-time event bridge
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -458,10 +460,42 @@ async def lifespan(app: FastAPI):
     else:
         print("[SKIP] Continuous learning disabled (DISABLE_CONTINUOUS_LEARNING=true)")
 
+    # ==================== UNIFIED SUBSYSTEM ACTIVATION ====================
+    # Wire ALL disconnected Claude subsystems: Layer 1 Message Bus, Component Registry,
+    # Cognitive Engine, Magma Memory, Diagnostic Engine, Systems Integration, Autonomous Engine
+    try:
+        from startup import initialize_all_subsystems, get_subsystems
+        
+        db_session = None
+        try:
+            db_session = SessionLocal()
+        except Exception:
+            pass
+        
+        subsystems = initialize_all_subsystems(session=db_session, settings=settings)
+        
+    except Exception as e:
+        print(f"[WARN] Subsystem activation error (non-fatal): {e}")
+        import traceback
+        traceback.print_exc()
+
     yield
     
     # Shutdown
     print("Grace API shutting down...")
+    
+    # Graceful subsystem shutdown
+    try:
+        from startup import get_subsystems
+        subs = get_subsystems()
+        if subs.diagnostic_engine:
+            try:
+                subs.diagnostic_engine.stop()
+                print("[SHUTDOWN] Diagnostic Engine stopped")
+            except Exception:
+                pass
+    except Exception:
+        pass
 
 
 # ==================== FastAPI App ====================
@@ -548,6 +582,8 @@ app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge 
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
+app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
+app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time event bridge to frontend
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

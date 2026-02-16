@@ -5,7 +5,12 @@ Provides centralized configuration for the application.
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*args, **kwargs):
+        pass
 
 # Get the backend directory
 BACKEND_DIR = Path(__file__).parent
@@ -28,22 +33,8 @@ class Settings:
     # ==================== Embedding Configuration ====================
     EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "qwen_4b")
     EMBEDDING_MODEL_PATH: str = str(BACKEND_DIR / "models" / "embedding" / EMBEDDING_DEFAULT)
-    EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cuda")  # cuda or cpu
+    EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cpu")
     EMBEDDING_NORMALIZE: bool = os.getenv("EMBEDDING_NORMALIZE", "true").lower() == "true"
-    
-    # ==================== Lightweight Mode & Component Disabling ====================
-    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
-    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
-    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
-    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
-    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
-    HEALING_SIMULATION_MODE: bool = os.getenv("HEALING_SIMULATION_MODE", "false").lower() == "true"
-    
-    # ==================== Error Handling Configuration ====================
-    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
-    
-    # ==================== Genesis Key Tracking ====================
-    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     
     # ==================== Database Configuration ====================
     DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite")
@@ -65,6 +56,7 @@ class Settings:
     # ==================== Ingestion Configuration ====================
     INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))
     INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
+    EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
 
     # ==================== Librarian System Configuration ====================
     LIBRARIAN_AUTO_PROCESS: bool = os.getenv("LIBRARIAN_AUTO_PROCESS", "true").lower() == "true"
@@ -86,8 +78,13 @@ class Settings:
     SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
     SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
     LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
+    HEALING_SIMULATION_MODE: bool = os.getenv("HEALING_SIMULATION_MODE", "false").lower() == "true"
     DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
+    SKIP_LAYER1_INIT: bool = os.getenv("SKIP_LAYER1_INIT", "false").lower() == "true"
+    SKIP_DIAGNOSTIC_ENGINE: bool = os.getenv("SKIP_DIAGNOSTIC_ENGINE", "false").lower() == "true"
+    SKIP_COGNITIVE_ENGINE: bool = os.getenv("SKIP_COGNITIVE_ENGINE", "false").lower() == "true"
+    SKIP_MAGMA_MEMORY: bool = os.getenv("SKIP_MAGMA_MEMORY", "false").lower() == "true"
 
     # ==================== Error Handling Configuration ====================
     SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
@@ -95,15 +92,11 @@ class Settings:
     SUPPRESS_QDRANT_ERRORS: bool = os.getenv("SUPPRESS_QDRANT_ERRORS", "false").lower() == "true"
     SUPPRESS_EMBEDDING_ERRORS: bool = os.getenv("SUPPRESS_EMBEDDING_ERRORS", "false").lower() == "true"
 
-    # ==================== Ingestion Configuration ====================
-    EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
-
     # ==================== SerpAPI Configuration ====================
     SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")
     SERPAPI_ENABLED: bool = os.getenv("SERPAPI_ENABLED", "true").lower() == "true"
     SERPAPI_MAX_RESULTS: int = int(os.getenv("SERPAPI_MAX_RESULTS", "5"))
     SERPAPI_AUTO_SCRAPE: bool = os.getenv("SERPAPI_AUTO_SCRAPE", "true").lower() == "true"
-
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

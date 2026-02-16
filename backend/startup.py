@@ -1,0 +1,238 @@
+"""
+Grace Unified Startup - Activates All Subsystems
+
+This module connects every subsystem that was built but never wired.
+Called from app.py lifespan after core services (DB, Ollama, Qdrant) are ready.
+
+Subsystems activated:
+1. Layer 1 Message Bus (nervous system - connects 9 components)
+2. Component Registry (lifecycle management)
+3. Cognitive Engine (OODA decision-making)
+4. Magma Memory (graph-based memory with causal inference)
+5. Diagnostic Engine (4-layer health monitoring with 60s heartbeat)
+6. Systems Integration (connects Planning/Todos/Memory/Diagnostics)
+7. Autonomous Engine (self-triggered task execution)
+
+Each subsystem is wrapped in try/except so one failure doesn't block others.
+"""
+
+import logging
+import threading
+from typing import Dict, Any, Optional
+
+logger = logging.getLogger(__name__)
+
+
+class GraceSubsystems:
+    """Holds references to all activated subsystems."""
+
+    def __init__(self):
+        self.layer1 = None
+        self.message_bus = None
+        self.registry = None
+        self.cortex = None
+        self.magma = None
+        self.diagnostic_engine = None
+        self.systems_integration = None
+        self.autonomous_engine = None
+        self._active_subsystems = []
+
+    def get_status(self) -> Dict[str, Any]:
+        """Get status of all subsystems."""
+        return {
+            "active_count": len(self._active_subsystems),
+            "active_subsystems": self._active_subsystems,
+            "layer1": "active" if self.layer1 else "inactive",
+            "message_bus": "active" if self.message_bus else "inactive",
+            "registry": "active" if self.registry else "inactive",
+            "cognitive_engine": "active" if self.cortex else "inactive",
+            "magma_memory": "active" if self.magma else "inactive",
+            "diagnostic_engine": "active" if self.diagnostic_engine else "inactive",
+            "systems_integration": "active" if self.systems_integration else "inactive",
+            "autonomous_engine": "active" if self.autonomous_engine else "inactive",
+        }
+
+
+_subsystems: Optional[GraceSubsystems] = None
+
+
+def get_subsystems() -> GraceSubsystems:
+    """Get the global subsystems instance."""
+    global _subsystems
+    if _subsystems is None:
+        _subsystems = GraceSubsystems()
+    return _subsystems
+
+
+def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
+    """
+    Initialize all Grace subsystems in the correct order.
+
+    Args:
+        session: Database session (optional, for subsystems that need DB)
+        settings: Settings instance
+
+    Returns:
+        GraceSubsystems with all activated references
+    """
+    subs = get_subsystems()
+
+    print("\n" + "=" * 60)
+    print("  GRACE SUBSYSTEM ACTIVATION")
+    print("=" * 60)
+
+    # =========================================================================
+    # 1. COMPONENT REGISTRY
+    # =========================================================================
+    try:
+        from core.registry import get_component_registry
+
+        subs.registry = get_component_registry()
+        subs._active_subsystems.append("component_registry")
+        print("[STARTUP] [OK] Component Registry initialized")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Component Registry failed: {e}")
+
+    # =========================================================================
+    # 2. LAYER 1 MESSAGE BUS + CONNECTORS
+    # =========================================================================
+    skip_layer1 = getattr(settings, "SKIP_LAYER1_INIT", False) if settings else False
+    if not skip_layer1:
+        try:
+            from layer1.message_bus import get_message_bus
+
+            subs.message_bus = get_message_bus()
+            subs._active_subsystems.append("message_bus")
+            print("[STARTUP] [OK] Layer 1 Message Bus initialized")
+
+            if subs.registry:
+                subs.registry.set_message_bus(subs.message_bus)
+                print("[STARTUP] [OK] Message Bus connected to Component Registry")
+
+            if session:
+                try:
+                    kb_path = getattr(settings, "KNOWLEDGE_BASE_PATH", "knowledge_base") if settings else "knowledge_base"
+                    from layer1.initialize import initialize_layer1
+
+                    subs.layer1 = initialize_layer1(
+                        session=session,
+                        kb_path=kb_path,
+                        enable_neuro_symbolic=False,
+                        enable_knowledge_base=False,
+                    )
+                    subs._active_subsystems.append("layer1_full")
+                    stats = subs.layer1.get_stats()
+                    actions = subs.layer1.get_autonomous_actions()
+                    print(
+                        f"[STARTUP] [OK] Layer 1 System fully initialized: "
+                        f"{stats.get('registered_components', 0)} components, "
+                        f"{len(actions)} autonomous actions"
+                    )
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Layer 1 full init failed (message bus still active): {e}")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Layer 1 Message Bus failed: {e}")
+    else:
+        print("[STARTUP] [SKIP] Layer 1 disabled (SKIP_LAYER1_INIT=true)")
+
+    # =========================================================================
+    # 3. COGNITIVE ENGINE (Central Cortex)
+    # =========================================================================
+    skip_cognitive = getattr(settings, "SKIP_COGNITIVE_ENGINE", False) if settings else False
+    if not skip_cognitive:
+        try:
+            from cognitive.engine import CognitiveEngine
+
+            subs.cortex = CognitiveEngine()
+            subs._active_subsystems.append("cognitive_engine")
+            print("[STARTUP] [OK] Cognitive Engine (Central Cortex) initialized")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Cognitive Engine failed: {e}")
+    else:
+        print("[STARTUP] [SKIP] Cognitive Engine disabled (SKIP_COGNITIVE_ENGINE=true)")
+
+    # =========================================================================
+    # 4. MAGMA MEMORY (Graph-based memory with causal inference)
+    # =========================================================================
+    skip_magma = getattr(settings, "SKIP_MAGMA_MEMORY", False) if settings else False
+    if not skip_magma:
+        try:
+            from cognitive.magma import get_grace_magma
+
+            subs.magma = get_grace_magma()
+            subs._active_subsystems.append("magma_memory")
+            print("[STARTUP] [OK] Magma Memory System initialized")
+
+            if subs.message_bus:
+                try:
+                    from cognitive.magma import create_magma_layer_integrations
+                    create_magma_layer_integrations(subs.magma, subs.message_bus)
+                    print("[STARTUP] [OK] Magma connected to Message Bus (Layer integrations active)")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Magma layer integrations failed: {e}")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Magma Memory failed: {e}")
+    else:
+        print("[STARTUP] [SKIP] Magma Memory disabled (SKIP_MAGMA_MEMORY=true)")
+
+    # =========================================================================
+    # 5. DIAGNOSTIC ENGINE (4-layer health monitoring)
+    # =========================================================================
+    skip_diagnostic = getattr(settings, "SKIP_DIAGNOSTIC_ENGINE", False) if settings else False
+    if not skip_diagnostic:
+        try:
+            from diagnostic_machine.diagnostic_engine import DiagnosticEngine
+
+            subs.diagnostic_engine = DiagnosticEngine()
+            subs._active_subsystems.append("diagnostic_engine")
+            print("[STARTUP] [OK] Diagnostic Engine initialized (4-layer: Sensors > Interpreters > Judgement > Action)")
+
+            def run_diagnostic_heartbeat():
+                try:
+                    subs.diagnostic_engine.start()
+                except Exception as e:
+                    print(f"[DIAGNOSTIC] [WARN] Heartbeat error: {e}")
+
+            diag_thread = threading.Thread(target=run_diagnostic_heartbeat, daemon=True)
+            diag_thread.start()
+            print("[STARTUP] [OK] Diagnostic heartbeat started (60-second cycle)")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Diagnostic Engine failed: {e}")
+    else:
+        print("[STARTUP] [SKIP] Diagnostic Engine disabled (SKIP_DIAGNOSTIC_ENGINE=true)")
+
+    # =========================================================================
+    # 6. SYSTEMS INTEGRATION (connects Planning/Todos/Memory/Diagnostics)
+    # =========================================================================
+    try:
+        from services.grace_systems_integration import GraceSystemsIntegration
+
+        subs.systems_integration = GraceSystemsIntegration()
+        subs._active_subsystems.append("systems_integration")
+        print("[STARTUP] [OK] Grace Systems Integration initialized")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Systems Integration failed: {e}")
+
+    # =========================================================================
+    # 7. AUTONOMOUS ENGINE (self-triggered actions)
+    # =========================================================================
+    try:
+        from services.grace_autonomous_engine import GraceAutonomousEngine
+
+        subs.autonomous_engine = GraceAutonomousEngine()
+        subs._active_subsystems.append("autonomous_engine")
+        print("[STARTUP] [OK] Grace Autonomous Engine initialized")
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Autonomous Engine failed: {e}")
+
+    # =========================================================================
+    # SUMMARY
+    # =========================================================================
+    total = len(subs._active_subsystems)
+    print()
+    print(f"[STARTUP] === {total} subsystems activated ===")
+    for name in subs._active_subsystems:
+        print(f"[STARTUP]   - {name}")
+    print("=" * 60 + "\n")
+
+    return subs
