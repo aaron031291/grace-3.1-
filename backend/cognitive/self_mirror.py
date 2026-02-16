@@ -729,6 +729,57 @@ class SelfMirror:
             "heartbeat_running": self._running,
         }
 
+    def save_state(self) -> bool:
+        """Save Self-Mirror state to disk."""
+        try:
+            import json
+            from pathlib import Path
+            data_dir = Path(__file__).parent.parent / "data" / "self_mirror"
+            data_dir.mkdir(parents=True, exist_ok=True)
+
+            state = {
+                "saved_at": datetime.utcnow().isoformat(),
+                "stats": self._stats,
+                "profiles": {
+                    domain: {
+                        "domain": domain,
+                        "mean_time": profile.mean_time,
+                        "mode_time": profile.mode_time,
+                        "std_time": profile.std_time,
+                        "total_observations": profile.total_observations,
+                    }
+                    for domain, profile in self.profiles.items()
+                },
+            }
+
+            with open(data_dir / "mirror_state.json", "w") as f:
+                json.dump(state, f, indent=2, default=str)
+
+            logger.info("[SELF-MIRROR] State saved to disk")
+            return True
+        except Exception as e:
+            logger.error(f"[SELF-MIRROR] Save failed: {e}")
+            return False
+
+    def load_state(self) -> bool:
+        """Load Self-Mirror state from disk."""
+        try:
+            import json
+            from pathlib import Path
+            filepath = Path(__file__).parent.parent / "data" / "self_mirror" / "mirror_state.json"
+            if not filepath.exists():
+                return False
+
+            with open(filepath, "r") as f:
+                state = json.load(f)
+
+            self._stats = state.get("stats", self._stats)
+            logger.info(f"[SELF-MIRROR] State restored from {state.get('saved_at', 'unknown')}")
+            return True
+        except Exception as e:
+            logger.error(f"[SELF-MIRROR] Load failed: {e}")
+            return False
+
 
 # =============================================================================
 # OPERATION MEASURER (context manager)

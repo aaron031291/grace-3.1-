@@ -663,6 +663,18 @@ class TimeSenseEngine:
         self.memory_predictor = MemoryPressurePredictor()
         self.trends = PerformanceTrendTracker()
 
+        # Deep capabilities
+        from cognitive.timesense_deep import (
+            LearningCurveTracker, TimeSensePersistence,
+            PredictiveScaler, TimeAwareScheduler,
+            OperationDependencyGraph,
+        )
+        self.learning_curves = LearningCurveTracker()
+        self.persistence = TimeSensePersistence()
+        self.scaler = PredictiveScaler()
+        self.scheduler = TimeAwareScheduler()
+        self.dep_graph = OperationDependencyGraph()
+
         self._session_start = datetime.utcnow()
         self._last_action_time = datetime.utcnow()
         self._action_timestamps: deque = deque(maxlen=1000)
@@ -732,6 +744,8 @@ class TimeSenseEngine:
 
         # Feed enhanced trackers
         self.trends.record(operation, duration_ms, success)
+        self.learning_curves.record(operation, duration_ms)
+        self.scheduler.record_load(datetime.utcnow().hour, min(duration_ms / 1000.0, 1.0))
 
         if self.self_mirror:
             try:
@@ -1057,6 +1071,14 @@ class TimeSenseEngine:
             "tracked_rates": len(self._rate_tracker._rates),
             "session_duration_s": (datetime.utcnow() - self._session_start).total_seconds(),
         }
+
+    def save_state(self) -> bool:
+        """Save all TimeSense state to disk. Grace remembers herself."""
+        return self.persistence.save(self)
+
+    def load_state(self) -> bool:
+        """Load TimeSense state from disk. Grace wakes up knowing herself."""
+        return self.persistence.load(self)
 
 
 # =============================================================================

@@ -210,3 +210,72 @@ async def operation_trend(operation: str, days: int = 7) -> Dict[str, Any]:
     from cognitive.timesense import get_timesense
     ts = get_timesense()
     return ts.trends.get_trend(operation, days)
+
+
+# =============================================================================
+# DEEP CAPABILITIES
+# =============================================================================
+
+@router.get("/learning-curves")
+async def all_learning_curves() -> Dict[str, Any]:
+    """Grace's learning curves - is she developing muscle memory?"""
+    from cognitive.timesense import get_timesense
+    return get_timesense().learning_curves.get_all_curves()
+
+
+@router.get("/learning-curves/{operation}")
+async def learning_curve(operation: str) -> Dict[str, Any]:
+    """Learning curve for a specific operation."""
+    from cognitive.timesense import get_timesense
+    return get_timesense().learning_curves.get_curve(operation)
+
+
+@router.get("/scaling")
+async def predictive_scaling() -> Dict[str, Any]:
+    """Predict when Grace will exhaust disk capacity."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    cap = ts.get_capacity()
+    return ts.scaler.predict_disk_exhaustion(cap.available_disk_bytes)
+
+
+@router.get("/schedule")
+async def optimal_schedule(duration_hours: int = 2) -> Dict[str, Any]:
+    """Find the optimal time window for heavy operations."""
+    from cognitive.timesense import get_timesense
+    return get_timesense().scheduler.get_optimal_window(duration_hours)
+
+
+@router.get("/schedule/now")
+async def is_good_time_now() -> Dict[str, Any]:
+    """Is right now a good time for heavy operations?"""
+    from cognitive.timesense import get_timesense
+    return get_timesense().scheduler.is_good_time_now()
+
+
+@router.get("/dependencies/{task_type}")
+async def operation_dependencies(task_type: str) -> Dict[str, Any]:
+    """Get execution order with parallelization for a task type."""
+    from cognitive.timesense import get_timesense
+    ts = get_timesense()
+    templates = ts.task_planner.TASK_TEMPLATES
+    if task_type in templates:
+        ops = [step[1] for step in templates[task_type]]
+        return ts.dep_graph.get_execution_order(ops)
+    return {"error": f"Unknown task type: {task_type}"}
+
+
+@router.post("/save")
+async def save_state() -> Dict[str, Any]:
+    """Save TimeSense state to disk."""
+    from cognitive.timesense import get_timesense
+    success = get_timesense().save_state()
+    return {"saved": success}
+
+
+@router.post("/load")
+async def load_state() -> Dict[str, Any]:
+    """Load TimeSense state from disk."""
+    from cognitive.timesense import get_timesense
+    success = get_timesense().load_state()
+    return {"loaded": success}
