@@ -320,6 +320,25 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
             except Exception as e:
                 print(f"[STARTUP] [WARN] Magma consolidation worker failed: {e}")
 
+        # FULL Genesis wiring (message bus + mirror + timesense + memory + triggers)
+        try:
+            from genesis.full_integration import wire_genesis_system
+            genesis_result = wire_genesis_system(
+                message_bus=subs.message_bus,
+                self_mirror=subs.self_mirror,
+                timesense=subs.timesense,
+                unified_memory=subs.unified_memory,
+                diagnostic_engine=subs.diagnostic_engine,
+            )
+            subs._active_subsystems.append("genesis_full_integration")
+            wired_to = genesis_result.get("wired_to", [])
+            print(f"[STARTUP] [OK] Genesis fully wired: {', '.join(wired_to)}")
+            print(f"[STARTUP] [OK] Unified CI/CD pipeline active (engine: {genesis_result['unified_cicd']._engine_name})")
+            print(f"[STARTUP] [OK] Active healing system ready")
+            print(f"[STARTUP] [OK] Autonomous triggers connected to diagnostic heartbeat")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Genesis full wiring failed: {e}")
+
     except Exception as e:
         print(f"[STARTUP] [WARN] Cross-wiring error (non-fatal): {e}")
 
