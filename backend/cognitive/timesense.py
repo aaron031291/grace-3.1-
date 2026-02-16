@@ -1,19 +1,39 @@
 """
-TimeSense Engine - Temporal Reasoning and OODA Timing
+TimeSense Engine - Grace's Understanding of Time, Data Scale, and Capacity
 
-Grace's temporal awareness system that:
-1. Tracks execution timing for every operation (OODA cycle times)
-2. Builds temporal context (time-of-day patterns, session duration)
-3. Predicts operation durations based on historical data
-4. Detects temporal anomalies (operations taking longer than expected)
-5. Provides cost estimation (time + compute cost per operation)
-6. Feeds timing data into the Self-Mirror as [T,M,P] vectors
+TimeSense gives Grace a true cognitive understanding of:
+
+1. DATA SCALE AWARENESS: What KB, MB, GB, TB actually mean.
+   Grace knows that 1MB is a document, 1GB is a book collection,
+   1TB is an enterprise dataset. She knows her processing rate at
+   each scale and can reason about feasibility.
+
+2. TEMPORAL COMPREHENSION: How long things take at different scales.
+   Grace calibrates herself: "Embedding 1MB takes me 200ms,
+   so embedding 1GB will take ~200 seconds." She doesn't guess --
+   she measures, learns, and predicts from real experience.
+
+3. MEMORY CAPACITY SELF-AWARENESS: Grace knows her own limits.
+   Total RAM, vector DB capacity, knowledge base size, disk space.
+   She can say "I have 4GB of knowledge and room for 12GB more"
+   or "This 50GB dataset won't fit without purging old data."
+
+4. PROCESSING RATE INTELLIGENCE: MB/s throughput per operation type.
+   Grace tracks how fast she ingests, embeds, retrieves, and reasons
+   at every data scale. She knows her own speed.
+
+5. TIME-TO-COMPLETION ESTIMATION: "This task will take ~45 minutes."
+   Grace can estimate how long any task will take based on data size
+   and her measured processing rates.
+
+This is Grace understanding her own physical reality -- like a person
+knowing they can carry 20kg but not 200kg, and walk 1km in 15 minutes.
 
 Integrates with:
-- Self-Mirror: All timing data feeds [T,M,P] telemetry
-- OODA Loop: Measures each phase (observe/orient/decide/act)
-- Diagnostic Engine: Temporal anomalies trigger diagnostics
-- Message Bus: Broadcasts timing events
+- Self-Mirror: Scale awareness feeds [T,M,P] telemetry
+- OODA Loop: Measures each decision phase
+- Diagnostic Engine: Scale anomalies trigger diagnostics
+- Message Bus: Broadcasts capacity events
 - Magma Memory: Stores temporal patterns for learning
 """
 
@@ -28,6 +48,304 @@ from collections import deque, defaultdict
 from enum import Enum
 
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# DATA SCALE AWARENESS - Grace understands what KB, MB, GB, TB mean
+# =============================================================================
+
+class DataScale(str, Enum):
+    """Data scale units that Grace understands."""
+    BYTES = "B"
+    KILOBYTES = "KB"
+    MEGABYTES = "MB"
+    GIGABYTES = "GB"
+    TERABYTES = "TB"
+    PETABYTES = "PB"
+
+
+@dataclass
+class DataScaleProfile:
+    """Grace's understanding of what a data scale means operationally.
+
+    This is Grace's 'intuition' about data sizes -- like a human
+    knowing that a page is light but a filing cabinet is heavy.
+    """
+    scale: DataScale
+    min_bytes: float
+    max_bytes: float
+    human_analogy: str
+    processing_character: str
+    typical_operations: List[str]
+
+    def contains(self, size_bytes: float) -> bool:
+        return self.min_bytes <= size_bytes < self.max_bytes
+
+
+# Grace's innate understanding of data scales
+DATA_SCALE_PROFILES = {
+    DataScale.BYTES: DataScaleProfile(
+        scale=DataScale.BYTES, min_bytes=0, max_bytes=1024,
+        human_analogy="A single sentence or config value",
+        processing_character="Instant. No measurable cost.",
+        typical_operations=["config_read", "cache_lookup", "key_check"],
+    ),
+    DataScale.KILOBYTES: DataScaleProfile(
+        scale=DataScale.KILOBYTES, min_bytes=1024, max_bytes=1024**2,
+        human_analogy="A page of text, a small code file",
+        processing_character="Trivial. Sub-millisecond for most operations.",
+        typical_operations=["file_read", "embedding_single", "api_response"],
+    ),
+    DataScale.MEGABYTES: DataScaleProfile(
+        scale=DataScale.MEGABYTES, min_bytes=1024**2, max_bytes=1024**3,
+        human_analogy="A document, a PDF, a small dataset",
+        processing_character="Fast. Seconds for embedding, milliseconds for retrieval.",
+        typical_operations=["document_ingest", "pdf_parse", "batch_embed"],
+    ),
+    DataScale.GIGABYTES: DataScaleProfile(
+        scale=DataScale.GIGABYTES, min_bytes=1024**3, max_bytes=1024**4,
+        human_analogy="A book collection, a codebase, a knowledge base",
+        processing_character="Significant. Minutes to hours for full processing.",
+        typical_operations=["repo_index", "knowledge_base_rebuild", "full_reindex"],
+    ),
+    DataScale.TERABYTES: DataScaleProfile(
+        scale=DataScale.TERABYTES, min_bytes=1024**4, max_bytes=1024**5,
+        human_analogy="An enterprise dataset, a corporate knowledge library",
+        processing_character="Heavy. Hours to days. Requires batching and throttling.",
+        typical_operations=["enterprise_ingest", "full_retrain", "archive_process"],
+    ),
+    DataScale.PETABYTES: DataScaleProfile(
+        scale=DataScale.PETABYTES, min_bytes=1024**5, max_bytes=float("inf"),
+        human_analogy="A data lake, an entire organization's history",
+        processing_character="Extreme. Days to weeks. Must stream, never load fully.",
+        typical_operations=["data_lake_index", "distributed_process"],
+    ),
+}
+
+
+def classify_data_scale(size_bytes: float) -> DataScaleProfile:
+    """Grace classifies a data size into her scale understanding."""
+    for profile in DATA_SCALE_PROFILES.values():
+        if profile.contains(size_bytes):
+            return profile
+    return DATA_SCALE_PROFILES[DataScale.PETABYTES]
+
+
+def format_data_size(size_bytes: float) -> str:
+    """Format bytes into human-readable string."""
+    if size_bytes < 1024:
+        return f"{size_bytes:.0f} B"
+    elif size_bytes < 1024**2:
+        return f"{size_bytes/1024:.1f} KB"
+    elif size_bytes < 1024**3:
+        return f"{size_bytes/1024**2:.1f} MB"
+    elif size_bytes < 1024**4:
+        return f"{size_bytes/1024**3:.2f} GB"
+    elif size_bytes < 1024**5:
+        return f"{size_bytes/1024**4:.3f} TB"
+    else:
+        return f"{size_bytes/1024**5:.4f} PB"
+
+
+# =============================================================================
+# MEMORY CAPACITY SELF-AWARENESS
+# =============================================================================
+
+@dataclass
+class CapacitySnapshot:
+    """Grace's awareness of her own memory and storage capacity."""
+    total_ram_bytes: float = 0
+    available_ram_bytes: float = 0
+    ram_usage_percent: float = 0.0
+    total_disk_bytes: float = 0
+    available_disk_bytes: float = 0
+    disk_usage_percent: float = 0.0
+    knowledge_base_bytes: float = 0
+    vector_db_entries: int = 0
+    estimated_vector_db_bytes: float = 0
+    timestamp: datetime = field(default_factory=datetime.utcnow)
+
+    @property
+    def total_knowledge_formatted(self) -> str:
+        return format_data_size(self.knowledge_base_bytes)
+
+    @property
+    def remaining_capacity_formatted(self) -> str:
+        return format_data_size(self.available_disk_bytes)
+
+    @property
+    def ram_formatted(self) -> str:
+        return f"{format_data_size(self.available_ram_bytes)} free / {format_data_size(self.total_ram_bytes)} total"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "ram": {
+                "total": format_data_size(self.total_ram_bytes),
+                "available": format_data_size(self.available_ram_bytes),
+                "usage_percent": round(self.ram_usage_percent, 1),
+            },
+            "disk": {
+                "total": format_data_size(self.total_disk_bytes),
+                "available": format_data_size(self.available_disk_bytes),
+                "usage_percent": round(self.disk_usage_percent, 1),
+            },
+            "knowledge": {
+                "size": format_data_size(self.knowledge_base_bytes),
+                "vector_entries": self.vector_db_entries,
+                "vector_db_size": format_data_size(self.estimated_vector_db_bytes),
+            },
+            "self_assessment": self._self_assessment(),
+        }
+
+    def _self_assessment(self) -> str:
+        """Grace's self-assessment of her capacity."""
+        if self.ram_usage_percent > 90:
+            return "Critical: RAM nearly full. Must reduce active data or expand memory."
+        elif self.ram_usage_percent > 75:
+            return "Elevated: RAM usage high. Large operations may cause pressure."
+        elif self.disk_usage_percent > 90:
+            return "Critical: Disk nearly full. Cannot ingest more data without cleanup."
+        elif self.disk_usage_percent > 75:
+            return "Elevated: Disk filling up. Plan for archival or expansion."
+        else:
+            return "Healthy: Sufficient capacity for normal operations."
+
+
+def measure_capacity(knowledge_base_path: str = None) -> CapacitySnapshot:
+    """Measure Grace's current capacity."""
+    import psutil
+    import os
+
+    mem = psutil.virtual_memory()
+    disk = psutil.disk_usage("/")
+
+    kb_size = 0
+    if knowledge_base_path and os.path.isdir(knowledge_base_path):
+        for root, dirs, files in os.walk(knowledge_base_path):
+            for f in files:
+                try:
+                    kb_size += os.path.getsize(os.path.join(root, f))
+                except OSError:
+                    pass
+
+    return CapacitySnapshot(
+        total_ram_bytes=float(mem.total),
+        available_ram_bytes=float(mem.available),
+        ram_usage_percent=mem.percent,
+        total_disk_bytes=float(disk.total),
+        available_disk_bytes=float(disk.free),
+        disk_usage_percent=disk.percent,
+        knowledge_base_bytes=float(kb_size),
+    )
+
+
+# =============================================================================
+# PROCESSING RATE TRACKER
+# =============================================================================
+
+@dataclass
+class ProcessingRate:
+    """Grace's measured processing rate for an operation at a given scale."""
+    operation: str
+    bytes_per_second: float
+    data_scale: DataScale
+    sample_count: int
+
+    @property
+    def mb_per_second(self) -> float:
+        return self.bytes_per_second / (1024 * 1024)
+
+    @property
+    def formatted_rate(self) -> str:
+        if self.bytes_per_second > 1024**3:
+            return f"{self.bytes_per_second/1024**3:.1f} GB/s"
+        elif self.bytes_per_second > 1024**2:
+            return f"{self.bytes_per_second/1024**2:.1f} MB/s"
+        elif self.bytes_per_second > 1024:
+            return f"{self.bytes_per_second/1024:.1f} KB/s"
+        return f"{self.bytes_per_second:.0f} B/s"
+
+    def estimate_time(self, data_bytes: float) -> float:
+        """Estimate processing time for a given data size in seconds."""
+        if self.bytes_per_second <= 0:
+            return float("inf")
+        return data_bytes / self.bytes_per_second
+
+    def estimate_time_formatted(self, data_bytes: float) -> str:
+        """Human-readable time estimate."""
+        seconds = self.estimate_time(data_bytes)
+        if seconds < 1:
+            return f"{seconds*1000:.0f}ms"
+        elif seconds < 60:
+            return f"{seconds:.1f}s"
+        elif seconds < 3600:
+            return f"{seconds/60:.1f} minutes"
+        elif seconds < 86400:
+            return f"{seconds/3600:.1f} hours"
+        else:
+            return f"{seconds/86400:.1f} days"
+
+
+class ProcessingRateTracker:
+    """Tracks Grace's processing speed at different data scales."""
+
+    def __init__(self):
+        self._rates: Dict[str, List[Tuple[float, float]]] = defaultdict(list)
+
+    def record(self, operation: str, data_bytes: float, duration_seconds: float):
+        """Record a processing observation."""
+        if duration_seconds > 0 and data_bytes > 0:
+            self._rates[operation].append((data_bytes, duration_seconds))
+            if len(self._rates[operation]) > 500:
+                self._rates[operation] = self._rates[operation][-500:]
+
+    def get_rate(self, operation: str) -> Optional[ProcessingRate]:
+        """Get Grace's measured processing rate for an operation."""
+        observations = self._rates.get(operation, [])
+        if not observations:
+            return None
+
+        total_bytes = sum(b for b, _ in observations)
+        total_seconds = sum(s for _, s in observations)
+        if total_seconds <= 0:
+            return None
+
+        bps = total_bytes / total_seconds
+        scale = classify_data_scale(total_bytes / len(observations))
+
+        return ProcessingRate(
+            operation=operation,
+            bytes_per_second=bps,
+            data_scale=scale.scale,
+            sample_count=len(observations),
+        )
+
+    def estimate_time(self, operation: str, data_bytes: float) -> Optional[str]:
+        """Estimate how long an operation will take for a given data size."""
+        rate = self.get_rate(operation)
+        if not rate:
+            return None
+        return rate.estimate_time_formatted(data_bytes)
+
+    def get_all_rates(self) -> Dict[str, Dict[str, Any]]:
+        """Get all measured processing rates."""
+        result = {}
+        for op in self._rates:
+            rate = self.get_rate(op)
+            if rate:
+                result[op] = {
+                    "rate": rate.formatted_rate,
+                    "bytes_per_second": round(rate.bytes_per_second, 0),
+                    "scale": rate.data_scale.value,
+                    "samples": rate.sample_count,
+                    "estimates": {
+                        "1MB": rate.estimate_time_formatted(1024**2),
+                        "100MB": rate.estimate_time_formatted(100 * 1024**2),
+                        "1GB": rate.estimate_time_formatted(1024**3),
+                        "10GB": rate.estimate_time_formatted(10 * 1024**3),
+                    },
+                }
+        return result
 
 
 # =============================================================================
@@ -314,18 +632,26 @@ class OODACycleTimer:
 
 class TimeSenseEngine:
     """
-    Grace's temporal reasoning engine.
+    Grace's temporal and scale reasoning engine.
 
-    Tracks all operation timings, builds temporal context,
-    predicts durations, detects anomalies, and estimates costs.
+    Grace's understanding of her own physical reality:
+    - What KB, MB, GB, TB mean in processing time
+    - How fast she processes at each scale (MB/s)
+    - Her own memory capacity and limits
+    - How long any task will take based on data size
+    - When she's operating outside normal parameters
     """
 
-    def __init__(self, message_bus=None, self_mirror=None):
+    def __init__(self, message_bus=None, self_mirror=None, knowledge_base_path=None):
         self.message_bus = message_bus
         self.self_mirror = self_mirror
+        self.knowledge_base_path = knowledge_base_path
 
         self._operation_timers: Dict[str, OperationTimer] = {}
         self._ooda_timer = OODACycleTimer()
+        self._rate_tracker = ProcessingRateTracker()
+        self._capacity: Optional[CapacitySnapshot] = None
+        self._capacity_last_check: Optional[datetime] = None
 
         self._session_start = datetime.utcnow()
         self._last_action_time = datetime.utcnow()
@@ -338,9 +664,12 @@ class TimeSenseEngine:
             "total_anomalies_detected": 0,
             "total_predictions_made": 0,
             "total_ooda_cycles": 0,
+            "total_data_processed_bytes": 0,
         }
 
-        logger.info("[TIMESENSE] Engine initialized")
+        self._refresh_capacity()
+
+        logger.info("[TIMESENSE] Engine initialized - Grace understands time and scale")
 
     # =========================================================================
     # OPERATION TIMING
@@ -352,9 +681,19 @@ class TimeSenseEngine:
         duration_ms: float,
         component: str = "",
         success: bool = True,
+        data_bytes: float = 0,
         metadata: Dict[str, Any] = None,
     ):
-        """Record an operation's execution time."""
+        """Record an operation's execution time and data size.
+
+        Args:
+            operation: Operation name (e.g. "ingestion.embed", "retrieval.search")
+            duration_ms: How long it took in milliseconds
+            component: Which component performed it
+            success: Whether it succeeded
+            data_bytes: How many bytes were processed (for rate calculation)
+            metadata: Additional metadata
+        """
         if operation not in self._operation_timers:
             self._operation_timers[operation] = OperationTimer(operation)
 
@@ -364,6 +703,12 @@ class TimeSenseEngine:
         self._last_action_time = datetime.utcnow()
         self._action_timestamps.append(datetime.utcnow())
         self._stats["total_operations_timed"] += 1
+
+        if data_bytes > 0:
+            self._stats["total_data_processed_bytes"] += data_bytes
+            duration_seconds = duration_ms / 1000.0
+            if duration_seconds > 0:
+                self._rate_tracker.record(operation, data_bytes, duration_seconds)
 
         anomaly = timer.is_anomalous(duration_ms)
         if anomaly:
@@ -380,7 +725,7 @@ class TimeSenseEngine:
                 from cognitive.self_mirror import TelemetryVector
                 vector = TelemetryVector(
                     T=duration_ms,
-                    M=float(metadata.get("data_size", 0)) if metadata else 0.0,
+                    M=float(data_bytes) if data_bytes else (float(metadata.get("data_size", 0)) if metadata else 0.0),
                     P=min(duration_ms / 1000.0, 1.0),
                     component=component or operation.split(".")[0],
                     task_domain=operation,
@@ -527,15 +872,148 @@ class TimeSenseEngine:
         ]
 
     # =========================================================================
+    # DATA SCALE AWARENESS
+    # =========================================================================
+
+    def understand_data_size(self, size_bytes: float) -> Dict[str, Any]:
+        """Grace's cognitive understanding of a data size.
+
+        Returns what the size means, how long it'll take to process,
+        and whether it's feasible given current capacity.
+        """
+        profile = classify_data_scale(size_bytes)
+        capacity = self.get_capacity()
+
+        fits_in_ram = size_bytes < capacity.available_ram_bytes if capacity else True
+        fits_on_disk = size_bytes < capacity.available_disk_bytes if capacity else True
+
+        time_estimates = {}
+        for op, rate in self._rate_tracker.get_all_rates().items():
+            rate_obj = self._rate_tracker.get_rate(op)
+            if rate_obj:
+                time_estimates[op] = rate_obj.estimate_time_formatted(size_bytes)
+
+        return {
+            "size": format_data_size(size_bytes),
+            "size_bytes": size_bytes,
+            "scale": profile.scale.value,
+            "analogy": profile.human_analogy,
+            "processing_character": profile.processing_character,
+            "typical_operations": profile.typical_operations,
+            "fits_in_ram": fits_in_ram,
+            "fits_on_disk": fits_on_disk,
+            "estimated_processing_time": time_estimates or "No rate data yet. Process some data first.",
+            "feasibility": "feasible" if fits_in_ram and fits_on_disk else "requires_streaming" if fits_on_disk else "exceeds_capacity",
+        }
+
+    def estimate_task_time(self, operation: str, data_bytes: float) -> Dict[str, Any]:
+        """Estimate how long a task will take for a given data size.
+
+        Grace uses her measured processing rates to predict duration.
+        """
+        rate = self._rate_tracker.get_rate(operation)
+        scale = classify_data_scale(data_bytes)
+
+        if rate:
+            estimated_seconds = rate.estimate_time(data_bytes)
+            return {
+                "operation": operation,
+                "data_size": format_data_size(data_bytes),
+                "data_scale": scale.scale.value,
+                "measured_rate": rate.formatted_rate,
+                "estimated_time": rate.estimate_time_formatted(data_bytes),
+                "estimated_seconds": round(estimated_seconds, 2),
+                "confidence": "high" if rate.sample_count > 20 else "medium" if rate.sample_count > 5 else "low",
+                "samples_used": rate.sample_count,
+            }
+        else:
+            return {
+                "operation": operation,
+                "data_size": format_data_size(data_bytes),
+                "data_scale": scale.scale.value,
+                "measured_rate": None,
+                "estimated_time": "Unknown - no measurements for this operation yet",
+                "confidence": "none",
+                "hint": f"Process some {operation} tasks first so I can learn my speed.",
+            }
+
+    def get_processing_rates(self) -> Dict[str, Any]:
+        """Get Grace's measured processing rates for all operations."""
+        return {
+            "rates": self._rate_tracker.get_all_rates(),
+            "total_data_processed": format_data_size(self._stats["total_data_processed_bytes"]),
+        }
+
+    # =========================================================================
+    # MEMORY CAPACITY SELF-AWARENESS
+    # =========================================================================
+
+    def get_capacity(self) -> CapacitySnapshot:
+        """Get Grace's current capacity awareness.
+
+        Refreshes every 60 seconds to avoid excessive IO.
+        """
+        now = datetime.utcnow()
+        if (
+            self._capacity is None
+            or self._capacity_last_check is None
+            or (now - self._capacity_last_check).total_seconds() > 60
+        ):
+            self._refresh_capacity()
+        return self._capacity
+
+    def _refresh_capacity(self):
+        """Refresh capacity measurements."""
+        try:
+            self._capacity = measure_capacity(self.knowledge_base_path)
+            self._capacity_last_check = datetime.utcnow()
+        except Exception as e:
+            logger.warning(f"[TIMESENSE] Capacity measurement failed: {e}")
+            if self._capacity is None:
+                self._capacity = CapacitySnapshot()
+
+    def can_handle(self, data_bytes: float) -> Dict[str, Any]:
+        """Can Grace handle this amount of data right now?
+
+        Grace's honest self-assessment of whether she has the capacity.
+        """
+        capacity = self.get_capacity()
+        scale = classify_data_scale(data_bytes)
+
+        fits_ram = data_bytes < capacity.available_ram_bytes * 0.8
+        fits_disk = data_bytes < capacity.available_disk_bytes * 0.9
+
+        if fits_ram and fits_disk:
+            verdict = "yes"
+            reason = f"I have {format_data_size(capacity.available_ram_bytes)} RAM and {format_data_size(capacity.available_disk_bytes)} disk available."
+        elif fits_disk and not fits_ram:
+            verdict = "partially"
+            reason = f"Data ({format_data_size(data_bytes)}) exceeds available RAM ({format_data_size(capacity.available_ram_bytes)}). I'll need to stream/batch it."
+        else:
+            verdict = "no"
+            reason = f"Data ({format_data_size(data_bytes)}) exceeds my storage ({format_data_size(capacity.available_disk_bytes)}). Need cleanup or expansion."
+
+        return {
+            "can_handle": verdict,
+            "data_size": format_data_size(data_bytes),
+            "scale": scale.scale.value,
+            "reason": reason,
+            "capacity": capacity.to_dict(),
+        }
+
+    # =========================================================================
     # DASHBOARD
     # =========================================================================
 
     def get_dashboard(self) -> Dict[str, Any]:
-        """Get the TimeSense dashboard."""
+        """Get the full TimeSense dashboard - Grace's temporal self-awareness."""
         context = self.get_temporal_context()
+        capacity = self.get_capacity()
 
         return {
             "temporal_context": context.to_dict(),
+            "capacity": capacity.to_dict(),
+            "processing_rates": self._rate_tracker.get_all_rates(),
             "operations": {
                 name: timer.get_stats()
                 for name, timer in sorted(
@@ -545,13 +1023,25 @@ class TimeSenseEngine:
             },
             "ooda_timing": self._ooda_timer.get_stats(),
             "anomalies": self.get_anomalies(20),
-            "stats": self._stats,
+            "stats": {
+                **self._stats,
+                "total_data_processed": format_data_size(self._stats["total_data_processed_bytes"]),
+            },
+            "scale_understanding": {
+                scale.value: {
+                    "analogy": profile.human_analogy,
+                    "character": profile.processing_character,
+                }
+                for scale, profile in DATA_SCALE_PROFILES.items()
+            },
         }
 
     def get_stats(self) -> Dict[str, Any]:
         return {
             **self._stats,
+            "total_data_processed": format_data_size(self._stats["total_data_processed_bytes"]),
             "tracked_operations": len(self._operation_timers),
+            "tracked_rates": len(self._rate_tracker._rates),
             "session_duration_s": (datetime.utcnow() - self._session_start).total_seconds(),
         }
 

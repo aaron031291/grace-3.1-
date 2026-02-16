@@ -1,13 +1,18 @@
 """
-TimeSense API - Temporal Reasoning Dashboard
+TimeSense API - Grace's Understanding of Time, Scale, and Capacity
 
 Endpoints:
-- /api/timesense/dashboard - Full timing dashboard
+- /api/timesense/dashboard - Full dashboard (timing + capacity + rates)
+- /api/timesense/understand/{size_bytes} - What does this data size mean?
+- /api/timesense/estimate/{operation}/{size_bytes} - How long will this take?
+- /api/timesense/capacity - Grace's memory and storage self-awareness
+- /api/timesense/can-handle/{size_bytes} - Can Grace handle this data?
+- /api/timesense/rates - Processing rates per operation (MB/s)
 - /api/timesense/context - Current temporal context
 - /api/timesense/predict/{operation} - Predict operation duration
 - /api/timesense/cost/{operation} - Estimate operation cost
-- /api/timesense/anomalies - Recent temporal anomalies
-- /api/timesense/ooda - OODA cycle timing stats
+- /api/timesense/anomalies - Temporal anomalies
+- /api/timesense/ooda - OODA cycle timing
 """
 
 from fastapi import APIRouter
@@ -18,9 +23,59 @@ router = APIRouter(prefix="/api/timesense", tags=["TimeSense"])
 
 @router.get("/dashboard")
 async def timesense_dashboard() -> Dict[str, Any]:
-    """Full TimeSense dashboard with all timing data."""
+    """Full TimeSense dashboard: timing, capacity, rates, scale understanding."""
     from cognitive.timesense import get_timesense
     return get_timesense().get_dashboard()
+
+
+@router.get("/understand/{size_bytes}")
+async def understand_data_size(size_bytes: float) -> Dict[str, Any]:
+    """Grace explains what a data size means and how she'd handle it.
+
+    Example: /api/timesense/understand/1073741824 (1GB)
+    Returns: analogy, processing time estimates, feasibility assessment.
+    """
+    from cognitive.timesense import get_timesense
+    return get_timesense().understand_data_size(size_bytes)
+
+
+@router.get("/estimate/{operation}/{size_bytes}")
+async def estimate_task_time(operation: str, size_bytes: float) -> Dict[str, Any]:
+    """Estimate how long an operation will take for a given data size.
+
+    Example: /api/timesense/estimate/ingestion.embed/104857600 (100MB)
+    Returns: estimated time based on Grace's measured processing rate.
+    """
+    from cognitive.timesense import get_timesense
+    return get_timesense().estimate_task_time(operation, size_bytes)
+
+
+@router.get("/capacity")
+async def capacity() -> Dict[str, Any]:
+    """Grace's memory and storage self-awareness.
+
+    Returns: RAM (total/available), disk (total/available),
+    knowledge base size, and self-assessment.
+    """
+    from cognitive.timesense import get_timesense
+    return get_timesense().get_capacity().to_dict()
+
+
+@router.get("/can-handle/{size_bytes}")
+async def can_handle(size_bytes: float) -> Dict[str, Any]:
+    """Can Grace handle this amount of data right now?
+
+    Grace's honest self-assessment of her current capacity.
+    """
+    from cognitive.timesense import get_timesense
+    return get_timesense().can_handle(size_bytes)
+
+
+@router.get("/rates")
+async def processing_rates() -> Dict[str, Any]:
+    """Grace's measured processing rates (MB/s) per operation type."""
+    from cognitive.timesense import get_timesense
+    return get_timesense().get_processing_rates()
 
 
 @router.get("/context")
@@ -32,7 +87,7 @@ async def temporal_context() -> Dict[str, Any]:
 
 @router.get("/predict/{operation}")
 async def predict_duration(operation: str) -> Dict[str, Any]:
-    """Predict how long an operation will take."""
+    """Predict how long an operation will take based on history."""
     from cognitive.timesense import get_timesense
     p = get_timesense().predict(operation)
     return {
@@ -62,7 +117,7 @@ async def estimate_cost(operation: str) -> Dict[str, Any]:
 
 @router.get("/anomalies")
 async def temporal_anomalies(limit: int = 50) -> Dict[str, Any]:
-    """Recent temporal anomalies."""
+    """Temporal anomalies - operations outside expected range."""
     from cognitive.timesense import get_timesense
     ts = get_timesense()
     return {
@@ -73,7 +128,7 @@ async def temporal_anomalies(limit: int = 50) -> Dict[str, Any]:
 
 @router.get("/ooda")
 async def ooda_timing() -> Dict[str, Any]:
-    """OODA cycle timing breakdown."""
+    """OODA cycle timing breakdown per phase."""
     from cognitive.timesense import get_timesense
     return get_timesense()._ooda_timer.get_stats()
 

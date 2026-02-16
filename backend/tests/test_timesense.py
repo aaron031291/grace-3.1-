@@ -12,6 +12,9 @@ from cognitive.timesense import (
     TimeSenseEngine, OperationTimer, OODACycleTimer,
     TemporalContext, TimePrediction, CostEstimate, TemporalAnomaly,
     TimeOfDay, WorkPattern, get_timesense, reset_timesense,
+    DataScale, DataScaleProfile, DATA_SCALE_PROFILES, classify_data_scale,
+    format_data_size, CapacitySnapshot, measure_capacity,
+    ProcessingRate, ProcessingRateTracker,
 )
 
 
@@ -191,6 +194,136 @@ class TestTimeSenseEngine:
         engine = TimeSenseEngine(self_mirror=mirror)
         engine.record_operation("test.op", 150.0, "test_component")
         assert mirror._stats["total_vectors_received"] >= 1
+
+
+class TestDataScaleAwareness:
+    """Grace understands what KB, MB, GB, TB mean."""
+
+    def test_format_bytes(self):
+        assert "B" in format_data_size(500)
+        assert "KB" in format_data_size(5000)
+        assert "MB" in format_data_size(5 * 1024**2)
+        assert "GB" in format_data_size(5 * 1024**3)
+        assert "TB" in format_data_size(5 * 1024**4)
+
+    def test_classify_kilobytes(self):
+        profile = classify_data_scale(50 * 1024)
+        assert profile.scale == DataScale.KILOBYTES
+        assert "page" in profile.human_analogy.lower() or "code" in profile.human_analogy.lower()
+
+    def test_classify_megabytes(self):
+        profile = classify_data_scale(50 * 1024**2)
+        assert profile.scale == DataScale.MEGABYTES
+
+    def test_classify_gigabytes(self):
+        profile = classify_data_scale(5 * 1024**3)
+        assert profile.scale == DataScale.GIGABYTES
+        assert "book" in profile.human_analogy.lower() or "codebase" in profile.human_analogy.lower()
+
+    def test_classify_terabytes(self):
+        profile = classify_data_scale(2 * 1024**4)
+        assert profile.scale == DataScale.TERABYTES
+        assert "enterprise" in profile.human_analogy.lower()
+
+    def test_all_scales_covered(self):
+        assert len(DATA_SCALE_PROFILES) == 6
+        for scale in DataScale:
+            assert scale in DATA_SCALE_PROFILES
+
+    def test_understand_data_size(self):
+        engine = TimeSenseEngine()
+        result = engine.understand_data_size(1024**3)  # 1GB
+        assert result["scale"] == "GB"
+        assert "analogy" in result
+        assert "feasibility" in result
+
+    def test_can_handle_small_data(self):
+        engine = TimeSenseEngine()
+        result = engine.can_handle(1024**2)  # 1MB
+        assert result["can_handle"] == "yes"
+
+    def test_can_handle_reports_capacity(self):
+        engine = TimeSenseEngine()
+        result = engine.can_handle(1024**3)
+        assert "capacity" in result
+        assert "ram" in result["capacity"]
+        assert "disk" in result["capacity"]
+
+
+class TestCapacityAwareness:
+    """Grace knows her own memory and storage limits."""
+
+    def test_measure_capacity(self):
+        cap = measure_capacity()
+        assert cap.total_ram_bytes > 0
+        assert cap.total_disk_bytes > 0
+        assert 0 <= cap.ram_usage_percent <= 100
+        assert 0 <= cap.disk_usage_percent <= 100
+
+    def test_capacity_to_dict(self):
+        cap = measure_capacity()
+        d = cap.to_dict()
+        assert "ram" in d
+        assert "disk" in d
+        assert "knowledge" in d
+        assert "self_assessment" in d
+
+    def test_self_assessment_string(self):
+        cap = CapacitySnapshot(
+            total_ram_bytes=16 * 1024**3,
+            available_ram_bytes=12 * 1024**3,
+            ram_usage_percent=25.0,
+            total_disk_bytes=500 * 1024**3,
+            available_disk_bytes=400 * 1024**3,
+            disk_usage_percent=20.0,
+        )
+        assert "Healthy" in cap._self_assessment()
+
+    def test_capacity_from_engine(self):
+        engine = TimeSenseEngine()
+        cap = engine.get_capacity()
+        assert cap.total_ram_bytes > 0
+
+
+class TestProcessingRates:
+    """Grace tracks how fast she processes at different scales."""
+
+    def test_rate_tracker_record(self):
+        tracker = ProcessingRateTracker()
+        tracker.record("ingest", 1024**2, 0.5)  # 1MB in 0.5s = 2MB/s
+        rate = tracker.get_rate("ingest")
+        assert rate is not None
+        assert rate.mb_per_second >= 1.0
+
+    def test_rate_estimates(self):
+        tracker = ProcessingRateTracker()
+        for _ in range(10):
+            tracker.record("embed", 1024**2, 0.2)  # 1MB in 200ms = 5MB/s
+        rate = tracker.get_rate("embed")
+        est = rate.estimate_time_formatted(1024**3)  # 1GB
+        assert est is not None
+        assert "s" in est or "min" in est
+
+    def test_engine_records_rates(self):
+        engine = TimeSenseEngine()
+        engine.record_operation("ingest.pdf", 200.0, "ingestion", data_bytes=1024**2)
+        engine.record_operation("ingest.pdf", 180.0, "ingestion", data_bytes=1024**2)
+        rates = engine.get_processing_rates()
+        assert "ingest.pdf" in rates["rates"]
+
+    def test_estimate_task_time_with_data(self):
+        engine = TimeSenseEngine()
+        for _ in range(10):
+            engine.record_operation("embed.batch", 500.0, "embedding", data_bytes=5 * 1024**2)
+        result = engine.estimate_task_time("embed.batch", 1024**3)  # 1GB
+        assert result["confidence"] != "none"
+        assert "estimated_time" in result
+
+    def test_estimate_unknown_operation(self):
+        engine = TimeSenseEngine()
+        result = engine.estimate_task_time("never.seen", 1024**3)
+        assert result["confidence"] == "none"
+        assert "hint" in result
 
 
 class TestDiagnosticEngineConnection:
