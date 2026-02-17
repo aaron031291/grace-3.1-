@@ -31,6 +31,7 @@ from .deep_reasoning_integration import DeepReasoningIntegration, ReasoningResul
 from .self_evolution_coordinator import SelfEvolutionCoordinator, EvolutionCycleResult, PillarRole
 from .secrets_vault import SecretsVault, get_vault
 from .kimi_orchestrator import KimiOrchestrator, KimiResponse, KimiMode
+from .recursion_governor import RecursionGovernor, ActionContract, ExecutionTier, GovernorDecision
 
 __all__ = [
     "WhitelistBox",
@@ -77,4 +78,8 @@ __all__ = [
     "KimiOrchestrator",
     "KimiResponse",
     "KimiMode",
+    "RecursionGovernor",
+    "ActionContract",
+    "ExecutionTier",
+    "GovernorDecision",
 ]
