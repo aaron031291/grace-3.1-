@@ -28,6 +28,7 @@ from .hallucination_guard import HallucinationGuard, HallucinationReport
 from .perpetual_learning_loop import PerpetualLearningLoop, LoopState, TrustChainEntry
 from .socratic_interrogator import SocraticInterrogator, InterrogationReport, QuestionCategory
 from .deep_reasoning_integration import DeepReasoningIntegration, ReasoningResult, ReasoningTaskType
+from .self_evolution_coordinator import SelfEvolutionCoordinator, EvolutionCycleResult, PillarRole
 
 __all__ = [
     "WhitelistBox",
@@ -66,4 +67,7 @@ __all__ = [
     "DeepReasoningIntegration",
     "ReasoningResult",
     "ReasoningTaskType",
+    "SelfEvolutionCoordinator",
+    "EvolutionCycleResult",
+    "PillarRole",
 ]
