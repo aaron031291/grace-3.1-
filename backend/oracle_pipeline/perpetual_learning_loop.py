@@ -70,6 +70,7 @@ from enum import Enum
 
 from .whitelist_box import WhitelistBox, WhitelistItem, WhitelistItemType
 from .multi_source_fetcher import MultiSourceFetcher, FetchResult, FetchStatus, FetchSource
+from .content_realization_engine import ContentRealizationEngine
 from .oracle_vector_store import OracleVectorStore, OracleRecord
 from .reverse_knn_discovery import ReverseKNNDiscovery
 from .proactive_discovery_engine import ProactiveDiscoveryEngine, DiscoveryTask, LearningPriority
@@ -172,6 +173,7 @@ class PerpetualLearningLoop:
         # Core components
         self.whitelist = WhitelistBox()
         self.fetcher = MultiSourceFetcher()
+        self.realizer = ContentRealizationEngine()
         self.oracle = OracleVectorStore()
         self.source_index = SourceCodeIndex()
         self.hallucination_guard = HallucinationGuard(
@@ -275,6 +277,8 @@ class PerpetualLearningLoop:
             fetch_results = self.fetcher.fetch_item(item)
             for fr in fetch_results:
                 if fr.status == FetchStatus.COMPLETED and fr.content:
+                    # Realize content (replace placeholders with real data)
+                    fr = self.realizer.realize(item, fr)
                     trust = self.get_trust_for_item(item.item_id)
                     records = self.oracle.ingest(
                         content=fr.content,
@@ -424,6 +428,8 @@ class PerpetualLearningLoop:
             fetch_results = self.fetcher.fetch_item(item)
             for fr in fetch_results:
                 if fr.status == FetchStatus.COMPLETED and fr.content:
+                    # Realize content
+                    fr = self.realizer.realize(item, fr)
                     trust = self.get_trust_for_item(item.item_id)
                     records = self.oracle.ingest(
                         content=fr.content,

@@ -32,6 +32,7 @@ from .self_evolution_coordinator import SelfEvolutionCoordinator, EvolutionCycle
 from .secrets_vault import SecretsVault, get_vault
 from .kimi_orchestrator import KimiOrchestrator, KimiResponse, KimiMode
 from .recursion_governor import RecursionGovernor, ActionContract, ExecutionTier, GovernorDecision
+from .content_realization_engine import ContentRealizationEngine, RealizationMode, RealizedContent
 
 __all__ = [
     "WhitelistBox",
@@ -82,4 +83,7 @@ __all__ = [
     "ActionContract",
     "ExecutionTier",
     "GovernorDecision",
+    "ContentRealizationEngine",
+    "RealizationMode",
+    "RealizedContent",
 ]
