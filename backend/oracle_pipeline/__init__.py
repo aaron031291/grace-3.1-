@@ -26,6 +26,7 @@ from .proactive_discovery_engine import ProactiveDiscoveryEngine, DiscoveryTask,
 from .source_code_index import SourceCodeIndex, CodeElement, CodeElementType
 from .hallucination_guard import HallucinationGuard, HallucinationReport
 from .perpetual_learning_loop import PerpetualLearningLoop, LoopState, TrustChainEntry
+from .socratic_interrogator import SocraticInterrogator, InterrogationReport, QuestionCategory
 
 __all__ = [
     "WhitelistBox",
@@ -58,4 +59,7 @@ __all__ = [
     "PerpetualLearningLoop",
     "LoopState",
     "TrustChainEntry",
+    "SocraticInterrogator",
+    "InterrogationReport",
+    "QuestionCategory",
 ]
