@@ -38,6 +38,11 @@ class GraceSubsystems:
         self.timesense = None
         self.self_mirror = None
         self.unified_memory = None
+        self.kimi_brain = None
+        self.grace_executor = None
+        self.verification_engine = None
+        self.pattern_learner = None
+        self.near_zero_guard = None
         self._active_subsystems = []
 
     def get_status(self) -> Dict[str, Any]:
@@ -56,6 +61,11 @@ class GraceSubsystems:
             "timesense": "active" if self.timesense else "inactive",
             "self_mirror": "active" if self.self_mirror else "inactive",
             "unified_memory": "active" if self.unified_memory else "inactive",
+            "kimi_brain": "active" if self.kimi_brain else "inactive",
+            "grace_executor": "active" if self.grace_executor else "inactive",
+            "verification_engine": "active" if self.verification_engine else "inactive",
+            "pattern_learner": "active" if self.pattern_learner else "inactive",
+            "near_zero_guard": "active" if self.near_zero_guard else "inactive",
         }
 
 
@@ -362,6 +372,169 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
             print(f"[STARTUP]   - {loop_name}")
     except Exception as e:
         print(f"[STARTUP] [WARN] Feedback loop wiring error: {e}")
+
+    # =========================================================================
+    # 11. KIMI + GRACE LEARNING SYSTEM
+    # Wire: KimiBrain (read-only), GraceVerifiedExecutor, VerificationEngine,
+    #        PatternLearner, NearZeroHallucinationGuard, DB migration
+    # =========================================================================
+    try:
+        print("[STARTUP] Initializing Kimi + Grace Learning System...")
+
+        # 11a. Run LLM tracking table migration
+        try:
+            from database.migrations.add_llm_tracking_tables import run_migration
+            run_migration()
+            print("[STARTUP] [OK] LLM tracking tables created/verified")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] LLM tracking migration failed: {e}")
+
+        # 11b. Initialize KimiBrain (read-only intelligence)
+        try:
+            from cognitive.kimi_brain import get_kimi_brain
+
+            subs.kimi_brain = get_kimi_brain(session) if session else None
+
+            if subs.kimi_brain:
+                # Connect Kimi to Mirror (read-only behavioral patterns)
+                if subs.self_mirror:
+                    try:
+                        from cognitive.mirror_self_modeling import get_mirror_system
+                        mirror_system = get_mirror_system(session)
+                        subs.kimi_brain.connect_mirror(mirror_system)
+                        print("[STARTUP] [OK] Kimi -> Mirror Self-Modeling connected (read-only)")
+                    except Exception as e:
+                        print(f"[STARTUP] [WARN] Kimi -> Mirror connection failed: {e}")
+
+                # Connect Kimi to Diagnostic Engine (read-only health data)
+                if subs.diagnostic_engine:
+                    subs.kimi_brain.connect_diagnostics(subs.diagnostic_engine)
+                    print("[STARTUP] [OK] Kimi -> Diagnostic Engine connected (read-only)")
+
+                # Connect Kimi to Learning Efficiency Tracker (read-only progress)
+                try:
+                    from cognitive.learning_efficiency_tracker import LearningEfficiencyTracker
+                    learning_tracker = LearningEfficiencyTracker(session)
+                    subs.kimi_brain.connect_learning(learning_tracker)
+                    print("[STARTUP] [OK] Kimi -> Learning Tracker connected (read-only)")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Kimi -> Learning Tracker connection failed: {e}")
+
+                # Connect Kimi to Pattern Learner (read-only autonomy readiness)
+                try:
+                    from cognitive.llm_pattern_learner import get_llm_pattern_learner
+                    subs.pattern_learner = get_llm_pattern_learner(session)
+                    subs.kimi_brain.connect_pattern_learner(subs.pattern_learner)
+                    subs._active_subsystems.append("pattern_learner")
+                    print("[STARTUP] [OK] Kimi -> Pattern Learner connected (read-only)")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Kimi -> Pattern Learner connection failed: {e}")
+
+                subs._active_subsystems.append("kimi_brain")
+                print("[STARTUP] [OK] Kimi Brain initialized (read-only intelligence)")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Kimi Brain failed: {e}")
+
+        # 11c. Initialize Verification Engine with all sources
+        try:
+            from cognitive.grace_verification_engine import get_grace_verification_engine
+
+            subs.verification_engine = get_grace_verification_engine(session) if session else None
+
+            if subs.verification_engine:
+                # Connect Oracle ML
+                if subs.systems_integration:
+                    subs.verification_engine.connect_oracle(subs.systems_integration)
+                    print("[STARTUP] [OK] Verification -> Oracle ML connected")
+
+                # Connect Governance
+                try:
+                    from security.governance import get_governance_engine
+                    governance = get_governance_engine()
+                    subs.verification_engine.connect_governance(governance)
+                    print("[STARTUP] [OK] Verification -> Governance connected")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Verification -> Governance failed: {e}")
+
+                # Connect WebSocket for bidirectional comms
+                try:
+                    from api.websocket import manager as ws_manager
+                    subs.verification_engine.connect_websocket(ws_manager)
+                    print("[STARTUP] [OK] Verification -> WebSocket bidirectional comms connected")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Verification -> WebSocket failed: {e}")
+
+                # Connect Knowledge Base retriever
+                try:
+                    from api.retrieve import get_document_retriever
+                    retriever = get_document_retriever()
+                    if retriever:
+                        subs.verification_engine.connect_knowledge_base(retriever)
+                        print("[STARTUP] [OK] Verification -> Knowledge Base connected")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Verification -> KB failed: {e}")
+
+                # Connect web search
+                try:
+                    search_service = SerpAPIService()
+                    subs.verification_engine.connect_search(search_service)
+                    print("[STARTUP] [OK] Verification -> Web Search connected")
+                except Exception as e:
+                    print(f"[STARTUP] [WARN] Verification -> Web Search failed: {e}")
+
+                subs._active_subsystems.append("verification_engine")
+                print("[STARTUP] [OK] Verification Engine initialized (10 sources)")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Verification Engine failed: {e}")
+
+        # 11d. Initialize Grace Verified Executor with execution bridge
+        try:
+            from cognitive.grace_verified_executor import get_grace_verified_executor
+            from execution.bridge import get_execution_bridge
+
+            exec_bridge = get_execution_bridge()
+
+            subs.grace_executor = get_grace_verified_executor(
+                session=session,
+                execution_bridge=exec_bridge,
+                coding_agent=None,  # Coding agent connected on-demand
+            ) if session else None
+
+            if subs.grace_executor and subs.verification_engine:
+                subs.grace_executor.verification = subs.verification_engine
+
+            if subs.grace_executor:
+                subs._active_subsystems.append("grace_executor")
+                print("[STARTUP] [OK] Grace Verified Executor initialized (with execution bridge)")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Grace Executor failed: {e}")
+
+        # 11e. Initialize Near-Zero Hallucination Guard
+        try:
+            from llm_orchestrator.near_zero_hallucination_guard import get_near_zero_hallucination_guard
+
+            base_guard = None
+            multi_llm = None
+            repo_access = None
+
+            try:
+                from llm_orchestrator.hallucination_guard import get_hallucination_guard
+                base_guard = get_hallucination_guard()
+            except Exception:
+                pass
+
+            subs.near_zero_guard = get_near_zero_hallucination_guard(
+                base_guard=base_guard,
+                multi_llm=multi_llm,
+                repo_access=repo_access,
+            )
+            subs._active_subsystems.append("near_zero_guard")
+            print("[STARTUP] [OK] Near-Zero Hallucination Guard initialized (13 layers)")
+        except Exception as e:
+            print(f"[STARTUP] [WARN] Near-Zero Guard failed: {e}")
+
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Kimi + Grace Learning System error (non-fatal): {e}")
 
     # =========================================================================
     # SUMMARY

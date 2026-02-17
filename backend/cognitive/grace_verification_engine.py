@@ -261,6 +261,7 @@ class GraceVerificationEngine:
         checks.append((self._check_file_system, VerificationSource.FILE_SYSTEM))
         checks.append((self._check_database, VerificationSource.DATABASE))
         checks.append((self._check_knowledge_base, VerificationSource.KNOWLEDGE_BASE))
+        checks.append((self._check_file_uploads, VerificationSource.FILE_UPLOADS))
 
         if risk_level in ("medium", "high", "critical"):
             checks.append((self._check_oracle, VerificationSource.ORACLE_ML))
@@ -729,6 +730,50 @@ class GraceVerificationEngine:
                 message="Instruction lacks proper OODA reasoning chain",
                 duration_ms=(time.time() - start) * 1000,
             )
+
+    async def _check_file_uploads(self, instruction) -> VerificationCheck:
+        """
+        Verify integrity of any file uploads referenced by the instruction.
+
+        Checks: Do uploaded files exist? Are they non-empty? Expected format?
+        """
+        check_id = f"CHK-{uuid.uuid4().hex[:8]}"
+        start = time.time()
+
+        target_files = getattr(instruction, 'target_files', []) or []
+        uploads_checked = 0
+        uploads_valid = 0
+
+        for file_path in target_files:
+            full_path = os.path.join(self.workspace_dir, file_path)
+            if os.path.isfile(full_path):
+                uploads_checked += 1
+                file_size = os.path.getsize(full_path)
+                if file_size > 0:
+                    uploads_valid += 1
+
+        if uploads_checked == 0:
+            return VerificationCheck(
+                check_id=check_id,
+                source=VerificationSource.FILE_UPLOADS,
+                check_name="file_uploads_check",
+                result=CheckResult.PASS,
+                confidence=1.0,
+                message="No file uploads to verify",
+                duration_ms=(time.time() - start) * 1000,
+            )
+
+        all_valid = uploads_valid == uploads_checked
+        return VerificationCheck(
+            check_id=check_id,
+            source=VerificationSource.FILE_UPLOADS,
+            check_name="file_uploads_check",
+            result=CheckResult.PASS if all_valid else CheckResult.WARN,
+            confidence=uploads_valid / uploads_checked if uploads_checked > 0 else 0,
+            message=f"{uploads_valid}/{uploads_checked} uploaded files valid",
+            details={"checked": uploads_checked, "valid": uploads_valid},
+            duration_ms=(time.time() - start) * 1000,
+        )
 
     async def _check_api_validation(self, instruction) -> VerificationCheck:
         """

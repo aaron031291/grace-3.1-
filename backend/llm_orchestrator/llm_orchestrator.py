@@ -123,6 +123,19 @@ class LLMOrchestrator:
         )
         self.cognitive_enforcer = CognitiveEnforcer()
 
+        # Near-Zero Hallucination Guard (13 layers) - wraps the base guard
+        self.near_zero_guard = None
+        try:
+            from .near_zero_hallucination_guard import get_near_zero_hallucination_guard
+            self.near_zero_guard = get_near_zero_hallucination_guard(
+                base_guard=self.hallucination_guard,
+                multi_llm=self.multi_llm,
+                repo_access=self.repo_access,
+            )
+            logger.info("[LLM-ORCHESTRATOR] Near-Zero Hallucination Guard active (13 layers)")
+        except Exception as e:
+            logger.warning(f"[LLM-ORCHESTRATOR] Near-Zero Guard not available, using base 6-layer: {e}")
+
         # Initialize Cognitive Layer 1 (with OODA + 12 Invariants) and Learning Memory
         self.cognitive_layer1 = get_cognitive_layer1_integration(session=session) if session else None
         self.learning_memory = LearningMemoryManager(

@@ -552,7 +552,7 @@ class TestGraceVerificationEngine:
         instruction.instruction_type = MagicMock(value="observe")
 
         checks = engine._determine_checks(instruction, "low")
-        assert len(checks) == 3  # file_system, database, knowledge_base
+        assert len(checks) == 4  # file_system, database, knowledge_base, file_uploads
 
     def test_determine_checks_medium_risk(self, session):
         from cognitive.grace_verification_engine import GraceVerificationEngine
@@ -562,7 +562,7 @@ class TestGraceVerificationEngine:
         instruction.instruction_type = MagicMock(value="fix")
 
         checks = engine._determine_checks(instruction, "medium")
-        assert len(checks) == 6  # low + oracle + governance + ooda
+        assert len(checks) == 7  # low(4) + oracle + governance + ooda
 
     def test_determine_checks_critical_risk(self, session):
         from cognitive.grace_verification_engine import GraceVerificationEngine
@@ -572,7 +572,7 @@ class TestGraceVerificationEngine:
         instruction.instruction_type = MagicMock(value="deploy")
 
         checks = engine._determine_checks(instruction, "critical")
-        assert len(checks) >= 10  # all checks
+        assert len(checks) >= 11  # all checks including file_uploads
 
     def test_determine_checks_delete_forces_user_confirmation(self, session):
         from cognitive.grace_verification_engine import (
@@ -617,6 +617,17 @@ class TestGraceVerificationEngine:
 
         instruction = MagicMock()
         result = await engine._check_database(instruction)
+        assert result.result.value == "pass"
+
+    @pytest.mark.asyncio
+    async def test_file_uploads_check_no_files(self, session):
+        from cognitive.grace_verification_engine import GraceVerificationEngine
+        engine = GraceVerificationEngine(session)
+
+        instruction = MagicMock()
+        instruction.target_files = []
+
+        result = await engine._check_file_uploads(instruction)
         assert result.result.value == "pass"
 
     @pytest.mark.asyncio
@@ -1176,6 +1187,39 @@ class TestNearZeroHallucinationGuard:
 # ========================================================================
 # TEST 10: Kimi Tool Executor
 # ========================================================================
+
+class TestStartupWiring:
+    """Test that startup.py correctly wires all new subsystems."""
+
+    def test_subsystems_has_kimi_fields(self):
+        from startup import GraceSubsystems
+        subs = GraceSubsystems()
+        assert hasattr(subs, 'kimi_brain')
+        assert hasattr(subs, 'grace_executor')
+        assert hasattr(subs, 'verification_engine')
+        assert hasattr(subs, 'pattern_learner')
+        assert hasattr(subs, 'near_zero_guard')
+
+    def test_subsystems_status_includes_new_fields(self):
+        from startup import GraceSubsystems
+        subs = GraceSubsystems()
+        status = subs.get_status()
+        assert "kimi_brain" in status
+        assert "grace_executor" in status
+        assert "verification_engine" in status
+        assert "pattern_learner" in status
+        assert "near_zero_guard" in status
+        assert status["kimi_brain"] == "inactive"
+
+    def test_subsystems_status_active_when_set(self):
+        from startup import GraceSubsystems
+        subs = GraceSubsystems()
+        subs.kimi_brain = MagicMock()
+        subs.grace_executor = MagicMock()
+        status = subs.get_status()
+        assert status["kimi_brain"] == "active"
+        assert status["grace_executor"] == "active"
+
 
 class TestKimiToolExecutor:
     """Test the tool registry and execution system."""
