@@ -52,6 +52,26 @@ class ComponentType(Enum):
     AUTONOMOUS_LEARNING = "autonomous_learning"
     LLM_ORCHESTRATION = "llm_orchestration"
     COGNITIVE_ENGINE = "cognitive_engine"
+    LLM_LEARNING = "llm_learning"
+    DIAGNOSTIC_MACHINE = "diagnostic_machine"
+    SELF_HEALING = "self_healing"
+    CONFIDENCE_SCORER = "confidence_scorer"
+    USER_FEEDBACK = "user_feedback"
+    WEB_SCRAPING = "web_scraping"
+
+
+class LearningEventTopic:
+    """Standard topic names for LLM learning events on the message bus."""
+    LLM_INTERACTION_COMPLETED = "llm_learning.interaction_completed"
+    LLM_FEEDBACK_RECEIVED = "llm_learning.feedback_received"
+    RAG_RETRIEVAL_QUALITY = "llm_learning.rag_retrieval_quality"
+    CONFIDENCE_SCORE_COMPUTED = "llm_learning.confidence_score_computed"
+    DIAGNOSTIC_INSIGHT = "llm_learning.diagnostic_insight"
+    SELF_HEALING_OUTCOME = "llm_learning.self_healing_outcome"
+    SENSOR_DATA_COLLECTED = "llm_learning.sensor_data_collected"
+    SCRAPING_RESULT = "llm_learning.scraping_result"
+    USER_VOTE = "llm_learning.user_vote"
+    PATTERN_LEARNED = "llm_learning.pattern_learned"
 
 
 @dataclass

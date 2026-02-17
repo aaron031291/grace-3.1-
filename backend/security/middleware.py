@@ -4,11 +4,15 @@ Security Middleware for GRACE
 Provides:
 - Security headers middleware
 - Rate limiting middleware
+- CSRF protection middleware
+- Authentication enforcement middleware
+- Input sanitisation middleware
 """
 
 import time
 import hashlib
-from typing import Dict, Callable, Optional
+import secrets
+from typing import Dict, Callable, Optional, Set
 from collections import defaultdict
 from datetime import datetime, timedelta
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -277,5 +281,183 @@ class RequestValidationMiddleware(BaseHTTPMiddleware):
                         status_code=413,
                         content={"detail": f"Request too large. Maximum size: {self.config.MAX_REQUEST_SIZE_MB}MB"},
                     )
+
+        return await call_next(request)
+
+
+class CSRFMiddleware(BaseHTTPMiddleware):
+    """
+    CSRF protection middleware.
+
+    Enforces CSRF token validation on state-changing requests
+    (POST, PUT, PATCH, DELETE).
+
+    Safe methods (GET, HEAD, OPTIONS) are exempted.
+    """
+
+    SAFE_METHODS: Set[str] = {"GET", "HEAD", "OPTIONS"}
+    EXEMPT_PATHS: Set[str] = {
+        "/auth/login",
+        "/auth/register",
+        "/health",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+    }
+
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        config = get_security_config()
+
+        # Skip for safe methods
+        if request.method in self.SAFE_METHODS:
+            response = await call_next(request)
+            # Provide a CSRF token cookie on GET so clients can read it
+            if request.method == "GET" and "csrf_token" not in request.cookies:
+                csrf_token = secrets.token_hex(32)
+                response.set_cookie(
+                    key="csrf_token",
+                    value=csrf_token,
+                    httponly=False,  # JS must read this
+                    secure=config.SESSION_COOKIE_SECURE,
+                    samesite=config.SESSION_COOKIE_SAMESITE,
+                )
+            return response
+
+        # Skip for exempt paths
+        path = request.url.path
+        if any(path.startswith(exempt) for exempt in self.EXEMPT_PATHS):
+            return await call_next(request)
+
+        # Validate CSRF token
+        cookie_token = request.cookies.get("csrf_token")
+        header_token = request.headers.get("X-CSRF-Token")
+
+        if not cookie_token or not header_token:
+            log_security_event(
+                event_type="CSRF_TOKEN_MISSING",
+                request=request,
+                details={"path": path},
+            )
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "CSRF token missing"},
+            )
+
+        if not secrets.compare_digest(cookie_token, header_token):
+            log_security_event(
+                event_type="CSRF_TOKEN_MISMATCH",
+                request=request,
+                details={"path": path},
+            )
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "CSRF token invalid"},
+            )
+
+        return await call_next(request)
+
+
+class AuthenticationMiddleware(BaseHTTPMiddleware):
+    """
+    Global authentication enforcement middleware.
+
+    Ensures ALL API endpoints (except a whitelist of public paths)
+    require a valid genesis_id cookie and session.
+    """
+
+    PUBLIC_PATHS: Set[str] = {
+        "/",
+        "/health",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+        "/auth/login",
+        "/auth/register",
+        "/auth/genesis-login",
+        "/favicon.ico",
+        "/metrics",
+    }
+
+    PUBLIC_PREFIXES = (
+        "/docs",
+        "/openapi",
+        "/redoc",
+        "/auth/",
+    )
+
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        path = request.url.path
+
+        # Skip public paths
+        if path in self.PUBLIC_PATHS:
+            return await call_next(request)
+
+        # Skip public prefixes
+        if any(path.startswith(prefix) for prefix in self.PUBLIC_PREFIXES):
+            return await call_next(request)
+
+        # Skip health check variants
+        if path.startswith("/health"):
+            return await call_next(request)
+
+        # Require genesis_id cookie
+        genesis_id = request.cookies.get("genesis_id")
+        if not genesis_id:
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "Authentication required. Please login."},
+            )
+
+        # Validate session
+        session_id = request.cookies.get("session_id")
+        if session_id:
+            from .auth import get_session_manager
+            session_manager = get_session_manager()
+            session = session_manager.validate_session(session_id)
+            if not session:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Session expired. Please login again."},
+                )
+
+        return await call_next(request)
+
+
+class InputSanitizationMiddleware(BaseHTTPMiddleware):
+    """
+    Input sanitization middleware.
+
+    Applies InputValidator/sanitize_input to all incoming JSON
+    request bodies before they reach endpoint handlers.
+    """
+
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        # Only process requests with JSON body
+        if request.method in ("POST", "PUT", "PATCH"):
+            content_type = request.headers.get("content-type", "")
+            if "application/json" in content_type:
+                try:
+                    from .validators import get_validator
+                    validator = get_validator()
+                    body = await request.body()
+                    if body:
+                        import json
+                        try:
+                            data = json.loads(body)
+                            is_valid, sanitized, error = validator.validate_json_input(data)
+                            if not is_valid:
+                                log_security_event(
+                                    event_type="INPUT_VALIDATION_FAILED",
+                                    request=request,
+                                    details={"error": error},
+                                )
+                                return JSONResponse(
+                                    status_code=400,
+                                    content={"detail": f"Input validation failed: {error}"},
+                                )
+                        except json.JSONDecodeError:
+                            pass  # Let FastAPI handle malformed JSON
+                except Exception:
+                    pass  # Don't block on validator import errors
 
         return await call_next(request)

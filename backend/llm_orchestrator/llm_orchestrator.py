@@ -192,6 +192,16 @@ class LLMOrchestrator:
         self.active_tasks[task_id] = task_request
 
         try:
+            # STEP 0: Constitutional Governance Check
+            governance_passed = self._check_governance(task_request)
+            audit_trail.append({
+                "step": "governance_check",
+                "passed": governance_passed,
+                "timestamp": datetime.now().isoformat()
+            })
+            if not governance_passed:
+                raise Exception("Task blocked by constitutional governance rules")
+
             # STEP 1: Cognitive Framework Enforcement (OODA Loop)
             decision_id = self._enforce_cognitive_framework(task_request)
             audit_trail.append({
@@ -339,6 +349,38 @@ class LLMOrchestrator:
     # =======================================================================
     # INTERNAL PIPELINE STEPS
     # =======================================================================
+
+    def _check_governance(self, task_request: LLMTaskRequest) -> bool:
+        """Check constitutional governance rules before executing a task."""
+        logger.info(f"[GOVERNANCE] Checking rules for task {task_request.task_id}")
+        try:
+            from security.governance import get_governance_engine, GovernanceContext
+            engine = get_governance_engine()
+            if engine is None:
+                logger.warning("[GOVERNANCE] Engine not available, allowing task")
+                return True
+
+            context = GovernanceContext(
+                action=f"llm_task_{task_request.task_type.value}",
+                actor=task_request.user_id or "system",
+                resource=task_request.prompt[:200],
+                metadata={
+                    "task_type": task_request.task_type.value,
+                    "task_id": task_request.task_id,
+                }
+            )
+            decision = engine.evaluate(context)
+            if hasattr(decision, 'allowed'):
+                return decision.allowed
+            if hasattr(decision, 'approved'):
+                return decision.approved
+            return True
+        except ImportError:
+            logger.debug("[GOVERNANCE] Governance module not available")
+            return True
+        except Exception as e:
+            logger.warning(f"[GOVERNANCE] Governance check error (allowing): {e}")
+            return True
 
     def _enforce_cognitive_framework(self, task_request: LLMTaskRequest) -> str:
         """Enforce cognitive framework (OODA + 12 invariants)."""

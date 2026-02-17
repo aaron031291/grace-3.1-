@@ -52,6 +52,30 @@ class ExecutionConfig:
             "mkfs",
             "dd if=/dev/zero",
             ":(){:|:&};:",  # Fork bomb
+            "sudo",
+            "chmod 777",
+            "curl|bash",
+            "curl | bash",
+            "wget|sh",
+            "wget | sh",
+            "eval(",
+            "exec(",
+            "os.system(",
+            "subprocess.call(",
+            ">/dev/sda",
+            "chmod +s",
+            "chown root",
+            "passwd",
+            "visudo",
+            "nc -l",           # Netcat listener
+            "ncat -l",
+            "python -c",       # Arbitrary python exec
+            "perl -e",         # Arbitrary perl exec
+            "ruby -e",         # Arbitrary ruby exec
+            "rm -rf ~",
+            "rm -rf .",
+            "cat /etc/shadow",
+            "cat /etc/passwd",
         ]
 
 
