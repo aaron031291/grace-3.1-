@@ -84,6 +84,17 @@ class SystemSnapshot:
     librarian_file_count: int
     librarian_code_files: int
     librarian_doc_files: int
+    # Unified Memory System
+    memory_mesh_connected: bool = False
+    magma_connected: bool = False
+    episodic_memory_count: int = 0
+    procedural_memory_count: int = 0
+    learning_example_count: int = 0
+    learning_pattern_count: int = 0
+    memory_mesh_links: int = 0
+    magma_nodes: int = 0
+    magma_relations: int = 0
+    causal_chains: int = 0
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
@@ -152,6 +163,12 @@ class DeepReasoningIntegration:
         self._hallucination_guard = None
         self._librarian = None
         self._interrogator = None
+        # Unified Memory System
+        self._memory_mesh = None
+        self._magma = None
+        self._episodic_memory = None
+        self._procedural_memory = None
+        self._learning_memory = None
 
         # The reasoning handler (Kimi, or any advanced model)
         self._reasoning_handler: Optional[Callable] = None
@@ -218,6 +235,33 @@ class DeepReasoningIntegration:
         self._interrogator = interrogator
         self._access_modes["interrogator"] = AccessMode.READ_ONLY
 
+    # --- Unified Memory System connections ---
+
+    def connect_memory_mesh(self, memory_mesh) -> None:
+        """Connect Memory Mesh Integration (read-only)."""
+        self._memory_mesh = memory_mesh
+        self._access_modes["memory_mesh"] = AccessMode.READ_ONLY
+
+    def connect_magma(self, magma) -> None:
+        """Connect MAGMA unified memory (read-only)."""
+        self._magma = magma
+        self._access_modes["magma"] = AccessMode.READ_ONLY
+
+    def connect_episodic_memory(self, episodic) -> None:
+        """Connect Episodic Memory buffer (read-only)."""
+        self._episodic_memory = episodic
+        self._access_modes["episodic_memory"] = AccessMode.READ_ONLY
+
+    def connect_procedural_memory(self, procedural) -> None:
+        """Connect Procedural Memory repository (read-only)."""
+        self._procedural_memory = procedural
+        self._access_modes["procedural_memory"] = AccessMode.READ_ONLY
+
+    def connect_learning_memory(self, learning) -> None:
+        """Connect Learning Memory manager (read-only)."""
+        self._learning_memory = learning
+        self._access_modes["learning_memory"] = AccessMode.READ_ONLY
+
     def set_reasoning_handler(self, handler: Callable) -> None:
         """
         Set the reasoning model handler (Kimi 2.5, etc.)
@@ -238,6 +282,133 @@ class DeepReasoningIntegration:
         self.connect_discovery(loop.discovery)
         self.connect_librarian(loop.librarian)
         self.connect_hallucination_guard(loop.hallucination_guard)
+
+    def connect_unified_memory(
+        self,
+        memory_mesh=None,
+        magma=None,
+        episodic=None,
+        procedural=None,
+        learning=None,
+    ) -> None:
+        """
+        Connect the unified memory system (all at once).
+
+        Args:
+            memory_mesh: MemoryMeshIntegration instance
+            magma: GraceMagmaSystem instance
+            episodic: EpisodicBuffer instance
+            procedural: ProceduralRepository instance
+            learning: LearningMemoryManager instance
+        """
+        if memory_mesh:
+            self.connect_memory_mesh(memory_mesh)
+        if magma:
+            self.connect_magma(magma)
+        if episodic:
+            self.connect_episodic_memory(episodic)
+        if procedural:
+            self.connect_procedural_memory(procedural)
+        if learning:
+            self.connect_learning_memory(learning)
+
+    def query_memory(self, query: str, memory_type: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Query the unified memory system (read-only).
+
+        Searches across all connected memory systems for relevant information.
+        Returns structured JSON results.
+
+        Args:
+            query: What to search for
+            memory_type: Optional filter (episodic, procedural, learning, magma, all)
+
+        Returns:
+            Dict with results from each memory system
+        """
+        results: Dict[str, Any] = {"query": query, "results": {}}
+
+        # Query MAGMA (graph-based memory)
+        if self._magma and memory_type in (None, "all", "magma"):
+            try:
+                magma_query = getattr(self._magma, 'query', None)
+                if magma_query and callable(magma_query):
+                    magma_results = magma_query(query)
+                    results["results"]["magma"] = {
+                        "found": bool(magma_results),
+                        "data": magma_results if isinstance(magma_results, (list, dict)) else str(magma_results),
+                    }
+                else:
+                    results["results"]["magma"] = {"found": False, "data": None}
+            except Exception as e:
+                results["results"]["magma"] = {"found": False, "error": str(e)}
+
+        # Query Episodic Memory
+        if self._episodic_memory and memory_type in (None, "all", "episodic"):
+            try:
+                recall = getattr(self._episodic_memory, 'recall', None)
+                if recall and callable(recall):
+                    episodes = recall(query)
+                    results["results"]["episodic"] = {
+                        "found": bool(episodes),
+                        "count": len(episodes) if isinstance(episodes, list) else 0,
+                        "data": episodes if isinstance(episodes, (list, dict)) else str(episodes) if episodes else None,
+                    }
+                else:
+                    results["results"]["episodic"] = {"found": False, "data": None}
+            except Exception as e:
+                results["results"]["episodic"] = {"found": False, "error": str(e)}
+
+        # Query Procedural Memory
+        if self._procedural_memory and memory_type in (None, "all", "procedural"):
+            try:
+                find = getattr(self._procedural_memory, 'find_procedure', None)
+                if find and callable(find):
+                    procedures = find(query)
+                    results["results"]["procedural"] = {
+                        "found": bool(procedures),
+                        "data": procedures if isinstance(procedures, (list, dict)) else str(procedures) if procedures else None,
+                    }
+                else:
+                    results["results"]["procedural"] = {"found": False, "data": None}
+            except Exception as e:
+                results["results"]["procedural"] = {"found": False, "error": str(e)}
+
+        # Query Learning Memory
+        if self._learning_memory and memory_type in (None, "all", "learning"):
+            try:
+                search = getattr(self._learning_memory, 'search_examples', None)
+                if search and callable(search):
+                    examples = search(query)
+                    results["results"]["learning"] = {
+                        "found": bool(examples),
+                        "count": len(examples) if isinstance(examples, list) else 0,
+                        "data": examples if isinstance(examples, (list, dict)) else str(examples) if examples else None,
+                    }
+                else:
+                    results["results"]["learning"] = {"found": False, "data": None}
+            except Exception as e:
+                results["results"]["learning"] = {"found": False, "error": str(e)}
+
+        # Always query Oracle (if connected)
+        if self._oracle and memory_type in (None, "all", "oracle"):
+            try:
+                oracle_results = self._oracle.search_by_content(query, limit=5)
+                results["results"]["oracle"] = {
+                    "found": bool(oracle_results),
+                    "count": len(oracle_results),
+                    "data": [
+                        {"content": r.content[:200], "domain": r.domain, "trust": r.trust_score, "score": r.score}
+                        for r in oracle_results
+                    ],
+                }
+            except Exception as e:
+                results["results"]["oracle"] = {"found": False, "error": str(e)}
+
+        results["systems_queried"] = list(results["results"].keys())
+        results["total_systems"] = len(results["systems_queried"])
+
+        return results
 
     # =========================================================================
     # SYSTEM SNAPSHOT (read-only aggregate)
@@ -321,6 +492,55 @@ class DeepReasoningIntegration:
             lib_code = lib_stats.get("code_files", 0)
             lib_docs = lib_stats.get("document_files", 0)
 
+        # Unified Memory System
+        mesh_connected = self._memory_mesh is not None
+        magma_connected = self._magma is not None
+        episodic_count = 0
+        procedural_count = 0
+        learning_ex_count = 0
+        learning_pat_count = 0
+        mesh_links = 0
+        magma_nodes = 0
+        magma_relations = 0
+        causal_count = 0
+
+        if self._episodic_memory:
+            try:
+                episodic_count = getattr(self._episodic_memory, 'episode_count', 0)
+                if callable(episodic_count):
+                    episodic_count = episodic_count()
+            except Exception:
+                pass
+
+        if self._procedural_memory:
+            try:
+                procedural_count = getattr(self._procedural_memory, 'procedure_count', 0)
+                if callable(procedural_count):
+                    procedural_count = procedural_count()
+            except Exception:
+                pass
+
+        if self._learning_memory:
+            try:
+                lm_stats = getattr(self._learning_memory, 'get_stats', None)
+                if lm_stats and callable(lm_stats):
+                    stats = lm_stats()
+                    learning_ex_count = stats.get('total_examples', 0)
+                    learning_pat_count = stats.get('total_patterns', 0)
+            except Exception:
+                pass
+
+        if self._magma:
+            try:
+                magma_stats = getattr(self._magma, 'get_stats', None)
+                if magma_stats and callable(magma_stats):
+                    ms = magma_stats()
+                    magma_nodes = ms.get('total_nodes', 0)
+                    magma_relations = ms.get('total_relations', 0)
+                    causal_count = ms.get('causal_chains', 0)
+            except Exception:
+                pass
+
         return SystemSnapshot(
             oracle_domains=oracle_domains,
             oracle_record_count=oracle_count,
@@ -340,6 +560,16 @@ class DeepReasoningIntegration:
             librarian_file_count=lib_files,
             librarian_code_files=lib_code,
             librarian_doc_files=lib_docs,
+            memory_mesh_connected=mesh_connected,
+            magma_connected=magma_connected,
+            episodic_memory_count=episodic_count,
+            procedural_memory_count=procedural_count,
+            learning_example_count=learning_ex_count,
+            learning_pattern_count=learning_pat_count,
+            memory_mesh_links=mesh_links,
+            magma_nodes=magma_nodes,
+            magma_relations=magma_relations,
+            causal_chains=causal_count,
         )
 
     # =========================================================================
@@ -470,6 +700,17 @@ class DeepReasoningIntegration:
                     "code": snapshot.librarian_code_files,
                     "docs": snapshot.librarian_doc_files,
                 },
+                "unified_memory": {
+                    "memory_mesh_connected": snapshot.memory_mesh_connected,
+                    "magma_connected": snapshot.magma_connected,
+                    "episodic_memories": snapshot.episodic_memory_count,
+                    "procedural_memories": snapshot.procedural_memory_count,
+                    "learning_examples": snapshot.learning_example_count,
+                    "learning_patterns": snapshot.learning_pattern_count,
+                    "magma_nodes": snapshot.magma_nodes,
+                    "magma_relations": snapshot.magma_relations,
+                    "causal_chains": snapshot.causal_chains,
+                },
             },
             "user_context": request.context,
         }
@@ -491,7 +732,23 @@ class DeepReasoningIntegration:
         """Heuristic reasoning when no external model is available."""
         steps: List[ReasoningStep] = []
 
-        # Step 1: Assess system state
+        # Step 1: Assess system state including memory
+        memory_summary = ""
+        if snapshot.memory_mesh_connected or snapshot.magma_connected:
+            memory_parts = []
+            if snapshot.episodic_memory_count:
+                memory_parts.append(f"{snapshot.episodic_memory_count} episodes")
+            if snapshot.procedural_memory_count:
+                memory_parts.append(f"{snapshot.procedural_memory_count} procedures")
+            if snapshot.learning_example_count:
+                memory_parts.append(f"{snapshot.learning_example_count} learning examples")
+            if snapshot.magma_nodes:
+                memory_parts.append(f"{snapshot.magma_nodes} MAGMA nodes")
+            if memory_parts:
+                memory_summary = f" Memory: {', '.join(memory_parts)}."
+            else:
+                memory_summary = " Unified memory systems connected."
+
         steps.append(ReasoningStep(
             step_number=1,
             thought=(
@@ -499,10 +756,11 @@ class DeepReasoningIntegration:
                 f"{len(snapshot.oracle_domains)} domains. "
                 f"Trust temperature: {snapshot.trust_temperature:.2f}. "
                 f"{snapshot.source_code_modules} code modules indexed."
+                f"{memory_summary}"
             ),
             evidence=[{"type": "system_snapshot", "records": snapshot.oracle_record_count}],
             confidence=0.9,
-            sources_consulted=["oracle", "source_index", "thermometer"],
+            sources_consulted=["oracle", "source_index", "thermometer", "unified_memory"],
         ))
 
         # Step 2: Address the query
@@ -690,11 +948,22 @@ class DeepReasoningIntegration:
             name: mode.value for name, mode in self._access_modes.items()
         }
 
+    def get_memory_connections(self) -> Dict[str, bool]:
+        """Get which memory systems are connected."""
+        return {
+            "memory_mesh": self._memory_mesh is not None,
+            "magma": self._magma is not None,
+            "episodic_memory": self._episodic_memory is not None,
+            "procedural_memory": self._procedural_memory is not None,
+            "learning_memory": self._learning_memory is not None,
+        }
+
     def get_stats(self) -> Dict[str, Any]:
         """Get integration statistics."""
         return {
             "connected_systems": len(self._access_modes),
             "systems": self.get_connected_systems(),
+            "memory_connections": self.get_memory_connections(),
             "total_reasoning_tasks": len(self.results),
             "has_reasoning_handler": self._reasoning_handler is not None,
             "average_confidence": (

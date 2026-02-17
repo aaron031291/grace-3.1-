@@ -28,6 +28,37 @@ from oracle_pipeline.proactive_discovery_engine import ProactiveDiscoveryEngine
 from oracle_pipeline.perpetual_learning_loop import PerpetualLearningLoop
 
 
+class MockMemoryMesh:
+    """Mock Memory Mesh for testing."""
+    pass
+
+class MockMagma:
+    """Mock MAGMA system for testing."""
+    def query(self, q):
+        return [{"content": f"MAGMA result for: {q}", "score": 0.8}]
+    def get_stats(self):
+        return {"total_nodes": 42, "total_relations": 15, "causal_chains": 3}
+
+class MockEpisodicMemory:
+    """Mock Episodic Memory for testing."""
+    episode_count = 25
+    def recall(self, q):
+        return [{"problem": q, "outcome": "success", "trust": 0.9}]
+
+class MockProceduralMemory:
+    """Mock Procedural Memory for testing."""
+    procedure_count = 10
+    def find_procedure(self, q):
+        return [{"name": f"procedure_for_{q}", "steps": ["step1", "step2"]}]
+
+class MockLearningMemory:
+    """Mock Learning Memory for testing."""
+    def get_stats(self):
+        return {"total_examples": 100, "total_patterns": 20}
+    def search_examples(self, q):
+        return [{"type": "pattern", "content": f"Example for {q}"}]
+
+
 class TestDeepReasoningConnections(unittest.TestCase):
     """Tests for system connections."""
 
@@ -98,6 +129,61 @@ class TestDeepReasoningConnections(unittest.TestCase):
         self.assertIn("librarian", connected)
         self.assertEqual(connected["oracle"], "read_only")
 
+    def test_connect_memory_mesh(self):
+        """Test connecting Memory Mesh."""
+        mesh = MockMemoryMesh()
+        self.reasoning.connect_memory_mesh(mesh)
+        self.assertEqual(self.reasoning._access_modes["memory_mesh"], AccessMode.READ_ONLY)
+
+    def test_connect_magma(self):
+        """Test connecting MAGMA."""
+        magma = MockMagma()
+        self.reasoning.connect_magma(magma)
+        self.assertEqual(self.reasoning._access_modes["magma"], AccessMode.READ_ONLY)
+
+    def test_connect_episodic_memory(self):
+        """Test connecting Episodic Memory."""
+        ep = MockEpisodicMemory()
+        self.reasoning.connect_episodic_memory(ep)
+        self.assertEqual(self.reasoning._access_modes["episodic_memory"], AccessMode.READ_ONLY)
+
+    def test_connect_procedural_memory(self):
+        """Test connecting Procedural Memory."""
+        proc = MockProceduralMemory()
+        self.reasoning.connect_procedural_memory(proc)
+        self.assertEqual(self.reasoning._access_modes["procedural_memory"], AccessMode.READ_ONLY)
+
+    def test_connect_learning_memory(self):
+        """Test connecting Learning Memory."""
+        lm = MockLearningMemory()
+        self.reasoning.connect_learning_memory(lm)
+        self.assertEqual(self.reasoning._access_modes["learning_memory"], AccessMode.READ_ONLY)
+
+    def test_connect_unified_memory_all(self):
+        """Test connecting all unified memory at once."""
+        self.reasoning.connect_unified_memory(
+            memory_mesh=MockMemoryMesh(),
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+            procedural=MockProceduralMemory(),
+            learning=MockLearningMemory(),
+        )
+        mem = self.reasoning.get_memory_connections()
+        self.assertTrue(mem["memory_mesh"])
+        self.assertTrue(mem["magma"])
+        self.assertTrue(mem["episodic_memory"])
+        self.assertTrue(mem["procedural_memory"])
+        self.assertTrue(mem["learning_memory"])
+
+    def test_memory_connections_read_only(self):
+        """Test all memory connections are read-only."""
+        self.reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+        )
+        for name, mode in self.reasoning._access_modes.items():
+            self.assertEqual(mode, AccessMode.READ_ONLY)
+
     def test_set_reasoning_handler(self):
         """Test setting a custom reasoning handler."""
         def custom_handler(context):
@@ -156,6 +242,35 @@ class TestSystemSnapshot(unittest.TestCase):
         snapshot = reasoning.take_snapshot()
         self.assertGreater(snapshot.oracle_record_count, 0)
         self.assertGreater(snapshot.trust_chain_size, 0)
+
+    def test_snapshot_with_memory_systems(self):
+        """Test snapshot includes memory system data."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_oracle(OracleVectorStore())
+        reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+            procedural=MockProceduralMemory(),
+            learning=MockLearningMemory(),
+        )
+        snapshot = reasoning.take_snapshot()
+        self.assertTrue(snapshot.magma_connected)
+        self.assertEqual(snapshot.episodic_memory_count, 25)
+        self.assertEqual(snapshot.procedural_memory_count, 10)
+        self.assertEqual(snapshot.learning_example_count, 100)
+        self.assertEqual(snapshot.learning_pattern_count, 20)
+        self.assertEqual(snapshot.magma_nodes, 42)
+        self.assertEqual(snapshot.magma_relations, 15)
+        self.assertEqual(snapshot.causal_chains, 3)
+
+    def test_snapshot_memory_defaults(self):
+        """Test snapshot has defaults when no memory connected."""
+        reasoning = DeepReasoningIntegration()
+        snapshot = reasoning.take_snapshot()
+        self.assertFalse(snapshot.memory_mesh_connected)
+        self.assertFalse(snapshot.magma_connected)
+        self.assertEqual(snapshot.episodic_memory_count, 0)
+        self.assertEqual(snapshot.magma_nodes, 0)
 
 
 class TestReasoningTasks(unittest.TestCase):
@@ -345,6 +460,87 @@ class TestCustomReasoningHandler(unittest.TestCase):
         self.assertIn("domain_knowledge", received_context)
 
 
+class TestQueryMemory(unittest.TestCase):
+    """Tests for the query_memory interface."""
+
+    def test_query_memory_all_systems(self):
+        """Test querying all memory systems."""
+        reasoning = DeepReasoningIntegration()
+        oracle = OracleVectorStore()
+        oracle.ingest("Python programming content", domain="python")
+        reasoning.connect_oracle(oracle)
+        reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+            procedural=MockProceduralMemory(),
+            learning=MockLearningMemory(),
+        )
+        results = reasoning.query_memory("Python programming")
+        self.assertIn("oracle", results["results"])
+        self.assertIn("magma", results["results"])
+        self.assertIn("episodic", results["results"])
+        self.assertIn("procedural", results["results"])
+        self.assertIn("learning", results["results"])
+        self.assertGreater(results["total_systems"], 0)
+
+    def test_query_memory_magma_only(self):
+        """Test querying only MAGMA."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_magma(MockMagma())
+        results = reasoning.query_memory("test query", memory_type="magma")
+        self.assertIn("magma", results["results"])
+        self.assertTrue(results["results"]["magma"]["found"])
+
+    def test_query_memory_episodic_only(self):
+        """Test querying only episodic memory."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_episodic_memory(MockEpisodicMemory())
+        results = reasoning.query_memory("test", memory_type="episodic")
+        self.assertIn("episodic", results["results"])
+        self.assertTrue(results["results"]["episodic"]["found"])
+
+    def test_query_memory_procedural_only(self):
+        """Test querying only procedural memory."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_procedural_memory(MockProceduralMemory())
+        results = reasoning.query_memory("fix database", memory_type="procedural")
+        self.assertIn("procedural", results["results"])
+        self.assertTrue(results["results"]["procedural"]["found"])
+
+    def test_query_memory_learning_only(self):
+        """Test querying only learning memory."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_learning_memory(MockLearningMemory())
+        results = reasoning.query_memory("pattern", memory_type="learning")
+        self.assertIn("learning", results["results"])
+        self.assertTrue(results["results"]["learning"]["found"])
+
+    def test_query_memory_oracle_only(self):
+        """Test querying only Oracle."""
+        reasoning = DeepReasoningIntegration()
+        oracle = OracleVectorStore()
+        oracle.ingest("Machine learning basics", domain="ai")
+        reasoning.connect_oracle(oracle)
+        results = reasoning.query_memory("machine learning", memory_type="oracle")
+        self.assertIn("oracle", results["results"])
+        self.assertTrue(results["results"]["oracle"]["found"])
+
+    def test_query_memory_no_connections(self):
+        """Test querying with no memory connected."""
+        reasoning = DeepReasoningIntegration()
+        results = reasoning.query_memory("test query")
+        self.assertEqual(results["total_systems"], 0)
+
+    def test_query_memory_systems_listed(self):
+        """Test systems_queried is populated."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_magma(MockMagma())
+        reasoning.connect_oracle(OracleVectorStore())
+        results = reasoning.query_memory("test")
+        self.assertIn("magma", results["systems_queried"])
+        self.assertIn("oracle", results["systems_queried"])
+
+
 class TestDeepReasoningStats(unittest.TestCase):
     """Tests for statistics."""
 
@@ -373,6 +569,19 @@ class TestDeepReasoningStats(unittest.TestCase):
         reasoning.connect_librarian(LibrarianFileManager())
         stats = reasoning.get_stats()
         self.assertEqual(stats["connected_systems"], 3)
+
+    def test_stats_memory_connections(self):
+        """Test memory connections in stats."""
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+        )
+        stats = reasoning.get_stats()
+        self.assertIn("memory_connections", stats)
+        self.assertTrue(stats["memory_connections"]["magma"])
+        self.assertTrue(stats["memory_connections"]["episodic_memory"])
+        self.assertFalse(stats["memory_connections"]["procedural_memory"])
 
 
 class TestDeepReasoningIntegration(unittest.TestCase):
@@ -417,6 +626,51 @@ class TestDeepReasoningIntegration(unittest.TestCase):
         self.assertIsInstance(result.nlp_output, str)
         self.assertGreater(len(result.json_output), 0)
         self.assertGreater(len(result.nlp_output), 0)
+
+    def test_full_system_with_memory(self):
+        """Test reasoning with full system including unified memory."""
+        loop = PerpetualLearningLoop()
+        loop.seed_from_whitelist("Python machine learning")
+
+        reasoning = DeepReasoningIntegration()
+        reasoning.connect_all_from_loop(loop)
+        reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+            procedural=MockProceduralMemory(),
+            learning=MockLearningMemory(),
+        )
+
+        # Reasoning should see memory state
+        snapshot = reasoning.take_snapshot()
+        self.assertTrue(snapshot.magma_connected)
+        self.assertGreater(snapshot.episodic_memory_count, 0)
+        self.assertGreater(snapshot.magma_nodes, 0)
+
+        # Reasoning should produce valid results with memory connected
+        result = reasoning.analyze_gaps()
+        self.assertIsNotNone(result.conclusion)
+        # Memory should be visible in the systems consulted
+        self.assertIn("unified_memory", result.reasoning_chain[0].sources_consulted)
+        # The heuristic reasoning step should mention memory
+        thoughts = " ".join(s.thought for s in result.reasoning_chain)
+        self.assertGreater(len(thoughts), 0)
+
+    def test_memory_query_through_reasoning(self):
+        """Test querying memory through the reasoning layer."""
+        reasoning = DeepReasoningIntegration()
+        oracle = OracleVectorStore()
+        oracle.ingest("Python async programming", domain="python")
+        reasoning.connect_oracle(oracle)
+        reasoning.connect_unified_memory(
+            magma=MockMagma(),
+            episodic=MockEpisodicMemory(),
+        )
+
+        mem_results = reasoning.query_memory("Python async")
+        self.assertIn("oracle", mem_results["results"])
+        self.assertIn("magma", mem_results["results"])
+        self.assertIn("episodic", mem_results["results"])
 
 
 if __name__ == "__main__":
