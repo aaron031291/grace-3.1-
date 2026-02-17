@@ -21,6 +21,8 @@ from .oracle_vector_store import OracleVectorStore, OracleRecord
 from .reverse_knn_discovery import ReverseKNNDiscovery, NeighborDiscoveryResult
 from .llm_enrichment import LLMEnrichmentEngine, EnrichmentResult
 from .oracle_pipeline import OraclePipeline, OraclePipelineResult
+from .librarian_file_manager import LibrarianFileManager, FileNode, FileCategory, FileType
+from .proactive_discovery_engine import ProactiveDiscoveryEngine, DiscoveryTask, DiscoveryAlgorithm
 
 __all__ = [
     "WhitelistBox",
@@ -38,4 +40,11 @@ __all__ = [
     "EnrichmentResult",
     "OraclePipeline",
     "OraclePipelineResult",
+    "LibrarianFileManager",
+    "FileNode",
+    "FileCategory",
+    "FileType",
+    "ProactiveDiscoveryEngine",
+    "DiscoveryTask",
+    "DiscoveryAlgorithm",
 ]
