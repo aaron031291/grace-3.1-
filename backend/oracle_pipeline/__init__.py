@@ -33,6 +33,7 @@ from .secrets_vault import SecretsVault, get_vault
 from .kimi_orchestrator import KimiOrchestrator, KimiResponse, KimiMode
 from .recursion_governor import RecursionGovernor, ActionContract, ExecutionTier, GovernorDecision
 from .content_realization_engine import ContentRealizationEngine, RealizationMode, RealizedContent
+from .unified_proactive_learning import UnifiedProactiveLearning, LearningTarget as UnifiedLearningTarget
 
 __all__ = [
     "WhitelistBox",
@@ -86,4 +87,6 @@ __all__ = [
     "ContentRealizationEngine",
     "RealizationMode",
     "RealizedContent",
+    "UnifiedProactiveLearning",
+    "UnifiedLearningTarget",
 ]
