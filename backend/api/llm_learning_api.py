@@ -44,6 +44,14 @@ from cognitive.kimi_tool_executor import (
     get_kimi_tool_executor,
     TOOL_REGISTRY,
 )
+from cognitive.kimi_brain import (
+    KimiBrain,
+    get_kimi_brain,
+)
+from cognitive.grace_verified_executor import (
+    GraceVerifiedExecutor,
+    get_grace_verified_executor,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -836,4 +844,206 @@ async def get_tool_stats(
         return executor.get_stats()
     except Exception as e:
         logger.error(f"Error getting tool stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KIMI BRAIN ENDPOINTS (READ-ONLY INTELLIGENCE)
+# =======================================================================
+
+class KimiAnalyzeRequest(BaseModel):
+    """Request Kimi to analyze and produce instructions."""
+    user_request: str = Field(..., description="What to analyze or what to do")
+    context: Optional[Dict[str, Any]] = Field(None, description="Additional context")
+
+
+def get_brain(db: Session = Depends(get_db)) -> KimiBrain:
+    return get_kimi_brain(db)
+
+
+def get_executor_instance(db: Session = Depends(get_db)) -> GraceVerifiedExecutor:
+    return get_grace_verified_executor(db)
+
+
+@router.get("/kimi/status")
+async def get_kimi_status(
+    brain: KimiBrain = Depends(get_brain),
+):
+    """
+    Get Kimi brain status.
+
+    Shows connected systems and recent analysis sessions.
+    Kimi is read-only -- she observes and instructs, never executes.
+    """
+    try:
+        return brain.get_status()
+    except Exception as e:
+        logger.error(f"Error getting Kimi status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/kimi/read-state")
+async def read_system_state(
+    brain: KimiBrain = Depends(get_brain),
+):
+    """
+    Kimi reads the current state of all Grace cognitive systems.
+
+    READ-ONLY: Kimi observes mirror, diagnostics, learning,
+    patterns, and interaction stats without modifying anything.
+    """
+    try:
+        return brain.read_system_state()
+    except Exception as e:
+        logger.error(f"Error reading system state: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/kimi/diagnose")
+async def kimi_diagnose(
+    brain: KimiBrain = Depends(get_brain),
+):
+    """
+    Kimi diagnoses the system -- identifies problems, gaps, opportunities.
+
+    READ-ONLY: Pure analysis, produces diagnosis but does not execute fixes.
+    """
+    try:
+        diagnosis = brain.diagnose()
+        return {
+            "diagnosis_id": diagnosis.diagnosis_id,
+            "timestamp": diagnosis.timestamp.isoformat(),
+            "system_health": diagnosis.system_health,
+            "detected_problems": diagnosis.detected_problems,
+            "learning_gaps": diagnosis.learning_gaps,
+            "improvement_opportunities": diagnosis.improvement_opportunities,
+            "overall_assessment": diagnosis.overall_assessment,
+            "confidence": diagnosis.confidence,
+        }
+    except Exception as e:
+        logger.error(f"Error in Kimi diagnosis: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/kimi/analyze")
+async def kimi_analyze(
+    request: KimiAnalyzeRequest,
+    brain: KimiBrain = Depends(get_brain),
+):
+    """
+    Kimi analyzes a request and produces instructions for Grace.
+
+    Kimi READS system state, DIAGNOSES problems, and PRODUCES
+    instructions. She does NOT execute anything.
+
+    Returns an instruction set that can be passed to Grace for execution.
+    """
+    try:
+        instruction_set = brain.produce_instructions(
+            user_request=request.user_request,
+            context=request.context,
+        )
+
+        return {
+            "session_id": instruction_set.session_id,
+            "summary": instruction_set.summary,
+            "total_confidence": instruction_set.total_confidence,
+            "diagnosis": {
+                "id": instruction_set.diagnosis.diagnosis_id,
+                "health": instruction_set.diagnosis.system_health,
+                "problems": len(instruction_set.diagnosis.detected_problems),
+                "assessment": instruction_set.diagnosis.overall_assessment,
+            },
+            "instructions": [
+                {
+                    "instruction_id": i.instruction_id,
+                    "type": i.instruction_type.value,
+                    "priority": i.priority.value,
+                    "what": i.what,
+                    "why": i.why,
+                    "how": i.how,
+                    "expected_outcome": i.expected_outcome,
+                    "confidence": i.confidence,
+                    "target_systems": i.target_systems,
+                    "risks": i.risks,
+                }
+                for i in instruction_set.instructions
+            ],
+        }
+
+    except Exception as e:
+        logger.error(f"Error in Kimi analysis: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# GRACE EXECUTOR ENDPOINTS (VERIFIES & EXECUTES)
+# =======================================================================
+
+@router.post("/grace/execute")
+async def grace_execute_instructions(
+    request: KimiAnalyzeRequest,
+    brain: KimiBrain = Depends(get_brain),
+    executor: GraceVerifiedExecutor = Depends(get_executor_instance),
+):
+    """
+    Full pipeline: Kimi analyzes -> Grace verifies -> Grace executes.
+
+    1. Kimi reads system state and produces instructions (read-only)
+    2. Grace verifies each instruction through her systems
+    3. Grace executes approved instructions
+    4. Results tracked for learning
+    """
+    try:
+        instruction_set = brain.produce_instructions(
+            user_request=request.user_request,
+            context=request.context,
+        )
+
+        session_result = await executor.process_instruction_set(instruction_set)
+
+        return {
+            "kimi_session": instruction_set.session_id,
+            "grace_session": session_result.session_id,
+            "kimi_analysis": instruction_set.summary,
+            "grace_execution": session_result.summary,
+            "total_instructions": session_result.total_instructions,
+            "approved": session_result.approved,
+            "rejected": session_result.rejected,
+            "succeeded": session_result.succeeded,
+            "failed": session_result.failed,
+            "instruction_results": [
+                {
+                    "instruction_id": r.instruction_id,
+                    "type": r.instruction_type,
+                    "verification": r.verification.value,
+                    "verification_reason": r.verification_reason,
+                    "executed": r.executed,
+                    "success": r.success,
+                    "output": r.output[:500] if r.output else None,
+                    "error": r.error,
+                    "steps": [
+                        {"action": s.action, "success": s.success, "output": s.output[:200]}
+                        for s in r.steps_completed
+                    ],
+                }
+                for r in session_result.instruction_results
+            ],
+            "duration_ms": session_result.total_duration_ms,
+        }
+
+    except Exception as e:
+        logger.error(f"Error in Grace execution: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/grace/execution-stats")
+async def get_grace_execution_stats(
+    executor: GraceVerifiedExecutor = Depends(get_executor_instance),
+):
+    """Get Grace's execution statistics."""
+    try:
+        return executor.get_execution_stats()
+    except Exception as e:
+        logger.error(f"Error getting execution stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
