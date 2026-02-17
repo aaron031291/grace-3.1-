@@ -26,7 +26,7 @@ import uuid
 import asyncio
 import json
 from unittest.mock import Mock, MagicMock, patch, AsyncMock, PropertyMock
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
 
 # We need to mock heavy deps before importing the modules
@@ -731,7 +731,7 @@ class TestGraceVerifiedExecutor:
 
         diagnosis = KimiDiagnosis(
             diagnosis_id="DIAG-test",
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             system_health={"status": "healthy", "overall_score": 0.8},
             behavioral_patterns=[],
             detected_problems=[],

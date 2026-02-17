@@ -30,7 +30,7 @@ import asyncio
 import uuid
 import time
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -73,7 +73,7 @@ class RoutedTask:
     tool_calls: List[Dict[str, Any]] = field(default_factory=list)
 
     context: Dict[str, Any] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass

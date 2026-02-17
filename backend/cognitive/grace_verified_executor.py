@@ -35,7 +35,7 @@ import logging
 import time
 import uuid
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -118,7 +118,7 @@ class SessionResult:
 
     summary: str = ""
     total_duration_ms: float = 0.0
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
 
 
@@ -210,7 +210,7 @@ class GraceVerifiedExecutor:
                     result.failed += 1
 
         result.total_duration_ms = (time.time() - start_time) * 1000
-        result.completed_at = datetime.utcnow()
+        result.completed_at = datetime.now(timezone.utc)
         result.summary = (
             f"Processed {result.total_instructions} instructions: "
             f"{result.approved} approved, {result.rejected} rejected, "
@@ -258,12 +258,12 @@ class GraceVerifiedExecutor:
             instruction_type=instruction.instruction_type.value,
             verification=verification,
             verification_reason=reason,
-            started_at=datetime.utcnow(),
+            started_at=datetime.now(timezone.utc),
         )
 
         if verification != VerificationResult.APPROVED:
             instr_result.duration_ms = (time.time() - start_time) * 1000
-            instr_result.completed_at = datetime.utcnow()
+            instr_result.completed_at = datetime.now(timezone.utc)
             logger.info(
                 f"[GRACE-EXECUTOR] Instruction {instruction.instruction_id} "
                 f"{verification.value}: {reason}"
@@ -281,7 +281,7 @@ class GraceVerifiedExecutor:
             logger.error(f"[GRACE-EXECUTOR] Instruction {instruction.instruction_id} failed: {e}")
 
         instr_result.duration_ms = (time.time() - start_time) * 1000
-        instr_result.completed_at = datetime.utcnow()
+        instr_result.completed_at = datetime.now(timezone.utc)
 
         return instr_result
 

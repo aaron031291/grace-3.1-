@@ -25,7 +25,7 @@ import hashlib
 import json
 import uuid
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import defaultdict, Counter
 
 from sqlalchemy.orm import Session
@@ -96,7 +96,7 @@ class LLMPatternLearner:
         """
         logger.info("[PATTERN-LEARNER] Extracting patterns from interactions...")
 
-        cutoff = datetime.utcnow() - timedelta(hours=time_window_hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=time_window_hours)
 
         paths = self.session.query(ReasoningPath).filter(
             ReasoningPath.created_at >= cutoff,
@@ -194,7 +194,7 @@ class LLMPatternLearner:
             existing.trigger_conditions = trigger_conditions
             existing.action_sequence = action_sequence
             existing.expected_outcomes = expected_outcomes
-            existing.last_validated = datetime.utcnow()
+            existing.last_validated = datetime.now(timezone.utc)
 
             self.session.flush()
 
@@ -510,7 +510,7 @@ class LLMPatternLearner:
                 continue
 
             pattern.times_applied += 1
-            pattern.last_applied = datetime.utcnow()
+            pattern.last_applied = datetime.now(timezone.utc)
 
             result = self._execute_pattern(pattern, request, context)
 

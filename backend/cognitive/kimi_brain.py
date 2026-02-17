@@ -49,7 +49,7 @@ import logging
 import uuid
 import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -134,7 +134,7 @@ class KimiInstruction:
     reasoning_chain: List[Dict[str, Any]] = field(default_factory=list)
 
     source_diagnosis_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -150,7 +150,7 @@ class KimiInstructionSet:
     instructions: List[KimiInstruction]
     summary: str
     total_confidence: float
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class KimiBrain:
@@ -209,7 +209,7 @@ class KimiBrain:
         of Grace's internal systems without modifying anything.
         """
         state = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "mirror": self._read_mirror(),
             "diagnostics": self._read_diagnostics(),
             "learning": self._read_learning(),
@@ -327,7 +327,7 @@ class KimiBrain:
 
         diagnosis = KimiDiagnosis(
             diagnosis_id=diagnosis_id,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             system_health=health,
             behavioral_patterns=behavioral,
             detected_problems=detected_problems,

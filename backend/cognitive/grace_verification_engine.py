@@ -27,7 +27,7 @@ import os
 import time
 import uuid
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -72,7 +72,7 @@ class VerificationCheck:
     message: str
     details: Dict[str, Any] = field(default_factory=dict)
     duration_ms: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -100,7 +100,7 @@ class VerificationReport:
     skipped_checks: int = 0
 
     total_duration_ms: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -818,7 +818,7 @@ class GraceVerificationEngine:
             "action": what,
             "type": itype_val,
             "risks": risks,
-            "requested_at": datetime.utcnow().isoformat(),
+            "requested_at": datetime.now(timezone.utc).isoformat(),
             "status": "pending",
         }
 
@@ -868,7 +868,7 @@ class GraceVerificationEngine:
         self._pending_confirmations[check_id]["status"] = "confirmed" if approved else "rejected"
         self._pending_confirmations[check_id]["user_approved"] = approved
         self._pending_confirmations[check_id]["user_note"] = user_note
-        self._pending_confirmations[check_id]["confirmed_at"] = datetime.utcnow().isoformat()
+        self._pending_confirmations[check_id]["confirmed_at"] = datetime.now(timezone.utc).isoformat()
 
         logger.info(
             f"[VERIFY-ENGINE] User confirmation for {check_id}: "

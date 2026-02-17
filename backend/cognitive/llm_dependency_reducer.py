@@ -18,7 +18,7 @@ needed for truly novel or complex situations.
 import logging
 import uuid
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 
 from sqlalchemy.orm import Session
@@ -64,7 +64,7 @@ class LLMDependencyReducer:
         Returns a comprehensive view of how much Grace depends on LLMs
         and where autonomous handling is possible.
         """
-        period_end = datetime.utcnow()
+        period_end = datetime.now(timezone.utc)
         period_start = period_end - timedelta(hours=period_hours)
 
         interactions = self.session.query(LLMInteraction).filter(
@@ -196,7 +196,7 @@ class LLMDependencyReducer:
 
         Shows how LLM dependency is changing -- ideally decreasing.
         """
-        cutoff = datetime.utcnow() - timedelta(days=days)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
 
         metrics = self.session.query(LLMDependencyMetric).filter(
             LLMDependencyMetric.period_start >= cutoff
@@ -402,7 +402,7 @@ class LLMDependencyReducer:
             "avg_trust_score": round(avg_trust, 3),
             "task_type_filter": task_type,
             "examples": examples,
-            "export_timestamp": datetime.utcnow().isoformat(),
+            "export_timestamp": datetime.now(timezone.utc).isoformat(),
             "recommended_use": (
                 "Use this data to fine-tune a local model. "
                 "Higher trust score examples are more reliable. "

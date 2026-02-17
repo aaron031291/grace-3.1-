@@ -27,7 +27,7 @@ import json
 import time
 import uuid
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 
 from sqlalchemy.orm import Session
@@ -540,7 +540,7 @@ class LLMInteractionTracker:
             Comprehensive stats including success rates, model usage,
             interaction types, and performance metrics.
         """
-        cutoff = datetime.utcnow() - timedelta(hours=time_window_hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=time_window_hours)
 
         query = self.session.query(LLMInteraction).filter(
             LLMInteraction.created_at >= cutoff
@@ -697,7 +697,7 @@ class LLMInteractionTracker:
         time_window_hours: int = 168,
     ) -> Dict[str, Any]:
         """Get statistics about coding tasks."""
-        cutoff = datetime.utcnow() - timedelta(hours=time_window_hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=time_window_hours)
 
         tasks = self.session.query(CodingTaskRecord).filter(
             CodingTaskRecord.created_at >= cutoff

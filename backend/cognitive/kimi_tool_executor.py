@@ -34,7 +34,7 @@ import uuid
 import asyncio
 from typing import Dict, Any, List, Optional, Callable, Awaitable
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 from sqlalchemy.orm import Session
@@ -93,7 +93,7 @@ class ToolCall:
     category: ToolCategory
     parameters: Dict[str, Any]
     reasoning: str
-    called_at: datetime = field(default_factory=datetime.utcnow)
+    called_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -772,7 +772,7 @@ class KimiToolExecutor:
             "success": tool_result.success,
             "duration_ms": duration_ms,
             "reasoning": reasoning,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         })
 
         return tool_result
