@@ -23,6 +23,9 @@ from .llm_enrichment import LLMEnrichmentEngine, EnrichmentResult
 from .oracle_pipeline import OraclePipeline, OraclePipelineResult
 from .librarian_file_manager import LibrarianFileManager, FileNode, FileCategory, FileType
 from .proactive_discovery_engine import ProactiveDiscoveryEngine, DiscoveryTask, DiscoveryAlgorithm
+from .source_code_index import SourceCodeIndex, CodeElement, CodeElementType
+from .hallucination_guard import HallucinationGuard, HallucinationReport
+from .perpetual_learning_loop import PerpetualLearningLoop, LoopState, TrustChainEntry
 
 __all__ = [
     "WhitelistBox",
@@ -47,4 +50,12 @@ __all__ = [
     "ProactiveDiscoveryEngine",
     "DiscoveryTask",
     "DiscoveryAlgorithm",
+    "SourceCodeIndex",
+    "CodeElement",
+    "CodeElementType",
+    "HallucinationGuard",
+    "HallucinationReport",
+    "PerpetualLearningLoop",
+    "LoopState",
+    "TrustChainEntry",
 ]
