@@ -12,7 +12,7 @@
 
 | Capability | Our Module | Claude Module | Verdict |
 |-----------|-----------|--------------|---------|
-| Reverse KNN Discovery | `oracle_pipeline/reverse_knn_discovery.py` + `proactive_discovery_engine.py` (7 algorithms) | `oracle_intelligence/reverse_knn_learning.py` + `proactive_learning.py` (basic KNN) | **KEEP OURS** — 7 algorithms vs 1 |
+| Reverse KNN Discovery | `oracle_pipeline/reverse_knn_discovery.py` + `proactive_discovery_engine.py` (heuristic: TF-IDF, co-occurrence, gap detect, momentum, depth, transfer) | `oracle_intelligence/reverse_knn_learning.py` + `proactive_learning.py` + `enhanced_proactive_learning.py` (embedding-based: real KNN graph, cluster detection, LLM Planner→Analyst→Critic, async, multi-hop, pattern drift, counterfactuals) | **KEEP BOTH** — different approaches. Claude's=vector math with LLM orchestration. Ours=heuristic fallback + unique algorithms (co-occurrence, transfer, momentum). Both should exist. |
 | Oracle Storage | `oracle_pipeline/oracle_vector_store.py` (storage + search + dedup) | `oracle_intelligence/oracle_core.py` (insight generation) | **COMPLEMENTARY** — different focus |
 | Hallucination Guard | `oracle_pipeline/hallucination_guard.py` | None | **UNIQUE TO US** |
 | Content Realization | `oracle_pipeline/content_realization_engine.py` | `oracle_intelligence/web_knowledge.py` | **COMPLEMENTARY** — ours fills placeholders, theirs does web |
@@ -30,18 +30,26 @@
 | Deep Reasoning (Kimi) | `oracle_pipeline/deep_reasoning_integration.py` | None | **UNIQUE TO US** |
 | 7 Trust Subsystems | `advanced_trust/*.py` (9 files) | None | **UNIQUE TO US** |
 
-### When Merging Claude Branches — SKIP These (We Cover Them Better):
-- `oracle_intelligence/reverse_knn_learning.py` — our 7-algorithm discovery is more comprehensive
-- `oracle_intelligence/proactive_learning.py` — our proactive_discovery_engine covers this
-- `oracle_intelligence/enhanced_proactive_learning.py` — same, ours is more complete
-
-### When Merging Claude Branches — BRING These (No Overlap):
+### When Merging Claude Branches — BRING ALL (No Duplicates):
+- `oracle_intelligence/reverse_knn_learning.py` — embedding-based KNN with real vector math (COMPLEMENTS our heuristic approach)
+- `oracle_intelligence/proactive_learning.py` — async proactive learning with LLM orchestration
+- `oracle_intelligence/enhanced_proactive_learning.py` — Planner→Analyst→Critic chain, multi-hop, counterfactuals
+- `oracle_intelligence/oracle_core.py` — insight generation (complementary to our storage)
+- `oracle_intelligence/cascading_failure_predictor.py` — failure prediction (complementary to our trust cascading)
 - `cognitive/coding_agent.py` — the actual coding agent (L6 from spec)
 - `cognitive/coding_agent_healing_bridge.py` — connects coding to self-healing
 - `benchmarking/*.py` — code execution, HumanEval, MBPP benchmarks (L7 from spec)
 - `governance/layer_enforcement.py` — deployment governance (L9 from spec)
-- `oracle_intelligence/oracle_core.py` — insight generation (complementary to our storage)
-- `oracle_intelligence/cascading_failure_predictor.py` — failure prediction (complementary)
+
+### How The Two KNN Systems Work Together:
+- **Claude's system** runs when embeddings + LLM are available (real vector similarity, async, LLM-optimized queries)
+- **Our system** runs as fallback when they're not, PLUS adds unique algorithms Claude doesn't have:
+  - TF-IDF concept extraction
+  - Co-occurrence mining (domain pairs that naturally go together)
+  - Cross-domain transfer detection (concepts that bridge fields)
+  - Trend momentum scoring (exponential decay weighting of recent activity)
+  - Expertise depth vs breadth scoring
+- **Together**: Claude's embedding-based discovery + our heuristic discovery = comprehensive coverage in all conditions
 
 ---
 
