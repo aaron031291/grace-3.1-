@@ -27,6 +27,7 @@ from .source_code_index import SourceCodeIndex, CodeElement, CodeElementType
 from .hallucination_guard import HallucinationGuard, HallucinationReport
 from .perpetual_learning_loop import PerpetualLearningLoop, LoopState, TrustChainEntry
 from .socratic_interrogator import SocraticInterrogator, InterrogationReport, QuestionCategory
+from .deep_reasoning_integration import DeepReasoningIntegration, ReasoningResult, ReasoningTaskType
 
 __all__ = [
     "WhitelistBox",
@@ -62,4 +63,7 @@ __all__ = [
     "SocraticInterrogator",
     "InterrogationReport",
     "QuestionCategory",
+    "DeepReasoningIntegration",
+    "ReasoningResult",
+    "ReasoningTaskType",
 ]
