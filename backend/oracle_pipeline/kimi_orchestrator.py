@@ -39,6 +39,7 @@ from .self_evolution_coordinator import SelfEvolutionCoordinator
 from .socratic_interrogator import SocraticInterrogator
 from .perpetual_learning_loop import PerpetualLearningLoop
 from .librarian_file_manager import LibrarianFileManager
+from .recursion_governor import RecursionGovernor
 
 logger = logging.getLogger(__name__)
 
@@ -137,6 +138,9 @@ class KimiOrchestrator:
         self._interrogator: Optional[SocraticInterrogator] = None
         self._loop: Optional[PerpetualLearningLoop] = None
         self._librarian: Optional[LibrarianFileManager] = None
+
+        # Recursion Governor (prevents infinite loops)
+        self._recursion_governor = RecursionGovernor()
 
         # External LLM handler (the actual Kimi API)
         self._llm_handler: Optional[Callable] = None
@@ -263,7 +267,7 @@ class KimiOrchestrator:
         """
         Connect to the full system from a PerpetualLearningLoop.
 
-        One-line setup for all connections.
+        One-line setup for ALL connections including advanced trust.
         """
         self._loop = loop
         self._oracle = loop.oracle
@@ -274,6 +278,15 @@ class KimiOrchestrator:
         # Set up reasoning with full system access
         reasoning = DeepReasoningIntegration()
         reasoning.connect_all_from_loop(loop)
+
+        # Wire advanced trust into reasoning
+        if loop.thermometer:
+            reasoning.connect_thermometer(loop.thermometer)
+        if loop.competence:
+            reasoning.connect_competence(loop.competence)
+        if loop.pillar_tracker:
+            reasoning.connect_pillars(loop.pillar_tracker)
+
         self._reasoning = reasoning
 
         # Set up evolution
@@ -290,7 +303,7 @@ class KimiOrchestrator:
         self._interrogator = interrogator
         reasoning.connect_interrogator(interrogator)
 
-        logger.info("[KIMI] Connected to full system (all subsystems wired)")
+        logger.info("[KIMI] Connected to full system (all subsystems + advanced trust wired)")
 
     # =========================================================================
     # QUERY INTERFACE (how the user talks to Grace through Kimi)
@@ -571,6 +584,7 @@ class KimiOrchestrator:
             "interrogator": self._interrogator is not None,
             "perpetual_loop": self._loop is not None,
             "librarian": self._librarian is not None,
+            "recursion_governor": self._recursion_governor is not None,
             "llm_handler": self._llm_handler is not None,
         }
 

@@ -78,6 +78,23 @@ from .llm_enrichment import LLMEnrichmentEngine, EnrichmentMode
 from .source_code_index import SourceCodeIndex
 from .hallucination_guard import HallucinationGuard
 from .librarian_file_manager import LibrarianFileManager, FileCategory
+from .unified_proactive_learning import UnifiedProactiveLearning
+
+# Import advanced trust components
+import sys as _sys
+_trust_path = str(__import__('pathlib').Path(__file__).resolve().parent.parent)
+if _trust_path not in _sys.path:
+    _sys.path.insert(0, _trust_path)
+
+try:
+    from advanced_trust.trust_thermometer import SystemTrustThermometer
+    from advanced_trust.competence_boundaries import CompetenceBoundaryTracker
+    from advanced_trust.pillar_tracker import PillarTracker, Pillar
+except ImportError:
+    SystemTrustThermometer = None
+    CompetenceBoundaryTracker = None
+    PillarTracker = None
+    Pillar = None
 
 logger = logging.getLogger(__name__)
 
@@ -181,8 +198,14 @@ class PerpetualLearningLoop:
         )
         self.librarian = LibrarianFileManager()
         self.discovery = ProactiveDiscoveryEngine(oracle_store=self.oracle)
+        self.unified_learning = UnifiedProactiveLearning(oracle_store=self.oracle)
         self.enrichment = LLMEnrichmentEngine(oracle_store=self.oracle)
         self.knn = ReverseKNNDiscovery(oracle_store=self.oracle)
+
+        # Advanced trust components (wired into the loop)
+        self.thermometer = SystemTrustThermometer() if SystemTrustThermometer else None
+        self.competence = CompetenceBoundaryTracker() if CompetenceBoundaryTracker else None
+        self.pillar_tracker = PillarTracker() if PillarTracker else None
 
         # State
         self.trust_chain: Dict[str, TrustChainEntry] = {}
@@ -342,7 +365,9 @@ class PerpetualLearningLoop:
         start = datetime.now(timezone.utc)
         errors: List[str] = []
 
-        # Run full discovery
+        # Run unified discovery (both engines)
+        unified_result = self.unified_learning.run_full_discovery()
+        # Also run the standalone discovery for compatibility
         queue_state = self.discovery.run_full_discovery()
 
         # Generate new queries from discovery tasks
@@ -649,13 +674,25 @@ class PerpetualLearningLoop:
             self.source_index.index_source_code(path, content)
 
     def _update_trust_temperature(self) -> None:
-        """Update the system-wide trust temperature."""
+        """Update the system-wide trust temperature using the real thermometer."""
         if not self.trust_chain:
             self._trust_temperature = 0.5
             return
 
         trusts = [e.trust_score for e in self.trust_chain.values()]
-        self._trust_temperature = sum(trusts) / len(trusts)
+        avg_trust = sum(trusts) / len(trusts)
+
+        if self.thermometer:
+            self.thermometer.update_data_trust(avg_trust)
+            # Feed pillar data if available
+            if self.pillar_tracker and Pillar:
+                for pillar in Pillar:
+                    rate = self.pillar_tracker.get_pillar_success_rate(pillar)
+                    self.thermometer.update_pillar_score(pillar.value, rate)
+            reading = self.thermometer.read_temperature()
+            self._trust_temperature = reading.temperature
+        else:
+            self._trust_temperature = avg_trust
 
     # =========================================================================
     # STATE & STATS
@@ -724,11 +761,15 @@ class PerpetualLearningLoop:
             "components": {
                 "oracle": self.oracle.get_stats(),
                 "discovery": self.discovery.get_stats(),
+                "unified_learning": self.unified_learning.get_stats(),
                 "enrichment": self.enrichment.get_stats(),
                 "source_index": self.source_index.get_stats(),
                 "hallucination_guard": self.hallucination_guard.get_stats(),
                 "librarian": self.librarian.get_stats(),
                 "whitelist": self.whitelist.get_stats(),
                 "fetcher": self.fetcher.get_stats(),
+                "thermometer": self.thermometer.get_stats() if self.thermometer else None,
+                "competence": self.competence.get_stats() if self.competence else None,
+                "pillar_tracker": self.pillar_tracker.get_stats() if self.pillar_tracker else None,
             },
         }
