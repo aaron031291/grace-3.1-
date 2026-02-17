@@ -48,6 +48,12 @@ from cognitive.kimi_brain import (
     InstructionPriority,
 )
 from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+from cognitive.grace_verification_engine import (
+    GraceVerificationEngine,
+    get_grace_verification_engine,
+    VerificationReport,
+    CheckResult,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -133,12 +139,14 @@ class GraceVerifiedExecutor:
         execution_bridge=None,
         coding_agent=None,
         governance_engine=None,
+        verification_engine: GraceVerificationEngine = None,
     ):
         self.session = session
         self.execution_bridge = execution_bridge
         self.coding_agent = coding_agent
         self.governance = governance_engine
 
+        self.verification = verification_engine or get_grace_verification_engine(session)
         self.tracker = get_llm_interaction_tracker(session)
 
         self._trust_threshold = 0.3
@@ -146,7 +154,7 @@ class GraceVerifiedExecutor:
 
         self._execution_history: List[SessionResult] = []
 
-        logger.info("[GRACE-EXECUTOR] Verified executor initialized")
+        logger.info("[GRACE-EXECUTOR] Verified executor initialized with multi-source verification")
 
     async def process_instruction_set(
         self,
@@ -243,7 +251,7 @@ class GraceVerifiedExecutor:
         """Process a single instruction from Kimi."""
         start_time = time.time()
 
-        verification, reason = self._verify_instruction(instruction)
+        verification, reason = await self._verify_instruction(instruction)
 
         instr_result = InstructionResult(
             instruction_id=instruction.instruction_id,
@@ -277,18 +285,26 @@ class GraceVerifiedExecutor:
 
         return instr_result
 
-    def _verify_instruction(
+    async def _verify_instruction(
         self,
         instruction: KimiInstruction,
     ) -> tuple:
         """
-        Verify a Kimi instruction through Grace's own systems.
+        Verify a Kimi instruction through Grace's MULTI-SOURCE verification.
 
-        Grace checks:
-        1. Is the confidence above threshold?
-        2. Are the preconditions met?
-        3. Does governance allow this action?
-        4. Are the risks acceptable?
+        Grace checks against:
+        1. File system (do referenced files exist?)
+        2. Database (is DB healthy, do records exist?)
+        3. Knowledge base (does this align with known facts?)
+        4. Oracle ML (will this likely succeed?)
+        5. Governance (does policy allow this?)
+        6. OODA loop (is reasoning chain valid?)
+        7. Chat history (does this contradict user?)
+        8. API validation (external data checks)
+        9. Web search (cross-reference for critical ops)
+        10. User confirmation (bidirectional comms for high-risk)
+
+        Only executes if verification PASSES.
         """
         if instruction.confidence < self._trust_threshold:
             return (
@@ -302,31 +318,50 @@ class GraceVerifiedExecutor:
                 "Informational instruction -- no execution needed"
             )
 
-        for precondition in instruction.preconditions:
-            if not self._check_precondition(precondition):
-                return (
-                    VerificationResult.REJECTED,
-                    f"Precondition not met: {precondition}"
-                )
-
         high_risk_types = [InstructionType.DELETE, InstructionType.DEPLOY]
         if instruction.instruction_type in high_risk_types:
-            if instruction.confidence < 0.8:
-                return (
-                    VerificationResult.REJECTED,
-                    f"High-risk action requires confidence >= 0.8, got {instruction.confidence:.2f}"
-                )
-            if not instruction.rollback_plan:
-                return (
-                    VerificationResult.REJECTED,
-                    "High-risk action requires a rollback plan"
-                )
+            risk_level = "critical"
+        elif instruction.instruction_type in [InstructionType.CREATE, InstructionType.FIX, InstructionType.REFACTOR]:
+            risk_level = "medium"
+        elif instruction.instruction_type in [InstructionType.HEAL, InstructionType.CONFIGURE]:
+            risk_level = "high"
+        else:
+            risk_level = "low"
 
-        return (VerificationResult.APPROVED, "All verification checks passed")
+        report = await self.verification.verify_instruction(
+            instruction,
+            risk_level=risk_level,
+        )
 
-    def _check_precondition(self, precondition: str) -> bool:
-        """Check if a precondition is met."""
-        return True
+        if report.requires_user_confirmation:
+            return (
+                VerificationResult.REJECTED,
+                f"Awaiting user confirmation: {report.user_confirmation_reason}"
+            )
+
+        if report.critical_failures:
+            failures_summary = "; ".join(report.critical_failures[:3])
+            return (
+                VerificationResult.REJECTED,
+                f"Verification FAILED ({report.failed_checks} checks failed): {failures_summary}"
+            )
+
+        if report.overall_pass:
+            warnings_note = ""
+            if report.warnings:
+                warnings_note = f" (with {report.warned_checks} warnings)"
+            return (
+                VerificationResult.APPROVED,
+                f"Multi-source verification PASSED "
+                f"({report.passed_checks}/{report.total_checks} checks, "
+                f"confidence={report.overall_confidence:.2f}){warnings_note}"
+            )
+        else:
+            return (
+                VerificationResult.REJECTED,
+                f"Verification did not pass "
+                f"({report.passed_checks}/{report.total_checks} checks passed)"
+            )
 
     async def _execute_instruction(
         self,

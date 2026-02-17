@@ -52,6 +52,10 @@ from cognitive.grace_verified_executor import (
     GraceVerifiedExecutor,
     get_grace_verified_executor,
 )
+from cognitive.grace_verification_engine import (
+    GraceVerificationEngine,
+    get_grace_verification_engine,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -1046,4 +1050,96 @@ async def get_grace_execution_stats(
         return executor.get_execution_stats()
     except Exception as e:
         logger.error(f"Error getting execution stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# VERIFICATION ENDPOINTS
+# =======================================================================
+
+class UserConfirmationRequest(BaseModel):
+    """User response to a confirmation request."""
+    check_id: str = Field(..., description="Check ID from pending confirmation")
+    approved: bool = Field(..., description="Whether user approves the action")
+    note: Optional[str] = Field(None, description="User's note/reason")
+
+
+def get_verification_engine(db: Session = Depends(get_db)) -> GraceVerificationEngine:
+    return get_grace_verification_engine(db)
+
+
+@router.get("/grace/verification/stats")
+async def get_verification_stats(
+    engine: GraceVerificationEngine = Depends(get_verification_engine),
+):
+    """
+    Get verification statistics.
+
+    Shows how many instructions passed/failed verification,
+    which sources caught issues, and pending confirmations.
+    """
+    try:
+        return engine.get_verification_stats()
+    except Exception as e:
+        logger.error(f"Error getting verification stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/grace/verification/pending")
+async def get_pending_confirmations(
+    engine: GraceVerificationEngine = Depends(get_verification_engine),
+):
+    """
+    Get pending user confirmations.
+
+    These are high-risk instructions that need user approval
+    before Grace will execute them. Respond via this API or
+    through WebSocket/chat/voice bidirectional comms.
+    """
+    try:
+        pending = engine.get_pending_confirmations()
+        return {
+            "pending_count": len(pending),
+            "confirmations": pending,
+        }
+    except Exception as e:
+        logger.error(f"Error getting pending confirmations: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/grace/verification/confirm")
+async def submit_user_confirmation(
+    request: UserConfirmationRequest,
+    engine: GraceVerificationEngine = Depends(get_verification_engine),
+):
+    """
+    Submit user confirmation for a pending verification check.
+
+    This is the bidirectional comms endpoint. When Grace asks
+    for user confirmation (for high-risk actions), the user
+    responds here via chat, WebSocket, or voice API.
+    """
+    try:
+        success = engine.submit_user_confirmation(
+            check_id=request.check_id,
+            approved=request.approved,
+            user_note=request.note,
+        )
+
+        if not success:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No pending confirmation found for check_id: {request.check_id}"
+            )
+
+        return {
+            "check_id": request.check_id,
+            "approved": request.approved,
+            "status": "confirmation_recorded",
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error submitting confirmation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
