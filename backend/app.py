@@ -774,6 +774,22 @@ async def chat(request: ChatRequest):
                 detail=f"Model '{model_name}' not found. Available models: {[m.name for m in client.get_all_models()]}"
             )
         
+        # ==================== INPUT SANITIZATION ====================
+        # Validate user input before processing to prevent injection attacks
+        try:
+            from security.validators import get_validator
+            _validator = get_validator()
+            for msg in request.messages:
+                _valid, _sanitized, _err = _validator.validate_string(
+                    msg.content, max_length=50000, allow_html=False, field_name="message"
+                )
+                if not _valid:
+                    raise HTTPException(status_code=400, detail=f"Invalid input: {_err}")
+        except HTTPException:
+            raise
+        except Exception:
+            pass  # Validator not available, continue without
+
         # ==================== ROUTING: SMALL-TALK vs RAG vs WEB ====================
         # Get the last user message as the query
         user_query = ""
@@ -919,15 +935,27 @@ async def chat(request: ChatRequest):
         except Exception as _track_err:
             logger.debug(f"[CHAT-TRACK] Tracking error (non-fatal): {_track_err}")
 
-        # Run near-zero hallucination check on response (async, non-blocking)
+        # Run near-zero hallucination check WITH RAG context for contradiction detection
         try:
             from startup import get_subsystems
             _subs = get_subsystems()
             if _subs.near_zero_guard:
+                # Extract RAG source texts to pass as context_documents
+                _context_docs = []
+                try:
+                    _sources = response_data.get("sources") or []
+                    for _src in _sources[:10]:
+                        _src_text = _src.get("text", "") if isinstance(_src, dict) else str(_src)
+                        if _src_text:
+                            _context_docs.append(_src_text[:1000])
+                except Exception:
+                    pass
+
                 _verify_result = _subs.near_zero_guard.verify(
                     prompt=user_query,
                     content=response_data.get("message", ""),
                     task_type="general",
+                    context_documents=_context_docs if _context_docs else None,
                     max_retries=0,
                 )
                 response_data["hallucination_check"] = {
@@ -936,6 +964,25 @@ async def chat(request: ChatRequest):
                     "claims_verified": _verify_result.verified_claims,
                     "claims_total": _verify_result.total_claims,
                 }
+
+                # Feed hallucination results back to learning tracker
+                try:
+                    if _track_session and not _track_session.is_active:
+                        _track_session = SessionLocal()
+                    _ltracker = get_llm_interaction_tracker(_track_session)
+                    _ltracker.record_interaction(
+                        prompt=f"[HALLUCINATION_CHECK] {user_query[:200]}",
+                        response=f"verified={_verify_result.is_verified}, prob={_verify_result.hallucination_probability:.3f}",
+                        model_used="near_zero_guard",
+                        interaction_type="reasoning",
+                        outcome="success" if _verify_result.is_verified else "failure",
+                        confidence_score=1.0 - _verify_result.hallucination_probability,
+                        metadata={"claims_total": _verify_result.total_claims, "claims_verified": _verify_result.verified_claims},
+                    )
+                    _track_session.commit()
+                    _track_session.close()
+                except Exception:
+                    pass
         except Exception as _guard_err:
             logger.debug(f"[CHAT-GUARD] Guard error (non-fatal): {_guard_err}")
 
@@ -1702,6 +1749,51 @@ async def delete_message(chat_id: int, message_id: int, session = Depends(get_se
             status_code=500,
             detail=f"Error deleting message: {str(e)}"
         )
+
+
+# ==================== User Feedback on Chat ====================
+
+class ChatFeedbackRequest(BaseModel):
+    """User feedback on a chat response (upvote/downvote)."""
+    message_content: str = Field(..., description="The response the user is rating")
+    query: str = Field("", description="The original query")
+    feedback: str = Field(..., description="positive, negative, or neutral")
+    note: Optional[str] = Field(None, description="Optional feedback text")
+
+@app.post("/chat/feedback", tags=["Chat"])
+async def submit_chat_feedback(request: ChatFeedbackRequest):
+    """
+    Submit user feedback on a chat response.
+
+    This is the highest-value learning signal -- direct human preference data.
+    Feeds into the LLM interaction tracker and pattern learner.
+    """
+    try:
+        from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+        from database.session import SessionLocal
+
+        _fb_session = SessionLocal()
+        tracker = get_llm_interaction_tracker(_fb_session)
+
+        tracker.record_interaction(
+            prompt=request.query[:2000],
+            response=request.message_content[:2000],
+            model_used="user_feedback",
+            interaction_type="question_answer",
+            outcome="success" if request.feedback == "positive" else "failure",
+            confidence_score=1.0 if request.feedback == "positive" else 0.0,
+            user_feedback=request.feedback,
+            user_feedback_text=request.note,
+            metadata={"source": "chat_feedback", "feedback_type": request.feedback},
+        )
+        _fb_session.commit()
+        _fb_session.close()
+
+        return {"status": "recorded", "feedback": request.feedback}
+
+    except Exception as e:
+        logger.error(f"[FEEDBACK] Error recording feedback: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ==================== Root Endpoint ====================

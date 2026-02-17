@@ -533,6 +533,44 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         except Exception as e:
             print(f"[STARTUP] [WARN] Near-Zero Guard failed: {e}")
 
+        # 11f. Wire Diagnostic Engine -> LLM Tracker (healing outcomes feed learning)
+        if subs.diagnostic_engine and session:
+            try:
+                from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+
+                def _diagnostic_to_learning(cycle):
+                    """Callback: diagnostic cycle results feed LLM learning tracker."""
+                    try:
+                        from database.session import SessionLocal
+                        _ds = SessionLocal()
+                        _dt = get_llm_interaction_tracker(_ds)
+                        health_status = "unknown"
+                        action_type = "none"
+                        if hasattr(cycle, 'judgement') and cycle.judgement:
+                            health_status = cycle.judgement.health.status.value if hasattr(cycle.judgement.health, 'status') else "unknown"
+                        if hasattr(cycle, 'action_decision') and cycle.action_decision:
+                            action_type = cycle.action_decision.action_type.value if hasattr(cycle.action_decision.action_type, 'value') else "unknown"
+                        _dt.record_interaction(
+                            prompt=f"[DIAGNOSTIC] Cycle {cycle.cycle_id}, trigger={cycle.trigger_source.value}",
+                            response=f"health={health_status}, action={action_type}, duration={cycle.total_duration_ms:.0f}ms",
+                            model_used="diagnostic_engine",
+                            interaction_type="reasoning",
+                            outcome="success" if cycle.success else "failure",
+                            confidence_score=0.9 if cycle.success else 0.3,
+                            duration_ms=cycle.total_duration_ms,
+                            error_message=cycle.error_message,
+                            metadata={"cycle_id": cycle.cycle_id, "health": health_status, "action": action_type},
+                        )
+                        _ds.commit()
+                        _ds.close()
+                    except Exception:
+                        pass
+
+                subs.diagnostic_engine.register_cycle_callback(_diagnostic_to_learning)
+                print("[STARTUP] [OK] Diagnostic Engine -> LLM Tracker callback wired")
+            except Exception as e:
+                print(f"[STARTUP] [WARN] Diagnostic -> LLM Tracker wiring failed: {e}")
+
     except Exception as e:
         print(f"[STARTUP] [WARN] Kimi + Grace Learning System error (non-fatal): {e}")
 

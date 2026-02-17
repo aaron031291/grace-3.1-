@@ -49,9 +49,37 @@ class ExecutionConfig:
         self.allowed_commands = allowed_commands or []
         self.blocked_commands = blocked_commands or [
             "rm -rf /",
+            "rm -rf /*",
             "mkfs",
             "dd if=/dev/zero",
             ":(){:|:&};:",  # Fork bomb
+            "sudo ",
+            "chmod 777",
+            "chmod -R 777",
+            "curl|bash",
+            "curl|sh",
+            "wget|bash",
+            "wget|sh",
+            "curl | bash",
+            "curl | sh",
+            "wget | bash",
+            "wget | sh",
+            "> /dev/sda",
+            "mv / ",
+            "shutdown",
+            "reboot",
+            "halt",
+            "init 0",
+            "init 6",
+            "passwd",
+            "useradd",
+            "userdel",
+            "visudo",
+            "crontab -r",
+            "iptables -F",
+            "systemctl stop",
+            "kill -9 1",
+            "nohup",  # Background persistent processes
         ]
 
 
