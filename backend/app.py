@@ -807,6 +807,21 @@ async def chat(request: ChatRequest):
                 num_predict=request.top_k or 256,
             )
 
+            # Track greeting in learning pipeline
+            try:
+                from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+                from database.session import SessionLocal
+                _gs = SessionLocal()
+                get_llm_interaction_tracker(_gs).record_interaction(
+                    prompt=user_query, response=response[:500],
+                    model_used=model_name, interaction_type="question_answer",
+                    outcome="success", confidence_score=0.95, duration_ms=0,
+                )
+                _gs.commit()
+                _gs.close()
+            except Exception:
+                pass
+
             return ChatResponse(
                 response=response,
                 sources=[],
@@ -871,7 +886,59 @@ async def chat(request: ChatRequest):
         if magma_result and "sources" in magma_result:
             existing_sources = response_data.get("sources") or []
             response_data["sources"] = existing_sources + magma_result["sources"]
-        
+
+        # ==================== KIMI LEARNING PIPELINE ====================
+        # Track every chat interaction for learning. Run hallucination check.
+        # This activates the entire Kimi+Grace learning system for ALL traffic.
+        try:
+            from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+            from database.session import SessionLocal
+
+            _track_session = SessionLocal()
+            tracker = get_llm_interaction_tracker(_track_session)
+
+            response_text = response_data.get("message", "")
+
+            tracker.record_interaction(
+                prompt=user_query,
+                response=response_text[:5000],
+                model_used=model_name,
+                interaction_type="question_answer",
+                outcome="success",
+                confidence_score=tier_result.confidence if hasattr(tier_result, 'confidence') else 0.7,
+                duration_ms=generation_time * 1000,
+                context_used={"tier": tier_result.tier_used if hasattr(tier_result, 'tier_used') else "unknown"},
+                reasoning_chain=[
+                    {"action": "observe", "thought": f"User query: {user_query[:100]}"},
+                    {"action": "retrieve", "thought": f"Retrieved from knowledge base"},
+                    {"action": "generate", "thought": f"Generated response via {model_name}"},
+                ],
+            )
+            _track_session.commit()
+            _track_session.close()
+        except Exception as _track_err:
+            logger.debug(f"[CHAT-TRACK] Tracking error (non-fatal): {_track_err}")
+
+        # Run near-zero hallucination check on response (async, non-blocking)
+        try:
+            from startup import get_subsystems
+            _subs = get_subsystems()
+            if _subs.near_zero_guard:
+                _verify_result = _subs.near_zero_guard.verify(
+                    prompt=user_query,
+                    content=response_data.get("message", ""),
+                    task_type="general",
+                    max_retries=0,
+                )
+                response_data["hallucination_check"] = {
+                    "verified": _verify_result.is_verified,
+                    "probability": _verify_result.hallucination_probability,
+                    "claims_verified": _verify_result.verified_claims,
+                    "claims_total": _verify_result.total_claims,
+                }
+        except Exception as _guard_err:
+            logger.debug(f"[CHAT-GUARD] Guard error (non-fatal): {_guard_err}")
+
         return ChatResponse(**response_data)
     
     except HTTPException:
