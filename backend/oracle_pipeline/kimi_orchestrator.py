@@ -489,8 +489,8 @@ class KimiOrchestrator:
         self, query: str, oracle_ctx: List, code_ctx: List,
         reasoning: Any, mode: KimiMode,
     ) -> str:
-        """Generate NLP response for the user."""
-        # If external LLM handler is set, use it
+        """Generate NLP response for the user with full system data."""
+        # If external LLM handler is set, use it with full context
         if self._llm_handler:
             try:
                 context = self._build_llm_context(query, oracle_ctx, code_ctx, reasoning)
@@ -498,24 +498,120 @@ class KimiOrchestrator:
             except Exception as e:
                 logger.warning(f"[KIMI] LLM handler failed: {e}")
 
-        # Build response from available context
+        # Build comprehensive response from ALL connected systems
         parts = []
+        query_lower = query.lower()
 
-        if reasoning and hasattr(reasoning, 'conclusion'):
-            parts.append(reasoning.conclusion)
+        # System status queries
+        is_status_query = any(w in query_lower for w in [
+            "status", "health", "state", "how are you", "system",
+            "temperature", "trust", "overview",
+        ])
 
+        # Knowledge queries
+        is_knowledge_query = any(w in query_lower for w in [
+            "know", "domain", "knowledge", "what do you", "tell me about",
+            "learned", "training",
+        ])
+
+        # Learning queries
+        is_learning_query = any(w in query_lower for w in [
+            "learn", "discover", "next", "should", "gap", "missing",
+            "queue", "explore",
+        ])
+
+        # File/code queries
+        is_code_query = any(w in query_lower for w in [
+            "code", "file", "function", "class", "module", "source",
+            "codebase", "genesis key",
+        ])
+
+        # Pull live system data
+        if is_status_query and self._loop:
+            parts.append("System Status:")
+            oracle = self._loop.oracle
+            parts.append(f"  Knowledge: {len(oracle.records)} records across {len(oracle.get_all_domains())} domains ({', '.join(oracle.get_all_domains()[:5])})")
+            tc = self._loop.trust_chain
+            if tc:
+                trusts = [e.trust_score for e in tc.values()]
+                parts.append(f"  Trust chain: {len(tc)} entries, avg trust {sum(trusts)/len(trusts):.0%}")
+            if self._loop.thermometer:
+                r = self._loop.thermometer.read_temperature()
+                parts.append(f"  Temperature: {r.temperature:.0%} ({r.mode.value})")
+            if self._loop.pillar_tracker:
+                from advanced_trust.pillar_tracker import Pillar
+                for p in Pillar:
+                    rate = self._loop.pillar_tracker.get_pillar_success_rate(p)
+                    if rate > 0:
+                        parts.append(f"  {p.value}: {rate:.0%} success")
+            lib_stats = self._loop.librarian.get_stats()
+            parts.append(f"  Files: {lib_stats['code_files']} code, {lib_stats['document_files']} docs")
+            ul = self._loop.unified_learning
+            parts.append(f"  Learning queue: {len(ul.learning_queue)} targets")
+
+        if is_knowledge_query and self._oracle:
+            domains = self._oracle.get_all_domains()
+            stats = self._oracle.get_domain_stats()
+            if domains:
+                parts.append(f"Knowledge domains ({len(domains)}):")
+                for d in domains:
+                    parts.append(f"  {d}: {stats.get(d, 0)} records")
+            # Search for specific domain mentioned
+            for domain in domains:
+                if domain in query_lower:
+                    records = self._oracle.search_by_domain(domain, limit=3)
+                    parts.append(f"\n{domain} content:")
+                    for rec in records:
+                        parts.append(f"  [{rec.trust_score:.0%} trust] {rec.content[:150]}")
+
+        if is_learning_query and self._loop:
+            ul = self._loop.unified_learning
+            if ul.learning_queue:
+                parts.append(f"Learning queue ({len(ul.learning_queue)} targets):")
+                for t in ul.learning_queue[:5]:
+                    parts.append(f"  [{t.priority.value}] {t.domain}: {t.description[:80]}")
+            if self._loop.competence:
+                comps = self._loop.competence.domains
+                if comps:
+                    parts.append("Competence by domain:")
+                    for d, c in comps.items():
+                        parts.append(f"  {d}: {c.accuracy:.0%} ({c.competence_level.value})")
+
+        if is_code_query and self._source_index:
+            si_stats = self._source_index.get_stats()
+            parts.append(f"Source code: {si_stats['total_modules']} modules, {si_stats['functions']} functions, {si_stats['classes']} classes")
+            # Search for specific code element
+            query_result = self._source_index.query_by_capability(query)
+            if query_result.results:
+                parts.append("Relevant code:")
+                for elem in query_result.results[:3]:
+                    parts.append(f"  {elem.name} ({elem.element_type.value}) in {elem.file_path}: {elem.signature}")
+
+        # Always include oracle search results
         if oracle_ctx:
-            parts.append(f"Found {len(oracle_ctx)} relevant knowledge records.")
-            top = oracle_ctx[0]
-            parts.append(f"Most relevant ({top.get('domain', 'general')}): {top.get('content', '')[:200]}")
+            if not any(p.startswith("Knowledge") or p.startswith("\n") for p in parts):
+                parts.append(f"Found {len(oracle_ctx)} relevant records:")
+                for ctx in oracle_ctx[:3]:
+                    parts.append(f"  [{ctx.get('domain', '?')}] {ctx.get('content', '')[:150]}")
 
+        # Always include reasoning
+        if reasoning and hasattr(reasoning, 'conclusion'):
+            parts.append(f"\nAnalysis: {reasoning.conclusion}")
+            if hasattr(reasoning, 'recommendations') and reasoning.recommendations:
+                parts.append("Recommendations:")
+                for rec in reasoning.recommendations[:3]:
+                    parts.append(f"  - {rec}")
+
+        # Include code context
         if code_ctx:
-            parts.append(f"Found {len(code_ctx)} relevant code elements.")
-            for c in code_ctx[:2]:
-                parts.append(f"  - {c['name']} ({c['type']}) in {c['file']}")
+            parts.append(f"Related code ({len(code_ctx)} elements):")
+            for c in code_ctx[:3]:
+                parts.append(f"  {c['name']} ({c['type']}) in {c['file']}")
 
         if not parts:
-            parts.append(f"Processing query: {query}")
+            parts.append(f"Processing: {query}")
+            if self._oracle:
+                parts.append(f"Oracle has {len(self._oracle.records)} records across {len(self._oracle.get_all_domains())} domains.")
 
         return "\n".join(parts)
 
