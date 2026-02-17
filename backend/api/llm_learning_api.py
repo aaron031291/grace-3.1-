@@ -39,6 +39,11 @@ from cognitive.llm_dependency_reducer import (
     LLMDependencyReducer,
     get_llm_dependency_reducer,
 )
+from cognitive.kimi_tool_executor import (
+    KimiToolExecutor,
+    get_kimi_tool_executor,
+    TOOL_REGISTRY,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -668,4 +673,167 @@ async def get_learning_dashboard(
 
     except Exception as e:
         logger.error(f"Error getting learning dashboard: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KIMI TOOL EXECUTOR ENDPOINTS
+# =======================================================================
+
+class ToolCallRequest(BaseModel):
+    """Request to execute a tool via Kimi."""
+    tool_id: str = Field(..., description="Tool ID from the tool registry")
+    parameters: Dict[str, Any] = Field(default_factory=dict, description="Tool parameters")
+    reasoning: str = Field(default="", description="Why Kimi is calling this tool")
+    session_id: Optional[str] = Field(None, description="Session grouping ID")
+
+
+class ParallelToolCallRequest(BaseModel):
+    """Request to execute multiple tools in parallel."""
+    calls: List[Dict[str, Any]] = Field(
+        ...,
+        description="List of tool calls: [{tool_id, parameters, reasoning}]"
+    )
+    session_id: Optional[str] = Field(None, description="Session grouping ID")
+
+
+def get_tool_executor(db: Session = Depends(get_db)) -> KimiToolExecutor:
+    return get_kimi_tool_executor(db)
+
+
+@router.get("/tools")
+async def list_available_tools(
+    category: Optional[str] = Query(default=None, description="Filter by category"),
+    include_high_risk: bool = Query(default=True, description="Include high-risk tools"),
+    executor: KimiToolExecutor = Depends(get_tool_executor),
+):
+    """
+    List all tools Kimi can execute.
+
+    Returns the complete tool registry organized by category.
+    Kimi uses this to know what tools are available for execution.
+    """
+    try:
+        tools = executor.list_tools(
+            category=category,
+            include_high_risk=include_high_risk,
+        )
+        categories = executor.list_categories()
+
+        return {
+            "total_tools": len(tools),
+            "categories": categories,
+            "tools": tools,
+        }
+
+    except Exception as e:
+        logger.error(f"Error listing tools: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/tools/{tool_id}")
+async def get_tool_schema(
+    tool_id: str,
+    executor: KimiToolExecutor = Depends(get_tool_executor),
+):
+    """
+    Get the full schema for a specific tool.
+
+    Returns parameter definitions, risk level, and execution details.
+    """
+    schema = executor.get_tool_schema(tool_id)
+    if not schema:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Tool not found: {tool_id}. Use /llm-learning/tools to see available tools."
+        )
+    return schema
+
+
+@router.post("/tools/call")
+async def call_tool(
+    request: ToolCallRequest,
+    executor: KimiToolExecutor = Depends(get_tool_executor),
+):
+    """
+    Execute a tool call.
+
+    This is Kimi's main tool execution endpoint. Kimi decides what to do
+    (intelligence) and calls this endpoint to actually do it (tool use).
+
+    Every call is tracked for learning and pattern extraction.
+    """
+    try:
+        result = await executor.call_tool(
+            tool_id=request.tool_id,
+            parameters=request.parameters,
+            reasoning=request.reasoning,
+            session_id=request.session_id,
+        )
+
+        return {
+            "call_id": result.call_id,
+            "tool_id": result.tool_id,
+            "success": result.success,
+            "output": result.output,
+            "error": result.error,
+            "duration_ms": result.duration_ms,
+            "side_effects": result.side_effects,
+            "files_affected": result.files_affected,
+        }
+
+    except Exception as e:
+        logger.error(f"Error executing tool {request.tool_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/tools/call-parallel")
+async def call_tools_parallel(
+    request: ParallelToolCallRequest,
+    executor: KimiToolExecutor = Depends(get_tool_executor),
+):
+    """
+    Execute multiple tools in parallel.
+
+    Useful when Kimi needs to gather information from multiple
+    system surfaces simultaneously (e.g., check git status AND
+    run health check AND get KPIs all at once).
+    """
+    try:
+        results = await executor.call_tools_parallel(
+            calls=request.calls,
+            session_id=request.session_id,
+        )
+
+        return {
+            "total_calls": len(results),
+            "successful": sum(1 for r in results if r.success),
+            "failed": sum(1 for r in results if not r.success),
+            "results": [
+                {
+                    "call_id": r.call_id,
+                    "tool_id": r.tool_id,
+                    "success": r.success,
+                    "output": r.output,
+                    "error": r.error,
+                    "duration_ms": r.duration_ms,
+                }
+                for r in results
+            ],
+        }
+
+    except Exception as e:
+        logger.error(f"Error executing parallel tools: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/tools/stats")
+async def get_tool_stats(
+    executor: KimiToolExecutor = Depends(get_tool_executor),
+):
+    """Get Kimi's tool usage statistics."""
+    try:
+        return executor.get_stats()
+    except Exception as e:
+        logger.error(f"Error getting tool stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))

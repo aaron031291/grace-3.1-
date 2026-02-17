@@ -12,9 +12,14 @@ Architecture:
                                          |
                                          |--> Direct Execution (commands, git, shell)
                                          |--> Coding Agent (code writing, refactoring, testing)
+                                         |--> Tool Execution (diagnostics, ingestion, monitoring, etc.)
                                          |--> Hybrid (Kimi plans, coding agent implements)
                                          |
                                          +--> ALL paths tracked by LLM Interaction Tracker
+
+Kimi is NOT just intelligence. Kimi is a tool-using agent that routes
+to the right tool for the job. The KimiToolExecutor provides access to
+50+ system tools across 20 categories.
 
 The router classifies each request and routes it accordingly,
 while ensuring every interaction is recorded for learning.
@@ -48,6 +53,7 @@ class RouteDecision(str, Enum):
     """Where a task should be routed."""
     KIMI_DIRECT = "kimi_direct"
     CODING_AGENT = "coding_agent"
+    TOOL_EXECUTION = "tool_execution"
     HYBRID = "hybrid"
     GRACE_AUTONOMOUS = "grace_autonomous"
 
@@ -64,6 +70,7 @@ class RoutedTask:
 
     coding_subtasks: List[Dict[str, Any]] = field(default_factory=list)
     command_subtasks: List[Dict[str, Any]] = field(default_factory=list)
+    tool_calls: List[Dict[str, Any]] = field(default_factory=list)
 
     context: Dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.utcnow)
@@ -115,11 +122,13 @@ class KimiCommandRouter:
         execution_bridge=None,
         coding_agent=None,
         pattern_learner=None,
+        tool_executor=None,
     ):
         self.session = session
         self.execution_bridge = execution_bridge
         self.coding_agent = coding_agent
         self.pattern_learner = pattern_learner
+        self.tool_executor = tool_executor
 
         self.tracker = get_llm_interaction_tracker(session)
 
@@ -128,6 +137,7 @@ class KimiCommandRouter:
             "total_routed": 0,
             "kimi_direct": 0,
             "coding_agent": 0,
+            "tool_execution": 0,
             "hybrid": 0,
             "grace_autonomous": 0,
         }
@@ -192,6 +202,11 @@ class KimiCommandRouter:
                 user_request, context
             )
 
+        if route == RouteDecision.TOOL_EXECUTION:
+            routed_task.tool_calls = self._extract_tool_calls(
+                user_request, context
+            )
+
         self._task_history.append(routed_task)
         self._routing_stats["total_routed"] += 1
         self._routing_stats[route.value] += 1
@@ -245,6 +260,9 @@ class KimiCommandRouter:
 
             elif routed_task.route == RouteDecision.CODING_AGENT:
                 await self._execute_coding_agent(routed_task, result)
+
+            elif routed_task.route == RouteDecision.TOOL_EXECUTION:
+                await self._execute_tool_calls(routed_task, result)
 
             elif routed_task.route == RouteDecision.HYBRID:
                 await self._execute_hybrid(routed_task, result, llm_response)
@@ -439,6 +457,66 @@ class KimiCommandRouter:
         if task.coding_subtasks:
             await self._execute_coding_agent(task, result)
 
+    async def _execute_tool_calls(
+        self,
+        task: RoutedTask,
+        result: ExecutionResult,
+    ):
+        """
+        Execute system tool calls via the KimiToolExecutor.
+
+        This handles tasks that map to system tools: diagnostics,
+        ingestion, monitoring, learning, scraping, task management,
+        knowledge base, autonomous actions, sandbox, governance, etc.
+
+        Kimi is a tool user, not just intelligence.
+        """
+        if not self.tool_executor:
+            for call in task.tool_calls:
+                result.command_results.append({
+                    "tool_call": call,
+                    "status": "recorded",
+                    "note": "Tool executor not connected; call recorded for tracking",
+                })
+            result.output = (
+                f"Tool calls recorded for delegation: {len(task.tool_calls)} calls. "
+                "Connect KimiToolExecutor for live execution."
+            )
+            return
+
+        for call in task.tool_calls:
+            try:
+                tool_result = await self.tool_executor.call_tool(
+                    tool_id=call["tool_id"],
+                    parameters=call.get("parameters", {}),
+                    reasoning=call.get("reasoning", task.original_request),
+                )
+
+                result.command_results.append({
+                    "tool_id": call["tool_id"],
+                    "call_id": tool_result.call_id,
+                    "success": tool_result.success,
+                    "output": tool_result.output,
+                    "error": tool_result.error,
+                    "duration_ms": tool_result.duration_ms,
+                })
+
+                if tool_result.success:
+                    result.commands_executed.append(call["tool_id"])
+                    if tool_result.output:
+                        result.output += f"\n[{call['tool_id']}]: {str(tool_result.output)[:500]}"
+                else:
+                    if not result.error:
+                        result.error = tool_result.error
+
+            except Exception as e:
+                result.command_results.append({
+                    "tool_id": call["tool_id"],
+                    "success": False,
+                    "error": str(e),
+                })
+                result.error = str(e)
+
     async def _execute_autonomous(
         self,
         task: RoutedTask,
@@ -521,12 +599,28 @@ class KimiCommandRouter:
             "set up", "configure and deploy",
         ]
 
+        tool_indicators = [
+            "diagnos", "health check", "heal", "self-heal",
+            "ingest", "knowledge base", "scrape", "crawl",
+            "monitor", "metrics", "telemetry", "kpi",
+            "todo", "task", "plan", "notion",
+            "experiment", "sandbox", "trial",
+            "governance", "policy", "evaluate",
+            "voice", "speech", "transcribe",
+            "retrieve", "query knowledge", "rag",
+            "cicd", "pipeline", "deploy",
+            "learning progress", "dependency", "pattern",
+            "browse codebase", "analyze code",
+            "autonomous action", "queue action",
+        ]
+
         coding_score = sum(1 for ind in coding_indicators if ind in request_lower)
         command_score = sum(1 for ind in command_indicators if ind in request_lower)
         reasoning_score = sum(1 for ind in reasoning_indicators if ind in request_lower)
         hybrid_score = sum(1 for ind in hybrid_indicators if ind in request_lower)
+        tool_score = sum(1 for ind in tool_indicators if ind in request_lower)
 
-        total = coding_score + command_score + reasoning_score + hybrid_score + 1
+        total = coding_score + command_score + reasoning_score + hybrid_score + tool_score + 1
 
         if hybrid_score > 0 and (coding_score > 0 or command_score > 0):
             confidence = min(0.9, (hybrid_score + coding_score + command_score) / total)
@@ -534,6 +628,14 @@ class KimiCommandRouter:
                 RouteDecision.HYBRID,
                 confidence,
                 f"Hybrid task detected (coding={coding_score}, command={command_score}, hybrid={hybrid_score})",
+            )
+
+        if tool_score > coding_score and tool_score > command_score and tool_score > reasoning_score:
+            confidence = min(0.9, tool_score / total)
+            return (
+                RouteDecision.TOOL_EXECUTION,
+                confidence,
+                f"System tool execution detected (score={tool_score})",
             )
 
         if coding_score > command_score and coding_score > reasoning_score:
@@ -646,6 +748,65 @@ class KimiCommandRouter:
 
         return subtasks
 
+    def _extract_tool_calls(
+        self,
+        request: str,
+        context: Optional[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Extract system tool calls from a request."""
+        request_lower = request.lower()
+        calls = []
+
+        tool_mapping = {
+            "health check": "health_check",
+            "diagnos": "run_diagnostic",
+            "self-heal": "trigger_healing",
+            "heal": "trigger_healing",
+            "ingest": "ingest_file",
+            "scrape": "scrape_url",
+            "crawl": "scrape_url",
+            "monitor": "get_system_metrics",
+            "metric": "get_system_metrics",
+            "telemetry": "get_telemetry",
+            "kpi": "get_kpis",
+            "todo": "list_todos",
+            "task": "list_todos",
+            "experiment": "propose_experiment",
+            "sandbox": "propose_experiment",
+            "governance": "check_governance",
+            "policy": "check_governance",
+            "retrieve": "query_knowledge",
+            "query knowledge": "query_knowledge",
+            "rag": "rag_query",
+            "cicd": "trigger_cicd",
+            "pipeline": "trigger_cicd",
+            "learning progress": "get_learning_progress",
+            "dependency": "get_dependency_metrics",
+            "pattern": "extract_patterns",
+            "browse codebase": "browse_codebase",
+            "analyze code": "analyze_code",
+            "study": "trigger_study",
+            "practice": "trigger_practice",
+            "cognitive": "get_cognitive_state",
+        }
+
+        for keyword, tool_id in tool_mapping.items():
+            if keyword in request_lower:
+                calls.append({
+                    "tool_id": tool_id,
+                    "parameters": context or {},
+                    "reasoning": f"User request matched '{keyword}' -> tool '{tool_id}'",
+                })
+
+        if not calls:
+            calls.append({
+                "tool_id": "get_system_metrics",
+                "parameters": {},
+                "reasoning": "Default system tool call",
+            })
+
+        return calls
+
     def _map_task_type_to_interaction(self, task_type: str) -> str:
         """Map task type to InteractionType value."""
         mapping = {
@@ -714,6 +875,7 @@ def get_kimi_command_router(
     execution_bridge=None,
     coding_agent=None,
     pattern_learner=None,
+    tool_executor=None,
 ) -> KimiCommandRouter:
     """Get or create the Kimi command router singleton."""
     global _router_instance
@@ -723,5 +885,6 @@ def get_kimi_command_router(
             execution_bridge=execution_bridge,
             coding_agent=coding_agent,
             pattern_learner=pattern_learner,
+            tool_executor=tool_executor,
         )
     return _router_instance
