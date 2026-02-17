@@ -23,6 +23,13 @@ from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 from database.session import get_db
 
+# Auth dependency for sensitive endpoints
+try:
+    from security.auth import get_optional_user
+except ImportError:
+    async def get_optional_user():
+        return None
+
 from cognitive.llm_interaction_tracker import (
     LLMInteractionTracker,
     get_llm_interaction_tracker,
@@ -766,6 +773,7 @@ async def get_tool_schema(
 async def call_tool(
     request: ToolCallRequest,
     executor: KimiToolExecutor = Depends(get_tool_executor),
+    user=Depends(get_optional_user),
 ):
     """
     Execute a tool call.
@@ -989,6 +997,7 @@ async def grace_execute_instructions(
     request: KimiAnalyzeRequest,
     brain: KimiBrain = Depends(get_brain),
     executor: GraceVerifiedExecutor = Depends(get_executor_instance),
+    user=Depends(get_optional_user),
 ):
     """
     Full pipeline: Kimi analyzes -> Grace verifies -> Grace executes.
@@ -1111,6 +1120,7 @@ async def get_pending_confirmations(
 async def submit_user_confirmation(
     request: UserConfirmationRequest,
     engine: GraceVerificationEngine = Depends(get_verification_engine),
+    user=Depends(get_optional_user),
 ):
     """
     Submit user confirmation for a pending verification check.

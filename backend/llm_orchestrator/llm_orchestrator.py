@@ -188,6 +188,47 @@ class LLMOrchestrator:
 
         logger.info(f"[LLM ORCHESTRATOR] Starting task {task_id}: {task_type.value}")
 
+        # Governance check - verify constitutional rules allow this task
+        try:
+            from security.governance import get_governance_engine, GovernanceContext
+            governance = get_governance_engine()
+            gov_context = GovernanceContext(
+                context_id=task_id,
+                action_type="execute_safe",
+                actor_id=user_id or "system",
+                actor_type="ai",
+                target_resource=f"llm_task:{task_type.value}",
+                impact_scope="component",
+                is_reversible=True,
+                metadata={"prompt_length": len(prompt), "task_type": task_type.value},
+            )
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    gov_decision = None  # Can't await in sync context, skip
+                else:
+                    gov_decision = loop.run_until_complete(governance.evaluate(gov_context))
+            except RuntimeError:
+                gov_decision = None
+
+            if gov_decision and not gov_decision.allowed:
+                violations = [v.description for v in gov_decision.violations[:3]]
+                logger.warning(f"[LLM ORCHESTRATOR] Task {task_id} BLOCKED by governance: {violations}")
+                audit_trail.append({"step": "governance", "blocked": True, "violations": violations})
+                return LLMTaskResult(
+                    task_id=task_id, prompt=prompt, success=False,
+                    content=f"Task blocked by governance: {'; '.join(violations)}",
+                    verification_result=None, cognitive_decision_id=None,
+                    genesis_key_id=None, trust_score=0.0, confidence_score=0.0,
+                    model_used="none", duration_ms=0, learning_example_id=None,
+                    audit_trail=audit_trail, timestamp=start_time,
+                )
+            else:
+                audit_trail.append({"step": "governance", "allowed": True})
+        except Exception as e:
+            audit_trail.append({"step": "governance", "error": str(e), "skipped": True})
+
         # Create task request
         task_request = LLMTaskRequest(
             task_id=task_id,

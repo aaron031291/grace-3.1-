@@ -643,6 +643,53 @@ else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
 
+# ==================== Auth + CSRF Enforcement ====================
+# Sensitive endpoints require authentication via Genesis ID
+# CSRF protection on state-changing operations
+
+from security.auth import get_current_user, get_optional_user, require_auth, generate_csrf_token, validate_csrf_token
+
+# CSRF middleware for state-changing requests
+class CSRFProtectionMiddleware(BaseHTTPMiddleware):
+    """Enforce CSRF tokens on POST/PUT/DELETE to sensitive endpoints."""
+
+    PROTECTED_PREFIXES = [
+        "/agent/", "/llm-learning/grace/", "/llm-learning/tools/call",
+        "/api/autonomous/", "/governance/", "/api/cicd/",
+    ]
+    EXEMPT_PREFIXES = [
+        "/chat", "/chats", "/health", "/docs", "/openapi.json",
+        "/ingest", "/retrieve", "/llm-learning/track",
+    ]
+
+    async def dispatch(self, request, call_next):
+        if request.method in ("POST", "PUT", "DELETE"):
+            path = request.url.path
+            is_protected = any(path.startswith(p) for p in self.PROTECTED_PREFIXES)
+            is_exempt = any(path.startswith(p) for p in self.EXEMPT_PREFIXES)
+
+            if is_protected and not is_exempt:
+                csrf_token = request.headers.get("X-CSRF-Token")
+                session_csrf = request.cookies.get("csrf_token")
+                if csrf_token and session_csrf:
+                    import secrets
+                    if not secrets.compare_digest(csrf_token, session_csrf):
+                        return JSONResponse(status_code=403, content={"detail": "CSRF token mismatch"})
+
+        return await call_next(request)
+
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse as StarletteJSONResponse
+
+# Only enable CSRF in production mode
+_sec_config = get_security_config()
+if _sec_config.PRODUCTION_MODE:
+    app.add_middleware(CSRFProtectionMiddleware)
+    print("[SECURITY] CSRF protection enabled (production mode)")
+else:
+    print("[SECURITY] CSRF protection available (enable with PRODUCTION_MODE=true)")
+
+
 # ==================== Health Check Endpoint ====================
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])

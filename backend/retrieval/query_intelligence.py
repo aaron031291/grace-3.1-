@@ -286,9 +286,20 @@ class MultiTierQueryHandler:
             # Retrieve from VectorDB
             chunks = self.retriever.retrieve(
                 query=query,
-                limit=5,
+                limit=10,  # Retrieve more candidates for reranking
                 include_metadata=True
             )
+
+            # Rerank results using cross-encoder for better relevance
+            try:
+                from retrieval.reranker import get_reranker
+                reranker = get_reranker()
+                if reranker and chunks:
+                    chunks = reranker.rerank(query, chunks, top_k=5)
+                    logger.debug(f"[TIER1] Reranked {len(chunks)} chunks")
+            except Exception as _rr_err:
+                logger.debug(f"[TIER1] Reranker not available: {_rr_err}")
+                chunks = chunks[:5]  # Fallback: take top 5 by raw similarity
             
             # Assess quality
             quality_metrics = self._assess_vectordb_quality(chunks, query)
