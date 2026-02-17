@@ -89,6 +89,7 @@ from api.self_mirror_api import router as self_mirror_router  # Self-Mirror tele
 from api.timesense_api import router as timesense_router  # TimeSense - temporal reasoning, predictions, OODA timing
 from api.magma_api import router as magma_router  # Magma Memory - graph memory, causal inference, intent routing
 from api.unified_memory_api import router as unified_memory_router  # Unified Memory - all 6 memory types in one system
+from api.llm_learning_api import router as llm_learning_router  # LLM Learning & Tracking - learn from Kimi, reduce LLM dependency
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -625,6 +626,7 @@ app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, i
 app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
+app.include_router(llm_learning_router)  # LLM Learning & Tracking - learn from Kimi, track reasoning, reduce LLM dependency
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
 app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time event bridge to frontend
