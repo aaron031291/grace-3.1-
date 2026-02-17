@@ -29,6 +29,8 @@ from .perpetual_learning_loop import PerpetualLearningLoop, LoopState, TrustChai
 from .socratic_interrogator import SocraticInterrogator, InterrogationReport, QuestionCategory
 from .deep_reasoning_integration import DeepReasoningIntegration, ReasoningResult, ReasoningTaskType
 from .self_evolution_coordinator import SelfEvolutionCoordinator, EvolutionCycleResult, PillarRole
+from .secrets_vault import SecretsVault, get_vault
+from .kimi_orchestrator import KimiOrchestrator, KimiResponse, KimiMode
 
 __all__ = [
     "WhitelistBox",
@@ -70,4 +72,9 @@ __all__ = [
     "SelfEvolutionCoordinator",
     "EvolutionCycleResult",
     "PillarRole",
+    "SecretsVault",
+    "get_vault",
+    "KimiOrchestrator",
+    "KimiResponse",
+    "KimiMode",
 ]
