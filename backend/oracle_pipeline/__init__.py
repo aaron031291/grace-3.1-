@@ -34,6 +34,7 @@ from .kimi_orchestrator import KimiOrchestrator, KimiResponse, KimiMode
 from .recursion_governor import RecursionGovernor, ActionContract, ExecutionTier, GovernorDecision
 from .content_realization_engine import ContentRealizationEngine, RealizationMode, RealizedContent
 from .unified_proactive_learning import UnifiedProactiveLearning, LearningTarget as UnifiedLearningTarget
+from .world_model import WorldModel, WorldState
 
 __all__ = [
     "WhitelistBox",
@@ -89,4 +90,6 @@ __all__ = [
     "RealizedContent",
     "UnifiedProactiveLearning",
     "UnifiedLearningTarget",
+    "WorldModel",
+    "WorldState",
 ]
