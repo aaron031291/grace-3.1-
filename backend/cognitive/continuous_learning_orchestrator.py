@@ -49,12 +49,17 @@ class ContinuousLearningOrchestrator:
         self.mirror_system = None
         self.learning_orchestrator = None
         self.ingestion_service = None
+        self.pattern_learner = None
+        self.dependency_reducer = None
 
         # State tracking
         self.last_ingestion_check = None
         self.last_learning_cycle = None
         self.last_mirror_observation = None
         self.last_experiment_check = None
+        self.last_pattern_extraction = None
+        self.last_dependency_calc = None
+        self.last_chat_mining = None
 
         # Continuous operation config
         self.config = {
@@ -62,6 +67,9 @@ class ContinuousLearningOrchestrator:
             "learning_cycle_interval_seconds": 300,  # Run learning every 5 min
             "mirror_observation_interval_seconds": 600,  # Mirror observes every 10 min
             "experiment_check_interval_seconds": 120,  # Check experiments every 2 min
+            "pattern_extraction_interval_seconds": 900,  # Extract patterns every 15 min
+            "dependency_calc_interval_seconds": 3600,  # Dependency metrics every hour
+            "chat_mining_interval_seconds": 7200,  # Mine chat history every 2 hours
             "auto_propose_experiments": True,  # Let Grace propose experiments
             "auto_start_trials": True,  # Auto-start trials if trust is high
             "min_trust_for_auto_trial": 0.65,  # Minimum trust to auto-start trial
@@ -150,6 +158,26 @@ class ContinuousLearningOrchestrator:
             logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")
             self.ingestion_service = None
 
+        # Get LLM Pattern Learner
+        try:
+            from cognitive.llm_pattern_learner import get_llm_pattern_learner
+            from database.session import SessionLocal
+            _pl_session = SessionLocal()
+            self.pattern_learner = get_llm_pattern_learner(_pl_session)
+            logger.info("[CONTINUOUS_LEARNING] [OK] Pattern Learner initialized")
+        except Exception as e:
+            logger.debug(f"[CONTINUOUS_LEARNING] Pattern Learner unavailable: {e}")
+
+        # Get LLM Dependency Reducer
+        try:
+            from cognitive.llm_dependency_reducer import get_llm_dependency_reducer
+            from database.session import SessionLocal
+            _dr_session = SessionLocal()
+            self.dependency_reducer = get_llm_dependency_reducer(_dr_session)
+            logger.info("[CONTINUOUS_LEARNING] [OK] Dependency Reducer initialized")
+        except Exception as e:
+            logger.debug(f"[CONTINUOUS_LEARNING] Dependency Reducer unavailable: {e}")
+
         logger.info("[CONTINUOUS_LEARNING] Component initialization complete")
 
     def start(self):
@@ -220,7 +248,19 @@ class ContinuousLearningOrchestrator:
                 if self._should_check_experiments():
                     self._check_experiments()
 
-                # 5. Update metrics
+                # 5. Extract patterns from LLM interactions (THE REFINERY)
+                if self._should_extract_patterns():
+                    self._run_pattern_extraction()
+
+                # 6. Calculate dependency reduction metrics
+                if self._should_calc_dependency():
+                    self._run_dependency_calculation()
+
+                # 7. Mine historical chat data for training
+                if self._should_mine_chats():
+                    self._run_chat_mining()
+
+                # 8. Update metrics
                 self._update_metrics()
 
                 # 6. Log periodic status
@@ -267,6 +307,115 @@ class ContinuousLearningOrchestrator:
 
         elapsed = (datetime.now() - self.last_experiment_check).total_seconds()
         return elapsed >= self.config["experiment_check_interval_seconds"]
+
+    def _should_extract_patterns(self) -> bool:
+        """Check if it's time to extract patterns from LLM interactions"""
+        if not self.pattern_learner:
+            return False
+        if not self.last_pattern_extraction:
+            return True
+        elapsed = (datetime.now() - self.last_pattern_extraction).total_seconds()
+        return elapsed >= self.config["pattern_extraction_interval_seconds"]
+
+    def _should_calc_dependency(self) -> bool:
+        """Check if it's time to calculate dependency metrics"""
+        if not self.dependency_reducer:
+            return False
+        if not self.last_dependency_calc:
+            return True
+        elapsed = (datetime.now() - self.last_dependency_calc).total_seconds()
+        return elapsed >= self.config["dependency_calc_interval_seconds"]
+
+    def _should_mine_chats(self) -> bool:
+        """Check if it's time to mine historical chats"""
+        if not self.last_chat_mining:
+            return True
+        elapsed = (datetime.now() - self.last_chat_mining).total_seconds()
+        return elapsed >= self.config["chat_mining_interval_seconds"]
+
+    def _run_pattern_extraction(self):
+        """Extract patterns from accumulated LLM interactions."""
+        try:
+            self.last_pattern_extraction = datetime.now()
+
+            patterns = self.pattern_learner.extract_patterns(time_window_hours=24)
+            progress = self.pattern_learner.get_learning_progress()
+
+            self.stats["patterns_extracted"] = self.stats.get("patterns_extracted", 0) + len(patterns)
+
+            logger.info(
+                f"[CONTINUOUS_LEARNING] Pattern extraction: {len(patterns)} new patterns, "
+                f"stage={progress.get('learning_stage', 'unknown')}, "
+                f"autonomy={progress.get('autonomy_readiness', 0):.1%}"
+            )
+
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "pattern_extraction",
+                f"Extracted {len(patterns)} patterns, autonomy={progress.get('autonomy_readiness', 0):.1%}",
+                data={"patterns_count": len(patterns), "progress": progress},
+            )
+
+        except Exception as e:
+            logger.error(f"[CONTINUOUS_LEARNING] Pattern extraction error: {e}")
+
+    def _run_dependency_calculation(self):
+        """Calculate LLM dependency reduction metrics."""
+        try:
+            self.last_dependency_calc = datetime.now()
+
+            metrics = self.dependency_reducer.calculate_dependency_metrics(period_hours=24)
+
+            logger.info(
+                f"[CONTINUOUS_LEARNING] Dependency metrics: "
+                f"ratio={metrics.get('llm_dependency_ratio', 1.0):.1%}, "
+                f"autonomy={metrics.get('autonomy_ratio', 0):.1%}, "
+                f"tasks={metrics.get('total_tasks', 0)}"
+            )
+
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "dependency_metrics",
+                f"Dependency={metrics.get('llm_dependency_ratio', 1.0):.1%}, Autonomy={metrics.get('autonomy_ratio', 0):.1%}",
+                data=metrics,
+            )
+
+        except Exception as e:
+            logger.error(f"[CONTINUOUS_LEARNING] Dependency calculation error: {e}")
+
+    def _run_chat_mining(self):
+        """Mine historical chat data for learning patterns."""
+        try:
+            self.last_chat_mining = datetime.now()
+
+            from database.session import SessionLocal
+            from models.database_models import Chat
+            from cognitive.learning_hook import track_learning_event
+
+            session = SessionLocal()
+            chats = session.query(Chat).order_by(Chat.created_at.desc()).limit(200).all()
+
+            mined = 0
+            for chat in chats:
+                user_msg = getattr(chat, 'user_message', None) or ''
+                assistant_msg = getattr(chat, 'assistant_message', None) or getattr(chat, 'response', None) or ''
+
+                if user_msg and assistant_msg and len(user_msg) > 5:
+                    track_learning_event(
+                        "chat_mining",
+                        user_msg[:200],
+                        interaction_type="question_answer",
+                        data={"query": user_msg[:500], "response": assistant_msg[:500], "mined": True},
+                    )
+                    mined += 1
+
+            session.close()
+
+            self.stats["chats_mined"] = self.stats.get("chats_mined", 0) + mined
+            logger.info(f"[CONTINUOUS_LEARNING] Chat mining: {mined} interactions mined from {len(chats)} chats")
+
+        except Exception as e:
+            logger.error(f"[CONTINUOUS_LEARNING] Chat mining error: {e}")
 
     def _run_ingestion_check(self):
         """Check for and ingest new data"""
