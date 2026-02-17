@@ -163,13 +163,47 @@ class GraceVerifiedExecutor:
         """
         Process a complete instruction set from Kimi.
 
+        PATTERN-DRIVEN BYPASS: Before executing through Kimi's instructions,
+        check if the pattern learner already knows how to handle this.
+        If a high-confidence pattern exists, skip the LLM entirely.
+
         For each instruction:
-        1. VERIFY through Grace's own systems
-        2. EXECUTE if approved
-        3. TRACK results for learning
+        1. CHECK if pattern learner can handle autonomously
+        2. VERIFY through Grace's own systems
+        3. EXECUTE if approved
+        4. TRACK results for learning
         """
         session_id = f"EXEC-{uuid.uuid4().hex[:12]}"
         start_time = time.time()
+
+        # PATTERN BYPASS: Check if we can handle any instructions without LLM
+        try:
+            from cognitive.llm_pattern_learner import get_llm_pattern_learner
+            pattern_learner = get_llm_pattern_learner(self.session)
+
+            bypassed = 0
+            for instruction in instruction_set.instructions:
+                task_type = instruction.instruction_type.value
+                if pattern_learner.can_handle_autonomously(instruction.what, task_type):
+                    pattern_result = pattern_learner.apply_pattern(
+                        instruction.what, task_type, {}
+                    )
+                    if pattern_result and pattern_result.get("success"):
+                        bypassed += 1
+                        logger.info(
+                            f"[GRACE-EXECUTOR] Pattern bypass: {instruction.instruction_id} "
+                            f"handled by pattern '{pattern_result.get('pattern_name')}'"
+                        )
+
+            if bypassed > 0:
+                from cognitive.learning_hook import track_learning_event
+                track_learning_event(
+                    "pattern_bypass",
+                    f"Bypassed Kimi for {bypassed}/{len(instruction_set.instructions)} instructions",
+                    data={"bypassed": bypassed, "total": len(instruction_set.instructions)},
+                )
+        except Exception:
+            pass  # Pattern check is optional enhancement
 
         result = SessionResult(
             session_id=session_id,

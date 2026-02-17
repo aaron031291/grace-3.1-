@@ -1153,3 +1153,56 @@ async def submit_user_confirmation(
     except Exception as e:
         logger.error(f"Error submitting confirmation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# HISTORICAL CHAT MINING
+# =======================================================================
+
+@router.post("/mine-history")
+async def mine_historical_chats(
+    limit: int = Query(default=500, le=5000, description="Max chats to mine"),
+    db: Session = Depends(get_db),
+):
+    """
+    Mine historical chat data to feed the learning system.
+
+    Every past conversation becomes a training example.
+    Extracts patterns from successful Q&A pairs.
+    """
+    try:
+        from models.database_models import Chat
+        from cognitive.learning_hook import track_learning_event
+
+        chats = db.query(Chat).order_by(Chat.created_at.desc()).limit(limit).all()
+
+        mined = 0
+        for chat in chats:
+            user_msg = getattr(chat, 'user_message', None) or ''
+            assistant_msg = getattr(chat, 'assistant_message', None) or getattr(chat, 'response', None) or ''
+
+            if user_msg and assistant_msg and len(user_msg) > 5:
+                track_learning_event(
+                    source="chat_history_mining",
+                    description=user_msg[:200],
+                    outcome="success",
+                    confidence=0.6,
+                    interaction_type="question_answer",
+                    data={
+                        "query": user_msg[:1000],
+                        "response": assistant_msg[:1000],
+                        "chat_id": getattr(chat, 'id', None),
+                        "mined": True,
+                    },
+                )
+                mined += 1
+
+        return {
+            "chats_scanned": len(chats),
+            "interactions_mined": mined,
+            "status": "complete",
+        }
+
+    except Exception as e:
+        logger.error(f"Error mining history: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

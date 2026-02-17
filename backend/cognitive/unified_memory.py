@@ -49,6 +49,13 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
+def _track_memory(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("unified_memory", desc, **kwargs)
+    except Exception:
+        pass
+
 
 # =============================================================================
 # MEMORY TYPES

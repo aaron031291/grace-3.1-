@@ -32,6 +32,13 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+def _track_scraping(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("web_scraping", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class WebScrapingService:
     """

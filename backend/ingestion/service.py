@@ -34,6 +34,13 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+def _track_ingestion(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("ingestion", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class TextChunker:
     """Handles text chunking with semantic and structure-aware strategies."""

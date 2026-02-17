@@ -25,6 +25,13 @@ from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
+def _track_voice(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("voice_api", desc, **kwargs)
+    except Exception:
+        pass
+
 router = APIRouter(prefix="/voice", tags=["voice"])
 
 

@@ -56,6 +56,14 @@ import threading
 
 logger = logging.getLogger(__name__)
 
+# Learning hook for tracking Magma operations
+def _track_magma(op, desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event(f"magma_{op}", desc, **kwargs)
+    except Exception:
+        pass
+
 
 @dataclass
 class GraceMagmaConfig:

@@ -49,6 +49,13 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
+def _track_timesense(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("timesense", desc, **kwargs)
+    except Exception:
+        pass
+
 
 # =============================================================================
 # DATA SCALE AWARENESS - Grace understands what KB, MB, GB, TB mean

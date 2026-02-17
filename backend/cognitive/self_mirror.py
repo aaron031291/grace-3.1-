@@ -38,6 +38,13 @@ import math
 
 logger = logging.getLogger(__name__)
 
+def _track_mirror(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("self_mirror", desc, **kwargs)
+    except Exception:
+        pass
+
 
 # =============================================================================
 # PHASE 1: TELEMETRY VECTOR PROTOCOL

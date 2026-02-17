@@ -22,6 +22,13 @@ from database.session import get_session
 
 logger = logging.getLogger(__name__)
 
+def _track_version(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("version_tracker", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class FileVersionTracker:
     """
