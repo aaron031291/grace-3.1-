@@ -1750,7 +1750,20 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                         sources = []
                         logger.info(f"[TIER-2] Consensus from {len(l1_result.outputs)} models, agreement={l1_result.agreement_score:.2f}")
 
-                        # Store user + assistant messages
+                        # Governance + HIA check on T2 output
+                        try:
+                            gov = chat_intel.check_governance(response_text, has_sources=False)
+                            if not gov.get("passed"):
+                                logger.warning(f"[TIER-2] Governance issue: {gov.get('violations')}")
+                        except Exception:
+                            pass
+
+                        # Episodic memory for T2
+                        try:
+                            chat_intel.record_episode(user_query, response_text, [], "consensus", l1_result.agreement_score, generation_time, chat_id)
+                        except Exception:
+                            pass
+
                         assistant_message = history_repo.add_message(
                             chat_id=chat_id, role="assistant",
                             content=response_text, completion_time=generation_time
@@ -1774,6 +1787,18 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                         f"[TIER-3] 3-layer complete: confidence={verified.confidence:.1%}, "
                         f"grounded={verified.training_data_grounded}"
                     )
+
+                    # Governance + HIA on T3 output
+                    try:
+                        gov = chat_intel.check_governance(response_text, has_sources=verified.training_data_grounded)
+                    except Exception:
+                        pass
+
+                    # Episodic memory for T3
+                    try:
+                        chat_intel.record_episode(user_query, response_text, [], "deep_reasoning", verified.confidence, generation_time, chat_id)
+                    except Exception:
+                        pass
 
                     assistant_message = history_repo.add_message(
                         chat_id=chat_id, role="assistant",
@@ -1866,7 +1891,33 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             genesis_msg = genesis_route_result.get("system_message", "")
             if genesis_msg:
                 response_text = f"**[Genesis#]** {genesis_msg}\n\n{response_text}"
-        
+
+        # Phase 4c: Magma Memory context enrichment
+        try:
+            from cognitive.magma.grace_magma_system import get_grace_magma
+            magma = get_grace_magma()
+            if magma:
+                magma.ingest(f"Q: {request.content[:200]} A: {response_text[:200]}")
+        except Exception:
+            pass
+
+        # Phase 4d: User preference observation + personalization
+        try:
+            from cognitive.user_preference_model import UserPreferenceEngine
+            from database.session import SessionLocal
+            _up_session = SessionLocal()
+            if _up_session:
+                try:
+                    genesis_id = request.headers.get("X-Genesis-ID", "") if hasattr(request, 'headers') else ""
+                    if not genesis_id:
+                        genesis_id = str(chat_id)
+                    up_engine = UserPreferenceEngine(_up_session)
+                    up_engine.observe_interaction(genesis_id, user_query, len(response_text))
+                finally:
+                    _up_session.close()
+        except Exception:
+            pass
+
         # Verify response is not a rejection/failure message from the model
         response_text = response_text.strip()
         

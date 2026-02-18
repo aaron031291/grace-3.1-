@@ -459,6 +459,22 @@ class ThreeLayerReasoning:
         except Exception:
             pass
 
+        # Contradiction detection between L1/L2 outputs
+        try:
+            from confidence_scorer.contradiction_detector import SemanticContradictionDetector
+            detector = SemanticContradictionDetector()
+            if len(l1.outputs) >= 2:
+                texts = [o.reasoning[:500] for o in l1.outputs[:3]]
+                for i in range(len(texts)):
+                    for j in range(i+1, len(texts)):
+                        contradiction = detector.detect_contradiction(texts[i], texts[j])
+                        if contradiction and contradiction.get("is_contradiction"):
+                            result.reasoning_trace["contradictions_detected"] = True
+                            logger.info(f"[3-LAYER] Contradiction detected between L1 models {i+1} and {j+1}")
+                            break
+        except Exception:
+            pass
+
         return result
 
     # =========================================================================
