@@ -68,7 +68,7 @@ class SecurityConfig:
     X_FRAME_OPTIONS: str = "DENY"
     X_XSS_PROTECTION: str = "1; mode=block"
     REFERRER_POLICY: str = "strict-origin-when-cross-origin"
-    PERMISSIONS_POLICY: str = "geolocation=(), microphone=(), camera=()"
+    PERMISSIONS_POLICY: str = "geolocation=(), microphone=(self), camera=()"
 
     # HSTS (HTTP Strict Transport Security)
     HSTS_ENABLED: bool = True

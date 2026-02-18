@@ -568,6 +568,14 @@ if not (settings and settings.DISABLE_GENESIS_TRACKING):
 else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
+# Add Governance Enforcement middleware for AI output safety
+try:
+    from security.governance_middleware import GovernanceEnforcementMiddleware
+    app.add_middleware(GovernanceEnforcementMiddleware, enable_enforcement=True)
+    print("[GOVERNANCE] Governance enforcement middleware active")
+except Exception as e:
+    print(f"[WARN] Governance middleware not loaded: {e}")
+
 
 # ==================== Health Check Endpoint ====================
 

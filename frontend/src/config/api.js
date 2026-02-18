@@ -81,6 +81,18 @@ export const API_ENDPOINTS = {
 
   // Notion
   notion: `${API_BASE_URL}/notion`,
+
+  // Unified Learning Pipeline
+  pipeline: `${API_BASE_URL}/pipeline`,
+  pipelineStatus: `${API_BASE_URL}/pipeline/status`,
+  pipelineGraph: `${API_BASE_URL}/pipeline/graph`,
+
+  // Streaming
+  streamChat: `${API_BASE_URL}/stream/chat`,
+
+  // WebSocket
+  ws: `${API_BASE_URL.replace('http', 'ws')}/ws`,
+  voiceWs: `${API_BASE_URL.replace('http', 'ws')}/voice/ws/continuous`,
 };
 
 // Helper function to build URLs with query params
