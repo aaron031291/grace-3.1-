@@ -459,6 +459,18 @@ class ThreeLayerReasoning:
         except Exception:
             pass
 
+        # Feed reasoning result as seed for KNN discovery
+        try:
+            from cognitive.unified_learning_pipeline import get_unified_pipeline
+            pipeline = get_unified_pipeline()
+            if pipeline.running:
+                pipeline.add_seed(
+                    topic=query[:100],
+                    text=result.answer[:300]
+                )
+        except Exception:
+            pass
+
         # Contradiction detection between L1/L2 outputs
         try:
             from confidence_scorer.contradiction_detector import SemanticContradictionDetector

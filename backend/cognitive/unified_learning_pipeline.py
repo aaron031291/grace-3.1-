@@ -410,6 +410,55 @@ class UnifiedLearningPipeline:
                     f"+{result.new_topics_discovered} topics, "
                     f"+{result.neighbors_found} connections"
                 )
+
+                # RECURSIVE DISCOVERY: Feed expansion results to Oracle
+                # Oracle analyzes, then triggers NEW KNN expansion cycles
+                try:
+                    from genesis.unified_intelligence import UnifiedIntelligenceEngine
+                    from database.session import SessionLocal
+                    _ui_s = SessionLocal()
+                    if _ui_s:
+                        try:
+                            oracle = UnifiedIntelligenceEngine(_ui_s)
+                            oracle.record(
+                                source_system="neighbor_expansion",
+                                signal_type="knn_result",
+                                signal_name=f"expansion_{topic[:80]}",
+                                value_numeric=result.new_topics_discovered,
+                                value_json={
+                                    "seed": topic[:100],
+                                    "neighbors": result.neighbors_found,
+                                    "new_topics": result.new_topics_discovered,
+                                    "depth": result.expansion_depth,
+                                    "trust_scores": {k: v for k, v in list(result.trust_scores.items())[:10]},
+                                },
+                                trust_score=0.8,
+                                ttl_seconds=1800,
+                            )
+
+                            # Oracle-driven recursive trigger:
+                            # High-trust discovered topics become NEW seeds
+                            # This creates: KNN -> Oracle -> NEW KNN -> Oracle -> ...
+                            high_trust_topics = [
+                                t for t, score in result.trust_scores.items()
+                                if score >= 0.6 and t not in self._processed_seeds
+                            ]
+                            for new_topic in high_trust_topics[:3]:
+                                self._pending_seeds.append({
+                                    "topic": new_topic,
+                                    "text": f"Discovered via neighbor expansion from '{topic[:60]}'"
+                                })
+
+                            if high_trust_topics:
+                                logger.info(
+                                    f"[UNIFIED-PIPELINE] Oracle recursive: "
+                                    f"{len(high_trust_topics)} high-trust topics queued for next KNN cycle"
+                                )
+                        finally:
+                            _ui_s.close()
+                except Exception:
+                    pass
+
             except Exception as e:
                 logger.warning(f"[UNIFIED-PIPELINE] Expansion failed for '{topic[:40]}': {e}")
 
