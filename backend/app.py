@@ -1956,6 +1956,22 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 )
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Pipeline seed skipped: {e}")
+
+        # Phase 7: Kimi Knowledge Feedback — embed high-quality answers into vector DB
+        try:
+            from cognitive.kimi_knowledge_feedback import get_kimi_feedback
+            kimi_fb = get_kimi_feedback()
+            confidence = tier_result.confidence.overall_score if hasattr(tier_result, 'confidence') and hasattr(tier_result.confidence, 'overall_score') else 0.5
+            kimi_fb.feed_answer(
+                question=request.content,
+                answer=response_text,
+                confidence=confidence,
+                tier_used=tier_result.tier.value if hasattr(tier_result, 'tier') else "unknown",
+                sources_count=len(sources) if sources else 0,
+                chat_id=chat_id,
+            )
+        except Exception as e:
+            logger.debug(f"[KIMI-FEEDBACK] Skipped: {e}")
         
         # Update chat's last_message_at
         chat_repo.update(chat_id, last_message_at=datetime.utcnow())
