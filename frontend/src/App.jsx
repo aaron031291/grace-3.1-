@@ -27,6 +27,7 @@ import WebScraper from "./components/WebScraper";
 import GraceTodosTab from "./components/GraceTodosTab";
 import GracePlanningTab from "./components/GracePlanningTab";
 import KimiGraceChat from "./components/KimiGraceChat";
+import SystemDashboard from "./components/SystemDashboard";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -412,6 +413,19 @@ function App() {
               Planning
             </button>
             <button
+              className={`tab-button ${activeTab === "system-dashboard" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("system-dashboard")}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+              </svg>
+              System
+            </button>
+            <button
               className={`tab-button ${activeTab === "genesis" ? "active" : ""
                 }`}
               onClick={() => setActiveTab("genesis")}
@@ -609,6 +623,7 @@ function App() {
           {activeTab === "webscraper" && <WebScraper />}
           {activeTab === "grace-todos" && <GraceTodosTab />}
           {activeTab === "grace-planning" && <GracePlanningTab />}
+          {activeTab === "system-dashboard" && <SystemDashboard />}
         </main>
       </div>
 
