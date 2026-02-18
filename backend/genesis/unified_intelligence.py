@@ -435,6 +435,24 @@ class UnifiedIntelligenceEngine:
         except Exception as e:
             logger.debug(f"[UNIFIED-INTEL] 3-layer reasoning collection failed: {e}")
 
+    def collect_from_author_discovery(self):
+        """Pull intelligence from author discovery engine."""
+        try:
+            from cognitive.author_discovery_engine import get_author_discovery_engine
+            engine = get_author_discovery_engine()
+            report = engine.get_report()
+            self.record(
+                source_system="author_discovery",
+                signal_type="acquisition_report",
+                signal_name="missing_works_by_trust_authors",
+                value_numeric=report.get("total_missing_works", 0),
+                value_json=report,
+                trust_score=0.9,
+                ttl_seconds=3600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Author discovery collection failed: {e}")
+
     def collect_from_hia(self):
         """Pull intelligence from HIA (Honesty, Integrity, Accountability) framework."""
         try:
@@ -563,6 +581,7 @@ class UnifiedIntelligenceEngine:
         self.collect_from_closed_loop()
         self.collect_from_three_layer_reasoning()
 
+        self.collect_from_author_discovery()
         self.collect_from_hia()
         self.collect_from_timesense_governance()
         self.collect_from_training_sources()
