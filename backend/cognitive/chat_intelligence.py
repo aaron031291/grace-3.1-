@@ -184,9 +184,9 @@ class ChatIntelligence:
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Episode recording failed: {e}")
 
-    def check_governance(self, response_text: str) -> Dict[str, Any]:
+    def check_governance(self, response_text: str, has_sources: bool = False) -> Dict[str, Any]:
         """
-        Check response against governance rules.
+        Check response against governance rules + HIA (Honesty, Integrity, Accountability).
 
         Returns governance check result with any violations.
         """
@@ -194,7 +194,8 @@ class ChatIntelligence:
             "passed": True,
             "violations": [],
             "warnings": [],
-            "checks_performed": []
+            "checks_performed": [],
+            "hia_score": None
         }
 
         try:
@@ -212,6 +213,34 @@ class ChatIntelligence:
                     result["violations"].append(check_result)
                 elif check_result.get("warning"):
                     result["warnings"].append(check_result)
+
+            # HIA Verification — Honesty, Integrity, Accountability
+            try:
+                from security.honesty_integrity_accountability import get_hia_framework
+                hia = get_hia_framework()
+                hia_result = hia.verify_llm_output(response_text, has_sources=has_sources)
+                result["checks_performed"].append("hia_honesty_check")
+                result["hia_score"] = {
+                    "honesty": hia_result.honesty_score,
+                    "integrity": hia_result.integrity_score,
+                    "accountability": hia_result.accountability_score,
+                    "overall": hia_result.overall_score,
+                }
+                if not hia_result.passed:
+                    result["passed"] = False
+                    for v in hia_result.violations:
+                        result["violations"].append({
+                            "rule": f"HIA_{v.value.value.upper()}",
+                            "detail": v.description,
+                            "severity": v.severity.value,
+                        })
+                if hia_result.corrections_applied:
+                    result["warnings"].extend([
+                        {"rule": "HIA_CORRECTION", "detail": c}
+                        for c in hia_result.corrections_applied
+                    ])
+            except Exception as e:
+                logger.debug(f"[CHAT-INTEL] HIA check skipped: {e}")
 
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Governance check error: {e}")

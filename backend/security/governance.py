@@ -52,6 +52,9 @@ class ConstitutionalRule(Enum):
     SAFETY_FIRST = "safety_first"
     TRANSPARENCY_REQUIRED = "transparency_required"
     REVERSIBILITY_PREFERRED = "reversibility_preferred"
+    HONESTY = "honesty"
+    INTEGRITY = "integrity"
+    ACCOUNTABILITY = "accountability"
 
 
 @dataclass
@@ -112,6 +115,24 @@ CONSTITUTIONAL_RULES: Dict[ConstitutionalRule, ConstitutionalRuleMeta] = {
         description="Reversible actions are preferred over irreversible ones.",
         severity=7,
         enforcement_mode="soft"
+    ),
+    ConstitutionalRule.HONESTY: ConstitutionalRuleMeta(
+        rule=ConstitutionalRule.HONESTY,
+        description="All outputs must be truthful. No fabrication, no inflated confidence, no made-up sources. If uncertain, say so.",
+        severity=10,
+        enforcement_mode="hard"
+    ),
+    ConstitutionalRule.INTEGRITY: ConstitutionalRuleMeta(
+        rule=ConstitutionalRule.INTEGRITY,
+        description="Internal data must be authentic. KPIs, trust scores, and self-reports must match reality. No gaming metrics.",
+        severity=10,
+        enforcement_mode="hard"
+    ),
+    ConstitutionalRule.ACCOUNTABILITY: ConstitutionalRuleMeta(
+        rule=ConstitutionalRule.ACCOUNTABILITY,
+        description="Every action must have an audit trail. Every failure must be recorded. Nothing is hidden.",
+        severity=10,
+        enforcement_mode="hard"
     ),
 }
 
