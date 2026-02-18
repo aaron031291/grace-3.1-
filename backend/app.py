@@ -393,6 +393,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Closed-Loop Ecosystem not available: {e}")
 
+    # ==================== TimeSense Governance ====================
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        ts_gov = get_timesense_governance()
+        print(f"[OK] TimeSense Governance active - {len(ts_gov.slas)} SLAs across 12 components")
+    except Exception as e:
+        print(f"[WARN] TimeSense Governance not available: {e}")
+
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
