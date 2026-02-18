@@ -1727,52 +1727,101 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Oracle routing skipped: {e}")
 
-        # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: Model Knowledge → Internet Search → Context Request
+        # ==================== TIERED REASONING EXECUTION ====================
+        # reasoning_tier from the router determines HOW we process this query
+        # Tier 0: handled by greeting detector above
+        # Tier 2: parallel consensus (Layer 1 only)
+        # Tier 3: full 3-layer reasoning (L1 + L2 + L3)
+        # Tier 1: standard multi-tier (default path below)
+
+        if reasoning_tier >= 2:
+            try:
+                from llm_orchestrator.three_layer_reasoning import get_three_layer_reasoning
+                deep_pipeline = get_three_layer_reasoning()
+                start_time = time.time()
+
+                if reasoning_tier == 2:
+                    # Tier 2: Layer 1 only (parallel consensus)
+                    l1_result = deep_pipeline.layer1_parallel_reasoning(user_query)
+                    generation_time = time.time() - start_time
+                    if l1_result.outputs:
+                        best = max(l1_result.outputs, key=lambda o: len(o.reasoning))
+                        response_text = best.reasoning
+                        sources = []
+                        logger.info(f"[TIER-2] Consensus from {len(l1_result.outputs)} models, agreement={l1_result.agreement_score:.2f}")
+
+                        # Store user + assistant messages
+                        assistant_message = history_repo.add_message(
+                            chat_id=chat_id, role="assistant",
+                            content=response_text, completion_time=generation_time
+                        )
+                        chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+                        total_tokens = history_repo.count_tokens_in_chat(chat_id)
+                        return PromptResponse(
+                            chat_id=chat_id, user_message_id=user_message.id,
+                            assistant_message_id=assistant_message.id,
+                            message=response_text, model=chat.model,
+                            generation_time=generation_time, tokens_used=None,
+                            total_tokens_in_chat=total_tokens, sources=sources
+                        )
+                else:
+                    # Tier 3: Full 3-layer reasoning
+                    verified = deep_pipeline.reason(user_query)
+                    generation_time = time.time() - start_time
+                    response_text = verified.answer
+                    sources = []
+                    logger.info(
+                        f"[TIER-3] 3-layer complete: confidence={verified.confidence:.1%}, "
+                        f"grounded={verified.training_data_grounded}"
+                    )
+
+                    assistant_message = history_repo.add_message(
+                        chat_id=chat_id, role="assistant",
+                        content=response_text, completion_time=generation_time
+                    )
+                    chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+                    total_tokens = history_repo.count_tokens_in_chat(chat_id)
+                    return PromptResponse(
+                        chat_id=chat_id, user_message_id=user_message.id,
+                        assistant_message_id=assistant_message.id,
+                        message=response_text, model=chat.model,
+                        generation_time=generation_time, tokens_used=None,
+                        total_tokens_in_chat=total_tokens, sources=sources
+                    )
+            except Exception as e:
+                logger.warning(f"[TIER-{reasoning_tier}] Deep reasoning failed, falling back to standard: {e}")
+
+        # ==================== STANDARD MULTI-TIER QUERY HANDLING (Tier 1) ====================
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling
         )
         
         # ==================== CONVERSATION CONTEXT RETRIEVAL ====================
-        # Fetch recent conversation history for context-aware responses
         recent_messages = history_repo.get_by_chat_reverse(
-            chat_id=chat_id,
-            skip=0,
-            limit=10  # Last 10 messages (excluding current user message)
+            chat_id=chat_id, skip=0, limit=10
         )
         
-        # Build conversation context array (reverse to chronological order)
         conversation_context = []
         for msg in reversed(recent_messages):
-            conversation_context.append({
-                "role": msg.role,
-                "content": msg.content
-            })
-        
-        # Add current user message to context
-        conversation_context.append({
-            "role": "user",
-            "content": request.content
-        })
+            conversation_context.append({"role": msg.role, "content": msg.content})
+        conversation_context.append({"role": "user", "content": request.content})
         
         logger.info(f"[CONTEXT] Built conversation context with {len(conversation_context)} messages")
         
-        # Create multi-tier handler
+        # Create multi-tier handler with trust-aware retrieval
         client = get_ollama_client()
         handler = create_multi_tier_handler(client)
         
-        # Handle query with tier fallback and conversation context
         start_time = time.time()
         tier_result = handler.handle_query(
             query=request.content,
-            user_id=None,  # TODO: Get from auth
-            genesis_key_id=None,  # TODO: Get from Genesis tracking
-            conversation_history=conversation_context  # Pass conversation context
+            user_id=None,
+            genesis_key_id=None,
+            conversation_history=conversation_context
         )
         generation_time = time.time() - start_time
         
-        # Log query handling for tracking and learning
         log_query_handling(
             query_id=tier_result.metadata.get("query_id", "unknown"),
             query_text=request.content,

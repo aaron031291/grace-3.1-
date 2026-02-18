@@ -59,13 +59,21 @@ async def generate_stream(
 
         model_name = settings.OLLAMA_LLM_DEFAULT if settings else "mistral:7b"
 
-        # RAG retrieval for context
+        # HIA honesty check — send disclaimer event if no sources found
+        # Governance check on final output happens post-stream
+
+        # RAG retrieval for context (trust-aware when available)
         rag_context = ""
         sources = []
 
         try:
+            from retrieval.trust_aware_retriever import TrustAwareDocumentRetriever
             from api.retrieve import get_document_retriever
-            retriever = get_document_retriever()
+            base_retriever = get_document_retriever()
+            try:
+                retriever = TrustAwareDocumentRetriever(base_retriever=base_retriever)
+            except Exception:
+                retriever = base_retriever
 
             retrieval_result = retriever.retrieve(
                 query=message,

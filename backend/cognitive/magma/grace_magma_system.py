@@ -193,13 +193,41 @@ class GraceMagmaSystem:
 
                 logger.info("[GRACE-MAGMA] Security integrations initialized")
 
+                # 5. Start auto-save daemon
+                self._start_auto_save()
+
                 self._initialized = True
-                logger.info("[GRACE-MAGMA] ✓ System fully initialized")
+                logger.info("[GRACE-MAGMA] ✓ System fully initialized (auto-save enabled)")
                 return True
 
             except Exception as e:
                 logger.error(f"[GRACE-MAGMA] Initialization failed: {e}")
                 return False
+
+    def _start_auto_save(self):
+        """Start background auto-save for persistence."""
+        def _save_loop():
+            while True:
+                try:
+                    time.sleep(self.config.consolidation_interval_seconds)
+                    self.save_state()
+                except Exception as e:
+                    logger.debug(f"[GRACE-MAGMA] Auto-save error: {e}")
+
+        import time
+        t = threading.Thread(target=_save_loop, daemon=True, name="magma-autosave")
+        t.start()
+        logger.info(f"[GRACE-MAGMA] Auto-save every {self.config.consolidation_interval_seconds}s")
+
+    def save_state(self) -> bool:
+        """Save Magma state to disk."""
+        try:
+            from cognitive.magma.persistence import MagmaPersistence
+            p = MagmaPersistence()
+            return p.save(self)
+        except Exception as e:
+            logger.debug(f"[GRACE-MAGMA] Save failed: {e}")
+            return False
 
     def _ensure_initialized(self):
         """Ensure system is initialized before use."""
