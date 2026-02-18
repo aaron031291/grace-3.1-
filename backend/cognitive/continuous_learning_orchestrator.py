@@ -150,6 +150,17 @@ class ContinuousLearningOrchestrator:
             logger.warning(f"[CONTINUOUS_LEARNING] Ingestion Service unavailable: {e}")
             self.ingestion_service = None
 
+        # Connect Unified Learning Pipeline
+        try:
+            from cognitive.unified_learning_pipeline import get_unified_pipeline
+            self._unified_pipeline = get_unified_pipeline()
+            if not self._unified_pipeline.running:
+                self._unified_pipeline.start()
+            logger.info("[CONTINUOUS_LEARNING] [OK] Unified Learning Pipeline connected")
+        except Exception as e:
+            self._unified_pipeline = None
+            logger.debug(f"[CONTINUOUS_LEARNING] Unified Pipeline unavailable: {e}")
+
         logger.info("[CONTINUOUS_LEARNING] Component initialization complete")
 
     def start(self):

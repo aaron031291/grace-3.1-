@@ -303,6 +303,19 @@ class LibrarianEngine:
                 if approved_count > 0:
                     logger.info(f"Auto-approved {approved_count} actions")
 
+            # Step 5: Feed to Unified Learning Pipeline for neighbor-by-neighbor expansion
+            try:
+                from cognitive.unified_learning_pipeline import get_unified_pipeline
+                pipeline = get_unified_pipeline()
+                if pipeline.running:
+                    all_tags = list(rule_tags | ai_tags)
+                    seed_topic = document.filename or f"document_{document_id}"
+                    seed_text = " ".join(all_tags) if all_tags else seed_topic
+                    pipeline.add_seed(topic=seed_topic, text=seed_text)
+                    logger.info(f"[LIBRARIAN] Queued '{seed_topic}' for neighbor expansion")
+            except Exception as pipe_err:
+                logger.debug(f"[LIBRARIAN] Pipeline feed skipped: {pipe_err}")
+
             result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
 

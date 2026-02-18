@@ -565,8 +565,18 @@ class TextIngestionService:
                 else:
                     logger.debug(f"[INGEST_FAST] [VERSION_CONTROL] Skipped: {version_result.get('reason', 'Unknown')}")
             except Exception as vc_error:
-                # Don't fail ingestion if version control fails
                 logger.warning(f"[INGEST_FAST] [VERSION_CONTROL] Failed to track version: {vc_error}")
+
+            # UNIFIED LEARNING PIPELINE: Feed ingested document as seed for neighbor expansion
+            try:
+                from cognitive.unified_learning_pipeline import get_unified_pipeline
+                pipeline = get_unified_pipeline()
+                if pipeline.running:
+                    seed_text = text_content[:500] if text_content else filename
+                    pipeline.add_seed(topic=filename, text=seed_text)
+                    logger.info(f"[INGEST_FAST] [PIPELINE] Queued for neighbor expansion: {filename}")
+            except Exception as pipe_error:
+                logger.debug(f"[INGEST_FAST] [PIPELINE] Seed queueing skipped: {pipe_error}")
 
             return document_id, "Document ingested successfully"
         

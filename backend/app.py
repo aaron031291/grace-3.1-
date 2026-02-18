@@ -83,6 +83,7 @@ from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagno
 from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
+from api.unified_pipeline_api import router as unified_pipeline_router  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor expansion
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -334,6 +335,16 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
 
+    # ==================== Initialize Unified Learning Pipeline ====================
+    # Start 24/7 continuous learning pipeline with neighbor-by-neighbor expansion
+    try:
+        from cognitive.unified_learning_pipeline import get_unified_pipeline
+        unified_pipeline = get_unified_pipeline()
+        unified_pipeline.start()
+        print("[OK] Unified Learning Pipeline started - 24/7 neighbor-by-neighbor expansion active")
+    except Exception as e:
+        print(f"[WARN] Unified Learning Pipeline not available: {e}")
+
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
@@ -547,6 +558,7 @@ app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, i
 app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
+app.include_router(unified_pipeline_router)  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor knowledge expansion
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
@@ -1321,6 +1333,36 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 sources=[]
             )
         
+        # ==================== CHAT INTELLIGENCE ====================
+        # Wire in ambiguity detection, governance, episodic memory, Oracle routing
+        from cognitive.chat_intelligence import get_chat_intelligence
+        chat_intel = get_chat_intelligence()
+
+        # Phase 1: Detect ambiguity in user query
+        ambiguity_result = None
+        try:
+            ambiguity_result = chat_intel.detect_ambiguity(
+                user_query,
+                conversation_history=[]
+            )
+            if ambiguity_result and ambiguity_result.get("is_ambiguous"):
+                logger.info(
+                    f"[CHAT-INTEL] Ambiguity detected: level={ambiguity_result['ambiguity_level']}, "
+                    f"signals={ambiguity_result['ambiguity_signals']}"
+                )
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Ambiguity detection skipped: {e}")
+
+        # Phase 2: Oracle query routing prediction
+        try:
+            routing_prediction = chat_intel.predict_query_routing(user_query)
+            logger.info(
+                f"[CHAT-INTEL] Oracle routing: tier={routing_prediction.get('predicted_tier')}, "
+                f"confidence={routing_prediction.get('confidence')}"
+            )
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Oracle routing skipped: {e}")
+
         # ==================== MULTI-TIER QUERY HANDLING ====================
         # Use multi-tier system: Model Knowledge → Internet Search → Context Request
         from retrieval.multi_tier_integration import (
@@ -1387,7 +1429,24 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         response_text = tier_result.response
         sources = tier_result.sources or []
 
+        # Phase 3: Governance check on response
+        governance_result = None
+        try:
+            governance_result = chat_intel.check_governance(response_text)
+            if not governance_result.get("passed"):
+                logger.warning(
+                    f"[CHAT-INTEL] Governance violation: {governance_result.get('violations')}"
+                )
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Governance check skipped: {e}")
 
+        # Phase 4: Enrich response with ambiguity questions / governance notes
+        try:
+            response_text = chat_intel.enrich_response(
+                response_text, ambiguity_result, governance_result
+            )
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Response enrichment skipped: {e}")
         
         # Verify response is not a rejection/failure message from the model
         response_text = response_text.strip()
@@ -1399,6 +1458,34 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             content=response_text,
             completion_time=generation_time
         )
+
+        # Phase 5: Record episode for learning (non-blocking)
+        try:
+            import asyncio
+            asyncio.create_task(asyncio.to_thread(
+                chat_intel.record_episode,
+                user_query=request.content,
+                response=response_text,
+                sources_used=sources,
+                tier_used=tier_result.tier.value if hasattr(tier_result, 'tier') else "unknown",
+                confidence=tier_result.confidence.overall_score if hasattr(tier_result, 'confidence') and hasattr(tier_result.confidence, 'overall_score') else 0.5,
+                generation_time=generation_time,
+                chat_id=chat_id
+            ))
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Episode recording skipped: {e}")
+
+        # Phase 6: Feed topic to unified learning pipeline for neighbor expansion
+        try:
+            from cognitive.unified_learning_pipeline import get_unified_pipeline
+            pipeline = get_unified_pipeline()
+            if pipeline.running:
+                pipeline.add_seed(
+                    topic=request.content[:100],
+                    text=request.content
+                )
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] Pipeline seed skipped: {e}")
         
         # Update chat's last_message_at
         chat_repo.update(chat_id, last_message_at=datetime.utcnow())
