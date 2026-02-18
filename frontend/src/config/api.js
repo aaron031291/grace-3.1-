@@ -93,6 +93,16 @@ export const API_ENDPOINTS = {
   // WebSocket
   ws: `${API_BASE_URL.replace('http', 'ws')}/ws`,
   voiceWs: `${API_BASE_URL.replace('http', 'ws')}/voice/ws/continuous`,
+
+  // Kimi + Grace Learning
+  kimiLearning: `${API_BASE_URL}/llm-learning`,
+  kimiStatus: `${API_BASE_URL}/llm-learning/kimi/status`,
+  kimiAnalyze: `${API_BASE_URL}/llm-learning/kimi/analyze`,
+  graceExecute: `${API_BASE_URL}/llm-learning/grace/execute`,
+  learningProgress: `${API_BASE_URL}/llm-learning/progress`,
+  learningDashboard: `${API_BASE_URL}/llm-learning/dashboard`,
+  verificationPending: `${API_BASE_URL}/llm-learning/grace/verification/pending`,
+  verificationConfirm: `${API_BASE_URL}/llm-learning/grace/verification/confirm`,
 };
 
 // Helper function to build URLs with query params

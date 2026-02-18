@@ -13,6 +13,7 @@ Manages multiple open-source LLMs with:
 from .multi_llm_client import MultiLLMClient, LLMModel
 from .repo_access import RepositoryAccessLayer
 from .hallucination_guard import HallucinationGuard, ConsensusResult
+from .near_zero_hallucination_guard import NearZeroHallucinationGuard
 from .cognitive_enforcer import CognitiveEnforcer
 from .llm_collaboration import LLMCollaborationHub
 from .learning_integration import LearningIntegration
@@ -22,6 +23,7 @@ __all__ = [
     'LLMModel',
     'RepositoryAccessLayer',
     'HallucinationGuard',
+    'NearZeroHallucinationGuard',
     'ConsensusResult',
     'CognitiveEnforcer',
     'LLMCollaborationHub',

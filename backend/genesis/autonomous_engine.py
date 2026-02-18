@@ -32,6 +32,13 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+def _track_autonomous(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("autonomous_engine", desc, **kwargs)
+    except Exception:
+        pass
+
 # =============================================================================
 # Core System Integration Helpers
 # =============================================================================

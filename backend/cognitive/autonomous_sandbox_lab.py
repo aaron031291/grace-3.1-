@@ -28,6 +28,13 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
+def _track_sandbox(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("sandbox_lab", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class ExperimentStatus(Enum):
     """Experiment lifecycle stages"""

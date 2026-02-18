@@ -26,6 +26,7 @@ import TelemetryTab from "./components/TelemetryTab";
 import WebScraper from "./components/WebScraper";
 import GraceTodosTab from "./components/GraceTodosTab";
 import GracePlanningTab from "./components/GracePlanningTab";
+import KimiGraceChat from "./components/KimiGraceChat";
 
 function App() {
   const [activeTab, setActiveTab] = useState("chat");
@@ -130,6 +131,23 @@ function App() {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
               Chat
+            </button>
+            <button
+              className={`tab-button ${activeTab === "kimi-grace" ? "active" : ""}`}
+              onClick={() => setActiveTab("kimi-grace")}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v4m0 14v4m-7-11H1m22 0h-4m-1.343-5.657l-2.828 2.828m-4.243 4.243l-2.828 2.828m12.728 0l-2.828-2.828M6.343 6.343L3.515 3.515"></path>
+              </svg>
+              Kimi + Grace
             </button>
             <button
               className={`tab-button ${activeTab === "governance" ? "active" : ""}`}
@@ -567,6 +585,7 @@ function App() {
         {/* Tab Content */}
         <main className="main-content">
           {activeTab === "chat" && <ChatTab />}
+          {activeTab === "kimi-grace" && <KimiGraceChat />}
           {activeTab === "governance" && <GovernanceTab />}
           {activeTab === "sandbox" && <SandboxTab />}
           {activeTab === "insights" && <InsightsTab />}

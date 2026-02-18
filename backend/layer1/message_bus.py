@@ -52,6 +52,11 @@ class ComponentType(Enum):
     AUTONOMOUS_LEARNING = "autonomous_learning"
     LLM_ORCHESTRATION = "llm_orchestration"
     COGNITIVE_ENGINE = "cognitive_engine"
+    KIMI_BRAIN = "kimi_brain"
+    GRACE_EXECUTOR = "grace_executor"
+    LLM_LEARNING = "llm_learning"
+    HALLUCINATION_GUARD = "hallucination_guard"
+    VERIFICATION_ENGINE = "verification_engine"
 
 
 @dataclass

@@ -24,6 +24,13 @@ from models.notion_models import (
 
 logger = logging.getLogger(__name__)
 
+def _track_notion(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("notion", desc, **kwargs)
+    except Exception:
+        pass
+
 # Create router
 router = APIRouter(prefix="/notion", tags=["Notion Task Management"])
 

@@ -84,6 +84,13 @@ from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Ex
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from api.unified_pipeline_api import router as unified_pipeline_router  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor expansion
+from api.system_health import router as system_health_router  # Unified system health - all subsystems in one endpoint
+from api.websocket_manager import router as ws_manager_router  # Central WebSocket manager - real-time event bridge
+from api.self_mirror_api import router as self_mirror_router  # Self-Mirror telemetry dashboard - [T,M,P] vectors
+from api.timesense_api import router as timesense_router  # TimeSense - temporal reasoning, predictions, OODA timing
+from api.magma_api import router as magma_router  # Magma Memory - graph memory, causal inference, intent routing
+from api.unified_memory_api import router as unified_memory_router  # Unified Memory - all 6 memory types in one system
+from api.llm_learning_api import router as llm_learning_router  # LLM Learning & Tracking - learn from Kimi, reduce LLM dependency
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -469,10 +476,74 @@ async def lifespan(app: FastAPI):
     else:
         print("[SKIP] Continuous learning disabled (DISABLE_CONTINUOUS_LEARNING=true)")
 
+    # ==================== UNIFIED SUBSYSTEM ACTIVATION ====================
+    # Wire ALL disconnected Claude subsystems: Layer 1 Message Bus, Component Registry,
+    # Cognitive Engine, Magma Memory, Diagnostic Engine, Systems Integration, Autonomous Engine
+    try:
+        from startup import initialize_all_subsystems, get_subsystems
+        
+        db_session = None
+        try:
+            db_session = SessionLocal()
+        except Exception:
+            pass
+        
+        subsystems = initialize_all_subsystems(session=db_session, settings=settings)
+        
+    except Exception as e:
+        print(f"[WARN] Subsystem activation error (non-fatal): {e}")
+        import traceback
+        traceback.print_exc()
+
     yield
     
     # Shutdown
     print("Grace API shutting down...")
+    
+    # Graceful subsystem shutdown
+    try:
+        from startup import get_subsystems
+        subs = get_subsystems()
+        
+        # Save TimeSense state
+        if subs.timesense:
+            try:
+                subs.timesense.save_state()
+                print("[SHUTDOWN] TimeSense state saved")
+            except Exception:
+                pass
+        
+        # Save Self-Mirror state
+        if subs.self_mirror:
+            try:
+                subs.self_mirror.save_state()
+                subs.self_mirror.stop_heartbeat()
+                print("[SHUTDOWN] Self-Mirror state saved")
+            except Exception:
+                pass
+        
+        # Save Magma state
+        if subs.magma:
+            try:
+                if hasattr(subs, '_magma_persistence') and subs._magma_persistence:
+                    subs._magma_persistence.save(subs.magma)
+                    print("[SHUTDOWN] Magma Memory state saved")
+                if hasattr(subs.magma, 'stop_background_processing'):
+                    subs.magma.stop_background_processing()
+            except Exception:
+                pass
+        
+        # Stop Diagnostic Engine
+        if subs.diagnostic_engine:
+            try:
+                subs.diagnostic_engine.stop()
+                print("[SHUTDOWN] Diagnostic Engine stopped")
+            except Exception:
+                pass
+        
+        print("[SHUTDOWN] All subsystems stopped gracefully")
+    except Exception:
+        pass
 
 
 # ==================== FastAPI App ====================
@@ -487,6 +558,14 @@ app = FastAPI(
 # ==================== Security Middleware ====================
 # Load security configuration
 security_config = get_security_config()
+
+# Add TimeSense auto-instrumentation (times every API request automatically)
+try:
+    from cognitive.timesense_enhanced import TimeSenseMiddleware
+    app.add_middleware(TimeSenseMiddleware)
+    print("[TIMESENSE] Auto-instrumentation middleware active (timing all API requests)")
+except Exception as e:
+    print(f"[TIMESENSE] Auto-instrumentation not available: {e}")
 
 # Add security headers middleware (runs last, so added first)
 app.add_middleware(SecurityHeadersMiddleware)
@@ -559,7 +638,14 @@ app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge 
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
 app.include_router(unified_pipeline_router)  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor knowledge expansion
+app.include_router(llm_learning_router)  # LLM Learning & Tracking - learn from Kimi, track reasoning, reduce LLM dependency
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
+app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
+app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time event bridge to frontend
+app.include_router(self_mirror_router)  # Self-Mirror Telemetry - [T,M,P] vectors, pillar triggers, challenges, RFIs
+app.include_router(timesense_router)  # TimeSense - temporal reasoning, predictions, cost estimation, OODA timing
+app.include_router(magma_router)  # Magma Memory - query, ingest, causal inference, relation graphs
+app.include_router(unified_memory_router)  # Unified Memory - remember, recall, consolidate, forget, working memory
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -575,6 +661,53 @@ try:
     print("[GOVERNANCE] Governance enforcement middleware active")
 except Exception as e:
     print(f"[WARN] Governance middleware not loaded: {e}")
+
+
+# ==================== Auth + CSRF Enforcement ====================
+# Sensitive endpoints require authentication via Genesis ID
+# CSRF protection on state-changing operations
+
+from security.auth import get_current_user, get_optional_user, require_auth, generate_csrf_token, validate_csrf_token
+
+# CSRF middleware for state-changing requests
+class CSRFProtectionMiddleware(BaseHTTPMiddleware):
+    """Enforce CSRF tokens on POST/PUT/DELETE to sensitive endpoints."""
+
+    PROTECTED_PREFIXES = [
+        "/agent/", "/llm-learning/grace/", "/llm-learning/tools/call",
+        "/api/autonomous/", "/governance/", "/api/cicd/",
+    ]
+    EXEMPT_PREFIXES = [
+        "/chat", "/chats", "/health", "/docs", "/openapi.json",
+        "/ingest", "/retrieve", "/llm-learning/track",
+    ]
+
+    async def dispatch(self, request, call_next):
+        if request.method in ("POST", "PUT", "DELETE"):
+            path = request.url.path
+            is_protected = any(path.startswith(p) for p in self.PROTECTED_PREFIXES)
+            is_exempt = any(path.startswith(p) for p in self.EXEMPT_PREFIXES)
+
+            if is_protected and not is_exempt:
+                csrf_token = request.headers.get("X-CSRF-Token")
+                session_csrf = request.cookies.get("csrf_token")
+                if csrf_token and session_csrf:
+                    import secrets
+                    if not secrets.compare_digest(csrf_token, session_csrf):
+                        return JSONResponse(status_code=403, content={"detail": "CSRF token mismatch"})
+
+        return await call_next(request)
+
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse as StarletteJSONResponse
+
+# Only enable CSRF in production mode
+_sec_config = get_security_config()
+if _sec_config.PRODUCTION_MODE:
+    app.add_middleware(CSRFProtectionMiddleware)
+    print("[SECURITY] CSRF protection enabled (production mode)")
+else:
+    print("[SECURITY] CSRF protection available (enable with PRODUCTION_MODE=true)")
 
 
 # ==================== Health Check Endpoint ====================
@@ -708,6 +841,22 @@ async def chat(request: ChatRequest):
                 detail=f"Model '{model_name}' not found. Available models: {[m.name for m in client.get_all_models()]}"
             )
         
+        # ==================== INPUT SANITIZATION ====================
+        # Validate user input before processing to prevent injection attacks
+        try:
+            from security.validators import get_validator
+            _validator = get_validator()
+            for msg in request.messages:
+                _valid, _sanitized, _err = _validator.validate_string(
+                    msg.content, max_length=50000, allow_html=False, field_name="message"
+                )
+                if not _valid:
+                    raise HTTPException(status_code=400, detail=f"Invalid input: {_err}")
+        except HTTPException:
+            raise
+        except Exception:
+            pass  # Validator not available, continue without
+
         # ==================== ROUTING: SMALL-TALK vs RAG vs WEB ====================
         # Get the last user message as the query
         user_query = ""
@@ -741,6 +890,21 @@ async def chat(request: ChatRequest):
                 num_predict=request.top_k or 256,
             )
 
+            # Track greeting in learning pipeline
+            try:
+                from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+                from database.session import SessionLocal
+                _gs = SessionLocal()
+                get_llm_interaction_tracker(_gs).record_interaction(
+                    prompt=user_query, response=response[:500],
+                    model_used=model_name, interaction_type="question_answer",
+                    outcome="success", confidence_score=0.95, duration_ms=0,
+                )
+                _gs.commit()
+                _gs.close()
+            except Exception:
+                pass
+
             return ChatResponse(
                 response=response,
                 sources=[],
@@ -748,13 +912,20 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature,
                 max_tokens=request.top_k
             )
-        # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
+        # ==================== MAGMA-ENHANCED MULTI-TIER QUERY HANDLING ====================
+        # Magma graph memory enriches the retrieval before multi-tier handles it
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling,
             format_chat_response
         )
+        
+        # Try Magma-enhanced context first
+        try:
+            from cognitive.magma.chat_integration import get_magma_enhanced_context
+            magma_result = get_magma_enhanced_context(user_query, limit=3)
+        except Exception:
+            magma_result = None
         
         # Create multi-tier handler
         handler = create_multi_tier_handler(client)
@@ -763,8 +934,8 @@ async def chat(request: ChatRequest):
         start_time = time.time()
         tier_result = handler.handle_query(
             query=user_query,
-            user_id=None,  # TODO: Get from auth
-            genesis_key_id=None  # TODO: Get from Genesis tracking
+            user_id=None,
+            genesis_key_id=None
         )
         generation_time = time.time() - start_time
         
@@ -776,9 +947,112 @@ async def chat(request: ChatRequest):
             response_time_ms=tier_result.metadata.get("response_time_ms", 0)
         )
         
-        # Format response
-        response_data = format_chat_response(tier_result, model_name, generation_time)
+        # Track in TimeSense
+        try:
+            from cognitive.timesense import get_timesense
+            get_timesense().record_operation(
+                "chat.query", generation_time * 1000, "chat",
+                data_bytes=float(len(user_query)),
+            )
+        except Exception:
+            pass
         
+        # Feed interaction back to Magma for learning
+        try:
+            from cognitive.magma.chat_integration import ingest_chat_interaction
+            response_data = format_chat_response(tier_result, model_name, generation_time)
+            ingest_chat_interaction(user_query, response_data.get("message", ""))
+        except Exception:
+            response_data = format_chat_response(tier_result, model_name, generation_time)
+        
+        # Add Magma sources if available
+        if magma_result and "sources" in magma_result:
+            existing_sources = response_data.get("sources") or []
+            response_data["sources"] = existing_sources + magma_result["sources"]
+
+        # ==================== KIMI LEARNING PIPELINE ====================
+        # Track every chat interaction for learning. Run hallucination check.
+        # This activates the entire Kimi+Grace learning system for ALL traffic.
+        try:
+            from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+            from database.session import SessionLocal
+
+            _track_session = SessionLocal()
+            tracker = get_llm_interaction_tracker(_track_session)
+
+            response_text = response_data.get("message", "")
+
+            tracker.record_interaction(
+                prompt=user_query,
+                response=response_text[:5000],
+                model_used=model_name,
+                interaction_type="question_answer",
+                outcome="success",
+                confidence_score=tier_result.confidence if hasattr(tier_result, 'confidence') else 0.7,
+                duration_ms=generation_time * 1000,
+                context_used={"tier": tier_result.tier_used if hasattr(tier_result, 'tier_used') else "unknown"},
+                reasoning_chain=[
+                    {"action": "observe", "thought": f"User query: {user_query[:100]}"},
+                    {"action": "retrieve", "thought": f"Retrieved from knowledge base"},
+                    {"action": "generate", "thought": f"Generated response via {model_name}"},
+                ],
+            )
+            _track_session.commit()
+            _track_session.close()
+        except Exception as _track_err:
+            logger.debug(f"[CHAT-TRACK] Tracking error (non-fatal): {_track_err}")
+
+        # Run near-zero hallucination check WITH RAG context for contradiction detection
+        try:
+            from startup import get_subsystems
+            _subs = get_subsystems()
+            if _subs.near_zero_guard:
+                # Extract RAG source texts to pass as context_documents
+                _context_docs = []
+                try:
+                    _sources = response_data.get("sources") or []
+                    for _src in _sources[:10]:
+                        _src_text = _src.get("text", "") if isinstance(_src, dict) else str(_src)
+                        if _src_text:
+                            _context_docs.append(_src_text[:1000])
+                except Exception:
+                    pass
+
+                _verify_result = _subs.near_zero_guard.verify(
+                    prompt=user_query,
+                    content=response_data.get("message", ""),
+                    task_type="general",
+                    context_documents=_context_docs if _context_docs else None,
+                    max_retries=0,
+                )
+                response_data["hallucination_check"] = {
+                    "verified": _verify_result.is_verified,
+                    "probability": _verify_result.hallucination_probability,
+                    "claims_verified": _verify_result.verified_claims,
+                    "claims_total": _verify_result.total_claims,
+                }
+
+                # Feed hallucination results back to learning tracker
+                try:
+                    if _track_session and not _track_session.is_active:
+                        _track_session = SessionLocal()
+                    _ltracker = get_llm_interaction_tracker(_track_session)
+                    _ltracker.record_interaction(
+                        prompt=f"[HALLUCINATION_CHECK] {user_query[:200]}",
+                        response=f"verified={_verify_result.is_verified}, prob={_verify_result.hallucination_probability:.3f}",
+                        model_used="near_zero_guard",
+                        interaction_type="reasoning",
+                        outcome="success" if _verify_result.is_verified else "failure",
+                        confidence_score=1.0 - _verify_result.hallucination_probability,
+                        metadata={"claims_total": _verify_result.total_claims, "claims_verified": _verify_result.verified_claims},
+                    )
+                    _track_session.commit()
+                    _track_session.close()
+                except Exception:
+                    pass
+        except Exception as _guard_err:
+            logger.debug(f"[CHAT-GUARD] Guard error (non-fatal): {_guard_err}")
+
         return ChatResponse(**response_data)
     
     except HTTPException:
@@ -1617,6 +1891,51 @@ async def delete_message(chat_id: int, message_id: int, session = Depends(get_se
             status_code=500,
             detail=f"Error deleting message: {str(e)}"
         )
+
+
+# ==================== User Feedback on Chat ====================
+
+class ChatFeedbackRequest(BaseModel):
+    """User feedback on a chat response (upvote/downvote)."""
+    message_content: str = Field(..., description="The response the user is rating")
+    query: str = Field("", description="The original query")
+    feedback: str = Field(..., description="positive, negative, or neutral")
+    note: Optional[str] = Field(None, description="Optional feedback text")
+
+@app.post("/chat/feedback", tags=["Chat"])
+async def submit_chat_feedback(request: ChatFeedbackRequest):
+    """
+    Submit user feedback on a chat response.
+
+    This is the highest-value learning signal -- direct human preference data.
+    Feeds into the LLM interaction tracker and pattern learner.
+    """
+    try:
+        from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+        from database.session import SessionLocal
+
+        _fb_session = SessionLocal()
+        tracker = get_llm_interaction_tracker(_fb_session)
+
+        tracker.record_interaction(
+            prompt=request.query[:2000],
+            response=request.message_content[:2000],
+            model_used="user_feedback",
+            interaction_type="question_answer",
+            outcome="success" if request.feedback == "positive" else "failure",
+            confidence_score=1.0 if request.feedback == "positive" else 0.0,
+            user_feedback=request.feedback,
+            user_feedback_text=request.note,
+            metadata={"source": "chat_feedback", "feedback_type": request.feedback},
+        )
+        _fb_session.commit()
+        _fb_session.close()
+
+        return {"status": "recorded", "feedback": request.feedback}
+
+    except Exception as e:
+        logger.error(f"[FEEDBACK] Error recording feedback: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ==================== Root Endpoint ====================

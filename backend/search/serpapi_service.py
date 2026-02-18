@@ -10,6 +10,13 @@ from typing import List, Dict, Optional, Any
 
 logger = logging.getLogger(__name__)
 
+def _track_search(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("web_search", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class SerpAPIService:
     """Service for interacting with SerpAPI Google Search."""

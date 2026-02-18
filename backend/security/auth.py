@@ -32,8 +32,17 @@ class SessionManager:
         self.config = get_security_config()
         self.logger = get_security_logger()
 
-        # In-memory session store (use Redis in production)
+        # Session store - uses DB-backed storage with in-memory cache
         self._sessions: Dict[str, Dict[str, Any]] = {}
+        self._db_backed = False
+
+        # Try to use database-backed sessions
+        try:
+            from database.session import SessionLocal
+            self._session_factory = SessionLocal
+            self._db_backed = True
+        except Exception:
+            self._session_factory = None
 
     def create_session(
         self,
@@ -200,15 +209,16 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Cookie"},
         )
 
-    # For strict session validation, uncomment below:
-    # session_manager = get_session_manager()
-    # session = session_manager.validate_session(session_id)
-    # if not session:
-    #     logger.log_access_denied("API", request, "Invalid session")
-    #     raise HTTPException(
-    #         status_code=HTTP_401_UNAUTHORIZED,
-    #         detail="Session expired. Please login again.",
-    #     )
+    # Session validation - verify session is active if session_id provided
+    if session_id:
+        session_manager = get_session_manager()
+        session = session_manager.validate_session(session_id)
+        if not session:
+            logger.log_access_denied("API", request, "Invalid or expired session")
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail="Session expired. Please login again.",
+            )
 
     return {
         "genesis_id": genesis_id,

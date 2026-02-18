@@ -35,6 +35,13 @@ from embedding import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
+def _track_proactive(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("proactive_learner", desc, **kwargs)
+    except Exception:
+        pass
+
 
 @dataclass
 class LearningTask:
