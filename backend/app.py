@@ -381,6 +381,18 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Unified Intelligence Daemon not available: {e}")
 
+    # ==================== Self-* Closed-Loop Ecosystem ====================
+    try:
+        from cognitive.self_agent_ecosystem import get_closed_loop
+        from database.session import SessionLocal
+        cl_session = SessionLocal()
+        if cl_session:
+            closed_loop = get_closed_loop(cl_session)
+            closed_loop.start(interval=300)
+            print("[OK] Self-* Closed-Loop Ecosystem started - 6 agents, autonomous improvement")
+    except Exception as e:
+        print(f"[WARN] Closed-Loop Ecosystem not available: {e}")
+
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
