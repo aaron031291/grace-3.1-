@@ -115,6 +115,18 @@ class PlaybookManager:
         self.session.add(playbook)
         self.session.commit()
         logger.info(f"[PLAYBOOK] Created new playbook '{name}'")
+
+        # Feed to unified intelligence
+        try:
+            from genesis.unified_intelligence import UnifiedIntelligenceEngine
+            UnifiedIntelligenceEngine(self.session).record(
+                source_system="healing_playbooks", signal_type="playbook_created",
+                signal_name=name, value_text=f"New playbook: {anomaly_type} -> {healing_action}",
+                trust_score=0.75, ttl_seconds=3600,
+            )
+        except Exception:
+            pass
+
         return playbook
 
     def record_failure(self, anomaly_type: str, healing_action: str, anomaly_severity: str):

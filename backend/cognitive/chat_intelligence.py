@@ -289,6 +289,28 @@ class ChatIntelligence:
                 }
         return {}
 
+    def use_three_layer_reasoning(self, query: str) -> Optional[Dict[str, Any]]:
+        """
+        Invoke the 3-layer reasoning pipeline for complex queries.
+
+        Returns the verified result or None if unavailable.
+        """
+        try:
+            from llm_orchestrator.three_layer_reasoning import get_three_layer_reasoning
+            pipeline = get_three_layer_reasoning()
+            result = pipeline.reason(query)
+            return {
+                "answer": result.answer,
+                "confidence": result.confidence,
+                "l1_agreement": result.layer1_agreement,
+                "l2_agreement": result.layer2_agreement,
+                "grounded": result.training_data_grounded,
+                "governance_passed": result.governance_passed,
+            }
+        except Exception as e:
+            logger.debug(f"[CHAT-INTEL] 3-layer reasoning unavailable: {e}")
+            return None
+
     def predict_query_routing(self, user_query: str) -> Dict[str, Any]:
         """
         Use Oracle ML predictions to optimize query routing.

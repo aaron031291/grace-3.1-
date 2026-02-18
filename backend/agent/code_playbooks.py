@@ -144,6 +144,18 @@ class CodePlaybookManager:
         self.session.add(playbook)
         self.session.commit()
         logger.info(f"[CODE-PLAYBOOK] Created '{name}'")
+
+        # Feed to unified intelligence
+        try:
+            from genesis.unified_intelligence import UnifiedIntelligenceEngine
+            UnifiedIntelligenceEngine(self.session).record(
+                source_system="code_playbooks", signal_type="playbook_created",
+                signal_name=name, value_text=f"Code playbook: {task_type}",
+                trust_score=0.7, ttl_seconds=3600,
+            )
+        except Exception:
+            pass
+
         return playbook
 
     def record_failure(

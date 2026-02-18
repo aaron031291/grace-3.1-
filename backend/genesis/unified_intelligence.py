@@ -426,6 +426,44 @@ class UnifiedIntelligenceEngine:
         except Exception as e:
             logger.debug(f"[UNIFIED-INTEL] 3-layer reasoning collection failed: {e}")
 
+    def collect_from_hia(self):
+        """Pull intelligence from HIA (Honesty, Integrity, Accountability) framework."""
+        try:
+            from security.honesty_integrity_accountability import get_hia_framework
+            hia = get_hia_framework()
+            scores = hia.get_system_hia_score()
+            self.record(
+                source_system="hia_framework",
+                signal_type="hia_scores",
+                signal_name="honesty_integrity_accountability",
+                value_numeric=scores.get("overall_hia_score", 0.5),
+                value_json=scores,
+                trust_score=0.95,
+                severity="warning" if scores.get("overall_hia_score", 1) < 0.7 else "info",
+                ttl_seconds=300,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] HIA collection failed: {e}")
+
+    def collect_from_timesense_governance(self):
+        """Pull intelligence from TimeSense governance SLA monitoring."""
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            ts_gov = get_timesense_governance()
+            status = ts_gov.get_sla_status()
+            self.record(
+                source_system="timesense_governance",
+                signal_type="sla_status",
+                signal_name="timesense_sla_health",
+                value_numeric=status["stats"]["total_breaches"],
+                value_json=status["stats"],
+                trust_score=0.9,
+                severity="warning" if status["stats"]["total_breaches"] > 0 else "info",
+                ttl_seconds=300,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] TimeSense governance collection failed: {e}")
+
     def librarian_audit(self):
         """
         Librarian Keeper Function — validates unified intelligence integrity.
@@ -445,7 +483,7 @@ class UnifiedIntelligenceEngine:
             UnifiedIntelligenceRecord.recorded_at >= datetime.now() - timedelta(minutes=10)
         ).count()
 
-        expected_sources = 14  # All collectors above
+        expected_sources = 18  # All collectors including HIA + TimeSense governance
         coverage = sources_reporting / max(expected_sources, 1)
 
         stale = self.session.query(UnifiedIntelligenceRecord).filter(
@@ -498,10 +536,13 @@ class UnifiedIntelligenceEngine:
         self.collect_from_closed_loop()
         self.collect_from_three_layer_reasoning()
 
+        self.collect_from_hia()
+        self.collect_from_timesense_governance()
+
         # Librarian audit — verifies everything is reporting
         self.librarian_audit()
 
-        logger.info("[UNIFIED-INTEL] Full collection cycle complete (16 sources + librarian audit)")
+        logger.info("[UNIFIED-INTEL] Full collection cycle complete (18 sources + librarian audit)")
 
     def get_system_snapshot(self) -> Dict[str, Any]:
         """Get current snapshot of all intelligence."""

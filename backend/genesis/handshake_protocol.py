@@ -190,6 +190,27 @@ class HandshakeProtocol:
 
         session.commit()
 
+        # Feed deaths to unified intelligence
+        try:
+            from genesis.unified_intelligence import UnifiedIntelligenceEngine
+            engine = UnifiedIntelligenceEngine(session)
+            for comp in dead_components:
+                engine.record(
+                    source_system="handshake_protocol", signal_type="silent_death",
+                    signal_name=f"death_{comp.name}", severity="critical",
+                    value_text=f"Component '{comp.name}' stopped responding",
+                    component_name=comp.name, trust_score=0.1, ttl_seconds=600,
+                )
+        except Exception:
+            pass
+
+        # TimeSense record
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            get_timesense_governance().record("handshake.pulse", 0, "handshake")
+        except Exception:
+            pass
+
         if self.auto_heal:
             try:
                 from cognitive.autonomous_healing_system import get_autonomous_healing

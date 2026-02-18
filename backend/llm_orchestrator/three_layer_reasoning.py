@@ -425,6 +425,40 @@ class ThreeLayerReasoning:
             f"duration={result.total_duration_ms:.0f}ms"
         )
 
+        # Feed result to unified intelligence
+        try:
+            from genesis.unified_intelligence import UnifiedIntelligenceEngine
+            from database.session import SessionLocal
+            _ui_s = SessionLocal()
+            if _ui_s:
+                try:
+                    UnifiedIntelligenceEngine(_ui_s).record(
+                        source_system="three_layer_reasoning", signal_type="result",
+                        signal_name="reasoning_complete", value_numeric=result.confidence,
+                        value_json={"l1_agreement": result.layer1_agreement, "l2_agreement": result.layer2_agreement, "grounded": result.training_data_grounded},
+                        trust_score=result.confidence, ttl_seconds=600,
+                    )
+                finally:
+                    _ui_s.close()
+        except Exception:
+            pass
+
+        # TimeSense timing
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            get_timesense_governance().record("reasoning.full", result.total_duration_ms, "reasoning")
+        except Exception:
+            pass
+
+        # HIA verification on final answer
+        try:
+            from security.honesty_integrity_accountability import get_hia_framework
+            hia_result = get_hia_framework().verify_llm_output(result.answer, has_sources=result.training_data_grounded)
+            if not hia_result.passed:
+                logger.warning(f"[3-LAYER] HIA violation: honesty={hia_result.honesty_score:.0%}")
+        except Exception:
+            pass
+
         return result
 
     # =========================================================================

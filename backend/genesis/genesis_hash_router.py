@@ -64,6 +64,13 @@ class GenesisHashRouter:
             result = self._process_reference(ref)
             results.append(result)
 
+        # TimeSense timing
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            get_timesense_governance().record("governance.check", 0, "governance")
+        except Exception:
+            pass
+
         return {
             "genesis_refs_found": len(refs),
             "components": results,

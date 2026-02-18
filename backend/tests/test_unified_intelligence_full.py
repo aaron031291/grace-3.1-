@@ -68,6 +68,12 @@ class TestAllCollectorsExist:
     def test_collect_from_three_layer_reasoning(self):
         assert "def collect_from_three_layer_reasoning" in self._get_engine_source()
 
+    def test_collect_from_hia(self):
+        assert "def collect_from_hia" in self._get_engine_source()
+
+    def test_collect_from_timesense_governance(self):
+        assert "def collect_from_timesense_governance" in self._get_engine_source()
+
 
 class TestLibrarianKeeper:
     """Verify librarian is wired as keeper of the unified table."""
@@ -126,4 +132,4 @@ class TestCollectAllIntegrity:
 
     def test_log_message_counts_sources(self):
         source = (BACKEND_DIR / "genesis" / "unified_intelligence.py").read_text()
-        assert "16 sources" in source
+        assert "18 sources" in source

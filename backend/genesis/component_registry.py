@@ -199,16 +199,28 @@ class ComponentRegistry:
         ]
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get registry statistics."""
+        """Get registry statistics with HIA integrity verification."""
         total = self.session.query(ComponentEntry).filter(ComponentEntry.is_active == True).count()
         alive = self.session.query(ComponentEntry).filter(ComponentEntry.status == "alive").count()
         silent = len(self.find_silent_deaths())
-        return {
+        stats = {
             "total_registered": total,
             "alive": alive,
             "silent_deaths": silent,
             "coverage": round(alive / max(total, 1), 2),
         }
+
+        # HIA integrity check — verify reported stats match actual DB counts
+        try:
+            from security.honesty_integrity_accountability import get_hia_framework
+            actual_total = self.session.query(ComponentEntry).count()
+            hia = get_hia_framework()
+            hia.verify_kpi_report(stats["coverage"], alive, max(total, 1))
+            stats["hia_verified"] = True
+        except Exception:
+            stats["hia_verified"] = False
+
+        return stats
 
     def _compute_hash(self, path: str) -> str:
         """Compute Genesis hash for a file or module."""

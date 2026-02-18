@@ -316,6 +316,13 @@ class LibrarianEngine:
             except Exception as pipe_err:
                 logger.debug(f"[LIBRARIAN] Pipeline feed skipped: {pipe_err}")
 
+            # TimeSense: Record librarian processing timing
+            try:
+                from cognitive.timesense_governance import get_timesense_governance
+                get_timesense_governance().record("librarian.process", 0, "librarian")
+            except Exception:
+                pass
+
             result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
 

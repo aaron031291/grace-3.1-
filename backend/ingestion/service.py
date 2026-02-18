@@ -545,6 +545,13 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST]   - {len(text_content)} characters")
             logger.info(f"[INGEST_FAST]   - Stored in PostgreSQL + Qdrant")
 
+            # TimeSense: Record ingestion timing
+            try:
+                from cognitive.timesense_governance import get_timesense_governance
+                get_timesense_governance().record("ingestion.full", 0, "ingestion", True, float(len(text_content)))
+            except Exception:
+                pass
+
             # SYMBIOTIC VERSION CONTROL: Auto-track ingested file
             try:
                 from layer1.components.version_control_connector import get_version_control_connector

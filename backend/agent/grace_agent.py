@@ -303,6 +303,20 @@ class GraceAgent:
                 f"({result.actions_executed} actions, {result.duration_seconds:.1f}s)"
             )
 
+            # TimeSense timing for the full task
+            try:
+                from cognitive.timesense_governance import get_timesense_governance
+                get_timesense_governance().record("agent.execute", result.duration_seconds * 1000, "code_agent", result.status == TaskStatus.COMPLETED)
+            except Exception:
+                pass
+
+            # HIA verification on agent output
+            try:
+                from security.honesty_integrity_accountability import get_hia_framework
+                get_hia_framework().verify_llm_output(result.summary or "", has_sources=True)
+            except Exception:
+                pass
+
             # Store successful configuration as playbook
             if result.status == TaskStatus.COMPLETED and self._playbook_manager:
                 try:

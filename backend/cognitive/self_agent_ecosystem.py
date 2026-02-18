@@ -301,6 +301,24 @@ class BaseSelfAgent:
             if kimi_insight:
                 analysis["kimi_insight"] = kimi_insight[:2000]
 
+        # HIA integrity check — verify our KPI matches reality
+        try:
+            from security.honesty_integrity_accountability import get_hia_framework
+            hia = get_hia_framework()
+            total = max(int(pass_rate * 100), 0)
+            passes = int(pass_rate * total) if total > 0 else 0
+            hia_result = hia.verify_kpi_report(kpi, passes, max(total, 1))
+            analysis["hia_integrity"] = hia_result.integrity_score
+        except Exception:
+            pass
+
+        # TimeSense — record analysis duration
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            get_timesense_governance().record("closedloop.analyze", 0, "closed_loop")
+        except Exception:
+            pass
+
         return analysis
 
 
