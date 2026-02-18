@@ -464,6 +464,24 @@ class UnifiedIntelligenceEngine:
         except Exception as e:
             logger.debug(f"[UNIFIED-INTEL] TimeSense governance collection failed: {e}")
 
+    def collect_from_training_sources(self):
+        """Pull intelligence from the training data source registry."""
+        try:
+            from cognitive.training_data_sources import get_training_source_registry
+            registry = get_training_source_registry()
+            stats = registry.get_stats()
+            self.record(
+                source_system="training_sources",
+                signal_type="registry_stats",
+                signal_name="training_data_sources",
+                value_numeric=stats.get("total_sources", 0),
+                value_json=stats,
+                trust_score=0.9,
+                ttl_seconds=3600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Training sources collection failed: {e}")
+
     def librarian_audit(self):
         """
         Librarian Keeper Function — validates unified intelligence integrity.
@@ -538,6 +556,7 @@ class UnifiedIntelligenceEngine:
 
         self.collect_from_hia()
         self.collect_from_timesense_governance()
+        self.collect_from_training_sources()
 
         # Librarian audit — verifies everything is reporting
         self.librarian_audit()
