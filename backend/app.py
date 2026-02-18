@@ -343,7 +343,6 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] ML Intelligence not available: {e}")
 
     # ==================== Initialize Unified Learning Pipeline ====================
-    # Start 24/7 continuous learning pipeline with neighbor-by-neighbor expansion
     try:
         from cognitive.unified_learning_pipeline import get_unified_pipeline
         unified_pipeline = get_unified_pipeline()
@@ -351,6 +350,36 @@ async def lifespan(app: FastAPI):
         print("[OK] Unified Learning Pipeline started - 24/7 neighbor-by-neighbor expansion active")
     except Exception as e:
         print(f"[WARN] Unified Learning Pipeline not available: {e}")
+
+    # ==================== Genesis# Component Registry ====================
+    try:
+        from genesis.component_registry import auto_register_all_components
+        from database.session import SessionLocal
+        reg_session = SessionLocal()
+        if reg_session:
+            count = auto_register_all_components(reg_session)
+            reg_session.close()
+            print(f"[OK] Genesis# Component Registry: {count} components auto-registered")
+    except Exception as e:
+        print(f"[WARN] Component Registry not available: {e}")
+
+    # ==================== Genesis Handshake Protocol ====================
+    try:
+        from genesis.handshake_protocol import get_handshake_protocol
+        handshake = get_handshake_protocol()
+        handshake.start()
+        print("[OK] Genesis Handshake Protocol started - heartbeat monitoring active")
+    except Exception as e:
+        print(f"[WARN] Handshake Protocol not available: {e}")
+
+    # ==================== Unified Intelligence Daemon ====================
+    try:
+        from genesis.unified_intelligence import get_intelligence_daemon
+        intel_daemon = get_intelligence_daemon()
+        intel_daemon.start()
+        print("[OK] Unified Intelligence Daemon started - collecting from all subsystems")
+    except Exception as e:
+        print(f"[WARN] Unified Intelligence Daemon not available: {e}")
 
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
@@ -1615,6 +1644,21 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 sources=[]
             )
         
+        # ==================== GENESIS# ROUTING ====================
+        # If user prompt contains Genesis#<component>, route through Genesis system
+        genesis_route_result = None
+        try:
+            from genesis.genesis_hash_router import get_genesis_hash_router
+            genesis_router = get_genesis_hash_router()
+            if genesis_router.has_genesis_ref(user_query):
+                genesis_route_result = genesis_router.route(user_query)
+                if genesis_route_result:
+                    logger.info(
+                        f"[GENESIS#] Routed {genesis_route_result['genesis_refs_found']} reference(s)"
+                    )
+        except Exception as e:
+            logger.debug(f"[GENESIS#] Routing skipped: {e}")
+
         # ==================== CHAT INTELLIGENCE ====================
         # Wire in ambiguity detection, governance, episodic memory, Oracle routing
         from cognitive.chat_intelligence import get_chat_intelligence
@@ -1729,6 +1773,12 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             )
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Response enrichment skipped: {e}")
+
+        # Phase 4b: Inject Genesis# confirmation if present
+        if genesis_route_result and genesis_route_result.get("components"):
+            genesis_msg = genesis_route_result.get("system_message", "")
+            if genesis_msg:
+                response_text = f"**[Genesis#]** {genesis_msg}\n\n{response_text}"
         
         # Verify response is not a rejection/failure message from the model
         response_text = response_text.strip()
