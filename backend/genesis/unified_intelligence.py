@@ -191,13 +191,317 @@ class UnifiedIntelligenceEngine:
         except Exception as e:
             logger.debug(f"[UNIFIED-INTEL] Pipeline collection failed: {e}")
 
+    # =========================================================================
+    # COLLECTORS — One for every subsystem in Grace
+    # =========================================================================
+
+    def collect_from_self_agents(self):
+        """Pull intelligence from all 6 self-* agent micro-DBs."""
+        try:
+            from cognitive.self_agent_ecosystem import (
+                SelfHealingLog, SelfMirrorLog, SelfModelLog,
+                SelfLearnerLog, CodeAgentLog, SelfEvolverLog
+            )
+            tables = {
+                "self_healer": SelfHealingLog,
+                "self_mirror": SelfMirrorLog,
+                "self_model": SelfModelLog,
+                "self_learner": SelfLearnerLog,
+                "code_agent": CodeAgentLog,
+                "self_evolver": SelfEvolverLog,
+            }
+            for agent_name, model in tables.items():
+                total = self.session.query(model).count()
+                passes = self.session.query(model).filter(model.status == "pass").count()
+                rate = passes / max(total, 1)
+                self.record(
+                    source_system=f"self_agent.{agent_name}",
+                    signal_type="pass_rate",
+                    signal_name=f"{agent_name}_performance",
+                    value_numeric=rate,
+                    value_json={"total": total, "passes": passes},
+                    trust_score=0.85,
+                    ttl_seconds=300,
+                )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Self-agent collection failed: {e}")
+
+    def collect_from_memory_mesh(self):
+        """Pull intelligence from memory mesh (cache, metrics, snapshots)."""
+        try:
+            from cognitive.memory_mesh_cache import MemoryMeshCache
+            cache = MemoryMeshCache()
+            stats = cache.get_stats() if hasattr(cache, 'get_stats') else {}
+            self.record(
+                source_system="memory_mesh",
+                signal_type="cache_stats",
+                signal_name="memory_mesh_health",
+                value_json=stats,
+                trust_score=0.85,
+                ttl_seconds=300,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Memory mesh collection failed: {e}")
+
+    def collect_from_magma(self):
+        """Pull intelligence from Magma Memory system."""
+        try:
+            from cognitive.magma.grace_magma_system import get_grace_magma
+            magma = get_grace_magma()
+            if magma:
+                stats = magma.get_stats() if hasattr(magma, 'get_stats') else {}
+                self.record(
+                    source_system="magma_memory",
+                    signal_type="graph_stats",
+                    signal_name="magma_health",
+                    value_json=stats,
+                    trust_score=0.85,
+                    ttl_seconds=300,
+                )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Magma collection failed: {e}")
+
+    def collect_from_episodic_memory(self):
+        """Pull intelligence from episodic memory."""
+        try:
+            from cognitive.episodic_memory import Episode
+            total_episodes = self.session.query(Episode).count()
+            self.record(
+                source_system="episodic_memory",
+                signal_type="volume",
+                signal_name="total_episodes",
+                value_numeric=total_episodes,
+                trust_score=0.9,
+                ttl_seconds=600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Episodic collection failed: {e}")
+
+    def collect_from_learning_memory(self):
+        """Pull intelligence from learning memory (examples + patterns)."""
+        try:
+            from cognitive.learning_memory import LearningExample, LearningPattern
+            total_examples = self.session.query(LearningExample).count()
+            total_patterns = self.session.query(LearningPattern).count()
+            from sqlalchemy import func
+            avg_trust = self.session.query(
+                func.avg(LearningExample.trust_score)
+            ).scalar() or 0.5
+            self.record(
+                source_system="learning_memory",
+                signal_type="volume_and_trust",
+                signal_name="learning_stats",
+                value_numeric=float(avg_trust),
+                value_json={"examples": total_examples, "patterns": total_patterns, "avg_trust": float(avg_trust)},
+                trust_score=0.9,
+                ttl_seconds=600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Learning memory collection failed: {e}")
+
+    def collect_from_genesis_keys(self):
+        """Pull intelligence from Genesis Key tracking."""
+        try:
+            from models.genesis_key_models import GenesisKey
+            total_keys = self.session.query(GenesisKey).count()
+            cutoff = datetime.now() - timedelta(hours=1)
+            recent_keys = self.session.query(GenesisKey).filter(
+                GenesisKey.created_at >= cutoff
+            ).count()
+            self.record(
+                source_system="genesis_keys",
+                signal_type="tracking_volume",
+                signal_name="genesis_key_stats",
+                value_numeric=total_keys,
+                value_json={"total": total_keys, "last_hour": recent_keys},
+                trust_score=0.95,
+                ttl_seconds=300,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Genesis key collection failed: {e}")
+
+    def collect_from_documents(self):
+        """Pull intelligence from document/ingestion system."""
+        try:
+            from models.database_models import Document
+            total_docs = self.session.query(Document).count()
+            completed = self.session.query(Document).filter(Document.status == "completed").count()
+            self.record(
+                source_system="ingestion",
+                signal_type="document_stats",
+                signal_name="ingestion_health",
+                value_numeric=completed,
+                value_json={"total": total_docs, "completed": completed, "rate": completed / max(total_docs, 1)},
+                trust_score=0.9,
+                ttl_seconds=600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Document collection failed: {e}")
+
+    def collect_from_llm_tracking(self):
+        """Pull intelligence from LLM interaction tracking."""
+        try:
+            from models.llm_tracking_models import LLMInteraction
+            total = self.session.query(LLMInteraction).count()
+            self.record(
+                source_system="llm_tracking",
+                signal_type="interaction_volume",
+                signal_name="llm_interactions",
+                value_numeric=total,
+                trust_score=0.85,
+                ttl_seconds=600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] LLM tracking collection failed: {e}")
+
+    def collect_from_handshake(self):
+        """Pull intelligence from handshake protocol."""
+        try:
+            from genesis.handshake_protocol import get_handshake_protocol
+            handshake = get_handshake_protocol()
+            status = handshake.get_status()
+            self.record(
+                source_system="handshake_protocol",
+                signal_type="liveness",
+                signal_name="handshake_stats",
+                value_json=status.get("stats", {}),
+                trust_score=0.9,
+                ttl_seconds=120,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Handshake collection failed: {e}")
+
+    def collect_from_governance(self):
+        """Pull intelligence from governance middleware."""
+        try:
+            from security.governance_middleware import get_audit_trail_manager
+            manager = get_audit_trail_manager()
+            summary = manager.get_violation_summary()
+            self.record(
+                source_system="governance",
+                signal_type="audit_trail",
+                signal_name="governance_stats",
+                value_numeric=summary.get("violation_rate", 0),
+                value_json=summary,
+                trust_score=0.95,
+                severity="warning" if summary.get("violation_rate", 0) > 0.05 else "info",
+                ttl_seconds=300,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Governance collection failed: {e}")
+
+    def collect_from_closed_loop(self):
+        """Pull intelligence from self-* closed-loop ecosystem."""
+        try:
+            from cognitive.self_agent_ecosystem import get_closed_loop
+            loop = get_closed_loop()
+            if loop:
+                status = loop.get_status()
+                self.record(
+                    source_system="closed_loop",
+                    signal_type="ecosystem_status",
+                    signal_name="self_agent_ecosystem",
+                    value_json=status,
+                    trust_score=0.85,
+                    ttl_seconds=300,
+                )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Closed-loop collection failed: {e}")
+
+    def collect_from_three_layer_reasoning(self):
+        """Pull intelligence from the 3-layer reasoning pipeline."""
+        try:
+            from llm_orchestrator.three_layer_reasoning import get_three_layer_reasoning
+            pipeline = get_three_layer_reasoning()
+            models = pipeline.get_available_models()
+            self.record(
+                source_system="three_layer_reasoning",
+                signal_type="capability",
+                signal_name="reasoning_models",
+                value_numeric=len(models),
+                value_json={"models": models[:10]},
+                trust_score=0.8,
+                ttl_seconds=600,
+            )
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] 3-layer reasoning collection failed: {e}")
+
+    def librarian_audit(self):
+        """
+        Librarian Keeper Function — validates unified intelligence integrity.
+
+        The librarian checks:
+        - Are all subsystems reporting?
+        - Are there stale records?
+        - Is data consistent?
+        - Are there gaps in coverage?
+        """
+        from sqlalchemy import func, distinct
+
+        sources_reporting = self.session.query(
+            distinct(UnifiedIntelligenceRecord.source_system)
+        ).filter(
+            UnifiedIntelligenceRecord.is_current == True,
+            UnifiedIntelligenceRecord.recorded_at >= datetime.now() - timedelta(minutes=10)
+        ).count()
+
+        expected_sources = 14  # All collectors above
+        coverage = sources_reporting / max(expected_sources, 1)
+
+        stale = self.session.query(UnifiedIntelligenceRecord).filter(
+            UnifiedIntelligenceRecord.is_current == True,
+            UnifiedIntelligenceRecord.recorded_at < datetime.now() - timedelta(minutes=15)
+        ).count()
+
+        audit_result = {
+            "sources_reporting": sources_reporting,
+            "expected_sources": expected_sources,
+            "coverage": round(coverage, 2),
+            "stale_records": stale,
+            "status": "healthy" if coverage >= 0.7 else ("degraded" if coverage >= 0.4 else "critical"),
+            "audited_at": datetime.now().isoformat(),
+        }
+
+        self.record(
+            source_system="librarian",
+            signal_type="audit",
+            signal_name="unified_intelligence_audit",
+            value_numeric=coverage,
+            value_json=audit_result,
+            trust_score=0.95,
+            severity="warning" if coverage < 0.7 else "info",
+            ttl_seconds=600,
+        )
+
+        logger.info(
+            f"[UNIFIED-INTEL] Librarian audit: {sources_reporting}/{expected_sources} "
+            f"sources ({coverage:.0%}), {stale} stale records"
+        )
+        return audit_result
+
     def collect_all(self):
-        """Run all collectors."""
+        """Run ALL collectors — every subsystem feeds the unified table."""
         self.collect_from_registry()
         self.collect_from_kpis()
         self.collect_from_healing()
         self.collect_from_pipeline()
-        logger.info("[UNIFIED-INTEL] Full collection cycle complete")
+        self.collect_from_self_agents()
+        self.collect_from_memory_mesh()
+        self.collect_from_magma()
+        self.collect_from_episodic_memory()
+        self.collect_from_learning_memory()
+        self.collect_from_genesis_keys()
+        self.collect_from_documents()
+        self.collect_from_llm_tracking()
+        self.collect_from_handshake()
+        self.collect_from_governance()
+        self.collect_from_closed_loop()
+        self.collect_from_three_layer_reasoning()
+
+        # Librarian audit — verifies everything is reporting
+        self.librarian_audit()
+
+        logger.info("[UNIFIED-INTEL] Full collection cycle complete (16 sources + librarian audit)")
 
     def get_system_snapshot(self) -> Dict[str, Any]:
         """Get current snapshot of all intelligence."""
