@@ -154,6 +154,29 @@ class GraceAgent:
         self.execution = get_execution_bridge(config=exec_config, genesis_tracker=genesis_tracker)
         self.feedback = get_feedback_processor()
 
+        # Code playbook system — tracks and monitors own operations
+        self._playbook_manager = None
+        try:
+            from agent.code_playbooks import CodePlaybookManager
+            from database.session import SessionLocal
+            _pb_session = SessionLocal()
+            if _pb_session:
+                self._playbook_manager = CodePlaybookManager(_pb_session)
+                logger.info("[AGENT] Code playbook system connected")
+        except Exception as e:
+            logger.debug(f"[AGENT] Code playbooks unavailable: {e}")
+
+        # Self-monitoring for the code agent's own micro-DB
+        self._self_agent = None
+        try:
+            from cognitive.self_agent_ecosystem import CodeAgentSelf
+            from database.session import SessionLocal
+            _sa_session = SessionLocal()
+            if _sa_session:
+                self._self_agent = CodeAgentSelf(_sa_session)
+        except Exception:
+            pass
+
         # State
         self.current_task: Optional[str] = None
         self.action_history: List[Tuple[ActionRequest, ActionResult]] = []
@@ -182,6 +205,25 @@ class GraceAgent:
         self.action_history = []
 
         logger.info(f"Starting task {task_id}: {task[:100]}...")
+
+        # Consult playbooks first — reuse proven strategies
+        playbook_match = None
+        task_type = self._classify_task_type(task)
+        if self._playbook_manager:
+            try:
+                playbook_match = self._playbook_manager.find_playbook(
+                    task_type=task_type
+                )
+                if playbook_match:
+                    logger.info(
+                        f"[AGENT] Playbook found: '{playbook_match.name}' "
+                        f"(trust: {playbook_match.trust_score:.2f}, "
+                        f"successes: {playbook_match.success_count})"
+                    )
+                    self.context["playbook_strategy"] = playbook_match.strategy
+                    self.context["playbook_steps"] = playbook_match.steps
+            except Exception as e:
+                logger.debug(f"[AGENT] Playbook lookup failed: {e}")
 
         result = TaskResult(task_id=task_id, status=TaskStatus.PLANNING)
 
@@ -261,14 +303,72 @@ class GraceAgent:
                 f"({result.actions_executed} actions, {result.duration_seconds:.1f}s)"
             )
 
+            # Store successful configuration as playbook
+            if result.status == TaskStatus.COMPLETED and self._playbook_manager:
+                try:
+                    test_pass_rate = result.actions_succeeded / max(result.actions_executed, 1)
+                    self._playbook_manager.create_from_success(
+                        task_type=task_type,
+                        file_pattern=result.files_modified[0] if result.files_modified else None,
+                        strategy={
+                            "task": task[:200],
+                            "actions": result.actions_executed,
+                            "files_modified": result.files_modified[:5],
+                            "patterns_learned": result.patterns_learned,
+                        },
+                        steps=[f"Step {i+1}" for i in range(result.actions_executed)],
+                        duration_ms=result.duration_seconds * 1000,
+                        lines_changed=len(result.files_modified),
+                        test_pass_rate=test_pass_rate,
+                    )
+                except Exception as pb_err:
+                    logger.debug(f"[AGENT] Playbook creation failed: {pb_err}")
+
+            # Log to self-monitoring micro-DB
+            if self._self_agent:
+                try:
+                    self._self_agent.log_attempt(
+                        action_type=task_type,
+                        status="pass" if result.status == TaskStatus.COMPLETED else "fail",
+                        target_file=result.files_modified[0] if result.files_modified else None,
+                        lines_changed=len(result.files_modified),
+                        tests_passed=result.actions_succeeded,
+                        tests_failed=result.actions_failed,
+                        trust_score=0.5 + (result.trust_delta if result.trust_delta else 0),
+                    )
+                except Exception:
+                    pass
+
             return result
 
         except Exception as e:
             logger.exception(f"Task {task_id} failed with error")
             result.status = TaskStatus.FAILED
             result.error = str(e)
-            result.completed_at = datetime.utcnow()
+            result.completed_at = datetime.now()
             result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+
+            # Record failure in playbook system
+            if self._playbook_manager:
+                try:
+                    self._playbook_manager.record_failure(
+                        task_type=task_type, error=str(e)
+                    )
+                except Exception:
+                    pass
+
+            # Log failure to self-monitoring
+            if self._self_agent:
+                try:
+                    self._self_agent.log_attempt(
+                        action_type=task_type,
+                        status="fail",
+                        error_message=str(e)[:500],
+                        trust_score=0.3,
+                    )
+                except Exception:
+                    pass
+
             return result
 
     async def _understand_task(self, task: str) -> Dict[str, Any]:
@@ -302,6 +402,10 @@ class GraceAgent:
             understanding["summary"] = f"Task: {task[:200]}"
 
         return understanding
+
+    def _classify_task_type(self, task: str) -> str:
+        """Classify task type for playbook lookup."""
+        return self._classify_task(task)
 
     def _classify_task(self, task: str) -> str:
         """Classify the type of task."""
