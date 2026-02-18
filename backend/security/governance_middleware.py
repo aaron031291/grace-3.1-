@@ -145,7 +145,7 @@ class OutputSafetyValidator:
             "safe": len(violations) == 0,
             "violations": violations,
             "checks_performed": len(cls.HARMFUL_PATTERNS) + len(cls.FABRICATION_PATTERNS),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
 
@@ -177,7 +177,7 @@ class AuditTrailManager:
     ):
         """Record a governance event in the audit trail."""
         entry = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "action": action,
             "input_hash": hash(input_data) % (10**8),
             "output_length": len(output_data),

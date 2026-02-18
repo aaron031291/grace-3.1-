@@ -41,7 +41,7 @@ class TopicNode:
 
     def __post_init__(self):
         if not self.discovered_at:
-            self.discovered_at = datetime.utcnow().isoformat()
+            self.discovered_at = datetime.now().isoformat()
 
 
 @dataclass
@@ -324,7 +324,7 @@ class UnifiedLearningPipeline:
             return
 
         self.running = True
-        self.stats["start_time"] = datetime.utcnow().isoformat()
+        self.stats["start_time"] = datetime.now().isoformat()
         self._thread = threading.Thread(
             target=self._pipeline_loop,
             daemon=True,
@@ -355,7 +355,7 @@ class UnifiedLearningPipeline:
             try:
                 cycle_count += 1
                 self.stats["total_cycles"] = cycle_count
-                self.stats["last_cycle_time"] = datetime.utcnow().isoformat()
+                self.stats["last_cycle_time"] = datetime.now().isoformat()
 
                 # Phase 1: Process pending seeds from ingestion
                 seeds_processed = self._process_pending_seeds()
@@ -370,7 +370,7 @@ class UnifiedLearningPipeline:
 
                 # Phase 4: Update stats
                 self.stats["uptime_seconds"] = (
-                    (datetime.utcnow() - datetime.fromisoformat(
+                    (datetime.now() - datetime.fromisoformat(
                         self.stats["start_time"]
                     )).total_seconds()
                     if self.stats["start_time"] else 0
@@ -425,7 +425,7 @@ class UnifiedLearningPipeline:
                 return
 
             try:
-                cutoff = datetime.utcnow() - timedelta(hours=1)
+                cutoff = datetime.now() - timedelta(hours=1)
                 recent_docs = session.query(Document).filter(
                     Document.status == "completed",
                     Document.created_at >= cutoff

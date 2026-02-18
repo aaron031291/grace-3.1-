@@ -26,7 +26,7 @@ os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
 # Diagnostic data collection
 _diagnostics: Dict[str, Any] = {
-    "session_id": datetime.utcnow().isoformat(),
+    "session_id": datetime.now().isoformat(),
     "environment": {
         "python_version": sys.version,
         "platform": sys.platform,
@@ -118,7 +118,7 @@ class DiagnosticCollector:
 
         pass_info = {
             "test": test_name,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "duration_ms": duration_ms,
             "categories": categories,
             "details": details or {},
@@ -149,7 +149,7 @@ class DiagnosticCollector:
 
         failure_info = {
             "test": test_name,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "duration_ms": duration_ms,
             "categories": categories,
             "error_type": error_type,
@@ -269,7 +269,7 @@ class DiagnosticCollector:
         skip_info = {
             "test": test_name,
             "reason": reason,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "categories": cls._categorize_test(test_name),
             "details": details or {},
             "suggested_fix": cls._get_suggested_fix(reason),
@@ -296,7 +296,7 @@ class DiagnosticCollector:
             "error_message": str(error),
             "import_chain": import_chain or [],
             "traceback": traceback.format_exc(),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "suggested_fix": cls._get_suggested_fix(str(error))
         }
         _diagnostics["import_errors"].append(error_info)
