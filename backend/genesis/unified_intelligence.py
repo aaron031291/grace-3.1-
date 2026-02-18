@@ -100,7 +100,16 @@ class UnifiedIntelligenceEngine:
         genesis_key_id: str = None,
         ttl_seconds: int = None,
     ):
-        """Record a single intelligence signal."""
+        """Record a single intelligence signal with deduplication."""
+        # Oracle-level deduplication — prevent spamming same record
+        try:
+            from cognitive.deduplication_engine import get_dedup_engine
+            dedup = get_dedup_engine()
+            if dedup.check_oracle_record_duplicate(source_system, signal_name, self.session):
+                return  # Skip duplicate
+        except Exception:
+            pass
+
         entry = UnifiedIntelligenceRecord(
             source_system=source_system,
             signal_type=signal_type,
