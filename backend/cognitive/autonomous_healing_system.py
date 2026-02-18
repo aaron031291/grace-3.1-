@@ -122,6 +122,14 @@ class AutonomousHealingSystem:
         # Initialize healing system
         self.healing_system = get_healing_system(str(repo_path) if repo_path else None)
 
+        # Initialize playbook manager for reusable success configurations
+        try:
+            from cognitive.healing_playbooks import PlaybookManager
+            self.playbook_manager = PlaybookManager(session)
+        except Exception as e:
+            self.playbook_manager = None
+            logger.debug(f"[AUTONOMOUS-HEALING] Playbook manager unavailable: {e}")
+
         # System state
         self.current_health = HealthStatus.HEALTHY
         self.anomalies_detected = []
@@ -301,11 +309,33 @@ class AutonomousHealingSystem:
         decisions = []
 
         for anomaly in anomalies:
-            # Determine appropriate healing action
-            action = self._select_healing_action(anomaly)
+            # Check playbooks first - reuse proven strategies
+            playbook_match = None
+            if self.playbook_manager:
+                try:
+                    playbook_match = self.playbook_manager.find_playbook(
+                        anomaly_type=anomaly["type"].value if hasattr(anomaly["type"], "value") else str(anomaly["type"]),
+                        anomaly_severity=anomaly.get("severity")
+                    )
+                    if playbook_match:
+                        logger.info(
+                            f"[AUTONOMOUS-HEALING] Playbook found: '{playbook_match.name}' "
+                            f"(trust: {playbook_match.trust_score:.2f}, uses: {playbook_match.success_count})"
+                        )
+                except Exception as e:
+                    logger.debug(f"[AUTONOMOUS-HEALING] Playbook lookup failed: {e}")
 
-            # Get trust score for action
-            trust_score = self.trust_scores.get(action, 0.5)
+            # Use playbook action if available, otherwise select new action
+            if playbook_match:
+                try:
+                    action = HealingAction(playbook_match.healing_action)
+                except ValueError:
+                    action = self._select_healing_action(anomaly)
+            else:
+                action = self._select_healing_action(anomaly)
+
+            # Get trust score (prefer playbook trust if available)
+            trust_score = playbook_match.trust_score if playbook_match else self.trust_scores.get(action, 0.5)
 
             # Decide if we can execute autonomously
             can_auto_execute = self._can_auto_execute(action, trust_score)
@@ -864,9 +894,36 @@ Focus on practical, safe, and effective healing."""
         self.session.add(example)
         self.session.commit()
 
+        # Store successful healing as a playbook for future reuse
+        if success and self.playbook_manager:
+            try:
+                anomaly_type = decision["anomaly"]["type"]
+                atype = anomaly_type.value if hasattr(anomaly_type, "value") else str(anomaly_type)
+                self.playbook_manager.create_playbook(
+                    anomaly_type=atype,
+                    anomaly_severity=decision["anomaly"].get("severity", "unknown"),
+                    healing_action=action.value,
+                    configuration={
+                        "trust_level": self.trust_level.name,
+                        "evidence": decision["anomaly"].get("evidence", []),
+                        "result_summary": str(result)[:500] if result else "",
+                    },
+                    steps=[decision.get("reason", "")],
+                    genesis_key_id=None,
+                )
+            except Exception as pb_err:
+                logger.debug(f"[AUTONOMOUS-HEALING] Playbook creation failed: {pb_err}")
+        elif not success and self.playbook_manager:
+            try:
+                anomaly_type = decision["anomaly"]["type"]
+                atype = anomaly_type.value if hasattr(anomaly_type, "value") else str(anomaly_type)
+                self.playbook_manager.record_failure(atype, action.value, decision["anomaly"].get("severity", "unknown"))
+            except Exception:
+                pass
+
         # Add to history
         self.healing_history.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "decision": decision,
             "result": result,
             "success": success
