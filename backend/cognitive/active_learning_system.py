@@ -120,6 +120,15 @@ class GraceActiveLearningSystem:
             cache_ttl_minutes=30
         )
 
+        # Genesis Key service for tracking learning operations
+        self._genesis_service = None
+        try:
+            from genesis.genesis_key_service import GenesisKeyService
+            self._genesis_service = GenesisKeyService(session=session)
+            logger.info("[ACTIVE-LEARNING] Genesis Key tracking connected")
+        except Exception:
+            pass
+
         # Training state
         self.current_session: Optional[TrainingSession] = None
         self.skill_levels: Dict[str, SkillLevel] = {}

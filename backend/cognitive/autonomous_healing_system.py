@@ -958,8 +958,8 @@ Focus on practical, safe, and effective healing."""
             decisions = []
             execution_results = {"executed": [], "awaiting_approval": [], "failed": []}
 
-        return {
-            "timestamp": datetime.utcnow().isoformat(),
+        cycle_result = {
+            "timestamp": datetime.now().isoformat(),
             "health_status": assessment["health_status"],
             "anomalies_detected": assessment["anomalies_detected"],
             "decisions_made": len(decisions),
@@ -970,6 +970,44 @@ Focus on practical, safe, and effective healing."""
             "decisions": decisions,
             "results": execution_results
         }
+
+        # Feed to unified intelligence
+        try:
+            from genesis.unified_intelligence import UnifiedIntelligenceEngine
+            UnifiedIntelligenceEngine(self.session).record(
+                source_system="self_healing", signal_type="cycle_result",
+                signal_name="healing_cycle", value_numeric=len(execution_results["executed"]),
+                value_json={"health": assessment["health_status"], "anomalies": assessment["anomalies_detected"]},
+                severity="warning" if assessment["anomalies_detected"] > 0 else "info",
+                trust_score=0.85, ttl_seconds=600,
+            )
+        except Exception:
+            pass
+
+        # TimeSense timing
+        try:
+            from cognitive.timesense_governance import get_timesense_governance
+            get_timesense_governance().record("healing.cycle", 0, "healing")
+        except Exception:
+            pass
+
+        # Propose sandbox experiment if complex anomalies found
+        if assessment["anomalies_detected"] > 2:
+            try:
+                from cognitive.autonomous_sandbox_lab import get_sandbox_lab
+                sandbox = get_sandbox_lab()
+                if sandbox:
+                    sandbox.propose_experiment(
+                        name=f"heal_anomaly_{assessment['anomalies_detected']}",
+                        hypothesis=f"Healing {assessment['anomalies_detected']} anomalies will improve system health",
+                        experiment_type="healing_strategy",
+                        parameters={"anomalies": assessment["anomalies_detected"]},
+                    ) if hasattr(sandbox, 'propose_experiment') else None
+                    logger.info("[AUTONOMOUS-HEALING] Proposed sandbox experiment for complex anomalies")
+            except Exception:
+                pass
+
+        return cycle_result
 
     # ======================================================================
     # Status & Reporting

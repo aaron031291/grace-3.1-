@@ -237,6 +237,24 @@ class GraceAgent:
             plan = await self._create_plan(task, understanding)
             logger.info(f"Created plan with {len(plan.get('steps', []))} steps")
 
+            # Phase 2b: If risky task, propose sandbox experiment first
+            try:
+                task_lower = task.lower()
+                is_risky = any(w in task_lower for w in ["delete", "remove", "production", "deploy", "migrate", "rewrite"])
+                if is_risky:
+                    from cognitive.autonomous_sandbox_lab import get_sandbox_lab
+                    sandbox = get_sandbox_lab()
+                    if sandbox and hasattr(sandbox, 'propose_experiment'):
+                        sandbox.propose_experiment(
+                            name=f"agent_task_{task_id}",
+                            hypothesis=f"Task '{task[:80]}' can be safely executed",
+                            experiment_type="code_change",
+                            parameters={"task": task[:200], "risk": "high"},
+                        )
+                        logger.info(f"[AGENT] Proposed sandbox experiment for risky task")
+            except Exception:
+                pass
+
             # Phase 3: Execute plan
             result.status = TaskStatus.EXECUTING
             iteration = 0

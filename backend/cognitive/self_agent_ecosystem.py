@@ -504,6 +504,22 @@ class ClosedLoopOrchestrator:
                 elif bn_name == "learner" and bn_kpi < 0.5:
                     self.agents["learner"].execute_study("system_improvement")
                 logger.info(f"[CLOSED-LOOP] Auto-remediated bottleneck: {bn_name} (KPI={bn_kpi:.1%})")
+
+                # If KPI still critical after remediation, propose sandbox experiment
+                if bn_kpi < 0.3:
+                    try:
+                        from cognitive.autonomous_sandbox_lab import get_sandbox_lab
+                        sandbox = get_sandbox_lab()
+                        if sandbox and hasattr(sandbox, 'propose_experiment'):
+                            sandbox.propose_experiment(
+                                name=f"improve_{bn_name}_cycle{self.cycle_count}",
+                                hypothesis=f"Agent {bn_name} at {bn_kpi:.0%} KPI needs experimental improvement",
+                                experiment_type="self_improvement",
+                                parameters={"agent": bn_name, "kpi": bn_kpi},
+                            )
+                            logger.info(f"[CLOSED-LOOP] Proposed sandbox experiment for {bn_name}")
+                    except Exception:
+                        pass
             except Exception as e:
                 logger.debug(f"[CLOSED-LOOP] Auto-remediation failed for {bn_name}: {e}")
 
