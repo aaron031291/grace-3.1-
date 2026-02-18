@@ -1699,7 +1699,25 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         except Exception as e:
             logger.debug(f"[CHAT-INTEL] Ambiguity detection skipped: {e}")
 
-        # Phase 2: Oracle query routing prediction
+        # Phase 2: Reasoning Router — classify into Tier 0/1/2/3
+        reasoning_tier = 1  # Default: standard
+        try:
+            from llm_orchestrator.reasoning_router import get_reasoning_router
+            rr = get_reasoning_router()
+            ambiguity_score = ambiguity_result.get("ambiguity_score", 0) if ambiguity_result else 0
+            routing_decision = rr.classify(
+                query=user_query,
+                ambiguity_score=ambiguity_score,
+            )
+            reasoning_tier = routing_decision.tier
+            logger.info(
+                f"[REASONING-ROUTER] Tier {routing_decision.tier_name}: {routing_decision.reason} "
+                f"(est. {routing_decision.estimated_time_ms:.0f}ms)"
+            )
+        except Exception as e:
+            logger.debug(f"[REASONING-ROUTER] Classification skipped: {e}")
+
+        # Phase 2b: Oracle query routing prediction
         try:
             routing_prediction = chat_intel.predict_query_routing(user_query)
             logger.info(
