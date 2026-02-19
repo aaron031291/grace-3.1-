@@ -244,23 +244,68 @@ class KNNSubAgentOrchestrator:
         self._seen_topics: Set[str] = set()
         self._lock = threading.Lock()
 
+        # Swarm communication — agents talk to each other
+        from cognitive.swarm_comms import get_swarm_comm_bus, get_shared_task_log, SwarmMessage, TaskLogEntry
+        self._comm_bus = get_swarm_comm_bus()
+        self._task_log = get_shared_task_log()
+        self._SwarmMessage = SwarmMessage
+        self._TaskLogEntry = TaskLogEntry
+
+        # Register reactive listeners — when one agent finds something,
+        # other agents react by searching deeper
+        self._reactive_discoveries: List[Discovery] = []
+        self._comm_bus.register_reactive_listener("orchestrator", self._on_agent_discovery)
+
         self.stats = {
             "total_swarms": 0,
             "total_discoveries": 0,
+            "reactive_discoveries": 0,
+            "tasks_skipped_duplicate": 0,
             "by_source": {"vector_search": 0, "web_search": 0, "api_search": 0, "cross_domain": 0},
         }
+
+    def _on_agent_discovery(self, message):
+        """Reactive callback — when any agent posts a discovery."""
+        if message.trust_score >= 0.7 and message.message_type == "discovery":
+            self._reactive_discoveries.append(Discovery(
+                topic=message.topic,
+                text=message.content[:300],
+                source=f"reactive_{message.sender}",
+                trust_score=message.trust_score * 0.9,
+            ))
+            self.stats["reactive_discoveries"] += 1
 
     def swarm_expand(self, seed_topic: str, seed_text: str = "") -> SwarmResult:
         """
         Launch all sub-agents in parallel to expand a seed topic.
 
-        Returns merged, deduplicated discoveries.
+        Agents communicate via the comm bus during search.
+        Task log prevents duplicate work.
         """
         start = time.time()
         self.stats["total_swarms"] += 1
         query = seed_text[:200] if seed_text else seed_topic
 
+        # Check task log — was this already expanded?
+        if self._task_log.was_already_done(seed_topic, "swarm_expand"):
+            self.stats["tasks_skipped_duplicate"] += 1
+            return SwarmResult(seed_topic=seed_topic, total_discoveries=0, duration_ms=0)
+
+        # Clear reactive discoveries for this round
+        self._reactive_discoveries = []
+
         all_discoveries: List[Discovery] = []
+
+        def _agent_wrapper(name: str, fn, q: str) -> List[Discovery]:
+            """Wraps agent search — posts discoveries to comm bus as they're found."""
+            results = fn(q)
+            for d in results:
+                self._comm_bus.post(self._SwarmMessage(
+                    sender=name, message_type="discovery",
+                    topic=d.topic, content=d.text[:300],
+                    trust_score=d.trust_score,
+                ))
+            return results
 
         agents = [
             ("vector", self.vector_agent.search, query),
@@ -272,7 +317,7 @@ class KNNSubAgentOrchestrator:
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             futures = {}
             for name, fn, q in agents:
-                futures[executor.submit(fn, q)] = name
+                futures[executor.submit(_agent_wrapper, name, fn, q)] = name
 
             for future in as_completed(futures, timeout=30):
                 agent_name = futures[future]
@@ -281,6 +326,9 @@ class KNNSubAgentOrchestrator:
                     all_discoveries.extend(results)
                 except Exception as e:
                     logger.debug(f"[KNN-SWARM] {agent_name} failed: {e}")
+
+        # Add reactive discoveries (found because agents talked to each other)
+        all_discoveries.extend(self._reactive_discoveries)
 
         # Deduplicate
         unique = self._deduplicate(all_discoveries)
@@ -305,8 +353,20 @@ class KNNSubAgentOrchestrator:
 
         duration = (time.time() - start) * 1000
 
+        # Log to shared task log — other agents can see this was done
+        self._task_log.log_task(self._TaskLogEntry(
+            task_type="swarm_expand",
+            topic=seed_topic,
+            agent="knn_orchestrator",
+            status="completed",
+            result_count=len(unique),
+            trust_score=unique[0].trust_score if unique else 0,
+            details={"by_source": by_source, "reactive": len(self._reactive_discoveries)},
+        ))
+
         _track_knn(
-            f"Swarm: {len(unique)} discoveries from {len(by_source)} sources",
+            f"Swarm: {len(unique)} discoveries from {len(by_source)} sources "
+            f"(+{len(self._reactive_discoveries)} reactive)",
             confidence=unique[0].trust_score if unique else 0,
         )
 
