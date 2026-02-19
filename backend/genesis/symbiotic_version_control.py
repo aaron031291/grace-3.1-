@@ -122,10 +122,32 @@ class SymbioticVersionControl:
                 session=session
             )
 
-            # CRITICAL: Store key_id and context_data IMMEDIATELY while object is still bound to session
-            # This prevents DetachedInstanceError when accessing these attributes later
-            operation_key_id = operation_genesis_key.key_id
-            operation_context_data = operation_genesis_key.context_data.copy() if operation_genesis_key.context_data else {}
+            # CRITICAL: Extract key attributes IMMEDIATELY while still in the same session.
+            # Use a safety wrapper in case the object was rolled back or expired.
+            try:
+                operation_key_id = operation_genesis_key.key_id
+                operation_context_data = (
+                    operation_genesis_key.context_data.copy()
+                    if operation_genesis_key.context_data else {}
+                )
+            except Exception as attr_err:
+                logger.warning(f"[SYMBIOTIC] Could not read genesis key attributes ({attr_err}), re-fetching from DB")
+                try:
+                    # Re-query just the key_id column by object identity
+                    from sqlalchemy import inspect as sa_inspect
+                    pk = sa_inspect(operation_genesis_key).identity
+                    if pk:
+                        refreshed = session.query(
+                            type(operation_genesis_key)
+                        ).filter_by(id=pk[0]).first()
+                        operation_key_id = refreshed.key_id if refreshed else f"UNKNOWN-{id(operation_genesis_key)}"
+                        operation_context_data = refreshed.context_data.copy() if (refreshed and refreshed.context_data) else {}
+                    else:
+                        operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
+                        operation_context_data = {}
+                except Exception:
+                    operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
+                    operation_context_data = {}
 
             # Create version entry (linked to Genesis Key)
             version_result = self.version_tracker.track_file_version(

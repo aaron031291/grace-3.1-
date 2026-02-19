@@ -49,10 +49,30 @@ class FileVersionTracker:
         return backend_dir
 
     def _load_or_create_metadata(self):
-        """Load or create file version metadata."""
+        """Load or create file version metadata, repairing corruption and stale paths."""
         if os.path.exists(self.version_metadata_file):
-            with open(self.version_metadata_file, 'r') as f:
-                self.version_metadata = json.load(f)
+            try:
+                with open(self.version_metadata_file, 'r', encoding='utf-8', errors='replace') as f:
+                    self.version_metadata = json.load(f)
+
+                # Auto-fix stale absolute paths from other machines/OS
+                self._fix_stale_paths()
+
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning(f"[VERSION-TRACKER] Metadata file unreadable ({e}), backing up and recreating")
+                backup_path = self.version_metadata_file + ".corrupt.bak"
+                try:
+                    import shutil
+                    shutil.copy2(self.version_metadata_file, backup_path)
+                    logger.warning(f"[VERSION-TRACKER] Corrupt backup saved: {backup_path}")
+                except Exception:
+                    pass
+                self.version_metadata = {
+                    "version": "1.0",
+                    "created_at": datetime.utcnow().isoformat(),
+                    "files": {}
+                }
+                self._save_metadata()
         else:
             self.version_metadata = {
                 "version": "1.0",
@@ -60,6 +80,44 @@ class FileVersionTracker:
                 "files": {}  # file_genesis_key -> version info
             }
             self._save_metadata()
+
+    def _fix_stale_paths(self):
+        """
+        Rewrite absolute paths that belong to a different machine or OS.
+        Paths are updated to be absolute on the current machine by resolving
+        them relative to the current base_path.
+        """
+        import re
+        changed = False
+        current_backend = str(Path(self.base_path).resolve())
+
+        for key, entry in self.version_metadata.get("files", {}).items():
+            for field in ("file_path", "absolute_path"):
+                val = entry.get(field, "")
+                if not val:
+                    continue
+
+                # Detect paths from another machine (Linux paths on Windows or vice versa)
+                is_foreign = (
+                    (val.startswith("/") and os.sep == "\\") or  # Linux path on Windows
+                    ("\\Users\\" in val and os.sep == "/")       # Windows path on Linux
+                )
+
+                if is_foreign:
+                    # Extract the relative portion after any known "backend/" segment
+                    match = re.search(r'[/\\]backend[/\\](.*)', val)
+                    if match:
+                        rel = match.group(1).replace("/", os.sep).replace("\\", os.sep)
+                        new_val = os.path.join(current_backend, rel)
+                        entry[field] = new_val
+                        changed = True
+
+        if changed:
+            logger.info("[VERSION-TRACKER] Stale paths updated to current machine, saving metadata")
+            self._save_metadata()
+
+
+
 
     def _save_metadata(self):
         """Save file version metadata."""

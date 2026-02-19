@@ -88,10 +88,24 @@ class GenesisKeyService:
                 sess.commit()
                 logger.info(f"Created new user profile: {user_id}")
 
+            # Eagerly load all needed attributes before potentially closing session
+            if close_session:
+                sess.flush()
+                # Expunge so the object is detached cleanly (not expired)
+                from sqlalchemy.orm.session import make_transient
+                sess.expunge(user)
+                make_transient(user)
+
             return user
+        except Exception as e:
+            logger.error(f"Failed to create user profile: {e}")
+            if close_session:
+                sess.rollback()
+            raise
         finally:
             if close_session:
                 sess.close()
+
 
     def create_key(
         self,
@@ -269,6 +283,13 @@ class GenesisKeyService:
             # If a session was passed in, let the caller handle commits
             if close_session:
                 sess.commit()
+                # Detach key cleanly so caller can read key_id after session close
+                from sqlalchemy.orm.session import make_transient
+                try:
+                    sess.expunge(key)
+                    make_transient(key)
+                except Exception:
+                    pass
 
             # Update user statistics if user_id provided
             if user_id:
@@ -566,7 +587,7 @@ class GenesisKeyService:
             user = session.query(UserProfile).filter(UserProfile.user_id == user_id).first()
             if user:
                 user.total_actions += 1
-                user.last_seen = datetime.utcnow()
+                user.last_seen = datetime.utcnow()  # Always set a fresh datetime
 
                 if key_type == GenesisKeyType.CODE_CHANGE:
                     user.total_changes += 1

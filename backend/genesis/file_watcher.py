@@ -53,6 +53,8 @@ class GenesisFileWatcher(FileSystemEventHandler):
             'auto_search',  # Exclude internet search cache - no need for version control
             'GU-',  # Exclude Genesis User folders (pattern prefix)
             'session_SS-',  # Exclude session files (pattern prefix)
+            'sandbox_lab',  # Exclude sandbox experiment files - too large, not useful to version
+            'EXP-',  # Exclude experiment JSON files
         }
         self.debounce_seconds = debounce_seconds
 
@@ -384,6 +386,8 @@ def start_watching_workspace(workspace_path: Optional[str] = None) -> bool:
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
             'grace.db', 'grace.db-shm', 'grace.db-wal',
             '.log', 'embedding_debug.log', 'nul', 'logs',  # Exclude logs directory
-            'auto_search'  # Exclude internet search cache
+            'auto_search',  # Exclude internet search cache
+            'sandbox_lab',  # Exclude sandbox experiment files
+            'EXP-',  # Exclude experiment JSON files
         }
     )

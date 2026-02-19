@@ -102,7 +102,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 how_method=f"HTTP Response {response.status_code}",
                 user_id=genesis_id,
                 session_id=session_id,
-                parent_key_id=request_key.key_id if request_key else None,
+                parent_key_id=getattr(request_key, 'key_id', None) if request_key else None,
                 output_data={
                     "status_code": response.status_code,
                     "duration_ms": duration_ms,
@@ -158,7 +158,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 profile_data={
                     "user_id": genesis_id,
                     "username": user.username,
-                    "first_seen": user.first_seen.isoformat(),
+                    "first_seen": (user.first_seen or datetime.utcnow()).isoformat(),
                     "user_agent": request.headers.get("user-agent"),
                     "initial_ip": request.client.host if request.client else None,
                     "initial_path": request.url.path
