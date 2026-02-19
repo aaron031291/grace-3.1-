@@ -397,8 +397,21 @@ class UnifiedLearningPipeline:
                 continue
 
             try:
+                # Use parallel sub-agent swarm if available, fallback to single-thread
+                swarm_result = None
+                try:
+                    from cognitive.knn_subagent_engine import get_knn_orchestrator
+                    swarm = get_knn_orchestrator()
+                    swarm_result = swarm.swarm_expand(topic, text)
+                except Exception:
+                    pass
+
                 result = self._neighbor_engine.expand_from_seed(topic, text)
                 self._processed_seeds.add(topic)
+
+                # Merge swarm discoveries into stats
+                if swarm_result:
+                    self.stats["total_topics_discovered"] += swarm_result.total_discoveries
                 processed += 1
 
                 self.stats["total_expansions"] += 1
