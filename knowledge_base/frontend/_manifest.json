@@ -1,0 +1,41 @@
+{
+  "documents": {
+    "PHP_MySQL_Complete_Course_2020.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.106366"
+    },
+    "NextJS_Ultimate_Ebook.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.150158"
+    },
+    "Terraform_Associate_Certification.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.163629"
+    },
+    "Oracle_Cloud_Infrastructure_Architect.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.187658"
+    },
+    "Core_Computer_Science_IB_Diploma.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.197964"
+    },
+    "Head_First_Go.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.217552"
+    },
+    "How_to_Code_in_React.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.224213"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.224226",
+  "document_count": 7
+}

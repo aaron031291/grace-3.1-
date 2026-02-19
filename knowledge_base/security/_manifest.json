@@ -1,0 +1,31 @@
+{
+  "documents": {
+    "CCSP_Cloud_Security_Professional.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.115978"
+    },
+    "Learning_DevSecOps_Ribeiro_OReilly.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.130921"
+    },
+    "Data_Analytics_Cybersecurity.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.136443"
+    },
+    "Guide_Cybersecurity_Digital_Transformation_Springer.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.176816"
+    },
+    "Cyber_Security_SOAR_IATAC.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.189557"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.189562",
+  "document_count": 5
+}

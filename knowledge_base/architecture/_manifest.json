@@ -1,0 +1,36 @@
+{
+  "documents": {
+    "Implementing_DDD_ABP_Kalkan.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.127858"
+    },
+    "Software_Architecture_Patterns_OReilly_2022.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.153707"
+    },
+    "Enterprise_Architecture_Frameworks.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.161626"
+    },
+    "Strategic_Monoliths_Microservices_2021.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.229002"
+    },
+    "Clean_Architectures_Python_Giordani.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.230299"
+    },
+    "Enterprise_Design_Patterns_Sousa.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.260775"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.260780",
+  "document_count": 6
+}

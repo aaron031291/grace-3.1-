@@ -1,0 +1,16 @@
+{
+  "documents": {
+    "Modern_Software_Engineering_David_Farley.pdf": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.147895"
+    },
+    "The_Pragmatic_Programmer_Hunt_Thomas.pdf": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.172985"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.172990",
+  "document_count": 2
+}

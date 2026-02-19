@@ -1,0 +1,36 @@
+{
+  "documents": {
+    "Algorithm_Design_With_Haskell_Bird_Gibbons_2020.pdf": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.111002"
+    },
+    "Quantum_Machine_Learning_Python_Zickert_2021.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.113570"
+    },
+    "Introduction_to_Java.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.123286"
+    },
+    "Rust_Programming_Language_3rd.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.181668"
+    },
+    "Haskell_Programming_4th_Ed.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.225839"
+    },
+    "Python_Web_Frameworks_OReilly.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.246304"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.246307",
+  "document_count": 6
+}

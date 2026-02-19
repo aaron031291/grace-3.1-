@@ -84,6 +84,7 @@ from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Ex
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from api.unified_pipeline_api import router as unified_pipeline_router  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor expansion
+from api.knowledge_browser_api import router as knowledge_browser_router  # Knowledge Browser - domain-organized file system
 from api.system_health import router as system_health_router  # Unified system health - all subsystems in one endpoint
 from api.websocket_manager import router as ws_manager_router  # Central WebSocket manager - real-time event bridge
 from api.self_mirror_api import router as self_mirror_router  # Self-Mirror telemetry dashboard - [T,M,P] vectors
@@ -687,6 +688,7 @@ app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge 
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
 app.include_router(unified_pipeline_router)  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor knowledge expansion
+app.include_router(knowledge_browser_router)  # Knowledge Browser - domain-organized Oracle file system
 app.include_router(llm_learning_router)  # LLM Learning & Tracking - learn from Kimi, track reasoning, reduce LLM dependency
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
