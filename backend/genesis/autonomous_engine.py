@@ -1033,6 +1033,5 @@ async def start_autonomous_engine():
 
 async def stop_autonomous_engine():
     """Stop the autonomous engine."""
-    global _engine
     if _engine:
         await _engine.stop()

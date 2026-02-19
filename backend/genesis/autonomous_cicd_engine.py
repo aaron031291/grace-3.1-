@@ -811,7 +811,6 @@ async def start_autonomous_cicd():
 
 async def stop_autonomous_cicd():
     """Stop the autonomous CI/CD engine."""
-    global _autonomous_engine
     if _autonomous_engine:
         await _autonomous_engine.stop()
     logger.info("[AutonomousCICD] Autonomous engine stopped")

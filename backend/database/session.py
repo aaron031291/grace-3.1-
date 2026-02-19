@@ -91,8 +91,6 @@ def get_session_factory() -> sessionmaker:
         finally:
             session.close()
     """
-    global SessionLocal
-
     if SessionLocal is None:
         initialize_session_factory()
 
