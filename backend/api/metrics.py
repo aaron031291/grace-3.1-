@@ -310,7 +310,7 @@ async def get_metrics_json():
         "gauges": dict(metrics._gauges),
         "histograms": {k: {kk: len(vv) for kk, vv in v.items()} for k, v in metrics._histograms.items()},
         "summaries": {k: {kk: len(vv) for kk, vv in v.items()} for k, v in metrics._summaries.items()},
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 

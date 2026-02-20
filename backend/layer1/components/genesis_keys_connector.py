@@ -128,7 +128,7 @@ class GenesisKeysConnector:
                 "genesis_key_id": genesis_key_id,
                 "file_path": file_path,
                 "document_id": document_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.GENESIS_KEYS
         )
@@ -172,7 +172,7 @@ class GenesisKeysConnector:
                 "learning_id": learning_id,
                 "learning_type": experience_type,
                 "user_id": user_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.GENESIS_KEYS
         )
@@ -198,7 +198,7 @@ class GenesisKeysConnector:
                 "user_id": user_id,
                 "contribution_type": contribution_type,
                 "genesis_key_id": genesis_key_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.GENESIS_KEYS
         )
@@ -358,7 +358,7 @@ class GenesisKeysConnector:
         metadata: Dict[str, Any]
     ) -> str:
         """Create a new Genesis Key."""
-        timestamp = int(datetime.utcnow().timestamp())
+        timestamp = int(datetime.now().timestamp())
         hash_input = f"{key_type}-{entity_type}-{entity_id}-{timestamp}"
         key_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:12]
 
@@ -369,7 +369,7 @@ class GenesisKeysConnector:
         genesis_key = GenesisKey(
             genesis_key_id=genesis_key_id,
             key_type=key_type,
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(),
             immutable=True,
             metadata=metadata
         )

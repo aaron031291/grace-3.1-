@@ -189,7 +189,7 @@ def _init_enterprise_repos():
 
     for i, repo in enumerate(enterprise_repos):
         repo_id = f"repo_{i:03d}"
-        now = datetime.utcnow().isoformat()
+        now = datetime.now().isoformat()
 
         _repositories[repo_id] = {
             "id": repo_id,
@@ -280,7 +280,7 @@ async def add_repository(
     """
     try:
         repo_id = _generate_id()
-        now = datetime.utcnow().isoformat()
+        now = datetime.now().isoformat()
 
         repo = {
             "id": repo_id,
@@ -323,7 +323,7 @@ async def bulk_add_repositories(
     """
     try:
         added = []
-        now = datetime.utcnow().isoformat()
+        now = datetime.now().isoformat()
 
         for config in request.repositories:
             repo_id = _generate_id()
@@ -406,7 +406,7 @@ async def update_repository(
             "exclude_patterns": config.exclude_patterns,
             "auto_sync": config.auto_sync,
             "metadata": config.metadata,
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.now().isoformat()
         })
 
         return RepositoryResponse(**repo)
@@ -453,7 +453,7 @@ async def ingest_repository(
             raise HTTPException(status_code=404, detail=f"Repository '{repository_id}' not found")
 
         repo = _repositories[repository_id]
-        started_at = datetime.utcnow()
+        started_at = datetime.now()
 
         # Update status
         repo["ingestion_status"] = IngestionStatus.IN_PROGRESS
@@ -468,7 +468,7 @@ async def ingest_repository(
         files_indexed = int(files_processed * random.uniform(0.8, 0.95))
         files_skipped = files_processed - files_indexed
 
-        completed_at = datetime.utcnow()
+        completed_at = datetime.now()
         duration = (completed_at - started_at).total_seconds()
 
         # Update repository
@@ -556,7 +556,7 @@ async def get_repository_files(
             files.append({
                 "path": f"src/file_{i}.{repo.get('language', 'txt').lower()[:2]}",
                 "size_bytes": 1000 + i * 100,
-                "last_modified": datetime.utcnow().isoformat(),
+                "last_modified": datetime.now().isoformat(),
                 "indexed": True
             })
 
@@ -685,7 +685,7 @@ async def check_repositories_health(session: Session = Depends(get_session)):
             "healthy": healthy[:10],
             "unhealthy": unhealthy[:10],
             "outdated": outdated[:10],
-            "checked_at": datetime.utcnow().isoformat()
+            "checked_at": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -729,7 +729,7 @@ async def set_repository_priority(
 
         repo = _repositories[repository_id]
         repo["priority"] = priority
-        repo["updated_at"] = datetime.utcnow().isoformat()
+        repo["updated_at"] = datetime.now().isoformat()
 
         return {
             "repository_id": repository_id,

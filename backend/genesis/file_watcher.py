@@ -228,7 +228,7 @@ class GenesisFileWatcher(FileSystemEventHandler):
                 file_path=rel_path,
                 context_data={
                     "operation_type": "delete",
-                    "deleted_at": datetime.utcnow().isoformat()
+                    "deleted_at": datetime.now().isoformat()
                 },
                 tags=["file_delete", "watcher"]
             )

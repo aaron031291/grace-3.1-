@@ -104,7 +104,7 @@ class ComprehensiveTracker:
                 session_id=self.session_id,
                 what_description=what_description,
                 where_location=where_location,
-                when_timestamp=datetime.utcnow(),
+                when_timestamp=datetime.now(),
                 why_reason=why_reason,
                 who_actor=who_actor or self.user_id,
                 how_method=how_method,

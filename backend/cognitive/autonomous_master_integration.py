@@ -291,7 +291,7 @@ class AutonomousMasterIntegration:
         logger.info("[MASTER-INTEGRATION] Running proactive monitoring cycle...")
 
         results = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "actions": []
         }
 

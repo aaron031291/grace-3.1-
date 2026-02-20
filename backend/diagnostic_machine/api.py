@@ -354,8 +354,8 @@ async def get_full_diagnostic_report():
 
         # Build comprehensive report
         report = {
-            "report_id": f"REPORT-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}",
-            "generated_at": datetime.utcnow().isoformat(),
+            "report_id": f"REPORT-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "generated_at": datetime.now().isoformat(),
             "cycle_id": cycle.cycle_id,
             "success": cycle.success,
         }

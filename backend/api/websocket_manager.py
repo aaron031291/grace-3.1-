@@ -44,7 +44,7 @@ class ConnectionManager:
             "type": "system.connected",
             "data": {
                 "message": "Connected to Grace real-time event stream",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "active_clients": len(self.active_connections),
             },
         })
@@ -74,7 +74,7 @@ class ConnectionManager:
         message = json.dumps({
             "type": event_type,
             "data": data,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         })
 
         disconnected = []
@@ -96,7 +96,7 @@ class ConnectionManager:
         message = json.dumps({
             "type": topic,
             "data": data,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         })
 
         disconnected = []
@@ -169,7 +169,7 @@ async def websocket_event_stream(websocket: WebSocket):
                 elif action == "ping":
                     await websocket.send_json({
                         "type": "system.pong",
-                        "data": {"timestamp": datetime.utcnow().isoformat()},
+                        "data": {"timestamp": datetime.now().isoformat()},
                     })
 
                 elif action == "get_stats":

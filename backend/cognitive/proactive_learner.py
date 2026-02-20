@@ -59,7 +59,7 @@ class LearningTask:
     topic: Optional[str] = None
     learning_objectives: List[str] = field(default_factory=list)
     priority: int = 5  # 1 (highest) to 10 (lowest)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
     status: str = "pending"  # pending, processing, completed, failed
     result: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
@@ -138,7 +138,7 @@ class FileMonitorHandler(FileSystemEventHandler):
             task_type="ingest_and_study",
             file_path=str(file_path),
             priority=1,  # High priority for new files
-            created_at=datetime.utcnow()
+            created_at=datetime.now()
         )
 
         # Add to learning queue
@@ -171,7 +171,7 @@ class FileMonitorHandler(FileSystemEventHandler):
                 task_type="ingest_and_study",
                 file_path=str(file_path),
                 priority=2,  # High priority for updates
-                created_at=datetime.utcnow()
+                created_at=datetime.now()
             )
 
             self.learning_queue.put(task)
@@ -576,7 +576,7 @@ class ProactiveLearningOrchestrator:
         """Start proactive learning system."""
         logger.info("[ORCHESTRATOR] Starting proactive learning system...")
 
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now()
 
         # Start file monitoring
         self.observer.schedule(
@@ -622,7 +622,7 @@ class ProactiveLearningOrchestrator:
 
         Returns task_id for tracking.
         """
-        task_id = f"{task_type}_{datetime.utcnow().timestamp()}"
+        task_id = f"{task_type}_{datetime.now().timestamp()}"
 
         task = LearningTask(
             task_id=task_id,
@@ -647,7 +647,7 @@ class ProactiveLearningOrchestrator:
 
         # Calculate learning velocity
         if self.start_time:
-            hours_running = (datetime.utcnow() - self.start_time).total_seconds() / 3600
+            hours_running = (datetime.now() - self.start_time).total_seconds() / 3600
             learning_velocity = total_concepts / hours_running if hours_running > 0 else 0
         else:
             learning_velocity = 0
@@ -661,7 +661,7 @@ class ProactiveLearningOrchestrator:
             "total_concepts_learned": total_concepts,
             "learning_velocity_per_hour": round(learning_velocity, 2),
             "uptime_hours": (
-                (datetime.utcnow() - self.start_time).total_seconds() / 3600
+                (datetime.now() - self.start_time).total_seconds() / 3600
                 if self.start_time else 0
             ),
             "subagents": [agent.get_status() for agent in self.subagents]

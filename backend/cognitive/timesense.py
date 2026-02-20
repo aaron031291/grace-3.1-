@@ -170,7 +170,7 @@ class CapacitySnapshot:
     knowledge_base_bytes: float = 0
     vector_db_entries: int = 0
     estimated_vector_db_bytes: float = 0
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
     @property
     def total_knowledge_formatted(self) -> str:
@@ -376,8 +376,8 @@ class WorkPattern(str, Enum):
 @dataclass
 class TemporalContext:
     """Grace's awareness of time."""
-    current_time: datetime = field(default_factory=datetime.utcnow)
-    session_start: datetime = field(default_factory=datetime.utcnow)
+    current_time: datetime = field(default_factory=datetime.now)
+    session_start: datetime = field(default_factory=datetime.now)
     session_duration_seconds: float = 0.0
     time_since_last_action_seconds: float = 0.0
     time_of_day: TimeOfDay = TimeOfDay.MORNING
@@ -405,7 +405,7 @@ class TimingRecord:
     operation: str
     component: str
     duration_ms: float
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     success: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -443,7 +443,7 @@ class TemporalAnomaly:
     actual_ms: float
     deviation_factor: float  # actual / expected
     severity: str  # minor, moderate, severe
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 # =============================================================================
@@ -463,7 +463,7 @@ class OperationTimer:
 
     def record(self, duration_ms: float, success: bool = True):
         self._durations.append(duration_ms)
-        self._timestamps.append(datetime.utcnow())
+        self._timestamps.append(datetime.now())
         self.total_invocations += 1
         if success:
             self._success_count += 1
@@ -682,8 +682,8 @@ class TimeSenseEngine:
         self.scheduler = TimeAwareScheduler()
         self.dep_graph = OperationDependencyGraph()
 
-        self._session_start = datetime.utcnow()
-        self._last_action_time = datetime.utcnow()
+        self._session_start = datetime.now()
+        self._last_action_time = datetime.now()
         self._action_timestamps: deque = deque(maxlen=1000)
 
         self._anomalies: deque = deque(maxlen=500)
@@ -729,8 +729,8 @@ class TimeSenseEngine:
         timer = self._operation_timers[operation]
         timer.record(duration_ms, success)
 
-        self._last_action_time = datetime.utcnow()
-        self._action_timestamps.append(datetime.utcnow())
+        self._last_action_time = datetime.now()
+        self._action_timestamps.append(datetime.now())
         self._stats["total_operations_timed"] += 1
 
         if data_bytes > 0:
@@ -752,7 +752,7 @@ class TimeSenseEngine:
         # Feed enhanced trackers
         self.trends.record(operation, duration_ms, success)
         self.learning_curves.record(operation, duration_ms)
-        self.scheduler.record_load(datetime.utcnow().hour, min(duration_ms / 1000.0, 1.0))
+        self.scheduler.record_load(datetime.now().hour, min(duration_ms / 1000.0, 1.0))
 
         if self.self_mirror:
             try:
@@ -801,7 +801,7 @@ class TimeSenseEngine:
 
     def get_temporal_context(self) -> TemporalContext:
         """Get Grace's current temporal awareness."""
-        now = datetime.utcnow()
+        now = datetime.now()
         session_duration = (now - self._session_start).total_seconds()
         time_since_last = (now - self._last_action_time).total_seconds()
 
@@ -987,7 +987,7 @@ class TimeSenseEngine:
 
         Refreshes every 60 seconds to avoid excessive IO.
         """
-        now = datetime.utcnow()
+        now = datetime.now()
         if (
             self._capacity is None
             or self._capacity_last_check is None
@@ -1000,7 +1000,7 @@ class TimeSenseEngine:
         """Refresh capacity measurements."""
         try:
             self._capacity = measure_capacity(self.knowledge_base_path)
-            self._capacity_last_check = datetime.utcnow()
+            self._capacity_last_check = datetime.now()
         except Exception as e:
             logger.warning(f"[TIMESENSE] Capacity measurement failed: {e}")
             if self._capacity is None:
@@ -1076,7 +1076,7 @@ class TimeSenseEngine:
             "total_data_processed": format_data_size(self._stats["total_data_processed_bytes"]),
             "tracked_operations": len(self._operation_timers),
             "tracked_rates": len(self._rate_tracker._rates),
-            "session_duration_s": (datetime.utcnow() - self._session_start).total_seconds(),
+            "session_duration_s": (datetime.now() - self._session_start).total_seconds(),
         }
 
     def save_state(self) -> bool:

@@ -450,6 +450,7 @@ class ClosedLoopOrchestrator:
             "evolver": SelfEvolverAgent(session),
         }
         self.running = False
+        self._lock = threading.Lock()
         self._thread: Optional[threading.Thread] = None
         self.cycle_count = 0
         self.mode = "improve"  # improve | scale | monitor
@@ -468,6 +469,7 @@ class ClosedLoopOrchestrator:
 
     def stop(self):
         self.running = False
+        self._lock = threading.Lock()
 
     def _loop(self):
         while self.running:

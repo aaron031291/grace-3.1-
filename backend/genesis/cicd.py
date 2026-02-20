@@ -96,8 +96,8 @@ class Pipeline:
     branches: List[str] = field(default_factory=list)  # Branch filters
     environment: Dict[str, str] = field(default_factory=dict)  # Global env vars
     timeout_minutes: int = 60
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
-    updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
+    updated_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
 @dataclass
@@ -361,7 +361,7 @@ class GenesisCICD:
 
     def _generate_genesis_key(self, action: str, metadata: Dict[str, Any]) -> str:
         """Generate a Genesis Key for CI/CD tracking."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
         key_data = f"{action}:{timestamp}:{json.dumps(metadata, sort_keys=True)}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:16]
         genesis_key = f"gk-cicd-{key_hash}"
@@ -488,7 +488,7 @@ class GenesisCICD:
             return
 
         run.status = PipelineStatus.RUNNING
-        run.started_at = datetime.utcnow().isoformat()
+        run.started_at = datetime.now().isoformat()
 
         # Create workspace for this run
         run_workspace = self.workspace_dir / run_id
@@ -519,8 +519,8 @@ class GenesisCICD:
                         result = StageResult(
                             stage_name=stage.name,
                             status=PipelineStatus.SKIPPED,
-                            started_at=datetime.utcnow().isoformat(),
-                            completed_at=datetime.utcnow().isoformat(),
+                            started_at=datetime.now().isoformat(),
+                            completed_at=datetime.now().isoformat(),
                             stderr="Skipped due to dependency failure"
                         )
                         completed_stages[stage.name] = result
@@ -580,7 +580,7 @@ class GenesisCICD:
             run.logs += f"\nPipeline error: {str(e)}"
 
         finally:
-            run.completed_at = datetime.utcnow().isoformat()
+            run.completed_at = datetime.now().isoformat()
             if run.started_at:
                 start = datetime.fromisoformat(run.started_at)
                 end = datetime.fromisoformat(run.completed_at)
@@ -615,7 +615,7 @@ class GenesisCICD:
         environment: Dict[str, str]
     ) -> StageResult:
         """Execute a single pipeline stage."""
-        started_at = datetime.utcnow().isoformat()
+        started_at = datetime.now().isoformat()
 
         result = StageResult(
             stage_name=stage.name,
@@ -678,7 +678,7 @@ class GenesisCICD:
             result.stderr = str(e)
             result.exit_code = -1
 
-        result.completed_at = datetime.utcnow().isoformat()
+        result.completed_at = datetime.now().isoformat()
         start = datetime.fromisoformat(result.started_at)
         end = datetime.fromisoformat(result.completed_at)
         result.duration_seconds = (end - start).total_seconds()
@@ -738,7 +738,7 @@ class GenesisCICD:
             self.active_runs[run_id].cancel()
 
         run.status = PipelineStatus.CANCELLED
-        run.completed_at = datetime.utcnow().isoformat()
+        run.completed_at = datetime.now().isoformat()
 
         logger.info(f"[CICD] Cancelled run: {run_id}")
         return True

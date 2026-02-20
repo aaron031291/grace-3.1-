@@ -43,7 +43,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_start',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'problem_statement': context.problem_statement,
             'goal': context.goal,
             'success_criteria': context.success_criteria,
@@ -72,7 +72,7 @@ class DecisionLogger:
         entry = {
             'event': 'alternatives_considered',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'alternatives_count': len(alternatives),
             'alternatives': alternatives,
             'selected': selected,
@@ -96,9 +96,9 @@ class DecisionLogger:
         entry = {
             'event': 'decision_complete',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'duration_seconds': (
-                datetime.utcnow() - context.created_at
+                datetime.now() - context.created_at
             ).total_seconds(),
             'result_summary': str(result)[:500],  # Truncate long results
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
@@ -121,7 +121,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_finalized',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
         }
 
         self._log_entries.append(entry)
@@ -142,7 +142,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_aborted',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'reason': reason,
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
         }
@@ -161,7 +161,7 @@ class DecisionLogger:
         entry = {
             'event': 'warning',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'message': message,
         }
 
@@ -185,7 +185,7 @@ class DecisionLogger:
         entry = {
             'event': 'invariant_violation',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'invariant_number': invariant_number,
             'violation': violation,
         }
@@ -278,7 +278,7 @@ class DecisionLogger:
             return
 
         # Write to daily log file
-        date_str = datetime.utcnow().strftime('%Y-%m-%d')
+        date_str = datetime.now().strftime('%Y-%m-%d')
         log_file = self.log_dir / f"decisions_{date_str}.jsonl"
 
         with open(log_file, 'a') as f:

@@ -105,7 +105,7 @@ def test_confidence_scorer():
         result = scorer.calculate_confidence_score(
             text_content=text,
             source_type="user_generated",
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(),
             existing_chunks=[]
         )
         

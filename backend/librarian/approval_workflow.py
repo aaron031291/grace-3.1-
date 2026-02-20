@@ -255,9 +255,9 @@ class ApprovalWorkflow:
 
         action.status = "approved"
         action.reviewed_by = reviewed_by
-        action.reviewed_at = datetime.utcnow()
+        action.reviewed_at = datetime.now()
         action.review_notes = notes
-        action.updated_at = datetime.utcnow()
+        action.updated_at = datetime.now()
 
         self.db.commit()
 
@@ -302,9 +302,9 @@ class ApprovalWorkflow:
 
         action.status = "rejected"
         action.reviewed_by = reviewed_by
-        action.reviewed_at = datetime.utcnow()
+        action.reviewed_at = datetime.now()
         action.review_notes = reason
-        action.updated_at = datetime.utcnow()
+        action.updated_at = datetime.now()
 
         self.db.commit()
 
@@ -342,9 +342,9 @@ class ApprovalWorkflow:
         for action in pending_actions:
             action.status = "approved"
             action.reviewed_by = "system"
-            action.reviewed_at = datetime.utcnow()
+            action.reviewed_at = datetime.now()
             action.review_notes = f"Auto-approved (confidence: {action.confidence})"
-            action.updated_at = datetime.utcnow()
+            action.updated_at = datetime.now()
             approved_count += 1
 
         if approved_count > 0:

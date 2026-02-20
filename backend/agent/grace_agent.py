@@ -94,7 +94,7 @@ class TaskResult:
     trust_delta: float = 0.0
 
     # Timing
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=datetime.now)
     completed_at: Optional[datetime] = None
     duration_seconds: float = 0.0
 
@@ -313,7 +313,7 @@ class GraceAgent:
                 result.status = TaskStatus.COMPLETED
 
             result.summary = await self._create_summary(task, result)
-            result.completed_at = datetime.utcnow()
+            result.completed_at = datetime.now()
             result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
 
             logger.info(

@@ -115,7 +115,7 @@ class ProceduralRepository:
         """Generate unique procedure name."""
         # Clean goal for name
         clean_goal = goal.lower().replace(' ', '_')[:50]
-        timestamp = int(datetime.utcnow().timestamp())
+        timestamp = int(datetime.now().timestamp())
         return f"{proc_type}_{clean_goal}_{timestamp}"
 
     def find_procedure(

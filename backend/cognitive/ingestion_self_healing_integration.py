@@ -147,7 +147,7 @@ class IngestionSelfHealingIntegration:
         result = {
             "ingestion_key_id": ingestion_key.key_id,
             "file_path": str(file_path),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "steps": []
         }
 
@@ -494,7 +494,7 @@ class IngestionSelfHealingIntegration:
         logger.info("[INGESTION-INTEGRATION] Running improvement cycle...")
 
         cycle_results = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "observations": {},
             "improvements": []
         }

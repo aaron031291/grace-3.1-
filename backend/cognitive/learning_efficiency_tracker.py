@@ -37,7 +37,7 @@ class Insight:
     data_consumed: Dict[str, float]  # {"bytes": 1024, "documents": 1, "chunks": 5}
     trust_score: float
     domain: Optional[str] = None
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     time_since_last_insight: Optional[timedelta] = None  # Time since previous insight
     time_to_insight: Optional[timedelta] = None  # Time spent learning before this insight
     genesis_key_id: Optional[str] = None
@@ -220,7 +220,7 @@ class LearningEfficiencyTracker:
             Insight object
         """
         # Initialize start time if first insight
-        current_time = datetime.utcnow()
+        current_time = datetime.now()
         if self.start_time is None:
             self.start_time = current_time
         
@@ -333,7 +333,7 @@ class LearningEfficiencyTracker:
                 "chunks": 0
             })
             
-            current_time = datetime.utcnow()
+            current_time = datetime.now()
             time_to_acq = current_time - self.start_time if self.start_time else timedelta(0)
             self.domain_acquisitions[domain] = DomainAcquisition(
                 domain=domain,
@@ -363,7 +363,7 @@ class LearningEfficiencyTracker:
         if domain:
             filtered_insights = [i for i in filtered_insights if i.domain == domain]
         if time_window:
-            cutoff = datetime.utcnow() - time_window
+            cutoff = datetime.now() - time_window
             filtered_insights = [i for i in filtered_insights if i.timestamp >= cutoff]
         
         if not filtered_insights:

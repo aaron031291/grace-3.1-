@@ -264,7 +264,7 @@ async def store_memory(request: MemoryStoreRequest):
             "id": result.get("id", str(uuid.uuid4())),
             "content": request.content,
             "memory_type": request.memory_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "metadata": request.metadata
         }
     except ImportError:
@@ -272,7 +272,7 @@ async def store_memory(request: MemoryStoreRequest):
             "id": str(uuid.uuid4()),
             "content": request.content,
             "memory_type": request.memory_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "metadata": request.metadata
         }
     except Exception as e:
@@ -303,7 +303,7 @@ async def query_memory(request: MemoryQueryRequest):
                 "id": str(uuid.uuid4()),
                 "content": f"Memory related to: {request.query}",
                 "memory_type": "semantic",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "score": 0.85
             }
         ]
@@ -363,7 +363,7 @@ async def create_genesis_key(request: GenesisKeyCreateRequest):
     import hashlib
 
     key_id = str(uuid.uuid4())
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = datetime.now().isoformat()
 
     # Generate hash from content
     hash_content = f"{key_id}{request.type}{request.entity_id}{timestamp}"
@@ -545,7 +545,7 @@ async def record_learning_insight(request: LearningInsightRequest):
         content=request.content,
         category=request.category,
         trust_score=0.5,  # Initial trust score
-        timestamp=datetime.utcnow().isoformat()
+        timestamp=datetime.now().isoformat()
     )
 
     learning_insights_store.append(insight)
@@ -597,7 +597,7 @@ async def schedule_autonomous_task(request: AutonomousTaskRequest):
         "status": "pending",
         "schedule": request.schedule,
         "interval_ms": request.interval_ms,
-        "scheduled_time": datetime.utcnow().isoformat(),
+        "scheduled_time": datetime.now().isoformat(),
         "metadata": request.metadata
     }
 
@@ -652,13 +652,13 @@ async def ide_chat(request: IDEChatRequest):
         return {
             "role": "assistant",
             "content": response,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except ImportError:
         return {
             "role": "assistant",
             "content": f"I received your message: '{request.message}'. The full LLM integration is being configured.",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -698,7 +698,7 @@ async def handle_websocket_message(message: Dict[str, Any]) -> Dict[str, Any]:
     payload = message.get("payload", {})
 
     if msg_type == "ping":
-        return {"type": "pong", "payload": {}, "timestamp": datetime.utcnow().isoformat()}
+        return {"type": "pong", "payload": {}, "timestamp": datetime.now().isoformat()}
 
     elif msg_type == "chat":
         try:
@@ -712,13 +712,13 @@ async def handle_websocket_message(message: Dict[str, Any]) -> Dict[str, Any]:
             return {
                 "type": "stream_end",
                 "payload": {"content": f"Response to: {content}"},
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             }
         except ImportError:
             return {
                 "type": "stream_end",
                 "payload": {"content": f"Received: {payload.get('content', '')}"},
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             }
 
     elif msg_type == "subscribe":
@@ -726,7 +726,7 @@ async def handle_websocket_message(message: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "type": "subscribed",
             "payload": {"channels": channels},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     elif msg_type == "code_update":
@@ -734,13 +734,13 @@ async def handle_websocket_message(message: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "type": "update_acknowledged",
             "payload": {},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     return {
         "type": "unknown",
         "payload": {"original_type": msg_type},
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 

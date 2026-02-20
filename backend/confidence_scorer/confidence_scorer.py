@@ -288,13 +288,13 @@ class ConfidenceScorer:
             Recency score between 0.0 and 1.0
         """
         if created_at is None:
-            created_at = datetime.utcnow()
+            created_at = datetime.now()
         
         # Ensure we're working with timezone-naive datetimes
         if created_at.tzinfo is not None:
             created_at = created_at.replace(tzinfo=None)
         
-        now = datetime.utcnow()
+        now = datetime.now()
         age_days = (now - created_at).days
         
         if age_days <= 90:  # 3 months

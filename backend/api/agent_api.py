@@ -115,7 +115,7 @@ async def start_task(request: TaskRequest, background_tasks: BackgroundTasks):
         agent.config.workspace_dir = request.workspace
 
     # Create task
-    task_id = f"TASK-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+    task_id = f"TASK-{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
     # Start task in background
     async def run_task():
@@ -150,7 +150,7 @@ async def start_task(request: TaskRequest, background_tasks: BackgroundTasks):
         files_deleted=[],
         patterns_learned=0,
         duration_seconds=0,
-        started_at=datetime.utcnow(),
+        started_at=datetime.now(),
     )
 
 
@@ -194,7 +194,7 @@ async def get_task_status(task_id: str):
             files_deleted=[],
             patterns_learned=0,
             duration_seconds=0,
-            started_at=datetime.utcnow(),
+            started_at=datetime.now(),
         )
 
     raise HTTPException(status_code=404, detail=f"Task not found: {task_id}")

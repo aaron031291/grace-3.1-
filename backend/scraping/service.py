@@ -103,7 +103,7 @@ class WebScrapingService:
                 return
             
             job.status = 'running'
-            job.started_at = datetime.utcnow()
+            job.started_at = datetime.now()
             self.session.commit()
             
             # Reset visited URLs for this job
@@ -125,7 +125,7 @@ class WebScrapingService:
             job = self.session.query(ScrapingJob).filter_by(id=job_id).first()
             if job:
                 job.status = 'completed'
-                job.completed_at = datetime.utcnow()
+                job.completed_at = datetime.now()
                 self.session.commit()
                 
         except Exception as e:
@@ -134,7 +134,7 @@ class WebScrapingService:
             if job:
                 job.status = 'failed'
                 job.error_message = str(e)
-                job.completed_at = datetime.utcnow()
+                job.completed_at = datetime.now()
                 self.session.commit()
     
     async def _scrape_url_recursive(
@@ -591,7 +591,7 @@ class WebScrapingService:
             content=content,
             content_length=len(content),
             status='success',
-            scraped_at=datetime.utcnow()
+            scraped_at=datetime.now()
         )
         
         self.session.add(page)
@@ -639,7 +639,7 @@ class WebScrapingService:
             # Use default folder based on domain
             parsed = urlparse(url)
             domain = parsed.netloc.replace('www.', '').replace('.', '_')
-            timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             target_dir = knowledge_base_dir / f"scraped_{domain}_{timestamp}"
         
         target_dir.mkdir(parents=True, exist_ok=True)
@@ -671,7 +671,7 @@ class WebScrapingService:
             # Write metadata header
             f.write(f"Source: {url}\n")
             f.write(f"Title: {title}\n")
-            f.write(f"Scraped: {datetime.utcnow().isoformat()}\n")
+            f.write(f"Scraped: {datetime.now().isoformat()}\n")
             f.write(f"{'-' * 80}\n\n")
             # Write content
             f.write(content)
@@ -719,7 +719,7 @@ class WebScrapingService:
                     file_path=metadata['file_path'],
                     file_size=metadata['file_size'],
                     file_type=metadata['file_type'],
-                    scraped_at=datetime.utcnow()
+                    scraped_at=datetime.now()
                 )
                 
                 self.session.add(page)
@@ -779,7 +779,7 @@ class WebScrapingService:
             parent_url=parent_url,
             status='filtered',
             similarity_score=f"{similarity_score:.3f}",
-            scraped_at=datetime.utcnow()
+            scraped_at=datetime.now()
         )
         
         self.session.add(page)
@@ -816,7 +816,7 @@ class WebScrapingService:
             parent_url=parent_url,
             status='failed',
             error_message=error_message,
-            scraped_at=datetime.utcnow()
+            scraped_at=datetime.now()
         )
         
         self.session.add(page)

@@ -91,7 +91,7 @@ class ComponentManifest:
     tags: Set[str] = field(default_factory=set)
 
     # Timing
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
     last_active_at: Optional[datetime] = None
 
     def to_dict(self) -> Dict[str, Any]:
@@ -258,7 +258,7 @@ class BaseComponent(ABC):
             await self._do_activate()
 
             self._set_state(ComponentState.ACTIVE)
-            self._manifest.last_active_at = datetime.utcnow()
+            self._manifest.last_active_at = datetime.now()
             self._stats["activations"] += 1
 
             logger.info(f"[{self.name}] Activated successfully")
@@ -393,7 +393,7 @@ class BaseComponent(ABC):
         """Calculate uptime since last activation."""
         if not self._manifest.last_active_at:
             return 0.0
-        return (datetime.utcnow() - self._manifest.last_active_at).total_seconds()
+        return (datetime.now() - self._manifest.last_active_at).total_seconds()
 
     # =========================================================================
     # TRUST MANAGEMENT
@@ -490,7 +490,7 @@ class BaseComponent(ABC):
         self._state_history.append({
             "from_state": old_state.value,
             "to_state": new_state.value,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         })
 
         # Keep history bounded

@@ -58,7 +58,7 @@ class TrainingSession:
         self.practice_tasks = practice_tasks
         self.success_criteria = success_criteria
 
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now()
         self.end_time: Optional[datetime] = None
         self.examples_learned: List[str] = []
         self.tasks_completed: List[Dict] = []
@@ -216,7 +216,7 @@ class GraceActiveLearningSystem:
             "examples_stored": len(examples_created),
             "prefetched_topics": prefetched_topics,  # Topics ready for next query
             "prefetch_statistics": prefetch_stats,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     def _find_relevant_training_materials(
@@ -286,7 +286,7 @@ class GraceActiveLearningSystem:
                     'source_document': material['document_id'],
                     'source_file': material['source'],
                     'relevance_score': chunk.get('score', 0.0),
-                    'extracted_at': datetime.utcnow().isoformat(),
+                    'extracted_at': datetime.now().isoformat(),
                     'learning_objectives': learning_objectives
                 }
                 concepts.append(concept)
@@ -552,7 +552,7 @@ class GraceActiveLearningSystem:
             "outcome": outcome,
             "success": outcome.get('success', False),
             "feedback": outcome.get('feedback', ''),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     def _analyze_practice_task(
@@ -719,7 +719,7 @@ class GraceActiveLearningSystem:
             new_confidence = min(0.95, (old_confidence + operational_confidence) / 2)
 
             metadata['operational_confidence'] = new_confidence
-            metadata['last_practiced'] = datetime.utcnow().isoformat()
+            metadata['last_practiced'] = datetime.now().isoformat()
 
             example.example_metadata = metadata
 
@@ -733,7 +733,7 @@ class GraceActiveLearningSystem:
                     'validated': example.times_validated,
                     'invalidated': example.times_invalidated
                 },
-                age_days=(datetime.utcnow() - example.created_at).days if example.created_at else 0
+                age_days=(datetime.now() - example.created_at).days if example.created_at else 0
             )
 
         self.session.commit()

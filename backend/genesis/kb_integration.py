@@ -106,7 +106,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                             keys_data = json.load(f)
                         except json.JSONDecodeError as e:
                             # Handle corrupted file by backing up and creating new
-                            backup_path = f"{file_path}.corrupt.{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+                            backup_path = f"{file_path}.corrupt.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                             try:
                                 import shutil
                                 shutil.copy2(file_path, backup_path)
@@ -118,14 +118,14 @@ All user actions, inputs, and outputs are tracked here from the first login.
                             keys_data = {
                                 "user_id": key.user_id,
                                 "session_id": key.session_id,
-                                "created_at": datetime.utcnow().isoformat(),
+                                "created_at": datetime.now().isoformat(),
                                 "keys": []
                             }
                 else:
                     keys_data = {
                         "user_id": key.user_id,
                         "session_id": key.session_id,
-                        "created_at": datetime.utcnow().isoformat(),
+                        "created_at": datetime.now().isoformat(),
                         "keys": []
                     }
 
@@ -176,7 +176,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 }
 
                 keys_data["keys"].append(key_dict)
-                keys_data["last_updated"] = datetime.utcnow().isoformat()
+                keys_data["last_updated"] = datetime.now().isoformat()
                 keys_data["total_keys"] = len(keys_data["keys"])
 
                 # Save to file
@@ -214,7 +214,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 existing_profile.update(profile_data)
                 profile_data = existing_profile
 
-            profile_data["last_updated"] = datetime.utcnow().isoformat()
+            profile_data["last_updated"] = datetime.now().isoformat()
 
             with open(profile_path, 'w') as f:
                 json.dump(profile_data, f, indent=2, default=str)

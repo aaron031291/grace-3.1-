@@ -79,7 +79,7 @@ def cognitive_operation(
             # Set planning timeout if specified
             if planning_timeout_seconds:
                 context.decision_freeze_point = (
-                    datetime.utcnow() + timedelta(seconds=planning_timeout_seconds)
+                    datetime.now() + timedelta(seconds=planning_timeout_seconds)
                 )
 
             # OBSERVE: Gather inputs

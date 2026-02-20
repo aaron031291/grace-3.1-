@@ -184,7 +184,7 @@ class GenesisKeyService:
                 key_type=key_type,
                 what=what_description,
                 where=where_location or file_path,
-                when=datetime.utcnow(),
+                when=datetime.now(),
                 why=why_reason,
                 who=who_actor,
                 how=how_method
@@ -193,7 +193,7 @@ class GenesisKeyService:
             # Generate AI-readable metadata
             metadata_ai = {
                 "key_type": key_type.value,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "commit_sha": commit_sha,
                 "has_code_change": bool(code_before or code_after),
                 "is_error": is_error,
@@ -212,7 +212,7 @@ class GenesisKeyService:
                 session_id=session_id,
                 what_description=what_description,
                 where_location=where_location,
-                when_timestamp=datetime.utcnow(),
+                when_timestamp=datetime.now(),
                 why_reason=why_reason,
                 who_actor=who_actor,
                 how_method=how_method,
@@ -373,7 +373,7 @@ class GenesisKeyService:
                 # Perform operation
                 result = upload_file()
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         key = None
 
         try:
@@ -396,7 +396,7 @@ class GenesisKeyService:
             sess = session or self.session or next(get_session())
             key.what_description = f"Completed: {operation_name}"
             key.status = GenesisKeyStatus.ACTIVE
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now() - start_time).total_seconds()
             key.output_data = {"duration_seconds": duration, "status": "success"}
             sess.commit()
 
@@ -409,7 +409,7 @@ class GenesisKeyService:
                 key.is_error = True
                 key.error_type = type(e).__name__
                 key.error_message = str(e)
-                duration = (datetime.utcnow() - start_time).total_seconds()
+                duration = (datetime.now() - start_time).total_seconds()
                 key.output_data = {"duration_seconds": duration, "status": "failed"}
                 sess.commit()
             raise
@@ -502,7 +502,7 @@ class GenesisKeyService:
 
             # Update suggestion
             suggestion.status = FixSuggestionStatus.APPLIED
-            suggestion.applied_at = datetime.utcnow()
+            suggestion.applied_at = datetime.now()
             suggestion.applied_by = applied_by
             suggestion.result_key_id = fix_key.key_id
 
@@ -566,7 +566,7 @@ class GenesisKeyService:
             user = session.query(UserProfile).filter(UserProfile.user_id == user_id).first()
             if user:
                 user.total_actions += 1
-                user.last_seen = datetime.utcnow()
+                user.last_seen = datetime.now()
 
                 if key_type == GenesisKeyType.CODE_CHANGE:
                     user.total_changes += 1

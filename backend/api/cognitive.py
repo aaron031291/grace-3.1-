@@ -55,7 +55,7 @@ async def get_recent_decisions(
         logger_instance = get_decision_logger()
 
         # Get decisions from the last N hours
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+        cutoff_time = datetime.now() - timedelta(hours=hours)
         all_decisions = logger_instance.get_recent_decisions(limit * 2)  # Get more to filter
 
         # Filter by time and convert to response format
@@ -197,7 +197,7 @@ async def get_cognitive_stats(
     """
     try:
         logger_instance = get_decision_logger()
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+        cutoff_time = datetime.now() - timedelta(hours=hours)
         all_decisions = logger_instance.get_recent_decisions(1000)
 
         # Filter by time

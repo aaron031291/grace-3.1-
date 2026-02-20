@@ -64,7 +64,7 @@ class DirectoryGenesisKey:
         else:
             self.directory_keys = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "root_genesis_key": None,
                 "directories": {}
             }
@@ -147,7 +147,7 @@ class DirectoryGenesisKey:
             "absolute_path": abs_path,
             "name": dir_name,
             "parent_genesis_key": parent_genesis_key,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now().isoformat(),
             "is_root": is_root,
             "subdirectories": [],
             "files": [],
@@ -285,7 +285,7 @@ Genesis Key: {dir_info['genesis_key']}
                         file_info = {
                             "name": item,
                             "path": item_rel,
-                            "added_at": datetime.utcnow().isoformat()
+                            "added_at": datetime.now().isoformat()
                         }
                         if file_info not in self.directory_keys["directories"][rel_path]["files"]:
                             self.directory_keys["directories"][rel_path]["files"].append(file_info)
@@ -405,7 +405,7 @@ Genesis Key: {dir_info['genesis_key']}
                 "version_number": version_number,
                 "directory_genesis_key": dir_key,
                 "file_path": file_path,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             }
 
         except Exception as e:

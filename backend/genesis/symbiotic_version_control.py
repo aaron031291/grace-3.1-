@@ -156,7 +156,7 @@ class SymbioticVersionControl:
                 "version_number": version_result.get("version_number"),
                 "changed": version_result.get("changed", True),
                 "file_path": rel_path,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "symbiotic": True,
                 "message": "Genesis Key and version entry created symbiotically"
             }

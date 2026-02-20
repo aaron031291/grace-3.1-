@@ -52,7 +52,7 @@ async def start_pipeline():
         return {
             "status": "started",
             "message": "24/7 continuous learning pipeline started",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -68,7 +68,7 @@ async def stop_pipeline():
         return {
             "status": "stopped",
             "message": "Pipeline stopped",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -85,7 +85,7 @@ async def add_seed_topic(request: PipelineSeedRequest):
             "status": "queued",
             "topic": request.topic,
             "pending_seeds": len(pipeline._pending_seeds),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -110,7 +110,7 @@ async def expand_topic_now(request: PipelineSeedRequest):
                 "expansion_depth": result.expansion_depth,
                 "duration_ms": result.duration_ms
             },
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -142,7 +142,7 @@ async def update_pipeline_config(config: PipelineConfigUpdate):
         return {
             "status": "updated",
             "config": pipeline.config,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -192,7 +192,7 @@ class AutonomousHealingSystem:
         health_status = self._calculate_health_status(anomalies)
 
         assessment = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "health_status": health_status.value,
             "code_issues": len(code_issues),
             "recent_errors": len(recent_errors),
@@ -213,7 +213,7 @@ class AutonomousHealingSystem:
 
     def _query_recent_errors(self, hours: int = 1) -> List[GenesisKey]:
         """Query recent error Genesis Keys."""
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+        cutoff_time = datetime.now() - timedelta(hours=hours)
 
         errors = self.session.query(GenesisKey).filter(
             GenesisKey.created_at >= cutoff_time,

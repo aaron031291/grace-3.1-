@@ -64,7 +64,7 @@ class TelemetryVector:
 
     component: str = ""
     task_domain: str = ""
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -107,7 +107,7 @@ class PillarTrigger:
     telemetry: TelemetryVector
     stats: Dict[str, float]
     severity: str = "normal"  # normal, elevated, critical
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 # =============================================================================
@@ -133,7 +133,7 @@ class StatisticalProfile:
         self._time_histogram: Dict[int, int] = defaultdict(int)
 
         self.total_observations = 0
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now()
 
     def observe(self, vector: TelemetryVector):
         """Record an observation."""
@@ -260,7 +260,7 @@ class Challenge:
     message: str
     resolution: Optional[str] = None
     resolved: bool = False
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -275,7 +275,7 @@ class RFI:
     synthesized_logic: Optional[str] = None
     oracle_verdict: Optional[str] = None
     baked_to_pillars: List[str] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 class AutonomousResolutionEngine:
@@ -745,7 +745,7 @@ class SelfMirror:
             data_dir.mkdir(parents=True, exist_ok=True)
 
             state = {
-                "saved_at": datetime.utcnow().isoformat(),
+                "saved_at": datetime.now().isoformat(),
                 "stats": self._stats,
                 "profiles": {
                     domain: {

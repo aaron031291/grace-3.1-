@@ -135,7 +135,7 @@ class TaskPlan:
     total_data_bytes: float
     parallel_possible: bool
     bottleneck_step: Optional[str]
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
 
     @property
     def total_estimated_formatted(self) -> str:
@@ -346,7 +346,7 @@ class ThroughputTracker:
     def start_operation(self, operation: str):
         """Mark operation as started (track concurrency)."""
         self._active_operations[operation] += 1
-        self._request_timestamps[operation].append(datetime.utcnow())
+        self._request_timestamps[operation].append(datetime.now())
         current = self._active_operations[operation]
         if current > self._max_observed_concurrent[operation]:
             self._max_observed_concurrent[operation] = current
@@ -363,7 +363,7 @@ class ThroughputTracker:
         """Get throughput budget for an operation."""
         current = self._active_operations.get(operation, 0)
 
-        now = datetime.utcnow()
+        now = datetime.now()
         one_sec_ago = now - timedelta(seconds=1)
         timestamps = self._request_timestamps.get(operation, deque())
         rps = sum(1 for t in timestamps if t > one_sec_ago)
@@ -537,7 +537,7 @@ class PerformanceTrendTracker:
 
     def record(self, operation: str, duration_ms: float, success: bool = True):
         """Record a data point for trend tracking."""
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now().strftime("%Y-%m-%d")
         self._daily_data[today][operation].append(duration_ms)
         self._daily_counts[today][operation] += 1
         if not success:
@@ -546,7 +546,7 @@ class PerformanceTrendTracker:
     def get_trend(self, operation: str, days: int = 7) -> Dict[str, Any]:
         """Get performance trend for an operation over N days."""
         daily_summaries = []
-        today = datetime.utcnow()
+        today = datetime.now()
 
         for i in range(days):
             date = (today - timedelta(days=i)).strftime("%Y-%m-%d")

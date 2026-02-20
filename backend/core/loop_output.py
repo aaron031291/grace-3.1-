@@ -160,7 +160,7 @@ class GraceLoopOutput:
     error_details: Optional[Dict[str, Any]] = None
 
     # Timing
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=datetime.now)
     completed_at: Optional[datetime] = None
     duration_ms: float = 0.0
 
@@ -214,7 +214,7 @@ class GraceLoopOutput:
     def start(self):
         """Mark loop as started."""
         self.status = LoopStatus.RUNNING
-        self.started_at = datetime.utcnow()
+        self.started_at = datetime.now()
 
     def complete(
         self,
@@ -227,7 +227,7 @@ class GraceLoopOutput:
         self.result = result
         self.confidence = confidence
         self.result_summary = summary
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now()
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     def fail(self, error: str, details: Optional[Dict[str, Any]] = None):
@@ -235,14 +235,14 @@ class GraceLoopOutput:
         self.status = LoopStatus.FAILED
         self.error = error
         self.error_details = details
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now()
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     def interrupt(self, reason: str):
         """Mark loop as interrupted."""
         self.status = LoopStatus.INTERRUPTED
         self.error = f"Interrupted: {reason}"
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now()
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     # =========================================================================

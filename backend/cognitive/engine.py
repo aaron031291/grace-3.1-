@@ -68,7 +68,7 @@ class DecisionContext:
     future_flexibility_metric: float = 1.0
 
     # Invariant 11: Time Bounds
-    planning_start: datetime = field(default_factory=datetime.utcnow)
+    planning_start: datetime = field(default_factory=datetime.now)
     planning_deadline: Optional[datetime] = None
     decision_freeze_point: Optional[datetime] = None
 
@@ -79,7 +79,7 @@ class DecisionContext:
 
     # Metadata
     parent_decision_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -376,7 +376,7 @@ class CognitiveEngine:
         if context.decision_freeze_point is None:
             return False
 
-        return datetime.utcnow() >= context.decision_freeze_point
+        return datetime.now() >= context.decision_freeze_point
 
     def check_recursion_bounds(self, context: DecisionContext) -> bool:
         """

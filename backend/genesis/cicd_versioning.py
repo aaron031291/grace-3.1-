@@ -149,7 +149,7 @@ class CICDVersionControl:
 
     def _generate_genesis_key(self, mutation_type: MutationType, pipeline_id: str, version: int) -> str:
         """Generate Genesis Key for version control operation."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
         key_data = f"cicd:version:{mutation_type.value}:{pipeline_id}:v{version}:{timestamp}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:12]
         return f"gk-vc-{key_hash}"
@@ -175,7 +175,7 @@ class CICDVersionControl:
         Returns:
             PipelineVersion object
         """
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
         config_hash = self._compute_hash(config)
 
         # Get or create history

@@ -78,7 +78,7 @@ class Contradiction:
     source_b: str  # Second conflicting element
     context: Dict[str, Any] = field(default_factory=dict)
     suggested_resolution: Optional[str] = None
-    detected_at: datetime = field(default_factory=datetime.utcnow)
+    detected_at: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -327,7 +327,7 @@ class GraceCognitionLinter(BaseComponent):
         recent = [
             o for o in self._output_history
             if o.loop_type == output.loop_type
-            and (datetime.utcnow() - o.completed_at) < timedelta(hours=1)
+            and (datetime.now() - o.completed_at) < timedelta(hours=1)
         ]
 
         if not recent:
@@ -351,7 +351,7 @@ class GraceCognitionLinter(BaseComponent):
                             source_b=prev_claim,
                             context={
                                 "previous_loop_id": prev_output.loop_id,
-                                "time_delta_seconds": (datetime.utcnow() - prev_output.completed_at).total_seconds(),
+                                "time_delta_seconds": (datetime.now() - prev_output.completed_at).total_seconds(),
                             },
                             suggested_resolution="Explain or acknowledge the change from previous position",
                         ))

@@ -67,7 +67,7 @@ class LearningCurveTracker:
         point = LearningCurvePoint(
             invocation_number=len(points) + 1,
             duration_ms=duration_ms,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
         )
         points.append(point)
         if len(points) > 5000:
@@ -187,7 +187,7 @@ class TimeSensePersistence:
         """Save TimeSense state to disk."""
         try:
             state = {
-                "saved_at": datetime.utcnow().isoformat(),
+                "saved_at": datetime.now().isoformat(),
                 "stats": timesense_engine._stats,
                 "operation_stats": {
                     name: timer.get_stats()
@@ -248,13 +248,13 @@ class PredictiveScaler:
 
     def record_capacity(self, snapshot: Dict[str, float]):
         """Record a capacity snapshot for trend analysis."""
-        self._capacity_history.append((datetime.utcnow(), snapshot))
+        self._capacity_history.append((datetime.now(), snapshot))
         if len(self._capacity_history) > 1000:
             self._capacity_history = self._capacity_history[-1000:]
 
     def record_ingestion(self, bytes_ingested: float):
         """Record data ingestion for growth projection."""
-        self._ingestion_history.append((datetime.utcnow(), bytes_ingested))
+        self._ingestion_history.append((datetime.now(), bytes_ingested))
         if len(self._ingestion_history) > 1000:
             self._ingestion_history = self._ingestion_history[-1000:]
 
@@ -266,7 +266,7 @@ class PredictiveScaler:
                 "message": "Need more ingestion history to predict disk exhaustion.",
             }
 
-        now = datetime.utcnow()
+        now = datetime.now()
         one_day_ago = now - timedelta(days=1)
         recent = [b for ts, b in self._ingestion_history if ts > one_day_ago]
         daily_bytes = sum(recent)
@@ -360,7 +360,7 @@ class TimeAwareScheduler:
 
     def is_good_time_now(self, threshold: float = 0.4) -> Dict[str, Any]:
         """Is right now a good time for heavy operations?"""
-        current_hour = datetime.utcnow().hour
+        current_hour = datetime.now().hour
         loads = self._hourly_load.get(current_hour, [])
         current_avg = sum(loads) / len(loads) if loads else 0.5
 

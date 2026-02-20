@@ -80,7 +80,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "AUTH_ATTEMPT",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "success": success,
             "username": username[:50] if username else None,
             "reason": reason,
@@ -104,7 +104,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "RATE_LIMIT_EXCEEDED",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "limit": limit,
             "endpoint": endpoint,
             **request_info
@@ -126,7 +126,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "SUSPICIOUS_REQUEST",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "reason": reason,
             "details": details,
             **request_info
@@ -145,7 +145,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "VALIDATION_FAILURE",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "field": field_name,
             "error": error,
             **request_info
@@ -164,7 +164,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "ACCESS_DENIED",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "resource": resource,
             "reason": reason,
             **request_info
@@ -187,7 +187,7 @@ class SecurityLogger:
 
         event = {
             "event_type": event_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "details": details,
             **request_info
         }

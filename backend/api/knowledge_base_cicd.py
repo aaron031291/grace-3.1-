@@ -180,7 +180,7 @@ async def trigger_autonomous_action(
                 "action_name": action["name"],
                 "response_status": response.status_code,
                 "result": result,
-                "triggered_at": datetime.utcnow().isoformat()
+                "triggered_at": datetime.now().isoformat()
             }
 
     except httpx.RequestError as e:
@@ -276,7 +276,7 @@ async def refresh_cicd_knowledge():
         "description": "Genesis Key-powered CI/CD pipeline system",
         "category": "infrastructure",
         "tags": ["cicd", "pipelines", "automation"],
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now().isoformat(),
         "autonomous_actions": {"enabled": True, "actions": []}
     }
 
@@ -313,7 +313,7 @@ async def refresh_cicd_knowledge():
     ])
 
     metadata["autonomous_actions"]["actions"] = actions
-    metadata["updated_at"] = datetime.utcnow().isoformat()
+    metadata["updated_at"] = datetime.now().isoformat()
 
     # Save metadata
     with open(KB_PATH / "metadata.json", "w") as f:

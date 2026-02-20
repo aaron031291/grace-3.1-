@@ -251,7 +251,7 @@ class FileHealthMonitor:
             anomalies=anomalies,
             healing_actions=healing_actions,
             recommendations=recommendations,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now()
         )
 
         # Track with Genesis Key
@@ -417,7 +417,7 @@ class FileHealthMonitor:
 
                 chunks = chunker.chunk_text(text_content)
                 vectors = []
-                created_at = doc.created_at.isoformat() if doc.created_at else datetime.utcnow().isoformat()
+                created_at = doc.created_at.isoformat() if doc.created_at else datetime.now().isoformat()
                 vector_base = int(f"{doc_id}000")
 
                 for chunk_index, chunk in enumerate(chunks):

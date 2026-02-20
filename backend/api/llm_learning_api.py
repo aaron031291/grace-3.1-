@@ -681,7 +681,7 @@ async def get_learning_dashboard(
         recommendations = reducer.get_reduction_recommendations()
 
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "interaction_stats_24h": interaction_stats,
             "pattern_stats": pattern_stats,
             "learning_progress": learning_progress,

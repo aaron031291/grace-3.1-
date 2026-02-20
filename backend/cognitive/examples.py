@@ -63,7 +63,7 @@ def rag_query_with_cognitive(query: str, chat_id: int) -> Dict[str, Any]:
         'query': query,
         'query_length': len(query),
         'chat_id': chat_id,
-        'timestamp': datetime.utcnow().isoformat()
+        'timestamp': datetime.now().isoformat()
     }
     engine.observe(context, observations)
 
@@ -231,7 +231,7 @@ def batch_process_documents(
     context.max_iterations = 100  # Max files to process
 
     # Set time bound (30 minutes)
-    context.decision_freeze_point = datetime.utcnow() + timedelta(minutes=30)
+    context.decision_freeze_point = datetime.now() + timedelta(minutes=30)
 
     # Track recursion
     def process_directory_recursive(path: str, depth: int = 0):

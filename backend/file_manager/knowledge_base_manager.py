@@ -189,7 +189,7 @@ class KnowledgeBaseManager:
             metadata_dict[file_metadata_key] = {
                 "filename": filename,
                 "size": len(file_content),
-                "created": datetime.utcnow().isoformat(),
+                "created": datetime.now().isoformat(),
                 "user_metadata": metadata or {},
             }
             

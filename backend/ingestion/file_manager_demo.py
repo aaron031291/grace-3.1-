@@ -235,7 +235,7 @@ class TestSuite:
                 "test.md": "hash1",
                 "test.txt": "hash2",
             },
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "count": 2,
         }
         

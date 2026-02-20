@@ -381,7 +381,7 @@ class TextIngestionService:
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now().isoformat(),
                 "source_type": source_type,
             }
             
@@ -418,7 +418,7 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST] [OK] Chunked text into {len(chunks)} chunks")
             
             # Get document creation date for embedding into chunks
-            created_at = document.created_at.isoformat() if document.created_at else datetime.utcnow().isoformat()
+            created_at = document.created_at.isoformat() if document.created_at else datetime.now().isoformat()
             
             # Generate embeddings and store chunks
             vector_id_counter = int(f"{document_id}000")
@@ -662,14 +662,14 @@ class TextIngestionService:
             doc_confidence_data = self.confidence_scorer.calculate_confidence_score(
                 text_content=text_content,
                 source_type=source_type,
-                created_at=datetime.utcnow(),
+                created_at=datetime.now(),
             )
             
             # Prepare document metadata
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now().isoformat(),
                 "source_type": source_type,
             }
             
@@ -730,7 +730,7 @@ class TextIngestionService:
                 chunk_confidence_data = self.confidence_scorer.calculate_confidence_score(
                     text_content=chunk_text,
                     source_type=source_type,
-                    created_at=datetime.utcnow(),
+                    created_at=datetime.now(),
                     existing_chunks=all_chunk_texts[:chunk_index] + all_chunk_texts[chunk_index+1:],  # Exclude current chunk
                 )
                 

@@ -53,7 +53,7 @@ class Segment:
     metadata: Dict[str, Any] = field(default_factory=dict)
     entities: List[str] = field(default_factory=list)
     concepts: List[str] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -478,7 +478,7 @@ class SynapticIngestionPipeline:
         Returns:
             IngestionResult with details of what was created
         """
-        timestamp = timestamp or datetime.utcnow()
+        timestamp = timestamp or datetime.now()
         metadata = metadata or {}
 
         # 1. Segment content

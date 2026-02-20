@@ -1651,7 +1651,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 completion_time=generation_time
             )
 
-            chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+            chat_repo.update(chat_id, last_message_at=datetime.now())
             total_tokens = history_repo.count_tokens_in_chat(chat_id)
 
             return PromptResponse(
@@ -1770,7 +1770,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                             chat_id=chat_id, role="assistant",
                             content=response_text, completion_time=generation_time
                         )
-                        chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+                        chat_repo.update(chat_id, last_message_at=datetime.now())
                         total_tokens = history_repo.count_tokens_in_chat(chat_id)
                         return PromptResponse(
                             chat_id=chat_id, user_message_id=user_message.id,
@@ -1806,7 +1806,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                         chat_id=chat_id, role="assistant",
                         content=response_text, completion_time=generation_time
                     )
-                    chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+                    chat_repo.update(chat_id, last_message_at=datetime.now())
                     total_tokens = history_repo.count_tokens_in_chat(chat_id)
                     return PromptResponse(
                         chat_id=chat_id, user_message_id=user_message.id,
@@ -1976,7 +1976,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             logger.debug(f"[KIMI-FEEDBACK] Skipped: {e}")
         
         # Update chat's last_message_at
-        chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+        chat_repo.update(chat_id, last_message_at=datetime.now())
         
         # Get total tokens in chat
         total_tokens = history_repo.count_tokens_in_chat(chat_id)

@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 class RegistryEntry:
     """Entry in the component registry."""
     component: BaseComponent
-    registered_at: datetime = field(default_factory=datetime.utcnow)
+    registered_at: datetime = field(default_factory=datetime.now)
     auto_start: bool = True
     priority: int = 5  # 1-10, higher = starts first
 

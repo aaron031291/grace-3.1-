@@ -282,7 +282,7 @@ class MemoryMeshLearner:
         Returns prioritized list of what Grace should learn next.
         """
         suggestions = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "knowledge_gaps": [],
             "high_value_topics": [],
             "related_clusters": [],

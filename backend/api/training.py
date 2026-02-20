@@ -359,7 +359,7 @@ async def get_learning_progress(
             "skills": skills,
             "total_tasks_completed": total_tasks,
             "overall_success_rate": round(overall_success_rate, 3),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     except Exception as e:

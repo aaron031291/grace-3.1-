@@ -96,7 +96,7 @@ class GenesisEventBridge:
             from layer1.message_bus import ComponentType
             await self.message_bus.publish(
                 topic=topic,
-                payload={**payload, "timestamp": datetime.utcnow().isoformat()},
+                payload={**payload, "timestamp": datetime.now().isoformat()},
                 from_component=ComponentType.GENESIS_KEYS,
                 priority=priority,
             )
@@ -235,7 +235,7 @@ class UnifiedCICDPipeline:
             "trigger": trigger,
             "engine": self._engine_name,
             "genesis_key_id": genesis_key_id,
-            "started_at": datetime.utcnow().isoformat(),
+            "started_at": datetime.now().isoformat(),
             "stages": [],
             "success": True,
         }
@@ -264,7 +264,7 @@ class UnifiedCICDPipeline:
 
         elapsed = (time.time() - start_time) * 1000
         result["duration_ms"] = elapsed
-        result["completed_at"] = datetime.utcnow().isoformat()
+        result["completed_at"] = datetime.now().isoformat()
 
         if result["success"]:
             self._success_count += 1
@@ -345,7 +345,7 @@ class AutonomousTriggerWiring:
         self._trigger_count += 1
         data["trigger_type"] = trigger_type
         data["trigger_number"] = self._trigger_count
-        data["timestamp"] = datetime.utcnow().isoformat()
+        data["timestamp"] = datetime.now().isoformat()
         self._triggers_fired.append(data)
 
         if len(self._triggers_fired) > 100:
@@ -399,7 +399,7 @@ class ActiveHealingSystem:
             "reason": reason,
             "success": False,
             "message": "",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         }
 
         try:

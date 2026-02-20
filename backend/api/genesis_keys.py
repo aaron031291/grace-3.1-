@@ -461,7 +461,7 @@ async def get_genesis_stats(session: Session = Depends(get_session)):
 
         # Recent activity (last 24 hours)
         from datetime import timedelta
-        yesterday = datetime.utcnow() - timedelta(days=1)
+        yesterday = datetime.now() - timedelta(days=1)
         recent_keys = session.query(GenesisKey).filter(
             GenesisKey.when_timestamp >= yesterday
         ).count()

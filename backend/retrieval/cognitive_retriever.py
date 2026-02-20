@@ -99,7 +99,7 @@ class CognitiveRetriever:
         Returns:
             Dict with chunks, context, and cognitive metadata
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
 
         # If cognitive engine disabled, use basic retrieval
         if not self.enable_cognitive:
@@ -241,7 +241,7 @@ class CognitiveRetriever:
         # Finalize decision
         self.cognitive_engine.finalize_decision(context)
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now()
         elapsed_ms = (end_time - start_time).total_seconds() * 1000
 
         # ========== LEARNING MEMORY INTEGRATION ==========

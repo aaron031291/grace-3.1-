@@ -97,7 +97,7 @@ class Layer1Integration:
         else:
             self.metadata = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "input_sources": {
                     "user_inputs": 0,
                     "file_uploads": 0,
@@ -190,7 +190,7 @@ class Layer1Integration:
             self.layer1_base,
             "uploads",
             user_id,
-            datetime.utcnow().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d")
         )
         os.makedirs(upload_path, exist_ok=True)
 
@@ -257,12 +257,12 @@ class Layer1Integration:
             self.layer1_base,
             "external_apis",
             api_name,
-            datetime.utcnow().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d")
         )
         os.makedirs(api_path, exist_ok=True)
 
         # Save API response
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now().timestamp()
         api_file = os.path.join(api_path, f"api_response_{timestamp}.json")
         with open(api_file, 'w') as f:
             json.dump(api_data, f, indent=2, default=str)
@@ -322,12 +322,12 @@ class Layer1Integration:
             self.layer1_base,
             "web_scraping",
             domain,
-            datetime.utcnow().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d")
         )
         os.makedirs(scraping_path, exist_ok=True)
 
         # Save HTML and parsed data
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now().timestamp()
         html_file = os.path.join(scraping_path, f"scrape_{timestamp}.html")
         data_file = os.path.join(scraping_path, f"parsed_{timestamp}.json")
 
@@ -381,12 +381,12 @@ class Layer1Integration:
             self.layer1_base,
             "memory_mesh",
             memory_type,
-            datetime.utcnow().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d")
         )
         os.makedirs(memory_path, exist_ok=True)
 
         # Save memory data
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now().timestamp()
         memory_file = os.path.join(memory_path, f"memory_{timestamp}.json")
         with open(memory_file, 'w') as f:
             json.dump(memory_data, f, indent=2, default=str)
@@ -441,12 +441,12 @@ class Layer1Integration:
             self.layer1_base,
             "learning_memory",
             learning_type,
-            datetime.utcnow().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d")
         )
         os.makedirs(learning_path, exist_ok=True)
 
         # Save learning data
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now().timestamp()
         learning_file = os.path.join(learning_path, f"learning_{timestamp}.json")
         with open(learning_file, 'w') as f:
             json.dump(learning_data, f, indent=2, default=str)
@@ -551,7 +551,7 @@ class Layer1Integration:
         os.makedirs(whitelist_path, exist_ok=True)
 
         # Save whitelist data
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now().timestamp()
         whitelist_file = os.path.join(whitelist_path, f"whitelist_{timestamp}.json")
         with open(whitelist_file, 'w') as f:
             json.dump(whitelist_data, f, indent=2, default=str)

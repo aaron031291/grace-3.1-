@@ -54,7 +54,7 @@ class TestResultData:
     code_failures: int = 0
     top_error_types: Dict[str, int] = field(default_factory=dict)
     learned_patterns: List[Dict] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -65,7 +65,7 @@ class LogData:
     warning_messages: List[Dict] = field(default_factory=list)
     recent_exceptions: List[Dict] = field(default_factory=list)
     log_volume_per_minute: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -81,7 +81,7 @@ class MetricsData:
     vector_db_health: bool = True
     llm_health: bool = True
     embedding_health: bool = True
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -94,7 +94,7 @@ class AgentOutputData:
     average_confidence: float = 0.0
     invariant_violations: int = 0
     recent_decisions: List[Dict] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -107,7 +107,7 @@ class GenesisKeyData:
     applied_fixes: int = 0
     recent_keys: List[Dict] = field(default_factory=list)
     key_types_distribution: Dict[str, int] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -119,7 +119,7 @@ class GraceMirrorData:
     self_governance_progress: float = 0.0
     component_status: Dict[str, str] = field(default_factory=dict)
     recent_activity: List[Dict] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -131,7 +131,7 @@ class SensorData:
     agent_outputs: Optional[AgentOutputData] = None
     genesis_keys: Optional[GenesisKeyData] = None
     grace_mirror: Optional[GraceMirrorData] = None
-    collection_timestamp: datetime = field(default_factory=datetime.utcnow)
+    collection_timestamp: datetime = field(default_factory=datetime.now)
     collection_duration_ms: float = 0.0
     sensors_available: List[SensorType] = field(default_factory=list)
     sensors_failed: List[SensorType] = field(default_factory=list)
@@ -170,7 +170,7 @@ class SensorLayer:
 
     def collect_all(self) -> SensorData:
         """Collect data from all available sensors."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         sensor_data = SensorData()
 
         # Collect from each sensor
@@ -204,7 +204,7 @@ class SensorLayer:
                 logger.error(f"Sensor {sensor_type} failed: {e}")
                 sensor_data.sensors_failed.append(sensor_type)
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now()
         sensor_data.collection_timestamp = end_time
         sensor_data.collection_duration_ms = (end_time - start_time).total_seconds() * 1000
 
@@ -270,7 +270,7 @@ class SensorLayer:
 
             # Find recent log files
             log_files = list(log_dir.glob("*.log")) + list(log_dir.glob("*.jsonl"))
-            recent_cutoff = datetime.utcnow() - timedelta(hours=1)
+            recent_cutoff = datetime.now() - timedelta(hours=1)
 
             for log_file in log_files[:5]:  # Limit to 5 most recent
                 try:
@@ -389,7 +389,7 @@ class SensorLayer:
                 return agent_data
 
             # Find today's decision log
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = datetime.now().strftime("%Y-%m-%d")
             decision_file = decision_dir / f"decisions_{today}.jsonl"
 
             if decision_file.exists():
@@ -448,7 +448,7 @@ class SensorLayer:
                     from models.genesis_key_models import GenesisKey
                     from sqlalchemy import func
 
-                    cutoff = datetime.utcnow() - timedelta(hours=24)
+                    cutoff = datetime.now() - timedelta(hours=24)
 
                     # Count by status
                     genesis_data.total_keys = session.query(func.count(GenesisKey.id)).scalar() or 0

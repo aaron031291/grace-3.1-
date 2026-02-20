@@ -32,7 +32,7 @@ class MagmaPersistence:
         """Save Magma state to disk."""
         try:
             state = {
-                "saved_at": datetime.utcnow().isoformat(),
+                "saved_at": datetime.now().isoformat(),
                 "stats": magma_system.get_stats() if hasattr(magma_system, 'get_stats') else {},
             }
 

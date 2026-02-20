@@ -52,7 +52,7 @@ class ConnectionManager:
         self.active_connections[channel].add(websocket)
         self.connection_info[websocket] = {
             "channel": channel,
-            "connected_at": datetime.utcnow().isoformat(),
+            "connected_at": datetime.now().isoformat(),
             "messages_received": 0,
             "messages_sent": 0
         }
@@ -160,7 +160,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
             "type": "connected",
             "channel": channel,
             "data": {"message": f"Connected to {channel} channel"},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         })
 
         while True:
@@ -176,7 +176,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
                 # Respond to ping
                 await manager.send_personal(websocket, {
                     "type": "pong",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 })
 
             elif msg_type == "subscribe":
@@ -187,7 +187,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
                     await manager.send_personal(websocket, {
                         "type": "ack",
                         "data": {"subscribed": new_channel},
-                        "timestamp": datetime.utcnow().isoformat()
+                        "timestamp": datetime.now().isoformat()
                     })
 
             elif msg_type == "unsubscribe":
@@ -198,7 +198,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
                     await manager.send_personal(websocket, {
                         "type": "ack",
                         "data": {"unsubscribed": unsub_channel},
-                        "timestamp": datetime.utcnow().isoformat()
+                        "timestamp": datetime.now().isoformat()
                     })
 
             elif msg_type == "message":
@@ -210,7 +210,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
                     await manager.send_personal(websocket, {
                         "type": "ack",
                         "data": data.get("data"),
-                        "timestamp": datetime.utcnow().isoformat()
+                        "timestamp": datetime.now().isoformat()
                     })
 
             elif msg_type == "status":
@@ -218,7 +218,7 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "status"):
                 await manager.send_personal(websocket, {
                     "type": "status",
                     "data": manager.get_stats(),
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 })
 
     except WebSocketDisconnect:
@@ -237,7 +237,7 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
         await manager.send_personal(websocket, {
             "type": "error",
             "data": {"error": "No message provided"},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         })
         return
 
@@ -255,7 +255,7 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
             await manager.send_personal(websocket, {
                 "type": "error",
                 "data": {"error": "Ollama service not running"},
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             })
             return
 
@@ -263,7 +263,7 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
         await manager.send_personal(websocket, {
             "type": "start",
             "data": {"message": "Generating response..."},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         })
 
         try:
@@ -282,7 +282,7 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
                     await manager.send_personal(websocket, {
                         "type": "token",
                         "data": {"token": token},
-                        "timestamp": datetime.utcnow().isoformat()
+                        "timestamp": datetime.now().isoformat()
                     })
                     await asyncio.sleep(0)
 
@@ -292,7 +292,7 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
                     "full_response": full_response,
                     "length": len(full_response)
                 },
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             })
 
         except Exception as stream_error:
@@ -301,14 +301,14 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
             await manager.send_personal(websocket, {
                 "type": "complete",
                 "data": {"full_response": response, "length": len(response)},
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             })
 
     except Exception as e:
         await manager.send_personal(websocket, {
             "type": "error",
             "data": {"error": str(e)},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         })
 
 
@@ -321,7 +321,7 @@ async def broadcast_status_update(status: dict):
     await manager.broadcast("status", {
         "type": "status_update",
         "data": status,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
 
 
@@ -330,7 +330,7 @@ async def broadcast_learning_progress(progress: dict):
     await manager.broadcast("learning", {
         "type": "learning_progress",
         "data": progress,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
 
 
@@ -339,7 +339,7 @@ async def broadcast_ingestion_status(status: dict):
     await manager.broadcast("ingestion", {
         "type": "ingestion_status",
         "data": status,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
 
 
@@ -348,7 +348,7 @@ async def broadcast_monitoring_data(data: dict):
     await manager.broadcast("monitoring", {
         "type": "monitoring_data",
         "data": data,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
 
 
@@ -374,7 +374,7 @@ async def broadcast_to_channel(channel: str, message: dict):
     await manager.broadcast(channel, {
         "type": "broadcast",
         "data": message,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
 
     return {

@@ -94,7 +94,7 @@ class TelemetryService:
             parent_run_id=parent_run_id,
             operation_type=operation_type,
             operation_name=operation_name,
-            started_at=datetime.utcnow(),
+            started_at=datetime.now(),
             status=OperationStatus.STARTED,
             input_hash=input_hash,
             metadata=metadata or {}
@@ -124,7 +124,7 @@ class TelemetryService:
             cpu_after = self._process.cpu_percent()
             memory_after = self._process.memory_info().rss / (1024 * 1024)
 
-            operation.completed_at = datetime.utcnow()
+            operation.completed_at = datetime.now()
             operation.duration_ms = duration_ms
             operation.status = OperationStatus.COMPLETED
             operation.cpu_percent = (cpu_before + cpu_after) / 2
@@ -140,7 +140,7 @@ class TelemetryService:
             # Operation failed
             duration_ms = (time.time() - start_time) * 1000
 
-            operation.completed_at = datetime.utcnow()
+            operation.completed_at = datetime.now()
             operation.duration_ms = duration_ms
             operation.status = OperationStatus.FAILED
             operation.error_message = str(e)
@@ -237,7 +237,7 @@ class TelemetryService:
                 session.add(baseline)
 
             # Get recent operations for rolling window calculation
-            window_start = datetime.utcnow() - timedelta(days=baseline.baseline_window_days)
+            window_start = datetime.now() - timedelta(days=baseline.baseline_window_days)
             recent_ops = session.query(OperationLog).filter(
                 OperationLog.operation_type == operation.operation_type,
                 OperationLog.operation_name == operation.operation_name,
@@ -289,7 +289,7 @@ class TelemetryService:
                 )
                 baseline.contradiction_rate = contradictions / len(recent_ops)
 
-                baseline.last_updated = datetime.utcnow()
+                baseline.last_updated = datetime.now()
                 session.commit()
 
         except Exception as e:

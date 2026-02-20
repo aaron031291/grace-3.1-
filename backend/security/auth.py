@@ -65,15 +65,15 @@ class SessionManager:
         session_id = f"SS-{secrets.token_hex(16)}"
 
         # Calculate expiration
-        expires_at = datetime.utcnow() + timedelta(hours=self.config.SESSION_MAX_AGE_HOURS)
+        expires_at = datetime.now() + timedelta(hours=self.config.SESSION_MAX_AGE_HOURS)
 
         # Store session data
         self._sessions[session_id] = {
             "user_id": user_id,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now().isoformat(),
             "expires_at": expires_at.isoformat(),
             "metadata": metadata or {},
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
         }
 
         # Set session cookie
@@ -115,13 +115,13 @@ class SessionManager:
 
         # Check expiration
         expires_at = datetime.fromisoformat(session["expires_at"])
-        if datetime.utcnow() > expires_at:
+        if datetime.now() > expires_at:
             # Session expired, remove it
             del self._sessions[session_id]
             return None
 
         # Update last activity
-        session["last_activity"] = datetime.utcnow().isoformat()
+        session["last_activity"] = datetime.now().isoformat()
 
         return session
 
@@ -164,7 +164,7 @@ class SessionManager:
 
     def cleanup_expired_sessions(self):
         """Remove all expired sessions."""
-        now = datetime.utcnow()
+        now = datetime.now()
         to_remove = [
             sid for sid, data in self._sessions.items()
             if datetime.fromisoformat(data["expires_at"]) < now

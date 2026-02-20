@@ -96,7 +96,7 @@ class Memory:
     # Provenance
     source: str = ""
     genesis_key_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
 
     # Connections
     related_memories: List[str] = field(default_factory=list)
@@ -108,7 +108,7 @@ class Memory:
 
     # Forgetting curve
     decay_rate: float = 0.1  # Higher = forgets faster
-    last_reinforced: datetime = field(default_factory=datetime.utcnow)
+    last_reinforced: datetime = field(default_factory=datetime.now)
 
     @property
     def current_retention(self) -> float:
@@ -119,7 +119,7 @@ class Memory:
         if self.strength == MemoryStrength.PERMANENT:
             return 1.0
 
-        hours_since = (datetime.utcnow() - self.last_reinforced).total_seconds() / 3600
+        hours_since = (datetime.now() - self.last_reinforced).total_seconds() / 3600
         stability = (1.0 / max(self.decay_rate, 0.01)) * (1 + self.access_count * 0.5)
         retention = math.exp(-hours_since / max(stability, 1.0))
         return max(0.01, min(1.0, retention))
@@ -132,8 +132,8 @@ class Memory:
     def reinforce(self):
         """Reinforce this memory (accessed/validated)."""
         self.access_count += 1
-        self.last_accessed = datetime.utcnow()
-        self.last_reinforced = datetime.utcnow()
+        self.last_accessed = datetime.now()
+        self.last_reinforced = datetime.now()
         self.decay_rate *= 0.9  # Slower decay with each reinforcement
 
         if self.access_count > 10 and self.strength == MemoryStrength.SHORT_TERM:
@@ -220,7 +220,7 @@ class ConsolidationEngine:
     def consolidate(self, memories: Dict[str, Memory]) -> Dict[str, Any]:
         """Run a full consolidation cycle."""
         self._consolidation_count += 1
-        self._last_consolidation = datetime.utcnow()
+        self._last_consolidation = datetime.now()
 
         results = {
             "promoted": 0,

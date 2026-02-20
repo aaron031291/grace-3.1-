@@ -64,8 +64,8 @@ class GraphNode:
     metadata: Dict[str, Any] = field(default_factory=dict)
     genesis_key_id: Optional[str] = None
     trust_score: float = 0.5
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
 
     def __hash__(self):
         return hash(self.id)
@@ -87,7 +87,7 @@ class GraphEdge:
     confidence: float = 0.5
     metadata: Dict[str, Any] = field(default_factory=dict)
     genesis_key_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
 
     def __hash__(self):
         return hash(self.id)

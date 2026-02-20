@@ -143,7 +143,7 @@ class MemoryMeshConnector:
                 "genesis_key_id": genesis_key_id,
                 "learning_type": learning_type,
                 "user_id": user_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.MEMORY_MESH
         )
@@ -167,7 +167,7 @@ class MemoryMeshConnector:
                 "learning_id": learning_id,
                 "trust_score": trust_score,
                 "genesis_key_id": genesis_key_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.MEMORY_MESH
         )
@@ -193,7 +193,7 @@ class MemoryMeshConnector:
                 "procedure_name": procedure_name,
                 "trust_score": trust_score,
                 "genesis_key_id": genesis_key_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.MEMORY_MESH
         )
@@ -228,7 +228,7 @@ class MemoryMeshConnector:
                 "pattern_id": pattern_id,
                 "pattern_type": pattern_type,
                 "examples_count": examples_count,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.MEMORY_MESH
         )
@@ -260,7 +260,7 @@ class MemoryMeshConnector:
                 payload={
                     "suggestions": suggestions,
                     "top_priorities": suggestions.get("top_priorities", [])[:5],
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 },
                 from_component=ComponentType.MEMORY_MESH
             )
@@ -301,7 +301,7 @@ class MemoryMeshConnector:
                     "new_trust": new_trust,
                     "degradation": degradation,
                     "suggested_action": "re_study" if new_trust < 0.5 else "validate",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 },
                 from_component=ComponentType.MEMORY_MESH
             )
