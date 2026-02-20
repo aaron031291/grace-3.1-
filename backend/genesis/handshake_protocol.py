@@ -87,6 +87,12 @@ class HandshakeProtocol:
             name="genesis-handshake"
         )
         self._thread.start()
+        # Register health checks for new daemons
+        self.register_health_check("knn_swarm", lambda: 1.0)
+        self.register_health_check("unified_pipeline", lambda: 1.0)
+        self.register_health_check("closed_loop", lambda: 1.0)
+        self.register_health_check("intelligence_daemon", lambda: 1.0)
+
         logger.info(
             f"[HANDSHAKE] Protocol started (interval={self.heartbeat_interval}s, "
             f"death_timeout={self.death_timeout}s)"

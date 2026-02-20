@@ -364,6 +364,14 @@ class UnifiedLearningPipeline:
                 if cycle_count % 3 == 0:
                     self._discover_new_seeds()
 
+                # Phase 2b: Discover seeds from author recommendations
+                if cycle_count % 5 == 0:
+                    self._discover_author_seeds()
+
+                # Phase 2c: Discover seeds from training source registry
+                if cycle_count % 7 == 0:
+                    self._discover_training_source_seeds()
+
                 # Phase 3: Run predictive prefetch for active topics
                 if self.config["enable_predictive_prefetch"] and cycle_count % 5 == 0:
                     self._run_predictive_prefetch()
@@ -476,6 +484,35 @@ class UnifiedLearningPipeline:
                 logger.warning(f"[UNIFIED-PIPELINE] Expansion failed for '{topic[:40]}': {e}")
 
         return processed
+
+    def _discover_author_seeds(self):
+        """Discover seeds from author discovery engine recommendations."""
+        try:
+            from cognitive.author_discovery_engine import get_author_discovery_engine
+            engine = get_author_discovery_engine()
+            missing = engine.get_missing_works()
+            for work in missing[:3]:
+                if work.title not in self._processed_seeds:
+                    self._pending_seeds.append({
+                        "topic": work.title,
+                        "text": f"{work.title} by {work.author} — {work.reason}"
+                    })
+        except Exception:
+            pass
+
+    def _discover_training_source_seeds(self):
+        """Discover seeds from training source registry."""
+        try:
+            from cognitive.training_data_sources import get_training_source_registry
+            registry = get_training_source_registry()
+            for source in registry.get_by_priority(5):
+                if source.name not in self._processed_seeds:
+                    self._pending_seeds.append({
+                        "topic": source.name,
+                        "text": f"{source.name}: {source.description}"
+                    })
+        except Exception:
+            pass
 
     def _discover_new_seeds(self):
         """Discover new seed topics from recently ingested documents."""

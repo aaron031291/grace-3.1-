@@ -296,6 +296,23 @@ class BaseSelfAgent:
             "timestamp": datetime.now().isoformat(),
         }
 
+        # Consult playbooks first before asking Kimi
+        playbook_insight = None
+        try:
+            from cognitive.healing_playbooks import PlaybookManager
+            from database.session import SessionLocal
+            _pb_s = SessionLocal()
+            if _pb_s:
+                try:
+                    pb = PlaybookManager(_pb_s)
+                    existing = pb.list_playbooks(active_only=True)
+                    if existing:
+                        playbook_insight = f"Found {len(existing)} playbooks to consult"
+                finally:
+                    _pb_s.close()
+        except Exception:
+            pass
+
         if kpi < 0.95:
             kimi_insight = self.ask_kimi_why_low()
             if kimi_insight:

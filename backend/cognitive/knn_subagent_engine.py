@@ -348,6 +348,9 @@ class KNNSubAgentOrchestrator:
         # Feed high-trust discoveries to Oracle
         self._feed_oracle(seed_topic, unique)
 
+        # Feed to Kimi knowledge feedback for vector embedding
+        self._feed_kimi_feedback(seed_topic, unique)
+
         # Feed to ingestion pipeline for embedding
         self._feed_pipeline(seed_topic, unique)
 
@@ -414,6 +417,22 @@ class KNNSubAgentOrchestrator:
                     )
                 finally:
                     session.close()
+        except Exception:
+            pass
+
+    def _feed_kimi_feedback(self, seed: str, discoveries: List[Discovery]):
+        """Feed high-trust discoveries to Kimi feedback for vector embedding."""
+        try:
+            from cognitive.kimi_knowledge_feedback import get_kimi_feedback
+            fb = get_kimi_feedback()
+            for d in discoveries:
+                if d.trust_score >= 0.7 and len(d.text) >= 200:
+                    fb.feed_answer(
+                        question=f"What is {d.topic}?",
+                        answer=d.text,
+                        confidence=d.trust_score,
+                        tier_used="knn_swarm",
+                    )
         except Exception:
             pass
 

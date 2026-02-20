@@ -323,7 +323,16 @@ class LibrarianEngine:
             except Exception:
                 pass
 
-            result["status"] = "success"
+            
+            # Auto-organize into domain folder
+            try:
+                from librarian.knowledge_organizer import get_knowledge_organizer
+                organizer = get_knowledge_organizer()
+                organizer.organize_file(str(document.filename) if hasattr(document, 'filename') else str(document_id))
+            except Exception:
+                pass
+
+result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
 
         except Exception as e:

@@ -157,6 +157,21 @@ class ThreeLayerReasoning:
 
         training_context = context or self.get_training_context(query)
 
+        # Personalize with user preferences if available
+        user_context = ""
+        try:
+            from cognitive.user_preference_model import UserPreferenceEngine
+            from database.session import SessionLocal
+            _up_s = SessionLocal()
+            if _up_s:
+                try:
+                    up = UserPreferenceEngine(_up_s)
+                    user_context = up.get_system_prompt_additions("default")
+                finally:
+                    _up_s.close()
+        except Exception:
+            pass
+
         system_prompt = (
             "You are an expert reasoning model. Analyze the question carefully using "
             "the provided training data context. Give your independent analysis and conclusion. "

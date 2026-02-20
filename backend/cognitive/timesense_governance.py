@@ -122,6 +122,16 @@ DEFAULT_SLAS: Dict[str, SLADefinition] = {
     "memory.recall": SLADefinition("memory.recall", 1000, 500, 3000, "memory", description="Memory recall"),
     "memory.consolidate": SLADefinition("memory.consolidate", 30000, 15000, 60000, "memory", description="Memory consolidation"),
 
+    # KNN Swarm
+    "knn.swarm_expand": SLADefinition("knn.swarm_expand", 30000, 15000, 60000, "knn_swarm", description="Full swarm expansion"),
+    "knn.vector_search": SLADefinition("knn.vector_search", 5000, 2000, 10000, "knn_swarm", description="Vector sub-agent search"),
+
+    # Knowledge Browser
+    "browser.organize": SLADefinition("browser.organize", 10000, 5000, 20000, "knowledge_browser", description="Domain organization"),
+
+    # Author Discovery
+    "discovery.authors": SLADefinition("discovery.authors", 15000, 8000, 30000, "author_discovery", description="Author work discovery"),
+
     # Governance
     "governance.check": SLADefinition("governance.check", 500, 200, 1000, "governance", description="Governance rule check"),
     "governance.audit": SLADefinition("governance.audit", 10000, 5000, 20000, "governance", description="Audit cycle"),
