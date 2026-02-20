@@ -3,6 +3,21 @@ Embedding module for generating text embeddings using Qwen3-Embedding-4B model.
 """
 
 import os
+
+def _track_embed(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('embedder', desc, **kw)
+    except Exception:
+        pass
+
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'embedder')
+    except Exception:
+        pass
+
 import numpy as np
 from pathlib import Path
 from typing import List, Union, Optional, Tuple

@@ -34,6 +34,13 @@ from retrieval.retriever import DocumentRetriever
 from embedding import get_embedding_model
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'proactive_learner')
+    except Exception:
+        pass
+
 
 def _track_proactive(desc, **kwargs):
     try:

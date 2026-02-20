@@ -16,6 +16,13 @@ from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
+def _check_hia(text):
+    try:
+        from security.honesty_integrity_accountability import get_hia_framework
+        return get_hia_framework().verify_llm_output(text)
+    except Exception:
+        return None
+
 
 router = APIRouter(tags=["WebSocket"])
 

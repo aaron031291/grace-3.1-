@@ -32,6 +32,20 @@ from .judgement import JudgementLayer, JudgementResult, HealthStatus
 from .action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'diagnostic_engine')
+    except Exception:
+        pass
+
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('diagnostic_engine', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class EngineState(str, Enum):

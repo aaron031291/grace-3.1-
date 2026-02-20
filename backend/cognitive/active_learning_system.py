@@ -29,6 +29,13 @@ from retrieval.retriever import DocumentRetriever
 from database.session import get_session
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'active_learning_system')
+    except Exception:
+        pass
+
 
 
 class TrainingSession:

@@ -31,6 +31,13 @@ except ImportError:
     settings = None
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'service')
+    except Exception:
+        pass
+
 
 def _track_scraping(desc, **kwargs):
     try:

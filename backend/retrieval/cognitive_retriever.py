@@ -16,6 +16,13 @@ from pathlib import Path
 from settings import KNOWLEDGE_BASE_PATH
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('cognitive_retriever', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class CognitiveRetriever:

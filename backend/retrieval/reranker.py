@@ -8,6 +8,13 @@ from typing import List, Dict, Any, Optional
 from threading import Lock
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('reranker', desc, **kw)
+    except Exception:
+        pass
+
 
 # Lazy imports for torch and sentence_transformers
 _torch = None

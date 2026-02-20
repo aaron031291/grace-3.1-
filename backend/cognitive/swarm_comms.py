@@ -42,6 +42,21 @@ from collections import deque
 from queue import Queue, Empty
 
 logger = logging.getLogger(__name__)
+def _track_genesis(entity_type, description):
+    try:
+        from genesis.genesis_key_service import GenesisKeyService
+        from database.session import SessionLocal
+        s = SessionLocal()
+        if s:
+            try:
+                GenesisKeyService(session=s).create_key(entity_type=entity_type, description=description[:200])
+            except Exception:
+                pass
+            finally:
+                s.close()
+    except Exception:
+        pass
+
 
 
 @dataclass

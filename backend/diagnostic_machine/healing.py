@@ -26,6 +26,13 @@ from enum import Enum
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('healing', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class HealingActionType(str, Enum):

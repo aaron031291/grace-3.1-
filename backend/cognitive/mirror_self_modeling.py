@@ -27,6 +27,13 @@ from cognitive.learning_memory import LearningExample
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'mirror_self_modeling')
+    except Exception:
+        pass
+
 
 
 # ======================================================================
