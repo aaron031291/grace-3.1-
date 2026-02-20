@@ -137,7 +137,15 @@ class KnowledgeOrganizer:
 
         scores = {}
         for domain, info in self.domains.items():
-            score = sum(1 for kw in info["keywords"] if kw in search_text)
+            score = 0
+            for kw in info["keywords"]:
+                if len(kw) <= 3:
+                    # Short keywords need word boundary match
+                    if f" {kw} " in f" {search_text} ":
+                        score += 1
+                else:
+                    if kw in search_text:
+                        score += 1
             if score > 0:
                 scores[domain] = score
 

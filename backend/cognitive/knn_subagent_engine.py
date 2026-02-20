@@ -110,7 +110,7 @@ class VectorSearchAgent:
         filename = meta.get("filename", meta.get("file_path", ""))
         if filename:
             import os
-            return os.path.splitext(os.path.basename(filename))[0].replace("_", " ")[:80]
+            return os.path.splitext(os.path.basename(filename))[0].replace("_", " ").replace("-", " ")[:80]
         return " ".join(text.split()[:10])[:80]
 
 
