@@ -132,4 +132,4 @@ class TestCollectAllIntegrity:
 
     def test_log_message_counts_sources(self):
         source = (BACKEND_DIR / "genesis" / "unified_intelligence.py").read_text()
-        assert "18 sources" in source
+        assert "26 sources" in source

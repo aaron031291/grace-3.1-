@@ -12,6 +12,13 @@ from typing import List, Tuple, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
+def _report_contradiction_to_hia(text1, text2):
+    try:
+        from security.honesty_integrity_accountability import get_hia_framework
+        get_hia_framework().violation_log.append(type('V', (), {'value': type('E', (), {'value': 'honesty'})(), 'severity': type('S', (), {'value': 'warning'})(), 'description': 'Contradiction detected', 'component': 'contradiction_detector', 'timestamp': __import__('datetime').datetime.now(), 'auto_corrected': False, 'evidence': '', 'correction': ''})())
+    except Exception:
+        pass
+
 # Lazy import for torch to avoid hard dependency at module load time
 torch = None
 

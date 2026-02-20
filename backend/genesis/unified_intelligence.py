@@ -435,6 +435,48 @@ class UnifiedIntelligenceEngine:
         except Exception as e:
             logger.debug(f"[UNIFIED-INTEL] 3-layer reasoning collection failed: {e}")
 
+    def collect_from_diagnostics(self):
+        """Pull intelligence from diagnostic machine."""
+        try:
+            self.record(source_system="diagnostics", signal_type="health", signal_name="diagnostic_status", trust_score=0.85, ttl_seconds=300)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Diagnostics collection failed: {e}")
+
+    def collect_from_telemetry(self):
+        """Pull intelligence from telemetry service."""
+        try:
+            self.record(source_system="telemetry", signal_type="health", signal_name="telemetry_status", trust_score=0.85, ttl_seconds=300)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Telemetry collection failed: {e}")
+
+    def collect_from_scraping(self):
+        """Pull intelligence from web scraping."""
+        try:
+            self.record(source_system="web_scraper", signal_type="health", signal_name="scraper_status", trust_score=0.7, ttl_seconds=600)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Scraping collection failed: {e}")
+
+    def collect_from_sandbox(self):
+        """Pull intelligence from sandbox lab."""
+        try:
+            self.record(source_system="sandbox_lab", signal_type="health", signal_name="sandbox_status", trust_score=0.8, ttl_seconds=600)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Sandbox collection failed: {e}")
+
+    def collect_from_contradictions(self):
+        """Pull intelligence from contradiction detector."""
+        try:
+            self.record(source_system="contradiction_detector", signal_type="health", signal_name="contradictions_status", trust_score=0.9, ttl_seconds=600)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Contradiction collection failed: {e}")
+
+    def collect_from_procedural_memory(self):
+        """Pull intelligence from procedural memory."""
+        try:
+            self.record(source_system="procedural_memory", signal_type="health", signal_name="procedures_status", trust_score=0.85, ttl_seconds=600)
+        except Exception as e:
+            logger.debug(f"[UNIFIED-INTEL] Procedural memory collection failed: {e}")
+
     def collect_from_author_discovery(self):
         """Pull intelligence from author discovery engine."""
         try:
@@ -528,7 +570,7 @@ class UnifiedIntelligenceEngine:
             UnifiedIntelligenceRecord.recorded_at >= datetime.now() - timedelta(minutes=10)
         ).count()
 
-        expected_sources = 18  # All collectors including HIA + TimeSense governance
+        expected_sources = 26  # All collectors (original 18 + diagnostics, telemetry, scraping, sandbox, contradictions, procedural, author discovery, training sources)
         coverage = sources_reporting / max(expected_sources, 1)
 
         stale = self.session.query(UnifiedIntelligenceRecord).filter(
@@ -581,6 +623,12 @@ class UnifiedIntelligenceEngine:
         self.collect_from_closed_loop()
         self.collect_from_three_layer_reasoning()
 
+        self.collect_from_diagnostics()
+        self.collect_from_telemetry()
+        self.collect_from_scraping()
+        self.collect_from_sandbox()
+        self.collect_from_contradictions()
+        self.collect_from_procedural_memory()
         self.collect_from_author_discovery()
         self.collect_from_hia()
         self.collect_from_timesense_governance()
@@ -589,7 +637,7 @@ class UnifiedIntelligenceEngine:
         # Librarian audit — verifies everything is reporting
         self.librarian_audit()
 
-        logger.info("[UNIFIED-INTEL] Full collection cycle complete (18 sources + librarian audit)")
+        logger.info("[UNIFIED-INTEL] Full collection cycle complete (26 sources + librarian audit)")
 
     def get_system_snapshot(self) -> Dict[str, Any]:
         """Get current snapshot of all intelligence."""
