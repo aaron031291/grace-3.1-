@@ -103,6 +103,62 @@ export const API_ENDPOINTS = {
   learningDashboard: `${API_BASE_URL}/llm-learning/dashboard`,
   verificationPending: `${API_BASE_URL}/llm-learning/grace/verification/pending`,
   verificationConfirm: `${API_BASE_URL}/llm-learning/grace/verification/confirm`,
+
+  // Diagnostic Machine
+  diagnostic: \`\${API_BASE_URL}/diagnostic\`,
+
+  // Proactive Learning
+  proactiveLearning: \`\${API_BASE_URL}/proactive-learning\`,
+
+  // Knowledge Browser
+  knowledgeBrowser: \`\${API_BASE_URL}/knowledge-browser\`,
+  knowledgeBrowserDomains: \`\${API_BASE_URL}/knowledge-browser/domains\`,
+  knowledgeBrowserCoverage: \`\${API_BASE_URL}/knowledge-browser/coverage\`,
+
+  // Agent
+  agent: \`\${API_BASE_URL}/agent\`,
+
+  // Codebase
+  codebase: \`\${API_BASE_URL}/codebase\`,
+
+  // Learning Efficiency
+  learningEfficiency: \`\${API_BASE_URL}/learning-efficiency\`,
+
+  // Repo Genesis
+  repoGenesis: \`\${API_BASE_URL}/repo-genesis\`,
+
+  // Testing
+  testing: \`\${API_BASE_URL}/test\`,
+
+  // Auth
+  auth: \`\${API_BASE_URL}/auth\`,
+
+  // System Monitoring
+  monitoring: \`\${API_BASE_URL}/monitoring\`,
+
+  // Layer 1
+  layer1: \`\${API_BASE_URL}/layer1\`,
+
+  // File Ingestion
+  fileIngest: \`\${API_BASE_URL}/file-ingest\`,
+
+  // Directory Hierarchy
+  directoryHierarchy: \`\${API_BASE_URL}/directory-hierarchy\`,
+
+  // Ingestion Integration
+  ingestionIntegration: \`\${API_BASE_URL}/ingestion-integration\`,
+
+  // Prometheus Metrics
+  metrics: \`\${API_BASE_URL}/metrics\`,
+
+  // Sandbox Lab
+  sandboxLab: \`\${API_BASE_URL}/sandbox-lab\`,
+
+  // Autonomous Learning
+  autonomousLearning: \`\${API_BASE_URL}/autonomous-learning\`,
+
+  // ML Intelligence
+  mlIntelligence: \`\${API_BASE_URL}/ml-intelligence\`,
 };
 
 // Helper function to build URLs with query params
@@ -114,6 +170,62 @@ export const buildUrl = (endpoint, params = {}) => {
     }
   });
   return url.toString();
+
+  // Diagnostic Machine
+  diagnostic: \`\${API_BASE_URL}/diagnostic\`,
+
+  // Proactive Learning
+  proactiveLearning: \`\${API_BASE_URL}/proactive-learning\`,
+
+  // Knowledge Browser
+  knowledgeBrowser: \`\${API_BASE_URL}/knowledge-browser\`,
+  knowledgeBrowserDomains: \`\${API_BASE_URL}/knowledge-browser/domains\`,
+  knowledgeBrowserCoverage: \`\${API_BASE_URL}/knowledge-browser/coverage\`,
+
+  // Agent
+  agent: \`\${API_BASE_URL}/agent\`,
+
+  // Codebase
+  codebase: \`\${API_BASE_URL}/codebase\`,
+
+  // Learning Efficiency
+  learningEfficiency: \`\${API_BASE_URL}/learning-efficiency\`,
+
+  // Repo Genesis
+  repoGenesis: \`\${API_BASE_URL}/repo-genesis\`,
+
+  // Testing
+  testing: \`\${API_BASE_URL}/test\`,
+
+  // Auth
+  auth: \`\${API_BASE_URL}/auth\`,
+
+  // System Monitoring
+  monitoring: \`\${API_BASE_URL}/monitoring\`,
+
+  // Layer 1
+  layer1: \`\${API_BASE_URL}/layer1\`,
+
+  // File Ingestion
+  fileIngest: \`\${API_BASE_URL}/file-ingest\`,
+
+  // Directory Hierarchy
+  directoryHierarchy: \`\${API_BASE_URL}/directory-hierarchy\`,
+
+  // Ingestion Integration
+  ingestionIntegration: \`\${API_BASE_URL}/ingestion-integration\`,
+
+  // Prometheus Metrics
+  metrics: \`\${API_BASE_URL}/metrics\`,
+
+  // Sandbox Lab
+  sandboxLab: \`\${API_BASE_URL}/sandbox-lab\`,
+
+  // Autonomous Learning
+  autonomousLearning: \`\${API_BASE_URL}/autonomous-learning\`,
+
+  // ML Intelligence
+  mlIntelligence: \`\${API_BASE_URL}/ml-intelligence\`,
 };
 
 export default {
@@ -121,4 +233,60 @@ export default {
   OLLAMA_BASE_URL,
   API_ENDPOINTS,
   buildUrl,
+
+  // Diagnostic Machine
+  diagnostic: \`\${API_BASE_URL}/diagnostic\`,
+
+  // Proactive Learning
+  proactiveLearning: \`\${API_BASE_URL}/proactive-learning\`,
+
+  // Knowledge Browser
+  knowledgeBrowser: \`\${API_BASE_URL}/knowledge-browser\`,
+  knowledgeBrowserDomains: \`\${API_BASE_URL}/knowledge-browser/domains\`,
+  knowledgeBrowserCoverage: \`\${API_BASE_URL}/knowledge-browser/coverage\`,
+
+  // Agent
+  agent: \`\${API_BASE_URL}/agent\`,
+
+  // Codebase
+  codebase: \`\${API_BASE_URL}/codebase\`,
+
+  // Learning Efficiency
+  learningEfficiency: \`\${API_BASE_URL}/learning-efficiency\`,
+
+  // Repo Genesis
+  repoGenesis: \`\${API_BASE_URL}/repo-genesis\`,
+
+  // Testing
+  testing: \`\${API_BASE_URL}/test\`,
+
+  // Auth
+  auth: \`\${API_BASE_URL}/auth\`,
+
+  // System Monitoring
+  monitoring: \`\${API_BASE_URL}/monitoring\`,
+
+  // Layer 1
+  layer1: \`\${API_BASE_URL}/layer1\`,
+
+  // File Ingestion
+  fileIngest: \`\${API_BASE_URL}/file-ingest\`,
+
+  // Directory Hierarchy
+  directoryHierarchy: \`\${API_BASE_URL}/directory-hierarchy\`,
+
+  // Ingestion Integration
+  ingestionIntegration: \`\${API_BASE_URL}/ingestion-integration\`,
+
+  // Prometheus Metrics
+  metrics: \`\${API_BASE_URL}/metrics\`,
+
+  // Sandbox Lab
+  sandboxLab: \`\${API_BASE_URL}/sandbox-lab\`,
+
+  // Autonomous Learning
+  autonomousLearning: \`\${API_BASE_URL}/autonomous-learning\`,
+
+  // ML Intelligence
+  mlIntelligence: \`\${API_BASE_URL}/ml-intelligence\`,
 };

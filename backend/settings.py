@@ -100,6 +100,25 @@ class Settings:
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
+
+    # Reasoning Router
+    REASONING_TIER_ENABLED: bool = True
+
+    # KNN Swarm
+    KNN_SWARM_WORKERS: int = 6
+
+    # Kimi Knowledge Feedback
+    KIMI_FEEDBACK_MIN_CONFIDENCE: float = 0.7
+    KIMI_FEEDBACK_MIN_LENGTH: int = 200
+
+    # Author Discovery
+    AUTHOR_DISCOVERY_ENABLED: bool = True
+
+    # Handshake Protocol
+    HANDSHAKE_INTERVAL: int = 60
+
+    # Closed-Loop Ecosystem
+    CLOSED_LOOP_INTERVAL: int = 300
     
     @classmethod
     def validate(cls) -> bool:
