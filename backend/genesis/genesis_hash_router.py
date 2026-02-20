@@ -41,11 +41,15 @@ class GenesisHashRouter:
 
     def detect_genesis_refs(self, user_prompt: str) -> List[str]:
         """Extract all Genesis# references from a user prompt."""
+        if not user_prompt:
+            return []
         matches = self.GENESIS_PATTERN.findall(user_prompt)
         return [m.strip() for m in matches]
 
     def has_genesis_ref(self, user_prompt: str) -> bool:
         """Check if prompt contains any Genesis# references."""
+        if not user_prompt:
+            return False
         return bool(self.GENESIS_PATTERN.search(user_prompt))
 
     def route(self, user_prompt: str) -> Optional[Dict[str, Any]]:
