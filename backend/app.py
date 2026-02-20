@@ -83,6 +83,7 @@ from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagno
 from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
+from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -549,6 +550,7 @@ app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge 
 app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
+app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

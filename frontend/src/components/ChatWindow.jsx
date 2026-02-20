@@ -14,6 +14,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [lastAssistantMessage, setLastAssistantMessage] = useState("");
   const [showSearchInternet, setShowSearchInternet] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
+  const [useAgent, setUseAgent] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -225,20 +226,31 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     setLoading(true);
 
     try {
+      // Determine which API endpoint to use
+      const endpoint = useAgent
+        ? `http://localhost:8000/api/mcp/chat`
+        : `http://localhost:8000/chats/${chatId}/prompt`;
+
+      const payload = useAgent ? {
+        chat_id: chatId,
+        messages: [], // Let backend load history via chat_id
+        use_rag: true,
+        use_web: true,
+        model: chatInfo?.model,
+        temperature: chatInfo?.temperature || 0.7
+      } : {
+        content: userMessage,
+        temperature: chatInfo?.temperature || 0.7,
+        top_p: 0.9,
+        top_k: 40,
+      };
+
       // Send prompt and get response
-      const response = await fetch(
-        `http://localhost:8000/chats/${chatId}/prompt`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            content: userMessage,
-            temperature: chatInfo?.temperature || 0.7,
-            top_p: 0.9,
-            top_k: 40,
-          }),
-        }
-      );
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       // Handle 404 - Knowledge not found
       if (response.status === 404) {
@@ -285,15 +297,16 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       // Add assistant message with sources if available
       const assistantMessage = {
-        id: result.assistant_message_id,
+        id: useAgent ? Date.now() + Math.random() : result.assistant_message_id,
         role: "assistant",
-        content: result.message,
-        tokens: null,
-        sources: result.sources || [], // Include sources from response
+        content: useAgent ? result.content : result.message,
+        tokens: useAgent ? null : result.tokens_used,
+        sources: result.sources || [], // Both standard and MCP return 'sources'
+        tool_calls: result.tool_calls_made || [], // Only in Agent Mode
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-      setLastAssistantMessage(result.message); // Track for TTS
+      setLastAssistantMessage(assistantMessage.content); // Track for TTS
 
       // Generate title if this is the first message and chat has no title or has default title
       if (
@@ -376,6 +389,19 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
               <span>General</span>
             </span>
           )}
+          <div className="agent-toggle-container">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={useAgent}
+                onChange={(e) => setUseAgent(e.target.checked)}
+              />
+              <span className="slider round"></span>
+            </label>
+            <span className={`agent-toggle-label ${useAgent ? 'active' : ''}`}>
+              {useAgent ? "Agent Mode ON" : "Agent Mode OFF"}
+            </span>
+          </div>
         </div>
         {chatInfo && (
           <div className="chat-info">
@@ -427,6 +453,16 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             <div className="message-content">
               <div className="message-role">{msg.role}</div>
               <div className="message-text">{msg.content}</div>
+              {msg.tool_calls && msg.tool_calls.length > 0 && (
+                <div className="message-tool-calls">
+                  {msg.tool_calls.map((tc, idx) => (
+                    <div key={idx} className={`tool-call-pill ${tc.success ? 'success' : 'failed'}`} title={tc.result_preview}>
+                      <span className="tool-icon">🛠️</span>
+                      <span className="tool-name">{tc.tool}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
               {msg.tokens && (
                 <div className="message-meta">Tokens: {msg.tokens}</div>
               )}
@@ -467,7 +503,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                                 {isExpanded ? "▼" : "▶"}
                               </span>
                               <span className="source-filename">
-                                {source.filename}
+                                {source.source || source.filename || "Unknown Source"}
                               </span>
                               {source.score && (
                                 <span className="source-score">
@@ -546,6 +582,9 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             <div className="message-avatar">🤖</div>
             <div className="message-content">
               <div className="message-role">assistant</div>
+              <div className="loading-text">
+                {useAgent ? "Agent is coordinating tools..." : "Generating response..."}
+              </div>
               <div className="typing-indicator">
                 <span></span>
                 <span></span>

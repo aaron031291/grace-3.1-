@@ -1,0 +1,7 @@
+# MCP Demo Report
+
+## Latest Stable Python Version
+The latest stable Python version is **3.12**, released on 2023-10-02, and it will be supported until 2028-10.
+
+## Preferred Python Flags for Deployment
+No relevant results found in the knowledge base for: 'deployment'.

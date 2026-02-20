@@ -6,6 +6,15 @@
 # =============================================================================
 
 # -----------------------------------------------------------------------------
+# Stage 0: MCP Builder - Build Node.js based MCP servers
+# -----------------------------------------------------------------------------
+FROM node:20-slim as mcp-builder
+
+WORKDIR /app
+COPY mcp_repos/DesktopCommanderMCP ./mcp_repos/DesktopCommanderMCP
+WORKDIR /app/mcp_repos/DesktopCommanderMCP
+RUN npm install && npm run build
+
 # Stage 1: Builder - Install dependencies
 # -----------------------------------------------------------------------------
 FROM python:3.11-slim as builder
@@ -44,6 +53,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
     curl \
+    nodejs \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -61,6 +71,10 @@ RUN groupadd -r grace && useradd -r -g grace grace
 
 # Copy application code
 COPY --chown=grace:grace . .
+
+# Copy built MCP assets from Stage 0
+COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/DesktopCommanderMCP/dist /app/mcp_repos/DesktopCommanderMCP/dist
+COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/DesktopCommanderMCP/node_modules /app/mcp_repos/DesktopCommanderMCP/node_modules
 
 # Create necessary directories
 RUN mkdir -p /app/data /app/logs /app/knowledge_base && \
