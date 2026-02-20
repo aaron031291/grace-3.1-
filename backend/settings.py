@@ -105,6 +105,12 @@ class Settings:
     SERPAPI_AUTO_SCRAPE: bool = os.getenv("SERPAPI_AUTO_SCRAPE", "true").lower() == "true"
 
 
+    # ==================== LLM Provider Configuration ====================
+    # LLM_PROVIDER: 'ollama' or 'openai'
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama").lower()
+    LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
+    LLM_MODEL: str = os.getenv("LLM_MODEL", "")
+
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     
@@ -121,11 +127,28 @@ class Settings:
         """
         errors = []
         
-        # Validate Ollama settings
-        if not cls.OLLAMA_URL:
-            errors.append("OLLAMA_URL is not set")
-        if not cls.OLLAMA_LLM_DEFAULT:
-            errors.append("OLLAMA_LLM_DEFAULT is not set")
+        # Validate LLM Provider settings
+        if cls.LLM_PROVIDER == "openai":
+            if not cls.LLM_API_KEY:
+                errors.append("LLM_API_KEY is required when LLM_PROVIDER is 'openai'")
+            if not cls.LLM_MODEL:
+                # Default to gpt-4o if not specified
+                cls.LLM_MODEL = "gpt-4o"
+        elif cls.LLM_PROVIDER == "ollama":
+            if not cls.OLLAMA_URL:
+                errors.append("OLLAMA_URL is not set")
+            # If LLM_MODEL is not set, use OLLAMA_LLM_DEFAULT
+            if not cls.LLM_MODEL:
+                cls.LLM_MODEL = cls.OLLAMA_LLM_DEFAULT
+        else:
+            errors.append(f"Unsupported LLM_PROVIDER: '{cls.LLM_PROVIDER}'. Must be 'ollama' or 'openai'")
+
+        # Validate Ollama settings (only if using ollama)
+        if cls.LLM_PROVIDER == "ollama":
+            if not cls.OLLAMA_URL:
+                errors.append("OLLAMA_URL is not set")
+            if not cls.OLLAMA_LLM_DEFAULT:
+                errors.append("OLLAMA_LLM_DEFAULT is not set")
         
         # Validate Embedding settings
         if not cls.EMBEDDING_DEFAULT:

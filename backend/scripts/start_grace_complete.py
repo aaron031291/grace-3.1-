@@ -145,26 +145,31 @@ def run_migrations():
         print_error(f"Migration error: {e}")
         return False
 
-def check_ollama():
-    """Check Ollama service"""
-    print_step(5, "Checking Ollama service")
+def check_llm_provider():
+    """Check LLM service provider"""
+    print_step(5, "Checking LLM service")
 
     try:
-        from ollama_client.client import get_ollama_client
-        client = get_ollama_client()
+        from llm_orchestrator.factory import get_llm_client
+        from settings import settings
+        client = get_llm_client()
+        provider = settings.LLM_PROVIDER.upper()
 
         if client.is_running():
             models = client.get_all_models()
-            print_success(f"Ollama running with {len(models)} model(s)")
+            print_success(f"{provider} service running with {len(models)} model(s)")
             if models:
-                print(f"      Models: {', '.join(models[:3])}")
+                # Handle different model list formats
+                model_names = [m['name'] if isinstance(m, dict) else str(m) for m in models]
+                print(f"      Models: {', '.join(model_names[:3])}")
             return True
         else:
-            print_warning("Ollama not running - chat will be unavailable")
-            print("      Start Ollama: ollama serve")
+            print_warning(f"{provider} service not responding - AI features will be unavailable")
+            if provider == "OLLAMA":
+                print("      Start Ollama: ollama serve")
             return True  # Non-critical
     except Exception as e:
-        print_warning(f"Ollama check failed: {e}")
+        print_warning(f"LLM check failed: {e}")
         return True  # Non-critical
 
 def check_qdrant():
@@ -302,7 +307,7 @@ def main():
         ("Version control", setup_version_control),
         ("Database", check_database),
         ("Migrations", run_migrations),
-        ("Ollama", check_ollama),
+        ("LLM", check_llm_provider),
         ("Qdrant", check_qdrant),
         ("ML Intelligence", initialize_ml_intelligence),
         ("System verification", verify_systems),

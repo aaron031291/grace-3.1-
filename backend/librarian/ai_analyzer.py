@@ -63,7 +63,7 @@ class AIContentAnalyzer:
     def __init__(
         self,
         db_session: Session,
-        ollama_client=None,
+        llm_client=None,
         llm_orchestrator=None,
         model_name: str = "mistral:7b",
         max_chunks: int = 5,
@@ -74,7 +74,7 @@ class AIContentAnalyzer:
 
         Args:
             db_session: SQLAlchemy database session
-            ollama_client: [DEPRECATED] Legacy Ollama client (use llm_orchestrator instead)
+            llm_client: Provider-agnostic LLM client
             llm_orchestrator: LLM Orchestrator instance (preferred)
             model_name: Model to use for analysis (default: "mistral:7b")
             max_chunks: Maximum chunks to analyze (default: 5)
@@ -85,9 +85,9 @@ class AIContentAnalyzer:
         self.max_chunks = max_chunks
         self.max_chars = max_chars
 
-        # Prefer LLM Orchestrator over direct Ollama client
+        # Prefer LLM Orchestrator over direct LLM client
         self._llm_orchestrator = llm_orchestrator
-        self._ollama_legacy = ollama_client  # Keep for backward compatibility
+        self._llm_client = llm_client
 
         # Try to get orchestrator if not provided
         if self._llm_orchestrator is None:
@@ -102,10 +102,14 @@ class AIContentAnalyzer:
                 logger.info("[AI ANALYZER] ✓ Connected to LLM Orchestrator")
             except Exception as e:
                 logger.warning(f"[AI ANALYZER] Could not connect to LLM Orchestrator: {e}")
-                logger.warning("[AI ANALYZER] Falling back to legacy Ollama client")
-
-        # Legacy compatibility
-        self.ollama = ollama_client
+                
+        # Try to get LLM client if not provided
+        if self._llm_client is None:
+            try:
+                from llm_orchestrator.factory import get_llm_client
+                self._llm_client = get_llm_client()
+            except Exception as e:
+                logger.warning(f"[AI ANALYZER] Could not get LLM client: {e}")
 
     def analyze_document(
         self,
@@ -190,17 +194,24 @@ class AIContentAnalyzer:
                 else:
                     raise Exception(f"Orchestrator task failed: {task_result.audit_trail}")
 
-            elif self._ollama_legacy:
-                # Legacy fallback to direct Ollama
-                logger.warning(f"[AI ANALYZER] Using legacy Ollama client for document {document_id}")
-                response = self._ollama_legacy.generate_response(
+            elif self._llm_client:
+                # Fallback to direct LLM client
+                logger.warning(f"[AI ANALYZER] Using direct LLM client for document {document_id}")
+                # Use chat for consistent JSON prompting
+                messages = [{"role": "user", "content": prompt}]
+                response = self._llm_client.chat(
                     model=self.model_name,
-                    prompt=prompt,
+                    messages=messages,
                     temperature=0.3,
                     stream=False
                 )
+                # handle if response is a dict (Ollama) or str (other)
+                if isinstance(response, dict) and "message" in response:
+                    response = response["message"].get("content", "")
+                elif not isinstance(response, str):
+                    response = str(response)
             else:
-                raise Exception("No LLM backend available (orchestrator or ollama)")
+                raise Exception("No LLM backend available (orchestrator or client)")
 
             # Parse response
             result = self._parse_analysis_response(response)
@@ -551,13 +562,18 @@ Example response: ["ai", "machine-learning", "research"]
                 else:
                     return []
 
-            elif self._ollama_legacy:
-                response = self._ollama_legacy.generate_response(
+            elif self._llm_client:
+                messages = [{"role": "user", "content": prompt}]
+                response = self._llm_client.chat(
                     model=self.model_name,
-                    prompt=prompt,
+                    messages=messages,
                     temperature=0.3,
                     stream=False
                 )
+                if isinstance(response, dict) and "message" in response:
+                    response = response["message"].get("content", "")
+                elif not isinstance(response, str):
+                    response = str(response)
             else:
                 return []
 
@@ -648,13 +664,18 @@ Respond in JSON:
                 else:
                     raise Exception("Comparison task failed")
 
-            elif self._ollama_legacy:
-                response = self._ollama_legacy.generate_response(
+            elif self._llm_client:
+                messages = [{"role": "user", "content": prompt}]
+                response = self._llm_client.chat(
                     model=self.model_name,
-                    prompt=prompt,
+                    messages=messages,
                     temperature=0.3,
                     stream=False
                 )
+                if isinstance(response, dict) and "message" in response:
+                    response = response["message"].get("content", "")
+                elif not isinstance(response, str):
+                    response = str(response)
             else:
                 raise Exception("No LLM backend available")
 
@@ -695,12 +716,9 @@ Respond in JSON:
             if self._llm_orchestrator:
                 return True
 
-            # Fallback to legacy
-            if self._ollama_legacy:
-                return (
-                    self._ollama_legacy.is_running() and
-                    self._ollama_legacy.model_exists(self.model_name)
-                )
+            # Fallback to direct client
+            if self._llm_client:
+                return self._llm_client.is_running()
 
             return False
         except Exception:
@@ -727,12 +745,12 @@ Respond in JSON:
                     ]
                 }
 
-            if self._ollama_legacy and self.is_available():
+            if self._llm_client and self.is_available():
                 return {
                     "model_name": self.model_name,
                     "available": True,
-                    "backend": "ollama_legacy",
-                    "running": self._ollama_legacy.is_model_running(self.model_name)
+                    "backend": "direct_llm_client",
+                    "running": True
                 }
 
         except Exception as e:

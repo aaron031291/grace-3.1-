@@ -352,11 +352,11 @@ class SensorLayer:
                 except Exception:
                     pass
 
-                # Fallback to direct Ollama check
+                # Fallback to direct LLM client check
                 if not llm_healthy:
                     try:
-                        from ollama_client import get_ollama_client
-                        client = get_ollama_client()
+                        from llm_orchestrator.factory import get_llm_client
+                        client = get_llm_client()
                         llm_healthy = client.is_running() if client else False
                         if llm_healthy:
                             logger.debug("[SENSORS] LLM health via direct client: OK")

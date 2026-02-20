@@ -39,32 +39,36 @@ class SystemHealth(BaseModel):
 _startup_time = datetime.utcnow()
 
 
-async def check_ollama() -> ServiceHealth:
-    """Check Ollama LLM service health."""
+async def check_llm() -> ServiceHealth:
+    """Check LLM service health."""
     import time
     start = time.time()
     try:
-        from ollama_client.client import get_ollama_client
-        client = get_ollama_client()
+        from llm_orchestrator.factory import get_llm_client
+        from settings import settings
+        client = get_llm_client()
+        provider = (settings.LLM_PROVIDER if settings else "llm").lower()
 
         if client.is_running():
             models = client.get_all_models()
             latency = (time.time() - start) * 1000
             return ServiceHealth(
-                name="ollama",
+                name=provider,
                 status="healthy",
                 latency_ms=round(latency, 2),
                 details={"models_available": len(models)}
             )
         else:
             return ServiceHealth(
-                name="ollama",
+                name=provider,
                 status="unhealthy",
-                message="Ollama service not running"
+                message=f"{provider.upper()} service not responding"
             )
     except Exception as e:
+        from settings import settings
+        provider = (settings.LLM_PROVIDER if settings else "llm").lower()
         return ServiceHealth(
-            name="ollama",
+            name=provider,
             status="unhealthy",
             message=str(e)
         )
@@ -229,7 +233,7 @@ async def comprehensive_health_check():
     """
     # Run all health checks concurrently
     checks = await asyncio.gather(
-        check_ollama(),
+        check_llm(),
         check_database(),
         check_qdrant(),
         check_embedding_model(),

@@ -1,0 +1,2218 @@
+{
+  "version": "1.0",
+  "created_at": "2026-01-11T20:16:07.320482",
+  "files": {
+    "FILE-86ea4900706d": {
+      "file_genesis_key": "FILE-86ea4900706d",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7f71287d9a2f418a\\session_SS-9152fc731d504035.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7f71287d9a2f418a\\session_SS-9152fc731d504035.json",
+      "created_at": "2026-01-22T11:34:42.435369",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-2603796249e5": {
+      "file_genesis_key": "FILE-2603796249e5",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-830d0741adf34009\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-830d0741adf34009\\profile.json",
+      "created_at": "2026-01-22T11:34:42.659910",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2603796249e5-1",
+          "genesis_key_db_id": "GK-1b824e717ff147efba4bc8c98298f605",
+          "timestamp": "2026-01-22T11:34:42.750108",
+          "file_hash": "e8d50b22585a5821177b3f75427054c420171e4c806c58528b6eac434622aab7",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f9313ff55bb44e98bfd404f647d7ad8d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "e8d50b22585a5821177b3f75427054c420171e4c806c58528b6eac434622aab7",
+      "last_updated": "2026-01-22T11:34:42.750167"
+    },
+    "FILE-0e6c633231db": {
+      "file_genesis_key": "FILE-0e6c633231db",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-25f7cea225f547db\\session_SS-5083658a83754fdf.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-25f7cea225f547db\\session_SS-5083658a83754fdf.json",
+      "created_at": "2026-01-22T11:34:42.974094",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-4a7a8e67fa3f": {
+      "file_genesis_key": "FILE-4a7a8e67fa3f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0fe9c0dad73749d9\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0fe9c0dad73749d9\\profile.json",
+      "created_at": "2026-01-22T11:34:43.163920",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-c3d8ce42777e": {
+      "file_genesis_key": "FILE-c3d8ce42777e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2dd1e316854a497b\\session_SS-3b629d1d16ee4c7c.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2dd1e316854a497b\\session_SS-3b629d1d16ee4c7c.json",
+      "created_at": "2026-01-22T11:34:43.309935",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c3d8ce42777e-1",
+          "genesis_key_db_id": "GK-265ba02358c247f9a1698a9f5d9bc91a",
+          "timestamp": "2026-01-22T11:34:43.407784",
+          "file_hash": "57d5aaa14ad8aedb64d137de7553ce662612322bc3ba4a358c812649c0be6f92",
+          "file_size": 2713,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-984b846cfe1344498333b5f8bb96a893",
+          "has_content": true
+        }
+      ],
+      "last_hash": "57d5aaa14ad8aedb64d137de7553ce662612322bc3ba4a358c812649c0be6f92",
+      "last_updated": "2026-01-22T11:34:43.407897"
+    },
+    "FILE-4d784f83e16f": {
+      "file_genesis_key": "FILE-4d784f83e16f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-ddb4fd213dee406e\\session_SS-6939aae187374ace.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-ddb4fd213dee406e\\session_SS-6939aae187374ace.json",
+      "created_at": "2026-01-22T11:34:43.623136",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4d784f83e16f-1",
+          "genesis_key_db_id": "GK-96a5d614700d4c2e831848b9df0c8d6b",
+          "timestamp": "2026-01-22T11:34:43.668227",
+          "file_hash": "1ebc30629003a27d4c1dc9de2b8fd0ec82eb8ed4a605fd148c4964aa52a0b791",
+          "file_size": 2651,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7feff2fe8ead44ffb812f48db1d8ccc5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1ebc30629003a27d4c1dc9de2b8fd0ec82eb8ed4a605fd148c4964aa52a0b791",
+      "last_updated": "2026-01-22T11:34:43.668277"
+    },
+    "FILE-6a523e3674e7": {
+      "file_genesis_key": "FILE-6a523e3674e7",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-798a89ecf702420b\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-798a89ecf702420b\\profile.json",
+      "created_at": "2026-01-22T11:34:43.721775",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6a523e3674e7-1",
+          "genesis_key_db_id": "GK-dd8e3e3babdd4bca927aab5e4486902a",
+          "timestamp": "2026-01-22T11:34:43.761410",
+          "file_hash": "8e38a7f9ef1c64a969844e72d2f88350b25d8315f7c73644c3f8e6dfc6ba8ed6",
+          "file_size": 352,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9c4c38f19b614fe2a48ffd6b246ca313",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8e38a7f9ef1c64a969844e72d2f88350b25d8315f7c73644c3f8e6dfc6ba8ed6",
+      "last_updated": "2026-01-22T11:34:43.761469"
+    },
+    "FILE-ec15f53d4ce2": {
+      "file_genesis_key": "FILE-ec15f53d4ce2",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-798a89ecf702420b\\session_SS-accfde8aaf9241e4.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-798a89ecf702420b\\session_SS-accfde8aaf9241e4.json",
+      "created_at": "2026-01-22T11:34:43.835793",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ec15f53d4ce2-1",
+          "genesis_key_db_id": "GK-98b413f3f0ef4200b647e14352dd829f",
+          "timestamp": "2026-01-22T11:34:43.887582",
+          "file_hash": "5457b963f1155f473bfa299332ea26ad501d9f57e23f0e71308b1e8cf5d3f08a",
+          "file_size": 5336,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c6cb6a5b9c074987a531f802de8c1eb4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5457b963f1155f473bfa299332ea26ad501d9f57e23f0e71308b1e8cf5d3f08a",
+      "last_updated": "2026-01-22T11:34:43.887630"
+    },
+    "FILE-9389aabf5629": {
+      "file_genesis_key": "FILE-9389aabf5629",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63cd05c108e8420a\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63cd05c108e8420a\\profile.json",
+      "created_at": "2026-01-22T11:34:45.397623",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-9389aabf5629-1",
+          "genesis_key_db_id": "GK-7bb9607e71bf4461a4d8bbe46459ce59",
+          "timestamp": "2026-01-22T11:34:45.465563",
+          "file_hash": "5bc096be2713212d11c9a9837173ae988daeaac7ce3101830158b91b5671a2bf",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4712e7f4d834494b98e604b9467b2861",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5bc096be2713212d11c9a9837173ae988daeaac7ce3101830158b91b5671a2bf",
+      "last_updated": "2026-01-22T11:34:45.465599"
+    },
+    "FILE-a01bf853a4fe": {
+      "file_genesis_key": "FILE-a01bf853a4fe",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63cd05c108e8420a\\session_SS-9570c25d27a64a27.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63cd05c108e8420a\\session_SS-9570c25d27a64a27.json",
+      "created_at": "2026-01-22T11:34:45.592408",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a01bf853a4fe-1",
+          "genesis_key_db_id": "GK-21c1d19c1ed34b4b9cc82c58e7ccc417",
+          "timestamp": "2026-01-22T11:34:45.649871",
+          "file_hash": "ac8af8b16d3fc170d7dbce36d309f9c2f9b0c5fb21d6d095360f6608400b557e",
+          "file_size": 4990,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5f2385336a64446eb3ef5a58aabc5d05",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ac8af8b16d3fc170d7dbce36d309f9c2f9b0c5fb21d6d095360f6608400b557e",
+      "last_updated": "2026-01-22T11:34:45.649931"
+    },
+    "FILE-2c9db7949a44": {
+      "file_genesis_key": "FILE-2c9db7949a44",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-01-22.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-01-22.json",
+      "created_at": "2026-01-22T11:34:45.731375",
+      "version_count": 5,
+      "versions": [
+        {
+          "version_number": 2,
+          "version_key_id": "VER-2c9db7949a44-2",
+          "genesis_key_db_id": "GK-a9f67f896c8b47fdb5dd048ab7aae5c3",
+          "timestamp": "2026-01-22T11:35:12.824291",
+          "file_hash": "2079c71244091f318995ffe401f7047d660bcab94d5c17a07dc596eac28c9afb",
+          "file_size": 412288,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d28b9490426c476fa22b68d2f1b214df",
+          "has_content": true
+        },
+        {
+          "version_number": 3,
+          "version_key_id": "VER-2c9db7949a44-3",
+          "genesis_key_db_id": "GK-46e4775f748247a183d96b2ef8d622f6",
+          "timestamp": "2026-01-22T11:35:16.080331",
+          "file_hash": "a6b0ba4a3775f28eab2211be2f60c6dee0700c1a54e21358041427ae3ae6bf17",
+          "file_size": 2160479,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5b9d85482e0440dfa223b35c4ed20c22",
+          "has_content": true
+        },
+        {
+          "version_number": 4,
+          "version_key_id": "VER-2c9db7949a44-4",
+          "genesis_key_db_id": "GK-756ad09c78124f6ebfee935aaf31b908",
+          "timestamp": "2026-01-22T11:35:44.447334",
+          "file_hash": "11a3e96abee3548943619d92d0fbaf53a35973dd9a40885b879b6147612470a3",
+          "file_size": 13098867,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7c91e1b7b5c3472db827087ac1492bdc",
+          "has_content": true
+        },
+        {
+          "version_number": 5,
+          "version_key_id": "VER-2c9db7949a44-5",
+          "genesis_key_db_id": "GK-3986b8b18d6f4a6e831145778480da79",
+          "timestamp": "2026-01-22T11:35:56.728169",
+          "file_hash": "8e573c080564098a7fe8aedcfd7a107eb23115317aed117bd5837d3ffe411a01",
+          "file_size": 92365438,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-708d443e08be4122a83bb720e2a8036c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8e573c080564098a7fe8aedcfd7a107eb23115317aed117bd5837d3ffe411a01",
+      "last_updated": "2026-01-22T11:35:56.728199"
+    },
+    "FILE-6f20d88cfb3a": {
+      "file_genesis_key": "FILE-6f20d88cfb3a",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9fec3e91f4fe4670\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9fec3e91f4fe4670\\profile.json",
+      "created_at": "2026-01-22T11:34:46.196661",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-b0a0da7a0fbc": {
+      "file_genesis_key": "FILE-b0a0da7a0fbc",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0ba167889985434c\\session_SS-e4e228ac73d14639.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0ba167889985434c\\session_SS-e4e228ac73d14639.json",
+      "created_at": "2026-01-22T11:34:46.525970",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-a3745b4834a1": {
+      "file_genesis_key": "FILE-a3745b4834a1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2f70c4f5495d4eca\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2f70c4f5495d4eca\\profile.json",
+      "created_at": "2026-01-22T11:34:46.689225",
+      "version_count": 1,
+      "versions": [],
+      "last_hash": null
+    },
+    "FILE-6a10518d8015": {
+      "file_genesis_key": "FILE-6a10518d8015",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bb10138585b04d39\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bb10138585b04d39\\profile.json",
+      "created_at": "2026-01-22T11:34:46.896069",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6a10518d8015-1",
+          "genesis_key_db_id": "GK-355849b42b984795b94e2ae54f78dc88",
+          "timestamp": "2026-01-22T11:34:46.961700",
+          "file_hash": "849484c2e102026943bd6fde5d6e01f703f5e8fe2a02768275819e9010d13be6",
+          "file_size": 343,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3e753b51ddeb4149ac4d0422bd5fc532",
+          "has_content": true
+        }
+      ],
+      "last_hash": "849484c2e102026943bd6fde5d6e01f703f5e8fe2a02768275819e9010d13be6",
+      "last_updated": "2026-01-22T11:34:46.961744"
+    },
+    "FILE-03fa61cb25b1": {
+      "file_genesis_key": "FILE-03fa61cb25b1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2f70c4f5495d4eca\\session_SS-e2b5ebb7fb254bd2.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2f70c4f5495d4eca\\session_SS-e2b5ebb7fb254bd2.json",
+      "created_at": "2026-01-22T11:34:47.166948",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-03fa61cb25b1-1",
+          "genesis_key_db_id": "GK-99d9da7e10b34fc2949e95e33050509c",
+          "timestamp": "2026-01-22T11:34:47.313648",
+          "file_hash": "9a66cc89291cf41ac84eb925b9828090ad0ea7a22db6e32f14ceb856a2aa2d62",
+          "file_size": 2801,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c53c3d46c7a44086a95706ee88ea35be",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9a66cc89291cf41ac84eb925b9828090ad0ea7a22db6e32f14ceb856a2aa2d62",
+      "last_updated": "2026-01-22T11:34:47.313738"
+    },
+    "FILE-952fe41e2768": {
+      "file_genesis_key": "FILE-952fe41e2768",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-3a822ef7e5cc437e\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-3a822ef7e5cc437e\\profile.json",
+      "created_at": "2026-01-22T11:35:12.465230",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-952fe41e2768-1",
+          "genesis_key_db_id": "GK-cfe68ba6be8f4a6f959bd996840afb59",
+          "timestamp": "2026-01-22T11:35:12.572571",
+          "file_hash": "d5a655d0b512d07f54c9797486f731f9a7d9cbf78ac7d9bec2e5efaba585195e",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-cc15561332614192bc92c527e49c46e7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d5a655d0b512d07f54c9797486f731f9a7d9cbf78ac7d9bec2e5efaba585195e",
+      "last_updated": "2026-01-22T11:35:12.572656"
+    },
+    "FILE-4d3563246851": {
+      "file_genesis_key": "FILE-4d3563246851",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-32c4a05800fa4fa8\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-32c4a05800fa4fa8\\profile.json",
+      "created_at": "2026-01-22T11:35:15.433401",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4d3563246851-1",
+          "genesis_key_db_id": "GK-5f1eac24e3ae40df8e1d9f9d9ebc2dc5",
+          "timestamp": "2026-01-22T11:35:15.548189",
+          "file_hash": "950cbb149e74bf9bfa1963d198314a09edc44f79519f5ea038f8da034e7a890a",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1326ced0248c48aaa629336329c10352",
+          "has_content": true
+        }
+      ],
+      "last_hash": "950cbb149e74bf9bfa1963d198314a09edc44f79519f5ea038f8da034e7a890a",
+      "last_updated": "2026-01-22T11:35:15.548243"
+    },
+    "FILE-4fe9476b2569": {
+      "file_genesis_key": "FILE-4fe9476b2569",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6acc81dcdd5048cb\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6acc81dcdd5048cb\\profile.json",
+      "created_at": "2026-01-22T11:35:42.563439",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4fe9476b2569-1",
+          "genesis_key_db_id": "GK-90e17fb889d84d3b8499483f2011c9f8",
+          "timestamp": "2026-01-22T11:35:42.729152",
+          "file_hash": "7160c4bf4350a89d1324494f03579f686298603e711ff7a5ee54e737c937d1b6",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6ac90d3f01a4489aad6873cfe980a45c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7160c4bf4350a89d1324494f03579f686298603e711ff7a5ee54e737c937d1b6",
+      "last_updated": "2026-01-22T11:35:42.729187"
+    },
+    "FILE-370229ff8285": {
+      "file_genesis_key": "FILE-370229ff8285",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e52403a677b3427e\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e52403a677b3427e\\profile.json",
+      "created_at": "2026-01-22T11:35:46.236966",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-370229ff8285-1",
+          "genesis_key_db_id": "GK-de472883430c4a9b80044dc36adb8178",
+          "timestamp": "2026-01-22T11:35:47.457921",
+          "file_hash": "4942b2dfd2a6a7112c2bec33a1dda5ce9ab75d454da936b6769cce5661b12639",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f2871a2fc2da43c19399b5d27c42d999",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4942b2dfd2a6a7112c2bec33a1dda5ce9ab75d454da936b6769cce5661b12639",
+      "last_updated": "2026-01-22T11:35:47.458015"
+    },
+    "FILE-229e46205327": {
+      "file_genesis_key": "FILE-229e46205327",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-4f39912525974a28\\session_SS-a0623dc14a734388.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-4f39912525974a28\\session_SS-a0623dc14a734388.json",
+      "created_at": "2026-01-22T14:48:06.174741",
+      "version_count": 2,
+      "versions": [
+        {
+          "version_number": 2,
+          "version_key_id": "VER-229e46205327-2",
+          "genesis_key_db_id": "GK-02e2d7ff5f204ddfa8e162a24415ddf4",
+          "timestamp": "2026-01-22T14:48:22.309296",
+          "file_hash": "040ceeacc5fef4f4698951f2b821cec23bd19f2053ab981589cf696b83728c3b",
+          "file_size": 2681,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e5a17cdaf8e245c183bb3a6061141092",
+          "has_content": true
+        }
+      ],
+      "last_hash": "040ceeacc5fef4f4698951f2b821cec23bd19f2053ab981589cf696b83728c3b",
+      "last_updated": "2026-01-22T14:48:22.309346"
+    },
+    "FILE-e1748e12fa00": {
+      "file_genesis_key": "FILE-e1748e12fa00",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1225675e63b84fff\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1225675e63b84fff\\profile.json",
+      "created_at": "2026-01-22T14:48:35.576650",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e1748e12fa00-1",
+          "genesis_key_db_id": "GK-f26fcad4b69e4397b5ad6734cc544bcc",
+          "timestamp": "2026-01-22T14:48:42.473667",
+          "file_hash": "ed1407d7fdcd28f7db64b04670339aaa36b473dc57db90a4bd611a418b9c9ed5",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-992d2d8aadcc4a5ba37171b28bfb077f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ed1407d7fdcd28f7db64b04670339aaa36b473dc57db90a4bd611a418b9c9ed5",
+      "last_updated": "2026-01-22T14:48:42.473696"
+    },
+    "FILE-4b8902291091": {
+      "file_genesis_key": "FILE-4b8902291091",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1225675e63b84fff\\session_SS-76304693a1524041.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1225675e63b84fff\\session_SS-76304693a1524041.json",
+      "created_at": "2026-01-22T14:48:48.715184",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4b8902291091-1",
+          "genesis_key_db_id": "GK-95d9aed9ca8c4d63ac17238a608abe1c",
+          "timestamp": "2026-01-22T14:48:55.354224",
+          "file_hash": "c2c90638cc1558deaf2a4b94b549bd3704445b8f384dd3946e35b054150b25d3",
+          "file_size": 2674,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-25469c96891e444a90bd6687b2c0f751",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c2c90638cc1558deaf2a4b94b549bd3704445b8f384dd3946e35b054150b25d3",
+      "last_updated": "2026-01-22T14:48:55.354248"
+    },
+    "FILE-f1e1ffed7986": {
+      "file_genesis_key": "FILE-f1e1ffed7986",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a842a60f3f4a5e\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a842a60f3f4a5e\\profile.json",
+      "created_at": "2026-01-22T14:49:07.853816",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f1e1ffed7986-1",
+          "genesis_key_db_id": "GK-23ba62c3a8ba4793886539156be99755",
+          "timestamp": "2026-01-22T14:49:13.615271",
+          "file_hash": "8777ee9f0546cb626209733881c6451f3d356d68691d7274ba571b523a79f9a8",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-656033be3fb9440abc64d5e4f29b3245",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8777ee9f0546cb626209733881c6451f3d356d68691d7274ba571b523a79f9a8",
+      "last_updated": "2026-01-22T14:49:13.615306"
+    },
+    "FILE-d9d12ba343cc": {
+      "file_genesis_key": "FILE-d9d12ba343cc",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a842a60f3f4a5e\\session_SS-2927d833288e4482.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a842a60f3f4a5e\\session_SS-2927d833288e4482.json",
+      "created_at": "2026-01-22T14:49:25.230558",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d9d12ba343cc-1",
+          "genesis_key_db_id": "GK-0a2e9d9c56e94a9097d869e528e6ae71",
+          "timestamp": "2026-01-22T14:49:31.087295",
+          "file_hash": "0c9b93fa95fb98e65eb644a687a63414e850f7ca719b73890406269faa782be5",
+          "file_size": 2713,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ae15fa3152b04978971e7adaa1608840",
+          "has_content": true
+        }
+      ],
+      "last_hash": "0c9b93fa95fb98e65eb644a687a63414e850f7ca719b73890406269faa782be5",
+      "last_updated": "2026-01-22T14:49:31.087327"
+    },
+    "FILE-c267e43d4b75": {
+      "file_genesis_key": "FILE-c267e43d4b75",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-acfba0c55df44869\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-acfba0c55df44869\\profile.json",
+      "created_at": "2026-01-22T14:49:42.687471",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c267e43d4b75-1",
+          "genesis_key_db_id": "GK-1f8ff64909a3496f9fa072d5d1a6daab",
+          "timestamp": "2026-01-22T14:49:48.478014",
+          "file_hash": "bc398809ef72d088e4904fdd2849e96ed09e35b124e8cbc797d8877eca03236d",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-573b9853c21f4c76b958c090c8a57a13",
+          "has_content": true
+        }
+      ],
+      "last_hash": "bc398809ef72d088e4904fdd2849e96ed09e35b124e8cbc797d8877eca03236d",
+      "last_updated": "2026-01-22T14:49:48.478055"
+    },
+    "FILE-11bf2d4ab6ee": {
+      "file_genesis_key": "FILE-11bf2d4ab6ee",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2753df1cd4a94dbf\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2753df1cd4a94dbf\\profile.json",
+      "created_at": "2026-01-22T14:49:54.233067",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-11bf2d4ab6ee-1",
+          "genesis_key_db_id": "GK-14edbf08e67f484092aa07dd9cd9de00",
+          "timestamp": "2026-01-22T14:50:00.893011",
+          "file_hash": "3c4de900972f3ccff23251c7a4fc540efcdf1a8c08164981453e8229f2979771",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-23c2c1246a714691be91c89afd80f740",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3c4de900972f3ccff23251c7a4fc540efcdf1a8c08164981453e8229f2979771",
+      "last_updated": "2026-01-22T14:50:00.893053"
+    },
+    "FILE-d03a6a919cc6": {
+      "file_genesis_key": "FILE-d03a6a919cc6",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2753df1cd4a94dbf\\session_SS-2c3a4569cd104a06.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2753df1cd4a94dbf\\session_SS-2c3a4569cd104a06.json",
+      "created_at": "2026-01-22T14:50:14.838905",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d03a6a919cc6-1",
+          "genesis_key_db_id": "GK-afc4f227a9da474fbac7e5fc4eec602c",
+          "timestamp": "2026-01-22T14:50:20.902434",
+          "file_hash": "9338d145c663a32f0aa756256b0448d8a9fe03bf2159a5ee82a0e3df522e0627",
+          "file_size": 5328,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-440cf3a331da44da8f09c01f06bf4dba",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9338d145c663a32f0aa756256b0448d8a9fe03bf2159a5ee82a0e3df522e0627",
+      "last_updated": "2026-01-22T14:50:20.902477"
+    },
+    "FILE-a2b9089f4222": {
+      "file_genesis_key": "FILE-a2b9089f4222",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6910aa21d50c499d\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6910aa21d50c499d\\profile.json",
+      "created_at": "2026-01-22T14:50:34.968090",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a2b9089f4222-1",
+          "genesis_key_db_id": "GK-5a22e860d90c41519505f412858ba801",
+          "timestamp": "2026-01-22T14:50:40.635863",
+          "file_hash": "9623dfc60e5590386b07f45e6686b7806675e94ebd4c79e53a362d657fdb01f0",
+          "file_size": 349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b6f0de4fc8bc45d681dee0bc36437b79",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9623dfc60e5590386b07f45e6686b7806675e94ebd4c79e53a362d657fdb01f0",
+      "last_updated": "2026-01-22T14:50:40.635883"
+    },
+    "FILE-4a3728c7780d": {
+      "file_genesis_key": "FILE-4a3728c7780d",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6910aa21d50c499d\\session_SS-891568e9f38d4915.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6910aa21d50c499d\\session_SS-891568e9f38d4915.json",
+      "created_at": "2026-01-22T14:50:52.242036",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4a3728c7780d-1",
+          "genesis_key_db_id": "GK-b44e68d16a214dd2944af4bd577f2ee2",
+          "timestamp": "2026-01-22T14:50:58.333560",
+          "file_hash": "71fb04d956477d86c7776d9cb81c0bdd29b57fa0b17f8a80c2dd4115d2807909",
+          "file_size": 5298,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-cb2306f22ecd41b490ff49424002753a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "71fb04d956477d86c7776d9cb81c0bdd29b57fa0b17f8a80c2dd4115d2807909",
+      "last_updated": "2026-01-22T14:50:58.333598"
+    },
+    "FILE-a26f624685ba": {
+      "file_genesis_key": "FILE-a26f624685ba",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8333be9cf1b94f29\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8333be9cf1b94f29\\profile.json",
+      "created_at": "2026-01-22T14:51:11.012606",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a26f624685ba-1",
+          "genesis_key_db_id": "GK-a541791a2d404bce851af72359f491bb",
+          "timestamp": "2026-01-22T14:51:16.989941",
+          "file_hash": "4006a305130f4bd1347ec6ca3ac12cc15884ce1aa9ff0ce951125be1f14bb5f0",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1d32911602db41d7a15206f9cb656d10",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4006a305130f4bd1347ec6ca3ac12cc15884ce1aa9ff0ce951125be1f14bb5f0",
+      "last_updated": "2026-01-22T14:51:16.989967"
+    },
+    "FILE-93967140b5e1": {
+      "file_genesis_key": "FILE-93967140b5e1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-744dd0bb71644723\\session_SS-3c0d2f52903f4a8d.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-744dd0bb71644723\\session_SS-3c0d2f52903f4a8d.json",
+      "created_at": "2026-01-22T15:55:32.165080",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-93967140b5e1-1",
+          "genesis_key_db_id": "GK-14df99a4c95d4d1b9df5058cdbb53774",
+          "timestamp": "2026-01-22T15:55:40.067543",
+          "file_hash": "d5ecd96f9a872d402b49293cf63b5c2394a5dded91aa93803ee09da983096628",
+          "file_size": 2681,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2f0e3df154874e00bdcb0f9471301585",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d5ecd96f9a872d402b49293cf63b5c2394a5dded91aa93803ee09da983096628",
+      "last_updated": "2026-01-22T15:55:40.067578"
+    },
+    "FILE-5aa2a2d69635": {
+      "file_genesis_key": "FILE-5aa2a2d69635",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-386a64c7c14d4476\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-386a64c7c14d4476\\profile.json",
+      "created_at": "2026-01-22T15:55:53.462322",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5aa2a2d69635-1",
+          "genesis_key_db_id": "GK-611d6b52806e421c8b88b46e21e5ae5a",
+          "timestamp": "2026-01-22T15:56:00.461778",
+          "file_hash": "9cd52f3c2c89d69c4cd87974bc347c36e4272c60ae32c0291b57cb51e5647ad1",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0e83cd699ed94dbf926839d577945583",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9cd52f3c2c89d69c4cd87974bc347c36e4272c60ae32c0291b57cb51e5647ad1",
+      "last_updated": "2026-01-22T15:56:00.461828"
+    },
+    "FILE-219ecf1d3a5e": {
+      "file_genesis_key": "FILE-219ecf1d3a5e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-386a64c7c14d4476\\session_SS-edc3b10acd7e4552.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-386a64c7c14d4476\\session_SS-edc3b10acd7e4552.json",
+      "created_at": "2026-01-22T15:56:13.350434",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-219ecf1d3a5e-1",
+          "genesis_key_db_id": "GK-872d0893d00843269fe00b3531181c67",
+          "timestamp": "2026-01-22T15:56:19.430213",
+          "file_hash": "6dc0d239a3809f7c3664208d70a3b1bb0a829177c70add94ebd9692b1ca79784",
+          "file_size": 5259,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f7445139aabc404d855b38bb5a8eb30b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6dc0d239a3809f7c3664208d70a3b1bb0a829177c70add94ebd9692b1ca79784",
+      "last_updated": "2026-01-22T15:56:19.430242"
+    },
+    "FILE-641577076957": {
+      "file_genesis_key": "FILE-641577076957",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7a0dc4347ec14e30\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7a0dc4347ec14e30\\profile.json",
+      "created_at": "2026-01-22T15:56:31.574324",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-641577076957-1",
+          "genesis_key_db_id": "GK-818f70ad9b7a4b279e53f1e5df67bdbe",
+          "timestamp": "2026-01-22T15:56:37.765701",
+          "file_hash": "763c79d20aedff792d12a48d1b8f909dc54470eda939ca78bceaa4fb42d3ae50",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0ad4824c00a64bb7847d9e83d0e75795",
+          "has_content": true
+        }
+      ],
+      "last_hash": "763c79d20aedff792d12a48d1b8f909dc54470eda939ca78bceaa4fb42d3ae50",
+      "last_updated": "2026-01-22T15:56:37.765736"
+    },
+    "FILE-b7d6aaba4cfe": {
+      "file_genesis_key": "FILE-b7d6aaba4cfe",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7a0dc4347ec14e30\\session_SS-27a1bd8e3e774411.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7a0dc4347ec14e30\\session_SS-27a1bd8e3e774411.json",
+      "created_at": "2026-01-22T15:56:50.986784",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b7d6aaba4cfe-1",
+          "genesis_key_db_id": "GK-c8a6b0e988264c5dab927dfe47dde6ac",
+          "timestamp": "2026-01-22T15:56:57.118926",
+          "file_hash": "fc76002c51d60c5787510afcd0e5c8c9977b15a2bb61587957ffc492daf982b0",
+          "file_size": 5339,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fd4aed3b54334f288f3dbdb38a9bf46d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fc76002c51d60c5787510afcd0e5c8c9977b15a2bb61587957ffc492daf982b0",
+      "last_updated": "2026-01-22T15:56:57.118959"
+    },
+    "FILE-e626553ab994": {
+      "file_genesis_key": "FILE-e626553ab994",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-a1daeabeb2764ce2\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-a1daeabeb2764ce2\\profile.json",
+      "created_at": "2026-01-22T15:57:09.681874",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e626553ab994-1",
+          "genesis_key_db_id": "GK-3bd92f659bbe46ce9486f5484c901a60",
+          "timestamp": "2026-01-22T15:57:15.864274",
+          "file_hash": "844ee97c656dcf4308024616fbe5f754067d47b9315a15e473b955eec741c1dc",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2d440160dcec46049518739972c2a58a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "844ee97c656dcf4308024616fbe5f754067d47b9315a15e473b955eec741c1dc",
+      "last_updated": "2026-01-22T15:57:15.864301"
+    },
+    "FILE-b074019c6144": {
+      "file_genesis_key": "FILE-b074019c6144",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2aecb7fc8eaa48aa\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2aecb7fc8eaa48aa\\profile.json",
+      "created_at": "2026-01-22T15:57:47.248954",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b074019c6144-1",
+          "genesis_key_db_id": "GK-1fa7e71d70134adb9ae29bdc585215b7",
+          "timestamp": "2026-01-22T15:57:53.514988",
+          "file_hash": "ded7eb42f1d2858804cd54ee84b6070874e009c931a9a111d1364f7e67a8243b",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c5eb507a096f44489241320e3b9ae6e3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ded7eb42f1d2858804cd54ee84b6070874e009c931a9a111d1364f7e67a8243b",
+      "last_updated": "2026-01-22T15:57:53.515018"
+    },
+    "FILE-e0a223e213cd": {
+      "file_genesis_key": "FILE-e0a223e213cd",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2aecb7fc8eaa48aa\\session_SS-0c0c16d014ef47e3.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2aecb7fc8eaa48aa\\session_SS-0c0c16d014ef47e3.json",
+      "created_at": "2026-01-22T15:58:06.627526",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e0a223e213cd-1",
+          "genesis_key_db_id": "GK-53436e41ee6e4067acfd409507f7fe37",
+          "timestamp": "2026-01-22T15:58:12.414413",
+          "file_hash": "674b88410bc06da67e2cd0742bddcd827cdbff70a64ab0fc2797db1630a37a89",
+          "file_size": 5328,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8aad6d051df44fec87bdbe6d751bcb7a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "674b88410bc06da67e2cd0742bddcd827cdbff70a64ab0fc2797db1630a37a89",
+      "last_updated": "2026-01-22T15:58:12.414474"
+    },
+    "FILE-dfa60541ce22": {
+      "file_genesis_key": "FILE-dfa60541ce22",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a3e87c608d4a91\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a3e87c608d4a91\\profile.json",
+      "created_at": "2026-01-22T15:58:23.925645",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-dfa60541ce22-1",
+          "genesis_key_db_id": "GK-01067af226ad4466b2d188274bd47037",
+          "timestamp": "2026-01-22T15:58:29.810507",
+          "file_hash": "f3ee688b871b28a625c34b88130c84bd9af79e2964f655b52a3dd01690510700",
+          "file_size": 349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4f89fc96f003465eaf2d21242aa496de",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f3ee688b871b28a625c34b88130c84bd9af79e2964f655b52a3dd01690510700",
+      "last_updated": "2026-01-22T15:58:29.810535"
+    },
+    "FILE-aa19fd6f1b2e": {
+      "file_genesis_key": "FILE-aa19fd6f1b2e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a3e87c608d4a91\\session_SS-b8f223cabe7742d4.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c1a3e87c608d4a91\\session_SS-b8f223cabe7742d4.json",
+      "created_at": "2026-01-22T15:58:47.350539",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aa19fd6f1b2e-1",
+          "genesis_key_db_id": "GK-451433a0a30f4fa3bd6adab7f04c80fb",
+          "timestamp": "2026-01-22T15:58:53.123083",
+          "file_hash": "6cec7f5263575b504ee0ea0215b955c82e44a0a3e959f939c90ce6555f48ef88",
+          "file_size": 5298,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-99ae05ebe5f640a2a2fb54ce103bcda7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6cec7f5263575b504ee0ea0215b955c82e44a0a3e959f939c90ce6555f48ef88",
+      "last_updated": "2026-01-22T15:58:53.123112"
+    },
+    "FILE-e8066d83a36f": {
+      "file_genesis_key": "FILE-e8066d83a36f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1f672a2cf98b4bb1\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1f672a2cf98b4bb1\\profile.json",
+      "created_at": "2026-01-22T15:59:04.722985",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e8066d83a36f-1",
+          "genesis_key_db_id": "GK-988da8e95704455b9e033e9425e13d16",
+          "timestamp": "2026-01-22T15:59:10.434390",
+          "file_hash": "2af628d313937a703f819c2f70b6a8224d0c797bf92fff8defc7d85b8c89c118",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-21d5d61ba508454db75302131c671cd0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2af628d313937a703f819c2f70b6a8224d0c797bf92fff8defc7d85b8c89c118",
+      "last_updated": "2026-01-22T15:59:10.434425"
+    },
+    "FILE-791b87d478ad": {
+      "file_genesis_key": "FILE-791b87d478ad",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1f672a2cf98b4bb1\\session_SS-e4a8b5b51e954faf.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1f672a2cf98b4bb1\\session_SS-e4a8b5b51e954faf.json",
+      "created_at": "2026-01-22T15:59:28.022716",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-791b87d478ad-1",
+          "genesis_key_db_id": "GK-a8eff3a95d3246f6968f365a29c0a544",
+          "timestamp": "2026-01-22T15:59:33.786175",
+          "file_hash": "ec93f612879af4160741acaa06078e81850ecf7eabd7a6cec2aea8a0415606f1",
+          "file_size": 5259,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ac34bf79674d4bf0baebe97b4d146e3e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ec93f612879af4160741acaa06078e81850ecf7eabd7a6cec2aea8a0415606f1",
+      "last_updated": "2026-01-22T15:59:33.786211"
+    },
+    "FILE-225d7aeb84a6": {
+      "file_genesis_key": "FILE-225d7aeb84a6",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-b9d7edba4af44915\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-b9d7edba4af44915\\profile.json",
+      "created_at": "2026-01-22T15:59:45.411803",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-225d7aeb84a6-1",
+          "genesis_key_db_id": "GK-8e57a0a074ef4066b0aeb0b3c90a22a5",
+          "timestamp": "2026-01-22T15:59:51.235672",
+          "file_hash": "bb7d928022eb62c28739cb52cdb5942fd204c8bfce2318dd7ea26f652195afd8",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d9455cedd93445e9be53b039ee035b7f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "bb7d928022eb62c28739cb52cdb5942fd204c8bfce2318dd7ea26f652195afd8",
+      "last_updated": "2026-01-22T15:59:51.235709"
+    },
+    "FILE-166dbbf18251": {
+      "file_genesis_key": "FILE-166dbbf18251",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-802360a893b8464c\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-802360a893b8464c\\profile.json",
+      "created_at": "2026-01-22T16:00:02.939607",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-166dbbf18251-1",
+          "genesis_key_db_id": "GK-4c1e1d26e1904462a65a50e3c633c2ab",
+          "timestamp": "2026-01-22T16:00:08.835651",
+          "file_hash": "31c84a83a7e5ca6679601c2abc9df299f9e95bf276d8ac15e36fdd848f762322",
+          "file_size": 343,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ad84cb99ab094d3b9f0b7d9d5b8f1766",
+          "has_content": true
+        }
+      ],
+      "last_hash": "31c84a83a7e5ca6679601c2abc9df299f9e95bf276d8ac15e36fdd848f762322",
+      "last_updated": "2026-01-22T16:00:08.835671"
+    },
+    "FILE-c46d312337c3": {
+      "file_genesis_key": "FILE-c46d312337c3",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-802360a893b8464c\\session_SS-a81a4b4555454ddb.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-802360a893b8464c\\session_SS-a81a4b4555454ddb.json",
+      "created_at": "2026-01-22T16:00:20.304347",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c46d312337c3-1",
+          "genesis_key_db_id": "GK-1d74e594f5d54a4a929d312c1e472b33",
+          "timestamp": "2026-01-22T16:00:25.999892",
+          "file_hash": "8ffaf2133c7feda840d4cb7c7dc16ea6e972e48c0b5cfe7b26feac8742ab7804",
+          "file_size": 5255,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2c932d65f6e24b7db6e82a8bd1e165c6",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8ffaf2133c7feda840d4cb7c7dc16ea6e972e48c0b5cfe7b26feac8742ab7804",
+      "last_updated": "2026-01-22T16:00:25.999919"
+    },
+    "FILE-8534782308af": {
+      "file_genesis_key": "FILE-8534782308af",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e6a47e15aea246e7\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e6a47e15aea246e7\\profile.json",
+      "created_at": "2026-01-22T16:00:37.689255",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8534782308af-1",
+          "genesis_key_db_id": "GK-fd8cc1bb0c0c44f0b7b65ab2534ced1a",
+          "timestamp": "2026-01-22T16:00:43.442857",
+          "file_hash": "6c21541e7c9719985b495e520b3a71413ed63ceee44fc3283d52e71eec2a8b3e",
+          "file_size": 352,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5feff51b4b8443d4aa4b022c26751d1c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6c21541e7c9719985b495e520b3a71413ed63ceee44fc3283d52e71eec2a8b3e",
+      "last_updated": "2026-01-22T16:00:43.442879"
+    },
+    "FILE-7e9f31f2e7a5": {
+      "file_genesis_key": "FILE-7e9f31f2e7a5",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e6a47e15aea246e7\\session_SS-818b2190e0b24de5.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e6a47e15aea246e7\\session_SS-818b2190e0b24de5.json",
+      "created_at": "2026-01-22T16:00:55.091164",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7e9f31f2e7a5-1",
+          "genesis_key_db_id": "GK-cf0c6019b038473c85c431f91b77bcc0",
+          "timestamp": "2026-01-22T16:01:00.815789",
+          "file_hash": "65dcd859f9adce33d8823586ad4c94b74d72b89b266a0e1e9abc069738e9abf1",
+          "file_size": 5325,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-dabac99095ba4a79881491341f040072",
+          "has_content": true
+        }
+      ],
+      "last_hash": "65dcd859f9adce33d8823586ad4c94b74d72b89b266a0e1e9abc069738e9abf1",
+      "last_updated": "2026-01-22T16:01:00.815811"
+    },
+    "FILE-3e3b04cc5da1": {
+      "file_genesis_key": "FILE-3e3b04cc5da1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c8568e3224fa45ae\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c8568e3224fa45ae\\profile.json",
+      "created_at": "2026-01-22T16:01:48.725623",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3e3b04cc5da1-1",
+          "genesis_key_db_id": "GK-3a5dd7c3be5d48cc994690c92afc1e42",
+          "timestamp": "2026-01-22T16:01:54.960341",
+          "file_hash": "1869cfc99e1bcb0bd37d83381a83bf89c13a8849afabc9aecc09c3fe728c75c1",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-86cd00f2e1d84c1c825739e3c28ff37f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1869cfc99e1bcb0bd37d83381a83bf89c13a8849afabc9aecc09c3fe728c75c1",
+      "last_updated": "2026-01-22T16:01:54.960367"
+    },
+    "FILE-6002bd967289": {
+      "file_genesis_key": "FILE-6002bd967289",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c8568e3224fa45ae\\session_SS-b427dc9a423e431a.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c8568e3224fa45ae\\session_SS-b427dc9a423e431a.json",
+      "created_at": "2026-01-22T16:02:13.909047",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6002bd967289-1",
+          "genesis_key_db_id": "GK-b26116bfd3bf4287a45d1907754f7187",
+          "timestamp": "2026-01-22T16:02:20.366778",
+          "file_hash": "cb9834c3418a685cf3ed426093a30c537470b3a75d1cb3e59072eab848340892",
+          "file_size": 5252,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0a2a4169bfc94032960d90e8de20245d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cb9834c3418a685cf3ed426093a30c537470b3a75d1cb3e59072eab848340892",
+      "last_updated": "2026-01-22T16:02:20.366800"
+    },
+    "FILE-91e0aa7ccef6": {
+      "file_genesis_key": "FILE-91e0aa7ccef6",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b33ae37251b483b\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b33ae37251b483b\\profile.json",
+      "created_at": "2026-01-22T16:02:34.130633",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-91e0aa7ccef6-1",
+          "genesis_key_db_id": "GK-450169751e124f7d985eaa89676283ea",
+          "timestamp": "2026-01-22T16:02:43.040412",
+          "file_hash": "aa71345cc57dfbded86304f2cfc0fb3edf0f9d1c37325538236bf4df645eda33",
+          "file_size": 349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0d8e16712a3242d798987e9b7968150b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "aa71345cc57dfbded86304f2cfc0fb3edf0f9d1c37325538236bf4df645eda33",
+      "last_updated": "2026-01-22T16:02:43.040514"
+    },
+    "FILE-2a01a0c624c6": {
+      "file_genesis_key": "FILE-2a01a0c624c6",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b33ae37251b483b\\session_SS-639960350ded46fc.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b33ae37251b483b\\session_SS-639960350ded46fc.json",
+      "created_at": "2026-01-22T16:03:01.882060",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2a01a0c624c6-1",
+          "genesis_key_db_id": "GK-9ef491cc84b74592973e4ff3c93554f6",
+          "timestamp": "2026-01-22T16:03:08.221234",
+          "file_hash": "2a27ac74ac898acc80e3375df7c164cde03bc3322bdf0b6d40da00bdae6676c8",
+          "file_size": 5298,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-50426027e88c47cdaef79c2fed7a977e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2a27ac74ac898acc80e3375df7c164cde03bc3322bdf0b6d40da00bdae6676c8",
+      "last_updated": "2026-01-22T16:03:08.221257"
+    },
+    "FILE-ea6d60cf3b7f": {
+      "file_genesis_key": "FILE-ea6d60cf3b7f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-57e16d9b41d643ff\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-57e16d9b41d643ff\\profile.json",
+      "created_at": "2026-01-22T16:03:19.931210",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ea6d60cf3b7f-1",
+          "genesis_key_db_id": "GK-e0c3e6d28a1a45bc9a072b357596068a",
+          "timestamp": "2026-01-22T16:03:25.634821",
+          "file_hash": "9675d320ebec1e9bb1d4e8ac5f45b38e3999b6fffee6d54c1331302a631e3904",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4f591c85919a49718a8a5f9cb38c7c05",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9675d320ebec1e9bb1d4e8ac5f45b38e3999b6fffee6d54c1331302a631e3904",
+      "last_updated": "2026-01-22T16:03:25.634849"
+    },
+    "FILE-0ab6fe57eeb3": {
+      "file_genesis_key": "FILE-0ab6fe57eeb3",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-57e16d9b41d643ff\\session_SS-462e5519482f4368.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-57e16d9b41d643ff\\session_SS-462e5519482f4368.json",
+      "created_at": "2026-01-22T16:03:47.752653",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0ab6fe57eeb3-1",
+          "genesis_key_db_id": "GK-80ecad042e424cce9376037bfa17b2fc",
+          "timestamp": "2026-01-22T16:03:55.233912",
+          "file_hash": "95c79f746df18d0e94e667bfa9f8b99f7e01e12743291e4cc4aac1814cc96369",
+          "file_size": 5259,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-436781b9d45d4a7ea4b753de79fce3cc",
+          "has_content": true
+        }
+      ],
+      "last_hash": "95c79f746df18d0e94e667bfa9f8b99f7e01e12743291e4cc4aac1814cc96369",
+      "last_updated": "2026-01-22T16:03:55.233961"
+    },
+    "FILE-9c6b94d2f6aa": {
+      "file_genesis_key": "FILE-9c6b94d2f6aa",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7461c19e02334836\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7461c19e02334836\\profile.json",
+      "created_at": "2026-01-22T16:04:09.173405",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-9c6b94d2f6aa-1",
+          "genesis_key_db_id": "GK-a16e17cb808c469294c9cd6af7602f92",
+          "timestamp": "2026-01-22T16:04:16.538926",
+          "file_hash": "11a0b926cff93a17295fab0930cf24a9a128e9c6c25b75eccf5e4b1ed2335256",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fa31e4a368be4e90a837038344870999",
+          "has_content": true
+        }
+      ],
+      "last_hash": "11a0b926cff93a17295fab0930cf24a9a128e9c6c25b75eccf5e4b1ed2335256",
+      "last_updated": "2026-01-22T16:04:16.538949"
+    },
+    "FILE-aec25a7180bb": {
+      "file_genesis_key": "FILE-aec25a7180bb",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-38b9936aed0444a3\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-38b9936aed0444a3\\profile.json",
+      "created_at": "2026-01-22T16:04:34.207209",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aec25a7180bb-1",
+          "genesis_key_db_id": "GK-dd33eeb939864c8e8011778858172b0b",
+          "timestamp": "2026-01-22T16:04:40.154700",
+          "file_hash": "7d773a446432d8ac5776b13d5018666528ca159e0be51b5a3c85aeb18efa831f",
+          "file_size": 348,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b759f80e734942e6bac138ee683c896e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7d773a446432d8ac5776b13d5018666528ca159e0be51b5a3c85aeb18efa831f",
+      "last_updated": "2026-01-22T16:04:40.154727"
+    },
+    "FILE-665c3d957a5f": {
+      "file_genesis_key": "FILE-665c3d957a5f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-38b9936aed0444a3\\session_SS-7ebac3eecf0d47b2.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-38b9936aed0444a3\\session_SS-7ebac3eecf0d47b2.json",
+      "created_at": "2026-01-22T16:04:51.758166",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-665c3d957a5f-1",
+          "genesis_key_db_id": "GK-1665f7ddbeb24d2d84432fa9fd4d288d",
+          "timestamp": "2026-01-22T16:04:57.467228",
+          "file_hash": "021c6b1e9bea6a2521926ad5480cdd0e514aeac05f0f4c586ef4155eaf47b93b",
+          "file_size": 5328,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b3e1c98964964d488e07d2fc2ff7a6b4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "021c6b1e9bea6a2521926ad5480cdd0e514aeac05f0f4c586ef4155eaf47b93b",
+      "last_updated": "2026-01-22T16:04:57.467250"
+    },
+    "FILE-988494dc9bb7": {
+      "file_genesis_key": "FILE-988494dc9bb7",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0c98385e6f8b4853\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0c98385e6f8b4853\\profile.json",
+      "created_at": "2026-01-22T16:05:20.861662",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-988494dc9bb7-1",
+          "genesis_key_db_id": "GK-abcd25bd483442a393392b6d91903974",
+          "timestamp": "2026-01-22T16:05:26.599272",
+          "file_hash": "c8f4b824c4d745fa1fca6aafb1c09cfe95b62387bbdd713677646ccdda39b2d2",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4c085cb5d3b344a7bb99f6d65f6d366c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c8f4b824c4d745fa1fca6aafb1c09cfe95b62387bbdd713677646ccdda39b2d2",
+      "last_updated": "2026-01-22T16:05:26.599294"
+    },
+    "FILE-55d0c25362f1": {
+      "file_genesis_key": "FILE-55d0c25362f1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93b94909ad244a8b\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93b94909ad244a8b\\profile.json",
+      "created_at": "2026-01-22T16:05:43.934348",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-55d0c25362f1-1",
+          "genesis_key_db_id": "GK-0648958afa314e7f8c3b7426d224b897",
+          "timestamp": "2026-01-22T16:05:49.697154",
+          "file_hash": "1908d5a135ebfd9385ade560529c5aba3f0f7f381a719e7c2fad419f4eb3d2ec",
+          "file_size": 341,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4544966d53bd4d33b25ccfd56fc40a48",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1908d5a135ebfd9385ade560529c5aba3f0f7f381a719e7c2fad419f4eb3d2ec",
+      "last_updated": "2026-01-22T16:05:49.697178"
+    },
+    "FILE-4c46939c0887": {
+      "file_genesis_key": "FILE-4c46939c0887",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93b94909ad244a8b\\session_SS-f46e9c9810594359.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93b94909ad244a8b\\session_SS-f46e9c9810594359.json",
+      "created_at": "2026-01-22T16:05:55.694564",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4c46939c0887-1",
+          "genesis_key_db_id": "GK-cb6790eee6bc49f3b04aa2e2941244ee",
+          "timestamp": "2026-01-22T16:06:01.490187",
+          "file_hash": "4ca34f8beb584478ba902efe952b9620c826077bcd3ef80efbd0c9325d3b5593",
+          "file_size": 5259,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c105df64970d465ba1df759af8df810d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4ca34f8beb584478ba902efe952b9620c826077bcd3ef80efbd0c9325d3b5593",
+      "last_updated": "2026-01-22T16:06:01.490208"
+    },
+    "FILE-8dc8c8743b05": {
+      "file_genesis_key": "FILE-8dc8c8743b05",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1075837299814095\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1075837299814095\\profile.json",
+      "created_at": "2026-01-22T16:06:13.063797",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8dc8c8743b05-1",
+          "genesis_key_db_id": "GK-145ce332de75446fb8eb199f2e94f100",
+          "timestamp": "2026-01-22T16:06:18.753055",
+          "file_hash": "144c6e49b24998dda65d9487e694b51379dad5807ae510a6597845884f03a8b1",
+          "file_size": 349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-aa9157c2a3d64c59b9da586a0a11bc09",
+          "has_content": true
+        }
+      ],
+      "last_hash": "144c6e49b24998dda65d9487e694b51379dad5807ae510a6597845884f03a8b1",
+      "last_updated": "2026-01-22T16:06:18.753078"
+    },
+    "FILE-847fd6cf14ad": {
+      "file_genesis_key": "FILE-847fd6cf14ad",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1075837299814095\\session_SS-d1462753f94b41ed.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1075837299814095\\session_SS-d1462753f94b41ed.json",
+      "created_at": "2026-01-22T16:06:30.349684",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-847fd6cf14ad-1",
+          "genesis_key_db_id": "GK-b5d8a834a72a41dc833f885b1ddfeded",
+          "timestamp": "2026-01-22T16:06:36.411073",
+          "file_hash": "1fb97d133904ccc003fb54591a1a5d48bfc93e629ab81eaf4f4d02f140ff2b45",
+          "file_size": 5298,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fe7e8651267647fb830eb04056a16ff8",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1fb97d133904ccc003fb54591a1a5d48bfc93e629ab81eaf4f4d02f140ff2b45",
+      "last_updated": "2026-01-22T16:06:36.411098"
+    },
+    "FILE-8096cc728c20": {
+      "file_genesis_key": "FILE-8096cc728c20",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e5e555c70b6d4d65\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e5e555c70b6d4d65\\profile.json",
+      "created_at": "2026-01-22T16:06:53.754961",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8096cc728c20-1",
+          "genesis_key_db_id": "GK-7619a4a820804d93b5d9c754b378e1d6",
+          "timestamp": "2026-01-22T16:06:59.603927",
+          "file_hash": "0f0ccfc520cb7183bd0a85531a049059951aa800a22b3fe2d4223060b3d222cb",
+          "file_size": 352,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9594b0cf51d4408eb0e1b7870e2d97b3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "0f0ccfc520cb7183bd0a85531a049059951aa800a22b3fe2d4223060b3d222cb",
+      "last_updated": "2026-01-22T16:06:59.603946"
+    },
+    "FILE-adfbc8592faf": {
+      "file_genesis_key": "FILE-adfbc8592faf",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e5e555c70b6d4d65\\session_SS-2bab9dd8a89044bd.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-e5e555c70b6d4d65\\session_SS-2bab9dd8a89044bd.json",
+      "created_at": "2026-01-22T16:07:11.136278",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-adfbc8592faf-1",
+          "genesis_key_db_id": "GK-53283e4c792d492d8c7dfb0ecfbc9574",
+          "timestamp": "2026-01-22T16:07:17.008743",
+          "file_hash": "47a2d875754c38f3b911bad3d90e9997aef7236f9fa9d0f5868f37a60859eefc",
+          "file_size": 5335,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fb372bcbb8ec41a2b5f59e4b57e6e0af",
+          "has_content": true
+        }
+      ],
+      "last_hash": "47a2d875754c38f3b911bad3d90e9997aef7236f9fa9d0f5868f37a60859eefc",
+      "last_updated": "2026-01-22T16:07:17.008769"
+    },
+    "FILE-eb46a5399ecb": {
+      "file_genesis_key": "FILE-eb46a5399ecb",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de3691bdce714941\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de3691bdce714941\\profile.json",
+      "created_at": "2026-01-22T16:07:28.563845",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-eb46a5399ecb-1",
+          "genesis_key_db_id": "GK-f8665bc24d504082a49983b972ff2aab",
+          "timestamp": "2026-01-22T16:07:34.295941",
+          "file_hash": "97b3819cbfa26fd32218d223bca81d2fcd94ad06ee6e5cc23682a9aa0c8931a5",
+          "file_size": 343,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b4a7797bd23846d4801cedf8d723e8b8",
+          "has_content": true
+        }
+      ],
+      "last_hash": "97b3819cbfa26fd32218d223bca81d2fcd94ad06ee6e5cc23682a9aa0c8931a5",
+      "last_updated": "2026-01-22T16:07:34.295965"
+    },
+    "FILE-b2d4f2e7821e": {
+      "file_genesis_key": "FILE-b2d4f2e7821e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de3691bdce714941\\session_SS-63134b2b5d824499.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de3691bdce714941\\session_SS-63134b2b5d824499.json",
+      "created_at": "2026-01-22T16:07:52.364604",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b2d4f2e7821e-1",
+          "genesis_key_db_id": "GK-02789e85b63f4715a38cc22fcf0f1263",
+          "timestamp": "2026-01-22T16:07:58.511341",
+          "file_hash": "b099dd2c252e970db95a5afa5ecd5a553ae3717bb4775b06cf2fcee10d43d046",
+          "file_size": 5245,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1aa8c0c5c1f94288b16cd0764617260c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b099dd2c252e970db95a5afa5ecd5a553ae3717bb4775b06cf2fcee10d43d046",
+      "last_updated": "2026-01-22T16:07:58.511371"
+    },
+    "FILE-b1fc073c360e": {
+      "file_genesis_key": "FILE-b1fc073c360e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-37bba7c25b6e4d98\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-37bba7c25b6e4d98\\profile.json",
+      "created_at": "2026-01-22T16:08:39.170128",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b1fc073c360e-1",
+          "genesis_key_db_id": "GK-568860049bae469cb55adc7094986fde",
+          "timestamp": "2026-01-22T16:08:45.145050",
+          "file_hash": "7e749bb81d61871bf32b49313e2717fc5c71d7e832c8b4e8f6f44706707fd4b8",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-bd7d92277a814e5eb122fafaabd2974a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7e749bb81d61871bf32b49313e2717fc5c71d7e832c8b4e8f6f44706707fd4b8",
+      "last_updated": "2026-01-22T16:08:45.145081"
+    },
+    "FILE-4e0d6e334e80": {
+      "file_genesis_key": "FILE-4e0d6e334e80",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de82fdaebe6549e2\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-de82fdaebe6549e2\\profile.json",
+      "created_at": "2026-01-22T16:09:02.408897",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4e0d6e334e80-1",
+          "genesis_key_db_id": "GK-3ee3ab2c90ba4bf9b6666437f7ba4315",
+          "timestamp": "2026-01-22T16:09:08.159148",
+          "file_hash": "f36068232783807aae63cec655d2bf38c6f87112911b8bac098644f7f19ef068",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-96305f94436844268c11f986ceb373a0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f36068232783807aae63cec655d2bf38c6f87112911b8bac098644f7f19ef068",
+      "last_updated": "2026-01-22T16:09:08.159170"
+    },
+    "FILE-55cd348bfb32": {
+      "file_genesis_key": "FILE-55cd348bfb32",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6a7f7548a4674ab4\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-6a7f7548a4674ab4\\profile.json",
+      "created_at": "2026-01-22T16:09:25.782039",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-55cd348bfb32-1",
+          "genesis_key_db_id": "GK-5fca83c555a84a9d91d5d80f46895d7b",
+          "timestamp": "2026-01-22T16:09:31.615946",
+          "file_hash": "07f8619d742f74bea9c0ef298f49a4af6b5086169e8b264dff4ef659094565f6",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6be99f0903db4536a71d27562d522b1c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "07f8619d742f74bea9c0ef298f49a4af6b5086169e8b264dff4ef659094565f6",
+      "last_updated": "2026-01-22T16:09:31.615969"
+    },
+    "FILE-e96bd21bc4fe": {
+      "file_genesis_key": "FILE-e96bd21bc4fe",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9c67988c758049b2\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9c67988c758049b2\\profile.json",
+      "created_at": "2026-01-22T16:09:43.323028",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e96bd21bc4fe-1",
+          "genesis_key_db_id": "GK-c7eed20d90614b6381202c4226a7ca71",
+          "timestamp": "2026-01-22T16:09:49.183792",
+          "file_hash": "1e5c4fddfc1c5cf6934ee38b24cf9fc70dc02bdcfb2285287367044308417f46",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d2028d50bb02479f9b87e221dc3ef4d7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1e5c4fddfc1c5cf6934ee38b24cf9fc70dc02bdcfb2285287367044308417f46",
+      "last_updated": "2026-01-22T16:09:49.183820"
+    },
+    "FILE-f2518b0a4edd": {
+      "file_genesis_key": "FILE-f2518b0a4edd",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-748aab7bbbf04de0\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-748aab7bbbf04de0\\profile.json",
+      "created_at": "2026-01-22T16:10:00.924822",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f2518b0a4edd-1",
+          "genesis_key_db_id": "GK-38512b1fe26a46228abdcf9379bb4881",
+          "timestamp": "2026-01-22T16:10:06.961768",
+          "file_hash": "2ff7405b633dfa7ceb9d6b48069bc3ff03cb2868959d4643b9aebc0d75603c58",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-89a96a612a1347dfaa9bdf7341c0517e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2ff7405b633dfa7ceb9d6b48069bc3ff03cb2868959d4643b9aebc0d75603c58",
+      "last_updated": "2026-01-22T16:10:06.961798"
+    },
+    "FILE-d0f2d04d93e1": {
+      "file_genesis_key": "FILE-d0f2d04d93e1",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c39324aac43f4679\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-c39324aac43f4679\\profile.json",
+      "created_at": "2026-01-22T16:10:18.431909",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d0f2d04d93e1-1",
+          "genesis_key_db_id": "GK-971a2393e33a4aba92f352572369aca8",
+          "timestamp": "2026-01-22T16:10:24.314056",
+          "file_hash": "1900692ac2d0430da4b62b2ea697d7da8c0fa1bea2e60371150a17e617e9aac1",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-bbc67512b8c24901b99c198aec028b25",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1900692ac2d0430da4b62b2ea697d7da8c0fa1bea2e60371150a17e617e9aac1",
+      "last_updated": "2026-01-22T16:10:24.314078"
+    },
+    "FILE-8143ae5fb3f5": {
+      "file_genesis_key": "FILE-8143ae5fb3f5",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63ae926df3184989\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-63ae926df3184989\\profile.json",
+      "created_at": "2026-01-22T16:10:41.683916",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8143ae5fb3f5-1",
+          "genesis_key_db_id": "GK-f4ddf4db8d054fa1b75f7a253f8c96a2",
+          "timestamp": "2026-01-22T16:10:47.714962",
+          "file_hash": "32b3046a5c39dbeb8e6dab3b57258b344a80ef52618428dd588952021ee406ab",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f4e82b24ffa8461e8ff51cff05f622cb",
+          "has_content": true
+        }
+      ],
+      "last_hash": "32b3046a5c39dbeb8e6dab3b57258b344a80ef52618428dd588952021ee406ab",
+      "last_updated": "2026-01-22T16:10:47.714990"
+    },
+    "FILE-c58b51bf47b9": {
+      "file_genesis_key": "FILE-c58b51bf47b9",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8a157d9b7ec14336\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8a157d9b7ec14336\\profile.json",
+      "created_at": "2026-01-22T16:10:53.593312",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c58b51bf47b9-1",
+          "genesis_key_db_id": "GK-ae003117a79b499fb5cf7ed99b42be23",
+          "timestamp": "2026-01-22T16:10:59.367537",
+          "file_hash": "b3a156c89ad1baaef8b423ae0be8b61e9f0e9aa1629fb1cca47beb5448ad5d60",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e40e14e651aa4367a76f66f485479814",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b3a156c89ad1baaef8b423ae0be8b61e9f0e9aa1629fb1cca47beb5448ad5d60",
+      "last_updated": "2026-01-22T16:10:59.367581"
+    },
+    "FILE-648b6c87fe88": {
+      "file_genesis_key": "FILE-648b6c87fe88",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7fd1e53c9e6c434c\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-7fd1e53c9e6c434c\\profile.json",
+      "created_at": "2026-01-22T16:11:11.149288",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-648b6c87fe88-1",
+          "genesis_key_db_id": "GK-b8722ac516304b88b144eda8632809c1",
+          "timestamp": "2026-01-22T16:11:16.905966",
+          "file_hash": "aa0962ebb43002449a32e082231c0e843c9f3b03731100023d1ecc1eb180f34e",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-62d98d504c194b0eb8c52c9240912c3d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "aa0962ebb43002449a32e082231c0e843c9f3b03731100023d1ecc1eb180f34e",
+      "last_updated": "2026-01-22T16:11:16.905996"
+    },
+    "FILE-4aeebb3cc89a": {
+      "file_genesis_key": "FILE-4aeebb3cc89a",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-5543194d7be740c6\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-5543194d7be740c6\\profile.json",
+      "created_at": "2026-01-22T16:11:22.616463",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4aeebb3cc89a-1",
+          "genesis_key_db_id": "GK-7e276bb98bb146738a88ba98336f2eb1",
+          "timestamp": "2026-01-22T16:11:28.376212",
+          "file_hash": "7202c25e22682fa9a41218e6cf5a6f25c104acf64b2870783c0293d9e971d628",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b5bcc1e381dc4d308ddb27fdd90de079",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7202c25e22682fa9a41218e6cf5a6f25c104acf64b2870783c0293d9e971d628",
+      "last_updated": "2026-01-22T16:11:28.376244"
+    },
+    "FILE-1d4f18acae9e": {
+      "file_genesis_key": "FILE-1d4f18acae9e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-031bf278b9994c1d\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-031bf278b9994c1d\\profile.json",
+      "created_at": "2026-01-22T16:11:40.510937",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-1d4f18acae9e-1",
+          "genesis_key_db_id": "GK-ebdd8e7b4c554e16867faa5e4ddfa489",
+          "timestamp": "2026-01-22T16:11:46.796288",
+          "file_hash": "58d2ece16696dbb17853d7959e3702f28d442bb3cfcea3f6df57dd050894196e",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-741608f4b16b46dea8a545b3c8cea248",
+          "has_content": true
+        }
+      ],
+      "last_hash": "58d2ece16696dbb17853d7959e3702f28d442bb3cfcea3f6df57dd050894196e",
+      "last_updated": "2026-01-22T16:11:46.796320"
+    },
+    "FILE-8e05e83726ed": {
+      "file_genesis_key": "FILE-8e05e83726ed",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2917f4a07e4e4fe6\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-2917f4a07e4e4fe6\\profile.json",
+      "created_at": "2026-01-22T16:12:04.739801",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8e05e83726ed-1",
+          "genesis_key_db_id": "GK-15220427bab241289a1dc417f6bf52d1",
+          "timestamp": "2026-01-22T16:12:10.863388",
+          "file_hash": "f2bf7b1b16317bf6da0057acc8b4cbf707074af990a10310a8370a9e9f702ca8",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-cc95472b43254667add11009c91e4f15",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f2bf7b1b16317bf6da0057acc8b4cbf707074af990a10310a8370a9e9f702ca8",
+      "last_updated": "2026-01-22T16:12:10.863409"
+    },
+    "FILE-b355efbc15db": {
+      "file_genesis_key": "FILE-b355efbc15db",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-966e21f101b946ca\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-966e21f101b946ca\\profile.json",
+      "created_at": "2026-01-22T16:12:28.383991",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b355efbc15db-1",
+          "genesis_key_db_id": "GK-e68b1259ffc14064b80e47ecb8b4c9ff",
+          "timestamp": "2026-01-22T16:12:34.248433",
+          "file_hash": "3fb758d0eab42c908f1d09f60c688870f7fc6f1e15a1372cab00926db1f29fd9",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-af9dbf7cb4bb4cd895495d6f412bc363",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3fb758d0eab42c908f1d09f60c688870f7fc6f1e15a1372cab00926db1f29fd9",
+      "last_updated": "2026-01-22T16:12:34.248472"
+    },
+    "FILE-85e8d1cdc5ac": {
+      "file_genesis_key": "FILE-85e8d1cdc5ac",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bcc1107956364655\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bcc1107956364655\\profile.json",
+      "created_at": "2026-01-22T16:12:46.012800",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-85e8d1cdc5ac-1",
+          "genesis_key_db_id": "GK-576ade83963b4cb6b85157cc068659c2",
+          "timestamp": "2026-01-22T16:12:51.812039",
+          "file_hash": "95c5755eb65ce88cbbc81a9bb31764ec957fdb8589ad9886788afe023fe8f589",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2eb992d0f5cc4dfd8dc1b8caba295e27",
+          "has_content": true
+        }
+      ],
+      "last_hash": "95c5755eb65ce88cbbc81a9bb31764ec957fdb8589ad9886788afe023fe8f589",
+      "last_updated": "2026-01-22T16:12:51.812061"
+    },
+    "FILE-6a9f7037c8d5": {
+      "file_genesis_key": "FILE-6a9f7037c8d5",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-805e81ad6af44bdf\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-805e81ad6af44bdf\\profile.json",
+      "created_at": "2026-01-22T16:13:09.864485",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6a9f7037c8d5-1",
+          "genesis_key_db_id": "GK-5ceb01686da04b76ba9d46b8416fbaf4",
+          "timestamp": "2026-01-22T16:13:16.056718",
+          "file_hash": "fae8292b1f004b8ec6987b58e51b672802bdefb3dd488e7e706cdc3edf74a5a6",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-75daf77e81d94cff9b0a49d03f842d44",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fae8292b1f004b8ec6987b58e51b672802bdefb3dd488e7e706cdc3edf74a5a6",
+      "last_updated": "2026-01-22T16:13:16.056740"
+    },
+    "FILE-b97f78dde969": {
+      "file_genesis_key": "FILE-b97f78dde969",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-eb5188109e134080\\session_SS-a120e4a9f40d4964.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-eb5188109e134080\\session_SS-a120e4a9f40d4964.json",
+      "created_at": "2026-01-23T12:29:47.661570",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b97f78dde969-1",
+          "genesis_key_db_id": "GK-02db8e98798b4be6b2d50a8f84931c6c",
+          "timestamp": "2026-01-23T12:29:47.674017",
+          "file_hash": "67fb5b3b99406bb98af3c746b53ed55dc1e211944d3b6f5a6a65f40010e216a3",
+          "file_size": 2681,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a869aae4f9c143a391b24f206b1b2063",
+          "has_content": true
+        }
+      ],
+      "last_hash": "67fb5b3b99406bb98af3c746b53ed55dc1e211944d3b6f5a6a65f40010e216a3",
+      "last_updated": "2026-01-23T12:29:47.674036"
+    },
+    "FILE-cc3b57f5c460": {
+      "file_genesis_key": "FILE-cc3b57f5c460",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-01-23.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-01-23.json",
+      "created_at": "2026-01-23T12:29:47.719766",
+      "version_count": 5,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cc3b57f5c460-1",
+          "genesis_key_db_id": "GK-335d1d599f7c41438280407f2affc734",
+          "timestamp": "2026-01-23T12:29:47.752092",
+          "file_hash": "a11d802f30941e08c28fbf72106f1c2fd3c98197a98ab92d6d004e2ea47e7070",
+          "file_size": 24575,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6b7b654c8ace484cbfac9177f1896a67",
+          "has_content": true
+        },
+        {
+          "version_number": 2,
+          "version_key_id": "VER-cc3b57f5c460-2",
+          "genesis_key_db_id": "GK-4a364bf8223a4e2db86488c5e967c880",
+          "timestamp": "2026-01-23T12:30:17.686564",
+          "file_hash": "f47fd45c123725adc9fed1183a0c12c902bc4b9d591955436dbc9c3f1f402f46",
+          "file_size": 374262,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d4b1bd356ca24cb19319afa52c194154",
+          "has_content": true
+        },
+        {
+          "version_number": 3,
+          "version_key_id": "VER-cc3b57f5c460-3",
+          "genesis_key_db_id": "GK-4dc774c94399494a8aad138805839199",
+          "timestamp": "2026-01-23T12:30:29.189136",
+          "file_hash": "0501b4e6e9016e7043153b8eaa55807d8665c99e4cf40960a0da294d16f2f573",
+          "file_size": 1975122,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-abb1c5f607b14a01a8742ddfd2c8b427",
+          "has_content": true
+        },
+        {
+          "version_number": 4,
+          "version_key_id": "VER-cc3b57f5c460-4",
+          "genesis_key_db_id": "GK-62915059332d42ffb66ea95439dbb2d4",
+          "timestamp": "2026-01-23T12:30:31.667893",
+          "file_hash": "17f8a7847d1e3fca8f731ba0a0cd2ef0d6d75079367c508646aa1feb60f16716",
+          "file_size": 12040986,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6e3606bc1e8246aeb0c641b2e9c7441c",
+          "has_content": true
+        },
+        {
+          "version_number": 5,
+          "version_key_id": "VER-cc3b57f5c460-5",
+          "genesis_key_db_id": "GK-522d2dcfce7c4204afb8e385d115c460",
+          "timestamp": "2026-01-23T12:30:42.797309",
+          "file_hash": "beadeea93f0b47dc7a331909b21173f77f1bd45aeb136d27485b803307ab283d",
+          "file_size": 84407524,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-50399a46fb45427d8d5152b5d4c8a0ca",
+          "has_content": true
+        }
+      ],
+      "last_hash": "beadeea93f0b47dc7a331909b21173f77f1bd45aeb136d27485b803307ab283d",
+      "last_updated": "2026-01-23T12:30:42.797456"
+    },
+    "FILE-e4d4bd94b214": {
+      "file_genesis_key": "FILE-e4d4bd94b214",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93117596b4364c5f\\session_SS-c15da73f83164584.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-93117596b4364c5f\\session_SS-c15da73f83164584.json",
+      "created_at": "2026-01-23T12:29:47.782708",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e4d4bd94b214-1",
+          "genesis_key_db_id": "GK-d4f67bdf95164f39ac9ce087a0ced842",
+          "timestamp": "2026-01-23T12:29:47.822080",
+          "file_hash": "a528ae40e1bfa768ee480c0862400230aae9011250a1b6d732e5c14f66390206",
+          "file_size": 2672,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-26a082bb64434e508404214e4c104bd6",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a528ae40e1bfa768ee480c0862400230aae9011250a1b6d732e5c14f66390206",
+      "last_updated": "2026-01-23T12:29:47.822109"
+    },
+    "FILE-ac94f0b151ab": {
+      "file_genesis_key": "FILE-ac94f0b151ab",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-5e20693af5054360\\session_SS-ab20ba40c4784637.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-5e20693af5054360\\session_SS-ab20ba40c4784637.json",
+      "created_at": "2026-01-23T12:29:47.890764",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ac94f0b151ab-1",
+          "genesis_key_db_id": "GK-ba9b98b1195a4d648289699b7e84c45b",
+          "timestamp": "2026-01-23T12:29:47.942167",
+          "file_hash": "a0d7f127a39528b275dee2e3527bc3b625fafe967eb810fbbf8e6f7ad6a0edf1",
+          "file_size": 5248,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2972dc4716804384806ceeaa6c1e78cf",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a0d7f127a39528b275dee2e3527bc3b625fafe967eb810fbbf8e6f7ad6a0edf1",
+      "last_updated": "2026-01-23T12:29:47.942228"
+    },
+    "FILE-3004f9c1877a": {
+      "file_genesis_key": "FILE-3004f9c1877a",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-adf4996da4d84bc1\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-adf4996da4d84bc1\\profile.json",
+      "created_at": "2026-01-23T12:29:48.003724",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3004f9c1877a-1",
+          "genesis_key_db_id": "GK-d03b99f36a8e4cdba11bd44355f75ea0",
+          "timestamp": "2026-01-23T12:29:48.045339",
+          "file_hash": "ffe4140391aaa63b7d91123583329888d6348165d1790e1026f190f8d3e127d7",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6dbabc1652184c0980953e9467d91d5d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ffe4140391aaa63b7d91123583329888d6348165d1790e1026f190f8d3e127d7",
+      "last_updated": "2026-01-23T12:29:48.045368"
+    },
+    "FILE-9877570c4ab2": {
+      "file_genesis_key": "FILE-9877570c4ab2",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-96775fb9afdf4e9d\\session_SS-d5e4321d6edc4b0a.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-96775fb9afdf4e9d\\session_SS-d5e4321d6edc4b0a.json",
+      "created_at": "2026-01-23T12:29:48.125269",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-9877570c4ab2-1",
+          "genesis_key_db_id": "GK-cf885788d4514ba9a06bc41ad3822186",
+          "timestamp": "2026-01-23T12:29:48.166338",
+          "file_hash": "f792fb4d02f9b39e7c0466a0c915c376fc862a08d115ed19e64071c6f7a8e832",
+          "file_size": 2711,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7e57a30c98cb494293d2cff432fec9fd",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f792fb4d02f9b39e7c0466a0c915c376fc862a08d115ed19e64071c6f7a8e832",
+      "last_updated": "2026-01-23T12:29:48.166372"
+    },
+    "FILE-cf042ce6bc04": {
+      "file_genesis_key": "FILE-cf042ce6bc04",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b09cca1fa9f4bf0\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b09cca1fa9f4bf0\\profile.json",
+      "created_at": "2026-01-23T12:29:48.210119",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cf042ce6bc04-1",
+          "genesis_key_db_id": "GK-1bdda5757e404edb91a7605b08f8e5ec",
+          "timestamp": "2026-01-23T12:29:48.225922",
+          "file_hash": "cac9dc6da2e6c73273a7852bc736ed1dd23222d146cc0fb0474c88b3485a8445",
+          "file_size": 349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5e06ff3d1f694b6f80188f4e97d72844",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cac9dc6da2e6c73273a7852bc736ed1dd23222d146cc0fb0474c88b3485a8445",
+      "last_updated": "2026-01-23T12:29:48.225942"
+    },
+    "FILE-292c34266882": {
+      "file_genesis_key": "FILE-292c34266882",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b09cca1fa9f4bf0\\session_SS-e33d18e62f4e4d5d.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-1b09cca1fa9f4bf0\\session_SS-e33d18e62f4e4d5d.json",
+      "created_at": "2026-01-23T12:29:48.280632",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-292c34266882-1",
+          "genesis_key_db_id": "GK-8b94c7e3905246908b6d3e6e9f1cce24",
+          "timestamp": "2026-01-23T12:29:48.311648",
+          "file_hash": "f88434661e9f50b6d8e6d53e91568b2a725e0d470e34198d67885b528a897ca5",
+          "file_size": 2681,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c6c599db0b2d4aebb9a9db0dfb5654b9",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f88434661e9f50b6d8e6d53e91568b2a725e0d470e34198d67885b528a897ca5",
+      "last_updated": "2026-01-23T12:29:48.311671"
+    },
+    "FILE-5049e160e737": {
+      "file_genesis_key": "FILE-5049e160e737",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bbe8554576ba46e2\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-bbe8554576ba46e2\\profile.json",
+      "created_at": "2026-01-23T12:29:48.346351",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5049e160e737-1",
+          "genesis_key_db_id": "GK-7d4b5bbdcab14ad6b5a6217921615d18",
+          "timestamp": "2026-01-23T12:29:48.369418",
+          "file_hash": "5d27bbbd3b63de76442925eab36adf349dc885e4c3b92600305e05c33d2c02ea",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8df5c080c3a84096a08c57bd0410fa4e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5d27bbbd3b63de76442925eab36adf349dc885e4c3b92600305e05c33d2c02ea",
+      "last_updated": "2026-01-23T12:29:48.369450"
+    },
+    "FILE-8523bd39f358": {
+      "file_genesis_key": "FILE-8523bd39f358",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-f59dfe8d3cfd46ea\\session_SS-015eb52d292a44aa.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-f59dfe8d3cfd46ea\\session_SS-015eb52d292a44aa.json",
+      "created_at": "2026-01-23T12:29:48.397900",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8523bd39f358-1",
+          "genesis_key_db_id": "GK-5096419435da49a3a4096a2489ae20bc",
+          "timestamp": "2026-01-23T12:29:48.417335",
+          "file_hash": "42c113f5f7a9a2ff46d6d339792981f662f6c50b5170087b4f0b3a13fa3ef06c",
+          "file_size": 5255,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-68f38d0c13ad46bf809cb05dc97eeaa6",
+          "has_content": true
+        }
+      ],
+      "last_hash": "42c113f5f7a9a2ff46d6d339792981f662f6c50b5170087b4f0b3a13fa3ef06c",
+      "last_updated": "2026-01-23T12:29:48.417367"
+    },
+    "FILE-2348b8d51bd6": {
+      "file_genesis_key": "FILE-2348b8d51bd6",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8135a9c9560644b4\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8135a9c9560644b4\\profile.json",
+      "created_at": "2026-01-23T12:29:48.446371",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2348b8d51bd6-1",
+          "genesis_key_db_id": "GK-94d473121cb049c9915adf0036eb423f",
+          "timestamp": "2026-01-23T12:29:48.462919",
+          "file_hash": "cd58b5cace148a761a724fb2f09baa98468e0dfcba2c8a3be40c3afdad5b1197",
+          "file_size": 343,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-721a58fccaac4e6f908af859e84a1313",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cd58b5cace148a761a724fb2f09baa98468e0dfcba2c8a3be40c3afdad5b1197",
+      "last_updated": "2026-01-23T12:29:48.462936"
+    },
+    "FILE-33d4d68dea4d": {
+      "file_genesis_key": "FILE-33d4d68dea4d",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8135a9c9560644b4\\session_SS-5c6c7cb30b164122.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-8135a9c9560644b4\\session_SS-5c6c7cb30b164122.json",
+      "created_at": "2026-01-23T12:29:48.490605",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-33d4d68dea4d-1",
+          "genesis_key_db_id": "GK-6d2e759edf224ef88b20626cc636f62c",
+          "timestamp": "2026-01-23T12:29:48.507177",
+          "file_hash": "785b8468c90aeaace0a46399a671f8a7eb58174fb78db33e5f7c0f330e67072d",
+          "file_size": 2651,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-76a7830d0fba4ef0a983e1ea8e300c29",
+          "has_content": true
+        }
+      ],
+      "last_hash": "785b8468c90aeaace0a46399a671f8a7eb58174fb78db33e5f7c0f330e67072d",
+      "last_updated": "2026-01-23T12:29:48.507194"
+    },
+    "FILE-da9985df9575": {
+      "file_genesis_key": "FILE-da9985df9575",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-f74b5961a7ca4f16\\session_SS-488b964e5ef0483f.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-f74b5961a7ca4f16\\session_SS-488b964e5ef0483f.json",
+      "created_at": "2026-01-23T12:29:48.538307",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-da9985df9575-1",
+          "genesis_key_db_id": "GK-e6a96d73935d4288af18b94ca0f3a253",
+          "timestamp": "2026-01-23T12:29:48.559663",
+          "file_hash": "a0a29552169ac4564bb408e2bbe392743cb37b6e7b85eec8c5daefe638a0caca",
+          "file_size": 5321,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6d84a8f9d95a4d1a9f7eee4c7ea16750",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a0a29552169ac4564bb408e2bbe392743cb37b6e7b85eec8c5daefe638a0caca",
+      "last_updated": "2026-01-23T12:29:48.559701"
+    },
+    "FILE-aee9f5bd1e67": {
+      "file_genesis_key": "FILE-aee9f5bd1e67",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-b19517a49d574b3e\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-b19517a49d574b3e\\profile.json",
+      "created_at": "2026-01-23T12:30:17.594950",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aee9f5bd1e67-1",
+          "genesis_key_db_id": "GK-9f43bbad1bed4a2d8c0a739995e65a84",
+          "timestamp": "2026-01-23T12:30:17.618131",
+          "file_hash": "4b8654d7b117f66a5a4746133d1da3f8ea7dcdd558986f47d9f40dabc97f3cd0",
+          "file_size": 342,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8233dff8ce9546429aa2fb715916869e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4b8654d7b117f66a5a4746133d1da3f8ea7dcdd558986f47d9f40dabc97f3cd0",
+      "last_updated": "2026-01-23T12:30:17.618165"
+    },
+    "FILE-b8068cc9b87e": {
+      "file_genesis_key": "FILE-b8068cc9b87e",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0157fdc6ca2341e1\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0157fdc6ca2341e1\\profile.json",
+      "created_at": "2026-01-23T12:30:28.746742",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b8068cc9b87e-1",
+          "genesis_key_db_id": "GK-697dec8078694a9391ad5225fe75ca53",
+          "timestamp": "2026-01-23T12:30:28.805134",
+          "file_hash": "43382a92773dde4830b339a1105eb265277e79eec8f8cbad2fb5a25ba07cce81",
+          "file_size": 350,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ecd5b33b8d6d4418b178a47866a1d63c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "43382a92773dde4830b339a1105eb265277e79eec8f8cbad2fb5a25ba07cce81",
+      "last_updated": "2026-01-23T12:30:28.805160"
+    },
+    "FILE-14c504d72148": {
+      "file_genesis_key": "FILE-14c504d72148",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0157fdc6ca2341e1\\session_SS-feea591fb1194a73.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-0157fdc6ca2341e1\\session_SS-feea591fb1194a73.json",
+      "created_at": "2026-01-23T12:30:28.913320",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-14c504d72148-1",
+          "genesis_key_db_id": "GK-bd0f6c41fa844182a1d40eeebf73105f",
+          "timestamp": "2026-01-23T12:30:28.972130",
+          "file_hash": "6b84fcfc1dd4556af46237b9c865073a69a9961a123e6bba8de9d92c233d5218",
+          "file_size": 2573,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-dfb817c286fb4ecbb8a1e745958b21a4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6b84fcfc1dd4556af46237b9c865073a69a9961a123e6bba8de9d92c233d5218",
+      "last_updated": "2026-01-23T12:30:28.972158"
+    },
+    "FILE-72a4a892f36f": {
+      "file_genesis_key": "FILE-72a4a892f36f",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-087d38863baa4406\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-087d38863baa4406\\profile.json",
+      "created_at": "2026-01-23T12:30:29.285641",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-72a4a892f36f-1",
+          "genesis_key_db_id": "GK-a4de720cb89f4876b3870661c78adba9",
+          "timestamp": "2026-01-23T12:30:29.362371",
+          "file_hash": "25557f36cb453eb9dd51fcd3be9a6d97c971ab95fa6a05169b60eaefe5623af2",
+          "file_size": 350,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c796fafb1c0c43a1ace6b6132ce4520d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "25557f36cb453eb9dd51fcd3be9a6d97c971ab95fa6a05169b60eaefe5623af2",
+      "last_updated": "2026-01-23T12:30:29.362388"
+    },
+    "FILE-04ddb91280aa": {
+      "file_genesis_key": "FILE-04ddb91280aa",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-087d38863baa4406\\session_SS-066ec15c5bd94884.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-087d38863baa4406\\session_SS-066ec15c5bd94884.json",
+      "created_at": "2026-01-23T12:30:29.439304",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-04ddb91280aa-1",
+          "genesis_key_db_id": "GK-28aa767dad27433bbd508b7849836146",
+          "timestamp": "2026-01-23T12:30:29.511137",
+          "file_hash": "062139ec607f2f9be5b6b9910284853b8ae5987ef09c3dde67bb9e55a3e596a8",
+          "file_size": 5534,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-34df84225b924f259199c3ea0bc9bb46",
+          "has_content": true
+        }
+      ],
+      "last_hash": "062139ec607f2f9be5b6b9910284853b8ae5987ef09c3dde67bb9e55a3e596a8",
+      "last_updated": "2026-01-23T12:30:29.511152"
+    },
+    "FILE-aea59f42efe8": {
+      "file_genesis_key": "FILE-aea59f42efe8",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9a00460c1e354225\\profile.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9a00460c1e354225\\profile.json",
+      "created_at": "2026-01-23T12:30:30.405407",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aea59f42efe8-1",
+          "genesis_key_db_id": "GK-c8b1d1aaf7de4532a2c2a96a985e7a81",
+          "timestamp": "2026-01-23T12:30:30.475571",
+          "file_hash": "81eeca196cba151360275ef20dc90c562082b6e4e6284aad7aa489088d88237d",
+          "file_size": 352,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f6650e059fae4df7b8a77964992185c2",
+          "has_content": true
+        }
+      ],
+      "last_hash": "81eeca196cba151360275ef20dc90c562082b6e4e6284aad7aa489088d88237d",
+      "last_updated": "2026-01-23T12:30:30.475587"
+    },
+    "FILE-ccbc3e733532": {
+      "file_genesis_key": "FILE-ccbc3e733532",
+      "file_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9a00460c1e354225\\session_SS-b6d043ca32384981.json",
+      "absolute_path": "C:\\Users\\jivot\\Documents\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\GU-9a00460c1e354225\\session_SS-b6d043ca32384981.json",
+      "created_at": "2026-01-23T12:30:30.556450",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ccbc3e733532-1",
+          "genesis_key_db_id": "GK-a9d726edd6ce4f038644a88932bceb7b",
+          "timestamp": "2026-01-23T12:30:30.626414",
+          "file_hash": "044a40f3f94627b8ebf54e909a39261480f9305408179f6b95b774af37ea504e",
+          "file_size": 4862,
+          

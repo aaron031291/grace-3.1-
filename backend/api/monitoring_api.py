@@ -163,13 +163,15 @@ def get_service_status() -> Dict[str, str]:
     except Exception:
         services["vector_db"] = "unavailable"
 
-    # Check Ollama
+    # Check LLM Provider
     try:
-        from ollama_client.client import get_ollama_client
-        ollama = get_ollama_client()
-        services["ollama"] = "healthy" if ollama.is_running() else "unavailable"
+        from llm_orchestrator.factory import get_llm_client
+        from settings import settings
+        llm = get_llm_client()
+        provider_name = settings.LLM_PROVIDER
+        services[f"llm_{provider_name}"] = "healthy" if llm.is_running() else "unavailable"
     except Exception:
-        services["ollama"] = "unavailable"
+        services["llm"] = "unavailable"
 
     # Check ML Intelligence
     try:

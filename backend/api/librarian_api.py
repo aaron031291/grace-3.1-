@@ -24,7 +24,7 @@ from librarian.relationship_manager import RelationshipManager
 from librarian.approval_workflow import ApprovalWorkflow
 from librarian.engine import LibrarianEngine
 from embedding import get_embedding_model
-from ollama_client.client import get_ollama_client
+from llm_orchestrator.factory import get_llm_client
 from vector_db.client import get_qdrant_client
 from settings import settings
 
@@ -47,7 +47,7 @@ def get_librarian_engine(session: Session) -> LibrarianEngine:
             _librarian_engine = LibrarianEngine(
                 db_session=session,
                 embedding_model=get_embedding_model(),
-                ollama_client=get_ollama_client(),
+                llm_client=get_llm_client(),
                 vector_db_client=get_qdrant_client(),
                 ai_model_name=settings.LIBRARIAN_AI_MODEL,
                 use_ai=settings.LIBRARIAN_USE_AI,

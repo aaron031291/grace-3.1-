@@ -86,7 +86,7 @@ class LibrarianEngine:
         self,
         db_session: Session,
         embedding_model=None,
-        ollama_client=None,  # [DEPRECATED] Use llm_orchestrator instead
+        llm_client=None,
         llm_orchestrator=None,
         vector_db_client=None,
         ai_model_name: str = "mistral:7b",
@@ -101,7 +101,7 @@ class LibrarianEngine:
         Args:
             db_session: SQLAlchemy database session
             embedding_model: Embedding model for similarity
-            ollama_client: [DEPRECATED] Legacy Ollama client (use llm_orchestrator instead)
+            llm_client: Provider-agnostic LLM client (replaces legacy ollama_client)
             llm_orchestrator: LLM Orchestrator instance (preferred)
             vector_db_client: Qdrant vector DB client
             ai_model_name: LLM model name (default: "mistral:7b")
@@ -139,13 +139,13 @@ class LibrarianEngine:
             except Exception as e:
                 logger.warning(f"[LIBRARIAN] Could not connect to LLM Orchestrator: {e}")
 
-        # Optional AI analyzer (now uses orchestrator)
+        # Optional AI analyzer (now uses orchestrator or generic client)
         self.ai_analyzer = None
         if use_ai:
             try:
                 self.ai_analyzer = AIContentAnalyzer(
                     db_session,
-                    ollama_client=ollama_client,  # Legacy fallback
+                    llm_client=llm_client,
                     llm_orchestrator=self._llm_orchestrator,  # Preferred
                     model_name=ai_model_name
                 )

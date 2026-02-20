@@ -32,7 +32,8 @@ from datetime import datetime, timedelta
 from collections import OrderedDict
 import requests
 
-from ollama_client.client import OllamaClient
+from .base_client import BaseLLMClient
+from .factory import get_llm_client
 from settings import settings
 
 logger = logging.getLogger(__name__)
@@ -428,7 +429,7 @@ class MultiLLMClient:
             max_retries: Maximum retry attempts
             max_concurrent_requests: Maximum concurrent requests for parallel ops
         """
-        self.ollama_client = OllamaClient(base_url or settings.OLLAMA_URL)
+        self.llm_client = get_llm_client()
         self.available_models: Dict[str, LLMModel] = {}
         self.model_stats: Dict[str, Dict[str, Any]] = {}
 
@@ -447,8 +448,32 @@ class MultiLLMClient:
     def _discover_models(self):
         """Discover which models are installed and available."""
         try:
-            installed_models = self.ollama_client.get_all_models()
-            installed_model_names = {model.name for model in installed_models}
+            # Get provider from settings
+            provider = settings.LLM_PROVIDER
+            
+            if provider == "openai":
+                # For OpenAI, we don't need to "discover" in the same way
+                # We register the configured model for all tasks
+                model_id = settings.LLM_MODEL or "gpt-4o"
+                config = LLMModel(
+                    name=f"OpenAI {model_id}",
+                    model_id=model_id,
+                    capabilities=[ModelCapability.GENERAL, ModelCapability.CODE, ModelCapability.REASONING],
+                    context_window=128000,
+                    recommended_tasks=list(TaskType),
+                    priority=10
+                )
+                self.available_models[model_id] = config
+                self.model_stats[model_id] = {
+                    "requests": 0, "successes": 0, "failures": 0,
+                    "total_duration_ms": 0, "avg_duration_ms": 0
+                }
+                logger.info(f"OpenAI Model configured: {model_id}")
+                return
+
+            installed_models = self.llm_client.get_all_models()
+            # installed_models returns dicts from adapter/factory
+            installed_model_names = {model['name'] for model in installed_models}
 
             for model_key, model_config in self.MODEL_REGISTRY.items():
                 # Check if model is installed (handle version tags)
@@ -713,12 +738,12 @@ class MultiLLMClient:
 
         for attempt in range(self.retry_config.max_retries + 1):
             try:
-                response_text = self.ollama_client.chat(
+                response_text = self.llm_client.chat(
                     model=model.model_id,
                     messages=messages,
                     stream=stream,
                     temperature=temperature or model.temperature,
-                    num_predict=max_tokens or model.max_tokens
+                    max_tokens=max_tokens or model.max_tokens
                 )
                 return response_text
 

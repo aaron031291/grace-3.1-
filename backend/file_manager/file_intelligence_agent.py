@@ -10,6 +10,7 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 from dataclasses import dataclass
 from datetime import datetime
+from llm_orchestrator.factory import get_llm_client
 
 logger = logging.getLogger(__name__)
 
@@ -39,16 +40,16 @@ class FileIntelligenceAgent:
     - Discovers relationships autonomously
     """
 
-    def __init__(self, file_handler=None, ollama_client=None):
+    def __init__(self, file_handler=None, llm_client=None):
         """
         Initialize intelligence agent.
 
         Args:
             file_handler: FileHandler for text extraction
-            ollama_client: OllamaClient for AI analysis
+            llm_client: LLM client for AI analysis (defaults to factory)
         """
         self.file_handler = file_handler
-        self.ollama_client = ollama_client
+        self.llm_client = llm_client or get_llm_client()
 
         logger.info("[FILE-INTELLIGENCE] Agent initialized")
 
@@ -141,7 +142,7 @@ class FileIntelligenceAgent:
             return "Content too short for summary"
 
         # Use LLM if available
-        if self.ollama_client:
+        if self.llm_client:
             try:
                 prompt = f"""Summarize the following text in 1-2 sentences (max {max_length} chars):
 
@@ -149,8 +150,7 @@ class FileIntelligenceAgent:
 
 Summary:"""
 
-                response = self.ollama_client.generate(
-                    model="qwen2.5:latest",
+                response = self.llm_client.generate(
                     prompt=prompt,
                     max_tokens=100
                 )
@@ -370,13 +370,13 @@ Summary:"""
 _intelligence_agent = None
 
 
-def get_file_intelligence_agent(file_handler=None, ollama_client=None) -> FileIntelligenceAgent:
+def get_file_intelligence_agent(file_handler=None, llm_client=None) -> FileIntelligenceAgent:
     """
     Get or create FileIntelligenceAgent singleton.
 
     Args:
         file_handler: Optional FileHandler instance
-        ollama_client: Optional OllamaClient instance
+        llm_client: Optional LLM client instance
 
     Returns:
         FileIntelligenceAgent instance
@@ -386,7 +386,7 @@ def get_file_intelligence_agent(file_handler=None, ollama_client=None) -> FileIn
     if _intelligence_agent is None:
         _intelligence_agent = FileIntelligenceAgent(
             file_handler=file_handler,
-            ollama_client=ollama_client
+            llm_client=llm_client
         )
 
     return _intelligence_agent

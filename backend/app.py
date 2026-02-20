@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 from security.config import get_security_config
 from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, RequestValidationMiddleware
 
-from ollama_client.client import get_ollama_client
+from llm_orchestrator.factory import get_llm_client
 from database.session import SessionLocal, get_session, initialize_session_factory
 from database.connection import DatabaseConnection
 from database.config import DatabaseConfig, DatabaseType
@@ -140,10 +140,10 @@ class ChatResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Response model for health check endpoint."""
-    status: str = Field(..., description="Health status: 'healthy' or 'unhealthy'")
-    ollama_running: bool = Field(..., description="Whether Ollama service is running")
-    models_available: int = Field(..., description="Number of available models")
+    """Health response model."""
+    status: str
+    llm_running: bool
+    models_available: int
 
 
 # ==================== Chat Management Models ====================
@@ -274,19 +274,20 @@ async def lifespan(app: FastAPI):
     else:
         print("[STARTUP] Embedding model loading skipped (SKIP_EMBEDDING_LOAD=true)\n")
     
-    # Check Ollama
-    if not settings.SKIP_OLLAMA_CHECK:
+    # Check LLM Provider
+    if not getattr(settings, 'SKIP_LLM_CHECK', False):
         try:
-            client = get_ollama_client()
+            client = get_llm_client()
+            provider_name = settings.LLM_PROVIDER.upper()
             if client.is_running():
-                models = client.get_all_models()
-                print(f"[OK] Ollama is running with {len(models)} model(s)")
+                print(f"[OK] {provider_name} is running and reachable")
             else:
-                print("[WARN] Ollama is not running - chat endpoint will be unavailable")
+                print(f"[WARN] {provider_name} is not responding - chat features may be limited")
         except Exception as e:
-            print(f"[WARN] Could not connect to Ollama: {e}")
+            provider = settings.LLM_PROVIDER if settings else "LLM"
+            print(f"[WARN] Could not connect to LLM provider ({provider}): {e}")
     else:
-        print("[SKIP] Ollama check skipped (SKIP_OLLAMA_CHECK=true)")
+        print("[SKIP] LLM check skipped")
     
     # Check Qdrant
     if not settings.SKIP_QDRANT_CHECK:
@@ -568,10 +569,10 @@ async def health_check():
         HealthResponse: Status of the API and Ollama service
     """
     try:
-        client = get_ollama_client()
-        ollama_running = client.is_running()
+        client = get_llm_client()
+        status_info = client.is_running()
         
-        if ollama_running:
+        if status_info:
             models = client.get_all_models()
             models_available = len(models)
             status = "healthy"
@@ -581,13 +582,13 @@ async def health_check():
         
         return HealthResponse(
             status=status,
-            ollama_running=ollama_running,
+            llm_running=status_info,
             models_available=models_available
         )
     except Exception as e:
         return HealthResponse(
             status="unhealthy",
-            ollama_running=False,
+            llm_running=False,
             models_available=0
         )
 
@@ -616,19 +617,19 @@ async def generate_title(request: TitleGenerationRequest):
         TitleGenerationResponse: The generated title
     """
     try:
-        client = get_ollama_client()
+        client = get_llm_client()
         
         if not client.is_running():
             raise HTTPException(
                 status_code=503,
-                detail="Ollama service is not running"
+                detail=f"{settings.LLM_PROVIDER.capitalize()} service is not running"
             )
         
         # Generate title using a simple prompt
         title_prompt = f"Generate a short title (max 5 words) for: {request.text}"
         
         response = client.chat(
-            model=settings.OLLAMA_LLM_DEFAULT if settings else "mistral:7b",
+            model=settings.LLM_MODEL,
             messages=[{"role": "user", "content": title_prompt}],
             stream=False,
             temperature=0.3,
@@ -665,27 +666,24 @@ async def chat(request: ChatRequest):
         HTTPException: 404 if no relevant knowledge found, 503 if services unavailable
     """
     try:
-        # Get the Ollama client
-        client = get_ollama_client()
+        # Get the LLM client
+        client = get_llm_client()
         
-        # Check if Ollama is running
+        # Check if service is running
         if not client.is_running():
             raise HTTPException(
                 status_code=503,
-                detail="Ollama service is not running. Please start Ollama and try again."
+                detail=f"{settings.LLM_PROVIDER.capitalize()} service is not running. Please check your configuration and try again."
             )
         
         # Get model from settings
-        if settings:
-            model_name = settings.OLLAMA_LLM_DEFAULT
-        else:
-            model_name = "mistral:7b"
+        model_name = settings.LLM_MODEL
         
-        # Check if model exists
-        if not client.model_exists(model_name):
+        # Check if model exists (optional check, some providers might not support listing or have transient models)
+        if settings.LLM_PROVIDER == "ollama" and not client.model_exists(model_name):
             raise HTTPException(
                 status_code=400,
-                detail=f"Model '{model_name}' not found. Available models: {[m.name for m in client.get_all_models()]}"
+                detail=f"Model '{model_name}' not found. Available models: {[m['name'] for m in client.get_all_models()]}"
             )
         
         # ==================== ROUTING: SMALL-TALK vs RAG vs WEB ====================
@@ -718,7 +716,7 @@ async def chat(request: ChatRequest):
                 messages=messages,
                 stream=False,
                 temperature=request.temperature or 0.4,
-                num_predict=request.top_k or 256,
+                max_tokens=request.top_k or 256,
             )
 
             return ChatResponse(
@@ -788,15 +786,17 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
         repo = ChatRepository(session)
         
         # Use default model if not specified
-        model = request.model or (settings.OLLAMA_LLM_DEFAULT if settings else "mistral:7b")
+        model = request.model or (settings.LLM_MODEL if settings else "mistral:7b")
         
-        # Verify model exists
-        client = get_ollama_client()
-        if not getattr(settings, 'SKIP_OLLAMA_CHECK', False) and not client.model_exists(model):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Model '{model}' not found"
-            )
+        # Verify model exists if possible
+        client = get_llm_client()
+        # Some providers don't support model check, so we only check if it's Ollama or if client provides the method
+        if settings.LLM_PROVIDER == "ollama" and hasattr(client, 'model_exists'):
+            if not getattr(settings, 'SKIP_LLM_CHECK', False) and not client.model_exists(model):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Model '{model}' not found"
+                )
         
         # Create chat with folder_path
         chat = repo.create(
@@ -1031,13 +1031,14 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
         if request.description is not None:
             update_data['description'] = request.description
         if request.model is not None:
-            # Verify model exists
-            client = get_ollama_client()
-            if not client.model_exists(request.model):
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Model '{request.model}' not found"
-                )
+            # Verify model exists if possible
+            client = get_llm_client()
+            if settings.LLM_PROVIDER == "ollama" and hasattr(client, 'model_exists'):
+                if not client.model_exists(request.model):
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Model '{request.model}' not found"
+                    )
             update_data['model'] = request.model
         if request.temperature is not None:
             update_data['temperature'] = request.temperature
@@ -1254,11 +1255,11 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         user_query = request.content.strip()
         greeting_pattern = re.compile(r"^(hi|hello|hey|hola|yo|sup|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye)\b", re.IGNORECASE)
         if greeting_pattern.match(user_query):
-            client = get_ollama_client()
+            client = get_llm_client()
             if not client.is_running():
                 raise HTTPException(
                     status_code=503,
-                    detail="Ollama service is not running. Please start Ollama to generate responses."
+                    detail=f"{settings.LLM_PROVIDER.upper()} service is not running. Please start the service to generate responses."
                 )
 
             # Fetch conversation history for context-aware greetings
@@ -1288,15 +1289,21 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
 
             start_time = time.time()
             temperature = request.temperature or chat.temperature or 0.4
-            response_text = client.chat(
-                model=chat.model,
-                messages=small_talk_messages,  # Now includes conversation history
-                stream=False,
-                temperature=min(temperature, 0.7),
-                top_p=request.top_p if request.top_p else 0.8,
-                top_k=request.top_k if request.top_k else 40,
-                num_predict=settings.MAX_NUM_PREDICT if settings else 256
-            )
+            # Build generation parameters in a provider-agnostic way
+            chat_kwargs = {
+                "model": chat.model,
+                "messages": small_talk_messages,
+                "stream": False,
+                "temperature": min(temperature, 0.7),
+                "top_p": request.top_p if request.top_p else 0.8,
+                "max_tokens": settings.MAX_NUM_PREDICT if settings else 256
+            }
+            
+            # top_k is Ollama-specific, only pass for Ollama
+            if settings.LLM_PROVIDER == "ollama":
+                chat_kwargs["top_k"] = request.top_k if request.top_k else 40
+                
+            response_text = client.chat(**chat_kwargs)
             generation_time = time.time() - start_time
 
             assistant_message = history_repo.add_message(
@@ -1353,7 +1360,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         logger.info(f"[CONTEXT] Built conversation context with {len(conversation_context)} messages")
         
         # Create multi-tier handler
-        client = get_ollama_client()
+        client = get_llm_client()
         handler = create_multi_tier_handler(client)
         
         # Handle query with tier fallback and conversation context
@@ -1580,12 +1587,12 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         HTTPException: 404 if no documents found in directory, 503 if services unavailable
     """
     try:
-        # Verify Ollama is running
-        client = get_ollama_client()
+        # Verify LLM is running
+        client = get_llm_client()
         if not client.is_running():
             raise HTTPException(
                 status_code=503,
-                detail="Ollama service is not running"
+                detail=f"{settings.LLM_PROVIDER.upper()} service is not running"
             )
         
         # ==================== DIRECTORY-SCOPED RAG RETRIEVAL ====================
@@ -1690,15 +1697,21 @@ async def directory_chat_prompt(request: DirectoryPromptRequest, session = Depen
         temperature = min(request.temperature or 0.7, 0.3)  # Cap temperature for deterministic responses
         max_num_predict = settings.MAX_NUM_PREDICT if settings else 512
         
-        response_text = client.chat(
-            model=settings.OLLAMA_LLM_DEFAULT if settings else "llama2",
-            messages=messages,
-            stream=False,
-            temperature=temperature,
-            top_p=request.top_p or 0.5,
-            top_k=request.top_k or 10,
-            num_predict=max_num_predict
-        )
+        # Build generation parameters in a provider-agnostic way
+        chat_kwargs = {
+            "model": settings.OLLAMA_LLM_DEFAULT if settings else "llama2",
+            "messages": messages,
+            "stream": False,
+            "temperature": temperature,
+            "top_p": request.top_p or 0.5,
+            "max_tokens": max_num_predict
+        }
+        
+        # top_k is Ollama-specific, only pass for Ollama
+        if settings.LLM_PROVIDER == "ollama":
+            chat_kwargs["top_k"] = request.top_k or 10
+            
+        response_text = client.chat(**chat_kwargs)
         generation_time = time.time() - start_time
         
         response_text = response_text.strip()

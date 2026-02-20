@@ -225,8 +225,8 @@ class LearningMemoryManager:
 
     def __init__(self, session: Session, knowledge_base_path: Path):
         self.session = session
-        self.kb_path = knowledge_base_path
-        self.learning_memory_path = knowledge_base_path / "layer_1" / "learning_memory"
+        self.kb_path = Path(knowledge_base_path) if isinstance(knowledge_base_path, str) else knowledge_base_path
+        self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
         self.trust_scorer = TrustScorer()
 
     def ingest_learning_data(

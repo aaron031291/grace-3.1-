@@ -883,9 +883,7 @@ Question: {query}
 
 Answer:"""
         
-        # Get model from settings or use available model
-        from settings import settings
-        model_name = settings.OLLAMA_LLM_DEFAULT if hasattr(settings, 'OLLAMA_LLM_DEFAULT') else "phi3:mini"
+        model_name = settings.LLM_MODEL
         
         response = self.llm_client.chat(
             model=model_name,
@@ -943,9 +941,7 @@ Answer:"""
             messages.append({"role": "user", "content": f"Question: {query}\n\nAnswer:"})
             logger.info("[CONVERSATION-MEMORY] No conversation history available")
         
-        # Get model from settings or use available model
-        from settings import settings
-        model_name = settings.OLLAMA_LLM_DEFAULT if hasattr(settings, 'OLLAMA_LLM_DEFAULT') else "phi3:mini"
+        model_name = settings.LLM_MODEL
         
         response = self.llm_client.chat(
             model=model_name,

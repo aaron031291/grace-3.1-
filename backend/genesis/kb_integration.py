@@ -6,6 +6,7 @@ Auto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.
 import os
 import json
 import logging
+import uuid
 from datetime import datetime
 from typing import Optional
 from pathlib import Path
@@ -91,7 +92,8 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 filename = f"session_{key.session_id}.json"
             else:
                 # Use date-based filename
-                date_str = key.when_timestamp.strftime('%Y-%m-%d')
+                ts = key.when_timestamp or datetime.utcnow()
+                date_str = ts.strftime('%Y-%m-%d')
                 filename = f"keys_{date_str}.json"
 
             file_path = os.path.join(user_folder, filename)
@@ -131,18 +133,18 @@ All user actions, inputs, and outputs are tracked here from the first login.
 
                 # Add this key
                 key_dict = {
-                    "key_id": key.key_id,
-                    "key_type": key.key_type.value,
-                    "status": key.status.value,
-                    "timestamp": key.when_timestamp.isoformat(),
+                    "key_id": getattr(key, 'key_id', str(uuid.uuid4())),
+                    "key_type": getattr(key.key_type, 'value', 'unknown') if key.key_type else 'unknown',
+                    "status": getattr(key.status, 'value', 'active') if key.status else 'active',
+                    "timestamp": (getattr(key, 'when_timestamp', None) or datetime.utcnow()).isoformat(),
 
                     # What, Where, When, Why, Who, How
-                    "what": key.what_description,
-                    "where": key.where_location,
-                    "when": key.when_timestamp.isoformat(),
-                    "why": key.why_reason,
-                    "who": key.who_actor,
-                    "how": key.how_method,
+                    "what": getattr(key, 'what_description', 'No description'),
+                    "where": getattr(key, 'where_location', 'Unknown location'),
+                    "when": (getattr(key, 'when_timestamp', None) or datetime.utcnow()).isoformat(),
+                    "why": getattr(key, 'why_reason', 'Not provided'),
+                    "who": getattr(key, 'who_actor', 'System'),
+                    "how": getattr(key, 'how_method', 'Automatic'),
 
                     # Code tracking
                     "file_path": key.file_path,

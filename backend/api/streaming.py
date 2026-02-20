@@ -11,7 +11,6 @@ from typing import List, Optional, AsyncGenerator
 import json
 import asyncio
 
-from ollama_client.client import get_ollama_client
 from database.session import get_session
 from models.repositories import ChatRepository, ChatHistoryRepository
 
@@ -51,13 +50,15 @@ async def generate_stream(
         SSE formatted strings: "event: <type>\ndata: <json>\n\n"
     """
     try:
-        client = get_ollama_client()
+        from llm_orchestrator.factory import get_llm_client
+        client = get_llm_client()
 
         if not client.is_running():
-            yield f"event: error\ndata: {json.dumps({'error': 'Ollama service not running'})}\n\n"
+            provider_name = settings.LLM_PROVIDER.upper() if settings else "LLM"
+            yield f"event: error\ndata: {json.dumps({'error': f'{provider_name} service not responding'})}\n\n"
             return
 
-        model_name = settings.OLLAMA_LLM_DEFAULT if settings else "mistral:7b"
+        model_name = settings.LLM_MODEL if settings else "gpt-4o"
 
         # RAG retrieval for context
         rag_context = ""
@@ -66,7 +67,8 @@ async def generate_stream(
         try:
             from api.retrieve import get_document_retriever
             retriever = get_document_retriever()
-
+            
+            # Use query intelligence for better retrieval if available
             retrieval_result = retriever.retrieve(
                 query=message,
                 limit=5,
@@ -116,40 +118,67 @@ Provide a helpful answer based on the context above:"""
             # Notify no sources found
             yield f"event: sources\ndata: {json.dumps({'sources': [], 'note': 'No relevant sources found'})}\n\n"
 
-        # Stream from Ollama
+        # Build messages
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": full_prompt}
         ]
 
-        # Use Ollama streaming
+        # Use unified streaming interface
         response_text = ""
         try:
-            # Ollama client streaming
-            stream_response = client.client.chat(
-                model=model_name,
+            stream_gen = client.chat(
                 messages=messages,
+                model=model_name,
                 stream=True,
-                options={"temperature": temperature}
+                temperature=temperature
             )
 
-            for chunk in stream_response:
-                if "message" in chunk and "content" in chunk["message"]:
-                    token = chunk["message"]["content"]
-                    response_text += token
-                    yield f"event: token\ndata: {json.dumps({'token': token})}\n\n"
-                    await asyncio.sleep(0)  # Allow other tasks to run
+            # Handle different stream response types (Requests vs native generator)
+            if hasattr(stream_gen, "iter_lines"):
+                # OpenAI/Requests style streaming
+                for line in stream_gen.iter_lines():
+                    if line:
+                        line_text = line.decode('utf-8')
+                        if line_text.startswith("data: "):
+                            data_str = line_text[6:].strip()
+                            if data_str == "[DONE]":
+                                break
+                            try:
+                                chunk_json = json.loads(data_str)
+                                if "choices" in chunk_json and len(chunk_json["choices"]) > 0:
+                                    token = chunk_json["choices"][0].get("delta", {}).get("content", "")
+                                    if token:
+                                        response_text += token
+                                        yield f"event: token\ndata: {json.dumps({'token': token})}\n\n"
+                            except Exception:
+                                continue
+            else:
+                # Ollama/Native generator style
+                for chunk in stream_gen:
+                    # Native Ollama adapter handles format, returns chunk dict
+                    if isinstance(chunk, dict) and "message" in chunk:
+                        token = chunk["message"].get("content", "")
+                        if token:
+                            response_text += token
+                            yield f"event: token\ndata: {json.dumps({'token': token})}\n\n"
+                    elif isinstance(chunk, str):
+                        # Raw string chunk fallback
+                        response_text += chunk
+                        yield f"event: token\ndata: {json.dumps({'token': chunk})}\n\n"
+                    
+                    await asyncio.sleep(0)
 
         except Exception as stream_error:
             # Fallback to non-streaming
             print(f"[STREAM] Streaming failed, using fallback: {stream_error}")
             response = client.generate(
                 prompt=full_prompt,
-                model=model_name,
+                model_id=model_name,
                 temperature=temperature,
                 stream=False
             )
-            response_text = response
+            response_text = response if isinstance(response, str) else str(response)
             # Send as single token
             yield f"event: token\ndata: {json.dumps({'token': response_text})}\n\n"
 

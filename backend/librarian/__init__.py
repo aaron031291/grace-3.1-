@@ -25,12 +25,12 @@ Usage:
     from librarian.engine import LibrarianEngine
     from database.session import SessionLocal
     from embedding import get_embedding_model
-    from ollama_client.client import get_ollama_client
+    from llm_orchestrator.factory import get_llm_client
 
     librarian = LibrarianEngine(
         db_session=SessionLocal(),
         embedding_model=get_embedding_model(),
-        ollama_client=get_ollama_client()
+        llm_client=get_llm_client()
     )
 
     # Process a single document

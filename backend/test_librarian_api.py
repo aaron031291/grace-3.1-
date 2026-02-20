@@ -25,7 +25,7 @@ from librarian.rule_categorizer import RuleBasedCategorizer
 from librarian.engine import LibrarianEngine
 from models.database_models import Document
 from embedding import get_embedding_model
-from ollama_client.client import get_ollama_client
+from llm_orchestrator.factory import get_llm_client
 from vector_db.client import get_qdrant_client
 from settings import settings
 
@@ -88,7 +88,7 @@ def test_librarian_engine_integration():
         librarian = LibrarianEngine(
             db_session=db,
             embedding_model=get_embedding_model(),
-            ollama_client=get_ollama_client(),
+            llm_client=get_llm_client(),
             vector_db_client=get_qdrant_client(),
             ai_model_name=settings.LIBRARIAN_AI_MODEL,
             use_ai=False,  # Disable AI for quick test

@@ -235,19 +235,17 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
         return
 
     try:
-        from ollama_client.client import get_ollama_client
-        try:
-            from settings import settings
-            model_name = settings.OLLAMA_LLM_DEFAULT
-        except ImportError:
-            model_name = "mistral:7b"
-
-        client = get_ollama_client()
+        from llm_orchestrator.factory import get_llm_client
+        from settings import settings
+        
+        model_name = settings.LLM_MODEL if settings else "gpt-4o"
+        client = get_llm_client()
 
         if not client.is_running():
+            provider_name = settings.LLM_PROVIDER.upper() if settings else "LLM"
             await manager.send_personal(websocket, {
                 "type": "error",
-                "data": {"error": "Ollama service not running"},
+                "data": {"error": f"{provider_name} service not responding"},
                 "timestamp": datetime.utcnow().isoformat()
             })
             return
@@ -255,45 +253,81 @@ async def handle_chat_message(websocket: WebSocket, data: dict):
         # Stream response
         await manager.send_personal(websocket, {
             "type": "start",
-            "data": {"message": "Generating response..."},
+            "data": {"message": "Generating response...", "model": model_name},
             "timestamp": datetime.utcnow().isoformat()
         })
 
         try:
-            stream_response = client.client.chat(
-                model=model_name,
+            full_response = ""
+            stream_gen = client.chat(
                 messages=[{"role": "user", "content": message}],
+                model=model_name,
                 stream=True,
-                options={"temperature": 0.7}
+                temperature=0.7
             )
 
-            full_response = ""
-            for chunk in stream_response:
-                if "message" in chunk and "content" in chunk["message"]:
-                    token = chunk["message"]["content"]
-                    full_response += token
-                    await manager.send_personal(websocket, {
-                        "type": "token",
-                        "data": {"token": token},
-                        "timestamp": datetime.utcnow().isoformat()
-                    })
+            # Handle different stream response types (Requests vs native generator)
+            if hasattr(stream_gen, "iter_lines"):
+                # OpenAI/Requests style streaming
+                for line in stream_gen.iter_lines():
+                    if line:
+                        line_text = line.decode('utf-8')
+                        if line_text.startswith("data: "):
+                            data_str = line_text[6:].strip()
+                            if data_str == "[DONE]":
+                                break
+                            try:
+                                chunk_json = json.loads(data_str)
+                                if "choices" in chunk_json and len(chunk_json["choices"]) > 0:
+                                    token = chunk_json["choices"][0].get("delta", {}).get("content", "")
+                                    if token:
+                                        full_response += token
+                                        await manager.send_personal(websocket, {
+                                            "type": "token",
+                                            "data": {"token": token},
+                                            "timestamp": datetime.utcnow().isoformat()
+                                        })
+                            except Exception:
+                                continue
+            else:
+                # Ollama/Native generator style
+                for chunk in stream_gen:
+                    if isinstance(chunk, dict) and "message" in chunk:
+                        token = chunk["message"].get("content", "")
+                        if token:
+                            full_response += token
+                            await manager.send_personal(websocket, {
+                                "type": "token",
+                                "data": {"token": token},
+                                "timestamp": datetime.utcnow().isoformat()
+                            })
+                    elif isinstance(chunk, str):
+                        full_response += chunk
+                        await manager.send_personal(websocket, {
+                            "type": "token",
+                            "data": {"token": chunk},
+                            "timestamp": datetime.utcnow().isoformat()
+                        })
                     await asyncio.sleep(0)
 
             await manager.send_personal(websocket, {
                 "type": "complete",
                 "data": {
                     "full_response": full_response,
-                    "length": len(full_response)
+                    "length": len(full_response),
+                    "model": model_name
                 },
                 "timestamp": datetime.utcnow().isoformat()
             })
 
         except Exception as stream_error:
             # Fallback to non-streaming
-            response = client.generate(prompt=message, model=model_name, stream=False)
+            print(f"[WS] Streaming failed, using fallback: {stream_error}")
+            response = client.generate(prompt=message, model_id=model_name, stream=False)
+            response_text = response if isinstance(response, str) else str(response)
             await manager.send_personal(websocket, {
                 "type": "complete",
-                "data": {"full_response": response, "length": len(response)},
+                "data": {"full_response": response_text, "length": len(response_text)},
                 "timestamp": datetime.utcnow().isoformat()
             })
 

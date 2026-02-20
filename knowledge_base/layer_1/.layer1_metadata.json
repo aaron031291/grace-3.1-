@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "created_at": "2026-02-20T11:26:59.280795",
+  "input_sources": {
+    "user_inputs": 0,
+    "file_uploads": 0,
+    "external_apis": 0,
+    "web_scraping": 0,
+    "memory_mesh": 0,
+    "learning_memory": 0,
+    "whitelist": 0,
+    "system_events": 0
+  },
+  "total_inputs": 0
+}
