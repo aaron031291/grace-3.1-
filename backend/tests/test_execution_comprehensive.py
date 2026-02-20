@@ -204,7 +204,7 @@ class TestActionRequest:
             action_type: GraceAction = GraceAction.THINK
             parameters: Dict[str, Any] = field(default_factory=dict)
             context: Dict[str, Any] = field(default_factory=dict)
-            created_at: datetime = field(default_factory=datetime.utcnow)
+            created_at: datetime = field(default_factory=datetime.now)
             timeout: int = 300
             requires_confirmation: bool = False
             confidence: float = 0.5
@@ -281,7 +281,7 @@ class TestActionResult:
             error: Optional[str] = None
             exit_code: Optional[int] = None
             execution_time: float = 0.0
-            completed_at: datetime = field(default_factory=datetime.utcnow)
+            completed_at: datetime = field(default_factory=datetime.now)
             data: Dict[str, Any] = field(default_factory=dict)
             files_created: List[str] = field(default_factory=list)
             files_modified: List[str] = field(default_factory=list)
@@ -533,7 +533,7 @@ class TestActionExecution:
                 self.action_history = []
 
             async def execute(self, action: ActionRequest) -> ActionResult:
-                start = datetime.utcnow()
+                start = datetime.now()
                 result = ActionResult(
                     action_id=action.action_id,
                     action_type=action.action_type,

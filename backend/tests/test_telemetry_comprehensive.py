@@ -161,7 +161,7 @@ class TestOperationTracking:
                     "run_id": run_id,
                     "operation_type": operation_type,
                     "operation_name": operation_name,
-                    "started_at": datetime.utcnow(),
+                    "started_at": datetime.now(),
                     "status": OperationStatus.STARTED
                 }
                 self.operations.append(operation)
@@ -169,7 +169,7 @@ class TestOperationTracking:
                 try:
                     yield run_id
                     operation["status"] = OperationStatus.COMPLETED
-                    operation["completed_at"] = datetime.utcnow()
+                    operation["completed_at"] = datetime.now()
                 except Exception as e:
                     operation["status"] = OperationStatus.FAILED
                     operation["error"] = str(e)
@@ -522,7 +522,7 @@ class TestBaselineAndDrift:
                 self.baseline_value = baseline_value
                 self.actual_value = actual_value
                 self.deviation_percent = deviation_percent
-                self.created_at = datetime.utcnow()
+                self.created_at = datetime.now()
 
         alert = MockDriftAlert(
             operation_name="process_pdf",
@@ -642,7 +642,7 @@ class TestReplayService:
                 self.stored_operations[run_id] = {
                     "input": input_data,
                     "output": output_data,
-                    "stored_at": datetime.utcnow()
+                    "stored_at": datetime.now()
                 }
 
         service = MockReplayService()
@@ -722,7 +722,7 @@ class TestSystemState:
         class MockSystemState:
             def __init__(self):
                 self.state_id = str(uuid.uuid4())
-                self.captured_at = datetime.utcnow()
+                self.captured_at = datetime.now()
                 self.cpu_percent = 0.0
                 self.memory_mb = 0.0
                 self.active_operations = 0
@@ -750,7 +750,7 @@ class TestSystemState:
 
             def record_state(self, cpu: float, memory: float):
                 self.state_history.append({
-                    "timestamp": datetime.utcnow(),
+                    "timestamp": datetime.now(),
                     "cpu": cpu,
                     "memory": memory
                 })
@@ -791,7 +791,7 @@ class TestHealthChecks:
                 return {
                     "healthy": all(self.components.values()),
                     "components": self.components,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 }
 
         service = MockTelemetryService()
@@ -924,7 +924,7 @@ class TestTelemetryQueries:
         """Test retrieving operations within time range."""
         class MockTelemetryService:
             def __init__(self):
-                now = datetime.utcnow()
+                now = datetime.now()
                 self.operations = [
                     {"name": "op1", "timestamp": now - timedelta(hours=2)},
                     {"name": "op2", "timestamp": now - timedelta(hours=1)},
@@ -938,7 +938,7 @@ class TestTelemetryQueries:
                 ]
 
         service = MockTelemetryService()
-        now = datetime.utcnow()
+        now = datetime.now()
         recent = service.get_in_range(
             now - timedelta(hours=1, minutes=30),
             now

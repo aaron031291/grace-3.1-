@@ -133,7 +133,7 @@ class TestSerialization:
     def test_serialize_datetime(self):
         """Test serializing datetime (uses str default)."""
         cache = RedisCache()
-        now = datetime.utcnow()
+        now = datetime.now()
         data = {"timestamp": now}
         serialized = cache._serialize(data)
         result = json.loads(serialized)

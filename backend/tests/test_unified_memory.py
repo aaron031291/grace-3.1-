@@ -169,7 +169,7 @@ class TestConsolidation:
         mem._memories[m.id].strength = MemoryStrength.FLASH
         mem._memories[m.id].decay_rate = 100.0
         from datetime import datetime, timedelta
-        mem._memories[m.id].last_reinforced = datetime.utcnow() - timedelta(days=30)
+        mem._memories[m.id].last_reinforced = datetime.now() - timedelta(days=30)
         result = mem.run_consolidation()
         assert result["pruned"] >= 1
         assert m.id not in mem._memories

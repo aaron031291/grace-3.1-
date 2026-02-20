@@ -320,7 +320,7 @@ class TestCognitiveFlowE2E:
                     self.learned_patterns.append({
                         "trigger": str(input_data)[:50],
                         "response": outcome.get("decision", {}),
-                        "learned_at": datetime.utcnow()
+                        "learned_at": datetime.now()
                     })
 
         system = MockCognitiveWithLearning()
@@ -394,7 +394,7 @@ class TestAPIIntegration:
                 self.requests = {}
 
             def is_allowed(self, user_id: str) -> Tuple[bool, int]:
-                now = datetime.utcnow()
+                now = datetime.now()
                 minute_key = now.strftime("%Y%m%d%H%M")
 
                 key = f"{user_id}:{minute_key}"
@@ -460,7 +460,7 @@ class TestAPIIntegration:
                     "success": True,
                     "data": data,
                     "metadata": metadata or {},
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 }
 
             @staticmethod
@@ -471,7 +471,7 @@ class TestAPIIntegration:
                         "message": error,
                         "code": code
                     },
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 }
 
         # Success response
@@ -507,8 +507,8 @@ class TestSecurityE2E:
                     token = str(uuid.uuid4())
                     self.tokens[token] = {
                         "user": username,
-                        "created_at": datetime.utcnow(),
-                        "expires_at": datetime.utcnow() + timedelta(hours=24)
+                        "created_at": datetime.now(),
+                        "expires_at": datetime.now() + timedelta(hours=24)
                     }
                     return token
                 return None
@@ -517,7 +517,7 @@ class TestSecurityE2E:
                 if token not in self.tokens:
                     return False
                 token_data = self.tokens[token]
-                return datetime.utcnow() < token_data["expires_at"]
+                return datetime.now() < token_data["expires_at"]
 
         auth = MockAuthService()
 
@@ -597,7 +597,7 @@ class TestSecurityE2E:
                 self.limit = 10  # requests per minute
 
             def record_request(self, user_id: str) -> bool:
-                now = datetime.utcnow()
+                now = datetime.now()
                 minute = now.replace(second=0, microsecond=0)
 
                 if user_id not in self.user_requests:
@@ -919,7 +919,7 @@ class TestSystemHealth:
                 return {
                     "healthy": all_healthy,
                     "components": status,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 }
 
         checker = MockHealthChecker()
@@ -970,14 +970,14 @@ class TestSystemHealth:
         """Test liveness probe."""
         class MockLivenessChecker:
             def __init__(self):
-                self.last_heartbeat = datetime.utcnow()
+                self.last_heartbeat = datetime.now()
                 self.heartbeat_threshold_seconds = 30
 
             def record_heartbeat(self):
-                self.last_heartbeat = datetime.utcnow()
+                self.last_heartbeat = datetime.now()
 
             def is_alive(self) -> bool:
-                elapsed = (datetime.utcnow() - self.last_heartbeat).total_seconds()
+                elapsed = (datetime.now() - self.last_heartbeat).total_seconds()
                 return elapsed < self.heartbeat_threshold_seconds
 
         checker = MockLivenessChecker()
@@ -986,7 +986,7 @@ class TestSystemHealth:
         assert checker.is_alive() is True
 
         # Simulate stale heartbeat
-        checker.last_heartbeat = datetime.utcnow() - timedelta(seconds=60)
+        checker.last_heartbeat = datetime.now() - timedelta(seconds=60)
         assert checker.is_alive() is False
 
 

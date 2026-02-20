@@ -25,7 +25,7 @@ def make_message(topic, payload):
         to_component=None,
         topic=topic,
         payload=payload,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(),
     )
 
 

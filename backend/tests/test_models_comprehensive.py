@@ -621,7 +621,7 @@ class TestChatRepository:
     def test_get_recent_chats(self):
         """Test getting recent chats within N days."""
         mock_session = MagicMock()
-        recent_chats = [MagicMock(created_at=datetime.utcnow()) for _ in range(3)]
+        recent_chats = [MagicMock(created_at=datetime.now()) for _ in range(3)]
 
         mock_query = MagicMock()
         mock_filter = MagicMock()
@@ -835,7 +835,7 @@ class TestChatHistoryRepository:
         existing_message.edited_content = original_content
         existing_message.content = "Updated content"
         existing_message.is_edited = True
-        existing_message.edited_at = datetime.utcnow()
+        existing_message.edited_at = datetime.now()
 
         assert existing_message.content == "Updated content"
         assert existing_message.edited_content == "Original content"

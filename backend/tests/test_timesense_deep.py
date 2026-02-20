@@ -110,7 +110,7 @@ class TestPredictiveScaler:
     def test_predict_with_ingestion_data(self):
         from datetime import datetime, timedelta
         scaler = PredictiveScaler()
-        now = datetime.utcnow()
+        now = datetime.now()
         for i in range(10):
             scaler._ingestion_history.append(
                 (now - timedelta(hours=i), 1024**3)
@@ -211,7 +211,7 @@ class TestDeepIntegration:
     def test_record_feeds_scheduler(self):
         engine = TimeSenseEngine()
         engine.record_operation("test.op", 500.0)
-        hour = __import__('datetime').datetime.utcnow().hour
+        hour = __import__('datetime').datetime.now().hour
         loads = engine.scheduler._hourly_load.get(hour, [])
         assert len(loads) >= 1
 
