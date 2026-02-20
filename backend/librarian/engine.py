@@ -332,7 +332,7 @@ class LibrarianEngine:
             except Exception:
                 pass
 
-result["status"] = "success"
+            result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
 
         except Exception as e:
