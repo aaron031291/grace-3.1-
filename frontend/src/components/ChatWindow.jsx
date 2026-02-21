@@ -236,6 +236,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         messages: [{ role: "user", content: userMessage }], // Send current message so backend can save/process it
         use_rag: true,
         use_web: true,
+        stream: true,
         model: chatInfo?.model,
         temperature: chatInfo?.temperature || 0.7
       } : {
@@ -293,20 +294,118 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         throw new Error(errorMessage);
       }
 
-      const result = await response.json();
+      let finalAssistantMessage = "";
 
-      // Add assistant message with sources if available
-      const assistantMessage = {
-        id: useAgent ? Date.now() + Math.random() : result.assistant_message_id,
-        role: "assistant",
-        content: useAgent ? result.content : result.message,
-        tokens: useAgent ? null : result.tokens_used,
-        sources: result.sources || [], // Both standard and MCP return 'sources'
-        tool_calls: result.tool_calls_made || [], // Only in Agent Mode
-      };
+      if (useAgent && payload.stream) {
+        // Read SSE stream
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let done = false;
 
-      setMessages((prev) => [...prev, assistantMessage]);
-      setLastAssistantMessage(assistantMessage.content); // Track for TTS
+        const tempAssistantId = Date.now() + Math.random();
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: tempAssistantId,
+            role: "assistant",
+            content: "",
+            tokens: null,
+            sources: [],
+            tool_calls: [],
+            is_streaming: true,
+          }
+        ]);
+
+        let assistantContent = "";
+        let toolCalls = [];
+        let sources = [];
+        let accumulatedText = "";
+
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) {
+            const rawChunk = decoder.decode(value, { stream: true });
+            accumulatedText += rawChunk;
+
+            const lines = accumulatedText.split(/\r?\n/);
+            accumulatedText = lines.pop(); // keep incomplete line
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const dataStr = line.slice(6);
+
+                if (dataStr === '[DONE]') {
+                  done = true;
+                  break;
+                }
+
+                try {
+                  const data = JSON.parse(dataStr);
+
+                  if (data.type === 'tool_call') {
+                    toolCalls = [...toolCalls, { tool: data.name, arguments: data.args, success: null, duration_ms: null, result_preview: null }];
+                  } else if (data.type === 'tool_result') {
+                    // Find last tool call with this name that hasn't finished
+                    let foundIdx = -1;
+                    for (let i = toolCalls.length - 1; i >= 0; i--) {
+                      if (toolCalls[i].tool === data.name && toolCalls[i].success === null) {
+                        foundIdx = i;
+                        break;
+                      }
+                    }
+
+                    if (foundIdx !== -1) {
+                      const updated = [...toolCalls];
+                      updated[foundIdx] = { ...updated[foundIdx], success: data.success, duration_ms: data.duration_ms, result_preview: data.result_preview };
+                      toolCalls = updated;
+                    }
+                  } else if (data.type === 'content') {
+                    assistantContent = data.content;
+                    sources = data.sources || [];
+                  } else if (data.type === 'error') {
+                    assistantContent += `\\n❌ Error: ${data.error}`;
+                  }
+
+                  // Update UI dynamically
+                  setMessages(prev => prev.map(msg =>
+                    msg.id === tempAssistantId
+                      ? { ...msg, content: assistantContent, tool_calls: toolCalls, sources: sources }
+                      : msg
+                  ));
+                } catch (e) { }
+              }
+            }
+          }
+        }
+
+        // Final cleanup of streaming states
+        setMessages(prev => prev.map(msg =>
+          msg.id === tempAssistantId
+            ? { ...msg, is_streaming: false }
+            : msg
+        ));
+        finalAssistantMessage = assistantContent;
+
+      } else {
+        // Standard JSON response
+        const result = await response.json();
+
+        // Add assistant message with sources if available
+        const assistantMessage = {
+          id: result.assistant_message_id || Date.now() + Math.random(),
+          role: "assistant",
+          content: result.message || result.content,
+          tokens: result.tokens_used || null,
+          sources: result.sources || [],
+          tool_calls: result.tool_calls_made || [],
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+        finalAssistantMessage = assistantMessage.content;
+      }
+
+      setLastAssistantMessage(finalAssistantMessage); // Track for TTS
 
       // Generate title if this is the first message and chat has no title or has default title
       if (
@@ -452,15 +551,37 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             </div>
             <div className="message-content">
               <div className="message-role">{msg.role}</div>
-              <div className="message-text">{msg.content}</div>
+              {msg.content ? (
+                <div className="message-text">{msg.content}</div>
+              ) : msg.is_streaming && (!msg.tool_calls || msg.tool_calls.length === 0) ? (
+                <div className="loading-text" style={{ marginTop: '0.5rem' }}>
+                  Starting agent workflow...
+                </div>
+              ) : null}
               {msg.tool_calls && msg.tool_calls.length > 0 && (
                 <div className="message-tool-calls">
-                  {msg.tool_calls.map((tc, idx) => (
-                    <div key={idx} className={`tool-call-pill ${tc.success ? 'success' : 'failed'}`} title={tc.result_preview}>
-                      <span className="tool-icon">🛠️</span>
-                      <span className="tool-name">{tc.tool}</span>
-                    </div>
-                  ))}
+                  {msg.tool_calls.map((tc, idx) => {
+                    let statusClass = "running";
+                    let icon = (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="spinner">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                      </svg>
+                    );
+                    if (tc.success === true) {
+                      statusClass = "success";
+                      icon = "✅";
+                    } else if (tc.success === false) {
+                      statusClass = "failed";
+                      icon = "❌";
+                    }
+                    return (
+                      <div key={idx} className={`tool-call-pill ${statusClass}`} title={tc.result_preview}>
+                        <span className="tool-icon">{icon}</span>
+                        <span className="tool-name">{tc.tool}</span>
+                        {tc.duration_ms && <span className="tool-duration">{Math.round(tc.duration_ms)}ms</span>}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
               {msg.tokens && (
@@ -577,7 +698,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             </div>
           </div>
         ))}
-        {loading && (
+        {loading && !messages.some(msg => msg.is_streaming) && (
           <div className="message message-assistant loading-indicator">
             <div className="message-avatar">🤖</div>
             <div className="message-content">

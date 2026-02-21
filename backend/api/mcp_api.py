@@ -14,6 +14,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -41,6 +42,7 @@ class MCPChatRequest(BaseModel):
     system_prompt: Optional[str] = Field(None, description="Override system prompt")
     use_rag: Optional[bool] = Field(True, description="Enable RAG knowledge search tool")
     use_web: Optional[bool] = Field(True, description="Enable web search and fetch tools")
+    stream: Optional[bool] = Field(False, description="Stream response via Server-Sent Events (SSE)")
 
 
 class MCPChatResponse(BaseModel):
@@ -155,8 +157,94 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
     if request.system_prompt:
         orchestrator.system_prompt = request.system_prompt
 
+    if request.stream:
+        # Create an asyncio.Queue for streaming events
+        queue = asyncio.Queue()
+
+        def on_tool_call(name, args):
+            # Create a non-blocking task to put into the queue from sync/async boundary
+            loop = asyncio.get_event_loop()
+            loop.call_soon_threadsafe(
+                queue.put_nowait,
+                {"type": "tool_call", "name": name, "args": args}
+            )
+
+        def on_tool_result(name, result):
+            loop = asyncio.get_event_loop()
+            loop.call_soon_threadsafe(
+                queue.put_nowait,
+                {
+                    "type": "tool_result", 
+                    "name": name, 
+                    "success": result.get("success", False),
+                    "duration_ms": result.get("duration_ms", 0),
+                    "result_preview": str(result.get("content", ""))[:200]
+                }
+            )
+
+        async def chat_runner():
+            try:
+                result = await orchestrator.chat(
+                    messages=messages,
+                    model=request.model,
+                    temperature=request.temperature,
+                    max_tokens=request.max_tokens,
+                    on_tool_call=on_tool_call,
+                    on_tool_result=on_tool_result
+                )
+                await queue.put({"type": "final_result", "data": result})
+            except Exception as e:
+                logger.error(f"[MCP API] Streaming error: {e}")
+                await queue.put({"type": "error", "error": str(e)})
+
+        # Start the orchestrator in the background
+        asyncio.create_task(chat_runner())
+
+        async def sse_generator():
+            try:
+                while True:
+                    item = await queue.get()
+                    
+                    if item["type"] == "final_result":
+                        # Save assistant response to DB
+                        result = item["data"]
+                        content = result.get("content", "")
+                        if chat_id and result.get("success"):
+                            history_repo.add_message(
+                                chat_id=chat_id,
+                                role="assistant",
+                                content=content
+                            )
+                            from datetime import datetime
+                            chat_repo.update(chat_id, updated_at=datetime.utcnow(), last_message_at=datetime.utcnow())
+                        
+                        # Yield final content
+                        yield f"data: {json.dumps({'type': 'content', 'content': content, 'sources': result.get('sources', []), 'tool_calls': result.get('tool_calls_made', [])})}\n\n"
+                        # We send a special [DONE] event
+                        yield "data: [DONE]\n\n"
+                        break
+                    elif item["type"] == "error":
+                        yield f"data: {json.dumps({'type': 'error', 'error': item['error']})}\n\n"
+                        yield "data: [DONE]\n\n"
+                        break
+                    else:
+                        # tool_call or tool_result
+                        yield f"data: {json.dumps(item)}\n\n"
+            except asyncio.CancelledError:
+                logger.info("[MCP API] Client disconnected from streaming connection")
+                    
+        return StreamingResponse(
+            sse_generator(), 
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no"
+            }
+        )
+
     try:
-        # Run the multi-turn orchestrator
+        # Run the multi-turn orchestrator (non-streaming legacy path)
         result = await orchestrator.chat(
             messages=messages,
             model=request.model,

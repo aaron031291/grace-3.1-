@@ -193,7 +193,8 @@ class MCPOrchestrator:
         max_tokens: int = 4096,
         calling_layer: str = "user",
         session_id: str = None,
-        on_tool_call: Callable = None
+        on_tool_call: Callable = None,
+        on_tool_result: Callable = None
     ) -> Dict[str, Any]:
         """
         Run a multi-turn tool-calling conversation.
@@ -205,7 +206,8 @@ class MCPOrchestrator:
             max_tokens: Max response tokens
             calling_layer: Which Grace OS layer is calling
             session_id: Session tracking ID
-            on_tool_call: Optional callback for each tool call (for streaming updates)
+            on_tool_call: Optional callback for each tool call start (for streaming updates)
+            on_tool_result: Optional callback for each tool call finish (for streaming updates)
             
         Returns:
             Dict with 'content', 'tool_calls_made', 'turns', 'model'
@@ -324,6 +326,9 @@ class MCPOrchestrator:
                         calling_layer=calling_layer,
                         session_id=session_id
                     )
+
+                if on_tool_result:
+                    on_tool_result(func_name, result)
 
                 tool_result_content = result.get("content", "")
                 all_tool_calls.append({
