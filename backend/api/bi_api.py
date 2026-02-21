@@ -701,3 +701,404 @@ async def cleanup_old_data():
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Lookalike Audiences ====================
+
+class LookalikeRequest(BaseModel):
+    platform: str = Field("meta", description="Platform (meta, tiktok, google)")
+    audience_percentage: float = Field(1.0, description="Audience size as % of country population")
+    country: str = Field("GB", description="Target country code")
+    archetype_filter: Optional[str] = Field(None, description="Filter by customer archetype")
+    name: str = Field("", description="Custom audience name")
+
+
+@router.post("/lookalike/prepare-seed")
+async def prepare_seed_audience(archetype_filter: Optional[str] = None):
+    """Prepare a seed audience from waitlist data for lookalike creation."""
+    try:
+        bi = get_bi_system()
+        result = await bi.lookalike_engine.prepare_seed_audience(
+            entries=bi.waitlist_manager.entries,
+            archetype_filter=archetype_filter,
+        )
+        if "hashed_emails" in result:
+            result["hashed_emails_count"] = len(result["hashed_emails"])
+            del result["hashed_emails"]
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/lookalike/create")
+async def create_lookalike_audience(request: LookalikeRequest):
+    """Create a lookalike audience definition (requires human approval to upload)."""
+    try:
+        bi = get_bi_system()
+        seed = await bi.lookalike_engine.prepare_seed_audience(
+            entries=bi.waitlist_manager.entries,
+            archetype_filter=request.archetype_filter,
+        )
+
+        if seed.get("status") != "ready":
+            return seed
+
+        audience = await bi.lookalike_engine.create_lookalike_audience(
+            seed_data=seed,
+            platform=request.platform,
+            audience_percentage=request.audience_percentage,
+            country=request.country,
+            name=request.name,
+        )
+
+        return {
+            "audience_id": audience.id,
+            "name": audience.name,
+            "platform": audience.platform,
+            "seed_size": audience.seed_size,
+            "audience_percentage": audience.audience_percentage,
+            "estimated_reach": audience.estimated_reach,
+            "country": audience.country,
+            "status": audience.status,
+            "notes": audience.notes,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/lookalike/strategy")
+async def get_lookalike_strategy(budget: float = 200.0):
+    """Get recommended lookalike audience strategy."""
+    try:
+        bi = get_bi_system()
+        seed_size = sum(
+            1 for e in bi.waitlist_manager.entries
+            if e.consent_given and not e.opted_out
+        )
+        archetypes = bi.archetype_engine.archetypes if bi.archetype_engine else []
+
+        return await bi.lookalike_engine.recommend_audience_strategy(
+            seed_size=seed_size,
+            budget=budget,
+            archetypes=archetypes,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Traffic Strategy ====================
+
+@router.get("/traffic/strategy")
+async def get_traffic_strategy(
+    budget: float = 200.0,
+    niche: str = "general",
+):
+    """Get complete traffic acquisition strategy."""
+    try:
+        bi = get_bi_system()
+        seed_size = sum(
+            1 for e in bi.waitlist_manager.entries
+            if e.consent_given and not e.opted_out
+        )
+
+        strategy = await bi.lookalike_engine.generate_traffic_strategy(
+            budget=budget,
+            niche=niche,
+            seed_size=seed_size,
+            archetypes=bi.archetype_engine.archetypes if bi.archetype_engine else None,
+        )
+
+        return {
+            "total_budget": strategy.total_estimated_budget,
+            "estimated_monthly_reach": strategy.estimated_monthly_reach,
+            "paid_channels": strategy.paid_channels,
+            "organic_channels": strategy.organic_channels,
+            "owned_channels": strategy.owned_channels,
+            "priority_order": strategy.priority_order,
+            "timeline": strategy.timeline,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Ad Optimization ====================
+
+@router.post("/ads/optimize")
+async def optimize_ads():
+    """Run real-time ad optimization analysis."""
+    try:
+        bi = get_bi_system()
+        results = bi.campaign_manager.results
+        if not results:
+            return {"message": "No campaign results to optimize. Record results first."}
+
+        analysis = await bi.ad_optimizer.analyze_performance(results)
+        return analysis
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/ads/optimization-dashboard")
+async def get_optimization_dashboard():
+    """Get the ad optimization dashboard."""
+    try:
+        bi = get_bi_system()
+        return await bi.ad_optimizer.get_optimization_dashboard()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== LLM Reasoning ====================
+
+class ReasoningRequest(BaseModel):
+    niche: str = Field("", description="Market niche for reasoning")
+    task: str = Field("market_analysis", description="Reasoning task type")
+
+
+@router.post("/reasoning/market")
+async def reason_about_market(request: ReasoningRequest):
+    """Have Grace reason about market data using LLM + hallucination guards."""
+    try:
+        bi = get_bi_system()
+        state = bi.intelligence_engine.state
+
+        market_data = {
+            "total_data_points": len(state.all_data_points),
+            "sources": list(set(dp.source.value for dp in state.all_data_points)),
+        }
+        pain_points = [
+            {"description": pp.description[:100], "severity": pp.severity, "category": pp.category}
+            for pp in state.all_pain_points[:10]
+        ]
+        competitors = []
+        for report in state.research_reports:
+            if report.competitor_landscape:
+                competitors = report.competitor_landscape.get("recommendations", [])
+
+        result = await bi.reasoning_engine.reason_about_market(
+            market_data=market_data,
+            pain_points=pain_points,
+            competitors=competitors,
+            niche=request.niche or (state.niches_under_investigation[0] if state.niches_under_investigation else ""),
+        )
+
+        return {
+            "task": result.task,
+            "reasoning": result.reasoning,
+            "recommendations": result.recommendations,
+            "confidence": result.confidence,
+            "verified": result.verification_passed,
+            "warnings": result.warnings,
+            "model": result.model_used,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/reasoning/product-strategy")
+async def reason_about_product():
+    """Have Grace reason about what product to build."""
+    try:
+        bi = get_bi_system()
+        state = bi.intelligence_engine.state
+
+        pain_points = [
+            {"description": pp.description[:100], "severity": pp.severity, "category": pp.category}
+            for pp in state.all_pain_points[:10]
+        ]
+
+        archetypes = [
+            {"name": a.name, "pain_points": a.pain_points, "channels": a.preferred_channels}
+            for a in (bi.archetype_engine.archetypes if bi.archetype_engine else [])
+        ]
+
+        opportunities = [
+            {"title": s.opportunity.title, "score": s.total_score, "verdict": s.verdict}
+            for s in state.scored_opportunities[:5]
+        ]
+
+        result = await bi.reasoning_engine.reason_about_product_strategy(
+            pain_points=pain_points,
+            archetypes=archetypes,
+            opportunities=opportunities,
+        )
+
+        return {
+            "reasoning": result.reasoning,
+            "recommendations": result.recommendations,
+            "confidence": result.confidence,
+            "verified": result.verification_passed,
+            "warnings": result.warnings,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/reasoning/briefing")
+async def get_grace_briefing():
+    """Get Grace's daily business intelligence briefing."""
+    try:
+        bi = get_bi_system()
+        state_dict = await bi.intelligence_engine.get_status()
+
+        result = await bi.reasoning_engine.generate_grace_briefing(state_dict)
+
+        return {
+            "briefing": result.reasoning,
+            "recommendations": result.recommendations,
+            "confidence": result.confidence,
+            "verified": result.verification_passed,
+            "warnings": result.warnings,
+            "timestamp": result.timestamp.isoformat(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/reasoning/history")
+async def get_reasoning_history(limit: int = 10):
+    """Get recent LLM reasoning history."""
+    try:
+        bi = get_bi_system()
+        return {"history": bi.reasoning_engine.get_reasoning_history(limit)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Secrets Vault ====================
+
+class SecretStoreRequest(BaseModel):
+    key: str = Field(..., description="Secret key name (e.g. SHOPIFY_API_KEY)")
+    value: str = Field(..., description="Secret value")
+    category: str = Field("api_key", description="Category (api_key, customer_data)")
+
+
+@router.post("/vault/store")
+async def store_secret(request: SecretStoreRequest):
+    """Store a secret in the encrypted vault."""
+    try:
+        bi = get_bi_system()
+        if not bi.secrets_vault or not bi.secrets_vault._initialized:
+            raise HTTPException(
+                status_code=400,
+                detail="Vault not initialized. Set BI_VAULT_PASSPHRASE environment variable.",
+            )
+        success = bi.secrets_vault.store(
+            key=request.key,
+            value=request.value,
+            category=request.category,
+        )
+        return {"status": "stored" if success else "failed", "key": request.key}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/vault/keys")
+async def list_vault_keys():
+    """List all keys in the vault (values are NOT exposed)."""
+    try:
+        bi = get_bi_system()
+        if not bi.secrets_vault or not bi.secrets_vault._initialized:
+            return {"status": "vault_not_initialized", "keys": []}
+        return {"keys": bi.secrets_vault.list_keys()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/vault/{key}")
+async def delete_secret(key: str):
+    """Delete a secret from the vault."""
+    try:
+        bi = get_bi_system()
+        if not bi.secrets_vault:
+            raise HTTPException(status_code=400, detail="Vault not initialized")
+        success = bi.secrets_vault.delete(key)
+        return {"status": "deleted" if success else "not_found", "key": key}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/vault/status")
+async def get_vault_status():
+    """Get secrets vault status."""
+    try:
+        bi = get_bi_system()
+        if bi.secrets_vault:
+            return bi.secrets_vault.get_status()
+        return {"initialized": False}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Jungle Scout ====================
+
+class JungleScoutRequest(BaseModel):
+    keyword: str = Field(..., description="Keyword to research")
+    marketplace: str = Field("us", description="Amazon marketplace (us, uk, de, etc)")
+
+
+@router.post("/amazon/keyword-research")
+async def amazon_keyword_research(request: JungleScoutRequest):
+    """Research Amazon keywords via Jungle Scout."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        js = ConnectorRegistry.get("jungle_scout")
+        if not js or not js.is_available:
+            return {
+                "status": "not_configured",
+                "message": "Jungle Scout not configured. Set JUNGLESCOUT_API_KEY and JUNGLESCOUT_API_NAME.",
+            }
+
+        data = await js.keyword_research(
+            search_terms=request.keyword,
+            marketplace=request.marketplace,
+        )
+        return data or {"message": "No keyword data found"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/amazon/product-database")
+async def amazon_product_search(request: JungleScoutRequest):
+    """Search Amazon product database via Jungle Scout."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        js = ConnectorRegistry.get("jungle_scout")
+        if not js or not js.is_available:
+            return {
+                "status": "not_configured",
+                "message": "Jungle Scout not configured. Set JUNGLESCOUT_API_KEY.",
+            }
+
+        data = await js.product_database(
+            keywords=request.keyword,
+            marketplace=request.marketplace,
+        )
+        return data or {"message": "No product data found"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/amazon/niche-analysis")
+async def amazon_niche_analysis(request: JungleScoutRequest):
+    """Get Amazon niche opportunity analysis via Jungle Scout."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        js = ConnectorRegistry.get("jungle_scout")
+        if not js or not js.is_available:
+            return {
+                "status": "not_configured",
+                "message": "Jungle Scout not configured.",
+            }
+
+        data = await js.niche_analysis(
+            keyword=request.keyword,
+            marketplace=request.marketplace,
+        )
+        return data or {"message": "No niche data found"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

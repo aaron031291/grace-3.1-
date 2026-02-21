@@ -138,6 +138,14 @@ class BIConfig:
                 name="YouTube Analytics",
                 api_key=os.getenv("YOUTUBE_API_KEY"),
             ),
+            "jungle_scout": ConnectorConfig(
+                name="Jungle Scout",
+                api_key=os.getenv("JUNGLESCOUT_API_KEY"),
+                extra={
+                    "api_name": os.getenv("JUNGLESCOUT_API_NAME"),
+                    "marketplace": os.getenv("JUNGLESCOUT_MARKETPLACE", "us"),
+                }
+            ),
         }
 
         retention = os.getenv("BI_RETENTION_DAYS")
