@@ -1393,3 +1393,24 @@ async def get_playbook_stats(db: Session = Depends(get_db)):
         return engine.get_stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+class InterrogateTaskRequest(BaseModel):
+    task_description: str = Field(..., description="What the user wants done")
+    answers: Optional[Dict[str, str]] = Field(None, description="Answers to previously asked questions")
+
+@router.post("/tasks/interrogate")
+async def interrogate_task(request: InterrogateTaskRequest, db: Session = Depends(get_db)):
+    """
+    Interrogate a task with WHAT/WHERE/WHEN/WHO/HOW/WHY before breaking it down.
+
+    If the task description is vague, returns questions the user must answer.
+    If the task is clear (or answers provided), returns the full breakdown.
+
+    Call once to get questions. Call again with answers to get breakdown.
+    """
+    try:
+        from cognitive.task_playbook_engine import get_task_playbook_engine
+        engine = get_task_playbook_engine(db)
+        return engine.interrogate_task(request.task_description, request.answers)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

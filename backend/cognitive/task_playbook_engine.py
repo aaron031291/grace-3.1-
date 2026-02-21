@@ -111,6 +111,133 @@ class TaskPlaybookEngine:
         self.session = session
         self.kimi_brain = kimi_brain
 
+    def interrogate_task(
+        self,
+        task_description: str,
+        answers: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Interrogate a task with WHAT/WHERE/WHEN/WHO/HOW/WHY questions
+        BEFORE breaking it down. Identifies what's known vs unknown.
+
+        If unknowns are blocking, returns questions for the user to answer.
+        If everything is known or answerable, proceeds to breakdown.
+
+        Args:
+            task_description: The raw task request
+            answers: Previously answered questions (for follow-up calls)
+
+        Returns:
+            Either questions to ask the user, or a complete breakdown
+        """
+        from cognitive.ambiguity import AmbiguityLedger, AmbiguityLevel
+
+        ledger = AmbiguityLedger()
+
+        # The 6 essential questions for any task
+        questions = {
+            "what": {
+                "question": "What exactly needs to be done? What is the deliverable?",
+                "extract_from": ["implement", "create", "fix", "add", "build", "remove", "update", "refactor"],
+            },
+            "where": {
+                "question": "Where in the system does this change happen? Which files/modules?",
+                "extract_from": [".py", ".js", ".ts", "module", "file", "component", "api", "endpoint"],
+            },
+            "why": {
+                "question": "Why is this needed? What problem does it solve?",
+                "extract_from": ["because", "since", "broken", "missing", "need", "require", "improve"],
+            },
+            "how": {
+                "question": "How should it be implemented? Any specific approach?",
+                "extract_from": ["using", "with", "via", "through", "approach", "pattern", "algorithm"],
+            },
+            "who": {
+                "question": "Who or what system is affected? Who requested this?",
+                "extract_from": ["user", "admin", "system", "grace", "kimi", "api", "frontend"],
+            },
+            "when": {
+                "question": "When does this need to be done? Any deadline or priority?",
+                "extract_from": ["urgent", "asap", "priority", "deadline", "before", "after", "now"],
+            },
+        }
+
+        desc_lower = task_description.lower()
+        needs_asking = []
+
+        # Analyze the task description to see what we already know
+        for q_key, q_data in questions.items():
+            # Check if the task description already answers this
+            has_indicator = any(ind in desc_lower for ind in q_data["extract_from"])
+
+            # Check if user provided an answer previously
+            if answers and q_key in answers:
+                ledger.add_known(q_key, answers[q_key], notes=f"User answered: {answers[q_key]}")
+            elif has_indicator:
+                # Extract what we can from the description
+                ledger.add_inferred(
+                    q_key,
+                    f"Inferred from description: {task_description[:200]}",
+                    confidence=0.6,
+                    notes="Extracted from task description"
+                )
+            else:
+                # We don't know this
+                is_blocking = q_key in ("what", "where")  # WHAT and WHERE are blocking
+                ledger.add_unknown(q_key, blocking=is_blocking, notes=q_data["question"])
+                needs_asking.append({
+                    "key": q_key,
+                    "question": q_data["question"],
+                    "blocking": is_blocking,
+                })
+
+        # Check: are there blocking unknowns?
+        blocking = ledger.get_blocking_unknowns()
+
+        if blocking and not answers:
+            # Return questions to ask the user
+            return {
+                "status": "needs_clarification",
+                "task": task_description,
+                "ambiguity": ledger.to_dict(),
+                "summary": ledger.summary(),
+                "questions": needs_asking,
+                "blocking_questions": [
+                    {"key": b.key, "question": b.notes}
+                    for b in blocking
+                ],
+                "can_proceed": False,
+                "message": (
+                    f"Task has {len(blocking)} blocking unknowns. "
+                    "Please answer the blocking questions before proceeding."
+                ),
+            }
+
+        # No blocking unknowns -- proceed to breakdown
+        # Merge answers into context
+        context = {"ambiguity": ledger.to_dict()}
+        if answers:
+            context["user_answers"] = answers
+
+        breakdown = self.break_down_task(task_description, context)
+
+        return {
+            "status": "ready",
+            "task": task_description,
+            "ambiguity": ledger.to_dict(),
+            "summary": ledger.summary(),
+            "questions_answered": len(ledger.get_by_level(AmbiguityLevel.KNOWN)),
+            "questions_inferred": len(ledger.get_by_level(AmbiguityLevel.INFERRED)),
+            "can_proceed": True,
+            "breakdown": {
+                "steps": breakdown.steps,
+                "total_steps": breakdown.total_steps,
+                "estimated_minutes": breakdown.estimated_minutes,
+                "from_playbook": breakdown.from_playbook,
+                "from_kimi": breakdown.from_kimi,
+            },
+        }
+
     def break_down_task(
         self,
         task_description: str,
