@@ -409,3 +409,122 @@ def _get_notification_service():
         _notification_service = PushNotificationService()
         _notification_service.initialize()
     return _notification_service
+
+
+_unified_chat = None
+
+
+def _get_unified_chat():
+    global _unified_chat
+    if _unified_chat is None:
+        from mobile.unified_chat import UnifiedChat
+        _unified_chat = UnifiedChat()
+    return _unified_chat
+
+
+# ==================== Unified Grace + Kimi Chat ====================
+
+class UnifiedChatRequest(BaseModel):
+    message: str = Field(..., description="Message. Prefix with @grace, @kimi, or @both to route.")
+    conversation_id: Optional[str] = Field(None, description="Conversation ID for continuity")
+    include_bi_context: bool = Field(True, description="Include BI data in Grace's context")
+
+
+@router.post("/unified-chat")
+async def unified_chat(request: UnifiedChatRequest):
+    """Unified chat with Grace and/or Kimi.
+
+    Routing:
+    - @grace [message] -> Grace responds with BI context + MAGMA memory
+    - @kimi [message]  -> Kimi responds with deep reasoning
+    - @both [message]  -> Both respond, synthesis shows agreement/divergence
+    - plain message    -> Grace responds (default)
+
+    Single conversation, full backend access, all intelligence connected.
+    """
+    try:
+        chat = _get_unified_chat()
+        return await chat.send_message(
+            conversation_id=request.conversation_id,
+            message=request.message,
+            include_bi_context=request.include_bi_context,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/unified-chat/{conversation_id}")
+async def get_conversation(conversation_id: str):
+    """Get full conversation history."""
+    try:
+        chat = _get_unified_chat()
+        conv = chat.get_conversation(conversation_id)
+        if not conv:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+        return conv
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/unified-chat-status")
+async def get_chat_status():
+    """Get unified chat status (Grace + Kimi availability)."""
+    try:
+        return _get_unified_chat().get_status()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Unified Intelligence Query ====================
+
+class UnifiedQueryRequest(BaseModel):
+    query: str = Field(..., description="Question to ask the unified intelligence")
+    include_knowledge_library: bool = Field(False, description="Search academic papers + Wikipedia")
+    require_verification: bool = Field(True, description="Run through hallucination guard")
+
+
+@router.post("/unified-query")
+async def unified_intelligence_query(request: UnifiedQueryRequest):
+    """Query the complete unified intelligence stack.
+
+    Your question goes through: BI data -> MAGMA memory -> OODA loop ->
+    LLM reasoning -> Hallucination guard -> Constitutional compliance ->
+    Confidence scoring -> Genesis tracking -> MAGMA ingestion.
+
+    Full GRACE intelligence on every query.
+    """
+    try:
+        from business_intelligence.utils.unified_intelligence import get_unified_intelligence, UnifiedQuery
+        ui = get_unified_intelligence()
+        q = UnifiedQuery(
+            query=request.query,
+            include_knowledge_library=request.include_knowledge_library,
+            require_verification=request.require_verification,
+        )
+        result = await ui.query(q)
+        return {
+            "answer": result.answer,
+            "confidence": result.confidence,
+            "verified": result.verified,
+            "integrity_score": result.integrity_score,
+            "sources_used": result.sources_used,
+            "reasoning_chain": result.reasoning_chain,
+            "contradictions": result.contradictions,
+            "genesis_key": result.genesis_key,
+            "models_consulted": result.models_consulted,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/unified-status")
+async def get_unified_intelligence_status():
+    """Get complete unified intelligence status -- every GRACE system and its connection."""
+    try:
+        from business_intelligence.utils.unified_intelligence import get_unified_intelligence
+        ui = get_unified_intelligence()
+        return await ui.get_full_system_status()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
