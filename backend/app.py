@@ -83,15 +83,8 @@ from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagno
 from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
-from api.unified_pipeline_api import router as unified_pipeline_router  # Unified Learning Pipeline - 24/7 neighbor-by-neighbor expansion
-from api.knowledge_browser_api import router as knowledge_browser_router  # Knowledge Browser - domain-organized file system
-from api.system_health import router as system_health_router  # Unified system health - all subsystems in one endpoint
-from api.websocket_manager import router as ws_manager_router  # Central WebSocket manager - real-time event bridge
-from api.self_mirror_api import router as self_mirror_router  # Self-Mirror telemetry dashboard - [T,M,P] vectors
-from api.timesense_api import router as timesense_router  # TimeSense - temporal reasoning, predictions, OODA timing
-from api.magma_api import router as magma_router  # Magma Memory - graph memory, causal inference, intent routing
-from api.unified_memory_api import router as unified_memory_router  # Unified Memory - all 6 memory types in one system
-from api.llm_learning_api import router as llm_learning_router  # LLM Learning & Tracking - learn from Kimi, reduce LLM dependency
+from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
+from api.bi_api import router as bi_router  # Business Intelligence - market research, campaigns, customer intelligence
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -691,12 +684,8 @@ app.include_router(unified_pipeline_router)  # Unified Learning Pipeline - 24/7 
 app.include_router(knowledge_browser_router)  # Knowledge Browser - domain-organized Oracle file system
 app.include_router(llm_learning_router)  # LLM Learning & Tracking - learn from Kimi, track reasoning, reduce LLM dependency
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
-app.include_router(system_health_router)  # Unified System Health - all subsystem statuses in one place
-app.include_router(ws_manager_router)  # Central WebSocket Manager - real-time event bridge to frontend
-app.include_router(self_mirror_router)  # Self-Mirror Telemetry - [T,M,P] vectors, pillar triggers, challenges, RFIs
-app.include_router(timesense_router)  # TimeSense - temporal reasoning, predictions, cost estimation, OODA timing
-app.include_router(magma_router)  # Magma Memory - query, ingest, causal inference, relation graphs
-app.include_router(unified_memory_router)  # Unified Memory - remember, recall, consolidate, forget, working memory
+app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
+app.include_router(bi_router)  # Business Intelligence - market research, campaigns, customer intelligence, product discovery
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
