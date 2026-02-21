@@ -14,4 +14,3 @@ from .meta_connector import MetaConnector
 from .tiktok_connector import TikTokConnector
 from .serpapi_connector import SerpAPIConnector
 from .web_scraping_connector import WebScrapingConnector
-from .junglescout_connector import JungleScoutConnector

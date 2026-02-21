@@ -6,7 +6,6 @@ audience insights, and campaign management. Also handles Instagram Graph API
 for organic content analytics.
 """
 
-import json
 import logging
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
@@ -108,6 +107,7 @@ class MetaConnector(BaseConnector):
                 "level": "campaign",
             }
 
+            import json  # noqa: F811
             async with session.get(url, params=params) as resp:
                 if resp.status != 200:
                     return []
