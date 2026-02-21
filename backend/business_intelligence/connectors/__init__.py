@@ -19,3 +19,4 @@ from .youtube_connector import YouTubeConnector
 from .instagram_connector import InstagramConnector
 from .email_marketing_connector import EmailMarketingConnector
 from .crypto_connector import CryptoFinanceConnector
+from .knowledge_library import KnowledgeLibraryConnector

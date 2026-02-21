@@ -25,6 +25,8 @@ from business_intelligence.connectors.youtube_connector import YouTubeConnector
 from business_intelligence.connectors.instagram_connector import InstagramConnector
 from business_intelligence.connectors.email_marketing_connector import EmailMarketingConnector
 from business_intelligence.connectors.crypto_connector import CryptoFinanceConnector
+from business_intelligence.connectors.knowledge_library import KnowledgeLibraryConnector
+from business_intelligence.utils.ml_bridge import MLIntelligenceBridge, get_ml_bridge
 from business_intelligence.synthesis.intelligence_engine import IntelligenceEngine
 from business_intelligence.synthesis.reasoning_engine import BIReasoningEngine
 from business_intelligence.campaigns.waitlist_manager import WaitlistManager
@@ -78,6 +80,7 @@ class BISystem:
         self.frontend_bridge: Optional[BIFrontendBridge] = None
         self.grace_integration: Optional[GraceIntegration] = None
         self.cognitive_bridge: Optional[CognitiveBridge] = None
+        self.ml_bridge: Optional[MLIntelligenceBridge] = None
         self.archetype_engine: Optional[ArchetypeEngine] = None
         self.pattern_analyzer: Optional[CrossPatternAnalyzer] = None
         self.product_ideation: Optional[ProductIdeationEngine] = None
@@ -126,6 +129,7 @@ class BISystem:
         self.frontend_bridge = BIFrontendBridge()
         self.grace_integration = get_grace_integration()
         self.cognitive_bridge = get_cognitive_bridge()
+        self.ml_bridge = get_ml_bridge()
         self.archetype_engine = ArchetypeEngine(
             min_cluster_size=self.config.pain_point_cluster_min_size
         )
@@ -171,6 +175,7 @@ class BISystem:
             "instagram": InstagramConnector,
             "email_marketing": EmailMarketingConnector,
             "crypto_finance": CryptoFinanceConnector,
+            "knowledge_library": KnowledgeLibraryConnector,
             "web_scraping": WebScrapingConnector,
         }
 
