@@ -1336,3 +1336,13 @@ async def get_task_stats(db: Session = Depends(get_db)):
         return verifier.get_stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/tasks/schedule")
+async def get_task_schedule(db: Session = Depends(get_db)):
+    """Get schedule predictions for all active tasks. Uses TimeSense for estimates."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.get_schedule()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

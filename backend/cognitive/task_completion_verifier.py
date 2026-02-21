@@ -202,6 +202,13 @@ class TaskCompletionVerifier:
 
     def __init__(self, session: Session):
         self.session = session
+        self._timesense = None
+
+        try:
+            from cognitive.timesense import get_timesense
+            self._timesense = get_timesense()
+        except Exception:
+            pass
 
     def create_task(
         self,
@@ -244,6 +251,18 @@ class TaskCompletionVerifier:
         self.session.add(task)
         self.session.flush()
 
+        # TimeSense: estimate how long this task type takes
+        if self._timesense:
+            try:
+                estimate = self._timesense.estimate_task_time(
+                    f"task.{tt.value}", 0
+                )
+                if estimate.get("estimated_seconds"):
+                    task.estimated_duration_minutes = int(estimate["estimated_seconds"] / 60) or 30
+                    self.session.flush()
+            except Exception:
+                pass
+
         return task
 
     def start_task(self, task_id: str) -> Optional[VerifiedTask]:
@@ -268,6 +287,9 @@ class TaskCompletionVerifier:
 
         task.status = TaskStatus.VERIFICATION.value
         task.verification_attempts += 1
+        _verify_start = time.time() if 'time' in dir() else None
+        import time as _time_mod
+        _verify_start = _time_mod.time()
 
         criteria = task.completion_criteria or []
         results = []
@@ -316,6 +338,16 @@ class TaskCompletionVerifier:
             })
 
         self.session.flush()
+
+        # TimeSense: record verification duration
+        if self._timesense and _verify_start:
+            _verify_duration = (_time_mod.time() - _verify_start) * 1000
+            self._timesense.record_operation(
+                f"task.verify.{task.task_type}",
+                _verify_duration,
+                component="task_verifier",
+                success=task.completion_percentage == 100.0,
+            )
 
         return {
             "task_id": task_id,
@@ -370,6 +402,15 @@ class TaskCompletionVerifier:
             task.actual_duration_minutes = int(delta.total_seconds() / 60)
 
         self.session.flush()
+
+        # TimeSense: record task completion duration for future estimates
+        if self._timesense and task.actual_duration_minutes:
+            self._timesense.record_operation(
+                f"task.complete.{task.task_type}",
+                task.actual_duration_minutes * 60 * 1000,  # Convert to ms
+                component="task_verifier",
+                success=True,
+            )
 
         # Track completion
         try:
@@ -537,6 +578,85 @@ class TaskCompletionVerifier:
             }
             for t in query.all()
         ]
+
+    def get_schedule(self) -> Dict[str, Any]:
+        """
+        Get schedule predictions for all in-progress tasks.
+
+        Uses TimeSense historical data to predict:
+        - Estimated completion time
+        - Whether task is on track or behind
+        - Recommended priority ordering
+        """
+        in_progress = self.session.query(VerifiedTask).filter(
+            VerifiedTask.status.in_(["in_progress", "verification", "planned"])
+        ).order_by(VerifiedTask.created_at).all()
+
+        schedule = []
+        for task in in_progress:
+            entry = {
+                "task_id": task.task_id,
+                "title": task.title,
+                "type": task.task_type,
+                "status": task.status,
+                "completion_percentage": task.completion_percentage,
+                "estimated_minutes": task.estimated_duration_minutes,
+                "started_at": task.started_at.isoformat() if task.started_at else None,
+                "scheduled_for": task.scheduled_for.isoformat() if task.scheduled_for else None,
+            }
+
+            # Calculate time elapsed
+            if task.started_at:
+                import time as _t
+                elapsed = (datetime.now(timezone.utc) - task.started_at).total_seconds() / 60
+                entry["elapsed_minutes"] = round(elapsed, 1)
+
+                # Predict remaining time based on completion percentage
+                if task.completion_percentage > 0:
+                    rate = elapsed / task.completion_percentage  # minutes per percent
+                    remaining_pct = 100 - task.completion_percentage
+                    estimated_remaining = rate * remaining_pct
+                    entry["estimated_remaining_minutes"] = round(estimated_remaining, 1)
+                    entry["predicted_completion"] = (
+                        datetime.now(timezone.utc).__add__(
+                            __import__('datetime').timedelta(minutes=estimated_remaining)
+                        )
+                    ).isoformat()
+
+                # Check if behind schedule
+                if task.estimated_duration_minutes and elapsed > task.estimated_duration_minutes * 1.5:
+                    entry["status_flag"] = "behind_schedule"
+                elif task.estimated_duration_minutes and elapsed > task.estimated_duration_minutes:
+                    entry["status_flag"] = "at_risk"
+                else:
+                    entry["status_flag"] = "on_track"
+            else:
+                entry["status_flag"] = "not_started"
+
+            # TimeSense prediction
+            if self._timesense:
+                try:
+                    prediction = self._timesense.estimate_task_time(
+                        f"task.complete.{task.task_type}", 0
+                    )
+                    if prediction.get("estimated_seconds"):
+                        entry["timesense_estimate_minutes"] = round(prediction["estimated_seconds"] / 60, 1)
+                except Exception:
+                    pass
+
+            schedule.append(entry)
+
+        # Sort: behind_schedule first, then at_risk, then on_track
+        priority_order = {"behind_schedule": 0, "at_risk": 1, "on_track": 2, "not_started": 3}
+        schedule.sort(key=lambda x: priority_order.get(x.get("status_flag", ""), 99))
+
+        return {
+            "total_scheduled": len(schedule),
+            "behind_schedule": sum(1 for s in schedule if s.get("status_flag") == "behind_schedule"),
+            "at_risk": sum(1 for s in schedule if s.get("status_flag") == "at_risk"),
+            "on_track": sum(1 for s in schedule if s.get("status_flag") == "on_track"),
+            "tasks": schedule,
+        }
 
     def get_stats(self) -> Dict[str, Any]:
         """Get task management statistics."""
