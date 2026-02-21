@@ -157,6 +157,15 @@ class BIConfig:
                     "alpha_vantage_key": os.getenv("ALPHA_VANTAGE_KEY"),
                 }
             ),
+            "knowledge_library": ConnectorConfig(
+                name="Universal Knowledge Library",
+                api_key=os.getenv("KNOWLEDGE_LIBRARY_KEY", "open_access"),
+                extra={
+                    "openalex_email": os.getenv("OPENALEX_EMAIL", ""),
+                    "semantic_scholar_key": os.getenv("SEMANTIC_SCHOLAR_KEY", ""),
+                    "google_kg_key": os.getenv("GOOGLE_KG_API_KEY", ""),
+                }
+            ),
             "jungle_scout": ConnectorConfig(
                 name="Jungle Scout",
                 api_key=os.getenv("JUNGLESCOUT_API_KEY"),

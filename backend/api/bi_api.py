@@ -1748,3 +1748,137 @@ async def score_bi_confidence(
                 "campaign_validated": validated}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== ML Intelligence ====================
+
+@router.get("/ml/status")
+async def get_ml_bridge_status():
+    """Get ML Intelligence connection status (Neural Trust, Bandits, Meta-Learning, etc)."""
+    try:
+        bi = get_bi_system()
+        if bi.ml_bridge:
+            return bi.ml_bridge.get_status()
+        return {"initialized": False}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/ml/optimal-data-collection")
+async def get_optimal_data_collection():
+    """Active Learning: identify which data to collect next for maximum insight."""
+    try:
+        bi = get_bi_system()
+        from business_intelligence.connectors.base import ConnectorRegistry
+        all_connectors = ConnectorRegistry.get_all()
+        current_data = {}
+        for name, conn in all_connectors.items():
+            current_data[name] = conn.health.total_data_points
+
+        available = list(all_connectors.keys())
+        return await bi.ml_bridge.identify_optimal_data_collection(current_data, available)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Universal Knowledge Library ====================
+
+class KnowledgeSearchRequest(BaseModel):
+    query: str = Field(..., description="Search query")
+    max_per_source: int = Field(5, description="Max results per knowledge source")
+
+
+@router.post("/knowledge/search-all")
+async def search_all_knowledge(request: KnowledgeSearchRequest):
+    """Search ALL knowledge sources simultaneously.
+
+    Queries OpenAlex (250M papers), Semantic Scholar (200M papers),
+    Wikipedia (6M articles), Open Library (millions of books),
+    and Google Knowledge Graph in parallel.
+    """
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        return await kl.search_all(request.query, request.max_per_source)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/knowledge/domain")
+async def get_domain_knowledge(request: KnowledgeSearchRequest):
+    """Get comprehensive knowledge about a domain/industry.
+
+    Combines Wikipedia overview, research trends, academic papers,
+    and books for deep domain understanding.
+    """
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        return await kl.get_domain_knowledge(request.query)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/knowledge/papers")
+async def search_academic_papers(request: KnowledgeSearchRequest):
+    """Search academic papers via OpenAlex (250M+ works, free)."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        return {"papers": await kl.search_papers(request.query, request.max_per_source)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/knowledge/wikipedia")
+async def search_wikipedia(request: KnowledgeSearchRequest):
+    """Search Wikipedia for background knowledge."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        articles = await kl.search_wikipedia(request.query, request.max_per_source)
+        if articles:
+            articles[0]["summary"] = await kl.get_wikipedia_summary(articles[0]["title"])
+        return {"articles": articles}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/knowledge/books")
+async def search_books(request: KnowledgeSearchRequest):
+    """Search Open Library for books (millions of titles, free)."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        return {"books": await kl.search_books(request.query, request.max_per_source)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/knowledge/research-trends")
+async def get_research_trends(request: KnowledgeSearchRequest):
+    """Get research publication trends for a topic over time."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        kl = ConnectorRegistry.get("knowledge_library")
+        if not kl:
+            return {"status": "not_configured"}
+
+        return await kl.get_research_trends(request.query)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
