@@ -952,7 +952,39 @@ async def chat(request: ChatRequest):
 
             _ui_session.close()
         except Exception as _ui_err:
-            logger.debug(f"[UNIFIED] Chain error (non-fatal, falling through to LLM): {_ui_err}")
+            logger.debug(f"[UNIFIED] Chain error (non-fatal): {_ui_err}")
+
+        # ==================== KIMI CONSULTATION ====================
+        # If unified intelligence couldn't answer, consult Kimi Brain
+        # before falling through to raw LLM. Kimi can compose from
+        # facts, reason about the system, and produce a smarter answer.
+        try:
+            from cognitive.kimi_brain import get_kimi_brain
+            from database.session import SessionLocal
+
+            _kimi_session = SessionLocal()
+            _kimi = get_kimi_brain(_kimi_session)
+
+            _kimi_result = _kimi.consult(user_query, requester="chat_endpoint")
+
+            if _kimi_result.get("answered") and _kimi_result.get("response"):
+                response_text = _kimi_result["response"]
+                if len(response_text) > 20:
+                    logger.info(f"[KIMI-CONSULT] Kimi answered from {_kimi_result.get('source', 'analysis')}")
+                    _kimi_session.close()
+                    return ChatResponse(
+                        response=response_text,
+                        sources=[{
+                            "text": f"Answered by Kimi ({_kimi_result.get('source', 'analysis')})",
+                            "score": 0.7,
+                        }],
+                        model="kimi:brain",
+                        temperature=request.temperature,
+                    )
+
+            _kimi_session.close()
+        except Exception as _kimi_err:
+            logger.debug(f"[KIMI-CONSULT] Error (non-fatal): {_kimi_err}")
 
         # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
         greeting_pattern = re.compile(

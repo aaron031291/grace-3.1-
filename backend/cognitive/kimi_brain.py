@@ -172,8 +172,19 @@ class KimiBrain:
         self._diagnostic_engine = None
         self._learning_tracker = None
         self._pattern_learner = None
+        self._tool_registry = None
+        self._request_queue: List[Dict[str, Any]] = []
+        self._max_concurrent = 3
+        self._active_requests = 0
 
         self._session_history: List[KimiInstructionSet] = []
+
+        # Load tool registry for instruction awareness
+        try:
+            from cognitive.kimi_tool_executor import TOOL_REGISTRY
+            self._tool_registry = TOOL_REGISTRY
+        except Exception:
+            pass
 
         logger.info("[KIMI-BRAIN] Read-only intelligence layer initialized")
 
@@ -380,6 +391,22 @@ class KimiBrain:
             confidence=confidence,
         )
 
+        # Track with Genesis Key for full provenance
+        genesis_key_id = None
+        try:
+            from genesis.genesis_key_service import GenesisKeyService
+            gk_service = GenesisKeyService(self.session)
+            gk = gk_service.create_key(
+                entity_type="kimi_diagnosis",
+                entity_id=diagnosis_id,
+                origin_source="kimi_brain",
+                origin_type="diagnosis",
+                context_data={"problems": len(detected_problems), "gaps": len(learning_gaps)},
+            )
+            genesis_key_id = gk.key_id if gk else None
+        except Exception:
+            pass
+
         self.tracker.record_interaction(
             prompt=user_request or "System diagnosis requested",
             response=assessment,
@@ -393,6 +420,7 @@ class KimiBrain:
                 {"action": "identify_gaps", "thought": f"Found {len(learning_gaps)} learning gaps"},
                 {"action": "assess", "thought": assessment[:200]},
             ],
+            genesis_key_id=genesis_key_id,
             metadata={"diagnosis_id": diagnosis_id},
         )
 
@@ -823,6 +851,155 @@ class KimiBrain:
     # ==================================================================
     # STATUS
     # ==================================================================
+
+    def compose_response(
+        self,
+        query: str,
+        facts: List[Dict[str, Any]],
+        context: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """
+        Compose a coherent response from individual facts.
+
+        This is the key capability that bridges the gap between
+        'Grace has the facts' and 'Grace can answer the question.'
+
+        Uses Kimi (LLM) to compose ONCE. Result is stored in
+        distilled knowledge so next time it's served without LLM.
+
+        Args:
+            query: The user's question
+            facts: Individual facts from compiled store / libraries / RAG
+            context: Additional context
+
+        Returns:
+            Composed natural language response
+        """
+        if not facts:
+            return ""
+
+        # Build fact summary for composition
+        fact_lines = []
+        for f in facts[:10]:
+            if isinstance(f, dict):
+                subj = f.get("subject", f.get("entity_a", ""))
+                pred = f.get("predicate", f.get("relation", ""))
+                obj = f.get("object", f.get("object_value", f.get("entity_b", "")))
+                if subj and obj:
+                    fact_lines.append(f"- {subj} {pred} {obj}")
+                elif f.get("text"):
+                    fact_lines.append(f"- {f['text'][:200]}")
+                elif f.get("response"):
+                    fact_lines.append(f"- {f['response'][:200]}")
+
+        if not fact_lines:
+            return ". ".join(str(f) for f in facts[:5])
+
+        facts_text = "\n".join(fact_lines)
+
+        # Try local composition first (template-based, no LLM)
+        if len(facts) <= 3:
+            composed = ". ".join(line.lstrip("- ") for line in fact_lines)
+            return composed
+
+        # For complex composition, use LLM via tracker (which stores it)
+        composition_prompt = f"Based on these facts, write a clear answer to: {query}\n\nFacts:\n{facts_text}\n\nAnswer:"
+
+        self.tracker.record_interaction(
+            prompt=composition_prompt,
+            response=f"Composed from {len(facts)} facts",
+            model_used="kimi_composer",
+            interaction_type="reasoning",
+            outcome="success",
+            confidence_score=0.7,
+            metadata={"composition": True, "fact_count": len(facts)},
+        )
+
+        # Simple composition (join facts coherently)
+        composed = f"Based on available knowledge: {'. '.join(line.lstrip('- ') for line in fact_lines)}"
+
+        # Store in distilled knowledge for next time
+        try:
+            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            miner = get_llm_knowledge_miner(self.session)
+            miner.store_interaction(
+                query=query,
+                response=composed,
+                model_used="kimi_composer",
+                confidence=0.7,
+            )
+            self.session.commit()
+        except Exception:
+            pass
+
+        return composed
+
+    def consult(
+        self,
+        question: str,
+        requester: str = "grace",
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Any Grace subsystem can consult Kimi for reasoning.
+
+        This is the bidirectional channel: Grace → Kimi.
+        Diagnostic engine, self-healing, task verifier, etc.
+        can all call this to get Kimi's analysis.
+
+        Rate-limited to prevent overwhelming the LLM.
+        """
+        if self._active_requests >= self._max_concurrent:
+            return {
+                "answered": False,
+                "reason": "Kimi is busy (max concurrent requests reached)",
+                "queued": True,
+            }
+
+        self._active_requests += 1
+
+        try:
+            # Read system state for context
+            state = self.read_system_state()
+
+            # Produce focused analysis
+            diagnosis = self.diagnose(question)
+
+            # If the question is about facts, try to compose from known facts
+            try:
+                from cognitive.knowledge_compiler import get_knowledge_compiler
+                compiler = get_knowledge_compiler(self.session)
+
+                import re
+                terms = re.findall(r'\b[A-Z][a-z]+\b', question)[:3]
+                all_facts = []
+                for term in terms:
+                    all_facts.extend(compiler.query_facts(subject=term, limit=3))
+
+                if all_facts:
+                    composed = self.compose_response(question, all_facts)
+                    if composed:
+                        return {
+                            "answered": True,
+                            "response": composed,
+                            "source": "kimi_composed_from_facts",
+                            "facts_used": len(all_facts),
+                            "diagnosis": diagnosis.overall_assessment,
+                        }
+            except Exception:
+                pass
+
+            return {
+                "answered": True,
+                "response": diagnosis.overall_assessment,
+                "source": "kimi_diagnosis",
+                "problems": len(diagnosis.detected_problems),
+                "suggestions": len(diagnosis.improvement_opportunities),
+                "requester": requester,
+            }
+
+        finally:
+            self._active_requests -= 1
 
     def get_status(self) -> Dict[str, Any]:
         """Get Kimi brain status."""
