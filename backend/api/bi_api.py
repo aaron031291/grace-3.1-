@@ -1619,3 +1619,132 @@ async def get_tracked_operations(limit: int = 50):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Cognitive Bridge ====================
+
+@router.get("/cognitive/status")
+async def get_cognitive_bridge_status():
+    """Get status of BI's deep cognitive integration.
+
+    Shows connection to: OODA loops, episodic memory, contradiction detector,
+    causal inference, decision logger, confidence scorer, Layer 1 message bus,
+    mirror self-modeling, predictive context, Oracle/ML, cognitive engine.
+    """
+    try:
+        bi = get_bi_system()
+        if bi.cognitive_bridge:
+            return bi.cognitive_bridge.get_status()
+        return {"initialized": False}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/cognitive/behavioral-patterns")
+async def get_bi_behavioral_patterns():
+    """Get Mirror Self-Modeling analysis of BI behavioral patterns."""
+    try:
+        bi = get_bi_system()
+        if bi.cognitive_bridge:
+            return bi.cognitive_bridge.get_bi_behavioral_patterns()
+        return {"patterns": []}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/cognitive/decisions")
+async def get_bi_decisions(limit: int = 20):
+    """Get BI decisions tracked through OODA loops."""
+    try:
+        bi = get_bi_system()
+        if not bi.cognitive_bridge:
+            return {"decisions": []}
+
+        decisions = bi.cognitive_bridge.decisions[-limit:]
+        return {
+            "total": len(bi.cognitive_bridge.decisions),
+            "decisions": [
+                {
+                    "id": d.decision_id,
+                    "type": d.decision_type,
+                    "module": d.module,
+                    "problem": d.problem,
+                    "confidence": d.confidence,
+                    "contradictions": len(d.contradictions_found),
+                    "causal_chains": len(d.causal_chains),
+                    "timestamp": d.timestamp.isoformat(),
+                }
+                for d in reversed(decisions)
+            ],
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class CausalQueryRequest(BaseModel):
+    observation: str = Field(..., description="Market observation to reason about causally")
+    context: List[str] = Field(default_factory=list, description="Supporting context")
+
+
+@router.post("/cognitive/causal-reasoning")
+async def causal_market_reasoning(request: CausalQueryRequest):
+    """Use MAGMA's causal inference for market reasoning.
+
+    Example: 'Why are competitors ratings dropping?'
+    """
+    try:
+        bi = get_bi_system()
+        if not bi.cognitive_bridge:
+            return {"status": "unavailable"}
+
+        return await bi.cognitive_bridge.infer_market_causality(
+            observation=request.observation,
+            context=request.context,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/cognitive/pre-fetch-context")
+async def pre_fetch_market_context(request: ResearchRequest):
+    """Pre-fetch related market knowledge before reasoning.
+
+    Predictive Context Loader identifies related topics and pre-loads them.
+    """
+    try:
+        bi = get_bi_system()
+        if not bi.cognitive_bridge:
+            return {"status": "unavailable"}
+
+        return await bi.cognitive_bridge.pre_fetch_market_context(
+            niche=request.niche,
+            keywords=request.keywords,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/cognitive/confidence-score")
+async def score_bi_confidence(
+    data_sources: int = 3,
+    data_points: int = 50,
+    contradictions: int = 0,
+    validated: bool = False,
+):
+    """Score BI data confidence using GRACE's confidence pipeline."""
+    try:
+        bi = get_bi_system()
+        if not bi.cognitive_bridge:
+            return {"confidence": 0.5, "note": "Cognitive bridge unavailable"}
+
+        score = await bi.cognitive_bridge.score_bi_confidence(
+            data_sources=data_sources,
+            data_points=data_points,
+            contradictions=contradictions,
+            validated_by_campaign=validated,
+        )
+        return {"confidence": score, "data_sources": data_sources,
+                "data_points": data_points, "contradictions": contradictions,
+                "campaign_validated": validated}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
