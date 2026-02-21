@@ -16,6 +16,8 @@ from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent, FileCreatedEvent, FileDeletedEvent
 
+from database.session import session_scope
+
 logger = logging.getLogger(__name__)
 
 
@@ -213,27 +215,27 @@ class GenesisFileWatcher(FileSystemEventHandler):
         # For deletions, we still create a Genesis Key to track the deletion
         # even though the file no longer exists
         try:
-            rel_path = os.path.relpath(file_path, self.watch_path)
-
             from genesis.genesis_key_service import get_genesis_service
             from models.genesis_key_models import GenesisKeyType
 
-            genesis_service = get_genesis_service()
-            genesis_service.create_key(
-                key_type=GenesisKeyType.FILE_OPERATION,
-                what_description=f"File deleted: {os.path.basename(file_path)}",
-                who_actor="file_watcher",
-                where_location=rel_path,
-                why_reason="File deletion detected by watcher",
-                how_method="File system watcher",
-                user_id="file_watcher",
-                file_path=rel_path,
-                context_data={
-                    "operation_type": "delete",
-                    "deleted_at": datetime.utcnow().isoformat()
-                },
-                tags=["file_delete", "watcher"]
-            )
+            with session_scope() as session:
+                genesis_service = get_genesis_service(session)
+                genesis_service.create_key(
+                    key_type=GenesisKeyType.FILE_OPERATION,
+                    what_description=f"File deleted: {os.path.basename(file_path)}",
+                    who_actor="file_watcher",
+                    where_location=rel_path,
+                    why_reason="File deletion detected by watcher",
+                    how_method="File system watcher",
+                    user_id="file_watcher",
+                    file_path=rel_path,
+                    context_data={
+                        "operation_type": "delete",
+                        "deleted_at": datetime.utcnow().isoformat()
+                    },
+                    tags=["file_delete", "watcher"],
+                    session=session
+                )
 
             logger.info(f"[FILE_WATCHER] Tracked deletion: {rel_path}")
 

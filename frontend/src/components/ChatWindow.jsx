@@ -233,7 +233,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       const payload = useAgent ? {
         chat_id: chatId,
-        messages: [], // Let backend load history via chat_id
+        messages: [{ role: "user", content: userMessage }], // Send current message so backend can save/process it
         use_rag: true,
         use_web: true,
         model: chatInfo?.model,

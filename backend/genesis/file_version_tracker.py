@@ -270,12 +270,20 @@ class FileVersionTracker:
 
             # Store key_id immediately to prevent DetachedInstanceError
             try:
+                # If using extracted data is possible, we should prefer it
+                # But here we need to ensure the object is valid
                 version_key_db_id = version_key.key_id
-            except Exception:
-                # Defensive refresh in case the object was expired
-                local_session.flush()
-                local_session.refresh(version_key)
-                version_key_db_id = version_key.key_id
+            except (Exception, AttributeError):
+                # Defensive refresh/merge in case the object was expired or detached
+                try:
+                    local_session.flush()
+                    version_key = local_session.merge(version_key)
+                    local_session.refresh(version_key)
+                    version_key_db_id = version_key.key_id
+                except Exception as e:
+                    logger.warning(f"[VERSION-TRACKER] Could not get key_id for version_key, using fallback: {e}")
+                    # Fallback to the ID we generated if it matches the schema
+                    version_key_db_id = version_key_id 
 
             # Store version info
             version_info = {
@@ -486,13 +494,7 @@ class FileVersionTracker:
         }
 
 
-# Global file version tracker instance
-_file_version_tracker: Optional[FileVersionTracker] = None
-
-
 def get_file_version_tracker(base_path: Optional[str] = None) -> FileVersionTracker:
-    """Get or create the global file version tracker instance."""
-    global _file_version_tracker
-    if _file_version_tracker is None or base_path is not None:
-        _file_version_tracker = FileVersionTracker(base_path=base_path)
-    return _file_version_tracker
+    """Get a file version tracker instance."""
+    # Never use global singleton for session-dependent services
+    return FileVersionTracker(base_path=base_path)

@@ -21,7 +21,7 @@ from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStat
 from genesis.genesis_key_service import get_genesis_service
 from genesis.file_version_tracker import get_file_version_tracker
 from genesis.repo_scanner import get_repo_scanner
-from database.session import get_session
+from database.session import get_session, session_scope
 
 logger = logging.getLogger(__name__)
 
@@ -57,99 +57,52 @@ class SymbioticVersionControl:
         operation_type: str = "modify"
     ) -> Dict[str, Any]:
         """
-        Track a file change - SYMBIOTIC operation.
-        """
-        # Manage session lifecycle to prevent DetachedInstanceError
-        local_session = None
-        session = self.session
-        
-        if not session:
-            # Create a new session if one doesn't exist
-            gen = get_session()
-            session = next(gen)
-            local_session = session
+        Track a file change symbiotically.
 
-        try:
-            # Normalize path
+        Creates a Genesis Key, then a file version, then links them.
+        Wrapped in session_scope for thread-safe atomicity.
+        """
+        with session_scope() as session:
+            # 1. Path Resolution
             if not os.path.isabs(file_path):
                 abs_path = os.path.join(self.base_path, file_path)
-                rel_path = file_path
             else:
                 abs_path = file_path
-                # Calculate relative path from base_path
-                try:
-                    rel_path = os.path.relpath(abs_path, self.base_path)
-                except ValueError:
-                    # If paths are on different drives (Windows), use absolute
-                    rel_path = abs_path
             
-            # Log path resolution (INFO level for visibility)
-            logger.info(f"[SYMBIOTIC] Path resolution: input={file_path}, abs={abs_path}, rel={rel_path}, base={self.base_path}")
+            rel_path = os.path.relpath(abs_path, self.base_path)
 
-            # Get or create file Genesis Key
-            file_genesis_key = self._get_or_create_file_genesis_key(rel_path)
+            # 2. Key Identification (FILE-prefix)
+            file_hash_id = hashlib.md5(rel_path.encode()).hexdigest()[:12]
+            file_genesis_key = f"FILE-{file_hash_id}"
 
-            # Read file content
-            if os.path.exists(abs_path):
-                file_content = self._read_file_content(abs_path)
-                file_hash = self._compute_file_hash(abs_path)
-                file_size = os.path.getsize(abs_path)
-            else:
-                file_content = None
-                file_hash = None
-                file_size = 0
-
-            # Create Genesis Key for this change
+            # 3. Create Operation Key
+            # We use the factory pattern which is thread-safe
+            self.genesis_service = get_genesis_service(session)
             operation_genesis_key = self.genesis_service.create_key(
                 key_type=GenesisKeyType.FILE_OPERATION,
-                what_description=change_description or f"{operation_type.capitalize()} file: {os.path.basename(file_path)}",
+                what_description=f"{operation_type.capitalize()}d file: {os.path.basename(abs_path)}",
                 who_actor=user_id or "system",
                 where_location=rel_path,
-                why_reason=f"File {operation_type} operation",
-                how_method="Symbiotic version control",
+                why_reason=change_description or f"File {operation_type} operation",
+                how_method="Symbiotic Version Control",
                 user_id=user_id,
                 file_path=rel_path,
                 parent_key_id=file_genesis_key,
-                code_after=file_content,
-                context_data={
-                    "file_genesis_key": file_genesis_key,
-                    "operation_type": operation_type,
-                    "file_hash": file_hash,
-                    "file_size": file_size,
-                    "symbiotic": True
-                },
-                tags=["file_change", operation_type, "symbiotic"],
+                context_data={"operation_type": operation_type, "symbiotic": True},
+                tags=["file_operation", operation_type, file_genesis_key, "symbiotic"],
                 session=session
             )
 
-            # CRITICAL: Extract key attributes IMMEDIATELY while still in the same session.
-            # Use a safety wrapper in case the object was rolled back or expired.
+            # 4. Defensive Data Extraction
             try:
                 operation_key_id = operation_genesis_key.key_id
-                operation_context_data = (
-                    operation_genesis_key.context_data.copy()
-                    if operation_genesis_key.context_data else {}
-                )
-            except Exception as attr_err:
-                logger.warning(f"[SYMBIOTIC] Could not read genesis key attributes ({attr_err}), re-fetching from DB")
-                try:
-                    # Re-query just the key_id column by object identity
-                    from sqlalchemy import inspect as sa_inspect
-                    pk = sa_inspect(operation_genesis_key).identity
-                    if pk:
-                        refreshed = session.query(
-                            type(operation_genesis_key)
-                        ).filter_by(id=pk[0]).first()
-                        operation_key_id = refreshed.key_id if refreshed else f"UNKNOWN-{id(operation_genesis_key)}"
-                        operation_context_data = refreshed.context_data.copy() if (refreshed and refreshed.context_data) else {}
-                    else:
-                        operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
-                        operation_context_data = {}
-                except Exception:
-                    operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
-                    operation_context_data = {}
+                operation_context_data = (operation_genesis_key.context_data or {}).copy()
+            except Exception:
+                operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
+                operation_context_data = {}
 
-            # Create version entry (linked to Genesis Key)
+            # 5. Version Tracking
+            self.version_tracker = get_file_version_tracker(self.base_path)
             version_result = self.version_tracker.track_file_version(
                 file_genesis_key=file_genesis_key,
                 file_path=abs_path,
@@ -159,17 +112,21 @@ class SymbioticVersionControl:
                 session=session
             )
 
-            # Update Genesis Key with version info using the copied context_data
+            # 6. Linking (Update Operation Key with Version Info)
             if version_result.get("changed", True):
                 operation_context_data["version_key_id"] = version_result["version_key_id"]
                 operation_context_data["version_number"] = version_result["version_number"]
                 
-                # Re-fetch the object to ensure it's attached to the session
-                session.refresh(operation_genesis_key)
+                try:
+                    # Attempt refresh if persistent
+                    session.refresh(operation_genesis_key)
+                except Exception:
+                    # Fallback: merge if detached or re-query
+                    operation_genesis_key = session.merge(operation_genesis_key)
+                    session.refresh(operation_genesis_key)
+
                 operation_genesis_key.context_data = operation_context_data
-                
-                # Commit updates
-                session.commit()
+                # session_scope will handle commit
 
             return {
                 "file_genesis_key": file_genesis_key,
@@ -178,22 +135,11 @@ class SymbioticVersionControl:
                 "version_number": version_result.get("version_number"),
                 "changed": version_result.get("changed", True),
                 "file_path": rel_path,
+                "absolute_path": abs_path,
                 "timestamp": datetime.utcnow().isoformat(),
-                "symbiotic": True,
-                "message": "Genesis Key and version entry created symbiotically"
+                "symbiotic": True
             }
 
-        except Exception as e:
-            logger.error(f"Error in symbiotic tracking: {e}")
-            # CRITICAL: Always rollback the active session on error
-            # This prevents "PendingRollbackError" for subsequent operations
-            if session:
-                session.rollback()
-            raise
-        finally:
-            # Close local session if we created it
-            if local_session:
-                local_session.close()
 
     def get_complete_history(
         self,
@@ -459,16 +405,10 @@ class SymbioticVersionControl:
             }
 
 
-# Global symbiotic version control instance
-_symbiotic_vc: Optional[SymbioticVersionControl] = None
-
-
 def get_symbiotic_version_control(
     base_path: Optional[str] = None,
     session: Optional[Session] = None
 ) -> SymbioticVersionControl:
-    """Get or create global symbiotic version control instance."""
-    global _symbiotic_vc
-    if _symbiotic_vc is None or base_path is not None or session is not None:
-        _symbiotic_vc = SymbioticVersionControl(base_path=base_path, session=session)
-    return _symbiotic_vc
+    """Get a symbiotic version control instance."""
+    # Never use global singleton for session-dependent services
+    return SymbioticVersionControl(base_path=base_path, session=session)

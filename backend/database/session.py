@@ -5,6 +5,7 @@ Provides session factory and context managers for database operations.
 
 from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator, Optional
+from contextlib import contextmanager
 import logging
 
 from .connection import DatabaseConnection
@@ -95,3 +96,22 @@ def get_session_factory() -> sessionmaker:
         initialize_session_factory()
 
     return SessionLocal
+@contextmanager
+def session_scope() -> Generator[Session, None, None]:
+    """
+    Context manager for database sessions.
+    Provides a transactional scope around a series of operations.
+    """
+    if SessionLocal is None:
+        initialize_session_factory()
+    
+    session = SessionLocal()
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Database session_scope error: {e}")
+        raise
+    finally:
+        session.close()

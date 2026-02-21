@@ -253,7 +253,15 @@ class GenesisKeyService:
             
             # CRITICAL: Always flush to ensure key_id is accessible
             # This prevents DetachedInstanceError when caller accesses key.key_id
-            sess.flush()
+            try:
+                sess.flush()
+            except Exception as e:
+                # If identity map conflict, attempt to merge instead
+                if "Identity map already had an identity" in str(e):
+                    key = sess.merge(key)
+                    sess.flush()
+                else:
+                    raise
             
             # CRITICAL: Extract all key data IMMEDIATELY after flush
             # This prevents DetachedInstanceError if session is rolled back later
@@ -671,13 +679,7 @@ class GenesisKeyService:
                 sess.close()
 
 
-# Global Genesis Key service instance
-_genesis_service: Optional[GenesisKeyService] = None
-
-
 def get_genesis_service(session: Optional[Session] = None) -> GenesisKeyService:
-    """Get or create the global Genesis Key service instance."""
-    global _genesis_service
-    if _genesis_service is None or session is not None:
-        _genesis_service = GenesisKeyService(session=session)
-    return _genesis_service
+    """Get a Genesis Key service instance."""
+    # Never use global singleton for session-dependent services in multi-threaded environments
+    return GenesisKeyService(session=session)

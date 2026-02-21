@@ -255,6 +255,7 @@ export default function VoiceButton({
     <div className={`voice-button-container ${size}`}>
       {/* Microphone button */}
       <button
+        type="button"
         className={`voice-button mic-button ${isListening ? "listening" : ""} ${disabled ? "disabled" : ""
           }`}
         onClick={toggleListening}
@@ -268,6 +269,7 @@ export default function VoiceButton({
       {/* Speaker button (optional) */}
       {showTTSButton && (
         <button
+          type="button"
           className={`voice-button speaker-button ${isSpeaking ? "speaking" : ""}`}
           onClick={handleSpeakClick}
           disabled={!speakText && !isSpeaking}

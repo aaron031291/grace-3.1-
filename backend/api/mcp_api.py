@@ -111,7 +111,7 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
     chat_id = request.chat_id
     messages = []
     
-    # 1. Load history if chat_id provided
+    # 1. Load context if chat_id provided
     if chat_id:
         chat = chat_repo.get(chat_id)
         if not chat:
@@ -121,22 +121,30 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
         if not request.model:
             request.model = chat.model
 
-        # Fetch existing history from DB if messages from client are empty
-        if not request.messages:
-            db_history = history_repo.get_by_chat(chat_id, skip=0, limit=50)
-            messages = [{"role": m.role, "content": m.content} for m in db_history]
+        # Fetch existing history from DB
+        db_history = history_repo.get_by_chat(chat_id, skip=0, limit=50)
+        messages = [{"role": m.role, "content": m.content} for m in db_history]
+        
+        # 2. Append incoming messages from client
+        if request.messages:
+            incoming_messages = [{"role": m.role, "content": m.content} for m in request.messages]
             
-            if not messages:
-                raise HTTPException(status_code=400, detail="No messages provided and no history found.")
-        else:
-            messages = [{"role": m.role, "content": m.content} for m in request.messages]
-            # Save the latest user message to DB if it's new
-            if messages and messages[-1]["role"] == "user":
-                history_repo.add_message(
-                    chat_id=chat_id,
-                    role="user",
-                    content=messages[-1]["content"]
-                )
+            # Identify which incoming messages are NEW (not in DB yet)
+            # Simplest way: if messages is empty, everything is new. 
+            # If not empty, we assume the client is only sending the LATEST turn
+            # because that's our implementation in ChatWindow.jsx
+            for msg in incoming_messages:
+                # Save to DB if user message
+                if msg["role"] == "user":
+                    history_repo.add_message(
+                        chat_id=chat_id,
+                        role="user",
+                        content=msg["content"]
+                    )
+                messages.append(msg)
+        
+        if not messages:
+            raise HTTPException(status_code=400, detail="No messages provided and no history found.")
     else:
         # Fallback to provided messages (stateless)
         if not request.messages:
@@ -167,7 +175,7 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
             )
             # Update chat timestamp
             from datetime import datetime
-            chat_repo.update(chat_id, updated_at=datetime.utcnow())
+            chat_repo.update(chat_id, updated_at=datetime.utcnow(), last_message_at=datetime.utcnow())
 
         return MCPChatResponse(
             content=content,
