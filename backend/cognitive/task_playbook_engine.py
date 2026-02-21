@@ -229,6 +229,18 @@ class TaskPlaybookEngine:
 
         breakdown = self.break_down_task(task_description, context)
 
+        # DERIVE SPECIFIC COMPLETION CRITERIA from interrogation answers
+        # This is what defines 100% for THIS specific task
+        resolved_answers = {}
+        for key in ["what", "where", "why", "how", "who", "when"]:
+            entry = ledger.get(key)
+            if entry and entry.level in (AmbiguityLevel.KNOWN, AmbiguityLevel.INFERRED):
+                resolved_answers[key] = entry.value
+
+        specific_criteria = self.derive_completion_criteria(
+            task_description, resolved_answers, breakdown.steps
+        )
+
         return {
             "status": "ready",
             "task": task_description,
@@ -243,6 +255,15 @@ class TaskPlaybookEngine:
                 "estimated_minutes": breakdown.estimated_minutes,
                 "from_playbook": breakdown.from_playbook,
                 "from_kimi": breakdown.from_kimi,
+            },
+            "completion_criteria": specific_criteria,
+            "what_100_percent_means": {
+                "total_criteria": len(specific_criteria),
+                "by_category": {},
+                "criteria": [
+                    {"name": c["name"], "category": c.get("category", "general"), "auto": c.get("auto", False)}
+                    for c in specific_criteria
+                ],
             },
         }
 
@@ -501,6 +522,166 @@ class TaskPlaybookEngine:
                     )
         except Exception:
             pass
+
+    def derive_completion_criteria(
+        self,
+        task_description: str,
+        interrogation_answers: Dict[str, Any],
+        steps: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """
+        Derive SPECIFIC, MEASURABLE completion criteria from the task.
+
+        Uses interrogation answers (WHAT/WHERE/HOW) to generate
+        criteria unique to THIS task, not generic templates.
+
+        Args:
+            task_description: The full task description
+            interrogation_answers: Resolved WHAT/WHERE/HOW/WHY/WHO/WHEN
+            steps: The task breakdown steps
+
+        Returns:
+            List of specific, measurable completion criteria
+        """
+        criteria = []
+        what = interrogation_answers.get("what", {})
+        where = interrogation_answers.get("where", {})
+        how = interrogation_answers.get("how", {})
+
+        what_val = what.get("value", what) if isinstance(what, dict) else str(what)
+        where_val = where.get("value", where) if isinstance(where, dict) else str(where)
+        how_val = how.get("value", how) if isinstance(how, dict) else str(how)
+
+        desc_lower = task_description.lower()
+
+        # ---- CRITERIA FROM WHAT (the deliverable) ----
+        if what_val:
+            criteria.append({
+                "id": "deliverable_exists",
+                "name": f"Deliverable exists: {str(what_val)[:100]}",
+                "auto": False,
+                "category": "deliverable",
+                "source": "what",
+            })
+
+        # ---- CRITERIA FROM WHERE (location) ----
+        if where_val:
+            # Extract file paths
+            import re
+            files = re.findall(r'[\w/]+\.(?:py|js|ts|jsx|tsx)', str(where_val))
+            for f in files[:5]:
+                criteria.append({
+                    "id": f"file_modified_{f.replace('/', '_').replace('.', '_')}",
+                    "name": f"File modified/created: {f}",
+                    "auto": True,
+                    "category": "location",
+                    "source": "where",
+                    "check_file": f,
+                })
+
+        # ---- CRITERIA FROM HOW (approach) ----
+        if how_val:
+            criteria.append({
+                "id": "approach_implemented",
+                "name": f"Approach implemented: {str(how_val)[:100]}",
+                "auto": False,
+                "category": "implementation",
+                "source": "how",
+            })
+
+        # ---- CRITERIA FROM STEPS (each step must complete) ----
+        for step in steps:
+            step_criteria = step.get("completion_criteria", [])
+            for sc in step_criteria:
+                criteria.append({
+                    "id": f"step_{step['step_id']}_{sc}" if isinstance(sc, str) else f"step_{step['step_id']}",
+                    "name": f"[{step['step_id']}] {step['action']}: {sc}" if isinstance(sc, str) else f"[{step['step_id']}] {step['action']}",
+                    "auto": False,
+                    "category": "step_completion",
+                    "source": "breakdown",
+                    "step_id": step["step_id"],
+                })
+
+        # ---- CRITERIA FROM TASK TYPE PATTERNS ----
+        # API endpoints
+        if any(w in desc_lower for w in ["endpoint", "api", "route", "post", "get"]):
+            endpoint_match = re.search(r'(?:POST|GET|PUT|DELETE)\s+/\w+', task_description, re.IGNORECASE)
+            if endpoint_match:
+                ep = endpoint_match.group()
+                criteria.append({"id": "endpoint_registered", "name": f"Endpoint registered: {ep}", "auto": True, "category": "api"})
+                criteria.append({"id": "endpoint_returns_success", "name": f"Endpoint returns 200 on valid request", "auto": True, "category": "api"})
+                criteria.append({"id": "endpoint_returns_error", "name": f"Endpoint returns 400/401/404 on invalid request", "auto": True, "category": "api"})
+            else:
+                criteria.append({"id": "endpoint_registered", "name": "API endpoint registered in router", "auto": True, "category": "api"})
+
+        # Authentication/security tasks
+        if any(w in desc_lower for w in ["auth", "login", "password", "jwt", "token", "security"]):
+            criteria.append({"id": "no_plaintext_secrets", "name": "No hardcoded secrets or plaintext passwords", "auto": True, "category": "security"})
+            criteria.append({"id": "auth_failure_handled", "name": "Authentication failure returns proper error", "auto": False, "category": "security"})
+
+        # Database tasks
+        if any(w in desc_lower for w in ["database", "model", "table", "migration", "schema"]):
+            criteria.append({"id": "migration_exists", "name": "Database migration exists", "auto": True, "category": "database"})
+            criteria.append({"id": "model_has_constraints", "name": "Model has proper constraints (not null, indexes)", "auto": False, "category": "database"})
+
+        # Testing tasks
+        if any(w in desc_lower for w in ["test", "spec", "coverage"]):
+            criteria.append({"id": "tests_cover_happy_path", "name": "Tests cover success case", "auto": False, "category": "testing"})
+            criteria.append({"id": "tests_cover_error_path", "name": "Tests cover error/edge cases", "auto": False, "category": "testing"})
+
+        # ---- UNIVERSAL CRITERIA (always apply) ----
+        criteria.append({"id": "syntax_valid", "name": "All changed files parse without syntax errors", "auto": True, "category": "quality"})
+        criteria.append({"id": "tests_pass", "name": "All tests pass (0 failures, 0 warnings)", "auto": True, "category": "quality"})
+        criteria.append({"id": "no_regressions", "name": "No regressions in existing tests", "auto": True, "category": "quality"})
+
+        # ---- CRITERIA FROM COMPILED KNOWLEDGE ----
+        # Check if we have known requirements for this domain
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+
+            import re as _re
+            key_terms = _re.findall(r'\b[A-Z][a-z]+\b', task_description)[:3]
+            for term in key_terms:
+                rules = compiler.query_rules(context=term, limit=2)
+                for rule in rules:
+                    criteria.append({
+                        "id": f"rule_{rule.get('rule_name', 'unknown')[:30]}",
+                        "name": f"Compiled rule: {rule.get('action', '')[:100]}",
+                        "auto": False,
+                        "category": "compiled_knowledge",
+                        "source": "knowledge_compiler",
+                    })
+        except Exception:
+            pass
+
+        # ---- CRITERIA FROM PLAYBOOK HISTORY ----
+        # What criteria did similar past tasks use?
+        try:
+            playbook = self._find_matching_playbook(task_description)
+            if playbook and playbook.steps:
+                for step in playbook.steps[:5]:
+                    for sc in step.get("completion_criteria", [])[:2]:
+                        crit_name = f"[Playbook] {sc}" if isinstance(sc, str) else f"[Playbook] {step.get('action', '')}"
+                        criteria.append({
+                            "id": f"playbook_{step.get('step_id', 'x')}_{len(criteria)}",
+                            "name": crit_name[:150],
+                            "auto": False,
+                            "category": "playbook_learned",
+                            "source": f"playbook:{playbook.playbook_id}",
+                        })
+        except Exception:
+            pass
+
+        # Deduplicate by name
+        seen = set()
+        unique = []
+        for c in criteria:
+            if c["name"] not in seen:
+                seen.add(c["name"])
+                unique.append(c)
+
+        return unique
 
     def break_down_task(
         self,
