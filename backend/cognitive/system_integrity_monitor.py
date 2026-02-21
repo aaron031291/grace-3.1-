@@ -72,6 +72,8 @@ class SystemIntegrityMonitor:
         issues.extend(self._check_knowledge_store())
         issues.extend(self._check_weight_health())
         issues.extend(self._check_api_coverage())
+        issues.extend(self._check_rag_alignment())
+        issues.extend(self._check_indexer_health())
 
         # Categorize
         critical = [i for i in issues if i.severity == "critical"]
@@ -333,6 +335,104 @@ class SystemIntegrityMonitor:
                 ))
         except Exception:
             pass
+
+        return issues
+
+    def _check_rag_alignment(self) -> List[IntegrityIssue]:
+        """Check RAG subsystem alignment -- are all knowledge sources searchable?"""
+        issues = []
+
+        # Check if Knowledge Indexer has run
+        try:
+            from cognitive.knowledge_indexer import get_knowledge_indexer
+            indexer = get_knowledge_indexer(self.session)
+            stats = indexer.get_stats()
+
+            if stats.get("last_run") is None:
+                issues.append(IntegrityIssue(
+                    "rag_alignment", "high", "knowledge_indexer",
+                    "Knowledge Indexer has NEVER run - internal knowledge not searchable via RAG",
+                    "Run POST /llm-learning/index/all or wait for continuous learning loop",
+                    True
+                ))
+            else:
+                total = stats.get("total_indexed", 0)
+                issues.append(IntegrityIssue(
+                    "connected", "info", "knowledge_indexer",
+                    f"Knowledge Indexer active: {total} entries indexed across {len(stats.get('by_source', {}))} sources",
+                    "", False
+                ))
+
+                # Check per-source coverage
+                by_source = stats.get("by_source", {})
+                expected_sources = ["chat_history", "completed_tasks", "playbooks", "diagnostics", "genesis_keys", "distilled_knowledge"]
+                for source in expected_sources:
+                    if source not in by_source or by_source[source] == 0:
+                        issues.append(IntegrityIssue(
+                            "rag_alignment", "medium", f"indexer_{source}",
+                            f"RAG source '{source}' has 0 indexed entries",
+                            f"This knowledge source exists but isn't searchable yet",
+                            True
+                        ))
+
+        except Exception as e:
+            issues.append(IntegrityIssue(
+                "rag_alignment", "medium", "knowledge_indexer",
+                f"Cannot check Knowledge Indexer: {e}",
+                "Knowledge Indexer may not be initialized",
+                False
+            ))
+
+        # Check retrieval quality
+        try:
+            from cognitive.knowledge_indexer import get_retrieval_quality_tracker
+            qt = get_retrieval_quality_tracker(self.session)
+            report = qt.get_quality_report()
+
+            total = report.get("total_retrievals_tracked", 0)
+            if total > 10:
+                rate = report.get("usefulness_rate", 0)
+                if rate < 0.3:
+                    issues.append(IntegrityIssue(
+                        "rag_alignment", "high", "retrieval_quality",
+                        f"Retrieval usefulness rate is {rate:.0%} -- most retrieved results are noise",
+                        "Reranker may need tuning, or documents need better chunking",
+                        False
+                    ))
+                else:
+                    issues.append(IntegrityIssue(
+                        "connected", "info", "retrieval_quality",
+                        f"Retrieval quality: {rate:.0%} usefulness rate ({total} retrievals tracked)",
+                        "", False
+                    ))
+        except Exception:
+            pass
+
+        return issues
+
+    def _check_indexer_health(self) -> List[IntegrityIssue]:
+        """Check if all subsystems that produce knowledge are feeding the indexer."""
+        issues = []
+
+        # Count tables that should be indexed
+        tables_to_check = [
+            ("Chat history", "models.database_models", "Chat"),
+            ("LLM interactions", "models.llm_tracking_models", "LLMInteraction"),
+        ]
+
+        for name, module, model_name in tables_to_check:
+            try:
+                mod = __import__(module, fromlist=[model_name])
+                model_class = getattr(mod, model_name)
+                count = self.session.query(model_class).count()
+                if count > 0:
+                    issues.append(IntegrityIssue(
+                        "connected", "info", f"data_{name.lower().replace(' ', '_')}",
+                        f"{name}: {count} records available for indexing",
+                        "", False
+                    ))
+            except Exception:
+                pass
 
         return issues
 
