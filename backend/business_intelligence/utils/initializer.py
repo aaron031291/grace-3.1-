@@ -21,6 +21,8 @@ from business_intelligence.connectors.tiktok_connector import TikTokConnector
 from business_intelligence.connectors.serpapi_connector import SerpAPIConnector
 from business_intelligence.connectors.web_scraping_connector import WebScrapingConnector
 from business_intelligence.connectors.junglescout_connector import JungleScoutConnector
+from business_intelligence.connectors.youtube_connector import YouTubeConnector
+from business_intelligence.connectors.instagram_connector import InstagramConnector
 from business_intelligence.synthesis.intelligence_engine import IntelligenceEngine
 from business_intelligence.synthesis.reasoning_engine import BIReasoningEngine
 from business_intelligence.campaigns.waitlist_manager import WaitlistManager
@@ -29,6 +31,7 @@ from business_intelligence.campaigns.ad_copy_generator import AdCopyGenerator
 from business_intelligence.campaigns.validation_engine import ValidationEngine
 from business_intelligence.campaigns.lookalike_engine import LookalikeEngine
 from business_intelligence.campaigns.ad_optimizer import AdOptimizer
+from business_intelligence.campaigns.dynamic_creative import DynamicCreativeEngine
 from business_intelligence.customer_intelligence.archetype_engine import ArchetypeEngine
 from business_intelligence.customer_intelligence.pattern_analyzer import CrossPatternAnalyzer
 from business_intelligence.product_discovery.product_ideation import ProductIdeationEngine
@@ -58,6 +61,7 @@ class BISystem:
         self.validation_engine: Optional[ValidationEngine] = None
         self.lookalike_engine: Optional[LookalikeEngine] = None
         self.ad_optimizer: Optional[AdOptimizer] = None
+        self.dynamic_creative: Optional[DynamicCreativeEngine] = None
         self.archetype_engine: Optional[ArchetypeEngine] = None
         self.pattern_analyzer: Optional[CrossPatternAnalyzer] = None
         self.product_ideation: Optional[ProductIdeationEngine] = None
@@ -98,6 +102,7 @@ class BISystem:
         self.ad_optimizer = AdOptimizer(
             target_cpa=self.config.target_cpa,
         )
+        self.dynamic_creative = DynamicCreativeEngine()
         self.archetype_engine = ArchetypeEngine(
             min_cluster_size=self.config.pain_point_cluster_min_size
         )
@@ -130,6 +135,8 @@ class BISystem:
             "tiktok": TikTokConnector,
             "serpapi": SerpAPIConnector,
             "jungle_scout": JungleScoutConnector,
+            "youtube": YouTubeConnector,
+            "instagram": InstagramConnector,
             "web_scraping": WebScrapingConnector,
         }
 

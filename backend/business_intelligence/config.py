@@ -137,6 +137,10 @@ class BIConfig:
             "youtube": ConnectorConfig(
                 name="YouTube Analytics",
                 api_key=os.getenv("YOUTUBE_API_KEY"),
+                access_token=os.getenv("YOUTUBE_OAUTH_TOKEN"),
+                extra={
+                    "channel_id": os.getenv("YOUTUBE_CHANNEL_ID"),
+                }
             ),
         }
 
