@@ -51,6 +51,8 @@ class LibraryConnectors:
     CONCEPTNET_API = "https://api.conceptnet.io"
     WOLFRAM_API = "https://api.wolframalpha.com/v2/query"
 
+    HEADERS = {"User-Agent": "GraceOS/1.0 (knowledge mining)", "Accept": "application/json"}
+
     def __init__(self, wolfram_app_id: Optional[str] = None, timeout: float = 10.0):
         self.wolfram_app_id = wolfram_app_id
         self.timeout = timeout
@@ -88,6 +90,7 @@ class LibraryConnectors:
                     "limit": 3,
                     "format": "json",
                 },
+                headers=self.HEADERS,
                 timeout=self.timeout,
             )
             search_data = search_resp.json()
@@ -120,6 +123,7 @@ class LibraryConnectors:
                     "props": "labels|descriptions|claims",
                     "format": "json",
                 },
+                headers=self.HEADERS,
                 timeout=self.timeout,
             )
             entity_data = entity_resp.json()
