@@ -913,6 +913,39 @@ async def chat(request: ChatRequest):
                 detail="No user message found in conversation"
             )
 
+        # ==================== DISTILLED KNOWLEDGE CHECK ====================
+        # Check if we already have a high-confidence answer stored.
+        # If so, skip the LLM entirely -- this is the dependency reduction in action.
+        try:
+            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            from database.session import SessionLocal
+
+            _dk_session = SessionLocal()
+            _miner = get_llm_knowledge_miner(_dk_session)
+
+            _cached = _miner.lookup(user_query, min_confidence=0.8)
+            if _cached and _cached.get("verified"):
+                logger.info(f"[DISTILLED] Serving from distilled knowledge (confidence={_cached['confidence']:.2f})")
+
+                from cognitive.learning_hook import track_learning_event
+                track_learning_event(
+                    "distilled_knowledge_hit",
+                    f"Served query from distilled store, skipped LLM",
+                    data={"confidence": _cached["confidence"], "times_accessed": _cached["times_accessed"]},
+                )
+
+                _dk_session.close()
+                return ChatResponse(
+                    response=_cached["response"],
+                    sources=[{"text": "Served from Grace's distilled knowledge (no LLM call)", "score": _cached["confidence"]}],
+                    model=f"distilled:{_cached.get('model_used', 'stored')}",
+                    temperature=request.temperature,
+                )
+
+            _dk_session.close()
+        except Exception as _dk_err:
+            logger.debug(f"[DISTILLED] Check error (non-fatal): {_dk_err}")
+
         # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
         greeting_pattern = re.compile(
             r"^(hi|hello|hey|hola|yo|sup|what'?s\s+up|wassup|howdy|greetings|good\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye|see\s+ya)\b",
@@ -1011,6 +1044,28 @@ async def chat(request: ChatRequest):
         if magma_result and "sources" in magma_result:
             existing_sources = response_data.get("sources") or []
             response_data["sources"] = existing_sources + magma_result["sources"]
+
+        # ==================== DISTILL LLM RESPONSE ====================
+        # Store this LLM response in distilled knowledge for future use.
+        # Next time someone asks the same/similar question, Grace can
+        # answer from the store without calling the LLM.
+        try:
+            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            from database.session import SessionLocal
+
+            _dist_session = SessionLocal()
+            _dist_miner = get_llm_knowledge_miner(_dist_session)
+            _dist_miner.store_interaction(
+                query=user_query,
+                response=response_data.get("message", "")[:10000],
+                model_used=model_name,
+                confidence=tier_result.confidence if hasattr(tier_result, 'confidence') else 0.6,
+                domain=None,
+            )
+            _dist_session.commit()
+            _dist_session.close()
+        except Exception as _dist_err:
+            logger.debug(f"[DISTILL] Storage error (non-fatal): {_dist_err}")
 
         # ==================== KIMI LEARNING PIPELINE ====================
         # Track every chat interaction for learning. Run hallucination check.
@@ -2127,6 +2182,20 @@ async def submit_chat_feedback(request: ChatFeedbackRequest):
         )
         _fb_session.commit()
         _fb_session.close()
+
+        # Also update distilled knowledge quality
+        try:
+            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            _fk_session = SessionLocal()
+            _fk_miner = get_llm_knowledge_miner(_fk_session)
+            _fk_miner.update_quality(
+                query=request.query,
+                feedback=request.feedback,
+            )
+            _fk_session.commit()
+            _fk_session.close()
+        except Exception:
+            pass
 
         return {"status": "recorded", "feedback": request.feedback}
 
