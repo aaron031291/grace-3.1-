@@ -1569,3 +1569,44 @@ async def compile_knowledge(
         return get_knowledge_compiler(db).compile_batch(limit=limit)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KNOWLEDGE INDEXER (makes ALL internal knowledge RAG-searchable)
+# =======================================================================
+
+@router.post("/index/all")
+async def index_all_knowledge(
+    since_hours: int = Query(default=24, description="Index knowledge from last N hours"),
+    db: Session = Depends(get_db),
+):
+    """
+    Index all internal knowledge sources into vector store for RAG.
+
+    Makes searchable: chats, tasks, playbooks, diagnostics,
+    Genesis keys, user feedback, distilled knowledge.
+    """
+    try:
+        from cognitive.knowledge_indexer import get_knowledge_indexer
+        indexer = get_knowledge_indexer(db)
+        return indexer.index_all_sources(since_hours=since_hours)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/index/stats")
+async def get_index_stats(db: Session = Depends(get_db)):
+    """Get knowledge indexer statistics."""
+    try:
+        from cognitive.knowledge_indexer import get_knowledge_indexer
+        return get_knowledge_indexer(db).get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/retrieval-quality")
+async def get_retrieval_quality(db: Session = Depends(get_db)):
+    """Get retrieval quality report - which results are useful vs noise."""
+    try:
+        from cognitive.knowledge_indexer import get_retrieval_quality_tracker
+        return get_retrieval_quality_tracker(db).get_quality_report()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

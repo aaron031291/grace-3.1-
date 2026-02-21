@@ -1085,6 +1085,25 @@ async def chat(request: ChatRequest):
             existing_sources = response_data.get("sources") or []
             response_data["sources"] = existing_sources + magma_result["sources"]
 
+        # ==================== RETRIEVAL QUALITY TRACKING ====================
+        # Track which retrieved chunks were useful in the final response
+        try:
+            from cognitive.knowledge_indexer import get_retrieval_quality_tracker
+            from database.session import SessionLocal
+            _rq_session = SessionLocal()
+            _rq_tracker = get_retrieval_quality_tracker(_rq_session)
+
+            sources = response_data.get("sources") or []
+            if sources and isinstance(sources, list):
+                _rq_tracker.record_retrieval_usage(
+                    retrieved_chunks=sources,
+                    final_response=response_data.get("message", ""),
+                )
+                _rq_session.commit()
+            _rq_session.close()
+        except Exception:
+            pass
+
         # ==================== DISTILL LLM RESPONSE ====================
         # Store this LLM response in distilled knowledge for future use.
         # Next time someone asks the same/similar question, Grace can

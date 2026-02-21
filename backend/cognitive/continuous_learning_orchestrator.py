@@ -271,7 +271,21 @@ class ContinuousLearningOrchestrator:
                 if self._should_mine_chats():
                     self._run_chat_mining()
 
-                # 8. Update metrics
+                # 8. Index internal knowledge for RAG (every 50 cycles ≈ ~8 min)
+                if cycle_count % 50 == 0 and cycle_count > 0:
+                    try:
+                        from cognitive.knowledge_indexer import get_knowledge_indexer
+                        from database.session import SessionLocal
+                        _idx_session = SessionLocal()
+                        indexer = get_knowledge_indexer(_idx_session)
+                        idx_result = indexer.index_all_sources(since_hours=1)
+                        _idx_session.close()
+                        if idx_result.get("total_indexed", 0) > 0:
+                            logger.info(f"[CONTINUOUS_LEARNING] Indexed {idx_result['total_indexed']} internal knowledge entries for RAG")
+                    except Exception as e:
+                        logger.debug(f"[CONTINUOUS_LEARNING] Knowledge indexing: {e}")
+
+                # 9. Update metrics
                 self._update_metrics()
 
                 # 6. Log periodic status
