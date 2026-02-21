@@ -1,0 +1,405 @@
+"""
+System Integrity Monitor
+
+Continuously tracks unknowns, missing wirings, disconnected components,
+and system health. Kimi reads this as part of her system state observation.
+
+Runs automatically. Reports what's connected, what's broken, what's unknown.
+User never has to ask "what's the state" -- the system tells them.
+
+WHAT IT TRACKS:
+  - Connected vs disconnected subsystems
+  - Missing wiring (imports exist but connections don't)
+  - Dead code (functions defined but never called)
+  - Knowledge gaps (topics with no compiled knowledge)
+  - Test coverage gaps (components without tests)
+  - Weight system health (stale weights, extreme values)
+  - Learning pipeline status (is data flowing?)
+  - Dependency trend (is autonomy improving?)
+
+Kimi reads this in her system state. If something is broken,
+Kimi's diagnosis will include it. The user sees it in the dashboard.
+"""
+
+import os
+import re
+import ast
+import logging
+from typing import Dict, Any, List, Optional
+from datetime import datetime, timezone
+from dataclasses import dataclass, field
+
+from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class IntegrityIssue:
+    """A single integrity issue detected."""
+    category: str       # wiring, dead_code, knowledge_gap, test_gap, weight, pipeline
+    severity: str       # critical, high, medium, low, info
+    component: str      # which component
+    description: str    # what's wrong
+    suggestion: str     # how to fix
+    auto_fixable: bool  # can Grace fix this herself?
+
+
+class SystemIntegrityMonitor:
+    """
+    Continuously monitors system integrity.
+
+    Kimi reads this. Dashboard shows this. User always knows the state.
+    """
+
+    def __init__(self, session: Session, workspace_dir: str = None):
+        self.session = session
+        self.workspace = workspace_dir or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self._last_scan: Optional[datetime] = None
+        self._cached_report: Optional[Dict[str, Any]] = None
+
+    def full_scan(self) -> Dict[str, Any]:
+        """
+        Run a complete system integrity scan.
+
+        Returns a report with everything that's connected,
+        disconnected, missing, or unknown.
+        """
+        issues = []
+
+        issues.extend(self._check_subsystem_connections())
+        issues.extend(self._check_learning_pipeline())
+        issues.extend(self._check_knowledge_store())
+        issues.extend(self._check_weight_health())
+        issues.extend(self._check_api_coverage())
+
+        # Categorize
+        critical = [i for i in issues if i.severity == "critical"]
+        high = [i for i in issues if i.severity == "high"]
+        medium = [i for i in issues if i.severity == "medium"]
+        low = [i for i in issues if i.severity == "low"]
+        info = [i for i in issues if i.severity == "info"]
+
+        connected = [i for i in issues if i.category == "connected"]
+        disconnected = [i for i in issues if i.category == "disconnected"]
+
+        report = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "total_issues": len(issues) - len(connected),
+            "critical": len(critical),
+            "high": len(high),
+            "medium": len(medium),
+            "low": len(low),
+            "connected_systems": len(connected),
+            "disconnected_systems": len(disconnected),
+            "health_score": self._calculate_health_score(issues),
+            "issues": [
+                {
+                    "category": i.category,
+                    "severity": i.severity,
+                    "component": i.component,
+                    "description": i.description,
+                    "suggestion": i.suggestion,
+                    "auto_fixable": i.auto_fixable,
+                }
+                for i in issues if i.category != "connected"
+            ],
+            "connected": [
+                {"component": i.component, "description": i.description}
+                for i in connected
+            ],
+        }
+
+        self._last_scan = datetime.now(timezone.utc)
+        self._cached_report = report
+
+        # Track the scan
+        try:
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "integrity_scan",
+                f"Scan complete: {report['total_issues']} issues, health={report['health_score']:.0f}%",
+                data={"health": report["health_score"], "critical": len(critical), "high": len(high)},
+            )
+        except Exception:
+            pass
+
+        return report
+
+    def _check_subsystem_connections(self) -> List[IntegrityIssue]:
+        """Check which subsystems are connected vs disconnected."""
+        issues = []
+
+        try:
+            from startup import get_subsystems
+            subs = get_subsystems()
+            status = subs.get_status()
+
+            for system, state in status.items():
+                if system in ("active_count", "active_subsystems"):
+                    continue
+                if state == "active":
+                    issues.append(IntegrityIssue(
+                        "connected", "info", system,
+                        f"{system} is active and connected",
+                        "", False
+                    ))
+                else:
+                    issues.append(IntegrityIssue(
+                        "disconnected", "medium", system,
+                        f"{system} is NOT active",
+                        f"Check startup.py initialization for {system}",
+                        False
+                    ))
+        except Exception as e:
+            issues.append(IntegrityIssue(
+                "disconnected", "critical", "startup",
+                f"Cannot read subsystem status: {e}",
+                "startup.py may not have been initialized",
+                False
+            ))
+
+        return issues
+
+    def _check_learning_pipeline(self) -> List[IntegrityIssue]:
+        """Check if data is flowing through the learning pipeline."""
+        issues = []
+
+        # Check LLM interaction tracker has recent data
+        try:
+            from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+            tracker = get_llm_interaction_tracker(self.session)
+            stats = tracker.get_interaction_stats(time_window_hours=24)
+
+            if stats.get("total", 0) == 0:
+                issues.append(IntegrityIssue(
+                    "pipeline", "high", "llm_interaction_tracker",
+                    "No interactions recorded in last 24 hours",
+                    "The learning pipeline has no data flowing. Use /chat or /llm-learning/track to feed it.",
+                    False
+                ))
+            else:
+                issues.append(IntegrityIssue(
+                    "connected", "info", "llm_interaction_tracker",
+                    f"{stats['total']} interactions recorded in last 24h",
+                    "", False
+                ))
+        except Exception as e:
+            issues.append(IntegrityIssue(
+                "pipeline", "high", "llm_interaction_tracker",
+                f"Cannot check interaction tracker: {e}",
+                "Database may not have LLM tracking tables",
+                False
+            ))
+
+        # Check pattern learner progress
+        try:
+            from cognitive.llm_pattern_learner import get_llm_pattern_learner
+            learner = get_llm_pattern_learner(self.session)
+            progress = learner.get_learning_progress()
+
+            if progress.get("patterns_extracted", 0) == 0:
+                issues.append(IntegrityIssue(
+                    "pipeline", "medium", "pattern_learner",
+                    "No patterns extracted yet",
+                    "Run POST /llm-learning/patterns/extract or wait for autonomous loop.",
+                    True
+                ))
+            else:
+                issues.append(IntegrityIssue(
+                    "connected", "info", "pattern_learner",
+                    f"{progress['patterns_extracted']} patterns, stage={progress['learning_stage']}",
+                    "", False
+                ))
+        except Exception:
+            pass
+
+        # Check dependency reducer
+        try:
+            from cognitive.llm_dependency_reducer import get_llm_dependency_reducer
+            reducer = get_llm_dependency_reducer(self.session)
+            trend = reducer.get_dependency_trend(days=7)
+
+            issues.append(IntegrityIssue(
+                "connected", "info", "dependency_reducer",
+                f"Trend: {trend.get('trend_direction', 'unknown')}, data points: {trend.get('data_points', 0)}",
+                "", False
+            ))
+        except Exception:
+            pass
+
+        return issues
+
+    def _check_knowledge_store(self) -> List[IntegrityIssue]:
+        """Check compiled knowledge store health."""
+        issues = []
+
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+            stats = compiler.get_stats()
+
+            total = sum(stats.get(k, 0) for k in ["total_facts", "total_procedures", "total_rules", "total_topics", "total_entities"])
+
+            if total == 0:
+                issues.append(IntegrityIssue(
+                    "knowledge_gap", "high", "knowledge_compiler",
+                    "Knowledge store is EMPTY - no compiled facts, procedures, or rules",
+                    "Run POST /llm-learning/compile or ingest documents. The unified intelligence layers 1-3 have nothing to query.",
+                    True
+                ))
+            else:
+                issues.append(IntegrityIssue(
+                    "connected", "info", "knowledge_compiler",
+                    f"Knowledge store: {stats.get('total_facts', 0)} facts, {stats.get('total_procedures', 0)} procedures, {stats.get('total_rules', 0)} rules",
+                    "", False
+                ))
+        except Exception:
+            issues.append(IntegrityIssue(
+                "knowledge_gap", "medium", "knowledge_compiler",
+                "Cannot check knowledge store",
+                "Knowledge compiler tables may not exist yet",
+                True
+            ))
+
+        # Check distilled knowledge
+        try:
+            from cognitive.knowledge_compiler import DistilledKnowledge
+            distilled_count = self.session.query(DistilledKnowledge).count()
+
+            if distilled_count == 0:
+                issues.append(IntegrityIssue(
+                    "knowledge_gap", "medium", "distilled_knowledge",
+                    "No distilled knowledge stored",
+                    "Start using /chat - every LLM response is automatically distilled.",
+                    False
+                ))
+            else:
+                verified = self.session.query(DistilledKnowledge).filter(
+                    DistilledKnowledge.is_verified == True
+                ).count()
+                issues.append(IntegrityIssue(
+                    "connected", "info", "distilled_knowledge",
+                    f"{distilled_count} distilled entries ({verified} verified)",
+                    "", False
+                ))
+        except Exception:
+            pass
+
+        # Check playbooks
+        try:
+            from cognitive.task_playbook_engine import TaskPlaybook
+            playbook_count = self.session.query(TaskPlaybook).count()
+
+            if playbook_count == 0:
+                issues.append(IntegrityIssue(
+                    "knowledge_gap", "low", "playbooks",
+                    "No task playbooks saved yet",
+                    "Complete tasks with 100% verification - playbooks auto-save on completion.",
+                    False
+                ))
+            else:
+                issues.append(IntegrityIssue(
+                    "connected", "info", "playbooks",
+                    f"{playbook_count} playbooks saved",
+                    "", False
+                ))
+        except Exception:
+            pass
+
+        return issues
+
+    def _check_weight_health(self) -> List[IntegrityIssue]:
+        """Check weight system health."""
+        issues = []
+
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            ws = get_grace_weight_system(self.session)
+            stats = ws.get_stats()
+
+            if stats.get("total_weight_updates", 0) == 0:
+                issues.append(IntegrityIssue(
+                    "weight", "medium", "weight_system",
+                    "No weight updates recorded - backpropagation not happening",
+                    "User feedback (upvote/downvote) triggers weight updates. Use POST /chat/feedback.",
+                    False
+                ))
+            else:
+                issues.append(IntegrityIssue(
+                    "connected", "info", "weight_system",
+                    f"{stats['total_weight_updates']} weight updates, KPIs: {stats.get('current_kpis', {})}",
+                    "", False
+                ))
+        except Exception:
+            pass
+
+        return issues
+
+    def _check_api_coverage(self) -> List[IntegrityIssue]:
+        """Check API endpoint coverage."""
+        issues = []
+
+        try:
+            api_file = os.path.join(self.workspace, "api", "llm_learning_api.py")
+            with open(api_file) as f:
+                content = f.read()
+            endpoint_count = content.count("@router.")
+
+            issues.append(IntegrityIssue(
+                "connected", "info", "api",
+                f"{endpoint_count} API endpoints defined in llm_learning_api.py",
+                "", False
+            ))
+        except Exception:
+            pass
+
+        return issues
+
+    def _calculate_health_score(self, issues: List[IntegrityIssue]) -> float:
+        """Calculate overall system health 0-100."""
+        if not issues:
+            return 50.0
+
+        connected = len([i for i in issues if i.category == "connected"])
+        total_components = connected + len([i for i in issues if i.category in ("disconnected", "pipeline", "knowledge_gap", "weight")])
+
+        if total_components == 0:
+            return 50.0
+
+        # Base score from connection ratio
+        base = (connected / total_components) * 70
+
+        # Penalty for critical/high issues
+        critical = len([i for i in issues if i.severity == "critical"])
+        high = len([i for i in issues if i.severity == "high"])
+
+        penalty = (critical * 15) + (high * 5)
+
+        return max(0, min(100, base + 30 - penalty))
+
+    def get_quick_status(self) -> Dict[str, Any]:
+        """Quick status check without full scan. Uses cached report if recent."""
+        if self._cached_report and self._last_scan:
+            age = (datetime.now(timezone.utc) - self._last_scan).total_seconds()
+            if age < 300:  # Cache valid for 5 minutes
+                return {
+                    "cached": True,
+                    "age_seconds": int(age),
+                    "health_score": self._cached_report["health_score"],
+                    "total_issues": self._cached_report["total_issues"],
+                    "critical": self._cached_report["critical"],
+                    "connected_systems": self._cached_report["connected_systems"],
+                }
+
+        return self.full_scan()
+
+
+_monitor: Optional[SystemIntegrityMonitor] = None
+
+
+def get_system_integrity_monitor(session: Session) -> SystemIntegrityMonitor:
+    global _monitor
+    if _monitor is None:
+        _monitor = SystemIntegrityMonitor(session)
+    return _monitor

@@ -216,6 +216,7 @@ class KimiBrain:
             "patterns": self._read_patterns(),
             "interaction_stats": self._read_interaction_stats(),
             "active_tasks": self._read_active_tasks(),
+            "system_integrity": self._read_system_integrity(),
         }
 
         logger.info("[KIMI-BRAIN] System state read complete")
@@ -313,6 +314,22 @@ class KimiBrain:
                 "at_risk": schedule.get("at_risk", 0),
                 "tasks": active[:5],
                 "stuck": stuck[:3],
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    def _read_system_integrity(self) -> Dict[str, Any]:
+        """Read system integrity status -- what's connected, broken, unknown."""
+        try:
+            from cognitive.system_integrity_monitor import get_system_integrity_monitor
+            monitor = get_system_integrity_monitor(self.session)
+            report = monitor.get_quick_status()
+            return {
+                "connected": True,
+                "health_score": report.get("health_score", 0),
+                "total_issues": report.get("total_issues", 0),
+                "critical_issues": report.get("critical", 0),
+                "connected_systems": report.get("connected_systems", 0),
             }
         except Exception as e:
             return {"connected": False, "error": str(e)}

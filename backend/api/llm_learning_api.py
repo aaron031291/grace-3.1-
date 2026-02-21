@@ -1452,3 +1452,33 @@ async def get_research_reliability(db: Session = Depends(get_db)):
         return coordinator.research_tracker.get_source_reliability()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# SYSTEM INTEGRITY MONITOR
+# =======================================================================
+
+@router.get("/integrity/scan")
+async def scan_system_integrity(db: Session = Depends(get_db)):
+    """
+    Full system integrity scan.
+
+    Shows what's connected, what's broken, what's unknown.
+    Kimi reads this automatically. Dashboard shows this.
+    """
+    try:
+        from cognitive.system_integrity_monitor import get_system_integrity_monitor
+        monitor = get_system_integrity_monitor(db)
+        return monitor.full_scan()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/integrity/status")
+async def quick_integrity_status(db: Session = Depends(get_db)):
+    """Quick integrity status (cached, fast)."""
+    try:
+        from cognitive.system_integrity_monitor import get_system_integrity_monitor
+        monitor = get_system_integrity_monitor(db)
+        return monitor.get_quick_status()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
