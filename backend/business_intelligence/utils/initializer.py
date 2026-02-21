@@ -39,6 +39,7 @@ from business_intelligence.synthesis.content_engine import ContentEngine
 from business_intelligence.synthesis.financial_model import FinancialModeler
 from business_intelligence.synthesis.untapped_intelligence import UntappedIntelligence
 from business_intelligence.utils.frontend_bridge import BIFrontendBridge
+from business_intelligence.utils.grace_integration import GraceIntegration, get_grace_integration
 from business_intelligence.customer_intelligence.archetype_engine import ArchetypeEngine
 from business_intelligence.customer_intelligence.pattern_analyzer import CrossPatternAnalyzer
 from business_intelligence.product_discovery.product_ideation import ProductIdeationEngine
@@ -74,6 +75,7 @@ class BISystem:
         self.financial_modeler: Optional[FinancialModeler] = None
         self.untapped_intel: Optional[UntappedIntelligence] = None
         self.frontend_bridge: Optional[BIFrontendBridge] = None
+        self.grace_integration: Optional[GraceIntegration] = None
         self.archetype_engine: Optional[ArchetypeEngine] = None
         self.pattern_analyzer: Optional[CrossPatternAnalyzer] = None
         self.product_ideation: Optional[ProductIdeationEngine] = None
@@ -120,6 +122,7 @@ class BISystem:
         self.financial_modeler = FinancialModeler()
         self.untapped_intel = UntappedIntelligence()
         self.frontend_bridge = BIFrontendBridge()
+        self.grace_integration = get_grace_integration()
         self.archetype_engine = ArchetypeEngine(
             min_cluster_size=self.config.pain_point_cluster_min_size
         )
@@ -134,9 +137,15 @@ class BISystem:
 
         active = ConnectorRegistry.get_active()
         total = len(ConnectorRegistry.get_all())
+        grace_connected = sum(
+            1 for v in self.grace_integration.get_integration_status()["subsystems"].values()
+            if v["connected"]
+        ) if self.grace_integration else 0
+
         logger.info(
             f"BI System initialized. "
             f"{len(active)}/{total} connectors active. "
+            f"GRACE backbone: {grace_connected}/5 subsystems connected. "
             f"LLM reasoning: {'available' if self.reasoning_engine else 'unavailable'}. "
             f"Secrets vault: {'active' if self.secrets_vault._initialized else 'inactive'}. "
             f"Ready for intelligence collection."
@@ -182,6 +191,7 @@ class BISystem:
             "total_connectors": len(ConnectorRegistry.get_all()),
             "reasoning_engine": "available" if self.reasoning_engine else "unavailable",
             "secrets_vault": self.secrets_vault.get_status() if self.secrets_vault else {"initialized": False},
+            "grace_integration": self.grace_integration.get_integration_status() if self.grace_integration else {"initialized": False},
         }
 
 
