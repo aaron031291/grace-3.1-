@@ -290,13 +290,24 @@ class KnowledgeCompiler:
             results["procedures"].append(proc)
 
         for rule in extracted.get("rules", []):
+            # Ensure all fields are strings/JSON-serializable (LLM may return dicts)
+            alt = rule.get("alternative")
+            if isinstance(alt, dict):
+                alt = json.dumps(alt)
+            expl = rule.get("explanation", "")
+            if isinstance(expl, dict):
+                expl = json.dumps(expl)
+            action = rule.get("action", "")
+            if isinstance(action, dict):
+                action = json.dumps(action)
+
             compiled = CompiledDecisionRule(
-                rule_name=rule.get("name", f"rule_{uuid.uuid4().hex[:8]}"),
+                rule_name=str(rule.get("name", f"rule_{uuid.uuid4().hex[:8]}"))[:256],
                 domain=domain,
                 conditions=rule.get("conditions", []),
-                action=rule.get("action", ""),
-                alternative=rule.get("alternative"),
-                explanation=rule.get("explanation", ""),
+                action=str(action)[:2000],
+                alternative=str(alt) if alt else None,
+                explanation=str(expl)[:2000],
                 confidence=rule.get("confidence", 0.5),
                 source_document_id=source_document_id,
             )
