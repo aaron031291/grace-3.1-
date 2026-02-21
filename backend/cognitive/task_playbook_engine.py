@@ -191,7 +191,15 @@ class TaskPlaybookEngine:
                     "blocking": is_blocking,
                 })
 
-        # Check: are there blocking unknowns?
+        # SELF-RESEARCH: Before asking the user, try to answer unknowns ourselves
+        # Web search + library connectors + compiled knowledge
+        unknowns_before = len(needs_asking)
+        if needs_asking:
+            self._self_research_unknowns(task_description, ledger, needs_asking)
+            # Re-check what's still unknown after research
+            needs_asking = [q for q in needs_asking if ledger.get(q["key"]).level.value == "unknown"]
+
+        # Check: are there STILL blocking unknowns after self-research?
         blocking = ledger.get_blocking_unknowns()
 
         if blocking and not answers:
@@ -237,6 +245,124 @@ class TaskPlaybookEngine:
                 "from_kimi": breakdown.from_kimi,
             },
         }
+
+    def _self_research_unknowns(
+        self,
+        task_description: str,
+        ledger,
+        unknowns: List[Dict[str, Any]],
+    ):
+        """
+        Try to answer unknown questions using web search, library connectors,
+        and compiled knowledge BEFORE asking the user.
+
+        Grace should exhaust her own resources before bothering the user.
+        """
+        # Extract key terms for research
+        import re
+        words = re.findall(r'\b[A-Za-z]{4,}\b', task_description)
+        key_terms = [w for w in words if w.lower() not in {
+            'this', 'that', 'with', 'from', 'have', 'need', 'want',
+            'make', 'should', 'could', 'would', 'please', 'just',
+        }][:5]
+
+        if not key_terms:
+            return
+
+        search_query = " ".join(key_terms)
+
+        # 1. Check compiled knowledge store
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+
+            for term in key_terms[:3]:
+                facts = compiler.query_facts(subject=term, limit=3)
+                if facts:
+                    for unknown in list(unknowns):
+                        if unknown["key"] == "what" and any("is" in f.get("predicate", "") for f in facts):
+                            ledger.promote_to_known(
+                                "what",
+                                f"From knowledge: {facts[0]['subject']} {facts[0]['predicate']} {facts[0]['object']}"
+                            )
+                        elif unknown["key"] == "how" and any(f.get("predicate", "") in ("uses", "requires", "based_on") for f in facts):
+                            parts = [f"{ff['subject']} {ff['predicate']} {ff['object']}" for ff in facts[:2]]
+                            ledger.promote_to_known(
+                                "how",
+                                f"From knowledge: {', '.join(parts)}"
+                            )
+        except Exception:
+            pass
+
+        # 2. Check library connectors (ConceptNet for common sense)
+        try:
+            from cognitive.library_connectors import get_library_connectors
+            lib = get_library_connectors()
+
+            for term in key_terms[:2]:
+                cn_facts = lib.query_conceptnet(term, limit=5)
+                if cn_facts:
+                    for unknown in list(unknowns):
+                        if unknown["key"] == "what":
+                            is_a = [f for f in cn_facts if f["predicate"] == "IsA"]
+                            if is_a:
+                                ledger.promote_to_known(
+                                    "what",
+                                    f"From ConceptNet: {is_a[0]['subject']} is a {is_a[0]['object']}"
+                                )
+                        elif unknown["key"] == "how":
+                            used_for = [f for f in cn_facts if f["predicate"] in ("UsedFor", "HasPrerequisite")]
+                            if used_for:
+                                uf = used_for[0]
+                                uf_text = uf.get('surface_text') or f"{uf['subject']} {uf['predicate']} {uf['object']}"
+                                ledger.add_inferred(
+                                    "how",
+                                    f"From ConceptNet: {uf_text}",
+                                    confidence=0.7,
+                                )
+        except Exception:
+            pass
+
+        # 3. Web search for context (if SerpAPI available)
+        try:
+            from search.serpapi_service import SerpAPIService
+            from settings import settings
+
+            if hasattr(settings, 'SERPAPI_KEY') and settings.SERPAPI_KEY:
+                search_service = SerpAPIService(api_key=settings.SERPAPI_KEY)
+                results = search_service.search(
+                    f"{search_query} best practices how to",
+                    num_results=3,
+                )
+
+                if results:
+                    snippets = [r.get("snippet", "") for r in results if r.get("snippet")]
+
+                    for unknown in list(unknowns):
+                        if unknown["key"] == "why" and snippets:
+                            ledger.add_inferred(
+                                "why",
+                                f"From web: {snippets[0][:200]}",
+                                confidence=0.5,
+                                notes="Inferred from web search results",
+                            )
+                        elif unknown["key"] == "how" and len(snippets) > 1:
+                            ledger.add_inferred(
+                                "how",
+                                f"From web: {snippets[1][:200]}",
+                                confidence=0.5,
+                                notes="Inferred from web search results",
+                            )
+
+                    # Track the research
+                    from cognitive.learning_hook import track_learning_event
+                    track_learning_event(
+                        "task_self_research",
+                        f"Self-researched '{search_query}': {len(results)} web results, {len(snippets)} useful",
+                        data={"query": search_query, "results": len(results)},
+                    )
+        except Exception:
+            pass
 
     def break_down_task(
         self,
