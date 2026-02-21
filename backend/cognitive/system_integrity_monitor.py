@@ -74,6 +74,7 @@ class SystemIntegrityMonitor:
         issues.extend(self._check_api_coverage())
         issues.extend(self._check_rag_alignment())
         issues.extend(self._check_indexer_health())
+        issues.extend(self._check_cross_system_signals())
 
         # Categorize
         critical = [i for i in issues if i.severity == "critical"]
@@ -433,6 +434,81 @@ class SystemIntegrityMonitor:
                     ))
             except Exception:
                 pass
+
+        return issues
+
+    def _check_cross_system_signals(self) -> List[IntegrityIssue]:
+        """Check cross-system signals that should flow between subsystems."""
+        issues = []
+
+        # diagnostics → weight_system: health drops should adjust weights
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            ws = get_grace_weight_system(self.session)
+            stats = ws.get_stats()
+            kpis = stats.get("current_kpis", {})
+            if kpis.get("success_rate", 1) < 0.5:
+                # Low success rate should trigger weight adjustment
+                ws.propagate_outcome(outcome="failure", source_type="system_health")
+                issues.append(IntegrityIssue(
+                    "connected", "info", "diagnostics_to_weights",
+                    "Low success rate triggered weight adjustment",
+                    "", False
+                ))
+        except Exception:
+            pass
+
+        # handshake → system_integrity: dead components feed integrity
+        try:
+            from genesis.component_registry import ComponentEntry
+            dead = self.session.query(ComponentEntry).filter(
+                ComponentEntry.status == "dead"
+            ).count()
+            if dead > 0:
+                issues.append(IntegrityIssue(
+                    "cross_system", "high", "handshake_to_integrity",
+                    f"{dead} dead components detected by handshake",
+                    "Self-healing should attempt restart",
+                    True
+                ))
+
+                from cognitive.learning_hook import track_learning_event
+                track_learning_event(
+                    "handshake_alert",
+                    f"{dead} dead components",
+                    outcome="failure",
+                    severity="high",
+                    signal_type="alert",
+                    data={"dead_count": dead},
+                )
+        except Exception:
+            pass
+
+        # handshake → mirror: component health feeds self-awareness
+        try:
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "system_health_snapshot",
+                f"Cross-system health check complete",
+                signal_type="health",
+                data={"check": "cross_system_signals"},
+            )
+        except Exception:
+            pass
+
+        # patterns → weight_system: pattern outcomes adjust weights
+        try:
+            from cognitive.llm_pattern_learner import get_llm_pattern_learner
+            learner = get_llm_pattern_learner(self.session)
+            stats = learner.get_pattern_stats()
+            if stats.get("total_patterns", 0) > 0:
+                avg_success = stats.get("avg_success_rate", 0)
+                if avg_success < 0.5:
+                    from cognitive.grace_weight_system import get_grace_weight_system
+                    ws = get_grace_weight_system(self.session)
+                    ws.propagate_outcome(outcome="failure", source_type="pattern_derived")
+        except Exception:
+            pass
 
         return issues
 

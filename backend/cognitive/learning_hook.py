@@ -48,6 +48,8 @@ def track_learning_event(
     data: Optional[Dict[str, Any]] = None,
     duration_ms: float = 0.0,
     error: Optional[str] = None,
+    signal_type: str = "observation",
+    severity: str = "info",
 ):
     """
     Universal learning hook. Call from ANY subsystem.
@@ -86,3 +88,24 @@ def track_learning_event(
         session.close()
     except Exception:
         pass  # Never block the calling system
+
+    # Also write to Unified Intelligence Table (shared cross-system data layer)
+    try:
+        _s2 = factory()
+        from genesis.unified_intelligence import UnifiedIntelligenceEngine
+        engine = UnifiedIntelligenceEngine(_s2)
+        engine.record(
+            source_system=source,
+            signal_type=signal_type,
+            signal_name=description[:200],
+            value_numeric=confidence,
+            value_text=str(data)[:500] if data else None,
+            value_json=data,
+            trust_score=confidence,
+            confidence=confidence,
+            severity=severity,
+        )
+        _s2.commit()
+        _s2.close()
+    except Exception:
+        pass

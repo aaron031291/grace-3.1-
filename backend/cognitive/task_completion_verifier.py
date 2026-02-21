@@ -768,7 +768,7 @@ class TaskCompletionVerifier:
         except Exception:
             pass
 
-        # 7. If criteria keep failing, flag for proactive learning
+        # 7. If criteria keep failing, flag for proactive learning + trigger diagnostics
         if task.verification_attempts >= 3 and not is_complete:
             try:
                 from cognitive.learning_hook import track_learning_event
@@ -777,10 +777,13 @@ class TaskCompletionVerifier:
                     f"Task '{task.title}' failed verification {task.verification_attempts} times. "
                     f"Failing criteria: {', '.join(failed_criteria[:5])}",
                     outcome="failure",
+                    severity="high",
+                    signal_type="alert",
                     data={
                         "task_id": task.task_id,
                         "failing_criteria": failed_criteria,
                         "needs_proactive_learning": True,
+                        "trigger_diagnostic": True,
                     },
                 )
             except Exception:
