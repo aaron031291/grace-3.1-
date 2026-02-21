@@ -12,3 +12,4 @@ from .campaign_manager import CampaignManager
 from .validation_engine import ValidationEngine
 from .lookalike_engine import LookalikeEngine
 from .ad_optimizer import AdOptimizer
+from .dynamic_creative import DynamicCreativeEngine

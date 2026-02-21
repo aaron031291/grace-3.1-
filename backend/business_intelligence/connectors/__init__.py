@@ -15,3 +15,5 @@ from .tiktok_connector import TikTokConnector
 from .serpapi_connector import SerpAPIConnector
 from .web_scraping_connector import WebScrapingConnector
 from .junglescout_connector import JungleScoutConnector
+from .youtube_connector import YouTubeConnector
+from .instagram_connector import InstagramConnector

@@ -1102,3 +1102,271 @@ async def amazon_niche_analysis(request: JungleScoutRequest):
         return data or {"message": "No niche data found"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== YouTube ====================
+
+class YouTubeRequest(BaseModel):
+    keyword: str = Field(..., description="Search keyword")
+    max_results: int = Field(20, description="Maximum results")
+
+
+@router.post("/youtube/search")
+async def youtube_search(request: YouTubeRequest):
+    """Search YouTube for videos in a niche."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        yt = ConnectorRegistry.get("youtube")
+        if not yt or not yt.is_available:
+            return {
+                "status": "not_configured",
+                "message": "YouTube API not configured. Set YOUTUBE_API_KEY.",
+                "setup": "Get API key from console.cloud.google.com (YouTube Data API v3)",
+            }
+
+        videos = await yt.search_videos(request.keyword, max_results=request.max_results)
+        return {"keyword": request.keyword, "results": len(videos), "videos": videos}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/youtube/niche-analysis")
+async def youtube_niche_analysis(request: YouTubeRequest):
+    """Analyze YouTube content landscape for a niche."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        yt = ConnectorRegistry.get("youtube")
+        if not yt or not yt.is_available:
+            return {"status": "not_configured", "message": "YouTube API not configured."}
+
+        analysis = await yt.analyze_niche_content(request.keyword, max_videos=request.max_results)
+        return analysis
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/youtube/channel-analytics")
+async def youtube_channel_analytics(days: int = 30):
+    """Get analytics for our YouTube channel (requires OAuth)."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        from datetime import timedelta
+        yt = ConnectorRegistry.get("youtube")
+        if not yt or not yt.is_available:
+            return {"status": "not_configured", "message": "YouTube API not configured."}
+
+        analytics = await yt.get_channel_analytics(
+            date_from=datetime.utcnow() - timedelta(days=days),
+        )
+        return analytics or {"message": "No analytics data. Ensure YOUTUBE_OAUTH_TOKEN and YOUTUBE_CHANNEL_ID are set."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/youtube/demographics")
+async def youtube_demographics():
+    """Get audience demographics for our YouTube channel."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        yt = ConnectorRegistry.get("youtube")
+        if not yt or not yt.is_available:
+            return {"status": "not_configured"}
+
+        return await yt.get_audience_demographics()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Instagram ====================
+
+@router.get("/instagram/insights")
+async def instagram_account_insights(days: int = 30):
+    """Get Instagram account-level insights."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        from datetime import timedelta
+        ig = ConnectorRegistry.get("instagram")
+        if not ig or not ig.is_available:
+            return {
+                "status": "not_configured",
+                "message": "Instagram Graph API not configured. Set INSTAGRAM_ACCESS_TOKEN and INSTAGRAM_BUSINESS_ID.",
+                "setup": "Requires Instagram Business Account + Meta Developer App",
+            }
+
+        insights = await ig.get_account_insights(
+            since=datetime.utcnow() - timedelta(days=days),
+        )
+        return insights or {"message": "No insights data available"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/instagram/demographics")
+async def instagram_demographics():
+    """Get Instagram audience demographics."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        ig = ConnectorRegistry.get("instagram")
+        if not ig or not ig.is_available:
+            return {"status": "not_configured"}
+
+        return await ig.get_audience_demographics()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/instagram/media")
+async def instagram_recent_media(limit: int = 25):
+    """Get recent Instagram posts with performance data."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        ig = ConnectorRegistry.get("instagram")
+        if not ig or not ig.is_available:
+            return {"status": "not_configured"}
+
+        media = await ig.get_recent_media(limit=limit)
+        return {"count": len(media), "media": media}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class HashtagRequest(BaseModel):
+    hashtag: str = Field(..., description="Hashtag to research (without #)")
+
+
+@router.post("/instagram/hashtag")
+async def instagram_hashtag_research(request: HashtagRequest):
+    """Research an Instagram hashtag's volume and reach."""
+    try:
+        from business_intelligence.connectors.base import ConnectorRegistry
+        ig = ConnectorRegistry.get("instagram")
+        if not ig or not ig.is_available:
+            return {"status": "not_configured"}
+
+        return await ig.search_hashtag(request.hashtag)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Dynamic Creative Optimization ====================
+
+class DynamicCreativeRequest(BaseModel):
+    pain_points: List[str] = Field(..., description="Pain points to address in creatives")
+    product_name: str = Field(..., description="Product name")
+    platforms: List[str] = Field(default_factory=lambda: ["meta"], description="Target platforms")
+    budget: float = Field(100.0, description="Total creative budget")
+
+
+@router.post("/creative/pipeline")
+async def build_creative_pipeline(request: DynamicCreativeRequest):
+    """Build a complete dynamic creative pipeline across platforms.
+
+    Returns platform-specific creative specs with real-time editing capabilities.
+    """
+    try:
+        bi = get_bi_system()
+        pipeline = await bi.dynamic_creative.build_creative_pipeline(
+            pain_points=request.pain_points,
+            product_name=request.product_name,
+            platforms=request.platforms,
+            budget=request.budget,
+        )
+        return pipeline
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/creative/meta-dco")
+async def generate_meta_dco(request: DynamicCreativeRequest):
+    """Generate Meta Dynamic Creative Optimization spec.
+
+    Provides multiple headlines/bodies/images that Meta auto-tests
+    in every combination per impression.
+    """
+    try:
+        bi = get_bi_system()
+        variation = await bi.dynamic_creative.generate_creative_variations(
+            pain_points=request.pain_points,
+            product_name=request.product_name,
+            platform="meta",
+        )
+        dco = await bi.dynamic_creative.generate_meta_dynamic_creative(
+            headlines=variation.headlines,
+            body_texts=variation.body_texts,
+            descriptions=variation.descriptions,
+        )
+        return {
+            "variation": {
+                "headlines": variation.headlines,
+                "body_texts": variation.body_texts,
+                "descriptions": variation.descriptions,
+                "ctas": variation.ctas,
+            },
+            "dco_spec": {
+                "asset_feed": dco.asset_feed,
+                "total_combinations": dco.platform_specs.get("total_combinations", 0),
+                "optimization": dco.platform_specs,
+            },
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/creative/tools")
+async def list_creative_tools():
+    """List available creative editing tools and their capabilities."""
+    return {
+        "tools": [
+            {
+                "name": "Meta Dynamic Creative",
+                "cost": "Free (part of Meta Ads)",
+                "real_time_editing": True,
+                "edits": ["Headlines", "Body text", "Images", "Videos", "CTAs"],
+                "auto_optimization": True,
+                "setup": "Included with any Meta ad account",
+                "api": "Marketing API asset_feed_spec",
+            },
+            {
+                "name": "Canva Connect API",
+                "cost": "Canva Pro + API access",
+                "real_time_editing": True,
+                "edits": ["Font size", "Font style", "Colors", "Image position", "Layout", "Text content", "Background"],
+                "auto_optimization": False,
+                "setup": "API key from canva.dev — Set CANVA_API_KEY",
+                "api": "REST API + Apps SDK",
+            },
+            {
+                "name": "AdCreative.ai",
+                "cost": "Subscription (from $29/mo)",
+                "real_time_editing": True,
+                "edits": ["Full creative generation", "Headlines", "Punchlines", "CTAs", "Colors (hex)", "Background images", "Logo placement"],
+                "auto_optimization": True,
+                "setup": "API key from adcreative.ai — Set ADCREATIVE_API_KEY",
+                "api": "REST API",
+            },
+            {
+                "name": "TikTok Symphony",
+                "cost": "Free with TikTok Business",
+                "real_time_editing": True,
+                "edits": ["Video scripts", "AI avatar videos", "Trending format adaptation", "Music selection"],
+                "auto_optimization": True,
+                "setup": "TikTok Business account + Marketing API",
+                "api": "Marketing API + Creative Center",
+            },
+            {
+                "name": "Google Responsive Ads",
+                "cost": "Free (part of Google Ads)",
+                "real_time_editing": True,
+                "edits": ["Up to 15 headlines auto-combined", "Up to 4 descriptions", "Auto format/size"],
+                "auto_optimization": True,
+                "setup": "Google Ads account",
+                "api": "Google Ads API",
+            },
+        ],
+        "summary": (
+            "YES — you can edit ads in real-time. Meta DCO auto-tests headline/image/CTA combinations. "
+            "Canva API edits fonts, image positions, layouts programmatically. "
+            "AdCreative.ai generates full creatives with AI. "
+            "All of these can be driven by Grace's BI data."
+        ),
+    }
