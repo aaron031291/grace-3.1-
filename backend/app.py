@@ -85,6 +85,7 @@ from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
 from api.bi_api import router as bi_router  # Business Intelligence - market research, campaigns, customer intelligence
+from mobile.mobile_api import router as mobile_router  # Mobile companion app - push notifications, quick actions, voice commands
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -686,6 +687,7 @@ app.include_router(llm_learning_router)  # LLM Learning & Tracking - learn from 
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
 app.include_router(bi_router)  # Business Intelligence - market research, campaigns, customer intelligence, product discovery
+app.include_router(mobile_router)  # Mobile companion app - push notifications, quick actions, voice commands, camera-to-knowledge
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
