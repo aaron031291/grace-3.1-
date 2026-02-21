@@ -323,7 +323,145 @@ class TaskPlaybookEngine:
         except Exception:
             pass
 
-        # 3. Web search for context (if SerpAPI available)
+        # 3. Memory Mesh - episodic + procedural recall
+        try:
+            from cognitive.procedural_memory import ProceduralRepository
+            proc_repo = ProceduralRepository(self.session)
+            procs = proc_repo.find_procedures(task_description, limit=3)
+            if procs:
+                for unknown in list(unknowns):
+                    if unknown["key"] == "how" and ledger.get("how").level.value == "unknown":
+                        best = procs[0]
+                        ledger.promote_to_known(
+                            "how",
+                            f"From procedural memory: {best.get('name', '')} - {best.get('goal', '')}"
+                        )
+                        break
+        except Exception:
+            pass
+
+        try:
+            from cognitive.episodic_memory import EpisodicBuffer
+            buffer = EpisodicBuffer(self.session)
+            episodes = buffer.recall_similar(task_description, limit=3)
+            if episodes:
+                for unknown in list(unknowns):
+                    if unknown["key"] == "what" and ledger.get("what").level.value == "unknown":
+                        best = episodes[0]
+                        ledger.add_inferred(
+                            "what",
+                            f"From past experience: {best.get('problem', '')}",
+                            confidence=0.65,
+                            notes="Similar task found in episodic memory",
+                        )
+                    elif unknown["key"] == "why" and ledger.get("why").level.value == "unknown":
+                        best = episodes[0]
+                        outcome = best.get("outcome", {})
+                        if isinstance(outcome, dict):
+                            ledger.add_inferred(
+                                "why",
+                                f"From past experience: previous outcome was {outcome.get('success', 'unknown')}",
+                                confidence=0.6,
+                            )
+        except Exception:
+            pass
+
+        # 4. Oracle ML - predict what this task needs based on features
+        try:
+            from startup import get_subsystems
+            subs = get_subsystems()
+            if subs.systems_integration:
+                import asyncio
+                try:
+                    loop = asyncio.get_event_loop()
+                    if not loop.is_running():
+                        prediction = loop.run_until_complete(
+                            subs.systems_integration.oracle_predict(
+                                "task_success",
+                                {"task_description": task_description, "task_terms": key_terms}
+                            )
+                        )
+                        if prediction.get("success") and prediction.get("factors"):
+                            for unknown in list(unknowns):
+                                if unknown["key"] == "how" and ledger.get("how").level.value in ("unknown", "assumed"):
+                                    factors = prediction["factors"]
+                                    if factors:
+                                        ledger.add_inferred(
+                                            "how",
+                                            f"Oracle suggests: {', '.join(str(f) for f in factors[:3])}",
+                                            confidence=0.55,
+                                            notes="Predicted from Oracle ML task analysis",
+                                        )
+                except RuntimeError:
+                    pass
+        except Exception:
+            pass
+
+        # 5. Reverse lookup - check what QUESTIONS this task type usually needs
+        # This is the reverse KNN idea: given a task, what knowledge gaps exist?
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+
+            # Check if we have any compiled rules about this type of task
+            rules = compiler.query_rules(context=task_description, limit=5)
+            if rules:
+                for unknown in list(unknowns):
+                    if unknown["key"] == "how" and ledger.get("how").level.value == "unknown":
+                        rule = rules[0]
+                        ledger.add_inferred(
+                            "how",
+                            f"From decision rule: {rule.get('action', '')}",
+                            confidence=0.65,
+                            notes=rule.get("explanation", ""),
+                        )
+
+            # Check entity relationships for context
+            for term in key_terms[:2]:
+                entities = compiler.query_entities(entity=term, limit=5)
+                if entities:
+                    for unknown in list(unknowns):
+                        if unknown["key"] == "what" and ledger.get("what").level.value == "unknown":
+                            rel = entities[0]
+                            ledger.add_inferred(
+                                "what",
+                                f"From entity graph: {rel['entity_a']} {rel['relation']} {rel['entity_b']}",
+                                confidence=0.6,
+                            )
+        except Exception:
+            pass
+
+        # 6. KNOWLEDGE GAP DETECTION: Unanswered questions reveal missing knowledge
+        # Record what we COULDN'T answer - this is new knowledge to acquire
+        still_unknown = [u for u in unknowns if ledger.get(u["key"]).level.value == "unknown"]
+        if still_unknown:
+            try:
+                from cognitive.learning_hook import track_learning_event
+                track_learning_event(
+                    "knowledge_gap_detected",
+                    f"Task '{task_description[:100]}' has {len(still_unknown)} unanswered questions",
+                    outcome="failure",
+                    data={
+                        "task": task_description[:200],
+                        "gaps": [u["key"] for u in still_unknown],
+                        "gap_questions": [u["question"] for u in still_unknown],
+                        "terms_searched": key_terms,
+                        "needs_acquisition": True,
+                    },
+                )
+
+                # Auto-trigger library mining for the topic to fill the gap
+                try:
+                    from cognitive.library_connectors import get_library_connectors
+                    lib = get_library_connectors()
+                    for term in key_terms[:2]:
+                        lib.mine_and_compile(term, session=self.session, sources=["wikidata", "conceptnet"])
+                except Exception:
+                    pass
+            except Exception:
+                pass
+
+        # 7. Web search for context (if SerpAPI available)
         try:
             from search.serpapi_service import SerpAPIService
             from settings import settings
