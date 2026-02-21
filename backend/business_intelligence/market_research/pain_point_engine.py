@@ -63,7 +63,7 @@ PAIN_PATTERNS = {
     ],
     "poor_quality": [
         r"cheap(ly)?[ -]?made", r"fell apart", r"poor quality",
-        r"flimsy", r"thin", r"fragile", r"shoddy", r"junky",
+        r"flimsy", r"\bthin\b", r"fragile", r"shoddy", r"junky",
     ],
     "bad_ux": [
         r"confusing", r"complicated", r"hard to (use|understand|setup|figure)",
