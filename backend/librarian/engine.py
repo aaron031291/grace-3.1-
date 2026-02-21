@@ -30,6 +30,13 @@ from librarian.approval_workflow import ApprovalWorkflow
 
 logger = logging.getLogger(__name__)
 
+def _track_librarian(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("librarian", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class LibrarianEngine:
     """
@@ -322,6 +329,37 @@ class LibrarianEngine:
                 get_timesense_governance().record("librarian.process", 0, "librarian")
             except Exception:
                 pass
+
+            # Learning: Track librarian processing for pattern extraction
+            _track_librarian(
+                f"Processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships",
+                data=result,
+            )
+
+            # Knowledge Compiler: Auto-compile document content into facts/procedures
+            try:
+                from cognitive.knowledge_compiler import get_knowledge_compiler
+                if document and hasattr(document, 'extracted_text_length') and document.extracted_text_length:
+                    compiler = get_knowledge_compiler(self.db)
+                    # Get document chunks for compilation
+                    from models.database_models import DocumentChunk
+                    chunks = self.db.query(DocumentChunk).filter(
+                        DocumentChunk.document_id == document_id
+                    ).limit(10).all()
+                    compiled = 0
+                    for chunk in chunks:
+                        if chunk.text_content and len(chunk.text_content) > 30:
+                            compiler.compile_chunk(
+                                text=chunk.text_content,
+                                source_document_id=str(document_id),
+                                source_chunk_id=str(chunk.id),
+                            )
+                            compiled += 1
+                    if compiled > 0:
+                        self.db.commit()
+                        logger.info(f"[LIBRARIAN] Auto-compiled {compiled} chunks into knowledge store")
+            except Exception as _comp_err:
+                logger.debug(f"[LIBRARIAN] Knowledge compilation skipped: {_comp_err}")
 
             
             # Auto-organize into domain folder
