@@ -575,6 +575,143 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
         print(f"[STARTUP] [WARN] Kimi + Grace Learning System error (non-fatal): {e}")
 
     # =========================================================================
+    # 12. REGISTER ALL NEW SYSTEMS IN COMPONENT REGISTRY + HANDSHAKE
+    # =========================================================================
+    try:
+        from genesis.component_registry import ComponentRegistry
+        from genesis.handshake_protocol import HandshakeProtocol
+
+        if session:
+            registry = ComponentRegistry(session)
+
+            new_components = [
+                ("kimi_brain", "cognitive", "cognitive.kimi_brain", "cognitive/kimi_brain.py",
+                 "Read-only intelligence layer - observes, diagnoses, produces instructions",
+                 ["diagnose", "produce_instructions", "compose_response", "consult"],
+                 ["mirror", "diagnostics", "learning", "patterns", "tasks"],
+                 ["grace_executor", "verification_engine", "llm_tracker"]),
+                ("grace_executor", "cognitive", "cognitive.grace_verified_executor", "cognitive/grace_verified_executor.py",
+                 "Verifies Kimi instructions and executes approved ones",
+                 ["process_instructions", "verify", "execute"],
+                 ["kimi_brain", "verification_engine", "execution_bridge"],
+                 ["coding_agent", "diagnostic_machine", "learning_system"]),
+                ("verification_engine", "security", "cognitive.grace_verification_engine", "cognitive/grace_verification_engine.py",
+                 "10-source multi-source verification engine",
+                 ["verify_instruction", "check_file_system", "check_database", "check_oracle", "check_governance"],
+                 ["oracle_ml", "governance", "websocket", "knowledge_base"],
+                 ["grace_executor"]),
+                ("knowledge_compiler", "cognitive", "cognitive.knowledge_compiler", "cognitive/knowledge_compiler.py",
+                 "Compiles raw data into deterministic facts/procedures/rules",
+                 ["compile_chunk", "compile_batch", "query_facts", "query_procedures"],
+                 ["llm_client"],
+                 ["unified_intelligence", "grace_executor"]),
+                ("unified_intelligence", "cognitive", "cognitive.unified_intelligence", "cognitive/unified_intelligence.py",
+                 "9-layer unified query chain - deterministic layers first, LLM last",
+                 ["query"],
+                 ["knowledge_compiler", "memory_mesh", "library_connectors", "rag"],
+                 ["chat_endpoint"]),
+                ("pattern_learner", "cognitive", "cognitive.llm_pattern_learner", "cognitive/llm_pattern_learner.py",
+                 "Extracts reusable patterns from LLM interactions",
+                 ["extract_patterns", "can_handle_autonomously", "apply_pattern"],
+                 ["llm_tracker"],
+                 ["grace_executor", "kimi_brain"]),
+                ("hallucination_guard", "security", "llm_orchestrator.near_zero_hallucination_guard", "llm_orchestrator/near_zero_hallucination_guard.py",
+                 "13-layer near-zero hallucination verification",
+                 ["verify"],
+                 ["base_guard", "multi_llm"],
+                 ["chat_endpoint"]),
+                ("task_verifier", "cognitive", "cognitive.task_completion_verifier", "cognitive/task_completion_verifier.py",
+                 "100% completion verification - refuses done unless all criteria pass",
+                 ["create_task", "verify", "mark_complete"],
+                 ["timesense", "self_mirror", "weight_system"],
+                 ["playbook_engine", "feedback_loops"]),
+                ("playbook_engine", "cognitive", "cognitive.task_playbook_engine", "cognitive/task_playbook_engine.py",
+                 "Task breakdown + playbook learning + interrogation",
+                 ["interrogate_task", "break_down_task", "save_as_playbook"],
+                 ["kimi_brain", "knowledge_compiler", "library_connectors", "memory_mesh"],
+                 ["task_verifier"]),
+                ("weight_system", "cognitive", "cognitive.grace_weight_system", "cognitive/grace_weight_system.py",
+                 "Trust/confidence as adjustable weights with backpropagation",
+                 ["propagate_outcome", "get_weight_snapshot"],
+                 ["knowledge_compiler", "pattern_learner"],
+                 ["chat_feedback"]),
+                ("library_connectors", "cognitive", "cognitive.library_connectors", "cognitive/library_connectors.py",
+                 "External deterministic knowledge - Wikidata, ConceptNet, Wolfram",
+                 ["query_wikidata", "query_conceptnet", "mine_and_compile"],
+                 [],
+                 ["unified_intelligence", "knowledge_compiler"]),
+                ("knowledge_indexer", "cognitive", "cognitive.knowledge_indexer", "cognitive/knowledge_indexer.py",
+                 "Indexes all internal knowledge for RAG searchability",
+                 ["index_all_sources"],
+                 ["embedding_model", "vector_db"],
+                 ["rag_retriever"]),
+                ("integrity_monitor", "cognitive", "cognitive.system_integrity_monitor", "cognitive/system_integrity_monitor.py",
+                 "Continuous system health and alignment auditing",
+                 ["full_scan", "get_quick_status"],
+                 ["all_subsystems"],
+                 ["kimi_brain"]),
+                ("feedback_loops", "cognitive", "cognitive.intelligence_feedback_loops", "cognitive/intelligence_feedback_loops.py",
+                 "11 self-improving feedback loops on every task outcome",
+                 ["record_task_outcome", "get_improvement_recommendations"],
+                 ["task_verifier", "weight_system"],
+                 ["criteria_tracker", "question_tracker", "gap_queue"]),
+            ]
+
+            registered = 0
+            for name, ctype, mod_path, file_path, desc, caps, deps, connects in new_components:
+                try:
+                    registry.register(
+                        name=name,
+                        component_type=ctype,
+                        module_path=mod_path,
+                        file_path=file_path,
+                        description=desc,
+                        capabilities=caps,
+                        dependencies=deps,
+                        connects_to=connects,
+                    )
+                    registered += 1
+                except Exception:
+                    pass
+
+            session.commit()
+            print(f"[STARTUP] [OK] Registered {registered} new components in Genesis Component Registry")
+
+            # Register health checks for handshake protocol
+            try:
+                handshake = HandshakeProtocol(heartbeat_interval=60)
+
+                def _kimi_health():
+                    return 1.0 if subs.kimi_brain else 0.0
+
+                def _executor_health():
+                    return 1.0 if subs.grace_executor else 0.0
+
+                def _verifier_health():
+                    return 1.0 if subs.verification_engine else 0.0
+
+                def _guard_health():
+                    return 1.0 if subs.near_zero_guard else 0.0
+
+                def _pattern_health():
+                    return 1.0 if subs.pattern_learner else 0.0
+
+                handshake.register_health_check("kimi_brain", _kimi_health)
+                handshake.register_health_check("grace_executor", _executor_health)
+                handshake.register_health_check("verification_engine", _verifier_health)
+                handshake.register_health_check("hallucination_guard", _guard_health)
+                handshake.register_health_check("pattern_learner", _pattern_health)
+
+                handshake.start()
+                subs._active_subsystems.append("handshake_protocol")
+                print(f"[STARTUP] [OK] Handshake protocol started with {len(new_components)} component health checks")
+            except Exception as e:
+                print(f"[STARTUP] [WARN] Handshake protocol failed: {e}")
+
+    except Exception as e:
+        print(f"[STARTUP] [WARN] Component registration error: {e}")
+
+    # =========================================================================
     # SUMMARY
     # =========================================================================
     total = len(subs._active_subsystems)

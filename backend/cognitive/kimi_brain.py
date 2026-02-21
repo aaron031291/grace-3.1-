@@ -228,6 +228,7 @@ class KimiBrain:
             "interaction_stats": self._read_interaction_stats(),
             "active_tasks": self._read_active_tasks(),
             "system_integrity": self._read_system_integrity(),
+            "handshake": self._read_handshake_status(),
         }
 
         logger.info("[KIMI-BRAIN] System state read complete")
@@ -325,6 +326,30 @@ class KimiBrain:
                 "at_risk": schedule.get("at_risk", 0),
                 "tasks": active[:5],
                 "stuck": stuck[:3],
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    def _read_handshake_status(self) -> Dict[str, Any]:
+        """Read component handshake status -- who's alive, dead, degraded."""
+        try:
+            from genesis.component_registry import ComponentEntry
+            components = self.session.query(ComponentEntry).filter(
+                ComponentEntry.is_active == True
+            ).all()
+
+            alive = [c for c in components if c.status == "active"]
+            dead = [c for c in components if c.status == "dead"]
+            degraded = [c for c in components if c.status == "degraded"]
+
+            return {
+                "connected": True,
+                "total_components": len(components),
+                "alive": len(alive),
+                "dead": len(dead),
+                "degraded": len(degraded),
+                "dead_components": [c.name for c in dead],
+                "degraded_components": [c.name for c in degraded],
             }
         except Exception as e:
             return {"connected": False, "error": str(e)}
