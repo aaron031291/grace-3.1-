@@ -164,9 +164,10 @@ class KimiBrain:
     Kimi NEVER executes. Kimi OBSERVES, ANALYZES, INSTRUCTS.
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, llm_client=None):
         self.session = session
         self.tracker = get_llm_interaction_tracker(session)
+        self.llm_client = llm_client
 
         self._mirror_system = None
         self._diagnostic_engine = None
@@ -186,7 +187,20 @@ class KimiBrain:
         except Exception:
             pass
 
-        logger.info("[KIMI-BRAIN] Read-only intelligence layer initialized")
+        # Try to get LLM client if not provided
+        if not self.llm_client:
+            try:
+                from ollama_client.client import get_ollama_client
+                client = get_ollama_client()
+                if client.is_running():
+                    self.llm_client = client
+            except Exception:
+                pass
+
+        logger.info(
+            f"[KIMI-BRAIN] Read-only intelligence layer initialized "
+            f"(LLM: {'connected' if self.llm_client else 'none - template composition only'})"
+        )
 
     def connect_mirror(self, mirror_system):
         """Connect to Grace's self-mirroring system (READ-ONLY)."""
@@ -959,21 +973,50 @@ class KimiBrain:
             composed = ". ".join(line.lstrip("- ") for line in fact_lines)
             return composed
 
-        # For complex composition, use LLM via tracker (which stores it)
-        composition_prompt = f"Based on these facts, write a clear answer to: {query}\n\nFacts:\n{facts_text}\n\nAnswer:"
+        # For complex composition, use LLM if available
+        composition_prompt = f"Based on these facts, write a clear concise answer to: {query}\n\nFacts:\n{facts_text}\n\nAnswer:"
+
+        composed = None
+
+        if self.llm_client:
+            try:
+                # Use LLM for intelligent composition
+                if hasattr(self.llm_client, 'chat'):
+                    llm_response = self.llm_client.chat(
+                        model=getattr(self.llm_client, 'default_model', 'mistral:7b'),
+                        messages=[
+                            {"role": "system", "content": "Compose a clear, concise answer from the given facts. Only use the facts provided."},
+                            {"role": "user", "content": composition_prompt},
+                        ],
+                        stream=False,
+                        temperature=0,  # Deterministic
+                    )
+                    if llm_response:
+                        composed = llm_response
+                elif hasattr(self.llm_client, 'generate'):
+                    result = self.llm_client.generate(
+                        prompt=composition_prompt,
+                        task_type="reasoning",
+                        system_prompt="Compose a clear answer from facts. Only use facts provided. Be concise.",
+                    )
+                    if result.get("success"):
+                        composed = result.get("content", "")
+            except Exception as e:
+                logger.debug(f"[KIMI-COMPOSE] LLM composition failed: {e}")
+
+        if not composed:
+            # Template composition fallback (no LLM)
+            composed = f"Based on available knowledge: {'. '.join(line.lstrip('- ') for line in fact_lines)}"
 
         self.tracker.record_interaction(
             prompt=composition_prompt,
-            response=f"Composed from {len(facts)} facts",
-            model_used="kimi_composer",
+            response=composed[:2000],
+            model_used="kimi_composer" if not self.llm_client else f"kimi_composer:llm",
             interaction_type="reasoning",
             outcome="success",
-            confidence_score=0.7,
-            metadata={"composition": True, "fact_count": len(facts)},
+            confidence_score=0.8 if self.llm_client else 0.6,
+            metadata={"composition": True, "fact_count": len(facts), "used_llm": bool(self.llm_client)},
         )
-
-        # Simple composition (join facts coherently)
-        composed = f"Based on available knowledge: {'. '.join(line.lstrip('- ') for line in fact_lines)}"
 
         # Store in distilled knowledge for next time
         try:
@@ -1085,9 +1128,9 @@ class KimiBrain:
 _brain_instance: Optional[KimiBrain] = None
 
 
-def get_kimi_brain(session: Session) -> KimiBrain:
+def get_kimi_brain(session: Session, llm_client=None) -> KimiBrain:
     """Get or create the Kimi brain singleton."""
     global _brain_instance
     if _brain_instance is None:
-        _brain_instance = KimiBrain(session)
+        _brain_instance = KimiBrain(session, llm_client=llm_client)
     return _brain_instance

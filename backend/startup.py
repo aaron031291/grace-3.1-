@@ -381,13 +381,20 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
     try:
         print("[STARTUP] Initializing Kimi + Grace Learning System...")
 
-        # 11a. Run LLM tracking table migration
+        # 11a. Run ALL table migrations (unified migration runner)
         try:
-            from database.migrations.add_llm_tracking_tables import run_migration
-            run_migration()
-            print("[STARTUP] [OK] LLM tracking tables created/verified")
+            from database.migrate_all import run_all_migrations
+            migration_result = run_all_migrations()
+            tables = migration_result.get("tables", 0)
+            print(f"[STARTUP] [OK] All database tables created/verified ({tables} tables)")
         except Exception as e:
-            print(f"[STARTUP] [WARN] LLM tracking migration failed: {e}")
+            print(f"[STARTUP] [WARN] Migration failed: {e}")
+            # Fallback to just LLM tracking tables
+            try:
+                from database.migrations.add_llm_tracking_tables import run_migration
+                run_migration()
+            except Exception:
+                pass
 
         # 11b. Initialize KimiBrain (read-only intelligence)
         try:
