@@ -1206,3 +1206,55 @@ async def mine_historical_chats(
     except Exception as e:
         logger.error(f"Error mining history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# LIBRARY CONNECTORS - EXTERNAL DETERMINISTIC KNOWLEDGE
+# =======================================================================
+
+@router.post("/library/mine")
+async def mine_library_knowledge(
+    topic: str = Query(..., description="Topic to mine knowledge about"),
+    sources: Optional[List[str]] = Query(default=None, description="Sources: wikidata, conceptnet, wolfram"),
+    db: Session = Depends(get_db),
+):
+    """
+    Mine external knowledge libraries for deterministic facts about a topic.
+
+    Queries Wikidata, ConceptNet, and Wolfram Alpha (if configured).
+    All results are 100% factual, not probabilistic.
+    Facts are compiled directly into Grace's knowledge store.
+    """
+    try:
+        from cognitive.library_connectors import get_library_connectors
+        lib = get_library_connectors()
+        return lib.mine_and_compile(topic=topic, session=db, sources=sources)
+    except Exception as e:
+        logger.error(f"Error mining library: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/library/wikidata")
+async def query_wikidata(
+    term: str = Query(..., description="Search term"),
+    limit: int = Query(default=10, le=50),
+):
+    """Query Wikidata for structured facts. 100% deterministic."""
+    try:
+        from cognitive.library_connectors import get_library_connectors
+        return get_library_connectors().query_wikidata(term, limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/library/conceptnet")
+async def query_conceptnet(
+    term: str = Query(..., description="Term to look up"),
+    limit: int = Query(default=20, le=50),
+):
+    """Query ConceptNet for common sense knowledge. 100% deterministic."""
+    try:
+        from cognitive.library_connectors import get_library_connectors
+        return get_library_connectors().query_conceptnet(term, limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
