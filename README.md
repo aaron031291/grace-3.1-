@@ -108,8 +108,8 @@
 ### Backend
 | Component | Technology |
 |-----------|-----------|
-| **Framework** | FastAPI (Python 3.11+) |
-| **LLM** | Ollama (Mistral:7b default, configurable) |
+| **Framework** | FastAPI (Python 3.11+), mcp, fastmcp |
+| **LLM** | Provider-agnostic: Ollama (Mistral:7b default) or OpenAI (GPT-4o) |
 | **Embeddings** | Sentence Transformers (Qwen 4B default, CUDA/CPU) |
 | **Vector DB** | Qdrant |
 | **SQL DB** | SQLite (default) / PostgreSQL / MySQL / MariaDB |
@@ -154,9 +154,19 @@ grace-3.1-/
 │   ├── settings.py             # Centralized configuration
 │   ├── logging_config.py       # Structured logging setup
 │   ├── Dockerfile              # Multi-stage production build
-│   ├── requirements.txt        # Python dependencies (79 packages)
+│   ├── requirements.txt        # Python dependencies (81 packages)
+│   ├── .env                    # Environment configuration
 │   │
-│   ├── api/                    # API Router Layer (51 files)
+│   ├── mcp_repos/              # MCP Server Implementations
+│   │   ├── DesktopCommanderMCP/ # Node.js MCP server for File/Terminal/Search
+│   │   └── mcp-servers/        # Community MCP servers
+│   │
+│   ├── tests/                  # Backend test suites (100+ files)
+│   │   ├── data/               # Test data and fixtures
+│   │   ├── embedding/          # Embedding model tests
+│   │   └── ollama/             # Ollama integration tests
+│   │
+│   ├── api/                    # API Router Layer (52 files)
 │   │   ├── layer1.py           # Layer 1 cognitive processing
 │   │   ├── retrieve.py         # RAG retrieval endpoints
 │   │   ├── ingest.py           # Document ingestion
@@ -204,6 +214,7 @@ grace-3.1-/
 │   │   └── ...
 │   │
 │   ├── genesis/                # Genesis Tracking System (29 files)
+│   │   ├── symbiotic_version_control.py # Hybrid Git + Genesis versioning
 │   │   ├── autonomous_engine.py    # Autonomous action engine
 │   │   ├── autonomous_cicd_engine.py
 │   │   ├── adaptive_cicd.py    # Trust/KPI-driven CI/CD
@@ -323,7 +334,13 @@ grace-3.1-/
 │   │   └── knowledge_base_manager.py   # KB lifecycle management
 │   │
 │   ├── agent/                  # GRACE Agent Framework
-│   │   └── grace_agent.py      # Software engineering agent
+│   │   └── grace_agent.py      # Core agent logic
+│   │
+│   ├── grace_mcp/              # Unified Agentic Orchestrator
+│   │   ├── orchestrator.py     # Multi-turn tool-calling loop
+│   │   ├── client.py           # MCP stdio client
+│   │   ├── builtin_tools.py    # Local RAG & Web tools
+│   │   └── audit_logger.py     # Tool execution auditing
 │   │
 │   ├── layer1/                 # Layer 1 Architecture
 │   │   ├── message_bus.py      # Event-driven message bus
@@ -616,7 +633,9 @@ All configuration is managed via `.env` in the `backend/` directory. Copy `.env.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `OLLAMA_URL` | `http://localhost:11434` | Ollama server URL |
-| `OLLAMA_LLM_DEFAULT` | `mistral:7b` | Default LLM model |
+| `LLM_PROVIDER` | `ollama` | LLM provider: `ollama` or `openai` |
+| `LLM_API_KEY` | _(empty)_ | OpenAI API Key (required for `openai`) |
+| `LLM_MODEL` | `mistral:7b` | LLM model name (default: mistral:7b or gpt-4o) |
 | `MAX_NUM_PREDICT` | `512` | Max tokens per response |
 
 ### Embeddings
@@ -834,7 +853,27 @@ Multi-model LLM management with safety guardrails:
 
 ---
 
-### 8. Agent Framework
+### 8. Unified Agentic Orchestrator
+
+The central nervous system for Grace OS agentic capabilities. It manages multi-turn tool-calling loops across both local (Built-in) and remote (MCP) tools.
+
+- **Orchestration Loop** — Stateful management of conversation turns and tool execution
+- **Provider Agnostic** — Works seamlessly with Ollama, OpenAI, and other Tool-Calling LLMs
+- **Audit Logging** — Full transparency into every tool call made by the agent
+
+#### Available Tools
+
+| Category | Tools | Description |
+|----------|-------|-------------|
+| **Local (Built-in)** | `rag_search`, `web_search`, `web_fetch` | Knowledge base search & internet access |
+| **Filesystem (MCP)** | `read_file`, `write_file`, `list_directory`, `move_file`, `get_file_info`, `write_pdf` | Full disk I/O with safety boundaries |
+| **Terminal (MCP)** | `start_process`, `read_process_output`, `interact_with_process`, `force_terminate` | OS-level command execution |
+| **Search (MCP)** | `start_search`, `get_more_search_results` | Advanced local filesystem indexing & search |
+| **Code (MCP)** | `edit_block` | Surgical search-and-replace for file modifications |
+
+---
+
+### 9. Agent Framework
 
 A software engineering agent capable of autonomous code execution:
 
@@ -845,7 +884,7 @@ A software engineering agent capable of autonomous code execution:
 
 ---
 
-### 9. MAGMA Subsystem
+### 10. MAGMA Subsystem
 
 **M**ulti-**A**gent **G**raph-based **M**emory **A**rchitecture — an advanced cognitive processing engine:
 
@@ -948,6 +987,7 @@ GRACE exposes **50+ API router modules** via FastAPI. Interactive documentation 
 | **Ingestion Pipeline** | `/api/ingestion` | Librarian ingestion |
 | **Ingestion Integration** | `/api/ingestion-integration` | Complete autonomous ingestion cycle |
 | **LLM Orchestration** | `/api/llm-orchestration` | Multi-LLM management |
+| **Unified Agentic** | `/api/mcp` | Multi-turn tool-calling & MCP API |
 
 ---
 
@@ -1080,6 +1120,17 @@ GRACE also includes its own CI/CD system:
 
 ---
 
+## Startup & Self-Healing
+
+GRACE is designed for high availability and autonomous recovery:
+
+- **JSON Self-Healing** — Automatic detection and repair of truncated or corrupted `.json` configuration files.
+- **Model Fallback** — Intelligent fallback to alternative LLM providers (e.g., switching to Ollama if OpenAI is unavailable).
+- **Schema Migrations** — Automatic database schema synchronization on startup via `run_all_migrations.py`.
+- **Environment Validation** — Strict verification of required API keys and connection strings before system boot.
+
+---
+
 ## Monitoring & Telemetry
 
 | Component | Description |
@@ -1118,7 +1169,7 @@ pytest tests/ -v
 pytest tests/ -v --cov=.
 
 # Run specific test
-pytest tests/test_security.py -v
+pytest tests/test_mcp_chat.py -v
 
 # Lint check (critical errors only)
 flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
