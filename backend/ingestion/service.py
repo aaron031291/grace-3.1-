@@ -817,6 +817,26 @@ class TextIngestionService:
             document.status = "completed"
             document.total_chunks = len(chunks)
             db.commit()
+
+            # Auto-compile chunks into deterministic knowledge (facts, procedures, rules)
+            try:
+                from cognitive.knowledge_compiler import get_knowledge_compiler
+                compiler = get_knowledge_compiler(db)
+                compiled_count = 0
+                for chunk in chunks[:20]:  # Compile first 20 chunks per document
+                    chunk_text = chunk.get("text", "") if isinstance(chunk, dict) else getattr(chunk, "text_content", "")
+                    if chunk_text and len(chunk_text) > 30:
+                        compiler.compile_chunk(
+                            text=chunk_text,
+                            source_document_id=str(document_id),
+                            domain=None,
+                        )
+                        compiled_count += 1
+                if compiled_count > 0:
+                    db.commit()
+                    logger.info(f"[INGEST] Auto-compiled {compiled_count} chunks into knowledge store")
+            except Exception as _compile_err:
+                logger.debug(f"[INGEST] Auto-compile skipped: {_compile_err}")
             
             logger.info(f"[OK] Successfully ingested document: {document_id}")
             return document_id, "Document ingested successfully"

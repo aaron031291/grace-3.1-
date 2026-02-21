@@ -913,38 +913,46 @@ async def chat(request: ChatRequest):
                 detail="No user message found in conversation"
             )
 
-        # ==================== DISTILLED KNOWLEDGE CHECK ====================
-        # Check if we already have a high-confidence answer stored.
-        # If so, skip the LLM entirely -- this is the dependency reduction in action.
+        # ==================== UNIFIED INTELLIGENCE CHAIN ====================
+        # Query ALL 9 intelligence layers in order before falling through to LLM.
+        # Layers 1-6 are 100% deterministic (no LLM needed).
+        # Layer 7 is RAG (high confidence vector search).
+        # Layer 8 is Oracle ML (prediction).
+        # Layer 9 signals "needs LLM" -- falls through to existing Ollama call below.
         try:
-            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            from cognitive.unified_intelligence import get_unified_intelligence
             from database.session import SessionLocal
 
-            _dk_session = SessionLocal()
-            _miner = get_llm_knowledge_miner(_dk_session)
+            _ui_session = SessionLocal()
+            _ui = get_unified_intelligence(_ui_session)
 
-            _cached = _miner.lookup(user_query, min_confidence=0.8)
-            if _cached and _cached.get("verified"):
-                logger.info(f"[DISTILLED] Serving from distilled knowledge (confidence={_cached['confidence']:.2f})")
+            _ui_result = _ui.query(
+                question=user_query,
+                min_confidence=0.7,
+                max_layer=8,  # Don't call LLM here -- existing code below handles that
+            )
 
-                from cognitive.learning_hook import track_learning_event
-                track_learning_event(
-                    "distilled_knowledge_hit",
-                    f"Served query from distilled store, skipped LLM",
-                    data={"confidence": _cached["confidence"], "times_accessed": _cached["times_accessed"]},
+            if _ui_result.answered and _ui_result.confidence >= 0.7:
+                logger.info(
+                    f"[UNIFIED] Answered by Layer {_ui_result.layer_number} "
+                    f"({_ui_result.layer_used}), confidence={_ui_result.confidence:.2f}, "
+                    f"deterministic={_ui_result.deterministic}, {_ui_result.duration_ms:.1f}ms"
                 )
 
-                _dk_session.close()
+                _ui_session.close()
                 return ChatResponse(
-                    response=_cached["response"],
-                    sources=[{"text": "Served from Grace's distilled knowledge (no LLM call)", "score": _cached["confidence"]}],
-                    model=f"distilled:{_cached.get('model_used', 'stored')}",
+                    response=_ui_result.response,
+                    sources=[{
+                        "text": f"Answered by Grace's {_ui_result.layer_used} (Layer {_ui_result.layer_number})",
+                        "score": _ui_result.confidence,
+                    }],
+                    model=f"grace:{_ui_result.layer_used}",
                     temperature=request.temperature,
                 )
 
-            _dk_session.close()
-        except Exception as _dk_err:
-            logger.debug(f"[DISTILLED] Check error (non-fatal): {_dk_err}")
+            _ui_session.close()
+        except Exception as _ui_err:
+            logger.debug(f"[UNIFIED] Chain error (non-fatal, falling through to LLM): {_ui_err}")
 
         # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
         greeting_pattern = re.compile(
@@ -2194,6 +2202,26 @@ async def submit_chat_feedback(request: ChatFeedbackRequest):
             )
             _fk_session.commit()
             _fk_session.close()
+        except Exception:
+            pass
+
+        # BACKPROPAGATION: Propagate feedback through Grace's weight system
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            import hashlib
+            _ws_session = SessionLocal()
+            _ws = get_grace_weight_system(_ws_session)
+
+            outcome = "user_positive" if request.feedback == "positive" else "user_negative"
+            query_hash = hashlib.sha256(request.query.strip().lower().encode()).hexdigest()[:16]
+
+            _ws.propagate_outcome(
+                outcome=outcome,
+                knowledge_ids=[query_hash],
+                source_type="llm_generated",
+            )
+            _ws_session.commit()
+            _ws_session.close()
         except Exception:
             pass
 
