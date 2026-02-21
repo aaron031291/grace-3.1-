@@ -203,10 +203,24 @@ class TaskCompletionVerifier:
     def __init__(self, session: Session):
         self.session = session
         self._timesense = None
+        self._self_mirror = None
+        self._mirror_modeling = None
 
         try:
             from cognitive.timesense import get_timesense
             self._timesense = get_timesense()
+        except Exception:
+            pass
+
+        try:
+            from cognitive.self_mirror import get_self_mirror
+            self._self_mirror = get_self_mirror()
+        except Exception:
+            pass
+
+        try:
+            from cognitive.mirror_self_modeling import get_mirror_system
+            self._mirror_modeling = get_mirror_system(session)
         except Exception:
             pass
 
@@ -348,6 +362,14 @@ class TaskCompletionVerifier:
                 component="task_verifier",
                 success=task.completion_percentage == 100.0,
             )
+
+        # Propagate outcome to all connected systems
+        result_dict = {
+            "is_complete": task.completion_percentage == 100.0,
+            "completion_percentage": task.completion_percentage,
+            "failed_criteria": failed_criteria,
+        }
+        self._propagate_task_outcome(task, result_dict)
 
         return {
             "task_id": task_id,
@@ -547,6 +569,101 @@ class TaskCompletionVerifier:
             return False
 
         return None  # Unknown criterion, needs manual
+
+    def _propagate_task_outcome(self, task: VerifiedTask, verification_result: Dict[str, Any]):
+        """
+        Propagate task outcome to all connected systems.
+
+        This is what makes the task verifier a hub - every completion
+        or failure feeds back into the intelligence network.
+        """
+        is_complete = verification_result.get("is_complete", False)
+        failed_criteria = verification_result.get("failed_criteria", [])
+        pct = verification_result.get("completion_percentage", 0)
+
+        # 1. Self-Mirror: Record task pattern as telemetry
+        if self._self_mirror:
+            try:
+                self._self_mirror.record_metric(
+                    "task_completion",
+                    pct / 100.0,
+                    tags={"type": task.task_type, "attempts": task.verification_attempts},
+                )
+            except Exception:
+                pass
+
+        # 2. Mirror Self-Modeling: Feed behavioral pattern
+        if self._mirror_modeling:
+            try:
+                # This data helps the mirror understand Grace's task patterns
+                pass  # Mirror reads from Genesis Keys and learning examples
+            except Exception:
+                pass
+
+        # 3. Episodic Memory: Store as experience
+        try:
+            from cognitive.episodic_memory import EpisodicBuffer
+            buffer = EpisodicBuffer(self.session)
+            buffer.store({
+                "problem": f"Task: {task.title}",
+                "action": {"type": task.task_type, "criteria": task.completion_criteria},
+                "outcome": {
+                    "success": is_complete,
+                    "percentage": pct,
+                    "failed_criteria": failed_criteria,
+                    "attempts": task.verification_attempts,
+                },
+                "source": "task_verifier",
+                "trust_score": 0.9 if is_complete else 0.5,
+            })
+        except Exception:
+            pass
+
+        # 4. Weight System: Adjust knowledge weights
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            ws = get_grace_weight_system(self.session)
+            outcome = "success" if is_complete else "failure"
+            ws.propagate_outcome(outcome=outcome, source_type="task_execution")
+        except Exception:
+            pass
+
+        # 5. KPI tracking via learning hook
+        try:
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "task_verification",
+                f"Task '{task.title}': {pct:.0f}% complete, attempt #{task.verification_attempts}",
+                outcome="success" if is_complete else "failure",
+                confidence=pct / 100.0,
+                data={
+                    "task_type": task.task_type,
+                    "completion_pct": pct,
+                    "failed_criteria": failed_criteria,
+                    "attempts": task.verification_attempts,
+                    "is_complete": is_complete,
+                },
+            )
+        except Exception:
+            pass
+
+        # 6. If criteria keep failing, flag for proactive learning
+        if task.verification_attempts >= 3 and not is_complete:
+            try:
+                from cognitive.learning_hook import track_learning_event
+                track_learning_event(
+                    "task_stuck",
+                    f"Task '{task.title}' failed verification {task.verification_attempts} times. "
+                    f"Failing criteria: {', '.join(failed_criteria[:5])}",
+                    outcome="failure",
+                    data={
+                        "task_id": task.task_id,
+                        "failing_criteria": failed_criteria,
+                        "needs_proactive_learning": True,
+                    },
+                )
+            except Exception:
+                pass
 
     def _get_task(self, task_id: str) -> Optional[VerifiedTask]:
         return self.session.query(VerifiedTask).filter(

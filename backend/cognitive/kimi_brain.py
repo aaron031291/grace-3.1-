@@ -215,6 +215,7 @@ class KimiBrain:
             "learning": self._read_learning(),
             "patterns": self._read_patterns(),
             "interaction_stats": self._read_interaction_stats(),
+            "active_tasks": self._read_active_tasks(),
         }
 
         logger.info("[KIMI-BRAIN] System state read complete")
@@ -290,6 +291,31 @@ class KimiBrain:
         except Exception as e:
             logger.warning(f"[KIMI-BRAIN] Error reading patterns: {e}")
             return {"connected": True, "error": str(e)}
+
+    def _read_active_tasks(self) -> Dict[str, Any]:
+        """Read active task status from Task Completion Verifier."""
+        try:
+            from cognitive.task_completion_verifier import get_task_completion_verifier
+            verifier = get_task_completion_verifier(self.session)
+            tasks = verifier.get_all_tasks(limit=20)
+            schedule = verifier.get_schedule()
+
+            active = [t for t in tasks if t["status"] in ("in_progress", "verification", "planned")]
+            stuck = [t for t in tasks if t["status"] == "failed_verification"]
+            complete = [t for t in tasks if t["status"] == "complete"]
+
+            return {
+                "connected": True,
+                "active_tasks": len(active),
+                "stuck_tasks": len(stuck),
+                "completed_tasks": len(complete),
+                "behind_schedule": schedule.get("behind_schedule", 0),
+                "at_risk": schedule.get("at_risk", 0),
+                "tasks": active[:5],
+                "stuck": stuck[:3],
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
 
     def _read_interaction_stats(self) -> Dict[str, Any]:
         """Read recent LLM interaction stats."""
