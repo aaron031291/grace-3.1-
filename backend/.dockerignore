@@ -86,3 +86,13 @@ models/
 # Test artifacts
 test-results/
 coverage/
+
+# JavaScript/Node
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
