@@ -1370,3 +1370,190 @@ async def list_creative_tools():
             "All of these can be driven by Grace's BI data."
         ),
     }
+
+
+# ==================== Recursive Intelligence Loops ====================
+
+@router.post("/loops/run")
+async def run_recursive_loops():
+    """Run all recursive intelligence loops.
+
+    Each loop feeds outputs back as inputs, compounding intelligence:
+    Research->Validate->Refine, Customer->Target->Acquire,
+    Pain->Product->Feedback, Content->Engage->Discover,
+    Price->Test->Optimize, Compete->Monitor->Adapt,
+    Sentiment->Predict->Act.
+    """
+    try:
+        bi = get_bi_system()
+        state = bi.intelligence_engine.state
+
+        results = await bi.recursive_loops.run_all_loops(
+            data_points=state.all_data_points,
+            pain_points=state.all_pain_points,
+            opportunities=[s.opportunity for s in state.scored_opportunities],
+            archetypes=bi.archetype_engine.archetypes if bi.archetype_engine else [],
+            campaign_results=bi.campaign_manager.results,
+            waitlist_entries=bi.waitlist_manager.entries,
+            product_concepts=state.product_concepts,
+        )
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/loops/knowledge")
+async def get_knowledge_summary():
+    """Get accumulated knowledge from all recursive loops."""
+    try:
+        bi = get_bi_system()
+        return bi.recursive_loops.get_knowledge_summary()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Content Engine ====================
+
+class ContentRequest(BaseModel):
+    niche: str = Field(..., description="Target niche")
+    pain_points: List[str] = Field(default_factory=list, description="Pain points to address")
+    keywords: List[str] = Field(default_factory=list, description="Target keywords")
+    product_name: str = Field("", description="Product name if applicable")
+    content_type: str = Field("all", description="blog, social, email, course, calendar, or all")
+    count: int = Field(5, description="Number of pieces to generate")
+
+
+@router.post("/content/generate")
+async def generate_content(request: ContentRequest):
+    """Generate data-driven content from BI intelligence."""
+    try:
+        bi = get_bi_system()
+        from business_intelligence.models.data_models import PainPoint
+        pps = [PainPoint(description=p, severity=0.7) for p in request.pain_points]
+        results = {}
+
+        if request.content_type in ("blog", "all"):
+            results["blog_outlines"] = [
+                {"title": c.title, "outline": c.outline, "keywords": c.target_keywords,
+                 "seo_notes": c.seo_notes, "word_count": c.estimated_word_count}
+                for c in await bi.content_engine.generate_blog_outlines(pps, request.keywords or [request.niche], count=request.count)
+            ]
+
+        if request.content_type in ("social", "all"):
+            results["social_posts"] = [
+                {"platform": c.target_platform, "hook": c.title, "thread": c.outline, "cta": c.cta}
+                for c in await bi.content_engine.generate_social_posts(pps, request.product_name, count=request.count)
+            ]
+
+        if request.content_type in ("email", "all"):
+            results["email_sequence"] = [
+                {"subject": c.title, "outline": c.outline, "cta": c.cta}
+                for c in await bi.content_engine.generate_email_sequence(pps)
+            ]
+
+        if request.content_type in ("course", "all"):
+            course = await bi.content_engine.generate_course_outline(request.niche, pps, request.keywords)
+            results["course"] = {"title": course.title, "modules": course.outline, "word_count": course.estimated_word_count}
+
+        if request.content_type == "calendar":
+            cal = await bi.content_engine.generate_content_calendar(pps, request.niche, request.keywords)
+            results["calendar"] = {"weeks": cal.duration_weeks, "posts_per_week": cal.posts_per_week,
+                                   "total_pieces": len(cal.pieces), "platforms": cal.platforms}
+
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Financial Modeling ====================
+
+class FinancialRequest(BaseModel):
+    niche: str = Field(..., description="Target niche")
+    product_type: str = Field("saas", description="Product type")
+    price: float = Field(29.0, description="Product price in GBP")
+    monthly_budget: float = Field(500.0, description="Monthly ad budget")
+    monthly_new_customers: int = Field(50, description="Expected monthly new customers")
+
+
+@router.post("/financial/model")
+async def build_financial_model(request: FinancialRequest):
+    """Build a financial model for a product concept."""
+    try:
+        bi = get_bi_system()
+        from business_intelligence.models.data_models import ProductConcept, ProductType
+
+        type_map = {"saas": ProductType.SAAS, "course": ProductType.ONLINE_COURSE,
+                    "ebook": ProductType.EBOOK_PDF, "ai": ProductType.AI_AUTOMATION,
+                    "community": ProductType.COMMUNITY_MEMBERSHIP, "template": ProductType.TEMPLATE_TOOLKIT}
+
+        concept = ProductConcept(
+            name=f"{request.niche} Product",
+            product_type=type_map.get(request.product_type, ProductType.SAAS),
+            estimated_price=request.price,
+            target_niche=request.niche,
+        )
+
+        plan = await bi.financial_modeler.build_financial_plan(
+            product=concept,
+            campaign_results=bi.campaign_manager.results or None,
+            monthly_budget=request.monthly_budget,
+        )
+
+        dashboard = await bi.frontend_bridge.get_financial_dashboard(plan)
+        return dashboard
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Untapped Intelligence ====================
+
+@router.post("/intelligence/untapped")
+async def run_untapped_intelligence():
+    """Run untapped intelligence analyses -- patterns most BI systems miss."""
+    try:
+        bi = get_bi_system()
+        state = bi.intelligence_engine.state
+
+        competitors = []
+        for report in state.research_reports:
+            if report.competitor_landscape:
+                competitors_data = report.competitor_landscape
+                break
+
+        from business_intelligence.models.data_models import CompetitorProduct
+        results = await bi.untapped_intel.analyze_all(
+            data_points=state.all_data_points,
+            pain_points=state.all_pain_points,
+            competitors=[],
+            waitlist=bi.waitlist_manager.entries,
+            campaigns=bi.campaign_manager.results,
+        )
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Frontend Dashboard ====================
+
+@router.get("/dashboard")
+async def get_bi_dashboard():
+    """Get complete BI dashboard data for the frontend.
+
+    Returns a single payload with all widgets the React frontend needs.
+    """
+    try:
+        bi = get_bi_system()
+        return await bi.frontend_bridge.get_dashboard_data(bi)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/dashboard/loops")
+async def get_loop_dashboard():
+    """Get recursive loops dashboard for frontend."""
+    try:
+        bi = get_bi_system()
+        knowledge = bi.recursive_loops.get_knowledge_summary()
+        return await bi.frontend_bridge.get_loop_dashboard(knowledge)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

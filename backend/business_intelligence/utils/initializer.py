@@ -23,6 +23,8 @@ from business_intelligence.connectors.web_scraping_connector import WebScrapingC
 from business_intelligence.connectors.junglescout_connector import JungleScoutConnector
 from business_intelligence.connectors.youtube_connector import YouTubeConnector
 from business_intelligence.connectors.instagram_connector import InstagramConnector
+from business_intelligence.connectors.email_marketing_connector import EmailMarketingConnector
+from business_intelligence.connectors.crypto_connector import CryptoFinanceConnector
 from business_intelligence.synthesis.intelligence_engine import IntelligenceEngine
 from business_intelligence.synthesis.reasoning_engine import BIReasoningEngine
 from business_intelligence.campaigns.waitlist_manager import WaitlistManager
@@ -32,6 +34,11 @@ from business_intelligence.campaigns.validation_engine import ValidationEngine
 from business_intelligence.campaigns.lookalike_engine import LookalikeEngine
 from business_intelligence.campaigns.ad_optimizer import AdOptimizer
 from business_intelligence.campaigns.dynamic_creative import DynamicCreativeEngine
+from business_intelligence.synthesis.recursive_loops import RecursiveIntelligenceEngine
+from business_intelligence.synthesis.content_engine import ContentEngine
+from business_intelligence.synthesis.financial_model import FinancialModeler
+from business_intelligence.synthesis.untapped_intelligence import UntappedIntelligence
+from business_intelligence.utils.frontend_bridge import BIFrontendBridge
 from business_intelligence.customer_intelligence.archetype_engine import ArchetypeEngine
 from business_intelligence.customer_intelligence.pattern_analyzer import CrossPatternAnalyzer
 from business_intelligence.product_discovery.product_ideation import ProductIdeationEngine
@@ -62,6 +69,11 @@ class BISystem:
         self.lookalike_engine: Optional[LookalikeEngine] = None
         self.ad_optimizer: Optional[AdOptimizer] = None
         self.dynamic_creative: Optional[DynamicCreativeEngine] = None
+        self.recursive_loops: Optional[RecursiveIntelligenceEngine] = None
+        self.content_engine: Optional[ContentEngine] = None
+        self.financial_modeler: Optional[FinancialModeler] = None
+        self.untapped_intel: Optional[UntappedIntelligence] = None
+        self.frontend_bridge: Optional[BIFrontendBridge] = None
         self.archetype_engine: Optional[ArchetypeEngine] = None
         self.pattern_analyzer: Optional[CrossPatternAnalyzer] = None
         self.product_ideation: Optional[ProductIdeationEngine] = None
@@ -103,6 +115,11 @@ class BISystem:
             target_cpa=self.config.target_cpa,
         )
         self.dynamic_creative = DynamicCreativeEngine()
+        self.recursive_loops = RecursiveIntelligenceEngine()
+        self.content_engine = ContentEngine()
+        self.financial_modeler = FinancialModeler()
+        self.untapped_intel = UntappedIntelligence()
+        self.frontend_bridge = BIFrontendBridge()
         self.archetype_engine = ArchetypeEngine(
             min_cluster_size=self.config.pain_point_cluster_min_size
         )
@@ -137,6 +154,8 @@ class BISystem:
             "jungle_scout": JungleScoutConnector,
             "youtube": YouTubeConnector,
             "instagram": InstagramConnector,
+            "email_marketing": EmailMarketingConnector,
+            "crypto_finance": CryptoFinanceConnector,
             "web_scraping": WebScrapingConnector,
         }
 

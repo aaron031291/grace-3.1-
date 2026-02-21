@@ -142,6 +142,21 @@ class BIConfig:
                     "channel_id": os.getenv("YOUTUBE_CHANNEL_ID"),
                 }
             ),
+            "email_marketing": ConnectorConfig(
+                name="Email Marketing",
+                api_key=os.getenv("EMAIL_MARKETING_API_KEY"),
+                extra={
+                    "provider": os.getenv("EMAIL_MARKETING_PROVIDER", "sendgrid"),
+                    "list_id": os.getenv("EMAIL_MARKETING_LIST_ID"),
+                }
+            ),
+            "crypto_finance": ConnectorConfig(
+                name="Crypto & Finance",
+                api_key=os.getenv("COINGECKO_API_KEY", "free"),
+                extra={
+                    "alpha_vantage_key": os.getenv("ALPHA_VANTAGE_KEY"),
+                }
+            ),
             "jungle_scout": ConnectorConfig(
                 name="Jungle Scout",
                 api_key=os.getenv("JUNGLESCOUT_API_KEY"),
