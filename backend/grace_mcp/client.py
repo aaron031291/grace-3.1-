@@ -147,6 +147,58 @@ class MCPClient:
             for tool in result.tools
         ]
 
+    async def list_resources(self) -> List[Dict[str, Any]]:
+        """List available MCP resources."""
+        if not self._session:
+            return []
+        result = await self._session.list_resources()
+        return [
+            {
+                "uri": r.uri,
+                "name": r.name,
+                "description": r.description or "",
+                "mime_type": r.mimeType or ""
+            }
+            for r in result.resources
+        ]
+
+    async def list_resource_templates(self) -> List[Dict[str, Any]]:
+        """List available MCP resource templates."""
+        if not self._session:
+            return []
+        result = await self._session.list_resource_templates()
+        return [
+            {
+                "uri_template": t.uriTemplate,
+                "name": t.name,
+                "description": t.description or "",
+                "mime_type": t.mimeType or ""
+            }
+            for t in result.resourceTemplates
+        ]
+
+    async def read_resource(self, uri: str) -> Dict[str, Any]:
+        """Read an MCP resource by URI."""
+        if not self._session:
+            return {"content": "", "success": False, "error": "Not connected"}
+        
+        try:
+            result = await self._session.read_resource(uri)
+            content_parts = []
+            for content in result.contents:
+                if hasattr(content, 'text') and content.text:
+                    content_parts.append(content.text)
+                elif hasattr(content, 'blob') and content.blob:
+                    content_parts.append(f"[Binary data: {content.mimeType}]")
+            
+            return {
+                "content": "\n".join(content_parts),
+                "success": True
+            }
+        except Exception as e:
+            logger.error(f"[MCP] Failed to read resource {uri}: {e}")
+            return {"content": "", "success": False, "error": str(e)}
+
     async def list_tools(self) -> List[Dict[str, Any]]:
         """Get list of available MCP tools."""
         if self._tools_cache is None:

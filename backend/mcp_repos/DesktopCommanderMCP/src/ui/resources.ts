@@ -4,7 +4,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { FILE_PREVIEW_RESOURCE_URI } from './contracts.js';
+import { FILE_PREVIEW_RESOURCE_URI, PROCESS_LOG_RESOURCE_PREFIX } from './contracts.js';
+import { terminalManager } from '../terminal-manager.js';
 
 const UI_RESOURCE_MIME_TYPE = 'text/html;profile=mcp-app';
 
@@ -13,6 +14,13 @@ export const FILE_PREVIEW_RESOURCE = {
     name: 'Desktop Commander File Preview',
     description: 'Markdown-first preview surface for read_file structured content.',
     mimeType: UI_RESOURCE_MIME_TYPE
+};
+
+export const PROCESS_LOG_RESOURCE_TEMPLATE = {
+    uriTemplate: `${PROCESS_LOG_RESOURCE_PREFIX}{pid}`,
+    name: 'Process Logs',
+    description: 'Real-time output stream for a running process.',
+    mimeType: 'text/plain'
 };
 
 interface ReadableUiResource {
@@ -75,6 +83,42 @@ export async function getFilePreviewResourceText(): Promise<string> {
     return readInlinedResourceHtml(DIST_FILE_PREVIEW_DIR, 'preview-runtime.js');
 }
 
+export async function readLogResource(uri: string) {
+    if (!uri.startsWith(PROCESS_LOG_RESOURCE_PREFIX)) {
+        return null;
+    }
+
+    const pidStr = uri.substring(PROCESS_LOG_RESOURCE_PREFIX.length);
+    const pid = parseInt(pidStr, 10);
+
+    if (isNaN(pid)) {
+        throw new Error(`Invalid PID in resource URI: ${uri}`);
+    }
+
+    const result = terminalManager.readOutputPaginated(pid, -500, 500);
+    if (!result) {
+        throw new Error(`Process with PID ${pid} not found or no logs available.`);
+    }
+
+    const status = result.isComplete
+        ? ` (Completed with code ${result.exitCode})`
+        : ` (Running)`;
+
+    return {
+        contents: [
+            {
+                uri,
+                mimeType: 'text/plain',
+                text: result.lines.join('\n')
+            }
+        ],
+        _meta: {
+            title: `Process ${pid} Logs${status}`,
+            pid
+        }
+    };
+}
+
 const READABLE_UI_RESOURCES: Record<string, ReadableUiResource> = {
     [FILE_PREVIEW_RESOURCE_URI]: {
         mimeType: FILE_PREVIEW_RESOURCE.mimeType,
@@ -86,7 +130,15 @@ export function listUiResources() {
     return [FILE_PREVIEW_RESOURCE];
 }
 
+export function listUiResourceTemplates() {
+    return [PROCESS_LOG_RESOURCE_TEMPLATE];
+}
+
 export async function readUiResource(uri: string) {
+    if (uri.startsWith(PROCESS_LOG_RESOURCE_PREFIX)) {
+        return readLogResource(uri);
+    }
+
     const resource = READABLE_UI_RESOURCES[uri];
     if (!resource) {
         return null;

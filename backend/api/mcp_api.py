@@ -249,3 +249,37 @@ async def mcp_shutdown():
         await _orchestrator.shutdown()
         _orchestrator = None
     return {"message": "MCP orchestrator shut down"}
+
+
+@router.get("/resources/templates")
+async def list_mcp_resource_templates():
+    """List available MCP resource templates."""
+    try:
+        orchestrator = await get_orchestrator()
+        templates = await orchestrator.mcp_client.list_resource_templates()
+        return {
+            "templates": templates,
+            "count": len(templates)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+
+@router.get("/resource")
+async def read_mcp_resource(uri: str):
+    """
+    Read a specific MCP resource by URI.
+    Useful for direct monitoring of process logs in the UI.
+    """
+    try:
+        orchestrator = await get_orchestrator()
+        result = await orchestrator.mcp_client.read_resource(uri)
+        
+        if not result.get("success"):
+            raise HTTPException(status_code=400, detail=result.get("error", "Failed to read resource"))
+            
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

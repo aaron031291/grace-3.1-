@@ -68,7 +68,7 @@ import {
     buildUiToolMeta,
     FILE_PREVIEW_RESOURCE_URI
 } from './ui/contracts.js';
-import { listUiResources, readUiResource } from './ui/resources.js';
+import { listUiResources, listUiResourceTemplates, readUiResource } from './ui/resources.js';
 
 // Store startup messages to send after initialization
 const deferredMessages: Array<{ level: string, message: string }> = [];
@@ -105,6 +105,13 @@ export const server = new Server(
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
     return {
         resources: listUiResources(),
+    };
+});
+
+// Add handler for resources/templates/list method
+server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+    return {
+        resourceTemplates: listUiResourceTemplates(),
     };
 });
 
@@ -1542,4 +1549,4 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 });
 
 // Add no-op handlers so Visual Studio initialization succeeds
-server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => ({ resourceTemplates: [] }));
+// ... existing handlers ...

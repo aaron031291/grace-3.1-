@@ -74,6 +74,43 @@ class AuditLogger:
             f"(layer={calling_layer}, {duration_ms:.0f}ms)"
         )
 
+    def log_resource_read(
+        self,
+        uri: str,
+        duration_ms: float,
+        calling_layer: str = "user",
+        session_id: str = None,
+        success: bool = True,
+        error: str = None
+    ):
+        """Log an MCP resource read."""
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+            "calling_layer": calling_layer,
+            "resource_uri": uri,
+            "type": "resource_read",
+            "duration_ms": round(duration_ms, 2),
+            "success": success,
+            "error": error
+        }
+
+        self._entries.append(entry)
+
+        # Write to file
+        try:
+            with open(self._log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry, default=str) + "\n")
+        except Exception as e:
+            logger.error(f"Failed to write audit log: {e}")
+
+        # Log to standard logger
+        status = "✅" if success else "❌"
+        logger.info(
+            f"[MCP AUDIT] {status} READ {uri} "
+            f"(layer={calling_layer}, {duration_ms:.0f}ms)"
+        )
+
     def _sanitize_args(self, args: Dict[str, Any]) -> Dict[str, Any]:
         """Sanitize arguments to avoid logging sensitive/huge data."""
         sanitized = {}

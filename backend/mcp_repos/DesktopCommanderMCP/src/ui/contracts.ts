@@ -3,6 +3,7 @@
  */
 export const FILE_PREVIEW_RESOURCE_URI = 'ui://desktop-commander/file-preview';
 export const CONFIG_EDITOR_RESOURCE_URI = 'ui://desktop-commander/config-editor';
+export const PROCESS_LOG_RESOURCE_PREFIX = 'logs://';
 
 export interface UiToolMeta extends Record<string, unknown> {
   'ui/resourceUri': string;

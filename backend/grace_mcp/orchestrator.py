@@ -98,10 +98,12 @@ class MCPOrchestrator:
             "- **File Operations**: read, write, edit, move, search files and directories\n"
             "- **Terminal**: execute commands, manage processes\n"
             "- **Knowledge Base**: search ingested documents via rag_search\n"
-            "- **Web**: search Google via web_search, fetch page content via web_fetch\n\n"
+            "- **Web**: search Google via web_search, fetch page content via web_fetch\n"
+            "- **Resources**: read real-time data streams via read_resource (e.g., logs://{pid} for process output)\n\n"
             "The LLM decides which tools to use based on context. "
             "For example, a single request might require web_search followed by write_file.\n\n"
             "Rules:\n"
+            "- Use logs://{pid} with read_resource to monitor the real-time output of a process without starting a new one\n"
             "- Use rag_search when the user asks about their project or knowledge base\n"
             "- Use web_search for current information not in the knowledge base\n"
             "- Use web_fetch to read the full content of a specific URL\n"
@@ -124,6 +126,31 @@ class MCPOrchestrator:
 
             # Get MCP tools in OpenAI function-calling format
             self._tools_openai_format = self.mcp_client.get_tools_as_openai_functions()
+            
+            # Add virtual read_resource tool for the LLM
+            self._tools_openai_format.append({
+                "type": "function",
+                "function": {
+                    "name": "read_resource",
+                    "description": (
+                        "Read a real-time data resource from the system via a URI. "
+                        "Currently supports Process Logs using the logs://{pid} format. "
+                        "Use this to monitor the output of a running process or check logs "
+                        "without repeatedly calling tools."
+                    ),
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "uri": {
+                                "type": "string",
+                                "description": "The URI of the resource to read (e.g., logs://1234)"
+                            }
+                        },
+                        "required": ["uri"]
+                    }
+                }
+            })
+            
             mcp_count = len(self._tools_openai_format)
 
             # Register builtin tools (RAG, web search, web fetch)
@@ -272,6 +299,23 @@ class MCPOrchestrator:
                     duration_ms = (time.time() - start_time) * 1000
                     result["duration_ms"] = duration_ms
                     logger.info(f"[ORCHESTRATOR] Builtin '{func_name}' completed in {duration_ms:.0f}ms")
+                elif func_name == "read_resource":
+                    # Execute resource read via MCP client
+                    uri = func_args.get("uri")
+                    result = await self.mcp_client.read_resource(uri)
+                    duration_ms = (time.time() - start_time) * 1000
+                    result["duration_ms"] = duration_ms
+                    
+                    # Log resource read to audit trail
+                    self.mcp_client.audit_logger.log_resource_read(
+                        uri=uri,
+                        duration_ms=duration_ms,
+                        calling_layer="orchestrator",
+                        session_id=session_id,
+                        success=result.get("success", False),
+                        error=result.get("error")
+                    )
+                    logger.info(f"[ORCHESTRATOR] Resource read '{uri}' completed in {duration_ms:.0f}ms")
                 else:
                     # Execute via MCP server
                     result = await self.mcp_client.call_tool(
@@ -390,6 +434,33 @@ class MCPOrchestrator:
                 "error": str(e),
                 "message": {}
             }
+
+    async def read_resource(self, uri: str, session_id: str = None) -> Dict[str, Any]:
+        """
+        Read an MCP resource by URI.
+        
+        Args:
+            uri: The resource URI to read.
+            session_id: Optional session identifier for auditing.
+            
+        Returns:
+            Dict containing the resource content or error details.
+        """
+        start_time = time.time()
+        result = await self.mcp_client.read_resource(uri)
+        duration_ms = (time.time() - start_time) * 1000
+        
+        # Log resource read to audit trail
+        self.mcp_client.audit_logger.log_resource_read(
+            uri=uri,
+            duration_ms=duration_ms,
+            calling_layer="orchestrator_direct",
+            session_id=session_id,
+            success=result.get("success", False),
+            error=result.get("error")
+        )
+        
+        return result
 
     def get_status(self) -> Dict[str, Any]:
         """Get orchestrator status."""
