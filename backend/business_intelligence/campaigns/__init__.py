@@ -10,3 +10,5 @@ from .ad_copy_generator import AdCopyGenerator
 from .waitlist_manager import WaitlistManager
 from .campaign_manager import CampaignManager
 from .validation_engine import ValidationEngine
+from .lookalike_engine import LookalikeEngine
+from .ad_optimizer import AdOptimizer

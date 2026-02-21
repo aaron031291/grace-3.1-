@@ -2,9 +2,9 @@
 BI System Initializer
 
 Sets up the entire Business Intelligence system:
-- Loads configuration from environment
+- Loads configuration from environment (or secrets vault)
 - Initializes and registers all connectors
-- Creates engine instances
+- Creates engine instances (including LLM reasoning)
 - Provides a single entry point for the GRACE backend
 """
 
@@ -20,16 +20,21 @@ from business_intelligence.connectors.meta_connector import MetaConnector
 from business_intelligence.connectors.tiktok_connector import TikTokConnector
 from business_intelligence.connectors.serpapi_connector import SerpAPIConnector
 from business_intelligence.connectors.web_scraping_connector import WebScrapingConnector
+from business_intelligence.connectors.junglescout_connector import JungleScoutConnector
 from business_intelligence.synthesis.intelligence_engine import IntelligenceEngine
+from business_intelligence.synthesis.reasoning_engine import BIReasoningEngine
 from business_intelligence.campaigns.waitlist_manager import WaitlistManager
 from business_intelligence.campaigns.campaign_manager import CampaignManager
 from business_intelligence.campaigns.ad_copy_generator import AdCopyGenerator
 from business_intelligence.campaigns.validation_engine import ValidationEngine
+from business_intelligence.campaigns.lookalike_engine import LookalikeEngine
+from business_intelligence.campaigns.ad_optimizer import AdOptimizer
 from business_intelligence.customer_intelligence.archetype_engine import ArchetypeEngine
 from business_intelligence.customer_intelligence.pattern_analyzer import CrossPatternAnalyzer
 from business_intelligence.product_discovery.product_ideation import ProductIdeationEngine
 from business_intelligence.product_discovery.niche_finder import NicheFinder
 from business_intelligence.historical.data_store import HistoricalDataStore
+from business_intelligence.utils.secrets_vault import SecretsVault
 
 logger = logging.getLogger(__name__)
 
@@ -46,15 +51,19 @@ class BISystem:
         self._initialized = False
 
         self.intelligence_engine: Optional[IntelligenceEngine] = None
+        self.reasoning_engine: Optional[BIReasoningEngine] = None
         self.waitlist_manager: Optional[WaitlistManager] = None
         self.campaign_manager: Optional[CampaignManager] = None
         self.ad_copy_generator: Optional[AdCopyGenerator] = None
         self.validation_engine: Optional[ValidationEngine] = None
+        self.lookalike_engine: Optional[LookalikeEngine] = None
+        self.ad_optimizer: Optional[AdOptimizer] = None
         self.archetype_engine: Optional[ArchetypeEngine] = None
         self.pattern_analyzer: Optional[CrossPatternAnalyzer] = None
         self.product_ideation: Optional[ProductIdeationEngine] = None
         self.niche_finder: Optional[NicheFinder] = None
         self.data_store: Optional[HistoricalDataStore] = None
+        self.secrets_vault: Optional[SecretsVault] = None
 
     def initialize(self):
         """Initialize all BI subsystems."""
@@ -63,10 +72,17 @@ class BISystem:
 
         logger.info("Initializing Business Intelligence System...")
 
+        self.secrets_vault = SecretsVault()
+        if self.secrets_vault._initialized:
+            self.secrets_vault.load_secrets_to_env(category="api_key")
+            self.config = BIConfig.from_env()
+            logger.info("Loaded API keys from secrets vault")
+
         ConnectorRegistry.reset()
         self._register_connectors()
 
         self.intelligence_engine = IntelligenceEngine(self.config)
+        self.reasoning_engine = BIReasoningEngine()
         self.waitlist_manager = WaitlistManager(
             validation_threshold=self.config.min_waitlist_for_validation
         )
@@ -76,6 +92,10 @@ class BISystem:
             waitlist_manager=self.waitlist_manager,
             campaign_manager=self.campaign_manager,
             min_signups=self.config.min_waitlist_for_validation,
+            target_cpa=self.config.target_cpa,
+        )
+        self.lookalike_engine = LookalikeEngine()
+        self.ad_optimizer = AdOptimizer(
             target_cpa=self.config.target_cpa,
         )
         self.archetype_engine = ArchetypeEngine(
@@ -95,6 +115,8 @@ class BISystem:
         logger.info(
             f"BI System initialized. "
             f"{len(active)}/{total} connectors active. "
+            f"LLM reasoning: {'available' if self.reasoning_engine else 'unavailable'}. "
+            f"Secrets vault: {'active' if self.secrets_vault._initialized else 'inactive'}. "
             f"Ready for intelligence collection."
         )
 
@@ -107,6 +129,7 @@ class BISystem:
             "meta": MetaConnector,
             "tiktok": TikTokConnector,
             "serpapi": SerpAPIConnector,
+            "jungle_scout": JungleScoutConnector,
             "web_scraping": WebScrapingConnector,
         }
 
@@ -131,6 +154,8 @@ class BISystem:
             "connectors": self.config.get_status_report(),
             "active_connectors": len(ConnectorRegistry.get_active()),
             "total_connectors": len(ConnectorRegistry.get_all()),
+            "reasoning_engine": "available" if self.reasoning_engine else "unavailable",
+            "secrets_vault": self.secrets_vault.get_status() if self.secrets_vault else {"initialized": False},
         }
 
 
