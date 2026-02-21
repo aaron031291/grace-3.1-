@@ -1258,3 +1258,81 @@ async def query_conceptnet(
         return get_library_connectors().query_conceptnet(term, limit)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# TASK COMPLETION VERIFIER
+# =======================================================================
+
+class CreateTaskRequest(BaseModel):
+    title: str = Field(..., description="Task title")
+    task_type: str = Field(default="new_module", description="new_module, bug_fix, integration, security_fix, api_endpoint")
+    description: Optional[str] = Field(None)
+    files: Optional[List[str]] = Field(None, description="Files involved")
+    extra_criteria: Optional[List[Dict[str, Any]]] = Field(None, description="Additional completion criteria")
+
+@router.post("/tasks/create")
+async def create_verified_task(request: CreateTaskRequest, db: Session = Depends(get_db)):
+    """Create a task with auto-generated completion criteria."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        task = verifier.create_task(
+            title=request.title, task_type=request.task_type,
+            description=request.description, files=request.files,
+            extra_criteria=request.extra_criteria,
+        )
+        return {"task_id": task.task_id, "title": task.title, "criteria_total": task.criteria_total, "status": task.status}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/tasks/{task_id}/verify")
+async def verify_task(task_id: str, db: Session = Depends(get_db)):
+    """Run verification checks. Returns what's done and what's not."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.verify(task_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/tasks/{task_id}/complete")
+async def complete_task(task_id: str, db: Session = Depends(get_db)):
+    """Mark task complete. ONLY works if 100% verified."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.mark_complete(task_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/tasks/{task_id}/confirm/{criterion_id}")
+async def confirm_criterion(task_id: str, criterion_id: str, passed: bool = True, db: Session = Depends(get_db)):
+    """Manually confirm a criterion that can't be auto-checked."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        verifier.confirm_criterion(task_id, criterion_id, passed)
+        return {"status": "confirmed", "criterion": criterion_id, "passed": passed}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/tasks")
+async def list_tasks(status: Optional[str] = None, limit: int = 50, db: Session = Depends(get_db)):
+    """List all tasks with completion status."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.get_all_tasks(status=status, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/tasks/stats")
+async def get_task_stats(db: Session = Depends(get_db)):
+    """Get task management statistics."""
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
