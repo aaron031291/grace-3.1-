@@ -17,3 +17,5 @@ from .web_scraping_connector import WebScrapingConnector
 from .junglescout_connector import JungleScoutConnector
 from .youtube_connector import YouTubeConnector
 from .instagram_connector import InstagramConnector
+from .email_marketing_connector import EmailMarketingConnector
+from .crypto_connector import CryptoFinanceConnector
