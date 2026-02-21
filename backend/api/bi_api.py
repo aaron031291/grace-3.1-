@@ -1557,3 +1557,65 @@ async def get_loop_dashboard():
         return await bi.frontend_bridge.get_loop_dashboard(knowledge)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== GRACE Backbone Integration ====================
+
+@router.get("/grace/integration-status")
+async def get_grace_integration_status():
+    """Get status of BI system's integration with all GRACE subsystems.
+
+    Shows which GRACE systems (Genesis, KPIs, MAGMA, Telemetry, Learning)
+    are connected to the BI pipeline.
+    """
+    try:
+        bi = get_bi_system()
+        if bi.grace_integration:
+            return bi.grace_integration.get_integration_status()
+        return {"initialized": False, "message": "GRACE integration not initialized"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/grace/sensor-data")
+async def get_bi_sensor_data():
+    """Get BI health data for GRACE's Diagnostic Machine sensors."""
+    try:
+        bi = get_bi_system()
+        if bi.grace_integration:
+            return bi.grace_integration.get_bi_sensor_data()
+        return {"health": "unknown"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/grace/operations")
+async def get_tracked_operations(limit: int = 50):
+    """Get recent BI operations tracked via Genesis Keys."""
+    try:
+        bi = get_bi_system()
+        if not bi.grace_integration:
+            return {"operations": []}
+
+        ops = bi.grace_integration.operations[-limit:]
+        return {
+            "total": len(bi.grace_integration.operations),
+            "showing": len(ops),
+            "operations": [
+                {
+                    "id": op.operation_id,
+                    "type": op.operation_type,
+                    "module": op.module,
+                    "description": op.description,
+                    "genesis_key": op.genesis_key_id,
+                    "success": op.success,
+                    "duration_ms": op.duration_ms,
+                    "timestamp": op.timestamp.isoformat(),
+                    "magma_ingested": op.magma_ingested,
+                    "error": op.error,
+                }
+                for op in reversed(ops)
+            ],
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
