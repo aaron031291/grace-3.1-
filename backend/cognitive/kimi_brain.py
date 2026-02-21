@@ -229,6 +229,8 @@ class KimiBrain:
             "active_tasks": self._read_active_tasks(),
             "system_integrity": self._read_system_integrity(),
             "handshake": self._read_handshake_status(),
+            "unified_intelligence": self._read_unified_intelligence(),
+            "weight_system": self._read_weight_system(),
         }
 
         logger.info("[KIMI-BRAIN] System state read complete")
@@ -366,6 +368,36 @@ class KimiBrain:
                 "total_issues": report.get("total_issues", 0),
                 "critical_issues": report.get("critical", 0),
                 "connected_systems": report.get("connected_systems", 0),
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    def _read_unified_intelligence(self) -> Dict[str, Any]:
+        """Read unified intelligence chain performance."""
+        try:
+            from cognitive.unified_intelligence import get_unified_intelligence
+            ui = get_unified_intelligence(self.session)
+            stats = ui.get_stats()
+            return {
+                "connected": True,
+                "total_queries": stats.get("total_queries", 0),
+                "hit_rate": stats.get("hit_rate", 0),
+                "layer_hits": stats.get("layer_hits", {}),
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    def _read_weight_system(self) -> Dict[str, Any]:
+        """Read weight system health."""
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            ws = get_grace_weight_system(self.session)
+            stats = ws.get_stats()
+            return {
+                "connected": True,
+                "total_updates": stats.get("total_weight_updates", 0),
+                "kpis": stats.get("current_kpis", {}),
+                "recent_updates": len(stats.get("recent_updates", [])),
             }
         except Exception as e:
             return {"connected": False, "error": str(e)}
