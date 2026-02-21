@@ -1346,3 +1346,50 @@ async def get_task_schedule(db: Session = Depends(get_db)):
         return verifier.get_schedule()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# TASK PLAYBOOK ENGINE
+# =======================================================================
+
+@router.post("/tasks/breakdown")
+async def break_down_task(
+    task_description: str = Query(..., description="What needs to be done"),
+    task_type: str = Query(default="new_module"),
+    db: Session = Depends(get_db),
+):
+    """
+    Break down a task into ordered subtasks with dependencies.
+
+    Checks playbooks first (instant, no LLM).
+    Falls back to Kimi (LLM analysis).
+    Falls back to heuristic (rule-based).
+
+    Returns execution waves (dependency-ordered groups).
+    """
+    try:
+        from cognitive.task_completion_verifier import get_task_completion_verifier
+        verifier = get_task_completion_verifier(db)
+        return verifier.break_down_and_create(task_description, task_type)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/playbooks")
+async def list_playbooks(limit: int = 50, db: Session = Depends(get_db)):
+    """List all saved task playbooks."""
+    try:
+        from cognitive.task_playbook_engine import get_task_playbook_engine
+        engine = get_task_playbook_engine(db)
+        return engine.list_playbooks(limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/playbooks/stats")
+async def get_playbook_stats(db: Session = Depends(get_db)):
+    """Get playbook statistics including Kimi calls saved."""
+    try:
+        from cognitive.task_playbook_engine import get_task_playbook_engine
+        engine = get_task_playbook_engine(db)
+        return engine.get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

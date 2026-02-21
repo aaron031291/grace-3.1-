@@ -224,6 +224,77 @@ class TaskCompletionVerifier:
         except Exception:
             pass
 
+    def break_down_and_create(
+        self,
+        task_description: str,
+        task_type: str = "new_module",
+        files: Optional[List[str]] = None,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Full pipeline: break down task → create with criteria → return plan.
+
+        Uses Playbook Engine: checks for existing playbook first,
+        falls back to Kimi, falls back to heuristic.
+
+        Returns task + ordered execution plan.
+        """
+        try:
+            from cognitive.task_playbook_engine import get_task_playbook_engine
+            from cognitive.kimi_brain import get_kimi_brain
+
+            kimi = get_kimi_brain(self.session)
+            playbook_engine = get_task_playbook_engine(self.session, kimi_brain=kimi)
+
+            # Get breakdown (playbook → Kimi → heuristic)
+            breakdown = playbook_engine.break_down_task(task_description, context)
+
+            # Get execution order (dependency-aware)
+            waves = playbook_engine.get_execution_order(breakdown.steps)
+
+            # Create verified task with criteria from breakdown
+            extra_criteria = []
+            for step in breakdown.steps:
+                for criterion in step.get("completion_criteria", []):
+                    extra_criteria.append({
+                        "id": f"step_{step['step_id']}_{criterion}",
+                        "name": f"[{step['step_id']}] {step['action']}: {criterion}",
+                        "auto": False,
+                        "step_id": step["step_id"],
+                    })
+
+            task = self.create_task(
+                title=task_description,
+                task_type=task_type,
+                files=files,
+                estimated_minutes=breakdown.estimated_minutes,
+                extra_criteria=extra_criteria,
+            )
+
+            return {
+                "task_id": task.task_id,
+                "title": task.title,
+                "status": task.status,
+                "from_playbook": breakdown.from_playbook,
+                "from_kimi": breakdown.from_kimi,
+                "playbook_id": breakdown.playbook_id,
+                "total_steps": breakdown.total_steps,
+                "estimated_minutes": breakdown.estimated_minutes,
+                "execution_waves": [
+                    [{"step_id": s["step_id"], "action": s["action"], "depends_on": s.get("depends_on", [])}
+                     for s in wave]
+                    for wave in waves
+                ],
+                "all_steps": breakdown.steps,
+                "criteria_total": task.criteria_total,
+            }
+
+        except Exception as e:
+            logger.error(f"[TASK] Breakdown failed: {e}")
+            # Fallback: create basic task
+            task = self.create_task(title=task_description, task_type=task_type, files=files)
+            return {"task_id": task.task_id, "title": task.title, "status": task.status, "error": str(e)}
+
     def create_task(
         self,
         title: str,
@@ -429,10 +500,39 @@ class TaskCompletionVerifier:
         if self._timesense and task.actual_duration_minutes:
             self._timesense.record_operation(
                 f"task.complete.{task.task_type}",
-                task.actual_duration_minutes * 60 * 1000,  # Convert to ms
+                task.actual_duration_minutes * 60 * 1000,
                 component="task_verifier",
                 success=True,
             )
+
+        # AUTO-SAVE PLAYBOOK: successful task → reusable playbook
+        try:
+            from cognitive.task_playbook_engine import get_task_playbook_engine
+            playbook_engine = get_task_playbook_engine(self.session)
+
+            # Extract steps from criteria (each criterion becomes a step)
+            steps = []
+            for i, criterion in enumerate(task.completion_criteria or []):
+                steps.append({
+                    "step_id": f"S{i+1}",
+                    "order": i + 1,
+                    "action": criterion.get("name", criterion.get("id", "")),
+                    "depends_on": [f"S{i}"] if i > 0 else [],
+                    "completion_criteria": [criterion.get("id", "")],
+                    "estimated_minutes": 5,
+                    "category": task.task_type,
+                })
+
+            if steps:
+                playbook_engine.save_as_playbook(
+                    task_description=task.title,
+                    steps=steps,
+                    task_type=task.task_type,
+                    source="completed_task",
+                )
+                logger.info(f"[TASK] Auto-saved playbook from completed task: {task.title[:80]}")
+        except Exception as e:
+            logger.debug(f"[TASK] Playbook save failed: {e}")
 
         # Track completion
         try:
