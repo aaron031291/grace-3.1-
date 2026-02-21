@@ -1482,3 +1482,90 @@ async def quick_integrity_status(db: Session = Depends(get_db)):
         return monitor.get_quick_status()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# COMPILED KNOWLEDGE QUERIES (DETERMINISTIC - NO LLM)
+# =======================================================================
+
+@router.get("/compiled/facts")
+async def query_compiled_facts(
+    subject: Optional[str] = Query(default=None),
+    predicate: Optional[str] = Query(default=None),
+    domain: Optional[str] = Query(default=None),
+    limit: int = Query(default=50, le=200),
+    db: Session = Depends(get_db),
+):
+    """Query compiled facts. Pure deterministic SQL lookup."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        compiler = get_knowledge_compiler(db)
+        return compiler.query_facts(subject, predicate, domain, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/compiled/procedures")
+async def query_compiled_procedures(
+    goal: Optional[str] = Query(default=None),
+    domain: Optional[str] = Query(default=None),
+    limit: int = Query(default=20, le=100),
+    db: Session = Depends(get_db),
+):
+    """Query compiled procedures. Pure deterministic SQL lookup."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        compiler = get_knowledge_compiler(db)
+        return compiler.query_procedures(goal, domain, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/compiled/rules")
+async def query_compiled_rules(
+    domain: Optional[str] = Query(default=None),
+    context: Optional[str] = Query(default=None),
+    limit: int = Query(default=20, le=100),
+    db: Session = Depends(get_db),
+):
+    """Query compiled decision rules. Pure deterministic SQL lookup."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        compiler = get_knowledge_compiler(db)
+        return compiler.query_rules(domain, context, limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/compiled/entities")
+async def query_compiled_entities(
+    entity: Optional[str] = Query(default=None),
+    relation: Optional[str] = Query(default=None),
+    limit: int = Query(default=50, le=200),
+    db: Session = Depends(get_db),
+):
+    """Query entity relationships. Pure deterministic SQL lookup."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        compiler = get_knowledge_compiler(db)
+        return compiler.query_entities(entity, relation, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/compiled/stats")
+async def get_compilation_stats(db: Session = Depends(get_db)):
+    """Get knowledge compilation statistics."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        return get_knowledge_compiler(db).get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/compile")
+async def compile_knowledge(
+    limit: int = Query(default=50, le=500),
+    db: Session = Depends(get_db),
+):
+    """Compile raw document chunks into deterministic knowledge."""
+    try:
+        from cognitive.knowledge_compiler import get_knowledge_compiler
+        return get_knowledge_compiler(db).compile_batch(limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
