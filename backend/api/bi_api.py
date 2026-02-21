@@ -1882,3 +1882,139 @@ async def get_research_trends(request: KnowledgeSearchRequest):
         return await kl.get_research_trends(request.query)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== Integrity & Accountability ====================
+
+@router.get("/integrity/status")
+async def get_integrity_status():
+    """Get status of honesty/integrity/accountability systems.
+
+    Shows connections to: Governance (Constitutional AI), Hallucination Guard
+    (6-layer), Confidence Scorer, Contradiction Detector, 12 Cognitive
+    Invariants, Trust-Aware Retrieval.
+    """
+    try:
+        bi = get_bi_system()
+        if bi.integrity_bridge:
+            return bi.integrity_bridge.get_status()
+        return {"initialized": False}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class IntegrityCheckRequest(BaseModel):
+    output: Dict[str, Any] = Field(..., description="BI output to check")
+    output_type: str = Field("recommendation", description="Type of output")
+
+
+@router.post("/integrity/check")
+async def run_integrity_check(request: IntegrityCheckRequest):
+    """Run full integrity check on a BI output.
+
+    Checks: Constitutional compliance, hallucination guard,
+    manipulation detection, transparency, confidence calibration.
+    """
+    try:
+        bi = get_bi_system()
+        if not bi.integrity_bridge:
+            return {"status": "unavailable"}
+
+        return await bi.integrity_bridge.run_full_integrity_check(
+            bi_output=request.output,
+            output_type=request.output_type,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/integrity/honesty-report")
+async def get_honesty_report():
+    """Get Grace's honesty report -- what she knows, doesn't know, and why.
+
+    Grace explicitly states her data gaps, confidence levels, known risks,
+    and unknown unknowns. Full transparency.
+    """
+    try:
+        bi = get_bi_system()
+        if not bi.integrity_bridge:
+            return {"status": "unavailable"}
+
+        from business_intelligence.connectors.base import ConnectorRegistry
+        state = bi.intelligence_engine.state if bi.intelligence_engine else None
+
+        return await bi.integrity_bridge.generate_honesty_report(
+            data_points=len(state.all_data_points) if state else 0,
+            sources_active=len(ConnectorRegistry.get_active()),
+            sources_total=len(ConnectorRegistry.get_all()),
+            pain_points=len(state.all_pain_points) if state else 0,
+            opportunities=len(state.scored_opportunities) if state else 0,
+            confidence=state.scored_opportunities[0].total_score if state and state.scored_opportunities else 0.0,
+            concerns=[n for n in (state.grace_notes[-5:] if state else [])],
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/integrity/accountability")
+async def get_accountability_report():
+    """Get accountability report -- how accurate have Grace's BI predictions been?
+
+    Tracks: predictions made, outcomes recorded, accuracy scores,
+    calibration error, overconfident/underconfident analysis.
+    """
+    try:
+        bi = get_bi_system()
+        if not bi.integrity_bridge:
+            return {"status": "unavailable"}
+
+        return await bi.integrity_bridge.get_accountability_report()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class PredictionRecord(BaseModel):
+    prediction: str = Field(..., description="What Grace predicted")
+    confidence: float = Field(..., description="Confidence level 0-1")
+    module: str = Field("general", description="Which BI module made the prediction")
+
+
+@router.post("/integrity/record-prediction")
+async def record_prediction(request: PredictionRecord):
+    """Record a BI prediction for future accountability tracking."""
+    try:
+        bi = get_bi_system()
+        if not bi.integrity_bridge:
+            return {"status": "unavailable"}
+
+        prediction_id = await bi.integrity_bridge.record_prediction(
+            prediction=request.prediction,
+            confidence=request.confidence,
+            module=request.module,
+        )
+        return {"prediction_id": prediction_id, "status": "recorded"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class OutcomeRecord(BaseModel):
+    prediction_id: str = Field(..., description="ID of the prediction to evaluate")
+    actual_outcome: str = Field(..., description="What actually happened")
+    accuracy: float = Field(..., description="How accurate was the prediction 0-1")
+
+
+@router.post("/integrity/record-outcome")
+async def record_outcome(request: OutcomeRecord):
+    """Record the actual outcome of a prediction for accountability."""
+    try:
+        bi = get_bi_system()
+        if not bi.integrity_bridge:
+            return {"status": "unavailable"}
+
+        return await bi.integrity_bridge.record_outcome(
+            prediction_id=request.prediction_id,
+            actual_outcome=request.actual_outcome,
+            accuracy=request.accuracy,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
