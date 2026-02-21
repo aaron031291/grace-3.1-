@@ -1414,3 +1414,41 @@ async def interrogate_task(request: InterrogateTaskRequest, db: Session = Depend
         return engine.interrogate_task(request.task_description, request.answers)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# INTELLIGENCE FEEDBACK LOOPS
+# =======================================================================
+
+@router.get("/feedback-loops/recommendations")
+async def get_feedback_recommendations(db: Session = Depends(get_db)):
+    """Get improvement recommendations from all 11 feedback loops."""
+    try:
+        from cognitive.intelligence_feedback_loops import get_feedback_coordinator
+        coordinator = get_feedback_coordinator(db)
+        return coordinator.get_improvement_recommendations()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/feedback-loops/knowledge-gaps")
+async def get_knowledge_gaps(db: Session = Depends(get_db)):
+    """Get prioritized knowledge gaps to mine."""
+    try:
+        from cognitive.intelligence_feedback_loops import get_feedback_coordinator
+        coordinator = get_feedback_coordinator(db)
+        return {
+            "priority_queue": coordinator.gap_queue.get_priority_queue()[:20],
+            "top_gaps": coordinator.gap_queue.get_top_gaps(10),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/feedback-loops/research-reliability")
+async def get_research_reliability(db: Session = Depends(get_db)):
+    """Get reliability scores for research sources."""
+    try:
+        from cognitive.intelligence_feedback_loops import get_feedback_coordinator
+        coordinator = get_feedback_coordinator(db)
+        return coordinator.research_tracker.get_source_reliability()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

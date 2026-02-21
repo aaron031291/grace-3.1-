@@ -747,7 +747,28 @@ class TaskCompletionVerifier:
         except Exception:
             pass
 
-        # 6. If criteria keep failing, flag for proactive learning
+        # 6. Feed ALL 11 intelligence feedback loops
+        try:
+            from cognitive.intelligence_feedback_loops import get_feedback_coordinator
+            coordinator = get_feedback_coordinator(self.session)
+
+            criteria_results = {}
+            for criterion in (task.completion_criteria or []):
+                cid = criterion.get("id", "")
+                result = (task.criteria_results or {}).get(cid, {})
+                criteria_results[cid] = result.get("passed", False)
+
+            coordinator.record_task_outcome(
+                task_id=task.task_id,
+                succeeded=is_complete,
+                criteria_results=criteria_results,
+                research_sources_used=[],
+                questions_asked={},
+            )
+        except Exception:
+            pass
+
+        # 7. If criteria keep failing, flag for proactive learning
         if task.verification_attempts >= 3 and not is_complete:
             try:
                 from cognitive.learning_hook import track_learning_event
