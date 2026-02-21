@@ -17,6 +17,11 @@ import logging
 import uuid
 import time
 
+try:
+    from settings import settings
+except ImportError:
+    settings = None
+
 logger = logging.getLogger(__name__)
 
 

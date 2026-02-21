@@ -208,7 +208,6 @@ async def list_mcp_tools():
 @router.get("/status")
 async def mcp_status():
     """Get MCP system status."""
-    global _orchestrator
     if _orchestrator is None:
         return {
             "initialized": False,
