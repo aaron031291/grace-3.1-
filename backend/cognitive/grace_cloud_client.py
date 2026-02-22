@@ -163,9 +163,16 @@ class KimiCloudClient:
 
         effective_max_tokens = max_tokens or self.max_tokens
 
+        # Always use Grace's system prompt (cached, comprehensive)
+        if not system_prompt:
+            try:
+                from cognitive.grace_system_prompt import get_grace_system_prompt
+                system_prompt = get_grace_system_prompt()
+            except Exception:
+                system_prompt = "You are Grace's reasoning engine. Be precise, honest, and concise."
+
         messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt[:4000]})  # Cap prompt length for cost
 
         try:
