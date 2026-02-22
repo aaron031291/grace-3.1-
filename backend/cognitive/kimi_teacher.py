@@ -446,6 +446,130 @@ Be specific. Reference actual numbers from the state data."""
             "stored_in": ["magma_memory", "distilled_knowledge", "knowledge_compiler", "oracle_ml"],
         }
 
+    def verify_with_cloud(self, content: str, original_query: str) -> Dict[str, Any]:
+        """Use Kimi Cloud as adversarial checker (hallucination guard Layer 11)."""
+        cloud = self._get_cloud()
+        if not cloud or not cloud.is_available():
+            return {"verified": None, "reason": "cloud unavailable"}
+
+        result = cloud.generate(
+            prompt=f"Fact-check this response. List ONLY errors. If accurate, say 'NO ERRORS'.\n\nQuestion: {original_query[:200]}\nResponse to check:\n{content[:1000]}",
+            system_prompt="You are a strict fact-checker. Only flag genuine errors.",
+            max_tokens=300,
+        )
+
+        if result.get("success"):
+            answer = result["content"].lower()
+            verified = "no errors" in answer
+            self._feed_oracle(original_query, content, "verification", verified)
+            return {"verified": verified, "response": result["content"], "tokens": result.get("tokens", 0)}
+        return {"verified": None, "reason": result.get("error", "unknown")}
+
+    def extract_knowledge_from_file(self, file_path: str, max_chunks: int = 3) -> Dict[str, Any]:
+        """Send document chunks to Kimi Cloud for high-quality extraction."""
+        cloud = self._get_cloud()
+        if not cloud or not cloud.is_available():
+            return {"success": False, "error": "cloud unavailable"}
+
+        import os, re
+        full_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), file_path)
+        if not os.path.exists(full_path):
+            return {"success": False, "error": f"file not found: {file_path}"}
+
+        with open(full_path, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+
+        chunks = [p.strip() for p in re.split(r'\n\n+', content) if len(p.strip()) > 100][:max_chunks]
+        total_compiled = {"facts": 0, "procedures": 0, "rules": 0, "entities": 0}
+
+        for chunk in chunks:
+            result = self.ask(
+                f"Extract all facts, procedures, and rules from this text:\n{chunk[:1500]}",
+                topic=os.path.basename(os.path.dirname(file_path)),
+                max_tokens=500,
+            )
+            if result.get("success"):
+                for k in total_compiled:
+                    total_compiled[k] += result.get("compiled", {}).get(k, 0)
+
+        return {"success": True, "file": file_path, "chunks_processed": len(chunks), "compiled": total_compiled}
+
+    def get_task_breakdown(self, task_description: str) -> Dict[str, Any]:
+        """Ask Kimi Cloud to break down a complex task."""
+        return self.ask(
+            f"Break down this task into ordered steps with dependencies. "
+            f"For each step: action, depends_on (which previous steps), estimated_minutes.\n\n"
+            f"Task: {task_description}",
+            topic="task_management",
+            max_tokens=600,
+        )
+
+    def review_code(self, file_path: str) -> Dict[str, Any]:
+        """Send code to Kimi Cloud for review."""
+        cloud = self._get_cloud()
+        if not cloud:
+            return {"success": False, "error": "cloud unavailable"}
+
+        result = cloud.generate_with_code_context(
+            prompt="Review this code for: bugs, security issues, performance problems, and improvements. Be specific with line references.",
+            code_files=[file_path],
+            max_tokens=600,
+        )
+
+        if result.get("success"):
+            self._compile_response(f"Code review: {file_path}", result["content"], "code_review", None)
+            self._distill_response(f"review:{file_path}", result["content"], result.get("model_name", "kimi_cloud"))
+            self.session.commit()
+
+        return {"success": result.get("success", False), "review": result.get("content", ""), "tokens": result.get("tokens", 0)}
+
+    def mine_knowledge_gaps(self) -> Dict[str, Any]:
+        """Read knowledge gaps from feedback loops, auto-mine each from cloud."""
+        try:
+            from cognitive.feedback_loops import get_feedback_coordinator
+            coord = get_feedback_coordinator(self.session)
+            recs = coord.get_recommendations()
+            gaps = recs.get("knowledge_gaps", [])[:5]
+        except Exception:
+            gaps = []
+
+        if not gaps:
+            return {"mined": 0, "message": "No knowledge gaps detected"}
+
+        results = []
+        for gap in gaps:
+            topic = gap.get("topic", "unknown")
+            result = self.ask(
+                f"Teach me about {topic}. What are the key concepts, best practices, and common patterns?",
+                topic=topic,
+                max_tokens=500,
+            )
+            results.append({"topic": topic, "success": result.get("success", False), "tokens": result.get("tokens", 0)})
+
+        return {"mined": len(results), "gaps_addressed": results}
+
+    def compose_for_unified_chain(self, query: str, facts: List[Dict]) -> Optional[str]:
+        """High-quality composition for unified intelligence chain."""
+        cloud = self._get_cloud()
+        if not cloud or not cloud.is_available():
+            return None
+
+        fact_text = "\n".join(f"- {f.get('subject', '')} {f.get('predicate', '')} {f.get('object', f.get('object_value', ''))}" for f in facts[:8])
+
+        result = cloud.generate(
+            prompt=f"Based on these facts, compose a clear answer to: {query}\n\nFacts:\n{fact_text}",
+            system_prompt="Compose a concise answer using ONLY the facts provided. Don't add information not in the facts.",
+            max_tokens=400,
+        )
+
+        if result.get("success"):
+            answer = result["content"]
+            self._distill_response(query, answer, "kimi_cloud:composer")
+            self.session.commit()
+            return answer
+
+        return None
+
     def get_stats(self) -> Dict[str, Any]:
         return dict(self._stats)
 

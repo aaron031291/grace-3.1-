@@ -1697,3 +1697,39 @@ async def kimi_ask_with_context(
         return get_kimi_teacher(db).ask_with_system_context(question, topic=topic)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/extract-file")
+async def kimi_extract_knowledge(file_path: str = Query(...), max_chunks: int = Query(default=3), db: Session = Depends(get_db)):
+    """Kimi Cloud extracts knowledge from a file (high quality)."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).extract_knowledge_from_file(file_path, max_chunks)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/review-code")
+async def kimi_review_code(file_path: str = Query(...), db: Session = Depends(get_db)):
+    """Kimi Cloud reviews code for bugs, security, performance."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).review_code(file_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/mine-gaps")
+async def kimi_mine_gaps(db: Session = Depends(get_db)):
+    """Auto-mine all detected knowledge gaps from Kimi Cloud."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).mine_knowledge_gaps()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/task-breakdown")
+async def kimi_task_breakdown(task: str = Query(...), db: Session = Depends(get_db)):
+    """Kimi Cloud breaks down a complex task into ordered steps."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).get_task_breakdown(task)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
