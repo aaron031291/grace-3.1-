@@ -1763,3 +1763,41 @@ async def kimi_correct_response(
         return get_kimi_teacher(db).correct_response(query, wrong_answer, correct_info)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KNOWLEDGE MINING ENGINE (parallel multi-source)
+# =======================================================================
+
+@router.post("/mine/start")
+async def start_knowledge_mining(
+    domains: List[str] = Query(default=["software engineering", "devops", "computer science", "artificial intelligence", "quantum computing"]),
+    db: Session = Depends(get_db),
+):
+    """Start background knowledge mining across multiple domains and sources."""
+    try:
+        from cognitive.knowledge_mining_engine import get_knowledge_mining_engine
+        from cognitive.grace_cloud_client import get_kimi_cloud_client
+        engine = get_knowledge_mining_engine(cloud_client=get_kimi_cloud_client())
+        return engine.mine_domains_background(domains)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/mine/stats")
+async def get_mining_stats():
+    """Get knowledge mining engine statistics."""
+    try:
+        from cognitive.knowledge_mining_engine import get_knowledge_mining_engine
+        return get_knowledge_mining_engine().get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/mine/stop")
+async def stop_mining():
+    """Stop background knowledge mining."""
+    try:
+        from cognitive.knowledge_mining_engine import get_knowledge_mining_engine
+        get_knowledge_mining_engine().stop()
+        return {"status": "stopped"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
