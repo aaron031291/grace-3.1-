@@ -52,7 +52,7 @@ htmlcov/
 docs/_build/
 
 # Local data (will be mounted as volumes)
-data/
+/data/
 logs/
 *.db
 *.sqlite
@@ -71,7 +71,7 @@ logs/
 Thumbs.db
 
 # Large model files (download at runtime)
-models/
+/models/
 *.bin
 *.pt
 *.pth
@@ -91,7 +91,6 @@ coverage/
 node_modules/
 **/node_modules/
 dist/
-**/dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
