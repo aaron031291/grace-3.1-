@@ -570,6 +570,101 @@ Be specific. Reference actual numbers from the state data."""
 
         return None
 
+    def mine_chat_history(self, limit: int = 20) -> Dict[str, Any]:
+        """Mine past conversations for patterns via cloud extraction."""
+        try:
+            from models.database_models import Chat
+            chats = self.session.query(Chat).order_by(Chat.created_at.desc()).limit(limit).all()
+        except Exception:
+            chats = []
+
+        if not chats:
+            return {"mined": 0, "message": "No chat history found"}
+
+        mined = 0
+        for chat in chats:
+            user_msg = getattr(chat, 'user_message', '') or ''
+            assistant_msg = getattr(chat, 'assistant_message', '') or getattr(chat, 'response', '') or ''
+            if user_msg and assistant_msg and len(user_msg) > 20:
+                self._distill_response(user_msg, assistant_msg, "chat_history")
+                mined += 1
+
+        self.session.commit()
+        return {"mined": mined, "source": "chat_history"}
+
+    def mine_git_patterns(self) -> Dict[str, Any]:
+        """Mine git commit patterns for code quality learning."""
+        import subprocess
+        try:
+            result = subprocess.run(
+                ['git', 'log', '--oneline', '-50'],
+                capture_output=True, text=True, timeout=10,
+                cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            )
+            commits = result.stdout.strip().split('\n') if result.stdout else []
+        except Exception:
+            commits = []
+
+        if not commits:
+            return {"mined": 0, "message": "No git history"}
+
+        commit_text = "\n".join(commits[:30])
+        result = self.ask(
+            f"Analyze these git commits and extract: coding patterns, common change types, quality indicators:\n{commit_text}",
+            topic="code_patterns",
+            max_tokens=400,
+        )
+        return {"mined": 1 if result.get("success") else 0, "commits_analyzed": len(commits)}
+
+    def correct_response(self, query: str, wrong_answer: str, correct_info: str) -> Dict[str, Any]:
+        """User corrects a cloud response. Downweight wrong, store correct."""
+        try:
+            from cognitive.knowledge_compiler import get_llm_knowledge_miner
+            miner = get_llm_knowledge_miner(self.session)
+            miner.update_quality(query, "negative")
+
+            miner.store_interaction(
+                query=query,
+                response=correct_info,
+                model_used="user_correction",
+                confidence=0.95,
+            )
+            self.session.commit()
+            return {"corrected": True, "query": query[:100]}
+        except Exception as e:
+            return {"corrected": False, "error": str(e)}
+
+    def cross_reference_rag_and_compiled(self, query: str) -> Dict[str, Any]:
+        """Cross-reference RAG results with compiled facts for reinforcement."""
+        results = {"rag_hits": 0, "compiled_hits": 0, "reinforced": 0}
+
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+
+            import re
+            terms = re.findall(r'\b[A-Z][a-z]+\b', query)[:3]
+            compiled_facts = []
+            for term in terms:
+                compiled_facts.extend(compiler.query_facts(subject=term, limit=3))
+            results["compiled_hits"] = len(compiled_facts)
+
+            if compiled_facts:
+                for fact in compiled_facts:
+                    fact_obj = self.session.query(
+                        __import__('cognitive.knowledge_compiler', fromlist=['CompiledFact']).CompiledFact
+                    ).filter_by(id=fact.get("id")).first() if "id" in fact else None
+
+                    if fact_obj:
+                        fact_obj.confidence = min(1.0, (fact_obj.confidence or 0.5) + 0.02)
+                        results["reinforced"] += 1
+
+                self.session.commit()
+        except Exception:
+            pass
+
+        return results
+
     def get_stats(self) -> Dict[str, Any]:
         return dict(self._stats)
 

@@ -663,6 +663,25 @@ class NearZeroHallucinationGuard:
         3. Find unsupported claims
         4. Rate the overall reliability
         """
+        # Try Kimi Cloud first (higher quality adversarial check)
+        try:
+            from cognitive.kimi_teacher import get_kimi_teacher
+            from database.session import SessionLocal
+            _s = SessionLocal()
+            teacher = get_kimi_teacher(_s)
+            cloud_result = teacher.verify_with_cloud(content, prompt)
+            _s.close()
+            if cloud_result.get("verified") is not None:
+                return LayerResult(
+                    layer_name="adversarial_self_challenge",
+                    layer_number=11,
+                    passed=cloud_result["verified"],
+                    confidence=0.85,
+                    details={"source": "kimi_cloud", "response": cloud_result.get("response", "")[:200]},
+                )
+        except Exception:
+            pass
+
         if not self.multi_llm:
             return LayerResult(
                 layer_name="adversarial_self_challenge",

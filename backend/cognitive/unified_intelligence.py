@@ -509,14 +509,28 @@ class UnifiedIntelligence:
         self, question: str, domain: Optional[str], min_conf: float
     ) -> Optional[IntelligenceResult]:
         """
-        LLM fallback. Used when all deterministic layers fail.
-
-        The response is stored in distilled knowledge so
-        next time this question hits Layer 4 instead.
+        Cloud LLM fallback. Uses Kimi Cloud for high-quality answers.
+        Response stored in distilled knowledge for future deterministic serving.
         """
-        # This layer is handled by the /chat endpoint's existing
-        # LLM call. We return None here to signal "needs LLM".
-        # The /chat endpoint will proceed to its existing Ollama/LLM call.
+        try:
+            from cognitive.kimi_teacher import get_kimi_teacher
+            teacher = get_kimi_teacher(self.session)
+            result = teacher.ask(question, topic=domain or "general", max_tokens=500)
+
+            if result.get("success") and result.get("answer"):
+                return IntelligenceResult(
+                    answered=True,
+                    response=result["answer"],
+                    layer_used="kimi_cloud",
+                    layer_number=9,
+                    confidence=0.8,
+                    source=f"kimi_cloud:{result.get('model', 'moonshot')}",
+                    deterministic=False,
+                    duration_ms=0,
+                    metadata={"tokens": result.get("tokens", 0), "compiled": result.get("compiled", {})},
+                )
+        except Exception:
+            pass
         return None
 
     # ==================================================================

@@ -285,7 +285,21 @@ class ContinuousLearningOrchestrator:
                     except Exception as e:
                         logger.debug(f"[CONTINUOUS_LEARNING] Knowledge indexing: {e}")
 
-                # 9. Update metrics
+                # 9. Auto-mine knowledge gaps via cloud (every 100 cycles ≈ ~16 min)
+                if cycle_count % 100 == 0 and cycle_count > 0:
+                    try:
+                        from cognitive.kimi_teacher import get_kimi_teacher
+                        from database.session import SessionLocal
+                        _gap_s = SessionLocal()
+                        teacher = get_kimi_teacher(_gap_s)
+                        gap_result = teacher.mine_knowledge_gaps()
+                        _gap_s.close()
+                        if gap_result.get("mined", 0) > 0:
+                            logger.info(f"[CONTINUOUS_LEARNING] Auto-mined {gap_result['mined']} knowledge gaps via cloud")
+                    except Exception as e:
+                        logger.debug(f"[CONTINUOUS_LEARNING] Cloud gap mining: {e}")
+
+                # 10. Update metrics
                 self._update_metrics()
 
                 # 6. Log periodic status

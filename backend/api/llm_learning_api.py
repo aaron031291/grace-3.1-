@@ -1733,3 +1733,33 @@ async def kimi_task_breakdown(task: str = Query(...), db: Session = Depends(get_
         return get_kimi_teacher(db).get_task_breakdown(task)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/mine-chats")
+async def kimi_mine_chat_history(limit: int = Query(default=20), db: Session = Depends(get_db)):
+    """Mine past chat conversations for learning patterns."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).mine_chat_history(limit)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/mine-git")
+async def kimi_mine_git(db: Session = Depends(get_db)):
+    """Mine git commit patterns for code quality learning."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).mine_git_patterns()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/correct")
+async def kimi_correct_response(
+    query: str = Query(...), wrong_answer: str = Query(...), correct_info: str = Query(...),
+    db: Session = Depends(get_db),
+):
+    """User corrects a wrong cloud response. Downweights wrong, stores correct."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).correct_response(query, wrong_answer, correct_info)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
