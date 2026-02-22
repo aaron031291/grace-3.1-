@@ -431,7 +431,7 @@ class KnowledgeMiningEngine:
             emb = embedder.embed_text([text[:500]])[0]
             vid = hashlib.md5(text[:200].encode()).hexdigest()
 
-            qpath = '/workspace/qdrant_grace'
+            qpath = '/workspace/qdrant_unified'
             if os.path.exists(os.path.join(qpath, '.lock')):
                 os.remove(os.path.join(qpath, '.lock'))
 

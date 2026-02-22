@@ -365,7 +365,7 @@ class SystemIntegrityMonitor:
             has_vectors = False
             try:
                 from qdrant_client import QdrantClient
-                for qpath in ['/workspace/qdrant_grace', '/workspace/qdrant_fresh', '/workspace/qdrant_v2']:
+                for qpath in ['/workspace/qdrant_unified', '/workspace/qdrant_unified', '/workspace/qdrant_unified']:
                     if os.path.exists(qpath):
                         try:
                             qc = QdrantClient(path=qpath)
