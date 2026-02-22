@@ -221,24 +221,22 @@ class GenesisFileWatcher(FileSystemEventHandler):
             from genesis.genesis_key_service import get_genesis_service
             from models.genesis_key_models import GenesisKeyType
 
-            with session_scope() as session:
-                genesis_service = get_genesis_service(session)
-                genesis_service.create_key(
-                    key_type=GenesisKeyType.FILE_OPERATION,
-                    what_description=f"File deleted: {os.path.basename(file_path)}",
-                    who_actor="file_watcher",
-                    where_location=rel_path,
-                    why_reason="File deletion detected by watcher",
-                    how_method="File system watcher",
-                    user_id="file_watcher",
-                    file_path=rel_path,
-                    context_data={
-                        "operation_type": "delete",
-                        "deleted_at": datetime.utcnow().isoformat()
-                    },
-                    tags=["file_delete", "watcher"],
-                    session=session
-                )
+            genesis_service = get_genesis_service()
+            genesis_service.create_key(
+                key_type=GenesisKeyType.FILE_OPERATION,
+                what_description=f"File deleted: {os.path.basename(file_path)}",
+                who_actor="file_watcher",
+                where_location=rel_path,
+                why_reason="File deletion detected by watcher",
+                how_method="File system watcher",
+                user_id="file_watcher",
+                file_path=rel_path,
+                context_data={
+                    "operation_type": "delete",
+                    "deleted_at": datetime.now().isoformat()
+                },
+                tags=["file_delete", "watcher"]
+            )
 
             logger.info(f"[FILE_WATCHER] Tracked deletion: {rel_path}")
 

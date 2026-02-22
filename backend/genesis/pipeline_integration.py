@@ -53,7 +53,7 @@ class DataPipeline:
         else:
             self.metadata = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "total_inputs_processed": 0,
                 "pipeline_stages": {
                     "layer_1_inputs": 0,
@@ -95,8 +95,8 @@ class DataPipeline:
             Complete pipeline result showing journey through all stages
         """
         pipeline_result = {
-            "pipeline_id": f"PIPE-{datetime.utcnow().timestamp()}",
-            "timestamp": datetime.utcnow().isoformat(),
+            "pipeline_id": f"PIPE-{datetime.now().timestamp()}",
+            "timestamp": datetime.now().isoformat(),
             "input_type": input_type,
             "stages": {},
             "complete": False
@@ -110,7 +110,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["layer_1_input"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "input_type": input_type,
                 "description": description or f"Processing {input_type}"
             }
@@ -142,7 +142,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["genesis_key"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "genesis_key_id": genesis_key.key_id,
                 "message": "Universal ID assigned & tracked"
             }
@@ -166,7 +166,7 @@ class DataPipeline:
 
                 pipeline_result["stages"]["version_control"] = {
                     "status": "completed",
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                     "version_key_id": version_result.get("version_key_id"),
                     "version_number": version_result.get("version_number"),
                     "symbiotic": True,
@@ -195,7 +195,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["librarian"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "organization_path": librarian_result["path"],
                 "category": librarian_result["category"],
                 "message": "Data organized & categorized"
@@ -217,7 +217,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["immutable_memory"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "storage_location": immutable_result["location"],
                 "immutable": True,
                 "message": "Permanent snapshot stored"
@@ -238,7 +238,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["rag"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "indexed": rag_result["indexed"],
                 "searchable": True,
                 "message": "Indexed for retrieval"
@@ -259,7 +259,7 @@ class DataPipeline:
 
             pipeline_result["stages"]["world_model"] = {
                 "status": "completed",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "ai_ready": True,
                 "context_available": True,
                 "message": "AI can understand & respond"
@@ -335,7 +335,7 @@ class DataPipeline:
         """
         immutable_entry = {
             "genesis_key_id": genesis_key.key_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "what": genesis_key.what_description,
             "who": genesis_key.who_actor,
             "where": genesis_key.where_location,
@@ -357,7 +357,7 @@ class DataPipeline:
         else:
             immutable_data = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "entries": []
             }
 
@@ -396,7 +396,7 @@ class DataPipeline:
                 "how": genesis_key.how_method
             },
             "searchable": True,
-            "indexed_at": datetime.utcnow().isoformat()
+            "indexed_at": datetime.now().isoformat()
         }
 
         # Store RAG index - use absolute path
@@ -409,7 +409,7 @@ class DataPipeline:
         else:
             rag_index = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "index": []
             }
 
@@ -448,7 +448,7 @@ class DataPipeline:
             },
             "rag_indexed": rag_result["indexed"],
             "available_for_ai": True,
-            "integrated_at": datetime.utcnow().isoformat()
+            "integrated_at": datetime.now().isoformat()
         }
 
         # Store world model context - use absolute path
@@ -461,7 +461,7 @@ class DataPipeline:
         else:
             world_model = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "contexts": []
             }
 

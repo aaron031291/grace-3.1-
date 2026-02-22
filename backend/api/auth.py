@@ -99,7 +99,7 @@ async def login(
         is_new_user = True
         identifier = request.email or request.username
         user = genesis_service.get_or_create_user(
-            username=request.username or f"User_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}",
+            username=request.username or f"User_{datetime.now().strftime('%Y%m%d%H%M%S')}",
             email=request.email,
             session=session
         )

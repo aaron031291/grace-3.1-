@@ -61,7 +61,7 @@ class NotificationPayload:
     priority: NotificationPriority
     source: str = "diagnostic_machine"
     details: Dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     tags: List[str] = field(default_factory=list)
 
 
@@ -72,7 +72,7 @@ class NotificationResult:
     channel: str
     status: NotificationStatus
     message: str
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     retry_count: int = 0
     error: Optional[str] = None
 

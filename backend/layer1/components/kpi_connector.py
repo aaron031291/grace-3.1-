@@ -186,7 +186,7 @@ class KPIConnector:
                     "component_name": component_name,
                     "metric_name": metric_name,
                     "value": value,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                 },
                 from_component=ComponentType.COGNITIVE_ENGINE,
             )
@@ -265,7 +265,7 @@ class KPIConnector:
             # Extract metadata from message
             metadata = {
                 "topic": message.topic,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
             }
             
             # Increment KPI

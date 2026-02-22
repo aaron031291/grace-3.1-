@@ -222,6 +222,51 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class APIKeyMiddleware(BaseHTTPMiddleware):
+    """
+    Validates API key on requests when REQUIRE_API_KEY is enabled.
+
+    Checks X-API-Key header against configured API_KEYS list.
+    Exempt paths: /health, /docs, /openapi.json
+    """
+
+    def __init__(self, app):
+        super().__init__(app)
+        self.config = get_security_config()
+
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        if not self.config.REQUIRE_API_KEY:
+            return await call_next(request)
+
+        # Exempt paths
+        path = request.url.path
+        exempt = ["/health", "/docs", "/openapi.json", "/redoc", "/"]
+        if any(path.startswith(e) for e in exempt):
+            return await call_next(request)
+
+        # Check API key
+        api_key = request.headers.get(self.config.API_KEY_HEADER)
+
+        if not api_key:
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "API key required. Set X-API-Key header."},
+            )
+
+        if api_key not in self.config.API_KEYS:
+            log_security_event(
+                event_type="INVALID_API_KEY",
+                request=request,
+                details={"key_prefix": api_key[:8] + "..."},
+            )
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "Invalid API key."},
+            )
+
+        return await call_next(request)
+
+
 class RequestValidationMiddleware(BaseHTTPMiddleware):
     """
     Validates incoming requests for security issues.

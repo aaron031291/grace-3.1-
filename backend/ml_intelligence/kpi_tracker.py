@@ -29,14 +29,14 @@ class KPI:
     metric_name: str
     value: float
     count: int = 1
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
     
     def increment(self, value: float = 1.0, metadata: Optional[Dict[str, Any]] = None):
         """Increment KPI value."""
         self.count += 1
         self.value += value
-        self.timestamp = datetime.utcnow()
+        self.timestamp = datetime.now()
         if metadata:
             self.metadata.update(metadata)
 
@@ -46,8 +46,8 @@ class ComponentKPIs:
     """All KPIs for a single component."""
     component_name: str
     kpis: Dict[str, KPI] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
     
     def get_kpi(self, metric_name: str) -> KPI:
         """Get or create KPI for metric."""
@@ -64,7 +64,7 @@ class ComponentKPIs:
         """Increment a KPI."""
         kpi = self.get_kpi(metric_name)
         kpi.increment(value, metadata)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now()
     
     def get_trust_score(self, metric_weights: Optional[Dict[str, float]] = None) -> float:
         """
@@ -112,7 +112,7 @@ class ComponentKPIs:
             return None
         
         kpi = self.kpis[metric_name]
-        if datetime.utcnow() - kpi.timestamp > time_window:
+        if datetime.now() - kpi.timestamp > time_window:
             return None
         
         return kpi

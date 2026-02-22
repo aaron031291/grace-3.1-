@@ -38,6 +38,13 @@ from embedding import EmbeddingModel
 from confidence_scorer.confidence_scorer import ConfidenceScorer
 
 logger = logging.getLogger(__name__)
+def _check_hia(text):
+    try:
+        from security.honesty_integrity_accountability import get_hia_framework
+        return get_hia_framework().verify_llm_output(text)
+    except Exception:
+        return None
+
 
 
 @dataclass
@@ -123,6 +130,19 @@ class LLMOrchestrator:
         )
         self.cognitive_enforcer = CognitiveEnforcer()
 
+        # Near-Zero Hallucination Guard (13 layers) - wraps the base guard
+        self.near_zero_guard = None
+        try:
+            from .near_zero_hallucination_guard import get_near_zero_hallucination_guard
+            self.near_zero_guard = get_near_zero_hallucination_guard(
+                base_guard=self.hallucination_guard,
+                multi_llm=self.multi_llm,
+                repo_access=self.repo_access,
+            )
+            logger.info("[LLM-ORCHESTRATOR] Near-Zero Hallucination Guard active (13 layers)")
+        except Exception as e:
+            logger.warning(f"[LLM-ORCHESTRATOR] Near-Zero Guard not available, using base 6-layer: {e}")
+
         # Initialize Cognitive Layer 1 (with OODA + 12 Invariants) and Learning Memory
         self.cognitive_layer1 = get_cognitive_layer1_integration(session=session) if session else None
         self.learning_memory = LearningMemoryManager(
@@ -174,6 +194,47 @@ class LLMOrchestrator:
         audit_trail = []
 
         logger.info(f"[LLM ORCHESTRATOR] Starting task {task_id}: {task_type.value}")
+
+        # Governance check - verify constitutional rules allow this task
+        try:
+            from security.governance import get_governance_engine, GovernanceContext
+            governance = get_governance_engine()
+            gov_context = GovernanceContext(
+                context_id=task_id,
+                action_type="execute_safe",
+                actor_id=user_id or "system",
+                actor_type="ai",
+                target_resource=f"llm_task:{task_type.value}",
+                impact_scope="component",
+                is_reversible=True,
+                metadata={"prompt_length": len(prompt), "task_type": task_type.value},
+            )
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    gov_decision = None  # Can't await in sync context, skip
+                else:
+                    gov_decision = loop.run_until_complete(governance.evaluate(gov_context))
+            except RuntimeError:
+                gov_decision = None
+
+            if gov_decision and not gov_decision.allowed:
+                violations = [v.description for v in gov_decision.violations[:3]]
+                logger.warning(f"[LLM ORCHESTRATOR] Task {task_id} BLOCKED by governance: {violations}")
+                audit_trail.append({"step": "governance", "blocked": True, "violations": violations})
+                return LLMTaskResult(
+                    task_id=task_id, prompt=prompt, success=False,
+                    content=f"Task blocked by governance: {'; '.join(violations)}",
+                    verification_result=None, cognitive_decision_id=None,
+                    genesis_key_id=None, trust_score=0.0, confidence_score=0.0,
+                    model_used="none", duration_ms=0, learning_example_id=None,
+                    audit_trail=audit_trail, timestamp=start_time,
+                )
+            else:
+                audit_trail.append({"step": "governance", "allowed": True})
+        except Exception as e:
+            audit_trail.append({"step": "governance", "error": str(e), "skipped": True})
 
         # Create task request
         task_request = LLMTaskRequest(

@@ -52,6 +52,11 @@ class ComponentType(Enum):
     AUTONOMOUS_LEARNING = "autonomous_learning"
     LLM_ORCHESTRATION = "llm_orchestration"
     COGNITIVE_ENGINE = "cognitive_engine"
+    KIMI_BRAIN = "kimi_brain"
+    GRACE_EXECUTOR = "grace_executor"
+    LLM_LEARNING = "llm_learning"
+    HALLUCINATION_GUARD = "hallucination_guard"
+    VERIFICATION_ENGINE = "verification_engine"
 
 
 @dataclass
@@ -267,7 +272,7 @@ class Layer1MessageBus:
             to_component=None,  # Broadcast
             topic=topic,
             payload=payload,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
             priority=priority
         )
 
@@ -352,7 +357,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=topic,
             payload=payload,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
             correlation_id=message_id,
             requires_response=True
         )
@@ -420,7 +425,7 @@ class Layer1MessageBus:
                 to_component=None,
                 topic="response",
                 payload=payload,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(),
                 correlation_id=correlation_id
             )
 
@@ -456,7 +461,7 @@ class Layer1MessageBus:
             to_component=to_component,
             topic=command,
             payload=payload,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now()
         )
 
         self._add_to_history(message)

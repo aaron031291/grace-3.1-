@@ -35,6 +35,7 @@ class GraceSystemType(str, Enum):
     PROACTIVE = "proactive"
     COGNITIVE = "cognitive"
     LIBRARIAN = "librarian"
+    BUSINESS_INTELLIGENCE = "business_intelligence"
 
 
 class IntegrationEvent(str, Enum):
@@ -49,6 +50,11 @@ class IntegrationEvent(str, Enum):
     LEARNING_COMPLETE = "learning_complete"
     DIAGNOSTIC_ALERT = "diagnostic_alert"
     SECURITY_CHECK = "security_check"
+    BI_RESEARCH_COMPLETE = "bi_research_complete"
+    BI_OPPORTUNITY_SCORED = "bi_opportunity_scored"
+    BI_CAMPAIGN_RESULT = "bi_campaign_result"
+    BI_VALIDATION_VERDICT = "bi_validation_verdict"
+    BI_LOOP_CYCLE_COMPLETE = "bi_loop_cycle_complete"
 
 
 class GraceSystemsIntegration:

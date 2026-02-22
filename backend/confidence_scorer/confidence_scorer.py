@@ -288,13 +288,13 @@ class ConfidenceScorer:
             Recency score between 0.0 and 1.0
         """
         if created_at is None:
-            created_at = datetime.utcnow()
+            created_at = datetime.now()
         
         # Ensure we're working with timezone-naive datetimes
         if created_at.tzinfo is not None:
             created_at = created_at.replace(tzinfo=None)
         
-        now = datetime.utcnow()
+        now = datetime.now()
         age_days = (now - created_at).days
         
         if age_days <= 90:  # 3 months
@@ -373,6 +373,31 @@ class ConfidenceScorer:
         else:
             result["contradictions_detected"] = False
             result["contradiction_count"] = 0
+
+        # Feed confidence scoring results to LLM learning tracker
+        try:
+            from cognitive.llm_interaction_tracker import get_llm_interaction_tracker
+            from database.session import SessionLocal
+            _cs_session = SessionLocal()
+            _cs_tracker = get_llm_interaction_tracker(_cs_session)
+            _cs_tracker.record_interaction(
+                prompt=f"[CONFIDENCE_SCORE] source={source_type}, len={len(text_content)}",
+                response=f"score={confidence_score:.3f}, quality={content_quality:.3f}, consensus={consensus_score:.3f}",
+                model_used="confidence_scorer",
+                interaction_type="reasoning",
+                outcome="success" if confidence_score >= 0.5 else "failure",
+                confidence_score=confidence_score,
+                metadata={
+                    "source_type": source_type,
+                    "content_quality": content_quality,
+                    "consensus_score": consensus_score,
+                    "contradictions": result.get("contradiction_count", 0),
+                },
+            )
+            _cs_session.commit()
+            _cs_session.close()
+        except Exception:
+            pass  # Non-blocking
         
         return result
     

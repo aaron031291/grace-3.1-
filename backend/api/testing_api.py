@@ -137,7 +137,7 @@ def validate_against_kpis(
     kpis = kpis or DEFAULT_KPIS
     validation = {
         "valid": True,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now().isoformat(),
         "kpi_results": {},
         "issues": []
     }
@@ -223,14 +223,14 @@ async def get_test_system_status():
             },
             "available_suites": list(runner.TEST_SUITES.keys()),
             "default_kpis": DEFAULT_KPIS,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         logger.error(f"Error getting test status: {e}")
         return {
             "status": "degraded",
             "error": str(e),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
 
@@ -308,7 +308,7 @@ async def run_tests(
             service = GenesisKeyService(db)
             key = service.create_genesis_key(
                 entity_type="test_run",
-                entity_id=results.get('run_id', f"test_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"),
+                entity_id=results.get('run_id', f"test_{datetime.now().strftime('%Y%m%d_%H%M%S')}"),
                 origin_source="autonomous_test_api",
                 origin_type="test_execution",
                 metadata={
@@ -358,7 +358,7 @@ async def generate_tests(request: TestGenerationRequest):
                 for t in tests
             ],
             "test_code": test_code,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     except Exception as e:
@@ -398,9 +398,9 @@ async def validate_tests(
         )
 
         validation_result = {
-            "validation_id": f"val_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "validation_id": f"val_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "valid": overall_valid,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "trust_score": {
                 "value": trust_score,
                 "threshold": request.min_trust_score,
@@ -474,13 +474,13 @@ async def integrate_tests(
         
         # Validation passed, proceed with integration
         integration_result = {
-            "integration_id": f"int_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "integration_id": f"int_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "test_run_id": request.test_run_id,
             "validation_id": request.validation_id,
             "status": "approved",
             "target_path": request.target_path,
             "auto_commit": request.auto_commit,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "trust_score": validation_result.get('trust_score', {}).get('value', 0.0)
         }
 
@@ -521,7 +521,7 @@ async def get_test_history(limit: int = 20):
         return {
             "history": history,
             "count": len(history),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     except Exception as e:
@@ -542,7 +542,7 @@ async def get_failed_tests(run_id: Optional[str] = None):
             "run_id": run_id or "latest",
             "failed_tests": failed,
             "count": len(failed),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     except Exception as e:
@@ -694,7 +694,7 @@ async def receive_diagnostics(
     """
     try:
         diagnostic_data = report.dict()
-        diagnostic_data['received_at'] = datetime.utcnow().isoformat()
+        diagnostic_data['received_at'] = datetime.now().isoformat()
 
         # Store in history
         _diagnostic_history.append(diagnostic_data)
@@ -761,7 +761,7 @@ async def receive_diagnostics(
         return {
             "status": "received",
             "session_id": report.session_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "genesis_key_id": genesis_key_id,
             "learning_insights": learning_insights,
             "learning_recorded": learning_recorded,
@@ -782,7 +782,7 @@ async def get_diagnostic_history(limit: int = 20):
     return {
         "history": _diagnostic_history[-limit:],
         "total": len(_diagnostic_history),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 
@@ -831,7 +831,7 @@ async def analyze_diagnostic_patterns():
         },
         "recommendations": _generate_recommendations(sorted_deps, sorted_errors),
         "total_reports_analyzed": len(_diagnostic_history),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 
@@ -977,7 +977,7 @@ async def _validate_fix_through_ooda(
             "reasoning": decision["reasoning"],
             "alternatives": decision.get("alternatives", []),
             "contradiction_check": contradiction_check,
-            "validation_timestamp": datetime.utcnow().isoformat()
+            "validation_timestamp": datetime.now().isoformat()
         }
 
     except ImportError as e:
@@ -1326,7 +1326,7 @@ Respond in JSON format:
         # Parse LLM response
         llm_result = _parse_llm_verification_response(response)
         llm_result["raw_response"] = response
-        llm_result["timestamp"] = datetime.utcnow().isoformat()
+        llm_result["timestamp"] = datetime.now().isoformat()
 
         return llm_result
 
@@ -1780,7 +1780,7 @@ async def _grace_mirror_reflect(
                 "concerns": concerns,
                 "block_execution": block_execution,
                 "block_reason": block_reason,
-                "mirror_timestamp": datetime.utcnow().isoformat()
+                "mirror_timestamp": datetime.now().isoformat()
             }
 
         elif stage == "post_execution":
@@ -1811,7 +1811,7 @@ async def _grace_mirror_reflect(
                 "learnings": learnings,
                 "self_assessment": reflection.get("self_assessment", ""),
                 "improvement_suggestions": reflection.get("suggestions", []),
-                "mirror_timestamp": datetime.utcnow().isoformat()
+                "mirror_timestamp": datetime.now().isoformat()
             }
 
     except ImportError:
@@ -1930,7 +1930,7 @@ async def _submit_to_autonomous_engine(request: Dict[str, Any]) -> Dict[str, Any
         return {
             "status": "submitted",
             "action_id": action.get("id") if action else None,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
     except ImportError:
@@ -1938,7 +1938,7 @@ async def _submit_to_autonomous_engine(request: Dict[str, Any]) -> Dict[str, Any
         logger.warning("Autonomous engine not available - action logged only")
         return {
             "status": "logged",
-            "action_id": f"local_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "action_id": f"local_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "note": "Autonomous engine not available"
         }
     except Exception as e:
@@ -2104,7 +2104,7 @@ async def _record_fix_outcome(
             "target": action.get("target"),
             "success": success,
             "result": result,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "validation": action.get("validation", {})
         }
 

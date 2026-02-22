@@ -121,7 +121,7 @@ class DocumentDownloader:
                         'content_type': content_type,
                         'url': url,
                         'original_url': original_url,  # Store original Drive URL if converted
-                        'downloaded_at': datetime.utcnow().isoformat()
+                        'downloaded_at': datetime.now().isoformat()
                     }
                     
                     # Save metadata file
@@ -289,11 +289,11 @@ class DocumentDownloader:
         
         for mime_type, ext in extension_map.items():
             if mime_type in content_type:
-                timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                 return f"document_{timestamp}.{ext}", ext
         
         # Ultimate fallback
-        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         return f"document_{timestamp}.bin", "bin"
     
     def _save_metadata(self, file_path: str, metadata: Dict) -> None:

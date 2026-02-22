@@ -100,7 +100,7 @@ class FileIntelligenceAgent:
                 'file_size': len(content),
                 'line_count': content.count('\n') + 1,
                 'word_count': len(content.split()),
-                'analyzed_at': datetime.utcnow().isoformat()
+                'analyzed_at': datetime.now().isoformat()
             }
 
             logger.info(

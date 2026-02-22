@@ -57,7 +57,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         # Track request start
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         request_data = await self._extract_request_data(request)
 
         # Create Genesis Key for request
@@ -90,7 +90,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
 
         # Track response
         try:
-            duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
+            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
 
             # Create Genesis Key for response
             self.genesis_service.create_key(

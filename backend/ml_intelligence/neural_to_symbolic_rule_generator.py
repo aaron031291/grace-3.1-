@@ -60,7 +60,7 @@ class SymbolicRule:
     
     def __post_init__(self):
         if self.created_at is None:
-            self.created_at = datetime.utcnow()
+            self.created_at = datetime.now()
 
 
 class NeuralToSymbolicRuleGenerator:
@@ -170,7 +170,7 @@ class NeuralToSymbolicRuleGenerator:
                 confidence=confidence,
                 support_count=len(member_indices),
                 features=features,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(),
             )
             
             patterns.append(pattern)

@@ -330,7 +330,7 @@ class PredictiveContextLoader:
             # Check cache first
             if topic in self.prefetched_cache:
                 cached = self.prefetched_cache[topic]
-                if datetime.utcnow() < cached.expires_at:
+                if datetime.now() < cached.expires_at:
                     logger.debug(f"[OK] Cache hit: {topic}")
                     self.prefetch_hits += 1
                     prefetched_contexts.append(cached)
@@ -400,8 +400,8 @@ class PredictiveContextLoader:
                 knowledge_chunks=chunks,
                 trust_score=trust_score,
                 operational_confidence=operational_confidence,
-                fetched_at=datetime.utcnow(),
-                expires_at=datetime.utcnow() + self.cache_ttl
+                fetched_at=datetime.now(),
+                expires_at=datetime.now() + self.cache_ttl
             )
 
             return context
@@ -445,7 +445,7 @@ class PredictiveContextLoader:
         """
         if topic in self.prefetched_cache:
             context = self.prefetched_cache[topic]
-            if datetime.utcnow() < context.expires_at:
+            if datetime.now() < context.expires_at:
                 self.prefetch_hits += 1
                 logger.info(f"🎯 CACHE HIT: {topic} was already prefetched!")
                 return context
@@ -472,7 +472,7 @@ class PredictiveContextLoader:
 
     def clear_expired_cache(self):
         """Clear expired entries from cache."""
-        now = datetime.utcnow()
+        now = datetime.now()
         expired = [topic for topic, ctx in self.prefetched_cache.items() if now >= ctx.expires_at]
         for topic in expired:
             del self.prefetched_cache[topic]

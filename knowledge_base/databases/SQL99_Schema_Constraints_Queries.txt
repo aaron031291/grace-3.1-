@@ -1,0 +1,1370 @@
+Chapter 8
+SQL-99: Schema Definition,
+Basic Constraints, and Queries
+Chapter Summary
+   Overview of SQL
+   DDL/DML
+   Review of DDL features
+   Review of DML features
+   More on constraints: assertions, triggers
+   Views in SQL
+
+
+
+
+                                                Slide 2- 2
+SQL Overview (1)
+   SQL: Structured Query Language
+       Standard language for commercial relational DBMSs
+   SEQUEL: Structured English QUEry Language
+       1978 System/R IBM- 1st Relational DBMS
+   1979 Oracle and Ingres
+   1982 SQL/DS and DB2 IBM
+   ANSI + ISO
+       SQL86 (SQL1) : first by ANSI and ratified by ISO (SQL-87), minor revision on 89
+        (SQL-89)
+       SQL92 (SQL2) : major revision
+       SQL99 (SQL3) : add recursive query, trigger, some OO features,
+         
+             Not fully endorsed by the industry
+       SQL2003 : XML, Window functions, etc
+          Window functions: a different kind of aggregate functions which require a
+
+           "sliding window" of rows.
+         
+             Minor revision to SQL 3, relatively new
+   There are some minor syntax differences among commercial DBMSs,
+    but the majority of SQL is standard across DBMSs.
+
+                                                                                   Slide 2- 3
+SQL Overview (2)
+   SQL has two major parts:
+   Data Definition Language (DDL): Used to create
+    database schema and its elements (such as
+    tables, constraints, etc)
+   Data Manipulation Language (DML): used to
+    store, retrieve and update data from tables.
+
+
+
+
+                                                Slide 2- 4
+DDL
+   DDL is used to define the schema of the database.
+   Create a database schema
+   Create a domain
+   Create, Drop or Alter a table
+   Create or Drop an Index
+   Define Integrity constraints
+   Define access privileges to users
+   Define access privileges on objects
+   Since SQL2, SQL supports the creation of multiple
+    schemas per database each with a distinct owner and
+    authorized users.
+
+
+                                                          Slide 2- 5
+DML
+   Data Manipulation Language (DML): used to
+    store, retrieve and update data from tables.
+
+
+
+
+                                                   Slide 2- 6
+Schema and Catalog Concepts (1)
+   Specifies a new database schema by giving it a name
+      Schema elements include tables, constraints, views, domains,
+
+       and other constructs such as authorization grants
+            CREATE SCHEMA COMPANY AUTHORIZATION Jsmith;
+       Not all users are authorized to create schema and schema
+        elements. Authorization grants to the relevant user accounts
+        should be done by the DBA.
+            CREATE USER Jsmith
+             IDENTIFIED BY Jsmith
+             DEFAULT TABLESPACE somedata
+             TEMPORARY TABLESPACE temp
+             QUOTA 10M ON somedata;
+             …..
+             GRANT create session TO Jsmith;
+             GRANT create table TO Jsmith;
+             GRANT create view TO Jsmith;
+             ………..
+
+
+
+
+                                                                       Slide 2- 7
+Schema and Catalog Concepts (2)
+   Catalog: a named collection of schemas in an
+    SQL environment
+   SQL environment: an installation of an SQL-
+    compliant RDBMS on a computer system
+   A catalog contains a special schema called
+    INFORMATION_SCHEMA, which provides
+    information on all schemas in the catalog.
+
+
+
+
+                                                   Slide 2- 8
+CREATE TABLE
+   Specifies a new base relation by giving it a name, and
+    specifying each of its attributes and their data types
+    (INTEGER, FLOAT, DECIMAL(i,j), CHAR(n),
+    VARCHAR(n))
+   A constraint NOT NULL may be specified on an attribute
+    CREATE TABLE DEPARTMENT (
+       DNAME               VARCHAR(10)    NOT
+    NULL,
+       DNUMBER        INTEGER        NOT NULL,
+       MGRSSN         CHAR(9),
+       MGRSTARTDATE   CHAR(9) );
+
+
+
+
+                                                       Slide 2- 9
+CREATE TABLE
+   In SQL2, can use the CREATE TABLE command for specifying the primary
+    key attributes, secondary keys, and referential integrity constraints (foreign
+    keys).
+   Key attributes can be specified via the PRIMARY KEY and UNIQUE phrases
+     CREATE TABLE DEPT (
+       DNAME           VARCHAR(10)    NOT NULL,
+       DNUMBER         INTEGER        NOT NULL,
+       MGRSSN          CHAR(9),
+       MGRSTARTDATE    CHAR(9),
+       PRIMARY KEY (DNUMBER),
+       UNIQUE (DNAME),
+       FOREIGN KEY (MGRSSN) REFERENCES EMP(SSN)
+     );
+
+
+                                                                            Slide 2- 10
+Data Types
+   Numeric: INTEGER, INT, FLOAT, DECIMAL
+   Character: CHAR(n), VARCHAR(n), CHAR VARYING(n),
+    CLOB (Character Large OBject) – use with LOB storage
+    control for efficiency
+   Bit String: BIT(n), VARBIT(n), BIT VARING(n), BLOB
+   Boolean: has values of TRUE, FALSE, UNKOWN
+   Date and Time: DATE (YYYY-MM-DD) TIME( HH:MM:SS)
+   Timestamp: DATE + TIME
+   INTERVAL data type: YEAR/MONTH or DAY/TIME
+   USER Defined types
+       (e.g.,) CREATE DOMAIN SSN_TYPE AS CHAR(9);
+
+                                                     Slide 2- 11
+Additional Data Types in SQL2 and
+SQL-99
+Has DATE, TIME, and TIMESTAMP data types
+ DATE:
+
+       Made up of year-month-day in the format yyyy-mm-dd
+   TIME:
+       Made up of hour:minute:second in the format hh:mm:ss
+   TIME(i):
+       Made up of hour:minute:second plus i additional digits
+        specifying fractions of a second
+       format is hh:mm:ss:ii...i
+
+
+
+
+                                                                 Slide 2- 12
+Additional Data Types in SQL2 and
+SQL-99 (contd.)
+   TIMESTAMP:
+       Has both DATE and TIME components
+   INTERVAL:
+       Specifies a relative value rather than an absolute
+        value
+       Can be DAY/TIME intervals or YEAR/MONTH
+        intervals
+       Can be positive or negative when added to or
+        subtracted from an absolute value, the result is an
+        absolute value
+
+                                                       Slide 2- 13
+DROP TABLE
+   Used to remove a relation (base table) and its
+    definition
+   The relation can no longer be used in queries,
+    updates, or any other commands since its
+    description no longer exists
+   Example:
+
+    DROP TABLE       DEPENDENT;
+
+
+                                                 Slide 2- 14
+ALTER TABLE
+   Used to add (or drop) an attribute to (from) one of the base
+    relations.
+   Also used for changing a column definition, and
+    adding/dropping table constraints.
+      For adding an attribute, the new attribute will have NULLs in
+
+        all the tuples of the relation right after the command is
+        executed; hence, the NOT NULL constraint is not allowed
+        for such an attribute
+   Example:
+    ALTER TABLE EMPLOYEE ADD JOB VARCHAR(12);
+   The database users must still enter a value for the new
+    attribute JOB for each EMPLOYEE tuple.
+      This can be done using the UPDATE command.
+
+
+
+
+                                                              Slide 2- 15
+REFERENTIAL INTEGRITY
+OPTIONS
+   We can specify RESTRICT, CASCADE, SET NULL or
+    SET DEFAULT on referential integrity constraints (foreign
+    keys)
+    CREATE TABLE DEPT (
+      DNAME         VARCHAR(10)   NOT NULL,
+      DNUMBER       INTEGER       NOT NULL,
+      MGRSSN        CHAR(9),
+      MGRSTARTDATE CHAR(9),
+      PRIMARY KEY (DNUMBER),
+      UNIQUE (DNAME),
+      FOREIGN KEY (MGRSSN) REFERENCES EMP
+     ON DELETE SET DEFAULT ON UPDATE
+     CASCADE);                          Slide 2- 16
+REFERENTIAL INTEGRITY
+OPTIONS (continued)
+ CREATE TABLE EMP(
+   ENAME       VARCHAR(30)     NOT NULL,
+   ESSN        CHAR(9),
+   BDATE       DATE,
+   DNO         INTEGER DEFAULT 1,
+   SUPERSSN    CHAR(9),
+   PRIMARY KEY (ESSN),
+   FOREIGN KEY (DNO) REFERENCES DEPT (Dnumber)
+    ON DELETE SET DEFAULT ON UPDATE CASCADE,
+   FOREIGN KEY (SUPERSSN) REFERENCES EMP (Ssn)
+    ON DELETE SET NULL ON UPDATE CASCADE);
+
+
+
+
+                                           Slide 2- 17
+Retrieval Queries in SQL
+   SQL has one basic statement for retrieving information
+    from a database; the SELECT statement
+       This is not the same as the SELECT operation of the
+        relational algebra
+   Important distinction between SQL and the formal
+    relational model:
+       SQL allows a table (relation) to have two or more tuples that
+        are identical in all their attribute values
+       Hence, an SQL relation (table) is a multi-set (sometimes
+        called a bag) of tuples; it is not a set of tuples
+   SQL relations can be constrained to be sets by specifying
+    PRIMARY KEY or UNIQUE attributes, or by using the
+    DISTINCT option in a query
+
+                                                               Slide 2- 18
+Retrieval Queries in SQL (contd.)
+   A bag or multi-set is like a set, but an element
+    may appear more than once.
+       Example: {A, B, C, A} is a bag. {A, B, C} is also a
+        bag that also is a set.
+       Bags also resemble lists, but the order is irrelevant
+        in a bag.
+   Example:
+       {A, B, A} = {B, A, A} as bags
+       However, [A, B, A] is not equal to [B, A, A] as lists
+
+
+                                                         Slide 2- 19
+Retrieval Queries in SQL (contd.)
+   Basic form of the SQL SELECT statement is called a
+    mapping or a SELECT-FROM-WHERE block
+
+SELECT           <attribute list>
+  FROM           <table list>
+  WHERE          <condition>
+
+       <attribute list> is a list of attribute names whose values are
+        to be retrieved by the query
+       <table list> is a list of the relation names required to process
+        the query
+       <condition> is a conditional (Boolean) expression that
+        identifies the tuples to be retrieved by the query
+
+
+                                                                  Slide 2- 20
+Relational Database Schema--Figure 5.5
+
+
+
+
+                                         Slide 2- 21
+Populated
+Database--
+Fig.5.6
+
+
+
+
+             Slide 2- 22
+Simple SQL Queries
+   Basic SQL queries correspond to using the
+    following operations of the relational algebra:
+       SELECT
+       PROJECT
+       JOIN
+   All subsequent examples use the COMPANY
+    database
+
+
+
+
+                                                      Slide 2- 23
+Simple SQL Queries (contd.)
+   Example of a simple query on one relation
+   Query 0: Retrieve the birthdate and address of the
+    employee whose name is 'John B. Smith'.
+    Q0:SELECT             BDATE, ADDRESS
+       FROM               EMPLOYEE
+       WHERE              FNAME='John' AND MINIT='B’
+       AND                LNAME='Smith’
+       Similar to a SELECT-PROJECT pair of relational algebra
+        operations:
+         
+             The SELECT-clause specifies the projection attributes and the
+             WHERE-clause specifies the selection condition
+       However, the result of the query may contain duplicate
+        tuples
+
+
+                                                                    Slide 2- 24
+Simple SQL Queries (contd.)
+   Query 1: Retrieve the name and address of all employees
+    who work for the 'Research' department.
+
+    Q1:SELECT          FNAME, LNAME, ADDRESS
+       FROM            EMPLOYEE, DEPARTMENT
+       WHERE           DNAME='Research' AND DNUMBER=DNO
+
+       Similar to a SELECT-PROJECT-JOIN sequence of
+        relational algebra operations
+       (DNAME='Research') is a selection condition (corresponds
+        to a SELECT operation in relational algebra)
+       (DNUMBER=DNO) is a join condition (corresponds to a
+        JOIN operation in relational algebra)
+
+
+                                                           Slide 2- 25
+Simple SQL Queries (contd.)
+   Query 2: For every project located in 'Stafford', list the project
+    number, the controlling department number, and the department
+    manager's last name, address, and birthdate.
+
+Q2: SELECT PNUMBER, DNUM, LNAME, BDATE, ADDRESS
+       FROM     PROJECT, DEPARTMENT, EMPLOYEE
+       WHERE    DNUM=DNUMBER AND MGRSSN=SSN
+                      AND PLOCATION='Stafford'
+
+        In Q2, there are two join conditions
+        The join condition DNUM=DNUMBER relates a project to its
+         controlling department
+        The join condition MGRSSN=SSN relates the controlling
+         department to the employee who manages that department
+
+
+
+                                                                     Slide 2- 26
+Aliases, * and DISTINCT, Empty
+WHERE-clause
+   In SQL, we can use the same name for two (or
+    more) attributes as long as the attributes are in
+    different relations
+   A query that refers to two or more attributes with
+    the same name must qualify the attribute name
+    with the relation name by prefixing the relation
+    name to the attribute name
+   Example:
+
+   EMPLOYEE.LNAME, DEPARTMENT.DNAME
+
+                                                   Slide 2- 27
+ALIASES
+   Some queries need to refer to the same relation twice
+      In this case, aliases are given to the relation name
+
+   Query 8: For each employee, retrieve the employee's name, and the
+    name of his or her immediate supervisor.
+
+    Q8: SELECT           E.FNAME, E.LNAME, S.FNAME, S.LNAME
+        FROM             EMPLOYEE E S
+        WHERE            E.SUPERSSN=S.SSN
+
+       In Q8, the alternate relation names E and S are called aliases or
+        tuple variables for the EMPLOYEE relation
+       We can think of E and S as two different copies of EMPLOYEE; E
+        represents employees in role of supervisees and S represents
+        employees in role of supervisors
+
+
+
+                                                                   Slide 2- 28
+ALIASES (contd.)
+   Aliasing can also be used in any SQL query for
+    convenience
+   Can also use the AS keyword to specify aliases
+
+      Q8:    SELECT     E.FNAME, E.LNAME,
+                        S.FNAME, S.LNAME
+             FROM       EMPLOYEE AS E,
+                        EMPLOYEE AS S
+             WHERE      E.SUPERSSN=S.SSN
+
+
+
+                                                Slide 2- 29
+UNSPECIFIED
+WHERE-clause
+   A missing WHERE-clause indicates no condition; hence,
+    all tuples of the relations in the FROM-clause are selected
+       This is equivalent to the condition WHERE TRUE
+   Query 9: Retrieve the SSN values for all employees.
+
+       Q9:     SELECT        SSN
+                FROM          EMPLOYEE
+
+   If more than one relation is specified in the FROM-clause
+    and there is no join condition, then the CARTESIAN
+    PRODUCT of tuples is selected
+
+
+                                                          Slide 2- 30
+UNSPECIFIED
+WHERE-clause (contd.)
+   Example:
+
+    Q10:       SELECT       SSN, DNAME
+               FROM         EMPLOYEE, DEPARTMENT
+
+       It is extremely important not to overlook specifying
+        any selection and join conditions in the WHERE-
+        clause; otherwise, incorrect and very large
+        relations may result
+
+
+
+                                                        Slide 2- 31
+USE OF *
+   To retrieve all the attribute values of the selected tuples, a
+    * is used, which stands for all the attributes
+    Examples:
+
+       Q1C:    SELECT         *
+               FROM           EMPLOYEE
+               WHERE          DNO=5
+
+       Q1D:    SELECT         *
+               FROM           EMPLOYEE, DEPARTMENT
+               WHERE          DNAME='Research' AND
+                              DNO=DNUMBER
+
+
+                                                             Slide 2- 32
+USE OF DISTINCT
+   SQL does not treat a relation as a set; duplicate tuples
+    can appear
+   To eliminate duplicate tuples in a query result, the
+    keyword DISTINCT is used
+   For example, the result of Q11 may have duplicate
+    SALARY values whereas Q11A does not have any
+    duplicate values
+
+       Q11:    SELECT        SALARY
+               FROM          EMPLOYEE
+       Q11A:   SELECT        DISTINCT SALARY
+               FROM          EMPLOYEE
+
+                                                          Slide 2- 33
+SET OPERATIONS
+   SQL has directly incorporated some set operations
+   There is a union operation (UNION), and in some versions
+    of SQL there are set difference (MINUS) and intersection
+    (INTERSECT) operations
+   The resulting relations of these set operations are sets of
+    tuples; duplicate tuples are eliminated from the result
+   The set operations apply only to union compatible
+    relations; the two relations must have the same attributes
+    and the attributes must appear in the same order
+
+
+
+
+                                                          Slide 2- 34
+SET OPERATIONS (contd.)
+   Query 4: Make a list of all project numbers for projects that involve an
+    employee whose last name is 'Smith' as a worker or as a manager of
+    the department that controls the project.
+
+     Q4:         (SELECT          PNAME
+                 FROM             PROJECT, DEPARTMENT,
+                                        EMPLOYEE
+                 WHERE            DNUM=DNUMBER AND
+                                  MGRSSN=SSN AND LNAME='Smith')
+                 UNION
+                 (SELECT          PNAME
+                 FROM             PROJECT, WORKS_ON, EMPLOYEE
+                 WHERE            PNUMBER=PNO AND
+                                  ESSN=SSN AND NAME='Smith')
+
+
+
+                                                                      Slide 2- 35
+NESTING OF QUERIES
+   A complete SELECT query, called a nested query, can be
+    specified within the WHERE-clause of another query,
+    called the outer query
+       Many of the previous queries can be specified in an
+        alternative form using nesting
+   Query 1: Retrieve the name and address of all employees
+    who work for the 'Research' department.
+
+    Q1:SELECT           FNAME, LNAME, ADDRESS
+       FROM             EMPLOYEE
+       WHERE            DNO IN (SELECT DNUMBER
+       FROM             DEPARTMENT
+       WHERE            DNAME='Research' )
+
+
+
+                                                              Slide 2- 36
+NESTING OF QUERIES (contd.)
+   The nested query selects the number of the 'Research'
+    department
+   The outer query select an EMPLOYEE tuple if its DNO
+    value is in the result of either nested query
+   The comparison operator IN compares a value v with a
+    set (or multi-set) of values V, and evaluates to TRUE if v
+    is one of the elements in V
+   In general, we can have several levels of nested queries
+   A reference to an unqualified attribute refers to the
+    relation declared in the innermost nested query
+   In this example, the nested query is not correlated with
+    the outer query
+
+                                                          Slide 2- 37
+CORRELATED NESTED QUERIES
+   If a condition in the WHERE-clause of a nested query references an
+    attribute of a relation declared in the outer query, the two queries are
+    said to be correlated
+       The result of a correlated nested query is different for each tuple
+
+         (or combination of tuples) of the relation(s) the outer query
+   Query 12: Retrieve the name of each employee who has a dependent
+    with the same first name as the employee.
+
+    Q12: SELECT           E.FNAME, E.LNAME
+        FROM              EMPLOYEE AS E
+        WHERE             E.SSN IN
+                                 (SELECT    ESSN
+                                 FROM       DEPENDENT
+                                 WHERE      ESSN=E.SSN AND
+                                 E.FNAME=DEPENDENT_NAME)
+
+
+                                                                     Slide 2- 38
+CORRELATED NESTED QUERIES
+(contd.)
+   In Q12, the nested query has a different result in the outer
+    query
+   A query written with nested SELECT... FROM...
+    WHERE... blocks and using the = or IN comparison
+    operators can always be expressed as a single block
+    query. For example, Q12 may be written as in Q12A
+
+       Q12A:   SELECT        E.FNAME, E.LNAME
+               FROM          EMPLOYEE E, DEPENDENT D
+               WHERE         E.SSN=D.ESSN AND
+                             E.FNAME=D.DEPENDENT_NAME
+
+
+
+                                                           Slide 2- 39
+CORRELATED NESTED QUERIES
+(contd.)
+   The original SQL as specified for SYSTEM R also had a
+    CONTAINS comparison operator, which is used in
+    conjunction with nested correlated queries
+       This operator was dropped from the language, possibly
+        because of the difficulty in implementing it efficiently
+       Most implementations of SQL do not have this operator
+       The CONTAINS operator compares two sets of values, and
+        returns TRUE if one set contains all values in the other set
+         
+             Reminiscent of the division operation of algebra
+
+
+
+
+                                                                Slide 2- 40
+CORRELATED NESTED QUERIES
+(contd.)
+   Query 3: Retrieve the name of each employee who works
+    on all the projects controlled by department number 5.
+
+      Q3:     SELECT       FNAME, LNAME
+              FROM         EMPLOYEE
+              WHERE (      (SELECT    PNO
+                           FROM       WORKS_ON
+                           WHERE      SSN=ESSN)
+                                 CONTAINS
+                           (SELECT    PNUMBER
+                           FROM       PROJECT
+                           WHERE      DNUM=5) )
+
+
+                                                      Slide 2- 41
+CORRELATED NESTED QUERIES
+(contd.)
+   In Q3, the second nested query, which is not
+    correlated with the outer query, retrieves the
+    project numbers of all projects controlled by
+    department 5
+   The first nested query, which is correlated,
+    retrieves the project numbers on which the
+    employee works, which is different for each
+    employee tuple because of the correlation
+
+
+
+                                                     Slide 2- 42
+THE EXISTS FUNCTION
+   EXISTS is used to check whether the result of a
+    correlated nested query is empty (contains no
+    tuples) or not
+       We can formulate Query 12 in an alternative form
+        that uses EXISTS as Q12B
+
+
+
+
+                                                     Slide 2- 43
+THE EXISTS FUNCTION (contd.)
+   Query 12: Retrieve the name of each employee
+    who has a dependent with the same first name as
+    the employee.
+
+    Q12B:   SELECT     FNAME, LNAME
+            FROM       EMPLOYEE
+            WHERE      EXISTS (SELECT   *
+                             FROM       DEPENDENT
+                             WHERE      SSN=ESSN
+                                  AND
+
+      FNAME=DEPENDENT_NAME)
+
+                                               Slide 2- 44
+THE EXISTS FUNCTION (contd.)
+   Query 6: Retrieve the names of employees who have no
+    dependents.
+
+        Q6:     SELECT        FNAME, LNAME
+                FROM          EMPLOYEE
+                WHERE         NOT EXISTS (SELECT   *
+                                   FROM       DEPENDENT
+                                   WHERE      SSN=ESSN)
+   In Q6, the correlated nested query retrieves all
+    DEPENDENT tuples related to an EMPLOYEE tuple. If
+    none exist, the EMPLOYEE tuple is selected
+       EXISTS is necessary for the expressive power of SQL
+
+                                                              Slide 2- 45
+EXPLICIT SETS
+   It is also possible to use an explicit
+    (enumerated) set of values in the WHERE-
+    clause rather than a nested query
+   Query 13: Retrieve the social security numbers of
+    all employees who work on project number 1, 2,
+    or 3.
+    Q13:     SELECT     DISTINCT ESSN
+             FROM       WORKS_ON
+             WHERE      PNO IN (1, 2, 3)
+
+
+                                                 Slide 2- 46
+NULLS IN SQL QUERIES
+   SQL allows queries that check if a value is NULL (missing
+    or undefined or not applicable)
+   SQL uses IS or IS NOT to compare NULLs because it
+    considers each NULL value distinct from other NULL
+    values, so equality comparison is not appropriate.
+   Query 14: Retrieve the names of all employees who do
+    not have supervisors.
+    Q14:          SELECT          FNAME, LNAME
+                  FROM            EMPLOYEE
+                  WHERE           SUPERSSN IS NULL
+       Note: If a join condition is specified, tuples with NULL values
+        for the join attributes are not included in the result
+
+
+                                                                 Slide 2- 47
+Joined Relations Feature
+in SQL2
+   Can specify a "joined relation" in the FROM-
+    clause
+       Looks like any other relation but is the result of a
+        join
+       Allows the user to specify different types of joins
+        (regular "theta" JOIN, NATURAL JOIN, LEFT
+        OUTER JOIN, RIGHT OUTER JOIN, CROSS
+        JOIN, etc)
+
+
+
+
+                                                         Slide 2- 48
+Joined Relations Feature
+in SQL2 (contd.)
+   Examples:
+    Q8:SELECT            E.FNAME, E.LNAME, S.FNAME, S.LNAME
+       FROM              EMPLOYEE E S
+       WHERE             E.SUPERSSN=S.SSN
+
+   can be written as:
+    Q8:SELECT            E.FNAME, E.LNAME, S.FNAME, S.LNAME
+       FROM              (EMPLOYEE E LEFT OUTER JOIN
+                         EMPLOYEES ON E.SUPERSSN=S.SSN)
+
+
+
+
+                                                       Slide 2- 49
+Joined Relations Feature
+in SQL2 (contd.)
+   Examples:
+    Q1:SELECT    FNAME, LNAME, ADDRESS
+       FROM EMPLOYEE, DEPARTMENT
+       WHERE     DNAME='Research' AND DNUMBER=DNO
+   could be written as:
+    Q1:SELECT         FNAME, LNAME, ADDRESS
+       FROM           (EMPLOYEE JOIN DEPARTMENT
+                      ON DNUMBER=DNO)
+        WHERE         DNAME='Research’
+   or as:
+    Q1:SELECT   FNAME, LNAME, ADDRESS
+       FROM     (EMPLOYEE NATURAL JOIN
+     DEPARTMENT
+                AS DEPT(DNAME, DNO, MSSN, MSDATE)
+       WHERE    DNAME='Research’
+
+                                                  Slide 2- 50
+Joined Relations Feature
+in SQL2 (contd.)
+   Another Example: Q2 could be written as follows;
+    this illustrates multiple joins in the joined tables
+    Q2:      SELECT       PNUMBER, DNUM, LNAME,
+                               BDATE, ADDRESS
+             FROM         (PROJECT JOIN
+                          DEPARTMENT ON
+                          DNUM=DNUMBER) JOIN
+                               EMPLOYEE ON
+                               MGRSSN=SSN) )
+             WHERE        PLOCATION='Stafford’
+
+
+                                                    Slide 2- 51
+AGGREGATE FUNCTIONS
+   Include COUNT, SUM, MAX, MIN, and AVG
+   Query 15: Find the maximum salary, the
+    minimum salary, and the average salary among
+    all employees.
+    Q15:    SELECT     MAX(SALARY),
+                       MIN(SALARY), AVG(SALARY)
+            FROM       EMPLOYEE
+
+   Some SQL implementations may not allow more
+    than one function in the SELECT-clause
+
+                                              Slide 2- 52
+AGGREGATE FUNCTIONS (contd.)
+   Query 16: Find the maximum salary, the
+    minimum salary, and the average salary among
+    employees who work for the 'Research'
+    department.
+    Q16:    SELECT     MAX(SALARY),
+                       MIN(SALARY), AVG(SALARY)
+            FROM       EMPLOYEE, DEPARTMENT
+            WHERE      DNO=DNUMBER AND
+                       DNAME='Research'
+
+
+
+                                              Slide 2- 53
+AGGREGATE FUNCTIONS (contd.)
+   Queries 17 and 18: Retrieve the total number of
+    employees in the company (Q17), and the number of
+    employees in the 'Research' department (Q18).
+    Q17:      SELECT      COUNT (*)
+              FROM        EMPLOYEE
+
+    Q18:      SELECT      COUNT (*)
+              FROM        EMPLOYEE, DEPARTMENT
+              WHERE       DNO=DNUMBER AND
+                          DNAME='Research’
+
+
+
+
+                                                        Slide 2- 54
+GROUPING
+   In many cases, we want to apply the aggregate
+    functions to subgroups of tuples in a relation
+   Each subgroup of tuples consists of the set of
+    tuples that have the same value for the grouping
+    attribute(s)
+   The function is applied to each subgroup
+    independently
+   SQL has a GROUP BY-clause for specifying the
+    grouping attributes, which must also appear in the
+    SELECT-clause
+
+
+                                                 Slide 2- 55
+GROUPING (contd.)
+   Query 20: For each department, retrieve the department
+    number, the number of employees in the department, and
+    their average salary.
+    Q20:          SELECT          DNO, COUNT (*), AVG (SALARY)
+                  FROM            EMPLOYEE
+                  GROUP BY        DNO
+       In Q20, the EMPLOYEE tuples are divided into groups-
+         
+             Each group having the same value for the grouping attribute
+             DNO
+       The COUNT and AVG functions are applied to each such
+        group of tuples separately
+       The SELECT-clause includes only the grouping attribute
+        and the functions to be applied on each group of tuples
+       A join condition can be used in conjunction with grouping
+
+                                                                    Slide 2- 56
+GROUPING (contd.)
+   Query 21: For each project, retrieve the project number,
+    project name, and the number of employees who work on
+    that project.
+
+    Q21:         SELECT         PNUMBER, PNAME, COUNT (*)
+                 FROM           PROJECT, WORKS_ON
+                 WHERE          PNUMBER=PNO
+                 GROUP BY       PNUMBER, PNAME
+
+       In this case, the grouping and functions are applied after
+        the joining of the two relations
+
+
+
+                                                                Slide 2- 57
+THE HAVING-CLAUSE
+   Sometimes we want to retrieve the values of
+    these functions for only those groups that satisfy
+    certain conditions
+   The HAVING-clause is used for specifying a
+    selection condition on groups (rather than on
+    individual tuples)
+
+
+
+
+                                                   Slide 2- 58
+THE HAVING-CLAUSE (contd.)
+   Query 22: For each project on which more than
+    two employees work, retrieve the project number,
+    project name, and the number of employees who
+    work on that project.
+    Q22:     SELECT   PNUMBER, PNAME,
+                      COUNT(*)
+             FROM     PROJECT, WORKS_ON
+             WHERE    PNUMBER=PNO
+             GROUP BY PNUMBER, PNAME
+             HAVING   COUNT (*) > 2
+
+
+                                                Slide 2- 59
+SUBSTRING COMPARISON
+   The LIKE comparison operator is used to
+    compare partial strings
+   Two reserved characters are used: '%' (or '*' in
+    some implementations) replaces an arbitrary
+    number of characters, and '_' replaces a single
+    arbitrary character
+
+
+
+
+                                                  Slide 2- 60
+SUBSTRING COMPARISON (contd.)
+   Query 25: Retrieve all employees whose address
+    is in Houston, Texas. Here, the value of the
+    ADDRESS attribute must contain the substring
+    'Houston,TX‘ in it.
+    Q25:    SELECT     FNAME, LNAME
+            FROM       EMPLOYEE
+            WHERE      ADDRESS LIKE
+                       '%Houston,TX%'
+
+
+
+
+                                              Slide 2- 61
+SUBSTRING COMPARISON (contd.)
+   Query 26: Retrieve all employees who were born during
+    the 1950s.
+    Here, '5' must be the 8th character of the string (according
+     to our format for date), so the BDATE value is '_______5_',
+     with each underscore as a place holder for a single arbitrary
+     character.
+    Q26:       SELECT         FNAME, LNAME
+               FROM           EMPLOYEE
+               WHERE          BDATE LIKE '_______5_’
+
+   The LIKE operator allows us to get around the fact that
+    each value is considered atomic and indivisible
+       Hence, in SQL, character string attribute values are not
+        atomic
+
+
+                                                               Slide 2- 62
+ARITHMETIC OPERATIONS
+   The standard arithmetic operators '+', '-'. '*', and '/' (for
+    addition, subtraction, multiplication, and division,
+    respectively) can be applied to numeric values in an SQL
+    query result
+   Query 27: Show the effect of giving all employees who
+    work on the 'ProductX' project a 10% raise.
+    Q27:       SELECT         FNAME, LNAME, 1.1*SALARY
+               FROM           EMPLOYEE, WORKS_ON,
+                              PROJECT
+               WHERE          SSN=ESSN AND PNO=PNUMBER
+                                   AND PNAME='ProductX’
+
+
+
+                                                             Slide 2- 63
+ORDER BY
+   The ORDER BY clause is used to sort the tuples in a
+    query result based on the values of some attribute(s)
+   Query 28: Retrieve a list of employees and the projects
+    each works in, ordered by the employee's department,
+    and within each department ordered alphabetically by
+    employee last name.
+    Q28:       SELECT       DNAME, LNAME, FNAME, PNAME
+               FROM         DEPARTMENT, EMPLOYEE,
+                                 WORKS_ON, PROJECT
+               WHERE        DNUMBER=DNO AND SSN=ESSN
+                                 AND PNO=PNUMBER
+               ORDER BY     DNAME, LNAME
+
+                                                         Slide 2- 64
+ORDER BY (contd.)
+   The default order is in ascending order of values
+   We can specify the keyword DESC if we want a
+    descending order; the keyword ASC can be used
+    to explicitly specify ascending order, even though
+    it is the default
+
+
+
+
+                                                  Slide 2- 65
+Summary of SQL Queries
+   A query in SQL can consist of up to six clauses,
+    but only the first two, SELECT and FROM, are
+    mandatory. The clauses are specified in the
+    following order:
+
+    SELECT         <attribute list>
+    FROM           <table list>
+    [WHERE         <condition>]
+    [GROUP BY      <grouping attribute(s)>]
+    [HAVING        <group condition>]
+    [ORDER BY      <attribute list>]
+
+                                                 Slide 2- 66
+Summary of SQL Queries (contd.)
+   The SELECT-clause lists the attributes or functions to be retrieved
+   The FROM-clause specifies all relations (or aliases) needed in the
+    query but not those needed in nested queries
+   The WHERE-clause specifies the conditions for selection and join of
+    tuples from the relations specified in the FROM-clause
+   GROUP BY specifies grouping attributes
+   HAVING specifies a condition for selection of groups
+   ORDER BY specifies an order for displaying the result of a query
+      A query is evaluated by first applying the WHERE-clause, then
+
+        GROUP BY and HAVING, and finally the SELECT-clause
+
+
+
+
+                                                                  Slide 2- 67
+Specifying Updates in SQL
+   There are three SQL commands to modify the
+    database: INSERT, DELETE, and UPDATE
+
+
+
+
+                                             Slide 2- 68
+INSERT
+   In its simplest form, it is used to add one or more
+    tuples to a relation
+   Attribute values should be listed in the same
+    order as the attributes were specified in the
+    CREATE TABLE command
+
+
+
+
+                                                   Slide 2- 69
+INSERT (contd.)
+   Example:
+    U1:INSERT INTO          EMPLOYEE
+       VALUES ('Richard','K','Marini', '653298653', '30-DEC-52',
+       '98 Oak Forest,Katy,TX', 'M', 37000,'987654321', 4 )
+
+   An alternate form of INSERT specifies explicitly the
+    attribute names that correspond to the values in the new
+    tuple
+       Attributes with NULL values can be left out
+   Example: Insert a tuple for a new EMPLOYEE for whom
+    we only know the FNAME, LNAME, and SSN attributes.
+    U1A: INSERT INTO          EMPLOYEE (FNAME, LNAME,
+                                              SSN)
+           VALUES ('Richard', 'Marini', '653298653')
+
+
+                                                            Slide 2- 70
+INSERT (contd.)
+   Important Note: Only the constraints specified in
+    the DDL commands are automatically enforced
+    by the DBMS when updates are applied to the
+    database
+       Another variation of INSERT allows insertion of
+        multiple tuples resulting from a query into a
+        relation
+
+
+
+
+                                                      Slide 2- 71
+INSERT (contd.)
+   Example: Suppose we want to create a temporary table that has the
+    name, number of employees, and total salaries for each department.
+      A table DEPTS_INFO is created by U3A, and is loaded with the
+
+       summary information retrieved from the database by the query in
+       U3B.
+     U3A:       CREATE TABLE DEPTS_INFO
+                      (DEPT_NAME                VARCHAR(10),
+                        NO_OF_EMPS              INTEGER,
+                        TOTAL_SAL               INTEGER);
+
+    U3B:        INSERT INTO DEPTS_INFO (DEPT_NAME,
+                            NO_OF_EMPS, TOTAL_SAL)
+                SELECT      DNAME, COUNT (*), SUM (SALARY)
+                FROM        DEPARTMENT, EMPLOYEE
+                WHERE       DNUMBER=DNO
+                GROUP BY    DNAME ;
+
+
+
+                                                                 Slide 2- 72
+INSERT (contd.)
+   Note: The DEPTS_INFO table may not be up-to-
+    date if we change the tuples in either the
+    DEPARTMENT or the EMPLOYEE relations after
+    issuing U3B. We have to create a view (see later)
+    to keep such a table up to date.
+
+
+
+
+                                                 Slide 2- 73
+DELETE
+   Removes tuples from a relation
+       Includes a WHERE-clause to select the tuples to be deleted
+       Referential integrity should be enforced
+       Tuples are deleted from only one table at a time (unless
+        CASCADE is specified on a referential integrity constraint)
+       A missing WHERE-clause specifies that all tuples in the
+        relation are to be deleted; the table then becomes an empty
+        table
+       The number of tuples deleted depends on the number of
+        tuples in the relation that satisfy the WHERE-clause
+
+
+
+
+                                                              Slide 2- 74
+DELETE (contd.)
+   Examples:
+     U4A:       DELETE FROM   EMPLOYEE
+                WHERE         LNAME='Brown’
+
+    U4B:        DELETE FROM   EMPLOYEE
+                WHERE         SSN='123456789’
+
+    U4C:        DELETE FROM   EMPLOYEE
+                WHERE         DNO IN
+                              (SELECT     DNUMBER
+                              FROM DEPARTMENT
+                              WHERE
+                              DNAME='Research')
+
+    U4D:        DELETE FROM   EMPLOYEE
+
+
+
+                                                Slide 2- 75
+UPDATE
+   Used to modify attribute values of one or more
+    selected tuples
+   A WHERE-clause selects the tuples to be
+    modified
+   An additional SET-clause specifies the attributes
+    to be modified and their new values
+   Each command modifies tuples in the same
+    relation
+   Referential integrity should be enforced
+
+                                                  Slide 2- 76
+UPDATE (contd.)
+   Example: Change the location and controlling
+    department number of project number 10 to
+    'Bellaire' and 5, respectively.
+    U5:      UPDATE     PROJECT
+             SET        PLOCATION = 'Bellaire',
+                            DNUM = 5
+             WHERE      PNUMBER=10
+
+
+
+
+                                                   Slide 2- 77
+UPDATE (contd.)
+   Example: Give all employees in the 'Research'
+    department a 10% raise in salary.
+    U6:UPDATE           EMPLOYEE
+       SET              SALARY = SALARY *1.1
+       WHERE            DNO IN (SELECT   DNUMBER
+                          FROM     DEPARTMENT
+                          WHERE    DNAME='Research')
+
+   In this request, the modified SALARY value depends on
+    the original SALARY value in each tuple
+       The reference to the SALARY attribute on the right of =
+        refers to the old SALARY value before modification
+       The reference to the SALARY attribute on the left of = refers
+        to the new SALARY value after modification
+
+
+                                                               Slide 2- 78
+Recap of SQL Queries
+   A query in SQL can consist of up to six clauses, but only
+    the first two, SELECT and FROM, are mandatory. The
+    clauses are specified in the following order:
+
+    SELECT           <attribute list>
+    FROM             <table list>
+    [WHERE           <condition>]
+    [GROUP BY        <grouping attribute(s)>]
+    [HAVING          <group condition>]
+    [ORDER BY        <attribute list>]
+   There are three SQL commands to modify the database:
+    INSERT, DELETE, and UPDATE
+
+                                                          Slide 2- 79
+Constraints as Assertions
+       General constraints: constraints that do not fit in
+        the basic SQL categories (presented in chapter
+        8)
+       Mechanism: CREAT ASSERTION
+         Components include:
+             a constraint name,
+             followed by CHECK,
+          
+              followed by a condition
+
+
+
+
+                                                      Slide 2- 80
+Assertions: An Example
+   “The salary of an employee must not be greater
+    than the salary of the manager of the department
+    that the employee works for’’               constraint
+                                                   name,
+CREAT ASSERTION SALARY_CONSTRAINT                 CHECK,
+                                                  condition
+CHECK (NOT EXISTS (SELECT *
+           FROM EMPLOYEE E, EMPLOYEE M,
+                DEPARTMENT D
+           WHERE E.SALARY > M.SALARY AND
+                E.DNO=D.NUMBER AND
+                D.MGRSSN=M.SSN))
+
+                                                    Slide 2- 81
+Using General Assertions
+   Specify a query that violates the condition;
+    include inside a NOT EXISTS clause
+   Query result must be empty
+       if the query result is not empty, the assertion has
+        been violated
+
+
+
+
+                                                        Slide 2- 82
+SQL Triggers
+   Objective: to monitor a database and take initiate
+    action when a condition occurs
+   Triggers are expressed in a syntax similar to
+    assertions and include the following:
+       Event
+            Such as an insert, deleted, or update operation
+       Condition
+       Action
+            To be taken when the condition is satisfied
+
+
+
+                                                               Slide 2- 83
+SQL Triggers: An Example
+   A trigger to compare an employee’s salary to his/her
+    supervisor during insert or update operations:
+
+
+CREATE TRIGGER INFORM_SUPERVISOR
+BEFORE INSERT OR UPDATE OF
+  SALARY, SUPERVISOR_SSN ON EMPLOYEE
+  FOR EACH ROW
+      WHEN
+      (NEW.SALARY> (SELECT SALARY FROM EMPLOYEE
+                   WHERE SSN=NEW.SUPERVISOR_SSN))
+      INFORM_SUPERVISOR (NEW.SUPERVISOR_SSN,NEW.SSN);
+
+
+
+                                                           Slide 2- 84
+Views in SQL
+   A view is a “virtual” table that is derived from
+    other tables
+   Allows for limited update operations
+       Since the table may not physically be stored
+   Allows full query operations
+   A convenience for expressing certain operations
+
+
+
+
+                                                       Slide 2- 85
+Specification of Views
+   SQL command: CREATE VIEW
+       a table (view) name
+       a possible list of attribute names (for example,
+        when arithmetic operations are specified or when
+        we want the names to be different from the
+        attributes in the base relations)
+       a query to specify the table contents
+
+
+
+
+                                                     Slide 2- 86
+SQL Views: An Example
+   Specify a different WORKS_ON table
+
+    CREATE VIEW WORKS_ON_NEW AS
+    SELECT FNAME, LNAME, PNAME, HOURS
+       FROM EMPLOYEE, PROJECT, WORKS_ON
+       WHERE SSN=ESSN AND PNO=PNUMBER
+       GROUP BY PNAME;
+
+
+
+
+                                          Slide 2- 87
+Using a Virtual Table
+   We can specify SQL queries on a newly create
+    table (view):
+    SELECT FNAME, LNAME
+       FROM WORKS_ON_NEW
+       WHERE PNAME=‘Seena’;
+
+   When no longer needed, a view can be dropped:
+    DROP WORKS_ON_NEW;
+
+
+
+
+                                              Slide 2- 88
+Efficient View Implementation
+   Query modification:
+       Present the view query in terms of a query on the
+        underlying base tables
+   Disadvantage:
+       Inefficient for views defined via complex queries
+            Especially if additional queries are to be applied to
+             the view within a short time period
+
+
+
+
+                                                               Slide 2- 89
+Efficient View Implementation
+   View materialization:
+       Involves physically creating and keeping a
+        temporary table
+   Assumption:
+       Other queries on the view will follow
+   Concerns:
+       Maintaining correspondence between the base
+        table and the view when the base table is updated
+   Strategy:
+       Incremental update
+
+                                                     Slide 2- 90
+Update Views
+   Update on a single view without aggregate
+    operations:
+       Update may map to an update on the underlying
+        base table
+   Views involving joins:
+       An update may map to an update on the
+        underlying base relations
+         
+             Not always possible
+
+
+
+
+                                                   Slide 2- 91
+Un-updatable Views
+   Views defined using groups and aggregate
+    functions are not updateable
+   Views defined on multiple tables using joins are
+    generally not updateable
+   WITH CHECK OPTION: must be added to the
+    definition of a view if the view is to be updated
+       To allow check for updatability and to plan for an
+        execution strategy
+
+
+
+
+                                                       Slide 2- 92
+

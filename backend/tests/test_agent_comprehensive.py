@@ -220,7 +220,7 @@ class TestTaskResult:
 
     def test_to_dict_with_timestamps(self):
         """Test TaskResult serialization with timestamps."""
-        now = datetime.utcnow()
+        now = datetime.now()
         result = TaskResult(
             task_id="TEST-006",
             status=TaskStatus.COMPLETED,

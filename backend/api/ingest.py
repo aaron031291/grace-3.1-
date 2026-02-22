@@ -484,7 +484,7 @@ async def get_status(
             "ingestion_service": "operational",
             "vector_db_connected": qdrant.is_connected(),
             "collections": qdrant.list_collections(),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         }
     
     except Exception as e:
@@ -493,5 +493,5 @@ async def get_status(
             "ingestion_service": "error",
             "vector_db_connected": False,
             "error": str(e),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
         }

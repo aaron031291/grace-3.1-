@@ -72,7 +72,7 @@ class RuleBasedCategorizer:
         Returns:
             List[LibrarianRule]: List of enabled rules sorted by priority
         """
-        now = datetime.utcnow()
+        now = datetime.now()
 
         # Check if cache is valid
         if (not force_refresh and
@@ -146,8 +146,8 @@ class RuleBasedCategorizer:
 
                     # Update rule statistics
                     rule.matches_count += 1
-                    rule.last_matched_at = datetime.utcnow()
-                    rule.updated_at = datetime.utcnow()
+                    rule.last_matched_at = datetime.now()
+                    rule.updated_at = datetime.now()
 
                     logger.info(f"Document {document_id} matched rule: {rule.name}")
 
@@ -457,7 +457,7 @@ class RuleBasedCategorizer:
             if hasattr(rule, key):
                 setattr(rule, key, value)
 
-        rule.updated_at = datetime.utcnow()
+        rule.updated_at = datetime.now()
         self.db.commit()
         self.db.refresh(rule)
 

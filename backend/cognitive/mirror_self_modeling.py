@@ -27,6 +27,13 @@ from cognitive.learning_memory import LearningExample
 from cognitive.memory_mesh_learner import get_memory_mesh_learner
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'mirror_self_modeling')
+    except Exception:
+        pass
+
 
 
 # ======================================================================
@@ -96,7 +103,7 @@ class MirrorSelfModelingSystem:
         """
         logger.info("[MIRROR] Observing recent operations...")
 
-        cutoff_time = datetime.utcnow() - timedelta(hours=self.observation_window_hours)
+        cutoff_time = datetime.now() - timedelta(hours=self.observation_window_hours)
 
         # Query all Genesis Keys in observation window
         genesis_keys = self.session.query(GenesisKey).filter(
@@ -110,7 +117,7 @@ class MirrorSelfModelingSystem:
 
         # Build observation summary
         observation = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "observation_window_hours": self.observation_window_hours,
             "total_operations": len(genesis_keys),
             "operations_by_type": {
@@ -173,7 +180,7 @@ class MirrorSelfModelingSystem:
 
     def _detect_repeated_failures(self) -> List[Dict[str, Any]]:
         """Detect operations that keep failing."""
-        cutoff_time = datetime.utcnow() - timedelta(hours=self.observation_window_hours)
+        cutoff_time = datetime.now() - timedelta(hours=self.observation_window_hours)
 
         # Find Genesis Keys with ERROR type
         failures = self.session.query(GenesisKey).filter(
@@ -304,7 +311,7 @@ class MirrorSelfModelingSystem:
         self.improvement_suggestions = suggestions
 
         self_model = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "observation_window_hours": self.observation_window_hours,
             "operations_observed": observation["total_operations"],
             "operations_by_type": observation["operations_by_type"],
@@ -327,7 +334,7 @@ class MirrorSelfModelingSystem:
 
     def _analyze_learning_progress(self) -> Dict[str, Any]:
         """Analyze Grace's learning progress over time."""
-        cutoff_time = datetime.utcnow() - timedelta(hours=self.observation_window_hours)
+        cutoff_time = datetime.now() - timedelta(hours=self.observation_window_hours)
 
         # Query learning examples
         examples = self.session.query(LearningExample).filter(

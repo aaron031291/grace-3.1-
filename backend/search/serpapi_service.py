@@ -9,6 +9,20 @@ import logging
 from typing import List, Dict, Optional, Any
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'serpapi_service')
+    except Exception:
+        pass
+
+
+def _track_search(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("web_search", desc, **kwargs)
+    except Exception:
+        pass
 
 
 class SerpAPIService:

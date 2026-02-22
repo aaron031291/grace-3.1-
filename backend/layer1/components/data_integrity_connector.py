@@ -148,7 +148,7 @@ class DataIntegrityConnector:
                 payload={
                     "category": category,
                     "detailed": detailed,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -167,7 +167,7 @@ class DataIntegrityConnector:
                 payload={
                     "report": report.summary if hasattr(report, 'summary') else report,
                     "all_checks_passed": self._check_all_passed(report),
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -176,7 +176,7 @@ class DataIntegrityConnector:
             self._last_report = {
                 "report": report.summary if hasattr(report, 'summary') else report,
                 "all_checks_passed": self._check_all_passed(report),
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
             }
 
             return {
@@ -247,7 +247,7 @@ class DataIntegrityConnector:
                 payload={
                     "trust_score": trust_score,
                     "source": "integrity_verification",
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )

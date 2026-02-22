@@ -413,7 +413,7 @@ async def stream_ingestions():
 
                 except asyncio.TimeoutError:
                     # Send heartbeat
-                    yield f"data: {json.dumps({'type': 'heartbeat', 'timestamp': datetime.utcnow().isoformat()})}\n\n"
+                    yield f"data: {json.dumps({'type': 'heartbeat', 'timestamp': datetime.now().isoformat()})}\n\n"
 
         finally:
             pipeline.remove_listener(listener)

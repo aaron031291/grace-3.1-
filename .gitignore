@@ -90,3 +90,5 @@ NUL
 CON
 PRN
 AUX 
+__pycache__/
+*.pyc

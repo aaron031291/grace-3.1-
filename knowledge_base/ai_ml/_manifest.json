@@ -1,0 +1,46 @@
+{
+  "documents": {
+    "DDIA_Kleppmann_2nd_Ed_OReilly_2024.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.098379"
+    },
+    "Foundations_Programming_Languages_Springer_2017.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.156176"
+    },
+    "Programming_Concepts_C.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.164903"
+    },
+    "Deep_Neural_Networks_Speech_Recognition.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.166532"
+    },
+    "Head_First_Design_Patterns_Freeman_OReilly_2021.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.184093"
+    },
+    "TypeScript_Beginner_to_Advanced.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.211093"
+    },
+    "AI_with_Python_Teoh_Rong_Springer_2022.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.221983"
+    },
+    "DASA_DevOps_Fundamentals.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.259989"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.259995",
+  "document_count": 8
+}

@@ -24,6 +24,13 @@ from models.notion_models import (
 
 logger = logging.getLogger(__name__)
 
+def _track_notion(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("notion", desc, **kwargs)
+    except Exception:
+        pass
+
 # Create router
 router = APIRouter(prefix="/notion", tags=["Notion Task Management"])
 
@@ -440,7 +447,7 @@ async def update_profile(genesis_key_id: str, request: ProfileUpdateRequest):
         if request.is_active is not None:
             profile.is_active = request.is_active
 
-        profile.updated_at = datetime.utcnow()
+        profile.updated_at = datetime.now()
         session.commit()
         session.refresh(profile)
 
@@ -470,9 +477,9 @@ async def log_on_profile(genesis_key_id: str):
         if not profile:
             raise HTTPException(status_code=404, detail=f"Profile {genesis_key_id} not found")
 
-        profile.last_logged_on = datetime.utcnow()
+        profile.last_logged_on = datetime.now()
         profile.is_active = True
-        profile.updated_at = datetime.utcnow()
+        profile.updated_at = datetime.now()
 
         session.commit()
         session.refresh(profile)
@@ -503,7 +510,7 @@ async def log_off_profile(genesis_key_id: str):
         if not profile:
             raise HTTPException(status_code=404, detail=f"Profile {genesis_key_id} not found")
 
-        now = datetime.utcnow()
+        now = datetime.now()
         profile.last_logged_off = now
 
         # Calculate time logged if we have a log on time
@@ -582,7 +589,7 @@ async def create_task(request: TaskCreateRequest):
 
         # Set started_at if task starts in progress
         if request.status == TaskStatus.IN_PROGRESS:
-            task.started_at = datetime.utcnow()
+            task.started_at = datetime.now()
 
         session.add(task)
         session.commit()
@@ -719,9 +726,9 @@ async def update_task(genesis_key_id: str, request: TaskUpdateRequest):
 
             # Handle status transitions
             if request.status == TaskStatus.IN_PROGRESS and not task.started_at:
-                task.started_at = datetime.utcnow()
+                task.started_at = datetime.now()
             elif request.status == TaskStatus.COMPLETED:
-                task.completed_at = datetime.utcnow()
+                task.completed_at = datetime.now()
                 task.progress_percent = 100
                 # Update assignee stats
                 if task.assignee:
@@ -807,7 +814,7 @@ async def update_task(genesis_key_id: str, request: TaskUpdateRequest):
 
         # Increment version
         task.version += 1
-        task.updated_at = datetime.utcnow()
+        task.updated_at = datetime.now()
 
         # Record all changes in history
         for field, old_val, new_val in changes:
@@ -897,9 +904,9 @@ async def move_task(
 
         # Handle status transitions
         if new_status == TaskStatus.IN_PROGRESS and not task.started_at:
-            task.started_at = datetime.utcnow()
+            task.started_at = datetime.now()
         elif new_status == TaskStatus.COMPLETED:
-            task.completed_at = datetime.utcnow()
+            task.completed_at = datetime.now()
             task.progress_percent = 100
             if task.assignee:
                 task.assignee.tasks_completed += 1
@@ -913,7 +920,7 @@ async def move_task(
                 task.assignee.tasks_in_progress += 1
 
         task.version += 1
-        task.updated_at = datetime.utcnow()
+        task.updated_at = datetime.now()
 
         record_task_history(
             session=session,

@@ -1628,7 +1628,7 @@ class TestNotificationSystem:
             'alert_id': 'ALERT-0001',
             'severity': 'critical',
             'reason': 'Test alert',
-            'timestamp': datetime.utcnow().isoformat()
+            'timestamp': datetime.now().isoformat()
         }
 
         with patch('urllib.request.urlopen') as mock_urlopen:
@@ -1665,7 +1665,7 @@ class TestNotificationSystem:
             'alert_id': 'ALERT-0002',
             'severity': 'warning',
             'reason': 'Test email alert',
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'health_status': 'degraded',
             'health_score': 0.65,
             'critical_components': [],
@@ -1704,7 +1704,7 @@ class TestNotificationSystem:
             'alert_id': 'ALERT-0004',
             'severity': 'critical',
             'reason': 'Critical system failure',
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'health_status': 'critical',
             'health_score': 0.25,
             'critical_components': ['database', 'cache'],

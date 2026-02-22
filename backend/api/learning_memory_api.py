@@ -210,7 +210,7 @@ async def export_training_data(
         mesh = MemoryMeshIntegration(session, Path(KNOWLEDGE_BASE_PATH))
 
         # Generate filename
-        timestamp = int(datetime.utcnow().timestamp())
+        timestamp = int(datetime.now().timestamp())
         filename = f"training_data_{timestamp}.{request.export_format}"
         output_path = Path(KNOWLEDGE_BASE_PATH) / "exports" / filename
 
@@ -588,7 +588,7 @@ async def get_all_patterns(
                 trust_score=p.trust_score or 0.5,
                 usage_count=p.usage_count or 0,
                 success_rate=p.success_rate or 0.0,
-                created_at=p.created_at.isoformat() if p.created_at else datetime.utcnow().isoformat()
+                created_at=p.created_at.isoformat() if p.created_at else datetime.now().isoformat()
             )
             patterns.append(pattern_resp)
 
@@ -641,7 +641,7 @@ async def get_pattern_by_id(
             trust_score=pattern.trust_score or 0.5,
             usage_count=pattern.usage_count or 0,
             success_rate=pattern.success_rate or 0.0,
-            created_at=pattern.created_at.isoformat() if pattern.created_at else datetime.utcnow().isoformat()
+            created_at=pattern.created_at.isoformat() if pattern.created_at else datetime.now().isoformat()
         )
 
     except HTTPException:
@@ -712,7 +712,7 @@ async def extract_patterns(
                 patterns_updated += 1
             else:
                 # Create new pattern
-                pattern_name = f"pattern_{example_type}_{datetime.utcnow().timestamp()}"
+                pattern_name = f"pattern_{example_type}_{datetime.now().timestamp()}"
 
                 # Extract common elements (simplified)
                 preconditions = {"example_count": len(group), "types": [example_type]}

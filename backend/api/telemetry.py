@@ -206,7 +206,7 @@ def acknowledge_alert(
         raise HTTPException(status_code=404, detail="Alert not found")
 
     alert.acknowledged = True
-    alert.acknowledged_at = datetime.utcnow()
+    alert.acknowledged_at = datetime.now()
     session.commit()
 
     return {"status": "acknowledged", "alert_id": alert_id}
@@ -225,7 +225,7 @@ def resolve_alert(
         raise HTTPException(status_code=404, detail="Alert not found")
 
     alert.resolved = True
-    alert.resolved_at = datetime.utcnow()
+    alert.resolved_at = datetime.now()
     alert.resolution_notes = resolution_notes
     session.commit()
 
@@ -261,7 +261,7 @@ def get_system_state_history(
     session: Session = Depends(get_session)
 ):
     """Get system state history for the specified time period."""
-    since = datetime.utcnow() - timedelta(hours=hours)
+    since = datetime.now() - timedelta(hours=hours)
 
     states = session.query(SystemState).filter(
         SystemState.created_at >= since
@@ -277,7 +277,7 @@ def get_operation_stats(
     session: Session = Depends(get_session)
 ):
     """Get aggregated operation statistics."""
-    since = datetime.utcnow() - timedelta(hours=hours)
+    since = datetime.now() - timedelta(hours=hours)
 
     query = session.query(OperationLog).filter(
         OperationLog.started_at >= since
@@ -366,7 +366,7 @@ def telemetry_health(session: Session = Depends(get_session)):
     """Check telemetry system health."""
     # Count recent operations
     recent_ops = session.query(OperationLog).filter(
-        OperationLog.started_at >= datetime.utcnow() - timedelta(hours=1)
+        OperationLog.started_at >= datetime.now() - timedelta(hours=1)
     ).count()
 
     # Count baselines
@@ -382,5 +382,5 @@ def telemetry_health(session: Session = Depends(get_session)):
         "recent_operations_1h": recent_ops,
         "baselines_tracked": baselines,
         "unresolved_alerts": unresolved_alerts,
-        "timestamp": datetime.utcnow()
+        "timestamp": datetime.now()
     }

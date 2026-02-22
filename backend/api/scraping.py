@@ -142,7 +142,7 @@ async def submit_scraping_job(
             url=request.url,
             depth=request.depth,
             status='pending',
-            folder_path=request.folder_path or f"scraped/{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            folder_path=request.folder_path or f"scraped/{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             same_domain_only=1 if request.same_domain_only else 0,
             max_pages=request.max_pages,
             total_pages=1  # Start with at least the root URL
@@ -342,7 +342,7 @@ async def cancel_scraping_job(
             )
         
         job.status = 'cancelled'
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now()
         session.commit()
         
         logger.info(f"Cancelled scraping job {job_id}")

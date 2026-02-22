@@ -61,7 +61,7 @@ class Pattern:
     affected_components: List[str] = field(default_factory=list)
     evidence: List[Dict] = field(default_factory=list)
     suggested_action: Optional[str] = None
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -74,7 +74,7 @@ class Anomaly:
     actual_value: Optional[Any] = None
     deviation_percent: float = 0.0
     affected_components: List[str] = field(default_factory=list)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -86,7 +86,7 @@ class InvariantCheck:
     description: str
     violation_details: Optional[str] = None
     severity: float = 0.0  # Only relevant if failed
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -97,7 +97,7 @@ class InterpretedData:
     invariant_checks: List[InvariantCheck] = field(default_factory=list)
     clarity_level: ClarityLevel = ClarityLevel.CLEAR
     clarity_score: float = 1.0  # 0.0 (opaque) to 1.0 (clear)
-    interpretation_timestamp: datetime = field(default_factory=datetime.utcnow)
+    interpretation_timestamp: datetime = field(default_factory=datetime.now)
     interpretation_duration_ms: float = 0.0
 
 
@@ -150,7 +150,7 @@ class InterpreterLayer:
 
     def interpret(self, sensor_data: SensorData) -> InterpretedData:
         """Interpret sensor data to extract patterns, anomalies, and clarity."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         result = InterpretedData()
 
         # Detect patterns
@@ -167,7 +167,7 @@ class InterpreterLayer:
             sensor_data, result.patterns, result.anomalies, result.invariant_checks
         )
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now()
         result.interpretation_timestamp = end_time
         result.interpretation_duration_ms = (end_time - start_time).total_seconds() * 1000
 

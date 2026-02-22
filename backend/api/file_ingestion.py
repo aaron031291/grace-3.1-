@@ -67,7 +67,7 @@ class FileIngestionResultItem(BaseModel):
     document_id: Optional[int] = None
     message: str = ""
     error: Optional[str] = None
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now().isoformat())
 
 
 class ScanResults(BaseModel):
@@ -76,7 +76,7 @@ class ScanResults(BaseModel):
     successful: int
     failed: int
     results: List[FileIngestionResultItem]
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now().isoformat())
 
 
 class FileManagerStatus(BaseModel):
@@ -85,7 +85,7 @@ class FileManagerStatus(BaseModel):
     knowledge_base_path: str
     tracked_files: int
     git_initialized: bool
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now().isoformat())
 
 
 # ==================== Endpoints ====================

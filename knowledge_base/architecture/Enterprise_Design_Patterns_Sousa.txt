@@ -1,0 +1,1857 @@
+Paulo Sousa
+pag@isep.ipp.pt
+Instituto Superior de Engenharia do Porto
+   Introduction
+   Enterprise Applications
+   Sample problem
+   Business entities
+   Business logic and data access
+   Some improvements
+   Sample application
+   Patterns for distributed applications
+   Synopsis
+   Conclusions
+Part 1
+“Each pattern describes a problem that
+   occurs over and over again in our
+  environment and then describes the
+core of the solution to that problem in
+    such a way that you can use this
+ solution a million times over without
+  ever doing it the same way twice.”
+                        Christopher Alexander
+                                    (architect)
+  “A Software Design Pattern names,
+abstracts, and identifies the key aspects
+   of a common design structure that
+ make it useful for creating a reusable
+         object-oriented design.”
+       Design Patterns-Elements of Reusable Object-oriented
+                       Software, Gamma et al. (Gang of Four)
+   a set of best practices
+
+   a typified solution to a problem in a given
+    context
+
+   a way to facilitate communication
+
+   found not invented
+“Patterns are half-baked”
+                   Martin Fowler
+   No direct code reuse
+
+   Pattern overload
+
+   Experience-based validation
+
+   Hard work integrating patterns in the
+    development process
+
+                                            8
+name             Contributes to the pattern
+                 vocabulary
+synopsis         Short description of the problem the
+                 pattern will solve.
+forces           Requirements, considerations, or
+                 necessary conditions
+solution         The essence of the solution
+counter forces Reasons for not using the pattern.
+related patterns Possible alternatives in the design.
+                                                        9
+  GoF Gang of Four
+POSA Pattern-Oriented Software Architecture
+
+PoEAA Patterns of Enterprise Application
+        Architecture
+
+   CJP Core J2EE Patterns
+
+  ESP Enterprise Solution Patterns using
+        Microsoft .NET                        10
+Part 2
+   Critical functionality
+   Large quantity of concurrently accessed data
+   Large number of screens
+   Integration
+   Conceptual dissonance
+   Complex (ilogic) business rules
+    “[Software Architecture is] the
+fundamental organization of a system,
+  embodied in its components, their
+  relationships to each other and the
+   environment, and the principles
+ governing its design and evolution.“
+       ANSI/IEEE Std 1471-2000, Recommended Practice for
+     Architectural Description of Software-Intensive Systems
+fonte: Application Architecture for .NET:
+   designing applications and Services
+Layers
+
+
+
+
+         fonte: Core J2EE Patterns
+fonte: Application Architecture for .NET: designing applications and Services
+   How to represent the business entities?
+
+   How to persist its state?
+
+   How to code the Business logic?
+
+   how to guarantee data coherence?
+
+   How to handle application distribution?
+Part 3
+   Revenue recognition
+     Three different products
+      ▪ Word processors, databases, spreadsheets
+
+
+     Different payment rules
+      ▪ WP – all at once (t)
+      ▪ DB – 3 payments: t, t+30, t+60
+      ▪ SS – 3 payments: t, t+60, t+90
+
+                            (From Martin Fowler’s PoEAA book)
+Customer               Contract                        Product
+           1                       *
++ name             + revenue                         + name
+                 * + dateSigned                  1
+
+                           1
+
+                                       WordProcessor              SpreadSheet
+                       *
+
+                RevenueRecognition
+               + dateRecognition                       DataBase
+               + amount
+                                      «table»
+                                TRevenueRecognitions
+
+                            + «Column» ID : int
+                            + «Column» contractID : int
+                            + «Column» dateRecognition : date
+                            + «Column» amount : currency
+
+
+
+
+                                       «table»
+                                                                        «table»
+                                     TContracts
+        «table»                                                        TProducts
+      TCustomers            + «Column» ID : int
+                                                                + «Column» ID : int
+                            + «Column» productID : int
++ «Column» ID : int                                             + «Column» type : varchar
+                            + «Column» customerID : int
++ «Column» name : varchar                                       + «Column» name : varchar
+                            + «Column» revenue : currency
+                            + «Column» dateSigned : date
+public interface IRevenueRecognition
+{
+  void CalculateRevenueRecognitions(int contractID);
+
+    Money RecognizedRevenue(int contractID, DateTime asOf);
+
+    object GetContracts();
+
+    object GetCustomers();
+
+    object GetProducts();
+}
+Part 4
+   How to represent:
+     One entity, e.g. Customer?
+     Collections, e.g., List of customers?
+     Networked/complex objects, e.g., production plan?
+
+   Structure and behaviour
+     Structure + behaviour?
+     Structure with behaviour?
+     Behaviour (and attributes)?
+
+   Persistence structure ≠ conceptual structure?
+   Custom classes
+
+   XML
+
+   DataSet (.net) / ResultSet (JDBC)
+   Custom classes
+
+   IList / List
+
+   XML
+
+   DataSet (.net) / ResultSet (JDBC)
+   User defined code with members for the
+    entity’s attributes
+
+                     Product
+                  + Type : int
+                  + Name : string
+                  + ID : int
+   Product                Contract
+                                                         Customer
++ Type : int       + Revenue : decimal
++ Name : string    + DateSigned : DateTime             + Name : string
++ ID : int         + CustomerID : int                  + ID : int
+                   + ProductID : int
+                   + ID : int
+
+
+
+
+                             * + RevenueRecognitions
+
+                     RevenueRecognition
+                  + DateRecognition : DateTime
+                  + Amount : decimal
+                  + ContractID : int
+                  + ID : int
+   An XML document (or string) representing an
+    entity’s structure
+
+     <product>
+      <id>123</id>
+      <name>SuperWriter 7.3</name>
+      <type>Word Processor</type>
+     </product>
+   A DataSet (or derived class) to hold tabular
+    data (eventually directly from a data source)
+   A class implementing the ResultSet interface to
+    hold tabular data (eventually directly from a data
+    source)
+   A library collection class (e.g. LinkedList)
+            LinkedList
+Part 5
+   Table oriented         BLL
+     Table Module
+                                  DAL
+     Table Data Gateway
+
+
+   Object oriented
+                             BLL
+     Domain Model
+     Active Record
+                                 DAL
+                                 BLL
+     Data Mapper
+Part 5.1
+         UI
+
+
+
+                            Uses the
+                           platform’s
+                          ResultSet for
+   «table module»      sharing entity data
+         BLL            beteween layers
+
+
+
+
+«table data gateway»
+         DAL
+                                                                    Pattern
+
+
+
+
+   A single instance that handles the business
+    logic for all rows in a database table or view
+
+
+
+
+           fonte: Patterns of Enterprise Application Architecture
+                                 Contract
+
++ Contract ( )
++ RecognizedRevenue ( [in] contractID : int , [in] asOf : DateTime ) : Money
++ CalculateRevenueRecognitions ( [in] contractID : int )
++ GetContracts ( ) : DataSet
++ GetContractsByProduct ( [in] productID : int ) : DataSet
++ GetContractsByCustomer ( [in] customerID : int ) : DataSet
+
+
+
+                             Customer
+
+                  + Customer ( )
+                  + GetCustomers ( ) : DataTable
+
+
+
+                              Product
+
+                   + Product ( )
+                   + GetProducts ( ) : DataTable
+                                                                    Pattern
+
+
+
+
+   An object that acts as a Gateway to a
+    database table. One instance handles all the
+    rows in the table
+
+
+
+                Business
+                 entity
+
+
+
+
+           fonte: Patterns of Enterprise Application Architecture
+                                CustomerGateway
+
+                       + CustomerGateway ( )
+                       + GetCustomers ( ) : DataTable
+
+
+                                                                                     ContractGateway
+
+     ProductGateway                      + ContractGateway ( )
+                                         + InsertRecognition ( [in] contractID : int , [in] recognitionDate : DateTime , [in] amount : decimal ) : int
++ ProductGateway ( )                     + GetContracts ( ) : DataSet
++ GetProducts ( ) : DataTable            + GetContractByID ( [in] contractID : int ) : DataSet
+                                         + GetContractsByProduct ( [in] productID : int ) : DataSet
+                                         + GetContractsByCustomer ( [in] customerID : int ) : DataSet
+
+
+
+
+                                       BaseGateway
+      # «property» CurrentTransaction : OleDbTransaction
+      - CONNSTR : string = @"Provider=..."
+      + BaseGateway ( )
+      # GetConnection ( [in] open : bool ) : OleDbConnection
+      # ExecuteQuery ( [in] cnx : OleDbConnection , [in] sql : string ) : DataSet
+      # ExecuteNonQuery ( [in] cnx : OleDbConnection , [in] sql : string ) : int
+      # ExecuteNonQuery ( [in] tx : OleDbTransaction , [in] sql : string ) : int
+      # ExecuteNonQuery ( [in] tx : OleDbTransaction , [in] cmd : OleDbCommand ) : int
+      + BeginTransaction ( )
+      + CommitTransaction ( )                                                                                                                  42
+      + RoolbackTransaction ( )                                                                                                            ISEP/IP
+      # «get» CurrentTransaction ( ) : OleDbTransaction                                                                                          P
+/ User : Actor1            / GUI              / ClassifierRole1 : Contract        / ClassifierRole2 : Contract
+                                                                                            Gateway
+
+         1 : \Form_Load\
+                               2 : GetContracts ( )
+                                                               3 : GetContracts ( )
+
+                                                                                                   4 : GetConnection ( open )
+
+
+
+
+                                                                                                   5 : ExecuteQuery ( cnx , sql )
+/ User : Actor1            / GUI                   / ClassifierRole1 : Contract
+
+
+      1 : \btnCalcRevenues_Click\
+                             2 : CalculateRevenueRecognitions (
+                                         contractID )
+                                                                    3 : \new\                  / ClassifierRole2 : Contract
+                                                                                                         Gateway
+
+                                                                  4 : GetContractByID ( contractID )
+
+
+
+                                                                    5 : BeginTransaction ( )
+
+
+
+                                                                  6 : InsertRecognition ( contractID ,                        foreach calculated
+                                                                      recognitionDate , amount )                              recognition
+
+
+
+                                                                    7 : CommitTransaction ( )
+public void CalculateRevenueRecognitions(int contractID)        Returns a join of
+{
+   DAL.ContractGateway dal = new DAL.ContractGateway();         TContracts and
+   DataSet ds = dal.GetContractByID(contractID);
+                                                                  TProducts
+    string prodType = (string)ds.Tables[0].Rows[0]["type"];
+    decimal totalRevenue = (decimal)ds.Tables[0].Rows[0]["revenue"];
+    DateTime recDate = (DateTime)ds.Tables[0].Rows[0]["dateSigned"];
+    dal.BeginTransaction();
+    switch (prodType) {
+    case "PT":
+         dal.InsertRecognition(contractID, recognitionDate, totalRevenue);
+         break;
+    case "FC":
+         decimal[] allocs = Money.Allocate(totalRevenue, 3);
+         dal.InsertRecognition(contractID, recDate, allocs[0]);
+         dal.InsertRecognition(contractID, recDate.AddDays(60), allocs[1]);
+         dal.InsertRecognition(contractID, recDate.AddDays(90), allocs[2]);
+         break;
+    case "BD":
+         decimal[] allocs = Money.Allocate(totalRevenue, 3);
+         dal.InsertRecognition(contractID, recDate, allocs[0]);
+         dal.InsertRecognition(contractID, recDate.AddDays(30), allocs[1]);
+         dal.InsertRecognition(contractID, recDate.AddDays(60), allocs[2]);
+         break;
+    }                               Explicit transaction control
+    dal.CommitTransaction();
+}                                              ☺/ 
+public int InsertRecognition(int contractID,
+                         DateTime recognitionDate,
+                         decimal amount)
+{
+   OleDbCommand sqlcmd = new OleDbCommand(
+                "INSERT INTO TRevenueRecognitions
+                (contractID, dateRecognition, amount)
+                VALUES (?, ?, ?)",
+                CurrentTransation.Connection,
+                CurrentTransation
+                );
+    sqlcmd.Parameters.Add("@cid", contractID);
+    sqlcmd.Parameters.Add("@dt", recognitionDate);
+    sqlcmd.Parameters.Add("@amt", amount);
+    return ExecuteNonQuery(CurrentTransation, sqlcmd);
+}
+Part 5.2
+        UI
+
+
+
+
+                                  These classes only
+                                    have attributes
+ «table module»        Entities   (no business logic-
+       BLL                        related behaviour)
+
+
+
+
+«table data gateway»
+         DAL
+   Product                Contract
+                                                         Customer
++ Type : int       + Revenue : decimal
++ Name : string    + DateSigned : DateTime             + Name : string
++ ID : int         + CustomerID : int                  + ID : int
+                   + ProductID : int
+                   + ID : int
+
+
+
+
+                             * + RevenueRecognitions
+
+                     RevenueRecognition
+                  + DateRecognition : DateTime
+                  + Amount : decimal
+                  + ContractID : int
+                  + ID : int
+                                 Contract
+
++ Contract ( )
++ RecognizedRevenue ( [in] contractID : int , [in] asOf : DateTime ) : Money
++ CalculateRevenueRecognitions ( [in] contractID : int )
++ GetContracts ( ) : IList
++ GetContractsByProduct ( [in] productID : int ) : IList
++ GetContractsByCustomer ( [in] customerID : int ) : IList
+
+
+
+                          Customer
+
+                  + Customer ( )
+                  + GetCustomers ( ) : IList
+
+
+
+                           Product
+
+                   + Product ( )
+                   + GetProducts ( ) : IList
+                   CustomerGateway
+
+ + CustomerGateway ( )                                                                                 ContractGateway
+ + GetCustomers ( ) : IList
+ - CreateCustomerObject ( [in] r : DataRow ) : Customer    + ContractGateway ( )
+                                                           + InsertRecognition ( [in] contractID : int , [in] recognitionDate : DateTime , [in] amount : decimal ) : int
+                                                           + GetContracts ( ) : IList
+                                                           + GetContractByID ( [in] contractID : int ) : Contract
+                ProductGateway                             + GetContractsByProduct ( [in] productID : int ) : IList
+                                                           + GetContractsByCustomer ( [in] customerID : int ) : IList
++ ProductGateway ( )                                       - CreateContractObject ( [in] r : DataRow ) : Contract
++ GetProducts ( ) : IList                                  - CreateRevenueRecognitionObject ( [in] r : DataRow ) : RevenueRecognition
+- CreateProductObject ( [in] r : DataRow ) : Product
+
+
+
+
+                                                            BaseGateway
+                            # «property» CurrentTransaction : OleDbTransaction
+                            - CONNSTR : string = @"Provider=..."
+                            + BaseGateway ( )
+                            # GetConnection ( [in] open : bool ) : OleDbConnection
+                            # ExecuteQuery ( [in] cnx : OleDbConnection , [in] sql : string ) : DataSet
+                            # ExecuteNonQuery ( [in] cnx : OleDbConnection , [in] sql : string ) : int
+                            # ExecuteNonQuery ( [in] tx : OleDbTransaction , [in] sql : string ) : int
+                            # ExecuteNonQuery ( [in] tx : OleDbTransaction , [in] cmd : OleDbCommand ) : int
+                            + BeginTransaction ( )
+                            + CommitTransaction ( )
+                            + RoolbackTransaction ( )
+                                                                                                                                                             51
+                            # «get» CurrentTransaction ( ) : OleDbTransaction                                                                            ISEP/IP
+                                                                                                                                                               P
+/ User : Actor1           / GUI        / ClassifierRole1 : Contract
+
+
+        1 : \Form_Load\
+                             2 : GetContracts ( )
+
+                                                       3 : \new\               / ClassifierRole2 : Contract
+                                                                                         Gateway
+
+                                                        4 : GetContracts ( )
+                                                                                                5 : GetConnection ( open )
+
+
+
+
+                                                                                                6 : ExecuteQuery ( cnx , sql )
+
+
+
+
+                                                                                              7 : \new\           / IList
+
+                                                                                                 8 : \new\
+                                                                                                                                 / ClassifierRole3 : Contract
+
+
+                                                                                                                                     foreach row returned
+                                                                                                9 : \Add\
+
+
+                                                                                                                                                    52
+                                                                                                                                                ISEP/IP
+                                                                                                                                                      P
+                    / GUI              / bll : Contract
+
+
+
+1 : \btnCalcRevenues_click\
+                                                                                                                    Sequence
+                    2 : CalculateRevenueRecognitions (
+                                contractID )                                                                    CalculateRevenues
+                                                 3 : \new\             / dalC : ContractGateway
+
+
+
+                                               4 : GetContractByID ( contractID )
+                                                                                       5 : CreateContractObject ( r )
+
+
+                                                                                      6 : \new\
+                                                                                                           / c : Contract
+
+
+
+                                                              7 : \new\
+                                                                                                                               / dalP : ProductGateway
+
+
+                                                             8 : GetProductByID ( productID )
+                                                                                                                                             9 : CreateProductObject ( r )
+
+
+                                                                                                                                           10 : \new\
+                                                                                                                                                             / p : Product
+
+
+
+                                                11 : BeginTransaction ( )
+
+                                                                                                  foreach calculated revenue
+                                              12 : InsertRecognition ( contractID ,
+                                                   recognitionDate , amount )
+                                                                                       13 : ExecuteNonQuery ( tx , cmd )
+
+
+
+
+                                                14 : CommitTransaction ( )
+public void CalculateRevenueRecognitions(int contractID)
+{
+   DAL.ContractGateway dalC = new DAL.ContractGateway();
+   Entities.Contract c = dalC.GetContractByID(contractID);
+    DAL.ProductGateway dalP = new DAL.ProductGateway();
+    TM.Entities.Product p = dalP.GetProductByID(c.ProductID);
+    dalC.BeginTransaction();
+    switch (p.Type) {
+    case "PT":
+         dalC.InsertRecognition(contractID, c.DateSigned, c.Revenue);
+         break;
+    case "FC":
+         decimal[] alcs = Money.Allocate(c.Revenue, 3);
+         dalC.InsertRecognition(contractID, c.DateSigned, allocs[0]);
+         dalC.InsertRecognition(contractID, c.DateSigned.AddDays(60),   alcs[1]);
+         dalC.InsertRecognition(contractID, c.DateSigned.AddDays(90),   alcs[2]);
+         break;
+    case "BD":
+         decimal[] alcs = Money.Allocate(c.Revenue, 3);
+         dalC.InsertRecognition(contractID, c.DateSigned, allocs[0]);
+         dalC.InsertRecognition(contractID, c.DateSigned.AddDays(30),   alcs[1]);
+         dalC.InsertRecognition(contractID, c.DateSigned.AddDays(60),   alcs[2]);
+         break;
+    }
+    dalC.CommitTransaction();
+}
+Part 5.3
+    GUI
+
+
+
+
+«domain model + active record»
+         BLL + DAL
+                                                                   Pattern
+
+
+
+
+   An object model of the domain that
+    incorporates both behavior and data
+
+
+
+
+          fonte: Patterns of Enterprise Application Architecture
+                                                                    Pattern
+
+
+
+
+   An object that wraps a row in a database
+    table or view, encapsulates the database
+    access, and adds domain logic on that data
+
+
+
+
+           fonte: Patterns of Enterprise Application Architecture
+                                                                              58
+                                                                                             Can be divided:
+                                                                                             (a) ActiveRecord                                      Classes
+                                  ActiveRecord
+                                                                                             (b) DBHelper                                         BLL/DAL
+# myID : int
+# «property» CurrentTransaction : OleDbTransaction
+- CONNSTR : string = @"Provider=..."                                                                                     Product
++ «property» ID : int
+                                                                                                       + «property» Type : string
++ Save ( )                                                                                             - _name : string
++ ActiveRecord ( )                                                                                     - _type : string                              0..1
+# GetConnection ( [in] open : bool ) : OleDbConnection
+                                                                                                       + Product ( )                                 - _Product
+# ExecuteQuery ( [in] sql : string ) : DataSet
+                                                                                                       # Product ( [in] row : DataRow )
+# ExecuteTransactedQuery ( [in] sql : string ) : DataSet
+                                                                                                       + LoadById ( [in] productID : int ) : Product
+# ExecuteNonQuery ( [in] sql : string ) : int
+                                                                                                       + LoadAll ( ) : IList
+# ExecuteTransactedNonQuery ( [in] sql : string ) : int
+                                                                                                       + Save ( )
+# ExecuteNonQuery ( [in] tx : OleDbTransaction , [in] cmd : OleDbCommand ) : int
+                                                                                                       + «get» Type ( ) : string
+# BeginTransaction ( )
+# CommitTransaction ( )
+# RoolbackTransaction ( )
+# «get» CurrentTransaction ( ) : OleDbTransaction
++ «get» ID ( ) : int                                                                                                     Customer
+# ExecuteTransactedNonQuery ( [in] cmd : OleDbCommand ) : int
+                                                                                                       - Name : string
+
+                                                                                                      + Customer ( )
+                                                                                         - _Customer
+                                                                                                      # Customer ( [in] row : DataRow )
+                                  Contract
+                                                                                                 0..1 + LoadById ( [in] customerID : int ) : Customer
+- CustomerID : int                                                                                    + LoadAll ( ) : IList
+- DateSigned : DateTime                                                                               + Save ( )
+- ProductID : int
+- Revenue : decimal
+# «property» Product : Product
+
++ Contract ( )                                                                                                               RevenueRecognition
+# Contract ( [in] row : DataRow )
+# Contract ( [in] dsContractAndRecognitions : DataSet )                      - RevenueRecognitions + Amount : decimal
++ RecognizedRevenue ( [in] asOf : DateTime ) : Money                                            * + DateRecognition : DateTime
++ CalculateRevenueRecognitions ( )                                                                 + ID : int
++ LoadById ( [in] contractID : int ) : Contract
++ LoadByProduct ( [in] productID : int ) : IList                                                   + RevenueRecognition ( [in] id : int , [in] dt : DateTime , [in] amt : decimal )
++ LoadByCustomer ( [in] customerID : int ) : IList                                                 + RevenueRecognition ( [in] dt : DateTime , [in] amt : decimal )
++ LoadAll ( ) : IList
++ Save ( )                                                                                                    inner private
+# AddRecognition ( [in] recognitionDate : DateTime , [in] amount : decimal )                                  class
+# «get» Product ( ) : Product
+                                                                                                                       DBHelper
+
+                                       ActiveRecord                                                + «property» CurrentTransaction : OleDbTransaction
+                                                                                                   - CONNSTR : string = @"Provider=..."
+                                     # myID : int
+                                     + «property» ID : int                                         + DBHelper ( )
+                                                                                                   + GetConnection ( )
+                                     + Save ( )                                                    + ExecuteQuery ( )
+                                     + ActiveRecord ( )                                            + ExecuteTransactedQuery ( )
+                                     + «get» ID ( )                                                + ExecuteNonQuery ( )
+                                                                                                   + ExecuteTransactedNonQuery ( )
+                                                                                                   + ExecuteNonQuery ( )
+                                                                                                   + BeginTransaction ( )
+                                                                                                   + CommitTransaction ( )
+   Product                                Contract                              Customer           + RoolbackTransaction ( )
+                                                                                                   + «get» CurrentTransaction ( )
+- Name : string            -   CustomerID : int                               - Name : string
+- Type : int               -   DateSigned : DateTime
+                0..1                                                          + Customer ( )
+                           -   ProductID : int                  - _Customer
++ Product ( )                                                                 + LoadById ( )                            inner private class
+                           -   Revenue : decimal
++ LoadById ( )                                                           0..1 + LoadAll ( )
++ LoadAll ( ) - _Product   + Contract ( )                                     + Save ( )
++ Save ( )                 + RecognizedRevenue ( )
+                           + CalculateRevenueRecognitions ( )
+                           + LoadById ( )                                                          RevenueRecognition
+                           + LoadByProduct ( )                          - RevenueRecognitions + Amount : decimal
+                           + LoadByCustomer ( )
+                                                                                           * + DateRecognition : DateTime
+                           + LoadAll ( )                                                      + ID : int
+                           + Save ( )
+                                                                                                + RevenueRecognition ( )
+/ User : Actor1           / GUI                : Contract
+
+
+        1 : \Form_Load\
+                             2 : LoadAll ( )
+                                                      3 : ExecuteQuery ( sql )
+
+
+
+
+                                                        4 : \new\                  / IList
+
+
+                                                            5 : Contract ( row )
+                                                                                                    / ClassifierRole2 : Contract
+
+                                                            6 : \Add\
+
+                                                                                             foreach
+                                                                                             returned row
+   Networks of objects
+       E.g. Invoice heading relates to invoice details
+       Invoice details refers to Products
+       Products refers to Suppliers
+       …
+
+   What to do?
+     Load them all into memory?
+     How to disallow multiple in-memory copies
+
+                                                          62
+                                                                    Pattern
+
+
+
+
+   An object that doesn't contain all of the data
+    you need but knows how to get it.
+
+
+
+
+           fonte: Patterns of Enterprise Application Architecture
+                                                                     Pattern
+
+
+
+
+   Ensures that each object gets loaded only once by
+    keeping every loaded object in a map. Looks up
+    objects using the map when referring to them
+
+
+
+
+            fonte: Patterns of Enterprise Application Architecture
+                                                                               64
+/ User : Actor1              / GUI                  : Contract
+                                                                                                       Sequence
+      1 : \btnCalcRevenues_Click\
+                               2 : LoadById ( contractID )
+                                                               3 : ExecuteQuery ( sql )
+                                                                                                   CalculateRevenues
+
+
+                                                             4 : Contract ( row )    / aContract : Contract
+
+
+
+                                     5 : CalculateRevenueRecognitions ( )                          6 : AddRecognition ( recognitionDate ,
+                                                                                                                amount )
+
+
+                                                                                                                  foreach calculated
+                                                                                                                  recognition
+
+                                         7 : Save ( )
+                                                                                                   8 : BeginTransaction ( )
+
+
+                                                                                                   9 : ExecuteTransactedNonQuery ( sql
+                                                                                                                    )
+
+
+                                                                                                   10 : ExecuteTransactedNonQuery ( sql
+                                                                                                                    )
+                                             foreach RevenueRecognition
+                                             object in _RevenueRecognitions
+                                                                                                   11 : CommitTransaction ( )
+public void CalculateRevenueRecognitions()
+{
+   switch (this.Product.Type) {
+      case "PT":
+        AddRecognition(this.DateSigned, this.Revenue);
+        break;
+      case "FC":
+        decimal[] allocsFC = Money.Allocate(Revenue, 3);
+        AddRecognition(DateSigned, allocsFC[0]);
+        AddRecognition(DateSigned.AddDays(60), allocsFC[1]);
+        AddRecognition(DateSigned.AddDays(90), allocsFC[2]);
+        break;
+      case "BD":
+        decimal[] allocsBD = Money.Allocate(Revenue, 3);
+        AddRecognition(DateSigned, allocsBD[0]);
+        AddRecognition(DateSigned.AddDays(30), allocsBD[1]);
+        AddRecognition(DateSigned.AddDays(60), allocsBD[2]);
+        break;
+   }
+}
+// foreign key
+private int ProductID;
+
+// object pointer
+private Product _Product;
+
+// relationship property
+protected Product Product
+{
+   get
+   {
+     // Lazy Load
+     if (this._Product == null)
+       this._Product = Product.LoadById(this.ProductID);
+
+        return this._Product;
+    }
+}
+// Identity Map
+public static IDictionary loaded = new Hashtable();
+
+public static Product LoadById(int productID)
+{
+   // check registry – Identity Map
+   Product p = (Product)loaded[productID];
+   if (p != null)
+      return p;
+
+    // load
+    Product aux = new Product();
+    DataSet ds = ExecuteQuery("SELECT * FROM TProducts WHERE productID=" +
+                                  productID);
+    p = new Product(ds.Tables[0].Rows[0]);
+
+    // save in registry
+    loaded[productID] = p;
+    return p;
+}
+public void Save() {
+   BeginTransaction();
+   object[] parms = new object[] {this.ProductID, this.CustomerID,
+                                  this.DateSigned, this.Revenue, this.ID};
+   if (this.ID != 0) {
+        sqlContract = "UPDATE TContracts SET productId=?, customerID=?,
+                         dateSigned=?, revenue=? WHERE contractID=?";
+        ExecuteTransactedNonQuery(sqlContract, parms);
+        ExecuteTransactedNonQuery("DELETE FROM TRevenueRecognitions WHERE
+                                  contractID=" + this.ID);
+   } else {
+        sqlContract = "INSERT INTO TContracts(productId, customerId,
+                         dateSigned, revenue) VALUES(?, ?, ?, ?)";
+        this.myID = ExecuteTransactedNonQuery(sqlContract, parms);
+   }
+    foreach (RevenueRecognition r in _RevenueRecognitions) {
+        string sqlRecognition = "INSERT INTO
+                 TRevenueRecognitions(contractID, dateRecognition, amount)
+                 VALUES(?, ?, ?)";
+        object parms[] = new object[] {this.ID, r.DateRecognition,
+                                   r.Amount};
+        ExecuteTransactedNonQuery(sqlRecognition, parms);
+    }
+    CommitTransaction();
+}
+Part 5.4
+                 UI
+
+
+
+
+«domain model»
+                      «data mapper»
+     BLL
+                           DAL
+
+
+
+
+                          Database
+                                                       Customer                                                          Contract
+                                                 - _ID : int                            + «property» Product : Product
+                                                 - _name : string                       - _ID : int
+          Business logic                         + «property» ID : int - _Customer      - _CustomerID : int
+                                                                                        - _DateSigned : DateTime
+                                                 + Customer ( )
+          methods only                           + «get» ID ( ) : int
+                                                                                        - _ProductID : int
+                                                                                        - _Revenue : decimal
+                                                                                        + «property» Customer : Customer
+                                                      Product                           + «property» RevenueRecognitions : IList
+                                                                                        + «property» DateSigned : DateTime
+                                            + «property» Type : string                  + «property» Revenue : decimal
+                                            - _ID : int                                 + «property» ID : int
+                                            - _name : string
+                                            - _type : string                            ~ AddRecognition ( [in] recognitionDate : DateTime , [in] amount : decimal )
+                                            + «property» ID : int                       + Contract ( )
+                                                                                        + RecognizedRevenue ( [in] asOf : DateTime ) : Money
+                                            + Product ( )                 - _Product    + CalculateRevenueRecognitions ( )
+                                            + «get» Type ( ) : string                   + «get» Product ( ) : Product
+                                            + «get» ID ( ) : int                        ~ SetID ( [in] id : int )
+                                                                                        ~ SetProduct ( [in] prodID : int , [in] prodType : string )
+                                   IRevenueRecognitionStrategy                          - SetStrategy ( [in] prodType : string )
+                                                                        - theStrategy   ~ SetProduct ( [in] prodID : int )
+                                                                                        + «get» Customer ( ) : Customer
+                                                                                        + «get» RevenueRecognitions ( ) : IList
+                            RevenueRecognition                                          + «get» DateSigned ( ) : DateTime
+                                                                                        + «get» Revenue ( ) : decimal
++ Amount : decimal
+                                                                                        + «get» ID ( ) : int
++ DateRecognition : DateTime
+                                                                                        ~ SetCustomer ( [in] custID : int )
++ ID : int
+                                                                                        + «set» Product ( [in] value : Product )
++ RevenueRecognition ( [in] id : int , [in] dt : DateTime , [in] amt : decimal )        + «set» DateSigned ( [in] value : DateTime )
++ RevenueRecognition ( [in] dt : DateTime , [in] amt : decimal )                        + «set» Revenue ( [in] value : decimal )                                72
+                                                                                                                                                         ISEP/IP
+                                                                *
+                                     - _RevenueRecognitions                                                                                                    P
+public void CalculateRevenueRecognitions()
+{
+   switch (this.Product.Type) {
+      case "PT":
+        AddRecognition(this.DateSigned, this.Revenue);
+        break;
+      case "FC":
+        decimal[] allocsFC = Money.Allocate(Revenue, 3);
+        AddRecognition(DateSigned, allocsFC[0]);
+        AddRecognition(DateSigned.AddDays(60), allocsFC[1]);
+        AddRecognition(DateSigned.AddDays(90), allocsFC[2]);
+        break;
+      case "BD":
+        decimal[] allocsBD = Money.Allocate(Revenue, 3);
+        AddRecognition(DateSigned, allocsBD[0]);
+        AddRecognition(DateSigned.AddDays(30), allocsBD[1]);
+        AddRecognition(DateSigned.AddDays(60), allocsBD[2]);
+        break;
+   }
+}
+                                                  Pattern GoF
+
+
+
+
+   Problem:
+     Allow the client the choice of many alternatives,
+     but each is complex, and you don't want to
+     include code for all.
+
+   Solution:
+     Make many implementations of the same
+     interface, and allow the client to select one and
+     give it back to you.
+                                                                       Pattern GoF
+
+
+
+
+   Define a family of algorithms, encapsulate each one, and make
+    them interchangeable. Strategy lets the algorithm vary
+    independently from clients that use it.
+
+
+
+
+              fonte: Design Patterns: Elements of Reusable Object-Oriented Software
+public interface IRevenueRecognitionStrategy
+{
+   void CalculateRevenueRecognitions();
+}
+                                      BaseStrategy                                              + theContract
+                                                                                                                Contract
++ BaseStrategy ( [in] c : Contract )
++ CreateStrategy ( [in] prodType : string , [in] c : Contract ) : IRevenueRecognitionStrategy
+
+
+
+
+           BDStrategy                                FCStrategy                                  PTStrategy
+
++ BDStrategy ( [in] c : Contract )       + FCStrategy ( [in] c : Contract )           + PTStrategy ( [in] c : Contract )
++ CalculateRevenueRecognitions ( )       + CalculateRevenueRecognitions ( )           + CalculateRevenueRecognitions ( )
+
+
+
+
+                                                                IRevenueRecognitionStrategy
+                                                                   Pattern
+
+
+
+
+   A layer of Mappers that moves data between
+    objects and a database while keeping them
+    independent of each other and the mapper
+    itself
+
+
+
+
+          fonte: Patterns of Enterprise Application Architecture
+              DBHelper                                                   IDBHelper
+
+
+
+
+                         ContractMapper                                                 CustomerMapper                                            ProductMapper
+
++ ContractMapper ( )                                                      + CustomerMapper ( )                                    + ProductMapper ( )
+# ApplyMap ( [in] row : DataRow ) : Contract                              # ApplyMap ( [in] row : DataRow ) : Customer            # ApplyMap ( [in] row : DataRow ) : Product
+# ApplyMap ( [in] dsContractAndRecognitions : DataSet ) : Contract        + LoadById ( [in] customerID : int ) : Customer         + LoadById ( [in] productID : int ) : Product
++ LoadById ( [in] contractID : int ) : Contract                           + LoadAll ( ) : IList                                   + LoadAll ( ) : IList
++ LoadByProduct ( [in] productID : int ) : IList
++ LoadByCustomer ( [in] customerID : int ) : IList
++ LoadAll ( ) : IList
++ Save ( [in] c : Contract )
+
+
+
+                                                                                                                                              IdentityMap
+                                                                                                                            # «property» Registry : IDictionary
+
+                                                                                                                            + IdentityMap ( )
+                                                                           DBFactory                                        # CheckRegistry ( [in] id : int ) : object
+                                                                                                                            # AddToRegistry ( [in] id : int , [in] o : object )
+                                                                 + DBFactory ( )                                            # «get» Registry ( ) : IDictionary
+                                                                 + CreateDBHelper ( ) : IDBHelper
+
+
+
+
+                                                                                                                                                                            79
+                                                        DBHelper
+            + «property» CurrentTransaction : IDbTransaction
+            - CONNSTR : string = @"Provider=..."
+            + DBHelper ( )
+            + BeginTransaction ( )
+            + CommitTransaction ( )
+            + ExecuteNonQuery ( [in] tx : IDbTransaction , [in] cmd : IDbCommand ) : int
+            + ExecuteNonQuery ( [in] sql : string ) : int
+IDBHelper   + ExecuteQuery ( [in] sql : string ) : DataSet
+            + ExecuteTransactedNonQuery ( [in] sql : string ) : int
+            + ExecuteTransactedQuery ( [in] sql : string ) : DataSet
+            + GetConnection ( [in] open : bool ) : IDbConnection
+            + RoolbackTransaction ( )
+            + «get» CurrentTransaction ( ) : IDbTransaction
+            + ExecuteTransactedNonQuery ( [in] cmd : IDbCommand ) : int
+            + CreateCommand ( ) : IDbCommand
+            + CreateCommand ( [in] inTransaction : bool ) : IDbCommand
+            + CreateParameter ( [in] name : string , [in] value : object ) : IDataParameter
+            + CreateParameter ( [in] name : string , [in] tp : DbType , [in] value : object ) : IDataParameter
+            + ExecuteQuery ( [in] cmd : IDbCommand ) : DataSet
+: Actor1               / UI             : ContractMapper                 : DBFactory                                                      : BaseStrategy
+
+     1 : \Form_Load\
+                          2 : LoadAll ( )
+                                                3 : CreateDBHelper ( )
+                                                                               4 : \new\        : IDBHelper
+
+
+
+                                                    5 : ExecuteQuery ( cmd )
+
+                                                  6 : ApplyMap ( dsContractAnd
+                                                         Recognitions )
+                                                                7 : [currentrow.Id != current
+                                                                     Contract.ID] \new\                       : Contract
+
+                                                           8 : SetID ( id )
+
+
+                                                      9 : SetProduct ( prodID , prodType )
+                                                                                                                     10 : SetStrategy ( prodType )
+
+
+
+                                                                                                                 11 : CreateStrategy ( prodType , c )
+
+
+
+                                                     12 : AddRecognition ( recognitionDate
+                                                                 , amount )
+                                                                                       foreach returned
+                                                                                       recognition                                              81
+                                                                                                                                            ISEP/IP
+                                                                                                                                                  P
+protected Contract ApplyMap(DataSet dsCNR)
+{
+   if (dsCNR].Rows.Count < 1)
+       return null;
+    Contract c = new Contract();
+    c.DateSigned = (DateTime)dsCNR.Tables[0].Rows[0]["Datesigned"];
+    c.Revenue = (decimal)dsCNR.Tables[0].Rows[0]["Revenue"];
+    c.SetID( (int)dsCNR.Tables[0].Rows[0]["ID"] );
+    c.SetProduct( (int) dsCNR.Tables[0].Rows[0]["ProductID"],
+                 (string) dsCNR.Tables[0].Rows[0]["ProdType"] );
+    c.SetCustomer( (int)dsCNR.Tables[0].Rows[0]["CustomerID"] );
+    foreach (DataRow r in dsCNR.Tables[0].Rows)
+    {
+        c.AddRecognition( (DateTime)r["dateRecognition"],
+                          (decimal)r["amount"]);
+    }
+    return c;
+}
+public class Contract
+{
+   // !!! to be used only by Mapper
+   internal void SetProduct(int prodID, string prodType)
+   {
+       _ProductID = prodID;
+       SetStrategy(prodType);
+   }
+
+    private void SetStrategy(string prodType)
+    {
+        theStrategy = BaseStrategy.CreateStrategy(prodType, this);
+    }
+}
+
+
+
+
+                                                                     83
+public abstract class BaseStrategy
+{
+   protected Contract theContract;
+    public BaseStrategy(Contract c) {
+        theContract = c;
+    }
+    public static IRevenueRecognitionStrategy CreateStrategy(
+                                           string prodType, Contract c)
+    {
+        switch (prodType) {
+        case "PT": return new Strategies.PTStrategy(c);
+                 break;
+        case "FC": return new Strategies.FCStrategy(c);
+                 break;
+        case "BD": return new Strategies.BDStrategy(c);
+                 break;
+        default:
+                 throw new ApplicationException("invalid type");
+        }
+        return null;
+    }
+}
+: Actor1              / UI         / c : Contract                            : IRevenueRecognitionStrategy      : ContractMapper             : DBFactory
+
+    1 : \btnCalc_Click\
+                      2 : CalculateRevenueRecognitions ( )
+                                             3 : CalculateRevenueRecognitions ( )
+
+
+
+                                                    4 : AddRecognition ( recognitionDate ,
+                                                                 amount )
+
+                                                                                foreach recognized
+                                                                                revenue
+                                         5 : Save ( c )
+                                                                                                                        6 : CreateDBHelper ( )
+                                                                                                                                                   7 : \new\
+                                                                                                                                                                 : IDBHelper
+
+                                                                                                                            8 : BeginTransaction ( )
+
+                                                                                                                         9 : ExecuteTransactedNonQuery ( cmd
+                                                                                                                                           )
+
+                                                                                                                          10 : ExecuteTransactedNonQuery (
+                                                                                   foreach recognized revenue                           cmd )
+
+
+                                                                                                                            11 : CommitTransaction ( )
+
+
+
+
+                                                                                                                                                                   85
+                                                                                                                                                               ISEP/IP
+                                                                                                                                                                     P
+public void CalculateRevenueRecognitions()
+{
+   _RevenueRecognitions.Clear();
+   theStrategy.CalculateRevenueRecognitions();
+}
+
+// !!! to be used by strategies
+internal void AddRecognition(DateTime recognitionDate,
+                              decimal amount)
+{
+   _RevenueRecognitions.Add(
+       new RevenueRecognition(recognitionDate, amount)
+       );
+}
+public class BDStrategy : BaseStrategy {
+   public void CalculateRevenueRecognitions() {
+        decimal[] allocs = Money.Allocate(theContract.Revenue, 3);
+        theContract.AddRecognition(theContract.DateSigned, allocs[0]);
+        theContract.AddRecognition(theContract.DateSigned.AddDays(30),
+                                  allocs[1]);
+        theContract.AddRecognition(theContract.DateSigned.AddDays(60),
+                                  allocs[2]);
+   }
+}
+public class FCStrategy : BaseStrategy {
+   public void CalculateRevenueRecognitions() {
+        decimal[] allocs = Money.Allocate(theContract.Revenue, 3);
+        theContract.AddRecognition(theContract.DateSigned, allocs[0]);
+        theContract.AddRecognition(theContract.DateSigned.AddDays(60),
+                                  allocs[1]);
+        theContract.AddRecognition(theContract.DateSigned.AddDays(90),
+                                  allocs[2]);
+   }
+}
+public class PTStrategy : BaseStrategy {
+   public void CalculateRevenueRecognitions() {
+        theContract.AddRecognition(theContract.DateSigned,
+                                  theContract.Revenue);
+   }
+}
+Part 6
+Part 6.1
+                                             Pattern
+
+
+
+
+   Prevents conflicts between concurrent
+    business transactions by detecting a conflict
+    and rolling back the transaction
+
+
+
+
+                                                       90
+                                                         Pattern
+
+
+
+
+fonte: Patterns of Enterprise Application Architecture
+                                             Pattern
+
+
+
+
+   Prevents conflicts between concurrent
+    business transactions by allowing only one
+    business transaction at a time to access data
+
+
+
+
+                                                       92
+                                                         Pattern
+
+
+
+
+fonte: Patterns of Enterprise Application Architecture
+Part 6.2
+                                                   Pattern GoF
+
+
+
+
+   Problem:
+     You need a set of related classes but there are
+     several sets with different implementations
+
+   Solution:
+     Create a service interface, create several
+     implementations of those services, create a
+     factory class for each set of implementations,
+     provide the client with the correct
+     implementation behind the interface
+                                            Pattern GoF
+
+
+
+
+   Provides an interface for creating families of
+    related or dependent objects without
+    specifying their concrete classes.
+                                                         Pattern GoF
+
+
+
+
+fonte: Design Patterns: Elements of Reusable Object-Oriented Software
+fonte: Microsoft .Net Pet Shop 3.x
+Part 6.3
+public class PersonDataAccess
+{
+    public PersonDataAccess() { ... }
+    public bool Insert(object r) { ... }
+    public bool Delete(object r) { ... }
+    public bool Update(object r) { ... }
+    public object Load(object id) { ... }
+}
+
+
+                                            Add logging to this
+                                              existing class
+public class PersonDataAccess
+{
+    public PersonWithLogDataAccess() { ... }
+    public bool Insert(object r)
+    {
+            ...
+           Log.Write(...);
+    }
+    public bool Delete(object r)
+    { ... }
+    public bool Update(object r)
+    { ... }                                    What if instead of
+                                                 logging you
+    public object Load(object id)
+    { ... }                                     needed billing?
+}
+public class PersonWithLogDataAccess : PersonDataAcess
+{
+    public PersonWithLogDataAccess() { ... }
+    public bool Insert(object r)
+    {
+           base.Insert(r);
+           logFile.Write(...);
+    }
+    public bool Delete(object r)
+    { ... }
+    public bool Update(object r)
+    { ... }                                 What if you
+                                          needed logging
+    public object Load(object id)
+    { ... }                                and billing?
+}
+                                                   Pattern GoF
+
+
+
+
+   Problem:
+     Allow functionally to be layered around an
+     abstraction, but still dynamically changeable.
+
+   Solution:
+     Combine inheritance and composition. By making
+     an object that both subclasses from anther class
+     and holds an instance of the class, can add new
+     behavior while referring all other behavior to the
+     original class.
+                                                                      Pattern GoF
+
+
+
+
+   Attach additional responsibilities to an object dynamically.
+    Decorators provide a flexible alternative to subclassing for
+    extending functionality.
+
+
+
+
+             fonte: Design Patterns: Elements of Reusable Object-Oriented Software
+public interface IDataAccess
+{
+   public bool Insert(object   r);
+   public bool Delete(object   r);
+   public bool Update(object   r);
+   public object Load(object   id);
+}
+public class PersonDataAccess : IDataAccess
+{
+    public PersonDataAccess () { ... }
+    public bool Insert(object r) { ... }
+    public bool Delete(object r) { ... }
+    public bool Update(object r) { ... }
+    public object Load(object id) { ... }
+}
+public class LoggingDecorator : IDataAccess
+{
+    IDataAccess component;
+    public LoggingDecorator(IDataAccess component) {
+            this.component = component;
+    }
+    public bool Insert(object r) {
+            WriteLog("Insert", r);
+            return component.Insert(r);
+    }
+    public bool Delete(object r) { ... }
+    public bool Update(object r) { ... }
+    public object Load(object id) { ... }
+    private void WriteLog(string op, object parms)
+    { ... }
+}
+public class TesteDecorator
+{
+    public void Teste()
+    {
+            IDataAccess da = new PersonIDataAccess ();
+            IDataAccess dec = new LoggingDecorator(da);
+           ...
+           dec.Insert(...);
+           ...
+    }
+}
+   Since the Decorator class implements the
+    same interface of the Component, it can be
+    used anywhere you would use a Component
+
+   Inheritance wouldn’t allow scenarios with
+    only Logging or only billing or both
+     But you can chain Decorators!
+public class CounterDecorator : IDataAccess
+{
+    int nAcessos = 0;
+    IDataAccess component;
+    public CounterDecorator(IDataAccess component) {
+            this.component = component;
+    }
+    public bool Insert(object r) {
+            nAcessos++;
+            return component.Insert(r);
+    }
+    public bool Delete(object r) { ... }
+    public bool Update(object r) { ... }
+    public object Load(object id) { ... }
+    public int NumOfAccesses { get { return nAcessos; } }
+}
+public class BillingDAL
+{
+    public void Teste()
+    {
+            IDataAccess da = new PersonDataAccess();
+            IDataAccess dec = new LoggingDecorator(da);
+            IDataAccess cd = new CounterDecorator(dec);
+           ...
+           cd.Insert(...);
+           ...
+           CounterDecorator bil = (CounterDecorator)cd;
+           float custo = bil.NumOfAccesses * PRICE_PER_OP;
+           ...
+    }
+}
+Part 7
+       ... Pattern ...
+... Java/C#... Adapter ...
+     Domain model ...
+
+
+
+
+                ???? ...
+          ... Java/C#... ???
+                 ????
+       ... Pattern ...
+... Java/C#... Adapter ...
+     Domain model ...
+
+
+
+
+                                ... Pattern ...
+                         ... Java/C#... Adapter ...
+                              Domain model ...
+                                                                Architectural
+                                                                    style
+
+
+
+output
+
+                                                                Business
+                                                               operations
+
+
+
+
+  http://w2ks.dei.isep.ipp.pt/psousa/GetFile.aspx?file=PoEAAWorkbench.zip
+public interface IRevenueRecognition
+{
+  Money RecognizedRevenue(int contractID, DateTime asOf);
+
+    void CalculateRevenueRecognitions(int contractID);
+
+    object GetContracts();
+
+    object GetCustomers();
+
+    object GetProducts();
+}
+                common
+
+
+
+
+RevenueGUI   RevenueFacade   Implementations
+   A combination of a Factory, a
+    Singleton and a Façade
+   The desired implementation is loaded
+    into memory and an instance of the
+    specific façade is created (reflection)
+    and returned to the GUI
+   The UI layer will then interact with the
+    business layer via the
+    IRevenueRecognition business
+    interface ignoring the actual
+    implementation
+   Each implementation shows a combination of
+    patterns that form an architectural style
+       Table module + table data gateway
+       Domain model / active record           These are the
+       Domain model + data mapper          classes the students
+                                                must “look”
+       …
+
+   Define the business classes and data access
+    classes necessary to support the application
+    requirements defined by the business interface
+   Transaction Script using DataSet
+     Transaction Script
+     Transaction Script + Data Gateway
+   Transaction Script using Custom Classes
+     Transaction Script
+     Transaction Script + Row Data Gateway
+   Table Module
+     Table Module + Table Data Gateway (DataSet)
+     Table Module + Table Data Gateway (Custom Classes)
+   Domain Model
+     Domain Model + Active Record
+     Domain Model + Data Mapper
+Part 8
+contract
+                                                              Pattern
+
+
+
+
+   An object that encapsulate the code that implements the
+    consumer portion of a contract. They act as proxies to other
+    services, encapsulating the details of connecting to the
+    source and performing any necessary translation.
+
+
+
+
+             fonte: Enterprise Solution Patterns Using .NET
+                                             Pattern
+
+
+
+
+ Hides the details of accessing the service (ex.,
+  network protocol)
+ May be considered a data access component
+ Native support from most tools (e.g., Visual
+  Studio, Netbeans, Rational software
+  Architect) by web service proxies
+                                                                    Pattern
+
+
+
+
+   Provides a coarse-grained façade on fine-
+    grained objects to improve efficiency over a
+    network
+
+
+
+
+           fonte: Patterns of Enterprise Application Architecture
+                                                      Pattern
+
+
+
+
+   Domain object interfaces are tipically fine grained
+   Inadequeate for remote operations
+   Create a surronding layer above domain objects
+     Local clients use the local interface
+   The facade may encapsulate the interface of one or
+    more business objects
+     Domain objects:
+      ▪   Address.New
+      ▪   Address.Set
+      ▪   Person.AddAddress
+      ▪   Person.Update
+     Remote Facade:
+      ▪ AddressFacade.AddNewAddressToPerson
+                                                                   Pattern
+
+
+
+
+   An object that carries data between
+    processes in order to reduce the number of
+    method calls.
+
+
+
+
+          fonte: Patterns of Enterprise Application Architecture
+                                                  Pattern
+
+
+
+
+   Since XML is the de facto standard DTO should
+    support serialization to/from XML
+   Should be independent of the underlying domain
+    object
+   Should be implemented in accordance with the
+    requiremnts of the remote application
+     CompleteCustomerInfoDTO
+     BasicCustomerInfoDTO
+   Should be independent of the underlying platform
+    (e.g., programming language)
+     DataSet/DataTable .net
+     ResultSet JDBC
+     DateTime .net
+                                                                      Pattern
+
+
+
+
+   Defines an application's boundary with a layer of services
+    that establishes a set of available operations and coordinates
+    the application's response in each operation
+
+
+
+
+             fonte: Patterns of Enterprise Application Architecture
+                                           Pattern
+
+
+
+
+ Domain logic pattern in the context of service
+  orientation
+ May be implemented as a Remote Facade or
+  may be called by a Remote Facade
+                                            Pattern
+
+
+
+
+   Hides the complexity of finding and creating
+    service gateways
+
+
+
+
+           fonte: Core J2EE Patterns
+Part 9
+   How to represent the business entities?
+
+   How to persist its state?
+
+   How to code the Business logic?
+
+   How to guarantee data coherence?
+
+   How to handle application distribution?
+   Simple to complex logic and good platform
+    support for Result Sets
+     Table Module
+
+   Complex logic
+     Domain Model
+
+
+
+
+                                                134
+   Table Module
+     Table Data Gateway
+
+   Domain Model very similar to DB schema
+     Active Record
+
+   Complex Domain Model
+     Data Mapper
+   Guarantee that in-memory data is only updated
+    in one place
+     Identity Map
+
+   Mantain a relation between in-memory objects
+    and database records
+     Identity field
+
+   Avoid loading the entire DB to memory
+     Lazy Load
+
+                                                    136
+   Hibernate e nHibernate
+     www.hibernate.org
+   LINQ
+     http://msdn.microsoft.com/en-us/netframework/aa904594.aspx
+   JDO
+     http://java.sun.com/products/jdo/
+   SDO
+     http://www.osoa.org/display/Main/Service+Data+Objects+Home
+   EJB 3
+     http://java.sun.com/products/ejb/
+   Apache Cayenne
+     http://cayenne.apache.org/
+   FastObjects j2
+     http://www.versant.net/eu_en/products/fastobjects_j2/
+   FastObjects.NET
+     http://www.versant.net/eu_en/products/fastobjects_net/
+   Prevayler
+     http://www.prevayler.org/wiki.jsp
+   Only in data access layer
+   Don’t forget Views
+   Balance dynamic SQL and stored procedures
+     Flexibility
+     Security
+   Easyest implementation for some business
+    logic (e.g., group operations)
+
+
+                                                138
+ Use parameters instead of string concatenation
+ DELETE is uncommon
+ INSERT causes no locking problem
+ Must be careful on UPDATE
+     Concurrent access
+     Incremental update
+      ▪ E.g. Update quantity on hand
+      ▪ UPDATE Products SET QtyOnHand = 10
+      ▪ UPDATE Products SET QtyOnHand = QtyOnHand + 2
+   Good scalability and user-centered
+    availability
+     Optimistic Lock
+
+   User cannot loose changes
+     Pessimistic Lock
+   How to pass objects in a remote call?
+      Data Transfer Object
+
+   How to remotely use objects with “fine grained”
+    interface?
+      Remote Façade
+
+   How to define a coherent set of operations?
+      Service Layer / Service Interface
+
+   How to hide the implementation details of the remote
+    call?
+      Service Gateway
+                                                           141
+Patterns are a good thing
+
+       Patterns can be difficult
+
+                   Driven by example
+
+         Will make it easier
+                                   142
+ Fell free to download the PoEAA Workbench
+http://w2ks.dei.isep.ipp.pt/psousa/GetFile.aspx
+           ?file=PoEAAWorkbench.zip
+
+
+        Slides available thru SlideShare
+     http://www.slideshare.net/pagsousa
+
+                                                  143
+Paulo Sousa
+pag@isep.ipp.pt   http://linkedin.com/in/pagsousa
+Paulo Sousa
+pag@isep.ipp.pt
+Instituto Superior de Engenharia do Porto
+   Fowler, Martin. Patterns of Enterprise Application Architecture. Adisson-Wesley.
+   Erich Gamma, Richard Helm, Ralph Johnson, John Vissides. Design patterns : elements of
+    reusable object-oriented software. Adisson-Wesley.
+   Frank Buschmann, Regine Meunier, Hans Rohnert, Peter Sommerlad, Michael Stal. Pattern-
+    oriented Software Architecture: System of Patterns.
+   Buschmann, F.; Henney, K. And Schmidt, D. (2007) Pattern-Oriented Software Architecture: A
+    Pattern Language for Distributed Computing, Volume 4. Willey.
+   Deepak Alur, John Crupi and Dan Malks. Core J2EE Patterns: Best Practices and Design
+    Strategies. Prentice Hall / Sun Microsystems Press.
+    http://java.sun.com/blueprints/corej2eepatterns/index.html
+   Enterprise Solution Patterns Using Microsoft .NET. Microsoft Press.
+    http://msdn.microsoft.com/architecture/patterns/default.aspx?pull=/library/en-
+    us/dnpatterns/html/Esp.asp
+   Designing Data Tier Components and Passing Data Through Tiers. Microsoft Patterns &
+    Practices. http://msdn.microsoft.com/library/?url=/library/en-
+    us/dnbda/html/BOAGag.asp?frame=true
+
+
+
+                                                                                                 147
+   GoF Design patterns (em C#)
+    http://www.dofactory.com/Patterns/Patterns.aspx
+   GoF & POSA Design patterns (em Java)
+    http://www.vico.org/pages/PatronsDisseny.html
+   Patterns of Enterprise Application architecture
+    http://martinfowler.com/eaaCatalog/
+   Core J2EE Patterns
+    http://www.corej2eepatterns.com
+
+   Enterprise Solution Patterns Using Microsoft .NET.
+    http://msdn.microsoft.com/architecture/patterns/default.aspx?pull=/library/en-
+    us/dnpatterns/html/Esp.asp
+
+   Patterns of Enterprise Application Integration
+    http://www.enterpriseintegrationpatterns.com/
+
+   Enterprise Java Patterns @ The Server Side
+    http://www.theserverside.com/patterns/index.tss
+
+   Microsoft Data Patterns
+    http://msdn.microsoft.com/architecture/patterns/default.aspx?pull=/library/en-
+    us/dnpatterns/html/Dp.asp
+

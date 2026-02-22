@@ -36,7 +36,7 @@ class SystemHealth(BaseModel):
 
 
 # Track startup time
-_startup_time = datetime.utcnow()
+_startup_time = datetime.now()
 
 
 async def check_llm() -> ServiceHealth:
@@ -273,11 +273,11 @@ async def comprehensive_health_check():
         overall_status = "healthy"
 
     # Calculate uptime
-    uptime = (datetime.utcnow() - _startup_time).total_seconds()
+    uptime = (datetime.now() - _startup_time).total_seconds()
 
     return SystemHealth(
         status=overall_status,
-        timestamp=datetime.utcnow().isoformat(),
+        timestamp=datetime.now().isoformat(),
         uptime_seconds=round(uptime, 2),
         services=services,
         summary=summary
@@ -310,4 +310,4 @@ async def liveness_check():
     Kubernetes-style liveness probe.
     Returns 200 if service is alive (basic check).
     """
-    return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
+    return {"status": "alive", "timestamp": datetime.now().isoformat()}

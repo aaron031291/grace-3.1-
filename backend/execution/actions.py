@@ -86,7 +86,7 @@ class ActionRequest:
     action_type: GraceAction = GraceAction.THINK
     parameters: Dict[str, Any] = field(default_factory=dict)
     context: Dict[str, Any] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
     timeout: int = 300  # seconds
     requires_confirmation: bool = False
 
@@ -121,7 +121,7 @@ class ActionResult:
     error: Optional[str] = None
     exit_code: Optional[int] = None
     execution_time: float = 0.0
-    completed_at: datetime = field(default_factory=datetime.utcnow)
+    completed_at: datetime = field(default_factory=datetime.now)
 
     # Structured results (action-specific)
     data: Dict[str, Any] = field(default_factory=dict)

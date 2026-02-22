@@ -117,7 +117,7 @@ class TagManager:
                 updated = True
 
             if updated:
-                existing_tag.updated_at = datetime.utcnow()
+                existing_tag.updated_at = datetime.now()
                 self.db.commit()
                 logger.info(f"Updated tag: {normalized_name}")
 
@@ -209,7 +209,7 @@ class TagManager:
                     tag_id=tag.id,
                     assigned_by=assigned_by,
                     confidence=confidence,
-                    assigned_at=datetime.utcnow(),
+                    assigned_at=datetime.now(),
                     assignment_metadata=metadata
                 )
 
@@ -217,7 +217,7 @@ class TagManager:
 
                 # Increment tag usage count
                 tag.usage_count += 1
-                tag.updated_at = datetime.utcnow()
+                tag.updated_at = datetime.now()
 
                 assignments.append(assignment)
                 logger.info(f"Assigned tag '{tag_name}' to document {document_id} (by: {assigned_by}, confidence: {confidence})")
@@ -271,7 +271,7 @@ class TagManager:
         # Decrement usage count
         if tag.usage_count > 0:
             tag.usage_count -= 1
-            tag.updated_at = datetime.utcnow()
+            tag.updated_at = datetime.now()
 
         self.db.commit()
 
@@ -551,7 +551,7 @@ class TagManager:
                 raise ValueError(f"Invalid color format: '{color}'")
             tag.color = color
 
-        tag.updated_at = datetime.utcnow()
+        tag.updated_at = datetime.now()
         self.db.commit()
         self.db.refresh(tag)
 

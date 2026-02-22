@@ -131,7 +131,7 @@ class MemoryMeshIntegration:
             trust_score=learning_example.trust_score,
             source=learning_example.source,
             genesis_key_id=learning_example.genesis_key_id,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
             # Link back to learning example
             metadata={'learning_example_id': learning_example.id}
         )

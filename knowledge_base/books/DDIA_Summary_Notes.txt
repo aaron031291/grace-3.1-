@@ -1,0 +1,287 @@
+CHAPTER 1
+RELIABLE
+SCALABLE
+MAINTAINABLE
+Is yours a Data-Intensive use case?
+An application is data intensive if the amount of
+data that it generates/uses increases quickly or
+if the complexity of data that it generates/uses
+increases quickly or if the speed of change in
+data increases quickly.
+Components of data intensive app
+
+
+
+
+Credit: Martin Kleppmann: Source https://www.semanticscholar.org/paper/Designing-Data-Intensive-Applications%3A-The-Big-and-Kleppmann/24f14e3b30012c2bc7e3abbdb16e2b3365d6f920
+Main components in a data-intensive app:
+1.   Databases for source of truth for any consumer. E.g. Oracle/MySQL
+2.   Cache for temporarily storing an expensive operation to speed up reads. E.g.
+     Memcache
+3.   Full-text Index for quickly searching data by keyword or filter.e.g. Apache
+     Lucene
+4.   Message queues for messaging passing between process. E.g. Apache
+     Kafka
+5.   Stream processing. E.g. Apache Samza, Apache Spark
+6.   Batch processing for crunching large amount of data. E.g. Apache
+     Spark/Hadoop
+7.   Application code which acts as the connective tissue between the above
+     components.
+Role of an application developer is to design the
+data system for reliability, scalability and
+maintainability.
+Reliability
+●   Fault tolerance
+●   No unauthorized access
+●   Chaos testing
+●   Full machine failures
+●   Bugs - Automating tests
+●   Staging/testing environment
+●   Quickly roll-back
+Scalability
+●   Handle higher traffic volume
+●   Traffic load with peak #of reads,writes and simultaneous users
+●   Capacity planning
+●   Response time vs throughput.
+●   End user response time
+●   90th,95th Percentile SLO/A service level objectives/agreements.
+●   scaling up (more powerful machine)
+●   scaling out (distributed many smaller machines).
+Maintainability
+●   Add new people to work
+●   productivity
+●   Operable: Configurable and testable
+●   Simple: easy to understand and ramp up
+●   Evolveable: easy to change
+There is no one magic solution that works for all
+data-intensive application use cases. Your solution
+will be custom to your needs, as long as you have a
+good idea of the above three pillars of Reliability,
+Scalability and Maintainability you will build the
+right system.
+CHAPTER 2
+DATA MODELS
+& QUERY
+LANGUAGES
+Data Abstraction
+                             Data Structures
+                         1
+                             Application layer
+
+             Json
+                     2
+         Api layer
+                             Bytes
+                         3   Memory/Disk
+
+   Magnetic Fields
+        Hardware     4
+Model a social network
+Users -> Friends -> Posts -> Likes
+Relational model
+Relational query
+Document based model
+Graph model
+Data Storage and Data Retrieval are the two main
+things to consider. Same query can be either written
+in 4 lines or with 30 lines based on your data model!
+                           3 Main categories of databases
+
+                                ●   Optimized for Transaction and batch processing
+                                    (read throughput), joins..
+
+01   Relational Database        ●
+                                ●
+                                    Data organized as table/relations
+                                    Object Relational Mapping needed.
+                                ●   Oracle, MySQL, PostgreSQL..
+                                ●   NoSQL - Not only SQL.
+                                ●   Flexible schemas, better performance due to
+
+02   Document Database
+                                ●
+                                    locality/High write throughput.
+                                    Mainly free and open source.
+                                    (Espresso,CouchDB, MongoDB..)
+
+                                ●   Best suited for highly interconnected data -
+                                    many to many relationships.
+03   Graph Database
+                                ●   Social graph, Web graph (Neo4j AnzoGraph,
+                                    SPARQL, Cypher)
+Document databases target use
+cases where data comes in
+self-constrained documents and
+relationships between one
+document and another are rare.
+Graph databases go in the
+opposite direction, targeting use
+cases where anything is potentially
+related to everything.
+Query languages
+Imperative - e.g. SQL - tell exactly how
+to perform certain operation in a certain order.
+
+SELECT * FROM animals WHERE family = ʻSharksʼ
+
+
+
+Declarative - e.g. CSS - just specify the pattern
+
+Li.selected > p { background-color: blue; }
+
+?map reduce?
+CHAPTER 3
+STORAGE &
+RETRIEVAL
+Storage &
+Retrieval
+                                Which database to use ??
+
+
+● Every storage engine is optimized for different use cases. Select the right
+  storage engine for your use case.
+● As an application developer we need to have a rough idea on what the
+  storage engine is doing under the hood so that we can select the right one.
+● Tuning and optimizing pointers.
+                              Which database to use ??
+
+
+● There are two broad categories of databases - OLTP and OLAP each with
+  different read pattern, write patterns, user using it, data size etc.
+   ○ OLTP - Online Transaction processing database are optimized for latency.
+        ■ E.g. MySQL, Oracle.
+   ○ OLAP - Online Analytical processing databases are optimized data
+       crunching! Data Warehousing - Star/Snowflake schema, Column oriented!
+       Column compression, Data Cubes, optimized for reads/queries.
+       Materialized views. Lack of flexibility.
+        ■ E.g. Hbase, Hive, Spark,
+                                 Database Index
+
+
+● An Index is an additional structure that is derived from the primary data. A well
+  chosen index optimizes for reads but slows down the write. ← your use case?
+● Simple database index is a Hash based Index. Some issues for an index
+   ○ File format (encoding)
+   ○ Deleting records
+   ○ Crash recovery
+   ○ Partially written records
+   ○ Concurrency control
+   ○ Range queries?
+                            Types of storage engines
+
+
+● There are two families of storage engines these databases use
+   ○ Log-structured - LSM-Trees e.g. SSTables → HBase, Cassandra
+   ○ Page-Oriented - B-trees. → RDBMS
+● These are answers to limitations of disk access.
+                             LSM-Trees - Log Sort Merge
+                             SSTables - Sorted String Tables
+
+● SSTables - in-memory mem table backed by Disk SSTable file, sorted by keys. E.g.
+  Red-black tree or AVL Trees. Supports high wight throughput.
+● Lucene - full-text search is much more complex than key-value index like SSTables.
+  It does internally use SSTables for term dictionary.
+● Bloom filters - memory-eﬀicient data structure used for approximating the contents
+  of a set. It can tell you if a key does not appear in the database, thus saves many
+  unnecessary disk reads for nonexistent keys.
+● Compaction is a background process of the means of throwing away duplicate
+  keys in the log and keeping only the most recent update for each key.
+  LevelDB, RocksDB, Cassandra and HBase are examples that use LSM-Trees.
+LSM-Trees - Log Sort Merge
+SSTables - Sorted String Tables
+                                 B-Trees Index
+
+
+●   Most widely used indexing structure is B-Trees. One place per key!
+●   They are the standard implementation in RDBMS and NoSQL stores today.
+●   It also keeps key-value sorted by keys which allows quick lookups.
+●   B-Trees are designed and optimized for the hardware as disks are arranged in
+    fixed-size blocks, B-Trees also break down the data into fixed size 4KB blocks
+●   There is a root node and a branching factor (references to child pages).
+●   4 level tree with 4KB pages with branching factor of 500 can store up to
+    256TB!! B-Tree is optimized for reads!
+●   Write ahead log is used for Crash recovery, Latches for concurrency.
+●   Sibling references in child node allows for easier scanning of sequential keys.
+B-Trees Index
+                                More about Index
+
+
+● Clustered index - inline storing of row values.
+● Secondary index - helps with joins.
+● Covering index - few columns are included.
+● Multi-column index - multiple keys concatenated.
+● Full-text search and fuzzy indexes help with spelling mistakes(edit-distances),
+  grammar, synonyms, words near each other, linguistics etc.
+● In Memory stores - VoltDB, MemSQL,Memcached.
+CHAPTER 4
+Agile Code
+Evolution &
+Data Encoding
+Rolling
+upgrade
+Code
+Compatibility
+
+ Backward Compatibility: Newer code can read data that was written by older
+ code for old and new clients.
+
+ Forward Compatibility: Older code can read data that was written by newer
+ code for new and old clients.
+                                  Encoding/Decoding
+                                  { “username” : “kunalc”,
+                                    “favoriteNumber”: 1111,
+                                   “Interests”: [“kayaking”, “daydreaming”]
+                                  }
+
+● Encoding       == Serialization      == Marshalling.
+● Decoding       == Deserialization    == Unmarshalling.
+
+● Language specification formats - java.io.Serializable.
+● Text based - JSON, CSV, XML
+● Binary encoding - varying parse and size performance.
+
+
+Text Json - 81 bytes, Binary JSON - 66 bytes, Thrift Binary - 59 bytes, Thrift
+Compat - 34 bytes, Protocol Buffer - 33 bytes, Avro - 32 bytes.
+                                  Data transfer use cases
+
+
+Example data structure
+
+{ “username” : “kunalc”,
+  “favoriteNumber”: 1111,
+ “Interests”: [“kayaking”, “daydreaming”]
+}
+
+●   To a File
+●   To a Database
+●   To an external service over the network - Rest.li(json/http), SOAP/WSDL, RPC
+●   To an async server via message passing - one way
+    communication/kakfa/rabbotmq/activeMQ
+CHAPTER 5
+REPLICATION
+CHAPTER 6
+PARTITIONING
+CHAPTER 7
+TRANSACTIONS
+CHAPTER 8
+Troubles with
+Distributed
+System
+CHAPTER 9
+CONSISTENCY
+& CONSENSUS
+CHAPTER 10
+BATCH
+PROCESSING
+CHAPTER 11
+STREAM
+PROCESSING
+CHAPTER 12
+FUTURE of
+DATA SYSTEMS
+Introduction
+
+to   CDN
+

@@ -69,7 +69,7 @@ class RealtimeEvent:
     event_id: str
     event_type: EventType
     data: Dict[str, Any]
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     source: str = "diagnostic_machine"
     priority: str = "normal"  # low, normal, high, critical
 
@@ -90,9 +90,9 @@ class ClientInfo:
     """Information about a connected WebSocket client."""
     client_id: str
     websocket: WebSocket
-    connected_at: datetime = field(default_factory=datetime.utcnow)
+    connected_at: datetime = field(default_factory=datetime.now)
     subscriptions: Set[str] = field(default_factory=set)
-    last_heartbeat: datetime = field(default_factory=datetime.utcnow)
+    last_heartbeat: datetime = field(default_factory=datetime.now)
     message_count: int = 0
 
 
@@ -126,7 +126,7 @@ class ConnectionManager:
         await websocket.accept()
 
         if not client_id:
-            client_id = f"client-{len(self._clients) + 1:04d}-{datetime.utcnow().timestamp():.0f}"
+            client_id = f"client-{len(self._clients) + 1:04d}-{datetime.now().timestamp():.0f}"
 
         client = ClientInfo(
             client_id=client_id,
@@ -237,7 +237,7 @@ class ConnectionManager:
                     event_id=self._next_event_id(),
                     event_type=EventType.HEARTBEAT,
                     data={
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now().isoformat(),
                         "clients": self.client_count,
                     },
                     priority="low"

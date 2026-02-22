@@ -26,6 +26,13 @@ from enum import Enum
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('healing', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class HealingActionType(str, Enum):
@@ -61,7 +68,7 @@ class HealingResult:
     post_state: Dict[str, Any] = field(default_factory=dict)
     rollback_available: bool = False
     rollback_command: Optional[str] = None
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -229,7 +236,7 @@ class HealingExecutor:
         parameters: Dict[str, Any] = None
     ) -> HealingResult:
         """Execute a healing action."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         parameters = parameters or {}
 
         config = self.registry.get_action(action_type)
@@ -285,7 +292,7 @@ class HealingExecutor:
         result.post_state = self._capture_state(action_type)
 
         # Calculate duration
-        end_time = datetime.utcnow()
+        end_time = datetime.now()
         result.duration_ms = (end_time - start_time).total_seconds() * 1000
 
         # Log the action
@@ -296,7 +303,7 @@ class HealingExecutor:
     def _capture_state(self, action_type: HealingActionType) -> Dict[str, Any]:
         """Capture relevant state before/after healing."""
         state = {
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
         }
 
         try:
@@ -311,7 +318,7 @@ class HealingExecutor:
     def _log_healing_action(self, result: HealingResult):
         """Log healing action for audit trail."""
         try:
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = datetime.now().strftime("%Y-%m-%d")
             log_file = self.log_dir / f"healing_{today}.jsonl"
 
             import json
@@ -533,7 +540,7 @@ class HealingExecutor:
                 try:
                     if log_file.stat().st_size > max_size_bytes:
                         # Rotate: rename with timestamp
-                        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                         rotated_name = f"{log_file.stem}_{timestamp}{log_file.suffix}"
                         rotated_path = log_file.parent / rotated_name
 

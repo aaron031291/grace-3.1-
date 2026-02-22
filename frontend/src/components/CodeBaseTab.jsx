@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config/api';
 import './CodeBaseTab.css';
 
 const CodeBaseTab = () => {
@@ -28,7 +29,7 @@ const CodeBaseTab = () => {
   const fetchRepositories = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/codebase/repositories');
+      const response = await fetch(`${API_BASE_URL}/api/codebase/repositories`);
       if (response.ok) {
         const data = await response.json();
         setRepositories(data.repositories || []);
@@ -81,7 +82,7 @@ const CodeBaseTab = () => {
 
   const fetchFiles = async (repo, path) => {
     try {
-      const response = await fetch(`/api/codebase/files?repo=${repo.id}&path=${encodeURIComponent(path)}`);
+      const response = await fetch(`${API_BASE_URL}/api/codebase/files?repo=${repo.id}&path=${encodeURIComponent(path)}`);
       if (response.ok) {
         const data = await response.json();
         setFiles(data.files || []);
@@ -119,7 +120,7 @@ const CodeBaseTab = () => {
 
   const fetchFileContent = async (file) => {
     try {
-      const response = await fetch(`/api/codebase/file?repo=${currentRepo.id}&path=${encodeURIComponent(currentPath + '/' + file.name)}`);
+      const response = await fetch(`${API_BASE_URL}/api/codebase/file?repo=${currentRepo.id}&path=${encodeURIComponent(currentPath + '/' + file.name)}`);
       if (response.ok) {
         const data = await response.json();
         setFileContent(data.content || '');
@@ -203,7 +204,7 @@ Grace uses a modular architecture with the following components:
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/codebase/search?q=${encodeURIComponent(searchQuery)}&repo=${currentRepo?.id || ''}`);
+      const response = await fetch(`${API_BASE_URL}/api/codebase/search?q=${encodeURIComponent(searchQuery)}&repo=${currentRepo?.id || ''}`);
       if (response.ok) {
         const data = await response.json();
         setSearchResults(data.results || []);
@@ -243,7 +244,7 @@ Grace uses a modular architecture with the following components:
     if (!currentRepo) return;
 
     try {
-      const response = await fetch(`/api/codebase/commits?repo=${currentRepo.id}`);
+      const response = await fetch(`${API_BASE_URL}/api/codebase/commits?repo=${currentRepo.id}`);
       if (response.ok) {
         const data = await response.json();
         setCommitHistory(data.commits || []);
@@ -296,7 +297,7 @@ Grace uses a modular architecture with the following components:
     if (!currentRepo) return;
 
     try {
-      const response = await fetch(`/api/codebase/analysis?repo=${currentRepo.id}`);
+      const response = await fetch(`${API_BASE_URL}/api/codebase/analysis?repo=${currentRepo.id}`);
       if (response.ok) {
         const data = await response.json();
         setCodeAnalysis(data);

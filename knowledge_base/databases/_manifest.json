@@ -1,0 +1,46 @@
+{
+  "documents": {
+    "NoSQL_Database_Systems.pdf": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.073453"
+    },
+    "Pro_Git_2nd_Ed_Chacon_Straub.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.081367"
+    },
+    "Refactoring_Martin_Fowler.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.121617"
+    },
+    "SQL99_Schema_Constraints_Queries.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.149057"
+    },
+    "DDIA_Summary_Notes.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.152897"
+    },
+    "Applying_DDD_Patterns_Nilsson_Addison_Wesley.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.220223"
+    },
+    "Web_Development_Python_Flask.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.252605"
+    },
+    "Combine_Async_Programming_Swift.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.255226"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.255232",
+  "document_count": 8
+}

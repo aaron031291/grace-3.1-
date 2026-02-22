@@ -111,7 +111,7 @@ class EpisodicBuffer:
             source=source,
             genesis_key_id=genesis_key_id,
             decision_id=decision_id,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now()
         )
 
         self.session.add(episode)

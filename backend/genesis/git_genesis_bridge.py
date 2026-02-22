@@ -217,7 +217,7 @@ class GitGenesisBridge:
                 "files_tracked": len(genesis_keys_created),
                 "genesis_keys": genesis_keys_created,
                 "errors": errors,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             }
 
         except Exception as e:

@@ -15,6 +15,13 @@ from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, Trus
 from embedding import EmbeddingModel, get_embedding_model
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('trust_aware_retriever', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class TrustAwareDocumentRetriever:

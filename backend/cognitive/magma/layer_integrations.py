@@ -45,7 +45,7 @@ class MagmaEvent:
     event_type: str
     payload: Dict[str, Any]
     genesis_key_id: Optional[str] = None
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     source_layer: int = 1  # Which layer generated this event
 
 
@@ -300,7 +300,7 @@ class MagmaMessageBusConnector:
 
         await self.message_bus.publish(
             topic="magma.consolidation_started",
-            payload={"timestamp": datetime.utcnow().isoformat()},
+            payload={"timestamp": datetime.now().isoformat()},
             from_component=self.ComponentType.MEMORY_MESH
         )
 
@@ -534,8 +534,8 @@ class InterpreterPatternMemory:
             description=description,
             confidence=confidence,
             frequency=1,
-            first_seen=datetime.utcnow(),
-            last_seen=datetime.utcnow(),
+            first_seen=datetime.now(),
+            last_seen=datetime.now(),
             affected_components=affected_components,
             evidence_ids=[genesis_key_id] if genesis_key_id else [],
             embedding_id=result.nodes_created[0] if result.nodes_created else None
@@ -593,7 +593,7 @@ class InterpreterPatternMemory:
 
         entry = self._pattern_cache[pattern_id]
         entry.frequency += 1
-        entry.last_seen = datetime.utcnow()
+        entry.last_seen = datetime.now()
 
         logger.debug(
             f"[MAGMA-L2] Updated pattern frequency: {pattern_id} "
@@ -607,7 +607,7 @@ class InterpreterPatternMemory:
         lookback_hours: int = 24
     ) -> List[PatternMemoryEntry]:
         """Get pattern evolution over time."""
-        cutoff = datetime.utcnow()
+        cutoff = datetime.now()
 
         evolution = [
             entry for entry in self._pattern_cache.values()
@@ -634,7 +634,7 @@ class DecisionPrecedent:
     context_summary: str
     outcome: Optional[str] = None
     outcome_success: Optional[bool] = None
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     genesis_key_id: Optional[str] = None
 
 
@@ -821,7 +821,7 @@ class ActionProcedure:
     times_used: int
     avg_duration_ms: float
     genesis_key_ids: List[str]
-    last_used: datetime = field(default_factory=datetime.utcnow)
+    last_used: datetime = field(default_factory=datetime.now)
 
 
 class ActionRouterMemory:
@@ -974,7 +974,7 @@ class ActionRouterMemory:
             (proc.avg_duration_ms * old_total + duration_ms) / new_total
         )
         proc.times_used = new_total
-        proc.last_used = datetime.utcnow()
+        proc.last_used = datetime.now()
 
         if genesis_key_id:
             proc.genesis_key_ids.append(genesis_key_id)

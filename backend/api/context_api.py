@@ -133,7 +133,7 @@ async def submit_context(
         for gap in gaps:
             gap.resolved = True
             gap.resolution_source = "user_submission"
-            gap.resolved_at = datetime.utcnow()
+            gap.resolved_at = datetime.now()
         
         session.commit()
         

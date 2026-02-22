@@ -32,6 +32,20 @@ from .judgement import JudgementLayer, JudgementResult, HealthStatus
 from .action_router import ActionRouter, ActionDecision, ActionType, CICDConfig, AlertConfig
 
 logger = logging.getLogger(__name__)
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'diagnostic_engine')
+    except Exception:
+        pass
+
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('diagnostic_engine', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class EngineState(str, Enum):
@@ -62,7 +76,7 @@ class DiagnosticCycle:
     interpreted_data: Optional[InterpretedData] = None
     judgement: Optional[JudgementResult] = None
     action_decision: Optional[ActionDecision] = None
-    cycle_start: datetime = field(default_factory=datetime.utcnow)
+    cycle_start: datetime = field(default_factory=datetime.now)
     cycle_end: Optional[datetime] = None
     total_duration_ms: float = 0.0
     success: bool = True
@@ -172,7 +186,7 @@ class DiagnosticEngine:
     def stats(self) -> EngineStats:
         """Get engine statistics."""
         if self._start_time:
-            self._stats.uptime_seconds = (datetime.utcnow() - self._start_time).total_seconds()
+            self._stats.uptime_seconds = (datetime.now() - self._start_time).total_seconds()
         return self._stats
 
     def start(self) -> bool:
@@ -183,7 +197,7 @@ class DiagnosticEngine:
 
         try:
             self._state = EngineState.STARTING
-            self._start_time = datetime.utcnow()
+            self._start_time = datetime.now()
             self._stop_event.clear()
 
             logger.info("Starting DiagnosticEngine...")
@@ -253,7 +267,7 @@ class DiagnosticEngine:
         )
 
         try:
-            cycle_start = datetime.utcnow()
+            cycle_start = datetime.now()
 
             # Layer 1: Collect sensor data
             logger.debug("Layer 1: Collecting sensor data...")
@@ -278,7 +292,7 @@ class DiagnosticEngine:
                 cycle.judgement
             )
 
-            cycle_end = datetime.utcnow()
+            cycle_end = datetime.now()
             cycle.cycle_end = cycle_end
             cycle.total_duration_ms = (cycle_end - cycle_start).total_seconds() * 1000
             cycle.success = True
@@ -322,7 +336,7 @@ class DiagnosticEngine:
         except Exception as e:
             cycle.success = False
             cycle.error_message = str(e)
-            cycle.cycle_end = datetime.utcnow()
+            cycle.cycle_end = datetime.now()
             self._stats.total_cycles += 1
             self._stats.failed_cycles += 1
             logger.error(f"Cycle {cycle.cycle_id} failed: {e}")
@@ -428,7 +442,7 @@ class DiagnosticEngine:
         """Save engine statistics to file."""
         try:
             stats_dict = {
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now().isoformat(),
                 'total_cycles': self._stats.total_cycles,
                 'successful_cycles': self._stats.successful_cycles,
                 'failed_cycles': self._stats.failed_cycles,

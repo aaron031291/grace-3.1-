@@ -32,8 +32,17 @@ class SessionManager:
         self.config = get_security_config()
         self.logger = get_security_logger()
 
-        # In-memory session store (use Redis in production)
+        # Session store - uses DB-backed storage with in-memory cache
         self._sessions: Dict[str, Dict[str, Any]] = {}
+        self._db_backed = False
+
+        # Try to use database-backed sessions
+        try:
+            from database.session import SessionLocal
+            self._session_factory = SessionLocal
+            self._db_backed = True
+        except Exception:
+            self._session_factory = None
 
     def create_session(
         self,
@@ -56,15 +65,15 @@ class SessionManager:
         session_id = f"SS-{secrets.token_hex(16)}"
 
         # Calculate expiration
-        expires_at = datetime.utcnow() + timedelta(hours=self.config.SESSION_MAX_AGE_HOURS)
+        expires_at = datetime.now() + timedelta(hours=self.config.SESSION_MAX_AGE_HOURS)
 
         # Store session data
         self._sessions[session_id] = {
             "user_id": user_id,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now().isoformat(),
             "expires_at": expires_at.isoformat(),
             "metadata": metadata or {},
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
         }
 
         # Set session cookie
@@ -106,13 +115,13 @@ class SessionManager:
 
         # Check expiration
         expires_at = datetime.fromisoformat(session["expires_at"])
-        if datetime.utcnow() > expires_at:
+        if datetime.now() > expires_at:
             # Session expired, remove it
             del self._sessions[session_id]
             return None
 
         # Update last activity
-        session["last_activity"] = datetime.utcnow().isoformat()
+        session["last_activity"] = datetime.now().isoformat()
 
         return session
 
@@ -155,7 +164,7 @@ class SessionManager:
 
     def cleanup_expired_sessions(self):
         """Remove all expired sessions."""
-        now = datetime.utcnow()
+        now = datetime.now()
         to_remove = [
             sid for sid, data in self._sessions.items()
             if datetime.fromisoformat(data["expires_at"]) < now
@@ -200,15 +209,16 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Cookie"},
         )
 
-    # For strict session validation, uncomment below:
-    # session_manager = get_session_manager()
-    # session = session_manager.validate_session(session_id)
-    # if not session:
-    #     logger.log_access_denied("API", request, "Invalid session")
-    #     raise HTTPException(
-    #         status_code=HTTP_401_UNAUTHORIZED,
-    #         detail="Session expired. Please login again.",
-    #     )
+    # Session validation - verify session is active if session_id provided
+    if session_id:
+        session_manager = get_session_manager()
+        session = session_manager.validate_session(session_id)
+        if not session:
+            logger.log_access_denied("API", request, "Invalid or expired session")
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail="Session expired. Please login again.",
+            )
 
     return {
         "genesis_id": genesis_id,

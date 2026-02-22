@@ -419,7 +419,7 @@ class GovernedExecutionBridge:
     ):
         """Log governance decision for audit."""
         entry = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "action_id": action.action_id,
             "action_type": action.action_type.value,
             "decision_id": decision.decision_id,
@@ -459,7 +459,7 @@ class GovernedExecutionBridge:
                     "decision_id": decision.decision_id,
                     "allowed": decision.allowed,
                     "autonomy_tier": decision.autonomy_tier.value,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now().isoformat(),
                 },
                 from_component=ComponentType.COGNITIVE_ENGINE,
                 priority=7 if not decision.allowed else 5,

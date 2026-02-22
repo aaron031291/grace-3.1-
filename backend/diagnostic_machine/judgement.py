@@ -119,7 +119,7 @@ class AVNAlert:
     violation_type: Optional[str] = None
     message: str = ""
     details: Dict = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=datetime.now)
     acknowledged: bool = False
 
 
@@ -130,7 +130,7 @@ class AVMStatus:
     is_active: bool = True
     anomalies_detected: int = 0
     violations_detected: int = 0
-    last_check: datetime = field(default_factory=datetime.utcnow)
+    last_check: datetime = field(default_factory=datetime.now)
     alert_threshold: int = 3
     current_alert_level: str = "normal"  # normal, elevated, critical
 
@@ -146,7 +146,7 @@ class JudgementResult:
     avn_alerts: List[AVNAlert] = field(default_factory=list)
     avm_status: AVMStatus = field(default_factory=lambda: AVMStatus("avm-001"))
     recommended_action: str = "none"  # none, monitor, alert, heal, freeze
-    judgement_timestamp: datetime = field(default_factory=datetime.utcnow)
+    judgement_timestamp: datetime = field(default_factory=datetime.now)
     judgement_duration_ms: float = 0.0
 
 
@@ -203,7 +203,7 @@ class JudgementLayer:
         interpreted_data: InterpretedData
     ) -> JudgementResult:
         """Produce judgement from sensor and interpreted data."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         result = JudgementResult()
 
         # Calculate health score
@@ -233,7 +233,7 @@ class JudgementLayer:
         # Determine recommended action
         result.recommended_action = self._determine_action(result)
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now()
         result.judgement_timestamp = end_time
         result.judgement_duration_ms = (end_time - start_time).total_seconds() * 1000
 
@@ -712,7 +712,7 @@ class JudgementLayer:
             is_active=True,
             anomalies_detected=anomaly_count,
             violations_detected=violation_count,
-            last_check=datetime.utcnow(),
+            last_check=datetime.now(),
             alert_threshold=self.avn_threshold,
             current_alert_level=alert_level,
         )

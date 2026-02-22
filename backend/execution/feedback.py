@@ -25,7 +25,7 @@ class LearningSignal:
     outcome: str
     confidence: float
     patterns: List[str] = field(default_factory=list)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> Dict[str, Any]:
         return {

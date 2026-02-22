@@ -89,7 +89,7 @@ def calculate_organ_progress() -> List[OrganStatus]:
                 "Recovery strategies (10%)",
                 "Health monitoring (50%)"
             ],
-            last_updated=datetime.utcnow().isoformat()
+            last_updated=datetime.now().isoformat()
         ),
         OrganStatus(
             id="world-model",
@@ -104,7 +104,7 @@ def calculate_organ_progress() -> List[OrganStatus]:
                 "Code comprehension (40%)",
                 "User intent modeling (25%)"
             ],
-            last_updated=datetime.utcnow().isoformat()
+            last_updated=datetime.now().isoformat()
         ),
         OrganStatus(
             id="self-learning",
@@ -120,7 +120,7 @@ def calculate_organ_progress() -> List[OrganStatus]:
                 "Active learning (20%)",
                 "Feedback integration (30%)"
             ],
-            last_updated=datetime.utcnow().isoformat()
+            last_updated=datetime.now().isoformat()
         ),
         OrganStatus(
             id="self-governance",
@@ -135,7 +135,7 @@ def calculate_organ_progress() -> List[OrganStatus]:
                 "Whitelist system (60%)",
                 "Approval workflows (20%)"
             ],
-            last_updated=datetime.utcnow().isoformat()
+            last_updated=datetime.now().isoformat()
         ),
     ]
     return organs
@@ -205,7 +205,7 @@ async def get_organs_status():
     return OrgansResponse(
         organs=organs,
         overall_progress=round(overall_progress, 1),
-        last_updated=datetime.utcnow().isoformat()
+        last_updated=datetime.now().isoformat()
     )
 
 
@@ -251,7 +251,7 @@ async def get_system_health():
         uptime_seconds=0,  # Would need to track actual start time
         metrics=metrics,
         services=services,
-        last_check=datetime.utcnow().isoformat()
+        last_check=datetime.now().isoformat()
     )
 
 
@@ -281,7 +281,7 @@ async def get_realtime_metrics():
         requests_per_minute=0.0,  # Would need request tracking
         average_latency_ms=50.0,  # Placeholder
         error_rate=0.0,  # Would need error tracking
-        timestamp=datetime.utcnow().isoformat()
+        timestamp=datetime.now().isoformat()
     )
 
 
@@ -297,42 +297,42 @@ async def get_component_status():
             "name": "Cognitive Engine",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.95
         },
         {
             "name": "Learning Memory",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.88
         },
         {
             "name": "Retrieval Engine",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.92
         },
         {
             "name": "LLM Orchestrator",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.90
         },
         {
             "name": "Librarian",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.87
         },
         {
             "name": "Sandbox Lab",
             "status": "operational",
             "version": "1.0",
-            "last_activity": datetime.utcnow().isoformat(),
+            "last_activity": datetime.now().isoformat(),
             "health": 0.85
         },
     ]
@@ -341,7 +341,7 @@ async def get_component_status():
         "components": components,
         "total": len(components),
         "healthy": sum(1 for c in components if c["health"] >= 0.8),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 
@@ -358,21 +358,21 @@ async def get_recent_activity(limit: int = 20):
             "id": "act_001",
             "type": "learning",
             "description": "Pattern extracted from feedback examples",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "component": "Learning Memory"
         },
         {
             "id": "act_002",
             "type": "retrieval",
             "description": "Document retrieved for query",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "component": "Retrieval Engine"
         },
         {
             "id": "act_003",
             "type": "governance",
             "description": "Action approved via whitelist",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "component": "Governance"
         },
     ]
@@ -380,5 +380,5 @@ async def get_recent_activity(limit: int = 20):
     return {
         "activities": activities[:limit],
         "total": len(activities),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }

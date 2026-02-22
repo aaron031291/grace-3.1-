@@ -49,9 +49,37 @@ class ExecutionConfig:
         self.allowed_commands = allowed_commands or []
         self.blocked_commands = blocked_commands or [
             "rm -rf /",
+            "rm -rf /*",
             "mkfs",
             "dd if=/dev/zero",
             ":(){:|:&};:",  # Fork bomb
+            "sudo ",
+            "chmod 777",
+            "chmod -R 777",
+            "curl|bash",
+            "curl|sh",
+            "wget|bash",
+            "wget|sh",
+            "curl | bash",
+            "curl | sh",
+            "wget | bash",
+            "wget | sh",
+            "> /dev/sda",
+            "mv / ",
+            "shutdown",
+            "reboot",
+            "halt",
+            "init 0",
+            "init 6",
+            "passwd",
+            "useradd",
+            "userdel",
+            "visudo",
+            "crontab -r",
+            "iptables -F",
+            "systemctl stop",
+            "kill -9 1",
+            "nohup",  # Background persistent processes
         ]
 
 
@@ -83,7 +111,7 @@ class ExecutionBridge:
 
         This is the main entry point for all execution requests.
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
         logger.info(f"Executing action: {action.action_type.value} [{action.action_id}]")
 
         try:
@@ -92,7 +120,7 @@ class ExecutionBridge:
             result = await handler(action)
 
             # Calculate execution time
-            result.execution_time = (datetime.utcnow() - start_time).total_seconds()
+            result.execution_time = (datetime.now() - start_time).total_seconds()
 
             # Record in history
             self.action_history.append((action, result))
@@ -114,7 +142,7 @@ class ExecutionBridge:
                 action_type=action.action_type,
                 status=ActionStatus.TIMEOUT,
                 error=f"Action timed out after {action.timeout}s",
-                execution_time=(datetime.utcnow() - start_time).total_seconds(),
+                execution_time=(datetime.now() - start_time).total_seconds(),
             )
             self.action_history.append((action, result))
             return result
@@ -126,7 +154,7 @@ class ExecutionBridge:
                 action_type=action.action_type,
                 status=ActionStatus.FAILURE,
                 error=str(e),
-                execution_time=(datetime.utcnow() - start_time).total_seconds(),
+                execution_time=(datetime.now() - start_time).total_seconds(),
             )
             self.action_history.append((action, result))
             return result

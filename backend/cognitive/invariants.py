@@ -123,7 +123,7 @@ class InvariantValidator:
 
         # Invariant 11: Time-Bounded Reasoning
         if context.decision_freeze_point:
-            if datetime.utcnow() > context.decision_freeze_point:
+            if datetime.now() > context.decision_freeze_point:
                 violations.append(
                     "Invariant 11: Decision freeze point exceeded - must decide now"
                 )
@@ -204,7 +204,7 @@ class InvariantValidator:
 
         elif invariant_number == 11:
             if context.decision_freeze_point:
-                if datetime.utcnow() > context.decision_freeze_point:
+                if datetime.now() > context.decision_freeze_point:
                     violations.append("Decision freeze point exceeded")
 
         elif invariant_number == 12:

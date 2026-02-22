@@ -30,6 +30,13 @@ from librarian.approval_workflow import ApprovalWorkflow
 
 logger = logging.getLogger(__name__)
 
+def _track_librarian(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("librarian", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class LibrarianEngine:
     """
@@ -302,6 +309,66 @@ class LibrarianEngine:
                 )
                 if approved_count > 0:
                     logger.info(f"Auto-approved {approved_count} actions")
+
+            # Step 5: Feed to Unified Learning Pipeline for neighbor-by-neighbor expansion
+            try:
+                from cognitive.unified_learning_pipeline import get_unified_pipeline
+                pipeline = get_unified_pipeline()
+                if pipeline.running:
+                    all_tags = list(rule_tags | ai_tags)
+                    seed_topic = document.filename or f"document_{document_id}"
+                    seed_text = " ".join(all_tags) if all_tags else seed_topic
+                    pipeline.add_seed(topic=seed_topic, text=seed_text)
+                    logger.info(f"[LIBRARIAN] Queued '{seed_topic}' for neighbor expansion")
+            except Exception as pipe_err:
+                logger.debug(f"[LIBRARIAN] Pipeline feed skipped: {pipe_err}")
+
+            # TimeSense: Record librarian processing timing
+            try:
+                from cognitive.timesense_governance import get_timesense_governance
+                get_timesense_governance().record("librarian.process", 0, "librarian")
+            except Exception:
+                pass
+
+            # Learning: Track librarian processing for pattern extraction
+            _track_librarian(
+                f"Processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships",
+                data=result,
+            )
+
+            # Knowledge Compiler: Auto-compile document content into facts/procedures
+            try:
+                from cognitive.knowledge_compiler import get_knowledge_compiler
+                if document and hasattr(document, 'extracted_text_length') and document.extracted_text_length:
+                    compiler = get_knowledge_compiler(self.db)
+                    # Get document chunks for compilation
+                    from models.database_models import DocumentChunk
+                    chunks = self.db.query(DocumentChunk).filter(
+                        DocumentChunk.document_id == document_id
+                    ).limit(10).all()
+                    compiled = 0
+                    for chunk in chunks:
+                        if chunk.text_content and len(chunk.text_content) > 30:
+                            compiler.compile_chunk(
+                                text=chunk.text_content,
+                                source_document_id=str(document_id),
+                                source_chunk_id=str(chunk.id),
+                            )
+                            compiled += 1
+                    if compiled > 0:
+                        self.db.commit()
+                        logger.info(f"[LIBRARIAN] Auto-compiled {compiled} chunks into knowledge store")
+            except Exception as _comp_err:
+                logger.debug(f"[LIBRARIAN] Knowledge compilation skipped: {_comp_err}")
+
+            
+            # Auto-organize into domain folder
+            try:
+                from librarian.knowledge_organizer import get_knowledge_organizer
+                organizer = get_knowledge_organizer()
+                organizer.organize_file(str(document.filename) if hasattr(document, 'filename') else str(document_id))
+            except Exception:
+                pass
 
             result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")

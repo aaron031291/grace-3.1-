@@ -34,6 +34,13 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+def _track_ingestion(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("ingestion", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class TextChunker:
     """Handles text chunking with semantic and structure-aware strategies."""
@@ -374,7 +381,7 @@ class TextIngestionService:
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now().isoformat(),
                 "source_type": source_type,
             }
             
@@ -411,7 +418,7 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST] [OK] Chunked text into {len(chunks)} chunks")
             
             # Get document creation date for embedding into chunks
-            created_at = document.created_at.isoformat() if document.created_at else datetime.utcnow().isoformat()
+            created_at = document.created_at.isoformat() if document.created_at else datetime.now().isoformat()
             
             # Generate embeddings and store chunks
             vector_id_counter = int(f"{document_id}000")
@@ -538,6 +545,13 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST]   - {len(text_content)} characters")
             logger.info(f"[INGEST_FAST]   - Stored in PostgreSQL + Qdrant")
 
+            # TimeSense: Record ingestion timing
+            try:
+                from cognitive.timesense_governance import get_timesense_governance
+                get_timesense_governance().record("ingestion.full", 0, "ingestion", True, float(len(text_content)))
+            except Exception:
+                pass
+
             # SYMBIOTIC VERSION CONTROL: Auto-track ingested file
             try:
                 from layer1.components.version_control_connector import get_version_control_connector
@@ -565,8 +579,18 @@ class TextIngestionService:
                 else:
                     logger.debug(f"[INGEST_FAST] [VERSION_CONTROL] Skipped: {version_result.get('reason', 'Unknown')}")
             except Exception as vc_error:
-                # Don't fail ingestion if version control fails
                 logger.warning(f"[INGEST_FAST] [VERSION_CONTROL] Failed to track version: {vc_error}")
+
+            # UNIFIED LEARNING PIPELINE: Feed ingested document as seed for neighbor expansion
+            try:
+                from cognitive.unified_learning_pipeline import get_unified_pipeline
+                pipeline = get_unified_pipeline()
+                if pipeline.running:
+                    seed_text = text_content[:500] if text_content else filename
+                    pipeline.add_seed(topic=filename, text=seed_text)
+                    logger.info(f"[INGEST_FAST] [PIPELINE] Queued for neighbor expansion: {filename}")
+            except Exception as pipe_error:
+                logger.debug(f"[INGEST_FAST] [PIPELINE] Seed queueing skipped: {pipe_error}")
 
             return document_id, "Document ingested successfully"
         
@@ -638,14 +662,14 @@ class TextIngestionService:
             doc_confidence_data = self.confidence_scorer.calculate_confidence_score(
                 text_content=text_content,
                 source_type=source_type,
-                created_at=datetime.utcnow(),
+                created_at=datetime.now(),
             )
             
             # Prepare document metadata
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now().isoformat(),
                 "source_type": source_type,
             }
             
@@ -706,7 +730,7 @@ class TextIngestionService:
                 chunk_confidence_data = self.confidence_scorer.calculate_confidence_score(
                     text_content=chunk_text,
                     source_type=source_type,
-                    created_at=datetime.utcnow(),
+                    created_at=datetime.now(),
                     existing_chunks=all_chunk_texts[:chunk_index] + all_chunk_texts[chunk_index+1:],  # Exclude current chunk
                 )
                 
@@ -793,6 +817,26 @@ class TextIngestionService:
             document.status = "completed"
             document.total_chunks = len(chunks)
             db.commit()
+
+            # Auto-compile chunks into deterministic knowledge (facts, procedures, rules)
+            try:
+                from cognitive.knowledge_compiler import get_knowledge_compiler
+                compiler = get_knowledge_compiler(db)
+                compiled_count = 0
+                for chunk in chunks[:20]:  # Compile first 20 chunks per document
+                    chunk_text = chunk.get("text", "") if isinstance(chunk, dict) else getattr(chunk, "text_content", "")
+                    if chunk_text and len(chunk_text) > 30:
+                        compiler.compile_chunk(
+                            text=chunk_text,
+                            source_document_id=str(document_id),
+                            domain=None,
+                        )
+                        compiled_count += 1
+                if compiled_count > 0:
+                    db.commit()
+                    logger.info(f"[INGEST] Auto-compiled {compiled_count} chunks into knowledge store")
+            except Exception as _compile_err:
+                logger.debug(f"[INGEST] Auto-compile skipped: {_compile_err}")
             
             logger.info(f"[OK] Successfully ingested document: {document_id}")
             return document_id, "Document ingested successfully"

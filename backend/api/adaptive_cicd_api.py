@@ -140,7 +140,7 @@ async def override_trust_score(request: TrustOverrideRequest):
     trust = adaptive.trust_scores[request.pipeline_id]
     trust.trust_level = trust_level
     trust.human_verified = True
-    trust.verification_date = datetime.utcnow().isoformat()
+    trust.verification_date = datetime.now().isoformat()
 
     return {
         "status": "updated",
@@ -365,7 +365,7 @@ async def run_sandbox(pipeline_id: str, branch: str = "main"):
 
     result = await adaptive.run_in_sandbox(
         pipeline_id=pipeline_id,
-        trigger_id=f"manual-{datetime.utcnow().strftime('%H%M%S')}",
+        trigger_id=f"manual-{datetime.now().strftime('%H%M%S')}",
         context={"branch": branch}
     )
 
@@ -560,7 +560,7 @@ async def get_llm_recommendation(pipeline_id: str, context: Optional[Dict[str, A
     return {
         "pipeline_id": pipeline_id,
         "recommendation": recommendation,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }
 
 

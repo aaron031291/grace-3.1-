@@ -27,6 +27,27 @@ import hashlib
 import uuid
 
 logger = logging.getLogger(__name__)
+def _check_hia(text):
+    try:
+        from security.honesty_integrity_accountability import get_hia_framework
+        return get_hia_framework().verify_llm_output(text)
+    except Exception:
+        return None
+
+def _record_time(op, ms):
+    try:
+        from cognitive.timesense_governance import get_timesense_governance
+        get_timesense_governance().record(op, ms, 'autonomous_sandbox_lab')
+    except Exception:
+        pass
+
+
+def _track_sandbox(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("sandbox_lab", desc, **kwargs)
+    except Exception:
+        pass
 
 
 class ExperimentStatus(Enum):

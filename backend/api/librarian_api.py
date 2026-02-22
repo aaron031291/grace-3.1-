@@ -492,7 +492,7 @@ async def update_tag(
         if request.category is not None:
             tag.category = request.category
 
-        tag.updated_at = datetime.utcnow()
+        tag.updated_at = datetime.now()
         session.commit()
         session.refresh(tag)
 
@@ -975,7 +975,7 @@ async def update_rule(
         if request.enabled is not None:
             rule.enabled = request.enabled
 
-        rule.updated_at = datetime.utcnow()
+        rule.updated_at = datetime.now()
         session.commit()
         session.refresh(rule)
 

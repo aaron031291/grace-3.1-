@@ -176,7 +176,7 @@ async def create_connector(
     """
     try:
         connector_id = _generate_id()
-        now = datetime.utcnow().isoformat()
+        now = datetime.now().isoformat()
 
         connector = {
             "id": connector_id,
@@ -242,7 +242,7 @@ async def update_connector(
             "sync_frequency": config.sync_frequency,
             "enabled": config.enabled,
             "filters": config.filters,
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.now().isoformat()
         })
 
         return ConnectorResponse(**connector)
@@ -294,7 +294,7 @@ async def sync_connector(
             raise HTTPException(status_code=404, detail=f"Connector '{connector_id}' not found")
 
         connector = _connectors[connector_id]
-        started_at = datetime.utcnow()
+        started_at = datetime.now()
 
         # Update status to syncing
         connector["status"] = ConnectorStatus.SYNCING
@@ -309,7 +309,7 @@ async def sync_connector(
         docs_updated = random.randint(0, 5)
         docs_deleted = random.randint(0, 2)
 
-        completed_at = datetime.utcnow()
+        completed_at = datetime.now()
         duration = (completed_at - started_at).total_seconds()
 
         # Update connector status
@@ -362,7 +362,7 @@ async def test_connector(
             "connection_status": "success",
             "latency_ms": 45.2,
             "message": "Connection successful",
-            "tested_at": datetime.utcnow().isoformat()
+            "tested_at": datetime.now().isoformat()
         }
     except HTTPException:
         raise
@@ -411,7 +411,7 @@ async def add_source(
             raise HTTPException(status_code=404, detail=f"Connector '{connector_id}' not found")
 
         source_id = _generate_id()
-        now = datetime.utcnow().isoformat()
+        now = datetime.now().isoformat()
 
         source = {
             "id": source_id,
@@ -480,7 +480,7 @@ async def search_knowledge_base(
                 "connector_id": list(_connectors.keys())[0] if _connectors else "default",
                 "metadata": {
                     "path": f"/knowledge/doc_{i}.md",
-                    "last_modified": datetime.utcnow().isoformat()
+                    "last_modified": datetime.now().isoformat()
                 } if request.include_metadata else None
             })
 
@@ -554,7 +554,7 @@ async def get_knowledge_base_stats(session: Session = Depends(get_session)):
                 "syncs_today": len(_sync_history),
                 "total_syncs": len(_sync_history)
             },
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -595,7 +595,7 @@ async def get_knowledge_base_health(session: Session = Depends(get_session)):
             "healthy_connectors": healthy_count,
             "total_connectors": total_count,
             "connectors": connector_health,
-            "checked_at": datetime.utcnow().isoformat()
+            "checked_at": datetime.now().isoformat()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

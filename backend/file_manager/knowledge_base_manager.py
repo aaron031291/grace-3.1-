@@ -12,6 +12,13 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+def _track_op(desc, **kw):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event('knowledge_base_manager', desc, **kw)
+    except Exception:
+        pass
+
 
 
 class KnowledgeBaseManager:
@@ -182,7 +189,7 @@ class KnowledgeBaseManager:
             metadata_dict[file_metadata_key] = {
                 "filename": filename,
                 "size": len(file_content),
-                "created": datetime.utcnow().isoformat(),
+                "created": datetime.now().isoformat(),
                 "user_metadata": metadata or {},
             }
             

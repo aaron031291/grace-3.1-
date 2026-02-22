@@ -33,11 +33,27 @@ def create_multi_tier_handler(llm_client):
     # Get the singleton embedding model
     embedding_model = get_embedding_model()
     
-    # Create retriever
-    retriever = DocumentRetriever(
-        collection_name="documents",
-        embedding_model=embedding_model
-    )
+    # Create retriever - use trust-aware if available, fallback to base
+    retriever = None
+    try:
+        from retrieval.trust_aware_retriever import TrustAwareDocumentRetriever
+        base_retriever = DocumentRetriever(
+            collection_name="documents",
+            embedding_model=embedding_model
+        )
+        retriever = TrustAwareDocumentRetriever(
+            base_retriever=base_retriever,
+            trust_weight=0.3,
+            min_trust_threshold=0.3,
+            embedding_model=embedding_model,
+        )
+        logger.info("[MULTI-TIER] Using TrustAwareDocumentRetriever (trust-weighted retrieval)")
+    except Exception as e:
+        logger.info(f"[MULTI-TIER] Falling back to base retriever: {e}")
+        retriever = DocumentRetriever(
+            collection_name="documents",
+            embedding_model=embedding_model
+        )
     
     # Get SerpAPI service if enabled
     serpapi_service = None

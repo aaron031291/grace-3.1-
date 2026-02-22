@@ -1,0 +1,51 @@
+{
+  "documents": {
+    "Audio_Programming_Book_Boulanger.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.089002"
+    },
+    "Operating_Systems_Khurana_2nd_Ed.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.097029"
+    },
+    "Quantum_Embedded_Programming_Statecharts.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.134134"
+    },
+    "Logic_Programming_Prolog_Apt.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.152254"
+    },
+    "Complete_DS_Algorithms_Guide.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.162578"
+    },
+    "OO_Software_Engineering_Singh.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.180398"
+    },
+    "Intro_Algorithms_Data_Structures.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.186298"
+    },
+    "System_Design_Interview_Alex_Xu.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.226660"
+    },
+    "Theory_of_Parsing_Translation_Compiling.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.244843"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.244848",
+  "document_count": 9
+}

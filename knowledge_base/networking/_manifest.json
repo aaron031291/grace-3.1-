@@ -1,0 +1,21 @@
+{
+  "documents": {
+    "Clean_Code_Principles_Patterns_V2_2024.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.102124"
+    },
+    "Software_Architecture_in_Practice_4th_SEI_2021.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.127025"
+    },
+    "Computer_Networking_Top_Down_8th_Ross.txt": {
+      "genesis_key": null,
+      "trust_score": 0.5,
+      "added_at": "2026-02-19T05:42:24.129970"
+    }
+  },
+  "last_updated": "2026-02-19T05:42:24.129975",
+  "document_count": 3
+}

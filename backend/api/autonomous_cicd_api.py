@@ -744,5 +744,5 @@ async def health_check():
             "autonomy_level": engine.autonomy_level.name,
             "decisions": len(engine.decisions)
         },
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     }

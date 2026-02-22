@@ -70,7 +70,7 @@ class GenesisKeyDailyOrganizer:
         try:
             # Default to today
             if target_date is None:
-                target_date = datetime.utcnow()
+                target_date = datetime.now()
 
             # Get date string for folder name
             date_str = target_date.strftime("%Y-%m-%d")
@@ -213,7 +213,7 @@ class GenesisKeyDailyOrganizer:
 
         return {
             "date": date_str,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now().isoformat(),
             "summary": summary,
             "statistics": {
                 "total_keys": len(keys),
@@ -419,7 +419,7 @@ class GenesisKeyDailyOrganizer:
         results = []
 
         for i in range(days_back):
-            target_date = datetime.utcnow() - timedelta(days=i)
+            target_date = datetime.now() - timedelta(days=i)
             result = self.export_daily_keys(target_date, session)
             results.append(result)
 

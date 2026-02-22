@@ -95,7 +95,7 @@ class CognitiveLayer1Integration:
 
         # Set planning timeout
         context.decision_freeze_point = (
-            datetime.utcnow() + timedelta(seconds=planning_timeout_seconds)
+            datetime.now() + timedelta(seconds=planning_timeout_seconds)
         )
 
         try:
@@ -104,7 +104,7 @@ class CognitiveLayer1Integration:
                 context,
                 observations or {
                     'operation': operation_name,
-                    'timestamp': datetime.utcnow().isoformat()
+                    'timestamp': datetime.now().isoformat()
                 }
             )
 

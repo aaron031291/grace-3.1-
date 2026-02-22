@@ -22,6 +22,13 @@ from database.session import get_session
 
 logger = logging.getLogger(__name__)
 
+def _track_version(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("version_tracker", desc, **kwargs)
+    except Exception:
+        pass
+
 
 class FileVersionTracker:
     """
@@ -76,7 +83,7 @@ class FileVersionTracker:
         else:
             self.version_metadata = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "files": {}  # file_genesis_key -> version info
             }
             self._save_metadata()
@@ -203,7 +210,7 @@ class FileVersionTracker:
                 "file_genesis_key": file_genesis_key,
                 "file_path": file_path,
                 "absolute_path": abs_file_path,
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now().isoformat(),
                 "version_count": 0,
                 "versions": [],
                 "last_hash": None
@@ -290,7 +297,7 @@ class FileVersionTracker:
                 "version_number": version_number,
                 "version_key_id": version_key_id,
                 "genesis_key_db_id": version_key_db_id,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "file_hash": current_hash,
                 "file_size": file_stats.st_size,
                 "user_id": user_id or "system",
@@ -300,7 +307,7 @@ class FileVersionTracker:
 
             file_info["versions"].append(version_info)
             file_info["last_hash"] = current_hash
-            file_info["last_updated"] = datetime.utcnow().isoformat()
+            file_info["last_updated"] = datetime.now().isoformat()
 
             self._save_metadata()
 
@@ -317,7 +324,7 @@ class FileVersionTracker:
                 "genesis_key_db_id": version_key.key_id,
                 "changed": True,
                 "file_hash": current_hash,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             }
 
         except Exception as e:

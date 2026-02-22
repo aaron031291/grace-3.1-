@@ -51,7 +51,7 @@ class BaseModel(Base):
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now()
     
     def __repr__(self) -> str:
         """String representation of model."""

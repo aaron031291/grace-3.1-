@@ -32,6 +32,13 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+def _track_autonomous(desc, **kwargs):
+    try:
+        from cognitive.learning_hook import track_learning_event
+        track_learning_event("autonomous_engine", desc, **kwargs)
+    except Exception:
+        pass
+
 # =============================================================================
 # Core System Integration Helpers
 # =============================================================================
@@ -149,7 +156,7 @@ class ActionContext:
     trigger_type: TriggerType
     data: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
 @dataclass
@@ -179,7 +186,7 @@ class AutonomousAction:
     timeout_seconds: int = 300
     retry_count: int = 0
     max_retries: int = 3
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     scheduled_at: Optional[str] = None
     started_at: Optional[str] = None
     completed_at: Optional[str] = None
@@ -353,7 +360,7 @@ class AutonomousEngine:
 
     def _generate_action_id(self) -> str:
         """Generate unique action ID."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
         return hashlib.sha256(f"action:{timestamp}".encode()).hexdigest()[:12]
 
     def _generate_genesis_key(self, action_type: str, resource: str, context: Dict[str, Any] = None) -> str:
@@ -404,7 +411,7 @@ class AutonomousEngine:
                 logger.warning(f"[Autonomous] Genesis Key Service error, falling back: {e}")
 
         # Fallback to simple key generation
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
         key_data = f"autonomous:{action_type}:{resource}:{timestamp}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:12]
         return f"gk-auto-{key_hash}"
@@ -417,7 +424,7 @@ class AutonomousEngine:
         version_entry = {
             "version": len(self._action_versions[action_id]) + 1,
             "mutation_type": mutation_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "status": action.status,
             "genesis_key": action.genesis_key,
             "snapshot": {
@@ -542,12 +549,12 @@ class AutonomousEngine:
         4. Notify Mirror for self-observation
         """
         action.status = "running"
-        action.started_at = datetime.utcnow().isoformat()
+        action.started_at = datetime.now().isoformat()
 
         # Track "start" mutation
         self._track_action_version(action.id, action, "start")
 
-        start_time = datetime.utcnow()
+        start_time = datetime.now()
 
         try:
             # Get handler
@@ -582,7 +589,7 @@ class AutonomousEngine:
             # Execute
             output = await handler(action)
 
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now() - start_time).total_seconds()
 
             result = ActionResult(
                 action_id=action.id,
@@ -599,7 +606,7 @@ class AutonomousEngine:
             self._update_trust_score(action.action_type.value, True)
 
         except Exception as e:
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now() - start_time).total_seconds()
 
             result = ActionResult(
                 action_id=action.id,
@@ -618,7 +625,7 @@ class AutonomousEngine:
             logger.error(f"[Autonomous] Action {action.id} failed: {e}")
 
         finally:
-            action.completed_at = datetime.utcnow().isoformat()
+            action.completed_at = datetime.now().isoformat()
             action.result = result
             self.stats["actions_executed"] += 1
 
@@ -690,7 +697,7 @@ class AutonomousEngine:
                 # Check cooldown
                 if rule.last_triggered:
                     last = datetime.fromisoformat(rule.last_triggered)
-                    if (datetime.utcnow() - last).seconds < rule.cooldown_seconds:
+                    if (datetime.now() - last).seconds < rule.cooldown_seconds:
                         continue
 
                 # Queue action
@@ -707,7 +714,7 @@ class AutonomousEngine:
                     config=rule.action_config
                 )
 
-                rule.last_triggered = datetime.utcnow().isoformat()
+                rule.last_triggered = datetime.now().isoformat()
 
         # Call registered event handlers
         handlers = self.event_handlers.get(event_name, [])
@@ -781,7 +788,7 @@ class AutonomousEngine:
         """Scheduler for time-based actions."""
         while self._running:
             try:
-                now = datetime.utcnow()
+                now = datetime.now()
 
                 for rule in self.rules.values():
                     if not rule.enabled:
@@ -907,7 +914,7 @@ class AutonomousEngine:
             result = await store_pattern({
                 "pattern": pattern,
                 "source": source,
-                "learned_at": datetime.utcnow().isoformat(),
+                "learned_at": datetime.now().isoformat(),
                 "genesis_key": action.genesis_key
             })
 
@@ -939,7 +946,7 @@ class AutonomousEngine:
         alert = {
             "severity": severity,
             "message": message,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "genesis_key": action.genesis_key
         }
 

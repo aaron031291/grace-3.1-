@@ -52,7 +52,7 @@ class QueuedOperation:
     priority: OperationPriority
     payload: Dict[str, Any]
     callback: Optional[Callable] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=datetime.now)
     retries: int = 0
     max_retries: int = 3
     genesis_key_id: Optional[str] = None
@@ -65,7 +65,7 @@ class OperationResult:
     success: bool
     result: Any
     error: Optional[str] = None
-    processed_at: datetime = field(default_factory=datetime.utcnow)
+    processed_at: datetime = field(default_factory=datetime.now)
 
 
 class AsyncOperationQueue:

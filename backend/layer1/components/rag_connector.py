@@ -197,7 +197,7 @@ class RAGConnector:
                 "success": True,
                 "quality_score": quality_score,
                 "results_count": results_count,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.RAG
         )
@@ -220,7 +220,7 @@ class RAGConnector:
                 "success": False,
                 "quality_score": 0.0,
                 "reason": reason,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.RAG
         )
@@ -256,7 +256,7 @@ class RAGConnector:
                 "procedure_id": procedure_id,
                 "procedure_name": procedure_name,
                 "trust_score": trust_score,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.RAG
         )

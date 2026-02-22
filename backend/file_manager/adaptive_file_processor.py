@@ -315,7 +315,7 @@ class StrategyLearner:
                         'quality': new_quality,
                         'times_used': new_times,
                         'last_used': outcome.timestamp,
-                        'updated_at': datetime.utcnow(),
+                        'updated_at': datetime.now(),
                         'id': strategy_id
                     }
                 )
@@ -344,8 +344,8 @@ class StrategyLearner:
                         'success_rate': 1.0 if outcome.success else 0.0,
                         'quality': outcome.quality_score,
                         'last_used': outcome.timestamp,
-                        'created_at': datetime.utcnow(),
-                        'updated_at': datetime.utcnow()
+                        'created_at': datetime.now(),
+                        'updated_at': datetime.now()
                     }
                 )
 
@@ -559,7 +559,7 @@ class AdaptiveFileProcessor:
             num_chunks=num_chunks,
             num_embeddings=num_embeddings,
             errors=errors or [],
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now()
         )
 
         # Record outcome

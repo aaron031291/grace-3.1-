@@ -279,7 +279,7 @@ class TestRecency:
     def test_recency_very_recent(self):
         """Test recency score for very recent content."""
         def calculate_recency(timestamp: datetime, max_age_days: int = 365) -> float:
-            now = datetime.utcnow()
+            now = datetime.now()
             age_days = (now - timestamp).days
 
             if age_days <= 0:
@@ -295,13 +295,13 @@ class TestRecency:
             else:
                 return 0.1
 
-        recent = datetime.utcnow() - timedelta(days=1)
+        recent = datetime.now() - timedelta(days=1)
         assert calculate_recency(recent) >= 0.9
 
     def test_recency_one_month_old(self):
         """Test recency score for month-old content."""
         def calculate_recency(timestamp: datetime) -> float:
-            now = datetime.utcnow()
+            now = datetime.now()
             age_days = (now - timestamp).days
             if age_days <= 30:
                 return 0.9
@@ -309,19 +309,19 @@ class TestRecency:
                 return 0.7
             return 0.5
 
-        month_old = datetime.utcnow() - timedelta(days=45)
+        month_old = datetime.now() - timedelta(days=45)
         assert calculate_recency(month_old) == 0.7
 
     def test_recency_old_content(self):
         """Test recency score for old content."""
         def calculate_recency(timestamp: datetime) -> float:
-            now = datetime.utcnow()
+            now = datetime.now()
             age_days = (now - timestamp).days
             if age_days > 365:
                 return 0.1
             return 0.5
 
-        old = datetime.utcnow() - timedelta(days=400)
+        old = datetime.now() - timedelta(days=400)
         assert calculate_recency(old) == 0.1
 
 
@@ -581,7 +581,7 @@ class TestConfidenceScorerIntegration:
                 return 0.7  # Mock consensus
 
             def calculate_recency(self, timestamp: datetime) -> float:
-                age_days = (datetime.utcnow() - timestamp).days
+                age_days = (datetime.now() - timestamp).days
                 return max(1.0 - age_days / 365, 0.1)
 
             def score(self, content: str, source_type: str, timestamp: datetime) -> Dict:
@@ -611,7 +611,7 @@ class TestConfidenceScorerIntegration:
         result = scorer.score(
             content="This is a test content " * 50,
             source_type="official_docs",
-            timestamp=datetime.utcnow() - timedelta(days=10)
+            timestamp=datetime.now() - timedelta(days=10)
         )
 
         assert "overall_confidence" in result
@@ -704,11 +704,11 @@ class TestConfidenceScorerEdgeCases:
     def test_future_timestamp(self):
         """Test handling future timestamps."""
         def calculate_recency(timestamp: datetime) -> float:
-            now = datetime.utcnow()
+            now = datetime.now()
             if timestamp > now:
                 return 1.0  # Treat as most recent
             return max(1.0 - (now - timestamp).days / 365, 0.1)
 
-        future = datetime.utcnow() + timedelta(days=30)
+        future = datetime.now() + timedelta(days=30)
         score = calculate_recency(future)
         assert score == 1.0

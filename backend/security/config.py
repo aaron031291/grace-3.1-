@@ -68,7 +68,7 @@ class SecurityConfig:
     X_FRAME_OPTIONS: str = "DENY"
     X_XSS_PROTECTION: str = "1; mode=block"
     REFERRER_POLICY: str = "strict-origin-when-cross-origin"
-    PERMISSIONS_POLICY: str = "geolocation=(), microphone=(), camera=()"
+    PERMISSIONS_POLICY: str = "geolocation=(), microphone=(self), camera=()"
 
     # HSTS (HTTP Strict Transport Security)
     HSTS_ENABLED: bool = True
@@ -95,6 +95,16 @@ class SecurityConfig:
     LOG_FAILED_AUTH: bool = True
     LOG_RATE_LIMIT_EXCEEDED: bool = True
     LOG_SUSPICIOUS_REQUESTS: bool = True
+
+    # ==================== Data Encryption ====================
+    ENCRYPTION_ENABLED: bool = True
+    ENCRYPTION_KEY: Optional[str] = None  # Set via ENCRYPTION_KEY env var (Fernet key)
+    ENCRYPT_SENSITIVE_FIELDS: bool = True  # Encrypt PII, API keys, passwords at rest
+
+    # ==================== API Key Management ====================
+    REQUIRE_API_KEY: bool = False  # Require X-API-Key header on all requests
+    API_KEYS: List[str] = field(default_factory=list)  # Valid API keys
+    API_KEY_HEADER: str = "X-API-Key"
 
     # ==================== Production Mode ====================
     # Set to True in production for stricter security
@@ -125,6 +135,16 @@ class SecurityConfig:
 
         # Security logging
         self.LOG_SECURITY_EVENTS = os.getenv("LOG_SECURITY_EVENTS", "true").lower() == "true"
+
+        # Encryption
+        self.ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+        self.ENCRYPTION_ENABLED = os.getenv("ENCRYPTION_ENABLED", "true").lower() == "true"
+
+        # API Keys
+        self.REQUIRE_API_KEY = os.getenv("REQUIRE_API_KEY", "false").lower() == "true"
+        api_keys_env = os.getenv("API_KEYS", "")
+        if api_keys_env:
+            self.API_KEYS = [k.strip() for k in api_keys_env.split(",") if k.strip()]
 
     def get_csp_header(self) -> str:
         """Build Content-Security-Policy header value."""

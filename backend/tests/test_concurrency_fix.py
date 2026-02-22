@@ -21,7 +21,7 @@ def create_mock_key(i):
         status=GenesisKeyStatus.ACTIVE,
         user_id="test_user_concurrency",
         what_description=f"Concurrent write {i}",
-        when_timestamp=datetime.utcnow(),
+        when_timestamp=datetime.now(),
         who_actor="tester",
         # ... other required fields mock ...
     )

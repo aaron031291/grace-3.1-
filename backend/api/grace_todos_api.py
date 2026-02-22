@@ -119,8 +119,8 @@ class GraceTask(BaseModel):
     labels: List[str] = []
     notes: Optional[str] = None
     created_by: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     version: int = 1
@@ -137,8 +137,8 @@ class UserRequirement(BaseModel):
     status: Literal["draft", "active", "in_progress", "completed", "archived"] = "draft"
     generated_tasks: List[str] = []
     assigned_team: List[str] = []
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
 
 class TeamMember(BaseModel):
@@ -171,7 +171,7 @@ class GraceAgent(BaseModel):
     total_processed: int = 0
     success_rate: float = 1.0
     avg_processing_time_ms: float = 0
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now)
 
 
 class AutonomousAction(BaseModel):
@@ -227,7 +227,7 @@ async def broadcast_update(update_type: str, data: Dict[str, Any]):
     message = json.dumps({
         "type": update_type,
         "data": data,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now().isoformat()
     })
     for ws in active_websockets:
         try:
@@ -274,7 +274,7 @@ async def execute_task_async(task_id: str):
         return
 
     task.status = TaskStatus.RUNNING
-    task.started_at = datetime.utcnow()
+    task.started_at = datetime.now()
     await broadcast_update("task_started", {"task_id": task_id})
 
     try:
@@ -291,7 +291,7 @@ async def execute_task_async(task_id: str):
             await asyncio.sleep(0.5)  # Simulate work
 
         task.status = TaskStatus.COMPLETED
-        task.completed_at = datetime.utcnow()
+        task.completed_at = datetime.now()
         task.progress_percent = 100
         task.result = {"success": True, "message": "Task completed successfully"}
 
@@ -300,7 +300,7 @@ async def execute_task_async(task_id: str):
     except Exception as e:
         task.status = TaskStatus.FAILED
         task.error = str(e)
-        task.completed_at = datetime.utcnow()
+        task.completed_at = datetime.now()
         await broadcast_update("task_failed", {"task_id": task_id, "error": str(e)})
 
 
@@ -312,8 +312,8 @@ async def execute_task_async(task_id: str):
 async def create_task(task: GraceTask, background_tasks: BackgroundTasks):
     """Create a new Grace task"""
     task.genesis_key_id = generate_genesis_id("GT")
-    task.created_at = datetime.utcnow()
-    task.updated_at = datetime.utcnow()
+    task.created_at = datetime.now()
+    task.updated_at = datetime.now()
 
     # Auto-assign if no assignee
     if not task.assignee_genesis_id:
@@ -384,7 +384,7 @@ async def update_task(task_id: str, updates: Dict[str, Any]):
         if hasattr(task, key):
             setattr(task, key, value)
 
-    task.updated_at = datetime.utcnow()
+    task.updated_at = datetime.now()
     task.version += 1
 
     await broadcast_update("task_updated", {"task_id": task_id, "updates": updates})
@@ -413,7 +413,7 @@ async def move_task(task_id: str, new_status: TaskStatus, position: Optional[int
 
     old_status = task.status
     task.status = new_status
-    task.updated_at = datetime.utcnow()
+    task.updated_at = datetime.now()
 
     await broadcast_update("task_moved", {
         "task_id": task_id,
@@ -538,7 +538,7 @@ async def pause_task(task_id: str):
         raise HTTPException(status_code=400, detail="Task not running")
 
     task.status = TaskStatus.PAUSED
-    task.updated_at = datetime.utcnow()
+    task.updated_at = datetime.now()
 
     await broadcast_update("task_paused", {"task_id": task_id})
 
@@ -568,8 +568,8 @@ async def cancel_task(task_id: str):
         raise HTTPException(status_code=404, detail="Task not found")
 
     task.status = TaskStatus.CANCELLED
-    task.updated_at = datetime.utcnow()
-    task.completed_at = datetime.utcnow()
+    task.updated_at = datetime.now()
+    task.completed_at = datetime.now()
 
     await broadcast_update("task_cancelled", {"task_id": task_id})
 
@@ -612,7 +612,7 @@ async def create_subtask(task_id: str, subtask: GraceTask):
     subtask.genesis_key_id = generate_genesis_id("GST")
     subtask.parent_task_id = task_id
     subtask.task_type = TaskType.SUB_AGENT
-    subtask.created_at = datetime.utcnow()
+    subtask.created_at = datetime.now()
 
     tasks_store[subtask.genesis_key_id] = subtask
     parent.sub_task_ids.append(subtask.genesis_key_id)
@@ -643,7 +643,7 @@ async def get_subtasks(task_id: str):
 async def create_requirement(req: UserRequirement):
     """Create a user requirement (job request)"""
     req.genesis_key_id = generate_genesis_id("GR")
-    req.created_at = datetime.utcnow()
+    req.created_at = datetime.now()
 
     requirements_store[req.genesis_key_id] = req
 
@@ -702,7 +702,7 @@ async def generate_tasks_from_requirement(req_id: str, background_tasks: Backgro
         req.generated_tasks.append(task.genesis_key_id)
 
     req.status = "in_progress"
-    req.updated_at = datetime.utcnow()
+    req.updated_at = datetime.now()
 
     await broadcast_update("tasks_generated", {
         "requirement_id": req_id,
@@ -884,7 +884,7 @@ async def schedule_task(
 
     task.scheduled_at = scheduled_at
     task.status = TaskStatus.SCHEDULED
-    task.updated_at = datetime.utcnow()
+    task.updated_at = datetime.now()
 
     await broadcast_update("task_scheduled", {
         "task_id": task_id,
@@ -1004,7 +1004,7 @@ async def reprioritize_tasks():
 
         # Increase priority if deadline approaching
         if task.deadline:
-            time_until_deadline = (task.deadline - datetime.utcnow()).total_seconds()
+            time_until_deadline = (task.deadline - datetime.now()).total_seconds()
             if time_until_deadline < 3600:  # Less than 1 hour
                 task.priority = TaskPriority.CRITICAL
             elif time_until_deadline < 86400:  # Less than 1 day

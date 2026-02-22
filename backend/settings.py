@@ -5,7 +5,12 @@ Provides centralized configuration for the application.
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*args, **kwargs):
+        pass
 
 # Get the backend directory
 BACKEND_DIR = Path(__file__).parent
@@ -28,22 +33,8 @@ class Settings:
     # ==================== Embedding Configuration ====================
     EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "qwen_4b")
     EMBEDDING_MODEL_PATH: str = str(BACKEND_DIR / "models" / "embedding" / EMBEDDING_DEFAULT)
-    EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cuda")  # cuda or cpu
+    EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cpu")
     EMBEDDING_NORMALIZE: bool = os.getenv("EMBEDDING_NORMALIZE", "true").lower() == "true"
-    
-    # ==================== Lightweight Mode & Component Disabling ====================
-    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
-    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
-    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
-    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
-    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
-    HEALING_SIMULATION_MODE: bool = os.getenv("HEALING_SIMULATION_MODE", "false").lower() == "true"
-    
-    # ==================== Error Handling Configuration ====================
-    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
-    
-    # ==================== Genesis Key Tracking ====================
-    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     
     # ==================== Database Configuration ====================
     DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite")
@@ -65,6 +56,7 @@ class Settings:
     # ==================== Ingestion Configuration ====================
     INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))
     INGESTION_CHUNK_OVERLAP: int = int(os.getenv("INGESTION_CHUNK_OVERLAP", "50"))
+    EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
 
     # ==================== Librarian System Configuration ====================
     LIBRARIAN_AUTO_PROCESS: bool = os.getenv("LIBRARIAN_AUTO_PROCESS", "true").lower() == "true"
@@ -86,17 +78,19 @@ class Settings:
     SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
     SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
     LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
+    HEALING_SIMULATION_MODE: bool = os.getenv("HEALING_SIMULATION_MODE", "false").lower() == "true"
     DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
+    SKIP_LAYER1_INIT: bool = os.getenv("SKIP_LAYER1_INIT", "false").lower() == "true"
+    SKIP_DIAGNOSTIC_ENGINE: bool = os.getenv("SKIP_DIAGNOSTIC_ENGINE", "false").lower() == "true"
+    SKIP_COGNITIVE_ENGINE: bool = os.getenv("SKIP_COGNITIVE_ENGINE", "false").lower() == "true"
+    SKIP_MAGMA_MEMORY: bool = os.getenv("SKIP_MAGMA_MEMORY", "false").lower() == "true"
 
     # ==================== Error Handling Configuration ====================
     SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
     SUPPRESS_QDRANT_ERRORS: bool = os.getenv("SUPPRESS_QDRANT_ERRORS", "false").lower() == "true"
     SUPPRESS_EMBEDDING_ERRORS: bool = os.getenv("SUPPRESS_EMBEDDING_ERRORS", "false").lower() == "true"
-
-    # ==================== Ingestion Configuration ====================
-    EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
 
     # ==================== SerpAPI Configuration ====================
     SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")
@@ -106,13 +100,40 @@ class Settings:
 
 
     # ==================== LLM Provider Configuration ====================
-    # LLM_PROVIDER: 'ollama' or 'openai'
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama").lower()
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
+
+    # Reasoning Router
+    REASONING_TIER_ENABLED: bool = True
+
+    # KNN Swarm
+    KNN_SWARM_WORKERS: int = 6
+
+    # Grace Brain - External LLM Configuration
+    GRACE_BRAIN_FEEDBACK_MIN_CONFIDENCE: float = 0.7
+    GRACE_BRAIN_FEEDBACK_MIN_LENGTH: int = 200
+
+    # Kimi Cloud API (external reasoning for edge cases, governed by GraceBrain)
+    KIMI_CLOUD_API_KEY: str = "sk-8kHoH172zQ4Gif102dkWLxMcJBPSeXsTCYWtFe9TWT4PqGdD"
+    KIMI_CLOUD_API_URL: str = "https://api.moonshot.ai/v1"
+    KIMI_CLOUD_MODEL: str = "moonshot-v1-8k"
+    KIMI_CLOUD_ENABLED: bool = True
+    KIMI_CLOUD_MAX_CALLS_PER_HOUR: int = 20  # Conservative rate limit
+    KIMI_CLOUD_TEMPERATURE: float = 0.0  # Deterministic
+    KIMI_CLOUD_MAX_TOKENS: int = 1000  # Keep responses short for cost
+
+    # Author Discovery
+    AUTHOR_DISCOVERY_ENABLED: bool = True
+
+    # Handshake Protocol
+    HANDSHAKE_INTERVAL: int = 60
+
+    # Closed-Loop Ecosystem
+    CLOSED_LOOP_INTERVAL: int = 300
     
     @classmethod
     def validate(cls) -> bool:

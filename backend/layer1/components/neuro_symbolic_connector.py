@@ -151,7 +151,7 @@ class NeuroSymbolicConnector:
                     "symbolic_results_count": len(result.symbolic_results),
                     "fused_results_count": len(result.fused_results),
                     "fusion_confidence": result.fusion_confidence,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 },
                 from_component=ComponentType.RAG
             )
@@ -176,7 +176,7 @@ class NeuroSymbolicConnector:
             payload={
                 "pattern_id": pattern_id,
                 "pattern_data": pattern_data,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.RAG
         )
@@ -203,7 +203,7 @@ class NeuroSymbolicConnector:
                 payload={
                     "rules_count": len(stored_patterns),
                     "pattern_ids": [p.pattern_name for p in stored_patterns],
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 },
                 from_component=ComponentType.RAG
             )

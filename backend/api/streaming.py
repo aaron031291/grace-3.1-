@@ -60,15 +60,22 @@ async def generate_stream(
 
         model_name = settings.LLM_MODEL if settings else "gpt-4o"
 
-        # RAG retrieval for context
+        # HIA honesty check — send disclaimer event if no sources found
+        # Governance check on final output happens post-stream
+
+        # RAG retrieval for context (trust-aware when available)
         rag_context = ""
         sources = []
 
         try:
+            from retrieval.trust_aware_retriever import TrustAwareDocumentRetriever
             from api.retrieve import get_document_retriever
-            retriever = get_document_retriever()
-            
-            # Use query intelligence for better retrieval if available
+            base_retriever = get_document_retriever()
+            try:
+                retriever = TrustAwareDocumentRetriever(base_retriever=base_retriever)
+            except Exception:
+                retriever = base_retriever
+
             retrieval_result = retriever.retrieve(
                 query=message,
                 limit=5,
@@ -190,6 +197,17 @@ Provide a helpful answer based on the context above:"""
                 history_repo.add_message(chat_id=chat_id, role="assistant", content=response_text)
             except Exception as save_error:
                 print(f"[STREAM] Failed to save history: {save_error}")
+
+        # Feed to Kimi knowledge feedback loop
+        try:
+            from cognitive.kimi_knowledge_feedback import get_kimi_feedback
+            if len(response_text) >= 200:
+                get_kimi_feedback().feed_answer(
+                    question=message, answer=response_text,
+                    confidence=0.6, tier_used="streaming",
+                )
+        except Exception:
+            pass
 
         # Send completion event
         yield f"event: done\ndata: {json.dumps({'status': 'complete', 'total_length': len(response_text)})}\n\n"

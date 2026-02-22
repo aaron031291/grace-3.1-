@@ -195,7 +195,7 @@ def test_decision_freeze_point_enforced():
         problem_statement="Make decision",
         goal="Decide on action",
         success_criteria=["Decision made"],
-        decision_freeze_point=datetime.utcnow() - timedelta(seconds=1)  # Past
+        decision_freeze_point=datetime.now() - timedelta(seconds=1)  # Past
     )
 
     result = validator.validate_all(context)

@@ -45,7 +45,7 @@ class MemoryMeshCache:
             'hits': 0,
             'misses': 0,
             'invalidations': 0,
-            'last_reset': datetime.utcnow()
+            'last_reset': datetime.now()
         }
 
         logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")

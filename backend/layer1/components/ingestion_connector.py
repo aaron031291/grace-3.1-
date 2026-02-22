@@ -132,7 +132,7 @@ class IngestionConnector:
                 payload={
                     "file_path": file_path,
                     "genesis_key_id": genesis_key_id,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now().isoformat()
                 },
                 from_component=ComponentType.INGESTION
             )
@@ -160,7 +160,7 @@ class IngestionConnector:
                 "file_path": file_path,
                 "genesis_key_id": genesis_key_id,
                 "chunks_created": chunks_created,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -171,7 +171,7 @@ class IngestionConnector:
             payload={
                 "file_path": file_path,
                 "genesis_key_id": genesis_key_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -195,7 +195,7 @@ class IngestionConnector:
                 "file_type": file_type,
                 "error": error,
                 "suggested_action": "retry_with_different_parser",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now().isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -241,7 +241,7 @@ class IngestionConnector:
         # Perform ingestion
         try:
             # Simplified - actual implementation would call ingestion service
-            document_id = f"doc-{datetime.utcnow().timestamp()}"
+            document_id = f"doc-{datetime.now().timestamp()}"
 
             # Trigger processing completion
             await self.message_bus.publish(

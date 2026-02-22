@@ -132,7 +132,7 @@ async def get_system_trust_score(session: Session = Depends(get_session)):
             entity="system",
             trust_score=trust_score,
             status=status,
-            calculated_at=datetime.utcnow().isoformat()
+            calculated_at=datetime.now().isoformat()
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -166,7 +166,7 @@ async def get_component_trust_score(
             entity=component_name,
             trust_score=trust_score,
             status=status,
-            calculated_at=datetime.utcnow().isoformat()
+            calculated_at=datetime.now().isoformat()
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -413,7 +413,7 @@ async def get_kpi_dashboard(session: Session = Depends(get_session)):
             "components": [],
             "top_performers": [],
             "needs_attention": [],
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now().isoformat()
         }
 
         # Process each component
