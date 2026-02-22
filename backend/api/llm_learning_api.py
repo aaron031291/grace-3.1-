@@ -1662,3 +1662,38 @@ async def kimi_teacher_stats(db: Session = Depends(get_db)):
         return get_kimi_teacher(db).get_stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/audit-teach")
+async def kimi_audit_and_teach(db: Session = Depends(get_db)):
+    """Kimi reads Grace's full state, audits, and teaches what needs fixing."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).audit_and_teach()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/learn-domain")
+async def kimi_learn_domain(
+    domain: str = Query(..., description="Domain to learn"),
+    depth: str = Query(default="overview", description="overview/intermediate/deep"),
+    db: Session = Depends(get_db),
+):
+    """Comprehensive domain learning from Kimi Cloud."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).learn_domain(domain, depth=depth)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/ask-with-context")
+async def kimi_ask_with_context(
+    question: str = Query(...),
+    topic: str = Query(default="general"),
+    db: Session = Depends(get_db),
+):
+    """Ask Kimi with full Grace system state as context."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).ask_with_system_context(question, topic=topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

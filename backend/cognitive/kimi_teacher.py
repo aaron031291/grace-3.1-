@@ -54,6 +54,7 @@ class KimiTeacher:
             "topics_mined": [],
             "genesis_keys_created": 0,
         }
+        self._system_context_cache: Optional[str] = None
 
     def _get_cloud(self):
         """Lazy-load cloud client."""
@@ -148,6 +149,171 @@ class KimiTeacher:
             )
         except Exception:
             pass
+
+    def _gather_system_context(self) -> str:
+        """
+        Read ALL Grace system states (read-only) to give Kimi Cloud
+        full context when teaching. Cached per session.
+        """
+        if self._system_context_cache:
+            return self._system_context_cache
+
+        context_parts = []
+
+        # GraceBrain state
+        try:
+            from cognitive.grace_brain import GraceBrain
+            brain = GraceBrain(self.session)
+            state = brain.read_system_state()
+            for key, value in state.items():
+                if key == "timestamp":
+                    continue
+                if isinstance(value, dict):
+                    connected = value.get("connected", "N/A")
+                    context_parts.append(f"{key}: connected={connected}")
+                    for k, v in value.items():
+                        if k not in ("connected", "error") and v and str(v) != "False":
+                            context_parts.append(f"  {k}={v}")
+        except Exception:
+            pass
+
+        # Diagnostic health
+        try:
+            from cognitive.system_integrity_monitor import get_system_integrity_monitor
+            monitor = get_system_integrity_monitor(self.session)
+            report = monitor.get_quick_status()
+            context_parts.append(f"integrity: health={report.get('health_score', '?')}, issues={report.get('total_issues', '?')}")
+        except Exception:
+            pass
+
+        # Knowledge store stats
+        try:
+            from cognitive.knowledge_compiler import CompiledFact, CompiledProcedure, CompiledDecisionRule, DistilledKnowledge
+            context_parts.append(f"knowledge_store: facts={self.session.query(CompiledFact).count()}, procedures={self.session.query(CompiledProcedure).count()}, rules={self.session.query(CompiledDecisionRule).count()}")
+            context_parts.append(f"distilled_knowledge: {self.session.query(DistilledKnowledge).count()} entries")
+        except Exception:
+            pass
+
+        # Weight system
+        try:
+            from cognitive.grace_weight_system import get_grace_weight_system
+            ws = get_grace_weight_system(self.session)
+            stats = ws.get_stats()
+            context_parts.append(f"weights: updates={stats.get('total_weight_updates', 0)}, kpis={stats.get('current_kpis', {})}")
+        except Exception:
+            pass
+
+        # Task stats
+        try:
+            from cognitive.task_completion_verifier import VerifiedTask
+            total = self.session.query(VerifiedTask).count()
+            complete = self.session.query(VerifiedTask).filter(VerifiedTask.status == "complete").count()
+            context_parts.append(f"tasks: total={total}, complete={complete}")
+        except Exception:
+            pass
+
+        # Feedback loop recommendations
+        try:
+            from cognitive.feedback_loops import get_feedback_coordinator
+            coord = get_feedback_coordinator(self.session)
+            recs = coord.get_recommendations()
+            gaps = recs.get("knowledge_gaps", [])[:3]
+            if gaps:
+                context_parts.append(f"knowledge_gaps: {[g.get('topic', '?') for g in gaps]}")
+        except Exception:
+            pass
+
+        context = "\n".join(context_parts)
+        self._system_context_cache = context[:2000]  # Cap for cost
+        return self._system_context_cache
+
+    def ask_with_system_context(
+        self,
+        question: str,
+        topic: str = "general",
+        code_files: Optional[List[str]] = None,
+        max_tokens: int = 800,
+    ) -> Dict[str, Any]:
+        """
+        Ask Kimi with FULL system state context.
+
+        Kimi sees diagnostics, health, knowledge gaps, weights, tasks --
+        everything Grace knows about herself. Read-only.
+        """
+        system_context = self._gather_system_context()
+        enriched_question = f"Grace System State:\n{system_context}\n\nQuestion: {question}"
+        return self.ask(enriched_question, topic=topic, code_files=code_files, max_tokens=max_tokens)
+
+    def audit_and_teach(self, max_tokens: int = 600) -> Dict[str, Any]:
+        """
+        Kimi reads Grace's full state and teaches her what needs fixing.
+
+        This is the key learning loop: Kimi audits, identifies gaps,
+        teaches Grace about those gaps, Grace stores the knowledge.
+        """
+        system_context = self._gather_system_context()
+
+        audit_question = f"""You are auditing Grace OS. Here is the current system state:
+
+{system_context}
+
+Based on this state:
+1. What are the top 3 issues that need attention?
+2. What knowledge gaps should be filled first?
+3. What integrations are missing or broken?
+4. What would improve the system most right now?
+
+Be specific. Reference actual numbers from the state data."""
+
+        return self.ask(audit_question, topic="grace_audit", max_tokens=max_tokens)
+
+    def learn_from_diagnostics(self, max_tokens: int = 500) -> Dict[str, Any]:
+        """Ask Kimi to analyze diagnostic data and teach Grace what it means."""
+        system_context = self._gather_system_context()
+        return self.ask(
+            f"Analyze this diagnostic data and explain what needs healing:\n{system_context}",
+            topic="diagnostics",
+            max_tokens=max_tokens,
+        )
+
+    def learn_domain(
+        self,
+        domain: str,
+        depth: str = "overview",
+        max_questions: int = 5,
+    ) -> Dict[str, Any]:
+        """
+        Comprehensive domain learning. Uses Kimi to teach Grace
+        a whole domain from scratch.
+
+        depth: 'overview' (3 questions), 'intermediate' (5), 'deep' (7)
+        """
+        question_sets = {
+            "overview": [
+                f"What is {domain}? Define the key concepts in 3-4 sentences.",
+                f"What are the essential best practices for {domain}?",
+                f"What tools and frameworks are most important in {domain}?",
+            ],
+            "intermediate": [
+                f"What is {domain}? Define the key concepts.",
+                f"What are the essential best practices for {domain}?",
+                f"What are the common mistakes and anti-patterns in {domain}?",
+                f"What tools, frameworks, and technologies are used in {domain}?",
+                f"How do you measure success and quality in {domain}?",
+            ],
+            "deep": [
+                f"What is {domain}? Define all key concepts and principles.",
+                f"What are the best practices and design patterns for {domain}?",
+                f"What are the common mistakes, anti-patterns, and pitfalls in {domain}?",
+                f"What tools, frameworks, and technologies are used in {domain}?",
+                f"How do you measure success, quality, and performance in {domain}?",
+                f"What are the current trends and future directions in {domain}?",
+                f"How does {domain} integrate with other engineering practices?",
+            ],
+        }
+
+        questions = question_sets.get(depth, question_sets["overview"])[:max_questions]
+        return self.mine_topic(domain, questions=questions, max_questions=max_questions)
 
     def ask(
         self,
