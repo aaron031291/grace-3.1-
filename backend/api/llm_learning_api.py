@@ -2076,3 +2076,15 @@ async def knowledge_reverse_knn(
         return get_grace_knowledge_engine().reverse_knn(query, limit, include_subagents=include_subagents)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/mine-codebase")
+async def knowledge_mine_codebase(
+    root_path: str = Query(default="/workspace/backend"),
+    db: Session = Depends(get_db),
+):
+    """Mine source code for function signatures, class patterns, error handling, framework idioms."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().mine_codebase(root_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

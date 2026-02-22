@@ -621,6 +621,33 @@ class GraceKnowledgeEngine:
         return result
 
     # ==================================================================
+    # MINE CODEBASE - extract code patterns, API signatures, error fixes
+    # ==================================================================
+
+    def mine_codebase(self, root_path: str = "/workspace/backend") -> Dict[str, Any]:
+        """
+        Mine source code for actionable patterns:
+        - Function signatures with types and decorators
+        - Class patterns with inheritance and init params
+        - Error handling patterns (try/except)
+        - Framework-specific patterns (FastAPI, SQLAlchemy, Qdrant, pytest)
+        - Error-solution pairs for common bugs
+        """
+        from cognitive.code_pattern_miner import CodePatternMiner
+        miner = CodePatternMiner(self.session_factory)
+
+        codebase = miner.mine_codebase(root_path)
+        frameworks = miner.mine_framework_patterns()
+        errors = miner.mine_error_solutions()
+
+        return {
+            "codebase": codebase,
+            "framework_patterns": frameworks["patterns_stored"],
+            "error_solutions": errors["error_solutions_stored"],
+            "stats": miner.get_stats(),
+        }
+
+    # ==================================================================
     # COMPILE - raw text → structured knowledge
     # ==================================================================
 
