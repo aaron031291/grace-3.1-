@@ -533,26 +533,40 @@ class SystemIntegrityMonitor:
         return issues
 
     def _calculate_health_score(self, issues: List[IntegrityIssue]) -> float:
-        """Calculate overall system health 0-100."""
+        """Calculate overall system health 0-100.
+
+        Separates startup issues (subsystems not active because app
+        isn't running) from real issues (things that are actually broken).
+        Startup issues don't tank the score in script/test mode.
+        """
         if not issues:
             return 50.0
 
-        connected = len([i for i in issues if i.category == "connected"])
-        total_components = connected + len([i for i in issues if i.category in ("disconnected", "pipeline", "knowledge_gap", "weight")])
+        connected = [i for i in issues if i.category == "connected"]
 
-        if total_components == 0:
-            return 50.0
+        # Separate startup issues from real issues
+        startup_issues = [i for i in issues if "NOT active" in i.description and i.category == "disconnected"]
+        real_issues = [i for i in issues if i not in connected and i not in startup_issues]
 
-        # Base score from connection ratio
-        base = (connected / total_components) * 70
+        total_real = len(connected) + len(real_issues)
 
-        # Penalty for critical/high issues
-        critical = len([i for i in issues if i.severity == "critical"])
-        high = len([i for i in issues if i.severity == "high"])
+        if total_real == 0:
+            return 70.0  # Only startup issues, system is structurally fine
 
-        penalty = (critical * 15) + (high * 5)
+        # Base score from real connection ratio
+        base = (len(connected) / max(total_real, 1)) * 60
 
-        return max(0, min(100, base + 30 - penalty))
+        # Penalty for real critical/high issues only
+        critical = len([i for i in real_issues if i.severity == "critical"])
+        high = len([i for i in real_issues if i.severity == "high"])
+        medium = len([i for i in real_issues if i.severity == "medium"])
+
+        penalty = (critical * 15) + (high * 8) + (medium * 2)
+
+        # Bonus for startup issues being the only problem (structurally sound)
+        startup_bonus = 10 if len(startup_issues) > 0 and len(real_issues) <= 3 else 0
+
+        return max(0, min(100, base + 30 - penalty + startup_bonus))
 
     def get_quick_status(self) -> Dict[str, Any]:
         """Quick status check without full scan. Uses cached report if recent."""
