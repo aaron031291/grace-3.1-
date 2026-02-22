@@ -747,9 +747,9 @@ class TaskCompletionVerifier:
         except Exception:
             pass
 
-        # 6. Feed ALL 11 intelligence feedback loops
+        # 6. Feed 5 core feedback loops
         try:
-            from cognitive.intelligence_feedback_loops import get_feedback_coordinator
+            from cognitive.feedback_loops import get_feedback_coordinator
             coordinator = get_feedback_coordinator(self.session)
 
             criteria_results = {}
