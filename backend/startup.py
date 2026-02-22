@@ -662,6 +662,16 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                  ["record_task_outcome", "get_improvement_recommendations"],
                  ["task_verifier", "weight_system"],
                  ["criteria_tracker", "question_tracker", "gap_queue"]),
+                ("knowledge_exhaustion", "cognitive", "cognitive.knowledge_exhaustion_engine", "cognitive/knowledge_exhaustion_engine.py",
+                 "Convergence-based deep extraction until topics exhausted",
+                 ["exhaust_topic", "github_massive_dump", "get_topic_status"],
+                 ["knowledge_compiler", "cloud_client"],
+                 ["unified_intelligence", "knowledge_mining_engine"]),
+                ("grace_knowledge_engine", "cognitive", "cognitive.grace_knowledge_engine", "cognitive/grace_knowledge_engine.py",
+                 "Unified knowledge engine - single entry point for all knowledge ops",
+                 ["query", "discover", "exhaust", "github_dump", "audit_gaps", "compile", "stats"],
+                 ["knowledge_compiler", "knowledge_exhaustion", "library_connectors", "cloud_client"],
+                 ["unified_intelligence", "grace_brain"]),
             ]
 
             registered = 0
