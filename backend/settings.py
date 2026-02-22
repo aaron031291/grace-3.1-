@@ -111,13 +111,14 @@ class Settings:
     GRACE_BRAIN_FEEDBACK_MIN_CONFIDENCE: float = 0.7
     GRACE_BRAIN_FEEDBACK_MIN_LENGTH: int = 200
 
-    # Kimi Cloud API (external reasoning for edge cases)
-    KIMI_CLOUD_API_KEY: str = ""
-    KIMI_CLOUD_API_URL: str = "https://api.moonshot.cn/v1"
+    # Kimi Cloud API (external reasoning for edge cases, governed by GraceBrain)
+    KIMI_CLOUD_API_KEY: str = "sk-8kHoH172zQ4Gif102dkWLxMcJBPSeXsTCYWtFe9TWT4PqGdD"
+    KIMI_CLOUD_API_URL: str = "https://api.moonshot.ai/v1"
     KIMI_CLOUD_MODEL: str = "moonshot-v1-8k"
-    KIMI_CLOUD_ENABLED: bool = False
-    KIMI_CLOUD_MAX_CALLS_PER_HOUR: int = 30
+    KIMI_CLOUD_ENABLED: bool = True
+    KIMI_CLOUD_MAX_CALLS_PER_HOUR: int = 20  # Conservative rate limit
     KIMI_CLOUD_TEMPERATURE: float = 0.0  # Deterministic
+    KIMI_CLOUD_MAX_TOKENS: int = 1000  # Keep responses short for cost
 
     # Author Discovery
     AUTHOR_DISCOVERY_ENABLED: bool = True

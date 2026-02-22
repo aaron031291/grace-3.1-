@@ -38,29 +38,39 @@ except ImportError:
 
 class KimiCloudClient:
     """
-    Governed external LLM client.
+    Governed external LLM client with read-only source code access.
 
     GraceBrain decides when to call this.
     Rate limited. Tracked. Verified. Distilled.
+
+    COST OPTIMIZATION:
+    - max_tokens capped (shorter responses = fewer tokens)
+    - Temperature 0 (deterministic = cacheable)
+    - Every response stored in distilled KB (never ask same question twice)
+    - Source code context sent only when needed (reduces prompt tokens)
+    - System prompt reused (cached on server side)
     """
 
     def __init__(
         self,
         api_key: str,
-        api_url: str = "https://api.moonshot.cn/v1",
+        api_url: str = "https://api.moonshot.ai/v1",
         model: str = "moonshot-v1-8k",
-        max_calls_per_hour: int = 30,
+        max_calls_per_hour: int = 20,
         temperature: float = 0.0,
+        max_tokens: int = 1000,
     ):
         self.api_key = api_key
         self.api_url = api_url
         self.model = model
         self.max_calls_per_hour = max_calls_per_hour
         self.temperature = temperature
+        self.max_tokens = max_tokens
 
         self._call_timestamps: deque = deque(maxlen=max_calls_per_hour)
         self._total_calls = 0
         self._total_tokens = 0
+        self._source_code_cache: Dict[str, str] = {}  # Cache file reads
 
     def is_available(self) -> bool:
         """Check if client is configured and not rate limited."""
@@ -76,12 +86,68 @@ class KimiCloudClient:
             self._call_timestamps.popleft()
         return len(self._call_timestamps) >= self.max_calls_per_hour
 
+    def read_source_file(self, file_path: str, max_lines: int = 100) -> Optional[str]:
+        """
+        Read-only source code access. Cached to minimize re-reads.
+
+        Used to give Kimi Cloud context about Grace's code when needed.
+        Only reads, never modifies.
+        """
+        if file_path in self._source_code_cache:
+            return self._source_code_cache[file_path]
+
+        import os
+        # Resolve relative to backend directory
+        base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        full_path = os.path.join(base, file_path)
+
+        if not os.path.exists(full_path):
+            return None
+
+        try:
+            with open(full_path, 'r', encoding='utf-8', errors='replace') as f:
+                lines = f.readlines()[:max_lines]
+            content = ''.join(lines)
+            self._source_code_cache[file_path] = content
+            return content
+        except Exception:
+            return None
+
+    def generate_with_code_context(
+        self,
+        prompt: str,
+        code_files: List[str],
+        system_prompt: Optional[str] = None,
+        max_tokens: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """
+        Generate with source code context. Cost-optimized:
+        - Only includes relevant file snippets (first 50 lines each)
+        - Caps total context to 3000 chars
+        - Cached file reads (no re-reading same file)
+        """
+        context_parts = []
+        total_chars = 0
+        for file_path in code_files[:5]:  # Max 5 files
+            code = self.read_source_file(file_path, max_lines=50)
+            if code and total_chars + len(code) < 3000:
+                context_parts.append(f"--- {file_path} ---\n{code[:600]}")
+                total_chars += len(code[:600])
+
+        if context_parts:
+            code_context = "\n\n".join(context_parts)
+            full_prompt = f"Source code context:\n{code_context}\n\nQuestion: {prompt}"
+        else:
+            full_prompt = prompt
+
+        return self.generate(full_prompt, system_prompt=system_prompt, max_tokens=max_tokens)
+
     def generate(
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
         task_type: Optional[str] = None,
-        max_tokens: int = 2000,
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         Call Kimi cloud API. GraceBrain must approve this call first.
@@ -95,10 +161,12 @@ class KimiCloudClient:
         if self._is_rate_limited():
             return {"success": False, "content": "", "error": f"Rate limited ({self.max_calls_per_hour}/hour)"}
 
+        effective_max_tokens = max_tokens or self.max_tokens
+
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
+        messages.append({"role": "user", "content": prompt[:4000]})  # Cap prompt length for cost
 
         try:
             resp = requests.post(
@@ -111,7 +179,7 @@ class KimiCloudClient:
                     "model": self.model,
                     "messages": messages,
                     "temperature": self.temperature,
-                    "max_tokens": max_tokens,
+                    "max_tokens": effective_max_tokens,
                 },
                 timeout=60,
             )
