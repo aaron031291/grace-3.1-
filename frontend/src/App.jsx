@@ -148,7 +148,7 @@ function App() {
                 <circle cx="12" cy="12" r="3"></circle>
                 <path d="M12 1v4m0 14v4m-7-11H1m22 0h-4m-1.343-5.657l-2.828 2.828m-4.243 4.243l-2.828 2.828m12.728 0l-2.828-2.828M6.343 6.343L3.515 3.515"></path>
               </svg>
-              Kimi + Grace
+              Grace Intelligence
             </button>
             <button
               className={`tab-button ${activeTab === "governance" ? "active" : ""}`}

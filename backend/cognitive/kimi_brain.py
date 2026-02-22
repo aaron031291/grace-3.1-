@@ -1,5 +1,5 @@
 """
-Kimi Brain - READ-ONLY Intelligence Layer
+Grace Brain - READ-ONLY Intelligence Layer
 
 Kimi is another brain. She does NOT execute anything.
 She READS Grace's cognitive systems, ANALYZES problems,
@@ -24,7 +24,7 @@ Architecture:
     ┌──────────────────────────────────────────────────────┐
     │                 GRACE (VERIFIES & EXECUTES)           │
     │                                                       │
-    │  1. Receives Kimi's instructions                     │
+    │  1. Receives Grace's instructions                     │
     │  2. Runs through OODA loop                           │
     │  3. Verifies via governance/trust                    │
     │  4. Executes via execution bridge                    │
@@ -86,9 +86,9 @@ class InstructionPriority(str, Enum):
 
 
 @dataclass
-class KimiDiagnosis:
+class GraceDiagnosis:
     """
-    Kimi's diagnosis of the system state.
+    Grace's diagnosis of the system state.
 
     This is what Kimi produces after reading all of Grace's
     cognitive systems. It's an analysis, not an execution.
@@ -138,26 +138,26 @@ class KimiInstruction:
 
 
 @dataclass
-class KimiInstructionSet:
+class GraceInstructionSet:
     """
     A set of instructions Kimi produces from a single analysis session.
 
-    This is the complete output of Kimi's brain for a given request.
+    This is the complete output of Grace's brain for a given request.
     Grace receives this, verifies each instruction, and executes.
     """
     session_id: str
-    diagnosis: KimiDiagnosis
+    diagnosis: GraceDiagnosis
     instructions: List[KimiInstruction]
     summary: str
     total_confidence: float
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-class KimiBrain:
+class GraceBrain:
     """
-    Kimi's read-only intelligence layer.
+    Grace's read-only intelligence layer.
 
-    Kimi reads Grace's cognitive systems, analyzes the state,
+    Grace reads Grace's cognitive systems, analyzes the state,
     identifies problems, and produces instructions for Grace
     to verify and execute.
 
@@ -178,7 +178,7 @@ class KimiBrain:
         self._max_concurrent = 3
         self._active_requests = 0
 
-        self._session_history: List[KimiInstructionSet] = []
+        self._session_history: List[GraceInstructionSet] = []
 
         # Load tool registry for instruction awareness
         try:
@@ -198,29 +198,29 @@ class KimiBrain:
                 pass
 
         logger.info(
-            f"[KIMI-BRAIN] Read-only intelligence layer initialized "
+            f"[GRACE-BRAIN] Read-only intelligence layer initialized "
             f"(LLM: {'connected' if self.llm_client else 'none - template composition only'})"
         )
 
     def connect_mirror(self, mirror_system):
         """Connect to Grace's self-mirroring system (READ-ONLY)."""
         self._mirror_system = mirror_system
-        logger.info("[KIMI-BRAIN] Connected to MirrorSelfModelingSystem (read-only)")
+        logger.info("[GRACE-BRAIN] Connected to MirrorSelfModelingSystem (read-only)")
 
     def connect_diagnostics(self, diagnostic_engine):
         """Connect to Grace's diagnostic machine (READ-ONLY)."""
         self._diagnostic_engine = diagnostic_engine
-        logger.info("[KIMI-BRAIN] Connected to DiagnosticEngine (read-only)")
+        logger.info("[GRACE-BRAIN] Connected to DiagnosticEngine (read-only)")
 
     def connect_learning(self, learning_tracker):
         """Connect to Grace's learning efficiency tracker (READ-ONLY)."""
         self._learning_tracker = learning_tracker
-        logger.info("[KIMI-BRAIN] Connected to LearningEfficiencyTracker (read-only)")
+        logger.info("[GRACE-BRAIN] Connected to LearningEfficiencyTracker (read-only)")
 
     def connect_pattern_learner(self, pattern_learner):
         """Connect to LLM pattern learner (READ-ONLY)."""
         self._pattern_learner = pattern_learner
-        logger.info("[KIMI-BRAIN] Connected to LLMPatternLearner (read-only)")
+        logger.info("[GRACE-BRAIN] Connected to LLMPatternLearner (read-only)")
 
     # ==================================================================
     # READ: Observe Grace's cognitive systems
@@ -230,7 +230,7 @@ class KimiBrain:
         """
         Read the current state of all Grace's cognitive systems.
 
-        This is Kimi's OBSERVE phase -- gathering data from all
+        This is Grace's OBSERVE phase -- gathering data from all
         of Grace's internal systems without modifying anything.
         """
         state = {
@@ -248,7 +248,7 @@ class KimiBrain:
             "security": self._read_security(),
         }
 
-        logger.info("[KIMI-BRAIN] System state read complete")
+        logger.info("[GRACE-BRAIN] System state read complete")
         return state
 
     def _read_mirror(self) -> Dict[str, Any]:
@@ -267,7 +267,7 @@ class KimiBrain:
                 "self_awareness_score": self_model.get("self_awareness_score", 0),
             }
         except Exception as e:
-            logger.warning(f"[KIMI-BRAIN] Error reading mirror: {e}")
+            logger.warning(f"[GRACE-BRAIN] Error reading mirror: {e}")
             return {"connected": True, "error": str(e)}
 
     def _read_diagnostics(self) -> Dict[str, Any]:
@@ -282,7 +282,7 @@ class KimiBrain:
                 "recent_cycles": getattr(self._diagnostic_engine, 'cycle_count', 0),
             }
         except Exception as e:
-            logger.warning(f"[KIMI-BRAIN] Error reading diagnostics: {e}")
+            logger.warning(f"[GRACE-BRAIN] Error reading diagnostics: {e}")
             return {"connected": True, "error": str(e)}
 
     def _read_learning(self) -> Dict[str, Any]:
@@ -300,7 +300,7 @@ class KimiBrain:
                 "domain_efficiency": metrics.get("domain_efficiency", {}),
             }
         except Exception as e:
-            logger.warning(f"[KIMI-BRAIN] Error reading learning: {e}")
+            logger.warning(f"[GRACE-BRAIN] Error reading learning: {e}")
             return {"connected": True, "error": str(e)}
 
     def _read_patterns(self) -> Dict[str, Any]:
@@ -319,7 +319,7 @@ class KimiBrain:
                 "replaceable_patterns": stats.get("replaceable_patterns", 0),
             }
         except Exception as e:
-            logger.warning(f"[KIMI-BRAIN] Error reading patterns: {e}")
+            logger.warning(f"[GRACE-BRAIN] Error reading patterns: {e}")
             return {"connected": True, "error": str(e)}
 
     def _read_active_tasks(self) -> Dict[str, Any]:
@@ -445,11 +445,11 @@ class KimiBrain:
     # ANALYZE: Diagnose problems from observed state
     # ==================================================================
 
-    def diagnose(self, user_request: Optional[str] = None) -> KimiDiagnosis:
+    def diagnose(self, user_request: Optional[str] = None) -> GraceDiagnosis:
         """
         Analyze Grace's current state and produce a diagnosis.
 
-        Kimi reads all systems, identifies problems, gaps,
+        Grace reads all systems, identifies problems, gaps,
         and opportunities. This is pure analysis -- no execution.
         """
         diagnosis_id = f"DIAG-{uuid.uuid4().hex[:12]}"
@@ -468,7 +468,7 @@ class KimiBrain:
 
         confidence = self._calculate_diagnosis_confidence(state)
 
-        diagnosis = KimiDiagnosis(
+        diagnosis = GraceDiagnosis(
             diagnosis_id=diagnosis_id,
             timestamp=datetime.now(timezone.utc),
             system_health=health,
@@ -488,7 +488,7 @@ class KimiBrain:
             gk = gk_service.create_key(
                 entity_type="kimi_diagnosis",
                 entity_id=diagnosis_id,
-                origin_source="kimi_brain",
+                origin_source="grace_brain",
                 origin_type="diagnosis",
                 context_data={"problems": len(detected_problems), "gaps": len(learning_gaps)},
             )
@@ -499,7 +499,7 @@ class KimiBrain:
         self.tracker.record_interaction(
             prompt=user_request or "System diagnosis requested",
             response=assessment,
-            model_used="kimi",
+            model_used="grace_brain",
             interaction_type="reasoning",
             outcome="success",
             confidence_score=confidence,
@@ -514,7 +514,7 @@ class KimiBrain:
         )
 
         logger.info(
-            f"[KIMI-BRAIN] Diagnosis {diagnosis_id}: "
+            f"[GRACE-BRAIN] Diagnosis {diagnosis_id}: "
             f"{len(detected_problems)} problems, "
             f"{len(learning_gaps)} gaps, "
             f"confidence={confidence:.2f}"
@@ -728,7 +728,7 @@ class KimiBrain:
         self,
         user_request: str,
         context: Optional[Dict[str, Any]] = None,
-    ) -> KimiInstructionSet:
+    ) -> GraceInstructionSet:
         """
         Analyze a user request and produce instructions for Grace.
 
@@ -761,7 +761,7 @@ class KimiBrain:
             f"Confidence: {total_confidence:.2f}."
         )
 
-        instruction_set = KimiInstructionSet(
+        instruction_set = GraceInstructionSet(
             session_id=session_id,
             diagnosis=diagnosis,
             instructions=instructions,
@@ -774,9 +774,9 @@ class KimiBrain:
         self.tracker.record_interaction(
             prompt=user_request,
             response=summary,
-            model_used="kimi",
+            model_used="grace_brain",
             interaction_type="planning",
-            delegation_type="kimi_direct",
+            delegation_type="grace_direct",
             outcome="success",
             confidence_score=total_confidence,
             reasoning_chain=[
@@ -793,7 +793,7 @@ class KimiBrain:
         )
 
         logger.info(
-            f"[KIMI-BRAIN] Session {session_id}: "
+            f"[GRACE-BRAIN] Session {session_id}: "
             f"{len(instructions)} instructions produced, "
             f"confidence={total_confidence:.2f}"
         )
@@ -803,7 +803,7 @@ class KimiBrain:
     def _generate_instructions(
         self,
         user_request: str,
-        diagnosis: KimiDiagnosis,
+        diagnosis: GraceDiagnosis,
         context: Optional[Dict[str, Any]],
     ) -> List[KimiInstruction]:
         """
@@ -818,7 +818,7 @@ class KimiBrain:
         task_type = self._classify_request(request_lower)
 
         if task_type == "coding":
-            instructions.append(KimiInstruction(
+            instructions.append(GraceInstruction(
                 instruction_id=f"INS-{uuid.uuid4().hex[:8]}",
                 instruction_type=InstructionType.CREATE if "create" in request_lower or "add" in request_lower
                     else InstructionType.FIX if "fix" in request_lower or "bug" in request_lower
@@ -840,7 +840,7 @@ class KimiBrain:
 
         elif task_type == "healing":
             for problem in diagnosis.detected_problems:
-                instructions.append(KimiInstruction(
+                instructions.append(GraceInstruction(
                     instruction_id=f"INS-{uuid.uuid4().hex[:8]}",
                     instruction_type=InstructionType.HEAL,
                     priority=InstructionPriority.HIGH if problem.get("severity") == "high"
@@ -861,7 +861,7 @@ class KimiBrain:
 
         elif task_type == "learning":
             for gap in diagnosis.learning_gaps:
-                instructions.append(KimiInstruction(
+                instructions.append(GraceInstruction(
                     instruction_id=f"INS-{uuid.uuid4().hex[:8]}",
                     instruction_type=InstructionType.LEARN,
                     priority=InstructionPriority.MEDIUM,
@@ -879,7 +879,7 @@ class KimiBrain:
                 ))
 
         elif task_type == "investigation":
-            instructions.append(KimiInstruction(
+            instructions.append(GraceInstruction(
                 instruction_id=f"INS-{uuid.uuid4().hex[:8]}",
                 instruction_type=InstructionType.INVESTIGATE,
                 priority=InstructionPriority.MEDIUM,
@@ -897,7 +897,7 @@ class KimiBrain:
             ))
 
         else:
-            instructions.append(KimiInstruction(
+            instructions.append(GraceInstruction(
                 instruction_id=f"INS-{uuid.uuid4().hex[:8]}",
                 instruction_type=InstructionType.OBSERVE,
                 priority=InstructionPriority.MEDIUM,
@@ -1020,7 +1020,7 @@ class KimiBrain:
                     if result.get("success"):
                         composed = result.get("content", "")
             except Exception as e:
-                logger.debug(f"[KIMI-COMPOSE] LLM composition failed: {e}")
+                logger.debug(f"[GRACE-COMPOSE] LLM composition failed: {e}")
 
         if not composed:
             # Template composition fallback (no LLM)
@@ -1029,7 +1029,7 @@ class KimiBrain:
         self.tracker.record_interaction(
             prompt=composition_prompt,
             response=composed[:2000],
-            model_used="kimi_composer" if not self.llm_client else f"kimi_composer:llm",
+            model_used="grace_composer" if not self.llm_client else f"kimi_composer:llm",
             interaction_type="reasoning",
             outcome="success",
             confidence_score=0.8 if self.llm_client else 0.6,
@@ -1043,7 +1043,7 @@ class KimiBrain:
             miner.store_interaction(
                 query=query,
                 response=composed,
-                model_used="kimi_composer",
+                model_used="grace_composer",
                 confidence=0.7,
             )
             self.session.commit()
@@ -1059,11 +1059,11 @@ class KimiBrain:
         context: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        Any Grace subsystem can consult Kimi for reasoning.
+        Any Grace subsystem can consult Grace Brain for reasoning.
 
         This is the bidirectional channel: Grace → Kimi.
         Diagnostic engine, self-healing, task verifier, etc.
-        can all call this to get Kimi's analysis.
+        can all call this to get Grace's analysis.
 
         Rate-limited to prevent overwhelming the LLM.
         """
@@ -1253,5 +1253,5 @@ def get_kimi_brain(session: Session, llm_client=None) -> KimiBrain:
     """Get or create the Kimi brain singleton."""
     global _brain_instance
     if _brain_instance is None:
-        _brain_instance = KimiBrain(session, llm_client=llm_client)
+        _brain_instance = GraceBrain(session, llm_client=llm_client)
     return _brain_instance

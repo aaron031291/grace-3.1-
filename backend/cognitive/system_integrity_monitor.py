@@ -2,7 +2,7 @@
 System Integrity Monitor
 
 Continuously tracks unknowns, missing wirings, disconnected components,
-and system health. Kimi reads this as part of her system state observation.
+and system health. Grace reads this as part of her system state observation.
 
 Runs automatically. Reports what's connected, what's broken, what's unknown.
 User never has to ask "what's the state" -- the system tells them.
@@ -17,8 +17,8 @@ WHAT IT TRACKS:
   - Learning pipeline status (is data flowing?)
   - Dependency trend (is autonomy improving?)
 
-Kimi reads this in her system state. If something is broken,
-Kimi's diagnosis will include it. The user sees it in the dashboard.
+Grace reads this in her system state. If something is broken,
+Grace's diagnosis will include it. The user sees it in the dashboard.
 """
 
 import os
@@ -49,7 +49,7 @@ class SystemIntegrityMonitor:
     """
     Continuously monitors system integrity.
 
-    Kimi reads this. Dashboard shows this. User always knows the state.
+    Grace reads this. Dashboard shows this. User always knows the state.
     """
 
     def __init__(self, session: Session, workspace_dir: str = None):

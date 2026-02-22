@@ -778,7 +778,7 @@ async def call_tool(
     """
     Execute a tool call.
 
-    This is Kimi's main tool execution endpoint. Kimi decides what to do
+    This is Grace's main tool execution endpoint. Kimi decides what to do
     (intelligence) and calls this endpoint to actually do it (tool use).
 
     Every call is tracked for learning and pattern extraction.
@@ -851,7 +851,7 @@ async def call_tools_parallel(
 async def get_tool_stats(
     executor: KimiToolExecutor = Depends(get_tool_executor),
 ):
-    """Get Kimi's tool usage statistics."""
+    """Get Grace's tool usage statistics."""
     try:
         return executor.get_stats()
     except Exception as e:
@@ -863,7 +863,7 @@ async def get_tool_stats(
 # KIMI BRAIN ENDPOINTS (READ-ONLY INTELLIGENCE)
 # =======================================================================
 
-class KimiAnalyzeRequest(BaseModel):
+class GraceAnalyzeRequest(BaseModel):
     """Request Kimi to analyze and produce instructions."""
     user_request: str = Field(..., description="What to analyze or what to do")
     context: Optional[Dict[str, Any]] = Field(None, description="Additional context")
@@ -879,13 +879,13 @@ def get_executor_instance(db: Session = Depends(get_db)) -> GraceVerifiedExecuto
 
 @router.get("/kimi/status")
 async def get_kimi_status(
-    brain: KimiBrain = Depends(get_brain),
+    brain: GraceBrain = Depends(get_brain),
 ):
     """
     Get Kimi brain status.
 
     Shows connected systems and recent analysis sessions.
-    Kimi is read-only -- she observes and instructs, never executes.
+    Grace Brain is deterministic -- she observes and instructs, never executes.
     """
     try:
         return brain.get_status()
@@ -896,10 +896,10 @@ async def get_kimi_status(
 
 @router.get("/kimi/read-state")
 async def read_system_state(
-    brain: KimiBrain = Depends(get_brain),
+    brain: GraceBrain = Depends(get_brain),
 ):
     """
-    Kimi reads the current state of all Grace cognitive systems.
+    Grace reads the current state of all Grace cognitive systems.
 
     READ-ONLY: Kimi observes mirror, diagnostics, learning,
     patterns, and interaction stats without modifying anything.
@@ -913,10 +913,10 @@ async def read_system_state(
 
 @router.get("/kimi/diagnose")
 async def kimi_diagnose(
-    brain: KimiBrain = Depends(get_brain),
+    brain: GraceBrain = Depends(get_brain),
 ):
     """
-    Kimi diagnoses the system -- identifies problems, gaps, opportunities.
+    Grace diagnoses the system -- identifies problems, gaps, opportunities.
 
     READ-ONLY: Pure analysis, produces diagnosis but does not execute fixes.
     """
@@ -939,11 +939,11 @@ async def kimi_diagnose(
 
 @router.post("/kimi/analyze")
 async def kimi_analyze(
-    request: KimiAnalyzeRequest,
-    brain: KimiBrain = Depends(get_brain),
+    request: GraceAnalyzeRequest,
+    brain: GraceBrain = Depends(get_brain),
 ):
     """
-    Kimi analyzes a request and produces instructions for Grace.
+    Grace analyzes a request and produces instructions for Grace.
 
     Kimi READS system state, DIAGNOSES problems, and PRODUCES
     instructions. She does NOT execute anything.
@@ -994,15 +994,15 @@ async def kimi_analyze(
 
 @router.post("/grace/execute")
 async def grace_execute_instructions(
-    request: KimiAnalyzeRequest,
-    brain: KimiBrain = Depends(get_brain),
+    request: GraceAnalyzeRequest,
+    brain: GraceBrain = Depends(get_brain),
     executor: GraceVerifiedExecutor = Depends(get_executor_instance),
     user=Depends(get_optional_user),
 ):
     """
-    Full pipeline: Kimi analyzes -> Grace verifies -> Grace executes.
+    Full pipeline: Grace analyzes -> Grace verifies -> Grace executes.
 
-    1. Kimi reads system state and produces instructions (read-only)
+    1. Grace reads system state and produces instructions (read-only)
     2. Grace verifies each instruction through her systems
     3. Grace executes approved instructions
     4. Results tracked for learning
@@ -1464,7 +1464,7 @@ async def scan_system_integrity(db: Session = Depends(get_db)):
     Full system integrity scan.
 
     Shows what's connected, what's broken, what's unknown.
-    Kimi reads this automatically. Dashboard shows this.
+    Grace reads this automatically. Dashboard shows this.
     """
     try:
         from cognitive.system_integrity_monitor import get_system_integrity_monitor

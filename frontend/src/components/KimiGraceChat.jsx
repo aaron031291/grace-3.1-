@@ -77,7 +77,7 @@ export default function KimiGraceChat() {
       timestamp: new Date().toISOString(),
     }]);
 
-    // Step 1: Kimi analyzes (read-only)
+    // Step 1: Grace analyzes (read-only)
     setMessages(prev => [...prev, {
       id: Date.now() + 1,
       role: "kimi",
@@ -96,7 +96,7 @@ export default function KimiGraceChat() {
       if (!kimiRes.ok) throw new Error(`Kimi error: ${kimiRes.status}`);
       const kimiData = await kimiRes.json();
 
-      // Update Kimi's message with analysis
+      // Update Grace's message with analysis
       setMessages(prev => {
         const updated = [...prev];
         const kimiIdx = updated.findIndex(m => m.role === "kimi" && m.status === "thinking");
@@ -184,7 +184,7 @@ export default function KimiGraceChat() {
 
   const roleStyles = {
     user: { bg: "#2563eb", label: "You", color: "#fff" },
-    kimi: { bg: "#8b5cf6", label: "Kimi", color: "#fff" },
+    kimi: { bg: "#8b5cf6", label: "Grace Brain", color: "#fff" },
     grace: { bg: "#059669", label: "Grace", color: "#fff" },
     system: { bg: "#6b7280", label: "System", color: "#fff" },
   };
@@ -223,9 +223,9 @@ export default function KimiGraceChat() {
               {messages.length === 0 && (
                 <div style={{ textAlign: "center", color: "#666", marginTop: "40px" }}>
                   <div style={{ fontSize: "48px", marginBottom: "16px" }}>🧠</div>
-                  <h3 style={{ color: "#aaa", marginBottom: "8px" }}>Kimi + Grace Chat</h3>
+                  <h3 style={{ color: "#aaa", marginBottom: "8px" }}>Grace Intelligence Chat</h3>
                   <p style={{ fontSize: "14px" }}>
-                    Talk to both Kimi and Grace. Kimi analyzes (read-only brain),
+                    Talk to both Kimi and Grace. Grace analyzes (read-only brain),
                     Grace verifies and executes. You can chip in at any point.
                   </p>
                 </div>
@@ -311,7 +311,7 @@ export default function KimiGraceChat() {
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Talk to Kimi & Grace..."
+                placeholder="Talk to Grace Intelligence..."
                 disabled={loading}
                 style={{
                   flex: 1, padding: "12px 16px", borderRadius: "8px",
@@ -419,7 +419,7 @@ export default function KimiGraceChat() {
                 <div style={{ background: "#1a1a2e", border: "1px solid #333", borderRadius: "8px", padding: "16px" }}>
                   <div style={{ fontSize: "12px", color: "#888", marginBottom: "8px" }}>What's Complete</div>
                   <CompletionItem label="LLM Interaction Tracking" done={true} />
-                  <CompletionItem label="Kimi Brain (read-only)" done={true} />
+                  <CompletionItem label="Grace Brain (read-only)" done={true} />
                   <CompletionItem label="Grace Verified Executor" done={true} />
                   <CompletionItem label="Multi-Source Verification (10 sources)" done={true} />
                   <CompletionItem label="Pattern Learner" done={true} />
@@ -445,7 +445,7 @@ export default function KimiGraceChat() {
       {/* Right: Kimi status sidebar */}
       <div style={{ width: "260px", background: "#111", padding: "16px", overflow: "auto" }}>
         <div style={{ marginBottom: "16px" }}>
-          <div style={{ fontSize: "11px", color: "#666", textTransform: "uppercase", marginBottom: "8px" }}>Kimi Brain</div>
+          <div style={{ fontSize: "11px", color: "#666", textTransform: "uppercase", marginBottom: "8px" }}>Grace Brain</div>
           <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#8b5cf6" }}></span>
             <span style={{ fontSize: "13px", color: "#ddd" }}>Read-Only Intelligence</span>

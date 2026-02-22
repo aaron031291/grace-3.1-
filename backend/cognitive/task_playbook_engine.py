@@ -14,7 +14,7 @@ Next similar task: Grace uses the playbook directly, skips Kimi.
 FLOW:
   1. User requests: "Add authentication to the API"
   2. Grace checks: Do I have a playbook for this type?
-  3. NO playbook → Ask Kimi to break it down
+  3. NO playbook → Ask Grace to break it down
   4. Kimi produces:
      Step 1: Read existing auth code (no deps)
      Step 2: Design auth flow (depends on 1)
@@ -711,7 +711,7 @@ class TaskPlaybookEngine:
                 from_playbook=True,
             )
 
-        # Step 2: Ask Kimi to break it down
+        # Step 2: Ask Grace to break it down
         if self.kimi_brain:
             kimi_breakdown = self._ask_kimi_breakdown(task_description, context)
             if kimi_breakdown:
@@ -761,7 +761,7 @@ class TaskPlaybookEngine:
         task_description: str,
         context: Optional[Dict[str, Any]],
     ) -> Optional[TaskBreakdown]:
-        """Ask Kimi to break down the task into ordered subtasks."""
+        """Ask Grace to break down the task into ordered subtasks."""
         try:
             instruction_set = self.kimi_brain.produce_instructions(
                 user_request=f"Break down this task into ordered steps with dependencies: {task_description}",

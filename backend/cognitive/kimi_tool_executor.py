@@ -4,7 +4,7 @@ Kimi Tool Executor
 Kimi is NOT just intelligence -- Kimi is a tool-using agent that can
 execute across ALL of Grace's system capabilities.
 
-This module maps every system tool surface to Kimi's execution ability:
+This module maps every system tool surface to Grace's execution ability:
 
 TOOL CATEGORIES:
   1. FILE OPERATIONS     - read, write, edit, delete, search files
@@ -540,15 +540,15 @@ TOOL_REGISTRY: Dict[str, ToolDefinition] = {
 # KIMI TOOL EXECUTOR
 # ==========================================================================
 
-class KimiToolExecutor:
+class GraceToolExecutor:
     """
-    Kimi's hands. Every tool in Grace's system, callable by Kimi.
+    Grace's hands. Every tool in Grace's system, callable by Kimi.
 
     This is NOT intelligence -- this is tool execution. Kimi decides
     WHAT to do (intelligence), and this executor does it (tool use).
 
     Usage:
-        executor = KimiToolExecutor(session)
+        executor = GraceToolExecutor(session)
 
         # List available tools
         tools = executor.list_tools()
@@ -585,7 +585,7 @@ class KimiToolExecutor:
         }
 
         logger.info(
-            f"[KIMI-TOOLS] Tool executor initialized with "
+            f"[GRACE-TOOLS] Tool executor initialized with "
             f"{len(TOOL_REGISTRY)} tools across "
             f"{len(set(t.category for t in TOOL_REGISTRY.values()))} categories"
         )
@@ -701,7 +701,7 @@ class KimiToolExecutor:
 
         if tool_def.requires_confirmation and self.confirm_high_risk:
             logger.warning(
-                f"[KIMI-TOOLS] High-risk tool {tool_id} called. "
+                f"[GRACE-TOOLS] High-risk tool {tool_id} called. "
                 f"Confirmation required. Reason: {reasoning}"
             )
 
@@ -732,7 +732,7 @@ class KimiToolExecutor:
 
         except Exception as e:
             duration_ms = (time.time() - start_time) * 1000
-            logger.error(f"[KIMI-TOOLS] Tool {tool_id} failed: {e}")
+            logger.error(f"[GRACE-TOOLS] Tool {tool_id} failed: {e}")
 
             tool_result = ToolResult(
                 call_id=call_id,
@@ -748,9 +748,9 @@ class KimiToolExecutor:
             self.tracker.record_interaction(
                 prompt=f"Tool call: {tool_id}({parameters})",
                 response=str(tool_result.output)[:2000] if tool_result.output else str(tool_result.error),
-                model_used="kimi",
+                model_used="grace_brain",
                 interaction_type="command_execution",
-                delegation_type="kimi_direct",
+                delegation_type="grace_direct",
                 outcome="success" if tool_result.success else "failure",
                 confidence_score=0.9 if tool_result.success else 0.3,
                 duration_ms=duration_ms,
@@ -919,7 +919,7 @@ def get_kimi_tool_executor(
     """Get or create the Kimi tool executor singleton."""
     global _executor_instance
     if _executor_instance is None:
-        _executor_instance = KimiToolExecutor(
+        _executor_instance = GraceToolExecutor(
             session=session,
             execution_bridge=execution_bridge,
         )

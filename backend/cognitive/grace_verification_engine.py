@@ -1,7 +1,7 @@
 """
 Grace Multi-Source Verification Engine
 
-Grace does NOT blindly execute Kimi's instructions.
+Grace does NOT blindly execute Grace's instructions.
 She verifies every instruction through multiple independent sources
 before executing. Only when verification passes does Grace act.
 
@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 class VerificationSource(str, Enum):
-    """Sources Grace can use to verify Kimi's instructions."""
+    """Sources Grace can use to verify Grace's instructions."""
     USER_CONFIRMATION = "user_confirmation"
     ORACLE_ML = "oracle_ml"
     CHAT_HISTORY = "chat_history"
@@ -137,7 +137,7 @@ class GraceVerificationEngine:
     """
     Multi-source verification engine.
 
-    Grace checks Kimi's instructions against every available source
+    Grace checks Grace's instructions against every available source
     before deciding whether to execute. This is Grace's immune system --
     she doesn't trust any single source, she cross-references everything.
 

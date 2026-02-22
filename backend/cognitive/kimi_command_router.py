@@ -1,7 +1,7 @@
 """
 Kimi Command Router
 
-Routes Kimi's decisions to the appropriate execution path:
+Routes Grace's decisions to the appropriate execution path:
 - Direct command execution: Kimi executes commands via the execution bridge
 - Coding task delegation: Kimi hands off coding tasks to the coding agent
 - Reasoning tasks: Kimi handles directly, results are tracked
@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
 
 class RouteDecision(str, Enum):
     """Where a task should be routed."""
-    KIMI_DIRECT = "kimi_direct"
+    KIMI_DIRECT = "grace_direct"
     CODING_AGENT = "coding_agent"
     TOOL_EXECUTION = "tool_execution"
     HYBRID = "hybrid"
@@ -99,9 +99,9 @@ class ExecutionResult:
     learning_signals: List[Dict[str, Any]] = field(default_factory=list)
 
 
-class KimiCommandRouter:
+class GraceCommandRouter:
     """
-    Routes Kimi's tasks to the appropriate executor.
+    Routes Grace's tasks to the appropriate executor.
 
     Kimi acts as the user-facing AI that:
     1. Understands user intent
@@ -135,14 +135,14 @@ class KimiCommandRouter:
         self._task_history: List[RoutedTask] = []
         self._routing_stats = {
             "total_routed": 0,
-            "kimi_direct": 0,
+            "grace_direct": 0,
             "coding_agent": 0,
             "tool_execution": 0,
             "hybrid": 0,
             "grace_autonomous": 0,
         }
 
-        logger.info("[KIMI-ROUTER] Command router initialized")
+        logger.info("[GRACE-ROUTER] Command router initialized")
 
     def classify_and_route(
         self,
@@ -212,7 +212,7 @@ class KimiCommandRouter:
         self._routing_stats[route.value] += 1
 
         logger.info(
-            f"[KIMI-ROUTER] Routed task {task_id}: "
+            f"[GRACE-ROUTER] Routed task {task_id}: "
             f"route={route.value}, type={task_type}, "
             f"confidence={classification_confidence:.2f}"
         )
@@ -230,8 +230,8 @@ class KimiCommandRouter:
 
         Args:
             routed_task: The task with routing decision
-            llm_response: Kimi's response/plan for the task
-            llm_reasoning: Kimi's reasoning chain
+            llm_response: Grace's response/plan for the task
+            llm_reasoning: Grace's reasoning chain
 
         Returns:
             ExecutionResult with all outcomes
@@ -245,7 +245,7 @@ class KimiCommandRouter:
         interaction = self.tracker.record_interaction(
             prompt=routed_task.original_request,
             response=llm_response or "",
-            model_used="kimi",
+            model_used="grace_brain",
             interaction_type=self._map_task_type_to_interaction(routed_task.task_type),
             delegation_type=routed_task.route.value,
             reasoning_chain=llm_reasoning,
@@ -281,7 +281,7 @@ class KimiCommandRouter:
             )
 
         except Exception as e:
-            logger.exception(f"[KIMI-ROUTER] Task {routed_task.task_id} failed")
+            logger.exception(f"[GRACE-ROUTER] Task {routed_task.task_id} failed")
             result.success = False
             result.error = str(e)
             result.duration_ms = (time.time() - start_time) * 1000
@@ -293,7 +293,7 @@ class KimiCommandRouter:
             )
 
         logger.info(
-            f"[KIMI-ROUTER] Task {routed_task.task_id} completed: "
+            f"[GRACE-ROUTER] Task {routed_task.task_id} completed: "
             f"success={result.success}, duration={result.duration_ms:.0f}ms"
         )
 
@@ -447,7 +447,7 @@ class KimiCommandRouter:
         Execute hybrid task: Kimi plans, coding agent implements.
 
         This is the most common pattern for complex tasks:
-        1. Kimi analyzes and creates a plan
+        1. Grace analyzes and creates a plan
         2. Coding agent implements each step
         3. Kimi reviews the result
         """
@@ -880,7 +880,7 @@ def get_kimi_command_router(
     """Get or create the Kimi command router singleton."""
     global _router_instance
     if _router_instance is None:
-        _router_instance = KimiCommandRouter(
+        _router_instance = GraceCommandRouter(
             session=session,
             execution_bridge=execution_bridge,
             coding_agent=coding_agent,

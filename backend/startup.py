@@ -61,7 +61,7 @@ class GraceSubsystems:
             "timesense": "active" if self.timesense else "inactive",
             "self_mirror": "active" if self.self_mirror else "inactive",
             "unified_memory": "active" if self.unified_memory else "inactive",
-            "kimi_brain": "active" if self.kimi_brain else "inactive",
+            "grace_brain": "active" if self.kimi_brain else "inactive",
             "grace_executor": "active" if self.grace_executor else "inactive",
             "verification_engine": "active" if self.verification_engine else "inactive",
             "pattern_learner": "active" if self.pattern_learner else "inactive",
@@ -375,11 +375,11 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
 
     # =========================================================================
     # 11. KIMI + GRACE LEARNING SYSTEM
-    # Wire: KimiBrain (read-only), GraceVerifiedExecutor, VerificationEngine,
+    # Wire: GraceBrain (read-only), GraceVerifiedExecutor, VerificationEngine,
     #        PatternLearner, NearZeroHallucinationGuard, DB migration
     # =========================================================================
     try:
-        print("[STARTUP] Initializing Kimi + Grace Learning System...")
+        print("[STARTUP] Initializing Grace Intelligence Learning System...")
 
         # 11a. Run ALL table migrations (unified migration runner)
         try:
@@ -437,10 +437,10 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                 except Exception as e:
                     print(f"[STARTUP] [WARN] Kimi -> Pattern Learner connection failed: {e}")
 
-                subs._active_subsystems.append("kimi_brain")
-                print("[STARTUP] [OK] Kimi Brain initialized (read-only intelligence)")
+                subs._active_subsystems.append("grace_brain")
+                print("[STARTUP] [OK] Grace Brain initialized (read-only intelligence)")
         except Exception as e:
-            print(f"[STARTUP] [WARN] Kimi Brain failed: {e}")
+            print(f"[STARTUP] [WARN] Grace Brain failed: {e}")
 
         # 11c. Initialize Verification Engine with all sources
         try:
@@ -579,7 +579,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                 print(f"[STARTUP] [WARN] Diagnostic -> LLM Tracker wiring failed: {e}")
 
     except Exception as e:
-        print(f"[STARTUP] [WARN] Kimi + Grace Learning System error (non-fatal): {e}")
+        print(f"[STARTUP] [WARN] Grace Intelligence Learning System error (non-fatal): {e}")
 
     # =========================================================================
     # 12. REGISTER ALL NEW SYSTEMS IN COMPONENT REGISTRY + HANDSHAKE
@@ -592,7 +592,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
             registry = ComponentRegistry(session)
 
             new_components = [
-                ("kimi_brain", "cognitive", "cognitive.kimi_brain", "cognitive/kimi_brain.py",
+                ("grace_brain", "cognitive", "cognitive.kimi_brain", "cognitive/kimi_brain.py",
                  "Read-only intelligence layer - observes, diagnoses, produces instructions",
                  ["diagnose", "produce_instructions", "compose_response", "consult"],
                  ["mirror", "diagnostics", "learning", "patterns", "tasks"],
@@ -600,7 +600,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                 ("grace_executor", "cognitive", "cognitive.grace_verified_executor", "cognitive/grace_verified_executor.py",
                  "Verifies Kimi instructions and executes approved ones",
                  ["process_instructions", "verify", "execute"],
-                 ["kimi_brain", "verification_engine", "execution_bridge"],
+                 ["grace_brain", "verification_engine", "execution_bridge"],
                  ["coding_agent", "diagnostic_machine", "learning_system"]),
                 ("verification_engine", "security", "cognitive.grace_verification_engine", "cognitive/grace_verification_engine.py",
                  "10-source multi-source verification engine",
@@ -621,7 +621,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                  "Extracts reusable patterns from LLM interactions",
                  ["extract_patterns", "can_handle_autonomously", "apply_pattern"],
                  ["llm_tracker"],
-                 ["grace_executor", "kimi_brain"]),
+                 ["grace_executor", "grace_brain"]),
                 ("hallucination_guard", "security", "llm_orchestrator.near_zero_hallucination_guard", "llm_orchestrator/near_zero_hallucination_guard.py",
                  "13-layer near-zero hallucination verification",
                  ["verify"],
@@ -635,7 +635,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                 ("playbook_engine", "cognitive", "cognitive.task_playbook_engine", "cognitive/task_playbook_engine.py",
                  "Task breakdown + playbook learning + interrogation",
                  ["interrogate_task", "break_down_task", "save_as_playbook"],
-                 ["kimi_brain", "knowledge_compiler", "library_connectors", "memory_mesh"],
+                 ["grace_brain", "knowledge_compiler", "library_connectors", "memory_mesh"],
                  ["task_verifier"]),
                 ("weight_system", "cognitive", "cognitive.grace_weight_system", "cognitive/grace_weight_system.py",
                  "Trust/confidence as adjustable weights with backpropagation",
@@ -656,7 +656,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                  "Continuous system health and alignment auditing",
                  ["full_scan", "get_quick_status"],
                  ["all_subsystems"],
-                 ["kimi_brain"]),
+                 ["grace_brain"]),
                 ("feedback_loops", "cognitive", "cognitive.intelligence_feedback_loops", "cognitive/intelligence_feedback_loops.py",
                  "11 self-improving feedback loops on every task outcome",
                  ["record_task_outcome", "get_improvement_recommendations"],
@@ -703,7 +703,7 @@ def initialize_all_subsystems(session=None, settings=None) -> GraceSubsystems:
                 def _pattern_health():
                     return 1.0 if subs.pattern_learner else 0.0
 
-                handshake.register_health_check("kimi_brain", _kimi_health)
+                handshake.register_health_check("grace_brain", _kimi_health)
                 handshake.register_health_check("grace_executor", _executor_health)
                 handshake.register_health_check("verification_engine", _verifier_health)
                 handshake.register_health_check("hallucination_guard", _guard_health)

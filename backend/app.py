@@ -962,7 +962,7 @@ async def chat(request: ChatRequest):
             logger.debug(f"[UNIFIED] Chain error (non-fatal): {_ui_err}")
 
         # ==================== KIMI CONSULTATION ====================
-        # If unified intelligence couldn't answer, consult Kimi Brain
+        # If unified intelligence couldn't answer, consult Grace Brain
         # before falling through to raw LLM. Kimi can compose from
         # facts, reason about the system, and produce a smarter answer.
         try:
@@ -977,7 +977,7 @@ async def chat(request: ChatRequest):
             if _kimi_result.get("answered") and _kimi_result.get("response"):
                 response_text = _kimi_result["response"]
                 if len(response_text) > 20:
-                    logger.info(f"[KIMI-CONSULT] Kimi answered from {_kimi_result.get('source', 'analysis')}")
+                    logger.info(f"[GRACE-CONSULT] Kimi answered from {_kimi_result.get('source', 'analysis')}")
                     _kimi_session.close()
                     return ChatResponse(
                         response=response_text,
@@ -991,7 +991,7 @@ async def chat(request: ChatRequest):
 
             _kimi_session.close()
         except Exception as _kimi_err:
-            logger.debug(f"[KIMI-CONSULT] Error (non-fatal): {_kimi_err}")
+            logger.debug(f"[GRACE-CONSULT] Error (non-fatal): {_kimi_err}")
 
         # Small-talk / greeting detector (avoid RAG & SerpAPI for simple chat)
         greeting_pattern = re.compile(

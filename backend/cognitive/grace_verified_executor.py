@@ -1,11 +1,11 @@
 """
 Grace Verified Executor
 
-Grace receives Kimi's read-only instructions, verifies them through
+Grace receives Grace's read-only instructions, verifies them through
 her own cognitive systems, and executes using her execution bridge.
 
 Flow:
-    Kimi produces KimiInstructionSet (read-only analysis)
+    Kimi produces GraceInstructionSet (read-only analysis)
          |
          v
     Grace receives instructions
@@ -42,7 +42,7 @@ from enum import Enum
 from sqlalchemy.orm import Session
 
 from cognitive.kimi_brain import (
-    KimiInstructionSet,
+    GraceInstructionSet,
     KimiInstruction,
     InstructionType,
     InstructionPriority,
@@ -124,9 +124,9 @@ class SessionResult:
 
 class GraceVerifiedExecutor:
     """
-    Grace's execution layer that processes Kimi's instructions.
+    Grace's execution layer that processes Grace's instructions.
 
-    Grace receives Kimi's read-only analysis and instructions,
+    Grace receives Grace's read-only analysis and instructions,
     verifies each one through her own systems, and executes
     the ones that pass verification.
 
@@ -158,12 +158,12 @@ class GraceVerifiedExecutor:
 
     async def process_instruction_set(
         self,
-        instruction_set: KimiInstructionSet,
+        instruction_set: GraceInstructionSet,
     ) -> SessionResult:
         """
         Process a complete instruction set from Kimi.
 
-        PATTERN-DRIVEN BYPASS: Before executing through Kimi's instructions,
+        PATTERN-DRIVEN BYPASS: Before executing through Grace's instructions,
         check if the pattern learner already knows how to handle this.
         If a high-confidence pattern exists, skip the LLM entirely.
 
