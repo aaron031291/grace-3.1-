@@ -40,6 +40,7 @@ def run_all_migrations():
         "cognitive.knowledge_compiler",
         "cognitive.task_completion_verifier",
         "cognitive.task_playbook_engine",
+        "cognitive.knowledge_exhaustion_engine",
     ]
 
     imported = 0

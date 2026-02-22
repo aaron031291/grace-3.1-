@@ -1830,3 +1830,235 @@ async def kimi_batch_teach(request: BatchTeachRequest, db: Session = Depends(get
         return teacher.batch_teach(request.questions, topic=request.topic)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KNOWLEDGE EXHAUSTION ENGINE (convergence-based deep extraction)
+# =======================================================================
+
+class ExhaustTopicRequest(BaseModel):
+    topic: str = Field(..., description="Topic to exhaust")
+    max_cycles: int = Field(default=3, description="Max convergence cycles")
+    questions_per_cycle: int = Field(default=5, description="Questions per cycle")
+
+class ExhaustMultipleRequest(BaseModel):
+    topics: List[str] = Field(..., description="Topics to exhaust")
+    max_cycles: int = Field(default=3)
+    questions_per_cycle: int = Field(default=5)
+
+class GitHubDumpRequest(BaseModel):
+    topics: List[str] = Field(..., description="Topics to mine from GitHub")
+    max_repos_per_topic: int = Field(default=10, description="Max repos per topic")
+    max_files_per_repo: int = Field(default=3, description="Max code files per repo")
+    include_code_files: bool = Field(default=True, description="Pull source code files")
+
+@router.post("/exhaust/topic")
+async def exhaust_topic(request: ExhaustTopicRequest, db: Session = Depends(get_db)):
+    """
+    Extract knowledge about a topic until convergence.
+    Asks questions from multiple perspectives. When 80%+ of answers
+    repeat existing knowledge across 3 cycles, the topic is exhausted.
+    """
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        from cognitive.grace_cloud_client import get_kimi_cloud_client
+        engine = get_knowledge_exhaustion_engine(cloud_client=get_kimi_cloud_client())
+        return engine.exhaust_topic(
+            request.topic,
+            max_cycles=request.max_cycles,
+            questions_per_cycle=request.questions_per_cycle,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/exhaust/multiple")
+async def exhaust_multiple_topics(request: ExhaustMultipleRequest, db: Session = Depends(get_db)):
+    """Exhaust multiple topics sequentially."""
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        from cognitive.grace_cloud_client import get_kimi_cloud_client
+        engine = get_knowledge_exhaustion_engine(cloud_client=get_kimi_cloud_client())
+        return engine.exhaust_multiple(
+            request.topics,
+            max_cycles=request.max_cycles,
+            questions_per_cycle=request.questions_per_cycle,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/exhaust/status/{topic}")
+async def get_topic_exhaustion_status(topic: str, db: Session = Depends(get_db)):
+    """Get the current exhaustion status for a specific topic."""
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        engine = get_knowledge_exhaustion_engine()
+        return engine.get_topic_status(topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/exhaust/status")
+async def get_all_exhaustion_status(db: Session = Depends(get_db)):
+    """Get exhaustion status for all tracked topics."""
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        engine = get_knowledge_exhaustion_engine()
+        return {"topics": engine.get_all_topics_status()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/exhaust/github-dump")
+async def github_massive_dump(request: GitHubDumpRequest, db: Session = Depends(get_db)):
+    """
+    Massive GitHub knowledge dump. Pulls top repos, READMEs, and code files
+    for each topic. One-time massive injection of external knowledge.
+    """
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        engine = get_knowledge_exhaustion_engine()
+        return engine.github_massive_dump(
+            request.topics,
+            max_repos_per_topic=request.max_repos_per_topic,
+            max_files_per_repo=request.max_files_per_repo,
+            include_code_files=request.include_code_files,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/exhaust/stats")
+async def get_exhaustion_stats():
+    """Get overall exhaustion engine statistics."""
+    try:
+        from cognitive.knowledge_exhaustion_engine import get_knowledge_exhaustion_engine
+        return get_knowledge_exhaustion_engine().get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# UNIFIED KNOWLEDGE ENGINE (single entry point for ALL knowledge ops)
+# =======================================================================
+
+class KnowledgeQueryRequest(BaseModel):
+    question: str = Field(..., description="Question to look up in compiled knowledge")
+    domain: Optional[str] = Field(default=None, description="Filter by domain")
+
+class KnowledgeDiscoverRequest(BaseModel):
+    topic: str = Field(..., description="Topic to discover knowledge about")
+    sources: Optional[List[str]] = Field(
+        default=None,
+        description="Sources: cloud, wikidata, conceptnet, github, arxiv, openalex, stackoverflow"
+    )
+    max_per_source: int = Field(default=5, description="Max results per source")
+
+class KnowledgeCompileRequest(BaseModel):
+    text: str = Field(..., description="Raw text to compile into structured knowledge")
+    domain: Optional[str] = Field(default=None)
+    source_id: Optional[str] = Field(default=None)
+
+class KnowledgeExhaustRequest(BaseModel):
+    topic: str = Field(..., description="Topic to exhaust")
+    max_cycles: int = Field(default=3)
+    questions_per_cycle: int = Field(default=5)
+
+class KnowledgeGitHubRequest(BaseModel):
+    topics: List[str] = Field(..., description="Topics for GitHub dump")
+    max_repos: int = Field(default=10)
+    max_files: int = Field(default=3)
+
+class KnowledgeAuditRequest(BaseModel):
+    domains: Optional[List[str]] = Field(default=None, description="Filter audit to specific domains")
+
+@router.post("/knowledge/query")
+async def knowledge_query(request: KnowledgeQueryRequest, db: Session = Depends(get_db)):
+    """Query compiled knowledge deterministically. No LLM needed."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().query(request.question, request.domain)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/discover")
+async def knowledge_discover(request: KnowledgeDiscoverRequest, db: Session = Depends(get_db)):
+    """
+    Discover knowledge from multiple sources. Deduped against existing vectors.
+    Sources: cloud, wikidata, conceptnet, github, arxiv, openalex, stackoverflow
+    """
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().discover(
+            request.topic, request.sources, request.max_per_source
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/compile")
+async def knowledge_compile(request: KnowledgeCompileRequest, db: Session = Depends(get_db)):
+    """Compile raw text into structured facts, procedures, and rules."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().compile(
+            request.text, request.domain, request.source_id
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/exhaust")
+async def knowledge_exhaust(request: KnowledgeExhaustRequest, db: Session = Depends(get_db)):
+    """Extract until convergence. Same info x5 = converging. x3 cycles = exhausted."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().exhaust(
+            request.topic, request.max_cycles, request.questions_per_cycle
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/github-dump")
+async def knowledge_github_dump(request: KnowledgeGitHubRequest, db: Session = Depends(get_db)):
+    """Massive one-time GitHub dump. Repos + READMEs + code files."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().github_dump(
+            request.topics, request.max_repos, request.max_files
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/audit")
+async def knowledge_audit(request: KnowledgeAuditRequest, db: Session = Depends(get_db)):
+    """
+    Kimi audits knowledge store for gaps, shallow topics, and missing components.
+    Returns prioritized recommendations.
+    """
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().audit_gaps(request.domains)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/audit/{topic}")
+async def knowledge_audit_topic(topic: str, db: Session = Depends(get_db)):
+    """Deep audit of a single topic - Kimi assesses depth and missing subtopics."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().audit_depth(topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/topic/{topic}")
+async def knowledge_topic_status(topic: str, db: Session = Depends(get_db)):
+    """Complete status for a topic: facts, depth, exhaustion, vectors."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().topic_status(topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/stats")
+async def knowledge_stats(db: Session = Depends(get_db)):
+    """Unified knowledge statistics across all subsystems."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
