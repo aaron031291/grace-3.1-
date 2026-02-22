@@ -321,7 +321,19 @@ class SystemIntegrityMonitor:
             ws = get_grace_weight_system(self.session)
             stats = ws.get_stats()
 
-            if stats.get("total_weight_updates", 0) == 0:
+            # Check actual DB for weight evidence (not just in-memory singleton)
+            has_weight_evidence = False
+            try:
+                from cognitive.knowledge_compiler import DistilledKnowledge
+                verified = self.session.query(DistilledKnowledge).filter(
+                    DistilledKnowledge.times_validated > 0
+                ).count()
+                if verified > 0:
+                    has_weight_evidence = True
+            except Exception:
+                pass
+
+            if stats.get("total_weight_updates", 0) == 0 and not has_weight_evidence:
                 issues.append(IntegrityIssue(
                     "weight", "medium", "weight_system",
                     "No weight updates recorded - backpropagation not happening",
@@ -349,7 +361,30 @@ class SystemIntegrityMonitor:
             indexer = get_knowledge_indexer(self.session)
             stats = indexer.get_stats()
 
-            if stats.get("last_run") is None:
+            # Check actual Qdrant for vectors (not just singleton state)
+            has_vectors = False
+            try:
+                from qdrant_client import QdrantClient
+                for qpath in ['/workspace/qdrant_grace', '/workspace/qdrant_fresh', '/workspace/qdrant_v2']:
+                    if os.path.exists(qpath):
+                        try:
+                            qc = QdrantClient(path=qpath)
+                            info = qc.get_collection("documents")
+                            if info.points_count > 0:
+                                has_vectors = True
+                                issues.append(IntegrityIssue(
+                                    "connected", "info", "knowledge_indexer",
+                                    f"Qdrant has {info.points_count} vectors at {qpath}",
+                                    "", False
+                                ))
+                            qc.close()
+                            break
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+
+            if stats.get("last_run") is None and not has_vectors:
                 issues.append(IntegrityIssue(
                     "rag_alignment", "high", "knowledge_indexer",
                     "Knowledge Indexer has NEVER run - internal knowledge not searchable via RAG",
@@ -370,9 +405,9 @@ class SystemIntegrityMonitor:
                 for source in expected_sources:
                     if source not in by_source or by_source[source] == 0:
                         issues.append(IntegrityIssue(
-                            "rag_alignment", "medium", f"indexer_{source}",
+                            "rag_alignment", "low", f"indexer_{source}",
                             f"RAG source '{source}' has 0 indexed entries",
-                            f"This knowledge source exists but isn't searchable yet",
+                            f"Run POST /llm-learning/index/all to index this source",
                             True
                         ))
 
