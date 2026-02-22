@@ -1610,3 +1610,13 @@ async def get_retrieval_quality(db: Session = Depends(get_db)):
         return get_retrieval_quality_tracker(db).get_quality_report()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/kimi/audit")
+async def kimi_audit_system(db: Session = Depends(get_db)):
+    """Kimi performs full system audit - scans for non-integrated components, knowledge gaps, security."""
+    try:
+        from cognitive.kimi_brain import get_kimi_brain
+        kimi = get_kimi_brain(db)
+        return kimi.audit_system()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

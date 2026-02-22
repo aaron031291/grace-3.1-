@@ -245,6 +245,7 @@ class KimiBrain:
             "handshake": self._read_handshake_status(),
             "unified_intelligence": self._read_unified_intelligence(),
             "weight_system": self._read_weight_system(),
+            "security": self._read_security(),
         }
 
         logger.info("[KIMI-BRAIN] System state read complete")
@@ -412,6 +413,23 @@ class KimiBrain:
                 "total_updates": stats.get("total_weight_updates", 0),
                 "kpis": stats.get("current_kpis", {}),
                 "recent_updates": len(stats.get("recent_updates", [])),
+            }
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
+
+    def _read_security(self) -> Dict[str, Any]:
+        """Read security configuration status."""
+        try:
+            from security.config import get_security_config
+            config = get_security_config()
+            return {
+                "connected": True,
+                "encryption_enabled": config.ENCRYPTION_ENABLED,
+                "api_key_required": config.REQUIRE_API_KEY,
+                "rate_limiting": config.RATE_LIMIT_ENABLED,
+                "production_mode": config.PRODUCTION_MODE,
+                "csrf_ready": True,
+                "cors_origins": len(config.CORS_ALLOWED_ORIGINS),
             }
         except Exception as e:
             return {"connected": False, "error": str(e)}
@@ -1100,6 +1118,109 @@ class KimiBrain:
 
         finally:
             self._active_requests -= 1
+
+    def audit_system(self) -> Dict[str, Any]:
+        """
+        Full system audit. Kimi scans for non-integrated components,
+        missing connections, and knowledge retrieval gaps.
+
+        This is what Kimi runs to keep the system aligned as it grows.
+        """
+        import os, re
+
+        audit = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "state": self.read_system_state(),
+            "disconnected": [],
+            "knowledge_gaps": [],
+            "integration_issues": [],
+            "recommendations": [],
+        }
+
+        # Check each state source
+        for key, value in audit["state"].items():
+            if key == "timestamp":
+                continue
+            if isinstance(value, dict):
+                if not value.get("connected", True):
+                    audit["disconnected"].append({
+                        "system": key,
+                        "error": value.get("error", "not connected"),
+                    })
+
+        # Check knowledge store health
+        try:
+            from cognitive.knowledge_compiler import get_knowledge_compiler
+            compiler = get_knowledge_compiler(self.session)
+            stats = compiler.get_stats()
+
+            if stats.get("total_facts", 0) == 0:
+                audit["knowledge_gaps"].append("Knowledge store has NO compiled facts")
+            if stats.get("total_procedures", 0) == 0:
+                audit["knowledge_gaps"].append("No compiled procedures")
+
+        except Exception:
+            audit["knowledge_gaps"].append("Cannot access knowledge compiler")
+
+        # Check RAG readiness
+        try:
+            from models.database_models import Document, DocumentChunk
+            docs = self.session.query(Document).count()
+            chunks = self.session.query(DocumentChunk).count()
+            if docs == 0:
+                audit["integration_issues"].append("0 documents ingested - RAG has nothing to search")
+            if chunks == 0:
+                audit["integration_issues"].append("0 chunks in DB - no embeddings for vector search")
+        except Exception:
+            pass
+
+        # Check security
+        security = audit["state"].get("security", {})
+        if not security.get("encryption_enabled"):
+            audit["recommendations"].append("Enable data encryption (ENCRYPTION_ENABLED=true)")
+        if not security.get("production_mode"):
+            audit["recommendations"].append("Enable production mode for full security (PRODUCTION_MODE=true)")
+
+        # Check learning pipeline
+        learning = audit["state"].get("patterns", {})
+        if learning.get("connected") and learning.get("autonomy_readiness", 0) < 0.1:
+            audit["recommendations"].append("Autonomy readiness is very low - need more interaction data")
+
+        # Check integrity
+        integrity = audit["state"].get("system_integrity", {})
+        if integrity.get("connected"):
+            if integrity.get("total_issues", 0) > 5:
+                audit["recommendations"].append(f"System has {integrity['total_issues']} integrity issues")
+
+        # Score
+        total_sources = 11
+        connected = total_sources - len(audit["disconnected"])
+        gaps = len(audit["knowledge_gaps"]) + len(audit["integration_issues"])
+        health = max(0, (connected / total_sources * 70) - (gaps * 5) + 30)
+
+        audit["health_score"] = round(min(100, health), 1)
+        audit["connected_count"] = connected
+        audit["total_sources"] = total_sources
+        audit["summary"] = (
+            f"Health: {audit['health_score']}%, "
+            f"{connected}/{total_sources} connected, "
+            f"{len(audit['disconnected'])} disconnected, "
+            f"{len(audit['knowledge_gaps'])} knowledge gaps, "
+            f"{len(audit['recommendations'])} recommendations"
+        )
+
+        # Track the audit
+        try:
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "kimi_audit",
+                audit["summary"],
+                data={"health": audit["health_score"], "issues": gaps},
+            )
+        except Exception:
+            pass
+
+        return audit
 
     def get_status(self) -> Dict[str, Any]:
         """Get Kimi brain status."""
