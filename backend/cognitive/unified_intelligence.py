@@ -137,6 +137,12 @@ class UnifiedIntelligence:
                 result = layer_fn(question, domain, min_confidence)
                 if result and result.answered and result.confidence >= min_confidence:
                     result.duration_ms = (time.time() - start) * 1000
+
+                    try:
+                        from cognitive.timesense import get_timesense
+                        get_timesense().record_operation(f"ui.query.{layer_name}", result.duration_ms, "unified_intelligence")
+                    except Exception:
+                        pass
                     self._layer_hits[layer_name] = self._layer_hits.get(layer_name, 0) + 1
 
                     # Track the hit

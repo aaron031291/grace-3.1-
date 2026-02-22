@@ -256,6 +256,12 @@ class KnowledgeMiningEngine:
         self._stats["keywords_extracted"] += len(keywords)
         logger.info(f"[MINER] {domain}: {len(keywords)} keywords extracted")
 
+        try:
+            from cognitive.timesense import get_timesense
+            get_timesense().record_operation("mining.keywords", len(keywords), "knowledge_miner")
+        except Exception:
+            pass
+
         # Step 2: Query all sources in parallel for each keyword
         session = self.session_factory()
 
@@ -274,6 +280,13 @@ class KnowledgeMiningEngine:
 
             except Exception as e:
                 logger.debug(f"[MINER] Keyword '{keyword}' error: {e}")
+
+            # TimeSense: track per-keyword mining
+            try:
+                from cognitive.timesense import get_timesense
+                get_timesense().record_operation("mining.keyword", len(source_results), "knowledge_miner")
+            except Exception:
+                pass
 
             time.sleep(0.5)  # Rate limiting between keywords
 
@@ -406,10 +419,34 @@ class KnowledgeMiningEngine:
 
         return verified
 
+    def _vectorize_fact(self, text: str, metadata: Dict[str, Any]):
+        """Auto-vectorize a compiled fact into Qdrant."""
+        try:
+            from embedding.ollama_embedder import OllamaEmbedder
+            from qdrant_client import QdrantClient
+            from qdrant_client.models import PointStruct
+            import hashlib
+
+            embedder = OllamaEmbedder()
+            emb = embedder.embed_text([text[:500]])[0]
+            vid = hashlib.md5(text[:200].encode()).hexdigest()
+
+            qpath = '/workspace/qdrant_grace'
+            if os.path.exists(os.path.join(qpath, '.lock')):
+                os.remove(os.path.join(qpath, '.lock'))
+
+            qc = QdrantClient(path=qpath)
+            qc.upsert(collection_name="documents", points=[
+                PointStruct(id=vid, vector=emb, payload=metadata)
+            ])
+            qc.close()
+        except Exception:
+            pass
+
     def _compile_verified(
         self, session: Session, keyword: str, verified: List[Dict], domain: str
     ):
-        """Compile verified knowledge into Grace's store."""
+        """Compile verified knowledge into Grace's store AND vectorize."""
         try:
             from cognitive.knowledge_compiler import CompiledFact, CompiledEntityRelation
 
@@ -431,6 +468,14 @@ class KnowledgeMiningEngine:
                 )
                 session.add(fact)
 
+                # Auto-vectorize into Qdrant
+                self._vectorize_fact(
+                    f"{keyword}: {item.get('description', item.get('title', ''))}",
+                    {"text": item.get("description", "")[:1000], "source": item["source"],
+                     "subject": keyword, "domain": domain, "confidence": item["confidence"],
+                     "verified": item.get("verified", False)}
+                )
+
                 # Entity relationship
                 if item.get("title"):
                     entity = CompiledEntityRelation(
@@ -444,6 +489,108 @@ class KnowledgeMiningEngine:
 
         except Exception as e:
             logger.debug(f"[MINER] Compile error: {e}")
+
+    def deep_mine_keywords(
+        self,
+        keywords: List[str],
+        domain: str = "general",
+        include_grace_context: bool = True,
+    ) -> Dict[str, Any]:
+        """
+        Feed keywords back to Kimi Cloud for deep context:
+        - Full definition + explanation
+        - Code snippets and patterns
+        - How it's used in Grace's architecture (if relevant)
+        - Configuration examples
+        - Common pitfalls
+
+        Results compiled + vectorized + stored.
+        """
+        if not self.cloud_client or not self.cloud_client.is_available():
+            return {"success": False, "error": "Cloud API not available"}
+
+        session = self.session_factory()
+        results = []
+        total_tokens = 0
+
+        for keyword in keywords:
+            if not self.cloud_client.is_available():
+                break
+
+            # Build context-aware prompt
+            prompt = f"""For the keyword "{keyword}" in {domain}, provide:
+1. DEFINITION: One precise paragraph
+2. CODE EXAMPLE: A short practical code snippet showing usage
+3. BEST PRACTICE: The most important rule when using this
+4. COMMON MISTAKE: What developers get wrong"""
+
+            if include_grace_context:
+                # Check if keyword relates to Grace's architecture
+                try:
+                    from cognitive.knowledge_compiler import KnowledgeCompiler
+                    compiler = KnowledgeCompiler(session)
+                    grace_facts = compiler.query_facts(subject=keyword, limit=2)
+                    if grace_facts:
+                        prompt += f"\n5. GRACE CONTEXT: This keyword relates to Grace OS: {grace_facts[0].get('object', '')[:200]}"
+                except Exception:
+                    pass
+
+            result = self.cloud_client.generate(prompt=prompt, max_tokens=500)
+
+            if result.get("success"):
+                content = result["content"]
+                tokens = result.get("tokens", 0)
+                total_tokens += tokens
+
+                # Compile into knowledge store
+                try:
+                    from cognitive.knowledge_compiler import KnowledgeCompiler, CompiledFact, CompiledProcedure
+                    compiler = KnowledgeCompiler(session)
+                    compiled = compiler.compile_chunk(
+                        text=content,
+                        source_document_id=f"cloud_deep:{keyword}",
+                        domain=domain,
+                    )
+
+                    # Also store the full response as a distilled entry
+                    from cognitive.knowledge_compiler import get_llm_knowledge_miner
+                    miner = get_llm_knowledge_miner(session)
+                    miner.store_interaction(
+                        query=f"Explain {keyword} with code example",
+                        response=content,
+                        model_used="kimi_cloud:deep_mine",
+                        confidence=0.85,
+                    )
+
+                    # Auto-vectorize
+                    self._vectorize_fact(
+                        f"{keyword}: {content[:300]}",
+                        {"text": content[:1500], "source": "kimi_cloud:deep", "subject": keyword,
+                         "domain": domain, "confidence": 0.85, "verified": True, "has_code": "```" in content}
+                    )
+
+                    results.append({
+                        "keyword": keyword,
+                        "tokens": tokens,
+                        "compiled": {k: len(v) for k, v in compiled.items() if isinstance(v, list)},
+                        "has_code": "```" in content,
+                    })
+
+                except Exception as e:
+                    results.append({"keyword": keyword, "error": str(e)[:60]})
+
+            session.commit()
+            time.sleep(1)  # Rate limiting
+
+        session.close()
+
+        succeeded = sum(1 for r in results if "tokens" in r)
+        return {
+            "keywords_processed": len(results),
+            "succeeded": succeeded,
+            "total_tokens": total_tokens,
+            "results": results,
+        }
 
     def stop(self):
         """Stop background mining."""

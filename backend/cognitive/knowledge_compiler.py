@@ -342,6 +342,12 @@ class KnowledgeCompiler:
         self.session.flush()
         self._compilation_count += 1
 
+        try:
+            from cognitive.timesense import get_timesense
+            get_timesense().record_operation("knowledge.compile", 1, "knowledge_compiler")
+        except Exception:
+            pass
+
         return results
 
     def _llm_extract(self, text: str, domain: Optional[str]) -> Dict[str, Any]:

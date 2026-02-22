@@ -373,6 +373,12 @@ Be specific. Reference actual numbers from the state data."""
         self.session.commit()
 
         self._stats["total_lessons"] += 1
+
+        try:
+            from cognitive.timesense import get_timesense
+            get_timesense().record_operation("kimi.teach", tokens, "kimi_teacher")
+        except Exception:
+            pass
         self._stats["total_tokens"] += tokens
         if topic not in self._stats["topics_mined"]:
             self._stats["topics_mined"].append(topic)

@@ -1801,3 +1801,18 @@ async def stop_mining():
         return {"status": "stopped"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/mine/deep")
+async def deep_mine_keywords(
+    keywords: List[str] = Query(..., description="Keywords to get deep context for"),
+    domain: str = Query(default="general"),
+    db: Session = Depends(get_db),
+):
+    """Feed keywords to Kimi Cloud for deep context with code examples."""
+    try:
+        from cognitive.knowledge_mining_engine import get_knowledge_mining_engine
+        from cognitive.grace_cloud_client import get_kimi_cloud_client
+        engine = get_knowledge_mining_engine(cloud_client=get_kimi_cloud_client())
+        return engine.deep_mine_keywords(keywords, domain=domain)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
