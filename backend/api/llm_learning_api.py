@@ -2088,3 +2088,12 @@ async def knowledge_mine_codebase(
         return get_grace_knowledge_engine().mine_codebase(root_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/daemon/status")
+async def knowledge_daemon_status():
+    """Get status of the continuous knowledge growth daemon."""
+    try:
+        from cognitive.knowledge_daemon import get_knowledge_daemon
+        return get_knowledge_daemon().get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

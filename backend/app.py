@@ -539,6 +539,15 @@ async def lifespan(app: FastAPI):
         import traceback
         traceback.print_exc()
 
+    # ==================== KNOWLEDGE DAEMON ====================
+    # Continuous background knowledge growth: KNN, Mining, Kimi proactive learning
+    try:
+        from cognitive.knowledge_daemon import start_knowledge_daemon
+        knowledge_daemon = start_knowledge_daemon()
+        print("[OK] Knowledge Daemon started - KNN expansion (60s), Mining (300s), Kimi learning (600s)")
+    except Exception as e:
+        print(f"[WARN] Knowledge Daemon not available: {e}")
+
     yield
     
     # Shutdown
