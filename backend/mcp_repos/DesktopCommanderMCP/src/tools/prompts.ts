@@ -48,22 +48,27 @@ function clearCache(): void {
  * Load prompts data from JSON file with caching
  */
 export async function loadPromptsData(): Promise<PromptsData> {
-   if (cachedPromptsData) {
-     return cachedPromptsData;
-   }
+  if (cachedPromptsData) {
+    return cachedPromptsData;
+  }
 
   try {
     const dataPath = path.join(__dirname, '..', 'data', 'onboarding-prompts.json');
     const fileContent = await fs.readFile(dataPath, 'utf-8');
     cachedPromptsData = JSON.parse(fileContent);
-    
-    if (!cachedPromptsData) {
-      throw new Error('Failed to parse prompts data');
+
+    if (!cachedPromptsData || !cachedPromptsData.prompts) {
+      throw new Error('Invalid prompts data structure');
     }
-    
+
     return cachedPromptsData;
   } catch (error) {
-    throw new Error(`Failed to load prompts data: ${error instanceof Error ? error.message : String(error)}`);
+    console.warn(`[Prompts] Warning: Failed to load prompts data: ${error instanceof Error ? error.message : String(error)}. Using empty fallback.`);
+    return {
+      version: "0.0.0",
+      description: "Fallback empty prompts",
+      prompts: []
+    };
   }
 }
 
@@ -74,7 +79,7 @@ export async function getPrompts(params: any): Promise<ServerResult> {
   try {
     // Validate and cast parameters
     const { action, promptId, anonymous_user_use_case } = params as GetPromptsParams;
-    
+
     if (!action) {
       return {
         content: [{
@@ -98,7 +103,7 @@ export async function getPrompts(params: any): Promise<ServerResult> {
       }
       return await getPrompt(promptId, anonymous_user_use_case);
     }
-    
+
     // Legacy actions return deprecation notice
     return {
       content: [{
@@ -123,7 +128,7 @@ export async function getPrompts(params: any): Promise<ServerResult> {
  */
 async function listCategories(): Promise<ServerResult> {
   const data = await loadPromptsData();
-  
+
   // Extract unique categories and count prompts in each
   const categoryMap = new Map<string, number>();
   data.prompts.forEach(prompt => {
@@ -139,7 +144,7 @@ async function listCategories(): Promise<ServerResult> {
   }));
 
   const response = formatCategoriesResponse(categories, data.prompts.length);
-  
+
   return {
     content: [{
       type: "text",
@@ -153,15 +158,15 @@ async function listCategories(): Promise<ServerResult> {
  */
 async function listPrompts(category?: string): Promise<ServerResult> {
   const data = await loadPromptsData();
-  
+
   let filteredPrompts = data.prompts;
-  
+
   // Filter by category if specified
   if (category) {
-    filteredPrompts = data.prompts.filter(prompt => 
+    filteredPrompts = data.prompts.filter(prompt =>
       prompt.categories.includes(category)
     );
-    
+
     if (filteredPrompts.length === 0) {
       return {
         content: [{
@@ -174,7 +179,7 @@ async function listPrompts(category?: string): Promise<ServerResult> {
   }
 
   const response = formatPromptsListResponse(filteredPrompts, category);
-  
+
   return {
     content: [{
       type: "text",
@@ -188,9 +193,9 @@ async function listPrompts(category?: string): Promise<ServerResult> {
  */
 async function getPrompt(promptId: string, anonymousUseCase?: string): Promise<ServerResult> {
   const data = await loadPromptsData();
-  
+
   const prompt = data.prompts.find(p => p.id === promptId);
-  
+
   if (!prompt) {
     return {
       content: [{
@@ -203,9 +208,9 @@ async function getPrompt(promptId: string, anonymousUseCase?: string): Promise<S
 
   // Mark prompt as used in user's onboarding state (for analytics)
   await usageTracker.markPromptUsed(promptId, prompt.categories[0] || 'uncategorized');
-  
+
   const response = formatPromptResponse(prompt);
-  
+
   return {
     content: [{
       type: "text",
@@ -231,28 +236,28 @@ function getCategoryDescription(category: string): string {
     'Automate tasks': 'Workflow automation and scripting',
     'Design systems': 'Architecture planning and system design'
   };
-  
+
   return descriptions[category] || 'Desktop Commander prompts and workflows';
 }
 
 /**
  * Format categories list response
  */
-function formatCategoriesResponse(categories: Array<{name: string, count: number, description: string}>, totalPrompts: number): string {
+function formatCategoriesResponse(categories: Array<{ name: string, count: number, description: string }>, totalPrompts: number): string {
   const sortedCategories = categories.sort((a, b) => b.count - a.count);
-  
+
   // AI INSTRUCTION: When listing prompts, do not show prompt IDs to users - they are for your reference only
   let response = `📚 **Desktop Commander Prompt Categories** (${categories.length} categories, ${totalPrompts} prompts)\n\n`;
-  
+
   sortedCategories.forEach(cat => {
     response += `• **${cat.name}** (${cat.count} prompts) - ${cat.description}\n`;
   });
-  
+
   response += `\n**Usage:**\n`;
   response += `• \`get_prompts(action='list_prompts', category='onboarding')\` - See prompts in category\n`;
   response += `• \`get_prompts(action='list_prompts')\` - See all available prompts\n`;
   response += `• \`get_prompts(action='get_prompt', promptId='PROMPT_ID')\` - Get a specific prompt`;
-  
+
   return response;
 }
 
@@ -261,9 +266,9 @@ function formatCategoriesResponse(categories: Array<{name: string, count: number
  */
 function formatPromptsListResponse(prompts: Prompt[], category?: string): string {
   const categoryText = category ? ` in "${category}"` : '';
-  
+
   let response = `Desktop Commander Examples${categoryText}\n\n`;
-  
+
   // Group by secondary tag
   const groupedPrompts = new Map<string, Prompt[]>();
   prompts.forEach(prompt => {
@@ -273,12 +278,12 @@ function formatPromptsListResponse(prompts: Prompt[], category?: string): string
     }
     groupedPrompts.get(tag)!.push(prompt);
   });
-  
+
   let promptNumber = 1;
-  
+
   // Display groups in preferred order
   const preferredOrder = ['Quick Start', 'Code Analysis', 'Build & Deploy', 'Other'];
-  
+
   preferredOrder.forEach(tag => {
     if (groupedPrompts.has(tag)) {
       const tagPrompts = groupedPrompts.get(tag)!;
@@ -292,7 +297,7 @@ function formatPromptsListResponse(prompts: Prompt[], category?: string): string
       response += `\n`;
     }
   });
-  
+
   response += `Say "Try #3" or "Let's do #1" to start any example.\n\n`;
   response += `<INSTRUCTION>Output options for user exactly as provided without missing numbers. 
 Its important so user can choose an options by entering number only. Also do not forget new lines between numbers for easy reading</INSTRUCTION>\n\n`;
@@ -309,7 +314,7 @@ Its important so user can choose an options by entering number only. Also do not
     }
   });
   response += ` -->`;
-  
+
   return response;
 }
 
@@ -319,19 +324,19 @@ Its important so user can choose an options by entering number only. Also do not
 function formatPromptResponse(prompt: Prompt): string {
   const verifiedBadge = prompt.verified ? ' ✅' : '';
   const categoryText = prompt.categories.join(', ');
-  
+
   let response = `# 🎯 ${prompt.title}${verifiedBadge}\n\n`;
   response += `**Category:** ${categoryText} • **Author:** ${prompt.author}\n\n`;
   response += `## Description\n${prompt.description}\n\n`;
-  
+
   if (prompt.votes > 0) {
     response += `*📊 This prompt has been used successfully by ${prompt.votes}+ users*\n\n`;
   }
-  
+
   response += `## Ready to Use This Prompt\nThe prompt below is ready to use. I'll start executing it right away:\n\n`;
   response += `---\n\n${prompt.prompt}`;
-  
+
   // AI metadata (not shown to user): Executed prompt ID = ${prompt.id}
-  
+
   return response;
 }
