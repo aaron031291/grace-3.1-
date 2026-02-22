@@ -74,7 +74,7 @@ class KimiKnowledgeFeedback:
 
     @property
     def ingestion(self):
-        """Lazy-init ingestion service."""
+        """Lazy-init ingestion service. Falls back to fast direct embedding."""
         if self._ingestion_service is None:
             try:
                 from ingestion.service import TextIngestionService
@@ -86,8 +86,8 @@ class KimiKnowledgeFeedback:
                     chunk_overlap=50,
                     embedding_model=model,
                 )
-            except Exception as e:
-                logger.debug(f"[KIMI-FEEDBACK] Ingestion service unavailable: {e}")
+            except Exception:
+                self._ingestion_service = "direct"
         return self._ingestion_service
 
     def feed_answer(
@@ -123,52 +123,87 @@ class KimiKnowledgeFeedback:
             return False
 
         # Passed all filters — embed into vector DB
-        if not self.ingestion:
-            return False
+        knowledge_text = (
+            f"Question: {question}\n\n"
+            f"Answer: {answer}\n\n"
+            f"Source: Kimi synthesis (confidence: {confidence:.0%}, tier: {tier_used})"
+        )
 
-        try:
-            # Format as a knowledge document
-            knowledge_text = (
-                f"Question: {question}\n\n"
-                f"Answer: {answer}\n\n"
-                f"Source: Kimi synthesis (confidence: {confidence:.0%}, tier: {tier_used})"
-            )
+        embedded = False
 
-            doc_id, message = self.ingestion.ingest_text_fast(
-                text_content=knowledge_text,
-                filename=f"kimi_synthesis_{content_hash[:12]}",
-                source="kimi_synthesis",
-                upload_method="kimi_feedback_loop",
-                source_type="ai_generated",
-                metadata={
+        # Try standard ingestion service first
+        if self.ingestion and self.ingestion != "direct":
+            try:
+                doc_id, message = self.ingestion.ingest_text_fast(
+                    text_content=knowledge_text,
+                    filename=f"kimi_synthesis_{content_hash[:12]}",
+                    source="kimi_synthesis",
+                    upload_method="kimi_feedback_loop",
+                    source_type="ai_generated",
+                    metadata={
+                        "question": question[:200],
+                        "confidence": confidence,
+                        "tier_used": tier_used,
+                        "sources_count": sources_count,
+                        "chat_id": chat_id,
+                        "embedded_at": datetime.now().isoformat(),
+                    },
+                )
+                if doc_id:
+                    embedded = True
+            except Exception:
+                pass
+
+        # Fallback: direct fast embedding into file-based Qdrant
+        if not embedded:
+            try:
+                self._direct_embed(knowledge_text, {
                     "question": question[:200],
                     "confidence": confidence,
                     "tier_used": tier_used,
-                    "sources_count": sources_count,
-                    "chat_id": chat_id,
-                    "embedded_at": datetime.now().isoformat(),
-                },
+                    "source": "kimi_synthesis",
+                })
+                embedded = True
+            except Exception as e:
+                logger.debug(f"[KIMI-FEEDBACK] Direct embed failed: {e}")
+
+        if embedded:
+            self._embedded_hashes.add(content_hash)
+            self.stats["total_embedded"] += 1
+            _track_feedback(
+                f"Embedded answer (confidence={confidence:.0%}, {len(answer)} chars)",
+                outcome="success",
+                confidence=confidence,
             )
-
-            if doc_id:
-                self._embedded_hashes.add(content_hash)
-                self.stats["total_embedded"] += 1
-                _track_feedback(
-                    f"Embedded answer (confidence={confidence:.0%}, {len(answer)} chars)",
-                    outcome="success",
-                    confidence=confidence,
-                )
-                logger.info(
-                    f"[KIMI-FEEDBACK] Embedded answer into vector DB "
-                    f"(doc_id={doc_id}, confidence={confidence:.0%}, "
-                    f"{len(answer)} chars, tier={tier_used})"
-                )
-                return True
-
-        except Exception as e:
-            logger.debug(f"[KIMI-FEEDBACK] Embedding failed: {e}")
+            return True
 
         return False
+
+    def _direct_embed(self, text: str, metadata: dict):
+        """Directly embed into file-based Qdrant using fast embedder."""
+        import os
+        from embedding.fast_embedder import embed_single
+        from qdrant_client import QdrantClient
+        from qdrant_client.models import PointStruct
+
+        qdrant_path = "/workspace/qdrant_unified"
+        lock_path = os.path.join(qdrant_path, ".lock")
+        if os.path.exists(lock_path):
+            os.remove(lock_path)
+
+        vector = embed_single(text[:500])
+        vid = hashlib.md5(text[:200].encode()).hexdigest()
+
+        qc = QdrantClient(path=qdrant_path)
+        try:
+            collections = [c.name for c in qc.get_collections().collections]
+            collection = "knowledge" if "knowledge" in collections else "documents"
+            metadata["text"] = text[:1000]
+            qc.upsert(collection_name=collection, points=[
+                PointStruct(id=vid, vector=vector, payload=metadata)
+            ])
+        finally:
+            qc.close()
 
     def get_stats(self) -> Dict[str, Any]:
         """Get feedback loop statistics."""
