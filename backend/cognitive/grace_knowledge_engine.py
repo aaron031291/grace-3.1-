@@ -9,6 +9,7 @@ Consolidates:
   - Kimi Teacher           (cloud API for novel knowledge)
   - Vector Dedup           (existing Qdrant embeddings as foundation)
   - Kimi Audit             (identify gaps, depth assessment)
+  - Reverse KNN            (find related knowledge via vector similarity)
 
 ONE class. ONE API surface. No more losing track.
 
@@ -26,6 +27,9 @@ Usage:
 
     # Query - deterministic lookup (no LLM)
     engine.query("What is the default port for Qdrant?")
+
+    # Reverse KNN - find related knowledge via vector similarity
+    engine.reverse_knn("design patterns", limit=10)
 
     # GitHub dump - massive one-time injection
     engine.github_dump(["fastapi", "sqlalchemy", "qdrant"])
@@ -254,6 +258,89 @@ class GraceKnowledgeEngine:
             "total_duplicates": total_dupes,
             "by_source": all_results,
         }
+
+    # ==================================================================
+    # REVERSE KNN - find related knowledge via vector similarity
+    # ==================================================================
+
+    def reverse_knn(
+        self, query: str, limit: int = 10, threshold: float = 0.4,
+        include_subagents: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Reverse KNN: find knowledge related to a query using vector similarity.
+
+        Searches existing Qdrant vectors and optionally runs the full
+        KNN sub-agent swarm (vector + web + API + cross-domain).
+
+        Returns ranked results with similarity scores.
+        """
+        results = {"query": query, "vector_results": [], "subagent_results": []}
+
+        # Vector search against Qdrant
+        try:
+            from embedding.ollama_embedder import OllamaEmbedder
+            from qdrant_client import QdrantClient
+
+            if not os.path.exists(self._qdrant_path):
+                results["vector_error"] = "Qdrant path does not exist"
+            else:
+                lock_path = os.path.join(self._qdrant_path, ".lock")
+                if os.path.exists(lock_path):
+                    os.remove(lock_path)
+
+                embedder = OllamaEmbedder()
+                emb = embedder.embed_text([query[:500]])[0]
+
+                qc = QdrantClient(path=self._qdrant_path)
+                try:
+                    search_results = qc.query_points(
+                        collection_name="documents",
+                        query=emb,
+                        limit=limit,
+                    )
+                    if search_results and hasattr(search_results, "points"):
+                        for point in search_results.points:
+                            if point.score >= threshold:
+                                payload = point.payload or {}
+                                results["vector_results"].append({
+                                    "text": payload.get("text", "")[:500],
+                                    "subject": payload.get("subject", ""),
+                                    "domain": payload.get("domain", ""),
+                                    "confidence": payload.get("confidence", 0),
+                                    "similarity": round(point.score, 4),
+                                    "source": payload.get("source", "unknown"),
+                                })
+                except Exception as e:
+                    results["vector_error"] = str(e)[:100]
+                finally:
+                    qc.close()
+
+        except ImportError:
+            results["vector_error"] = "Ollama or Qdrant not available"
+
+        # KNN sub-agent swarm
+        if include_subagents:
+            try:
+                from cognitive.knn_subagent_engine import KNNSubAgentOrchestrator
+                orchestrator = KNNSubAgentOrchestrator()
+                swarm_result = orchestrator.discover(query, depth=1)
+                if hasattr(swarm_result, "discoveries_by_source"):
+                    results["subagent_results"] = [
+                        {
+                            "topic": d.topic,
+                            "text": d.text[:300],
+                            "source": d.source,
+                            "trust": d.trust_score,
+                            "similarity": d.similarity,
+                        }
+                        for d in getattr(swarm_result, "all_discoveries", [])[:limit]
+                    ]
+            except Exception as e:
+                results["subagent_error"] = str(e)[:100]
+
+        results["total_results"] = len(results["vector_results"]) + len(results["subagent_results"])
+        return results
 
     # ==================================================================
     # EXHAUST - convergence-based deep extraction

@@ -2062,3 +2062,17 @@ async def knowledge_stats(db: Session = Depends(get_db)):
         return get_grace_knowledge_engine().stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/knn/{query}")
+async def knowledge_reverse_knn(
+    query: str,
+    limit: int = Query(default=10),
+    include_subagents: bool = Query(default=False),
+    db: Session = Depends(get_db),
+):
+    """Reverse KNN - find related knowledge via vector similarity."""
+    try:
+        from cognitive.grace_knowledge_engine import get_grace_knowledge_engine
+        return get_grace_knowledge_engine().reverse_knn(query, limit, include_subagents=include_subagents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

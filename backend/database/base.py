@@ -5,8 +5,12 @@ Provides declarative base and utility base model for all ORM models.
 
 from sqlalchemy.orm import declarative_base, DeclarativeBase
 from sqlalchemy import Column, DateTime, Integer
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
+
+
+def _utc_now():
+    return datetime.now(timezone.utc)
 
 
 class Base(DeclarativeBase):
@@ -26,8 +30,8 @@ class BaseModel(Base):
     __abstract__ = True
     
     id = Column(Integer, primary_key=True, index=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utc_now, nullable=False)
+    updated_at = Column(DateTime, default=_utc_now, onupdate=_utc_now, nullable=False)
     
     def to_dict(self) -> dict:
         """
@@ -51,7 +55,7 @@ class BaseModel(Base):
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now(timezone.utc)
     
     def __repr__(self) -> str:
         """String representation of model."""
