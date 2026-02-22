@@ -188,6 +188,9 @@ class GraceBrain:
             pass
 
         # Try to get LLM client if not provided
+        # Priority: provided client > local Ollama > Kimi Cloud
+        self._kimi_cloud = None
+
         if not self.llm_client:
             try:
                 from ollama_client.client import get_ollama_client
@@ -197,10 +200,16 @@ class GraceBrain:
             except Exception:
                 pass
 
-        logger.info(
-            f"[GRACE-BRAIN] Read-only intelligence layer initialized "
-            f"(LLM: {'connected' if self.llm_client else 'none - template composition only'})"
-        )
+        # Kimi Cloud as governed fallback for edge cases
+        try:
+            from cognitive.kimi_cloud_client import get_kimi_cloud_client
+            self._kimi_cloud = get_kimi_cloud_client()
+        except Exception:
+            pass
+
+        local_status = 'local LLM' if self.llm_client else 'template only'
+        cloud_status = 'Kimi Cloud available' if self._kimi_cloud else 'no cloud'
+        logger.info(f"[GRACE-BRAIN] Initialized ({local_status}, {cloud_status})")
 
     def connect_mirror(self, mirror_system):
         """Connect to Grace's self-mirroring system (READ-ONLY)."""
@@ -1022,6 +1031,14 @@ class GraceBrain:
             except Exception as e:
                 logger.debug(f"[GRACE-COMPOSE] LLM composition failed: {e}")
 
+        # If local LLM failed, try Kimi Cloud for complex composition
+        if not composed and self._kimi_cloud and len(facts) > 3:
+            composed = self.escalate_to_cloud(
+                prompt=composition_prompt,
+                reason=f"Complex composition of {len(facts)} facts",
+                system_prompt="Compose a clear answer from facts. Only use facts provided. Be concise.",
+            )
+
         if not composed:
             # Template composition fallback (no LLM)
             composed = f"Based on available knowledge: {'. '.join(line.lstrip('- ') for line in fact_lines)}"
@@ -1107,10 +1124,25 @@ class GraceBrain:
             except Exception:
                 pass
 
+            # If diagnosis alone isn't enough, try cloud for novel questions
+            if self._kimi_cloud and self._kimi_cloud.is_available():
+                cloud_response = self.escalate_to_cloud(
+                    prompt=question,
+                    reason=f"Novel question from {requester}, no compiled knowledge found",
+                )
+                if cloud_response:
+                    return {
+                        "answered": True,
+                        "response": cloud_response,
+                        "source": "grace_brain:cloud_escalation",
+                        "diagnosis": diagnosis.overall_assessment,
+                        "requester": requester,
+                    }
+
             return {
                 "answered": True,
                 "response": diagnosis.overall_assessment,
-                "source": "kimi_diagnosis",
+                "source": "grace_brain:diagnosis",
                 "problems": len(diagnosis.detected_problems),
                 "suggestions": len(diagnosis.improvement_opportunities),
                 "requester": requester,
@@ -1118,6 +1150,87 @@ class GraceBrain:
 
         finally:
             self._active_requests -= 1
+
+    def escalate_to_cloud(
+        self,
+        prompt: str,
+        reason: str,
+        system_prompt: Optional[str] = None,
+    ) -> Optional[str]:
+        """
+        Grace Brain decides to escalate to Kimi Cloud API.
+
+        This is GOVERNED: Grace only calls the cloud when:
+        1. Local LLM can't handle it (too complex for 1B model)
+        2. Knowledge store doesn't have the answer
+        3. It's a genuinely novel problem
+
+        Every call is:
+        - Rate limited (max N/hour)
+        - Tracked with Genesis Key
+        - Verified by hallucination guard
+        - Stored in distilled knowledge for next time
+
+        Args:
+            prompt: What to ask
+            reason: Why Grace needs cloud (logged for audit)
+            system_prompt: System instructions
+
+        Returns:
+            Cloud response text, or None if unavailable/rate limited
+        """
+        if not self._kimi_cloud or not self._kimi_cloud.is_available():
+            return None
+
+        # Log the escalation decision
+        try:
+            from cognitive.learning_hook import track_learning_event
+            track_learning_event(
+                "cloud_escalation",
+                f"Grace Brain escalating to Kimi Cloud: {reason}",
+                data={"reason": reason, "prompt_length": len(prompt)},
+            )
+        except Exception:
+            pass
+
+        # Make the governed call
+        result = self._kimi_cloud.generate(
+            prompt=prompt,
+            system_prompt=system_prompt or "You are a knowledgeable assistant. Be precise and factual.",
+        )
+
+        if result.get("success"):
+            content = result["content"]
+
+            # Store in distilled knowledge for next time (skip cloud)
+            try:
+                from cognitive.knowledge_compiler import get_llm_knowledge_miner
+                miner = get_llm_knowledge_miner(self.session)
+                miner.store_interaction(
+                    query=prompt,
+                    response=content,
+                    model_used=result.get("model_name", "kimi_cloud"),
+                    confidence=0.8,
+                )
+                self.session.commit()
+            except Exception:
+                pass
+
+            # Track the interaction
+            self.tracker.record_interaction(
+                prompt=prompt,
+                response=content[:5000],
+                model_used=result.get("model_name", "kimi_cloud"),
+                interaction_type="reasoning",
+                outcome="success",
+                confidence_score=0.8,
+                token_count_output=result.get("tokens", 0),
+                metadata={"escalation_reason": reason, "cloud": True},
+            )
+
+            return content
+
+        return None
 
     def audit_system(self) -> Dict[str, Any]:
         """
