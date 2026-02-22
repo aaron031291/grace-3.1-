@@ -10,6 +10,21 @@ Learns and remembers user preferences across sessions:
 
 Built from Genesis ID session tracking and conversation history.
 Feeds into chat intelligence to personalize responses.
+
+Classes:
+- `UserPreference`
+- `UserPreferenceEngine`
+
+Key Methods:
+- `observe_interaction()`
+- `get_preferences()`
+- `get_system_prompt_additions()`
+
+Database Tables:
+- `user_preferences`
+
+Connects To:
+Self-contained
 """
 
 import logging

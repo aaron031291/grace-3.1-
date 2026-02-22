@@ -6,6 +6,9 @@ These rules cover common file types, naming patterns, and directory structures.
 
 Run this script after migration to populate the rules table:
     python backend/librarian/seed_default_rules.py
+
+Key Methods:
+- `seed_rules()`
 """
 
 import sys

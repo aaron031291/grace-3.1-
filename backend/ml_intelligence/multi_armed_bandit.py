@@ -10,6 +10,23 @@ Algorithms Implemented:
 - Epsilon-Greedy
 - Contextual Bandits
 - Exp3 (Exponential-weight algorithm for Exploration and Exploitation)
+
+Classes:
+- `BanditAlgorithm`
+- `TopicArm`
+- `BanditContext`
+- `MultiArmedBandit`
+
+Key Methods:
+- `add_arm()`
+- `select_arm()`
+- `update_reward()`
+- `get_arm_stats()`
+- `get_all_stats()`
+- `recommend_next_topics()`
+- `save_state()`
+- `load_state()`
+- `get_bandit()`
 """
 
 import numpy as np

@@ -29,6 +29,24 @@ Classification signals:
 - User explicit request ("think deeply", "analyze carefully")
 - Contradiction detection between sources
 - Self-* agent requesting code/config changes
+
+Classes:
+- `ReasoningTier`
+- `RoutingDecision`
+- `ReasoningRouter`
+
+Key Methods:
+- `tier_name()`
+- `classify()`
+- `classify_self_agent_action()`
+- `get_stats()`
+- `get_reasoning_router()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
 """
 
 import logging

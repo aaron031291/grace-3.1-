@@ -26,6 +26,23 @@ Each domain folder has a _manifest.json with:
 
 The frontend can browse this like a file manager and upload
 documents directly to specific domain folders.
+
+Classes:
+- `KnowledgeOrganizer`
+
+Key Methods:
+- `classify_document()`
+- `organize_file()`
+- `organize_all()`
+- `get_domain_structure()`
+- `get_coverage_report()`
+- `get_knowledge_organizer()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+Self-contained
 """
 
 import logging

@@ -3,6 +3,14 @@ Decorators for easily adding telemetry to operations.
 
 Provides simple decorators that can be applied to any function
 to automatically track execution, measure performance, and enable replay.
+
+Key Methods:
+- `track_operation()`
+- `decorator()`
+- `track_tokens()`
+- `wrapper()`
+- `track_confidence()`
+- `wrapper()`
 """
 import functools
 import json

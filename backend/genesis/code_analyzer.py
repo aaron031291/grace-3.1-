@@ -2,6 +2,16 @@
 Code Analyzer for Genesis Key system.
 
 Detects errors, suggests fixes, and highlights issues in code like spell-check.
+
+Classes:
+- `CodeIssue`
+- `CodeAnalyzer`
+
+Key Methods:
+- `analyze_python_code()`
+- `analyze_javascript_code()`
+- `generate_fix_code()`
+- `get_code_analyzer()`
 """
 import ast
 import re

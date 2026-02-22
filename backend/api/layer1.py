@@ -15,6 +15,17 @@ NOW INTEGRATED WITH COGNITIVE ENGINE:
 - All Layer 1 inputs flow through OODA loop
 - 12 invariants enforced automatically
 - Deterministic decision-making with full audit trail
+
+Classes:
+- `UserInputRequest`
+- `ExternalAPIRequest`
+- `WebScrapingRequest`
+- `MemoryMeshRequest`
+- `LearningMemoryRequest`
+- `WhitelistRequest`
+- `SystemEventRequest`
+- `WhitelistResponse`
+- `WhitelistLogsResponse`
 """
 from fastapi import APIRouter, HTTPException, Depends, File, UploadFile, Body
 from pydantic import BaseModel, Field

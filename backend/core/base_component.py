@@ -8,6 +8,28 @@ Addresses Clarity Class 1 (Structural Ambiguity):
 - Trust and role tracking
 
 All Grace components should inherit from BaseComponent.
+
+Classes:
+- `ComponentState`
+- `ComponentRole`
+- `ComponentManifest`
+- `BaseComponent`
+
+Key Methods:
+- `to_dict()`
+- `component_id()`
+- `name()`
+- `manifest()`
+- `state()`
+- `is_active()`
+- `is_available()`
+- `trust_level()`
+- `get_status()`
+- `adjust_trust()`
+- `set_trusted()`
+- `record_operation()`
+- `get_success_rate()`
+- `set_message_bus()`
 """
 
 from __future__ import annotations

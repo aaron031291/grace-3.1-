@@ -5,6 +5,16 @@ Automatically tracks all requests, responses, and operations
 through FastAPI middleware and decorators.
 
 Every API call, file operation, and database change gets a Genesis Key.
+
+Classes:
+- `GenesisTrackingMiddleware`
+- `SessionTracker`
+
+Key Methods:
+- `track_file_operation()`
+- `decorator()`
+- `track_database_operation()`
+- `decorator()`
 """
 
 import logging

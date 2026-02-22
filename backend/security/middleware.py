@@ -7,6 +7,11 @@ Provides:
 - CSRF protection middleware
 - Authentication enforcement middleware
 - Input sanitisation middleware
+
+Classes:
+- `SecurityHeadersMiddleware`
+- `RateLimitMiddleware`
+- `RequestValidationMiddleware`
 """
 
 import time

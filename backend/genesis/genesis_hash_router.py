@@ -10,6 +10,23 @@ When a user types "Genesis#<component>" in a prompt, this router:
 6. Triggers handshake protocol for the component
 
 This is the user-facing entry point for the Genesis# system.
+
+Classes:
+- `GenesisHashRouter`
+
+Key Methods:
+- `detect_genesis_refs()`
+- `has_genesis_ref()`
+- `route()`
+- `get_genesis_hash_router()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.timesense_governance`
+- `genesis.component_registry`
+- `genesis.unified_intelligence`
 """
 
 import logging

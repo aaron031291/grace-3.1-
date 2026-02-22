@@ -6,6 +6,14 @@ Provides real-time bidirectional communication for:
 - System status updates
 - Learning progress notifications
 - File ingestion status
+
+Classes:
+- `ConnectionManager`
+
+Key Methods:
+- `disconnect()`
+- `get_stats()`
+- `get_connection_manager()`
 """
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends

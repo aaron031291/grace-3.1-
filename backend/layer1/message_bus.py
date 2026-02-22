@@ -15,6 +15,27 @@ Components:
 - LLM Orchestration
 - Version Control
 - Librarian
+
+Classes:
+- `MessageType`
+- `ComponentType`
+- `Message`
+- `AutonomousAction`
+- `Layer1MessageBus`
+
+Key Methods:
+- `register_component()`
+- `get_component()`
+- `register_autonomous_action()`
+- `subscribe()`
+- `register_request_handler()`
+- `get_message_history()`
+- `get_stats()`
+- `get_autonomous_actions()`
+- `enable_autonomous_action()`
+- `disable_autonomous_action()`
+- `get_message_bus()`
+- `reset_message_bus()`
 """
 
 from typing import Dict, Any, Callable, List, Optional, Set

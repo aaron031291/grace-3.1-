@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python3
 """
 Migration script to add folder_path column to chats table.

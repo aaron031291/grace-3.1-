@@ -8,6 +8,22 @@ Uses LLM to infer causal relationships:
 4. Generate causal explanations
 
 Integrates with the Causal Graph for storage and retrieval.
+
+Classes:
+- `CausalRelationStrength`
+- `CausalClaim`
+- `CausalChain`
+- `CausalExplanation`
+- `CausalPatternDetector`
+- `LLMCausalInferencer`
+
+Key Methods:
+- `detect()`
+- `infer_causation()`
+- `store_claims()`
+- `trace_causal_chain()`
+- `explain_causation()`
+- `validate_claim()`
 """
 
 from dataclasses import dataclass, field

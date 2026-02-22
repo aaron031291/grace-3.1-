@@ -6,6 +6,15 @@ Adds tables for Grace-aligned file management:
 - file_relationships: Semantic connections between files
 - processing_strategies: Learning-based optimization
 - file_health_checks: Health monitoring history
+
+Classes:
+- `FileIntelligenceModel`
+- `FileRelationshipModel`
+- `ProcessingStrategyModel`
+- `FileHealthCheckModel`
+
+Key Methods:
+- `run_migration()`
 """
 
 import logging

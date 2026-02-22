@@ -10,6 +10,34 @@ Key Features:
 - Subagent architecture for autonomous operation
 - Background task queue for async learning
 - Progress tracking and reporting
+
+Classes:
+- `LearningTask`
+- `LearningProgress`
+- `FileMonitorHandler`
+- `ProactiveLearningSubagent`
+- `ProactiveLearningOrchestrator`
+
+Key Methods:
+- `on_created()`
+- `on_modified()`
+- `start()`
+- `stop()`
+- `get_status()`
+- `start()`
+- `stop()`
+- `add_learning_task()`
+- `get_status()`
+
+Connects To:
+- `cognitive.active_learning_system`
+- `cognitive.learning_hook`
+- `database.session`
+- `embedding`
+- `genesis.layer1_integration`
+- `ingestion.service`
+- `models.database_models`
+- `retrieval.retriever`
 """
 
 import asyncio

@@ -11,6 +11,23 @@ Implements concrete healing actions for:
 - Configuration reload
 
 All actions are reversible where possible (Invariant 4).
+
+Classes:
+- `HealingActionType`
+- `HealingRisk`
+- `HealingResult`
+- `HealingActionConfig`
+- `HealingActionRegistry`
+- `HealingExecutor`
+
+Key Methods:
+- `register_handler()`
+- `get_action()`
+- `get_handler()`
+- `list_actions()`
+- `execute()`
+- `get_healing_executor()`
+- `execute_healing()`
 """
 
 import gc

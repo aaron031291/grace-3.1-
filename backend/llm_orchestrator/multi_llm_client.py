@@ -17,6 +17,38 @@ Features:
 - Rate limiting
 - Response caching
 - Production-ready error handling
+
+Classes:
+- `RateLimiter`
+- `LRUCache`
+- `RetryConfig`
+- `TaskType`
+- `ModelCapability`
+- `LLMModel`
+- `MultiLLMClient`
+
+Key Methods:
+- `acquire()`
+- `get_status()`
+- `get()`
+- `set()`
+- `clear()`
+- `get_stats()`
+- `get_delay()`
+- `should_retry()`
+- `select_model()`
+- `generate()`
+- `generate_multiple()`
+- `get_available_models()`
+- `get_model_stats()`
+- `reset_stats()`
+- `get_system_status()`
+- `clear_cache()`
+- `shutdown()`
+- `get_multi_llm_client()`
+
+Connects To:
+Self-contained
 """
 
 import logging

@@ -11,6 +11,24 @@ Layer 4 — Oracle-level: Unified intelligence record dedup
 Layer 5 — Pipeline-level: Processed seeds set (neighbor expansion)
 
 This engine adds Layer 3 (semantic) and Layer 4 (Oracle) which were missing.
+
+Classes:
+- `DeduplicationEngine`
+
+Key Methods:
+- `check_file_duplicate()`
+- `check_semantic_duplicate()`
+- `check_title_duplicate()`
+- `check_oracle_record_duplicate()`
+- `get_stats()`
+- `get_dedup_engine()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `genesis.unified_intelligence`
+- `retrieval.retriever`
 """
 
 import logging

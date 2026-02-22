@@ -8,6 +8,23 @@ Full integration with Grace backend systems:
 - Scheduling and prioritization
 - Team management with skill-based assignment
 - Genesis ID tracking for all tasks
+
+Classes:
+- `TaskStatus`
+- `TaskPriority`
+- `TaskType`
+- `ProcessingMode`
+- `AgentType`
+- `GraceTask`
+- `UserRequirement`
+- `TeamMember`
+- `GraceAgent`
+- `AutonomousAction`
+- `TaskBoard`
+
+Key Methods:
+- `generate_genesis_id()`
+- `get_best_assignee()`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks, WebSocket, WebSocketDisconnect

@@ -1,6 +1,18 @@
 """
 Version Control API routes using FastAPI.
 Provides endpoints for Git operations and version history.
+
+Classes:
+- `CommitInfo`
+- `CommitListResponse`
+- `FileChange`
+- `DiffStats`
+- `CommitDiffResponse`
+- `TreeNode`
+- `TreeStructureResponse`
+- `ModuleStats`
+- `ModuleStatisticsResponse`
+- `RevertResponse`
 """
 
 from fastapi import APIRouter, HTTPException, Query

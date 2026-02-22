@@ -20,6 +20,23 @@ The code agent also monitors its own systems:
 - Self-analyzes performance trends
 - Asks Kimi when stuck
 - Consults healing system when degraded
+
+Classes:
+- `CodePlaybook`
+- `CodePlaybookManager`
+
+Key Methods:
+- `create_from_success()`
+- `record_failure()`
+- `find_playbook()`
+- `get_agent_performance()`
+- `list_playbooks()`
+
+Database Tables:
+- `code_playbooks`
+
+Connects To:
+- `genesis.unified_intelligence`
 """
 
 import logging

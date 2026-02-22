@@ -9,6 +9,11 @@ Adds composite indexes for common query patterns in Memory Mesh:
 - Document lookups
 
 Expected Performance Improvement: 5-10x faster queries
+
+Key Methods:
+- `safe_create_index()`
+- `upgrade()`
+- `downgrade()`
 """
 
 import sqlite3

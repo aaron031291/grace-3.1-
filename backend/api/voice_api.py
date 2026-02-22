@@ -6,6 +6,19 @@ Provides voice capabilities for GRACE:
 - Text-to-Speech using edge-tts, pyttsx3, or system TTS
 - Continuous conversation mode
 - NLP preprocessing for natural language understanding
+
+Classes:
+- `TTSEngine`
+- `STTEngine`
+- `VoiceSettings`
+- `TTSRequest`
+- `STTResponse`
+- `NLPProcessedText`
+- `VoiceManager`
+- `VoiceSession`
+
+Key Methods:
+- `preprocess_text_nlp()`
 """
 
 import logging

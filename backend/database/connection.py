@@ -1,6 +1,17 @@
 """
 Database connection management module.
 Handles engine creation and connection pooling.
+
+Classes:
+- `DatabaseConnection`
+
+Key Methods:
+- `initialize()`
+- `get_engine()`
+- `get_config()`
+- `close()`
+- `health_check()`
+- `get_db_connection()`
 """
 
 from sqlalchemy import create_engine, Engine, event, text

@@ -12,6 +12,20 @@ Key Metrics:
 - Domain Acquisition Efficiency (data per domain)
 - Skill Acquisition Rate (data per skill level)
 - Learning Curve Analysis
+
+Classes:
+- `Insight`
+- `DomainAcquisition`
+- `LearningEfficiencyMetrics`
+- `LearningEfficiencyTracker`
+
+Key Methods:
+- `record_data_consumption()`
+- `record_insight()`
+- `record_domain_acquisition()`
+- `get_efficiency_metrics()`
+- `get_optimal_learning_paths()`
+- `export_metrics()`
 """
 
 import logging

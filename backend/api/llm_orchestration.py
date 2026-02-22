@@ -9,6 +9,24 @@ All endpoints:
 - Verify outputs through 5-layer pipeline
 - Integrate with learning memory
 - Log for audit
+
+Classes:
+- `LLMTaskRequest`
+- `LLMTaskResponse`
+- `ModelListResponse`
+- `StatsResponse`
+- `RepoQueryRequest`
+- `RepoQueryResponse`
+- `DebateRequest`
+- `ConsensusRequest`
+- `DelegateRequest`
+- `ReviewRequest`
+- `FineTuneDatasetRequest`
+- `NearZeroVerifyRequest`
+
+Key Methods:
+- `get_or_create_embedding_model()`
+- `get_orchestrator()`
 """
 
 import logging

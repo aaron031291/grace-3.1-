@@ -10,6 +10,23 @@ This is the main agent loop that:
 3. Executes using the execution bridge
 4. Learns from outcomes
 5. Iterates until complete
+
+Classes:
+- `TaskStatus`
+- `AgentConfig`
+- `TaskResult`
+- `GraceAgent`
+
+Key Methods:
+- `to_dict()`
+
+Connects To:
+- `agent.code_playbooks`
+- `cognitive.autonomous_sandbox_lab`
+- `cognitive.self_agent_ecosystem`
+- `cognitive.timesense_governance`
+- `database.session`
+- `security.honesty_integrity_accountability`
 """
 
 import asyncio

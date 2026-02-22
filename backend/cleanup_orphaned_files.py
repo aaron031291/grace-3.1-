@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python3
 """
 Database cleanup script for orphaned file records.

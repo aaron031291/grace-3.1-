@@ -6,6 +6,18 @@ Integrates all Grace-aligned file management components:
 - AdaptiveFileProcessor (learning-based optimization)
 - FileHealthMonitor (autonomous health)
 - GenesisFileTracker (complete tracking)
+
+Classes:
+- `GraceFileManager`
+
+Key Methods:
+- `process_file_intelligently()`
+- `record_ingestion_outcome()`
+- `run_health_check()`
+- `get_file_intelligence()`
+- `get_file_relationships()`
+- `get_performance_metrics()`
+- `get_grace_file_manager()`
 """
 
 import logging

@@ -35,6 +35,57 @@ Integrates with:
 - Diagnostic Engine: Scale anomalies trigger diagnostics
 - Message Bus: Broadcasts capacity events
 - Magma Memory: Stores temporal patterns for learning
+
+Classes:
+- `DataScale`
+- `DataScaleProfile`
+- `CapacitySnapshot`
+- `ProcessingRate`
+- `ProcessingRateTracker`
+- `TimeOfDay`
+- `WorkPattern`
+- `TemporalContext`
+- `TimingRecord`
+- `TimePrediction`
+- `CostEstimate`
+- `TemporalAnomaly`
+- `OperationTimer`
+- `OODACycleTimer`
+- `TimeSenseEngine`
+- `_TimeSenseContext`
+
+Key Methods:
+- `contains()`
+- `classify_data_scale()`
+- `format_data_size()`
+- `total_knowledge_formatted()`
+- `remaining_capacity_formatted()`
+- `ram_formatted()`
+- `to_dict()`
+- `measure_capacity()`
+- `mb_per_second()`
+- `formatted_rate()`
+- `estimate_time()`
+- `estimate_time_formatted()`
+- `record()`
+- `get_rate()`
+- `estimate_time()`
+- `get_all_rates()`
+- `to_dict()`
+- `record()`
+- `mean()`
+- `std()`
+- `median()`
+- `p95()`
+- `success_rate()`
+- `last_duration()`
+- `predict()`
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.self_mirror`
+- `cognitive.timesense_deep`
+- `cognitive.timesense_enhanced`
 """
 
 import logging

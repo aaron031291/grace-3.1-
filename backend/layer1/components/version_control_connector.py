@@ -6,6 +6,17 @@ This connector makes version control AUTONOMOUS - any file change processed
 through Layer 1 automatically gets tracked with full version history.
 
 UPDATED: Now fully integrated with Layer 1 message bus with autonomous actions.
+
+Classes:
+- `VersionControlConnector`
+
+Key Methods:
+- `on_message()`
+- `on_file_upload()`
+- `on_file_ingest()`
+- `on_file_modify()`
+- `get_statistics()`
+- `get_version_control_connector()`
 """
 import logging
 from typing import Dict, Any, Optional

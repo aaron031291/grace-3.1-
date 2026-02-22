@@ -32,6 +32,17 @@ ARCHITECTURE:
                                             |
                                     if REJECT and retries left:
                                         -> auto-correct -> re-verify
+
+Classes:
+- `AtomicClaim`
+- `LayerResult`
+- `NearZeroVerificationResult`
+- `NearZeroHallucinationGuard`
+
+Key Methods:
+- `verify()`
+- `get_stats()`
+- `get_near_zero_hallucination_guard()`
 """
 
 import logging

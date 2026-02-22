@@ -11,6 +11,25 @@ Genesis Key Actions for CI/CD:
 - BUILD_ARTIFACT: Creates build artifacts
 - TEST_EXECUTION: Runs test suites
 - DEPLOYMENT: Handles deployments
+
+Classes:
+- `PipelineStatus`
+- `StageType`
+- `StageResult`
+- `PipelineStage`
+- `Pipeline`
+- `PipelineRun`
+- `GenesisKeyAction`
+- `GenesisCICD`
+
+Key Methods:
+- `get_pipeline()`
+- `get_run()`
+- `list_pipelines()`
+- `list_runs()`
+- `register_pipeline()`
+- `get_genesis_keys()`
+- `get_cicd()`
 """
 
 import asyncio

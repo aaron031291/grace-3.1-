@@ -8,6 +8,12 @@ The frontend can:
 - Upload documents to specific domains
 - View coverage reports
 - Trigger organization
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `librarian.knowledge_organizer`
 """
 
 import logging

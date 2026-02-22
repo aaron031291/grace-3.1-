@@ -13,6 +13,24 @@ This creates true self-awareness by:
 
 The mirror creates a "reflection" of Grace that Grace can examine to understand
 herself and improve continuously.
+
+Classes:
+- `PatternType`
+- `MirrorSelfModelingSystem`
+
+Key Methods:
+- `observe_recent_operations()`
+- `detect_behavioral_patterns()`
+- `build_self_model()`
+- `trigger_improvement_actions()`
+- `get_mirror_status()`
+- `analyze_recent_operations()`
+- `get_mirror_system()`
+
+Connects To:
+- `cognitive.learning_memory`
+- `cognitive.memory_mesh_learner`
+- `models.genesis_key_models`
 """
 
 import logging

@@ -1,6 +1,14 @@
 """
 SQLAlchemy base classes and models.
 Provides declarative base and utility base model for all ORM models.
+
+Classes:
+- `Base`
+- `BaseModel`
+
+Key Methods:
+- `to_dict()`
+- `update()`
 """
 
 from sqlalchemy.orm import declarative_base, DeclarativeBase

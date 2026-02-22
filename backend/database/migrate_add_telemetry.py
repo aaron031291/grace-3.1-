@@ -3,6 +3,9 @@ Migration script to add telemetry and self-modeling tables to Grace.
 
 Run this script to add the operation tracking, baselines, drift detection,
 and replay tables to the database.
+
+Key Methods:
+- `migrate()`
 """
 import sys
 from pathlib import Path

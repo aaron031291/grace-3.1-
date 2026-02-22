@@ -9,6 +9,25 @@ Integrates with:
 - Policy Engine (runtime-configurable)
 - Security logging (audit trail)
 - Trust system (autonomy tiers)
+
+Classes:
+- `GovernanceEnforcementMiddleware`
+- `OutputSafetyValidator`
+- `AuditTrailManager`
+
+Key Methods:
+- `get_stats()`
+- `validate()`
+- `record()`
+- `get_recent()`
+- `get_violation_summary()`
+- `get_audit_trail_manager()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `security.logging`
 """
 
 import logging

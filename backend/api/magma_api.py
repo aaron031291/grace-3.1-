@@ -8,6 +8,11 @@ Endpoints for Grace's Magma memory system:
 - /api/magma/why - Causal inference (why did X happen?)
 - /api/magma/context - Get LLM context for a query
 - /api/magma/graphs - Relation graph statistics
+
+Classes:
+- `IngestRequest`
+- `QueryRequest`
+- `CausalRequest`
 """
 
 from fastapi import APIRouter

@@ -2,6 +2,16 @@
 Genesis Key API endpoints.
 
 Provides comprehensive tracking and version control capabilities.
+
+Classes:
+- `CreateGenesisKeyRequest`
+- `GenesisKeyResponse`
+- `FixSuggestionResponse`
+- `AnalyzeCodeRequest`
+- `CodeIssueResponse`
+- `CreateUserRequest`
+- `UserProfileResponse`
+- `ArchiveResponse`
 """
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field, ConfigDict

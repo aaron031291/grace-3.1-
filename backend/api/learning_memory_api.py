@@ -3,6 +3,14 @@ Learning Memory API Endpoints
 
 Provides access to learning memory system with trust scoring
 and integration with memory mesh.
+
+Classes:
+- `LearningExperienceRequest`
+- `FeedbackRequest`
+- `TrainingDataRequest`
+- `PatternResponse`
+- `PatternsListResponse`
+- `PatternExtractRequest`
 """
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field

@@ -20,6 +20,33 @@ Integrations:
 - Knowledge Base: Stored knowledge
 - RAG/Retrieval: Finding relevant info
 - Embedder: Vector embeddings
+
+Classes:
+- `PipelineStage`
+- `DataCategory`
+- `TrustLevel`
+- `WhitelistEntry`
+- `PipelineResult`
+- `StageResult`
+- `WhitelistLearningPipeline`
+
+Key Methods:
+- `get_genesis_key_service()`
+- `get_cognitive_engine()`
+- `get_mirror_system()`
+- `get_active_learning()`
+- `get_memory_mesh_learner()`
+- `get_contradiction_detector()`
+- `get_proactive_learner()`
+- `get_embedder()`
+- `get_librarian_pipeline()`
+- `get_learning_memory()`
+- `get_ml_intelligence()`
+- `get_entry()`
+- `get_result()`
+- `list_entries()`
+- `get_statistics()`
+- `get_whitelist_pipeline()`
 """
 
 import asyncio

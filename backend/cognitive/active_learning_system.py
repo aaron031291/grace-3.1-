@@ -13,6 +13,26 @@ Architecture:
 - Learning Memory = What has been learned
 - Sandbox = Practice environment
 - File Manager = Her world to interact with
+
+Classes:
+- `TrainingSession`
+- `SkillLevel`
+- `GraceActiveLearningSystem`
+
+Key Methods:
+- `study_topic()`
+- `practice_skill()`
+- `extract_learning_patterns()`
+- `create_training_curriculum()`
+- `get_skill_assessment()`
+
+Connects To:
+- `cognitive.engine`
+- `cognitive.learning_memory`
+- `cognitive.predictive_context_loader`
+- `database.session`
+- `genesis.genesis_key_service`
+- `retrieval.retriever`
 """
 
 from typing import List, Dict, Any, Optional, Tuple

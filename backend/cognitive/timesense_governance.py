@@ -22,6 +22,28 @@ Components that need TimeSense:
 
 This is the temporal nervous system — if anything takes too long,
 TimeSense detects it and can trigger self-healing.
+
+Classes:
+- `SLADefinition`
+- `SLAViolation`
+- `TimeSenseGovernance`
+
+Key Methods:
+- `timesense()`
+- `time_operation()`
+- `time_async_operation()`
+- `record()`
+- `get_sla_status()`
+- `add_sla()`
+- `get_timesense_governance()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.timesense`
+- `genesis.unified_intelligence`
 """
 
 import logging

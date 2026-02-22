@@ -10,6 +10,27 @@ Write/update path for the Magma memory system:
 6. Causal Inference - Detect cause-effect relationships
 
 This is the ingestion pipeline that feeds the relation graphs.
+
+Classes:
+- `SegmentType`
+- `Segment`
+- `IngestionResult`
+- `EventSegmenter`
+- `SemanticLinker`
+- `TemporalLinker`
+- `EntityLinker`
+- `CausalLinker`
+- `SynapticIngestionPipeline`
+
+Key Methods:
+- `segment()`
+- `link_segment()`
+- `link_segment()`
+- `link_entities()`
+- `detect_causal_relations()`
+- `link_causal_relations()`
+- `ingest()`
+- `ingest_batch()`
 """
 
 from dataclasses import dataclass, field

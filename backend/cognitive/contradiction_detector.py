@@ -13,6 +13,26 @@ Contradiction types:
 3. Constitutional: Contradictions with core rules
 4. Pattern: Drift from learned patterns
 5. Confidence: Overconfident claims without support
+
+Classes:
+- `ContradictionType`
+- `ContradictionSeverity`
+- `AVNAction`
+- `Contradiction`
+- `AVNResult`
+- `LintResult`
+- `GraceCognitionLinter`
+
+Key Methods:
+- `to_dict()`
+- `to_dict()`
+- `has_critical()`
+- `has_high()`
+- `to_dict()`
+- `update_pattern_baseline()`
+- `get_stats()`
+- `get_cognition_linter()`
+- `reset_linter()`
 """
 
 from __future__ import annotations

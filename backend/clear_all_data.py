@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python
 """
 Clear all data from PostgreSQL and Qdrant vector database.

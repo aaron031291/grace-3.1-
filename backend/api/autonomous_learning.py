@@ -6,6 +6,14 @@ Controls Grace's complete autonomous learning system with:
 - Background operation
 - Automatic task distribution
 - Self-reflection and improvement
+
+Classes:
+- `StartLearningSystemRequest`
+- `StudyTaskRequest`
+- `PracticeTaskRequest`
+
+Key Methods:
+- `get_orchestrator()`
 """
 
 from fastapi import APIRouter, HTTPException

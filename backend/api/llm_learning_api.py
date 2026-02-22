@@ -12,6 +12,27 @@ Endpoints:
 - /llm-learning/training-data - Export training data for local models
 - /llm-learning/progress      - View learning progress
 - /llm-learning/coding-tasks  - Track coding task delegation
+
+Classes:
+- `RecordInteractionRequest`
+- `UpdateInteractionRequest`
+- `RouteTaskRequest`
+- `RecordCodingTaskRequest`
+- `UpdateCodingTaskRequest`
+- `ToolCallRequest`
+- `ParallelToolCallRequest`
+- `KimiAnalyzeRequest`
+- `UserConfirmationRequest`
+
+Key Methods:
+- `get_tracker()`
+- `get_router_instance()`
+- `get_learner()`
+- `get_reducer()`
+- `get_tool_executor()`
+- `get_brain()`
+- `get_executor_instance()`
+- `get_verification_engine()`
 """
 
 import logging

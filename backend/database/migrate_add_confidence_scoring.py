@@ -17,6 +17,9 @@ For document_chunks table:
 
 The migration also drops the old trust_score column from documents table
 and updates indexes for the new confidence_score column.
+
+Key Methods:
+- `migrate_add_confidence_scoring()`
 """
 
 from sqlalchemy import Column, Float, Text, inspect, text

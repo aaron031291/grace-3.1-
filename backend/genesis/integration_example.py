@@ -12,6 +12,14 @@ This shows how the comprehensive tracking system captures ALL inputs:
 - Librarian actions
 
 Every action creates a Genesis Key for complete audit trail.
+
+Key Methods:
+- `example_user_upload_with_tracking()`
+- `example_ai_code_generation()`
+- `example_external_api_tracking()`
+- `example_web_fetch_tracking()`
+- `example_session_tracking()`
+- `example_complete_user_journey()`
 """
 
 from database.session import initialize_session_factory, SessionLocal

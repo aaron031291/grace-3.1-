@@ -9,6 +9,20 @@ what Grace should learn next based on:
 4. Success patterns that should be reinforced
 
 This creates a feedback loop: Memory → Learning → Memory
+
+Classes:
+- `MemoryMeshLearner`
+
+Key Methods:
+- `identify_knowledge_gaps()`
+- `identify_high_value_topics()`
+- `identify_related_topic_clusters()`
+- `analyze_failure_patterns()`
+- `get_learning_suggestions()`
+- `get_memory_mesh_learner()`
+
+Connects To:
+- `cognitive.learning_memory`
 """
 
 import logging

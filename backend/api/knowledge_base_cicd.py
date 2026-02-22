@@ -3,6 +3,14 @@ Knowledge Base CI/CD Integration
 ================================
 Enables autonomous CI/CD triggers from the knowledge base.
 Integrates with the Genesis Key CI/CD system.
+
+Classes:
+- `AutonomousAction`
+- `TriggerActionRequest`
+- `KnowledgeBaseEntry`
+
+Key Methods:
+- `load_metadata()`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks

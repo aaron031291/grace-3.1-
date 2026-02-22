@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python3
 """
 Download lightweight embedding model for laptop testing.

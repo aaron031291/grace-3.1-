@@ -11,6 +11,37 @@ Plus Security integrations:
 - Genesis Keys: Full provenance tracking
 - Trust Scoring: Neural trust-aware retrieval
 - Governance: Constitutional memory enforcement
+
+Classes:
+- `MagmaComponentType`
+- `MagmaEvent`
+- `MagmaMessageBusConnector`
+- `PatternMemoryEntry`
+- `InterpreterPatternMemory`
+- `DecisionPrecedent`
+- `JudgementDecisionMemory`
+- `ActionProcedure`
+- `ActionRouterMemory`
+- `MagmaGenesisIntegration`
+- `MagmaTrustIntegration`
+- `MagmaGovernanceIntegration`
+
+Key Methods:
+- `connect()`
+- `store_pattern()`
+- `find_similar_patterns()`
+- `update_pattern_frequency()`
+- `get_pattern_evolution()`
+- `store_decision()`
+- `find_precedents()`
+- `record_outcome()`
+- `get_success_rate()`
+- `store_procedure()`
+- `find_procedures()`
+- `update_procedure_outcome()`
+- `get_best_procedure()`
+- `connect_genesis()`
+- `track_ingestion()`
 """
 
 from typing import Dict, List, Any, Optional, Callable, Tuple

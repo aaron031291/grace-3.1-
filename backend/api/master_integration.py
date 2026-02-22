@@ -3,6 +3,11 @@ Master Integration API
 
 Single unified API for Grace's complete autonomous system.
 ALL systems integrated and accessible through one endpoint.
+
+Classes:
+- `UnifiedInputRequest`
+- `FileInputRequest`
+- `UserQueryRequest`
 """
 
 from fastapi import APIRouter, HTTPException, Depends

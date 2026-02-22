@@ -2,6 +2,10 @@
 Streaming Chat API
 ==================
 Server-Sent Events (SSE) streaming for real-time chat responses.
+
+Classes:
+- `StreamChatRequest`
+- `StreamEvent`
 """
 
 from fastapi import APIRouter, HTTPException, Depends

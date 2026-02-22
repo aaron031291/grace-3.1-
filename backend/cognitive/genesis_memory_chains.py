@@ -8,6 +8,15 @@ Tracks the complete learning journey for each Genesis Key:
 - Knowledge graph: Connections between concepts
 
 Grace Alignment: Maintains episodic continuity and learning narrative
+
+Classes:
+- `GenesisMemoryChain`
+
+Key Methods:
+- `get_memory_chain()`
+- `get_all_genesis_chains()`
+- `get_learning_narrative()`
+- `get_genesis_memory_chain()`
 """
 
 import logging

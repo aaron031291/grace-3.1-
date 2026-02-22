@@ -5,6 +5,12 @@ Connects Genesis Keys system to Layer 1 message bus for:
 - Automatic key creation on ingestion
 - User contribution tracking
 - Cross-component provenance
+
+Classes:
+- `GenesisKeysConnector`
+
+Key Methods:
+- `create_genesis_keys_connector()`
 """
 
 from typing import Dict, Any, Optional

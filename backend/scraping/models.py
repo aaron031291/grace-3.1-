@@ -1,5 +1,13 @@
 """
 Database models for web scraping functionality.
+
+Classes:
+- `ScrapingJob`
+- `ScrapedPage`
+
+Key Methods:
+- `to_dict()`
+- `to_dict()`
 """
 
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey

@@ -9,6 +9,22 @@ Key Features:
 - Joint inference combining both approaches
 - Trust-weighted fusion
 - Context-aware reasoning
+
+Classes:
+- `ReasoningResult`
+- `NeuroSymbolicReasoner`
+
+Key Methods:
+- `reason()`
+- `explain_reasoning()`
+- `get_neuro_symbolic_reasoner()`
+
+Connects To:
+- `cognitive.learning_memory`
+- `embedding`
+- `ml_intelligence.neural_to_symbolic_rule_generator`
+- `ml_intelligence.trust_aware_embedding`
+- `retrieval.retriever`
 """
 
 import numpy as np

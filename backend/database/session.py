@@ -1,6 +1,12 @@
 """
 Database session management module.
 Provides session factory and context managers for database operations.
+
+Key Methods:
+- `initialize_session_factory()`
+- `get_session()`
+- `get_db()`
+- `get_session_factory()`
 """
 
 from sqlalchemy.orm import sessionmaker, Session

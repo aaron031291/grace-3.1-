@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python3
 """
 Initialize Qdrant collection for Grace API.

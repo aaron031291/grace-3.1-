@@ -2,6 +2,16 @@
 Genesis Key Knowledge Base Integration.
 
 Auto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.
+
+Classes:
+- `GenesisKBIntegration`
+
+Key Methods:
+- `save_genesis_key()`
+- `save_user_profile()`
+- `get_user_keys()`
+- `create_user_summary()`
+- `get_kb_integration()`
 """
 import os
 import json

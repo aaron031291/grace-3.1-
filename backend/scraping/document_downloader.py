@@ -3,6 +3,9 @@ Document downloader service for web scraping.
 
 This service handles downloading documents (PDFs, DOCXs, PPTs, etc.)
 found during web scraping and storing them in the knowledge base.
+
+Classes:
+- `DocumentDownloader`
 """
 
 import aiohttp

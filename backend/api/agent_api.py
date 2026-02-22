@@ -2,6 +2,16 @@
 Grace Agent API
 
 REST API endpoints for Grace's software engineering agent.
+
+Classes:
+- `TaskRequest`
+- `TaskResponse`
+- `ActionExecuteRequest`
+- `ActionResponse`
+- `AgentStatusResponse`
+
+Key Methods:
+- `get_agent()`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks

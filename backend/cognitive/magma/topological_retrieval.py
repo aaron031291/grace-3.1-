@@ -12,6 +12,21 @@ Traversal Policies:
 - DFS (Depth-First): Deep exploration of single paths
 - Best-First: Follow highest-weight edges
 - Adaptive: Dynamically adjust based on results
+
+Classes:
+- `TraversalPolicy`
+- `TraversalConfig`
+- `TraversalState`
+- `TraversalResult`
+- `GraphTraverser`
+- `AdaptiveTopologicalRetriever`
+
+Key Methods:
+- `bfs_traverse()`
+- `best_first_traverse()`
+- `bidirectional_traverse()`
+- `retrieve()`
+- `retrieve_neighbors()`
 """
 
 from dataclasses import dataclass, field

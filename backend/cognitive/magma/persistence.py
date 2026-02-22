@@ -10,6 +10,14 @@ Saves:
 - Graph statistics
 
 Format: JSON files in data/magma/
+
+Classes:
+- `MagmaPersistence`
+
+Key Methods:
+- `save()`
+- `load()`
+- `get_info()`
 """
 
 import json

@@ -5,6 +5,12 @@ Connects LLM orchestration to Layer 1 message bus for:
 - Skill-aware LLM selection
 - Procedural memory integration
 - Cross-component reasoning
+
+Classes:
+- `LLMOrchestrationConnector`
+
+Key Methods:
+- `create_llm_orchestration_connector()`
 """
 
 from typing import Dict, Any, Optional

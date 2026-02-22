@@ -29,6 +29,17 @@ Flow:
     Fed back to Kimi for next analysis cycle
 
 Key principle: Kimi thinks, Grace does.
+
+Classes:
+- `VerificationResult`
+- `ExecutionStep`
+- `InstructionResult`
+- `SessionResult`
+- `GraceVerifiedExecutor`
+
+Key Methods:
+- `get_execution_stats()`
+- `get_grace_verified_executor()`
 """
 
 import logging

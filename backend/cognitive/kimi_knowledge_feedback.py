@@ -16,6 +16,22 @@ This creates a knowledge flywheel:
   User asks question -> Kimi synthesizes answer -> Answer embedded ->
   KNN discovers connections -> Next question gets BETTER context ->
   Kimi gives BETTER answer -> Embedded -> KNN expands further -> ...
+
+Classes:
+- `KimiKnowledgeFeedback`
+
+Key Methods:
+- `ingestion()`
+- `feed_answer()`
+- `get_stats()`
+- `get_kimi_feedback()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
+- `ingestion.service`
 """
 
 import logging

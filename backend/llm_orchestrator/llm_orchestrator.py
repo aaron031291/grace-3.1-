@@ -18,6 +18,25 @@ All LLM operations are:
 - Trust-scored
 - Cognitively enforced
 - Integrated with learning memory
+
+Classes:
+- `LLMTaskRequest`
+- `LLMTaskResult`
+- `LLMOrchestrator`
+
+Key Methods:
+- `execute_task()`
+- `get_task_result()`
+- `get_recent_tasks()`
+- `get_stats()`
+- `get_llm_orchestrator()`
+
+Connects To:
+- `cognitive.learning_memory`
+- `confidence_scorer.confidence_scorer`
+- `embedding`
+- `genesis.cognitive_layer1_integration`
+- `security.governance`
 """
 
 import logging

@@ -2,6 +2,16 @@
 Autonomous Sandbox Lab API
 
 Endpoints for Grace's self-improvement experimentation system
+
+Classes:
+- `ProposeExperimentRequest`
+- `RecordImplementationRequest`
+- `StartTrialRequest`
+- `RecordTrialResultRequest`
+- `ApprovalRequest`
+- `ExperimentResponse`
+- `ExperimentListResponse`
+- `LabStatsResponse`
 """
 
 from fastapi import APIRouter, HTTPException

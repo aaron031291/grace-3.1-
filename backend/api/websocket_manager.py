@@ -11,6 +11,14 @@ Events pushed to frontend:
 - learning.update: Learning progress
 - message_bus.event: Any message bus event
 - agent.status: Agent task updates
+
+Classes:
+- `ConnectionManager`
+
+Key Methods:
+- `disconnect()`
+- `get_stats()`
+- `get_ws_manager()`
 """
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect

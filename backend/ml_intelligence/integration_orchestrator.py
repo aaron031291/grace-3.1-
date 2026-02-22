@@ -11,6 +11,23 @@ Features:
 - Provides uncertainty estimates for predictions
 - Selects optimal training examples via active learning
 - Improves representations with contrastive learning
+
+Classes:
+- `MLIntelligenceOrchestrator`
+
+Key Methods:
+- `initialize()`
+- `compute_trust_score()`
+- `update_trust_from_outcome()`
+- `select_next_learning_topic()`
+- `update_topic_reward()`
+- `get_learning_recommendations()`
+- `get_uncertainty_estimate()`
+- `select_training_examples()`
+- `get_statistics()`
+- `save_all_models()`
+- `get_ml_orchestrator()`
+- `enhance_learning_memory_with_ml()`
 """
 
 import sys

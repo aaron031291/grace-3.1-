@@ -8,6 +8,10 @@ Exposes the Self-Mirror's unified telemetry data:
 - Bi-directional challenges between components
 - RFI (Request for Intelligence) management
 - Real-time system pulse
+
+Classes:
+- `TelemetryVectorInput`
+- `RFICreateRequest`
 """
 
 from fastapi import APIRouter

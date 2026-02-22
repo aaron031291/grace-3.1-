@@ -43,6 +43,32 @@ GRACE can autonomously:
 - Trigger healing actions when pipelines fail
 - Learn from CI/CD outcomes to improve future decisions
 - Create and track Genesis Keys for all operations
+
+Classes:
+- `IntelligenceMode`
+- `TriggerSource`
+- `TestSelectionStrategy`
+- `PipelineDecision`
+- `TestMetrics`
+- `WebhookEvent`
+- `ClosedLoopMetric`
+- `IntelligentDecision`
+- `IntelligentTestSelector`
+- `WebhookEventProcessor`
+- `ClosedLoopFeedback`
+- `IntelligentCICDOrchestrator`
+
+Key Methods:
+- `record_test_result()`
+- `select_tests()`
+- `register_handler()`
+- `parse_github_event()`
+- `record_metric()`
+- `get_trigger_recommendation()`
+- `record_pipeline_outcome()`
+- `get_status()`
+- `get_dashboard_data()`
+- `get_intelligent_cicd_orchestrator()`
 """
 
 import asyncio

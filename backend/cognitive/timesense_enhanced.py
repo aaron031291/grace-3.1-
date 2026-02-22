@@ -19,6 +19,34 @@ TimeSense Enhanced Capabilities
 
 5. PERFORMANCE TRENDS: Is Grace getting faster or slower over time?
    She tracks daily averages and detects degradation trends across days.
+
+Classes:
+- `TimeSenseMiddleware`
+- `TaskStep`
+- `TaskPlan`
+- `TaskPlanner`
+- `ThroughputBudget`
+- `ThroughputTracker`
+- `MemoryPressurePredictor`
+- `DailyPerformance`
+- `PerformanceTrendTracker`
+
+Key Methods:
+- `total_estimated_formatted()`
+- `to_dict()`
+- `plan()`
+- `get_available_tasks()`
+- `to_dict()`
+- `start_operation()`
+- `end_operation()`
+- `get_budget()`
+- `should_throttle()`
+- `get_all_budgets()`
+- `record_memory_usage()`
+- `predict_memory_impact()`
+- `record()`
+- `get_trend()`
+- `get_all_trends()`
 """
 
 import logging

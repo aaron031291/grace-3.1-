@@ -10,6 +10,30 @@ Algorithms:
 - Learning Rate Scheduling via meta-learning
 - Hyperparameter Optimization
 - Task Similarity Detection
+
+Classes:
+- `LearningTask`
+- `MetaLearningEpisode`
+- `MAML`
+- `HyperparameterOptimizer`
+- `TaskSimilarityDetector`
+- `MetaLearningOrchestrator`
+
+Key Methods:
+- `inner_loop()`
+- `outer_loop()`
+- `meta_train()`
+- `suggest_hyperparameters()`
+- `update_from_result()`
+- `get_best_hyperparameters()`
+- `embed_task()`
+- `add_task()`
+- `find_similar_tasks()`
+- `optimize_learning_for_task()`
+- `get_learning_recommendations()`
+- `save_state()`
+- `load_state()`
+- `get_meta_learner()`
 """
 
 import torch

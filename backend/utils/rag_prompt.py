@@ -1,5 +1,9 @@
 """
 RAG prompt utilities for injecting retrieved context into chat prompts.
+
+Key Methods:
+- `build_rag_prompt()`
+- `build_rag_system_prompt()`
 """
 
 from typing import List, Optional

@@ -35,6 +35,45 @@ ARCHITECTURE:
 
 This replaces calling Memory Mesh OR Magma separately.
 One system. One API. Every memory type. Full lifecycle.
+
+Classes:
+- `MemoryType`
+- `MemoryStrength`
+- `Memory`
+- `AssociativeRecallEngine`
+- `ConsolidationEngine`
+- `UnifiedMemory`
+
+Key Methods:
+- `current_retention()`
+- `effective_score()`
+- `reinforce()`
+- `to_dict()`
+- `record_co_access()`
+- `get_associations()`
+- `consolidate()`
+- `get_stats()`
+- `remember()`
+- `recall()`
+- `forget()`
+- `reinforce()`
+- `get_working_memory()`
+- `add_to_working_memory()`
+- `clear_working_memory()`
+- `run_consolidation()`
+- `start_consolidation_loop()`
+- `stop_consolidation_loop()`
+- `remember_episode()`
+- `remember_procedure()`
+- `remember_fact()`
+- `remember_cause()`
+- `learn()`
+- `get_stats()`
+- `get_dashboard()`
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.magma`
 """
 
 import logging

@@ -6,6 +6,20 @@ Manages tiered permission system for librarian actions:
 - Approval required: Sensitive actions (folder creation, deletion, moves)
 
 Provides approval queue for human review of pending actions.
+
+Classes:
+- `ApprovalWorkflow`
+
+Key Methods:
+- `create_action()`
+- `get_permission_tier()`
+- `get_pending_actions()`
+- `approve_action()`
+- `reject_action()`
+- `auto_approve_safe_actions()`
+- `get_action_statistics()`
+- `batch_approve()`
+- `batch_reject()`
 """
 
 from typing import List, Dict, Any, Optional

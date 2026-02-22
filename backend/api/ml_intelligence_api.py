@@ -7,6 +7,23 @@ Endpoints for advanced machine learning features:
 - Meta-learning
 - Uncertainty quantification
 - Active learning
+
+Classes:
+- `TrustScoreRequest`
+- `TrustScoreResponse`
+- `BanditSelectRequest`
+- `BanditSelectResponse`
+- `BanditFeedbackRequest`
+- `MetaLearningRequest`
+- `MetaLearningResponse`
+- `UncertaintyRequest`
+- `UncertaintyResponse`
+- `ActiveSampleRequest`
+- `ActiveSampleResponse`
+- `StatsResponse`
+
+Key Methods:
+- `get_orchestrator()`
 """
 
 from fastapi import APIRouter, HTTPException, Depends

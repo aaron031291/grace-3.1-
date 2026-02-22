@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python
 """
 Quick reference and usage guide for reset_and_reingest.py

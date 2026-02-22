@@ -9,6 +9,9 @@ Closes ALL gaps:
 
 This module is called from startup.py after the diagnostic engine
 and other subsystems are initialized.
+
+Key Methods:
+- `wire_diagnostic_engine()`
 """
 
 import logging

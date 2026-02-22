@@ -14,6 +14,34 @@ Creates a fully autonomous system that:
 4. Executes healing actions with progressive autonomy
 5. Learns from healing outcomes
 6. Integrates with mirror agent for self-modeling
+
+Classes:
+- `HealthStatus`
+- `AnomalyType`
+- `HealingAction`
+- `TrustLevel`
+- `AutonomousHealingSystem`
+
+Key Methods:
+- `assess_system_health()`
+- `decide_healing_actions()`
+- `execute_healing()`
+- `run_monitoring_cycle()`
+- `get_system_status()`
+- `get_autonomous_healing()`
+
+Connects To:
+- `cognitive.autonomous_sandbox_lab`
+- `cognitive.healing_playbooks`
+- `cognitive.learning_memory`
+- `cognitive.timesense_governance`
+- `database.session`
+- `embedding.embedding_model`
+- `genesis.healing_system`
+- `genesis.unified_intelligence`
+- `llm_orchestrator.llm_orchestrator`
+- `models.genesis_key_models`
+- `vector_db.qdrant_client`
 """
 
 import logging

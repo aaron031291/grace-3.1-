@@ -29,6 +29,34 @@ Architecture:
 │  │  Cross-pollination between agents in real-time    │    │
 │  └──────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────┘
+
+Classes:
+- `SwarmMessage`
+- `TaskLogEntry`
+- `SwarmCommBus`
+- `SharedTaskLog`
+
+Key Methods:
+- `post()`
+- `get_recent()`
+- `get_discoveries_by()`
+- `get_all_topics_found()`
+- `register_reactive_listener()`
+- `register_reactive_queue()`
+- `get_stats()`
+- `log_task()`
+- `was_already_done()`
+- `get_history_for()`
+- `get_recent()`
+- `get_stats()`
+- `get_swarm_comm_bus()`
+- `get_shared_task_log()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+Self-contained
 """
 
 import logging

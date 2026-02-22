@@ -11,6 +11,15 @@ Provides:
 - Closed-loop feedback from production
 - Self-healing integration
 - Genesis Key tracking for all operations
+
+Classes:
+- `PipelineTriggerRequest`
+- `AutonomousEventRequest`
+- `IntelligentDecisionRequest`
+- `TestResultRequest`
+- `FeedbackMetricRequest`
+- `ApprovalRequest`
+- `PipelineDefinition`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks

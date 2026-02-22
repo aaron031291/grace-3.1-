@@ -29,6 +29,20 @@ Architecture:
     │   └─────────────┘  └─────────────┘  └─────────────────────┘   │
     │                                                                 │
     └─────────────────────────────────────────────────────────────────┘
+
+Classes:
+- `AutonomousTriggerType`
+- `AutonomyLevel`
+- `ActionRisk`
+- `AutonomousEvent`
+- `AutonomousDecision`
+- `AutonomousCICDEngine`
+
+Key Methods:
+- `record_outcome()`
+- `get_status()`
+- `get_pending_decisions()`
+- `get_autonomous_cicd_engine()`
 """
 
 import asyncio

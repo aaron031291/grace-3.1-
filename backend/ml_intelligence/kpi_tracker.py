@@ -10,6 +10,32 @@ Key Features:
 - KPI-to-trust score conversion
 - System-wide trust aggregation
 - Time-windowed metrics (recent vs. historical)
+
+Classes:
+- `KPI`
+- `ComponentKPIs`
+- `KPITracker`
+
+Key Methods:
+- `increment()`
+- `get_kpi()`
+- `increment_kpi()`
+- `get_trust_score()`
+- `get_recent_kpi()`
+- `to_dict()`
+- `register_component()`
+- `increment_kpi()`
+- `get_component_kpis()`
+- `get_component_trust_score()`
+- `get_system_trust_score()`
+- `get_health_signal()`
+- `get_system_health()`
+- `to_dict()`
+- `get_kpi_tracker()`
+- `reset_kpi_tracker()`
+
+Connects To:
+Self-contained
 """
 
 import logging

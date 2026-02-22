@@ -9,6 +9,11 @@ Instead of using the basic retriever, chat queries go through:
 4. Context synthesis (generate LLM-ready context)
 
 This replaces the basic retriever in the multi-tier integration.
+
+Key Methods:
+- `get_magma_enhanced_context()`
+- `enrich_rag_context()`
+- `ingest_chat_interaction()`
 """
 
 import logging

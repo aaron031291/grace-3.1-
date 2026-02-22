@@ -9,6 +9,19 @@ Key Features:
 - Trust-weighted similarity search
 - Trust-guided clustering
 - Integration with symbolic knowledge base
+
+Classes:
+- `TrustContext`
+- `TrustAwareEmbeddingModel`
+
+Key Methods:
+- `get_effective_trust()`
+- `embed_text()`
+- `similarity_with_trust()`
+- `cluster_with_trust()`
+- `get_embedding_dimension()`
+- `get_model_info()`
+- `get_trust_aware_embedding_model()`
 """
 
 import numpy as np

@@ -8,6 +8,17 @@ Integration points:
 - GovernanceEngine: Constitutional and policy checks
 - Layer1MessageBus: Event publishing for audit
 - GovernanceMetrics: KPI tracking
+
+Classes:
+- `GovernedExecutionBridge`
+
+Key Methods:
+- `config()`
+- `action_history()`
+- `get_stats()`
+- `get_governance_log()`
+- `get_governed_execution_bridge()`
+- `reset_governed_bridge()`
 """
 
 import asyncio

@@ -12,6 +12,30 @@ Features:
 - Event-driven sensor triggering
 - CI/CD pipeline integration
 - Forensic analysis and AVN/AVM
+
+Classes:
+- `EngineState`
+- `TriggerSource`
+- `DiagnosticCycle`
+- `EngineStats`
+- `DiagnosticEngine`
+
+Key Methods:
+- `state()`
+- `stats()`
+- `start()`
+- `stop()`
+- `pause()`
+- `resume()`
+- `run_cycle()`
+- `trigger_from_sensor()`
+- `trigger_from_cicd()`
+- `trigger_from_webhook()`
+- `on_cycle_complete()`
+- `on_alert()`
+- `on_heal()`
+- `on_freeze()`
+- `get_recent_cycles()`
 """
 
 import os

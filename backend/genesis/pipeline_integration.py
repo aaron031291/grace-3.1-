@@ -2,6 +2,15 @@
 Complete Pipeline Integration: Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model
 
 This module ensures all data flows through the complete pipeline symbiotically.
+
+Classes:
+- `DataPipeline`
+
+Key Methods:
+- `process_input()`
+- `get_pipeline_stats()`
+- `verify_pipeline()`
+- `get_data_pipeline()`
 """
 import os
 import json

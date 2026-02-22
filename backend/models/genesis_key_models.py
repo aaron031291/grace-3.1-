@@ -3,6 +3,15 @@ Genesis Key models for comprehensive version control and tracking.
 
 Genesis Keys track every input, change, and action in the system with
 complete metadata for what, where, when, why, who, and how.
+
+Classes:
+- `GenesisKeyType`
+- `GenesisKeyStatus`
+- `FixSuggestionStatus`
+- `GenesisKey`
+- `FixSuggestion`
+- `GenesisKeyArchive`
+- `UserProfile`
 """
 from datetime import datetime
 from typing import Optional, Dict, Any

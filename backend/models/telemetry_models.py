@@ -3,6 +3,15 @@ Self-modeling telemetry models for Grace.
 
 These models enable Grace to observe her own execution,
 track performance baselines, detect drift, and replay operations.
+
+Classes:
+- `OperationType`
+- `OperationStatus`
+- `OperationLog`
+- `PerformanceBaseline`
+- `DriftAlert`
+- `OperationReplay`
+- `SystemState`
 """
 from datetime import datetime
 from typing import Optional, Dict, Any

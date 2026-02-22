@@ -11,6 +11,31 @@ RRF formula: score(d) = Σ 1 / (k + rank_i(d))
 where k is a constant (typically 60) and rank_i(d) is the rank of document d in result list i.
 
 This provides a robust way to merge rankings without requiring score normalization.
+
+Classes:
+- `RetrievalResult`
+- `FusedResult`
+- `FusionMethod`
+- `RRFFusion`
+- `WeightedRRFFusion`
+- `CombSUMFusion`
+- `CombMNZFusion`
+- `InterleavingFusion`
+- `MagmaFusion`
+
+Key Methods:
+- `fuse()`
+- `set_source_weight()`
+- `set_source_weights()`
+- `fuse()`
+- `fuse()`
+- `fuse()`
+- `fuse()`
+- `fuse()`
+- `fuse_with_limit()`
+- `set_method()`
+- `set_source_weight()`
+- `create_retrieval_results()`
 """
 
 from dataclasses import dataclass, field

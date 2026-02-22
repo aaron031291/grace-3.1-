@@ -11,6 +11,28 @@ Features:
 - Dynamic model expansion
 - Continuous evaluation
 - Automatic checkpointing
+
+Classes:
+- `StreamingBatch`
+- `ModelCheckpoint`
+- `ElasticWeightConsolidation`
+- `OnlineLearningPipeline`
+- `IncrementalEmbeddingLearner`
+
+Key Methods:
+- `compute_fisher_information()`
+- `penalty()`
+- `update()`
+- `update_ewc()`
+- `checkpoint()`
+- `load_checkpoint()`
+- `get_metrics_summary()`
+- `adapt_embedding()`
+- `learn_from_positive_pair()`
+- `save_adapter()`
+- `load_adapter()`
+- `get_online_learning_pipeline()`
+- `get_incremental_embedder()`
 """
 
 import torch

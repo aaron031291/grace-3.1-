@@ -4,6 +4,16 @@ Enterprise Repository Management API.
 Endpoints for managing enterprise repositories, tracking ingestion status,
 and monitoring repository health.
 These endpoints are not exposed to the frontend yet - internal use only.
+
+Classes:
+- `RepositoryType`
+- `IngestionStatus`
+- `RepositoryPriority`
+- `RepositoryConfig`
+- `RepositoryResponse`
+- `IngestionResultResponse`
+- `RepositoryStatsResponse`
+- `BulkAddRequest`
 """
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field

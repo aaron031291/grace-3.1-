@@ -12,6 +12,17 @@ This is the MASTER INTEGRATION LAYER that connects ALL systems:
 - Training System (Skill Development)
 
 EVERYTHING flows through here and triggers autonomously.
+
+Classes:
+- `AutonomousMasterIntegration`
+
+Key Methods:
+- `initialize()`
+- `process_input()`
+- `run_proactive_cycle()`
+- `get_complete_system_status()`
+- `shutdown()`
+- `get_master_integration()`
 """
 
 import logging

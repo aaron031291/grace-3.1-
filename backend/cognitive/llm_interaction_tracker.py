@@ -19,6 +19,20 @@ Architecture:
                                 -> Patterns identified
                                 -> Learning memory updated
                                 -> Dependency metrics updated
+
+Classes:
+- `LLMInteractionTracker`
+
+Key Methods:
+- `record_interaction()`
+- `update_interaction_outcome()`
+- `record_coding_task()`
+- `update_coding_task()`
+- `get_interaction_stats()`
+- `get_recent_interactions()`
+- `get_reasoning_paths()`
+- `get_coding_task_stats()`
+- `get_llm_interaction_tracker()`
 """
 
 import logging

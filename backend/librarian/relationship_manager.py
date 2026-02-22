@@ -8,6 +8,17 @@ Automatically detects and manages relationships between documents including:
 - Duplicate detection
 
 Builds a knowledge graph of document relationships.
+
+Classes:
+- `RelationshipManager`
+
+Key Methods:
+- `detect_relationships()`
+- `create_relationship()`
+- `save_detected_relationships()`
+- `get_document_relationships()`
+- `get_dependency_graph()`
+- `delete_relationship()`
 """
 
 from typing import List, Dict, Any, Optional, Tuple, Set

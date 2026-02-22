@@ -2,6 +2,13 @@
 Unified Memory API - Grace's Complete Memory System
 
 One API for all memory operations.
+
+Classes:
+- `RememberRequest`
+- `RecallRequest`
+- `EpisodeRequest`
+- `ProcedureRequest`
+- `CausalRequest`
 """
 
 from fastapi import APIRouter

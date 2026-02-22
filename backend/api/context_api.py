@@ -5,6 +5,13 @@ Provides endpoints for:
 - Submitting user context to fill knowledge gaps
 - Retrieving context request details
 - Viewing context submission history
+
+Classes:
+- `ContextGapSubmission`
+- `SubmitContextRequest`
+- `SubmitContextResponse`
+- `ContextRequestDetails`
+- `ContextHistoryItem`
 """
 
 from fastapi import APIRouter, HTTPException, Depends

@@ -6,6 +6,25 @@ Provides comprehensive task management with:
 - Profile management with Genesis Key generation
 - Full task history and versioning
 - File/folder association for provenance
+
+Classes:
+- `ProfileCreateRequest`
+- `ProfileUpdateRequest`
+- `ProfileResponse`
+- `ProfileListResponse`
+- `SubtaskModel`
+- `TaskCreateRequest`
+- `TaskUpdateRequest`
+- `TaskResponse`
+- `TaskListResponse`
+- `TaskHistoryResponse`
+- `KanbanBoardResponse`
+
+Key Methods:
+- `get_db_session()`
+- `task_to_response()`
+- `profile_to_response()`
+- `record_task_history()`
 """
 
 from fastapi import APIRouter, HTTPException, Depends, Query

@@ -1,6 +1,25 @@
 """
 Example models demonstrating database usage.
 These are templates - modify or replace with your actual models.
+
+Classes:
+- `ChatType`
+- `User`
+- `Conversation`
+- `Message`
+- `Embedding`
+- `Chat`
+- `ChatHistory`
+- `Document`
+- `DocumentChunk`
+- `GovernanceRule`
+- `GovernanceDocument`
+- `GovernanceDecision`
+
+Key Methods:
+- `to_dict()`
+- `to_dict()`
+- `to_dict()`
 """
 
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, Enum as SQLEnum

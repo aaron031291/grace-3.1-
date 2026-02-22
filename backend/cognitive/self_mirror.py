@@ -21,6 +21,47 @@ Connects to existing subsystems:
 - Governance (triggered by risk thresholds)
 - Agent (triggered for self-building)
 - Continuous Learning (triggered for knowledge acquisition)
+
+Classes:
+- `TelemetryVector`
+- `PillarType`
+- `PillarTrigger`
+- `StatisticalProfile`
+- `Challenge`
+- `RFI`
+- `AutonomousResolutionEngine`
+- `SelfMirror`
+- `_OperationMeasurer`
+
+Key Methods:
+- `to_dict()`
+- `observe()`
+- `mean_time()`
+- `mean_mass()`
+- `mean_pressure()`
+- `mode_time()`
+- `variance_time()`
+- `std_time()`
+- `variance_pressure()`
+- `is_degraded()`
+- `is_below_mode()`
+- `is_slower_than_previous()`
+- `is_high_risk_ingestion()`
+- `is_evolution_ready()`
+- `get_dashboard_row()`
+- `create_rfi()`
+- `get_stats()`
+- `receive_vector()`
+- `broadcast_system_pulse()`
+- `measure_operation()`
+- `create_rfi()`
+- `start_heartbeat()`
+- `stop_heartbeat()`
+- `get_dashboard()`
+- `get_stats()`
+
+Connects To:
+- `cognitive.learning_hook`
 """
 
 import logging

@@ -11,6 +11,35 @@ Strategies:
 - Diversity Sampling
 - Core-Set Selection
 - Adversarial Sampling
+
+Classes:
+- `SamplingStrategy`
+- `SampleScore`
+- `UncertaintySampler`
+- `EntropySampler`
+- `MarginSampler`
+- `QueryByCommittee`
+- `ExpectedModelChangeSampler`
+- `DiversitySampler`
+- `CoreSetSampler`
+- `ActiveLearningSampler`
+
+Key Methods:
+- `compute_uncertainty()`
+- `select_samples()`
+- `compute_entropy()`
+- `select_samples()`
+- `compute_margin()`
+- `select_samples()`
+- `compute_disagreement()`
+- `select_samples()`
+- `compute_gradient_magnitude()`
+- `select_samples()`
+- `select_samples()`
+- `select_samples()`
+- `select_samples()`
+- `hybrid_selection()`
+- `get_active_sampler()`
 """
 
 import torch

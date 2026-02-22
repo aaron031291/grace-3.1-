@@ -2,6 +2,14 @@
 Genesis CI/CD API
 =================
 REST API for the Genesis Key-powered CI/CD pipeline system.
+
+Classes:
+- `TriggerPipelineRequest`
+- `CreatePipelineRequest`
+- `StageResultResponse`
+- `PipelineRunResponse`
+- `PipelineResponse`
+- `WebhookPayload`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Request

@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python3
 """Fix: Re-ingest GDP document and clean up orphaned vectors."""
 

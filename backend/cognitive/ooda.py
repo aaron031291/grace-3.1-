@@ -3,6 +3,24 @@ OODA Loop Implementation for Grace.
 
 Implements Invariant 1: OODA as the Primary Control Loop.
 All execution flows through Observe → Orient → Decide → Act.
+
+Classes:
+- `OODAPhase`
+- `OODAState`
+- `OODALoop`
+
+Key Methods:
+- `observe()`
+- `orient()`
+- `decide()`
+- `act()`
+- `reset()`
+- `get_phase_history()`
+- `is_complete()`
+- `validate_completion()`
+
+Connects To:
+Self-contained
 """
 from enum import Enum
 from typing import Dict, Any, Callable, Optional

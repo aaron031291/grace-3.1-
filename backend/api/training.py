@@ -6,6 +6,14 @@ API for Grace's active learning system where she:
 - Practices skills in sandbox environment
 - Builds persistent knowledge and abilities
 - Tracks skill proficiency over time
+
+Classes:
+- `StudyTopicRequest`
+- `PracticeSkillRequest`
+- `CreateCurriculumRequest`
+
+Key Methods:
+- `get_learning_system()`
 """
 
 from datetime import datetime

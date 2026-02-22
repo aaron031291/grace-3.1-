@@ -6,6 +6,9 @@ Creates tables for:
 - Learning patterns
 - Episodes (episodic memory)
 - Procedures (procedural memory)
+
+Key Methods:
+- `migrate()`
 """
 import sqlite3
 from pathlib import Path

@@ -10,6 +10,29 @@ Features:
 - Confidence intervals via Monte Carlo dropout
 - Feature engineering from learning examples
 - Adversarial robustness testing
+
+Classes:
+- `TrustFeatures`
+- `TrainingExample`
+- `TrustScorerNetwork`
+- `ExperienceReplay`
+- `NeuralTrustScorer`
+
+Key Methods:
+- `forward()`
+- `predict_with_uncertainty()`
+- `add()`
+- `sample()`
+- `extract_features()`
+- `features_to_tensor()`
+- `predict_trust()`
+- `update_from_outcome()`
+- `train_step()`
+- `adversarial_test()`
+- `save_model()`
+- `load_model()`
+- `get_stats()`
+- `get_neural_trust_scorer()`
 """
 
 import torch

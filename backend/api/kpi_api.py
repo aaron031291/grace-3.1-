@@ -3,6 +3,15 @@ KPI Tracking API.
 
 Endpoints for monitoring and managing Key Performance Indicators.
 These endpoints are not exposed to the frontend yet - internal use only.
+
+Classes:
+- `KPIMetricResponse`
+- `ComponentKPIsResponse`
+- `SystemHealthResponse`
+- `IncrementKPIRequest`
+- `RegisterComponentRequest`
+- `TrustScoreResponse`
+- `KPITrendResponse`
 """
 from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel, Field

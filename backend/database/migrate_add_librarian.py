@@ -10,6 +10,9 @@ This migration adds 6 new tables for the Librarian System:
 - librarian_audit: Complete audit trail
 
 Run this script to enable automatic file organization and categorization.
+
+Key Methods:
+- `migrate()`
 """
 import sys
 from pathlib import Path

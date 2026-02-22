@@ -14,6 +14,16 @@ Every ingestion creates Genesis Keys that trigger:
 - Mirror observation of learning patterns
 - Self-healing if issues occur
 - Continuous improvement loop
+
+Classes:
+- `IngestionSelfHealingIntegration`
+
+Key Methods:
+- `ingest_file_with_tracking()`
+- `ingest_directory_with_tracking()`
+- `run_improvement_cycle()`
+- `get_complete_status()`
+- `get_ingestion_integration()`
 """
 
 import logging

@@ -2,6 +2,10 @@
 Comprehensive Health Check API
 ==============================
 Health checks for all GRACE services and components.
+
+Classes:
+- `ServiceHealth`
+- `SystemHealth`
 """
 
 from fastapi import APIRouter, Depends

@@ -10,6 +10,24 @@ Intelligent, self-improving CI/CD with:
 
 GRACE can autonomously trigger pipelines based on her needs,
 test in sandbox, and request human approval via governance.
+
+Classes:
+- `PipelineTrustLevel`
+- `AdaptiveTriggerReason`
+- `GovernanceAction`
+- `PipelineTrustScore`
+- `PipelineKPIs`
+- `AdaptiveTrigger`
+- `GovernanceRequest`
+- `AdaptiveCICD`
+
+Key Methods:
+- `calculate_trust_score()`
+- `record_run_result()`
+- `calculate_kpis()`
+- `approve_governance_request()`
+- `get_dashboard_data()`
+- `get_adaptive_cicd()`
 """
 
 import asyncio

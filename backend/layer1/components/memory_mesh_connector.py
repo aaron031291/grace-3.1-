@@ -5,6 +5,12 @@ Connects the memory mesh to Layer 1 message bus for:
 - Automatic Genesis Key linking
 - Trust-based episodic/procedural routing
 - Cross-component learning coordination
+
+Classes:
+- `MemoryMeshConnector`
+
+Key Methods:
+- `create_memory_mesh_connector()`
 """
 
 from typing import Dict, Any, Optional

@@ -3,6 +3,16 @@ Unified Learning Pipeline API
 
 Exposes the 24/7 continuous learning pipeline and neighbor-by-neighbor
 topic expansion engine for monitoring and control.
+
+Classes:
+- `PipelineSeedRequest`
+- `PipelineConfigUpdate`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.unified_learning_pipeline`
 """
 
 import logging

@@ -10,6 +10,17 @@ FULLY INTEGRATED with:
 - Hallucination mitigation
 - Learning Memory integration
 - Layer 1 Message Bus
+
+Classes:
+- `AIContentAnalyzer`
+
+Key Methods:
+- `analyze_document()`
+- `analyze_batch()`
+- `suggest_tags_for_query()`
+- `compare_documents()`
+- `is_available()`
+- `get_model_info()`
 """
 
 from typing import List, Dict, Any, Optional, Tuple

@@ -18,6 +18,32 @@ Takes Grace's temporal intelligence to its absolute limit:
 5. OPERATION DEPENDENCY GRAPHS: Grace understands task ordering.
    "Can't embed until chunking is done. Can't store until embedding is done."
    She parallelizes what she can and sequences what she must.
+
+Classes:
+- `LearningCurvePoint`
+- `LearningCurveTracker`
+- `TimeSensePersistence`
+- `PredictiveScaler`
+- `TimeAwareScheduler`
+- `OperationNode`
+- `OperationDependencyGraph`
+
+Key Methods:
+- `record()`
+- `get_curve()`
+- `get_all_curves()`
+- `to_json()`
+- `from_json()`
+- `save()`
+- `load()`
+- `record_capacity()`
+- `record_ingestion()`
+- `predict_disk_exhaustion()`
+- `record_load()`
+- `get_optimal_window()`
+- `is_good_time_now()`
+- `add_dependency()`
+- `get_dependencies()`
 """
 
 import logging

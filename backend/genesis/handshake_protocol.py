@@ -15,6 +15,26 @@ The protocol:
 6. The diagnostic engine tracks all heartbeat data
 
 This is the nervous system that prevents silent failures.
+
+Classes:
+- `HandshakeProtocol`
+
+Key Methods:
+- `register_health_check()`
+- `start()`
+- `stop()`
+- `get_status()`
+- `get_handshake_protocol()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.autonomous_healing_system`
+- `cognitive.learning_hook`
+- `cognitive.timesense_governance`
+- `genesis.component_registry`
+- `genesis.unified_intelligence`
 """
 
 import logging

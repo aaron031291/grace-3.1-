@@ -13,6 +13,17 @@ on external LLMs. This is the strategic layer that coordinates:
 The goal: Over time, Grace should need Kimi (and other LLMs) less and
 less for common tasks, eventually reaching a state where LLMs are only
 needed for truly novel or complex situations.
+
+Classes:
+- `LLMDependencyReducer`
+
+Key Methods:
+- `calculate_dependency_metrics()`
+- `get_dependency_trend()`
+- `get_domain_autonomy_scores()`
+- `export_training_data()`
+- `get_reduction_recommendations()`
+- `get_llm_dependency_reducer()`
 """
 
 import logging

@@ -2,6 +2,21 @@
 Repository Genesis Key API.
 
 Endpoints for scanning repo, assigning Genesis Keys, and healing.
+
+Classes:
+- `ScanRepoRequest`
+- `ScanResponse`
+- `DirectoryTreeResponse`
+- `FindByKeyResponse`
+- `HealFileRequest`
+- `HealDirectoryRequest`
+- `NavigateToIssueRequest`
+- `TrackFileVersionRequest`
+- `FileVersionResponse`
+- `AutoTrackDirectoryRequest`
+- `SymbioticTrackRequest`
+- `RollbackRequest`
+- `PipelineProcessRequest`
 """
 from fastapi import APIRouter, HTTPException, Depends, Body
 from pydantic import BaseModel, Field

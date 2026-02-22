@@ -30,6 +30,35 @@ This framework enforces these values across:
 - All self-* agents (mirror, healer, learner, etc.)
 - All governance decisions
 - All user-facing responses
+
+Classes:
+- `HIAValue`
+- `ViolationSeverity`
+- `HIAViolation`
+- `HIAVerificationResult`
+- `HonestyEnforcer`
+- `IntegrityEnforcer`
+- `AccountabilityEnforcer`
+- `HIAFramework`
+
+Key Methods:
+- `check_output()`
+- `check_kpi_integrity()`
+- `check_trust_consistency()`
+- `check_audit_trail()`
+- `check_failure_reporting()`
+- `verify_llm_output()`
+- `verify_kpi_report()`
+- `verify_trust_score()`
+- `verify_audit_trail()`
+- `get_system_hia_score()`
+- `get_hia_framework()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
 """
 
 import logging

@@ -8,6 +8,16 @@ operations, measuring performance, and enabling replay functionality.
 
 Health checks prioritize LLM Orchestrator availability over direct
 Ollama client access to ensure consistent system status reporting.
+
+Classes:
+- `TelemetryService`
+
+Key Methods:
+- `track_operation()`
+- `record_tokens()`
+- `record_confidence()`
+- `capture_system_state()`
+- `get_telemetry_service()`
 """
 import uuid
 import time

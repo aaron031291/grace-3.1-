@@ -3,6 +3,9 @@ Cognitive Engine API endpoints.
 
 Provides REST endpoints for viewing OODA decisions, ambiguity tracking,
 and invariant validation.
+
+Key Methods:
+- `get_decision_logger()`
 """
 from fastapi import APIRouter, HTTPException, Query
 from typing import List, Optional, Dict, Any

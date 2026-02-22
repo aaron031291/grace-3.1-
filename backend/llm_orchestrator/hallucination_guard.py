@@ -11,6 +11,32 @@ Layer 5: Trust System Verification - Validate against learning memory
 Layer 6: External Verification - Web search and documentation lookup
 
 All operations are tracked and logged.
+
+Classes:
+- `ExternalVerifier`
+- `ConsensusResult`
+- `VerificationResult`
+- `HallucinationGuard`
+
+Key Methods:
+- `verify_technical_claim()`
+- `verify_factual_claim()`
+- `get_cache_stats()`
+- `clear_cache()`
+- `verify_repository_grounding()`
+- `check_cross_model_consensus()`
+- `verify_external()`
+- `check_contradictions()`
+- `calculate_confidence_score()`
+- `verify_against_trust_system()`
+- `verify_content()`
+- `get_verification_log()`
+- `get_verification_stats()`
+- `get_hallucination_guard()`
+
+Connects To:
+- `confidence_scorer.confidence_scorer`
+- `confidence_scorer.contradiction_detector`
 """
 
 import logging

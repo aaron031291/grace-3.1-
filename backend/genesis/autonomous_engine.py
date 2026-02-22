@@ -18,6 +18,38 @@ Integrations:
 - Trust Scores: Actions are scored for reliability
 - KPIs: Performance metrics tracked for all actions
 - Version Control: All mutations are version controlled
+
+Classes:
+- `ActionType`
+- `TriggerType`
+- `ActionPriority`
+- `ActionStatus`
+- `ActionContext`
+- `ActionResult`
+- `AutonomousAction`
+- `ActionRule`
+- `AutonomousEngine`
+
+Key Methods:
+- `get_genesis_key_service()`
+- `get_mirror_system()`
+- `get_cognitive_engine()`
+- `get_kpi_tracker()`
+- `on_event()`
+- `get_status()`
+- `get_recent_actions()`
+- `get_autonomous_engine()`
+
+Connects To:
+- `cognitive.engine`
+- `cognitive.learning_hook`
+- `cognitive.mirror_self_modeling`
+- `database.session`
+- `genesis.adaptive_cicd`
+- `genesis.cicd`
+- `genesis.genesis_key_service`
+- `genesis.librarian_pipeline`
+- `models.genesis_key_models`
 """
 
 import asyncio

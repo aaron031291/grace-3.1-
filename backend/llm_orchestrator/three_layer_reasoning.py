@@ -24,6 +24,34 @@ The LLM orchestration system has access to:
 - Kimi (primary LLM for complex tasks)
 - All other available models
 - Knowledge base for grounding
+
+Classes:
+- `ReasoningOutput`
+- `LayerResult`
+- `VerifiedResult`
+- `ThreeLayerReasoning`
+
+Key Methods:
+- `client()`
+- `get_available_models()`
+- `get_training_context()`
+- `layer1_parallel_reasoning()`
+- `layer2_synthesis_reasoning()`
+- `layer3_grace_verification()`
+- `reason()`
+- `get_three_layer_reasoning()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.timesense_governance`
+- `cognitive.unified_learning_pipeline`
+- `genesis.unified_intelligence`
+- `retrieval.retriever`
+- `security.governance_middleware`
+- `security.honesty_integrity_accountability`
 """
 
 import logging

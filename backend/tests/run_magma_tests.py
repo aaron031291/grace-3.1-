@@ -1,3 +1,6 @@
+"""
+Test helper / runner script.
+"""
 #!/usr/bin/env python3
 """
 Magma Memory System - Full Test Suite (No pytest required)

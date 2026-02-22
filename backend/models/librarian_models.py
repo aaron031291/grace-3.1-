@@ -12,6 +12,14 @@ The librarian system automatically organizes and indexes all files from:
 - User uploads
 - Human-created content
 - Grace's autonomous actions
+
+Classes:
+- `LibrarianTag`
+- `DocumentTag`
+- `DocumentRelationship`
+- `LibrarianRule`
+- `LibrarianAction`
+- `LibrarianAudit`
 """
 
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, CheckConstraint

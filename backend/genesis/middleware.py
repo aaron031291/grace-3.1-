@@ -3,6 +3,12 @@ Genesis Key Middleware for FastAPI.
 
 Automatically tracks all API requests and responses with Genesis Keys.
 Assigns Genesis IDs to users on first access.
+
+Classes:
+- `GenesisKeyMiddleware`
+
+Key Methods:
+- `add_genesis_middleware()`
 """
 import logging
 import uuid

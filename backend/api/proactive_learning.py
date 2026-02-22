@@ -2,6 +2,13 @@
 Proactive Learning API
 
 Endpoints for Grace's autonomous background learning system.
+
+Classes:
+- `StartProactiveLearningRequest`
+- `AddTaskRequest`
+
+Key Methods:
+- `get_orchestrator()`
 """
 
 from fastapi import APIRouter, HTTPException

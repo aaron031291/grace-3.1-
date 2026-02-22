@@ -6,6 +6,12 @@ Connects NeuroSymbolicReasoner to Layer 1 message bus for:
 - Trust-weighted retrieval
 - Automatic rule generation from patterns
 - Cross-component neuro-symbolic integration
+
+Classes:
+- `NeuroSymbolicConnector`
+
+Key Methods:
+- `create_neuro_symbolic_connector()`
 """
 
 from typing import Dict, Any, Optional

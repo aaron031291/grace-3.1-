@@ -10,6 +10,30 @@ Wires cognitive systems into the chat pipeline:
 
 This is the missing integration bridge between the rich cognitive backend
 and the user-facing chat endpoints.
+
+Classes:
+- `ChatIntelligence`
+
+Key Methods:
+- `ambiguity_engine()`
+- `episodic_buffer()`
+- `detect_ambiguity()`
+- `record_episode()`
+- `check_governance()`
+- `use_three_layer_reasoning()`
+- `predict_query_routing()`
+- `enrich_response()`
+- `get_chat_intelligence()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.engine`
+- `cognitive.episodic_memory`
+- `diagnostic_machine.interpreters`
+- `llm_orchestrator.three_layer_reasoning`
+- `security.honesty_integrity_accountability`
 """
 
 import logging

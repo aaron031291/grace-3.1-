@@ -11,6 +11,24 @@ Closes ALL gaps in the Genesis Key system:
 6. ACTIVE HEALING: Execute fixes, not just suggest them
 
 Called from startup.py after Genesis and other subsystems are initialized.
+
+Classes:
+- `GenesisEventBridge`
+- `UnifiedCICDPipeline`
+- `AutonomousTriggerWiring`
+- `ActiveHealingSystem`
+
+Key Methods:
+- `get_stats()`
+- `get_stats()`
+- `on_diagnostic_cycle()`
+- `get_stats()`
+- `execute_healing()`
+- `get_stats()`
+- `wire_genesis_system()`
+- `get_genesis_bridge()`
+- `get_unified_cicd()`
+- `get_active_healing()`
 """
 
 import logging

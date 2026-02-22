@@ -1,6 +1,18 @@
 """
 Knowledge base file and folder management.
 Handles file storage, directory structure, and metadata.
+
+Classes:
+- `KnowledgeBaseManager`
+
+Key Methods:
+- `get_directory_structure()`
+- `create_folder()`
+- `save_file()`
+- `delete_file()`
+- `delete_folder()`
+- `get_file_path()`
+- `file_exists()`
 """
 
 import os

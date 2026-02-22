@@ -46,6 +46,44 @@ Usage:
 
     # Store a procedure from Layer 4
     magma.store_procedure("heal", "Reconnect DB", ["Stop pool", "Restart"])
+
+Classes:
+- `GraceMagmaConfig`
+- `GraceMagmaSystem`
+
+Key Methods:
+- `initialize()`
+- `save_state()`
+- `ingest()`
+- `query()`
+- `get_context()`
+- `why()`
+- `explain()`
+- `store_pattern()`
+- `find_similar_patterns()`
+- `store_decision()`
+- `find_precedents()`
+- `record_decision_outcome()`
+- `store_procedure()`
+- `find_procedures()`
+- `get_best_procedure()`
+- `graphs()`
+- `semantic_graph()`
+- `temporal_graph()`
+- `causal_graph()`
+- `entity_graph()`
+- `get_stats()`
+- `health_check()`
+- `shutdown()`
+- `get_grace_magma()`
+- `reset_grace_magma()`
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.magma`
+- `cognitive.magma.grace_magma_system`
+- `cognitive.magma.layer_integrations`
+- `cognitive.magma.persistence`
 """
 
 from typing import Dict, List, Any, Optional, Callable, Tuple

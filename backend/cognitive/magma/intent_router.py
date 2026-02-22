@@ -8,6 +8,26 @@ Routes queries to appropriate retrieval strategies based on:
 4. Retrieval Policy - How to traverse and combine results
 
 This is the entry point for the Magma query process.
+
+Classes:
+- `QueryIntent`
+- `AnchorType`
+- `Anchor`
+- `QueryAnalysis`
+- `IntentClassifier`
+- `AnchorIdentifier`
+- `GraphSelector`
+- `RetrievalPolicySelector`
+- `IntentAwareRouter`
+
+Key Methods:
+- `classify()`
+- `identify()`
+- `select()`
+- `select()`
+- `analyze_query()`
+- `route()`
+- `get_anchor_embeddings_needed()`
 """
 
 from dataclasses import dataclass, field

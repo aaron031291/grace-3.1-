@@ -9,6 +9,18 @@ Key Features:
 - Automatic rule generation from patterns
 - Trust score assignment based on pattern confidence
 - Integration with symbolic knowledge base
+
+Classes:
+- `NeuralPattern`
+- `SymbolicRule`
+- `NeuralToSymbolicRuleGenerator`
+
+Key Methods:
+- `detect_patterns()`
+- `pattern_to_rule()`
+- `generate_rules_from_texts()`
+- `validate_rule()`
+- `get_neural_to_symbolic_generator()`
 """
 
 import numpy as np

@@ -9,6 +9,9 @@ Usage from any module:
     track_learning_event("my_system", "what happened", outcome="success", data={...})
 
 Non-blocking, non-fatal. If tracker unavailable, silently drops.
+
+Key Methods:
+- `track_learning_event()`
 """
 
 import logging

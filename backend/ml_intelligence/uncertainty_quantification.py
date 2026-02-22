@@ -9,6 +9,32 @@ Provides calibrated confidence estimates for predictions using:
 - Epistemic vs Aleatoric Uncertainty
 
 Helps the system know when it doesn't know something.
+
+Classes:
+- `UncertaintyEstimate`
+- `BayesianLinear`
+- `BayesianNeuralNetwork`
+- `MCDropoutNetwork`
+- `DeepEnsemble`
+- `ConformalPredictor`
+- `UncertaintyQuantifier`
+
+Key Methods:
+- `reset_parameters()`
+- `forward()`
+- `kl_divergence()`
+- `forward()`
+- `kl_divergence()`
+- `predict_with_uncertainty()`
+- `forward()`
+- `predict_with_uncertainty()`
+- `train_ensemble()`
+- `predict_with_uncertainty()`
+- `calibrate()`
+- `predict_interval()`
+- `predict_with_uncertainty()`
+- `calibrate()`
+- `create_bayesian_network()`
 """
 
 import torch

@@ -15,6 +15,30 @@ Architecture:
 - Performance Monitoring: Continuous metrics collection
 - Trial Period: 90-day validation with live data
 - Promotion Workflow: Automated promotion with user approval gates
+
+Classes:
+- `ExperimentStatus`
+- `ExperimentType`
+- `TrustThreshold`
+- `Experiment`
+- `AutonomousSandboxLab`
+
+Key Methods:
+- `calculate_trust_score()`
+- `get_success_rate()`
+- `get_trial_days_elapsed()`
+- `get_trial_days_remaining()`
+- `is_trial_complete()`
+- `can_enter_sandbox()`
+- `can_enter_trial()`
+- `can_promote_to_production()`
+- `can_auto_approve()`
+- `to_dict()`
+- `initialize_ml_intelligence()`
+- `propose_experiment()`
+- `enter_sandbox()`
+- `record_sandbox_implementation()`
+- `start_trial()`
 """
 
 import json

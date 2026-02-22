@@ -1,6 +1,25 @@
 """
 Backward compatibility wrapper.
 Real code moved to cognitive/grace_brain.py
+
+Classes:
+- `InstructionType`
+- `InstructionPriority`
+- `KimiDiagnosis`
+- `KimiInstruction`
+- `KimiInstructionSet`
+- `KimiBrain`
+
+Key Methods:
+- `connect_mirror()`
+- `connect_diagnostics()`
+- `connect_learning()`
+- `connect_pattern_learner()`
+- `read_system_state()`
+- `diagnose()`
+- `produce_instructions()`
+- `get_status()`
+- `get_kimi_brain()`
 """
 from cognitive.grace_brain import *
 

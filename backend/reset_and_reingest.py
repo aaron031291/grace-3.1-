@@ -1,3 +1,6 @@
+"""
+Utility script.
+"""
 #!/usr/bin/env python
 """
 Complete reset and re-ingestion script for Grace Knowledge Base.

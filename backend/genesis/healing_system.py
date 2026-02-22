@@ -6,6 +6,24 @@ Uses Genesis Keys to:
 - Provide contextual healing/fixes
 - Debug using Genesis Key navigation
 - Auto-repair broken code
+
+Classes:
+- `HealingSystem`
+
+Key Methods:
+- `scan_for_issues()`
+- `heal_file()`
+- `heal_directory()`
+- `navigate_to_issue()`
+- `get_healing_summary()`
+- `export_healing_report()`
+- `get_healing_system()`
+
+Connects To:
+- `genesis.code_analyzer`
+- `genesis.genesis_key_service`
+- `genesis.repo_scanner`
+- `models.genesis_key_models`
 """
 import os
 import json

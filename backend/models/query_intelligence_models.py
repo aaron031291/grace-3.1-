@@ -5,6 +5,11 @@ These models track:
 - Query handling decisions and tier usage
 - Knowledge gaps identified during queries
 - User-submitted context for gap resolution
+
+Classes:
+- `QueryHandlingLog`
+- `KnowledgeGap`
+- `ContextSubmission`
 """
 
 from sqlalchemy import Column, Integer, String, Text, Boolean, Float, ForeignKey, DateTime

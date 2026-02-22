@@ -1,5 +1,12 @@
 """
 API routes for web scraping functionality.
+
+Classes:
+- `ScrapeSubmitRequest`
+- `ScrapeSubmitResponse`
+- `ScrapeStatusResponse`
+- `ScrapedPageInfo`
+- `ScrapeResultsResponse`
 """
 
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks

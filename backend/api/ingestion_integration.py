@@ -9,6 +9,10 @@ Unified API that connects:
 - Mirror self-modeling
 
 Every file ingested triggers the complete autonomous cycle.
+
+Classes:
+- `IngestFileRequest`
+- `IngestDirectoryRequest`
 """
 
 from fastapi import APIRouter, HTTPException, UploadFile, File

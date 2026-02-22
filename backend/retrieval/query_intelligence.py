@@ -7,6 +7,24 @@ Orchestrates intelligent query handling with three-tier fallback:
 3. Tier 3 - User Context Request: Request specific context from user
 
 Each tier has quality/confidence thresholds that trigger fallback to next tier.
+
+Classes:
+- `QueryTier`
+- `ConfidenceMetrics`
+- `KnowledgeGap`
+- `QueryResult`
+- `MultiTierQueryHandler`
+
+Key Methods:
+- `is_high_quality()`
+- `to_dict()`
+- `to_dict()`
+- `handle_query()`
+
+Connects To:
+- `embedding`
+- `ingestion.service`
+- `retrieval.reranker`
 """
 
 from enum import Enum

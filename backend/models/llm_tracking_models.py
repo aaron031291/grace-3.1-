@@ -10,6 +10,16 @@ Purpose:
 - Track coding task outcomes (success/failure)
 - Store extracted patterns for reducing LLM dependency
 - Measure progress toward autonomous operation
+
+Classes:
+- `InteractionType`
+- `InteractionOutcome`
+- `TaskDelegationType`
+- `LLMInteraction`
+- `ReasoningPath`
+- `ExtractedPattern`
+- `CodingTaskRecord`
+- `LLMDependencyMetric`
 """
 
 from sqlalchemy import (

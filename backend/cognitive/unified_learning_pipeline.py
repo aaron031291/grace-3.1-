@@ -11,6 +11,32 @@ into a continuous 24/7 data pipeline that:
 5. Runs perpetually as a background daemon
 
 This is the "push it as far as we can" module for the learning system.
+
+Classes:
+- `TopicNode`
+- `ExpansionResult`
+- `NeighborByNeighborEngine`
+- `UnifiedLearningPipeline`
+
+Key Methods:
+- `retriever()`
+- `expand_from_seed()`
+- `get_knowledge_graph()`
+- `start()`
+- `stop()`
+- `add_seed()`
+- `get_status()`
+- `get_unified_pipeline()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.knn_subagent_engine`
+- `cognitive.learning_memory`
+- `cognitive.predictive_context_loader`
+- `genesis.unified_intelligence`
+- `retrieval.retriever`
 """
 
 import logging

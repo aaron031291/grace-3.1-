@@ -9,6 +9,24 @@ Evaluates interpreted data to produce:
 - Forensic analysis (root cause investigation)
 - AVN (Anomaly Violation Notification)
 - AVM (Anomaly Violation Monitor)
+
+Classes:
+- `HealthStatus`
+- `RiskLevel`
+- `DriftType`
+- `HealthScore`
+- `ConfidenceScore`
+- `RiskVector`
+- `DriftAnalysis`
+- `ForensicFinding`
+- `AVNAlert`
+- `AVMStatus`
+- `JudgementResult`
+- `JudgementLayer`
+
+Key Methods:
+- `judge()`
+- `to_dict()`
 """
 
 import logging

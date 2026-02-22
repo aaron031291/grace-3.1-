@@ -31,6 +31,35 @@ Sub-Agents:
 4. CrossDomainAgent — Finds connections between different domain folders
 
 All run in parallel via ThreadPoolExecutor.
+
+Classes:
+- `Discovery`
+- `SwarmResult`
+- `VectorSearchAgent`
+- `WebSearchAgent`
+- `APISearchAgent`
+- `CrossDomainAgent`
+- `KNNSubAgentOrchestrator`
+
+Key Methods:
+- `search()`
+- `search()`
+- `search()`
+- `search()`
+- `swarm_expand()`
+- `get_stats()`
+- `get_knn_orchestrator()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
+- `cognitive.swarm_comms`
+- `cognitive.unified_learning_pipeline`
+- `genesis.unified_intelligence`
+- `librarian.knowledge_organizer`
+- `retrieval.retriever`
 """
 
 import logging

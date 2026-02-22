@@ -14,6 +14,21 @@ Collects raw data from:
 
 Health checks prioritize LLM Orchestrator availability over direct
 Ollama client access to ensure consistent system status reporting.
+
+Classes:
+- `SensorType`
+- `TestResultData`
+- `LogData`
+- `MetricsData`
+- `AgentOutputData`
+- `GenesisKeyData`
+- `GraceMirrorData`
+- `SensorData`
+- `SensorLayer`
+
+Key Methods:
+- `collect_all()`
+- `to_dict()`
 """
 
 import os

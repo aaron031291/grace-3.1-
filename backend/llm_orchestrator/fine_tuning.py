@@ -13,6 +13,24 @@ All fine-tuning:
 - Tracks with Genesis Keys
 - Validates improvements
 - Creates backups
+
+Classes:
+- `FineTuningStatus`
+- `FineTuningMethod`
+- `FineTuningDataset`
+- `FineTuningConfig`
+- `FineTuningReport`
+- `FineTuningApprovalRequest`
+- `LLMFineTuningSystem`
+
+Key Methods:
+- `prepare_dataset()`
+- `request_fine_tuning_approval()`
+- `approve_and_start_fine_tuning()`
+- `generate_report()`
+- `cancel_job()`
+- `get_all_jobs()`
+- `get_fine_tuning_system()`
 """
 
 import logging

@@ -20,6 +20,25 @@ Verification Sources:
 
 If ANY critical verification fails, instruction is REJECTED.
 Grace explains WHY to the user through bidirectional comms.
+
+Classes:
+- `VerificationSource`
+- `CheckResult`
+- `VerificationCheck`
+- `VerificationReport`
+- `GraceVerificationEngine`
+
+Key Methods:
+- `to_dict()`
+- `connect_oracle()`
+- `connect_websocket()`
+- `connect_governance()`
+- `connect_knowledge_base()`
+- `connect_search()`
+- `submit_user_confirmation()`
+- `get_pending_confirmations()`
+- `get_verification_stats()`
+- `get_grace_verification_engine()`
 """
 
 import logging

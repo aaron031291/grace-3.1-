@@ -17,6 +17,16 @@ confidence_score = (
 
 Now includes semantic contradiction detection to prevent contradictory chunks
 from artificially boosting consensus scores.
+
+Classes:
+- `ConfidenceScorer`
+
+Key Methods:
+- `calculate_source_reliability()`
+- `calculate_content_quality()`
+- `calculate_consensus_score()`
+- `calculate_recency()`
+- `calculate_confidence_score()`
 """
 
 import logging

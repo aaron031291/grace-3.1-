@@ -13,6 +13,23 @@ Planning Flow:
 6. IDE_HANDOFF - Hand off to IDE for implementation
 
 Author: Grace Autonomous System
+
+Classes:
+- `PlanningPhase`
+- `ConceptStatus`
+- `QuestionType`
+- `TechnicalDecisionStatus`
+- `ExecutionStatus`
+- `PlanningConcept`
+- `ConceptQuestion`
+- `TechnicalStackItem`
+- `TechnicalDecision`
+- `ExecutionPlan`
+- `IDEHandoff`
+- `PlanningSession`
+
+Key Methods:
+- `generate_grace_ide_instructions()`
 """
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks

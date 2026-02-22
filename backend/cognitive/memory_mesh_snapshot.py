@@ -12,6 +12,18 @@ The immutable memory stores:
 5. Complete statistics and metadata
 
 Snapshots are saved as .genesis_immutable_memory_mesh.json
+
+Classes:
+- `MemoryMeshSnapshot`
+
+Key Methods:
+- `create_snapshot()`
+- `save_snapshot()`
+- `load_snapshot()`
+- `restore_from_snapshot()`
+- `create_versioned_snapshot()`
+- `compare_snapshots()`
+- `create_memory_mesh_snapshot()`
 """
 
 import json

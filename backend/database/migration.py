@@ -1,6 +1,14 @@
 """
 Database initialization and migration utilities.
 Handles database schema creation and management.
+
+Key Methods:
+- `create_tables()`
+- `drop_tables()`
+- `table_exists()`
+- `get_table_columns()`
+- `get_all_tables()`
+- `get_db_schema()`
 """
 
 from sqlalchemy import inspect, MetaData

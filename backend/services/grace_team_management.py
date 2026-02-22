@@ -13,6 +13,33 @@ Features:
 - Auto-assignment with ML predictions
 
 Author: Grace Autonomous System
+
+Classes:
+- `SkillLevel`
+- `TeamRole`
+- `AssignmentStrategy`
+- `Skill`
+- `TeamMember`
+- `GraceAgent`
+- `AssignmentResult`
+- `GraceTeamManagement`
+
+Key Methods:
+- `add_team_member()`
+- `update_team_member()`
+- `add_skill_to_member()`
+- `get_team_member()`
+- `get_team_by_genesis_id()`
+- `get_all_team_members()`
+- `get_members_with_skill()`
+- `add_grace_agent()`
+- `get_grace_agent()`
+- `get_agents_by_capability()`
+- `get_available_agents()`
+- `auto_assign_task()`
+- `complete_assignment()`
+- `get_team_overview()`
+- `get_workload_report()`
 """
 
 from typing import Dict, Any, List, Optional, Set

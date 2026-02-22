@@ -17,6 +17,23 @@ Architecture:
 - Results Create New Genesis Keys
   ↓
 - RECURSIVE LOOP if needed
+
+Classes:
+- `GenesisTriggerPipeline`
+
+Key Methods:
+- `set_orchestrator()`
+- `on_genesis_key_created()`
+- `get_status()`
+- `get_genesis_trigger_pipeline()`
+
+Connects To:
+- `cognitive.autonomous_healing_system`
+- `cognitive.learning_subagent_system`
+- `cognitive.mirror_self_modeling`
+- `database.session`
+- `llm_orchestrator.llm_orchestrator`
+- `models.genesis_key_models`
 """
 
 import logging

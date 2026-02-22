@@ -19,6 +19,22 @@ Enhanced with Grace's cognitive systems:
 - Neuro-Symbolic Reasoner for hybrid reasoning
 - Genesis Keys for complete tracking
 - Learning Efficiency Tracking for metrics
+
+Classes:
+- `ActionType`
+- `ActionPriority`
+- `ActionStatus`
+- `ActionResult`
+- `ActionDecision`
+- `HealingAction`
+- `AlertConfig`
+- `CICDConfig`
+- `ActionRouter`
+
+Key Methods:
+- `register_healing_function()`
+- `route()`
+- `to_dict()`
 """
 
 import os

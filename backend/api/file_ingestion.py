@@ -1,6 +1,14 @@
 """
 API endpoints for file-based ingestion management.
 Provides REST endpoints to trigger and monitor file-based ingestion.
+
+Classes:
+- `FileIngestionResultItem`
+- `ScanResults`
+- `FileManagerStatus`
+
+Key Methods:
+- `get_file_manager()`
 """
 
 from fastapi import APIRouter, HTTPException, Query, Depends, BackgroundTasks

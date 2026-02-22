@@ -15,6 +15,16 @@ FULLY INTEGRATED with:
 - Layer 1 Message Bus
 
 This is the main entry point for the librarian system.
+
+Classes:
+- `LibrarianEngine`
+
+Key Methods:
+- `process_document()`
+- `process_batch()`
+- `reprocess_all_documents()`
+- `get_system_statistics()`
+- `health_check()`
 """
 
 from typing import List, Dict, Any, Optional

@@ -9,6 +9,30 @@ Implementations:
 - Triplet Loss
 - N-Pair Loss
 - Hard Negative Mining
+
+Classes:
+- `ContrastiveBatch`
+- `NTXentLoss`
+- `TripletLoss`
+- `SupervisedContrastiveLoss`
+- `HardNegativeMiner`
+- `ContrastiveLearner`
+
+Key Methods:
+- `forward()`
+- `compute_distance()`
+- `forward()`
+- `forward()`
+- `compute_pairwise_distances()`
+- `mine_hard_negatives()`
+- `forward()`
+- `train_step()`
+- `encode()`
+- `compute_similarity()`
+- `get_training_stats()`
+- `save_model()`
+- `load_model()`
+- `get_contrastive_learner()`
 """
 
 import torch

@@ -7,6 +7,19 @@ Provides REST API for:
 - Viewing diagnostic history
 - Managing the diagnostic engine
 - CI/CD integration webhooks
+
+Classes:
+- `DiagnosticTriggerRequest`
+- `DiagnosticTriggerResponse`
+- `HealthSummaryResponse`
+- `EngineStatusResponse`
+- `CICDWebhookRequest`
+- `SensorFlagRequest`
+- `HealingRequest`
+- `NotificationTestRequest`
+
+Key Methods:
+- `get_engine()`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks

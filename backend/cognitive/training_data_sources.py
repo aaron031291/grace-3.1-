@@ -11,6 +11,32 @@ Each source has:
 - Category (what domain it covers)
 - Priority (what order to ingest)
 - Auto-refresh interval (how often to re-check)
+
+Classes:
+- `SourceType`
+- `SourceCategory`
+- `DataSource`
+- `TrainingDataSourceRegistry`
+
+Key Methods:
+- `get_by_priority()`
+- `get_by_category()`
+- `get_by_type()`
+- `get_github_repos()`
+- `get_apis()`
+- `get_websites()`
+- `get_unfetched()`
+- `get_stale()`
+- `mark_fetched()`
+- `get_stats()`
+- `to_dict()`
+- `get_training_source_registry()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+Self-contained
 """
 
 import logging

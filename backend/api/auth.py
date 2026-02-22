@@ -3,6 +3,11 @@ Authentication API with Genesis Key integration.
 
 Provides login/session management using Genesis IDs.
 Includes secure session management and security logging.
+
+Classes:
+- `LoginRequest`
+- `LoginResponse`
+- `SessionInfoResponse`
 """
 from fastapi import APIRouter, HTTPException, Depends, Response, Cookie
 from pydantic import BaseModel, Field

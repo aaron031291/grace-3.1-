@@ -13,6 +13,15 @@ Usage:
     )
 
     # All components now communicate autonomously!
+
+Classes:
+- `Layer1System`
+
+Key Methods:
+- `get_stats()`
+- `get_autonomous_actions()`
+- `initialize_layer1()`
+- `get_layer1_stats()`
 """
 
 from typing import Dict, Any, Optional

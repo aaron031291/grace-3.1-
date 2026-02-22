@@ -6,6 +6,20 @@ Analyzes raw sensor data to detect:
 - Anomalies (unusual behavior, outliers)
 - Invariant checks (rule violations)
 - Clarity classification (clear vs ambiguous states)
+
+Classes:
+- `PatternType`
+- `AnomalyType`
+- `ClarityLevel`
+- `Pattern`
+- `Anomaly`
+- `InvariantCheck`
+- `InterpretedData`
+- `InterpreterLayer`
+
+Key Methods:
+- `interpret()`
+- `to_dict()`
 """
 
 import logging

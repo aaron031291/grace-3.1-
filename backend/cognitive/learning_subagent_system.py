@@ -12,6 +12,32 @@ Architecture:
 - Predictive Context Subagent: Pre-fetching and caching (dedicated process)
 
 All subagents run independently in background with IPC via queues.
+
+Classes:
+- `TaskType`
+- `MessageType`
+- `LearningTask`
+- `Message`
+- `NullRetriever`
+- `BaseSubagent`
+- `StudySubagent`
+- `PracticeSubagent`
+- `MirrorSubagent`
+- `LearningOrchestrator`
+
+Key Methods:
+- `to_dict()`
+- `from_dict()`
+- `to_dict()`
+- `from_dict()`
+- `retrieve()`
+- `start()`
+- `stop()`
+- `start()`
+- `stop()`
+- `submit_study_task()`
+- `submit_practice_task()`
+- `get_status()`
 """
 
 import multiprocessing as mp

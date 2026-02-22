@@ -13,6 +13,30 @@ Grace continuously:
 7. Repeats - continuous evolution
 
 This creates a never-ending self-improvement loop.
+
+Classes:
+- `ContinuousLearningOrchestrator`
+
+Key Methods:
+- `initialize_components()`
+- `start()`
+- `stop()`
+- `get_status()`
+- `get_continuous_orchestrator()`
+- `start_continuous_learning()`
+- `stop_continuous_learning()`
+
+Connects To:
+- `cognitive.autonomous_sandbox_lab`
+- `cognitive.learning_hook`
+- `cognitive.llm_dependency_reducer`
+- `cognitive.llm_pattern_learner`
+- `cognitive.mirror_self_modeling`
+- `cognitive.unified_learning_pipeline`
+- `database.session`
+- `embedding`
+- `ingestion.service`
+- `models.database_models`
 """
 
 import logging

@@ -17,6 +17,26 @@ When a user sends "Genesis#" in a prompt, the system:
 
 This table is THE source of truth for what exists in the system.
 No component can die silently because the handshake protocol checks this.
+
+Classes:
+- `ComponentEntry`
+- `ComponentRegistry`
+
+Key Methods:
+- `register()`
+- `heartbeat()`
+- `find_silent_deaths()`
+- `lookup()`
+- `search()`
+- `list_all()`
+- `get_stats()`
+- `auto_register_all_components()`
+
+Database Tables:
+- `genesis_component_registry`
+
+Connects To:
+- `security.honesty_integrity_accountability`
 """
 
 import logging

@@ -13,6 +13,27 @@ This is deterministic preemptive fetching:
 3. Pre-fetch relevant knowledge
 4. Cache in active context
 5. Ready when needed
+
+Classes:
+- `PreFetchedContext`
+- `TopicRelationshipGraph`
+- `WhitelistTrigger`
+- `PredictiveContextLoader`
+
+Key Methods:
+- `get_related_topics()`
+- `learn_relationship()`
+- `should_prefetch()`
+- `get_prefetch_depth()`
+- `process_query()`
+- `get_cached_context()`
+- `warmup_topics()`
+- `clear_expired_cache()`
+- `get_statistics()`
+
+Connects To:
+- `cognitive.learning_memory`
+- `retrieval.retriever`
 """
 
 from typing import List, Dict, Any, Set, Optional

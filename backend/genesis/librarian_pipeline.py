@@ -10,6 +10,25 @@ Integrations:
 - Cognitive Framework: Decisions about filing and categorization
 - Trust Scores: Ingestion reliability tracking
 - Version Control: All ingestions are version controlled
+
+Classes:
+- `IngestionStatus`
+- `ContentType`
+- `IngestionRecord`
+- `IngestionResult`
+- `LibrarianPipeline`
+
+Key Methods:
+- `get_genesis_key_service()`
+- `get_mirror_system()`
+- `add_listener()`
+- `remove_listener()`
+- `get_ingestion()`
+- `get_ingestions_by_genesis_key()`
+- `list_ingestions()`
+- `get_statistics()`
+- `search_library()`
+- `get_librarian_pipeline()`
 """
 
 import os

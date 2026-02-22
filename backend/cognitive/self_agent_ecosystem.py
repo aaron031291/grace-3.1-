@@ -24,6 +24,55 @@ The closed loop:
   Code Agent implements -> Evolver scales -> Mirror observes again...
 
 When all agents reach 100% KPI, Evolver switches to scaling mode.
+
+Classes:
+- `SelfHealingLog`
+- `SelfMirrorLog`
+- `SelfModelLog`
+- `SelfLearnerLog`
+- `CodeAgentLog`
+- `SelfEvolverLog`
+- `BaseSelfAgent`
+- `SelfHealingAgent`
+- `SelfMirrorAgent`
+- `SelfModelAgent`
+- `SelfLearnerAgent`
+- `CodeAgentSelf`
+- `SelfEvolverAgent`
+- `ClosedLoopOrchestrator`
+
+Key Methods:
+- `log_attempt()`
+- `get_pass_rate()`
+- `get_recent_failures()`
+- `get_kpi_score()`
+- `ask_kimi_why_low()`
+- `self_analyze()`
+- `execute_heal()`
+- `execute_observation()`
+- `execute_study()`
+- `start()`
+- `stop()`
+- `run_cycle()`
+- `get_status()`
+- `get_closed_loop()`
+
+Database Tables:
+- `self_healing_log`
+- `self_mirror_log`
+- `self_model_log`
+- `self_learner_log`
+- `code_agent_log`
+- `self_evolver_log`
+
+Connects To:
+- `cognitive.active_learning_system`
+- `cognitive.autonomous_healing_system`
+- `cognitive.autonomous_sandbox_lab`
+- `cognitive.learning_hook`
+- `cognitive.mirror_self_modeling`
+- `cognitive.timesense_governance`
+- `security.honesty_integrity_accountability`
 """
 
 import logging

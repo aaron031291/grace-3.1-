@@ -13,6 +13,17 @@ with all core Grace systems:
 - ProactiveLearning (autonomous learning)
 
 Author: Grace Autonomous System
+
+Classes:
+- `GraceSystemType`
+- `IntegrationEvent`
+- `GraceSystemsIntegration`
+
+Key Methods:
+- `register_event_handler()`
+- `get_system_status()`
+- `get_integration_metrics()`
+- `get_grace_integration()`
 """
 
 from typing import Dict, Any, List, Optional

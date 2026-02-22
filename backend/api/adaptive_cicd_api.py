@@ -3,6 +3,12 @@ Adaptive CI/CD API
 ==================
 REST API for the adaptive CI/CD system.
 Trust scores, KPIs, LLM orchestration, sandbox, governance.
+
+Classes:
+- `TriggerRequest`
+- `RecordRunRequest`
+- `GovernanceApprovalRequest`
+- `TrustOverrideRequest`
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks

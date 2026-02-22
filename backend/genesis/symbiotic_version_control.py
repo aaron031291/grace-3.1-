@@ -7,6 +7,17 @@ Genesis Keys and version control work as ONE unified system:
 - File changes automatically create Genesis Keys
 - Genesis Keys automatically track versions
 - Complete bidirectional integration
+
+Classes:
+- `SymbioticVersionControl`
+
+Key Methods:
+- `track_file_change()`
+- `get_complete_history()`
+- `rollback_to_version()`
+- `watch_file()`
+- `get_symbiotic_stats()`
+- `get_symbiotic_version_control()`
 """
 import os
 import hashlib

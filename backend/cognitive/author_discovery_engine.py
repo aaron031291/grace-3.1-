@@ -22,6 +22,25 @@ Authors in our highest-trust books:
 - Bass, Clements & Kazman (CMU SEI) — Software Architecture
 - Martin Fowler — Refactoring
 - Scott Chacon — Pro Git
+
+Classes:
+- `AuthorProfile`
+- `AcquisitionRecommendation`
+- `AuthorDiscoveryEngine`
+
+Key Methods:
+- `get_top_authors()`
+- `get_missing_works()`
+- `generate_search_queries()`
+- `search_for_author()`
+- `get_report()`
+- `get_author_discovery_engine()`
+
+Database Tables:
+None (no DB tables)
+
+Connects To:
+- `cognitive.learning_hook`
 """
 
 import logging

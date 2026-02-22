@@ -2,6 +2,9 @@
 Database migration to add Genesis Key tables.
 
 Run this script to create the Genesis Key tracking system tables.
+
+Key Methods:
+- `run_migration()`
 """
 import sys
 import os

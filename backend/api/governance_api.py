@@ -10,6 +10,17 @@ Provides endpoints for:
 Integrates with:
 - Database models for persistence
 - security/governance.py GovernanceEngine for real enforcement
+
+Classes:
+- `GovernanceRuleCreate`
+- `GovernanceRuleUpdate`
+- `RuleToggle`
+- `DecisionAction`
+- `GovernanceCheckRequest`
+
+Key Methods:
+- `seed_default_rules()`
+- `extract_rules_from_document()`
 """
 
 import logging
