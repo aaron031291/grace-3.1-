@@ -65,6 +65,7 @@ class ExecutionConfig:
             "wget | bash",
             "wget | sh",
             "> /dev/sda",
+            ">/dev/sda",
             "mv / ",
             "shutdown",
             "reboot",
@@ -79,7 +80,22 @@ class ExecutionConfig:
             "iptables -F",
             "systemctl stop",
             "kill -9 1",
-            "nohup",  # Background persistent processes
+            "nohup",
+            "eval(",
+            "exec(",
+            "os.system(",
+            "subprocess.call(",
+            "chmod +s",
+            "chown root",
+            "nc -l",
+            "ncat -l",
+            "python -c",
+            "perl -e",
+            "ruby -e",
+            "rm -rf ~",
+            "rm -rf .",
+            "cat /etc/shadow",
+            "cat /etc/passwd",
         ]
 
 

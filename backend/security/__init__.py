@@ -29,11 +29,20 @@ except ImportError as e:
 
 # Import middleware
 try:
-    from .middleware import SecurityHeadersMiddleware, RateLimitMiddleware
+    from .middleware import (
+        SecurityHeadersMiddleware,
+        RateLimitMiddleware,
+        CSRFMiddleware,
+        AuthenticationMiddleware,
+        InputSanitizationMiddleware,
+    )
 except ImportError as e:
     _logger.warning(f"Could not import middleware: {e}")
     SecurityHeadersMiddleware = None
     RateLimitMiddleware = None
+    CSRFMiddleware = None
+    AuthenticationMiddleware = None
+    InputSanitizationMiddleware = None
 
 # Import validators
 try:
@@ -142,6 +151,9 @@ __all__ = [
     # Middleware
     "SecurityHeadersMiddleware",
     "RateLimitMiddleware",
+    "CSRFMiddleware",
+    "AuthenticationMiddleware",
+    "InputSanitizationMiddleware",
     # Validators
     "InputValidator",
     "sanitize_input",
