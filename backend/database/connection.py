@@ -4,7 +4,7 @@ Handles engine creation and connection pooling.
 """
 
 from sqlalchemy import create_engine, Engine, event, text
-from sqlalchemy.pool import QueuePool, StaticPool
+from sqlalchemy.pool import QueuePool, NullPool
 from typing import Optional
 import logging
 
@@ -95,10 +95,11 @@ class DatabaseConnection:
         
         # SQLite uses a different pool strategy
         if config.db_type == DatabaseType.SQLITE:
+            from sqlalchemy.pool import QueuePool, NullPool
             engine = create_engine(
                 connection_string,
-                connect_args={"check_same_thread": False},
-                poolclass=StaticPool,
+                connect_args={"check_same_thread": False, "timeout": 15},
+                poolclass=NullPool,
                 echo=config.echo,
             )
             # Enable foreign keys for SQLite

@@ -29,7 +29,7 @@
       "file_path": "D:\\grace-3.1-\\backend\\grace_mcp\\orchestrator.py",
       "absolute_path": "D:\\grace-3.1-\\backend\\grace_mcp\\orchestrator.py",
       "created_at": "2026-02-21T08:20:17.318123",
-      "version_count": 1,
+      "version_count": 2,
       "versions": [
         {
           "version_number": 1,
@@ -41,10 +41,21 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-782b4dd93dec46b69ca7d42e36c39c6d",
           "has_content": true
+        },
+        {
+          "version_number": 2,
+          "version_key_id": "VER-43027883baf3-2",
+          "genesis_key_db_id": "GK-0e0a1e44c6aa4bd58f884272550e49a5",
+          "timestamp": "2026-02-22T06:50:01.822287",
+          "file_hash": "5a23cdfc2d162925129ff9b7b0ceafc96c4d747db2ddc60208b8746bee45a83e",
+          "file_size": 19950,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-da0317e34cf04015abfff6c5c9ddf0bb",
+          "has_content": true
         }
       ],
-      "last_hash": "73931cc9a8e720402c465da5d16003ec6e97849617ea9e982a0b90ccbc073549",
-      "last_updated": "2026-02-21T08:20:17.604726"
+      "last_hash": "5a23cdfc2d162925129ff9b7b0ceafc96c4d747db2ddc60208b8746bee45a83e",
+      "last_updated": "2026-02-22T06:50:01.822287"
     },
     "FILE-31fc7130cf54": {
       "file_genesis_key": "FILE-31fc7130cf54",
@@ -3444,6 +3455,1733 @@
       ],
       "last_hash": "73a3b909fc750780886490aaef6570dd57d58d91511bb34f127a2c6c19b6c3f4",
       "last_updated": "2026-02-21T14:46:31.418509"
+    },
+    "FILE-13856496cc5c": {
+      "file_genesis_key": "FILE-13856496cc5c",
+      "file_path": "D:\\grace-3.1-\\frontend\\index.html",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\index.html",
+      "created_at": "2026-02-22T06:40:39.930823",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-13856496cc5c-1",
+          "genesis_key_db_id": "GK-ed1bed4e4a3a4044b27f3e1ae23c785f",
+          "timestamp": "2026-02-22T06:40:40.119804",
+          "file_hash": "342bb7e0f421d2ce82ae31830c02f952cfb9174a35cc3c6ce4cd86bfcb68ef1e",
+          "file_size": 370,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-cb18998a45fe4fb0be5d815b5c1240a5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "342bb7e0f421d2ce82ae31830c02f952cfb9174a35cc3c6ce4cd86bfcb68ef1e",
+      "last_updated": "2026-02-22T06:40:40.119804"
+    },
+    "FILE-0b479ee57fd7": {
+      "file_genesis_key": "FILE-0b479ee57fd7",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\main.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\main.jsx",
+      "created_at": "2026-02-22T06:40:40.547822",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0b479ee57fd7-1",
+          "genesis_key_db_id": "GK-a2908231c47144768cecc9ecd80650eb",
+          "timestamp": "2026-02-22T06:40:40.743043",
+          "file_hash": "ae81f1c01f2c8018a1ba5cf73171921c8982d90b049bb6b039ea82f8e1dec958",
+          "file_size": 239,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6c60cf41ed4e463dbbf65c5ca025e4de",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ae81f1c01f2c8018a1ba5cf73171921c8982d90b049bb6b039ea82f8e1dec958",
+      "last_updated": "2026-02-22T06:40:40.743043"
+    },
+    "FILE-3949d0bb5571": {
+      "file_genesis_key": "FILE-3949d0bb5571",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\index.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\index.css",
+      "created_at": "2026-02-22T06:40:41.070163",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3949d0bb5571-1",
+          "genesis_key_db_id": "GK-c95545ee32aa4e44bd0cbaab0d7d63d4",
+          "timestamp": "2026-02-22T06:40:41.244830",
+          "file_hash": "f316f04d51aea6ad7f69bdd20ab88b6d8a80e0335ef70787682fa19b622da293",
+          "file_size": 837,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ff864dd0b3ee448d91c22e5673e64d0c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f316f04d51aea6ad7f69bdd20ab88b6d8a80e0335ef70787682fa19b622da293",
+      "last_updated": "2026-02-22T06:40:41.244830"
+    },
+    "FILE-cbb07ddf1867": {
+      "file_genesis_key": "FILE-cbb07ddf1867",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\App.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\App.jsx",
+      "created_at": "2026-02-22T06:40:41.438228",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cbb07ddf1867-1",
+          "genesis_key_db_id": "GK-d9723ea2094645c7902d8e968f3de725",
+          "timestamp": "2026-02-22T06:40:41.514762",
+          "file_hash": "0a847ab40ecbaf755810d1fd576c450eb3cc275e93e3326eb9a92006160ee9a1",
+          "file_size": 23071,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3c6d8454d51a4576aa2fe969c09dced0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "0a847ab40ecbaf755810d1fd576c450eb3cc275e93e3326eb9a92006160ee9a1",
+      "last_updated": "2026-02-22T06:40:41.514762"
+    },
+    "FILE-c0ff1a0a161e": {
+      "file_genesis_key": "FILE-c0ff1a0a161e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\RAGTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\RAGTab.jsx",
+      "created_at": "2026-02-22T06:40:41.656071",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c0ff1a0a161e-1",
+          "genesis_key_db_id": "GK-e77a38aea4774d1a82a9a7e429c1d498",
+          "timestamp": "2026-02-22T06:40:41.751317",
+          "file_hash": "8e33f98516c8a2717b507b7b170e53222b7b4b399b0f81f42d1dd21ddab97130",
+          "file_size": 9919,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5cb3facdd01f4c5783134fb546786dad",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8e33f98516c8a2717b507b7b170e53222b7b4b399b0f81f42d1dd21ddab97130",
+      "last_updated": "2026-02-22T06:40:41.751317"
+    },
+    "FILE-2b53914ed5a9": {
+      "file_genesis_key": "FILE-2b53914ed5a9",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\LibrarianTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\LibrarianTab.jsx",
+      "created_at": "2026-02-22T06:40:42.045842",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2b53914ed5a9-1",
+          "genesis_key_db_id": "GK-68ab849486e74e659eaeca19fb9f2987",
+          "timestamp": "2026-02-22T06:40:42.167642",
+          "file_hash": "0e316d09cb53fa3f1ec865facf1699aa416fcae817340ee85a7d42020d8a76f2",
+          "file_size": 28590,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-815fe88e01d847e9be9ea19c00bc5b4d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "0e316d09cb53fa3f1ec865facf1699aa416fcae817340ee85a7d42020d8a76f2",
+      "last_updated": "2026-02-22T06:40:42.167642"
+    },
+    "FILE-f49b59ea51cc": {
+      "file_genesis_key": "FILE-f49b59ea51cc",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\App.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\App.css",
+      "created_at": "2026-02-22T06:40:42.370640",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f49b59ea51cc-1",
+          "genesis_key_db_id": "GK-ae3f24c2447b4f59a1dc711878dd2331",
+          "timestamp": "2026-02-22T06:40:42.674776",
+          "file_hash": "26cf107ef3eca04d3fe45a230896f0e54d545c304967e47a7c5e44586aeeb4bd",
+          "file_size": 2420,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2880b7f7ebeb4d2da3afc89507baf46a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "26cf107ef3eca04d3fe45a230896f0e54d545c304967e47a7c5e44586aeeb4bd",
+      "last_updated": "2026-02-22T06:40:42.674776"
+    },
+    "FILE-59686feae4fd": {
+      "file_genesis_key": "FILE-59686feae4fd",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\SandboxTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\SandboxTab.jsx",
+      "created_at": "2026-02-22T06:40:42.940825",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-59686feae4fd-1",
+          "genesis_key_db_id": "GK-afb4daa5c992498fbe85f21c06162186",
+          "timestamp": "2026-02-22T06:40:43.038868",
+          "file_hash": "663070b9662c20797c8e0f55722482afceeab8ec99a49de70ba1f4f70f8e3494",
+          "file_size": 14714,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b38625b9ae274faba169df1029345516",
+          "has_content": true
+        }
+      ],
+      "last_hash": "663070b9662c20797c8e0f55722482afceeab8ec99a49de70ba1f4f70f8e3494",
+      "last_updated": "2026-02-22T06:40:43.038868"
+    },
+    "FILE-531777413e9b": {
+      "file_genesis_key": "FILE-531777413e9b",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ResearchTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ResearchTab.jsx",
+      "created_at": "2026-02-22T06:40:43.450883",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-531777413e9b-1",
+          "genesis_key_db_id": "GK-547685ccd853407d809f469a457b8ebe",
+          "timestamp": "2026-02-22T06:40:43.521791",
+          "file_hash": "019a21e2d484ff3f8698627380c5794ce3e402c1e850bb2e3f634fa1119929b0",
+          "file_size": 16771,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-dcfb67119dea4055891b967e7576da5d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "019a21e2d484ff3f8698627380c5794ce3e402c1e850bb2e3f634fa1119929b0",
+      "last_updated": "2026-02-22T06:40:43.521791"
+    },
+    "FILE-18d1e3698196": {
+      "file_genesis_key": "FILE-18d1e3698196",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\WhitelistTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\WhitelistTab.jsx",
+      "created_at": "2026-02-22T06:40:43.674653",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-18d1e3698196-1",
+          "genesis_key_db_id": "GK-f141837953b849168d7a06e1dedf3ad5",
+          "timestamp": "2026-02-22T06:40:43.737423",
+          "file_hash": "1e44b297e853a5df7ebcee5863fe46c1cf098c3b1a8666196efa2edb648f9fe2",
+          "file_size": 19525,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0c617fd5384446f5aa477d220f388342",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1e44b297e853a5df7ebcee5863fe46c1cf098c3b1a8666196efa2edb648f9fe2",
+      "last_updated": "2026-02-22T06:40:43.737423"
+    },
+    "FILE-d87f93b7c16b": {
+      "file_genesis_key": "FILE-d87f93b7c16b",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\PersistentVoicePanel.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\PersistentVoicePanel.jsx",
+      "created_at": "2026-02-22T06:40:43.900084",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d87f93b7c16b-1",
+          "genesis_key_db_id": "GK-de5a3f0e4bca4e12a9c4e0125dd45e6e",
+          "timestamp": "2026-02-22T06:40:44.039414",
+          "file_hash": "612d062574672b93a68081a419674d2dddbc7ec3f59fc51b001d3bb0f49e1c31",
+          "file_size": 17679,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9b13398790bf44d09b7a358b86890e63",
+          "has_content": true
+        }
+      ],
+      "last_hash": "612d062574672b93a68081a419674d2dddbc7ec3f59fc51b001d3bb0f49e1c31",
+      "last_updated": "2026-02-22T06:40:44.039414"
+    },
+    "FILE-4dac73dd1729": {
+      "file_genesis_key": "FILE-4dac73dd1729",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\VersionControl.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\VersionControl.jsx",
+      "created_at": "2026-02-22T06:40:44.440577",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4dac73dd1729-1",
+          "genesis_key_db_id": "GK-c753398a3eb64ed1be5fce0ff8bb38a0",
+          "timestamp": "2026-02-22T06:40:44.545876",
+          "file_hash": "8ddc15f5ace60b39ac2069eb2244922f72348a00c6448541c6f71d16d89dc570",
+          "file_size": 10039,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8cf3068db0774371a119e78db398fd03",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8ddc15f5ace60b39ac2069eb2244922f72348a00c6448541c6f71d16d89dc570",
+      "last_updated": "2026-02-22T06:40:44.545876"
+    },
+    "FILE-ee3056834230": {
+      "file_genesis_key": "FILE-ee3056834230",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\OrchestrationTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\OrchestrationTab.jsx",
+      "created_at": "2026-02-22T06:40:45.180927",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ee3056834230-1",
+          "genesis_key_db_id": "GK-3dad09b9e6664ac88c264a972fdc027e",
+          "timestamp": "2026-02-22T06:40:45.328180",
+          "file_hash": "a1e8a85ee3ec4e6dbd4c10481b431ec518ebb7b272132cde9fab7cd08128ea10",
+          "file_size": 13358,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-20832c796b7b45c18c9da599b4a630b4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a1e8a85ee3ec4e6dbd4c10481b431ec518ebb7b272132cde9fab7cd08128ea10",
+      "last_updated": "2026-02-22T06:40:45.328180"
+    },
+    "FILE-25151cb72644": {
+      "file_genesis_key": "FILE-25151cb72644",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\LearningTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\LearningTab.jsx",
+      "created_at": "2026-02-22T06:40:45.541030",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-25151cb72644-1",
+          "genesis_key_db_id": "GK-a078eb0c14094190993701a91743fc4c",
+          "timestamp": "2026-02-22T06:40:45.679866",
+          "file_hash": "ad2e651a6b25fa05fc8655bb0ee64f33531b0038492ce88ad25ad6d20bdd44f1",
+          "file_size": 29673,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-bd7a37a969df469091f16743c79c6279",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ad2e651a6b25fa05fc8655bb0ee64f33531b0038492ce88ad25ad6d20bdd44f1",
+      "last_updated": "2026-02-22T06:40:45.679866"
+    },
+    "FILE-c1c18c2a8b9d": {
+      "file_genesis_key": "FILE-c1c18c2a8b9d",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.jsx",
+      "created_at": "2026-02-22T06:40:45.862325",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c1c18c2a8b9d-1",
+          "genesis_key_db_id": "GK-e32df25b03ba48cc91ac717bf9bc60ed",
+          "timestamp": "2026-02-22T06:40:45.979225",
+          "file_hash": "d650151a815d0a1e6d9ed2b4402f3c8ae1cd85981e4d2f4bec13cfae57561718",
+          "file_size": 16106,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-88ce8486431f4c2b9a08c5f97fe3ebbf",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d650151a815d0a1e6d9ed2b4402f3c8ae1cd85981e4d2f4bec13cfae57561718",
+      "last_updated": "2026-02-22T06:40:45.979225"
+    },
+    "FILE-81e656785295": {
+      "file_genesis_key": "FILE-81e656785295",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\MLIntelligenceTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\MLIntelligenceTab.jsx",
+      "created_at": "2026-02-22T06:40:46.174755",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-81e656785295-1",
+          "genesis_key_db_id": "GK-5a826bf56e7c4e16be221078284120ae",
+          "timestamp": "2026-02-22T06:40:46.438431",
+          "file_hash": "178b8d088dacf50cb153af714a89f8df78b7549bf7149979729d674e54c68c31",
+          "file_size": 20540,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-22bf1d94dd364b3ea4b515cb90280dec",
+          "has_content": true
+        }
+      ],
+      "last_hash": "178b8d088dacf50cb153af714a89f8df78b7549bf7149979729d674e54c68c31",
+      "last_updated": "2026-02-22T06:40:46.438431"
+    },
+    "FILE-44a3738fc3d8": {
+      "file_genesis_key": "FILE-44a3738fc3d8",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\config\\api.js",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\config\\api.js",
+      "created_at": "2026-02-22T06:40:46.697894",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-44a3738fc3d8-1",
+          "genesis_key_db_id": "GK-171b51e3b1fd46c5ad5106d5e0b9f69b",
+          "timestamp": "2026-02-22T06:40:46.860477",
+          "file_hash": "49881f6a40062422cd04938e65fa7176a81466dd422d725981cc4bb1d051cdf5",
+          "file_size": 2452,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f0414083af9541c5a2902b09968f66dd",
+          "has_content": true
+        }
+      ],
+      "last_hash": "49881f6a40062422cd04938e65fa7176a81466dd422d725981cc4bb1d051cdf5",
+      "last_updated": "2026-02-22T06:40:46.860477"
+    },
+    "FILE-deac90120a82": {
+      "file_genesis_key": "FILE-deac90120a82",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\MonitoringTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\MonitoringTab.jsx",
+      "created_at": "2026-02-22T06:40:47.079246",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-deac90120a82-1",
+          "genesis_key_db_id": "GK-7f12df061ae5400394110bfd138e8a73",
+          "timestamp": "2026-02-22T06:40:47.250188",
+          "file_hash": "73190ac0f88c6116c52cedf2f6c8b3a874a09ca35ef86073e105af5fa2a30dd7",
+          "file_size": 15475,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3ec44bc66d7b46ceb289849e4cf5ad03",
+          "has_content": true
+        }
+      ],
+      "last_hash": "73190ac0f88c6116c52cedf2f6c8b3a874a09ca35ef86073e105af5fa2a30dd7",
+      "last_updated": "2026-02-22T06:40:47.250188"
+    },
+    "FILE-d285b41022ad": {
+      "file_genesis_key": "FILE-d285b41022ad",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\TelemetryTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\TelemetryTab.jsx",
+      "created_at": "2026-02-22T06:40:47.452267",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d285b41022ad-1",
+          "genesis_key_db_id": "GK-6f950219b8aa4976b1485eaf4b444399",
+          "timestamp": "2026-02-22T06:40:47.557861",
+          "file_hash": "5025de4a89af968d17d8b388cdc850e639001f391654463bec6705f300387cbd",
+          "file_size": 18681,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9c19a26b4cea43bc81d55e2430ac3292",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5025de4a89af968d17d8b388cdc850e639001f391654463bec6705f300387cbd",
+      "last_updated": "2026-02-22T06:40:47.557861"
+    },
+    "FILE-572cb6ebe951": {
+      "file_genesis_key": "FILE-572cb6ebe951",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\NotionTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\NotionTab.jsx",
+      "created_at": "2026-02-22T06:40:47.734725",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-572cb6ebe951-1",
+          "genesis_key_db_id": "GK-1ad398771d9344828208842f8e173c11",
+          "timestamp": "2026-02-22T06:40:47.867873",
+          "file_hash": "95cacd6011302e7a48b861a7a5f61df3ad8f806a15c1e59b287427c43265353f",
+          "file_size": 35383,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8b2d9e37343441bdb139c025138bce2a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "95cacd6011302e7a48b861a7a5f61df3ad8f806a15c1e59b287427c43265353f",
+      "last_updated": "2026-02-22T06:40:47.867873"
+    },
+    "FILE-b0571542d7d9": {
+      "file_genesis_key": "FILE-b0571542d7d9",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\RAGTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\RAGTab.css",
+      "created_at": "2026-02-22T06:40:48.388787",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b0571542d7d9-1",
+          "genesis_key_db_id": "GK-6abcfbd04d7c47d9b9fe6dbeeede0e9a",
+          "timestamp": "2026-02-22T06:40:48.717221",
+          "file_hash": "12327f703135ee138f152fd79265429bf389c8d1e1d7d23b77e67b017afc558e",
+          "file_size": 10743,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-56b1edaf93d24acfa027daf586d31182",
+          "has_content": true
+        }
+      ],
+      "last_hash": "12327f703135ee138f152fd79265429bf389c8d1e1d7d23b77e67b017afc558e",
+      "last_updated": "2026-02-22T06:40:48.717221"
+    },
+    "FILE-6449e6834143": {
+      "file_genesis_key": "FILE-6449e6834143",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\LibrarianTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\LibrarianTab.css",
+      "created_at": "2026-02-22T06:40:49.077808",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6449e6834143-1",
+          "genesis_key_db_id": "GK-c205615c2ac74258bf8d867a04530ca8",
+          "timestamp": "2026-02-22T06:40:49.173141",
+          "file_hash": "d0452d8b8bb2198d0b82349e31528c439477c28eb1f1ba34fe0986bc8b01e466",
+          "file_size": 17165,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-41d9d29e62de4ae4938cea98d38fa65f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d0452d8b8bb2198d0b82349e31528c439477c28eb1f1ba34fe0986bc8b01e466",
+      "last_updated": "2026-02-22T06:40:49.173141"
+    },
+    "FILE-7a9622482ab8": {
+      "file_genesis_key": "FILE-7a9622482ab8",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\SandboxTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\SandboxTab.css",
+      "created_at": "2026-02-22T06:40:49.371998",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7a9622482ab8-1",
+          "genesis_key_db_id": "GK-6e8a72ba2f6e401fb8a6c710b4df1db5",
+          "timestamp": "2026-02-22T06:40:49.486192",
+          "file_hash": "82d21129158300f263aadd432491abae688181c5bb19c75a296b2633669a3ade",
+          "file_size": 10516,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a7c30f50925940e2a442600c1614b1b7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "82d21129158300f263aadd432491abae688181c5bb19c75a296b2633669a3ade",
+      "last_updated": "2026-02-22T06:40:49.486192"
+    },
+    "FILE-d05ba797d74f": {
+      "file_genesis_key": "FILE-d05ba797d74f",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ResearchTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ResearchTab.css",
+      "created_at": "2026-02-22T06:40:49.722578",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d05ba797d74f-1",
+          "genesis_key_db_id": "GK-9725d42bb4584d2d84d0bd6177513219",
+          "timestamp": "2026-02-22T06:40:49.859633",
+          "file_hash": "938b82e9ce5190a73f4bd2da1355ac6683cbc03c1fecc0dbf42998d76d669f18",
+          "file_size": 10922,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8a5a74589a484675a07fa5d346a083e0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "938b82e9ce5190a73f4bd2da1355ac6683cbc03c1fecc0dbf42998d76d669f18",
+      "last_updated": "2026-02-22T06:40:49.859633"
+    },
+    "FILE-c165e808b384": {
+      "file_genesis_key": "FILE-c165e808b384",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\WhitelistTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\WhitelistTab.css",
+      "created_at": "2026-02-22T06:40:50.426802",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c165e808b384-1",
+          "genesis_key_db_id": "GK-3b3651222bc24e1a86e2733bbe1b3285",
+          "timestamp": "2026-02-22T06:40:50.835938",
+          "file_hash": "718e6e2115969b86489a18433ae1f02a6fd989be244060438100609cac9f5034",
+          "file_size": 10264,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3ee98601e3b1417a8e5560a17ec2a753",
+          "has_content": true
+        }
+      ],
+      "last_hash": "718e6e2115969b86489a18433ae1f02a6fd989be244060438100609cac9f5034",
+      "last_updated": "2026-02-22T06:40:50.835938"
+    },
+    "FILE-3d8d0b4cc901": {
+      "file_genesis_key": "FILE-3d8d0b4cc901",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\PersistentVoicePanel.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\PersistentVoicePanel.css",
+      "created_at": "2026-02-22T06:40:51.181181",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3d8d0b4cc901-1",
+          "genesis_key_db_id": "GK-f89c77100c3f4f808080cb9fa52199b0",
+          "timestamp": "2026-02-22T06:40:51.326171",
+          "file_hash": "828e508719605e25b3cc2834f394c5536b0f1d07a130c9606c1fa56bc48520e1",
+          "file_size": 8235,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1ecc1f86a5734089bc2f8e2eafc31158",
+          "has_content": true
+        }
+      ],
+      "last_hash": "828e508719605e25b3cc2834f394c5536b0f1d07a130c9606c1fa56bc48520e1",
+      "last_updated": "2026-02-22T06:40:51.326171"
+    },
+    "FILE-7c827bc88299": {
+      "file_genesis_key": "FILE-7c827bc88299",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\GitTree.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\GitTree.jsx",
+      "created_at": "2026-02-22T06:40:51.754969",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7c827bc88299-1",
+          "genesis_key_db_id": "GK-571cd583cdc144ab93beed5cde5f01d6",
+          "timestamp": "2026-02-22T06:40:51.904362",
+          "file_hash": "80bb916796107b5ca9c1a3adf50aaf1573a4756923bc138d2d8039989f533912",
+          "file_size": 5493,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3d5a7bfab095419aa9c9072e74964a44",
+          "has_content": true
+        }
+      ],
+      "last_hash": "80bb916796107b5ca9c1a3adf50aaf1573a4756923bc138d2d8039989f533912",
+      "last_updated": "2026-02-22T06:40:51.904362"
+    },
+    "FILE-946121a7490d": {
+      "file_genesis_key": "FILE-946121a7490d",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\VersionControl.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\VersionControl.css",
+      "created_at": "2026-02-22T06:40:52.051970",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-946121a7490d-1",
+          "genesis_key_db_id": "GK-c41c19144c624123a402a5aeb7ad45ac",
+          "timestamp": "2026-02-22T06:40:52.146150",
+          "file_hash": "26ec7334df58be1a01bb66c085b7f7d9c183924be13b3fc6eef2b9eef3fdc0be",
+          "file_size": 4691,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ea70843a752248d0a62762450aba7fb1",
+          "has_content": true
+        }
+      ],
+      "last_hash": "26ec7334df58be1a01bb66c085b7f7d9c183924be13b3fc6eef2b9eef3fdc0be",
+      "last_updated": "2026-02-22T06:40:52.146150"
+    },
+    "FILE-7ac56dbcf7ba": {
+      "file_genesis_key": "FILE-7ac56dbcf7ba",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\DiffViewer.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\DiffViewer.jsx",
+      "created_at": "2026-02-22T06:40:52.310835",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7ac56dbcf7ba-1",
+          "genesis_key_db_id": "GK-2ac502330fba4e4dbfa93baef1d88b05",
+          "timestamp": "2026-02-22T06:40:52.413369",
+          "file_hash": "2cf5f5c1ed5fc85e1063f4ba8ca5b8ea628fd81eac1281d2590d4116eb2f1919",
+          "file_size": 4231,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fdaa88b5db3547e1b15bf16c99fea62e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2cf5f5c1ed5fc85e1063f4ba8ca5b8ea628fd81eac1281d2590d4116eb2f1919",
+      "last_updated": "2026-02-22T06:40:52.413369"
+    },
+    "FILE-b6a52b7f70bf": {
+      "file_genesis_key": "FILE-b6a52b7f70bf",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\CommitTimeline.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\CommitTimeline.jsx",
+      "created_at": "2026-02-22T06:40:52.575021",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b6a52b7f70bf-1",
+          "genesis_key_db_id": "GK-cb7f3231d7cd447b9e292627c7f0a945",
+          "timestamp": "2026-02-22T06:40:52.798747",
+          "file_hash": "e119facb582d37d0c76dfafda2e3b6fe50903c607a777ffb30665b96f72e7629",
+          "file_size": 5081,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ff21ca425a334154aba75e9dc38e6a61",
+          "has_content": true
+        }
+      ],
+      "last_hash": "e119facb582d37d0c76dfafda2e3b6fe50903c607a777ffb30665b96f72e7629",
+      "last_updated": "2026-02-22T06:40:52.798747"
+    },
+    "FILE-4ec31a97932b": {
+      "file_genesis_key": "FILE-4ec31a97932b",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\RevertModal.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\RevertModal.jsx",
+      "created_at": "2026-02-22T06:40:53.074750",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-4ec31a97932b-1",
+          "genesis_key_db_id": "GK-97b468e1612040dbb475102aa363651e",
+          "timestamp": "2026-02-22T06:40:53.172953",
+          "file_hash": "13556bd97a8ba856dbc2bf0e821761731613064f445af04fc2ad874d0655dc82",
+          "file_size": 2537,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-398c60f89c78412a81a832feb9d1de55",
+          "has_content": true
+        }
+      ],
+      "last_hash": "13556bd97a8ba856dbc2bf0e821761731613064f445af04fc2ad874d0655dc82",
+      "last_updated": "2026-02-22T06:40:53.172953"
+    },
+    "FILE-2b6ddcfb0d4d": {
+      "file_genesis_key": "FILE-2b6ddcfb0d4d",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\ModuleHistory.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\ModuleHistory.jsx",
+      "created_at": "2026-02-22T06:40:53.357963",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2b6ddcfb0d4d-1",
+          "genesis_key_db_id": "GK-d4e48b7f10cb43d5a8ab0424e3cb1443",
+          "timestamp": "2026-02-22T06:40:53.463090",
+          "file_hash": "42ed5873fd4b86c9b81b52f1255877f579f2ccaf51926d2f1bb84d8547640629",
+          "file_size": 7337,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2e5589ba57fa40ffa9b06793af990c2c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "42ed5873fd4b86c9b81b52f1255877f579f2ccaf51926d2f1bb84d8547640629",
+      "last_updated": "2026-02-22T06:40:53.463090"
+    },
+    "FILE-5212049a894b": {
+      "file_genesis_key": "FILE-5212049a894b",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\OrchestrationTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\OrchestrationTab.css",
+      "created_at": "2026-02-22T06:40:53.628143",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5212049a894b-1",
+          "genesis_key_db_id": "GK-2fcb7823a32c49ffb2b106f515602808",
+          "timestamp": "2026-02-22T06:40:53.720220",
+          "file_hash": "955c4b3c48ff9c7f80ac1b719c8a34dd7fa10b358faa0ca2f0406a68f0c0fd71",
+          "file_size": 7412,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e731d3657f1e4fef96b06e6ff1e8a43d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "955c4b3c48ff9c7f80ac1b719c8a34dd7fa10b358faa0ca2f0406a68f0c0fd71",
+      "last_updated": "2026-02-22T06:40:53.720220"
+    },
+    "FILE-26e033f5bc34": {
+      "file_genesis_key": "FILE-26e033f5bc34",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.css",
+      "created_at": "2026-02-22T06:40:53.907216",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-26e033f5bc34-1",
+          "genesis_key_db_id": "GK-bfae7ee66c8346bcbe728819bda7e1d4",
+          "timestamp": "2026-02-22T06:40:54.007653",
+          "file_hash": "dc043901024828a14f1b33ba409c7d2278cf4db11d9676751cae51ef2dc8bd9f",
+          "file_size": 13433,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-206cd330ca4c474ca4aa83994dc929b5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "dc043901024828a14f1b33ba409c7d2278cf4db11d9676751cae51ef2dc8bd9f",
+      "last_updated": "2026-02-22T06:40:54.007653"
+    },
+    "FILE-f2bcaa327fcd": {
+      "file_genesis_key": "FILE-f2bcaa327fcd",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\MLIntelligenceTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\MLIntelligenceTab.css",
+      "created_at": "2026-02-22T06:40:54.256145",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f2bcaa327fcd-1",
+          "genesis_key_db_id": "GK-f170874709e34354a1a7c5626a236d12",
+          "timestamp": "2026-02-22T06:40:54.352246",
+          "file_hash": "f0d2f3c962d6e9df1e6c46e7cb0b018513d884b6b273ab63e9c2dccfb6d0b824",
+          "file_size": 12310,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0631e92f62db445d930b1ea8c3b5591a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f0d2f3c962d6e9df1e6c46e7cb0b018513d884b6b273ab63e9c2dccfb6d0b824",
+      "last_updated": "2026-02-22T06:40:54.352246"
+    },
+    "FILE-13dc360113d8": {
+      "file_genesis_key": "FILE-13dc360113d8",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\MonitoringTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\MonitoringTab.css",
+      "created_at": "2026-02-22T06:40:54.516806",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-13dc360113d8-1",
+          "genesis_key_db_id": "GK-69378fd7f63941749682e87a10765a1d",
+          "timestamp": "2026-02-22T06:40:54.632929",
+          "file_hash": "23fbf2ce77b6bf4224ad11f354435c6a13d30bb09ce7e0aa007a419c98950f63",
+          "file_size": 6932,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fa994ef8277c45139043e5887340efa4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "23fbf2ce77b6bf4224ad11f354435c6a13d30bb09ce7e0aa007a419c98950f63",
+      "last_updated": "2026-02-22T06:40:54.632929"
+    },
+    "FILE-b887b1721eb7": {
+      "file_genesis_key": "FILE-b887b1721eb7",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\NotionTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\NotionTab.css",
+      "created_at": "2026-02-22T06:40:54.839634",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b887b1721eb7-1",
+          "genesis_key_db_id": "GK-766590daeb4e48d2a39498927618bcd7",
+          "timestamp": "2026-02-22T06:40:54.940182",
+          "file_hash": "819327d489b9f248aef7a9397a08d60c6a33cd34a7f7f71b516befa4e8e97b0e",
+          "file_size": 17213,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2e8a1a925e7447cd9268f90db53ac605",
+          "has_content": true
+        }
+      ],
+      "last_hash": "819327d489b9f248aef7a9397a08d60c6a33cd34a7f7f71b516befa4e8e97b0e",
+      "last_updated": "2026-02-22T06:40:54.940182"
+    },
+    "FILE-c722e7237d30": {
+      "file_genesis_key": "FILE-c722e7237d30",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\GitTree.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\GitTree.css",
+      "created_at": "2026-02-22T06:40:55.148927",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c722e7237d30-1",
+          "genesis_key_db_id": "GK-f1b44e8a7d9b4e1e8d866e44e86a4787",
+          "timestamp": "2026-02-22T06:40:55.251076",
+          "file_hash": "8fb936376e2ac968d8bf5dd75ff95d600b3e0f700b91264c7f583164d502023b",
+          "file_size": 3222,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a339fb2b3b5442fe8fad74d8a6abb8e5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8fb936376e2ac968d8bf5dd75ff95d600b3e0f700b91264c7f583164d502023b",
+      "last_updated": "2026-02-22T06:40:55.251076"
+    },
+    "FILE-bc66913684ac": {
+      "file_genesis_key": "FILE-bc66913684ac",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\DiffViewer.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\DiffViewer.css",
+      "created_at": "2026-02-22T06:40:55.489832",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-bc66913684ac-1",
+          "genesis_key_db_id": "GK-81020fec35bc4ed983a9c47621ab70ce",
+          "timestamp": "2026-02-22T06:40:55.614264",
+          "file_hash": "48b7724947126e8ec793088b2fc99f8c89425c1ef64701dfd350122527f554a5",
+          "file_size": 4205,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-05b23ea0c6e84d5bad3c70d0a6ebc627",
+          "has_content": true
+        }
+      ],
+      "last_hash": "48b7724947126e8ec793088b2fc99f8c89425c1ef64701dfd350122527f554a5",
+      "last_updated": "2026-02-22T06:40:55.614264"
+    },
+    "FILE-47a1ea8281fa": {
+      "file_genesis_key": "FILE-47a1ea8281fa",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\CommitTimeline.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\CommitTimeline.css",
+      "created_at": "2026-02-22T06:40:55.815612",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-47a1ea8281fa-1",
+          "genesis_key_db_id": "GK-43d77c38a163456ba73f77c431ac4777",
+          "timestamp": "2026-02-22T06:40:55.949614",
+          "file_hash": "e5ec941860567a8135f75dd751d5e35c289cd7746d97e8ed0b3edf4bf7572b3c",
+          "file_size": 4247,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6cc92e526f8c452188bdd5c381d7dbab",
+          "has_content": true
+        }
+      ],
+      "last_hash": "e5ec941860567a8135f75dd751d5e35c289cd7746d97e8ed0b3edf4bf7572b3c",
+      "last_updated": "2026-02-22T06:40:55.949614"
+    },
+    "FILE-d6dec6d9c05c": {
+      "file_genesis_key": "FILE-d6dec6d9c05c",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\RevertModal.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\RevertModal.css",
+      "created_at": "2026-02-22T06:40:56.849149",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d6dec6d9c05c-1",
+          "genesis_key_db_id": "GK-febf6b100c0f4a7093ae236420dcda63",
+          "timestamp": "2026-02-22T06:40:57.111455",
+          "file_hash": "df455ed288cabcac72b266bf6008a57a1d8193653185cb003b4fa7b9e3e0c1a0",
+          "file_size": 3531,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-29d0591e126247b7b349a767ce846c2a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "df455ed288cabcac72b266bf6008a57a1d8193653185cb003b4fa7b9e3e0c1a0",
+      "last_updated": "2026-02-22T06:40:57.111455"
+    },
+    "FILE-5115aafb0c30": {
+      "file_genesis_key": "FILE-5115aafb0c30",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\ModuleHistory.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\version_control\\ModuleHistory.css",
+      "created_at": "2026-02-22T06:40:57.462840",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5115aafb0c30-1",
+          "genesis_key_db_id": "GK-0b7c3164fdcc4e51b23287d040adc1f2",
+          "timestamp": "2026-02-22T06:40:57.577414",
+          "file_hash": "ae457e16f698f5656d0fa63b5e42a8088a44b6e75806b2de7cfd191fec024d2b",
+          "file_size": 4436,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d106ffa6cfcc4859a40fb343ddb13444",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ae457e16f698f5656d0fa63b5e42a8088a44b6e75806b2de7cfd191fec024d2b",
+      "last_updated": "2026-02-22T06:40:57.577414"
+    },
+    "FILE-b8ccec1a0675": {
+      "file_genesis_key": "FILE-b8ccec1a0675",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\VoiceButton.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\VoiceButton.css",
+      "created_at": "2026-02-22T06:40:57.768353",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b8ccec1a0675-1",
+          "genesis_key_db_id": "GK-90eff6da802a406d97ebebbf12be07ea",
+          "timestamp": "2026-02-22T06:40:58.033976",
+          "file_hash": "f126d24bb1ba4a2e2c65e528c61ad4fb16256ca624c5c5f391cf9a7e4f8abd8f",
+          "file_size": 4167,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e6436d0b141f4ddca6a12906b975162f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f126d24bb1ba4a2e2c65e528c61ad4fb16256ca624c5c5f391cf9a7e4f8abd8f",
+      "last_updated": "2026-02-22T06:40:58.033976"
+    },
+    "FILE-59bbc5cacf8b": {
+      "file_genesis_key": "FILE-59bbc5cacf8b",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\SearchInternetButton.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\SearchInternetButton.css",
+      "created_at": "2026-02-22T06:40:58.273336",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-59bbc5cacf8b-1",
+          "genesis_key_db_id": "GK-d6ea75d83a184beda5bf348a3422d159",
+          "timestamp": "2026-02-22T06:40:58.409466",
+          "file_hash": "445a2624f56e14a3f1b893711ec6badbb47b99df4af030a3877e39a2c42ef640",
+          "file_size": 1853,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5e6258a0adb846b3807cc84f245469e2",
+          "has_content": true
+        }
+      ],
+      "last_hash": "445a2624f56e14a3f1b893711ec6badbb47b99df4af030a3877e39a2c42ef640",
+      "last_updated": "2026-02-22T06:40:58.409466"
+    },
+    "FILE-725fa6cd139f": {
+      "file_genesis_key": "FILE-725fa6cd139f",
+      "file_path": "D:\\grace-3.1-\\backend\\iftari.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\iftari.txt",
+      "created_at": "2026-02-22T06:43:50.842164",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-725fa6cd139f-1",
+          "genesis_key_db_id": "GK-4cb8fc4ce554431280d0638bf4188f3b",
+          "timestamp": "2026-02-22T06:43:51.111107",
+          "file_hash": "32cc9ec23cd4296df7c2d9428552ae840d80dc3e8e0a16a80f686086bb067d33",
+          "file_size": 40,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6d2b9a1695244891b6c763355a8d58c5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "32cc9ec23cd4296df7c2d9428552ae840d80dc3e8e0a16a80f686086bb067d33",
+      "last_updated": "2026-02-22T06:43:51.111107"
+    },
+    "FILE-f665c3021acc": {
+      "file_genesis_key": "FILE-f665c3021acc",
+      "file_path": "D:\\grace-3.1-\\backend\\iftari_deleted.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\iftari_deleted.txt",
+      "created_at": "2026-02-22T06:44:21.658192",
+      "version_count": 2,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f665c3021acc-1",
+          "genesis_key_db_id": "GK-649e1047430a4cbda2fb600fcec21f0c",
+          "timestamp": "2026-02-22T06:44:21.767024",
+          "file_hash": "32cc9ec23cd4296df7c2d9428552ae840d80dc3e8e0a16a80f686086bb067d33",
+          "file_size": 40,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-504cff7f1e6249408b0e099973413a66",
+          "has_content": true
+        },
+        {
+          "version_number": 2,
+          "version_key_id": "VER-f665c3021acc-2",
+          "genesis_key_db_id": "GK-4e0b2e3a212b4779995fdba08f2b50f1",
+          "timestamp": "2026-02-22T06:49:08.067155",
+          "file_hash": "6e95ef20f1e10b7178aa2c72d4c673e67144d579462cca5b86a20180899dd245",
+          "file_size": 40,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-33907a8fd7bf4f70a4bf508e944ec253",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6e95ef20f1e10b7178aa2c72d4c673e67144d579462cca5b86a20180899dd245",
+      "last_updated": "2026-02-22T06:49:08.067155"
+    },
+    "FILE-504be59791f5": {
+      "file_genesis_key": "FILE-504be59791f5",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\package.json",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\package.json",
+      "created_at": "2026-02-22T07:22:59.612671",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-504be59791f5-1",
+          "genesis_key_db_id": "GK-962c08665b6f4b8bad784f2f5e88d45a",
+          "timestamp": "2026-02-22T07:23:00.005283",
+          "file_hash": "901e365f790360fc8c70de3744528e8234faa76b86dc98be246f01ad78218d74",
+          "file_size": 4842,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-287139d3fdf64391a921099264e40133",
+          "has_content": true
+        }
+      ],
+      "last_hash": "901e365f790360fc8c70de3744528e8234faa76b86dc98be246f01ad78218d74",
+      "last_updated": "2026-02-22T07:23:00.005283"
+    },
+    "FILE-aaf31998e20d": {
+      "file_genesis_key": "FILE-aaf31998e20d",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GovernanceTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GovernanceTab.jsx",
+      "created_at": "2026-02-22T08:08:51.637171",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aaf31998e20d-1",
+          "genesis_key_db_id": "GK-6784cd00da474aabbea13161b551268a",
+          "timestamp": "2026-02-22T08:08:51.863893",
+          "file_hash": "c5b8038c0072e581d95aaf3fd28f0b97f815becc25501255f4f1480bf5f61751",
+          "file_size": 41238,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-924a8afd2e70495cb3e2bdc1bd185250",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c5b8038c0072e581d95aaf3fd28f0b97f815becc25501255f4f1480bf5f61751",
+      "last_updated": "2026-02-22T08:08:51.863893"
+    },
+    "FILE-12516fd0636e": {
+      "file_genesis_key": "FILE-12516fd0636e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ExperimentTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ExperimentTab.jsx",
+      "created_at": "2026-02-22T08:08:52.414388",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-12516fd0636e-1",
+          "genesis_key_db_id": "GK-1720d54e1a544209b8da61faf08c47f4",
+          "timestamp": "2026-02-22T08:08:52.796434",
+          "file_hash": "697cd8884a9ec9dc338576a8cd1084956aa340e20cdb7a6722c6f6a29351aa96",
+          "file_size": 11824,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b9d4151c6b7147dbaf0e6e63166f50c3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "697cd8884a9ec9dc338576a8cd1084956aa340e20cdb7a6722c6f6a29351aa96",
+      "last_updated": "2026-02-22T08:08:52.796434"
+    },
+    "FILE-a2610bbb7114": {
+      "file_genesis_key": "FILE-a2610bbb7114",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ConnectorsTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ConnectorsTab.jsx",
+      "created_at": "2026-02-22T08:08:53.487875",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a2610bbb7114-1",
+          "genesis_key_db_id": "GK-a66a3335531149d6a29ec7597e6a35bf",
+          "timestamp": "2026-02-22T08:08:53.731938",
+          "file_hash": "8cdb10a87788207a774d3a0aeb02d1d6ba832bc88753c29ae42f6d599bf510be",
+          "file_size": 9530,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c1b5a0abab214b859f5a7641b884b9e3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8cdb10a87788207a774d3a0aeb02d1d6ba832bc88753c29ae42f6d599bf510be",
+      "last_updated": "2026-02-22T08:08:53.731938"
+    },
+    "FILE-54662c34d18e": {
+      "file_genesis_key": "FILE-54662c34d18e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GracePlanningTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GracePlanningTab.jsx",
+      "created_at": "2026-02-22T08:08:54.765000",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-54662c34d18e-1",
+          "genesis_key_db_id": "GK-d369accbb7444ed285b017a83e2d32ca",
+          "timestamp": "2026-02-22T08:08:54.964129",
+          "file_hash": "f1103ab643b10a2a38e93887dfb7cc9d303d06933785565e41dfe7b2a03d8ba8",
+          "file_size": 79165,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4928d6718da8446298ec4dce730b6368",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f1103ab643b10a2a38e93887dfb7cc9d303d06933785565e41dfe7b2a03d8ba8",
+      "last_updated": "2026-02-22T08:08:54.964129"
+    },
+    "FILE-ed12f7052403": {
+      "file_genesis_key": "FILE-ed12f7052403",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\CodeBaseTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\CodeBaseTab.jsx",
+      "created_at": "2026-02-22T08:08:55.219449",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ed12f7052403-1",
+          "genesis_key_db_id": "GK-d5c92300959f4c7ab4e297590eced9f0",
+          "timestamp": "2026-02-22T08:08:55.419494",
+          "file_hash": "8ebd7cacf95426452ad184994413efd65f151dff1a339d359e14800dd7758283",
+          "file_size": 27754,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0518d441e4b146b482f778a9f3daa485",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8ebd7cacf95426452ad184994413efd65f151dff1a339d359e14800dd7758283",
+      "last_updated": "2026-02-22T08:08:55.419494"
+    },
+    "FILE-45172d226c0f": {
+      "file_genesis_key": "FILE-45172d226c0f",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatTab.jsx",
+      "created_at": "2026-02-22T08:08:56.095056",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-45172d226c0f-1",
+          "genesis_key_db_id": "GK-3fae0940be6f4063835e329df56c3dd5",
+          "timestamp": "2026-02-22T08:08:56.237858",
+          "file_hash": "2f38d6779b7e77694ae048b211aeb2cad1909d5adbe4498e786a9c7306ed1847",
+          "file_size": 3725,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c285bd874fa244f4a46c747f8b8c3510",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2f38d6779b7e77694ae048b211aeb2cad1909d5adbe4498e786a9c7306ed1847",
+      "last_updated": "2026-02-22T08:08:56.237858"
+    },
+    "FILE-63d4b80c0c7e": {
+      "file_genesis_key": "FILE-63d4b80c0c7e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GraceTodosTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GraceTodosTab.jsx",
+      "created_at": "2026-02-22T08:08:56.632686",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-63d4b80c0c7e-1",
+          "genesis_key_db_id": "VER-63d4b80c0c7e-1",
+          "timestamp": "2026-02-22T08:08:56.929559",
+          "file_hash": "f5485bff18c209086859a60f72e4c0d49bd83712f07dd7cde3c583814a8e765d",
+          "file_size": 32752,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e3b1c82ced704612a2b9516d9e427eb4",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f5485bff18c209086859a60f72e4c0d49bd83712f07dd7cde3c583814a8e765d",
+      "last_updated": "2026-02-22T08:08:56.929559"
+    },
+    "FILE-992283a98bf5": {
+      "file_genesis_key": "FILE-992283a98bf5",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\APITab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\APITab.jsx",
+      "created_at": "2026-02-22T08:08:57.478254",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-992283a98bf5-1",
+          "genesis_key_db_id": "GK-80961ed153824e028f30203073ecdb71",
+          "timestamp": "2026-02-22T08:08:57.679069",
+          "file_hash": "1c3f057100358f36cce42dd2dfabe4110ef18bc025f52693f2f30240887eeed6",
+          "file_size": 21026,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4f002bbb38dc4cee91186729b0b06b79",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1c3f057100358f36cce42dd2dfabe4110ef18bc025f52693f2f30240887eeed6",
+      "last_updated": "2026-02-22T08:08:57.679069"
+    },
+    "FILE-a46b6c312487": {
+      "file_genesis_key": "FILE-a46b6c312487",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\CognitiveTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\CognitiveTab.jsx",
+      "created_at": "2026-02-22T08:08:58.359905",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-a46b6c312487-1",
+          "genesis_key_db_id": "GK-c778c28ae01e4133933b2530f975298d",
+          "timestamp": "2026-02-22T08:08:58.509427",
+          "file_hash": "8e36ce6325a209a452de740128d8ba4a809194f79654cbd24a6db233f06f9349",
+          "file_size": 15772,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-700af3f566e84e938904e66840601363",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8e36ce6325a209a452de740128d8ba4a809194f79654cbd24a6db233f06f9349",
+      "last_updated": "2026-02-22T08:08:58.509427"
+    },
+    "FILE-52f382f23bfc": {
+      "file_genesis_key": "FILE-52f382f23bfc",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyTab.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyTab.jsx",
+      "created_at": "2026-02-22T08:08:58.794635",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-52f382f23bfc-1",
+          "genesis_key_db_id": "GK-d1b00fa9e16a418e909569728013be02",
+          "timestamp": "2026-02-22T08:08:58.965214",
+          "file_hash": "41b45c237edcc250274a72d03d1799324eb94b6d31400c45c83b54a7a9df5926",
+          "file_size": 24497,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-260be246a49a4f428f2c0b6a2b9d9401",
+          "has_content": true
+        }
+      ],
+      "last_hash": "41b45c237edcc250274a72d03d1799324eb94b6d31400c45c83b54a7a9df5926",
+      "last_updated": "2026-02-22T08:08:58.965214"
+    },
+    "FILE-690c19d0e3d7": {
+      "file_genesis_key": "FILE-690c19d0e3d7",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ExperimentTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ExperimentTab.css",
+      "created_at": "2026-02-22T08:08:59.874339",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-690c19d0e3d7-1",
+          "genesis_key_db_id": "GK-fdab6ce890ae4c879f95bdd82b1b1eeb",
+          "timestamp": "2026-02-22T08:09:00.000259",
+          "file_hash": "2a9a90e807ba3bd5ee28b71f50c6b63b3bc9d0302175ee2b545415f994418d3f",
+          "file_size": 6711,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a5a15e02384d42cf94e561a56d5b059e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2a9a90e807ba3bd5ee28b71f50c6b63b3bc9d0302175ee2b545415f994418d3f",
+      "last_updated": "2026-02-22T08:09:00.000259"
+    },
+    "FILE-2294563b2c9e": {
+      "file_genesis_key": "FILE-2294563b2c9e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GovernanceTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GovernanceTab.css",
+      "created_at": "2026-02-22T08:09:00.210475",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2294563b2c9e-1",
+          "genesis_key_db_id": "GK-906c42f761644b668b4981a46c11fd61",
+          "timestamp": "2026-02-22T08:09:00.428148",
+          "file_hash": "8ac2e145aa51a072d86cbb65950af2f2412fe1769a4be200d0c2a025180906d8",
+          "file_size": 24726,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3a11412a24a5479abd088dfd2913a2b2",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8ac2e145aa51a072d86cbb65950af2f2412fe1769a4be200d0c2a025180906d8",
+      "last_updated": "2026-02-22T08:09:00.428148"
+    },
+    "FILE-84557d1c3a47": {
+      "file_genesis_key": "FILE-84557d1c3a47",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ConnectorsTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ConnectorsTab.css",
+      "created_at": "2026-02-22T08:09:00.597523",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-84557d1c3a47-1",
+          "genesis_key_db_id": "GK-1d06593cf5034c1ebc9fa9499c881a6c",
+          "timestamp": "2026-02-22T08:09:00.723668",
+          "file_hash": "275967c276599c31d852d80afcc1a253f6004325a2c783df951694a405d0633e",
+          "file_size": 5148,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-24fb4b0bbe6d44c5a09130746b7ff43b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "275967c276599c31d852d80afcc1a253f6004325a2c783df951694a405d0633e",
+      "last_updated": "2026-02-22T08:09:00.723668"
+    },
+    "FILE-323d1d7b16ae": {
+      "file_genesis_key": "FILE-323d1d7b16ae",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GracePlanningTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GracePlanningTab.css",
+      "created_at": "2026-02-22T08:09:01.895143",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-323d1d7b16ae-1",
+          "genesis_key_db_id": "GK-774c22f075304e7abf141bccd130b470",
+          "timestamp": "2026-02-22T08:09:02.117609",
+          "file_hash": "fcaf0be7424b77b5298d5ff71063714183fa054d2ed50c83abcb191041bda6c0",
+          "file_size": 31032,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9c40ad2eec0c471c9e84c3da5aaf2efa",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fcaf0be7424b77b5298d5ff71063714183fa054d2ed50c83abcb191041bda6c0",
+      "last_updated": "2026-02-22T08:09:02.117609"
+    },
+    "FILE-381c8f6647b4": {
+      "file_genesis_key": "FILE-381c8f6647b4",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatTab.css",
+      "created_at": "2026-02-22T08:09:03.362457",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-381c8f6647b4-1",
+          "genesis_key_db_id": "GK-525465bff3b24a3cb352a0bd918747b2",
+          "timestamp": "2026-02-22T08:09:03.777646",
+          "file_hash": "137865d84361316aeee627f75f783e52b9aabad3c72bbb80cf71f0fbc3f5c342",
+          "file_size": 88,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-8c4c74ed344642d685ff3cc27911fa32",
+          "has_content": true
+        }
+      ],
+      "last_hash": "137865d84361316aeee627f75f783e52b9aabad3c72bbb80cf71f0fbc3f5c342",
+      "last_updated": "2026-02-22T08:09:03.777646"
+    },
+    "FILE-739884a14cd7": {
+      "file_genesis_key": "FILE-739884a14cd7",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\CodeBaseTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\CodeBaseTab.css",
+      "created_at": "2026-02-22T08:09:04.525627",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-739884a14cd7-1",
+          "genesis_key_db_id": "GK-f3276a5d2a85439b83fa0957787a7579",
+          "timestamp": "2026-02-22T08:09:04.721959",
+          "file_hash": "74ba42b42be0fc291bd161a60f9c9f8547f0df7a5c75514c391ff2b53639eb67",
+          "file_size": 13905,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-aaaef064c5b74823aca332a47807578f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "74ba42b42be0fc291bd161a60f9c9f8547f0df7a5c75514c391ff2b53639eb67",
+      "last_updated": "2026-02-22T08:09:04.721959"
+    },
+    "FILE-ce55a759ddaf": {
+      "file_genesis_key": "FILE-ce55a759ddaf",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatList.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatList.jsx",
+      "created_at": "2026-02-22T08:09:04.937003",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-ce55a759ddaf-1",
+          "genesis_key_db_id": "GK-b29cd1251a2444b1b1983e6705c17772",
+          "timestamp": "2026-02-22T08:09:05.169556",
+          "file_hash": "81bca6731afdefda208b05a5c41e89c25c7f584e49beef23d55e1ea0866d8176",
+          "file_size": 14822,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6f5c679773504d999980c1f949706d5f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "81bca6731afdefda208b05a5c41e89c25c7f584e49beef23d55e1ea0866d8176",
+      "last_updated": "2026-02-22T08:09:05.169556"
+    },
+    "FILE-2c072b73bc6a": {
+      "file_genesis_key": "FILE-2c072b73bc6a",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\FileBrowser.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\FileBrowser.jsx",
+      "created_at": "2026-02-22T08:09:05.479728",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2c072b73bc6a-1",
+          "genesis_key_db_id": "GK-814be2030bd04fbf9b1286dfdcada32c",
+          "timestamp": "2026-02-22T08:09:05.585070",
+          "file_hash": "3d51dd43072ccc0c78029c4da2e34d91ae3c63bc00ba65ae73b9c572b245c3d2",
+          "file_size": 19018,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ee7f110a4df142a4a6bbe0bcac94715e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3d51dd43072ccc0c78029c4da2e34d91ae3c63bc00ba65ae73b9c572b245c3d2",
+      "last_updated": "2026-02-22T08:09:05.585070"
+    },
+    "FILE-8da212e3299e": {
+      "file_genesis_key": "FILE-8da212e3299e",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\DirectoryChat.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\DirectoryChat.jsx",
+      "created_at": "2026-02-22T08:09:05.718339",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8da212e3299e-1",
+          "genesis_key_db_id": "GK-9360b6d2aca64a609db4cedf7690c6a6",
+          "timestamp": "2026-02-22T08:09:05.912362",
+          "file_hash": "266bb901c3aa5e38675ff3ab900428667fc336131627f4f92eb5254477187549",
+          "file_size": 8901,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-ea3c6ab681024d1bb37cdc7235f1f67b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "266bb901c3aa5e38675ff3ab900428667fc336131627f4f92eb5254477187549",
+      "last_updated": "2026-02-22T08:09:05.912362"
+    },
+    "FILE-6912dad9dfdd": {
+      "file_genesis_key": "FILE-6912dad9dfdd",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyPanel.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyPanel.jsx",
+      "created_at": "2026-02-22T08:09:06.055887",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6912dad9dfdd-1",
+          "genesis_key_db_id": "GK-8d6c9c5b87054a56b337db52b08dae22",
+          "timestamp": "2026-02-22T08:09:06.251183",
+          "file_hash": "2a2064a6a0c56d8b7ebe712410397dbe168594771a7d97500a1dd562f28288a4",
+          "file_size": 17114,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-76a763730f144b659e7292f21f75f935",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2a2064a6a0c56d8b7ebe712410397dbe168594771a7d97500a1dd562f28288a4",
+      "last_updated": "2026-02-22T08:09:06.251183"
+    },
+    "FILE-5bf08b04ce07": {
+      "file_genesis_key": "FILE-5bf08b04ce07",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GraceTodosTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GraceTodosTab.css",
+      "created_at": "2026-02-22T08:09:06.427459",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5bf08b04ce07-1",
+          "genesis_key_db_id": "GK-fec0866c071547c8b36f9cebfa9e07f5",
+          "timestamp": "2026-02-22T08:09:06.566348",
+          "file_hash": "4f0360cca0e85123322549e23340132d02dfc57f0cae052a6c1b1289638bf1e4",
+          "file_size": 19043,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5e36d52933d04993919ca4843e856943",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4f0360cca0e85123322549e23340132d02dfc57f0cae052a6c1b1289638bf1e4",
+      "last_updated": "2026-02-22T08:09:06.566348"
+    },
+    "FILE-248b89789371": {
+      "file_genesis_key": "FILE-248b89789371",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\InsightsTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\InsightsTab.css",
+      "created_at": "2026-02-22T08:09:06.736989",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-248b89789371-1",
+          "genesis_key_db_id": "GK-d3e285e0084542a5891ed5de0520da74",
+          "timestamp": "2026-02-22T08:09:06.902492",
+          "file_hash": "c25995b13e59007d0b25c1907c3dc8974bc85d3df59161156602c0cf71feaf61",
+          "file_size": 9485,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-d976805dfc51404a97d63d9d14ae494a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c25995b13e59007d0b25c1907c3dc8974bc85d3df59161156602c0cf71feaf61",
+      "last_updated": "2026-02-22T08:09:06.902492"
+    },
+    "FILE-922524648798": {
+      "file_genesis_key": "FILE-922524648798",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\APITab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\APITab.css",
+      "created_at": "2026-02-22T08:09:07.318371",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-922524648798-1",
+          "genesis_key_db_id": "GK-5fca46dc67e64c2c84858e561adf56cf",
+          "timestamp": "2026-02-22T08:09:07.499308",
+          "file_hash": "bbf7cd4638ce434c1a442f3ddb28d7677fbc5858212e0713163f36344f94cd8f",
+          "file_size": 11279,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0dfe630cb7af4effaa4e4885e36d1ac7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "bbf7cd4638ce434c1a442f3ddb28d7677fbc5858212e0713163f36344f94cd8f",
+      "last_updated": "2026-02-22T08:09:07.499308"
+    },
+    "FILE-c8d5a9f283f0": {
+      "file_genesis_key": "FILE-c8d5a9f283f0",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\CognitiveTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\CognitiveTab.css",
+      "created_at": "2026-02-22T08:09:08.002252",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c8d5a9f283f0-1",
+          "genesis_key_db_id": "GK-1285ae3210ef438ca8df37976d937430",
+          "timestamp": "2026-02-22T08:09:08.172229",
+          "file_hash": "cf19ce4bd7e4b208b8c5bbd6ceb2434314bd364c7161072b079c6aba6a5cb4aa",
+          "file_size": 9944,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9dfc6799da7948ac859b38183941d243",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cf19ce4bd7e4b208b8c5bbd6ceb2434314bd364c7161072b079c6aba6a5cb4aa",
+      "last_updated": "2026-02-22T08:09:08.172229"
+    },
+    "FILE-088db8313645": {
+      "file_genesis_key": "FILE-088db8313645",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyTab.css",
+      "created_at": "2026-02-22T08:09:08.323304",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-088db8313645-1",
+          "genesis_key_db_id": "GK-2301dd6e53324009be6a4e8df02ede13",
+          "timestamp": "2026-02-22T08:09:08.539824",
+          "file_hash": "65eeb203e6d37f8313c86ed66e853921c30ad26081d1341c2e2de227bc019150",
+          "file_size": 12768,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-02e2641e7d924659823eefbc35487ff7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "65eeb203e6d37f8313c86ed66e853921c30ad26081d1341c2e2de227bc019150",
+      "last_updated": "2026-02-22T08:09:08.539824"
+    },
+    "FILE-03d0109df7f4": {
+      "file_genesis_key": "FILE-03d0109df7f4",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\LearningTab.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\LearningTab.css",
+      "created_at": "2026-02-22T08:09:08.779102",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-03d0109df7f4-1",
+          "genesis_key_db_id": "GK-902c65f9b28a4c98aab927cc85c99f9d",
+          "timestamp": "2026-02-22T08:09:08.978796",
+          "file_hash": "b0464717dfb74a8ecb44fe17644742ee342caf68d8cd53819a8a97f6642103dd",
+          "file_size": 14664,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-fbaf0847ddd14e3aa15765cc61c45d0e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b0464717dfb74a8ecb44fe17644742ee342caf68d8cd53819a8a97f6642103dd",
+      "last_updated": "2026-02-22T08:09:08.978796"
+    },
+    "FILE-25fcd5ef50a5": {
+      "file_genesis_key": "FILE-25fcd5ef50a5",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatList.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ChatList.css",
+      "created_at": "2026-02-22T08:09:10.263557",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-25fcd5ef50a5-1",
+          "genesis_key_db_id": "GK-ecacad75506a4623a4b8aeddc2a30964",
+          "timestamp": "2026-02-22T08:09:10.422325",
+          "file_hash": "dcc266876e41860b48b87bef6d94a115b08b7eaf9c8c85ecd3dd2e7b66137875",
+          "file_size": 13522,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5bc5f2b84d4f4616bc73af58302a7ab7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "dcc266876e41860b48b87bef6d94a115b08b7eaf9c8c85ecd3dd2e7b66137875",
+      "last_updated": "2026-02-22T08:09:10.422325"
+    },
+    "FILE-2ecab60eca81": {
+      "file_genesis_key": "FILE-2ecab60eca81",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\FileBrowser.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\FileBrowser.css",
+      "created_at": "2026-02-22T08:09:10.612639",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2ecab60eca81-1",
+          "genesis_key_db_id": "GK-e5d19a4c78c249bcb4e72a4ed4e71445",
+          "timestamp": "2026-02-22T08:09:10.875593",
+          "file_hash": "f7b73ccb72a9cee196a047d5061a1be54972149deddf3b726eb22d576613436d",
+          "file_size": 10212,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-52d682c6ea8248a883dc4a87042bb971",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f7b73ccb72a9cee196a047d5061a1be54972149deddf3b726eb22d576613436d",
+      "last_updated": "2026-02-22T08:09:10.875593"
+    },
+    "FILE-6a444f77abf9": {
+      "file_genesis_key": "FILE-6a444f77abf9",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyPanel.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisKeyPanel.css",
+      "created_at": "2026-02-22T08:09:11.029369",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-6a444f77abf9-1",
+          "genesis_key_db_id": "GK-6dcbdc16619549db8bb72152a1349f70",
+          "timestamp": "2026-02-22T08:09:11.154854",
+          "file_hash": "a959f0ca1341b518096258da6827f4e38e132ff0a3a72a1d9e56098369c6b922",
+          "file_size": 9783,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-66e88b9e5e6a469d99f69760cde5a416",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a959f0ca1341b518096258da6827f4e38e132ff0a3a72a1d9e56098369c6b922",
+      "last_updated": "2026-02-22T08:09:11.154854"
+    },
+    "FILE-d2a7eb45fd00": {
+      "file_genesis_key": "FILE-d2a7eb45fd00",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\DirectoryChat.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\DirectoryChat.css",
+      "created_at": "2026-02-22T08:09:11.315078",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d2a7eb45fd00-1",
+          "genesis_key_db_id": "GK-f0ddb86dbdea4e14987ae8ff5d9de54c",
+          "timestamp": "2026-02-22T08:09:11.454136",
+          "file_hash": "3f2fe5368e50bf03c657b23f98a799d7ea91f8ab4deb18a86ebb983711443d03",
+          "file_size": 4294,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7316ae7359a246bfae2b52c1208855f7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3f2fe5368e50bf03c657b23f98a799d7ea91f8ab4deb18a86ebb983711443d03",
+      "last_updated": "2026-02-22T08:09:11.454136"
+    },
+    "FILE-7fbe8f9caa71": {
+      "file_genesis_key": "FILE-7fbe8f9caa71",
+      "file_path": "D:\\grace-3.1-\\backend\\ping_google.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\ping_google.txt",
+      "created_at": "2026-02-22T08:15:29.099627",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7fbe8f9caa71-1",
+          "genesis_key_db_id": "GK-7b0f46c0724b4c0d99d8874ffab06410",
+          "timestamp": "2026-02-22T08:15:29.319180",
+          "file_hash": "9b67949eb440df3d7f32552445188eb9f7a2803a26bed08a13317d59559e30f3",
+          "file_size": 466,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a643e61b199d4704ad135444316fcf06",
+          "has_content": true
+        }
+      ],
+      "last_hash": "9b67949eb440df3d7f32552445188eb9f7a2803a26bed08a13317d59559e30f3",
+      "last_updated": "2026-02-22T08:15:29.319180"
     }
   }
 }

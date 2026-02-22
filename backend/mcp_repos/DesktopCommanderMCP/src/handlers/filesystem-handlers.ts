@@ -5,6 +5,10 @@ import {
     createDirectory,
     listDirectory,
     moveFile,
+    copyFile,
+    copyDirectory,
+    deleteFile,
+    deleteDirectory,
     getFileInfo,
     writePdf,
     type FileResult,
@@ -24,6 +28,10 @@ import {
     CreateDirectoryArgsSchema,
     ListDirectoryArgsSchema,
     MoveFileArgsSchema,
+    CopyFileArgsSchema,
+    CopyDirectoryArgsSchema,
+    DeleteFileArgsSchema,
+    DeleteDirectoryArgsSchema,
     GetFileInfoArgsSchema,
     WritePdfArgsSchema
 } from '../tools/schemas.js';
@@ -350,6 +358,70 @@ export async function handleMoveFile(args: unknown): Promise<ServerResult> {
         await moveFile(parsed.source, parsed.destination);
         return {
             content: [{ type: "text", text: `Successfully moved ${parsed.source} to ${parsed.destination}` }],
+        };
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return createErrorResponse(errorMessage);
+    }
+}
+
+/**
+ * Handle copy_file command
+ */
+export async function handleCopyFile(args: unknown): Promise<ServerResult> {
+    try {
+        const parsed = CopyFileArgsSchema.parse(args);
+        await copyFile(parsed.source, parsed.destination);
+        return {
+            content: [{ type: "text", text: `Successfully copied ${parsed.source} to ${parsed.destination}` }],
+        };
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return createErrorResponse(errorMessage);
+    }
+}
+
+/**
+ * Handle copy_directory command
+ */
+export async function handleCopyDirectory(args: unknown): Promise<ServerResult> {
+    try {
+        const parsed = CopyDirectoryArgsSchema.parse(args);
+        await copyDirectory(parsed.source, parsed.destination);
+        return {
+            content: [{ type: "text", text: `Successfully copied directory ${parsed.source} to ${parsed.destination}` }],
+        };
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return createErrorResponse(errorMessage);
+    }
+}
+
+/**
+ * Handle delete_file command
+ */
+export async function handleDeleteFile(args: unknown): Promise<ServerResult> {
+    try {
+        const parsed = DeleteFileArgsSchema.parse(args);
+        await deleteFile(parsed.path);
+        return {
+            content: [{ type: "text", text: `Successfully deleted file ${parsed.path}` }],
+        };
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return createErrorResponse(errorMessage);
+    }
+}
+
+/**
+ * Handle delete_directory command
+ */
+export async function handleDeleteDirectory(args: unknown): Promise<ServerResult> {
+    try {
+        const parsed = DeleteDirectoryArgsSchema.parse(args);
+        await deleteDirectory(parsed.path, parsed.recursive);
+        return {
+            content: [{ type: "text", text: `Successfully deleted directory ${parsed.path}` }],
         };
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);

@@ -1,12 +1,15 @@
 import { terminalManager } from '../terminal-manager.js';
 import { commandManager } from '../command-manager.js';
-import { StartProcessArgsSchema, ReadProcessOutputArgsSchema, InteractWithProcessArgsSchema, ForceTerminateArgsSchema, ListSessionsArgsSchema } from './schemas.js';
+import { ExecuteCommandArgsSchema, StartProcessArgsSchema, ReadProcessOutputArgsSchema, InteractWithProcessArgsSchema, ForceTerminateArgsSchema, ListSessionsArgsSchema } from './schemas.js';
 import { capture } from "../utils/capture.js";
 import { ServerResult } from '../types.js';
 import { analyzeProcessState, cleanProcessOutput, formatProcessStateMessage, ProcessState } from '../utils/process-detection.js';
 import * as os from 'os';
 import { configManager } from '../config-manager.js';
-import { spawn } from 'child_process';
+import { exec, spawn } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -57,7 +60,7 @@ async function executeNodeCode(code: string, timeout_ms: number = 30000): Promis
     });
 
     // Clean up temp file
-    await fs.unlink(tempFile).catch(() => {});
+    await fs.unlink(tempFile).catch(() => { });
 
     if (result.exitCode !== 0) {
       return {
@@ -78,7 +81,7 @@ async function executeNodeCode(code: string, timeout_ms: number = 30000): Promis
 
   } catch (error) {
     // Clean up temp file on error
-    await fs.unlink(tempFile).catch(() => {});
+    await fs.unlink(tempFile).catch(() => { });
 
     return {
       content: [{
@@ -207,6 +210,93 @@ export async function startProcess(args: unknown): Promise<ServerResult> {
   };
 }
 
+/**
+ * Execute a command directly without creating a persistent session
+ * Returns stdout/stderr immediately, useful for quick one-off commands
+ */
+export async function executeCommand(args: unknown): Promise<ServerResult> {
+  const parsed = ExecuteCommandArgsSchema.safeParse(args);
+  if (!parsed.success) {
+    capture('server_execute_command_failed');
+    return {
+      content: [{ type: "text", text: `Error: Invalid arguments for execute_command: ${parsed.error}` }],
+      isError: true,
+    };
+  }
+
+  try {
+    const commands = commandManager.extractCommands(parsed.data.command).join(', ');
+    capture('server_execute_command', {
+      command: commandManager.getBaseCommand(parsed.data.command),
+      commands: commands
+    });
+  } catch (error) {
+    capture('server_execute_command', {
+      command: commandManager.getBaseCommand(parsed.data.command)
+    });
+  }
+
+  const isAllowed = await commandManager.validateCommand(parsed.data.command);
+  if (!isAllowed) {
+    return {
+      content: [{ type: "text", text: `Error: Command not allowed: ${parsed.data.command}` }],
+      isError: true,
+    };
+  }
+
+  let shellUsed: string | undefined = parsed.data.shell;
+
+  if (!shellUsed) {
+    const config = await configManager.getConfig();
+    if (config.defaultShell) {
+      shellUsed = config.defaultShell;
+    } else {
+      const isWindows = os.platform() === 'win32';
+      if (isWindows && process.env.COMSPEC) {
+        shellUsed = process.env.COMSPEC;
+      } else if (!isWindows && process.env.SHELL) {
+        shellUsed = process.env.SHELL;
+      } else {
+        shellUsed = isWindows ? 'cmd.exe' : '/bin/sh';
+      }
+    }
+  }
+
+  try {
+    const { stdout, stderr } = await execAsync(parsed.data.command, {
+      shell: shellUsed,
+      timeout: parsed.data.timeout_ms || 30000,
+      maxBuffer: 1024 * 1024 * 50 // 50MB buffer to prevent overflow on large outputs
+    });
+
+    let outputText = '';
+    if (stdout && stdout.trim()) outputText += stdout;
+    if (stderr && stderr.trim()) outputText += (outputText ? '\n\n--- STDERR ---\n' : '') + stderr;
+
+    if (!outputText.trim()) {
+      outputText = `Command executed successfully but returned no output.`;
+    }
+
+    return {
+      content: [{ type: "text", text: outputText }],
+    };
+  } catch (error: any) {
+    const errorMsg = error.message || String(error);
+    const stdout = error.stdout ? `\n\nSTDOUT:\n${error.stdout}` : '';
+    const stderr = error.stderr ? `\n\nSTDERR:\n${error.stderr}` : '';
+
+    let timeOutMsg = '';
+    if (error.killed && error.signal === 'SIGTERM') {
+      timeOutMsg = `\n\nCommand timed out after ${parsed.data.timeout_ms}ms. If this is a long-running process like a server, use 'start_process' instead.`;
+    }
+
+    return {
+      content: [{ type: "text", text: `Command failed: ${errorMsg}${timeOutMsg}${stdout}${stderr}` }],
+      isError: true,
+    };
+  }
+}
+
 function formatTimingInfo(timing: any): string {
   let msg = '\n\n📊 Timing Information:\n';
   msg += `  Exit Reason: ${timing.exitReason}\n`;
@@ -251,12 +341,12 @@ export async function readProcessOutput(args: unknown): Promise<ServerResult> {
   const config = await configManager.getConfig();
   const defaultLength = config.fileReadLineLimit ?? 1000;
 
-  const { 
-    pid, 
-    timeout_ms = 5000, 
+  const {
+    pid,
+    timeout_ms = 5000,
     offset = 0,                    // 0 = from last read, positive = absolute, negative = tail
     length = defaultLength,        // Default from config, same as file reading
-    verbose_timing = false 
+    verbose_timing = false
   } = parsed.data;
 
   // Timing telemetry
@@ -311,7 +401,7 @@ export async function readProcessOutput(args: unknown): Promise<ServerResult> {
 
   // Read output with pagination
   const result = terminalManager.readOutputPaginated(pid, offset, length);
-  
+
   if (!result) {
     return {
       content: [{ type: "text", text: `No session found for PID ${pid}` }],
@@ -342,8 +432,8 @@ export async function readProcessOutput(args: unknown): Promise<ServerResult> {
   // Add process state info
   let processStateMessage = '';
   if (result.isComplete) {
-    const runtimeStr = result.runtimeMs !== undefined 
-      ? ` (runtime: ${(result.runtimeMs / 1000).toFixed(2)}s)` 
+    const runtimeStr = result.runtimeMs !== undefined
+      ? ` (runtime: ${(result.runtimeMs / 1000).toFixed(2)}s)`
       : '';
     processStateMessage = `\n✅ Process completed with exit code ${result.exitCode}${runtimeStr}`;
   } else if (session) {
@@ -473,7 +563,7 @@ export async function interactWithProcess(args: unknown): Promise<ServerResult> 
 
     // Quick prompt patterns for immediate detection
     const quickPromptPatterns = />>>\s*$|>\s*$|\$\s*$|#\s*$/;
-    
+
     const waitForResponse = (): Promise<void> => {
       return new Promise((resolve) => {
         let resolved = false;
@@ -495,10 +585,10 @@ export async function interactWithProcess(args: unknown): Promise<ServerResult> 
           if (resolved) return;
 
           // Use snapshot-based reading to handle REPL prompt line appending
-          const newOutput = outputSnapshot 
+          const newOutput = outputSnapshot
             ? terminalManager.getOutputSinceSnapshot(pid, outputSnapshot)
             : terminalManager.getNewOutput(pid);
-            
+
           if (newOutput && newOutput.length > lastOutputLength) {
             const now = Date.now();
             if (!firstOutputTime) firstOutputTime = now;
@@ -549,13 +639,13 @@ export async function interactWithProcess(args: unknown): Promise<ServerResult> 
         }, pollIntervalMs);
       });
     };
-    
+
     await waitForResponse();
 
     // Clean and format output
     let cleanOutput = cleanProcessOutput(output, input);
     const timeoutReached = !earlyExit && !processState?.isFinished && !processState?.isWaitingForInput;
-    
+
     // Apply output line limit to prevent context overflow
     let truncationMessage = '';
     const outputLines = cleanOutput.split('\n');
@@ -565,12 +655,12 @@ export async function interactWithProcess(args: unknown): Promise<ServerResult> 
       const remainingLines = outputLines.length - maxOutputLines;
       truncationMessage = `\n\n⚠️ Output truncated: showing ${maxOutputLines} of ${outputLines.length} lines (${remainingLines} hidden). Use read_process_output with offset/length for full output.`;
     }
-    
+
     // Determine final state
     if (!processState) {
       processState = analyzeProcessState(output, pid);
     }
-    
+
     let statusMessage = '';
     if (processState.isWaitingForInput) {
       statusMessage = `\n🔄 ${formatProcessStateMessage(processState, pid)}`;
@@ -633,7 +723,7 @@ export async function interactWithProcess(args: unknown): Promise<ServerResult> 
         text: responseText
       }],
     };
-    
+
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     capture('server_interact_with_process_error', {

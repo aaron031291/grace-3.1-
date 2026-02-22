@@ -650,6 +650,28 @@ export async function moveFile(sourcePath: string, destinationPath: string): Pro
     await fs.rename(validSourcePath, validDestPath);
 }
 
+export async function copyFile(sourcePath: string, destinationPath: string): Promise<void> {
+    const validSourcePath = await validatePath(sourcePath);
+    const validDestPath = await validatePath(destinationPath);
+    await fs.copyFile(validSourcePath, validDestPath);
+}
+
+export async function copyDirectory(sourcePath: string, destinationPath: string): Promise<void> {
+    const validSourcePath = await validatePath(sourcePath);
+    const validDestPath = await validatePath(destinationPath);
+    await fs.cp(validSourcePath, validDestPath, { recursive: true });
+}
+
+export async function deleteFile(filePath: string): Promise<void> {
+    const validPath = await validatePath(filePath);
+    await fs.unlink(validPath);
+}
+
+export async function deleteDirectory(dirPath: string, recursive: boolean = false): Promise<void> {
+    const validPath = await validatePath(dirPath);
+    await fs.rm(validPath, { recursive, force: true });
+}
+
 export async function searchFiles(rootPath: string, pattern: string): Promise<string[]> {
     // Use the new search manager for better performance
     // This provides a temporary compatibility layer until we fully migrate to search sessions

@@ -1,12 +1,14 @@
-import { 
-    startProcess, 
-    readProcessOutput, 
+import {
+    executeCommand,
+    startProcess,
+    readProcessOutput,
     interactWithProcess,
-    forceTerminate, 
-    listSessions 
+    forceTerminate,
+    listSessions
 } from '../tools/improved-process-tools.js';
 
-import { 
+import {
+    ExecuteCommandArgsSchema,
     StartProcessArgsSchema,
     ReadProcessOutputArgsSchema,
     InteractWithProcessArgsSchema,
@@ -15,6 +17,13 @@ import {
 } from '../tools/schemas.js';
 
 import { ServerResult } from '../types.js';
+
+/**
+ * Handle execute_command command
+ */
+export async function handleExecuteCommand(args: unknown): Promise<ServerResult> {
+    return executeCommand(args);
+}
 
 /**
  * Handle start_process command (improved execute_command)

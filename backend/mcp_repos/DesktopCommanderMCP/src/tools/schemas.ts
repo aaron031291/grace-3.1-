@@ -18,6 +18,12 @@ export const SetConfigValueArgsSchema = z.object({
 export const ListProcessesArgsSchema = z.object({});
 
 // Terminal tools schemas
+export const ExecuteCommandArgsSchema = z.object({
+  command: z.string(),
+  timeout_ms: z.number().optional().default(30000),
+  shell: z.string().optional(),
+});
+
 export const StartProcessArgsSchema = z.object({
   command: z.string(),
   timeout_ms: z.number(),
@@ -117,6 +123,25 @@ export const MoveFileArgsSchema = z.object({
   destination: z.string(),
 });
 
+export const CopyFileArgsSchema = z.object({
+  source: z.string(),
+  destination: z.string(),
+});
+
+export const CopyDirectoryArgsSchema = z.object({
+  source: z.string(),
+  destination: z.string(),
+});
+
+export const DeleteFileArgsSchema = z.object({
+  path: z.string(),
+});
+
+export const DeleteDirectoryArgsSchema = z.object({
+  path: z.string(),
+  recursive: z.boolean().optional().default(false),
+});
+
 export const GetFileInfoArgsSchema = z.object({
   path: z.string(),
 });
@@ -141,7 +166,7 @@ export const EditBlockArgsSchema = z.object({
     // Helper to check if value is actually provided (not undefined, not empty string)
     const hasValue = (v: unknown) => v !== undefined && v !== '';
     return (hasValue(data.old_string) && data.new_string !== undefined) ||
-           (hasValue(data.range) && hasValue(data.content));
+      (hasValue(data.range) && hasValue(data.content));
   },
   { message: "Must provide either (old_string + new_string) or (range + content)" }
 );

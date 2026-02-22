@@ -111,7 +111,8 @@ class MCPOrchestrator:
             "- Use edit_block for surgical edits (search/replace)\n"
             "- Use write_file only for creating new files or full rewrites\n"
             "- Use paths relative to the current directory\n"
-            "- Never delete files without explicit user confirmation\n"
+            "- Use delete_file or delete_directory to delete files/folders, but NEVER do this without explicit user confirmation first.\n"
+            "- Use execute_command for quick shell commands and start_process for long-running servers or persistent sessions.\n"
         )
 
     async def initialize(self) -> bool:
@@ -331,6 +332,10 @@ class MCPOrchestrator:
                     on_tool_result(func_name, result)
 
                 tool_result_content = result.get("content", "")
+                if not result.get("success", False) and result.get("error"):
+                    error_msg = result.get("error", "")
+                    tool_result_content += f"\n\n[TOOL EXECUTION FAILED]\nError details: {error_msg}"
+                
                 all_tool_calls.append({
                     "tool": func_name,
                     "arguments": func_args,

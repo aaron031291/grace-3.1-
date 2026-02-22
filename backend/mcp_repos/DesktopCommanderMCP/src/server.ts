@@ -24,6 +24,7 @@ const PATH_GUIDANCE = `IMPORTANT: ${getPathGuidance(SYSTEM_INFO)} Relative paths
 const CMD_PREFIX_DESCRIPTION = `This command can be referenced as "DC: ..." or "use Desktop Commander to ..." in your instructions.`;
 
 import {
+    ExecuteCommandArgsSchema,
     StartProcessArgsSchema,
     ReadProcessOutputArgsSchema,
     InteractWithProcessArgsSchema,
@@ -50,6 +51,10 @@ import {
     GetPromptsArgsSchema,
     GetRecentToolCallsArgsSchema,
     WritePdfArgsSchema,
+    DeleteFileArgsSchema,
+    DeleteDirectoryArgsSchema,
+    CopyFileArgsSchema,
+    CopyDirectoryArgsSchema,
 } from './tools/schemas.js';
 import { getConfig, setConfigValue } from './tools/config.js';
 import { getUsageStats } from './tools/usage.js';
@@ -551,6 +556,75 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 },
             },
             {
+                name: "copy_file",
+                description: `
+                        Copy a file to a new location.
+                        
+                        Both source and destination must be within allowed directories.
+                        
+                        ${PATH_GUIDANCE}
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(CopyFileArgsSchema),
+                annotations: {
+                    title: "Copy File",
+                    readOnlyHint: false,
+                    destructiveHint: false,
+                    openWorldHint: false,
+                },
+            },
+            {
+                name: "copy_directory",
+                description: `
+                        Copy a directory and all its contents recursively to a new location.
+                        
+                        Both source and destination must be within allowed directories.
+                        
+                        ${PATH_GUIDANCE}
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(CopyDirectoryArgsSchema),
+                annotations: {
+                    title: "Copy Directory",
+                    readOnlyHint: false,
+                    destructiveHint: false,
+                    openWorldHint: false,
+                },
+            },
+            {
+                name: "delete_file",
+                description: `
+                        Delete a file permanently.
+                        
+                        Must be within allowed directories.
+                        
+                        ${PATH_GUIDANCE}
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(DeleteFileArgsSchema),
+                annotations: {
+                    title: "Delete File",
+                    readOnlyHint: false,
+                    destructiveHint: true,
+                    openWorldHint: false,
+                },
+            },
+            {
+                name: "delete_directory",
+                description: `
+                        Delete a directory permanently.
+                        
+                        Supports recursive deletion of non-empty directories if 'recursive' is set to true.
+                        Must be within allowed directories.
+                        
+                        ${PATH_GUIDANCE}
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(DeleteDirectoryArgsSchema),
+                annotations: {
+                    title: "Delete Directory",
+                    readOnlyHint: false,
+                    destructiveHint: true,
+                    openWorldHint: false,
+                },
+            },
+            {
                 name: "start_search",
                 description: `
                         Start a streaming search that can return results progressively.
@@ -795,6 +869,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
 
             // Terminal tools
+            {
+                name: "execute_command",
+                description: `
+                        Execute a command directly and return its output immediately.
+                        
+                        PRIMARY TOOL FOR QUICK COMMANDS AND SCRIPTS
+                        Use this for short, self-terminating commands where you just want the stdout/stderr.
+                        Examples: 'git status', 'npm install', 'ls -la', 'cat file.txt'.
+                        
+                        For long-running servers or interactive tools where you need to send follow-up input or keep
+                        the process alive, use 'start_process' instead.
+                        
+                        ${OS_GUIDANCE}
+                        ${PATH_GUIDANCE}
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(ExecuteCommandArgsSchema),
+                annotations: {
+                    title: "Execute Command",
+                    readOnlyHint: false,
+                    destructiveHint: true,
+                    openWorldHint: true,
+                },
+            },
             {
                 name: "start_process",
                 description: `
@@ -1356,6 +1453,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
                 break;
 
             // Process tools
+            case "execute_command":
+                result = await handlers.handleExecuteCommand(args);
+                break;
+
             case "list_processes":
                 result = await handlers.handleListProcesses();
                 break;
@@ -1393,6 +1494,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
             case "move_file":
                 result = await handlers.handleMoveFile(args);
+                break;
+
+            case "copy_file":
+                result = await handlers.handleCopyFile(args);
+                break;
+
+            case "copy_directory":
+                result = await handlers.handleCopyDirectory(args);
+                break;
+
+            case "delete_file":
+                result = await handlers.handleDeleteFile(args);
+                break;
+
+            case "delete_directory":
+                result = await handlers.handleDeleteDirectory(args);
                 break;
 
             case "start_search":
