@@ -180,30 +180,9 @@ class KimiKnowledgeFeedback:
         return False
 
     def _direct_embed(self, text: str, metadata: dict):
-        """Directly embed into file-based Qdrant using fast embedder."""
-        import os
-        from embedding.fast_embedder import embed_single
-        from qdrant_client import QdrantClient
-        from qdrant_client.models import PointStruct
-
-        qdrant_path = "/workspace/qdrant_unified"
-        lock_path = os.path.join(qdrant_path, ".lock")
-        if os.path.exists(lock_path):
-            os.remove(lock_path)
-
-        vector = embed_single(text[:500])
-        vid = hashlib.md5(text[:200].encode()).hexdigest()
-
-        qc = QdrantClient(path=qdrant_path)
-        try:
-            collections = [c.name for c in qc.get_collections().collections]
-            collection = "knowledge" if "knowledge" in collections else "documents"
-            metadata["text"] = text[:1000]
-            qc.upsert(collection_name=collection, points=[
-                PointStruct(id=vid, vector=vector, payload=metadata)
-            ])
-        finally:
-            qc.close()
+        """Directly embed via unified vector store (cloud or local)."""
+        from embedding.vector_store import upsert as vs_upsert
+        vs_upsert([text[:500]], [metadata])
 
     def get_stats(self) -> Dict[str, Any]:
         """Get feedback loop statistics."""

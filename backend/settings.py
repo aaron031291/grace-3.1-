@@ -52,6 +52,10 @@ class Settings:
     QDRANT_API_KEY: str = os.getenv("QDRANT_API_KEY", "")
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "documents")
     QDRANT_TIMEOUT: int = int(os.getenv("QDRANT_TIMEOUT", "30"))
+
+    # Qdrant Cloud (persistent, shared vector storage)
+    QDRANT_CLOUD_URL: str = os.getenv("QDRANT_CLOUD_URL", "")
+    QDRANT_CLOUD_API_KEY: str = os.getenv("QDRANT_CLOUD_API_KEY", "")
     
     # ==================== Ingestion Configuration ====================
     INGESTION_CHUNK_SIZE: int = int(os.getenv("INGESTION_CHUNK_SIZE", "512"))

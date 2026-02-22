@@ -539,6 +539,18 @@ async def lifespan(app: FastAPI):
         import traceback
         traceback.print_exc()
 
+    # ==================== VECTOR STORE ====================
+    # Connect to Qdrant Cloud (persistent) or local fallback
+    try:
+        from embedding.vector_store import get_client, is_cloud, ensure_collection, count
+        get_client()
+        ensure_collection()
+        vc = count()
+        mode = "CLOUD (persistent)" if is_cloud() else "LOCAL (temporary)"
+        print(f"[OK] Vector Store: {mode} - {vc:,} vectors")
+    except Exception as e:
+        print(f"[WARN] Vector Store not available: {e}")
+
     # ==================== KNOWLEDGE DAEMON ====================
     # Continuous background knowledge growth: KNN, Mining, Kimi proactive learning
     try:

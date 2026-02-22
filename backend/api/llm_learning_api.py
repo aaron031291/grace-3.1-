@@ -2097,3 +2097,37 @@ async def knowledge_daemon_status():
         return get_knowledge_daemon().get_stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/knowledge/vectors/info")
+async def knowledge_vector_info():
+    """Get vector store info - cloud vs local, collection stats."""
+    try:
+        from embedding.vector_store import get_info
+        return get_info()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/knowledge/vectors/migrate-to-cloud")
+async def knowledge_migrate_to_cloud(db: Session = Depends(get_db)):
+    """Migrate all local vectors to Qdrant Cloud."""
+    try:
+        from embedding.vector_store import is_cloud, ensure_collection, upsert, count
+        if not is_cloud():
+            raise HTTPException(status_code=400, detail="Not connected to Qdrant Cloud. Set QDRANT_CLOUD_URL and QDRANT_CLOUD_API_KEY.")
+        
+        ensure_collection()
+        
+        from cognitive.knowledge_compiler import CompiledFact
+        facts = db.query(CompiledFact).all()
+        
+        texts = [f"{f.subject}: {f.object_value}"[:500] for f in facts]
+        payloads = [{"subject": (f.subject or "")[:200], "domain": f.domain or "general",
+                     "confidence": f.confidence or 0.5, "type": f.object_type or "text",
+                     "source": "migration"} for f in facts]
+        
+        total = upsert(texts, payloads)
+        return {"migrated": total, "cloud_count": count()}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

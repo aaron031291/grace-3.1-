@@ -67,7 +67,6 @@ class GraceKnowledgeEngine:
     def __init__(self, session_factory, cloud_client=None):
         self.session_factory = session_factory
         self.cloud_client = cloud_client
-        self._qdrant_path = "/workspace/qdrant_unified"
         self._stats = {
             "queries": 0,
             "facts_compiled": 0,
@@ -277,47 +276,13 @@ class GraceKnowledgeEngine:
         """
         results = {"query": query, "vector_results": [], "subagent_results": []}
 
-        # Vector search against Qdrant
+        # Vector search via unified store (cloud or local)
         try:
-            from embedding.ollama_embedder import OllamaEmbedder
-            from qdrant_client import QdrantClient
-
-            if not os.path.exists(self._qdrant_path):
-                results["vector_error"] = "Qdrant path does not exist"
-            else:
-                lock_path = os.path.join(self._qdrant_path, ".lock")
-                if os.path.exists(lock_path):
-                    os.remove(lock_path)
-
-                embedder = OllamaEmbedder()
-                emb = embedder.embed_text([query[:500]])[0]
-
-                qc = QdrantClient(path=self._qdrant_path)
-                try:
-                    search_results = qc.query_points(
-                        collection_name="documents",
-                        query=emb,
-                        limit=limit,
-                    )
-                    if search_results and hasattr(search_results, "points"):
-                        for point in search_results.points:
-                            if point.score >= threshold:
-                                payload = point.payload or {}
-                                results["vector_results"].append({
-                                    "text": payload.get("text", "")[:500],
-                                    "subject": payload.get("subject", ""),
-                                    "domain": payload.get("domain", ""),
-                                    "confidence": payload.get("confidence", 0),
-                                    "similarity": round(point.score, 4),
-                                    "source": payload.get("source", "unknown"),
-                                })
-                except Exception as e:
-                    results["vector_error"] = str(e)[:100]
-                finally:
-                    qc.close()
-
-        except ImportError:
-            results["vector_error"] = "Ollama or Qdrant not available"
+            from embedding.vector_store import search as vs_search
+            hits = vs_search(query, limit=limit, threshold=threshold)
+            results["vector_results"] = hits
+        except Exception as e:
+            results["vector_error"] = str(e)[:100]
 
         # KNN sub-agent swarm
         if include_subagents:
@@ -1023,87 +988,29 @@ class GraceKnowledgeEngine:
         return hashlib.md5(normalized.encode()).hexdigest()[:12]
 
     def _is_semantically_duplicate(self, fact: Dict) -> bool:
-        """
-        Check if a fact is semantically similar to existing vectors in Qdrant.
-        Uses cosine similarity with threshold 0.92.
-        """
+        """Check if a fact is semantically similar to existing vectors."""
         self._stats["vector_comparisons"] += 1
         try:
-            from embedding.ollama_embedder import OllamaEmbedder
-            from qdrant_client import QdrantClient
-
+            from embedding.vector_store import search
             text = f"{fact.get('subject', '')}: {fact.get('object', '')}"[:300]
-
-            if not os.path.exists(self._qdrant_path):
-                return False
-
-            lock_path = os.path.join(self._qdrant_path, ".lock")
-            if os.path.exists(lock_path):
-                os.remove(lock_path)
-
-            embedder = OllamaEmbedder()
-            emb = embedder.embed_text([text])[0]
-
-            qc = QdrantClient(path=self._qdrant_path)
-            try:
-                results = qc.query_points(
-                    collection_name="documents",
-                    query=emb,
-                    limit=1,
-                )
-                if results and hasattr(results, 'points') and results.points:
-                    top_score = results.points[0].score
-                    if top_score > 0.92:
-                        return True
-            except Exception:
-                pass
-            finally:
-                qc.close()
-
+            results = search(text, limit=1, threshold=0.92)
+            return len(results) > 0
         except Exception:
-            pass
-        return False
+            return False
 
     def _vectorize(self, text: str, metadata: Dict[str, Any]):
-        """Store text + embedding in Qdrant unified store."""
+        """Store text + embedding in vector store (cloud or local)."""
         try:
-            from embedding.ollama_embedder import OllamaEmbedder
-            from qdrant_client import QdrantClient
-            from qdrant_client.models import PointStruct
-
-            embedder = OllamaEmbedder()
-            emb = embedder.embed_text([text[:500]])[0]
-            vid = hashlib.md5(text[:200].encode()).hexdigest()
-
-            lock_path = os.path.join(self._qdrant_path, ".lock")
-            if os.path.exists(lock_path):
-                os.remove(lock_path)
-
-            qc = QdrantClient(path=self._qdrant_path)
-            qc.upsert(collection_name="documents", points=[
-                PointStruct(id=vid, vector=emb, payload=metadata)
-            ])
-            qc.close()
+            from embedding.vector_store import upsert
+            upsert([text[:500]], [metadata])
         except Exception:
             pass
 
     def _get_vector_count(self) -> int:
-        """Get current vector count from Qdrant."""
+        """Get current vector count."""
         try:
-            from qdrant_client import QdrantClient
-
-            if not os.path.exists(self._qdrant_path):
-                return 0
-
-            lock_path = os.path.join(self._qdrant_path, ".lock")
-            if os.path.exists(lock_path):
-                os.remove(lock_path)
-
-            qc = QdrantClient(path=self._qdrant_path)
-            info = qc.get_collection("documents")
-            count = info.points_count
-            qc.close()
-            return count
+            from embedding.vector_store import count
+            return count()
         except Exception:
             return 0
 

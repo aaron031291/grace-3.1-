@@ -170,39 +170,10 @@ class KnowledgeDaemon:
 
             seed = f"{fact.subject}: {fact.object_value}"[:200]
 
-            # Run reverse KNN search
-            from embedding.fast_embedder import embed_single
-            from qdrant_client import QdrantClient
-            import os
-
-            qdrant_path = "/workspace/qdrant_unified"
-            lock_path = os.path.join(qdrant_path, ".lock")
-            if os.path.exists(lock_path):
-                os.remove(lock_path)
-
-            embedding = embed_single(seed)
-            qc = QdrantClient(path=qdrant_path)
-
-            try:
-                collections = [c.name for c in qc.get_collections().collections]
-                collection = "knowledge" if "knowledge" in collections else "documents"
-
-                results = qc.query_points(
-                    collection_name=collection,
-                    query=embedding,
-                    limit=5,
-                )
-
-                discoveries = 0
-                if results and hasattr(results, "points"):
-                    for point in results.points:
-                        if point.score > 0.7:
-                            discoveries += 1
-
-                self._stats["knn_discoveries"] += discoveries
-
-            finally:
-                qc.close()
+            # Run reverse KNN search via unified vector store
+            from embedding.vector_store import search as vs_search
+            results = vs_search(seed, limit=5, threshold=0.7)
+            self._stats["knn_discoveries"] += len(results)
 
             self._stats["knn_cycles"] += 1
 
@@ -269,13 +240,9 @@ class KnowledgeDaemon:
                 session.commit()
                 self._stats["mining_facts"] += facts_added
 
-                # Vectorize new facts
+                # Vectorize new facts via unified store
                 try:
-                    from embedding.fast_embedder import embed_texts
-                    from qdrant_client import QdrantClient
-                    from qdrant_client.models import PointStruct
-                    import hashlib, os
-
+                    from embedding.vector_store import upsert as vs_upsert
                     new_facts = session.query(CompiledFact).filter(
                         CompiledFact.source_text == "arxiv:daemon",
                         CompiledFact.domain == domain,
@@ -283,29 +250,8 @@ class KnowledgeDaemon:
 
                     if new_facts:
                         texts = [f"{f.subject}: {f.object_value}"[:500] for f in new_facts]
-                        embeddings = embed_texts(texts)
-
-                        qdrant_path = "/workspace/qdrant_unified"
-                        lock_path = os.path.join(qdrant_path, ".lock")
-                        if os.path.exists(lock_path):
-                            os.remove(lock_path)
-
-                        qc = QdrantClient(path=qdrant_path)
-                        try:
-                            collections = [c.name for c in qc.get_collections().collections]
-                            collection = "knowledge" if "knowledge" in collections else "documents"
-
-                            points = [
-                                PointStruct(
-                                    id=hashlib.md5(texts[i][:200].encode()).hexdigest(),
-                                    vector=embeddings[i],
-                                    payload={"text": texts[i], "domain": domain, "source": "daemon_mining"},
-                                )
-                                for i in range(len(texts))
-                            ]
-                            qc.upsert(collection_name=collection, points=points)
-                        finally:
-                            qc.close()
+                        payloads = [{"domain": domain, "source": "daemon_mining"} for _ in texts]
+                        vs_upsert(texts, payloads)
                 except Exception:
                     pass
 
@@ -375,33 +321,11 @@ class KnowledgeDaemon:
 
             session.commit()
 
-            # Vectorize
+            # Vectorize via unified store
             try:
-                from embedding.fast_embedder import embed_single
-                from qdrant_client import QdrantClient
-                from qdrant_client.models import PointStruct
-                import hashlib, os
-
+                from embedding.vector_store import upsert as vs_upsert
                 text = f"{domain}: {content[:300]}"
-                embedding = embed_single(text)
-                vid = hashlib.md5(text[:200].encode()).hexdigest()
-
-                qdrant_path = "/workspace/qdrant_unified"
-                lock_path = os.path.join(qdrant_path, ".lock")
-                if os.path.exists(lock_path):
-                    os.remove(lock_path)
-
-                qc = QdrantClient(path=qdrant_path)
-                try:
-                    collections = [c.name for c in qc.get_collections().collections]
-                    collection = "knowledge" if "knowledge" in collections else "documents"
-                    qc.upsert(collection_name=collection, points=[
-                        PointStruct(id=vid, vector=embedding, payload={
-                            "text": text, "domain": domain, "source": "kimi_daemon",
-                        })
-                    ])
-                finally:
-                    qc.close()
+                vs_upsert([text], [{"domain": domain, "source": "kimi_daemon"}])
             except Exception:
                 pass
 
