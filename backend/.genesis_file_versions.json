@@ -5182,6 +5182,1458 @@
       ],
       "last_hash": "9b67949eb440df3d7f32552445188eb9f7a2803a26bed08a13317d59559e30f3",
       "last_updated": "2026-02-22T08:15:29.319180"
+    },
+    "FILE-82d943c18671": {
+      "file_genesis_key": "FILE-82d943c18671",
+      "file_path": "D:\\grace-3.1-\\frontend\\Dockerfile",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\Dockerfile",
+      "created_at": "2026-02-22T08:23:05.224793",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-82d943c18671-1",
+          "genesis_key_db_id": "GK-771de4a6fac94030a77d7140c39aec55",
+          "timestamp": "2026-02-22T08:23:05.389454",
+          "file_hash": "1e4ba2e8df985cb8ff933a17ad729db8256590c7512fba2d14f5a8d673d132eb",
+          "file_size": 1833,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1c1df8925d264f73bbc7871c1c424826",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1e4ba2e8df985cb8ff933a17ad729db8256590c7512fba2d14f5a8d673d132eb",
+      "last_updated": "2026-02-22T08:23:05.389454"
+    },
+    "FILE-e2bf1a3cb51b": {
+      "file_genesis_key": "FILE-e2bf1a3cb51b",
+      "file_path": "D:\\grace-3.1-\\frontend\\.dockerignore",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\.dockerignore",
+      "created_at": "2026-02-22T08:23:09.756651",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e2bf1a3cb51b-1",
+          "genesis_key_db_id": "GK-e2b76cd5379149fb99269539a37ee694",
+          "timestamp": "2026-02-22T08:23:10.017562",
+          "file_hash": "ef442a808cd6b1851b1455e18e198c4c8da74febdb4f3d74ee41f414c6b915e5",
+          "file_size": 770,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5093b030b2a24633a5cc908d39b2033a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ef442a808cd6b1851b1455e18e198c4c8da74febdb4f3d74ee41f414c6b915e5",
+      "last_updated": "2026-02-22T08:23:10.017562"
+    },
+    "FILE-90b0a564395e": {
+      "file_genesis_key": "FILE-90b0a564395e",
+      "file_path": "D:\\grace-3.1-\\frontend\\nginx.conf",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\nginx.conf",
+      "created_at": "2026-02-22T08:23:10.654407",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-90b0a564395e-1",
+          "genesis_key_db_id": "GK-31df530b9fc6428cb2405b2e0157be13",
+          "timestamp": "2026-02-22T08:23:11.084565",
+          "file_hash": "c29347a49cbbcaea66c9ae315e323d02f04163d4c61d198c97c9a987a4fec03b",
+          "file_size": 1993,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-972622ae966a44d79da59a7a2bfde57a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c29347a49cbbcaea66c9ae315e323d02f04163d4c61d198c97c9a987a4fec03b",
+      "last_updated": "2026-02-22T08:23:11.084565"
+    },
+    "FILE-b0579cc8b169": {
+      "file_genesis_key": "FILE-b0579cc8b169",
+      "file_path": "D:\\grace-3.1-\\frontend\\eslint.config.js",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\eslint.config.js",
+      "created_at": "2026-02-22T08:23:11.543725",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b0579cc8b169-1",
+          "genesis_key_db_id": "GK-9a34fbf669f94bc397492c9c8abba095",
+          "timestamp": "2026-02-22T08:23:12.015166",
+          "file_hash": "f6477b521c0d4c5ab0ac73d8cc8ce484795d23bece7cbbd0cd2a9f4301337532",
+          "file_size": 787,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2dd0de80f5bf43ee8e1b2b5142bd6379",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f6477b521c0d4c5ab0ac73d8cc8ce484795d23bece7cbbd0cd2a9f4301337532",
+      "last_updated": "2026-02-22T08:23:12.015166"
+    },
+    "FILE-0ee5fcd36e26": {
+      "file_genesis_key": "FILE-0ee5fcd36e26",
+      "file_path": "D:\\grace-3.1-\\frontend\\public\\sw.js",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\public\\sw.js",
+      "created_at": "2026-02-22T08:23:12.412638",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0ee5fcd36e26-1",
+          "genesis_key_db_id": "GK-32bd8b339b8b4153be0deeea0104d81f",
+          "timestamp": "2026-02-22T08:23:12.958976",
+          "file_hash": "931db526b1710b96712b5bc74436d89cebc72e715a318ba504eba2ffeb65cf83",
+          "file_size": 10652,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e3c2b6bb62274fca889141862ef86884",
+          "has_content": true
+        }
+      ],
+      "last_hash": "931db526b1710b96712b5bc74436d89cebc72e715a318ba504eba2ffeb65cf83",
+      "last_updated": "2026-02-22T08:23:12.958976"
+    },
+    "FILE-e14944fa2792": {
+      "file_genesis_key": "FILE-e14944fa2792",
+      "file_path": "D:\\grace-3.1-\\frontend\\public\\vite.svg",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\public\\vite.svg",
+      "created_at": "2026-02-22T08:23:13.423508",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e14944fa2792-1",
+          "genesis_key_db_id": "GK-a74d29e7e7b2420a8bc5083c052a010b",
+          "timestamp": "2026-02-22T08:23:13.806645",
+          "file_hash": "4a748afd443918bb16591c834c401dae33e87861ab5dbad0811c3a3b4a9214fb",
+          "file_size": 1497,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b0c8ed812fc049a09a030848c8ccad5c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4a748afd443918bb16591c834c401dae33e87861ab5dbad0811c3a3b4a9214fb",
+      "last_updated": "2026-02-22T08:23:13.806645"
+    },
+    "FILE-aae840582813": {
+      "file_genesis_key": "FILE-aae840582813",
+      "file_path": "D:\\grace-3.1-\\frontend\\package-lock.json",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\package-lock.json",
+      "created_at": "2026-02-22T08:23:14.318393",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-aae840582813-1",
+          "genesis_key_db_id": "GK-bef6fd2b49a043ea8a3cd90ab590998d",
+          "timestamp": "2026-02-22T08:23:14.768962",
+          "file_hash": "928eedd1199908c7d36e19dc2232cd2f84a8024b9932651fcefc701235873102",
+          "file_size": 153836,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5bfa1f72bc5549fb8dd1ca0aafc84d88",
+          "has_content": true
+        }
+      ],
+      "last_hash": "928eedd1199908c7d36e19dc2232cd2f84a8024b9932651fcefc701235873102",
+      "last_updated": "2026-02-22T08:23:14.768962"
+    },
+    "FILE-0ef4bae7fb54": {
+      "file_genesis_key": "FILE-0ef4bae7fb54",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\CICDDashboard.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\CICDDashboard.jsx",
+      "created_at": "2026-02-22T08:23:15.563858",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0ef4bae7fb54-1",
+          "genesis_key_db_id": "GK-4188365432a24db2ad33e8f56334ebca",
+          "timestamp": "2026-02-22T08:23:15.978109",
+          "file_hash": "683d55666913fc16acb140c9d2c9ee93a0468b28a799f5f56bc2f962f4d37ef2",
+          "file_size": 19726,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-10ead74b971845d99d53a4b00868f75d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "683d55666913fc16acb140c9d2c9ee93a0468b28a799f5f56bc2f962f4d37ef2",
+      "last_updated": "2026-02-22T08:23:15.978109"
+    },
+    "FILE-98f38c2ba3ff": {
+      "file_genesis_key": "FILE-98f38c2ba3ff",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\assets\\react.svg",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\assets\\react.svg",
+      "created_at": "2026-02-22T08:23:16.440291",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-98f38c2ba3ff-1",
+          "genesis_key_db_id": "GK-02fe813bf2db4dadb7b9bed4075699e6",
+          "timestamp": "2026-02-22T08:23:16.995023",
+          "file_hash": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5",
+          "file_size": 4126,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-addfef466fed49248944f77a3f552d0a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5",
+      "last_updated": "2026-02-22T08:23:16.995023"
+    },
+    "FILE-c744e6329697": {
+      "file_genesis_key": "FILE-c744e6329697",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\ErrorBoundary.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\ErrorBoundary.jsx",
+      "created_at": "2026-02-22T08:23:17.896895",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c744e6329697-1",
+          "genesis_key_db_id": "GK-655da5f76c8042aea324c6685d2d9ead",
+          "timestamp": "2026-02-22T08:23:18.318118",
+          "file_hash": "ea33925e8c814288eada784b1eb7fe395dda514e85ec532b2da8c58397a8ad2f",
+          "file_size": 5240,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a0e51503a05e468f9f1fa1c93b990d85",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ea33925e8c814288eada784b1eb7fe395dda514e85ec532b2da8c58397a8ad2f",
+      "last_updated": "2026-02-22T08:23:18.318118"
+    },
+    "FILE-c6297feb5bd2": {
+      "file_genesis_key": "FILE-c6297feb5bd2",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisLogin.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisLogin.css",
+      "created_at": "2026-02-22T08:23:18.851528",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c6297feb5bd2-1",
+          "genesis_key_db_id": "GK-ae99c296562146b49d9facd99887ba41",
+          "timestamp": "2026-02-22T08:23:19.311841",
+          "file_hash": "974527a5c5955750686a4bd12fa6bd50dee66ad98a974cfafbfc97c8661507e8",
+          "file_size": 3985,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a268d2ed0aae4ad1b5ff5053a5c26100",
+          "has_content": true
+        }
+      ],
+      "last_hash": "974527a5c5955750686a4bd12fa6bd50dee66ad98a974cfafbfc97c8661507e8",
+      "last_updated": "2026-02-22T08:23:19.311841"
+    },
+    "FILE-071325314229": {
+      "file_genesis_key": "FILE-071325314229",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisLogin.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\GenesisLogin.jsx",
+      "created_at": "2026-02-22T08:23:19.623971",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-071325314229-1",
+          "genesis_key_db_id": "GK-6d23becc79af4267b6afe78fe270f50a",
+          "timestamp": "2026-02-22T08:23:19.835489",
+          "file_hash": "8323828b5a4f671e5162ea703fc2653178f97c766aecbee980595a77df275d8f",
+          "file_size": 7244,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-19e0613a0a5346fd9529fb944b676ab0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8323828b5a4f671e5162ea703fc2653178f97c766aecbee980595a77df275d8f",
+      "last_updated": "2026-02-22T08:23:19.835489"
+    },
+    "FILE-e363362fa991": {
+      "file_genesis_key": "FILE-e363362fa991",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\IngestionDashboard.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\IngestionDashboard.css",
+      "created_at": "2026-02-22T08:23:20.104967",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e363362fa991-1",
+          "genesis_key_db_id": "GK-6859c0bf91884fc0b7867a01647bd463",
+          "timestamp": "2026-02-22T08:23:20.617561",
+          "file_hash": "6b1655b6a68c39faf3558f1958bdf06fb52ae96da1905d3d29b088d1f672b116",
+          "file_size": 9368,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-79efe3b61fd04dff8303640546c3a4fb",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6b1655b6a68c39faf3558f1958bdf06fb52ae96da1905d3d29b088d1f672b116",
+      "last_updated": "2026-02-22T08:23:20.617561"
+    },
+    "FILE-5527d3f65c25": {
+      "file_genesis_key": "FILE-5527d3f65c25",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\IngestionDashboard.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\IngestionDashboard.jsx",
+      "created_at": "2026-02-22T08:23:20.957993",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5527d3f65c25-1",
+          "genesis_key_db_id": "GK-f7b70254ee464bb78b9f58c0e624126d",
+          "timestamp": "2026-02-22T08:23:21.138209",
+          "file_hash": "843074471dc3574f1f82001f17c5edb302852450db3f7c3c4765b36071796d31",
+          "file_size": 21003,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7c8c0ba48b07401fb389469b19db50f9",
+          "has_content": true
+        }
+      ],
+      "last_hash": "843074471dc3574f1f82001f17c5edb302852450db3f7c3c4765b36071796d31",
+      "last_updated": "2026-02-22T08:23:21.138209"
+    },
+    "FILE-0bf0c1d65a9c": {
+      "file_genesis_key": "FILE-0bf0c1d65a9c",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\KPIDashboard.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\KPIDashboard.jsx",
+      "created_at": "2026-02-22T08:23:21.498302",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0bf0c1d65a9c-1",
+          "genesis_key_db_id": "GK-99556346e33447fe859a4a0671a16842",
+          "timestamp": "2026-02-22T08:23:21.666287",
+          "file_hash": "e66e35e2e1626a56d7d90fc8ec091aa0f89059939507b909df7adbb3fbf28b96",
+          "file_size": 10269,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-727887a3d45e4198bca62ea2312c1f20",
+          "has_content": true
+        }
+      ],
+      "last_hash": "e66e35e2e1626a56d7d90fc8ec091aa0f89059939507b909df7adbb3fbf28b96",
+      "last_updated": "2026-02-22T08:23:21.666287"
+    },
+    "FILE-5b3331785382": {
+      "file_genesis_key": "FILE-5b3331785382",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\KPIDashboard.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\KPIDashboard.css",
+      "created_at": "2026-02-22T08:23:21.931133",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5b3331785382-1",
+          "genesis_key_db_id": "GK-8bf77c2576c04e54b050aaf7441f4f8d",
+          "timestamp": "2026-02-22T08:23:22.098490",
+          "file_hash": "0850affabbd9a1d74ea6b64f5c120dea0d12b3f323a6a659c1bec75c0d65a517",
+          "file_size": 7905,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-16b3901df9cc46f8b05d4d43328d8e48",
+          "has_content": true
+        }
+      ],
+      "last_hash": "0850affabbd9a1d74ea6b64f5c120dea0d12b3f323a6a659c1bec75c0d65a517",
+      "last_updated": "2026-02-22T08:23:22.098490"
+    },
+    "FILE-feb699de6f48": {
+      "file_genesis_key": "FILE-feb699de6f48",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\KnowledgeBaseManager.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\KnowledgeBaseManager.css",
+      "created_at": "2026-02-22T08:23:22.305646",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-feb699de6f48-1",
+          "genesis_key_db_id": "GK-b23952a3b490451daef80920af103b67",
+          "timestamp": "2026-02-22T08:23:22.630554",
+          "file_hash": "a806892b305635d55fc262c30552cc88ac6c9160d12d0d6b2cae8ad6733ad9bd",
+          "file_size": 10519,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-73d370e1b54640d9951a08a49febf555",
+          "has_content": true
+        }
+      ],
+      "last_hash": "a806892b305635d55fc262c30552cc88ac6c9160d12d0d6b2cae8ad6733ad9bd",
+      "last_updated": "2026-02-22T08:23:22.630554"
+    },
+    "FILE-94de607ea3a2": {
+      "file_genesis_key": "FILE-94de607ea3a2",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\KnowledgeBaseManager.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\KnowledgeBaseManager.jsx",
+      "created_at": "2026-02-22T08:23:22.913482",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-94de607ea3a2-1",
+          "genesis_key_db_id": "GK-c8b0496f5e794f8fb85d508b21b63c8f",
+          "timestamp": "2026-02-22T08:23:23.106056",
+          "file_hash": "3bc53afeb77a1f47392d3781488bbfa4cf7d02d990bf60bd6f91fd2c0e5cc871",
+          "file_size": 16729,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5b1cc10ff0ce4a4ca11db9025446c14b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "3bc53afeb77a1f47392d3781488bbfa4cf7d02d990bf60bd6f91fd2c0e5cc871",
+      "last_updated": "2026-02-22T08:23:23.106056"
+    },
+    "FILE-05fad2071de9": {
+      "file_genesis_key": "FILE-05fad2071de9",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\LazyComponents.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\LazyComponents.jsx",
+      "created_at": "2026-02-22T08:23:23.293277",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-05fad2071de9-1",
+          "genesis_key_db_id": "GK-782c06805fa949b68dcf3e9b5c9ba3ea",
+          "timestamp": "2026-02-22T08:23:23.483309",
+          "file_hash": "b9293e567ab4c43e8ef0d00aacfcc62468cb06e8b13586adc8462de6d64f6a55",
+          "file_size": 8461,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a5d24cb5c8f34b07904e6a1ad8698549",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b9293e567ab4c43e8ef0d00aacfcc62468cb06e8b13586adc8462de6d64f6a55",
+      "last_updated": "2026-02-22T08:23:23.483309"
+    },
+    "FILE-896674444125": {
+      "file_genesis_key": "FILE-896674444125",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\RepositoryManager.css",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\RepositoryManager.css",
+      "created_at": "2026-02-22T08:23:23.736953",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-896674444125-1",
+          "genesis_key_db_id": "GK-380709da46124adca9185e7f66d0fa51",
+          "timestamp": "2026-02-22T08:23:23.970137",
+          "file_hash": "cdf11042bbe0b2a833d2daf146be5d0d03b201ead6d4b6e958716a6ff7c7d361",
+          "file_size": 10349,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-256209a28b084be2b74bbfb8d13a292a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cdf11042bbe0b2a833d2daf146be5d0d03b201ead6d4b6e958716a6ff7c7d361",
+      "last_updated": "2026-02-22T08:23:23.970137"
+    },
+    "FILE-1d6d2b93d09f": {
+      "file_genesis_key": "FILE-1d6d2b93d09f",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\RepositoryManager.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\RepositoryManager.jsx",
+      "created_at": "2026-02-22T08:23:24.262098",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-1d6d2b93d09f-1",
+          "genesis_key_db_id": "GK-c0cea593ebc6432ca691e079b3c8b2d9",
+          "timestamp": "2026-02-22T08:23:24.407698",
+          "file_hash": "6efd2fdb408a769a764a536034afe8087a8d5f3176b76c604456e9b92b474016",
+          "file_size": 17170,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-affaf86ff9524251b73d11fafa6386b0",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6efd2fdb408a769a764a536034afe8087a8d5f3176b76c604456e9b92b474016",
+      "last_updated": "2026-02-22T08:23:24.407698"
+    },
+    "FILE-28cfeaa83fc2": {
+      "file_genesis_key": "FILE-28cfeaa83fc2",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\Skeleton.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\Skeleton.jsx",
+      "created_at": "2026-02-22T08:23:24.593632",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-28cfeaa83fc2-1",
+          "genesis_key_db_id": "GK-96b54e52d9af4efe88d779dc5b6656ed",
+          "timestamp": "2026-02-22T08:23:24.756498",
+          "file_hash": "cb263dc84232d01fbabe699dcbf79d9574a81bc1f80701ae2eebda86d48713d4",
+          "file_size": 8606,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-343eb4e43c4d41e48c4d7843a37e1b9a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cb263dc84232d01fbabe699dcbf79d9574a81bc1f80701ae2eebda86d48713d4",
+      "last_updated": "2026-02-22T08:23:24.756498"
+    },
+    "FILE-2f10e4ccf253": {
+      "file_genesis_key": "FILE-2f10e4ccf253",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\Toast.jsx",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\Toast.jsx",
+      "created_at": "2026-02-22T08:23:25.047116",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-2f10e4ccf253-1",
+          "genesis_key_db_id": "GK-2ad7701e04f145e7b9e5be7f3758b75d",
+          "timestamp": "2026-02-22T08:23:25.209774",
+          "file_hash": "dee0f837d8822996036e3cbe95517a7e73549b34991723fc674f0049fe78547e",
+          "file_size": 6216,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-275c89755f65445fb0bfc3b08e9109da",
+          "has_content": true
+        }
+      ],
+      "last_hash": "dee0f837d8822996036e3cbe95517a7e73549b34991723fc674f0049fe78547e",
+      "last_updated": "2026-02-22T08:23:25.209774"
+    },
+    "FILE-fb023e5f3fcd": {
+      "file_genesis_key": "FILE-fb023e5f3fcd",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.jsx.backup",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\components\\WebScraper.jsx.backup",
+      "created_at": "2026-02-22T08:23:25.423309",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-fb023e5f3fcd-1",
+          "genesis_key_db_id": "GK-99a48041bc064cfdb15665783d2e2a51",
+          "timestamp": "2026-02-22T08:23:25.574138",
+          "file_hash": "5fc518a655933c2cac63d2fd489557fc5776e887e1aee731f2ddb2ac55e7b8fc",
+          "file_size": 12428,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b00a43b7e54f4b33bdaaee3de4223991",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5fc518a655933c2cac63d2fd489557fc5776e887e1aee731f2ddb2ac55e7b8fc",
+      "last_updated": "2026-02-22T08:23:25.574138"
+    },
+    "FILE-eaabd65f26be": {
+      "file_genesis_key": "FILE-eaabd65f26be",
+      "file_path": "D:\\grace-3.1-\\frontend\\src\\store\\index.js",
+      "absolute_path": "D:\\grace-3.1-\\frontend\\src\\store\\index.js",
+      "created_at": "2026-02-22T08:23:25.775655",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-eaabd65f26be-1",
+          "genesis_key_db_id": "GK-362384e5482d4e4592a28f96541fc999",
+          "timestamp": "2026-02-22T08:23:25.993544",
+          "file_hash": "6da3d8650e0dea695e658d0aa370fac8818d8e4046c67d4a9eb40ed85c959184",
+          "file_size": 11989,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b174c12addb74324a0a88f2c40b9092e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "6da3d8650e0dea695e658d0aa370fac8818d8e4046c67d4a9eb40ed85c959184",
+      "last_updated": "2026-02-22T08:23:25.993544"
+    },
+    "FILE-7d7c186f3734": {
+      "file_genesis_key": "FILE-7d7c186f3734",
+      "file_path": "D:\\grace-3.1-\\backend\\.genesis_pipeline_metadata.json",
+      "absolute_path": "D:\\grace-3.1-\\backend\\.genesis_pipeline_metadata.json",
+      "created_at": "2026-02-22T08:23:26.210669",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-7d7c186f3734-1",
+          "genesis_key_db_id": "GK-139827b691eb420980d43e98348ed1e6",
+          "timestamp": "2026-02-22T08:23:26.367733",
+          "file_hash": "70ade73eb1fb9a7791c31a83abc436d790ad31b15c514e97345ea84ccd55f2eb",
+          "file_size": 336,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c2a3c8a53af54daeafc6fe08fce02652",
+          "has_content": true
+        }
+      ],
+      "last_hash": "70ade73eb1fb9a7791c31a83abc436d790ad31b15c514e97345ea84ccd55f2eb",
+      "last_updated": "2026-02-22T08:23:26.367733"
+    },
+    "FILE-b861b92d6e72": {
+      "file_genesis_key": "FILE-b861b92d6e72",
+      "file_path": "D:\\grace-3.1-\\.agent\\mcp_config.json",
+      "absolute_path": "D:\\grace-3.1-\\.agent\\mcp_config.json",
+      "created_at": "2026-02-22T08:23:50.997615",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b861b92d6e72-1",
+          "genesis_key_db_id": "GK-2486432a846646e396ce8b69fd04351b",
+          "timestamp": "2026-02-22T08:23:51.540007",
+          "file_hash": "8c83c36772eaeaf54ac70c35c8bb1af83a0f669b5985899a8b80814a1af2e6ac",
+          "file_size": 495,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-40b85eced05044e69050c9cf5fcf60be",
+          "has_content": true
+        }
+      ],
+      "last_hash": "8c83c36772eaeaf54ac70c35c8bb1af83a0f669b5985899a8b80814a1af2e6ac",
+      "last_updated": "2026-02-22T08:23:51.540007"
+    },
+    "FILE-d0fb50a1bc18": {
+      "file_genesis_key": "FILE-d0fb50a1bc18",
+      "file_path": "D:\\grace-3.1-\\knowledge_base\\cicd_pipelines\\metadata.json",
+      "absolute_path": "D:\\grace-3.1-\\knowledge_base\\cicd_pipelines\\metadata.json",
+      "created_at": "2026-02-22T08:23:52.106199",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d0fb50a1bc18-1",
+          "genesis_key_db_id": "GK-0432c89f44dd46e3abd8b168fb374409",
+          "timestamp": "2026-02-22T08:23:52.378515",
+          "file_hash": "b6df1445f325604f2e9df354231cc692f13c17c9125996bcb84fb45c46be7fa8",
+          "file_size": 2845,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b1bd918205fd421f9ef7f79a432fd0f5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b6df1445f325604f2e9df354231cc692f13c17c9125996bcb84fb45c46be7fa8",
+      "last_updated": "2026-02-22T08:23:52.378515"
+    },
+    "FILE-d8358008d08d": {
+      "file_genesis_key": "FILE-d8358008d08d",
+      "file_path": "D:\\grace-3.1-\\monitoring\\grafana-dashboard.json",
+      "absolute_path": "D:\\grace-3.1-\\monitoring\\grafana-dashboard.json",
+      "created_at": "2026-02-22T08:23:52.700151",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d8358008d08d-1",
+          "genesis_key_db_id": "GK-9e55aa22b4fb448fb757f87fb28f3aca",
+          "timestamp": "2026-02-22T08:23:52.867298",
+          "file_hash": "7b849f6e7518d6ebd929f4a6d4116c66fc7fc513f6d008eee023573c134b9616",
+          "file_size": 19784,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a0bd0fdd4f864a63b8efe4a122fdf2de",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7b849f6e7518d6ebd929f4a6d4116c66fc7fc513f6d008eee023573c134b9616",
+      "last_updated": "2026-02-22T08:23:52.867298"
+    },
+    "FILE-dbc8ea69c2cc": {
+      "file_genesis_key": "FILE-dbc8ea69c2cc",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\aliases\\data.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\aliases\\data.json",
+      "created_at": "2026-02-22T08:23:53.082584",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-dbc8ea69c2cc-1",
+          "genesis_key_db_id": "GK-a1f65ef6690644499641f82b495ebb68",
+          "timestamp": "2026-02-22T08:23:53.243604",
+          "file_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "file_size": 2,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-cf52d2879c2f4a85b19549673b408dde",
+          "has_content": true
+        }
+      ],
+      "last_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "last_updated": "2026-02-22T08:23:53.243604"
+    },
+    "FILE-1844307d020c": {
+      "file_genesis_key": "FILE-1844307d020c",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\newest_clocks.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\newest_clocks.json",
+      "created_at": "2026-02-22T08:23:53.446267",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-1844307d020c-1",
+          "genesis_key_db_id": "GK-bfd22374dc4b4282a2f2ff5e8268cc8f",
+          "timestamp": "2026-02-22T08:23:53.629516",
+          "file_hash": "904339cbb8d12d1a33c6c8bb919c4479e4bbf08710d70b239a3bfb74c27d27d4",
+          "file_size": 100,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-86e9df2fe7864341a0559ad93111bcad",
+          "has_content": true
+        }
+      ],
+      "last_hash": "904339cbb8d12d1a33c6c8bb919c4479e4bbf08710d70b239a3bfb74c27d27d4",
+      "last_updated": "2026-02-22T08:23:53.629516"
+    },
+    "FILE-06f77fd0fc9c": {
+      "file_genesis_key": "FILE-06f77fd0fc9c",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\replica_state.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\replica_state.json",
+      "created_at": "2026-02-22T08:23:53.930401",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-06f77fd0fc9c-1",
+          "genesis_key_db_id": "GK-20fb2989aad74fe3bf4a25b41b8ce7c0",
+          "timestamp": "2026-02-22T08:23:54.099595",
+          "file_hash": "b0e769110549277cb704799b27d2497fcae5a6345a56c9f5eaf9be9bb94542c9",
+          "file_size": 87,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9e7ea0cb717d48b7b438743f41d5f71f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "b0e769110549277cb704799b27d2497fcae5a6345a56c9f5eaf9be9bb94542c9",
+      "last_updated": "2026-02-22T08:23:54.099595"
+    },
+    "FILE-9aba3cb24ea4": {
+      "file_genesis_key": "FILE-9aba3cb24ea4",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\payload_index\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\payload_index\\config.json",
+      "created_at": "2026-02-22T08:23:54.307836",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-9aba3cb24ea4-1",
+          "genesis_key_db_id": "GK-05a81bbf54e84d0e9657dbe6c7fc4f45",
+          "timestamp": "2026-02-22T08:23:54.456254",
+          "file_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+          "file_size": 41,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e11950af13fa4f488eb40e684377624b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+      "last_updated": "2026-02-22T08:23:54.456254"
+    },
+    "FILE-30f66b5ccebd": {
+      "file_genesis_key": "FILE-30f66b5ccebd",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\payload_storage\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\payload_storage\\config.json",
+      "created_at": "2026-02-22T08:23:54.639822",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-30f66b5ccebd-1",
+          "genesis_key_db_id": "GK-d33a8d268e0f4bb4b2ab181439b2dfe2",
+          "timestamp": "2026-02-22T08:23:54.835423",
+          "file_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+          "file_size": 97,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-abf44b0349c541bb83cbfdf83f10fdbb",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+      "last_updated": "2026-02-22T08:23:54.835423"
+    },
+    "FILE-cde7009111dd": {
+      "file_genesis_key": "FILE-cde7009111dd",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\segment.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\segment.json",
+      "created_at": "2026-02-22T08:23:55.081575",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cde7009111dd-1",
+          "genesis_key_db_id": "GK-9dc6334829524defbcbe092046540809",
+          "timestamp": "2026-02-22T08:23:55.265833",
+          "file_hash": "2c4f40d5e9d9faab34fa95a64a3ef1732045122868911d588e334e727b8a4b6d",
+          "file_size": 237,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-f3373af5dc9942e09e3d3558820faa41",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2c4f40d5e9d9faab34fa95a64a3ef1732045122868911d588e334e727b8a4b6d",
+      "last_updated": "2026-02-22T08:23:55.265833"
+    },
+    "FILE-8e4fb77255f1": {
+      "file_genesis_key": "FILE-8e4fb77255f1",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\vector_storage\\vectors\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\6adbca7b-e190-4c26-a7f8-2c81715c9049\\vector_storage\\vectors\\config.json",
+      "created_at": "2026-02-22T08:23:55.471691",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8e4fb77255f1-1",
+          "genesis_key_db_id": "GK-53fb503102784a43869cf296d9929461",
+          "timestamp": "2026-02-22T08:23:55.636655",
+          "file_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+          "file_size": 82,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-3067e71c316449918245af896864289d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+      "last_updated": "2026-02-22T08:23:55.636655"
+    },
+    "FILE-e7092ce20a97": {
+      "file_genesis_key": "FILE-e7092ce20a97",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\payload_index\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\payload_index\\config.json",
+      "created_at": "2026-02-22T08:23:55.857813",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e7092ce20a97-1",
+          "genesis_key_db_id": "GK-a3772972a5a94eb395a7de85498edbe1",
+          "timestamp": "2026-02-22T08:23:56.041584",
+          "file_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+          "file_size": 41,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-72c9a8452b3746e6960bfd4401bcda63",
+          "has_content": true
+        }
+      ],
+      "last_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+      "last_updated": "2026-02-22T08:23:56.041584"
+    },
+    "FILE-0a1f282633ef": {
+      "file_genesis_key": "FILE-0a1f282633ef",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\payload_storage\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\payload_storage\\config.json",
+      "created_at": "2026-02-22T08:23:56.274242",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-0a1f282633ef-1",
+          "genesis_key_db_id": "GK-81579f26233a47a8ae10d99b56a8530f",
+          "timestamp": "2026-02-22T08:23:56.430584",
+          "file_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+          "file_size": 97,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-149f66b6848643029e0190903d84f769",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+      "last_updated": "2026-02-22T08:23:56.430584"
+    },
+    "FILE-675689014d55": {
+      "file_genesis_key": "FILE-675689014d55",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\segment.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\segment.json",
+      "created_at": "2026-02-22T08:23:56.624322",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-675689014d55-1",
+          "genesis_key_db_id": "GK-c7f13d94be7b459b8effaf8517e9f548",
+          "timestamp": "2026-02-22T08:23:56.771668",
+          "file_hash": "ba23e25c495cc178b6856e4f943074bdf32f9c67ad8686148374e6ff3044accb",
+          "file_size": 237,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-69733be6ca2047cdba19ca29e3cc8c6c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ba23e25c495cc178b6856e4f943074bdf32f9c67ad8686148374e6ff3044accb",
+      "last_updated": "2026-02-22T08:23:56.771668"
+    },
+    "FILE-47492513a6f3": {
+      "file_genesis_key": "FILE-47492513a6f3",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\vector_storage\\vectors\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\812ca95f-6406-4308-b6d2-88da1a5d55cc\\vector_storage\\vectors\\config.json",
+      "created_at": "2026-02-22T08:23:57.010337",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-47492513a6f3-1",
+          "genesis_key_db_id": "GK-30d1e77a815d453ba7a4b00f2f8dea26",
+          "timestamp": "2026-02-22T08:23:57.220308",
+          "file_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+          "file_size": 82,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-26c2eabbbeac4074aaefa4a9a2257ca2",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+      "last_updated": "2026-02-22T08:23:57.220308"
+    },
+    "FILE-8e942cf194d1": {
+      "file_genesis_key": "FILE-8e942cf194d1",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\payload_index\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\payload_index\\config.json",
+      "created_at": "2026-02-22T08:23:57.859296",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8e942cf194d1-1",
+          "genesis_key_db_id": "GK-12345a9d559747429af31e3c052ae1ef",
+          "timestamp": "2026-02-22T08:23:58.049029",
+          "file_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+          "file_size": 41,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1b7733fd29ad4ffca42699a7f44da5f3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+      "last_updated": "2026-02-22T08:23:58.049029"
+    },
+    "FILE-15a1ccdb07c3": {
+      "file_genesis_key": "FILE-15a1ccdb07c3",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\payload_storage\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\payload_storage\\config.json",
+      "created_at": "2026-02-22T08:23:58.535886",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-15a1ccdb07c3-1",
+          "genesis_key_db_id": "GK-05464750a9b2431ca325cfc1fb3e1073",
+          "timestamp": "2026-02-22T08:23:58.727798",
+          "file_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+          "file_size": 97,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-32ac6bbe49a6407a80a61d53dc688ec3",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+      "last_updated": "2026-02-22T08:23:58.727798"
+    },
+    "FILE-5afc8dee63df": {
+      "file_genesis_key": "FILE-5afc8dee63df",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\segment.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\segment.json",
+      "created_at": "2026-02-22T08:23:58.941591",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-5afc8dee63df-1",
+          "genesis_key_db_id": "GK-c37f2245f0c44902b5e6853ffb9271b2",
+          "timestamp": "2026-02-22T08:23:59.096255",
+          "file_hash": "2c4f40d5e9d9faab34fa95a64a3ef1732045122868911d588e334e727b8a4b6d",
+          "file_size": 237,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7e5c351c161f4cc980febfd3a2fa7952",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2c4f40d5e9d9faab34fa95a64a3ef1732045122868911d588e334e727b8a4b6d",
+      "last_updated": "2026-02-22T08:23:59.096255"
+    },
+    "FILE-cd8067abc0b1": {
+      "file_genesis_key": "FILE-cd8067abc0b1",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\vector_storage\\vectors\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\eeffd2f7-3c03-4ced-a6a0-45d2a1f477d5\\vector_storage\\vectors\\config.json",
+      "created_at": "2026-02-22T08:23:59.303128",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cd8067abc0b1-1",
+          "genesis_key_db_id": "GK-df1a48fc82ac43208ae04fdfdd40c9ac",
+          "timestamp": "2026-02-22T08:23:59.544689",
+          "file_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+          "file_size": 82,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-90362af98ad947f8a05f45b0382e1250",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+      "last_updated": "2026-02-22T08:23:59.544689"
+    },
+    "FILE-3f9e434fb9fd": {
+      "file_genesis_key": "FILE-3f9e434fb9fd",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\payload_index\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\payload_index\\config.json",
+      "created_at": "2026-02-22T08:23:59.861179",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3f9e434fb9fd-1",
+          "genesis_key_db_id": "GK-86b67cbfa0d6487982746f498efa94e0",
+          "timestamp": "2026-02-22T08:24:00.042368",
+          "file_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+          "file_size": 41,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6d71a0bacde74a10b1d3a6c302280980",
+          "has_content": true
+        }
+      ],
+      "last_hash": "45dbebb604d8ff50a69f34cc140bb7c8793b912cd723a67bc4b397b712b93925",
+      "last_updated": "2026-02-22T08:24:00.042368"
+    },
+    "FILE-87ab97c5af4a": {
+      "file_genesis_key": "FILE-87ab97c5af4a",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\payload_storage\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\payload_storage\\config.json",
+      "created_at": "2026-02-22T08:24:00.426267",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-87ab97c5af4a-1",
+          "genesis_key_db_id": "GK-0887044899434aa4b1b158a2877a77d9",
+          "timestamp": "2026-02-22T08:24:00.865261",
+          "file_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+          "file_size": 97,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-b2f70b5271fd412883921c37613ee7ec",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5d2d4a5dfbc77dec05decfae8b5228e1928bfce75b15e3be3922c392d603cfe8",
+      "last_updated": "2026-02-22T08:24:00.865261"
+    },
+    "FILE-da5e6762e56b": {
+      "file_genesis_key": "FILE-da5e6762e56b",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\segment.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\segment.json",
+      "created_at": "2026-02-22T08:24:01.280560",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-da5e6762e56b-1",
+          "genesis_key_db_id": "GK-78ac2c52a7834aa2a3a2bed70609c06f",
+          "timestamp": "2026-02-22T08:24:01.579927",
+          "file_hash": "7fa35e6abc00c315b20bd067f9bb9a1479ee315c191742a66bc72299f007f32b",
+          "file_size": 237,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5f9c857e52fe4ccdaebd76bfeff43a99",
+          "has_content": true
+        }
+      ],
+      "last_hash": "7fa35e6abc00c315b20bd067f9bb9a1479ee315c191742a66bc72299f007f32b",
+      "last_updated": "2026-02-22T08:24:01.579927"
+    },
+    "FILE-f7b3a814ad1a": {
+      "file_genesis_key": "FILE-f7b3a814ad1a",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\vector_storage\\vectors\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\segments\\fad7eaeb-c6c2-465c-a1f8-be7feb79f011\\vector_storage\\vectors\\config.json",
+      "created_at": "2026-02-22T08:24:02.043223",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-f7b3a814ad1a-1",
+          "genesis_key_db_id": "GK-e1a2ddc99e8d499eae3e0e9cb0cc9e0a",
+          "timestamp": "2026-02-22T08:24:02.237023",
+          "file_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+          "file_size": 82,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0cb4acdb91d94845b02a0762ec7b9a46",
+          "has_content": true
+        }
+      ],
+      "last_hash": "fa6574044845fd0cb6b6eb7c61e9c00d088974fcff5d6965eefeb18947928bd8",
+      "last_updated": "2026-02-22T08:24:02.237023"
+    },
+    "FILE-3397a4baf1d8": {
+      "file_genesis_key": "FILE-3397a4baf1d8",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\shard_config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\0\\shard_config.json",
+      "created_at": "2026-02-22T08:24:02.707047",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-3397a4baf1d8-1",
+          "genesis_key_db_id": "GK-ecbabf50441b4f42bd0944e958e27065",
+          "timestamp": "2026-02-22T08:24:03.131617",
+          "file_hash": "65066de734166009a72a33b3e77c38e0c61565edae6492fbce864738e2f38328",
+          "file_size": 21,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-436d1de7d3724393af85dd3a88cb482f",
+          "has_content": true
+        }
+      ],
+      "last_hash": "65066de734166009a72a33b3e77c38e0c61565edae6492fbce864738e2f38328",
+      "last_updated": "2026-02-22T08:24:03.131617"
+    },
+    "FILE-e4cdd6b9f8cd": {
+      "file_genesis_key": "FILE-e4cdd6b9f8cd",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\config.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\config.json",
+      "created_at": "2026-02-22T08:24:03.504767",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-e4cdd6b9f8cd-1",
+          "genesis_key_db_id": "GK-6c27dda4294741a9b40fbd5b486f6d29",
+          "timestamp": "2026-02-22T08:24:03.865500",
+          "file_hash": "f94d57908fc8665131225a28976e84812cef84769f13383b4c766b43ef662dce",
+          "file_size": 612,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1bac2ce21fac4ec0a383e9cb5aa1aedd",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f94d57908fc8665131225a28976e84812cef84769f13383b4c766b43ef662dce",
+      "last_updated": "2026-02-22T08:24:03.865500"
+    },
+    "FILE-cce546562c12": {
+      "file_genesis_key": "FILE-cce546562c12",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\shard_key_mapping.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\collections\\documents\\shard_key_mapping.json",
+      "created_at": "2026-02-22T08:24:04.302324",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-cce546562c12-1",
+          "genesis_key_db_id": "GK-f3bb3b2882634b81b063acefa80cc00b",
+          "timestamp": "2026-02-22T08:24:04.663738",
+          "file_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "file_size": 2,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1e250720e80e47d9a35a02132d33521e",
+          "has_content": true
+        }
+      ],
+      "last_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "last_updated": "2026-02-22T08:24:04.663738"
+    },
+    "FILE-b9fc9eed6669": {
+      "file_genesis_key": "FILE-b9fc9eed6669",
+      "file_path": "D:\\grace-3.1-\\qdrant_storage\\raft_state.json",
+      "absolute_path": "D:\\grace-3.1-\\qdrant_storage\\raft_state.json",
+      "created_at": "2026-02-22T08:24:05.563306",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b9fc9eed6669-1",
+          "genesis_key_db_id": "GK-4bc91389b0084ddabf77bf7abbc3bf35",
+          "timestamp": "2026-02-22T08:24:06.374163",
+          "file_hash": "5097e89329cb71ca2c1461ed5c267619ab2d895774b682d69049380bd41b174e",
+          "file_size": 355,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-1beab1d33e8a43ccb663efc684ef3c34",
+          "has_content": true
+        }
+      ],
+      "last_hash": "5097e89329cb71ca2c1461ed5c267619ab2d895774b682d69049380bd41b174e",
+      "last_updated": "2026-02-22T08:24:06.374163"
+    },
+    "FILE-676b09cc3871": {
+      "file_genesis_key": "FILE-676b09cc3871",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.claude\\settings.local.json",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.claude\\settings.local.json",
+      "created_at": "2026-02-22T08:27:32.257168",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-676b09cc3871-1",
+          "genesis_key_db_id": "GK-22add2ce38c2483b9c74cb12ef654f20",
+          "timestamp": "2026-02-22T08:27:33.015375",
+          "file_hash": "1a1d1e6189aec11ff7d348cf18c95325967dec01b3feb420def1f28abb310118",
+          "file_size": 189,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a7dd2a53d13548f8816790dac97850da",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1a1d1e6189aec11ff7d348cf18c95325967dec01b3feb420def1f28abb310118",
+      "last_updated": "2026-02-22T08:27:33.015375"
+    },
+    "FILE-c424cfd16d84": {
+      "file_genesis_key": "FILE-c424cfd16d84",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.codespellrc",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.codespellrc",
+      "created_at": "2026-02-22T08:27:34.183800",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c424cfd16d84-1",
+          "genesis_key_db_id": "GK-de3aa97626654a49ba9b036a2de115ea",
+          "timestamp": "2026-02-22T08:27:35.223484",
+          "file_hash": "f3782913dd59a265c5fa0b335d4f46b9d6bd35607ec7a35dc29c210f697a47a4",
+          "file_size": 208,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-04f76dd6f7da48ddae6a054cdaf44694",
+          "has_content": true
+        }
+      ],
+      "last_hash": "f3782913dd59a265c5fa0b335d4f46b9d6bd35607ec7a35dc29c210f697a47a4",
+      "last_updated": "2026-02-22T08:27:35.223484"
+    },
+    "FILE-8f5bb08074ad": {
+      "file_genesis_key": "FILE-8f5bb08074ad",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.npmignore",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\.npmignore",
+      "created_at": "2026-02-22T08:27:36.173319",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-8f5bb08074ad-1",
+          "genesis_key_db_id": "GK-3a64fcbe21d6426589315f0f554a2910",
+          "timestamp": "2026-02-22T08:27:36.856556",
+          "file_hash": "c790940d3f151195187f46e144bb5af802a492a59da6f1ce737d352d9db81847",
+          "file_size": 116,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e3d2ab32f3fd44a8a06acb369fa2f8ca",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c790940d3f151195187f46e144bb5af802a492a59da6f1ce737d352d9db81847",
+      "last_updated": "2026-02-22T08:27:36.856556"
+    },
+    "FILE-b14b5ecbc206": {
+      "file_genesis_key": "FILE-b14b5ecbc206",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\test\\test_output\\file_with_1500_lines.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\DesktopCommanderMCP\\test\\test_output\\file_with_1500_lines.txt",
+      "created_at": "2026-02-22T08:27:54.154385",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-b14b5ecbc206-1",
+          "genesis_key_db_id": "GK-58a27ff634bd40588369e070fd0b034e",
+          "timestamp": "2026-02-22T08:27:54.838284",
+          "file_hash": "cf5ea7c34f0b9cb131606b739ccb8e2cf763480fcaa69b947a00d076ed4cad2e",
+          "file_size": 106893,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-eb127dcca90a4a089989a7cb67218f4d",
+          "has_content": true
+        }
+      ],
+      "last_hash": "cf5ea7c34f0b9cb131606b739ccb8e2cf763480fcaa69b947a00d076ed4cad2e",
+      "last_updated": "2026-02-22T08:27:54.838284"
+    },
+    "FILE-77cece1c4a67": {
+      "file_genesis_key": "FILE-77cece1c4a67",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\.mcp.json",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\.mcp.json",
+      "created_at": "2026-02-22T08:27:55.430030",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-77cece1c4a67-1",
+          "genesis_key_db_id": "GK-72fd0cd515194854985980d6d28800a2",
+          "timestamp": "2026-02-22T08:27:56.112185",
+          "file_hash": "c307f5ca26b6dd924e08b2abe7040b01a3fc5ba4020e7570a62ce255bce3a906",
+          "file_size": 131,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a5bfe905c3f64ab49d32a9a868f0203c",
+          "has_content": true
+        }
+      ],
+      "last_hash": "c307f5ca26b6dd924e08b2abe7040b01a3fc5ba4020e7570a62ce255bce3a906",
+      "last_updated": "2026-02-22T08:27:56.112185"
+    },
+    "FILE-03f04893b84d": {
+      "file_genesis_key": "FILE-03f04893b84d",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\.npmrc",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\.npmrc",
+      "created_at": "2026-02-22T08:27:56.730209",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-03f04893b84d-1",
+          "genesis_key_db_id": "GK-bbb70b1505ee4cde90a77e9b61596105",
+          "timestamp": "2026-02-22T08:27:57.393222",
+          "file_hash": "497b03d4ef857503319b6db5eb720bac571dc082cb1a5849b9e6319092cc43d1",
+          "file_size": 102,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-a3e80c6ece3c4b608a749c17dd15be8a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "497b03d4ef857503319b6db5eb720bac571dc082cb1a5849b9e6319092cc43d1",
+      "last_updated": "2026-02-22T08:27:57.393222"
+    },
+    "FILE-d95ae311af64": {
+      "file_genesis_key": "FILE-d95ae311af64",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\everything\\.prettierignore",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\everything\\.prettierignore",
+      "created_at": "2026-02-22T08:27:57.983834",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d95ae311af64-1",
+          "genesis_key_db_id": "GK-2d268025ec524c6294526b4fc2f99df4",
+          "timestamp": "2026-02-22T08:27:58.754980",
+          "file_hash": "407371029b57224fa059278e74906905e02047effeffd6a37bece565d24effb2",
+          "file_size": 41,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-182fc367a77f41d4b40216773a23f6f5",
+          "has_content": true
+        }
+      ],
+      "last_hash": "407371029b57224fa059278e74906905e02047effeffd6a37bece565d24effb2",
+      "last_updated": "2026-02-22T08:27:58.754980"
+    },
+    "FILE-61f98d84a3d5": {
+      "file_genesis_key": "FILE-61f98d84a3d5",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\fetch\\.python-version",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\fetch\\.python-version",
+      "created_at": "2026-02-22T08:27:59.614126",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-61f98d84a3d5-1",
+          "genesis_key_db_id": "GK-e469c2eba8214a348418a308644fee11",
+          "timestamp": "2026-02-22T08:28:00.313830",
+          "file_hash": "ceba8fa5c10f40fbed8feb7eb5238b63dda568908acfd874ee413747b29936c8",
+          "file_size": 6,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-eec7650720c245b69cee885beea4d235",
+          "has_content": true
+        }
+      ],
+      "last_hash": "ceba8fa5c10f40fbed8feb7eb5238b63dda568908acfd874ee413747b29936c8",
+      "last_updated": "2026-02-22T08:28:00.313830"
+    },
+    "FILE-93358790f74e": {
+      "file_genesis_key": "FILE-93358790f74e",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\git\\.python-version",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\git\\.python-version",
+      "created_at": "2026-02-22T08:28:01.569710",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-93358790f74e-1",
+          "genesis_key_db_id": "GK-e7582f86d3f94d29b1bd06ff73d7a12c",
+          "timestamp": "2026-02-22T08:28:02.195943",
+          "file_hash": "2c6bb7b4a0cc70e45e866dc579bec9f0b5c843c42fd6ed7391df7f5cd7859f14",
+          "file_size": 6,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-beac08aee9fa4b1b80f1d21bb18f7745",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2c6bb7b4a0cc70e45e866dc579bec9f0b5c843c42fd6ed7391df7f5cd7859f14",
+      "last_updated": "2026-02-22T08:28:02.195943"
+    },
+    "FILE-edfc93c1cf75": {
+      "file_genesis_key": "FILE-edfc93c1cf75",
+      "file_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\time\\.python-version",
+      "absolute_path": "D:\\grace-3.1-\\backend\\mcp_repos\\mcp-servers\\src\\time\\.python-version",
+      "created_at": "2026-02-22T08:28:03.991318",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-edfc93c1cf75-1",
+          "genesis_key_db_id": "GK-2a064725e1394ffd9d0f8c5282c6f0eb",
+          "timestamp": "2026-02-22T08:28:04.512946",
+          "file_hash": "2c6bb7b4a0cc70e45e866dc579bec9f0b5c843c42fd6ed7391df7f5cd7859f14",
+          "file_size": 6,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7484c810d1474f6e91088593821f81bc",
+          "has_content": true
+        }
+      ],
+      "last_hash": "2c6bb7b4a0cc70e45e866dc579bec9f0b5c843c42fd6ed7391df7f5cd7859f14",
+      "last_updated": "2026-02-22T08:28:04.512946"
+    },
+    "FILE-82009d53dac8": {
+      "file_genesis_key": "FILE-82009d53dac8",
+      "file_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_bench.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_bench.txt",
+      "created_at": "2026-02-22T08:28:07.461370",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-82009d53dac8-1",
+          "genesis_key_db_id": "GK-575cb884c51341a39eb9ba0744d9cfa6",
+          "timestamp": "2026-02-22T08:28:07.996991",
+          "file_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+          "file_size": 108000,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e81a2e8065344154b7a79cd8563221b8",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+      "last_updated": "2026-02-22T08:28:07.996991"
+    },
+    "FILE-adbf47449d07": {
+      "file_genesis_key": "FILE-adbf47449d07",
+      "file_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_100kb.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_100kb.txt",
+      "created_at": "2026-02-22T08:28:08.692842",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-adbf47449d07-1",
+          "genesis_key_db_id": "GK-fc0cc8b6329f4e92943f7a1d396fb882",
+          "timestamp": "2026-02-22T08:28:09.042815",
+          "file_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+          "file_size": 108000,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-837c585b413e4b89ace79cc822ae9b1b",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+      "last_updated": "2026-02-22T08:28:09.042815"
+    },
+    "FILE-571838ecd04a": {
+      "file_genesis_key": "FILE-571838ecd04a",
+      "file_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_opt.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_opt.txt",
+      "created_at": "2026-02-22T08:28:09.717136",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-571838ecd04a-1",
+          "genesis_key_db_id": "GK-f9d6801cf06c4375813d620a90a3db23",
+          "timestamp": "2026-02-22T08:28:10.224415",
+          "file_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+          "file_size": 108000,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-96ee31fb9f4240c791f0cd3d23278698",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+      "last_updated": "2026-02-22T08:28:10.224415"
+    },
+    "FILE-d76a3c12ee5f": {
+      "file_genesis_key": "FILE-d76a3c12ee5f",
+      "file_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_opt2.txt",
+      "absolute_path": "D:\\grace-3.1-\\backend\\tests\\data\\test_opt2.txt",
+      "created_at": "2026-02-22T08:28:10.933695",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-d76a3c12ee5f-1",
+          "genesis_key_db_id": "GK-444f5e3767124a708a28a7c7019aa199",
+          "timestamp": "2026-02-22T08:28:11.514599",
+          "file_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+          "file_size": 108000,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-eb3d8e7a017e4feeba39bfd1743452c6",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d2bc5a8512bade8b0eed9c00675c50534984655474577c6798261b4f3508b6e0",
+      "last_updated": "2026-02-22T08:28:11.514599"
     }
   }
 }
