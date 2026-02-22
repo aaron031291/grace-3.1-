@@ -1620,3 +1620,45 @@ async def kimi_audit_system(db: Session = Depends(get_db)):
         return kimi.audit_system()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =======================================================================
+# KIMI TEACHER (Cloud API - Grace's teacher, separate from GraceBrain)
+# =======================================================================
+
+@router.post("/kimi/teach")
+async def kimi_teach(
+    question: str = Query(..., description="What Grace wants to learn"),
+    topic: str = Query(default="general", description="Topic domain"),
+    db: Session = Depends(get_db),
+):
+    """Ask Kimi Cloud to teach Grace something. Response compiled into knowledge store."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        teacher = get_kimi_teacher(db)
+        return teacher.ask(question, topic=topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/kimi/mine")
+async def kimi_mine_topic(
+    topic: str = Query(..., description="Topic to mine"),
+    max_questions: int = Query(default=5, le=10),
+    db: Session = Depends(get_db),
+):
+    """Mine Kimi Cloud for knowledge on a topic. Asks multiple questions, compiles all."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        teacher = get_kimi_teacher(db)
+        return teacher.mine_topic(topic, max_questions=max_questions)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/kimi/teacher-stats")
+async def kimi_teacher_stats(db: Session = Depends(get_db)):
+    """Get Kimi Teacher statistics."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        return get_kimi_teacher(db).get_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
