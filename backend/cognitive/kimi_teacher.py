@@ -671,6 +671,82 @@ Be specific. Reference actual numbers from the state data."""
 
         return results
 
+    def batch_teach(
+        self,
+        questions: List[Dict[str, Any]],
+        topic: str = "general",
+    ) -> Dict[str, Any]:
+        """
+        Batch teaching - multiple questions in fewer API calls.
+
+        Combines up to 5 questions per API call for cost efficiency.
+        Each answer still compiled + distilled + stored individually.
+
+        Args:
+            questions: List of {"question": str, "topic": str?}
+            topic: Default topic for all questions
+
+        Returns:
+            Batch results with per-question compiled stats
+        """
+        cloud = self._get_cloud()
+        if not cloud:
+            return {"success": False, "error": "Cloud not available"}
+
+        prompts = [
+            {"prompt": q.get("question", q) if isinstance(q, dict) else q,
+             "topic": q.get("topic", topic) if isinstance(q, dict) else topic}
+            for q in questions
+        ]
+
+        batch_results = cloud.batch_generate(
+            [{"prompt": p["prompt"], "system_prompt": None} for p in prompts],
+            delay_between=0.5,
+        )
+
+        total_tokens = 0
+        total_compiled = {"facts": 0, "procedures": 0, "rules": 0, "entities": 0}
+        per_question = []
+
+        for i, result in enumerate(batch_results):
+            question = prompts[i]["prompt"] if i < len(prompts) else "?"
+            q_topic = prompts[i].get("topic", topic)
+
+            if result.get("success") and result.get("content"):
+                answer = result["content"]
+                tokens = result.get("tokens", 0)
+                total_tokens += tokens
+
+                self._store_in_magma(question, answer, q_topic)
+                compiled = self._compile_response(question, answer, q_topic, None)
+                self._distill_response(question, answer, result.get("model_name", "kimi_cloud:batch"))
+                self._feed_oracle(question, answer, q_topic, True)
+
+                for k in total_compiled:
+                    total_compiled[k] += len(compiled.get(k, []))
+
+                per_question.append({
+                    "question": question[:100],
+                    "tokens": tokens,
+                    "compiled": {k: len(v) for k, v in compiled.items() if isinstance(v, list)},
+                })
+
+                self._stats["total_lessons"] += 1
+                self._stats["total_tokens"] += tokens
+            else:
+                per_question.append({"question": question[:100], "error": result.get("error", "?")})
+
+        self.session.commit()
+
+        return {
+            "total_questions": len(questions),
+            "succeeded": sum(1 for r in per_question if "tokens" in r),
+            "total_tokens": total_tokens,
+            "total_compiled": total_compiled,
+            "api_calls_saved": max(0, len(questions) - len(batch_results)),
+            "results": per_question,
+        }
+
     def get_stats(self) -> Dict[str, Any]:
         return dict(self._stats)
 

@@ -230,6 +230,92 @@ class KimiCloudClient:
     def is_running(self):
         return bool(self.api_key)
 
+    def batch_generate(
+        self,
+        prompts: List[Dict[str, Any]],
+        max_tokens_per_prompt: Optional[int] = None,
+        delay_between: float = 0.5,
+    ) -> List[Dict[str, Any]]:
+        """
+        Batch process multiple prompts cost-effectively.
+
+        Groups prompts to minimize API calls:
+        - Small prompts combined into single calls
+        - Rate limit respected automatically
+        - Each result tracked and stored
+
+        Args:
+            prompts: List of {"prompt": str, "topic": str, "system_prompt": str?}
+            max_tokens_per_prompt: Token limit per prompt
+            delay_between: Seconds between calls (rate limiting)
+
+        Returns:
+            List of results matching input order
+        """
+        effective_max = max_tokens_per_prompt or self.max_tokens
+        results = []
+
+        # Strategy 1: Combine small prompts into batched calls
+        # If 5 small questions, combine into 1 call with numbered responses
+        batch_size = 5
+        batches = [prompts[i:i+batch_size] for i in range(0, len(prompts), batch_size)]
+
+        for batch in batches:
+            if not self.is_available():
+                for _ in batch:
+                    results.append({"success": False, "content": "", "error": "Rate limited"})
+                continue
+
+            if len(batch) == 1:
+                # Single prompt - direct call
+                p = batch[0]
+                result = self.generate(
+                    prompt=p["prompt"],
+                    system_prompt=p.get("system_prompt"),
+                    max_tokens=effective_max,
+                )
+                results.append(result)
+            else:
+                # Multiple prompts - combine into one call
+                combined = "Answer each question separately. Number your answers.\n\n"
+                for i, p in enumerate(batch, 1):
+                    combined += f"{i}. {p['prompt']}\n\n"
+
+                result = self.generate(
+                    prompt=combined,
+                    system_prompt=batch[0].get("system_prompt", "Answer each question concisely."),
+                    max_tokens=effective_max * min(len(batch), 3),  # Scale but cap
+                )
+
+                if result.get("success"):
+                    # Split combined response into individual answers
+                    content = result["content"]
+                    tokens_per = result.get("tokens", 0) // len(batch)
+
+                    # Try to split by numbered answers
+                    import re
+                    parts = re.split(r'\n(?=\d+\.\s)', content)
+
+                    for i, p in enumerate(batch):
+                        answer = parts[i] if i < len(parts) else ""
+                        answer = re.sub(r'^\d+\.\s*', '', answer).strip()
+                        results.append({
+                            "success": True,
+                            "content": answer,
+                            "model_name": result.get("model_name", "kimi_cloud:batch"),
+                            "tokens": tokens_per,
+                            "batch": True,
+                        })
+                else:
+                    for _ in batch:
+                        results.append(result)
+
+            if delay_between > 0:
+                import time
+                time.sleep(delay_between)
+
+        return results
+
     def get_stats(self) -> Dict[str, Any]:
         return {
             "total_calls": self._total_calls,

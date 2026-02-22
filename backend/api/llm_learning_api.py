@@ -1816,3 +1816,17 @@ async def deep_mine_keywords(
         return engine.deep_mine_keywords(keywords, domain=domain)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+class BatchTeachRequest(BaseModel):
+    questions: List[str] = Field(..., description="List of questions to batch teach")
+    topic: str = Field(default="general")
+
+@router.post("/kimi/batch-teach")
+async def kimi_batch_teach(request: BatchTeachRequest, db: Session = Depends(get_db)):
+    """Batch teach Grace multiple questions in fewer API calls. Cost-effective."""
+    try:
+        from cognitive.kimi_teacher import get_kimi_teacher
+        teacher = get_kimi_teacher(db)
+        return teacher.batch_teach(request.questions, topic=request.topic)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
