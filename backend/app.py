@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # Security imports
 from security.config import get_security_config
-from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, RequestValidationMiddleware
+from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, RequestValidationMiddleware, APIKeyMiddleware
 
 from ollama_client.client import get_ollama_client
 from database.session import SessionLocal, get_session, initialize_session_factory
@@ -750,6 +750,13 @@ if _sec_config.PRODUCTION_MODE:
     print("[SECURITY] CSRF protection enabled (production mode)")
 else:
     print("[SECURITY] CSRF protection available (enable with PRODUCTION_MODE=true)")
+
+# API Key middleware (enable with REQUIRE_API_KEY=true)
+if _sec_config.REQUIRE_API_KEY:
+    app.add_middleware(APIKeyMiddleware)
+    print(f"[SECURITY] API key authentication enabled ({len(_sec_config.API_KEYS)} keys configured)")
+else:
+    print("[SECURITY] API key auth available (enable with REQUIRE_API_KEY=true)")
 
 
 # ==================== Health Check Endpoint ====================
