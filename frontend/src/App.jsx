@@ -5,6 +5,7 @@ import ChatTab from "./components/ChatTab";
 import FoldersTab from "./components/FoldersTab";
 import DocsTab from "./components/DocsTab";
 import GovernanceTab from "./components/GovernanceTab";
+import WhitelistTab from "./components/WhitelistTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
     { id: "folders", label: "Folders", icon: "📁", desc: "File management & librarian" },
     { id: "docs", label: "Docs", icon: "📚", desc: "Document library — all uploads" },
     { id: "governance", label: "Governance", icon: "🏛️", desc: "Approvals, scores, healing, learning" },
+    { id: "whitelist", label: "Whitelist", icon: "🛡️", desc: "API & web sources, learning pipeline" },
   ];
 
   const current = views.find((v) => v.id === activeView) || views[0];
@@ -146,6 +148,7 @@ function App() {
           {activeView === "folders" && <FoldersTab />}
           {activeView === "docs" && <DocsTab />}
           {activeView === "governance" && <GovernanceTab />}
+          {activeView === "whitelist" && <WhitelistTab />}
         </main>
       </div>
 

@@ -91,6 +91,7 @@ from api.cross_tab_api import router as cross_tab_router
 from api.governance_hub_api import router as governance_hub_router
 from api.genesis_daily_api import router as genesis_daily_router
 from api.governance_rules_api import router as governance_rules_router
+from api.whitelist_hub_api import router as whitelist_hub_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -565,6 +566,7 @@ app.include_router(cross_tab_router)  # Cross-tab intelligence — folder chat, 
 app.include_router(governance_hub_router)  # Governance Hub — approvals, scores, healing, learning
 app.include_router(genesis_daily_router)  # Genesis daily log — 24hr folders, key details
 app.include_router(governance_rules_router)  # Governance rules & persona — law docs, context windows
+app.include_router(whitelist_hub_router)  # Whitelist hub — API sources, web sources, learning
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
