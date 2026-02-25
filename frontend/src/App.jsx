@@ -6,6 +6,7 @@ import FoldersTab from "./components/FoldersTab";
 import DocsTab from "./components/DocsTab";
 import GovernanceTab from "./components/GovernanceTab";
 import WhitelistTab from "./components/WhitelistTab";
+import OracleTab from "./components/OracleTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
     { id: "docs", label: "Docs", icon: "📚", desc: "Document library — all uploads" },
     { id: "governance", label: "Governance", icon: "🏛️", desc: "Approvals, scores, healing, learning" },
     { id: "whitelist", label: "Whitelist", icon: "🛡️", desc: "API & web sources, learning pipeline" },
+    { id: "oracle", label: "Oracle", icon: "🔮", desc: "Training data, audit, gap filling" },
   ];
 
   const current = views.find((v) => v.id === activeView) || views[0];
@@ -149,6 +151,7 @@ function App() {
           {activeView === "docs" && <DocsTab />}
           {activeView === "governance" && <GovernanceTab />}
           {activeView === "whitelist" && <WhitelistTab />}
+          {activeView === "oracle" && <OracleTab />}
         </main>
       </div>
 
