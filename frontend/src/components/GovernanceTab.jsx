@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
 
 const C = {
@@ -374,6 +374,331 @@ function ActionsPanel() {
   );
 }
 
+// ── Sub-tab: Rules & Persona ──────────────────────────────────────────
+function RulesPersonaPanel() {
+  const [docs, setDocs] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [docContent, setDocContent] = useState('');
+  const [docLoading, setDocLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editText, setEditText] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [hasUnsaved, setHasUnsaved] = useState(false);
+
+  // Persona
+  const [personal, setPersonal] = useState('');
+  const [professional, setProfessional] = useState('');
+  const [personaLoading, setPersonaLoading] = useState(true);
+  const [personaSaving, setPersonaSaving] = useState(false);
+
+  // Upload
+  const [showUpload, setShowUpload] = useState(false);
+  const [uploadCat, setUploadCat] = useState('general');
+  const [uploadDesc, setUploadDesc] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef(null);
+
+  // Reasoning
+  const [reasonQ, setReasonQ] = useState('');
+  const [reasonResult, setReasonResult] = useState(null);
+  const [reasoning, setReasoning] = useState(false);
+
+  const [notification, setNotification] = useState(null);
+  const notifTimer = useRef(null);
+  const notify = useCallback((msg, type = 'success') => {
+    setNotification({ msg, type });
+    clearTimeout(notifTimer.current);
+    notifTimer.current = setTimeout(() => setNotification(null), 4000);
+  }, []);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents`);
+      if (res.ok) {
+        const d = await res.json();
+        setDocs(d.documents || []);
+        setCategories(d.categories || []);
+      }
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    fetch(`${API_BASE_URL}/api/governance-rules/persona`)
+      .then(r => r.ok ? r.json() : {})
+      .then(d => { setPersonal(d.personal || ''); setProfessional(d.professional || ''); })
+      .catch(() => {})
+      .finally(() => setPersonaLoading(false));
+  }, [refresh]);
+
+  const openDoc = async (doc) => {
+    setSelectedDoc(doc);
+    setDocLoading(true);
+    setEditMode(false);
+    setHasUnsaved(false);
+    setReasonResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(doc.id)}/content`);
+      if (res.ok) { const d = await res.json(); setDocContent(d.content || ''); setEditText(d.content || ''); }
+    } catch { /* silent */ }
+    finally { setDocLoading(false); }
+  };
+
+  const saveDoc = async () => {
+    if (!selectedDoc) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(selectedDoc.id)}/content`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editText }),
+      });
+      if (res.ok) { setDocContent(editText); setHasUnsaved(false); notify('Rule document saved'); }
+    } catch { notify('Save failed', 'error'); }
+    finally { setSaving(false); }
+  };
+
+  const deleteDoc = async (docId) => {
+    if (!window.confirm('Delete this governance rule document?')) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(docId)}`, { method: 'DELETE' });
+      notify('Document deleted');
+      if (selectedDoc?.id === docId) { setSelectedDoc(null); setDocContent(''); }
+      refresh();
+    } catch { notify('Delete failed', 'error'); }
+  };
+
+  const handleUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', files[0]);
+      fd.append('category', uploadCat);
+      fd.append('description', uploadDesc);
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/upload`, { method: 'POST', body: fd });
+      if (res.ok) { notify('Rule document uploaded — it is now LAW'); refresh(); setShowUpload(false); }
+    } catch { notify('Upload failed', 'error'); }
+    finally { setUploading(false); if (fileRef.current) fileRef.current.value = ''; }
+  };
+
+  const savePersona = async () => {
+    setPersonaSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/persona`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ personal, professional }),
+      });
+      if (res.ok) notify('Persona saved');
+    } catch { notify('Save failed', 'error'); }
+    finally { setPersonaSaving(false); }
+  };
+
+  const handleReason = async () => {
+    if (!reasonQ.trim() || !selectedDoc) return;
+    setReasoning(true); setReasonResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/reason`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_id: selectedDoc.id, question: reasonQ, use_kimi: true }),
+      });
+      if (res.ok) setReasonResult(await res.json());
+    } catch { setReasonResult({ error: 'Reasoning failed' }); }
+    finally { setReasoning(false); }
+  };
+
+  const catOptions = ['general', 'gdpr', 'iso', 'anti_bribery', 'code_standards', 'user_rules', 'industry'];
+
+  return (
+    <div style={{ display: 'flex', height: '100%', overflow: 'hidden', position: 'relative' }}>
+      {notification && (
+        <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', zIndex: 100, padding: '8px 20px', borderRadius: 6, fontSize: 13, fontWeight: 500, background: notification.type === 'success' ? C.success : C.error, color: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,.4)' }}>{notification.msg}</div>
+      )}
+
+      {/* Left: Document list + Persona */}
+      <div style={{ flex: '0 0 280px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+
+        {/* Persona context windows */}
+        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '12px' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, marginBottom: 8 }}>🎭 Persona</div>
+
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Personal — how Grace talks to you</div>
+            <textarea
+              value={personal}
+              onChange={e => setPersonal(e.target.value)}
+              placeholder="e.g. Be casual and friendly, use my name, explain things simply..."
+              disabled={personaLoading}
+              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Professional — how Grace shows up externally</div>
+            <textarea
+              value={professional}
+              onChange={e => setProfessional(e.target.value)}
+              placeholder="e.g. Formal tone, use company name, cite sources, UK English..."
+              disabled={personaLoading}
+              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+            />
+          </div>
+
+          <button onClick={savePersona} disabled={personaSaving} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
+            {personaSaving ? '⏳ Saving...' : '💾 Save Persona'}
+          </button>
+        </div>
+
+        {/* Upload */}
+        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6 }}>
+          <button onClick={() => setShowUpload(!showUpload)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>📤 Upload Rule Doc</button>
+          <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
+        </div>
+
+        {showUpload && (
+          <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+            <select value={uploadCat} onChange={e => setUploadCat(e.target.value)} style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none' }}>
+              {catOptions.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ').toUpperCase()}</option>)}
+            </select>
+            <input placeholder="Description..." value={uploadDesc} onChange={e => setUploadDesc(e.target.value)} style={{ width: '100%', padding: '5px 8px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none', boxSizing: 'border-box' }} />
+            <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} />
+            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
+              {uploading ? '⏳' : '📎 Choose File'}
+            </button>
+          </div>
+        )}
+
+        {/* Document list by category */}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {loading ? (
+            <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>Loading...</div>
+          ) : categories.length === 0 && docs.length === 0 ? (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>📜</div>
+              <div style={{ fontSize: 12 }}>No rule documents yet</div>
+              <div style={{ fontSize: 10, marginTop: 4 }}>Upload GDPR, ISO, or custom rules</div>
+            </div>
+          ) : categories.map(cat => (
+            <div key={cat.name}>
+              <div style={{ padding: '6px 12px', fontSize: 10, fontWeight: 700, color: C.muted, textTransform: 'uppercase', background: C.bgAlt, borderBottom: `1px solid ${C.border}` }}>
+                📂 {cat.name.replace(/_/g, ' ')} ({cat.count})
+              </div>
+              {cat.documents.map(doc => (
+                <div
+                  key={doc.id}
+                  onClick={() => openDoc(doc)}
+                  style={{
+                    padding: '7px 12px', cursor: 'pointer', fontSize: 12,
+                    background: selectedDoc?.id === doc.id ? C.bgDark : 'transparent',
+                    borderLeft: selectedDoc?.id === doc.id ? `3px solid ${C.accent}` : '3px solid transparent',
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    transition: 'background .1s',
+                  }}
+                  onMouseEnter={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = C.bgAlt; }}
+                  onMouseLeave={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <span>{doc.enforced ? '⚖️' : '📄'}</span>
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <div style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.filename}</div>
+                    {doc.description && <div style={{ fontSize: 10, color: C.dim }}>{doc.description}</div>}
+                  </div>
+                  <span onClick={e => { e.stopPropagation(); deleteDoc(doc.id); }} style={{ cursor: 'pointer', fontSize: 12, color: C.dim, padding: '0 2px' }}>🗑</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right: Document viewer/editor + Reasoning */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {selectedDoc ? (
+          <>
+            {/* Toolbar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+              <span>⚖️</span>
+              <span style={{ fontWeight: 700, fontSize: 13 }}>{selectedDoc.filename}</span>
+              {hasUnsaved && <span style={{ fontSize: 10, color: C.accent, fontWeight: 600 }}>UNSAVED</span>}
+              <span style={{ fontSize: 10, color: C.dim }}>({selectedDoc.category})</span>
+              <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
+                {editMode ? (
+                  <>
+                    <button onClick={saveDoc} disabled={saving || !hasUnsaved} style={{ ...btn(hasUnsaved ? C.success : C.bgDark), fontSize: 11 }}>{saving ? '⏳' : '💾 Save'}</button>
+                    <button onClick={() => { if (hasUnsaved && !window.confirm('Discard?')) return; setEditMode(false); setEditText(docContent); setHasUnsaved(false); }} style={{ ...btn(C.border), fontSize: 11 }}>View</button>
+                  </>
+                ) : (
+                  <button onClick={() => { setEditMode(true); setEditText(docContent); }} style={{ ...btn(C.accentAlt), fontSize: 11 }}>✏️ Edit</button>
+                )}
+                <span onClick={() => { setSelectedDoc(null); setDocContent(''); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, overflow: 'auto' }}>
+              {docLoading ? (
+                <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading...</div>
+              ) : editMode ? (
+                <textarea
+                  value={editText}
+                  onChange={e => { setEditText(e.target.value); setHasUnsaved(e.target.value !== docContent); }}
+                  onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveDoc(); } }}
+                  spellCheck={false}
+                  style={{ width: '100%', height: '100%', resize: 'none', background: '#0d1117', color: '#e6edf3', border: 'none', outline: 'none', padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, boxSizing: 'border-box' }}
+                />
+              ) : (
+                <pre style={{ margin: 0, padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#e6edf3', background: '#0d1117', height: '100%', overflow: 'auto' }}>
+                  {docContent || '(empty document)'}
+                </pre>
+              )}
+            </div>
+
+            {/* Reasoning bar */}
+            <div style={{ borderTop: `1px solid ${C.border}`, padding: '8px 16px', background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>🤖 Ask about this rule:</span>
+              <input
+                placeholder="What does this document require? How should Grace comply?"
+                value={reasonQ}
+                onChange={e => setReasonQ(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleReason()}
+                disabled={reasoning}
+                style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }}
+              />
+              <button onClick={handleReason} disabled={reasoning || !reasonQ.trim()} style={{ ...btn(C.accent), fontSize: 11, opacity: reasoning ? 0.5 : 1 }}>
+                {reasoning ? '⏳' : '🧠 Reason'}
+              </button>
+            </div>
+            {reasonResult && (
+              <div style={{ borderTop: `1px solid ${C.border}`, padding: '12px 16px', background: C.bg, maxHeight: 200, overflowY: 'auto' }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, marginBottom: 6 }}>
+                  Grace + Kimi Analysis ({reasonResult.provider || 'kimi'})
+                </div>
+                <pre style={{ margin: 0, fontSize: 12, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                  {reasonResult.response || reasonResult.error || JSON.stringify(reasonResult)}
+                </pre>
+              </div>
+            )}
+          </>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center', color: C.dim }}>
+              <div style={{ fontSize: 56, marginBottom: 12, opacity: 0.5 }}>⚖️</div>
+              <div style={{ fontSize: 15, fontWeight: 500, color: C.muted }}>Select a rule document</div>
+              <div style={{ fontSize: 12, marginTop: 4, maxWidth: 300 }}>
+                Upload industry standards (GDPR, ISO, anti-bribery), code parameters, or custom rules.
+                They become law — Grace and Kimi will follow them.
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Sub-tab: Genesis Keys ─────────────────────────────────────────────
 function GenesisKeysPanel() {
   const [folders, setFolders] = useState([]);
@@ -735,6 +1060,7 @@ export default function GovernanceTab() {
     { id: 'scores', label: 'Scores', icon: '📊' },
     { id: 'performance', label: 'Performance', icon: '⚡' },
     { id: 'actions', label: 'Actions', icon: '🔧' },
+    { id: 'rules', label: 'Rules & Persona', icon: '⚖️' },
     { id: 'genesis', label: 'Genesis Keys', icon: '🔑' },
   ];
 
@@ -791,6 +1117,7 @@ export default function GovernanceTab() {
         {activeTab === 'scores' && <ScoresPanel />}
         {activeTab === 'performance' && <PerformancePanel />}
         {activeTab === 'actions' && <ActionsPanel />}
+        {activeTab === 'rules' && <RulesPersonaPanel />}
         {activeTab === 'genesis' && <GenesisKeysPanel />}
       </div>
     </div>

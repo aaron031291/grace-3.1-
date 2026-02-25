@@ -125,7 +125,7 @@ class TestKimiClient:
 
 
 class TestLLMFactory:
-    """Test LLM factory supports all providers."""
+    """Test LLM factory supports all providers with governance wrapping."""
 
     def test_factory_default(self):
         from llm_orchestrator.factory import get_llm_client
@@ -134,21 +134,33 @@ class TestLLMFactory:
 
     def test_factory_kimi(self):
         from llm_orchestrator.factory import get_llm_client
+        from llm_orchestrator.governance_wrapper import GovernanceAwareLLM
         client = get_llm_client(provider="kimi")
-        from llm_orchestrator.kimi_client import KimiLLMClient
-        assert isinstance(client, KimiLLMClient)
+        assert isinstance(client, GovernanceAwareLLM)
+        assert hasattr(client, '_inner')
 
     def test_factory_openai(self):
         from llm_orchestrator.factory import get_llm_client
+        from llm_orchestrator.governance_wrapper import GovernanceAwareLLM
         client = get_llm_client(provider="openai")
-        from llm_orchestrator.openai_client import OpenAILLMClient
-        assert isinstance(client, OpenAILLMClient)
+        assert isinstance(client, GovernanceAwareLLM)
 
     def test_get_kimi_client(self):
         from llm_orchestrator.factory import get_kimi_client
+        from llm_orchestrator.governance_wrapper import GovernanceAwareLLM
         client = get_kimi_client()
-        from llm_orchestrator.kimi_client import KimiLLMClient
-        assert isinstance(client, KimiLLMClient)
+        assert isinstance(client, GovernanceAwareLLM)
+
+    def test_raw_client_no_wrapper(self):
+        from llm_orchestrator.factory import get_raw_client
+        from llm_orchestrator.governance_wrapper import GovernanceAwareLLM
+        client = get_raw_client()
+        assert not isinstance(client, GovernanceAwareLLM)
+
+    def test_governance_prefix_builds(self):
+        from llm_orchestrator.governance_wrapper import build_governance_prefix
+        prefix = build_governance_prefix()
+        assert isinstance(prefix, str)
 
 
 if __name__ == "__main__":
