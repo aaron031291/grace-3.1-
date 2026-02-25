@@ -180,6 +180,11 @@ function PerformancePanel() {
   const [metrics, setMetrics] = useState(null);
   const [bridge, setBridge] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fullData, setFullData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/governance/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   const refresh = useCallback(() => {
     setLoading(true);
@@ -287,6 +292,98 @@ function PerformancePanel() {
             </Card>
           )}
         </>
+      )}
+
+      {/* Full aggregation: extra sections */}
+      {fullData?.governance_pillars && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Governance Pillars</div>
+          {typeof fullData.governance_pillars === 'object' ? (
+            Object.entries(fullData.governance_pillars).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.governance_pillars)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.kpi_dashboard && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KPI Dashboard</div>
+          {typeof fullData.kpi_dashboard === 'object' ? (
+            Object.entries(fullData.kpi_dashboard).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kpi_dashboard)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.monitoring_organs && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Monitoring Organs</div>
+          {typeof fullData.monitoring_organs === 'object' ? (
+            Object.entries(fullData.monitoring_organs).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.monitoring_organs)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.diagnostic_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Status</div>
+          {typeof fullData.diagnostic_status === 'object' ? (
+            Object.entries(fullData.diagnostic_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_status)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.telemetry_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Telemetry Status</div>
+          {typeof fullData.telemetry_status === 'object' ? (
+            Object.entries(fullData.telemetry_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.telemetry_status)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.autonomous_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Autonomous Status</div>
+          {typeof fullData.autonomous_status === 'object' ? (
+            Object.entries(fullData.autonomous_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.autonomous_status)}</span>
+          )}
+        </div>
       )}
 
       <div style={{ textAlign: 'center', marginTop: 8 }}>

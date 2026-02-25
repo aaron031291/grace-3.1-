@@ -28,6 +28,11 @@ export default function BusinessIntelligenceTab() {
   const [dashboard, setDashboard] = useState(null);
   const [trends, setTrends] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fullData, setFullData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/bi/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -106,6 +111,53 @@ export default function BusinessIntelligenceTab() {
               <span style={{ fontSize: 24, fontWeight: 800, color: d.documents.avg_confidence >= 0.7 ? C.success : C.warn }}>{(d.documents.avg_confidence * 100).toFixed(0)}%</span>
               <Bar value={d.documents.avg_confidence * 100} max={100} color={d.documents.avg_confidence >= 0.7 ? C.success : C.warn} />
             </div>
+          </div>
+        )}
+
+        {/* Full aggregation: extra sections */}
+        {fullData?.kpi_summary && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KPI Summary</div>
+            {typeof fullData.kpi_summary === 'object' ? (
+              Object.entries(fullData.kpi_summary).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kpi_summary)}</span>
+            )}
+          </div>
+        )}
+        {fullData?.kpi_dashboard && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KPI Dashboard</div>
+            {typeof fullData.kpi_dashboard === 'object' ? (
+              Object.entries(fullData.kpi_dashboard).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kpi_dashboard)}</span>
+            )}
+          </div>
+        )}
+        {fullData?.monitoring_metrics && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Monitoring Metrics</div>
+            {typeof fullData.monitoring_metrics === 'object' ? (
+              Object.entries(fullData.monitoring_metrics).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.monitoring_metrics)}</span>
+            )}
           </div>
         )}
 

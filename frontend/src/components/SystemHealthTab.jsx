@@ -27,6 +27,11 @@ export default function SystemHealthTab() {
   const [health, setHealth] = useState(null);
   const [procs, setProcs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fullData, setFullData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/health/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -127,6 +132,53 @@ export default function SystemHealthTab() {
           <div style={{ color: C.muted }}>Disk: {r.disk_used_gb || 0} / {r.disk_total_gb || 0} GB</div>
           <div style={{ color: C.muted }}>Cores: {r.cpu_cores || 0}</div>
         </div>
+
+        {/* Full aggregation: extra sections */}
+        {fullData?.diagnostic_sensors && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Sensors</div>
+            {typeof fullData.diagnostic_sensors === 'object' ? (
+              Object.entries(fullData.diagnostic_sensors).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_sensors)}</span>
+            )}
+          </div>
+        )}
+        {fullData?.diagnostic_healing && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Healing</div>
+            {typeof fullData.diagnostic_healing === 'object' ? (
+              Object.entries(fullData.diagnostic_healing).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_healing)}</span>
+            )}
+          </div>
+        )}
+        {fullData?.diagnostic_trends && (
+          <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Trends</div>
+            {typeof fullData.diagnostic_trends === 'object' ? (
+              Object.entries(fullData.diagnostic_trends).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                  <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                </div>
+              ))
+            ) : (
+              <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_trends)}</span>
+            )}
+          </div>
+        )}
 
         <BackendPanel prefixes={['/health', '/diagnostic', '/monitoring', '/api/system-health']} label="Health & Diagnostics" />
       </div>

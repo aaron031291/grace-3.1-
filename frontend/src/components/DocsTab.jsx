@@ -110,6 +110,7 @@ export default function DocsTab() {
   const [showUpload, setShowUpload] = useState(false);
   const fileRef = useRef(null);
 
+  const [fullData, setFullData] = useState(null);
   const [notification, setNotification] = useState(null);
   const notifTimer = useRef(null);
   const notify = useCallback((msg, type = 'success') => {
@@ -151,6 +152,10 @@ export default function DocsTab() {
     else fetchByFolder();
     fetchStats();
   }, [view, fetchAll, fetchByFolder, fetchStats]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/docs/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   // Related docs & tags
   const [relatedDocs, setRelatedDocs] = useState([]);
@@ -486,6 +491,68 @@ export default function DocsTab() {
                     </div>
                   )}
 
+                  {/* Full aggregation: extra sections */}
+                  {fullData?.ingest_status && (
+                    <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Ingest Status</div>
+                      {typeof fullData.ingest_status === 'object' ? (
+                        Object.entries(fullData.ingest_status).map(([k, v]) => (
+                          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                            <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                            <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.ingest_status)}</span>
+                      )}
+                    </div>
+                  )}
+                  {fullData?.ingestion_status && (
+                    <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Ingestion Status</div>
+                      {typeof fullData.ingestion_status === 'object' ? (
+                        Object.entries(fullData.ingestion_status).map(([k, v]) => (
+                          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                            <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                            <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.ingestion_status)}</span>
+                      )}
+                    </div>
+                  )}
+                  {fullData?.kb_connectors && (
+                    <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KB Connectors</div>
+                      {typeof fullData.kb_connectors === 'object' ? (
+                        Object.entries(fullData.kb_connectors).map(([k, v]) => (
+                          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                            <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                            <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kb_connectors)}</span>
+                      )}
+                    </div>
+                  )}
+                  {fullData?.intelligence_tags && (
+                    <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Intelligence Tags</div>
+                      {typeof fullData.intelligence_tags === 'object' ? (
+                        Object.entries(fullData.intelligence_tags).map(([k, v]) => (
+                          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                            <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                            <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.intelligence_tags)}</span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Actions */}
                   <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
                     <button
@@ -512,12 +579,62 @@ export default function DocsTab() {
             </div>
           </>
         ) : (
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center', color: C.dim }}>
-              <div style={{ fontSize: 48, marginBottom: 12, opacity: 0.5 }}>📋</div>
-              <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4, color: C.muted }}>Select a document</div>
-              <div style={{ fontSize: 12 }}>Click any document to see its details</div>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'center', color: C.dim }}>
+                <div style={{ fontSize: 48, marginBottom: 12, opacity: 0.5 }}>📋</div>
+                <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4, color: C.muted }}>Select a document</div>
+                <div style={{ fontSize: 12 }}>Click any document to see its details</div>
+              </div>
             </div>
+            {fullData && (fullData.ingest_status || fullData.ingestion_status || fullData.kb_connectors || fullData.intelligence_tags) && (
+              <div style={{ padding: '12px 16px', borderTop: `1px solid ${C.border}` }}>
+                {fullData?.ingest_status && (
+                  <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Ingest Status</div>
+                    {typeof fullData.ingest_status === 'object' ? Object.entries(fullData.ingest_status).map(([k, v]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                        <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                      </div>
+                    )) : <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.ingest_status)}</span>}
+                  </div>
+                )}
+                {fullData?.ingestion_status && (
+                  <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Ingestion Status</div>
+                    {typeof fullData.ingestion_status === 'object' ? Object.entries(fullData.ingestion_status).map(([k, v]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                        <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                      </div>
+                    )) : <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.ingestion_status)}</span>}
+                  </div>
+                )}
+                {fullData?.kb_connectors && (
+                  <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KB Connectors</div>
+                    {typeof fullData.kb_connectors === 'object' ? Object.entries(fullData.kb_connectors).map(([k, v]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                        <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                      </div>
+                    )) : <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kb_connectors)}</span>}
+                  </div>
+                )}
+                {fullData?.intelligence_tags && (
+                  <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Intelligence Tags</div>
+                    {typeof fullData.intelligence_tags === 'object' ? Object.entries(fullData.intelligence_tags).map(([k, v]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                        <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                      </div>
+                    )) : <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.intelligence_tags)}</span>}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

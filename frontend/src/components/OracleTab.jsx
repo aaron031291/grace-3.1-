@@ -254,10 +254,15 @@ function AuditPanel() {
 export default function OracleTab() {
   const [activeTab, setActiveTab] = useState('overview');
   const [dashboard, setDashboard] = useState(null);
+  const [fullData, setFullData] = useState(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/oracle/dashboard`)
       .then(r => r.ok ? r.json() : null).then(setDashboard).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/oracle/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
   }, []);
 
   const tabs = [
@@ -329,6 +334,68 @@ export default function OracleTab() {
                     <span style={{ fontWeight: 700 }}>{s.count}</span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Full aggregation: extra sections */}
+            {fullData?.learning_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Learning Status</div>
+                {typeof fullData.learning_status === 'object' ? (
+                  Object.entries(fullData.learning_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.learning_status)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.ml_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>ML Status</div>
+                {typeof fullData.ml_status === 'object' ? (
+                  Object.entries(fullData.ml_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.ml_status)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.sandbox_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Sandbox Status</div>
+                {typeof fullData.sandbox_status === 'object' ? (
+                  Object.entries(fullData.sandbox_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.sandbox_status)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.proactive_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Proactive Status</div>
+                {typeof fullData.proactive_status === 'object' ? (
+                  Object.entries(fullData.proactive_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.proactive_status)}</span>
+                )}
               </div>
             )}
           </div>

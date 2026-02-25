@@ -99,6 +99,11 @@ export default function CodebaseTab() {
 
   // Panel sizing
   const [fullscreenPanel, setFullscreenPanel] = useState(null); // null, 'tree', 'editor', 'agent'
+  const [fullData, setFullData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/codebase/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   // ── Fetch ───────────────────────────────────────────────────────────
   const fetchProjects = useCallback(async () => {
@@ -280,9 +285,9 @@ export default function CodebaseTab() {
         </div>
       )}
 
-      {/* Three panels */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-
+      {/* Three panels + full aggregation */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Panel 1: File Tree */}
         {showTree && (
           <div style={{ flex: fullscreenPanel === 'tree' ? 1 : '0 0 240px', borderRight: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: C.bg }}>
@@ -428,6 +433,74 @@ export default function CodebaseTab() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+        </div>
+
+        {/* Full aggregation: extra sections */}
+        {fullData && (fullData.version_control || fullData.cicd_pipelines || fullData.agent_status || fullData.testing_status) && (
+          <div style={{ padding: '12px 16px', borderTop: `1px solid ${C.border}`, background: C.bg, maxHeight: 240, overflowY: 'auto' }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginBottom: 10, textTransform: 'uppercase' }}>Full Aggregation</div>
+            {fullData?.version_control && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Version Control</div>
+                {typeof fullData.version_control === 'object' ? (
+                  Object.entries(fullData.version_control).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.version_control)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.cicd_pipelines && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>CI/CD Pipelines</div>
+                {typeof fullData.cicd_pipelines === 'object' ? (
+                  Object.entries(fullData.cicd_pipelines).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.cicd_pipelines)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.agent_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Agent Status</div>
+                {typeof fullData.agent_status === 'object' ? (
+                  Object.entries(fullData.agent_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.agent_status)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.testing_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Testing Status</div>
+                {typeof fullData.testing_status === 'object' ? (
+                  Object.entries(fullData.testing_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.testing_status)}</span>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

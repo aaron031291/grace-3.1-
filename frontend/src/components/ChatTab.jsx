@@ -45,6 +45,7 @@ function WorldModelPanel({ onClose }) {
   const [graceMessages, setGraceMessages] = useState([]);
   const [graceSending, setGraceSending] = useState(false);
   const graceEndRef = useRef(null);
+  const [fullData, setFullData] = useState(null);
 
   const fetchSystemState = useCallback(async () => {
     try {
@@ -78,6 +79,10 @@ function WorldModelPanel({ onClose }) {
     const interval = setInterval(fetchSystemState, 30000);
     return () => clearInterval(interval);
   }, [fetchSystemState]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/chat/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
 
   useEffect(() => {
     graceEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -313,6 +318,68 @@ function WorldModelPanel({ onClose }) {
                     </span>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Full aggregation: extra sections */}
+            {fullData?.cognitive_decisions && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Cognitive Decisions</div>
+                {typeof fullData.cognitive_decisions === 'object' ? (
+                  Object.entries(fullData.cognitive_decisions).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.cognitive_decisions)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.llm_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>LLM Status</div>
+                {typeof fullData.llm_status === 'object' ? (
+                  Object.entries(fullData.llm_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.llm_status)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.mcp_tools && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>MCP Tools</div>
+                {typeof fullData.mcp_tools === 'object' ? (
+                  Object.entries(fullData.mcp_tools).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.mcp_tools)}</span>
+                )}
+              </div>
+            )}
+            {fullData?.voice_status && (
+              <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Voice Status</div>
+                {typeof fullData.voice_status === 'object' ? (
+                  Object.entries(fullData.voice_status).map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                      <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                      <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                    </div>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.voice_status)}</span>
+                )}
               </div>
             )}
           </>
