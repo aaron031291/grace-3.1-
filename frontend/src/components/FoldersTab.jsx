@@ -240,7 +240,7 @@ const FoldersTab = () => {
       const res = await fetch(`${API_BASE_URL}/api/librarian-fs/stats`);
       if (!res.ok) return;
       setStats(await res.json());
-    } catch (_) { /* silent */ }
+    } catch { /* silent */ }
   }, []);
 
   // ── Mount ────────────────────────────────────────────────────────────
@@ -314,23 +314,28 @@ const FoldersTab = () => {
     }
   };
 
-  const handleUpload = async (e) => {
-    const files = e.target.files;
+  const handleUpload = async (e, targetDir) => {
+    const files = e.target ? e.target.files : e;
     if (!files || files.length === 0) return;
     setUploading(true);
+    const uploadDir = targetDir ?? currentPath;
+    let uploadCount = 0;
     try {
-      const formData = new FormData();
-      Array.from(files).forEach(f => formData.append('file', f));
-      if (currentPath) formData.append('path', currentPath);
-      const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) throw new Error('Upload failed');
-      notify('File uploaded');
+      for (const f of Array.from(files)) {
+        const formData = new FormData();
+        formData.append('file', f);
+        formData.append('directory', uploadDir);
+        const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        if (!res.ok) throw new Error(`Upload failed for ${f.name}`);
+        uploadCount++;
+      }
+      notify(`${uploadCount} file${uploadCount > 1 ? 's' : ''} uploaded to ${uploadDir || 'root'}`);
       refresh();
-    } catch (e) {
-      setError(e.message);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -600,19 +605,52 @@ const FoldersTab = () => {
           <span onClick={refresh} style={{ marginLeft: 'auto', cursor: 'pointer', fontSize: 12, color: COLORS.textMuted }} title="Refresh">↻</span>
         </div>
 
-        {/* Search bar */}
-        <form onSubmit={handleSearch} style={{ padding: '8px 16px', borderBottom: `1px solid ${COLORS.border}`, display: 'flex', gap: 8, background: COLORS.bgAlt }}>
-          <input
-            type="text"
-            placeholder="Search documents..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            style={{ ...inputStyle, flex: 1 }}
-          />
-          <button type="submit" disabled={searching} style={{ ...btnStyle, background: COLORS.accent, opacity: searching ? 0.6 : 1 }}>
-            {searching ? '...' : '🔍 Search'}
+        {/* Toolbar: New Folder, Upload, Search */}
+        <div style={{ padding: '8px 16px', borderBottom: `1px solid ${COLORS.border}`, display: 'flex', gap: 8, alignItems: 'center', background: COLORS.bgAlt, flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowNewDir(!showNewDir)}
+            style={{ ...btnStyle, background: COLORS.bgDark, fontSize: 12, padding: '5px 10px' }}
+          >
+            📁+ New Folder
           </button>
-        </form>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            style={{ ...btnStyle, background: COLORS.accent, fontSize: 12, padding: '5px 10px', opacity: uploading ? 0.6 : 1 }}
+          >
+            {uploading ? '⏳ Uploading...' : '📤 Upload Here'}
+          </button>
+          <span style={{ fontSize: 11, color: COLORS.textDim }}>into: {currentPath || '/'}</span>
+          <form onSubmit={handleSearch} style={{ display: 'flex', gap: 6, marginLeft: 'auto', flex: '0 1 300px' }}>
+            <input
+              type="text"
+              placeholder="Search documents..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              style={{ ...inputStyle, flex: 1, fontSize: 12, padding: '5px 8px' }}
+            />
+            <button type="submit" disabled={searching} style={{ ...btnStyle, background: COLORS.accent, fontSize: 12, padding: '5px 10px', opacity: searching ? 0.6 : 1 }}>
+              {searching ? '...' : '🔍'}
+            </button>
+          </form>
+        </div>
+
+        {/* Inline New Folder creation */}
+        {showNewDir && (
+          <div style={{ padding: '8px 16px', borderBottom: `1px solid ${COLORS.border}`, background: COLORS.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ fontSize: 12, color: COLORS.textMuted }}>📁 Create in <b>{currentPath || '/'}</b>:</span>
+            <input
+              placeholder="folder-name (nested: a/b/c)"
+              value={newDirName}
+              onChange={e => setNewDirName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleCreateDir()}
+              style={{ ...inputStyle, flex: 1, fontSize: 12, padding: '5px 8px' }}
+              autoFocus
+            />
+            <button onClick={handleCreateDir} disabled={actionBusy} style={{ ...btnStyle, background: COLORS.success, fontSize: 12, padding: '5px 12px' }}>Create</button>
+            <button onClick={() => { setShowNewDir(false); setNewDirName(''); }} style={{ ...btnStyle, background: COLORS.border, fontSize: 12, padding: '5px 8px' }}>✕</button>
+          </div>
+        )}
 
         {/* Search results */}
         {searchResults.length > 0 && (

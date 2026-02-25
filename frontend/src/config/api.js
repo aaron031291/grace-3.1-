@@ -81,6 +81,21 @@ export const API_ENDPOINTS = {
 
   // Notion
   notion: `${API_BASE_URL}/notion`,
+
+  // World Model
+  worldModel: `${API_BASE_URL}/api/world-model`,
+  worldModelState: `${API_BASE_URL}/api/world-model/state`,
+  worldModelChat: `${API_BASE_URL}/api/world-model/chat`,
+  worldModelSubsystems: `${API_BASE_URL}/api/world-model/subsystems`,
+
+  // Librarian File System
+  librarianFs: `${API_BASE_URL}/api/librarian-fs`,
+  librarianFsTree: `${API_BASE_URL}/api/librarian-fs/tree`,
+  librarianFsBrowse: `${API_BASE_URL}/api/librarian-fs/browse`,
+  librarianFsStats: `${API_BASE_URL}/api/librarian-fs/stats`,
+
+  // MCP Chat
+  mcpChat: `${API_BASE_URL}/api/mcp/chat`,
 };
 
 // Helper function to build URLs with query params

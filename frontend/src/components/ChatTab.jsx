@@ -235,6 +235,73 @@ function WorldModelPanel({ onClose }) {
               </div>
             )}
 
+            {/* Source Code */}
+            {systemState?.source_code && (
+              <div style={styles.section}>
+                <div style={styles.sectionHeader}>Source Code</div>
+                <div style={styles.statsGrid}>
+                  <div style={styles.statItem}>
+                    <span style={styles.statValue}>{(systemState.source_code.total_python_files || 0).toLocaleString()}</span>
+                    <span style={styles.statLabel}>Python Files</span>
+                  </div>
+                  <div style={styles.statItem}>
+                    <span style={styles.statValue}>{(systemState.source_code.total_lines || 0).toLocaleString()}</span>
+                    <span style={styles.statLabel}>Lines of Code</span>
+                  </div>
+                </div>
+                {systemState.source_code.modules && (
+                  <div style={{ marginTop: 8 }}>
+                    {Object.entries(systemState.source_code.modules).slice(0, 8).map(([mod, count]) => (
+                      <div key={mod} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, padding: '2px 0', color: '#aaa' }}>
+                        <span>{mod}/</span>
+                        <span style={{ color: '#eee' }}>{count} files</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Database */}
+            {systemState?.database?.connected && (
+              <div style={styles.section}>
+                <div style={styles.sectionHeader}>Database ({systemState.database.table_count || 0} tables)</div>
+                <div style={{ maxHeight: 120, overflowY: 'auto' }}>
+                  {systemState.database.row_counts && Object.entries(systemState.database.row_counts).slice(0, 10).map(([table, count]) => (
+                    <div key={table} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, padding: '2px 0', color: '#aaa' }}>
+                      <span>{table}</span>
+                      <span style={{ color: '#eee' }}>{count} rows</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Chats */}
+            {systemState?.chats?.available && (
+              <div style={styles.section}>
+                <div style={styles.sectionHeader}>Chat History</div>
+                <div style={styles.statsGrid}>
+                  <div style={styles.statItem}>
+                    <span style={styles.statValue}>{(systemState.chats.total_chats || 0).toLocaleString()}</span>
+                    <span style={styles.statLabel}>Conversations</span>
+                  </div>
+                  <div style={styles.statItem}>
+                    <span style={styles.statValue}>{(systemState.chats.total_messages || 0).toLocaleString()}</span>
+                    <span style={styles.statLabel}>Messages</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* APIs */}
+            {systemState?.apis?.total_routes > 0 && (
+              <div style={styles.section}>
+                <div style={styles.sectionHeader}>APIs ({systemState.apis.total_routes} endpoints)</div>
+                <div style={{ fontSize: 11, color: '#aaa' }}>All endpoints connected to world model</div>
+              </div>
+            )}
+
             {/* Capabilities */}
             {capabilities.length > 0 && (
               <div style={styles.section}>
