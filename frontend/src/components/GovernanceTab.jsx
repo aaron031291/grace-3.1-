@@ -374,6 +374,338 @@ function ActionsPanel() {
   );
 }
 
+// ── Sub-tab: Genesis Keys ─────────────────────────────────────────────
+function GenesisKeysPanel() {
+  const [folders, setFolders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [dayData, setDayData] = useState(null);
+  const [dayLoading, setDayLoading] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [keyDetail, setKeyDetail] = useState(null);
+  const [keyLoading, setKeyLoading] = useState(false);
+  const [stats, setStats] = useState(null);
+  const [expandedTypes, setExpandedTypes] = useState(new Set());
+
+  useEffect(() => {
+    Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/genesis-daily/folders?days=60`).then(r => r.ok ? r.json() : { folders: [] }),
+      fetch(`${API_BASE_URL}/api/genesis-daily/stats`).then(r => r.ok ? r.json() : null),
+    ]).then(([fRes, sRes]) => {
+      if (fRes.status === 'fulfilled') setFolders(fRes.value.folders || []);
+      if (sRes.status === 'fulfilled') setStats(sRes.value);
+      setLoading(false);
+    });
+  }, []);
+
+  const openFolder = useCallback(async (date) => {
+    setSelectedDate(date);
+    setSelectedKey(null);
+    setKeyDetail(null);
+    setDayLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/folder/${date}`);
+      if (res.ok) setDayData(await res.json());
+    } catch { /* silent */ }
+    finally { setDayLoading(false); }
+  }, []);
+
+  const openKey = useCallback(async (keyId) => {
+    setSelectedKey(keyId);
+    setKeyLoading(true);
+    setKeyDetail(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/key/${keyId}`);
+      if (res.ok) setKeyDetail(await res.json());
+    } catch { /* silent */ }
+    finally { setKeyLoading(false); }
+  }, []);
+
+  const toggleType = (type) => {
+    setExpandedTypes(prev => {
+      const n = new Set(prev);
+      if (n.has(type)) n.delete(type); else n.add(type);
+      return n;
+    });
+  };
+
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading Genesis Keys...</div>;
+
+  return (
+    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+
+      {/* Left: Date folders */}
+      <div style={{ flex: '0 0 240px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+        {stats && (
+          <div style={{ padding: '10px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+            <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>Total Keys: <b style={{ color: C.text }}>{(stats.total_keys || 0).toLocaleString()}</b></div>
+            <div style={{ fontSize: 11, color: C.muted }}>Today: <b style={{ color: C.accent }}>{(stats.today_keys || 0).toLocaleString()}</b></div>
+          </div>
+        )}
+        <div style={{ padding: '8px 12px', fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', borderBottom: `1px solid ${C.border}` }}>
+          📅 Daily Folders
+        </div>
+        {folders.length === 0 ? (
+          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>No genesis keys yet</div>
+        ) : folders.map(f => (
+          <div
+            key={f.date}
+            onClick={() => openFolder(f.date)}
+            style={{
+              padding: '8px 12px', cursor: 'pointer', fontSize: 12,
+              display: 'flex', alignItems: 'center', gap: 8,
+              background: selectedDate === f.date ? C.bgDark : 'transparent',
+              borderLeft: selectedDate === f.date ? `3px solid ${C.accent}` : '3px solid transparent',
+              borderBottom: `1px solid ${C.border}22`,
+              transition: 'background .1s',
+            }}
+            onMouseEnter={e => { if (selectedDate !== f.date) e.currentTarget.style.background = C.bgAlt; }}
+            onMouseLeave={e => { if (selectedDate !== f.date) e.currentTarget.style.background = 'transparent'; }}
+          >
+            <span>📁</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600 }}>{f.date}</div>
+              <div style={{ fontSize: 10, color: C.dim }}>{f.label}</div>
+            </div>
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ fontWeight: 700, color: C.text }}>{f.key_count}</div>
+              {f.error_count > 0 && <div style={{ fontSize: 9, color: C.error }}>{f.error_count} errors</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Center: Day contents grouped by type */}
+      <div style={{ flex: 1, overflow: 'auto', borderRight: selectedKey ? `1px solid ${C.border}` : 'none' }}>
+        {!selectedDate ? (
+          <div style={{ padding: 60, textAlign: 'center', color: C.dim }}>
+            <div style={{ fontSize: 48, marginBottom: 12, opacity: 0.5 }}>🔑</div>
+            <div style={{ fontSize: 14, fontWeight: 500, color: C.muted }}>Select a daily folder</div>
+            <div style={{ fontSize: 12 }}>Each folder contains all Genesis Keys from that 24-hour window</div>
+          </div>
+        ) : dayLoading ? (
+          <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading keys...</div>
+        ) : dayData ? (
+          <div style={{ padding: 16 }}>
+            {/* Demographics bar */}
+            <div style={{
+              display: 'flex', gap: 16, padding: '10px 14px', marginBottom: 14,
+              background: C.bgAlt, borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 12, flexWrap: 'wrap',
+            }}>
+              <span>🔑 <b>{dayData.demographics?.total_keys || 0}</b> keys</span>
+              <span>❌ <b style={{ color: C.error }}>{dayData.demographics?.total_errors || 0}</b> errors</span>
+              <span>✅ <b style={{ color: C.success }}>{dayData.demographics?.total_fixes || 0}</b> fixes</span>
+              <span>👤 <b>{dayData.demographics?.unique_actors || 0}</b> actors</span>
+              <span>📄 <b>{dayData.demographics?.unique_files || 0}</b> files</span>
+            </div>
+
+            {/* Types */}
+            {(dayData.by_type || []).map(group => {
+              const isOpen = expandedTypes.has(group.type);
+              return (
+                <div key={group.type} style={{ marginBottom: 6 }}>
+                  <div
+                    onClick={() => toggleType(group.type)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                      background: C.bgAlt, borderRadius: 6, cursor: 'pointer',
+                      border: `1px solid ${C.border}`, userSelect: 'none',
+                    }}
+                  >
+                    <span style={{ fontSize: 10, width: 14, textAlign: 'center', color: C.muted }}>{isOpen ? '▼' : '▶'}</span>
+                    <span style={{ fontSize: 16 }}>{group.icon}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{group.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: C.accent }}>{group.count}</span>
+                    {group.error_count > 0 && <span style={{ fontSize: 10, color: C.error }}>({group.error_count} errors)</span>}
+                  </div>
+                  {isOpen && (
+                    <div style={{ paddingLeft: 12, borderLeft: `2px solid ${C.border}`, marginLeft: 20, marginTop: 4 }}>
+                      {group.keys.map(k => (
+                        <div
+                          key={k.key_id || k.id}
+                          onDoubleClick={() => openKey(k.key_id)}
+                          onClick={() => openKey(k.key_id)}
+                          style={{
+                            padding: '6px 10px', marginBottom: 2, borderRadius: 4, cursor: 'pointer',
+                            background: selectedKey === k.key_id ? C.bgDark : 'transparent',
+                            borderLeft: selectedKey === k.key_id ? `2px solid ${C.accent}` : '2px solid transparent',
+                            fontSize: 12, transition: 'background .1s',
+                          }}
+                          onMouseEnter={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = C.bgAlt; }}
+                          onMouseLeave={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            {k.is_error && <span style={{ color: C.error }}>❌</span>}
+                            {k.fix_applied && <span style={{ color: C.success }}>✅</span>}
+                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: C.text }}>{k.what}</span>
+                            <span style={{ fontSize: 10, color: C.dim, flexShrink: 0 }}>
+                              {k.timestamp ? new Date(k.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                            </span>
+                          </div>
+                          {k.file_path && <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>📄 {k.file_path}</div>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+
+      {/* Right: Key detail panel */}
+      {selectedKey && (
+        <div style={{ flex: '0 0 380px', overflow: 'auto', padding: '12px 16px' }}>
+          {keyLoading ? (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Loading key...</div>
+          ) : keyDetail ? (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>🔑</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 11, fontFamily: 'monospace', color: C.accent, wordBreak: 'break-all' }}>{keyDetail.key_id}</div>
+                  <StatusBadge status={keyDetail.key_type} />
+                </div>
+                <span onClick={() => { setSelectedKey(null); setKeyDetail(null); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
+              </div>
+
+              {/* What/Who/When/Where/Why/How */}
+              <Card title="Details">
+                {[
+                  ['What', keyDetail.what],
+                  ['Who', keyDetail.who],
+                  ['When', keyDetail.timestamp ? new Date(keyDetail.timestamp).toLocaleString() : ''],
+                  ['Where', keyDetail.where],
+                  ['Why', keyDetail.why],
+                  ['How', keyDetail.how],
+                  ['Status', keyDetail.status],
+                  ['File', keyDetail.file_path],
+                  ['Function', keyDetail.function_name],
+                  ['Line', keyDetail.line_number],
+                ].filter(([, v]) => v).map(([label, val]) => (
+                  <div key={label} style={{ display: 'flex', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
+                    <span style={{ color: C.muted, width: 55, flexShrink: 0 }}>{label}</span>
+                    <span style={{ color: C.text, wordBreak: 'break-all' }}>{String(val)}</span>
+                  </div>
+                ))}
+              </Card>
+
+              {/* Source code context */}
+              {keyDetail.source_context && (
+                <Card title={`📄 Source: ${keyDetail.source_context.file_path || keyDetail.file_path}`}>
+                  <pre style={{
+                    margin: 0, padding: 10, background: '#0d1117', borderRadius: 4,
+                    fontSize: 11, lineHeight: 1.5, overflow: 'auto', maxHeight: 300,
+                    fontFamily: '"Fira Code", "JetBrains Mono", Consolas, monospace',
+                    color: '#e6edf3', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                  }}>
+                    {keyDetail.source_context.lines
+                      ? keyDetail.source_context.lines.map((line, i) => {
+                          const lineNum = (keyDetail.source_context.start_line || 1) + i;
+                          const isHighlight = lineNum === keyDetail.source_context.highlight_line;
+                          return (
+                            <div key={i} style={{ background: isHighlight ? '#e9456020' : 'transparent', display: 'flex' }}>
+                              <span style={{ width: 40, textAlign: 'right', paddingRight: 10, color: isHighlight ? C.accent : '#484f58', userSelect: 'none', flexShrink: 0 }}>{lineNum}</span>
+                              <span>{line}</span>
+                            </div>
+                          );
+                        })
+                      : keyDetail.source_context.preview || '(no preview)'
+                    }
+                  </pre>
+                </Card>
+              )}
+
+              {/* Code before/after */}
+              {(keyDetail.code_before || keyDetail.code_after) && (
+                <Card title="Code Change">
+                  {keyDetail.code_before && (
+                    <div style={{ marginBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: C.error, fontWeight: 600, marginBottom: 4 }}>— Before</div>
+                      <pre style={{ margin: 0, padding: 8, background: C.error + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_before}</pre>
+                    </div>
+                  )}
+                  {keyDetail.code_after && (
+                    <div>
+                      <div style={{ fontSize: 10, color: C.success, fontWeight: 600, marginBottom: 4 }}>+ After</div>
+                      <pre style={{ margin: 0, padding: 8, background: C.success + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_after}</pre>
+                    </div>
+                  )}
+                </Card>
+              )}
+
+              {/* Error info */}
+              {keyDetail.is_error && (
+                <Card title="❌ Error">
+                  <div style={{ fontSize: 12, color: C.error, fontWeight: 600 }}>{keyDetail.error_type}</div>
+                  <div style={{ fontSize: 11, color: C.muted, marginTop: 4, whiteSpace: 'pre-wrap' }}>{keyDetail.error_message}</div>
+                </Card>
+              )}
+
+              {/* Tags */}
+              {keyDetail.tags && keyDetail.tags.length > 0 && (
+                <Card title="Tags">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    {keyDetail.tags.map((t, i) => (
+                      <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{t}</span>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {/* Input/Output data */}
+              {keyDetail.input_data && Object.keys(keyDetail.input_data).length > 0 && (
+                <Card title="Input Data">
+                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.input_data, null, 2)}</pre>
+                </Card>
+              )}
+              {keyDetail.output_data && Object.keys(keyDetail.output_data).length > 0 && (
+                <Card title="Output Data">
+                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.output_data, null, 2)}</pre>
+                </Card>
+              )}
+
+              {/* Child/parent keys */}
+              {keyDetail.parent_key && (
+                <Card title="Parent Key">
+                  <div onClick={() => openKey(keyDetail.parent_key.key_id)} style={{ cursor: 'pointer', fontSize: 12, color: C.info }}>
+                    🔗 {keyDetail.parent_key.what} <span style={{ fontSize: 10, color: C.dim }}>({keyDetail.parent_key.type})</span>
+                  </div>
+                </Card>
+              )}
+              {keyDetail.child_keys && keyDetail.child_keys.length > 0 && (
+                <Card title={`Child Keys (${keyDetail.child_keys.length})`}>
+                  {keyDetail.child_keys.map(ck => (
+                    <div key={ck.key_id} onClick={() => openKey(ck.key_id)} style={{ cursor: 'pointer', fontSize: 11, padding: '3px 0', borderBottom: `1px solid ${C.border}`, color: C.info }}>
+                      🔗 {ck.what} <span style={{ fontSize: 9, color: C.dim }}>({ck.type})</span>
+                    </div>
+                  ))}
+                </Card>
+              )}
+
+              {/* Fix suggestions */}
+              {keyDetail.fix_suggestions && keyDetail.fix_suggestions.length > 0 && (
+                <Card title={`Fix Suggestions (${keyDetail.fix_suggestions.length})`}>
+                  {keyDetail.fix_suggestions.map(fs => (
+                    <div key={fs.id} style={{ padding: '6px 8px', marginBottom: 4, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+                      <div style={{ fontSize: 12, fontWeight: 600 }}>{fs.title}</div>
+                      <div style={{ fontSize: 10, color: C.muted }}><StatusBadge status={fs.status} /> · {fs.severity} · {fs.confidence ? (fs.confidence * 100).toFixed(0) + '% confidence' : ''}</div>
+                      {fs.fix_code && <pre style={{ margin: '4px 0 0', fontSize: 10, color: C.success, background: C.success + '10', padding: 6, borderRadius: 3, whiteSpace: 'pre-wrap', maxHeight: 80, overflow: 'auto' }}>{fs.fix_code}</pre>}
+                    </div>
+                  ))}
+                </Card>
+              )}
+            </>
+          ) : (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Failed to load key detail</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main GovernanceTab ────────────────────────────────────────────────
 export default function GovernanceTab() {
   const [activeTab, setActiveTab] = useState('approvals');
@@ -390,6 +722,7 @@ export default function GovernanceTab() {
     { id: 'scores', label: 'Scores', icon: '📊' },
     { id: 'performance', label: 'Performance', icon: '⚡' },
     { id: 'actions', label: 'Actions', icon: '🔧' },
+    { id: 'genesis', label: 'Genesis Keys', icon: '🔑' },
   ];
 
   return (
@@ -445,6 +778,7 @@ export default function GovernanceTab() {
         {activeTab === 'scores' && <ScoresPanel />}
         {activeTab === 'performance' && <PerformancePanel />}
         {activeTab === 'actions' && <ActionsPanel />}
+        {activeTab === 'genesis' && <GenesisKeysPanel />}
       </div>
     </div>
   );
