@@ -95,6 +95,7 @@ from api.whitelist_hub_api import router as whitelist_hub_router
 from api.oracle_api import router as oracle_router
 from api.codebase_hub_api import router as codebase_hub_router
 from api.system_bridge_api import router as system_bridge_router
+from api.tasks_hub_api import router as tasks_hub_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -573,6 +574,7 @@ app.include_router(whitelist_hub_router)  # Whitelist hub — API sources, web s
 app.include_router(oracle_router)  # Oracle — training data store, Kimi audit, gap filling
 app.include_router(codebase_hub_router)  # Codebase hub — code projects, coding agent
 app.include_router(system_bridge_router)  # System bridge — aggregates all 190+ backend systems
+app.include_router(tasks_hub_router)  # Tasks hub — live activity, task submission, scheduling
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
