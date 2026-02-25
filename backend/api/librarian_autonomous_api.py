@@ -45,6 +45,17 @@ class AutoOrganizeRequest(BaseModel):
     dry_run: bool = True
 
 
+class FileSaveRequest(BaseModel):
+    path: str
+    content: str
+
+
+class FileCreateRequest(BaseModel):
+    path: str
+    content: str = ""
+    directory: str = ""
+
+
 class FileAnalyzeRequest(BaseModel):
     file_path: str
     use_kimi: bool = False
@@ -341,6 +352,58 @@ async def get_file_content(path: str, max_chars: int = 50000):
         "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
         "extension": target.suffix.lower(),
     }
+
+
+@router.put("/file/content")
+async def save_file_content(request: FileSaveRequest):
+    """Save (overwrite) file content. Used by the inline document editor."""
+    target = _resolve_safe_path(request.path)
+    if not target.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    if not target.is_file():
+        raise HTTPException(status_code=400, detail="Path is not a file")
+
+    try:
+        target.write_text(request.content, encoding="utf-8")
+        stat = target.stat()
+        return {
+            "saved": True,
+            "path": request.path,
+            "name": target.name,
+            "size": stat.st_size,
+            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Save failed: {e}")
+
+
+@router.post("/file/create")
+async def create_new_file(request: FileCreateRequest):
+    """Create a new file with optional initial content."""
+    file_path = request.path
+    if request.directory:
+        file_path = f"{request.directory}/{request.path}" if request.directory else request.path
+
+    target = _resolve_safe_path(file_path)
+    if target.exists():
+        raise HTTPException(status_code=409, detail="File already exists")
+
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(request.content, encoding="utf-8")
+        kb = _get_kb_path()
+        stat = target.stat()
+        return {
+            "created": True,
+            "path": str(target.relative_to(kb)),
+            "name": target.name,
+            "size": stat.st_size,
+            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Create failed: {e}")
 
 
 @router.post("/analyze")

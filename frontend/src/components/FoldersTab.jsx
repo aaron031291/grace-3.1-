@@ -58,6 +58,19 @@ function formatBytes(bytes) {
   return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
 }
 
+function _fileIcon(nameOrExt) {
+  const ext = (nameOrExt || '').split('.').pop().toLowerCase();
+  const map = {
+    md: '📝', txt: '📝', doc: '📝', docx: '📝', rtf: '📝',
+    py: '🐍', js: '🟨', ts: '🔷', jsx: '⚛️', tsx: '⚛️',
+    json: '📋', yaml: '⚙️', yml: '⚙️', toml: '⚙️', ini: '⚙️', cfg: '⚙️',
+    csv: '📊', xml: '📰', html: '🌐', css: '🎨',
+    pdf: '📕', png: '🖼️', jpg: '🖼️', jpeg: '🖼️', gif: '🖼️', svg: '🖼️',
+    sh: '🖥️', bash: '🖥️', sql: '🗄️', log: '📋',
+  };
+  return map[ext] || '📄';
+}
+
 // ── Tree Node ──────────────────────────────────────────────────────────
 function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleExpand, searchFilter }) {
   const isDir = node.type === 'directory';
@@ -175,8 +188,17 @@ const FoldersTab = () => {
 
   const [actionBusy, setActionBusy] = useState(false);
 
+  // Editor state
+  const [editMode, setEditMode] = useState(false);
+  const [editContent, setEditContent] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [hasUnsaved, setHasUnsaved] = useState(false);
+  const [showNewFile, setShowNewFile] = useState(false);
+  const [newFileName, setNewFileName] = useState('');
+
   const fileInputRef = useRef(null);
   const notifTimer = useRef(null);
+  const editorRef = useRef(null);
 
   // ── Notifications ────────────────────────────────────────────────────
   const notify = useCallback((msg, type = 'success') => {
@@ -415,6 +437,92 @@ const FoldersTab = () => {
       setError(e.message);
     } finally {
       setActionBusy(false);
+    }
+  };
+
+  // ── Editor: save & create ───────────────────────────────────────────
+  const handleSaveFile = async () => {
+    if (!selectedFile?.path) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/content`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: selectedFile.path, content: editContent }),
+      });
+      if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.detail || 'Save failed'); }
+      const data = await res.json();
+      setFileContent(editContent);
+      setHasUnsaved(false);
+      setSelectedFile(prev => ({ ...prev, size: data.size, modified: data.modified }));
+      notify('File saved');
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCreateFile = async () => {
+    if (!newFileName.trim()) return;
+    setActionBusy(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: newFileName.trim(), directory: currentPath, content: '' }),
+      });
+      if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.detail || 'Create failed'); }
+      const data = await res.json();
+      setShowNewFile(false);
+      setNewFileName('');
+      notify('File created');
+      refresh();
+      setSelectedFile({ path: data.path, name: data.name, size: data.size });
+      setEditMode(true);
+      setEditContent('');
+      setFileContent('');
+      setHasUnsaved(false);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const enterEditMode = () => {
+    setEditMode(true);
+    setEditContent(fileContent);
+    setHasUnsaved(false);
+  };
+
+  const exitEditMode = () => {
+    if (hasUnsaved && !window.confirm('Discard unsaved changes?')) return;
+    setEditMode(false);
+    setEditContent('');
+    setHasUnsaved(false);
+  };
+
+  const handleEditorChange = (e) => {
+    setEditContent(e.target.value);
+    setHasUnsaved(e.target.value !== fileContent);
+  };
+
+  const handleEditorKeyDown = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      handleSaveFile();
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      const val = e.target.value;
+      setEditContent(val.substring(0, start) + '  ' + val.substring(end));
+      setHasUnsaved(true);
+      requestAnimationFrame(() => {
+        e.target.selectionStart = e.target.selectionEnd = start + 2;
+      });
     }
   };
 
@@ -671,81 +779,228 @@ const FoldersTab = () => {
           </div>
         )}
 
-        {/* Main content area */}
-        <div style={{ flex: 1, overflow: 'auto', padding: 16 }}>
-          {selectedFile ? (
-            /* File viewer */
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <span style={{ fontSize: 18 }}>📄</span>
-                <span style={{ fontWeight: 600, fontSize: 15 }}>{selectedFile.name}</span>
-                {selectedFile.size != null && (
-                  <span style={{ fontSize: 12, color: COLORS.textDim }}>{formatBytes(selectedFile.size)}</span>
-                )}
-                <span onClick={() => { setSelectedFile(null); setFileContent(''); }} style={{ marginLeft: 'auto', cursor: 'pointer', fontSize: 12, color: COLORS.textMuted }}>
-                  ✕ Close
-                </span>
-              </div>
-              {fileLoading ? (
-                <div style={{ color: COLORS.textDim, fontSize: 13, padding: 20, textAlign: 'center' }}>Loading file content...</div>
-              ) : (
-                <pre style={{
-                  background: COLORS.bgAlt, border: `1px solid ${COLORS.border}`, borderRadius: 6,
-                  padding: 16, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-                  color: COLORS.text, maxHeight: 'calc(100vh - 280px)', overflowY: 'auto', margin: 0,
-                }}>
-                  {fileContent || '(empty file)'}
-                </pre>
-              )}
+        {/* Main content area — project-style document panel */}
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+
+          {/* Document list sidebar — files in the current directory */}
+          <div style={{
+            flex: '0 0 220px', borderRight: `1px solid ${COLORS.border}`,
+            display: 'flex', flexDirection: 'column', background: COLORS.bg,
+          }}>
+            <div style={{
+              padding: '10px 12px', borderBottom: `1px solid ${COLORS.border}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Documents
+              </span>
+              <span
+                onClick={() => setShowNewFile(!showNewFile)}
+                style={{ cursor: 'pointer', fontSize: 16, color: COLORS.accent, lineHeight: 1 }}
+                title="New file"
+              >+</span>
             </div>
-          ) : (
-            /* Directory browser */
-            <div>
+
+            {showNewFile && (
+              <div style={{ padding: '8px 10px', borderBottom: `1px solid ${COLORS.border}`, display: 'flex', gap: 4 }}>
+                <input
+                  placeholder="filename.md"
+                  value={newFileName}
+                  onChange={e => setNewFileName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateFile()}
+                  style={{ ...inputStyle, fontSize: 11, padding: '4px 6px', flex: 1 }}
+                  autoFocus
+                />
+                <button onClick={handleCreateFile} disabled={actionBusy} style={{ ...btnStyle, fontSize: 11, padding: '3px 8px', background: COLORS.success }}>✓</button>
+                <button onClick={() => { setShowNewFile(false); setNewFileName(''); }} style={{ ...btnStyle, fontSize: 11, padding: '3px 6px', background: COLORS.border }}>✕</button>
+              </div>
+            )}
+
+            <div style={{ flex: 1, overflowY: 'auto' }}>
               {dirLoading ? (
-                <div style={{ color: COLORS.textDim, fontSize: 13, padding: 40, textAlign: 'center' }}>Loading directory...</div>
-              ) : dirItems.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: 40, color: COLORS.textDim }}>
-                  <div style={{ fontSize: 48, marginBottom: 12 }}>📂</div>
-                  <div style={{ fontSize: 14, fontWeight: 500 }}>This folder is empty</div>
-                  <div style={{ fontSize: 12, marginTop: 6 }}>Upload files or create a new directory</div>
-                </div>
+                <div style={{ padding: 16, fontSize: 12, color: COLORS.textDim, textAlign: 'center' }}>Loading...</div>
               ) : (
-                <div>
-                  {dirItems.map(item => {
-                    const isDir = item.type === 'directory' || item.is_dir;
+                <>
+                  {/* Subdirectories first */}
+                  {dirItems.filter(i => i.type === 'directory' || i.is_dir).map(item => (
+                    <div
+                      key={item.path || item.name}
+                      onClick={() => handleDirItemClick(item)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
+                        cursor: 'pointer', fontSize: 12,
+                        color: COLORS.textMuted,
+                        background: 'transparent',
+                        transition: 'background .1s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <span style={{ flexShrink: 0 }}>📁</span>
+                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
+                      <span style={{ fontSize: 10, color: COLORS.textDim }}>{item.file_count ?? ''}</span>
+                      <span
+                        onClick={e => { e.stopPropagation(); handleDeleteDir(item.path); }}
+                        title="Delete folder"
+                        style={{ cursor: 'pointer', fontSize: 12, color: COLORS.textDim, opacity: 0.6, padding: '0 2px' }}
+                      >🗑</span>
+                    </div>
+                  ))}
+
+                  {/* Files */}
+                  {dirItems.filter(i => i.type !== 'directory' && !i.is_dir).map(item => {
+                    const isActive = selectedFile?.path === item.path;
                     return (
                       <div
                         key={item.path || item.name}
                         onClick={() => handleDirItemClick(item)}
                         style={{
-                          display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
-                          borderRadius: 6, cursor: 'pointer', marginBottom: 2,
-                          background: 'transparent', transition: 'background .1s',
+                          display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px',
+                          cursor: 'pointer', fontSize: 12,
+                          background: isActive ? COLORS.bgDark : 'transparent',
+                          borderLeft: isActive ? `2px solid ${COLORS.accent}` : '2px solid transparent',
+                          color: isActive ? COLORS.text : COLORS.textMuted,
+                          transition: 'all .1s',
                         }}
-                        onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
-                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = COLORS.bgAlt; }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                       >
-                        <span style={{ fontSize: 16, flexShrink: 0 }}>{isDir ? '📁' : '📄'}</span>
-                        <span style={{ flex: 1, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span style={{ flexShrink: 0 }}>{_fileIcon(item.extension || item.name)}</span>
+                        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {item.name}
+                          {hasUnsaved && isActive && <span style={{ color: COLORS.accent, marginLeft: 4 }}>●</span>}
                         </span>
-                        <span style={{ fontSize: 11, color: COLORS.textDim, flexShrink: 0 }}>
-                          {isDir ? (item.file_count != null ? `${item.file_count} items` : 'Folder') : formatBytes(item.size)}
-                        </span>
-                        <span
-                          onClick={e => { e.stopPropagation(); isDir ? handleDeleteDir(item.path) : handleDeleteFile(item.path); }}
-                          title="Delete"
-                          style={{ cursor: 'pointer', fontSize: 14, color: COLORS.textDim, flexShrink: 0, padding: '2px 4px' }}
-                        >
-                          🗑
-                        </span>
+                        <span style={{ fontSize: 10, color: COLORS.textDim, flexShrink: 0 }}>{formatBytes(item.size)}</span>
                       </div>
                     );
                   })}
-                </div>
+
+                  {dirItems.length === 0 && (
+                    <div style={{ padding: '30px 16px', textAlign: 'center', color: COLORS.textDim, fontSize: 12 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>📂</div>
+                      Empty folder
+                    </div>
+                  )}
+                </>
               )}
             </div>
-          )}
+          </div>
+
+          {/* Document editor / viewer */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            {selectedFile ? (
+              <>
+                {/* Editor toolbar */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px',
+                  borderBottom: `1px solid ${COLORS.border}`, background: COLORS.bgAlt,
+                  minHeight: 40,
+                }}>
+                  <span style={{ fontSize: 14 }}>{_fileIcon(selectedFile.extension || selectedFile.name)}</span>
+                  <span style={{ fontWeight: 600, fontSize: 13 }}>{selectedFile.name}</span>
+                  {hasUnsaved && <span style={{ fontSize: 10, color: COLORS.accent, fontWeight: 600 }}>UNSAVED</span>}
+                  {selectedFile.size != null && (
+                    <span style={{ fontSize: 11, color: COLORS.textDim }}>{formatBytes(selectedFile.size)}</span>
+                  )}
+
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
+                    {editMode ? (
+                      <>
+                        <button
+                          onClick={handleSaveFile}
+                          disabled={saving || !hasUnsaved}
+                          style={{
+                            ...btnStyle, fontSize: 12, padding: '4px 12px',
+                            background: hasUnsaved ? COLORS.success : COLORS.bgDark,
+                            opacity: saving ? 0.5 : 1,
+                          }}
+                        >
+                          {saving ? '⏳ Saving...' : '💾 Save'}
+                        </button>
+                        <span style={{ fontSize: 10, color: COLORS.textDim }}>Ctrl+S</span>
+                        <button
+                          onClick={exitEditMode}
+                          style={{ ...btnStyle, fontSize: 12, padding: '4px 10px', background: COLORS.border }}
+                        >
+                          View
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={enterEditMode}
+                        style={{ ...btnStyle, fontSize: 12, padding: '4px 12px', background: COLORS.accentAlt }}
+                      >
+                        ✏️ Edit
+                      </button>
+                    )}
+                    <span
+                      onClick={e => { e.stopPropagation(); handleDeleteFile(selectedFile.path); }}
+                      title="Delete file"
+                      style={{ cursor: 'pointer', fontSize: 14, color: COLORS.textDim, padding: '2px' }}
+                    >🗑</span>
+                    <span
+                      onClick={() => { if (hasUnsaved && !window.confirm('Discard unsaved changes?')) return; setSelectedFile(null); setFileContent(''); setEditMode(false); setHasUnsaved(false); }}
+                      style={{ cursor: 'pointer', fontSize: 16, color: COLORS.textMuted, padding: '2px', lineHeight: 1 }}
+                    >✕</span>
+                  </div>
+                </div>
+
+                {/* File content: editor or viewer */}
+                <div style={{ flex: 1, overflow: 'auto' }}>
+                  {fileLoading ? (
+                    <div style={{ padding: 40, textAlign: 'center', color: COLORS.textDim, fontSize: 13 }}>Loading file content...</div>
+                  ) : editMode ? (
+                    <textarea
+                      ref={editorRef}
+                      value={editContent}
+                      onChange={handleEditorChange}
+                      onKeyDown={handleEditorKeyDown}
+                      spellCheck={false}
+                      style={{
+                        width: '100%', height: '100%', resize: 'none',
+                        background: '#0d1117', color: '#e6edf3',
+                        border: 'none', outline: 'none',
+                        padding: '16px 20px',
+                        fontFamily: '"Fira Code", "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, monospace',
+                        fontSize: 13, lineHeight: 1.7, tabSize: 2,
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  ) : (
+                    <pre style={{
+                      margin: 0, padding: '16px 20px',
+                      fontFamily: '"Fira Code", "JetBrains Mono", "SF Mono", Consolas, monospace',
+                      fontSize: 13, lineHeight: 1.7,
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                      color: '#e6edf3', background: '#0d1117',
+                      height: '100%', overflow: 'auto',
+                    }}>
+                      {fileContent || '(empty file — click Edit to start writing)'}
+                    </pre>
+                  )}
+                </div>
+              </>
+            ) : (
+              /* No file selected — show folder overview */
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textDim }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 56, marginBottom: 16, opacity: 0.5 }}>📄</div>
+                  <div style={{ fontSize: 15, fontWeight: 500, marginBottom: 8, color: COLORS.textMuted }}>Select a document to view or edit</div>
+                  <div style={{ fontSize: 12, marginBottom: 16 }}>
+                    Choose a file from the list, or create a new one with <b>+</b>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                    <button onClick={() => setShowNewFile(true)} style={{ ...btnStyle, background: COLORS.accent }}>
+                      📝 New File
+                    </button>
+                    <button onClick={() => fileInputRef.current?.click()} style={{ ...btnStyle, background: COLORS.accentAlt }}>
+                      📤 Upload
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
