@@ -68,6 +68,7 @@ from api.whitelist_hub_api import router as whitelist_hub_router
 from api.oracle_api import router as oracle_router
 from api.codebase_hub_api import router as codebase_hub_router
 from api.system_bridge_api import router as system_bridge_router
+from api.manifest_api import router as manifest_router
 from api.tasks_hub_api import router as tasks_hub_router
 from api.api_registry_api import router as api_registry_router
 from api.business_intelligence_api import router as bi_router
@@ -544,6 +545,7 @@ app.include_router(learning_healing_router)  # /api/learn-heal — self-improvem
 app.include_router(unified_coding_agent_router)  # /api/coding-agent — unified agent (28 systems)
 app.include_router(api_explorer_router)      # /api/explorer — call any endpoint
 app.include_router(system_bridge_router)     # /api/bridge — system aggregation
+app.include_router(manifest_router)          # /api/manifest — live system manifest
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
