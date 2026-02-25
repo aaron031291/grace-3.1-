@@ -100,6 +100,7 @@ from api.api_registry_api import router as api_registry_router
 from api.business_intelligence_api import router as bi_router
 from api.system_health_api import router as system_health_router
 from api.learning_healing_api import router as learning_healing_router
+from api.unified_coding_agent_api import router as unified_coding_agent_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -583,6 +584,7 @@ app.include_router(api_registry_router)  # API Registry — catalogue all endpoi
 app.include_router(bi_router)  # Business Intelligence — analytics dashboard
 app.include_router(system_health_router)  # System Health — resources, services, organs, diagnostics
 app.include_router(learning_healing_router)  # Learning & Healing — self-improvement dashboard
+app.include_router(unified_coding_agent_router)  # Unified Coding Agent — all intelligence wired in
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

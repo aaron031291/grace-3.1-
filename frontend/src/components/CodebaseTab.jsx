@@ -89,7 +89,13 @@ export default function CodebaseTab() {
   const [agentResponse, setAgentResponse] = useState('');
   const [agentLoading, setAgentLoading] = useState(false);
   const [useKimi, setUseKimi] = useState(false);
+  const [agentCaps, setAgentCaps] = useState(null);
   const agentEndRef = useRef(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/coding-agent/capabilities`)
+      .then(r => r.ok ? r.json() : null).then(setAgentCaps).catch(() => {});
+  }, []);
 
   // Panel sizing
   const [fullscreenPanel, setFullscreenPanel] = useState(null); // null, 'tree', 'editor', 'agent'
@@ -187,12 +193,15 @@ export default function CodebaseTab() {
     const prompt = agentPrompt; setAgentPrompt('');
     setAgentResponse(prev => prev + `\n\n>>> ${prompt}\n\nThinking...`);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/codebase-hub/agent/generate`, {
+      const res = await fetch(`${API_BASE_URL}/api/coding-agent/generate`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt, project_folder: selectedProject.project_folder,
-          file_context: selectedFile ? fileContent?.slice(0, 2000) : null,
+          current_file: selectedFile?.path || null,
           use_kimi: useKimi,
+          include_codenet: true,
+          include_memory: true,
+          include_rag: true,
         }),
       });
       if (res.ok) {
@@ -355,10 +364,26 @@ export default function CodebaseTab() {
         {showAgent && (
           <div style={{ flex: fullscreenPanel === 'agent' ? 1 : '0 0 380px', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: C.bgPanel }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, flexShrink: 0 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: C.muted, flex: 1 }}>🤖 CODING AGENT</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: C.muted, flex: 1 }}>🤖 UNIFIED AGENT</span>
               <button onClick={() => setAgentResponse('')} style={{ ...btn(C.border), fontSize: 10, padding: '2px 8px' }}>Clear</button>
               {fsBtn('agent')}
             </div>
+
+            {/* Intelligence sources */}
+            {agentCaps?.capabilities && (
+              <div style={{ padding: '4px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {Object.entries(agentCaps.capabilities).map(([key, cap]) => (
+                  <span key={key} style={{
+                    fontSize: 9, padding: '1px 6px', borderRadius: 8,
+                    background: cap.available ? '#3fb95022' : '#f8514922',
+                    color: cap.available ? '#3fb950' : '#f85149',
+                    fontWeight: 600,
+                  }} title={cap.description}>
+                    {cap.available ? '●' : '○'} {key.replace(/_/g, ' ')}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div style={{ flex: 1, overflow: 'auto', padding: 12 }}>
               {agentResponse ? (
