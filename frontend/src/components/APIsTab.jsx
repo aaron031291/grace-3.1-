@@ -36,11 +36,21 @@ function MethodBadge({ method }) {
 }
 
 export default function APIsTab() {
+  const [mode, setMode] = useState('catalogue'); // 'catalogue' | 'explorer'
   const [registry, setRegistry] = useState(null);
   const [healthCheck, setHealthCheck] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(null);
+
+  // Explorer state
+  const [explorerRoutes, setExplorerRoutes] = useState([]);
+  const [explorerMethod, setExplorerMethod] = useState('GET');
+  const [explorerPath, setExplorerPath] = useState('');
+  const [explorerBody, setExplorerBody] = useState('{}');
+  const [explorerResult, setExplorerResult] = useState(null);
+  const [explorerCalling, setExplorerCalling] = useState(false);
+  const [explorerFilter, setExplorerFilter] = useState('');
   const [diagnosing, setDiagnosing] = useState(false);
   const [diagnosis, setDiagnosis] = useState(null);
   const [filter, setFilter] = useState('');
@@ -72,6 +82,32 @@ export default function APIsTab() {
 
   useEffect(() => { fetchRegistry(); }, [fetchRegistry]);
 
+  useEffect(() => {
+    if (mode === 'explorer' && explorerRoutes.length === 0) {
+      fetch(`${API_BASE_URL}/api/explorer/routes`)
+        .then(r => r.ok ? r.json() : { routes: [] })
+        .then(d => setExplorerRoutes(d.routes || []))
+        .catch(() => {});
+    }
+  }, [mode, explorerRoutes.length]);
+
+  const callEndpoint = async () => {
+    if (!explorerPath) return;
+    setExplorerCalling(true); setExplorerResult(null);
+    try {
+      let body = null;
+      if (explorerMethod !== 'GET' && explorerBody.trim()) {
+        try { body = JSON.parse(explorerBody); } catch { body = null; }
+      }
+      const res = await fetch(`${API_BASE_URL}/api/explorer/call`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: explorerMethod, path: explorerPath, body }),
+      });
+      if (res.ok) setExplorerResult(await res.json());
+    } catch { /* silent */ }
+    finally { setExplorerCalling(false); }
+  };
+
   const diagnoseAPI = async (path, error) => {
     setDiagnosing(true);
     setDiagnosis(null);
@@ -99,7 +135,11 @@ export default function APIsTab() {
       {/* Header */}
       <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 15, fontWeight: 700 }}>🔗 APIs</span>
-        {registry && <span style={{ fontSize: 11, color: C.dim }}>{registry.total_routes} endpoints · {allGroups.length} groups</span>}
+        <div style={{ display: 'flex', background: C.bgDark, borderRadius: 4, overflow: 'hidden' }}>
+          <button onClick={() => setMode('catalogue')} style={{ ...btn(mode === 'catalogue' ? C.accentAlt : 'transparent'), borderRadius: 0, fontSize: 11, padding: '4px 12px' }}>Catalogue</button>
+          <button onClick={() => setMode('explorer')} style={{ ...btn(mode === 'explorer' ? C.accentAlt : 'transparent'), borderRadius: 0, fontSize: 11, padding: '4px 12px' }}>Explorer</button>
+        </div>
+        {registry && <span style={{ fontSize: 11, color: C.dim }}>{registry.total_routes} endpoints</span>}
 
         <input placeholder="Filter endpoints..." value={filter} onChange={e => setFilter(e.target.value)}
           style={{ padding: '5px 10px', border: `1px solid ${C.border}`, borderRadius: 4, background: C.bg, color: C.text, fontSize: 12, outline: 'none', flex: '0 1 200px' }} />
@@ -138,7 +178,109 @@ export default function APIsTab() {
       )}
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        {mode === 'explorer' ? (
+          /* ── Explorer Mode ─────────────────────────────── */
+          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+            {/* Route list */}
+            <div style={{ flex: '0 0 320px', borderRight: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+                <input placeholder="Filter routes..." value={explorerFilter} onChange={e => setExplorerFilter(e.target.value)}
+                  style={{ width: '100%', padding: '5px 8px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, outline: 'none', boxSizing: 'border-box' }} />
+              </div>
+              <div style={{ flex: 1, overflowY: 'auto' }}>
+                {explorerRoutes
+                  .filter(r => !explorerFilter || r.path.toLowerCase().includes(explorerFilter.toLowerCase()) || (r.description || '').toLowerCase().includes(explorerFilter.toLowerCase()))
+                  .map((r, i) => (
+                  <div key={`${r.method}-${r.path}-${i}`}
+                    onClick={() => { setExplorerMethod(r.method); setExplorerPath(r.path); setExplorerResult(null); }}
+                    style={{
+                      padding: '5px 12px', cursor: 'pointer', fontSize: 11,
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      background: explorerPath === r.path && explorerMethod === r.method ? C.bgDark : 'transparent',
+                      borderBottom: `1px solid ${C.border}11`,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = C.bgAlt}
+                    onMouseLeave={e => { if (!(explorerPath === r.path && explorerMethod === r.method)) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <MethodBadge method={r.method} />
+                    <span style={{ flex: 1, fontFamily: 'monospace', fontSize: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.path}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
+            {/* Call panel */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              {/* Request bar */}
+              <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
+                <select value={explorerMethod} onChange={e => setExplorerMethod(e.target.value)}
+                  style={{ padding: '6px 8px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none', fontWeight: 700 }}>
+                  {['GET', 'POST', 'PUT', 'DELETE'].map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+                <input value={explorerPath} onChange={e => setExplorerPath(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && callEndpoint()}
+                  placeholder="/api/endpoint/path"
+                  style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none', fontFamily: 'monospace' }} />
+                <button onClick={callEndpoint} disabled={explorerCalling || !explorerPath}
+                  style={{ ...btn(C.live), opacity: explorerCalling ? 0.5 : 1 }}>
+                  {explorerCalling ? '⏳' : '▶ Send'}
+                </button>
+              </div>
+
+              {/* Body editor for POST/PUT */}
+              {(explorerMethod === 'POST' || explorerMethod === 'PUT') && (
+                <div style={{ borderBottom: `1px solid ${C.border}` }}>
+                  <div style={{ padding: '4px 16px', fontSize: 10, color: C.muted }}>Request Body (JSON)</div>
+                  <textarea value={explorerBody} onChange={e => setExplorerBody(e.target.value)}
+                    style={{ width: '100%', height: 80, resize: 'vertical', background: '#0d1117', color: '#e6edf3', border: 'none', padding: '8px 16px', fontFamily: 'monospace', fontSize: 12, outline: 'none', boxSizing: 'border-box' }} />
+                </div>
+              )}
+
+              {/* Response */}
+              <div style={{ flex: 1, overflow: 'auto' }}>
+                {explorerResult ? (
+                  <div style={{ padding: 16 }}>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+                      <span style={{
+                        fontSize: 14, fontWeight: 800,
+                        color: explorerResult.status_code >= 200 && explorerResult.status_code < 300 ? C.live
+                          : explorerResult.status_code >= 400 ? C.broken : C.unconnected,
+                      }}>
+                        {explorerResult.status_code || 'ERR'}
+                      </span>
+                      {explorerResult.response_time_ms && (
+                        <span style={{ fontSize: 11, color: C.dim }}>{explorerResult.response_time_ms}ms</span>
+                      )}
+                      {explorerResult.error && (
+                        <span style={{ fontSize: 11, color: C.broken }}>{explorerResult.error}</span>
+                      )}
+                    </div>
+                    <pre style={{
+                      margin: 0, padding: 16, background: '#0d1117', color: '#e6edf3',
+                      borderRadius: 6, fontSize: 12, lineHeight: 1.5,
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                      maxHeight: 'calc(100vh - 300px)', overflow: 'auto',
+                    }}>
+                      {typeof explorerResult.data === 'string'
+                        ? explorerResult.data
+                        : JSON.stringify(explorerResult.data, null, 2)}
+                    </pre>
+                  </div>
+                ) : (
+                  <div style={{ padding: 60, textAlign: 'center', color: C.dim }}>
+                    <div style={{ fontSize: 48, opacity: 0.4 }}>🔍</div>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: C.muted, marginTop: 12 }}>API Explorer</div>
+                    <div style={{ fontSize: 12, marginTop: 4, maxWidth: 300, margin: '4px auto 0' }}>
+                      Select any endpoint from the list or type a path, then hit Send.
+                      See the raw response — no black boxes.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+        <>
         {/* Left: API list by group */}
         <div style={{ flex: 1, overflowY: 'auto', borderRight: selectedRoute ? `1px solid ${C.border}` : 'none' }}>
 
@@ -271,6 +413,8 @@ export default function APIsTab() {
               </div>
             )}
           </div>
+        )}
+        </>
         )}
       </div>
     </div>
