@@ -1,1142 +1,451 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import "./GovernanceTab.css";
+import { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = "http://localhost:8000";
-
-// Trust score visualization
-const _getTrustColor = (score) => {
-  if (score >= 0.8) return "#10b981";
-  if (score >= 0.6) return "#3b82f6";
-  if (score >= 0.4) return "#f59e0b";
-  return "#ef4444";
+const C = {
+  bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
+  accent: '#e94560', accentAlt: '#533483',
+  text: '#eee', muted: '#aaa', dim: '#666', border: '#333',
+  success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3',
 };
 
-const _getTrustLevel = (score) => {
-  if (score >= 0.8) return "High";
-  if (score >= 0.6) return "Medium";
-  if (score >= 0.4) return "Low";
-  return "Critical";
-};
+const btn = (bg = C.accentAlt) => ({
+  padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer',
+  fontSize: 12, fontWeight: 600, color: '#fff', background: bg, transition: 'opacity .15s',
+});
 
-// Governance Pillar Icons
-const PillarIcon = ({ type }) => {
-  const icons = {
-    operational: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-      </svg>
-    ),
-    behavioral: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="8" r="5"/>
-        <path d="M20 21a8 8 0 0 0-16 0"/>
-      </svg>
-    ),
-    immutable: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        <path d="M9 12l2 2 4-4"/>
-      </svg>
-    )
+function StatusBadge({ status }) {
+  const colors = {
+    approved: C.success, completed: C.success, healthy: C.success, excellent: C.success, good: C.success,
+    pending: C.warn, discussion: C.warn, fair: C.warn, degraded: C.warn, warning: C.warn,
+    denied: C.error, failed: C.error, poor: C.error, critical: C.error,
   };
-  return icons[type] || null;
-};
-
-// Document Upload Component
-function DocumentUpload({ pillarType, onUpload, existingDocs }) {
-  const [dragActive, setDragActive] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef(null);
-
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer?.files;
-    if (files && files.length > 0) {
-      await uploadFiles(files);
-    }
-  };
-
-  const handleFileSelect = async (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      await uploadFiles(files);
-    }
-  };
-
-  const uploadFiles = async (files) => {
-    setUploading(true);
-    try {
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("pillar_type", pillarType);
-        formData.append("filename", file.name);
-
-        await fetch(`${API_BASE}/governance/documents/upload`, {
-          method: "POST",
-          body: formData,
-        });
-      }
-      onUpload();
-    } catch (err) {
-      console.error("Upload failed:", err);
-      alert("Failed to upload document: " + err.message);
-    }
-    setUploading(false);
-  };
-
+  const bg = colors[(status || '').toLowerCase()] || C.dim;
   return (
-    <div className="document-upload-section">
-      <div
-        className={`upload-zone ${dragActive ? "drag-active" : ""} ${uploading ? "uploading" : ""}`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept=".pdf,.doc,.docx,.txt,.md,.json"
-          onChange={handleFileSelect}
-          style={{ display: "none" }}
-        />
-        {uploading ? (
-          <div className="upload-status">
-            <div className="spinner small" />
-            <span>Uploading...</span>
-          </div>
-        ) : (
-          <>
-            <div className="upload-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-              </svg>
-            </div>
-            <p>Drag & drop governance documents here</p>
-            <span className="upload-hint">PDF, DOC, TXT, MD, JSON supported</span>
-          </>
-        )}
-      </div>
+    <span style={{
+      fontSize: 10, padding: '2px 8px', borderRadius: 10, fontWeight: 700,
+      background: bg + '30', color: bg, textTransform: 'uppercase', letterSpacing: '0.3px',
+    }}>{status || 'unknown'}</span>
+  );
+}
 
-      {existingDocs && existingDocs.length > 0 && (
-        <div className="existing-docs">
-          <h5>Uploaded Documents ({existingDocs.length})</h5>
-          <ul>
-            {existingDocs.map((doc, i) => (
-              <li key={i} className="doc-item">
-                <span className="doc-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                    <polyline points="14,2 14,8 20,8"/>
-                  </svg>
-                </span>
-                <span className="doc-name">{doc.filename}</span>
-                <span className="doc-status" data-status={doc.status}>
-                  {doc.status === "processed" ? "Active" : doc.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+function MeterBar({ value, max = 100, color = C.accent }) {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div style={{ height: 6, background: C.bgDark, borderRadius: 3, overflow: 'hidden', flex: 1 }}>
+      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 3, transition: 'width .4s' }} />
     </div>
   );
 }
 
-// Natural Language Rule Input Component
-function NaturalLanguageRuleInput({ pillarType, onRuleAdded }) {
-  const [ruleText, setRuleText] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+function Card({ title, children, extra }) {
+  return (
+    <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{title}</span>
+        {extra}
+      </div>
+      {children}
+    </div>
+  );
+}
 
-  const placeholders = {
-    operational: "e.g., \"Always follow HIPAA guidelines when handling medical data\" or \"Require approval for any action costing over $1000\"",
-    behavioral: "e.g., \"Use a friendly, casual tone in responses\" or \"Always provide step-by-step explanations\""
-  };
+// ── Sub-tab: Approvals ────────────────────────────────────────────────
+function ApprovalsPanel() {
+  const [pending, setPending] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [actioning, setActioning] = useState(null);
 
-  const handleAddRule = async () => {
-    if (!ruleText.trim()) return;
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const [pRes, hRes] = await Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/governance-hub/approvals`),
+      fetch(`${API_BASE_URL}/api/governance-hub/approvals/history?limit=30`),
+    ]);
+    if (pRes.status === 'fulfilled' && pRes.value.ok) setPending((await pRes.value.json()).decisions || []);
+    if (hRes.status === 'fulfilled' && hRes.value.ok) setHistory((await hRes.value.json()).decisions || []);
+    setLoading(false);
+  }, []);
 
-    setIsProcessing(true);
-    setFeedback(null);
+  useEffect(() => { refresh(); }, [refresh]);
 
+  const handleAction = async (id, decision) => {
+    setActioning(id);
     try {
-      // Parse natural language into a rule structure
-      const parsedRule = parseNaturalLanguageRule(ruleText, pillarType);
-
-      // Send to backend
-      const response = await fetch(`${API_BASE}/governance/rules/new`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...parsedRule,
-          pillar_type: pillarType,
-          source: "User-defined (natural language)"
-        })
+      await fetch(`${API_BASE_URL}/api/governance-hub/approvals/${id}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision }),
       });
-
-      if (response.ok) {
-        setFeedback({ type: "success", message: "Rule added successfully!" });
-        setRuleText("");
-        onRuleAdded();
-      } else {
-        const error = await response.json();
-        setFeedback({ type: "error", message: error.detail || "Failed to add rule" });
-      }
-    } catch (err) {
-      console.error("Error adding rule:", err);
-      setFeedback({ type: "error", message: "Failed to add rule. Please try again." });
-    }
-
-    setIsProcessing(false);
-
-    // Clear feedback after 3 seconds
-    setTimeout(() => setFeedback(null), 3000);
+      refresh();
+    } catch { /* silent */ }
+    finally { setActioning(null); }
   };
 
-  // Parse natural language into rule structure
-  const parseNaturalLanguageRule = (text, pillar) => {
-    const lowerText = text.toLowerCase();
-
-    // Determine severity based on keywords
-    let severity = pillar === "operational" ? 6 : 3;
-    if (lowerText.includes("always") || lowerText.includes("must") || lowerText.includes("never")) {
-      severity = pillar === "operational" ? 8 : 5;
-    }
-    if (lowerText.includes("critical") || lowerText.includes("required") || lowerText.includes("mandatory")) {
-      severity = 9;
-    }
-
-    // Determine action based on keywords
-    let action = "warn";
-    if (lowerText.includes("block") || lowerText.includes("prevent") || lowerText.includes("never")) {
-      action = "block";
-    } else if (lowerText.includes("review") || lowerText.includes("approval") || lowerText.includes("approve")) {
-      action = "flag";
-    }
-
-    // Extract a name from the text (first 50 chars or until first period/comma)
-    let name = text.split(/[.,!?]/)[0].trim();
-    if (name.length > 50) {
-      name = name.substring(0, 47) + "...";
-    }
-
-    // Try to extract patterns for matching
-    let pattern = null;
-    const patternMatches = text.match(/["']([^"']+)["']/g);
-    if (patternMatches) {
-      pattern = patternMatches.map(p => p.replace(/["']/g, "")).join("|");
-    }
-
-    return {
-      name: name,
-      description: text,
-      severity: severity,
-      action: action,
-      pattern: pattern,
-      enabled: true
-    };
-  };
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading approvals...</div>;
 
   return (
-    <div className="natural-language-input">
-      <div className="nl-input-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 20h9"/>
-          <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/>
-        </svg>
-        <span>Add Rule in Natural Language</span>
-      </div>
-      <div className="nl-input-container">
-        <textarea
-          value={ruleText}
-          onChange={(e) => setRuleText(e.target.value)}
-          placeholder={placeholders[pillarType]}
-          rows={2}
-          disabled={isProcessing}
-        />
-        <button
-          className="btn-add-rule"
-          onClick={handleAddRule}
-          disabled={!ruleText.trim() || isProcessing}
-        >
-          {isProcessing ? (
-            <>
-              <div className="spinner small" />
-              Processing...
-            </>
-          ) : (
-            <>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Add Rule
-            </>
-          )}
-        </button>
-      </div>
-      {feedback && (
-        <div className={`nl-feedback ${feedback.type}`}>
-          {feedback.type === "success" ? (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-              <polyline points="22,4 12,14.01 9,11.01"/>
-            </svg>
-          ) : (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-          )}
-          {feedback.message}
-        </div>
-      )}
-      <div className="nl-hint">
-        Write your rule in plain English. Grace will interpret and apply it automatically.
-      </div>
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <Card title={`Pending Approvals (${pending.length})`} extra={
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh</button>
+      }>
+        {pending.length === 0 ? (
+          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 13 }}>No pending approvals</div>
+        ) : pending.map(d => (
+          <div key={d.id} style={{ padding: '10px 12px', marginBottom: 6, background: C.bg, borderRadius: 6, border: `1px solid ${C.border}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <StatusBadge status={d.severity} />
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{d.title}</span>
+              <span style={{ fontSize: 10, color: C.dim, marginLeft: 'auto' }}>{d.pillar_type}</span>
+            </div>
+            {d.description && <div style={{ fontSize: 12, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>{d.description}</div>}
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={() => handleAction(d.id, 'approve')} disabled={actioning === d.id} style={btn(C.success)}>✓ Approve</button>
+              <button onClick={() => handleAction(d.id, 'deny')} disabled={actioning === d.id} style={btn(C.error)}>✕ Deny</button>
+              <button onClick={() => handleAction(d.id, 'discuss')} disabled={actioning === d.id} style={btn(C.warn)}>💬 Discuss</button>
+            </div>
+          </div>
+        ))}
+      </Card>
+
+      <Card title={`Decision History (${history.length})`}>
+        {history.length === 0 ? (
+          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No history</div>
+        ) : history.map(d => (
+          <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: `1px solid ${C.border}`, fontSize: 12 }}>
+            <StatusBadge status={d.status} />
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.title}</span>
+            <span style={{ color: C.dim, fontSize: 10, flexShrink: 0 }}>{d.created_at ? new Date(d.created_at).toLocaleDateString() : ''}</span>
+          </div>
+        ))}
+      </Card>
     </div>
   );
 }
 
-// Governance Pillar Card
-function GovernancePillar({ type, title, description, rules, documents, onUpload, onToggleRule, onEditRule, onRuleAdded }) {
-  const [expanded, setExpanded] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
+// ── Sub-tab: Scores ───────────────────────────────────────────────────
+function ScoresPanel() {
+  const [scores, setScores] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const pillarColors = {
-    operational: { bg: "#dbeafe", border: "#3b82f6", icon: "#1e40af" },
-    behavioral: { bg: "#fef3c7", border: "#f59e0b", icon: "#92400e" },
-    immutable: { bg: "#fee2e2", border: "#ef4444", icon: "#991b1b" }
-  };
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/governance-hub/scores`)
+      .then(r => r.ok ? r.json() : { components: [] })
+      .then(setScores).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
-  const colors = pillarColors[type];
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading scores...</div>;
+  if (!scores) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
 
-  return (
-    <div
-      className={`governance-pillar pillar-${type}`}
-      style={{ borderColor: colors.border }}
-    >
-      <div
-        className="pillar-header"
-        onClick={() => setExpanded(!expanded)}
-        style={{ backgroundColor: colors.bg }}
-      >
-        <div className="pillar-icon" style={{ color: colors.icon }}>
-          <PillarIcon type={type} />
-        </div>
-        <div className="pillar-info">
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-        <div className="pillar-stats">
-          <span className="rule-count">{rules?.length || 0} rules</span>
-          <span className="doc-count">{documents?.length || 0} docs</span>
-        </div>
-        <span className={`expand-icon ${expanded ? "expanded" : ""}`}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="6,9 12,15 18,9"/>
-          </svg>
-        </span>
-      </div>
-
-      {expanded && (
-        <div className="pillar-content">
-          <div className="pillar-actions">
-            <button
-              className={`btn-upload ${showUpload ? "active" : ""}`}
-              onClick={() => setShowUpload(!showUpload)}
-            >
-              {showUpload ? "Hide Upload" : "Upload Documents"}
-            </button>
-          </div>
-
-          {showUpload && (
-            <DocumentUpload
-              pillarType={type}
-              onUpload={onUpload}
-              existingDocs={documents}
-            />
-          )}
-
-          {/* Natural Language Rule Input - only for operational and behavioral */}
-          {type !== "immutable" && (
-            <NaturalLanguageRuleInput
-              pillarType={type}
-              onRuleAdded={onRuleAdded}
-            />
-          )}
-
-          <div className="rules-section">
-            <h4>Active Rules</h4>
-            {rules && rules.length > 0 ? (
-              <ul className="rules-list">
-                {rules.map((rule, i) => (
-                  <li key={i} className={`rule-item ${rule.enabled ? "enabled" : "disabled"}`}>
-                    <div className="rule-toggle">
-                      <input
-                        type="checkbox"
-                        checked={rule.enabled}
-                        onChange={() => onToggleRule(rule.id, !rule.enabled)}
-                        disabled={type === "immutable"}
-                      />
-                    </div>
-                    <div className="rule-content">
-                      <span className="rule-name">{rule.name}</span>
-                      <span className="rule-description">{rule.description}</span>
-                      {rule.source && (
-                        <span className="rule-source">Source: {rule.source}</span>
-                      )}
-                    </div>
-                    <div className="rule-severity" data-severity={rule.severity}>
-                      {rule.severity}
-                    </div>
-                    {type !== "immutable" && (
-                      <button
-                        className="btn-edit-rule"
-                        onClick={() => onEditRule(rule)}
-                      >
-                        Edit
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-rules">No rules configured. Upload governance documents to generate rules.</p>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Human-in-the-Loop Decision Card
-function DecisionCard({ decision, onAction }) {
-  const [note, setNote] = useState("");
-  const [showDiscuss, setShowDiscuss] = useState(false);
-
-  const statusColors = {
-    pending: "#f59e0b",
-    confirmed: "#10b981",
-    denied: "#ef4444",
-    discussing: "#3b82f6"
-  };
-
-  const getSeverityLabel = (severity) => {
-    if (severity >= 9) return "Critical";
-    if (severity >= 7) return "High";
-    if (severity >= 4) return "Medium";
-    return "Low";
-  };
+  const systemTrust = scores.system_trust?.trust_score || 0;
+  const trustColor = systemTrust >= 0.8 ? C.success : systemTrust >= 0.5 ? C.warn : C.error;
 
   return (
-    <div className={`decision-card status-${decision.status}`}>
-      <div className="decision-header">
-        <div className="decision-type">
-          <span className={`pillar-badge pillar-${decision.pillar_type}`}>
-            {decision.pillar_type}
-          </span>
-          <span className={`severity-badge severity-${getSeverityLabel(decision.severity).toLowerCase()}`}>
-            {getSeverityLabel(decision.severity)}
-          </span>
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <Card title="System Trust Score">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
+          <span style={{ fontSize: 36, fontWeight: 800, color: trustColor }}>{(systemTrust * 100).toFixed(0)}%</span>
+          <div style={{ flex: 1 }}>
+            <MeterBar value={systemTrust * 100} color={trustColor} />
+            <div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>
+              Status: <StatusBadge status={scores.system_trust?.status || 'unknown'} />
+            </div>
+          </div>
         </div>
-        <span
-          className="decision-status"
-          style={{ color: statusColors[decision.status] }}
-        >
-          {decision.status.toUpperCase()}
-        </span>
-      </div>
+      </Card>
 
-      <div className="decision-content">
-        <h4>{decision.title}</h4>
-        <p>{decision.description}</p>
-
-        {decision.context && (
-          <div className="decision-context">
-            <strong>Context:</strong>
-            <pre>{JSON.stringify(decision.context, null, 2)}</pre>
-          </div>
-        )}
-
-        {decision.rule_reference && (
-          <div className="rule-reference">
-            <span className="ref-label">Related Rule:</span>
-            <span className="ref-value">{decision.rule_reference}</span>
-          </div>
-        )}
-      </div>
-
-      {decision.status === "pending" && (
-        <div className="decision-actions">
-          {showDiscuss ? (
-            <div className="discuss-form">
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Add your thoughts or questions..."
-                rows={3}
-              />
-              <div className="discuss-buttons">
-                <button
-                  className="btn-send-discuss"
-                  onClick={() => {
-                    onAction(decision.id, "discuss", note);
-                    setNote("");
-                    setShowDiscuss(false);
-                  }}
-                >
-                  Send for Discussion
-                </button>
-                <button
-                  className="btn-cancel"
-                  onClick={() => setShowDiscuss(false)}
-                >
-                  Cancel
-                </button>
+      <Card title={`Component Scores (${scores.component_count})`}>
+        {(scores.components || []).length === 0 ? (
+          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No components tracked yet</div>
+        ) : (scores.components || []).map((comp, i) => {
+          const ts = comp.trust_score || 0;
+          const tc = ts >= 0.8 ? C.success : ts >= 0.5 ? C.warn : C.error;
+          return (
+            <div key={i} style={{ padding: '8px 0', borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, flex: 1 }}>{comp.name}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: tc }}>{(ts * 100).toFixed(0)}%</span>
+                <StatusBadge status={comp.status} />
               </div>
+              <MeterBar value={ts * 100} color={tc} />
             </div>
-          ) : (
-            <div className="action-buttons">
-              <button
-                className="btn-confirm"
-                onClick={() => onAction(decision.id, "confirm")}
-              >
-                Confirm
-              </button>
-              <button
-                className="btn-discuss"
-                onClick={() => setShowDiscuss(true)}
-              >
-                Discuss
-              </button>
-              <button
-                className="btn-deny"
-                onClick={() => onAction(decision.id, "deny")}
-              >
-                Deny
-              </button>
-            </div>
-          )}
-        </div>
+          );
+        })}
+      </Card>
+    </div>
+  );
+}
+
+// ── Sub-tab: Performance ──────────────────────────────────────────────
+function PerformancePanel() {
+  const [metrics, setMetrics] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(() => {
+    setLoading(true);
+    fetch(`${API_BASE_URL}/api/governance-hub/performance`)
+      .then(r => r.ok ? r.json() : null)
+      .then(setMetrics).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
+
+  if (loading && !metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading metrics...</div>;
+  if (!metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
+
+  const cpuColor = (metrics.cpu?.total_percent || 0) > 80 ? C.error : (metrics.cpu?.total_percent || 0) > 50 ? C.warn : C.success;
+  const memColor = (metrics.memory?.percent || 0) > 80 ? C.error : (metrics.memory?.percent || 0) > 50 ? C.warn : C.success;
+  const diskColor = (metrics.disk?.percent || 0) > 80 ? C.error : (metrics.disk?.percent || 0) > 50 ? C.warn : C.success;
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
+        {[
+          { label: 'CPU', val: metrics.cpu?.total_percent, unit: '%', color: cpuColor, sub: `${metrics.cpu?.core_count} cores` },
+          { label: 'Memory', val: metrics.memory?.percent, unit: '%', color: memColor, sub: `${metrics.memory?.used_gb} / ${metrics.memory?.total_gb} GB` },
+          { label: 'Disk', val: metrics.disk?.percent, unit: '%', color: diskColor, sub: `${metrics.disk?.used_gb} / ${metrics.disk?.total_gb} GB` },
+        ].map((m, i) => (
+          <div key={i} style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+            <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 8 }}>{m.label}</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: m.color }}>{(m.val || 0).toFixed(1)}{m.unit}</div>
+            <MeterBar value={m.val || 0} color={m.color} />
+            <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>{m.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {metrics.cpu?.per_core && (
+        <Card title="CPU Per Core">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 6 }}>
+            {metrics.cpu.per_core.map((v, i) => (
+              <div key={i} style={{ textAlign: 'center', padding: 6, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: 10, color: C.dim }}>Core {i}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: v > 80 ? C.error : v > 50 ? C.warn : C.success }}>{v.toFixed(0)}%</div>
+              </div>
+            ))}
+          </div>
+        </Card>
       )}
 
-      {decision.status === "discussing" && decision.discussion && (
-        <div className="discussion-thread">
-          <h5>Discussion</h5>
-          {decision.discussion.map((msg, i) => (
-            <div key={i} className={`discussion-msg ${msg.from}`}>
-              <span className="msg-author">{msg.from === "grace" ? "Grace" : "You"}</span>
-              <span className="msg-content">{msg.content}</span>
-              <span className="msg-time">{new Date(msg.timestamp).toLocaleString()}</span>
-            </div>
+      {metrics.database && (
+        <Card title="Database">
+          <div style={{ display: 'flex', gap: 24, fontSize: 13 }}>
+            <div><span style={{ color: C.muted }}>Tables:</span> <b>{metrics.database.tables}</b></div>
+            <div><span style={{ color: C.muted }}>Rows:</span> <b>{(metrics.database.total_rows || 0).toLocaleString()}</b></div>
+          </div>
+        </Card>
+      )}
+
+      <div style={{ textAlign: 'center', marginTop: 8 }}>
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh Metrics</button>
+      </div>
+    </div>
+  );
+}
+
+// ── Sub-tab: Actions (Healing + Learning) ─────────────────────────────
+function ActionsPanel() {
+  const [healActions, setHealActions] = useState([]);
+  const [triggering, setTriggering] = useState(null);
+  const [learnQuery, setLearnQuery] = useState('');
+  const [learnMethod, setLearnMethod] = useState('kimi');
+  const [learnResult, setLearnResult] = useState(null);
+  const [learnLoading, setLearnLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/governance-hub/healing/actions`)
+      .then(r => r.ok ? r.json() : { actions: [] })
+      .then(d => setHealActions(d.actions || []))
+      .catch(() => {});
+  }, []);
+
+  const triggerHealing = async (action) => {
+    setTriggering(action);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/healing/trigger`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      if (res.ok) setNotification(`Healing action '${action}' triggered`);
+    } catch { /* silent */ }
+    finally { setTriggering(null); setTimeout(() => setNotification(null), 3000); }
+  };
+
+  const triggerLearning = async () => {
+    if (!learnQuery.trim()) return;
+    setLearnLoading(true);
+    setLearnResult(null);
+    try {
+      const body = { method: learnMethod };
+      if (learnMethod === 'kimi' || learnMethod === 'websearch') body.query = learnQuery;
+      if (learnMethod === 'study') body.topic = learnQuery;
+      if (learnMethod === 'websearch') body.url = learnQuery;
+
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/learning/trigger`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) setLearnResult(await res.json());
+    } catch (e) { setLearnResult({ error: e.message }); }
+    finally { setLearnLoading(false); }
+  };
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      {notification && (
+        <div style={{ padding: '8px 16px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>
+      )}
+
+      <Card title="🔧 Self-Healing Actions">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {healActions.map(a => (
+            <button
+              key={a.id}
+              onClick={() => triggerHealing(a.id)}
+              disabled={triggering === a.id}
+              style={{
+                ...btn(C.bgDark), padding: '10px 12px', textAlign: 'left',
+                display: 'flex', flexDirection: 'column', gap: 4,
+                opacity: triggering === a.id ? 0.5 : 1,
+              }}
+            >
+              <span style={{ fontWeight: 700, fontSize: 12 }}>{a.name}</span>
+              <span style={{ fontWeight: 400, fontSize: 10, color: C.dim }}>{a.description}</span>
+            </button>
           ))}
         </div>
-      )}
+      </Card>
 
-      <div className="decision-meta">
-        <span>Created: {new Date(decision.created_at).toLocaleString()}</span>
-        {decision.resolved_at && (
-          <span>Resolved: {new Date(decision.resolved_at).toLocaleString()}</span>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// Rule Editor Modal
-function RuleEditorModal({ rule, onSave, onClose }) {
-  const [editedRule, setEditedRule] = useState(rule || {
-    name: "",
-    description: "",
-    pattern: "",
-    action: "warn",
-    severity: 5,
-    enabled: true
-  });
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3>{rule ? "Edit Rule" : "Create Rule"}</h3>
-
-        <div className="form-group">
-          <label>Rule Name</label>
-          <input
-            type="text"
-            value={editedRule.name}
-            onChange={(e) => setEditedRule({ ...editedRule, name: e.target.value })}
-            placeholder="e.g., No PII in Responses"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            value={editedRule.description}
-            onChange={(e) => setEditedRule({ ...editedRule, description: e.target.value })}
-            placeholder="What does this rule enforce?"
-            rows={2}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Pattern (regex or keyword)</label>
-          <input
-            type="text"
-            value={editedRule.pattern}
-            onChange={(e) => setEditedRule({ ...editedRule, pattern: e.target.value })}
-            placeholder="e.g., SSN|social security|\\d{3}-\\d{2}-\\d{4}"
-          />
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Action</label>
-            <select
-              value={editedRule.action}
-              onChange={(e) => setEditedRule({ ...editedRule, action: e.target.value })}
-            >
-              <option value="warn">Warn</option>
-              <option value="block">Block</option>
-              <option value="flag">Flag for Review</option>
-              <option value="redact">Redact</option>
-            </select>
+      <Card title="🧠 Self-Learning Triggers">
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+            {[
+              { id: 'kimi', label: '🌐 Kimi 2.5' },
+              { id: 'websearch', label: '🔍 Web Search' },
+              { id: 'study', label: '📚 Self-Study' },
+              { id: 'ingestion', label: '📥 Ingestion' },
+            ].map(m => (
+              <button
+                key={m.id}
+                onClick={() => setLearnMethod(m.id)}
+                style={{
+                  ...btn(learnMethod === m.id ? C.accentAlt : C.bgDark),
+                  fontSize: 11, padding: '4px 10px',
+                }}
+              >{m.label}</button>
+            ))}
           </div>
 
-          <div className="form-group">
-            <label>Severity (1-10)</label>
+          <div style={{ display: 'flex', gap: 8 }}>
             <input
-              type="number"
-              min="1"
-              max="10"
-              value={editedRule.severity}
-              onChange={(e) => setEditedRule({ ...editedRule, severity: parseInt(e.target.value) })}
+              placeholder={learnMethod === 'websearch' ? 'URL to scrape...' : learnMethod === 'study' ? 'Topic to study...' : 'Ask Kimi...'}
+              value={learnQuery}
+              onChange={e => setLearnQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && triggerLearning()}
+              disabled={learnMethod === 'ingestion'}
+              style={{
+                flex: 1, padding: '8px 10px', background: C.bg, border: `1px solid ${C.border}`,
+                borderRadius: 4, color: C.text, fontSize: 12, outline: 'none',
+              }}
             />
+            <button
+              onClick={triggerLearning}
+              disabled={learnLoading || learnMethod === 'ingestion'}
+              style={{ ...btn(C.accent), opacity: learnLoading ? 0.5 : 1 }}
+            >
+              {learnLoading ? '⏳' : '▶ Go'}
+            </button>
           </div>
         </div>
 
-        <div className="modal-actions">
-          <button className="btn-save" onClick={() => onSave(editedRule)}>
-            Save Rule
-          </button>
-          <button className="btn-cancel" onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-      </div>
+        {learnResult && (
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12, fontSize: 12, maxHeight: 300, overflowY: 'auto' }}>
+            {learnResult.error ? (
+              <div style={{ color: C.error }}>{learnResult.error}</div>
+            ) : learnResult.response ? (
+              <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: C.text, lineHeight: 1.6 }}>{learnResult.response}</pre>
+            ) : (
+              <pre style={{ margin: 0, color: C.muted }}>{JSON.stringify(learnResult, null, 2)}</pre>
+            )}
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
 
-// Main Governance Tab
+// ── Main GovernanceTab ────────────────────────────────────────────────
 export default function GovernanceTab() {
-  const [activeView, setActiveView] = useState("pillars");
-  const [pillarsData, setPillarsData] = useState({
-    operational: { rules: [], documents: [] },
-    behavioral: { rules: [], documents: [] },
-    immutable: { rules: [], documents: [] }
-  });
-  const [pendingDecisions, setPendingDecisions] = useState([]);
-  const [_decisionHistory, _setDecisionHistory] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [editingRule, setEditingRule] = useState(null);
-  const [showRuleEditor, setShowRuleEditor] = useState(false);
+  const [activeTab, setActiveTab] = useState('approvals');
+  const [dashboard, setDashboard] = useState(null);
 
-  // Fetch governance data
-  const fetchGovernanceData = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/pillars`);
-      if (response.ok) {
-        const data = await response.json();
-        setPillarsData(data);
-      } else {
-        // Use default data if endpoint doesn't exist yet
-        setPillarsData({
-          operational: {
-            rules: [
-              { id: 1, name: "Industry Compliance", description: "Ensure outputs comply with industry standards", severity: 8, enabled: true, source: "ISO 27001" },
-              { id: 2, name: "Data Classification", description: "Classify and handle data according to sensitivity", severity: 7, enabled: true, source: "GDPR" },
-            ],
-            documents: []
-          },
-          behavioral: {
-            rules: [
-              { id: 3, name: "Professional Tone", description: "Maintain professional communication style", severity: 3, enabled: true },
-              { id: 4, name: "Response Length", description: "Keep responses concise and actionable", severity: 2, enabled: true },
-            ],
-            documents: []
-          },
-          immutable: {
-            rules: [
-              { id: 5, name: "No Harmful Content", description: "Never generate content that could cause harm", severity: 10, enabled: true },
-              { id: 6, name: "No Illegal Activities", description: "Never assist with illegal activities", severity: 10, enabled: true },
-              { id: 7, name: "No PII Exposure", description: "Never expose personally identifiable information", severity: 10, enabled: true },
-              { id: 8, name: "Safety Override", description: "Safety cannot be bypassed by any prompt", severity: 10, enabled: true },
-            ],
-            documents: []
-          }
-        });
-      }
-    } catch (err) {
-      console.error("Error fetching governance data:", err);
-    }
-  }, []);
-
-  // Fetch pending decisions
-  const fetchPendingDecisions = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/decisions/pending`);
-      if (response.ok) {
-        const data = await response.json();
-        setPendingDecisions(data.decisions || []);
-      } else {
-        // Mock data for demonstration
-        setPendingDecisions([
-          {
-            id: 1,
-            title: "External API Integration Request",
-            description: "Grace wants to integrate with a third-party analytics API to enhance response accuracy.",
-            pillar_type: "operational",
-            severity: 6,
-            status: "pending",
-            context: { api_name: "AnalyticsAPI", data_types: ["usage_metrics", "response_quality"] },
-            rule_reference: "Data Classification",
-            created_at: new Date().toISOString()
-          },
-          {
-            id: 2,
-            title: "Tone Adjustment Request",
-            description: "User prefers more casual communication style. This change would affect all future interactions.",
-            pillar_type: "behavioral",
-            severity: 2,
-            status: "pending",
-            context: { current_tone: "professional", requested_tone: "casual" },
-            created_at: new Date(Date.now() - 3600000).toISOString()
-          }
-        ]);
-      }
-    } catch (err) {
-      console.error("Error fetching decisions:", err);
-    }
-  }, []);
-
-  // Fetch stats
-  const fetchStats = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/stats`);
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      } else {
-        setStats({
-          total_rules: 8,
-          active_rules: 8,
-          pending_decisions: 2,
-          confirmed_today: 5,
-          denied_today: 1,
-          compliance_score: 0.94
-        });
-      }
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  }, []);
-
-  // Initial load
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await Promise.all([
-        fetchGovernanceData(),
-        fetchPendingDecisions(),
-        fetchStats()
-      ]);
-      setLoading(false);
-    };
-    loadData();
-  }, [fetchGovernanceData, fetchPendingDecisions, fetchStats]);
+    fetch(`${API_BASE_URL}/api/governance-hub/dashboard`)
+      .then(r => r.ok ? r.json() : null)
+      .then(setDashboard).catch(() => {});
+  }, []);
 
-  // Handle decision action
-  const handleDecisionAction = async (decisionId, action, note = "") => {
-    try {
-      await fetch(`${API_BASE}/governance/decisions/${decisionId}/${action}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note, reviewed_by: "user" })
-      });
-      fetchPendingDecisions();
-      fetchStats();
-    } catch (err) {
-      console.error("Error handling decision:", err);
-      // Update locally for demo
-      setPendingDecisions(prev =>
-        prev.map(d => d.id === decisionId
-          ? { ...d, status: action === "confirm" ? "confirmed" : action === "deny" ? "denied" : "discussing" }
-          : d
-        )
-      );
-    }
-  };
-
-  // Handle rule toggle
-  const handleRuleToggle = async (ruleId, enabled) => {
-    try {
-      await fetch(`${API_BASE}/governance/rules/${ruleId}/toggle`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled })
-      });
-      fetchGovernanceData();
-    } catch (err) {
-      console.error("Error toggling rule:", err);
-      // Update locally for demo
-      setPillarsData(prev => {
-        const newData = { ...prev };
-        for (const pillar of Object.keys(newData)) {
-          newData[pillar].rules = newData[pillar].rules.map(r =>
-            r.id === ruleId ? { ...r, enabled } : r
-          );
-        }
-        return newData;
-      });
-    }
-  };
-
-  // Handle rule edit
-  const handleRuleEdit = (rule) => {
-    setEditingRule(rule);
-    setShowRuleEditor(true);
-  };
-
-  // Handle rule save
-  const handleRuleSave = async (rule) => {
-    try {
-      await fetch(`${API_BASE}/governance/rules/${rule.id || "new"}`, {
-        method: rule.id ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(rule)
-      });
-      fetchGovernanceData();
-    } catch (err) {
-      console.error("Error saving rule:", err);
-    }
-    setShowRuleEditor(false);
-    setEditingRule(null);
-  };
-
-  if (loading) {
-    return (
-      <div className="governance-tab">
-        <div className="loading-state">
-          <div className="spinner" />
-          <p>Loading Governance Framework...</p>
-        </div>
-      </div>
-    );
-  }
+  const tabs = [
+    { id: 'approvals', label: 'Approvals', icon: '✓', badge: dashboard?.approvals?.pending_count },
+    { id: 'scores', label: 'Scores', icon: '📊' },
+    { id: 'performance', label: 'Performance', icon: '⚡' },
+    { id: 'actions', label: 'Actions', icon: '🔧' },
+  ];
 
   return (
-    <div className="governance-tab">
-      <div className="governance-header">
-        <div className="header-left">
-          <h2>Governance Framework</h2>
-          <p>Three-pillar governance with human-in-the-loop decision making</p>
-        </div>
-        <div className="header-stats">
-          {stats && (
-            <>
-              <div className="stat-item primary">
-                <span className="stat-value">{Math.round(stats.compliance_score * 100)}%</span>
-                <span className="stat-label">Compliance</span>
-              </div>
-              <div className="stat-item warning">
-                <span className="stat-value">{stats.pending_decisions}</span>
-                <span className="stat-label">Pending</span>
-              </div>
-              <div className="stat-item success">
-                <span className="stat-value">{stats.confirmed_today}</span>
-                <span className="stat-label">Confirmed</span>
-              </div>
-              <div className="stat-item info">
-                <span className="stat-value">{stats.active_rules}</span>
-                <span className="stat-label">Active Rules</span>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: C.text, background: C.bg }}>
 
-      <div className="governance-toolbar">
-        <div className="view-tabs">
+      {/* Header with sub-tabs */}
+      <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
+        <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+          🏛️ Governance
+        </span>
+        {tabs.map(t => (
           <button
-            className={activeView === "pillars" ? "active" : ""}
-            onClick={() => setActiveView("pillars")}
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            style={{
+              padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
+              color: activeTab === t.id ? C.accent : C.muted,
+              borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',
+              fontSize: 13, fontWeight: activeTab === t.id ? 700 : 500,
+              display: 'flex', alignItems: 'center', gap: 6,
+              transition: 'all .15s',
+            }}
           >
-            Governance Pillars
-          </button>
-          <button
-            className={activeView === "decisions" ? "active" : ""}
-            onClick={() => setActiveView("decisions")}
-          >
-            Decisions
-            {pendingDecisions.length > 0 && (
-              <span className="badge">{pendingDecisions.length}</span>
+            <span>{t.icon}</span> {t.label}
+            {t.badge > 0 && (
+              <span style={{
+                background: C.error, color: '#fff', fontSize: 9, fontWeight: 700,
+                padding: '1px 6px', borderRadius: 10, lineHeight: '14px',
+              }}>{t.badge}</span>
             )}
           </button>
-          <button
-            className={activeView === "history" ? "active" : ""}
-            onClick={() => setActiveView("history")}
-          >
-            History
-          </button>
-          <button
-            className={activeView === "analytics" ? "active" : ""}
-            onClick={() => setActiveView("analytics")}
-          >
-            Analytics
-          </button>
-        </div>
-        <div className="toolbar-spacer" />
-        <button className="btn-refresh" onClick={() => {
-          fetchGovernanceData();
-          fetchPendingDecisions();
-          fetchStats();
-        }}>
-          Refresh
-        </button>
-      </div>
+        ))}
 
-      <div className="governance-content">
-        {activeView === "pillars" && (
-          <div className="pillars-view">
-            <GovernancePillar
-              type="operational"
-              title="Operational Governance"
-              description="Industry standards, compliance requirements, and professional protocols that guide Grace's decision-making in real-world scenarios."
-              rules={pillarsData.operational.rules}
-              documents={pillarsData.operational.documents}
-              onUpload={fetchGovernanceData}
-              onToggleRule={handleRuleToggle}
-              onEditRule={handleRuleEdit}
-              onRuleAdded={fetchGovernanceData}
-            />
-
-            <GovernancePillar
-              type="behavioral"
-              title="Behavioral Governance"
-              description="Personal interaction preferences, communication style, and user-specific adaptations that shape Grace's personality."
-              rules={pillarsData.behavioral.rules}
-              documents={pillarsData.behavioral.documents}
-              onUpload={fetchGovernanceData}
-              onToggleRule={handleRuleToggle}
-              onEditRule={handleRuleEdit}
-              onRuleAdded={fetchGovernanceData}
-            />
-
-            {/* Immutable governance status indicator - rules are enforced internally */}
-            <div className="immutable-status-card">
-              <div className="immutable-header">
-                <div className="immutable-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="M9 12l2 2 4-4"/>
-                  </svg>
-                </div>
-                <div className="immutable-info">
-                  <h3>Safety & Compliance</h3>
-                  <p>Core safety rules are always active and enforced automatically behind the scenes.</p>
-                </div>
-                <div className="immutable-badge">
-                  <span className="active-indicator"></span>
-                  Always Active
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeView === "decisions" && (
-          <div className="decisions-view">
-            <div className="decisions-intro">
-              <h3>Human-in-the-Loop Decisions</h3>
-              <p>Review and approve decisions that require human judgment. You can confirm, discuss, or deny each request.</p>
-            </div>
-
-            {pendingDecisions.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M9 12l2 2 4-4"/>
-                  </svg>
-                </div>
-                <p>No pending decisions require your review</p>
-              </div>
-            ) : (
-              <div className="decisions-list">
-                {pendingDecisions.map((decision) => (
-                  <DecisionCard
-                    key={decision.id}
-                    decision={decision}
-                    onAction={handleDecisionAction}
-                  />
-                ))}
-              </div>
+        {/* Quick stats from dashboard */}
+        {dashboard && (
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, fontSize: 11, color: C.dim, paddingRight: 8 }}>
+            {dashboard.trust?.system_score != null && (
+              <span>Trust: <b style={{ color: dashboard.trust.system_score >= 0.7 ? C.success : C.warn }}>{(dashboard.trust.system_score * 100).toFixed(0)}%</b></span>
+            )}
+            {dashboard.performance?.cpu_percent != null && (
+              <span>CPU: <b>{dashboard.performance.cpu_percent.toFixed(0)}%</b></span>
+            )}
+            {dashboard.healing?.available && dashboard.healing.health_status && (
+              <span>Health: <StatusBadge status={dashboard.healing.health_status} /></span>
             )}
           </div>
         )}
-
-        {activeView === "history" && (
-          <div className="history-view">
-            <h3>Decision History</h3>
-            <p>View past governance decisions and their outcomes.</p>
-
-            <div className="history-filters">
-              <select defaultValue="all">
-                <option value="all">All Pillars</option>
-                <option value="operational">Operational</option>
-                <option value="behavioral">Behavioral</option>
-                <option value="immutable">Immutable</option>
-              </select>
-              <select defaultValue="7d">
-                <option value="24h">Last 24 hours</option>
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="all">All time</option>
-              </select>
-            </div>
-
-            <div className="history-list">
-              <div className="history-item confirmed">
-                <span className="history-status">CONFIRMED</span>
-                <span className="history-title">API Integration Request</span>
-                <span className="history-pillar">operational</span>
-                <span className="history-date">2 hours ago</span>
-              </div>
-              <div className="history-item denied">
-                <span className="history-status">DENIED</span>
-                <span className="history-title">Disable Logging Request</span>
-                <span className="history-pillar">immutable</span>
-                <span className="history-date">5 hours ago</span>
-              </div>
-              <div className="history-item confirmed">
-                <span className="history-status">CONFIRMED</span>
-                <span className="history-title">Tone Adjustment</span>
-                <span className="history-pillar">behavioral</span>
-                <span className="history-date">1 day ago</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeView === "analytics" && (
-          <div className="analytics-view">
-            <h3>Governance Analytics</h3>
-
-            <div className="analytics-grid">
-              <div className="analytics-card">
-                <h4>Decision Distribution</h4>
-                <div className="distribution-bars">
-                  <div className="bar-item">
-                    <span className="bar-label">Confirmed</span>
-                    <div className="bar-track">
-                      <div className="bar-fill confirmed" style={{ width: "75%" }} />
-                    </div>
-                    <span className="bar-value">75%</span>
-                  </div>
-                  <div className="bar-item">
-                    <span className="bar-label">Denied</span>
-                    <div className="bar-track">
-                      <div className="bar-fill denied" style={{ width: "15%" }} />
-                    </div>
-                    <span className="bar-value">15%</span>
-                  </div>
-                  <div className="bar-item">
-                    <span className="bar-label">Discussed</span>
-                    <div className="bar-track">
-                      <div className="bar-fill discussed" style={{ width: "10%" }} />
-                    </div>
-                    <span className="bar-value">10%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Pillar Activity</h4>
-                <div className="pillar-stats">
-                  <div className="pillar-stat operational">
-                    <span className="pillar-name">Operational</span>
-                    <span className="pillar-count">45 decisions</span>
-                  </div>
-                  <div className="pillar-stat behavioral">
-                    <span className="pillar-name">Behavioral</span>
-                    <span className="pillar-count">23 decisions</span>
-                  </div>
-                  <div className="pillar-stat immutable">
-                    <span className="pillar-name">Immutable</span>
-                    <span className="pillar-count">12 blocks</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Compliance Trend</h4>
-                <div className="trend-indicator positive">
-                  <span className="trend-arrow">↑</span>
-                  <span className="trend-value">+2.3%</span>
-                  <span className="trend-period">vs last week</span>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Response Time</h4>
-                <div className="response-stats">
-                  <div className="response-stat">
-                    <span className="response-label">Avg. Review Time</span>
-                    <span className="response-value">4.2 min</span>
-                  </div>
-                  <div className="response-stat">
-                    <span className="response-label">Auto-resolved</span>
-                    <span className="response-value">67%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      {showRuleEditor && (
-        <RuleEditorModal
-          rule={editingRule}
-          onSave={handleRuleSave}
-          onClose={() => {
-            setShowRuleEditor(false);
-            setEditingRule(null);
-          }}
-        />
-      )}
+      {/* Tab content */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {activeTab === 'approvals' && <ApprovalsPanel />}
+        {activeTab === 'scores' && <ScoresPanel />}
+        {activeTab === 'performance' && <PerformancePanel />}
+        {activeTab === 'actions' && <ActionsPanel />}
+      </div>
     </div>
   );
 }
