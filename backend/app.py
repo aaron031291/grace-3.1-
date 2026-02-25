@@ -35,54 +35,27 @@ from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
 from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router, get_document_retriever
-from api.version_control import router as version_control_router
 from api.file_management import router as file_management_router
-from api.file_ingestion import router as file_ingestion_router
 from api.genesis_keys import router as genesis_keys_router
 from api.auth import router as auth_router
-from api.directory_hierarchy import router as directory_hierarchy_router
-from api.repo_genesis import router as repo_genesis_router
-from api.layer1 import router as layer1_router
 from api.learning_memory_api import router as learning_memory_router
 from api.librarian_api import router as librarian_router
 from api.cognitive import router as cognitive_router
 from api.training import router as training_router
 from api.autonomous_learning import router as autonomous_learning_router
-from api.master_integration import router as master_router
-from api.llm_orchestration import router as llm_orchestration_router
-from api.ingestion_integration import router as ingestion_integration_router  # Complete autonomous cycle
-from api.ml_intelligence_api import router as ml_intelligence_router  # ML Intelligence features
-from api.sandbox_lab import router as sandbox_lab_router  # Autonomous experimentation lab
-from api.notion import router as notion_router  # Notion task management system
-from api.voice_api import router as voice_router  # Voice API - STT/TTS for GRACE
-from api.agent_api import router as agent_router  # Full Agent Framework - software engineering agent
-from api.governance_api import router as governance_router  # Three-Pillar Governance Framework
-from api.codebase_api import router as codebase_router  # Codebase Browser - file browsing, search, analysis
-from api.knowledge_base_api import router as knowledge_base_router  # Knowledge Base Connectors
-from api.kpi_api import router as kpi_router  # KPI Dashboard tracking
-from api.proactive_learning import router as proactive_learning_router  # Proactive Learning system
-from api.repositories_api import router as repositories_router  # Enterprise Repository Management
-from api.context_api import router as context_router  # Context submission for multi-tier queries
-from api.telemetry import router as telemetry_router  # System Telemetry and monitoring
-from api.monitoring_api import router as monitoring_router  # System Monitoring - organs, health, metrics
-from api.streaming import router as streaming_router  # SSE Streaming chat responses
-from api.websocket import router as websocket_router  # WebSocket real-time updates
-from api.health import router as health_router  # Comprehensive health checks
-from api.metrics import router as metrics_router  # Prometheus metrics endpoint
-from api.learning_efficiency_api import router as learning_efficiency_router  # Learning Efficiency - Data-to-Insight tracking
-from api.cicd_api import router as cicd_router  # Genesis CI/CD pipelines
-from api.cicd_versioning_api import router as cicd_versioning_router  # CI/CD version control
-from api.knowledge_base_cicd import router as kb_cicd_router  # Knowledge base CI/CD integration
-from api.adaptive_cicd_api import router as adaptive_cicd_router  # Adaptive CI/CD with trust/KPIs
-from api.ingestion_api import router as ingestion_router  # Librarian Ingestion Pipeline
-from api.autonomous_api import router as autonomous_router  # Autonomous Action Engine
-from api.whitelist_api import router as whitelist_router  # Whitelist Learning Pipeline - human input to learning
-from api.testing_api import router as test_router  # Autonomous Testing - self-testing with KPI validation
-from api.scraping import router as scraping_router  # Web Scraping - URL scraping and crawling
-from diagnostic_machine.api import router as diagnostic_router  # 4-Layer Diagnostic Machine
-from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Extension IDE Bridge
-from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
-from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
+from api.ml_intelligence_api import router as ml_intelligence_router
+from api.sandbox_lab import router as sandbox_lab_router
+from api.voice_api import router as voice_router
+from api.governance_api import router as governance_router
+from api.kpi_api import router as kpi_router
+from api.telemetry import router as telemetry_router
+from api.monitoring_api import router as monitoring_router
+from api.streaming import router as streaming_router
+from api.websocket import router as websocket_router
+from api.health import router as health_router
+from api.scraping import router as scraping_router
+from diagnostic_machine.api import router as diagnostic_router
+from api.grace_todos_api import router as grace_todos_router
 from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
 from api.world_model_api import router as world_model_router
 from api.librarian_autonomous_api import router as librarian_autonomous_router
@@ -102,7 +75,6 @@ from api.system_health_api import router as system_health_router
 from api.learning_healing_api import router as learning_healing_router
 from api.unified_coding_agent_api import router as unified_coding_agent_router
 from api.api_explorer_api import router as api_explorer_router
-from api.tab_aggregator_api import router as tab_aggregator_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -518,77 +490,60 @@ app.add_middleware(
     max_age=security_config.CORS_MAX_AGE,
 )
 
-# Register API routers
-app.include_router(ingest_router)
-app.include_router(retrieve_router)
-app.include_router(version_control_router)
-app.include_router(file_management_router)
-app.include_router(file_ingestion_router)
-app.include_router(learning_efficiency_router)  # Learning Efficiency - Data-to-Insight tracking
-app.include_router(genesis_keys_router)
-app.include_router(auth_router)
-app.include_router(directory_hierarchy_router)
-app.include_router(repo_genesis_router)
-app.include_router(layer1_router)
-app.include_router(learning_memory_router)
-app.include_router(librarian_router)
-app.include_router(cognitive_router)
-app.include_router(training_router)
-app.include_router(master_router)  # Master integration - unified access to ALL systems
-app.include_router(autonomous_learning_router)
-app.include_router(llm_orchestration_router)
-app.include_router(ingestion_integration_router)  # Complete autonomous cycle with self-healing
-app.include_router(ml_intelligence_router)  # ML Intelligence - neural trust, bandits, meta-learning
-app.include_router(sandbox_lab_router)  # Autonomous Sandbox Lab - self-improvement experiments
-app.include_router(notion_router)  # Notion Task Management - Kanban board with Genesis Keys
-app.include_router(voice_router)  # Voice API - STT/TTS for continuous voice interaction with GRACE
-app.include_router(agent_router)  # Full Agent Framework - software engineering agent with execution
-app.include_router(governance_router)  # Three-Pillar Governance Framework with human-in-the-loop
-app.include_router(codebase_router)  # Codebase Browser - file browsing, code search, commit history, analysis
-app.include_router(knowledge_base_router)  # Knowledge Base Connectors - external knowledge sources
-app.include_router(kpi_router)  # KPI Dashboard - system health and performance metrics
-app.include_router(proactive_learning_router)  # Proactive Learning - task queue and autonomous learning
-app.include_router(repositories_router)  # Enterprise Repository Management - multi-repo support
-app.include_router(telemetry_router)  # System Telemetry - drift detection, baselines, alerts
-app.include_router(monitoring_router)  # System Monitoring - organs of grace, health, metrics
-app.include_router(streaming_router)  # SSE Streaming - real-time chat response streaming
-app.include_router(websocket_router)  # WebSocket - real-time bidirectional updates
-app.include_router(health_router)  # Comprehensive health checks for all services
-app.include_router(metrics_router)  # Prometheus metrics - /metrics endpoint
-app.include_router(cicd_router)  # Genesis CI/CD - self-hosted pipelines
-app.include_router(cicd_versioning_router)  # CI/CD Version Control - audit trail
-app.include_router(kb_cicd_router)  # Knowledge Base CI/CD - autonomous triggers
-app.include_router(adaptive_cicd_router)  # Adaptive CI/CD - trust, KPIs, LLM, governance
-app.include_router(ingestion_router)  # Librarian Ingestion Pipeline - Genesis-tracked data flow
-app.include_router(autonomous_router)  # Autonomous Action Engine - self-triggered actions
-app.include_router(whitelist_router)  # Whitelist Learning Pipeline - human input to GRACE learning
-app.include_router(test_router)  # Autonomous Testing - self-testing with KPI validation
-app.include_router(scraping_router)  # Web Scraping - URL scraping and crawling
-app.include_router(diagnostic_router)  # 4-Layer Diagnostic Machine - sensors, interpreters, judgement, action
-app.include_router(ide_bridge_router)  # Grace OS VSCode Extension - IDE Bridge for cognitive IDE
-app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop task management with sub-agents
-app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
-app.include_router(context_router)  # Context API - user context submission for multi-tier queries
-app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
-app.include_router(world_model_router)  # World Model - bird's eye system view
-app.include_router(librarian_autonomous_router)  # Librarian autonomous file management
-app.include_router(docs_library_router)  # Docs library — central document registry
-app.include_router(cross_tab_router)  # Cross-tab intelligence — folder chat, tags, relationships, activity
-app.include_router(governance_hub_router)  # Governance Hub — approvals, scores, healing, learning
-app.include_router(genesis_daily_router)  # Genesis daily log — 24hr folders, key details
-app.include_router(governance_rules_router)  # Governance rules & persona — law docs, context windows
-app.include_router(whitelist_hub_router)  # Whitelist hub — API sources, web sources, learning
-app.include_router(oracle_router)  # Oracle — training data store, Kimi audit, gap filling
-app.include_router(codebase_hub_router)  # Codebase hub — code projects, coding agent
-app.include_router(system_bridge_router)  # System bridge — aggregates all 190+ backend systems
-app.include_router(tasks_hub_router)  # Tasks hub — live activity, task submission, scheduling
-app.include_router(api_registry_router)  # API Registry — catalogue all endpoints with health checks
-app.include_router(bi_router)  # Business Intelligence — analytics dashboard
-app.include_router(system_health_router)  # System Health — resources, services, organs, diagnostics
-app.include_router(learning_healing_router)  # Learning & Healing — self-improvement dashboard
-app.include_router(unified_coding_agent_router)  # Unified Coding Agent — all intelligence wired in
-app.include_router(api_explorer_router)  # API Explorer — call any endpoint from frontend
-app.include_router(tab_aggregator_router)  # Tab Aggregator — all 770 endpoints mapped to 12 tabs
+# =============================================================================
+# CONSOLIDATED API ROUTERS
+# =============================================================================
+# Core endpoints used directly by the frontend or internally by other systems.
+# Redundant old APIs removed — hub APIs consolidate their functionality.
+# =============================================================================
+
+# --- Core (called directly by frontend or needed by app.py chat endpoints) ---
+app.include_router(retrieve_router)          # /retrieve — RAG search (used by Chat, Folders, Docs)
+app.include_router(cognitive_router)         # /cognitive — OODA decisions (used by Chat WorldModel)
+app.include_router(voice_router)             # /voice — TTS/STT (used by Chat)
+app.include_router(health_router)            # /health — health checks (used by App.jsx)
+app.include_router(auth_router)              # /auth — authentication
+app.include_router(mcp_router)               # /api/mcp — MCP tool-calling chat
+app.include_router(streaming_router)         # /stream — SSE streaming
+app.include_router(websocket_router)         # /ws — WebSocket updates
+app.include_router(telemetry_router)         # /telemetry — operation tracking
+
+# --- Internal systems (used by hub APIs, coding agent, and governance) ---
+app.include_router(file_management_router)   # /files — file upload (used by librarian-fs)
+app.include_router(ingest_router)            # /ingest — document ingestion
+app.include_router(kpi_router)               # /kpi — trust scores (used by governance, BI)
+app.include_router(monitoring_router)        # /monitoring — organs, health (used by governance)
+app.include_router(diagnostic_router)        # /diagnostic — 4-layer diagnostics (used by health)
+app.include_router(ml_intelligence_router)   # /ml-intelligence — neural trust (used by oracle, agent)
+app.include_router(training_router)          # /training — study/practice (used by oracle)
+app.include_router(learning_memory_router)   # /learning-memory — learning examples (used by oracle)
+app.include_router(autonomous_learning_router)  # /autonomous-learning — subagent learning
+app.include_router(governance_router)        # /governance — three-pillar framework
+app.include_router(librarian_router)         # /librarian — tags, relationships, rules
+app.include_router(genesis_keys_router)      # /genesis — genesis key management
+app.include_router(sandbox_lab_router)       # /sandbox-lab — experiments
+app.include_router(grace_todos_router)       # /api/grace-todos — task store (used by tasks hub)
+app.include_router(scraping_router)          # /scrape — web scraping (used by whitelist)
+
+# --- Hub APIs (the consolidated frontend-facing layer) ---
+app.include_router(world_model_router)       # /api/world-model — bird's eye system view
+app.include_router(librarian_autonomous_router)  # /api/librarian-fs — file management CRUD
+app.include_router(docs_library_router)      # /api/docs — central document library
+app.include_router(cross_tab_router)         # /api/intelligence — folder chat, tags, relationships
+app.include_router(governance_hub_router)    # /api/governance-hub — approvals, scores, healing
+app.include_router(genesis_daily_router)     # /api/genesis-daily — 24hr genesis key logs
+app.include_router(governance_rules_router)  # /api/governance-rules — law docs, persona
+app.include_router(whitelist_hub_router)     # /api/whitelist-hub — API/web sources
+app.include_router(oracle_router)            # /api/oracle — training data, audit
+app.include_router(codebase_hub_router)      # /api/codebase-hub — code projects
+app.include_router(tasks_hub_router)         # /api/tasks-hub — live activity, scheduling
+app.include_router(api_registry_router)      # /api/registry — endpoint catalogue
+app.include_router(bi_router)                # /api/bi — business intelligence
+app.include_router(system_health_router)     # /api/system-health — system health dashboard
+app.include_router(learning_healing_router)  # /api/learn-heal — self-improvement
+app.include_router(unified_coding_agent_router)  # /api/coding-agent — unified agent (28 systems)
+app.include_router(api_explorer_router)      # /api/explorer — call any endpoint
+app.include_router(system_bridge_router)     # /api/bridge — system aggregation
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
