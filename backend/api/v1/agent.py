@@ -1,4 +1,4 @@
-"""v1/agent — Unified coding agent"""
+"""v1/agent — Unified coding agent with feedback loop"""
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
@@ -18,6 +18,13 @@ class AgentApply(BaseModel):
     content: str
     project_folder: str
 
+class AgentFeedback(BaseModel):
+    genesis_key: str
+    prompt: str
+    output: str
+    outcome: str  # positive, negative, failure
+    correction: Optional[str] = None
+
 
 @router.post("/generate")
 async def generate(request: AgentPrompt):
@@ -32,6 +39,19 @@ async def generate(request: AgentPrompt):
 async def apply(request: AgentApply):
     import requests as req
     return req.post(f"{BASE}/api/coding-agent/apply", json=request.model_dump(), timeout=10).json()
+
+@router.post("/feedback")
+async def feedback(request: AgentFeedback):
+    """Record outcome of a generation — closes the learning loop."""
+    from cognitive.pipeline import FeedbackLoop
+    FeedbackLoop.record_outcome(
+        genesis_key=request.genesis_key,
+        prompt=request.prompt,
+        output=request.output,
+        outcome=request.outcome,
+        correction=request.correction,
+    )
+    return {"recorded": True, "outcome": request.outcome}
 
 @router.get("/capabilities")
 async def capabilities():
