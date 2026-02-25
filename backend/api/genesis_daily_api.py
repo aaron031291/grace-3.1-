@@ -69,20 +69,17 @@ def _key_to_dict(key) -> Dict[str, Any]:
 @router.get("/folders")
 async def list_daily_folders(days: int = 30):
     """
-    List all daily folders with key counts.
-    Each folder represents a 24-hour window of Genesis Key activity.
+    List all daily folders with rich metadata so you know
+    what each folder is about at a glance.
     """
     from models.genesis_key_models import GenesisKey
     from sqlalchemy import func, cast, Date
     db = _get_db()
     try:
         cutoff = datetime.utcnow() - timedelta(days=days)
-        rows = (
-            db.query(
-                cast(GenesisKey.when_timestamp, Date).label("day"),
-                func.count(GenesisKey.id).label("count"),
-                func.sum(func.cast(GenesisKey.is_error, db.bind.dialect.name != 'sqlite' and 'INTEGER' or 'INTEGER')).label("errors"),
-            )
+
+        day_groups = (
+            db.query(cast(GenesisKey.when_timestamp, Date).label("day"))
             .filter(GenesisKey.when_timestamp >= cutoff)
             .group_by(cast(GenesisKey.when_timestamp, Date))
             .order_by(cast(GenesisKey.when_timestamp, Date).desc())
@@ -90,14 +87,58 @@ async def list_daily_folders(days: int = 30):
         )
 
         folders = []
-        for row in rows:
-            day = row[0]
-            day_str = day.isoformat() if hasattr(day, 'isoformat') else str(day)
+        for (day_val,) in day_groups:
+            day_start = datetime.combine(day_val, datetime.min.time())
+            day_end = day_start + timedelta(days=1)
+
+            keys = (
+                db.query(GenesisKey)
+                .filter(GenesisKey.when_timestamp >= day_start,
+                        GenesisKey.when_timestamp < day_end)
+                .all()
+            )
+
+            type_counts: Dict[str, int] = {}
+            actors: Dict[str, int] = {}
+            files: Dict[str, int] = {}
+            error_count = 0
+            fix_count = 0
+
+            for k in keys:
+                kt = k.key_type.value if hasattr(k.key_type, 'value') else str(k.key_type)
+                type_counts[kt] = type_counts.get(kt, 0) + 1
+                if k.who_actor:
+                    actors[k.who_actor] = actors.get(k.who_actor, 0) + 1
+                if k.file_path:
+                    files[k.file_path] = files.get(k.file_path, 0) + 1
+                if k.is_error:
+                    error_count += 1
+                if k.fix_applied:
+                    fix_count += 1
+
+            top_types = sorted(type_counts.items(), key=lambda x: x[1], reverse=True)[:4]
+            top_actor = max(actors.items(), key=lambda x: x[1])[0] if actors else None
+            top_file = max(files.items(), key=lambda x: x[1])[0] if files else None
+
+            summary_parts = []
+            for kt, cnt in top_types:
+                summary_parts.append(f"{_type_icon(kt)} {cnt} {_type_label(kt).lower()}")
+            summary = ", ".join(summary_parts)
+
+            day_str = day_val.isoformat() if hasattr(day_val, 'isoformat') else str(day_val)
+
             folders.append({
                 "date": day_str,
-                "label": _format_folder_name(day),
-                "key_count": row[1],
-                "error_count": row[2] or 0,
+                "label": _format_folder_name(day_val),
+                "summary": summary,
+                "key_count": len(keys),
+                "error_count": error_count,
+                "fix_count": fix_count,
+                "top_types": dict(top_types),
+                "top_actor": top_actor,
+                "top_file": _short_path(top_file) if top_file else None,
+                "unique_actors": len(actors),
+                "unique_files": len(files),
             })
 
         return {"total_folders": len(folders), "folders": folders}
@@ -330,6 +371,16 @@ def _format_folder_name(day) -> str:
     if hasattr(day, 'strftime'):
         return day.strftime("%A, %B %d, %Y")
     return str(day)
+
+
+def _short_path(path: str) -> str:
+    """Shorten a file path for display."""
+    if not path:
+        return ""
+    parts = path.replace("\\", "/").split("/")
+    if len(parts) <= 2:
+        return path
+    return f".../{'/'.join(parts[-2:])}"
 
 
 def _type_label(kt: str) -> str:

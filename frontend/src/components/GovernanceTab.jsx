@@ -453,7 +453,6 @@ function GenesisKeysPanel() {
             onClick={() => openFolder(f.date)}
             style={{
               padding: '8px 12px', cursor: 'pointer', fontSize: 12,
-              display: 'flex', alignItems: 'center', gap: 8,
               background: selectedDate === f.date ? C.bgDark : 'transparent',
               borderLeft: selectedDate === f.date ? `3px solid ${C.accent}` : '3px solid transparent',
               borderBottom: `1px solid ${C.border}22`,
@@ -462,14 +461,28 @@ function GenesisKeysPanel() {
             onMouseEnter={e => { if (selectedDate !== f.date) e.currentTarget.style.background = C.bgAlt; }}
             onMouseLeave={e => { if (selectedDate !== f.date) e.currentTarget.style.background = 'transparent'; }}
           >
-            <span>📁</span>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600 }}>{f.date}</div>
-              <div style={{ fontSize: 10, color: C.dim }}>{f.label}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>📁</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600 }}>{f.date}</div>
+                <div style={{ fontSize: 10, color: C.dim }}>{f.label}</div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontWeight: 700, color: C.text }}>{f.key_count}</div>
+                {f.error_count > 0 && <div style={{ fontSize: 9, color: C.error }}>{f.error_count} err</div>}
+              </div>
             </div>
-            <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontWeight: 700, color: C.text }}>{f.key_count}</div>
-              {f.error_count > 0 && <div style={{ fontSize: 9, color: C.error }}>{f.error_count} errors</div>}
+            {/* Metadata summary */}
+            {f.summary && (
+              <div style={{ fontSize: 10, color: C.muted, marginTop: 4, lineHeight: 1.5, paddingLeft: 24 }}>
+                {f.summary}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: 8, fontSize: 9, color: C.dim, marginTop: 3, paddingLeft: 24, flexWrap: 'wrap' }}>
+              {f.unique_actors > 0 && <span>👤 {f.unique_actors}</span>}
+              {f.unique_files > 0 && <span>📄 {f.unique_files} files</span>}
+              {f.fix_count > 0 && <span style={{ color: C.success }}>✅ {f.fix_count} fixes</span>}
+              {f.top_file && <span title={f.top_file}>📌 {f.top_file}</span>}
             </div>
           </div>
         ))}
