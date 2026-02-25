@@ -14,7 +14,9 @@ from api.grace_todos_api import (
     router,
     TaskStatus, TaskPriority, TaskType, ProcessingMode, AgentType,
     GraceTask, UserRequirement, TeamMember, GraceAgent, AutonomousAction, TaskBoard,
-    tasks, requirements, team_members, grace_agents, autonomous_actions
+    tasks_store as tasks, requirements_store as requirements,
+    team_store as team_members, agents_store as grace_agents,
+    actions_store as autonomous_actions
 )
 
 
