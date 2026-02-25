@@ -1,3 +1,4 @@
+import BackendPanel from './BackendPanel';
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
 
@@ -126,6 +127,8 @@ export default function SystemHealthTab() {
           <div style={{ color: C.muted }}>Disk: {r.disk_used_gb || 0} / {r.disk_total_gb || 0} GB</div>
           <div style={{ color: C.muted }}>Cores: {r.cpu_cores || 0}</div>
         </div>
+
+        <BackendPanel prefixes={['/health', '/diagnostic', '/monitoring', '/api/system-health']} label="Health & Diagnostics" />
       </div>
     </div>
   );

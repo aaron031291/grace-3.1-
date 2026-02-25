@@ -1,3 +1,4 @@
+import BackendPanel from './BackendPanel';
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
 
@@ -191,6 +192,8 @@ export default function LearningHealingTab() {
                     <span style={{ fontSize: 10, color: C.dim }}>{((s.success || 0) * 100).toFixed(0)}% success</span>
                   </div>
                 ))}
+
+                <BackendPanel prefixes={['/training', '/autonomous-learning', '/learning-memory', '/learning-efficiency', '/proactive-learning', '/ml-intelligence', '/sandbox-lab', '/api/learn-heal']} label="Learning & ML" />
               </div>
             )}
           </>

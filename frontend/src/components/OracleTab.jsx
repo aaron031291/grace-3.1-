@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
+import BackendPanel from './BackendPanel';
 
 const C = {
   bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
@@ -243,6 +244,7 @@ function AuditPanel() {
             )}
           </div>
         )}
+        <BackendPanel prefixes={['/training', '/learning-memory', '/api/oracle', '/autonomous-learning']} label="Training & Learning" />
       </div>
     </div>
   );

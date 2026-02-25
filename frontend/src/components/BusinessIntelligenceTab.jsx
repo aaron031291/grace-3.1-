@@ -1,3 +1,4 @@
+import BackendPanel from './BackendPanel';
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
 
@@ -107,6 +108,8 @@ export default function BusinessIntelligenceTab() {
             </div>
           </div>
         )}
+
+        <BackendPanel prefixes={['/kpi', '/telemetry', '/monitoring', '/api/bi']} label="BI & Analytics" />
       </div>
     </div>
   );
