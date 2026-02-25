@@ -85,7 +85,7 @@ def _read_file_preview(file_path: Path, max_chars: int = 3000) -> str:
         return "[Unable to read file]"
 
 
-def _build_tree(dir_path: Path, kb_root: Path, depth: int = 0, max_depth: int = 5) -> Dict[str, Any]:
+def _build_tree(dir_path: Path, kb_root: Path, depth: int = 0, max_depth: int = 50) -> Dict[str, Any]:
     """Build directory tree structure."""
     rel = str(dir_path.relative_to(kb_root))
     if rel == ".":
@@ -128,7 +128,7 @@ def _build_tree(dir_path: Path, kb_root: Path, depth: int = 0, max_depth: int = 
 
 
 @router.get("/tree")
-async def get_directory_tree(max_depth: int = 5):
+async def get_directory_tree(max_depth: int = 50):
     """Get the full knowledge base directory tree."""
     kb = _get_kb_path()
     if not kb.exists():
