@@ -6,14 +6,8 @@ const ExperimentTab = () => {
   const [loading, setLoading] = useState(true);
   const [experiments, setExperiments] = useState([]);
   const [labStatus, setLabStatus] = useState(null);
-  const [selectedExperiment, setSelectedExperiment] = useState(null);
   const [showProposeModal, setShowProposeModal] = useState(false);
   const [newExperiment, setNewExperiment] = useState({ name: '', hypothesis: '', methodology: '', metrics: '' });
-
-  useEffect(() => {
-    fetchLabStatus();
-    fetchExperiments();
-  }, []);
 
   const fetchLabStatus = async () => {
     try {
@@ -96,6 +90,13 @@ const ExperimentTab = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      fetchLabStatus();
+      fetchExperiments();
+    });
+  }, []);
 
   const handleProposeExperiment = async () => {
     try {

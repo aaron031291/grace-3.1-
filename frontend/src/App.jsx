@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { API_BASE_URL, API_ENDPOINTS } from "./config/api";
 import ChatTab from "./components/ChatTab";

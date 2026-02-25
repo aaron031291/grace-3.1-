@@ -42,7 +42,7 @@ const IngestionDashboard = () => {
   const [selectedIngestion, setSelectedIngestion] = useState(null);
   const [filter, setFilter] = useState({ status: '', contentType: '' });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [_error, _setError] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(null);
   const eventSourceRef = useRef(null);

@@ -262,7 +262,7 @@ export default function ResearchTab() {
         const data = await response.json();
         setCloningStatus(data);
       }
-    } catch (err) {
+    } catch {
       // Ignore - endpoint may not exist
     }
   }, []);

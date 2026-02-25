@@ -9,11 +9,6 @@ const ConnectorsTab = () => {
   const [testingId, setTestingId] = useState(null);
   const [newConnector, setNewConnector] = useState({ name: '', type: 'github', url: '', auth_type: 'token', credentials: '' });
 
-  useEffect(() => {
-    fetchConnectors();
-    fetchSyncHistory();
-  }, []);
-
   const fetchConnectors = async () => {
     setLoading(true);
     try {
@@ -52,6 +47,13 @@ const ConnectorsTab = () => {
       console.error('Error fetching sync history:', error);
     }
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      fetchConnectors();
+      fetchSyncHistory();
+    });
+  }, []);
 
   const handleAddConnector = async () => {
     try {

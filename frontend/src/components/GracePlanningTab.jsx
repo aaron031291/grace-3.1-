@@ -12,7 +12,7 @@
  * @author Grace Autonomous System
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     DndContext,
     closestCenter,
@@ -669,7 +669,7 @@ const ConceptModal = ({ isOpen, onClose, onSubmit, concept }) => {
 
     useEffect(() => {
         if (concept) {
-            setFormData({ ...formData, ...concept });
+            queueMicrotask(() => setFormData(prev => ({ ...prev, ...concept })));
         }
     }, [concept]);
 
@@ -1060,7 +1060,7 @@ const GracePlanningTab = ({ genesisId = 'G-USER-001' }) => {
     const [isGraceActive, setIsGraceActive] = useState(false);
 
     const [selectedConcept, setSelectedConcept] = useState(null);
-    const [wsConnection, setWsConnection] = useState(null);
+    const [_wsConnection, setWsConnection] = useState(null);
 
     // Modals
     const [showConceptModal, setShowConceptModal] = useState(false);

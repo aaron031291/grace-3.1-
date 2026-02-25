@@ -373,7 +373,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                       ? { ...msg, content: assistantContent, tool_calls: toolCalls, sources: sources }
                       : msg
                   ));
-                } catch (e) { }
+                } catch { /* intentionally empty */ }
               }
             }
           }

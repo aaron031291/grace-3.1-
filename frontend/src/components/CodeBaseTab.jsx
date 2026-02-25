@@ -15,16 +15,6 @@ const CodeBaseTab = () => {
   const [commitHistory, setCommitHistory] = useState([]);
   const [codeAnalysis, setCodeAnalysis] = useState(null);
 
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
-
-  useEffect(() => {
-    if (currentRepo) {
-      fetchFiles(currentRepo, currentPath);
-    }
-  }, [currentRepo, currentPath]);
-
   const fetchRepositories = async () => {
     setLoading(true);
     try {
@@ -116,6 +106,16 @@ const CodeBaseTab = () => {
       console.error('Error fetching files:', error);
     }
   };
+
+  useEffect(() => {
+    queueMicrotask(() => fetchRepositories());
+  }, []);
+
+  useEffect(() => {
+    if (currentRepo) {
+      queueMicrotask(() => fetchFiles(currentRepo, currentPath));
+    }
+  }, [currentRepo, currentPath]);
 
   const fetchFileContent = async (file) => {
     try {

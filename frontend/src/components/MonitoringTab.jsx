@@ -83,36 +83,7 @@ export default function MonitoringTab() {
   const [organs, setOrgans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [overallProgress, setOverallProgress] = useState(0);
-  const [lastUpdated, setLastUpdated] = useState(null);
-
-  useEffect(() => {
-    fetchOrgansStatus();
-  }, []);
-
-  const fetchOrgansStatus = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/monitoring/organs');
-      if (response.ok) {
-        const data = await response.json();
-        // Map API response to component format with icons
-        const organsWithIcons = (data.organs || []).map(organ => ({
-          ...organ,
-          icon: getOrganIcon(organ.id),
-        }));
-        setOrgans(organsWithIcons);
-        setOverallProgress(data.overall_progress || 0);
-        setLastUpdated(data.last_updated);
-      } else {
-        // Use fallback data
-        setOrgans(FALLBACK_ORGANS);
-      }
-    } catch (error) {
-      console.error('Error fetching organs status:', error);
-      setOrgans(FALLBACK_ORGANS);
-    }
-    setLoading(false);
-  };
+  const [_lastUpdated, setLastUpdated] = useState(null);
 
   const getOrganIcon = (organId) => {
     const icons = {
@@ -145,6 +116,35 @@ export default function MonitoringTab() {
     };
     return icons[organId] || icons['self-healing'];
   };
+
+  const fetchOrgansStatus = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/monitoring/organs');
+      if (response.ok) {
+        const data = await response.json();
+        // Map API response to component format with icons
+        const organsWithIcons = (data.organs || []).map(organ => ({
+          ...organ,
+          icon: getOrganIcon(organ.id),
+        }));
+        setOrgans(organsWithIcons);
+        setOverallProgress(data.overall_progress || 0);
+        setLastUpdated(data.last_updated);
+      } else {
+        // Use fallback data
+        setOrgans(FALLBACK_ORGANS);
+      }
+    } catch (error) {
+      console.error('Error fetching organs status:', error);
+      setOrgans(FALLBACK_ORGANS);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    queueMicrotask(() => fetchOrgansStatus());
+  }, []);
 
   if (loading) {
     return (

@@ -165,7 +165,7 @@ export default function WebScraper() {
 
       setScraping(false);
       setStatus(prev => ({ ...prev, status: 'cancelled' }));
-    } catch (err) {
+    } catch {
       setError('Failed to cancel scraping job');
     }
   };

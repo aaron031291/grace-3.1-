@@ -542,7 +542,7 @@ export default function APITab() {
         success: true,
         latency: Math.floor(100 + Math.random() * 200)
       };
-    } catch (err) {
+    } catch {
       return {
         success: true,
         latency: Math.floor(100 + Math.random() * 200)

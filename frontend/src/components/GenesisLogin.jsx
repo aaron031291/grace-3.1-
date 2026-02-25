@@ -32,7 +32,7 @@ export default function GenesisLogin({ onLogin }) {
           }
         }
       }
-    } catch (err) {
+    } catch {
       console.log("No existing session found");
     }
   };

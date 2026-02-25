@@ -10,7 +10,7 @@ const LearningTab = () => {
   const [skills, setSkills] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [memoryStats, setMemoryStats] = useState(null);
-  const [trainingData, setTrainingData] = useState([]);
+  const [_trainingData, _setTrainingData] = useState([]);
   const [studyTopic, setStudyTopic] = useState('API design best practices');
   const [practiceSkillName, setPracticeSkillName] = useState('Code refactoring patterns');
   const [practiceTaskDescription, setPracticeTaskDescription] = useState('Refactor a function to improve readability and add error handling');

@@ -42,7 +42,7 @@ export default function PersistentVoicePanel({
   // Refs
   const recognitionRef = useRef(null);
   const audioRef = useRef(null);
-  const wsRef = useRef(null);
+  const _wsRef = useRef(null);
 
   // Available voices
   const [availableVoices, setAvailableVoices] = useState([]);

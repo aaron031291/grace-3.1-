@@ -10,20 +10,6 @@ const MLIntelligenceTab = () => {
   const [banditStats, setBanditStats] = useState(null);
   const [uncertaintyData, setUncertaintyData] = useState(null);
 
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  const fetchAllData = async () => {
-    setLoading(true);
-    await Promise.all([
-      fetchMLStatus(),
-      fetchSystemTrust(),
-      fetchComponents(),
-    ]);
-    setLoading(false);
-  };
-
   const fetchMLStatus = async () => {
     try {
       const response = await fetch('/api/ml-intelligence/status');
@@ -85,6 +71,20 @@ const MLIntelligenceTab = () => {
       console.error('Error fetching components:', error);
     }
   };
+
+  const fetchAllData = async () => {
+    setLoading(true);
+    await Promise.all([
+      fetchMLStatus(),
+      fetchSystemTrust(),
+      fetchComponents(),
+    ]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    queueMicrotask(() => fetchAllData());
+  }, []);
 
   const fetchBanditStats = async () => {
     try {

@@ -12,11 +12,6 @@ const GenesisKeyTab = () => {
   const [dailySummary, setDailySummary] = useState(null);
   const [analysisResults, setAnalysisResults] = useState(null);
 
-  useEffect(() => {
-    fetchStats();
-    fetchGenesisKeys();
-  }, []);
-
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/genesis/stats');
@@ -109,6 +104,13 @@ const GenesisKeyTab = () => {
       console.error('Error fetching genesis keys:', error);
     }
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      fetchStats();
+      fetchGenesisKeys();
+    });
+  }, []);
 
   const fetchArchives = async () => {
     try {

@@ -10,12 +10,6 @@ const OrchestrationTab = () => {
   const [collaborations, setCollaborations] = useState([]);
   const [fineTuneJobs, setFineTuneJobs] = useState([]);
 
-  useEffect(() => {
-    fetchLLMStats();
-    fetchModels();
-    fetchRecentTasks();
-  }, []);
-
   const fetchLLMStats = async () => {
     setLoading(true);
     try {
@@ -74,6 +68,14 @@ const OrchestrationTab = () => {
       console.error('Error fetching tasks:', error);
     }
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      fetchLLMStats();
+      fetchModels();
+      fetchRecentTasks();
+    });
+  }, []);
 
   const fetchCollaborations = async () => {
     try {

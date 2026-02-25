@@ -13,10 +13,6 @@ const WhitelistTab = () => {
   const [addType, setAddType] = useState('domain');
   const [newEntry, setNewEntry] = useState({ value: '', description: '', priority: 'medium' });
 
-  useEffect(() => {
-    fetchWhitelistData();
-  }, []);
-
   const fetchWhitelistData = async () => {
     setLoading(true);
     try {
@@ -63,6 +59,10 @@ const WhitelistTab = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    queueMicrotask(() => fetchWhitelistData());
+  }, []);
 
   const fetchLogs = async () => {
     try {

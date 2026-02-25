@@ -93,14 +93,14 @@ export function ListSkeleton({ items = 5, hasAvatar = true, hasSecondary = true 
           <Box sx={{ flex: 1 }}>
             <MuiSkeleton
               variant="text"
-              width={`${60 + Math.random() * 30}%`}
+              width={`${60 + (i % 4) * 7.5}%`}
               height={24}
               animation="wave"
             />
             {hasSecondary && (
               <MuiSkeleton
                 variant="text"
-                width={`${40 + Math.random() * 20}%`}
+                width={`${40 + (i % 4) * 5}%`}
                 height={20}
                 animation="wave"
               />
@@ -193,8 +193,8 @@ export function ChatSkeleton({ messages = 4 }) {
             )}
             <MuiSkeleton
               variant="rectangular"
-              width={`${40 + Math.random() * 30}%`}
-              height={60 + Math.random() * 40}
+              width={`${40 + (i % 4) * 7.5}%`}
+              height={60 + (i % 4) * 10}
               animation="wave"
               sx={{ borderRadius: 2 }}
             />

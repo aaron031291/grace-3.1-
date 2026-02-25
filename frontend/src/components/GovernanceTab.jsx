@@ -4,14 +4,14 @@ import "./GovernanceTab.css";
 const API_BASE = "http://localhost:8000";
 
 // Trust score visualization
-const getTrustColor = (score) => {
+const _getTrustColor = (score) => {
   if (score >= 0.8) return "#10b981";
   if (score >= 0.6) return "#3b82f6";
   if (score >= 0.4) return "#f59e0b";
   return "#ef4444";
 };
 
-const getTrustLevel = (score) => {
+const _getTrustLevel = (score) => {
   if (score >= 0.8) return "High";
   if (score >= 0.6) return "Medium";
   if (score >= 0.4) return "Low";
@@ -657,7 +657,7 @@ export default function GovernanceTab() {
     immutable: { rules: [], documents: [] }
   });
   const [pendingDecisions, setPendingDecisions] = useState([]);
-  const [decisionHistory, setDecisionHistory] = useState([]);
+  const [_decisionHistory, _setDecisionHistory] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editingRule, setEditingRule] = useState(null);

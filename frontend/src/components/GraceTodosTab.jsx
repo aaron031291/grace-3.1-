@@ -10,7 +10,7 @@
  * - Notion-style panels and boards
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -21,7 +21,6 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
@@ -261,7 +260,7 @@ const GraceThinkingPanel = ({ thinking }) => {
 // Team Panel Component
 // ============================================================================
 
-const TeamPanel = ({ team, onAssign, onAddMember }) => {
+const TeamPanel = ({ team, onAssign: _onAssign, onAddMember }) => {
   return (
     <div className="team-panel">
       <div className="panel-header">
@@ -410,7 +409,7 @@ const TaskModal = ({ task, isOpen, onClose, onSave }) => {
   });
 
   useEffect(() => {
-    if (task) setFormData(task);
+    if (task) queueMicrotask(() => setFormData(task));
   }, [task]);
 
   if (!isOpen) return null;
@@ -650,39 +649,6 @@ const GraceTodosTab = () => {
     return () => clearInterval(pollInterval);
   }, [fetchBoard, fetchStats, fetchThinking, fetchTeam, fetchRequirements, fetchAgents]);
 
-  // WebSocket connection
-  useEffect(() => {
-    const connectWS = () => {
-      const websocket = new WebSocket(`ws://localhost:8000/api/grace-todos/ws`);
-
-      websocket.onopen = () => {
-        console.log('Grace Todos WebSocket connected');
-        websocket.send(JSON.stringify({
-          type: 'subscribe',
-          channels: ['tasks', 'agents', 'team']
-        }));
-      };
-
-      websocket.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        handleWSMessage(message);
-      };
-
-      websocket.onclose = () => {
-        console.log('WebSocket disconnected, reconnecting...');
-        setTimeout(connectWS, 3000);
-      };
-
-      setWs(websocket);
-    };
-
-    connectWS();
-
-    return () => {
-      if (ws) ws.close();
-    };
-  }, []);
-
   const handleWSMessage = (message) => {
     switch (message.type) {
       case 'task_created':
@@ -719,6 +685,39 @@ const GraceTodosTab = () => {
         break;
     }
   };
+
+  // WebSocket connection
+  useEffect(() => {
+    const connectWS = () => {
+      const websocket = new WebSocket(`ws://localhost:8000/api/grace-todos/ws`);
+
+      websocket.onopen = () => {
+        console.log('Grace Todos WebSocket connected');
+        websocket.send(JSON.stringify({
+          type: 'subscribe',
+          channels: ['tasks', 'agents', 'team']
+        }));
+      };
+
+      websocket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        handleWSMessage(message);
+      };
+
+      websocket.onclose = () => {
+        console.log('WebSocket disconnected, reconnecting...');
+        setTimeout(connectWS, 3000);
+      };
+
+      setWs(websocket);
+    };
+
+    connectWS();
+
+    return () => {
+      if (ws) ws.close();
+    };
+  }, []);
 
   // ============================================================================
   // Task Actions

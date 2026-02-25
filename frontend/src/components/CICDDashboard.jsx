@@ -354,7 +354,7 @@ export default function CICDDashboard() {
   const [error, setError] = useState(null);
   const [selectedRun, setSelectedRun] = useState(null);
   const [triggerDialogOpen, setTriggerDialogOpen] = useState(false);
-  const [refreshInterval, setRefreshInterval] = useState(null);
+  const [_refreshInterval, setRefreshInterval] = useState(null);
 
   // Fetch data
   const fetchData = useCallback(async () => {
@@ -370,7 +370,7 @@ export default function CICDDashboard() {
       if (statusRes.ok) setStatus(await statusRes.json());
 
       setError(null);
-    } catch (err) {
+    } catch {
       setError('Failed to fetch CI/CD data');
     } finally {
       setLoading(false);
@@ -405,7 +405,7 @@ export default function CICDDashboard() {
         const error = await response.json();
         setError(error.detail || 'Failed to trigger pipeline');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to trigger pipeline');
     }
   };
@@ -415,7 +415,7 @@ export default function CICDDashboard() {
     try {
       await fetch(`${API_BASE}/runs/${runId}/cancel`, { method: 'POST' });
       await fetchData();
-    } catch (err) {
+    } catch {
       setError('Failed to cancel run');
     }
   };
@@ -425,7 +425,7 @@ export default function CICDDashboard() {
     try {
       await fetch(`${API_BASE}/runs/${runId}/retry`, { method: 'POST' });
       await fetchData();
-    } catch (err) {
+    } catch {
       setError('Failed to retry run');
     }
   };

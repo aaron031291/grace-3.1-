@@ -152,7 +152,7 @@ function DraggableCard({ task, columnId, onDelete, onEdit, profiles }) {
 }
 
 // Column Component
-function Column({ column, tasks, onDelete, onEdit, activeId, profiles }) {
+function Column({ column, tasks, onDelete, onEdit, activeId: _activeId, profiles }) {
   const taskIds = tasks.map((t) => t.genesis_key_id);
   const { setNodeRef } = useSortable({
     id: column.id,
@@ -779,7 +779,7 @@ export default function NotionTab() {
     try {
       await moveTask(active.id, destStatus);
       fetchBoard(); // Refresh to get updated data
-    } catch (err) {
+    } catch {
       // Revert on error
       fetchBoard();
     }
@@ -835,7 +835,7 @@ export default function NotionTab() {
     }
   };
 
-  const viewTaskHistory = async (task) => {
+  const _viewTaskHistory = async (task) => {
     try {
       const response = await fetch(`${API_BASE}/notion/tasks/${task.genesis_key_id}/history`);
       if (!response.ok) throw new Error("Failed to fetch history");

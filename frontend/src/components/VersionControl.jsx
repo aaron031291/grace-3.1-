@@ -105,7 +105,7 @@ export default function VersionControl() {
         }
       );
       if (!response.ok) throw new Error("Failed to revert");
-      const data = await response.json();
+      const _data = await response.json();
       setShowRevertModal(false);
       fetchCommits();
       setError(null);

@@ -10,7 +10,7 @@ export default function GenesisKeyPanel() {
   const [showMetadata, setShowMetadata] = useState(false);
   const [metadataFormat, setMetadataFormat] = useState("human");
   const [archives, setArchives] = useState([]);
-  const [selectedArchive, setSelectedArchive] = useState(null);
+  const [_selectedArchive, _setSelectedArchive] = useState(null);
   const [stats, setStats] = useState(null);
 
   const API_BASE = "http://localhost:8000";

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Lazy Loading Components
  * =======================
@@ -293,6 +294,7 @@ export const lazyRoutes = [
 /**
  * Higher-order component for lazy loading with custom fallback
  */
+// eslint-disable-next-line no-unused-vars
 export function withLazyLoading(importFn, FallbackComponent = LoadingSpinner) {
   const LazyComponent = lazy(importFn);
 
@@ -311,7 +313,7 @@ export function withLazyLoading(importFn, FallbackComponent = LoadingSpinner) {
 export function createLazyComponent(importFn, options = {}) {
   const {
     fallback = <LoadingSpinner />,
-    errorFallback = null,
+    errorFallback: _errorFallback = null,
     displayName = 'LazyComponent'
   } = options;
 

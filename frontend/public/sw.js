@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * Service Worker for GRACE
  * ========================
@@ -130,7 +131,7 @@ async function handleApiRequest(request) {
   // Network only for other API requests
   try {
     return await fetch(request);
-  } catch (error) {
+  } catch {
     return new Response(
       JSON.stringify({ error: 'Network unavailable', offline: true }),
       {
@@ -158,7 +159,7 @@ async function handleNavigationRequest(request) {
     }
 
     return response;
-  } catch (error) {
+  } catch {
     // Fallback to cached index.html for SPA
     const cache = await caches.open(STATIC_CACHE);
     const cached = await cache.match('/index.html');
@@ -209,7 +210,7 @@ async function cacheFirst(request, cacheName) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch (error) {
+  } catch {
     return new Response('Resource not available', { status: 503 });
   }
 }
@@ -224,7 +225,7 @@ async function networkFirst(request, cacheName) {
     }
 
     return response;
-  } catch (error) {
+  } catch {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
 
@@ -317,7 +318,7 @@ self.addEventListener('push', (event) => {
   if (event.data) {
     try {
       data = event.data.json();
-    } catch (e) {
+    } catch {
       data.body = event.data.text();
     }
   }
