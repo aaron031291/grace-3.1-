@@ -97,6 +97,9 @@ from api.codebase_hub_api import router as codebase_hub_router
 from api.system_bridge_api import router as system_bridge_router
 from api.tasks_hub_api import router as tasks_hub_router
 from api.api_registry_api import router as api_registry_router
+from api.business_intelligence_api import router as bi_router
+from api.system_health_api import router as system_health_router
+from api.learning_healing_api import router as learning_healing_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -577,6 +580,9 @@ app.include_router(codebase_hub_router)  # Codebase hub — code projects, codin
 app.include_router(system_bridge_router)  # System bridge — aggregates all 190+ backend systems
 app.include_router(tasks_hub_router)  # Tasks hub — live activity, task submission, scheduling
 app.include_router(api_registry_router)  # API Registry — catalogue all endpoints with health checks
+app.include_router(bi_router)  # Business Intelligence — analytics dashboard
+app.include_router(system_health_router)  # System Health — resources, services, organs, diagnostics
+app.include_router(learning_healing_router)  # Learning & Healing — self-improvement dashboard
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

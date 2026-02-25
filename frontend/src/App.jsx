@@ -10,6 +10,9 @@ import OracleTab from "./components/OracleTab";
 import CodebaseTab from "./components/CodebaseTab";
 import TasksTab from "./components/TasksTab";
 import APIsTab from "./components/APIsTab";
+import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
+import SystemHealthTab from "./components/SystemHealthTab";
+import LearningHealingTab from "./components/LearningHealingTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 
 function App() {
@@ -82,6 +85,9 @@ function App() {
     { id: "codebase", label: "Codebase", icon: "💻", desc: "Code projects & coding agent" },
     { id: "tasks", label: "Tasks", icon: "📋", desc: "Live activity, submit & schedule tasks" },
     { id: "apis", label: "APIs", icon: "🔗", desc: "All endpoints, health checks, diagnostics" },
+    { id: "bi", label: "BI", icon: "📈", desc: "Business intelligence & analytics" },
+    { id: "health", label: "Health", icon: "🏥", desc: "System health, services, organs" },
+    { id: "learn-heal", label: "Learn & Heal", icon: "🧬", desc: "Self-learning, healing, skills" },
   ];
 
   const current = views.find((v) => v.id === activeView) || views[0];
@@ -161,6 +167,9 @@ function App() {
           {activeView === "codebase" && <CodebaseTab />}
           {activeView === "tasks" && <TasksTab />}
           {activeView === "apis" && <APIsTab />}
+          {activeView === "bi" && <BusinessIntelligenceTab />}
+          {activeView === "health" && <SystemHealthTab />}
+          {activeView === "learn-heal" && <LearningHealingTab />}
         </main>
       </div>
 
