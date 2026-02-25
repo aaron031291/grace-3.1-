@@ -314,3 +314,82 @@ async def run_scheduled_now(task_id: str, background_tasks: BackgroundTasks):
                             priority=task.get("priority", "medium"), task_type=task.get("task_type", "user_request"))
     result = await submit_task(submit_req, background_tasks)
     return {**result, "scheduled_id": task_id}
+
+
+# ---------------------------------------------------------------------------
+# 4. TimeSense — temporal awareness
+# ---------------------------------------------------------------------------
+
+@router.get("/time-sense")
+async def get_time_sense():
+    """Grace's current temporal awareness — what she knows about right now."""
+    from cognitive.time_sense import TimeSense
+
+    context = TimeSense.now_context()
+
+    # Enrich with scheduled task urgency
+    scheduled = _load_scheduled()
+    urgent_tasks = []
+    for t in scheduled:
+        if t.get("status") in ("scheduled", "overdue"):
+            urgency = TimeSense.urgency_score(t.get("scheduled_for", ""))
+            urgent_tasks.append({**t, "urgency": urgency})
+    urgent_tasks.sort(key=lambda x: x["urgency"].get("urgency", 0), reverse=True)
+
+    # Activity pattern from genesis keys
+    pattern = {}
+    try:
+        from sqlalchemy import text
+        db = _get_db()
+        try:
+            rows = db.execute(text(
+                "SELECT when_timestamp FROM genesis_key WHERE when_timestamp >= :cutoff ORDER BY when_timestamp DESC LIMIT 500"
+            ), {"cutoff": datetime.utcnow() - timedelta(days=7)}).fetchall()
+            timestamps = [r[0].isoformat() for r in rows if r[0]]
+            pattern = TimeSense.activity_patterns(timestamps)
+        finally:
+            db.close()
+    except Exception:
+        pass
+
+    return {
+        "now": context,
+        "upcoming_tasks": urgent_tasks[:10],
+        "activity_pattern": pattern,
+    }
+
+
+@router.get("/time-sense/prioritised")
+async def get_time_prioritised_tasks():
+    """All tasks re-prioritised by TimeSense temporal urgency."""
+    from cognitive.time_sense import TimeSense
+
+    all_tasks = []
+
+    # Scheduled tasks
+    for t in _load_scheduled():
+        all_tasks.append({
+            "id": t["id"], "title": t["title"],
+            "priority": t.get("priority", "medium"),
+            "scheduled_for": t.get("scheduled_for"),
+            "status": t.get("status", "scheduled"),
+            "source": "scheduled",
+        })
+
+    # Active tasks from store
+    try:
+        from api.grace_todos_api import tasks_store
+        for tid, task in tasks_store.items():
+            all_tasks.append({
+                "id": tid, "title": task.title,
+                "priority": task.priority.value,
+                "scheduled_for": task.scheduled_at.isoformat() if task.scheduled_at else None,
+                "deadline": task.deadline.isoformat() if task.deadline else None,
+                "status": task.status.value,
+                "source": "task_store",
+            })
+    except Exception:
+        pass
+
+    prioritised = TimeSense.prioritise_by_time(all_tasks)
+    return {"total": len(prioritised), "tasks": prioritised}

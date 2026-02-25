@@ -43,14 +43,17 @@ function timeAgo(iso) {
 function LivePanel() {
   const [live, setLive] = useState(null);
   const [history, setHistory] = useState([]);
+  const [timeSense, setTimeSense] = useState(null);
 
   const refresh = useCallback(async () => {
-    const [lRes, hRes] = await Promise.allSettled([
+    const [lRes, hRes, tsRes] = await Promise.allSettled([
       fetch(`${API_BASE_URL}/api/tasks-hub/live`).then(r => r.ok ? r.json() : null),
       fetch(`${API_BASE_URL}/api/tasks-hub/history?limit=40`).then(r => r.ok ? r.json() : null),
+      fetch(`${API_BASE_URL}/api/tasks-hub/time-sense`).then(r => r.ok ? r.json() : null),
     ]);
     if (lRes.status === 'fulfilled') setLive(lRes.value);
     if (hRes.status === 'fulfilled') setHistory(hRes.value?.history || []);
+    if (tsRes.status === 'fulfilled') setTimeSense(tsRes.value);
   }, []);
 
   useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 5000); return () => clearInterval(i); }, [refresh]);
@@ -69,6 +72,28 @@ function LivePanel() {
             </span>
           )}
         </div>
+        {/* TimeSense bar */}
+        {timeSense?.now && (
+          <div style={{ padding: '8px 14px', borderBottom: `1px solid ${C.border}`, background: C.bg, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', fontSize: 11 }}>
+            <span style={{ fontWeight: 700, color: C.accent }}>🕐 TimeSense</span>
+            <span style={{ color: C.text }}>{timeSense.now.day_of_week}</span>
+            <span style={{ color: C.muted }}>{timeSense.now.period_label}</span>
+            <span style={{ color: C.muted }}>{timeSense.now.time}</span>
+            <span style={{ color: timeSense.now.is_business_hours ? C.success : C.dim }}>
+              {timeSense.now.is_business_hours ? '🟢 Business hours' : '🌙 Off hours'}
+            </span>
+            {timeSense.activity_pattern?.peak_hour && (
+              <span style={{ color: C.dim }}>Peak: {timeSense.activity_pattern.peak_hour} ({timeSense.activity_pattern.peak_day})</span>
+            )}
+            {timeSense.upcoming_tasks?.length > 0 && (
+              <span style={{ color: C.warn }}>
+                ⏰ {timeSense.upcoming_tasks.length} upcoming
+                {timeSense.upcoming_tasks[0]?.urgency?.label === 'overdue' && <span style={{ color: C.error }}> ({timeSense.upcoming_tasks.filter(t => t.urgency?.label === 'overdue').length} overdue)</span>}
+              </span>
+            )}
+          </div>
+        )}
+
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {!live ? <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Connecting...</div>
            : live.activities?.length === 0 ? <div style={{ padding: 40, textAlign: 'center', color: C.dim }}><div style={{ fontSize: 32, opacity: 0.5 }}>⏳</div><div style={{ fontSize: 12, marginTop: 8 }}>No activity in the last 5 minutes</div></div>
