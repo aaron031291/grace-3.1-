@@ -206,7 +206,13 @@ export default function CodebaseTab() {
       });
       if (res.ok) {
         const d = await res.json();
-        setAgentResponse(prev => prev.replace('Thinking...', d.response || '(no response)'));
+        let footer = '';
+        if (d.intelligence_score) footer += `\n\n─── Intelligence: ${d.intelligence_score.score}/10 (${d.intelligence_score.available}/${d.intelligence_score.total_systems} systems)`;
+        if (d.verification?.verified != null) footer += ` · Verified: ${d.verification.verified ? '✅' : '⚠️'} (${((d.verification.confidence || 0) * 100).toFixed(0)}% confidence)`;
+        if (d.verification?.invariants) footer += ` · Invariants: ${d.verification.invariants.violations === 0 ? '✅' : '⚠️ ' + d.verification.invariants.violations + ' violations'}`;
+        if (d.trust?.system_trust) footer += ` · Trust: ${((d.trust.system_trust || 0) * 100).toFixed(0)}%`;
+        if (d.genesis_key) footer += ` · GK: ${d.genesis_key}`;
+        setAgentResponse(prev => prev.replace('Thinking...', (d.response || '(no response)') + footer));
       }
     } catch { setAgentResponse(prev => prev.replace('Thinking...', '(error)')); }
     finally { setAgentLoading(false); setTimeout(() => agentEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100); }
