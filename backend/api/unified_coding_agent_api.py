@@ -242,12 +242,14 @@ async def unified_generate(request: AgentPrompt):
 
     system_prompt = (
         "You are Grace's unified coding agent — an autonomous AI software engineer "
-        "with 20 intelligence sources wired in:\n"
-        "CodeNet patterns, learning memory, RAG retrieval, governance rules, "
-        "genesis tracking, persona context, mirror self-model, OODA loop, "
-        "12 invariants, ambiguity ledger, contradiction detection, "
-        "hallucination guard, neural trust scoring, uncertainty quantification, "
-        "KPI tracking, TimeSense, neuro-symbolic reasoning, predictive context.\n\n"
+        "with 28 intelligence sources wired in:\n"
+        "CodeNet, learning memory, RAG, governance rules, genesis tracking, "
+        "persona, mirror self-model, OODA loop, 12 invariants, ambiguity ledger, "
+        "contradiction detection, hallucination guard (6-layer), neural trust, "
+        "uncertainty quantification, KPI tracking, TimeSense, neuro-symbolic, "
+        "predictive context, Grace Agent, governed bridge, confidence scorer, "
+        "GraceOS codegen layer, GraceOS testing layer, SerpAPI search, "
+        "telemetry, git service, world model, Kimi cloud.\n\n"
         "Write production-quality code. Use ```filepath: path/file.ext``` markers. "
         "Explain reasoning. Follow learned patterns."
     )
@@ -275,7 +277,7 @@ async def unified_generate(request: AgentPrompt):
         from api._genesis_tracker import track
         gk = track(
             key_type="ai_code_generation",
-            what=f"Unified agent (20 sources): {request.prompt[:80]}",
+            what=f"Unified agent (28 sources): {request.prompt[:80]}",
             how="POST /api/coding-agent/generate",
             input_data={"prompt": request.prompt, "project": request.project_folder, "provider": provider},
             output_data={"trust": trust, "verification": verification},
@@ -366,6 +368,16 @@ async def agent_capabilities():
     _check_cap(caps, "neuro_symbolic", "Neural + symbolic reasoning fusion", lambda: __import__("ml_intelligence.neuro_symbolic_reasoner", fromlist=["NeuroSymbolicReasoner"]))
     _check_cap(caps, "predictive_context", "Prefetched context loading", lambda: __import__("cognitive.predictive_context_loader", fromlist=["PredictiveContextLoader"]))
 
+    # 21-28: Execution, GraceOS, infrastructure systems
+    _check_cap(caps, "grace_agent", "Software engineering agent with OODA execution loop", lambda: __import__("agent.grace_agent", fromlist=["GraceAgent"]))
+    _check_cap(caps, "governed_bridge", "Constitutional governance checks on execution", lambda: __import__("execution.governed_bridge", fromlist=["GovernedExecutionBridge"]))
+    _check_cap(caps, "confidence_scorer", "Semantic contradiction detection + confidence scoring", lambda: __import__("confidence_scorer.confidence_scorer", fromlist=["ConfidenceScorer"]))
+    _check_cap(caps, "graceos_codegen", "Grace OS Layer 6 code generation layer", lambda: __import__("grace_os.layers.l6_codegen.codegen_layer", fromlist=["CodegenLayer"]))
+    _check_cap(caps, "graceos_testing", "Grace OS Layer 7 testing layer", lambda: __import__("grace_os.layers.l7_testing.testing_layer", fromlist=["TestingLayer"]))
+    _check_cap(caps, "serpapi_search", "SerpAPI Google Search integration", lambda: __import__("search.serpapi_service", fromlist=["SerpAPIService"]))
+    _check_cap(caps, "telemetry", "Operation telemetry with replay", lambda: __import__("telemetry.telemetry_service", fromlist=["TelemetryService"]))
+    _check_cap(caps, "git_service", "Git version control operations", lambda: __import__("version_control.git_service", fromlist=["GitService"]))
+
     available = sum(1 for c in caps.values() if c.get("available"))
     total = len(caps)
 
@@ -411,6 +423,14 @@ def _calculate_intelligence_score() -> Dict[str, Any]:
         ("predictive_context", 0.3, lambda: __import__("cognitive.predictive_context_loader", fromlist=["x"])),
         ("persona", 0.3, lambda: True),
         ("world_model", 0.3, lambda: True),
+        ("grace_agent", 0.5, lambda: __import__("agent.grace_agent", fromlist=["x"])),
+        ("governed_bridge", 0.4, lambda: __import__("execution.governed_bridge", fromlist=["x"])),
+        ("confidence_scorer", 0.4, lambda: __import__("confidence_scorer.confidence_scorer", fromlist=["x"])),
+        ("graceos_codegen", 0.5, lambda: __import__("grace_os.layers.l6_codegen.codegen_layer", fromlist=["x"])),
+        ("graceos_testing", 0.4, lambda: __import__("grace_os.layers.l7_testing.testing_layer", fromlist=["x"])),
+        ("serpapi", 0.3, lambda: __import__("search.serpapi_service", fromlist=["x"])),
+        ("telemetry", 0.3, lambda: __import__("telemetry.telemetry_service", fromlist=["x"])),
+        ("git_service", 0.3, lambda: __import__("version_control.git_service", fromlist=["x"])),
     ]
 
     for name, weight, check in checks:
