@@ -394,6 +394,15 @@ export default function ChatTab() {
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
   const [useKimi, setUseKimi] = useState(false);
+  const [folderContext, setFolderContext] = useState("");
+  const [availableFolders, setAvailableFolders] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/docs/by-folder`)
+      .then(r => r.ok ? r.json() : { folders: [] })
+      .then(d => setAvailableFolders((d.folders || []).map(f => f.folder)))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetchChats();
@@ -505,6 +514,32 @@ export default function ChatTab() {
                 {useKimi ? "Kimi 2.5 Cloud" : "Local LLM"}
               </span>
             </label>
+          </div>
+          {/* Folder context selector */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 12, color: "#888" }}>📁</span>
+            <select
+              value={folderContext}
+              onChange={e => setFolderContext(e.target.value)}
+              style={{
+                padding: "4px 8px", fontSize: 12, background: "#1a1a2e",
+                color: folderContext ? "#e94560" : "#888",
+                border: "1px solid #333", borderRadius: 4, outline: "none",
+                maxWidth: 160,
+              }}
+            >
+              <option value="">All folders</option>
+              {availableFolders.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
+            {folderContext && (
+              <span
+                onClick={() => setFolderContext("")}
+                style={{ cursor: "pointer", fontSize: 14, color: "#888" }}
+                title="Clear folder context"
+              >✕</span>
+            )}
           </div>
         </div>
         <button

@@ -97,6 +97,11 @@ export const API_ENDPOINTS = {
   // MCP Chat
   mcpChat: `${API_BASE_URL}/api/mcp/chat`,
 
+  // Cross-Tab Intelligence
+  folderChat: `${API_BASE_URL}/api/intelligence/folder-chat`,
+  allTags: `${API_BASE_URL}/api/intelligence/tags`,
+  activity: `${API_BASE_URL}/api/intelligence/activity`,
+
   // Docs Library
   docsAll: `${API_BASE_URL}/api/docs/all`,
   docsByFolder: `${API_BASE_URL}/api/docs/by-folder`,

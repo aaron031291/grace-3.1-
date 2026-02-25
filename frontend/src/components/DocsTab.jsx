@@ -152,14 +152,33 @@ export default function DocsTab() {
     fetchStats();
   }, [view, fetchAll, fetchByFolder, fetchStats]);
 
+  // Related docs & tags
+  const [relatedDocs, setRelatedDocs] = useState([]);
+  const [docTags, setDocTags] = useState([]);
+  const [reprocessing, setReprocessing] = useState(false);
+
   // ── Doc detail ──────────────────────────────────────────────────────
   const loadDetail = useCallback(async (doc) => {
     setSelectedDoc(doc);
     setDetailLoading(true);
     setDetail(null);
+    setRelatedDocs([]);
+    setDocTags([]);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/docs/document/${doc.id}`);
-      if (res.ok) setDetail(await res.json());
+      const [detailRes, relatedRes, tagsRes] = await Promise.allSettled([
+        fetch(`${API_BASE_URL}/api/docs/document/${doc.id}`),
+        fetch(`${API_BASE_URL}/api/intelligence/document/${doc.id}/related?limit=6`),
+        fetch(`${API_BASE_URL}/api/intelligence/document/${doc.id}/tags`),
+      ]);
+      if (detailRes.status === 'fulfilled' && detailRes.value.ok) setDetail(await detailRes.value.json());
+      if (relatedRes.status === 'fulfilled' && relatedRes.value.ok) {
+        const rd = await relatedRes.value.json();
+        setRelatedDocs(rd.related || []);
+      }
+      if (tagsRes.status === 'fulfilled' && tagsRes.value.ok) {
+        const td = await tagsRes.value.json();
+        setDocTags([...(td.tags || []), ...(td.librarian_tags || []).map(t => t.name)]);
+      }
     } catch { /* silent */ }
     finally { setDetailLoading(false); }
   }, []);
@@ -422,8 +441,68 @@ export default function DocsTab() {
                     </div>
                   )}
 
+                  {/* Tags (from intelligence) */}
+                  {docTags.length > 0 && (
+                    <div style={{ marginBottom: 16 }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 6 }}>Auto-Tags (Librarian)</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                        {[...new Set(docTags)].map((t, i) => (
+                          <span key={i} style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text, cursor: 'pointer' }}
+                            onClick={() => { setView('all'); setSearch(typeof t === 'string' ? t : t.name || ''); }}
+                            title="Click to search by this tag"
+                          >{typeof t === 'string' ? t : t.name || t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Related documents */}
+                  {relatedDocs.length > 0 && (
+                    <div style={{ marginBottom: 16 }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 6 }}>
+                        Related Documents ({relatedDocs.length})
+                      </div>
+                      {relatedDocs.map((rd, i) => (
+                        <div
+                          key={i}
+                          onClick={() => { if (rd.document_id) loadDetail({ id: rd.document_id, filename: rd.filename }); }}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px',
+                            marginBottom: 3, borderRadius: 4, cursor: 'pointer',
+                            background: C.bgAlt, border: `1px solid ${C.border}`,
+                            fontSize: 12, transition: 'background .1s',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = C.bgDark}
+                          onMouseLeave={e => e.currentTarget.style.background = C.bgAlt}
+                        >
+                          <span>{fileIcon(rd.filename)}</span>
+                          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{rd.filename}</span>
+                          <span style={{ fontSize: 10, color: C.warn, flexShrink: 0 }}>
+                            {rd.confidence ? (rd.confidence * 100).toFixed(0) + '%' : ''}
+                          </span>
+                          <span style={{ fontSize: 9, color: C.dim, flexShrink: 0 }}>{rd.relationship_type}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Actions */}
-                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+                    <button
+                      onClick={async () => {
+                        setReprocessing(true);
+                        try {
+                          const res = await fetch(`${API_BASE_URL}/api/intelligence/document/${detail.id}/reprocess`, { method: 'POST' });
+                          if (res.ok) notify('Librarian reprocessing queued');
+                          else notify('Reprocess failed', 'error');
+                        } catch { notify('Reprocess failed', 'error'); }
+                        finally { setReprocessing(false); }
+                      }}
+                      disabled={reprocessing}
+                      style={{ ...btn, background: C.accentAlt, fontSize: 12, padding: '5px 12px', opacity: reprocessing ? 0.5 : 1 }}
+                    >
+                      {reprocessing ? '⏳ Processing...' : '🔄 Reprocess'}
+                    </button>
                     <button onClick={() => handleDelete(detail.id)} style={{ ...btn, background: C.accent, fontSize: 12, padding: '5px 12px' }}>🗑 Remove</button>
                   </div>
                 </>

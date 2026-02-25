@@ -196,7 +196,16 @@ async def create_directory(request: DirectoryCreateRequest):
     try:
         target.mkdir(parents=True, exist_ok=True)
         logger.info(f"Created directory: {target}")
-        return {"created": True, "path": request.path}
+        from api._genesis_tracker import track
+        gk = track(
+            key_type="file_op",
+            what=f"Created directory: {request.path}",
+            where=str(target),
+            how="POST /api/librarian-fs/directory",
+            file_path=str(target),
+            tags=["directory", "create"],
+        )
+        return {"created": True, "path": request.path, "genesis_key": gk}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create directory: {e}")
 
@@ -217,7 +226,9 @@ async def delete_directory(path: str, force: bool = False):
             if any(target.iterdir()):
                 raise HTTPException(status_code=400, detail="Directory not empty. Use force=true to delete.")
             target.rmdir()
-        return {"deleted": True, "path": path}
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Deleted directory: {path}", where=path, how="DELETE /api/librarian-fs/directory", file_path=path, tags=["delete", "directory"])
+        return {"deleted": True, "path": path, "genesis_key": gk}
     except HTTPException:
         raise
     except Exception as e:
@@ -264,6 +275,18 @@ async def upload_file(
         except Exception as _reg_err:
             logger.warning(f"Docs library registration skipped: {_reg_err}")
 
+        from api._genesis_tracker import track
+        gk = track(
+            key_type="upload",
+            what=f"Uploaded file: {file.filename} to {directory or '/'}",
+            where=str(file_path),
+            how="POST /api/librarian-fs/file/upload",
+            file_path=str(file_path),
+            output_data={"size": len(content), "directory": directory},
+            tags=["upload", "file"],
+        )
+        result["genesis_key"] = gk
+
         if auto_ingest:
             try:
                 from ingestion.service import TextIngestionService
@@ -301,7 +324,9 @@ async def delete_file(path: str):
 
     try:
         target.unlink()
-        return {"deleted": True, "path": path}
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Deleted file: {path}", where=path, how="DELETE /api/librarian-fs/file", file_path=path, tags=["delete", "file"])
+        return {"deleted": True, "path": path, "genesis_key": gk}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Delete failed: {e}")
 
@@ -320,7 +345,9 @@ async def rename_file(request: FileRenameRequest):
     try:
         dest.parent.mkdir(parents=True, exist_ok=True)
         source.rename(dest)
-        return {"renamed": True, "old_path": request.old_path, "new_path": request.new_path}
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Renamed: {request.old_path} → {request.new_path}", where=str(dest), how="POST /api/librarian-fs/file/rename", file_path=str(dest), tags=["rename"])
+        return {"renamed": True, "old_path": request.old_path, "new_path": request.new_path, "genesis_key": gk}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Rename failed: {e}")
 
@@ -340,11 +367,10 @@ async def move_file(request: FileMoveRequest):
     try:
         shutil.move(str(source), str(dest))
         kb = _get_kb_path()
-        return {
-            "moved": True,
-            "old_path": request.source_path,
-            "new_path": str(dest.relative_to(kb)),
-        }
+        new_path = str(dest.relative_to(kb))
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Moved: {request.source_path} → {new_path}", where=new_path, how="POST /api/librarian-fs/file/move", file_path=str(dest), tags=["move", "file"])
+        return {"moved": True, "old_path": request.source_path, "new_path": new_path, "genesis_key": gk}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Move failed: {e}")
 
@@ -383,12 +409,15 @@ async def save_file_content(request: FileSaveRequest):
     try:
         target.write_text(request.content, encoding="utf-8")
         stat = target.stat()
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Saved file: {request.path}", where=request.path, how="PUT /api/librarian-fs/file/content", file_path=str(target), output_data={"size": stat.st_size}, tags=["save", "edit"])
         return {
             "saved": True,
             "path": request.path,
             "name": target.name,
             "size": stat.st_size,
             "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            "genesis_key": gk,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Save failed: {e}")
@@ -409,13 +438,17 @@ async def create_new_file(request: FileCreateRequest):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(request.content, encoding="utf-8")
         kb = _get_kb_path()
+        rel_path = str(target.relative_to(kb))
         stat = target.stat()
+        from api._genesis_tracker import track
+        gk = track(key_type="file_op", what=f"Created file: {rel_path}", where=rel_path, how="POST /api/librarian-fs/file/create", file_path=str(target), tags=["create", "file"])
         return {
             "created": True,
-            "path": str(target.relative_to(kb)),
+            "path": rel_path,
             "name": target.name,
             "size": stat.st_size,
             "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            "genesis_key": gk,
         }
     except HTTPException:
         raise

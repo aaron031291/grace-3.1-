@@ -340,11 +340,21 @@ async def world_model_chat(request: WorldModelChatRequest):
 
         response_text = client.chat(messages=messages, temperature=0.7)
 
+        from api._genesis_tracker import track
+        gk = track(
+            key_type="ai_response",
+            what=f"World model chat: {request.query[:80]}",
+            how="POST /api/world-model/chat",
+            input_data={"query": request.query, "provider": provider},
+            tags=["world_model", "chat", provider],
+        )
+
         return {
             "response": response_text,
             "system_state_snapshot": system_state,
             "provider_used": provider,
             "model_used": model_used,
+            "genesis_key": gk,
         }
     except Exception as e:
         logger.error(f"World model chat failed: {e}")
@@ -407,6 +417,10 @@ async def analyze_source_code(request: SourceCodeRequest):
 
         prompt = f"{instruction}\n\nFile: {request.file_path}\n```python\n{content[:8000]}\n```"
         response = client.generate(prompt=prompt, temperature=0.3, max_tokens=4096)
+
+        from api._genesis_tracker import track
+        track(key_type="ai_response", what=f"Source code analysis: {request.file_path}", where=request.file_path, how="POST /api/world-model/source/analyze", file_path=request.file_path, tags=["source_analysis", "ai"])
+
         return {"file_path": request.file_path, "analysis": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -144,6 +144,21 @@ def register_document(
         db.commit()
         db.refresh(doc)
         logger.info(f"Docs library: registered '{filename}' (id={doc.id}) in folder '{directory}'")
+
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="file_ingestion",
+                what=f"Registered document: {filename}",
+                where=file_path,
+                how=f"register_document(source={source})",
+                file_path=file_path,
+                output_data={"doc_id": doc.id, "directory": directory},
+                tags=["document", "register", source],
+            )
+        except Exception:
+            pass
+
         return doc.id
     except Exception as e:
         db.rollback()
@@ -339,8 +354,14 @@ async def delete_document(doc_id: int, delete_file: bool = False):
                 fp.unlink()
                 file_deleted = True
 
+        doc_name = doc.filename
         db.delete(doc)
         db.commit()
+        try:
+            from api._genesis_tracker import track
+            track(key_type="file_op", what=f"Deleted document from library: {doc_name}", how="DELETE /api/docs/document", tags=["delete", "document"])
+        except Exception:
+            pass
         return {"deleted": True, "id": doc_id, "file_removed": file_deleted}
     except HTTPException:
         raise
