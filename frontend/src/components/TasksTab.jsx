@@ -112,7 +112,7 @@ function LivePanel() {
   );
 }
 
-// ── Submit Task ───────────────────────────────────────────────────────
+// ── Submit + Kanban Board ──────────────────────────────────────────────
 function SubmitPanel() {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -121,6 +121,8 @@ function SubmitPanel() {
   const [submitting, setSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [dragId, setDragId] = useState(null);
+  const [dragOverCol, setDragOverCol] = useState(null);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -144,6 +146,20 @@ function SubmitPanel() {
     finally { setSubmitting(false); }
   };
 
+  const handleDrop = (newStatus) => {
+    if (!dragId) return;
+    setTasks(prev => prev.map(t => t.id === dragId ? { ...t, status: newStatus } : t));
+    setDragId(null);
+    setDragOverCol(null);
+  };
+
+  const columns = [
+    { id: 'queued', label: 'Queued', color: C.info, icon: '📥' },
+    { id: 'running', label: 'Running', color: C.warn, icon: '⚡' },
+    { id: 'completed', label: 'Completed', color: C.success, icon: '✅' },
+    { id: 'failed', label: 'Failed', color: C.error, icon: '❌' },
+  ];
+
   const types = [
     { id: 'user_request', label: '💬 Request' }, { id: 'learning', label: '🎓 Learning' },
     { id: 'healing', label: '🔧 Healing' }, { id: 'ingestion', label: '📥 Ingestion' },
@@ -151,66 +167,94 @@ function SubmitPanel() {
   ];
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
-      {/* Submit form */}
-      <div style={{ flex: '0 0 360px', borderRight: `1px solid ${C.border}`, padding: 16, overflow: 'auto' }}>
-        {notification && <div style={{ padding: '8px 14px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 
-        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}>📝 Suggest a Task</div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ fontSize: 11, color: C.muted, display: 'block', marginBottom: 4 }}>What should Grace do?</label>
-          <input placeholder="e.g. Research competitors in AI space" value={title} onChange={e => setTitle(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()} style={inp} />
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ fontSize: 11, color: C.muted, display: 'block', marginBottom: 4 }}>Details (optional)</label>
-          <textarea placeholder="Additional context..." value={desc} onChange={e => setDesc(e.target.value)} rows={3} style={{ ...inp, resize: 'vertical', fontFamily: 'inherit' }} />
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ fontSize: 11, color: C.muted, display: 'block', marginBottom: 4 }}>Type</label>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-            {types.map(t => (
-              <button key={t.id} onClick={() => setTaskType(t.id)} style={{ ...btn(taskType === t.id ? C.accentAlt : C.bgDark), fontSize: 10, padding: '4px 10px' }}>{t.label}</button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ fontSize: 11, color: C.muted, display: 'block', marginBottom: 4 }}>Priority</label>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {['low', 'medium', 'high', 'critical'].map(p => (
-              <button key={p} onClick={() => setPriority(p)} style={{ ...btn(priority === p ? priorityColor(p) : C.bgDark), fontSize: 10, padding: '4px 12px', textTransform: 'capitalize' }}>{p}</button>
-            ))}
-          </div>
-        </div>
-
-        <button onClick={submit} disabled={submitting || !title.trim()} style={{ ...btn(C.accent), width: '100%', padding: '10px', fontSize: 13, opacity: submitting ? 0.5 : 1 }}>
-          {submitting ? '⏳ Submitting...' : '▶ Submit Task'}
-        </button>
-      </div>
-
-      {/* Active tasks */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 700 }}>Active Tasks ({tasks.length})</span>
-          <button onClick={fetchTasks} style={{ ...btn(C.bgDark), fontSize: 10, marginLeft: 'auto' }}>↻</button>
-        </div>
-        <div style={{ flex: 1, overflowY: 'auto' }}>
-          {tasks.length === 0 ? <div style={{ padding: 40, textAlign: 'center', color: C.dim }}><div style={{ fontSize: 32 }}>📋</div><div style={{ fontSize: 12, marginTop: 8 }}>No active tasks</div></div>
-           : tasks.map(t => (
-            <div key={t.id} style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 10, alignItems: 'center' }}>
-              <span style={{ width: 4, height: 30, borderRadius: 2, background: priorityColor(t.priority), flexShrink: 0 }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, fontWeight: 600 }}>{t.title}</div>
-                <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>{t.type} · {t.status} · {timeAgo(t.created_at)}</div>
-              </div>
-              {t.progress > 0 && <span style={{ fontSize: 12, fontWeight: 700, color: C.success }}>{t.progress}%</span>}
-              <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 3, background: priorityColor(t.priority) + '30', color: priorityColor(t.priority), textTransform: 'uppercase', fontWeight: 700 }}>{t.priority}</span>
-            </div>
+      {/* Submit bar at top */}
+      <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        {notification && <div style={{ padding: '4px 12px', background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 4, fontSize: 11, color: C.success }}>{notification}</div>}
+        <input placeholder="What should Grace do?" value={title} onChange={e => setTitle(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()} style={{ ...inp, flex: '1 1 200px', minWidth: 150 }} />
+        <input placeholder="Details (optional)" value={desc} onChange={e => setDesc(e.target.value)} style={{ ...inp, flex: '1 1 200px', minWidth: 100 }} />
+        <div style={{ display: 'flex', gap: 2 }}>
+          {types.map(t => (
+            <button key={t.id} onClick={() => setTaskType(t.id)} style={{ ...btn(taskType === t.id ? C.accentAlt : C.bgDark), fontSize: 9, padding: '3px 6px' }}>{t.label}</button>
           ))}
         </div>
+        <div style={{ display: 'flex', gap: 2 }}>
+          {['low', 'medium', 'high', 'critical'].map(p => (
+            <button key={p} onClick={() => setPriority(p)} style={{ ...btn(priority === p ? priorityColor(p) : C.bgDark), fontSize: 9, padding: '3px 8px', textTransform: 'capitalize' }}>{p}</button>
+          ))}
+        </div>
+        <button onClick={submit} disabled={submitting || !title.trim()} style={{ ...btn(C.accent), fontSize: 12, opacity: submitting ? 0.5 : 1 }}>
+          {submitting ? '⏳' : '+ Add Task'}
+        </button>
+        <button onClick={fetchTasks} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
+      </div>
+
+      {/* Kanban board */}
+      <div style={{ flex: 1, display: 'flex', gap: 8, padding: 8, overflow: 'auto' }}>
+        {columns.map(col => {
+          const colTasks = tasks.filter(t => t.status === col.id);
+          const isOver = dragOverCol === col.id;
+          return (
+            <div
+              key={col.id}
+              onDragOver={e => { e.preventDefault(); setDragOverCol(col.id); }}
+              onDragLeave={() => setDragOverCol(null)}
+              onDrop={() => handleDrop(col.id)}
+              style={{
+                flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column',
+                background: isOver ? col.color + '15' : C.bgAlt,
+                border: `1px solid ${isOver ? col.color : C.border}`,
+                borderRadius: 8, overflow: 'hidden', transition: 'border-color .15s, background .15s',
+              }}
+            >
+              {/* Column header */}
+              <div style={{ padding: '10px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span>{col.icon}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, flex: 1 }}>{col.label}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: col.color, background: col.color + '22', padding: '1px 8px', borderRadius: 10 }}>{colTasks.length}</span>
+              </div>
+
+              {/* Task cards */}
+              <div style={{ flex: 1, overflowY: 'auto', padding: 6 }}>
+                {colTasks.length === 0 && (
+                  <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 11 }}>
+                    {dragId ? 'Drop here' : 'No tasks'}
+                  </div>
+                )}
+                {colTasks.map(t => (
+                  <div
+                    key={t.id}
+                    draggable
+                    onDragStart={() => setDragId(t.id)}
+                    onDragEnd={() => { setDragId(null); setDragOverCol(null); }}
+                    style={{
+                      padding: '8px 10px', marginBottom: 6, borderRadius: 6,
+                      background: dragId === t.id ? C.bgDark : C.bg,
+                      border: `1px solid ${dragId === t.id ? C.accent : C.border}`,
+                      cursor: 'grab', opacity: dragId === t.id ? 0.7 : 1,
+                      transition: 'opacity .15s, border-color .15s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                      <span style={{ width: 4, height: 16, borderRadius: 2, background: priorityColor(t.priority), flexShrink: 0 }} />
+                      <span style={{ fontSize: 12, fontWeight: 600, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.title}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 10, color: C.dim }}>
+                      <span>{typeIcon(t.type)}</span>
+                      <span style={{ textTransform: 'capitalize' }}>{t.priority}</span>
+                      {t.progress > 0 && <span style={{ color: C.success }}>{t.progress}%</span>}
+                      <span style={{ marginLeft: 'auto' }}>{timeAgo(t.created_at)}</span>
+                    </div>
+                    {t.description && (
+                      <div style={{ fontSize: 10, color: C.dim, marginTop: 4, lineHeight: 1.3, maxHeight: 26, overflow: 'hidden' }}>{t.description}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
