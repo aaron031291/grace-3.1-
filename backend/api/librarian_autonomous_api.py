@@ -247,6 +247,23 @@ async def upload_file(
             "name": file.filename,
         }
 
+        try:
+            import hashlib as _hl
+            from api.docs_library_api import register_document
+            _hash = _hl.sha256(content).hexdigest()
+            doc_id = register_document(
+                filename=file.filename,
+                file_path=str(file_path),
+                file_size=len(content),
+                source="knowledge_base",
+                upload_method="librarian_upload",
+                directory=directory,
+                content_hash=_hash,
+            )
+            result["library_doc_id"] = doc_id
+        except Exception as _reg_err:
+            logger.warning(f"Docs library registration skipped: {_reg_err}")
+
         if auto_ingest:
             try:
                 from ingestion.service import TextIngestionService

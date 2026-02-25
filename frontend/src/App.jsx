@@ -3,6 +3,7 @@ import "./App.css";
 import { API_ENDPOINTS } from "./config/api";
 import ChatTab from "./components/ChatTab";
 import FoldersTab from "./components/FoldersTab";
+import DocsTab from "./components/DocsTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
   const views = [
     { id: "chat", label: "Chat", icon: "💬", desc: "World model & system chat" },
     { id: "folders", label: "Folders", icon: "📁", desc: "File management & librarian" },
+    { id: "docs", label: "Docs", icon: "📚", desc: "Document library — all uploads" },
   ];
 
   const current = views.find((v) => v.id === activeView) || views[0];
@@ -140,6 +142,7 @@ function App() {
         <main className="main-content" style={{ width: "100%" }}>
           {activeView === "chat" && <ChatTab />}
           {activeView === "folders" && <FoldersTab />}
+          {activeView === "docs" && <DocsTab />}
         </main>
       </div>
 

@@ -96,6 +96,12 @@ export const API_ENDPOINTS = {
 
   // MCP Chat
   mcpChat: `${API_BASE_URL}/api/mcp/chat`,
+
+  // Docs Library
+  docsAll: `${API_BASE_URL}/api/docs/all`,
+  docsByFolder: `${API_BASE_URL}/api/docs/by-folder`,
+  docsUpload: `${API_BASE_URL}/api/docs/upload`,
+  docsStats: `${API_BASE_URL}/api/docs/stats`,
 };
 
 // Helper function to build URLs with query params

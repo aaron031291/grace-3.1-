@@ -86,6 +86,7 @@ from api.grace_planning_api import router as grace_planning_router  # Grace Plan
 from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
 from api.world_model_api import router as world_model_router
 from api.librarian_autonomous_api import router as librarian_autonomous_router
+from api.docs_library_api import router as docs_library_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -555,6 +556,7 @@ app.include_router(context_router)  # Context API - user context submission for 
 app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
 app.include_router(world_model_router)  # World Model - bird's eye system view
 app.include_router(librarian_autonomous_router)  # Librarian autonomous file management
+app.include_router(docs_library_router)  # Docs library — central document registry
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
