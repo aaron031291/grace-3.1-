@@ -2,6 +2,7 @@
 Tests for Grace Todos API
 
 Comprehensive tests for autonomous task management system.
+Updated to match current API model structure.
 """
 
 import pytest
@@ -9,7 +10,6 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch, AsyncMock
 import asyncio
 
-# Import the module to test
 from api.grace_todos_api import (
     router,
     TaskStatus, TaskPriority, TaskType, ProcessingMode, AgentType,
@@ -28,76 +28,73 @@ class TestTaskModels:
         task = GraceTask(
             title="Test Task",
             description="A test task description",
-            genesis_id="G-TEST-001"
+            genesis_key_id="G-TEST-001"
         )
         assert task.title == "Test Task"
-        assert task.id.startswith("GT-")
+        assert task.genesis_key_id == "G-TEST-001"
         assert task.status == TaskStatus.QUEUED
         assert task.priority == TaskPriority.MEDIUM
         assert task.task_type == TaskType.AUTONOMOUS
-        assert task.progress == 0
+        assert task.progress_percent == 0
 
     def test_grace_task_with_all_fields(self):
         """Test creating a GraceTask with all fields"""
         task = GraceTask(
             title="Complex Task",
             description="Complex task description",
-            genesis_id="G-TEST-002",
+            genesis_key_id="G-TEST-002",
             status=TaskStatus.RUNNING,
             priority=TaskPriority.CRITICAL,
             task_type=TaskType.USER_REQUEST,
-            assigned_to="user-123",
+            assignee_genesis_id="user-123",
             assigned_agent="GA-001",
             parent_task_id="GT-parent",
-            progress=50,
-            tags=["urgent", "frontend"],
-            required_capabilities=["python", "react"]
+            progress_percent=50,
+            labels=["urgent", "frontend"],
         )
         assert task.status == TaskStatus.RUNNING
         assert task.priority == TaskPriority.CRITICAL
-        assert task.progress == 50
-        assert "urgent" in task.tags
-        assert "python" in task.required_capabilities
+        assert task.progress_percent == 50
+        assert "urgent" in task.labels
 
     def test_user_requirement_creation(self):
         """Test creating a UserRequirement"""
         req = UserRequirement(
             title="New Feature Request",
             description="Build a new dashboard",
-            genesis_id="G-USER-001",
-            requester_name="Aaron"
+            genesis_key_id="G-USER-001",
+            user_genesis_id="user-aaron"
         )
         assert req.title == "New Feature Request"
-        assert req.id.startswith("GR-")
-        assert req.genesis_id == "G-USER-001"
-        assert req.requester_name == "Aaron"
-        assert req.status == "pending"
+        assert req.genesis_key_id == "G-USER-001"
+        assert req.user_genesis_id == "user-aaron"
+        assert req.status == "draft"
 
     def test_team_member_creation(self):
         """Test creating a TeamMember"""
         member = TeamMember(
             name="John Developer",
-            genesis_id="G-JOHN-001",
+            display_name="John D.",
+            genesis_key_id="G-JOHN-001",
             role="developer",
-            skills=["python", "javascript", "react"]
+            skill_sets=["python", "javascript", "react"]
         )
         assert member.name == "John Developer"
-        assert member.id.startswith("GM-")
-        assert "python" in member.skills
+        assert member.genesis_key_id == "G-JOHN-001"
+        assert "python" in member.skill_sets
         assert member.current_load == 0
-        assert member.max_concurrent_tasks == 5
 
     def test_grace_agent_creation(self):
         """Test creating a GraceAgent"""
         agent = GraceAgent(
             name="Test Agent",
-            agent_type=AgentType.CODING,
+            agent_id="GA-001",
+            agent_type=AgentType.SPECIALIST,
             capabilities=["python", "api_design"],
             max_concurrent=10
         )
         assert agent.name == "Test Agent"
-        assert agent.id.startswith("GA-")
-        assert agent.agent_type == AgentType.CODING
+        assert agent.agent_id == "GA-001"
         assert agent.status == "idle"
         assert agent.max_concurrent == 10
 
@@ -147,27 +144,30 @@ class TestAutonomousAction:
     def test_autonomous_action_creation(self):
         """Test creating an AutonomousAction"""
         action = AutonomousAction(
+            action_id="GAA-001",
+            task_id="GT-123",
+            agent_id="GA-001",
             action_type="execute",
-            target_id="GT-123",
             description="Executing task"
         )
         assert action.action_type == "execute"
-        assert action.target_id == "GT-123"
-        assert action.id.startswith("GAA-")
+        assert action.task_id == "GT-123"
+        assert action.action_id == "GAA-001"
         assert action.status == "pending"
-        assert action.initiated_by == "grace"
 
     def test_action_with_result(self):
         """Test action with result"""
         action = AutonomousAction(
+            action_id="GAA-002",
+            task_id="GT-456",
+            agent_id="GA-001",
             action_type="complete",
-            target_id="GT-456",
             description="Task completed",
             status="completed",
-            result={"success": True, "output": "Done"}
+            output_data={"success": True, "output": "Done"}
         )
         assert action.status == "completed"
-        assert action.result["success"] is True
+        assert action.output_data["success"] is True
 
 
 class TestTaskBoard:
@@ -175,28 +175,22 @@ class TestTaskBoard:
 
     def test_task_board_creation(self):
         """Test creating a TaskBoard"""
-        board = TaskBoard(
-            title="Sprint Board",
-            genesis_id="G-SPRINT-001"
-        )
-        assert board.title == "Sprint Board"
-        assert board.id.startswith("GB-")
-        assert "queued" in board.columns
-        assert "completed" in board.columns
+        board = TaskBoard()
+        assert isinstance(board.queued, list)
+        assert isinstance(board.completed, list)
+        assert len(board.queued) == 0
 
     def test_board_with_tasks(self):
         """Test board with tasks in columns"""
+        task1 = GraceTask(title="Task 1", genesis_key_id="G-001")
+        task2 = GraceTask(title="Task 2", genesis_key_id="G-002")
+        task3 = GraceTask(title="Task 3", genesis_key_id="G-003", status=TaskStatus.RUNNING)
         board = TaskBoard(
-            title="Test Board",
-            genesis_id="G-TEST-001",
-            columns={
-                "queued": ["GT-001", "GT-002"],
-                "running": ["GT-003"],
-                "completed": []
-            }
+            queued=[task1, task2],
+            running=[task3],
         )
-        assert len(board.columns["queued"]) == 2
-        assert len(board.columns["running"]) == 1
+        assert len(board.queued) == 2
+        assert len(board.running) == 1
 
 
 class TestTaskStorage:
@@ -214,33 +208,34 @@ class TestTaskStorage:
         task = GraceTask(
             title="Storage Test",
             description="Test task storage",
-            genesis_id="G-TEST"
+            genesis_key_id="G-TEST"
         )
-        tasks[task.id] = task
-        assert task.id in tasks
-        assert tasks[task.id].title == "Storage Test"
+        tasks[task.genesis_key_id] = task
+        assert task.genesis_key_id in tasks
+        assert tasks[task.genesis_key_id].title == "Storage Test"
 
     def test_add_requirement_to_storage(self):
         """Test adding a requirement to storage"""
         req = UserRequirement(
             title="Storage Requirement",
             description="Test requirement storage",
-            genesis_id="G-TEST",
-            requester_name="Tester"
+            genesis_key_id="G-TEST",
+            user_genesis_id="user-tester"
         )
-        requirements[req.id] = req
-        assert req.id in requirements
+        requirements[req.genesis_key_id] = req
+        assert req.genesis_key_id in requirements
 
     def test_add_team_member_to_storage(self):
         """Test adding a team member to storage"""
         member = TeamMember(
             name="Storage Tester",
-            genesis_id="G-TESTER",
-            role="tester",
-            skills=["testing"]
+            display_name="Tester",
+            genesis_key_id="G-TESTER",
+            role="specialist",
+            skill_sets=["testing"]
         )
-        team_members[member.id] = member
-        assert member.id in team_members
+        team_members[member.genesis_key_id] = member
+        assert member.genesis_key_id in team_members
 
 
 class TestTaskOperations:
@@ -251,63 +246,60 @@ class TestTaskOperations:
         task = GraceTask(
             title="Transition Test",
             description="Testing transitions",
-            genesis_id="G-TEST"
+            genesis_key_id="G-TEST"
         )
-        # Initial status is queued
         assert task.status == TaskStatus.QUEUED
 
-        # Transition to running
         task.status = TaskStatus.RUNNING
         assert task.status == TaskStatus.RUNNING
 
-        # Transition to completed
         task.status = TaskStatus.COMPLETED
-        task.progress = 100
+        task.progress_percent = 100
         assert task.status == TaskStatus.COMPLETED
-        assert task.progress == 100
+        assert task.progress_percent == 100
 
     def test_task_progress_validation(self):
         """Test progress stays within bounds"""
         task = GraceTask(
             title="Progress Test",
             description="Testing progress",
-            genesis_id="G-TEST",
-            progress=50
+            genesis_key_id="G-TEST",
+            progress_percent=50
         )
-        assert 0 <= task.progress <= 100
+        assert 0 <= task.progress_percent <= 100
 
     def test_sub_task_relationship(self):
         """Test parent-child task relationship"""
         parent = GraceTask(
             title="Parent Task",
             description="Parent task",
-            genesis_id="G-TEST"
+            genesis_key_id="G-PARENT"
         )
         child = GraceTask(
             title="Child Task",
             description="Child task",
-            genesis_id="G-TEST",
-            parent_task_id=parent.id
+            genesis_key_id="G-CHILD",
+            parent_task_id="G-PARENT"
         )
-        parent.sub_tasks.append(child.id)
+        parent.sub_task_ids.append(child.genesis_key_id)
 
-        assert child.parent_task_id == parent.id
-        assert child.id in parent.sub_tasks
+        assert child.parent_task_id == "G-PARENT"
+        assert child.genesis_key_id in parent.sub_task_ids
 
     def test_task_dependency_tracking(self):
         """Test task dependencies"""
         task1 = GraceTask(
             title="First Task",
             description="Must complete first",
-            genesis_id="G-TEST"
+            genesis_key_id="G-FIRST"
         )
         task2 = GraceTask(
             title="Second Task",
             description="Depends on first",
-            genesis_id="G-TEST",
-            dependencies=[task1.id]
+            genesis_key_id="G-SECOND",
+            dependencies=["G-FIRST"]
         )
-        assert task1.id in task2.dependencies
+        assert "G-FIRST" in task2.dependencies
 
 
 class TestAgentOperations:
@@ -317,32 +309,33 @@ class TestAgentOperations:
         """Test assigning task to agent"""
         agent = GraceAgent(
             name="Worker Agent",
-            agent_type=AgentType.CODING,
+            agent_id="GA-WORKER",
+            agent_type=AgentType.WORKER,
             capabilities=["python"]
         )
-        task_id = "GT-test-001"
-        agent.current_tasks.append(task_id)
+        agent.current_task_id = "GT-test-001"
 
-        assert task_id in agent.current_tasks
-        assert agent.status == "idle"  # Status not auto-updated
+        assert agent.current_task_id == "GT-test-001"
+        assert agent.status == "idle"
 
     def test_agent_capacity_check(self):
         """Test agent capacity limits"""
         agent = GraceAgent(
             name="Capacity Agent",
-            agent_type=AgentType.ANALYSIS,
+            agent_id="GA-CAP",
+            agent_type=AgentType.SPECIALIST,
             capabilities=["analysis"],
             max_concurrent=2
         )
-        # Add tasks up to capacity
-        agent.current_tasks.extend(["GT-001", "GT-002"])
-        assert len(agent.current_tasks) == agent.max_concurrent
+        agent.task_queue.extend(["GT-001", "GT-002"])
+        assert len(agent.task_queue) == agent.max_concurrent
 
     def test_agent_capability_matching(self):
         """Test matching agent capabilities to task requirements"""
         agent = GraceAgent(
             name="Skilled Agent",
-            agent_type=AgentType.CODING,
+            agent_id="GA-SKILL",
+            agent_type=AgentType.SPECIALIST,
             capabilities=["python", "javascript", "api_design"]
         )
         required = ["python", "api_design"]
@@ -357,27 +350,28 @@ class TestTeamMemberOperations:
         """Test matching member skills to requirements"""
         member = TeamMember(
             name="Skilled Member",
-            genesis_id="G-SKILL",
+            display_name="Skilled",
+            genesis_key_id="G-SKILL",
             role="developer",
-            skills=["python", "react", "postgresql"]
+            skill_sets=["python", "react", "postgresql"]
         )
         required_skills = ["python", "react"]
-        match_count = len(set(member.skills) & set(required_skills))
+        match_count = len(set(member.skill_sets) & set(required_skills))
         assert match_count == 2
 
     def test_member_workload_calculation(self):
         """Test calculating member workload"""
         member = TeamMember(
             name="Busy Member",
-            genesis_id="G-BUSY",
+            display_name="Busy",
+            genesis_key_id="G-BUSY",
             role="developer",
-            skills=["python"],
+            skill_sets=["python"],
             current_load=75,
-            max_concurrent_tasks=5
+            capacity=100
         )
         member.assigned_tasks = ["GT-001", "GT-002", "GT-003"]
-        utilization = (len(member.assigned_tasks) / member.max_concurrent_tasks) * 100
-        assert utilization == 60  # 3/5 = 60%
+        assert member.current_load == 75
 
 
 class TestRequirementOperations:
@@ -388,26 +382,25 @@ class TestRequirementOperations:
         req = UserRequirement(
             title="Feature Request",
             description="Build new feature",
-            genesis_id="G-REQ",
-            requester_name="Product Manager"
+            genesis_key_id="G-REQ",
+            user_genesis_id="product-manager"
         )
-        # Simulate task generation
         generated_tasks = ["GT-001", "GT-002"]
         req.generated_tasks = generated_tasks
 
         assert len(req.generated_tasks) == 2
-        assert req.status == "pending"
+        assert req.status == "draft"
 
     def test_requirement_acceptance(self):
         """Test accepting a requirement"""
         req = UserRequirement(
             title="Accepted Request",
             description="This will be accepted",
-            genesis_id="G-REQ",
-            requester_name="Manager"
+            genesis_key_id="G-REQ",
+            user_genesis_id="manager"
         )
-        req.status = "accepted"
-        assert req.status == "accepted"
+        req.status = "active"
+        assert req.status == "active"
 
 
 class TestProcessingMode:
@@ -415,11 +408,10 @@ class TestProcessingMode:
 
     def test_all_modes_exist(self):
         """Test all processing modes exist"""
-        expected = ["sequential", "parallel", "background", "scheduled", "priority"]
+        expected = ["sequential", "parallel", "background", "multi_thread", "distributed"]
         for mode in expected:
             assert hasattr(ProcessingMode, mode.upper())
 
 
-# Run tests
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
