@@ -178,13 +178,19 @@ function ScoresPanel() {
 // ── Sub-tab: Performance ──────────────────────────────────────────────
 function PerformancePanel() {
   const [metrics, setMetrics] = useState(null);
+  const [bridge, setBridge] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/api/governance-hub/performance`)
-      .then(r => r.ok ? r.json() : null)
-      .then(setMetrics).catch(() => {}).finally(() => setLoading(false));
+    Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/governance-hub/performance`).then(r => r.ok ? r.json() : null),
+      fetch(`${API_BASE_URL}/api/bridge/governance/full`).then(r => r.ok ? r.json() : null),
+    ]).then(([mRes, bRes]) => {
+      if (mRes.status === 'fulfilled') setMetrics(mRes.value);
+      if (bRes.status === 'fulfilled') setBridge(bRes.value);
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
@@ -235,8 +241,56 @@ function PerformancePanel() {
         </Card>
       )}
 
+      {/* Bridge data — connected subsystems */}
+      {bridge && (
+        <>
+          {bridge.memory_mesh && Object.keys(bridge.memory_mesh).length > 0 && (
+            <Card title="🧠 Memory Mesh">
+              {Object.entries(bridge.memory_mesh).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '3px 0', borderBottom: `1px solid ${C.border}` }}>
+                  <span style={{ color: C.muted }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ fontWeight: 700 }}>{(v || 0).toLocaleString()}</span>
+                </div>
+              ))}
+            </Card>
+          )}
+
+          {bridge.monitoring?.organs && (
+            <Card title="🫀 Organs of Grace">
+              {bridge.monitoring.organs.map((o, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0', borderBottom: `1px solid ${C.border}` }}>
+                  <span style={{ fontSize: 12, flex: 1 }}>{o.name}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: o.progress >= 50 ? C.success : C.warn }}>{o.progress}%</span>
+                  <MeterBar value={o.progress} color={o.progress >= 50 ? C.success : C.warn} />
+                </div>
+              ))}
+            </Card>
+          )}
+
+          {bridge.ml_intelligence?.available && (
+            <Card title="🤖 ML Intelligence">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {(bridge.ml_intelligence.components || []).map((c, i) => (
+                  <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{c.replace(/_/g, ' ')}</span>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {bridge.ooda?.recent_decisions?.length > 0 && (
+            <Card title="🔄 Recent OODA Decisions">
+              {bridge.ooda.recent_decisions.slice(0, 5).map((d, i) => (
+                <div key={i} style={{ fontSize: 11, padding: '4px 0', borderBottom: `1px solid ${C.border}`, color: C.muted }}>
+                  <span style={{ color: C.text }}>{d.type}</span> — {d.action} ({((d.confidence || 0) * 100).toFixed(0)}%)
+                </div>
+              ))}
+            </Card>
+          )}
+        </>
+      )}
+
       <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh Metrics</button>
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh All</button>
       </div>
     </div>
   );
