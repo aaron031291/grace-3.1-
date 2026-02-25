@@ -33,29 +33,9 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router, get_document_retriever
-from api.file_management import router as file_management_router
-from api.genesis_keys import router as genesis_keys_router
-from api.auth import router as auth_router
-from api.learning_memory_api import router as learning_memory_router
-from api.librarian_api import router as librarian_router
-from api.cognitive import router as cognitive_router
-from api.training import router as training_router
-from api.autonomous_learning import router as autonomous_learning_router
-from api.ml_intelligence_api import router as ml_intelligence_router
-from api.sandbox_lab import router as sandbox_lab_router
 from api.voice_api import router as voice_router
-from api.governance_api import router as governance_router
-from api.kpi_api import router as kpi_router
-from api.telemetry import router as telemetry_router
-from api.monitoring_api import router as monitoring_router
-from api.streaming import router as streaming_router
-from api.websocket import router as websocket_router
 from api.health import router as health_router
-from api.scraping import router as scraping_router
-from diagnostic_machine.api import router as diagnostic_router
-from api.grace_todos_api import router as grace_todos_router
 from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
 from api.world_model_api import router as world_model_router
 from api.librarian_autonomous_api import router as librarian_autonomous_router
@@ -493,62 +473,36 @@ app.add_middleware(
 )
 
 # =============================================================================
-# CONSOLIDATED API ROUTERS
-# =============================================================================
-# Core endpoints used directly by the frontend or internally by other systems.
-# Redundant old APIs removed — hub APIs consolidate their functionality.
+# API ROUTERS — v1 resource layer + minimal core
 # =============================================================================
 
-# --- Core (called directly by frontend or needed by app.py chat endpoints) ---
-app.include_router(retrieve_router)          # /retrieve — RAG search (used by Chat, Folders, Docs)
-app.include_router(cognitive_router)         # /cognitive — OODA decisions (used by Chat WorldModel)
-app.include_router(voice_router)             # /voice — TTS/STT (used by Chat)
-app.include_router(health_router)            # /health — health checks (used by App.jsx)
-app.include_router(auth_router)              # /auth — authentication
-app.include_router(mcp_router)               # /api/mcp — MCP tool-calling chat
-app.include_router(streaming_router)         # /stream — SSE streaming
-app.include_router(websocket_router)         # /ws — WebSocket updates
-app.include_router(telemetry_router)         # /telemetry — operation tracking
+# Core: needed by app.py's own chat/RAG endpoints
+app.include_router(retrieve_router)          # /retrieve — used by app.py chat
+app.include_router(health_router)            # /health — used by frontend health check
+app.include_router(mcp_router)               # /api/mcp — MCP tool-calling
+app.include_router(voice_router)             # /voice — TTS/STT
 
-# --- Internal systems (used by hub APIs, coding agent, and governance) ---
-app.include_router(file_management_router)   # /files — file upload (used by librarian-fs)
-app.include_router(ingest_router)            # /ingest — document ingestion
-app.include_router(kpi_router)               # /kpi — trust scores (used by governance, BI)
-app.include_router(monitoring_router)        # /monitoring — organs, health (used by governance)
-app.include_router(diagnostic_router)        # /diagnostic — 4-layer diagnostics (used by health)
-app.include_router(ml_intelligence_router)   # /ml-intelligence — neural trust (used by oracle, agent)
-app.include_router(training_router)          # /training — study/practice (used by oracle)
-app.include_router(learning_memory_router)   # /learning-memory — learning examples (used by oracle)
-app.include_router(autonomous_learning_router)  # /autonomous-learning — subagent learning
-app.include_router(governance_router)        # /governance — three-pillar framework
-app.include_router(librarian_router)         # /librarian — tags, relationships, rules
-app.include_router(genesis_keys_router)      # /genesis — genesis key management
-app.include_router(sandbox_lab_router)       # /sandbox-lab — experiments
-app.include_router(grace_todos_router)       # /api/grace-todos — task store (used by tasks hub)
-app.include_router(scraping_router)          # /scrape — web scraping (used by whitelist)
+# Hub APIs: called by v1 resource layer via direct imports
+app.include_router(world_model_router)       # /api/world-model
+app.include_router(librarian_autonomous_router)  # /api/librarian-fs
+app.include_router(docs_library_router)      # /api/docs
+app.include_router(cross_tab_router)         # /api/intelligence
+app.include_router(governance_hub_router)    # /api/governance-hub
+app.include_router(genesis_daily_router)     # /api/genesis-daily
+app.include_router(governance_rules_router)  # /api/governance-rules
+app.include_router(whitelist_hub_router)     # /api/whitelist-hub
+app.include_router(oracle_router)            # /api/oracle
+app.include_router(codebase_hub_router)      # /api/codebase-hub
+app.include_router(tasks_hub_router)         # /api/tasks-hub
+app.include_router(unified_coding_agent_router)  # /api/coding-agent
+app.include_router(bi_router)                # /api/bi
+app.include_router(system_health_router)     # /api/system-health
+app.include_router(learning_healing_router)  # /api/learn-heal
+app.include_router(api_registry_router)      # /api/registry
+app.include_router(api_explorer_router)      # /api/explorer
+app.include_router(manifest_router)          # /api/manifest
 
-# --- Hub APIs (the consolidated frontend-facing layer) ---
-app.include_router(world_model_router)       # /api/world-model — bird's eye system view
-app.include_router(librarian_autonomous_router)  # /api/librarian-fs — file management CRUD
-app.include_router(docs_library_router)      # /api/docs — central document library
-app.include_router(cross_tab_router)         # /api/intelligence — folder chat, tags, relationships
-app.include_router(governance_hub_router)    # /api/governance-hub — approvals, scores, healing
-app.include_router(genesis_daily_router)     # /api/genesis-daily — 24hr genesis key logs
-app.include_router(governance_rules_router)  # /api/governance-rules — law docs, persona
-app.include_router(whitelist_hub_router)     # /api/whitelist-hub — API/web sources
-app.include_router(oracle_router)            # /api/oracle — training data, audit
-app.include_router(codebase_hub_router)      # /api/codebase-hub — code projects
-app.include_router(tasks_hub_router)         # /api/tasks-hub — live activity, scheduling
-app.include_router(api_registry_router)      # /api/registry — endpoint catalogue
-app.include_router(bi_router)                # /api/bi — business intelligence
-app.include_router(system_health_router)     # /api/system-health — system health dashboard
-app.include_router(learning_healing_router)  # /api/learn-heal — self-improvement
-app.include_router(unified_coding_agent_router)  # /api/coding-agent — unified agent (28 systems)
-app.include_router(api_explorer_router)      # /api/explorer — call any endpoint
-app.include_router(system_bridge_router)     # /api/bridge — system aggregation
-app.include_router(manifest_router)          # /api/manifest — live system manifest
-
-# --- v1 Clean Resource API (enterprise pattern) ---
+# v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)

@@ -238,60 +238,41 @@ async def unified_generate(request: AgentPrompt):
         import psutil
         context_parts.append(f"\n[System] CPU {psutil.cpu_percent()}%, MEM {psutil.virtual_memory().percent}%")
 
-    trust = _get_trust_score()
-
     system_prompt = (
-        "You are Grace's unified coding agent — an autonomous AI software engineer "
-        "with 28 intelligence sources wired in:\n"
-        "CodeNet, learning memory, RAG, governance rules, genesis tracking, "
-        "persona, mirror self-model, OODA loop, 12 invariants, ambiguity ledger, "
-        "contradiction detection, hallucination guard (6-layer), neural trust, "
-        "uncertainty quantification, KPI tracking, TimeSense, neuro-symbolic, "
-        "predictive context, Grace Agent, governed bridge, confidence scorer, "
-        "GraceOS codegen layer, GraceOS testing layer, SerpAPI search, "
-        "telemetry, git service, world model, Kimi cloud.\n\n"
-        "Write production-quality code. Use ```filepath: path/file.ext``` markers. "
-        "Explain reasoning. Follow learned patterns."
+        "You are Grace's unified coding agent. Write production-quality code. "
+        "Use ```filepath: path/file.ext``` markers. Explain reasoning."
     )
 
     full_prompt = "\n".join(context_parts) + f"\n\nRequest: {request.prompt}"
 
+    # Run the cognitive pipeline — single chain, not independent calls
     try:
-        if request.use_kimi:
-            from llm_orchestrator.factory import get_kimi_client
-            client = get_kimi_client()
-            provider = "kimi"
-        else:
-            from llm_orchestrator.factory import get_llm_client
-            client = get_llm_client()
-            provider = "local"
-
-        response = client.generate(prompt=full_prompt, system_prompt=system_prompt, temperature=0.3, max_tokens=8192)
-
-        verification = {}
-        if request.verify_output:
-            verification = _run_hallucination_check(request.prompt, response)
-            invariants = _run_invariant_check(request.prompt)
-            verification["invariants"] = invariants
-
-        from api._genesis_tracker import track
-        gk = track(
-            key_type="ai_code_generation",
-            what=f"Unified agent (28 sources): {request.prompt[:80]}",
-            how="POST /api/coding-agent/generate",
-            input_data={"prompt": request.prompt, "project": request.project_folder, "provider": provider},
-            output_data={"trust": trust, "verification": verification},
-            tags=["coding_agent", "unified", provider],
+        from cognitive.pipeline import CognitivePipeline
+        pipeline = CognitivePipeline()
+        result = pipeline.run(
+            prompt=full_prompt,
+            system_prompt=system_prompt,
+            project_folder=request.project_folder,
+            current_file=request.current_file,
+            use_kimi=request.use_kimi,
         )
 
         return {
-            "response": response,
-            "provider": provider,
+            "response": result.llm_response,
+            "provider": "kimi" if request.use_kimi else "local",
             "project_folder": request.project_folder,
+            "pipeline": {
+                "stages_passed": result.stages_passed,
+                "stages_failed": result.stages_failed,
+                "errors": result.errors,
+            },
+            "trust": result.trust_score,
+            "verification": result.verification,
+            "invariants": result.invariant_result,
+            "ambiguity": result.ambiguity,
+            "time_context": result.time_context,
+            "genesis_key": result.genesis_key,
             "intelligence_score": _calculate_intelligence_score(),
-            "trust": trust,
-            "verification": verification,
-            "genesis_key": gk,
             "sources_used": _list_active_sources(request),
         }
     except Exception as e:
