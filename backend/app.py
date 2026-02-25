@@ -84,6 +84,8 @@ from api.ide_bridge_api import router as ide_bridge_router  # Grace OS VSCode Ex
 from api.grace_todos_api import router as grace_todos_router  # Grace Autonomous Todos - task management with sub-agents
 from api.grace_planning_api import router as grace_planning_router  # Grace Planning - concept-to-execution workflow
 from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
+from api.world_model_api import router as world_model_router
+from api.librarian_autonomous_api import router as librarian_autonomous_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -551,6 +553,8 @@ app.include_router(grace_todos_router)  # Grace Autonomous Todos - drag-drop tas
 app.include_router(grace_planning_router)  # Grace Planning - concept→questions→tech→decisions→execute→IDE workflow
 app.include_router(context_router)  # Context API - user context submission for multi-tier queries
 app.include_router(mcp_router)  # MCP - Model Context Protocol file/terminal/git tools for Grace OS
+app.include_router(world_model_router)  # World Model - bird's eye system view
+app.include_router(librarian_autonomous_router)  # Librarian autonomous file management
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

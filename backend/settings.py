@@ -106,10 +106,15 @@ class Settings:
 
 
     # ==================== LLM Provider Configuration ====================
-    # LLM_PROVIDER: 'ollama' or 'openai'
+    # LLM_PROVIDER: 'ollama', 'openai', or 'kimi'
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama").lower()
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "")
+
+    # ==================== Kimi 2.5 (Moonshot AI) Configuration ====================
+    KIMI_API_KEY: str = os.getenv("KIMI_API_KEY", "")
+    KIMI_BASE_URL: str = os.getenv("KIMI_BASE_URL", "https://api.moonshot.cn/v1")
+    KIMI_MODEL: str = os.getenv("KIMI_MODEL", "kimi-k2-0711-preview")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
