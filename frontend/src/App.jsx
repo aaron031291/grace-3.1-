@@ -9,6 +9,7 @@ import WhitelistTab from "./components/WhitelistTab";
 import OracleTab from "./components/OracleTab";
 import CodebaseTab from "./components/CodebaseTab";
 import TasksTab from "./components/TasksTab";
+import APIsTab from "./components/APIsTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
     { id: "oracle", label: "Oracle", icon: "🔮", desc: "Training data, audit, gap filling" },
     { id: "codebase", label: "Codebase", icon: "💻", desc: "Code projects & coding agent" },
     { id: "tasks", label: "Tasks", icon: "📋", desc: "Live activity, submit & schedule tasks" },
+    { id: "apis", label: "APIs", icon: "🔗", desc: "All endpoints, health checks, diagnostics" },
   ];
 
   const current = views.find((v) => v.id === activeView) || views[0];
@@ -158,6 +160,7 @@ function App() {
           {activeView === "oracle" && <OracleTab />}
           {activeView === "codebase" && <CodebaseTab />}
           {activeView === "tasks" && <TasksTab />}
+          {activeView === "apis" && <APIsTab />}
         </main>
       </div>
 
