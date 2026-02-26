@@ -543,12 +543,28 @@ class CognitivePipeline:
             scores = [grounding_score, contradiction_score, quality_score, trust_check, internal_score, structural_score]
             confidence = sum(w * max(0, min(1, s)) for w, s in zip(weights, scores))
 
+            # Layer 7: Cross-model verification via Kimi (if available)
+            kimi_verification = None
+            try:
+                from llm_orchestrator.kimi_enhanced import get_kimi_enhanced
+                kimi = get_kimi_enhanced()
+                kimi_result = kimi.verify_output(ctx.prompt[:500], ctx.llm_response[:2000])
+                if kimi_result.get("kimi_available"):
+                    kimi_verification = kimi_result
+                    if kimi_result.get("verified"):
+                        confidence = min(1.0, confidence + 0.1)
+                    elif kimi_result.get("issues"):
+                        confidence = max(0.1, confidence - 0.1)
+            except Exception:
+                pass
+
             ctx.verification = {
                 "verified": confidence >= 0.5,
                 "confidence": round(confidence, 2),
                 "grounded": len(hallucinated_refs) == 0,
                 "verified_refs": verified_refs[:10],
                 "hallucinated_refs": hallucinated_refs[:10],
+                "kimi_verification": kimi_verification,
                 "layers": {
                     "1_grounding": round(max(0, grounding_score), 2),
                     "2_contradiction": round(max(0, contradiction_score), 2),
@@ -556,6 +572,7 @@ class CognitivePipeline:
                     "4_trust": round(trust_check, 2),
                     "5_internal": round(internal_score, 2),
                     "6_structural": round(structural_score, 2),
+                    "7_cross_model": round(kimi_verification.get("confidence", 0) if kimi_verification else 0, 2),
                 },
             }
             ctx.stages_passed.append("hallucination")

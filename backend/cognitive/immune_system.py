@@ -149,8 +149,18 @@ class GraceImmuneSystem:
                 pass
 
     def _on_realtime_alert(self, event: Dict):
-        """Called INSTANTLY when a genesis alert fires."""
+        """Called INSTANTLY when a genesis alert fires. Consults Kimi if critical."""
         logger.warning(f"[IMMUNE] Alert received: {event.get('type')}: {event.get('message')}")
+
+        if event.get("severity", 0) >= 0.8:
+            try:
+                from llm_orchestrator.kimi_enhanced import get_kimi_enhanced
+                kimi = get_kimi_enhanced()
+                diagnosis = kimi.diagnose_realtime(self._realtime_errors[-10:])
+                if diagnosis.get("diagnosis"):
+                    logger.info(f"[IMMUNE] Kimi real-time diagnosis: {diagnosis['diagnosis'][:200]}")
+            except Exception:
+                pass
 
     # ── Main scan cycle ────────────────────────────────────────────────
 
