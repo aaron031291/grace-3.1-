@@ -17,6 +17,7 @@ Same intelligence. Same 28 systems. Same governance. Clean routing.
 """
 
 from fastapi import APIRouter
+from pydantic import BaseModel as _BaseModel
 
 v1_router = APIRouter(prefix="/api/v1")
 
@@ -79,3 +80,31 @@ def register_v1(app):
         return get_autonomous_librarian().organise_file(file_path)
 
     app.include_router(librarian_auto)
+
+    # HUNTER assimilator endpoints
+    hunter_router = _AR(prefix="/api/v1/hunter", tags=["HUNTER Assimilator"])
+
+    class _HunterRequest(_BaseModel):
+        code: str
+        description: str = ""
+        project_folder: str = ""
+
+    @hunter_router.post("/assimilate")
+    async def hunter_assimilate(request: _HunterRequest):
+        from cognitive.hunter_assimilator import get_hunter
+        result = get_hunter().assimilate(request.code, request.description, request.project_folder)
+        return {
+            "request_id": result.request_id, "status": result.status,
+            "files_created": result.files_created, "schemas_detected": result.schemas_detected,
+            "issues_found": result.issues_found, "issues_fixed": result.issues_fixed,
+            "trust_score": result.trust_score, "handshake_sent": result.handshake_sent,
+            "steps": [{"step": s.get("step"), "success": not s.get("error")} for s in result.steps],
+            "genesis_key": result.genesis_key,
+        }
+
+    @hunter_router.get("/history")
+    async def hunter_history():
+        from cognitive.hunter_assimilator import get_hunter
+        return {"history": get_hunter().get_history()}
+
+    app.include_router(hunter_router)
