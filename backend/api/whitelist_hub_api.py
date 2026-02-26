@@ -180,6 +180,21 @@ async def run_api_source(source_id: str, request: SourceRunRequest):
               input_data={"url": source["url"], "query": request.query},
               tags=["whitelist", "api_run"])
 
+        # Store in Oracle (training data) + Magma
+        try:
+            from cognitive.pipeline import FeedbackLoop
+            FeedbackLoop.record_outcome(
+                genesis_key="", prompt=f"API source: {source['name']} ({source['url']})",
+                output=str(result.get("data", ""))[:3000], outcome="positive",
+            )
+        except Exception:
+            pass
+        try:
+            from cognitive.magma_bridge import ingest
+            ingest(f"API data from {source['name']}: {str(result.get('data', ''))[:1000]}", source="whitelist_api")
+        except Exception:
+            pass
+
         return result
     except Exception as e:
         return {"status": "error", "error": str(e)}
@@ -284,6 +299,21 @@ async def run_web_source(source_id: str, request: SourceRunRequest):
               how="POST /api/whitelist-hub/web-sources/run",
               input_data={"url": source["url"], "type": source["source_type"]},
               tags=["whitelist", "web_run", source["source_type"]])
+
+        # Store in Oracle + Magma
+        try:
+            from cognitive.pipeline import FeedbackLoop
+            FeedbackLoop.record_outcome(
+                genesis_key="", prompt=f"Web source: {source['name']} ({source['source_type']})",
+                output=(result.get("text", "") or "")[:3000], outcome="positive",
+            )
+        except Exception:
+            pass
+        try:
+            from cognitive.magma_bridge import ingest
+            ingest(f"Web data from {source['name']}: {(result.get('text', '') or '')[:1000]}", source="whitelist_web")
+        except Exception:
+            pass
 
         return result
     except Exception as e:

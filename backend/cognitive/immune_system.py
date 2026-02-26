@@ -339,6 +339,19 @@ class GraceImmuneSystem:
     def _check_api(self) -> Tuple[float, str, Dict]:
         return (95, "healthy", {"running": True})
 
+    def _check_rag(self) -> Tuple[float, str, Dict]:
+        """Check if RAG retrieval is working."""
+        try:
+            from retrieval.retriever import DocumentRetriever
+            from embedding.embedder import get_embedding_model
+            from vector_db.client import get_qdrant_client
+            retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
+            # Quick test query
+            results = retriever.retrieve(query="test", limit=1, score_threshold=0.0)
+            return (85, "healthy", {"working": True, "results": len(results)})
+        except Exception:
+            return (0, "down", {"working": False})
+
     def _check_ingestion(self) -> Tuple[float, str, Dict]:
         try:
             db = _get_db()

@@ -304,6 +304,12 @@ async def upload_file(
                     )
                     result["ingested"] = True
                     result["document_id"] = getattr(ingest_result, 'document_id', None)
+                    # Store in Magma memory
+                    try:
+                        from cognitive.magma_bridge import ingest as magma_ingest
+                        magma_ingest(f"Document ingested: {file.filename} in {directory}", source="librarian")
+                    except Exception:
+                        pass
             except Exception as e:
                 result["ingested"] = False
                 result["ingest_error"] = str(e)

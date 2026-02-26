@@ -446,3 +446,29 @@ async def trust_distribution():
         return {"total": len(rows), "distribution": buckets}
     finally:
         db.close()
+
+
+@router.post("/search-rag")
+async def oracle_rag_search(query: str, limit: int = 10):
+    """Search the knowledge base via RAG for training-relevant content."""
+    try:
+        from retrieval.retriever import DocumentRetriever
+        from embedding.embedder import get_embedding_model
+        from vector_db.client import get_qdrant_client
+        retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
+        chunks = retriever.retrieve(query=query, limit=limit, score_threshold=0.3)
+        return {"query": query, "results": [
+            {"text": c.get("text", "")[:300], "score": c.get("score", 0),
+             "source": c.get("metadata", {}).get("filename", "")}
+            for c in chunks
+        ]}
+    except Exception as e:
+        return {"query": query, "results": [], "error": str(e)}
+
+
+@router.post("/feedback")
+async def oracle_feedback(prompt: str, output: str, outcome: str, correction: str = ""):
+    """Record feedback for learning — closes the loop."""
+    from cognitive.pipeline import FeedbackLoop
+    FeedbackLoop.record_outcome(genesis_key="", prompt=prompt, output=output, outcome=outcome, correction=correction)
+    return {"recorded": True, "outcome": outcome}
