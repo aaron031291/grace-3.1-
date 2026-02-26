@@ -47,3 +47,9 @@ def register_v1(app):
 
     from api.agent_rules_api import router as agent_rules_router
     app.include_router(agent_rules_router)
+
+    from api.export_api import router as export_router
+    app.include_router(export_router)
+
+    from api.oracle_explorer_api import router as oracle_explorer_router
+    app.include_router(oracle_explorer_router)
