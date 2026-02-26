@@ -53,3 +53,29 @@ def register_v1(app):
 
     from api.oracle_explorer_api import router as oracle_explorer_router
     app.include_router(oracle_explorer_router)
+
+    # Autonomous librarian endpoints
+    from fastapi import APIRouter as _AR
+    librarian_auto = _AR(prefix="/api/v1/librarian", tags=["Autonomous Librarian"])
+
+    @librarian_auto.get("/status")
+    async def librarian_status():
+        from cognitive.librarian_autonomous import get_autonomous_librarian
+        return get_autonomous_librarian().get_status()
+
+    @librarian_auto.post("/organise-all")
+    async def librarian_organise_all(dry_run: bool = True):
+        from cognitive.librarian_autonomous import get_autonomous_librarian
+        return get_autonomous_librarian().organise_all(dry_run=dry_run)
+
+    @librarian_auto.post("/ensure-taxonomy")
+    async def librarian_ensure_taxonomy():
+        from cognitive.librarian_autonomous import get_autonomous_librarian
+        return get_autonomous_librarian().ensure_taxonomy()
+
+    @librarian_auto.post("/organise")
+    async def librarian_organise_file(file_path: str):
+        from cognitive.librarian_autonomous import get_autonomous_librarian
+        return get_autonomous_librarian().organise_file(file_path)
+
+    app.include_router(librarian_auto)
