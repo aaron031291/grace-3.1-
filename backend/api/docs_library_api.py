@@ -146,6 +146,18 @@ def register_document(
         logger.info(f"Docs library: registered '{filename}' (id={doc.id}) in folder '{directory}'")
 
         try:
+            from cognitive.trust_engine import get_trust_engine
+            get_trust_engine().score_output(f"docs_{source}", f"Docs: {source}",
+                filename, source="internal")
+        except Exception:
+            pass
+        try:
+            from cognitive.pipeline import FeedbackLoop
+            FeedbackLoop.record_outcome("", f"Doc registered: {filename}", f"Source: {source}, Dir: {directory}", "positive")
+        except Exception:
+            pass
+
+        try:
             from api._genesis_tracker import track
             track(
                 key_type="file_ingestion",

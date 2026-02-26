@@ -310,6 +310,18 @@ async def upload_file(
                         magma_ingest(f"Document ingested: {file.filename} in {directory}", source="librarian")
                     except Exception:
                         pass
+                    # Update trust + learning
+                    try:
+                        from cognitive.trust_engine import get_trust_engine
+                        get_trust_engine().score_output(f"librarian_{directory or 'root'}", f"Librarian: {directory or 'root'}",
+                            text[:200], source="internal")
+                    except Exception:
+                        pass
+                    try:
+                        from cognitive.pipeline import FeedbackLoop
+                        FeedbackLoop.record_outcome("", f"Ingested: {file.filename}", text[:500], "positive")
+                    except Exception:
+                        pass
             except Exception as e:
                 result["ingested"] = False
                 result["ingest_error"] = str(e)

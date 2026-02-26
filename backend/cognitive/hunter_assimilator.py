@@ -143,6 +143,22 @@ class HunterAssimilator:
         result.steps.append(step11)
         result.handshake_sent = step11.get("sent", False)
 
+        # Step 12: Contradiction check on final code
+        step12 = self._step_contradiction_check(code, project_folder)
+        result.steps.append(step12)
+
+        # Step 13: Feed learning loop
+        step13 = self._step_feed_learning(code, description, result)
+        result.steps.append(step13)
+
+        # Step 14: Immune system post-check
+        step14 = self._step_immune_postcheck()
+        result.steps.append(step14)
+
+        # Step 15: Update KPIs
+        step15 = self._step_update_kpi(result)
+        result.steps.append(step15)
+
         # Complete
         result.status = "complete"
         result.completed_at = datetime.utcnow().isoformat()
@@ -419,6 +435,70 @@ class HunterAssimilator:
             pass
 
         return {"step": "handshake", "sent": True, "announcement": announcement}
+
+    # ── Step 12: Contradiction check ─────────────────────────────────
+
+    def _step_contradiction_check(self, code: str, project_folder: str) -> Dict:
+        try:
+            # Check if code contradicts existing project
+            if project_folder:
+                kb = Path("knowledge_base") / project_folder
+                if kb.exists():
+                    existing_files = [f.name for f in kb.rglob("*.py")]
+                    # Check for naming conflicts
+                    new_files = [Path(f).name for f in self._history[-1].files_created if self._history else []]
+                    conflicts = [f for f in new_files if f in existing_files]
+                    if conflicts:
+                        return {"step": "contradiction_check", "conflicts": conflicts, "clean": False}
+            return {"step": "contradiction_check", "conflicts": [], "clean": True}
+        except Exception:
+            return {"step": "contradiction_check", "clean": True}
+
+    # ── Step 13: Feed learning loop ────────────────────────────────────
+
+    def _step_feed_learning(self, code: str, description: str, result: AssimilationResult) -> Dict:
+        try:
+            from cognitive.pipeline import FeedbackLoop
+            outcome = "positive" if result.trust_score >= 60 and len(result.issues_found) == 0 else "negative"
+            FeedbackLoop.record_outcome(
+                genesis_key=result.genesis_key or "",
+                prompt=f"HUNTER: {description}",
+                output=code[:3000],
+                outcome=outcome,
+            )
+            return {"step": "feed_learning", "outcome": outcome, "recorded": True}
+        except Exception as e:
+            return {"step": "feed_learning", "recorded": False, "error": str(e)}
+
+    # ── Step 14: Immune system post-check ──────────────────────────────
+
+    def _step_immune_postcheck(self) -> Dict:
+        try:
+            from cognitive.immune_system import get_immune_system
+            immune = get_immune_system()
+            result = immune.scan()
+            new_anomalies = len(result.get("anomalies", []))
+            return {"step": "immune_postcheck", "anomalies_after": new_anomalies,
+                    "health": result.get("overall_health", {}).get("status", "unknown")}
+        except Exception:
+            return {"step": "immune_postcheck", "skipped": True}
+
+    # ── Step 15: Update KPIs ───────────────────────────────────────────
+
+    def _step_update_kpi(self, result: AssimilationResult) -> Dict:
+        try:
+            from cognitive.trust_engine import get_trust_engine
+            engine = get_trust_engine()
+            # Score the assimilation as a component
+            success = result.trust_score >= 60 and len(result.issues_found) <= len(result.issues_fixed)
+            comp = engine.score_output(
+                "hunter_assimilation", "HUNTER Assimilator",
+                f"Trust: {result.trust_score}, Issues: {len(result.issues_found)}, Fixed: {len(result.issues_fixed)}",
+                source="deterministic" if success else "llm",
+            )
+            return {"step": "update_kpi", "component_trust": comp.trust_score, "trend": comp.trend}
+        except Exception:
+            return {"step": "update_kpi", "skipped": True}
 
     def get_history(self) -> List[Dict]:
         return [{

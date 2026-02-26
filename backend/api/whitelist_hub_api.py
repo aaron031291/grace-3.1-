@@ -194,6 +194,12 @@ async def run_api_source(source_id: str, request: SourceRunRequest):
             ingest(f"API data from {source['name']}: {str(result.get('data', ''))[:1000]}", source="whitelist_api")
         except Exception:
             pass
+        try:
+            from cognitive.trust_engine import get_trust_engine
+            get_trust_engine().score_output(f"whitelist_api_{source['name']}", f"Whitelist: {source['name']}",
+                str(result.get("data", ""))[:500], source="internal" if result.get("status") == "success" else "unknown")
+        except Exception:
+            pass
 
         return result
     except Exception as e:
@@ -312,6 +318,12 @@ async def run_web_source(source_id: str, request: SourceRunRequest):
         try:
             from cognitive.magma_bridge import ingest
             ingest(f"Web data from {source['name']}: {(result.get('text', '') or '')[:1000]}", source="whitelist_web")
+        except Exception:
+            pass
+        try:
+            from cognitive.trust_engine import get_trust_engine
+            get_trust_engine().score_output(f"whitelist_web_{source['name']}", f"Whitelist: {source['name']}",
+                (result.get("text", "") or "")[:500], source="internal" if result.get("status") == "success" else "unknown")
         except Exception:
             pass
 
