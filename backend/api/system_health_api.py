@@ -156,3 +156,38 @@ async def healing_log():
     """Get recent healing history."""
     from cognitive.self_healing import get_healer
     return {"log": get_healer().get_log()}
+
+@router.post("/immune/scan")
+async def immune_scan():
+    """Run a full immune system scan — detects, diagnoses, heals."""
+    from cognitive.immune_system import get_immune_system
+    return get_immune_system().scan()
+
+@router.get("/immune/status")
+async def immune_status():
+    """Get immune system status: scan interval, baselines, playbook."""
+    from cognitive.immune_system import get_immune_system
+    return get_immune_system().get_status()
+
+@router.get("/immune/playbook")
+async def immune_playbook():
+    """Get the healing playbook — what worked for which problems."""
+    from cognitive.immune_system import get_immune_system
+    return {"playbook": get_immune_system().get_playbook()}
+
+@router.post("/resolve")
+async def resolve_problem(component: str, description: str, error: str = "", file_path: str = "", severity: str = "medium"):
+    """
+    Full intelligent resolution chain:
+    self-heal → diagnose (Grace+Kimi) → agree fix → code agent → search → re-diagnose → apply → learn
+    """
+    from cognitive.healing_coordinator import get_coordinator
+    coordinator = get_coordinator()
+    result = coordinator.resolve({
+        "component": component,
+        "description": description,
+        "error": error,
+        "file_path": file_path,
+        "severity": severity,
+    })
+    return result

@@ -636,14 +636,20 @@ class FeedbackLoop:
 
             db.execute(text("""
                 INSERT INTO learning_examples
-                (example_type, input_context, expected_output, actual_output, trust_score, source, created_at, updated_at)
-                VALUES (:et, :ic, :eo, :ao, :ts, :src, :now, :now)
+                (example_type, input_context, expected_output, actual_output, trust_score,
+                 source_reliability, content_quality, consensus_score, recency_score,
+                 source, created_at, updated_at)
+                VALUES (:et, :ic, :eo, :ao, :ts, :sr, :cq, :cs, :rs, :src, :now, :now)
             """), {
                 "et": f"pipeline_{outcome}",
                 "ic": prompt[:5000],
                 "eo": correction[:5000] if correction else "",
                 "ao": output[:5000],
                 "ts": trust,
+                "sr": trust,  # source_reliability matches trust
+                "cq": trust,  # content_quality
+                "cs": 0.5,    # consensus_score (neutral)
+                "rs": 1.0,    # recency_score (just created)
                 "src": "cognitive_pipeline",
                 "now": now,
             })

@@ -90,11 +90,14 @@ export default function CodebaseTab() {
   const [agentLoading, setAgentLoading] = useState(false);
   const [useKimi, setUseKimi] = useState(false);
   const [agentCaps, setAgentCaps] = useState(null);
+  const [agentRules, setAgentRules] = useState([]);
   const agentEndRef = useRef(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/coding-agent/capabilities`)
       .then(r => r.ok ? r.json() : null).then(setAgentCaps).catch(() => {});
+    fetch(`${API_BASE_URL}/api/v1/agent/rules`)
+      .then(r => r.ok ? r.json() : { rules: [] }).then(d => setAgentRules(d.rules || [])).catch(() => {});
   }, []);
 
   // Panel sizing
@@ -395,6 +398,27 @@ export default function CodebaseTab() {
                 ))}
               </div>
             )}
+
+            {/* Agent rules: upload docs + instructions */}
+            <div style={{ padding: '6px 12px', borderBottom: `1px solid ${C.border}`, background: C.bg }}>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <span style={{ fontSize: 10, color: C.muted }}>📜 Rules:</span>
+                <input type="file" id="agentRuleUpload" style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    if (!e.target.files?.length) return;
+                    const fd = new FormData();
+                    fd.append('file', e.target.files[0]);
+                    fd.append('category', 'coding_standards');
+                    await fetch(`${API_BASE_URL}/api/v1/agent/rules/upload`, { method: 'POST', body: fd });
+                    e.target.value = '';
+                    fetch(`${API_BASE_URL}/api/v1/agent/rules`).then(r => r.ok ? r.json() : { rules: [] }).then(d => setAgentRules(d.rules || []));
+                  }}
+                />
+                <button onClick={() => document.getElementById('agentRuleUpload')?.click()}
+                  style={{ ...btn(C.bgDark), fontSize: 9, padding: '2px 8px' }}>📤 Upload</button>
+                {agentRules.length > 0 && <span style={{ fontSize: 9, color: C.success }}>{agentRules.length} rules enforced</span>}
+              </div>
+            </div>
 
             <div style={{ flex: 1, overflow: 'auto', padding: 12 }}>
               {agentResponse ? (
