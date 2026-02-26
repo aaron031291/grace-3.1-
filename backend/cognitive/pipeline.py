@@ -218,6 +218,20 @@ class CognitivePipeline:
             except Exception:
                 pass
 
+            # Magma memory — query for relevant context
+            try:
+                from cognitive.magma_bridge import query_context, query_causal
+                magma_ctx = query_context(ctx.prompt[:200])
+                if magma_ctx:
+                    observations["magma_context"] = magma_ctx[:300]
+                # Causal reasoning for bug fixes
+                if observations["prompt_type"] == "bug_fix":
+                    causal = query_causal(ctx.prompt[:200])
+                    if causal:
+                        observations["causal_insight"] = causal[:200]
+            except Exception:
+                pass
+
             # DECIDE: classify approach
             observations["approach"] = "direct" if observations["prompt_type"] in ("code_generation", "bug_fix") else "analytical"
 
@@ -401,6 +415,10 @@ class CognitivePipeline:
                 enriched += f"\n[Known skills: {', '.join(p['name'] for p in ctx.ooda['procedures'][:3])}]"
             if ctx.invariants.get("warnings"):
                 enriched += f"\n[Warnings: {'; '.join(ctx.invariants['warnings'][:3])}]"
+            if ctx.ooda.get("magma_context"):
+                enriched += f"\n[Memory context: {ctx.ooda['magma_context'][:500]}]"
+            if ctx.ooda.get("causal_insight"):
+                enriched += f"\n[Causal insight: {ctx.ooda['causal_insight']}]"
 
             messages = [{"role": "user", "content": enriched}]
             if ctx.system_prompt:
@@ -766,6 +784,20 @@ class FeedbackLoop:
                     db.commit()
                 except Exception:
                     pass
+
+            # Store in Magma memory
+            try:
+                from cognitive.magma_bridge import ingest, store_pattern, store_decision, store_procedure
+                ingest(f"{outcome}: {prompt[:200]} → {output[:200]}", source="feedback_loop")
+                if outcome == "positive":
+                    store_pattern("successful_generation", prompt[:200])
+                    store_decision("generate", "code", f"Successfully generated: {prompt[:100]}")
+                elif outcome == "negative":
+                    store_pattern("failed_generation", f"{prompt[:100]} → correction: {correction[:100] if correction else 'none'}")
+                if outcome == "positive" and trust >= 0.8:
+                    store_procedure(f"Learned: {prompt[:50]}", prompt[:200], steps=["Generate", "Verify", "Apply"])
+            except Exception:
+                pass
 
             logger.info(f"[FEEDBACK] Recorded {outcome} outcome, trust={trust}")
         except Exception as e:

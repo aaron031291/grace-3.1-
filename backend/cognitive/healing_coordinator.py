@@ -276,7 +276,18 @@ class HealingCoordinator:
     # ── Record outcome for learning ───────────────────────────────────
 
     def _record_outcome(self, problem: Dict, result: Dict, success: bool):
-        """Track via KPI + store as learning experience."""
+        """Track via KPI + store as learning experience + Magma memory."""
+        # Store in Magma
+        try:
+            from cognitive.magma_bridge import store_decision, store_pattern, ingest
+            ingest(f"Healing coordination: {problem.get('component')} — {'RESOLVED' if success else 'UNRESOLVED'}",
+                   source="healing_coordinator")
+            store_decision("coordinate_healing", problem.get("component", ""),
+                          f"{'Resolved' if success else 'Failed'} via {result.get('resolution', '?')}")
+            if success:
+                store_pattern("successful_coordination", f"{problem.get('description', '')[:100]} → {result.get('resolution', '')}")
+        except Exception:
+            pass
         try:
             from cognitive.trust_engine import get_trust_engine
             engine = get_trust_engine()

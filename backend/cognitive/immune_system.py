@@ -609,6 +609,19 @@ class GraceImmuneSystem:
         # Store as learning experience
         self._store_learning(anomaly, action, success and improved, duration)
 
+        # Store in Magma memory
+        try:
+            from cognitive.magma_bridge import store_pattern, store_decision, ingest
+            ingest(f"Healing {anomaly.component}: {action} → {'success' if success and improved else 'failed'}",
+                   source="immune_system")
+            if success and improved:
+                store_pattern("successful_healing", f"{anomaly.anomaly_type.value} on {anomaly.component} → {action}")
+                store_decision("heal", anomaly.component, f"Applied {action} successfully")
+            else:
+                store_pattern("failed_healing", f"{anomaly.anomaly_type.value} on {anomaly.component} → {action} FAILED")
+        except Exception:
+            pass
+
         # Check vaccination: is this a recurring problem?
         occurrences = sum(1 for r in self._healing_playbook
                          if r.problem_type == anomaly.anomaly_type.value
