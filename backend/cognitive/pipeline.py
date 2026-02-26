@@ -420,25 +420,71 @@ class CognitivePipeline:
             ctx.stages_failed.append("hallucination")
             ctx.errors.append(f"Hallucination: {e}")
 
-    # ── Stage 8: Trust Post — score and update ─────────────────────────
+    # ── Stage 8: Trust Post — Trust Engine scoring + verification ──────
     def _stage_trust_post(self, ctx: PipelineContext):
         try:
-            score = 0.5
+            from cognitive.trust_engine import get_trust_engine
 
+            engine = get_trust_engine()
+
+            # Determine source type
+            source = "deterministic" if ctx.ooda.get("prompt_type") == "question" else "llm"
+            if not ctx.llm_response:
+                source = "internal"
+
+            # Score the output through the Trust Engine
+            component_id = f"pipeline_{ctx.ooda.get('prompt_type', 'general')}"
+            comp_score = engine.score_output(
+                component_id=component_id,
+                component_name=f"Pipeline: {ctx.ooda.get('prompt_type', 'general')}",
+                output=ctx.llm_response or ctx.prompt,
+                source=source,
+            )
+
+            # Adjust based on pipeline stage results
+            adjustment = 0
             if ctx.verification.get("grounded"):
-                score += 0.2
+                adjustment += 10
             if ctx.contradictions.get("issue_count", 0) == 0:
-                score += 0.15
+                adjustment += 5
             if ctx.invariants.get("valid"):
-                score += 0.1
+                adjustment += 5
             if not ctx.ambiguity.get("has_blocking"):
-                score += 0.05
-            if len(ctx.stages_failed) == 0 or (len(ctx.stages_failed) == 1 and "generate" in ctx.stages_failed):
-                score += 0.1
+                adjustment += 5
+            if len(ctx.stages_failed) == 0:
+                adjustment += 5
 
-            ctx.trust_score = min(round(score, 2), 1.0)
+            comp_score.trust_score = min(100, comp_score.trust_score + adjustment)
+
+            # Run verification if needed (below 80)
+            verification_result = {}
+            if comp_score.trust_score < 80 and ctx.llm_response:
+                verification_result = engine.verify_output(
+                    component_id=component_id,
+                    output=ctx.llm_response,
+                    trust_score=comp_score.trust_score,
+                )
+
+            # Normalise to 0-1 for backward compatibility
+            ctx.trust_score = round(comp_score.trust_score / 100, 2)
+            ctx.trust_context = {
+                "component_trust": comp_score.trust_score,
+                "trend": comp_score.trend,
+                "needs_verification": comp_score.needs_verification,
+                "needs_remediation": comp_score.needs_remediation,
+                "remediation_type": comp_score.remediation_type,
+                "verification_level": verification_result.get("verification_level", "none"),
+                "verification_result": verification_result,
+                "chunk_scores": [{"id": c.chunk_id, "score": c.score, "source": c.source} for c in comp_score.chunks[:10]],
+            }
             ctx.stages_passed.append("trust_post")
         except Exception as e:
+            # Fallback to simple scoring if engine fails
+            score = 0.5
+            if ctx.verification.get("grounded"): score += 0.2
+            if ctx.contradictions.get("issue_count", 0) == 0: score += 0.15
+            if ctx.invariants.get("valid"): score += 0.1
+            ctx.trust_score = min(round(score, 2), 1.0)
             ctx.stages_failed.append("trust_post")
             ctx.errors.append(f"TrustPost: {e}")
 
