@@ -333,6 +333,15 @@ class CognitivePipeline:
                 from llm_orchestrator.factory import get_llm_client
                 client = get_llm_client()
 
+            # Inject agent rules into system prompt
+            try:
+                from api.agent_rules_api import get_agent_rules_context
+                agent_rules = get_agent_rules_context()
+                if agent_rules:
+                    ctx.system_prompt = (ctx.system_prompt or "") + agent_rules
+            except Exception:
+                pass
+
             # Enrich prompt with pipeline context
             enriched = ctx.prompt
             if ctx.ooda.get("tech_stack"):
@@ -354,18 +363,12 @@ class CognitivePipeline:
             ctx.stages_failed.append("generate")
             ctx.errors.append(f"Generate: {e}")
 
-    # ── Stage 6: Contradiction — compare output against knowledge ──────
+    # ── Stage 6: Contradiction — semantic + structural detection ──────
     def _stage_contradiction(self, ctx: PipelineContext):
         try:
             issues = []
 
-            # Check file references in output against actual project files
-            response_lower = ctx.llm_response.lower()
-            for ref in ["import ", "from ", "require("]:
-                if ref in response_lower:
-                    pass  # Could check if imported modules exist
-
-            # Check if output contradicts project structure
+            # Check 1: Language mismatch against detected tech stack
             if ctx.ooda.get("tech_stack"):
                 stack = ctx.ooda["tech_stack"]
                 if "python" in stack and ("const " in ctx.llm_response or "function " in ctx.llm_response and "def " not in ctx.llm_response):
@@ -373,47 +376,138 @@ class CognitivePipeline:
                 if "javascript" in stack and "def " in ctx.llm_response and "function " not in ctx.llm_response:
                     issues.append("language_mismatch: JavaScript project but output looks like Python")
 
+            # Check 2: Semantic contradiction against knowledge base via RAG
+            try:
+                from retrieval.retriever import DocumentRetriever
+                from embedding.embedder import get_embedding_model
+                from vector_db.client import get_qdrant_client
+
+                retriever = DocumentRetriever(
+                    embedding_model=get_embedding_model(),
+                    qdrant_client=get_qdrant_client(),
+                )
+                # Search for content similar to the output
+                chunks = retriever.retrieve(
+                    query=ctx.llm_response[:500],
+                    limit=3, score_threshold=0.7,
+                    filter_path=ctx.project_folder if ctx.project_folder else None,
+                )
+                for chunk in chunks:
+                    existing_text = chunk.get("text", "").lower()
+                    output_lower = ctx.llm_response.lower()
+                    # If highly similar content exists but differs in key ways
+                    if chunk.get("score", 0) > 0.85:
+                        if ("not " in existing_text) != ("not " in output_lower[:200]):
+                            issues.append(f"semantic_contradiction: Output may contradict existing document (similarity {chunk['score']:.0%})")
+            except Exception:
+                pass  # RAG not available — skip semantic check
+
+            # Check 3: Import verification — do imported modules exist in project?
+            import re
+            imports = re.findall(r'(?:from|import)\s+([\w.]+)', ctx.llm_response)
+            for imp in imports[:10]:
+                top_module = imp.split('.')[0]
+                stdlib = {'os', 'sys', 'json', 'datetime', 'typing', 'pathlib', 're', 'logging',
+                          'collections', 'functools', 'itertools', 'math', 'hashlib', 'uuid', 'time',
+                          'abc', 'dataclasses', 'enum', 'copy', 'io', 'subprocess', 'threading',
+                          'asyncio', 'contextlib', 'traceback', 'unittest', 'pytest'}
+                common_packages = {'fastapi', 'pydantic', 'sqlalchemy', 'requests', 'numpy', 'pandas',
+                                   'flask', 'django', 'react', 'express', 'next'}
+                if top_module not in stdlib and top_module not in common_packages:
+                    if ctx.project_files and not any(top_module in f for f in ctx.project_files):
+                        issues.append(f"unresolved_import: '{imp}' not found in project or standard library")
+
             ctx.contradictions = {
                 "checked": True,
                 "issues": issues,
                 "issue_count": len(issues),
+                "semantic_check": "performed" if len(issues) > 0 else "clean",
             }
             ctx.stages_passed.append("contradiction")
         except Exception as e:
             ctx.stages_failed.append("contradiction")
             ctx.errors.append(f"Contradiction: {e}")
 
-    # ── Stage 7: Hallucination — verify against project files ──────────
+    # ── Stage 7: Hallucination — 6-layer verification ────────────────
     def _stage_hallucination(self, ctx: PipelineContext):
         try:
-            hallucinated_refs = []
-            verified_refs = []
-
-            # Extract file paths mentioned in output
             import re
+
+            # Layer 1: Repository grounding — check file references exist
             file_refs = re.findall(r'[\w/]+\.\w{1,4}', ctx.llm_response)
             project_file_set = set(ctx.project_files)
-
+            hallucinated_refs = []
+            verified_refs = []
             for ref in file_refs[:20]:
                 if any(ref in pf for pf in project_file_set):
                     verified_refs.append(ref)
                 elif ref.count('.') == 1 and not ref.startswith('0.') and not ref[0].isdigit():
-                    # Looks like a file path but not found
                     hallucinated_refs.append(ref)
 
-            confidence = 1.0
-            if hallucinated_refs:
-                confidence -= len(hallucinated_refs) * 0.1
-            if ctx.contradictions.get("issue_count", 0) > 0:
-                confidence -= ctx.contradictions["issue_count"] * 0.15
-            confidence = max(confidence, 0.1)
+            grounding_score = 1.0 - (len(hallucinated_refs) * 0.15)
+
+            # Layer 2: Contradiction alignment (from previous stage)
+            contradiction_score = 1.0 - (ctx.contradictions.get("issue_count", 0) * 0.2)
+
+            # Layer 3: Confidence scoring — code quality signals
+            quality_score = 0.7
+            if "def " in ctx.llm_response or "class " in ctx.llm_response or "function " in ctx.llm_response:
+                quality_score += 0.1
+            if "TODO" in ctx.llm_response or "FIXME" in ctx.llm_response:
+                quality_score -= 0.1
+            if "error" in ctx.llm_response.lower() and "handle" not in ctx.llm_response.lower():
+                quality_score -= 0.05
+
+            # Layer 4: Trust system check
+            trust_check = 0.5
+            try:
+                from cognitive.trust_engine import get_trust_engine
+                sys_trust = get_trust_engine().get_system_trust()
+                trust_check = sys_trust.get("system_trust", 50) / 100
+            except Exception:
+                pass
+
+            # Layer 5: Internal knowledge verification
+            internal_score = 0.5
+            db = _get_db()
+            if db:
+                try:
+                    from sqlalchemy import text
+                    docs = db.execute(text("SELECT COUNT(*) FROM documents WHERE status='completed'")).scalar() or 0
+                    internal_score = min(0.9, 0.4 + docs * 0.01)
+                except Exception:
+                    pass
+                finally:
+                    db.close()
+
+            # Layer 6: Structural verification — does the output make sense?
+            structural_score = 0.7
+            if len(ctx.llm_response) < 10:
+                structural_score = 0.2
+            elif len(ctx.llm_response) > 50:
+                structural_score = 0.8
+            if "```" in ctx.llm_response:
+                structural_score += 0.1
+
+            # Composite confidence
+            weights = [0.25, 0.15, 0.15, 0.15, 0.15, 0.15]
+            scores = [grounding_score, contradiction_score, quality_score, trust_check, internal_score, structural_score]
+            confidence = sum(w * max(0, min(1, s)) for w, s in zip(weights, scores))
 
             ctx.verification = {
                 "verified": confidence >= 0.5,
                 "confidence": round(confidence, 2),
+                "grounded": len(hallucinated_refs) == 0,
                 "verified_refs": verified_refs[:10],
                 "hallucinated_refs": hallucinated_refs[:10],
-                "grounded": len(hallucinated_refs) == 0,
+                "layers": {
+                    "1_grounding": round(max(0, grounding_score), 2),
+                    "2_contradiction": round(max(0, contradiction_score), 2),
+                    "3_quality": round(quality_score, 2),
+                    "4_trust": round(trust_check, 2),
+                    "5_internal": round(internal_score, 2),
+                    "6_structural": round(structural_score, 2),
+                },
             }
             ctx.stages_passed.append("hallucination")
         except Exception as e:

@@ -128,13 +128,31 @@ async def running_processes():
 @router.post("/heal/{action}")
 async def trigger_heal(action: str, background_tasks: BackgroundTasks):
     """Trigger a healing action."""
+    from cognitive.self_healing import get_healer
+    healer = get_healer()
+    
+    if action == "full":
+        result = healer.check_and_heal()
+        return result
+    
     import gc
     actions = {
         "gc": lambda: gc.collect(),
-        "cache": lambda: logger.info("[HEAL] Cache cleared"),
+        "database": lambda: healer._heal_database(),
+        "qdrant": lambda: healer._heal_qdrant(),
+        "llm": lambda: healer._heal_llm(),
+        "memory": lambda: healer._heal_memory(),
     }
-    if action in actions:
-        background_tasks.add_task(actions[action])
+    handler = actions.get(action)
+    if handler:
+        background_tasks.add_task(handler)
+    
     from api._genesis_tracker import track
     track(key_type="system", what=f"Health heal: {action}", tags=["health", "heal"])
     return {"triggered": True, "action": action}
+
+@router.get("/heal/log")
+async def healing_log():
+    """Get recent healing history."""
+    from cognitive.self_healing import get_healer
+    return {"log": get_healer().get_log()}

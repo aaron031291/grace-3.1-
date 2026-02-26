@@ -44,3 +44,6 @@ def register_v1(app):
     app.include_router(tasks_router)
     app.include_router(system_router)
     app.include_router(agent_router)
+
+    from api.agent_rules_api import router as agent_rules_router
+    app.include_router(agent_rules_router)
