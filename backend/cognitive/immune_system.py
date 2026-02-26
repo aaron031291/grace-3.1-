@@ -37,6 +37,16 @@ from enum import Enum
 logger = logging.getLogger(__name__)
 
 
+def _get_db():
+    try:
+        from database.session import SessionLocal
+        if SessionLocal:
+            return SessionLocal()
+    except Exception:
+        pass
+    return None
+
+
 class AnomalyType(str, Enum):
     PERFORMANCE_DEGRADATION = "performance_degradation"
     MEMORY_LEAK = "memory_leak"
@@ -148,6 +158,18 @@ class GraceImmuneSystem:
         # ── OODA Observe: snapshot every component ─────────────────────
         snapshots = self._observe_all_components()
         result["snapshots"] = [{"name": s.name, "health": s.health_score, "status": s.status, "anomalies": s.anomalies} for s in snapshots]
+
+        # ── Genesis Key analysis: detect error spikes ──────────────────
+        genesis_health = self._analyze_genesis_keys()
+        result["genesis_analysis"] = genesis_health
+        if genesis_health.get("error_spike"):
+            snapshots.append(ComponentSnapshot(
+                name="genesis_error_rate",
+                health_score=max(0, 100 - genesis_health["error_rate"] * 200),
+                status="error_spike" if genesis_health["error_spike"] else "normal",
+                metrics={"error_rate": genesis_health["error_rate"], "recent_errors": genesis_health["recent_errors"]},
+                timestamp=datetime.utcnow().isoformat(),
+            ))
 
         # ── OODA Orient: detect anomalies against baselines ────────────
         anomalies = self._detect_anomalies(snapshots)
@@ -277,6 +299,41 @@ class GraceImmuneSystem:
 
     def _check_api(self) -> Tuple[float, str, Dict]:
         return (95, "healthy", {"running": True})
+
+    def _analyze_genesis_keys(self) -> Dict[str, Any]:
+        """Read genesis keys to detect error spikes and patterns."""
+        try:
+            db = _get_db()
+            if not db:
+                return {"available": False}
+            from sqlalchemy import text
+            # Count recent keys and errors (last 5 minutes)
+            cutoff = datetime.utcnow() - timedelta(minutes=5)
+            total = db.execute(text("SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d"), {"d": cutoff}).scalar() or 0
+            errors = db.execute(text("SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d AND is_error = 1"), {"d": cutoff}).scalar() or 0
+
+            # Get recent error details
+            error_details = []
+            if errors > 0:
+                rows = db.execute(text(
+                    "SELECT what_description, where_location, error_type FROM genesis_key "
+                    "WHERE when_timestamp >= :d AND is_error = 1 ORDER BY when_timestamp DESC LIMIT 5"
+                ), {"d": cutoff}).fetchall()
+                error_details = [{"what": r[0], "where": r[1], "error_type": r[2]} for r in rows]
+
+            db.close()
+
+            error_rate = errors / max(total, 1)
+            return {
+                "available": True,
+                "recent_total": total,
+                "recent_errors": errors,
+                "error_rate": round(error_rate, 3),
+                "error_spike": error_rate > 0.2,  # >20% error rate = spike
+                "error_details": error_details,
+            }
+        except Exception:
+            return {"available": False}
 
     # ── Detect anomalies against baselines ─────────────────────────────
 

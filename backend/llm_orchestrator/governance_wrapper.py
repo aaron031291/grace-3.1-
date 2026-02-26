@@ -95,6 +95,23 @@ def build_governance_prefix() -> str:
     return "\n\n" + "\n\n---\n\n".join(parts) + "\n\n---\n\n"
 
 
+def _track_llm_call(prompt: str, response: str, provider: str):
+    """Track every LLM input/output via genesis key."""
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="ai_response",
+            what=f"LLM call ({provider}): {prompt[:80]}",
+            who="system",
+            how=f"GovernanceAwareLLM → {provider}",
+            input_data={"prompt": prompt},
+            output_data={"response": response},
+            tags=["llm_call", provider.lower()],
+        )
+    except Exception:
+        pass
+
+
 class GovernanceAwareLLM(BaseLLMClient):
     """
     Wraps any LLM client to inject governance rules and persona
@@ -117,10 +134,12 @@ class GovernanceAwareLLM(BaseLLMClient):
         gov_prefix = build_governance_prefix()
         if gov_prefix:
             system_prompt = (system_prompt or "") + gov_prefix
-        return self._inner.generate(
+        result = self._inner.generate(
             prompt=prompt, model_id=model_id, system_prompt=system_prompt,
             temperature=temperature, max_tokens=max_tokens, stream=stream, **kwargs
         )
+        _track_llm_call(prompt[:200], result if isinstance(result, str) else str(result)[:200], type(self._inner).__name__)
+        return result
 
     def chat(
         self,
@@ -131,6 +150,7 @@ class GovernanceAwareLLM(BaseLLMClient):
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
         gov_prefix = build_governance_prefix()
+        prompt_preview = messages[-1].get("content", "")[:200] if messages else ""
         if gov_prefix:
             messages = list(messages)
             if messages and messages[0].get("role") == "system":
@@ -140,10 +160,12 @@ class GovernanceAwareLLM(BaseLLMClient):
                 }
             else:
                 messages.insert(0, {"role": "system", "content": gov_prefix.strip()})
-        return self._inner.chat(
+        result = self._inner.chat(
             messages=messages, model=model, stream=stream,
             temperature=temperature, **kwargs
         )
+        _track_llm_call(prompt_preview, result if isinstance(result, str) else str(result)[:200], type(self._inner).__name__)
+        return result
 
     def is_running(self) -> bool:
         return self._inner.is_running()
