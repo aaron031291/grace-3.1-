@@ -155,12 +155,17 @@ class CognitivePipeline:
                     ctx.project_context = content
                     observations["current_file_lines"] = content.count('\n')
 
-            # ORIENT: check learned patterns and recent history
+            # ORIENT: check learned patterns, episodic memory, procedural memory
             observations["learned_patterns"] = []
+            observations["episodic"] = []
+            observations["procedures"] = []
+
             db = _get_db()
             if db:
                 try:
                     from sqlalchemy import text
+
+                    # Learning examples
                     rows = db.execute(text(
                         "SELECT input_context, expected_output, trust_score FROM learning_examples "
                         "WHERE trust_score >= 0.6 ORDER BY trust_score DESC LIMIT 3"
@@ -168,10 +173,50 @@ class CognitivePipeline:
                     for r in rows:
                         ctx.learned_patterns.append({"input": (r[0] or "")[:100], "trust": r[2]})
                         observations["learned_patterns"].append({"input": (r[0] or "")[:50], "trust": r[2]})
+
+                    # Episodic memory — concrete past experiences
+                    try:
+                        episodes = db.execute(text(
+                            "SELECT problem, action, outcome, trust_score FROM episodes "
+                            "WHERE trust_score >= 0.5 ORDER BY trust_score DESC LIMIT 3"
+                        )).fetchall()
+                        for ep in episodes:
+                            observations["episodic"].append({
+                                "problem": (ep[0] or "")[:80], "action": (ep[1] or "")[:80],
+                                "outcome": (ep[2] or "")[:80], "trust": ep[3]
+                            })
+                    except Exception:
+                        pass
+
+                    # Procedural memory — learned skills
+                    try:
+                        procs = db.execute(text(
+                            "SELECT name, goal, trust_score, success_rate FROM procedures "
+                            "WHERE trust_score >= 0.5 ORDER BY trust_score DESC LIMIT 3"
+                        )).fetchall()
+                        for p in procs:
+                            observations["procedures"].append({
+                                "name": p[0], "goal": (p[1] or "")[:80],
+                                "trust": p[2], "success": p[3]
+                            })
+                    except Exception:
+                        pass
+
                 except Exception:
                     pass
                 finally:
                     db.close()
+
+            # Decision log — track this decision
+            try:
+                from genesis.realtime import get_realtime_engine
+                get_realtime_engine().on_key_created(
+                    key_type="system", what=f"OODA decision: {observations['prompt_type']}",
+                    who="pipeline", where="cognitive.pipeline.ooda",
+                    data={"type": observations["prompt_type"], "files": len(ctx.project_files)},
+                )
+            except Exception:
+                pass
 
             # DECIDE: classify approach
             observations["approach"] = "direct" if observations["prompt_type"] in ("code_generation", "bug_fix") else "analytical"
@@ -342,14 +387,18 @@ class CognitivePipeline:
             except Exception:
                 pass
 
-            # Enrich prompt with pipeline context
+            # Enrich prompt with pipeline context + all memory systems
             enriched = ctx.prompt
             if ctx.ooda.get("tech_stack"):
                 enriched += f"\n[Tech stack: {', '.join(ctx.ooda['tech_stack'])}]"
             if ctx.project_context:
                 enriched += f"\n[Current file context:\n{ctx.project_context[:2000]}]"
             if ctx.learned_patterns:
-                enriched += f"\n[{len(ctx.learned_patterns)} relevant learned patterns available]"
+                enriched += f"\n[{len(ctx.learned_patterns)} learned patterns available]"
+            if ctx.ooda.get("episodic"):
+                enriched += f"\n[Past experiences: {'; '.join(e['problem'][:50] + '→' + e['outcome'][:30] for e in ctx.ooda['episodic'][:2])}]"
+            if ctx.ooda.get("procedures"):
+                enriched += f"\n[Known skills: {', '.join(p['name'] for p in ctx.ooda['procedures'][:3])}]"
             if ctx.invariants.get("warnings"):
                 enriched += f"\n[Warnings: {'; '.join(ctx.invariants['warnings'][:3])}]"
 
@@ -665,6 +714,41 @@ class FeedbackLoop:
                 tags=["feedback", outcome],
                 parent_key_id=genesis_key,
             )
+
+            # Also store in episodic memory (concrete experience)
+            try:
+                db.execute(text("""
+                    INSERT INTO episodes (problem, action, outcome, trust_score, source, created_at, updated_at)
+                    VALUES (:problem, :action, :outcome, :ts, :src, :now, :now)
+                """), {
+                    "problem": prompt[:2000],
+                    "action": f"pipeline_{outcome}",
+                    "outcome": output[:2000],
+                    "ts": trust,
+                    "src": "feedback_loop",
+                    "now": now,
+                })
+                db.commit()
+            except Exception:
+                pass
+
+            # If high trust positive → promote to procedural memory (learned skill)
+            if outcome == "positive" and trust >= 0.8:
+                try:
+                    db.execute(text("""
+                        INSERT INTO procedures (name, goal, procedure_type, trust_score, success_rate, usage_count, created_at, updated_at)
+                        VALUES (:name, :goal, :ptype, :ts, :sr, 1, :now, :now)
+                    """), {
+                        "name": f"Learned from: {prompt[:50]}",
+                        "goal": prompt[:200],
+                        "ptype": "pipeline_learned",
+                        "ts": trust,
+                        "sr": 1.0,
+                        "now": now,
+                    })
+                    db.commit()
+                except Exception:
+                    pass
 
             logger.info(f"[FEEDBACK] Recorded {outcome} outcome, trust={trust}")
         except Exception as e:

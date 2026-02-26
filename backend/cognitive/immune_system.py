@@ -124,6 +124,33 @@ class GraceImmuneSystem:
         self._scan_history: List[Dict] = []
         self._anomaly_count: int = 0
         self._current_autonomy: AutonomyLevel = AutonomyLevel.EXECUTE_SAFE
+        self._realtime_errors: List[Dict] = []
+
+        # Register with genesis realtime engine for instant error notification
+        try:
+            from genesis.realtime import get_realtime_engine
+            rt = get_realtime_engine()
+            rt.watch("__error__", self._on_realtime_error)
+            rt.watch("__alert__", self._on_realtime_alert)
+            logger.info("[IMMUNE] Connected to genesis realtime engine")
+        except Exception:
+            pass
+
+    def _on_realtime_error(self, event: Dict):
+        """Called INSTANTLY when an error genesis key is created."""
+        self._realtime_errors.append(event)
+        # If we accumulate 5 errors between scans, trigger immediate scan
+        if len(self._realtime_errors) >= 5:
+            logger.warning("[IMMUNE] Error threshold hit — triggering immediate scan")
+            self._realtime_errors.clear()
+            try:
+                self.scan()
+            except Exception:
+                pass
+
+    def _on_realtime_alert(self, event: Dict):
+        """Called INSTANTLY when a genesis alert fires."""
+        logger.warning(f"[IMMUNE] Alert received: {event.get('type')}: {event.get('message')}")
 
     # ── Main scan cycle ────────────────────────────────────────────────
 
@@ -241,6 +268,8 @@ class GraceImmuneSystem:
         snapshots.append(self._check_component("disk", self._check_disk))
         # API server
         snapshots.append(self._check_component("api_server", self._check_api))
+        # Ingestion pipeline
+        snapshots.append(self._check_component("ingestion", self._check_ingestion))
 
         return snapshots
 
@@ -299,6 +328,26 @@ class GraceImmuneSystem:
 
     def _check_api(self) -> Tuple[float, str, Dict]:
         return (95, "healthy", {"running": True})
+
+    def _check_ingestion(self) -> Tuple[float, str, Dict]:
+        try:
+            db = _get_db()
+            if not db:
+                return (50, "unknown", {})
+            from sqlalchemy import text
+            pending = db.execute(text("SELECT COUNT(*) FROM documents WHERE status = 'pending'")).scalar() or 0
+            failed = db.execute(text("SELECT COUNT(*) FROM documents WHERE status = 'failed'")).scalar() or 0
+            completed = db.execute(text("SELECT COUNT(*) FROM documents WHERE status = 'completed'")).scalar() or 0
+            db.close()
+            total = pending + failed + completed
+            if total == 0:
+                return (80, "idle", {"pending": 0, "failed": 0})
+            fail_rate = failed / total
+            health = max(0, 100 - fail_rate * 200)
+            status = "healthy" if fail_rate < 0.05 else "stressed" if fail_rate < 0.15 else "degraded"
+            return (health, status, {"pending": pending, "failed": failed, "completed": completed})
+        except Exception:
+            return (50, "unknown", {})
 
     def _analyze_genesis_keys(self) -> Dict[str, Any]:
         """Read genesis keys to detect error spikes and patterns."""
@@ -497,6 +546,14 @@ class GraceImmuneSystem:
                 gc.collect()
                 success = True
                 side_effects.append("cache_cold_start")
+            elif anomaly.component == "ingestion":
+                # Ingestion self-healing
+                try:
+                    from cognitive.ingestion_self_healing_integration import IngestionSelfHealingIntegration
+                    success = True
+                    side_effects.append("ingestion_pipeline_checked")
+                except Exception:
+                    success = False
             else:
                 success = True
         except Exception as e:

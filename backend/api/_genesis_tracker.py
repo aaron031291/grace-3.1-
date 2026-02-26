@@ -4,6 +4,9 @@ Thin Genesis Key tracking helper used by all CRUD APIs.
 Every new output — uploads, directories, subdirectories, files,
 document registrations, edits, and intelligence operations — gets
 a Genesis Key so the full provenance chain is preserved.
+
+NOW: Also fires the real-time event engine so the immune system
+and watchers get notified INSTANTLY, not on the next poll.
 """
 
 import logging
@@ -25,13 +28,31 @@ def track(
     context: Optional[Dict[str, Any]] = None,
     tags: Optional[list] = None,
     parent_key_id: Optional[str] = None,
+    is_error: bool = False,
+    error_type: str = "",
+    error_message: str = "",
+    code_before: str = None,
+    code_after: str = None,
 ) -> Optional[str]:
     """
     Create a Genesis Key for any system output.
     Returns the genesis key id (GK-...) or None if tracking fails.
 
     This is fire-and-forget — tracking failures never break the caller.
+    Also fires the real-time event engine for instant notification.
     """
+    # Fire real-time engine FIRST (even if DB write fails)
+    try:
+        from genesis.realtime import get_realtime_engine
+        get_realtime_engine().on_key_created(
+            key_type=key_type, what=what, who=who, where=where,
+            is_error=is_error, error_type=error_type, error_message=error_message,
+            data={"tags": tags, "input": input_data, "output": output_data},
+        )
+    except Exception:
+        pass
+
+    # Write to database
     try:
         from genesis.genesis_key_service import get_genesis_service
         from models.genesis_key_models import GenesisKeyType
@@ -42,9 +63,14 @@ def track(
             "file_ingestion": GenesisKeyType.FILE_INGESTION,
             "librarian": GenesisKeyType.LIBRARIAN_ACTION,
             "ai_response": GenesisKeyType.AI_RESPONSE,
+            "ai_code_generation": GenesisKeyType.AI_CODE_GENERATION,
+            "coding_agent_action": GenesisKeyType.CODING_AGENT_ACTION,
             "api_request": GenesisKeyType.API_REQUEST,
             "system": GenesisKeyType.SYSTEM_EVENT,
             "db_change": GenesisKeyType.DATABASE_CHANGE,
+            "code_change": GenesisKeyType.CODE_CHANGE,
+            "web_fetch": GenesisKeyType.WEB_FETCH,
+            "error": GenesisKeyType.ERROR,
         }
         gk_type = type_map.get(key_type, GenesisKeyType.SYSTEM_EVENT)
 
@@ -62,6 +88,11 @@ def track(
             context_data=context,
             tags=tags,
             parent_key_id=parent_key_id,
+            is_error=is_error,
+            error_type=error_type,
+            error_message=error_message,
+            code_before=code_before,
+            code_after=code_after,
         )
         gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
         return str(gk_id) if gk_id else None
