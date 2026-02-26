@@ -106,3 +106,30 @@ async def kimi_process_rules(doc_name: str, content: str):
     """Kimi pre-processes a rule document — extracts structured rules."""
     from llm_orchestrator.kimi_enhanced import get_kimi_enhanced
     return get_kimi_enhanced().process_rule_document(content, doc_name)
+
+@router.post("/idle-learn")
+async def trigger_idle_learning():
+    """Trigger one idle learning session — Kimi teaches the next topic."""
+    from cognitive.idle_learner import get_idle_learner
+    learner = get_idle_learner()
+    learner._last_activity = 0  # Force idle for manual trigger
+    result = learner.learn_next()
+    return result or {"status": "not_ready"}
+
+@router.get("/idle-learn/status")
+async def idle_learning_status():
+    """Get idle learning status — progress, topics taught, curriculum."""
+    from cognitive.idle_learner import get_idle_learner
+    return get_idle_learner().get_status()
+
+@router.get("/idle-learn/log")
+async def idle_learning_log():
+    """Get idle learning history."""
+    from cognitive.idle_learner import get_idle_learner
+    return {"log": get_idle_learner().get_log()}
+
+@router.get("/idle-learn/curriculum")
+async def idle_learning_curriculum():
+    """Get the full coding curriculum Kimi teaches from."""
+    from cognitive.idle_learner import CODING_CURRICULUM
+    return {"total": len(CODING_CURRICULUM), "topics": CODING_CURRICULUM}
