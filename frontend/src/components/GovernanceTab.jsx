@@ -556,6 +556,33 @@ function RulesPersonaPanel() {
   const [reasonResult, setReasonResult] = useState(null);
   const [reasoning, setReasoning] = useState(false);
 
+  // Domain rules
+  const [domainMode, setDomainMode] = useState('global'); // 'global' or 'domain'
+  const [domainFolders, setDomainFolders] = useState([]);
+  const [selectedDomain, setSelectedDomain] = useState('');
+  const [domainRules, setDomainRules] = useState([]);
+  const domainFileRef = useRef(null);
+
+  useEffect(() => {
+    if (domainMode === 'domain') {
+      fetch(`${API_BASE_URL}/api/librarian-fs/tree?max_depth=1`)
+        .then(r => r.ok ? r.json() : { children: [] })
+        .then(d => {
+          const folders = (d.children || []).filter(c => c.type === 'directory').map(c => c.name);
+          setDomainFolders(folders);
+        }).catch(() => {});
+    }
+  }, [domainMode]);
+
+  useEffect(() => {
+    if (selectedDomain) {
+      fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`)
+        .then(r => r.ok ? r.json() : { rules: [] })
+        .then(d => setDomainRules(d.rules || []))
+        .catch(() => setDomainRules([]));
+    }
+  }, [selectedDomain]);
+
   const [notification, setNotification] = useState(null);
   const notifTimer = useRef(null);
   const notify = useCallback((msg, type = 'success') => {
@@ -704,9 +731,46 @@ function RulesPersonaPanel() {
           </button>
         </div>
 
-        {/* Upload */}
+        {/* Scope toggle: Global vs Domain */}
+        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
+            <button onClick={() => setDomainMode('global')} style={{ ...btn(domainMode === 'global' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>🌐 Global Rules</button>
+            <button onClick={() => setDomainMode('domain')} style={{ ...btn(domainMode === 'domain' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>📁 Per Domain</button>
+          </div>
+          {domainMode === 'domain' && (
+            <div>
+              <select value={selectedDomain} onChange={e => setSelectedDomain(e.target.value)}
+                style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', marginBottom: 6 }}>
+                <option value="">Select domain folder...</option>
+                {domainFolders.map(f => <option key={f} value={f}>{f}</option>)}
+              </select>
+              {selectedDomain && (
+                <>
+                  <input type="file" ref={domainFileRef} style={{ display: 'none' }} onChange={async (e) => {
+                    if (!e.target.files?.length) return;
+                    const fd = new FormData();
+                    fd.append('file', e.target.files[0]);
+                    await fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules/upload`, { method: 'POST', body: fd });
+                    e.target.value = '';
+                    fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`).then(r => r.ok ? r.json() : { rules: [] }).then(d => setDomainRules(d.rules || []));
+                    notify('Domain rule uploaded');
+                  }} />
+                  <button onClick={() => domainFileRef.current?.click()} style={{ ...btn(C.success), width: '100%', fontSize: 10, marginBottom: 4 }}>📤 Upload Rule to {selectedDomain}</button>
+                  {domainRules.length > 0 && domainRules.map(r => (
+                    <div key={r.filename} style={{ padding: '4px 8px', fontSize: 11, borderBottom: `1px solid ${C.border}22`, display: 'flex', alignItems: 'center', gap: 6, color: C.muted }}>
+                      <span>⚖️</span><span style={{ flex: 1 }}>{r.filename}</span>
+                    </div>
+                  ))}
+                  {domainRules.length === 0 && <div style={{ fontSize: 10, color: C.dim, textAlign: 'center', padding: 8 }}>No domain rules yet</div>}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Upload global */}
         <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6 }}>
-          <button onClick={() => setShowUpload(!showUpload)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>📤 Upload Rule Doc</button>
+          <button onClick={() => setShowUpload(!showUpload)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>📤 Upload Global Rule</button>
           <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
         </div>
 

@@ -416,7 +416,23 @@ export default function CodebaseTab() {
                 />
                 <button onClick={() => document.getElementById('agentRuleUpload')?.click()}
                   style={{ ...btn(C.bgDark), fontSize: 9, padding: '2px 8px' }}>📤 Upload</button>
-                {agentRules.length > 0 && <span style={{ fontSize: 9, color: C.success }}>{agentRules.length} rules enforced</span>}
+                {agentRules.length > 0 && <span style={{ fontSize: 9, color: C.success }}>{agentRules.length} global</span>}
+                {selectedProject && (
+                  <>
+                    <span style={{ fontSize: 9, color: C.dim }}>|</span>
+                    <input type="file" id="domainRuleUpload" style={{ display: 'none' }}
+                      onChange={async (e) => {
+                        if (!e.target.files?.length || !selectedProject) return;
+                        const fd = new FormData();
+                        fd.append('file', e.target.files[0]);
+                        await fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedProject.domain_folder || selectedProject.project_folder)}/rules/upload`, { method: 'POST', body: fd });
+                        e.target.value = '';
+                      }}
+                    />
+                    <button onClick={() => document.getElementById('domainRuleUpload')?.click()}
+                      style={{ ...btn(C.bgDark), fontSize: 9, padding: '2px 8px' }}>📁 Domain Rule</button>
+                  </>
+                )}
               </div>
             </div>
 

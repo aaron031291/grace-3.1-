@@ -393,6 +393,116 @@ function SchedulePanel() {
   );
 }
 
+// ── Planner Sub-tab — Multi-model consensus ──────────────────────────
+function PlannerPanel() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const [models, setModels] = useState([]);
+  const [selectedModel, setSelectedModel] = useState('auto');
+  const endRef = useCallback(node => { if (node) node.scrollIntoView({ behavior: 'smooth' }); }, []);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/v1/domain/models`)
+      .then(r => r.ok ? r.json() : { models: [] })
+      .then(d => setModels(d.models || []))
+      .catch(() => {});
+  }, []);
+
+  const send = async () => {
+    if (!input.trim() || sending) return;
+    const msg = input.trim();
+    setInput('');
+    setMessages(prev => [...prev, { role: 'user', content: msg }]);
+    setSending(true);
+
+    // Get responses from selected model (or all for consensus)
+    const providers = selectedModel === 'consensus'
+      ? models.filter(m => m.available).map(m => m.id)
+      : [selectedModel === 'auto' ? models.find(m => m.available)?.id || 'ollama' : selectedModel];
+
+    for (const provider of providers) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/domain/chat`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg, folder_path: '', provider }),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          setMessages(prev => [...prev, {
+            role: 'assistant', content: d.response || '(no response)',
+            provider: d.provider || provider,
+          }]);
+        }
+      } catch {
+        setMessages(prev => [...prev, { role: 'assistant', content: `(${provider} unavailable)`, provider }]);
+      }
+    }
+    setSending(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* Model selector */}
+      <div style={{ padding: '8px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <span style={{ fontSize: 11, color: C.muted }}>Model:</span>
+        <select value={selectedModel} onChange={e => setSelectedModel(e.target.value)}
+          style={{ padding: '4px 8px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none' }}>
+          <option value="auto">Auto (best available)</option>
+          <option value="consensus">🤝 Consensus (all models)</option>
+          {models.map(m => (
+            <option key={m.id} value={m.id} disabled={!m.available}>{m.name} {m.available ? '' : '(unavailable)'}</option>
+          ))}
+        </select>
+        <span style={{ fontSize: 10, color: C.dim, marginLeft: 'auto' }}>
+          {selectedModel === 'consensus' ? 'All models discuss and find consensus' : ''}
+        </span>
+      </div>
+
+      {/* Messages */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: 12 }}>
+        {messages.length === 0 && (
+          <div style={{ textAlign: 'center', color: C.dim, paddingTop: 60 }}>
+            <div style={{ fontSize: 40, opacity: 0.4 }}>🤝</div>
+            <div style={{ fontSize: 14, fontWeight: 500, color: C.muted, marginTop: 8 }}>Planner</div>
+            <div style={{ fontSize: 12, marginTop: 4, maxWidth: 300, margin: '4px auto 0' }}>
+              Discuss tasks with Grace, Kimi, and Opus. Select "Consensus" to have all models contribute and find agreement.
+            </div>
+          </div>
+        )}
+        {messages.map((msg, i) => (
+          <div key={i} style={{
+            padding: '8px 12px', marginBottom: 6, borderRadius: 8,
+            background: msg.role === 'user' ? C.bgDark : C.bgAlt,
+            alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+            maxWidth: '90%', border: `1px solid ${C.border}`,
+          }}>
+            <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
+              {msg.role === 'user' ? 'You' : `Grace (${msg.provider || 'auto'})`}
+            </div>
+            <pre style={{ margin: 0, fontSize: 12, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>{msg.content}</pre>
+          </div>
+        ))}
+        {sending && <div style={{ padding: 8, color: C.dim, fontSize: 12 }}>Thinking...</div>}
+        <div ref={endRef} />
+      </div>
+
+      {/* Input */}
+      <div style={{ padding: '8px 12px', borderTop: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8 }}>
+        <input placeholder="Discuss a task, plan, or decision..."
+          value={input} onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+          disabled={sending}
+          style={{ flex: 1, padding: '8px 12px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }} />
+        <button onClick={send} disabled={sending || !input.trim()}
+          style={{ padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#fff', background: C.accent, opacity: sending ? 0.5 : 1 }}>
+          {sending ? '⏳' : '▶ Send'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── Main TasksTab ─────────────────────────────────────────────────────
 export default function TasksTab() {
   const [activeTab, setActiveTab] = useState('live');
@@ -401,6 +511,7 @@ export default function TasksTab() {
     { id: 'live', label: 'Live', icon: '🟢' },
     { id: 'submit', label: 'Submit Task', icon: '📝' },
     { id: 'schedule', label: 'Schedule', icon: '⏰' },
+    { id: 'planner', label: 'Planner', icon: '🤝' },
   ];
 
   return (
@@ -421,6 +532,7 @@ export default function TasksTab() {
         {activeTab === 'live' && <LivePanel />}
         {activeTab === 'submit' && <SubmitPanel />}
         {activeTab === 'schedule' && <SchedulePanel />}
+        {activeTab === 'planner' && <PlannerPanel />}
       </div>
     </div>
   );
