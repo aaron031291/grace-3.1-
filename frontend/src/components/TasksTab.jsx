@@ -487,17 +487,35 @@ function PlannerPanel() {
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
-      <div style={{ padding: '8px 12px', borderTop: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8 }}>
-        <input placeholder="Discuss a task, plan, or decision..."
-          value={input} onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-          disabled={sending}
-          style={{ flex: 1, padding: '8px 12px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }} />
-        <button onClick={send} disabled={sending || !input.trim()}
-          style={{ padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#fff', background: C.accent, opacity: sending ? 0.5 : 1 }}>
-          {sending ? '⏳' : '▶ Send'}
-        </button>
+      {/* Input — type or upload */}
+      <div style={{ padding: '8px 12px', borderTop: `1px solid ${C.border}`, background: C.bgAlt }}>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input placeholder="Discuss a task, plan, or decision..."
+            value={input} onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+            disabled={sending}
+            style={{ flex: 1, padding: '8px 12px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }} />
+          <input type="file" id="plannerFileUpload" accept=".pdf,.txt,.md,.doc,.docx,.csv,.json" style={{ display: 'none' }}
+            onChange={async (e) => {
+              if (!e.target.files?.length) return;
+              const file = e.target.files[0];
+              const text = await file.text().catch(() => `[Uploaded: ${file.name}, ${(file.size/1024).toFixed(1)}KB]`);
+              const preview = text.substring(0, 3000);
+              setMessages(prev => [...prev, { role: 'user', content: `📎 Uploaded: ${file.name}\n\n${preview}` }]);
+              setInput(`Analyse this document: ${file.name}`);
+              e.target.value = '';
+            }}
+          />
+          <button onClick={() => document.getElementById('plannerFileUpload')?.click()}
+            title="Upload a document to discuss"
+            style={{ padding: '6px 10px', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 14, color: '#fff', background: C.bgDark }}>
+            📎
+          </button>
+          <button onClick={send} disabled={sending || !input.trim()}
+            style={{ padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#fff', background: C.accent, opacity: sending ? 0.5 : 1 }}>
+            {sending ? '⏳' : '▶ Send'}
+          </button>
+        </div>
       </div>
     </div>
   );
