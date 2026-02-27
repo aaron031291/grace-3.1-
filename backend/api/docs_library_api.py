@@ -395,6 +395,9 @@ async def upload_to_library(
     Upload a document directly to the docs library.
     The file is saved into the knowledge base under the given folder
     and registered in the library.
+
+    For files > 10 MB, uses streaming write to avoid holding full file in memory.
+    For files > ~10 MB consider using /api/upload/initiate (chunked upload) instead.
     """
     kb = _get_kb_path()
     target_dir = kb / folder if folder else kb
@@ -402,17 +405,24 @@ async def upload_to_library(
 
     file_path = target_dir / file.filename
     try:
-        content = await file.read()
+        hasher = hashlib.sha256()
+        total_size = 0
         with open(file_path, "wb") as f:
-            f.write(content)
+            while True:
+                chunk = await file.read(1024 * 1024)  # 1 MB streaming reads
+                if not chunk:
+                    break
+                f.write(chunk)
+                hasher.update(chunk)
+                total_size += len(chunk)
 
-        content_hash = hashlib.sha256(content).hexdigest()
+        content_hash = hasher.hexdigest()
         tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
 
         doc_id = register_document(
             filename=file.filename,
             file_path=str(file_path),
-            file_size=len(content),
+            file_size=total_size,
             source="docs_library",
             upload_method="docs_upload",
             directory=folder,
@@ -427,7 +437,7 @@ async def upload_to_library(
             "path": str(file_path.relative_to(kb)),
             "folder": folder,
             "name": file.filename,
-            "size": len(content),
+            "size": total_size,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {e}")

@@ -22,6 +22,16 @@ export const V1 = {
   agent:      `${API_BASE_URL}/api/v1/agent`,
 };
 
+// Chunked upload endpoints (5 GB support)
+export const UPLOAD = {
+  initiate: `${API_BASE_URL}/api/upload/initiate`,
+  chunk:    `${API_BASE_URL}/api/upload/chunk`,
+  complete: `${API_BASE_URL}/api/upload/complete`,
+  status:   `${API_BASE_URL}/api/upload/status`,
+  cancel:   `${API_BASE_URL}/api/upload/cancel`,
+  active:   `${API_BASE_URL}/api/upload/active`,
+};
+
 // Legacy endpoints still used directly by some components
 export const API_ENDPOINTS = {
   health: `${API_BASE_URL}/health`,
@@ -43,4 +53,4 @@ export const buildUrl = (endpoint, params = {}) => {
   return url.toString();
 };
 
-export default { API_BASE_URL, V1, API_ENDPOINTS, buildUrl };
+export default { API_BASE_URL, V1, UPLOAD, API_ENDPOINTS, buildUrl };

@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { useChunkedUpload, CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import UploadProgress from './UploadProgress';
 
 const COLORS = {
   bg: '#1a1a2e',
@@ -170,6 +172,7 @@ const FoldersTab = () => {
   const [moveDest, setMoveDest] = useState('');
   const [showMove, setShowMove] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(null);
 
   // AI state
   const [analyzeTarget, setAnalyzeTarget] = useState('');
@@ -340,18 +343,68 @@ const FoldersTab = () => {
     const files = e.target ? e.target.files : e;
     if (!files || files.length === 0) return;
     setUploading(true);
+    setUploadProgress(null);
     const uploadDir = targetDir ?? currentPath;
     let uploadCount = 0;
     try {
       for (const f of Array.from(files)) {
-        const formData = new FormData();
-        formData.append('file', f);
-        formData.append('directory', uploadDir);
-        const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (!res.ok) throw new Error(`Upload failed for ${f.name}`);
+        if (f.size > CHUNKED_THRESHOLD) {
+          // Large file — use chunked upload
+          const initRes = await fetch(`${API_BASE_URL}/api/upload/initiate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: f.name,
+              file_size: f.size,
+              folder: uploadDir,
+              auto_ingest: true,
+            }),
+          });
+          if (!initRes.ok) throw new Error(`Initiation failed for ${f.name}`);
+          const { upload_id, total_chunks, chunk_size } = await initRes.json();
+
+          for (let i = 0; i < total_chunks; i++) {
+            const start = i * chunk_size;
+            const end = Math.min(start + chunk_size, f.size);
+            const blob = f.slice(start, end);
+            const chunkData = await blob.arrayBuffer();
+            const hashBuf = await crypto.subtle.digest('SHA-256', chunkData);
+            const chunkHash = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            const fd = new FormData();
+            fd.append('upload_id', upload_id);
+            fd.append('chunk_index', String(i));
+            fd.append('chunk_hash', chunkHash);
+            fd.append('chunk', new Blob([chunkData]), `chunk_${i}`);
+
+            const cRes = await fetch(`${API_BASE_URL}/api/upload/chunk`, { method: 'POST', body: fd });
+            if (!cRes.ok) throw new Error(`Chunk ${i} failed for ${f.name}`);
+
+            setUploadProgress({
+              phase: 'uploading', percent: ((i + 1) / total_chunks) * 90,
+              bytesUploaded: end, totalBytes: f.size,
+            });
+          }
+
+          setUploadProgress({ phase: 'assembling', percent: 95, bytesUploaded: f.size, totalBytes: f.size });
+          const compRes = await fetch(`${API_BASE_URL}/api/upload/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ upload_id }),
+          });
+          if (!compRes.ok) throw new Error(`Assembly failed for ${f.name}`);
+          setUploadProgress({ phase: 'complete', percent: 100, bytesUploaded: f.size, totalBytes: f.size });
+        } else {
+          // Small file — direct upload
+          const formData = new FormData();
+          formData.append('file', f);
+          formData.append('directory', uploadDir);
+          const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
+            method: 'POST',
+            body: formData,
+          });
+          if (!res.ok) throw new Error(`Upload failed for ${f.name}`);
+        }
         uploadCount++;
       }
       notify(`${uploadCount} file${uploadCount > 1 ? 's' : ''} uploaded to ${uploadDir || 'root'}`);
@@ -360,6 +413,7 @@ const FoldersTab = () => {
       setError(err.message);
     } finally {
       setUploading(false);
+      setUploadProgress(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -1019,8 +1073,9 @@ const FoldersTab = () => {
             disabled={uploading}
             style={{ ...btnStyle, width: '100%', background: COLORS.accent, opacity: uploading ? 0.6 : 1 }}
           >
-            {uploading ? 'Uploading...' : '📤 Upload File'}
+            {uploading ? 'Uploading...' : '📤 Upload File (up to 5 GB)'}
           </button>
+          {uploadProgress && <UploadProgress progress={uploadProgress} />}
         </div>
 
         {/* Create directory */}

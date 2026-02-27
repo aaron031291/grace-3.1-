@@ -57,6 +57,7 @@ from api.system_health_api import router as system_health_router
 from api.learning_healing_api import router as learning_healing_router
 from api.unified_coding_agent_api import router as unified_coding_agent_router
 from api.api_explorer_api import router as api_explorer_router
+from api.chunked_upload_api import router as chunked_upload_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -501,6 +502,7 @@ app.include_router(learning_healing_router)  # /api/learn-heal
 app.include_router(api_registry_router)      # /api/registry
 app.include_router(api_explorer_router)      # /api/explorer
 app.include_router(manifest_router)          # /api/manifest
+app.include_router(chunked_upload_router)    # /api/upload — chunked 5GB uploads
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

@@ -241,35 +241,47 @@ async def upload_file(
     directory: str = Form(""),
     auto_ingest: bool = Form(True),
 ):
-    """Upload a file to a specific directory and optionally ingest it."""
+    """Upload a file to a specific directory and optionally ingest it.
+
+    Uses streaming write to handle files without holding full content in memory.
+    For files > 10 MB, consider /api/upload/initiate (chunked upload) for resilience.
+    """
     target_dir = _resolve_safe_path(directory)
     target_dir.mkdir(parents=True, exist_ok=True)
 
     file_path = target_dir / file.filename
     try:
-        content = await file.read()
+        import hashlib as _hl
+        hasher = _hl.sha256()
+        total_size = 0
         with open(file_path, 'wb') as f:
-            f.write(content)
+            while True:
+                chunk = await file.read(1024 * 1024)  # 1 MB streaming reads
+                if not chunk:
+                    break
+                f.write(chunk)
+                hasher.update(chunk)
+                total_size += len(chunk)
+
+        content_hash = hasher.hexdigest()
 
         result = {
             "uploaded": True,
             "path": str(file_path.relative_to(_get_kb_path())),
-            "size": len(content),
+            "size": total_size,
             "name": file.filename,
         }
 
         try:
-            import hashlib as _hl
             from api.docs_library_api import register_document
-            _hash = _hl.sha256(content).hexdigest()
             doc_id = register_document(
                 filename=file.filename,
                 file_path=str(file_path),
-                file_size=len(content),
+                file_size=total_size,
                 source="knowledge_base",
                 upload_method="librarian_upload",
                 directory=directory,
-                content_hash=_hash,
+                content_hash=content_hash,
             )
             result["library_doc_id"] = doc_id
         except Exception as _reg_err:
@@ -282,7 +294,7 @@ async def upload_file(
             where=str(file_path),
             how="POST /api/librarian-fs/file/upload",
             file_path=str(file_path),
-            output_data={"size": len(content), "directory": directory},
+            output_data={"size": total_size, "directory": directory},
             tags=["upload", "file"],
         )
         result["genesis_key"] = gk
@@ -304,13 +316,11 @@ async def upload_file(
                     )
                     result["ingested"] = True
                     result["document_id"] = getattr(ingest_result, 'document_id', None)
-                    # Store in Magma memory
                     try:
                         from cognitive.magma_bridge import ingest as magma_ingest
                         magma_ingest(f"Document ingested: {file.filename} in {directory}", source="librarian")
                     except Exception:
                         pass
-                    # Update trust + learning
                     try:
                         from cognitive.trust_engine import get_trust_engine
                         get_trust_engine().score_output(f"librarian_{directory or 'root'}", f"Librarian: {directory or 'root'}",

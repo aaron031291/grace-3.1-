@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./FileBrowser.css";
+import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
 
 export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [currentPath, setCurrentPath] = useState("");
@@ -95,87 +96,96 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
     setUploadProgress(0);
     setUploadingFiles(Array.from(files).map(f => f.name));
 
-    // Use XMLHttpRequest for upload progress tracking
-    const xhr = new XMLHttpRequest();
+    const fileList = Array.from(files);
+    const largeFiles = fileList.filter(f => f.size > CHUNKED_THRESHOLD);
+    const smallFiles = fileList.filter(f => f.size <= CHUNKED_THRESHOLD);
 
-    // Track upload progress
-    xhr.upload.addEventListener("progress", (event) => {
-      if (event.lengthComputable) {
-        const percentComplete = Math.round((event.loaded / event.total) * 100);
-        setUploadProgress(percentComplete);
-      }
-    });
+    let successCount = 0;
+    let failCount = 0;
 
-    // Handle completion
-    xhr.addEventListener("load", async () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          const data = JSON.parse(xhr.responseText);
+    // Handle large files via chunked upload
+    for (const f of largeFiles) {
+      try {
+        const initRes = await fetch(`${API_BASE}/api/upload/initiate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: f.name,
+            file_size: f.size,
+            folder: currentPath,
+            auto_ingest: true,
+          }),
+        });
+        if (!initRes.ok) { failCount++; continue; }
+        const { upload_id, total_chunks, chunk_size } = await initRes.json();
 
-          // Show summary of results
-          if (data.successful > 0 || data.failed > 0) {
-            const successMsg =
-              data.successful > 0
-                ? `${data.successful} file(s) uploaded successfully`
-                : "";
-            const failMsg = data.failed > 0 ? `${data.failed} file(s) failed` : "";
-            const message = [successMsg, failMsg].filter((m) => m).join(", ");
+        for (let i = 0; i < total_chunks; i++) {
+          const start = i * chunk_size;
+          const end = Math.min(start + chunk_size, f.size);
+          const blob = f.slice(start, end);
+          const chunkData = await blob.arrayBuffer();
+          const hashBuf = await crypto.subtle.digest('SHA-256', chunkData);
+          const chunkHash = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-            if (data.failed > 0) {
-              // Show detailed errors
-              const failedFiles = data.results
-                .filter((r) => !r.success)
-                .map((r) => r.filename);
-              setError(`${message}. Failed: ${failedFiles.join(", ")}`);
-            } else {
-              setError(null);
-            }
+          const fd = new FormData();
+          fd.append('upload_id', upload_id);
+          fd.append('chunk_index', String(i));
+          fd.append('chunk_hash', chunkHash);
+          fd.append('chunk', new Blob([chunkData]), `chunk_${i}`);
 
-            await loadDirectory();
-            // Reset file input
-            e.target.value = "";
-          }
-        } catch (parseErr) {
-          setError("Failed to parse response");
-          console.error("Parse error:", parseErr);
+          const cRes = await fetch(`${API_BASE}/api/upload/chunk`, { method: 'POST', body: fd });
+          if (!cRes.ok) throw new Error(`Chunk ${i} failed`);
+          setUploadProgress(Math.round(((i + 1) / total_chunks) * 90));
         }
-      } else {
-        setError(`Upload failed with status ${xhr.status}`);
+
+        setUploadProgress(95);
+        const compRes = await fetch(`${API_BASE}/api/upload/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ upload_id }),
+        });
+        if (compRes.ok) successCount++; else failCount++;
+        setUploadProgress(100);
+      } catch {
+        failCount++;
       }
+    }
 
-      setUploading(false);
-      setUploadProgress(0);
-      setUploadingFiles([]);
-    });
+    // Handle small files via legacy bulk upload
+    if (smallFiles.length > 0) {
+      try {
+        const formData = new FormData();
+        smallFiles.forEach((file) => {
+          formData.append("files", file);
+        });
+        formData.append("folder_path", currentPath);
+        formData.append("ingest", "true");
+        formData.append("source_type", "user_generated");
 
-    // Handle errors
-    xhr.addEventListener("error", () => {
-      setError("Network error during upload");
-      setUploading(false);
-      setUploadProgress(0);
-      setUploadingFiles([]);
-    });
+        const res = await fetch(`${API_BASE}/files/upload-multiple`, { method: 'POST', body: formData });
+        if (res.ok) {
+          const data = await res.json();
+          successCount += data.successful || smallFiles.length;
+          failCount += data.failed || 0;
+        } else {
+          failCount += smallFiles.length;
+        }
+      } catch {
+        failCount += smallFiles.length;
+      }
+    }
 
-    // Handle abort
-    xhr.addEventListener("abort", () => {
-      setError("Upload cancelled");
-      setUploading(false);
-      setUploadProgress(0);
-      setUploadingFiles([]);
-    });
+    if (failCount > 0) {
+      setError(`${successCount} uploaded, ${failCount} failed`);
+    } else {
+      setError(null);
+    }
 
-    // Prepare form data
-    const formData = new FormData();
-    Array.from(files).forEach((file) => {
-      formData.append("files", file);
-    });
-    formData.append("folder_path", currentPath);
-    formData.append("ingest", "true");
-    formData.append("source_type", "user_generated");
-
-    // Send request
-    xhr.open("POST", `${API_BASE}/files/upload-multiple`);
-    xhr.send(formData);
+    await loadDirectory();
+    e.target.value = "";
+    setUploading(false);
+    setUploadProgress(0);
+    setUploadingFiles([]);
   };
 
   const handleDeleteFile = async (filePath) => {

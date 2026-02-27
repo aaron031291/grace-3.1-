@@ -77,8 +77,8 @@ class SecurityConfig:
     HSTS_PRELOAD: bool = False
 
     # ==================== Input Validation ====================
-    MAX_REQUEST_SIZE_MB: int = 50                    # Max request body size
-    MAX_FILE_UPLOAD_SIZE_MB: int = 100               # Max file upload size
+    MAX_REQUEST_SIZE_MB: int = 50                    # Max request body size (per-request; chunked uploads bypass this)
+    MAX_FILE_UPLOAD_SIZE_MB: int = 5120              # Max total file upload size (5 GB via chunked upload)
     MAX_STRING_LENGTH: int = 10000                   # Max string input length
     MAX_ARRAY_LENGTH: int = 1000                     # Max array input length
 
