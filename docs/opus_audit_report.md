@@ -72,3 +72,33 @@ Yes. Full Grace would exhibit genuine agency — making novel decisions based on
 - Long-term strategic planning (multi-month thinking)
 - Ethical reasoning beyond rules (novel dilemmas)
 - Physical world integration
+
+---
+
+## FOLLOW-UP: Opus Assessment — Coding Agent Capability Ceiling
+
+### Can Grace handle complex real-world projects?
+
+| Project | Current | Fully Implemented | Key Requirement |
+|---|---|---|---|
+| Mobile App | 60-70% | 85-90% | 10K+ mobile codebases as training |
+| Landing Page | 75-80% | 90-95% | Grace's sweet spot |
+| BI Dashboard | 50-60% | 75-85% | Domain ontologies + viz patterns |
+| E-commerce | 40-50% | 70-80% | PCI compliance rules + transaction patterns |
+| Trading Bot | 30-40% | 60-70% | Financial domain training + risk frameworks |
+
+### Can Grace build herself out?
+70-80% capable with guardrails. Could implement the 14 placeholder
+systems, refactor code, optimise pipeline. Cannot fundamentally alter
+core architecture without human oversight. "Senior developer with
+oversight" not "autonomous evolution."
+
+### Does Opus + Kimi + local 32B/70B change things?
+Yes — raises capability ceiling 20-30% across all project types.
+Opus for architecture, Kimi for long-context, local for fast iteration.
+
+### 2026 Reality:
+- Tier 1 (90%+): Landing pages, CRUD apps, APIs, refactoring, docs
+- Tier 2 (70-80%): Mobile apps, e-commerce, business apps
+- Tier 3 (50-70%): Financial systems, real-time, novel algorithms
+- Still fiction: Autonomous architecture, creative leaps, implicit requirements
