@@ -462,6 +462,17 @@ export default function CodebaseTab() {
                   disabled={!selectedProject || agentLoading}
                   style={{ ...inp, flex: 1 }}
                 />
+                <input type="file" id="agentDocUpload" accept=".pdf,.txt,.md,.doc,.docx,.csv,.json,.py,.js,.ts,.jsx,.tsx" style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    if (!e.target.files?.length) return;
+                    const f = e.target.files[0];
+                    const text = await f.text().catch(() => `[File: ${f.name}]`);
+                    setAgentPrompt(`Implement based on this document: ${f.name}\n\n${text.substring(0, 3000)}`);
+                    e.target.value = '';
+                  }}
+                />
+                <button onClick={() => document.getElementById('agentDocUpload')?.click()} title="Upload spec, design doc, or code"
+                  style={{ ...btn(C.bgDark), fontSize: 14, padding: '4px 8px' }}>📎</button>
                 <button onClick={handleAgentSend} disabled={!selectedProject || agentLoading || !agentPrompt.trim()} style={{ ...btn(C.accent), opacity: agentLoading ? 0.5 : 1 }}>
                   {agentLoading ? '⏳' : '▶'}
                 </button>

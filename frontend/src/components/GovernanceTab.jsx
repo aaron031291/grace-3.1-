@@ -871,17 +871,28 @@ function RulesPersonaPanel() {
               )}
             </div>
 
-            {/* Reasoning bar */}
+            {/* Reasoning bar — type or upload */}
             <div style={{ borderTop: `1px solid ${C.border}`, padding: '8px 16px', background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>🤖 Ask about this rule:</span>
+              <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>🤖</span>
               <input
-                placeholder="What does this document require? How should Grace comply?"
+                placeholder="Ask about this rule, or upload a document to compare..."
                 value={reasonQ}
                 onChange={e => setReasonQ(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleReason()}
                 disabled={reasoning}
                 style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }}
               />
+              <input type="file" id="govReasonUpload" accept=".pdf,.txt,.md,.doc,.docx,.csv,.json" style={{ display: 'none' }}
+                onChange={async (e) => {
+                  if (!e.target.files?.length) return;
+                  const f = e.target.files[0];
+                  const text = await f.text().catch(() => `[File: ${f.name}]`);
+                  setReasonQ(`Analyse this document and compare with current rules: ${f.name}\n\n${text.substring(0, 2000)}`);
+                  e.target.value = '';
+                }}
+              />
+              <button onClick={() => document.getElementById('govReasonUpload')?.click()} title="Upload document to reason about"
+                style={{ ...btn(C.bgDark), fontSize: 14, padding: '4px 8px' }}>📎</button>
               <button onClick={handleReason} disabled={reasoning || !reasonQ.trim()} style={{ ...btn(C.accent), fontSize: 11, opacity: reasoning ? 0.5 : 1 }}>
                 {reasoning ? '⏳' : '🧠 Reason'}
               </button>
