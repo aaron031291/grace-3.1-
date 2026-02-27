@@ -164,3 +164,22 @@ def register_v1(app):
         return {"history": get_auto_research().get_history()}
 
     app.include_router(research_router)
+
+    # File Generator endpoints
+    gen_router = _AR(prefix="/api/v1/generate", tags=["File Generator"])
+
+    class _GenRequest(_BaseModel):
+        prompt: str
+        filename: str
+        folder: str = ""
+        use_kimi: bool = True
+
+    @gen_router.post("/file")
+    async def generate_file(request: _GenRequest):
+        from cognitive.file_generator import get_file_generator
+        return get_file_generator().generate(
+            prompt=request.prompt, filename=request.filename,
+            folder=request.folder, use_kimi=request.use_kimi,
+        )
+
+    app.include_router(gen_router)
