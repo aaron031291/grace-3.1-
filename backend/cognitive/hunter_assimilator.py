@@ -422,6 +422,13 @@ class HunterAssimilator:
         except Exception:
             pass
 
+        # Register in System Registry
+        try:
+            from cognitive.system_registry import get_system_registry
+            get_system_registry().register_from_handshake(announcement)
+        except Exception:
+            pass
+
         # Genesis key for the handshake
         try:
             from api._genesis_tracker import track

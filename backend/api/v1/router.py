@@ -108,3 +108,36 @@ def register_v1(app):
         return {"history": get_hunter().get_history()}
 
     app.include_router(hunter_router)
+
+    # System Registry endpoints
+    registry_router = _AR(prefix="/api/v1/registry", tags=["System Registry"])
+
+    @registry_router.get("/all")
+    async def registry_all():
+        from cognitive.system_registry import get_system_registry
+        reg = get_system_registry()
+        health = reg.check_health()
+        return {"health": health, "components": reg.get_all()}
+
+    @registry_router.get("/by-category")
+    async def registry_by_category():
+        from cognitive.system_registry import get_system_registry
+        return get_system_registry().get_by_category()
+
+    @registry_router.get("/health")
+    async def registry_health():
+        from cognitive.system_registry import get_system_registry
+        return get_system_registry().check_health()
+
+    @registry_router.get("/status/{status}")
+    async def registry_by_status(status: str):
+        from cognitive.system_registry import get_system_registry
+        return {"components": get_system_registry().get_by_status(status)}
+
+    @registry_router.get("/new")
+    async def registry_new_components():
+        from cognitive.system_registry import get_system_registry
+        all_comps = get_system_registry().get_all()
+        return {"components": [c for c in all_comps if c["is_new"]]}
+
+    app.include_router(registry_router)
