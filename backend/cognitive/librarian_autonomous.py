@@ -337,6 +337,29 @@ class AutonomousLibrarian:
 
     # ── Ensure directory structure exists ───────────────────────────────
 
+    def on_new_folder(self, folder_path: str) -> Dict[str, Any]:
+        """Called when a new domain folder is created. Triggers auto-research analysis."""
+        try:
+            from cognitive.auto_research import get_auto_research
+            research = get_auto_research()
+            analysis = research.analyse_folder(folder_path)
+            
+            from api._genesis_tracker import track
+            track(key_type="librarian",
+                  what=f"New folder detected: {folder_path} — auto-research suggested",
+                  where=folder_path,
+                  output_data={"topics": len(analysis.get("suggested_research", []))},
+                  tags=["librarian", "new_folder", "auto_research"])
+
+            return {
+                "notification": f"New folder '{folder_path}' detected. {len(analysis.get('suggested_research', []))} research topics suggested.",
+                "folder": folder_path,
+                "suggested_topics": analysis.get("suggested_research", []),
+                "analysis": analysis,
+            }
+        except Exception as e:
+            return {"folder": folder_path, "error": str(e)}
+
     def ensure_taxonomy(self) -> Dict[str, Any]:
         """Create the full directory taxonomy if it doesn't exist."""
         kb = _get_kb()

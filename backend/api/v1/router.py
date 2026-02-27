@@ -144,3 +144,23 @@ def register_v1(app):
 
     from api.domain_api import router as domain_router
     app.include_router(domain_router)
+
+    # Auto-Research endpoints
+    research_router = _AR(prefix="/api/v1/research", tags=["Auto Research"])
+
+    @research_router.post("/analyse")
+    async def analyse_folder(folder_path: str):
+        from cognitive.auto_research import get_auto_research
+        return get_auto_research().analyse_folder(folder_path)
+
+    @research_router.post("/run")
+    async def run_research(folder_path: str, depth: int = 1, max_queries: int = 10):
+        from cognitive.auto_research import get_auto_research
+        return get_auto_research().run_research_cycle(folder_path, depth, max_queries)
+
+    @research_router.get("/history")
+    async def research_history():
+        from cognitive.auto_research import get_auto_research
+        return {"history": get_auto_research().get_history()}
+
+    app.include_router(research_router)
