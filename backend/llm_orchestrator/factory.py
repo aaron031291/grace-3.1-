@@ -11,6 +11,7 @@ from .base_client import BaseLLMClient
 from .ollama_adapter import OllamaLLMClient
 from .openai_client import OpenAILLMClient
 from .kimi_client import KimiLLMClient
+from .opus_client import OpusLLMClient
 from .governance_wrapper import GovernanceAwareLLM
 from settings import settings
 
@@ -34,6 +35,10 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         return _wrap(KimiLLMClient(
             api_key=getattr(settings, 'KIMI_API_KEY', '') or settings.LLM_API_KEY,
         ))
+    elif provider == "opus":
+        return _wrap(OpusLLMClient(
+            api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+        ))
     else:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
 
@@ -45,6 +50,13 @@ def get_kimi_client() -> KimiLLMClient:
     ))
 
 
+def get_opus_client() -> OpusLLMClient:
+    """Get an Opus 4.6 client with governance rules enforced."""
+    return _wrap(OpusLLMClient(
+        api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+    ))
+
+
 def get_raw_client(provider: str = None) -> BaseLLMClient:
     """Get a raw client WITHOUT governance wrapping (for internal use only)."""
     provider = provider or settings.LLM_PROVIDER
@@ -53,6 +65,10 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
     elif provider == "kimi":
         return KimiLLMClient(
             api_key=getattr(settings, 'KIMI_API_KEY', '') or settings.LLM_API_KEY,
+        )
+    elif provider == "opus":
+        return OpusLLMClient(
+            api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
         )
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)

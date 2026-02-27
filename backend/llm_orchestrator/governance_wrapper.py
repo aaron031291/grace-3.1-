@@ -95,6 +95,15 @@ def build_governance_prefix() -> str:
     return "\n\n" + "\n\n---\n\n".join(parts) + "\n\n---\n\n"
 
 
+def build_domain_prefix(folder_path: str) -> str:
+    """Build governance prefix specific to a domain folder."""
+    try:
+        from api.domain_api import _get_domain_rules
+        return _get_domain_rules(folder_path)
+    except Exception:
+        return ""
+
+
 def _track_llm_call(prompt: str, response: str, provider: str):
     """Track every LLM input/output via genesis key."""
     try:

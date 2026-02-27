@@ -116,6 +116,11 @@ class Settings:
     KIMI_BASE_URL: str = os.getenv("KIMI_BASE_URL", "https://api.moonshot.cn/v1")
     KIMI_MODEL: str = os.getenv("KIMI_MODEL", "kimi-k2-0711-preview")
 
+    # ==================== Opus (Anthropic Claude) Configuration ====================
+    OPUS_API_KEY: str = os.getenv("OPUS_API_KEY", "")
+    OPUS_BASE_URL: str = os.getenv("OPUS_BASE_URL", "https://api.anthropic.com/v1")
+    OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
+
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     

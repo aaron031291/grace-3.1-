@@ -141,3 +141,6 @@ def register_v1(app):
         return {"components": [c for c in all_comps if c["is_new"]]}
 
     app.include_router(registry_router)
+
+    from api.domain_api import router as domain_router
+    app.include_router(domain_router)
