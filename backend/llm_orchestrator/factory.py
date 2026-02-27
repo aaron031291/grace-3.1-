@@ -43,6 +43,30 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
 
 
+def get_llm_for_task(task: str = "general") -> BaseLLMClient:
+    """
+    Get the best model for a specific task type.
+    Falls back gracefully if specialised models aren't configured.
+    
+    Tasks: code, reason, fast, general
+    """
+    model_override = None
+    
+    if task == "code" and settings.OLLAMA_MODEL_CODE:
+        model_override = settings.OLLAMA_MODEL_CODE
+    elif task == "reason" and settings.OLLAMA_MODEL_REASON:
+        model_override = settings.OLLAMA_MODEL_REASON
+    elif task == "fast" and settings.OLLAMA_MODEL_FAST:
+        model_override = settings.OLLAMA_MODEL_FAST
+
+    if model_override:
+        client = OllamaLLMClient(base_url=settings.OLLAMA_URL)
+        client._default_model = model_override
+        return _wrap(client)
+
+    return get_llm_client()
+
+
 def get_kimi_client() -> KimiLLMClient:
     """Get a Kimi 2.5 client with governance rules enforced."""
     return _wrap(KimiLLMClient(

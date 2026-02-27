@@ -121,6 +121,11 @@ class Settings:
     OPUS_BASE_URL: str = os.getenv("OPUS_BASE_URL", "https://api.anthropic.com/v1")
     OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
 
+    # ==================== Local Model Configuration (per-task) ====================
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "")       # e.g. qwen2.5-coder:32b
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "")   # e.g. llama3.1:70b-instruct-q4_K_M
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "")       # e.g. mistral:7b (quick tasks)
+
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     

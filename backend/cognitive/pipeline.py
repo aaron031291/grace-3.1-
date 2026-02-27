@@ -389,8 +389,9 @@ class CognitivePipeline:
                 from llm_orchestrator.factory import get_kimi_client
                 client = get_kimi_client()
             else:
-                from llm_orchestrator.factory import get_llm_client
-                client = get_llm_client()
+                from llm_orchestrator.factory import get_llm_for_task
+                task_type = "code" if ctx.ooda.get("prompt_type") in ("code_generation", "bug_fix", "refactor", "testing") else "reason"
+                client = get_llm_for_task(task_type)
 
             # Inject agent rules into system prompt
             try:
