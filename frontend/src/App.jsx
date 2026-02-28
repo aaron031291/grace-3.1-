@@ -13,6 +13,7 @@ import APIsTab from "./components/APIsTab";
 import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
 import SystemHealthTab from "./components/SystemHealthTab";
 import LearningHealingTab from "./components/LearningHealingTab";
+import LabTab from "./components/LabTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 import UndoToast from "./components/UndoManager";
@@ -32,6 +33,7 @@ const VIEWS = [
   { id: "bi", label: "BI", icon: "📈" },
   { id: "health", label: "Health", icon: "🏥" },
   { id: "learn-heal", label: "Learn", icon: "🧬" },
+  { id: "lab", label: "Lab", icon: "🧪" },
 ];
 
 function App() {
@@ -153,6 +155,7 @@ function App() {
           {activeView === "bi" && <BusinessIntelligenceTab />}
           {activeView === "health" && <SystemHealthTab />}
           {activeView === "learn-heal" && <LearningHealingTab />}
+          {activeView === "lab" && <LabTab />}
         </main>
       </div>
 

@@ -67,6 +67,7 @@ from api.reporting_api import router as reporting_router
 from api.knowledge_mining_api import router as knowledge_mining_router
 from api.governance_discussion_api import router as governance_discussion_router
 from api.live_console_api import router as live_console_router
+from api.feedback_api import router as feedback_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -541,6 +542,7 @@ app.include_router(reporting_router)         # /api/reports — system reports +
 app.include_router(knowledge_mining_router)  # /api/knowledge-mine — LLM knowledge extraction
 app.include_router(governance_discussion_router)  # /api/governance/discuss — chat about approvals
 app.include_router(live_console_router)           # /api/console — real-time Kimi+Opus interaction
+app.include_router(feedback_router)              # /api/feedback — user feedback on generated code
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

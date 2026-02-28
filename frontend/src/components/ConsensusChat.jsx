@@ -236,6 +236,36 @@ export default function ConsensusChat() {
               <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                 {msg.content}
               </div>
+              {msg.role === 'assistant' && (
+                <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                  <button onClick={() => {
+                    fetch(`${API_BASE_URL}/api/feedback/code`, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                      body: `verdict=worked&task=${encodeURIComponent(messages[0]?.content || '')}&code_preview=${encodeURIComponent(msg.content?.substring(0, 500) || '')}`,
+                    });
+                    msg._fb = 'up';
+                  }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, opacity: msg._fb === 'up' ? 1 : 0.4 }}>👍</button>
+                  <button onClick={async () => {
+                    const res = await fetch(`${API_BASE_URL}/api/feedback/code`, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                      body: `verdict=didnt_work&task=${encodeURIComponent(messages[0]?.content || '')}&code_preview=${encodeURIComponent(msg.content?.substring(0, 500) || '')}`,
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      if (data.next_steps) {
+                        setMessages(prev => [...prev, {
+                          role: 'system', model: 'Grace',
+                          content: `💡 Next steps:\n${data.next_steps}`,
+                          ts: new Date().toISOString(),
+                        }]);
+                      }
+                    }
+                    msg._fb = 'down';
+                  }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, opacity: msg._fb === 'down' ? 1 : 0.4 }}>👎</button>
+                </div>
+              )}
             </div>
           );
         })}
