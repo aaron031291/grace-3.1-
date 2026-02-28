@@ -114,10 +114,81 @@ def track(
         )
         gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
         if not gk_id:
-            # Fallback: generate our own ID if service didn't return one
             import uuid
             gk_id = f"GK-{uuid.uuid4().hex}"
+
+        # Push embedding to Qdrant Cloud for vector search
+        try:
+            _push_to_qdrant(gk_id, key_type, what, where, tags)
+        except Exception:
+            pass
+
         return str(gk_id)
     except Exception as e:
         logger.debug(f"Genesis tracking skipped: {e}")
         return None
+
+
+def _push_to_qdrant(gk_id: str, key_type: str, what: str, where: str, tags: list):
+    """Push genesis key as embedding to Qdrant Cloud for vector search."""
+    import os
+    qdrant_url = os.getenv("QDRANT_URL", "")
+    qdrant_key = os.getenv("QDRANT_API_KEY", "")
+
+    if not qdrant_url:
+        return
+
+    try:
+        from qdrant_client import QdrantClient
+        from qdrant_client.models import PointStruct, VectorParams, Distance
+        import hashlib
+
+        client = QdrantClient(url=qdrant_url, api_key=qdrant_key, timeout=10)
+
+        # Ensure collection exists
+        collections = [c.name for c in client.get_collections().collections]
+        if "genesis_keys" not in collections:
+            client.create_collection(
+                collection_name="genesis_keys",
+                vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+            )
+
+        # Generate embedding from the text
+        text = f"{key_type} {what} {where or ''} {' '.join(tags or [])}"
+
+        # Simple hash-based embedding (fast, deterministic, no model needed)
+        # Real embeddings happen when embedding model is loaded
+        raw = hashlib.sha384(text.encode()).digest()
+        vector = [b / 255.0 for b in raw]  # 384-dim normalised vector
+
+        # Try real embedding if available
+        try:
+            from embedding.embedder import get_embedding_model
+            model = get_embedding_model()
+            if model and hasattr(model, 'encode'):
+                real_vec = model.encode(text)
+                if real_vec is not None and len(real_vec) > 0:
+                    vector = real_vec.tolist() if hasattr(real_vec, 'tolist') else list(real_vec)
+        except Exception:
+            pass  # Use hash-based fallback
+
+        # Generate numeric ID from genesis key hash
+        point_id = int(hashlib.md5(gk_id.encode()).hexdigest()[:16], 16) % (2**63)
+
+        client.upsert(
+            collection_name="genesis_keys",
+            points=[PointStruct(
+                id=point_id,
+                vector=vector[:384],  # Ensure 384 dims
+                payload={
+                    "genesis_key_id": gk_id,
+                    "key_type": key_type,
+                    "what": what[:500],
+                    "where": where[:200] if where else "",
+                    "tags": tags or [],
+                    "timestamp": __import__("datetime").datetime.utcnow().isoformat(),
+                },
+            )],
+        )
+    except Exception as e:
+        logger.debug(f"Qdrant push skipped: {e}")
