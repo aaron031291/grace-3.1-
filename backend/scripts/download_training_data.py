@@ -56,17 +56,28 @@ def download_huggingface(dataset_id: str, output_dir: Path, languages: list = No
 
             # Get content field (different datasets use different names)
             content_field = None
-            for field in ["content", "text", "code", "body", "answer"]:
+            for field in ["content", "text", "code", "body", "answer_body", "question_body", "answer", "question"]:
                 if field in batch:
                     content_field = field
                     break
 
             if not content_field:
-                print(f"  No content field found in batch. Fields: {list(batch.keys())}")
-                continue
+                # Try combining question + answer for Q&A datasets
+                if "question_body" in batch and "answer_body" in batch:
+                    content_field = "__combined_qa__"
+                else:
+                    print(f"  No content field found. Fields: {list(batch.keys())[:5]}")
+                    continue
 
             samples = []
-            contents = batch[content_field]
+            if content_field == "__combined_qa__":
+                questions = batch["question_body"]
+                answers = batch["answer_body"]
+                titles = batch.get("title", [""] * len(questions))
+                contents = [f"Q: {titles[i]}\n{questions[i]}\n\nA: {answers[i]}" 
+                           for i in range(len(questions))]
+            else:
+                contents = batch[content_field]
             for i, content in enumerate(contents):
                 if not content or len(str(content)) < 50:
                     continue
