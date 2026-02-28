@@ -113,9 +113,16 @@ async def unreliable_api_call(url: str) -> dict:
 import asyncio
 import time
 from enum import Enum
-from typing import Callable, Any, Optional
+from typing import Callable, Any, Optional, Type
 from dataclasses import dataclass
+from functools import wraps
 import threading
+
+
+class CircuitBreakerOpenException(Exception):
+    """Raised when circuit breaker is open and rejecting calls."""
+    pass
+
 
 class CircuitState(Enum):
     CLOSED = "closed"

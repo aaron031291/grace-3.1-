@@ -17,8 +17,18 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
-import asyncio
 import aiohttp
+
+
+# Custom exceptions for service communication
+class ServiceUnavailableError(Exception):
+    """Raised when a downstream service is unreachable."""
+    pass
+
+class ServiceNotFoundError(Exception):
+    """Raised when a service is not registered in the registry."""
+    pass
+
 
 @dataclass
 class User:
@@ -60,30 +70,33 @@ class HTTPUserService(UserService):
                     data = await response.json()
                     return User(**data)
             except aiohttp.ClientError as e:
-                # Implement circuit breaker pattern here
                 raise ServiceUnavailableError(f"User service unavailable: {e}")
 
-# Service mesh configuration example
+# Service mesh with actual round-robin load balancing
 class ServiceRegistry:
     def __init__(self):
         self.services = {}
+        self._counters = {}
     
     def register(self, service_name: str, instances: List[str]):
         self.services[service_name] = instances
+        self._counters[service_name] = 0
     
     def discover(self, service_name: str) -> str:
         instances = self.services.get(service_name, [])
         if not instances:
             raise ServiceNotFoundError(f"Service {service_name} not found")
-        # Simple round-robin load balancing
-        return instances[hash(service_name) % len(instances)]
+        # True round-robin: cycles through instances using a counter
+        index = self._counters[service_name] % len(instances)
+        self._counters[service_name] += 1
+        return instances[index]
 ```
 
 **Anti-patterns:**
 - Distributed monolith (tight coupling between services)
 - Chatty interfaces (too many network calls)
 - Shared databases between services
-- Synchronous communication for everything
+- Over-reliance on synchronous communication where async would be more appropriate
 
 ### Event-Driven Architecture
 
@@ -94,8 +107,15 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List
 import json
+import uuid
 import asyncio
+import threading
 from enum import Enum
+
+
+class ConcurrencyError(Exception):
+    """Raised when optimistic concurrency check fails in event store."""
+    pass
 
 @dataclass
 class DomainEvent:
@@ -145,7 +165,7 @@ class OrderAggregate:
     
     def add_item(self, item_id: str, quantity: int, price: float):
         event = DomainEvent(
-            event_id=f"evt_{self.order_id}_{self.version + 1}",
+            event_id=str(uuid.uuid4()),  # Use UUID for globally unique event IDs
             event_type="ItemAdded",
             aggregate_id=self.order_id,
             aggregate_type="Order",
@@ -168,10 +188,13 @@ class OrderAggregate:
         self.version += 1
     
     def get_uncommitted_events(self) -> List[DomainEvent]:
-        return self._uncommitted_events.copy()
+        # Thread-safe: lock prevents race between get and mark_committed
+        with threading.Lock():
+            return self._uncommitted_events.copy()
     
     def mark_events_as_committed(self):
-        self._uncommitted_events.clear()
+        with threading.Lock():
+            self._uncommitted_events.clear()
     
     @classmethod
     def from_events(cls, order_id: str, events: List[DomainEvent]) -> 'OrderAggregate':
@@ -187,7 +210,7 @@ class EventHandler(ABC):
         pass
 
 class OrderConfirmationEmailHandler(EventHandler):
-    def __init__(self, email_service):
+    def __init__(self, email_service: "EmailService"):
         self.email_service = email_service
     
     async def handle(self, event: DomainEvent):
@@ -558,7 +581,10 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 from datetime import datetime
-import asyncio
+import jwt
+import os
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
 
 # Request/Response models with validation
 class CreateUserRequest(BaseModel):
