@@ -492,6 +492,16 @@ async def list_blueprints():
 
 # ── ML Training + Memory Reconciler ───────────────────────────────────
 
+# ── Self-Mirror ───────────────────────────────────────────────────────
+
+@router.get("/mirror/reflect")
+async def mirror_reflect():
+    """Full self-reflection using ALL connected systems."""
+    from cognitive.mirror_self_modeling import MirrorSelfModelingSystem
+    mirror = MirrorSelfModelingSystem()
+    return mirror.full_self_reflection()
+
+
 @router.post("/ml/train")
 async def ml_train():
     """Train ML models on loop execution data. Real training, not bookkeeping."""

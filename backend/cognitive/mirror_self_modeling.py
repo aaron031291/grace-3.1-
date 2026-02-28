@@ -78,10 +78,149 @@ class MirrorSelfModelingSystem:
 
         self._memory_learner = None
 
+        # Connected systems
+        self._unified_memory = None
+        self._flash_cache = None
+        self._ghost_memory = None
+        self._time_sense = None
+
         logger.info(
             f"[MIRROR] Self-modeling system initialized "
             f"(window={observation_window_hours}h, min_patterns={min_pattern_occurrences})"
         )
+
+    @property
+    def unified_memory(self):
+        if self._unified_memory is None:
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                self._unified_memory = get_unified_memory()
+            except Exception:
+                pass
+        return self._unified_memory
+
+    @property
+    def flash_cache(self):
+        if self._flash_cache is None:
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                self._flash_cache = get_flash_cache()
+            except Exception:
+                pass
+        return self._flash_cache
+
+    @property
+    def ghost_memory(self):
+        if self._ghost_memory is None:
+            try:
+                from cognitive.ghost_memory import get_ghost_memory
+                self._ghost_memory = get_ghost_memory()
+            except Exception:
+                pass
+        return self._ghost_memory
+
+    @property
+    def time_sense(self):
+        if self._time_sense is None:
+            try:
+                from cognitive.time_sense import TimeSense
+                self._time_sense = TimeSense()
+            except Exception:
+                pass
+        return self._time_sense
+
+    def full_self_reflection(self) -> Dict[str, Any]:
+        """
+        Complete self-reflection using ALL connected systems:
+        databases, memory, TimeSense, ghost memory, flash cache.
+        """
+        reflection = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "temporal_context": {},
+            "memory_state": {},
+            "behavioral_patterns": [],
+            "self_assessment": "",
+        }
+
+        # TimeSense — when am I reflecting?
+        if self.time_sense:
+            try:
+                reflection["temporal_context"] = self.time_sense.get_context()
+            except Exception:
+                pass
+
+        # Unified Memory — what do I know?
+        if self.unified_memory:
+            try:
+                reflection["memory_state"] = self.unified_memory.get_stats()
+            except Exception:
+                pass
+
+        # Ghost Memory — what am I working on right now?
+        if self.ghost_memory:
+            try:
+                reflection["current_task"] = self.ghost_memory.get_stats()
+            except Exception:
+                pass
+
+        # Flash Cache — what external knowledge do I have?
+        if self.flash_cache:
+            try:
+                reflection["cached_knowledge"] = self.flash_cache.stats()
+            except Exception:
+                pass
+
+        # Database — recent genesis keys
+        try:
+            observation = self.observe_recent_operations()
+            reflection["recent_operations"] = observation.get("total_operations", 0)
+            reflection["operations_by_type"] = observation.get("operations_by_type", {})
+        except Exception:
+            pass
+
+        # Behavioral patterns
+        try:
+            patterns = self.detect_behavioral_patterns()
+            reflection["behavioral_patterns"] = patterns[:5]
+        except Exception:
+            pass
+
+        # Self-assessment
+        total_ops = reflection.get("recent_operations", 0)
+        memory_entries = sum(v.get("count", 0) for v in reflection.get("memory_state", {}).values() if isinstance(v, dict))
+        reflection["self_assessment"] = (
+            f"In the last {self.observation_window_hours}h: {total_ops} operations. "
+            f"Memory: {memory_entries} entries. "
+            f"Patterns detected: {len(reflection['behavioral_patterns'])}."
+        )
+
+        # Store reflection in memory
+        if self.unified_memory:
+            try:
+                self.unified_memory.store_episode(
+                    problem="Self-reflection",
+                    action=reflection["self_assessment"],
+                    outcome=f"Patterns: {len(reflection['behavioral_patterns'])}",
+                    trust=0.8,
+                    source="mirror_self_model",
+                )
+            except Exception:
+                pass
+
+        # Genesis Key
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="system",
+                what=f"Self-reflection: {reflection['self_assessment'][:100]}",
+                how="mirror_self_modeling.full_self_reflection",
+                output_data={"ops": total_ops, "patterns": len(reflection["behavioral_patterns"])},
+                tags=["mirror", "self_reflection"],
+            )
+        except Exception:
+            pass
+
+        return reflection
 
     @property
     def session(self):
