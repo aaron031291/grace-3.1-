@@ -25,10 +25,23 @@ def p(icon, msg):
 def header(msg):
     print(f"\n{'='*50}\n  {msg}\n{'='*50}")
 
+# Plain English explanations for every step
+NLP = {
+    "kill": "Closing any old Grace processes that might still be running from last time.",
+    "env": "Checking your configuration file to make sure all API keys and settings are correct.",
+    "frontend": "Making sure the website interface has all its files and is ready to display.",
+    "qdrant": "Connecting to your cloud database where all the smart search data is stored.",
+    "backend": "Starting Grace's brain — the server that runs all the AI, memory, and intelligence.",
+    "frontend_start": "Starting the website you'll open in your browser to talk to Grace.",
+    "diagnostics": "Grace is checking herself — testing every system to make sure everything works.",
+    "done": "Grace is alive and ready. Open the website link below in your browser.",
+}
+
 
 def kill_ports():
     """Kill anything on our ports."""
-    header("STEP 1: Clearing ports")
+    header("STEP 1: Clearing Old Processes")
+    print(f"  {NLP['kill']}\n")
     for port in [8000, 5173, 5174, 5175, 6333, 6334]:
         try:
             r = subprocess.run(f'netstat -ano | findstr :{port}', shell=True, capture_output=True, text=True)
@@ -44,7 +57,8 @@ def kill_ports():
 
 def fix_env():
     """Fix all .env issues."""
-    header("STEP 2: Fixing configuration")
+    header("STEP 2: Checking Configuration")
+    print(f"  {NLP['env']}\n")
     env = BACKEND / ".env"
     if not env.exists():
         ex = BACKEND / ".env.example"
@@ -74,7 +88,8 @@ def fix_env():
 
 def fix_frontend():
     """Fix all frontend import issues."""
-    header("STEP 3: Fixing frontend")
+    header("STEP 3: Preparing the Website")
+    print(f"  {NLP['frontend']}\n")
     
     components = FRONTEND / "src" / "components"
     if not components.exists():
@@ -111,7 +126,8 @@ def fix_frontend():
 
 def start_qdrant():
     """Connect to Qdrant — Cloud first, Docker fallback."""
-    header("STEP 4: Connecting to Qdrant")
+    header("STEP 4: Connecting to Search Database")
+    print(f"  {NLP['qdrant']}\n")
 
     # Check for Qdrant Cloud URL in .env
     env_path = BACKEND / ".env"
@@ -170,14 +186,16 @@ def start_qdrant():
 
 def start_backend():
     """Start backend server."""
-    header("STEP 5: Starting backend")
+    header("STEP 5: Starting Grace's Brain")
+    print(f"  {NLP['backend']}\n")
     os.chdir(BACKEND)
 
     proc = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"],
         creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0
     )
-    p("✅", f"Backend starting (PID {proc.pid})")
+    p("✅", "Grace's brain is loading...")
+    print("  This takes 10-30 seconds. Please wait...")
 
     # Wait for health
     for i in range(30):
@@ -185,7 +203,7 @@ def start_backend():
             import requests
             r = requests.get("http://localhost:8000/health", timeout=2)
             if r.status_code == 200:
-                p("✅", "Backend LIVE at http://localhost:8000")
+                p("✅", "Grace's brain is ready and responding!")
                 os.chdir(ROOT)
                 return proc
         except Exception:
@@ -201,7 +219,8 @@ def start_backend():
 
 def start_frontend():
     """Start frontend dev server."""
-    header("STEP 6: Starting frontend")
+    header("STEP 6: Starting the Website")
+    print(f"  {NLP['frontend_start']}\n")
     os.chdir(FRONTEND)
 
     proc = subprocess.Popen(
@@ -217,7 +236,8 @@ def start_frontend():
 
 def run_diagnostics():
     """Run diagnostics through the API."""
-    header("STEP 7: Diagnostics")
+    header("STEP 7: Grace is Checking Herself")
+    print(f"  {NLP['diagnostics']}\n")
     try:
         import requests
 
@@ -260,13 +280,17 @@ def main():
     run_diagnostics()
 
     header("GRACE IS RUNNING!")
-    print("  🌐 Frontend:  http://localhost:5173")
-    print("  🔧 Backend:   http://localhost:8000")
-    print("  ❤️  Health:    http://localhost:8000/health")
-    print("  🤖 Console:   http://localhost:8000/api/console/status")
-    print("  🔑 Vault:     http://localhost:8000/api/vault/status")
+    print(f"  {NLP['done']}")
     print()
-    print("  Press Ctrl+C to stop Grace")
+    print("  🌐 Open this in your browser:  http://localhost:5173")
+    print()
+    print("  Other useful links:")
+    print("    Health check:     http://localhost:8000/health")
+    print("    System status:    http://localhost:8000/api/console/status")
+    print("    Model status:     http://localhost:8000/api/vault/status")
+    print("    Run smoke test:   http://localhost:8000/api/audit/test/smoke")
+    print()
+    print("  To stop Grace, press Ctrl+C in this window.")
 
     try:
         while True:
