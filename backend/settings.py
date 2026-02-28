@@ -119,9 +119,9 @@ class Settings:
     OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
 
     # ==================== Local Model Configuration (per-task) ====================
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "")       # e.g. qwen2.5-coder:32b
-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "")   # e.g. llama3.1:70b-instruct-q4_K_M
-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "")       # e.g. mistral:7b (quick tasks)
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:7b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "deepseek-r1:7b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen2.5:7b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

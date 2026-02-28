@@ -54,26 +54,26 @@ MODEL_REGISTRY = {
         "name": "Opus 4.6 (Claude)",
         "provider": "opus",
         "strengths": ["deep reasoning", "architecture", "audit", "code review"],
-        "cost_tier": "high",
+        "cost_tier": "cloud",
     },
     "kimi": {
-        "name": "Kimi 2.5 (Moonshot)",
+        "name": "Kimi K2.5 (Moonshot)",
         "provider": "kimi",
-        "strengths": ["long context", "document analysis", "system reasoning"],
-        "cost_tier": "medium",
+        "strengths": ["long context (262K)", "document analysis", "system reasoning"],
+        "cost_tier": "cloud",
     },
     "qwen": {
-        "name": "Qwen 2.5 (Local)",
+        "name": "Qwen 2.5 Coder (Local)",
         "provider": "ollama",
         "task": "code",
-        "strengths": ["code generation", "fast iteration", "local/private"],
+        "strengths": ["code generation", "fast iteration", "local/private", "free"],
         "cost_tier": "free",
     },
     "reasoning": {
-        "name": "Reasoning Model (Local)",
+        "name": "DeepSeek R1 (Local)",
         "provider": "ollama",
         "task": "reason",
-        "strengths": ["logical deduction", "problem solving", "analysis"],
+        "strengths": ["chain-of-thought", "mathematical reasoning", "problem decomposition"],
         "cost_tier": "free",
     },
 }
@@ -112,13 +112,19 @@ def _get_client(model_id: str):
     if not info:
         return None
 
-    from llm_orchestrator.factory import get_llm_client, get_llm_for_task
+    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_qwen_coder, get_deepseek_reasoner
 
     provider = info.get("provider")
     task = info.get("task")
 
-    if provider in ("opus", "kimi"):
-        return get_llm_client(provider=provider)
+    if provider == "opus":
+        return get_llm_client(provider="opus")
+    elif provider == "kimi":
+        return get_llm_client(provider="kimi")
+    elif task == "code":
+        return get_qwen_coder()
+    elif task == "reason":
+        return get_deepseek_reasoner()
     elif task:
         return get_llm_for_task(task)
     else:

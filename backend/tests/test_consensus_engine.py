@@ -46,8 +46,7 @@ class TestModelRegistry:
     def test_cost_tiers(self):
         from cognitive.consensus_engine import MODEL_REGISTRY
         tiers = {info["cost_tier"] for info in MODEL_REGISTRY.values()}
-        assert "high" in tiers
-        assert "medium" in tiers
+        assert "cloud" in tiers
         assert "free" in tiers
 
 
