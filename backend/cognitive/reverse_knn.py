@@ -129,6 +129,175 @@ class ReverseKNNOracle:
 
         return gaps
 
+    def fill_gaps_actively(self, max_gaps: int = 5, auto_ingest: bool = True) -> Dict[str, Any]:
+        """
+        Actively fill knowledge gaps through 3 direct data pathways:
+          1. API calls — hit known API sources for structured data
+          2. Web search — SerpAPI for targeted research
+          3. Web scraping — fetch and extract from known URLs
+
+        Each gap topic gets routed through whichever pathway has a matching source.
+        Results flow into FlashCache + Oracle + unified memory.
+        """
+        gaps = self.scan_knowledge_gaps()
+        topics = self.suggest_expansion_topics(limit=max_gaps)
+
+        fill_results = []
+        for topic in topics:
+            if not topic:
+                continue
+
+            result = {"topic": topic, "pathways_tried": [], "data_acquired": False}
+
+            # Pathway 1: FlashCache — check for cached API/web sources on this topic
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                refs = fc.lookup(keyword=topic, min_trust=0.3, limit=5)
+                api_refs = [r for r in refs if r.get("source_type") in ("api", "web")]
+
+                for ref in api_refs[:2]:
+                    uri = ref.get("source_uri", "")
+                    if not uri or uri.startswith("internal://"):
+                        continue
+
+                    # Stream content from the cached source
+                    streamed = fc.stream_content(ref.get("id", ""))
+                    if streamed and not streamed.get("error"):
+                        content = streamed.get("text", streamed.get("data", ""))
+                        if content and len(str(content)) > 50:
+                            result["pathways_tried"].append({
+                                "pathway": "flash_cache_stream",
+                                "source": ref.get("source_name", uri),
+                                "chars": len(str(content)),
+                            })
+                            result["data_acquired"] = True
+
+                            # Store in unified memory
+                            if auto_ingest:
+                                self._ingest_discovery(topic, str(content)[:5000], f"flash_cache:{uri}")
+            except Exception:
+                pass
+
+            # Pathway 2: Web search via SerpAPI
+            if not result["data_acquired"]:
+                try:
+                    from settings import settings
+                    if settings.SERPAPI_KEY:
+                        from search.serpapi_service import SerpAPIService
+                        serp = SerpAPIService(api_key=settings.SERPAPI_KEY)
+                        search_results = serp.search(f"{topic} software engineering best practices", num_results=3)
+
+                        for sr in search_results:
+                            result["pathways_tried"].append({
+                                "pathway": "web_search",
+                                "source": sr.get("link", ""),
+                                "title": sr.get("title", ""),
+                            })
+
+                            # Cache the search result
+                            try:
+                                fc = get_flash_cache()
+                                fc.register(
+                                    source_uri=sr.get("link", ""),
+                                    source_type="search",
+                                    source_name=sr.get("title", "")[:100],
+                                    keywords=fc.extract_keywords(f"{topic} {sr.get('snippet', '')}"),
+                                    summary=sr.get("snippet", ""),
+                                    trust_score=0.5,
+                                )
+                            except Exception:
+                                pass
+
+                        if search_results:
+                            result["data_acquired"] = True
+                            if auto_ingest:
+                                combined = "\n".join(f"{r['title']}: {r.get('snippet', '')}" for r in search_results)
+                                self._ingest_discovery(topic, combined, "web_search")
+                except Exception:
+                    pass
+
+            # Pathway 3: Direct web fetch from known sources
+            if not result["data_acquired"]:
+                try:
+                    import requests as req
+                    known_urls = {
+                        "python": "https://peps.python.org/api/peps.json",
+                        "api": "https://api.github.com",
+                        "security": "https://api.github.com/repos/OWASP/CheatSheetSeries/contents/cheatsheets",
+                    }
+
+                    for keyword, url in known_urls.items():
+                        if keyword in topic.lower():
+                            try:
+                                resp = req.get(url, timeout=10, headers={"User-Agent": "Grace/1.0"})
+                                if resp.status_code == 200:
+                                    data = resp.text[:5000]
+                                    result["pathways_tried"].append({
+                                        "pathway": "direct_fetch",
+                                        "source": url,
+                                        "chars": len(data),
+                                    })
+                                    result["data_acquired"] = True
+                                    if auto_ingest:
+                                        self._ingest_discovery(topic, data, f"direct:{url}")
+                            except Exception:
+                                pass
+                except Exception:
+                    pass
+
+            fill_results.append(result)
+
+        # Track
+        acquired = sum(1 for r in fill_results if r["data_acquired"])
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="system",
+                what=f"Reverse kNN active fill: {acquired}/{len(fill_results)} gaps filled",
+                how="reverse_knn.fill_gaps_actively",
+                output_data={"filled": acquired, "total": len(fill_results)},
+                tags=["reverse_knn", "active_fill", "knowledge_expansion"],
+            )
+        except Exception:
+            pass
+
+        return {
+            "topics_processed": len(fill_results),
+            "gaps_filled": acquired,
+            "results": fill_results,
+        }
+
+    def _ingest_discovery(self, topic: str, content: str, source: str):
+        """Ingest discovered data into Oracle + unified memory."""
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+            mem.store_learning(
+                input_ctx=f"Knowledge gap fill: {topic}",
+                expected=content[:5000],
+                trust=0.6,
+                source=f"reverse_knn_{source}",
+                example_type="gap_fill",
+            )
+        except Exception:
+            pass
+
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            kw = fc.extract_keywords(f"{topic} {content[:500]}")
+            fc.register(
+                source_uri=f"internal://gap_fill/{topic.replace(' ', '_')}",
+                source_type="internal",
+                source_name=f"Gap fill: {topic}",
+                keywords=kw,
+                summary=content[:300],
+                trust_score=0.6,
+            )
+        except Exception:
+            pass
+
     def log_query(self, query: str, had_results: bool, best_score: float = 0.0):
         """Log a user query for demand-gap analysis."""
         self._query_log.append({

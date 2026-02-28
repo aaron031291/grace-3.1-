@@ -240,6 +240,17 @@ async def discover_and_fill_gaps():
     }
 
 
+@router.post("/discover-and-fill-active")
+async def discover_and_fill_active(max_gaps: int = 5):
+    """
+    Active gap filling: Reverse kNN finds gaps → routes each gap through
+    3 pathways (API, web search, web scrape) → ingests results.
+    """
+    from cognitive.reverse_knn import get_reverse_knn
+    knn = get_reverse_knn()
+    return knn.fill_gaps_actively(max_gaps=max_gaps)
+
+
 @router.post("/seed-sources")
 async def seed_engineering_sources():
     """
