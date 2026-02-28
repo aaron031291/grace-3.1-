@@ -492,6 +492,29 @@ async def smart_ingest(file_path: str):
     return lib.smart_ingest_document(file_path)
 
 
+# ── Test Framework ────────────────────────────────────────────────────
+
+@router.get("/test/smoke")
+async def run_smoke_test():
+    """Quick 30-second health check — is everything alive?"""
+    from cognitive.test_framework import smoke_test
+    return smoke_test()
+
+
+@router.get("/test/full")
+async def run_full_test():
+    """Run full test suite with plain English results."""
+    from cognitive.test_framework import full_test
+    return full_test()
+
+
+@router.get("/test/diagnostic")
+async def run_diagnostic():
+    """Deep diagnostic: what's broken, why, and how to fix it."""
+    from cognitive.test_framework import diagnostic
+    return diagnostic()
+
+
 @router.post("/sandbox/run")
 async def sandbox_run(code: str):
     """Execute code in sandboxed environment. Returns compile + runtime results."""
