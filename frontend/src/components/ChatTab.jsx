@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
+import ConsensusChat from "./ConsensusChat";
 import { API_BASE_URL } from "../config/api";
 import "./ChatTab.css";
 
@@ -460,6 +461,7 @@ export default function ChatTab() {
   const [selectedFolder, setSelectedFolder] = useState("");
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
+  const [chatMode, setChatMode] = useState("general"); // general, consensus
   const [useKimi, setUseKimi] = useState(false);
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
@@ -630,6 +632,21 @@ export default function ChatTab() {
             )}
           </div>
 
+          {/* Chat mode selector */}
+          <div style={{ display: "flex", gap: 2, background: "#111", borderRadius: 6, padding: 2 }}>
+            {[
+              { id: "general", label: "💬 Chat", },
+              { id: "consensus", label: "🤝 Consensus" },
+            ].map(m => (
+              <button key={m.id} onClick={() => setChatMode(m.id)} style={{
+                padding: "4px 10px", border: "none", borderRadius: 4, cursor: "pointer",
+                fontSize: 11, fontWeight: chatMode === m.id ? 700 : 500,
+                background: chatMode === m.id ? "#e94560" : "transparent",
+                color: chatMode === m.id ? "#fff" : "#888",
+              }}>{m.label}</button>
+            ))}
+          </div>
+
           {/* Folder context selector */}
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 12, color: "#888" }}>📁</span>
@@ -677,34 +694,40 @@ export default function ChatTab() {
 
       {/* Main content area */}
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-        <div
-          style={{
-            flex: showWorldModel ? "1 1 70%" : "1 1 100%",
-            display: "flex",
-            overflow: "hidden",
-            transition: "flex 0.2s ease",
-          }}
-        >
-          <ChatList
-            chats={chats}
-            selectedChatId={selectedChatId}
-            selectedFolder={selectedFolder}
-            onSelectChat={setSelectedChatId}
-            onSelectFolder={setSelectedFolder}
-            onCreateChat={createNewChat}
-            onDeleteChat={deleteChat}
-            onUpdateTitle={updateChatTitle}
-            loading={loading}
-          />
-          <ChatWindow
-            chatId={selectedChatId}
-            folderPath={
-              chats.find((c) => c.id === selectedChatId)?.folder_path ||
-              selectedFolder
-            }
-            onChatCreated={fetchChats}
-          />
-        </div>
+        {chatMode === "consensus" ? (
+          <div style={{ flex: showWorldModel ? "1 1 70%" : "1 1 100%", overflow: "hidden" }}>
+            <ConsensusChat />
+          </div>
+        ) : (
+          <div
+            style={{
+              flex: showWorldModel ? "1 1 70%" : "1 1 100%",
+              display: "flex",
+              overflow: "hidden",
+              transition: "flex 0.2s ease",
+            }}
+          >
+            <ChatList
+              chats={chats}
+              selectedChatId={selectedChatId}
+              selectedFolder={selectedFolder}
+              onSelectChat={setSelectedChatId}
+              onSelectFolder={setSelectedFolder}
+              onCreateChat={createNewChat}
+              onDeleteChat={deleteChat}
+              onUpdateTitle={updateChatTitle}
+              loading={loading}
+            />
+            <ChatWindow
+              chatId={selectedChatId}
+              folderPath={
+                chats.find((c) => c.id === selectedChatId)?.folder_path ||
+                selectedFolder
+              }
+              onChatCreated={fetchChats}
+            />
+          </div>
+        )}
 
         {showWorldModel && (
           <WorldModelPanel onClose={() => setShowWorldModel(false)} />
