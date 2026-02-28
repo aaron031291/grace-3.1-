@@ -494,6 +494,43 @@ async def smart_ingest(file_path: str):
 
 # ── Test Framework ────────────────────────────────────────────────────
 
+# ── Autonomous Diagnostics ────────────────────────────────────────────
+
+@router.get("/diagnostics/startup")
+async def diagnostics_startup():
+    """Run startup diagnostic — full system check with auto-fixing."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().on_startup()
+
+
+@router.get("/diagnostics/hourly")
+async def diagnostics_hourly():
+    """Hourly health check with auto-fix."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().hourly_check()
+
+
+@router.get("/diagnostics/daily")
+async def diagnostics_daily():
+    """Daily comprehensive report in plain English."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().daily_report()
+
+
+@router.post("/diagnostics/error")
+async def diagnostics_error(error_type: str, error_message: str, component: str = ""):
+    """Report an error for autonomous diagnosis and fixing."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().on_error(error_type, error_message, component)
+
+
+@router.get("/diagnostics/status")
+async def diagnostics_status():
+    """Current diagnostic system status."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().get_status()
+
+
 @router.get("/test/smoke")
 async def run_smoke_test():
     """Quick 30-second health check — is everything alive?"""
