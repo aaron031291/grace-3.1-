@@ -149,6 +149,208 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         description="Complete autonomous healing: Detect→Triage→Diagnose→Select Strategy→Validate→Snapshot→Execute→Verify Quality→Commit/Rollback→Learn. Born from HEAL-001: wholesale rewrite caused 50.6% content loss. Now enforces surgical patches, size gates, quality gates, and automatic rollback.",
         max_depth=3,
     ),
+
+    # ── Loops 14-36: Full Autonomous Coverage ─────────────────────────
+
+    # Safety Loops
+    "api_request_validation": NamedLoop(
+        name="API Request Validation Loop",
+        category="safety",
+        components=["trust_engine", "immune_system", "governance_wrapper", "event_bus"],
+        status="healthy",
+        description="Request authentication → rate limiting → payload validation → security scan → route to handler. Rollback: reject with error code. Fallback: most restrictive security policy.",
+        max_depth=5,
+    ),
+    "security_compliance_enforcement": NamedLoop(
+        name="Security Compliance Enforcement Loop",
+        category="safety",
+        components=["governance_wrapper", "trust_engine", "immune_system"],
+        status="healthy",
+        description="Policy compliance assessment → security posture evaluation → violation detection → corrective action → execution. Rollback: last compliant config. Fallback: maximum security lockdown.",
+        max_depth=2,
+    ),
+    "live_integration_safety": NamedLoop(
+        name="Live Integration Safety Loop",
+        category="safety",
+        components=["live_integration", "architecture_compass", "immune_system", "trust_engine"],
+        status="healthy",
+        description="Integration impact assessment → safety validation via compass → staged integration with monitoring → success validation. Rollback: revert to pre-integration state. Fallback: offline testing first.",
+        max_depth=2,
+    ),
+    "sandbox_experiment_lifecycle": NamedLoop(
+        name="Sandbox Experiment Lifecycle Loop",
+        category="safety",
+        components=["sandbox_engine", "immune_system", "trust_engine"],
+        status="healthy",
+        description="Sandbox creation → resource isolation → experiment execution → result validation → safety assessment. Rollback: immediate sandbox destruction. Fallback: offline experiment queue.",
+        max_depth=3,
+    ),
+    "autonomous_trigger_validation": NamedLoop(
+        name="Autonomous Trigger Validation Loop",
+        category="safety",
+        components=["central_orchestrator", "trust_engine", "governance_wrapper", "immune_system", "event_bus"],
+        status="healthy",
+        description="Trigger legitimacy → authority validation → safety constraints → impact assessment → authorization. Rollback: cancel pending actions. Fallback: require human authorization.",
+        max_depth=2,
+    ),
+    "emergency_response_coordination": NamedLoop(
+        name="Emergency Response Coordination Loop",
+        category="safety",
+        components=["immune_system", "central_orchestrator", "event_bus"],
+        status="healthy",
+        description="Emergency severity assessment → response protocol → resource mobilization → coordinated response → status monitoring. Rollback: system shutdown with data preservation. Fallback: complete isolation.",
+        max_depth=1,
+    ),
+
+    # Verification Loops
+    "api_response_verification": NamedLoop(
+        name="API Response Verification Loop",
+        category="verification",
+        components=["consensus_engine", "trust_engine", "unified_memory"],
+        status="healthy",
+        description="Response content validation → consensus accuracy check → trust scoring → sanitization → delivery confirmation. Rollback: cached safe response. Fallback: generic safe response.",
+        max_depth=3,
+    ),
+    "code_deployment_verification": NamedLoop(
+        name="Code Deployment Verification Loop",
+        category="verification",
+        components=["immune_system", "consensus_engine", "trust_engine", "circuit_breaker"],
+        status="healthy",
+        description="Pre-deployment health check → staged deployment → performance validation → consensus on success → full rollout or rollback. Rollback: revert to previous stable version. Fallback: maintenance mode.",
+        max_depth=3,
+    ),
+    "llm_hallucination_detection": NamedLoop(
+        name="LLM Hallucination Detection Loop",
+        category="verification",
+        components=["consensus_engine", "unified_memory", "trust_engine", "pipeline"],
+        status="healthy",
+        description="Multi-model consensus → fact verification against memory → confidence scoring → hallucination probability → response filtering. Rollback: conservative fact-based response. Fallback: acknowledge uncertainty.",
+        max_depth=5,
+    ),
+    "report_generation_verification": NamedLoop(
+        name="Report Generation Verification Loop",
+        category="verification",
+        components=["reporting_engine", "consensus_engine", "unified_memory", "trust_engine"],
+        status="healthy",
+        description="Data source validation → report generation → fact verification → consensus validation → accuracy scoring. Rollback: template-based report. Fallback: report with uncertainty markers.",
+        max_depth=4,
+    ),
+
+    # Data Loops
+    "data_ingestion_validation": NamedLoop(
+        name="Data Ingestion Validation Loop",
+        category="data",
+        components=["librarian_autonomous", "immune_system", "trust_engine", "unified_memory", "consensus_engine"],
+        status="healthy",
+        description="Source verification → format validation → content scanning → consensus quality check → memory integration. Rollback: remove ingested data. Fallback: manual review queue.",
+        max_depth=4,
+    ),
+    "librarian_file_integrity": NamedLoop(
+        name="Librarian File Integrity Loop",
+        category="data",
+        components=["librarian_autonomous", "immune_system", "unified_memory", "trust_engine", "event_bus"],
+        status="healthy",
+        description="File operation validation → integrity check (checksums) → permission verification → execution with monitoring → post-op validation. Rollback: restore from backup. Fallback: read-only mode.",
+        max_depth=4,
+    ),
+    "memory_consistency_maintenance": NamedLoop(
+        name="Memory Consistency Maintenance Loop",
+        category="data",
+        components=["unified_memory", "flash_cache", "immune_system"],
+        status="healthy",
+        description="Memory integrity verification → cross-reference validation → inconsistency detection → conflict resolution → synchronization. Rollback: restore from consistent backup. Fallback: read-only mode.",
+        max_depth=4,
+    ),
+    "version_control_integrity": NamedLoop(
+        name="Version Control Integrity Loop",
+        category="data",
+        components=["consensus_engine", "trust_engine"],
+        status="healthy",
+        description="Change validation → version integrity verification → conflict detection → consensus on changes → version commit. Rollback: last known good version. Fallback: read-only until resolved.",
+        max_depth=3,
+    ),
+    "cross_system_synchronization": NamedLoop(
+        name="Cross-System Synchronization Loop",
+        category="data",
+        components=["event_bus", "unified_memory", "central_orchestrator"],
+        status="healthy",
+        description="Sync requirement assessment → data consistency verification → conflict identification → resolution strategy → sync execution. Rollback: last consistent state. Fallback: eventual consistency.",
+        max_depth=3,
+    ),
+
+    # Coding Loops
+    "code_generation_safety": NamedLoop(
+        name="Code Generation Safety Loop",
+        category="coding",
+        components=["pipeline", "immune_system", "consensus_engine", "trust_engine", "sandbox_engine"],
+        status="healthy",
+        description="Requirements analysis → code generation with constraints → static analysis → sandbox testing → consensus validation. Rollback: revert to last good code. Fallback: pre-approved templates.",
+        max_depth=6,
+    ),
+
+    # Learning Loops
+    "user_intent_adaptation": NamedLoop(
+        name="User Intent Adaptation Loop",
+        category="learning",
+        components=["user_intent_override", "unified_memory", "pipeline"],
+        status="healthy",
+        description="Intent extraction → historical pattern analysis → preference learning → response personalisation → feedback collection. Rollback: previous user model. Fallback: generic responses.",
+        max_depth=4,
+    ),
+    "feedback_loop_optimization": NamedLoop(
+        name="Feedback Loop Optimization Loop",
+        category="learning",
+        components=["intelligence_layer", "unified_memory", "trust_engine"],
+        status="healthy",
+        description="Feedback quality assessment → learning effectiveness → optimization opportunity → parameter adjustment → performance validation. Rollback: previous learning config. Fallback: conservative learning rates.",
+        max_depth=4,
+    ),
+
+    # Homeostasis Loops
+    "system_health_monitoring": NamedLoop(
+        name="System Health Monitoring Loop",
+        category="homeostasis",
+        components=["immune_system", "central_orchestrator", "event_bus", "reporting_engine"],
+        status="healthy",
+        description="Resource utilisation → performance metrics → anomaly detection → health scoring → alert generation. Rollback: reduce load, disable non-critical features. Fallback: safe mode with core functions.",
+        max_depth=3,
+    ),
+    "cognitive_load_balancing": NamedLoop(
+        name="Cognitive Load Balancing Loop",
+        category="homeostasis",
+        components=["central_orchestrator", "pipeline", "consensus_engine"],
+        status="healthy",
+        description="Cognitive load assessment → task priority evaluation → resource reallocation → load distribution → performance monitoring. Rollback: previous resource allocation. Fallback: essential functions only.",
+        max_depth=3,
+    ),
+    "performance_optimization_feedback": NamedLoop(
+        name="Performance Optimization Feedback Loop",
+        category="homeostasis",
+        components=["intelligence_layer", "central_orchestrator", "event_bus"],
+        status="healthy",
+        description="Bottleneck identification → optimization strategy → configuration adjustment → impact measurement → validation. Rollback: previous configuration. Fallback: conservative settings with guaranteed stability.",
+        max_depth=4,
+    ),
+
+    # Trust Loops
+    "external_api_reliability": NamedLoop(
+        name="External API Reliability Loop",
+        category="trust",
+        components=["flash_cache", "trust_engine", "circuit_breaker", "event_bus"],
+        status="healthy",
+        description="API endpoint trust assessment → request with timeout → response validation → reliability scoring → circuit breaker update. Rollback: switch to backup/cached data. Fallback: cached responses.",
+        max_depth=5,
+    ),
+
+    # Knowledge Loops
+    "knowledge_graph_maintenance": NamedLoop(
+        name="Knowledge Graph Maintenance Loop",
+        category="knowledge",
+        components=["unified_memory", "flash_cache", "consensus_engine", "magma_bridge"],
+        status="healthy",
+        description="Graph consistency validation → relationship verification → redundancy detection → optimization → consensus on changes. Rollback: last consistent checkpoint. Fallback: simplified graph.",
+        max_depth=4,
+    ),
 }
 
 # Thread-local call depth tracking
