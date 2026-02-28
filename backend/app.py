@@ -66,6 +66,7 @@ from api.planner_api import router as planner_router
 from api.reporting_api import router as reporting_router
 from api.knowledge_mining_api import router as knowledge_mining_router
 from api.governance_discussion_api import router as governance_discussion_router
+from api.live_console_api import router as live_console_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -242,8 +243,28 @@ async def lifespan(app: FastAPI):
         print("[OK] Database tables created/verified")
     except Exception as e:
         print(f"[WARN] Database initialization error: {e}")
-        raise
+        print("[WARN] Grace will continue with limited functionality")
     
+    # Auto-ingest training corpus on startup
+    try:
+        from cognitive.training_ingest import ingest_training_corpus
+        result = ingest_training_corpus()
+        if result.get("ingested", 0) > 0:
+            print(f"[OK] Training corpus: {result['ingested']} files ingested")
+        else:
+            print(f"[OK] Training corpus up to date")
+    except Exception as e:
+        print(f"[WARN] Training ingest skipped: {e}")
+
+    # Run startup diagnostic
+    try:
+        from cognitive.autonomous_diagnostics import get_diagnostics
+        diag = get_diagnostics()
+        startup_result = diag.on_startup()
+        print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')} ({startup_result.get('healthy', 0)}/{startup_result.get('total', 0)} healthy)")
+    except Exception as e:
+        print(f"[WARN] Startup diagnostic skipped: {e}")
+
     # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
     if not settings.SKIP_EMBEDDING_LOAD:
         try:
@@ -519,6 +540,7 @@ app.include_router(planner_router)           # /api/planner — intelligent dual
 app.include_router(reporting_router)         # /api/reports — system reports + sandbox experiments
 app.include_router(knowledge_mining_router)  # /api/knowledge-mine — LLM knowledge extraction
 app.include_router(governance_discussion_router)  # /api/governance/discuss — chat about approvals
+app.include_router(live_console_router)           # /api/console — real-time Kimi+Opus interaction
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

@@ -63,8 +63,15 @@ def track(
     except Exception:
         pass
 
-    # Write to database
+    # Write to database (auto-init if needed)
     try:
+        from database.session import SessionLocal, initialize_session_factory
+        if SessionLocal is None:
+            try:
+                initialize_session_factory()
+            except Exception:
+                return None
+
         from genesis.genesis_key_service import get_genesis_service
         from models.genesis_key_models import GenesisKeyType
 
