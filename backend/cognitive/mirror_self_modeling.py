@@ -62,11 +62,11 @@ class MirrorSelfModelingSystem:
 
     def __init__(
         self,
-        session: Session,
+        session: Session = None,
         observation_window_hours: int = 24,
         min_pattern_occurrences: int = 3
     ):
-        self.session = session
+        self._session = session
         self.observation_window_hours = observation_window_hours
         self.min_pattern_occurrences = min_pattern_occurrences
 
@@ -76,13 +76,38 @@ class MirrorSelfModelingSystem:
         self.learning_progress = {}
         self.improvement_suggestions = []
 
-        # Memory mesh integration
-        self.memory_learner = get_memory_mesh_learner(session)
+        self._memory_learner = None
 
         logger.info(
             f"[MIRROR] Self-modeling system initialized "
             f"(window={observation_window_hours}h, min_patterns={min_pattern_occurrences})"
         )
+
+    @property
+    def session(self):
+        """Lazy-load database session."""
+        if self._session is None:
+            try:
+                from database.session import SessionLocal, initialize_session_factory
+                if SessionLocal is None:
+                    initialize_session_factory()
+                    from database.session import SessionLocal as SL
+                    self._session = SL()
+                else:
+                    self._session = SessionLocal()
+            except Exception as e:
+                logger.warning(f"[MIRROR] Session lazy-load failed: {e}")
+        return self._session
+
+    @property
+    def memory_learner(self):
+        """Lazy-load memory mesh learner."""
+        if self._memory_learner is None and self.session:
+            try:
+                self._memory_learner = get_memory_mesh_learner(self.session)
+            except Exception:
+                pass
+        return self._memory_learner
 
     # ======================================================================
     # Observation - Watch ALL Genesis Keys

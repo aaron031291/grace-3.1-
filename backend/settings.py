@@ -80,23 +80,20 @@ class Settings:
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
     MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "512"))
 
-    # ==================== Component Control Flags ====================
-    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
-    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
-    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
-    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
-    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
-    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
+    # ==================== Component Control Flags (deduplicated) ====================
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
 
-    # ==================== Error Handling Configuration ====================
-    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
+    # ==================== Error Handling (deduplicated) ====================
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
     SUPPRESS_QDRANT_ERRORS: bool = os.getenv("SUPPRESS_QDRANT_ERRORS", "false").lower() == "true"
     SUPPRESS_EMBEDDING_ERRORS: bool = os.getenv("SUPPRESS_EMBEDDING_ERRORS", "false").lower() == "true"
 
     # ==================== Ingestion Configuration ====================
     EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
+
+    # ==================== Consensus Engine ====================
+    CONSENSUS_BATCH_SCHEDULE: str = os.getenv("CONSENSUS_BATCH_SCHEDULE", "daily")
+    CONSENSUS_MAX_BATCH_SIZE: int = int(os.getenv("CONSENSUS_MAX_BATCH_SIZE", "5"))
 
     # ==================== SerpAPI Configuration ====================
     SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")

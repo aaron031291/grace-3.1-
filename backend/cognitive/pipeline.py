@@ -299,6 +299,26 @@ class CognitivePipeline:
 
             has_blocking = len(unknown) > 0 and ctx.ooda.get("approach") != "analytical"
 
+            # If blocking unknowns exist, escalate to consensus for resolution
+            consensus_resolution = None
+            if has_blocking and len(unknown) >= 2:
+                try:
+                    from cognitive.consensus_engine import run_consensus, _check_model_available
+                    available = [m for m in ["qwen", "reasoning"] if _check_model_available(m)]
+                    if available:
+                        unknowns_text = ", ".join(f"{k}: {v}" for k, v in unknown)
+                        cr = run_consensus(
+                            prompt=f"Resolve these unknowns for the task '{ctx.prompt[:200]}':\n{unknowns_text}",
+                            models=available,
+                            source="autonomous",
+                        )
+                        if cr.verification.get("passed"):
+                            consensus_resolution = cr.final_output[:500]
+                            for u_key, u_val in unknown:
+                                inferred.append((u_key, f"[consensus] {consensus_resolution[:100]}"))
+                except Exception:
+                    pass
+
             ctx.ambiguity = {
                 "known": known,
                 "inferred": inferred,
@@ -306,6 +326,7 @@ class CognitivePipeline:
                 "unknown": unknown,
                 "implicit_refs": implicit_refs,
                 "has_blocking": has_blocking,
+                "consensus_resolution": consensus_resolution,
                 "known_count": len(known),
                 "assumed_count": len(assumed),
                 "unknown_count": len(unknown),

@@ -104,8 +104,57 @@ def build_domain_prefix(folder_path: str) -> str:
         return ""
 
 
-def _track_llm_call(prompt: str, response: str, provider: str):
-    """Track every LLM input/output via genesis key."""
+_usage_stats = {
+    "total_calls": 0,
+    "total_errors": 0,
+    "by_provider": {},
+    "total_latency_ms": 0,
+}
+_stats_lock = __import__("threading").Lock()
+
+
+def _track_llm_call(prompt: str, response: str, provider: str, latency_ms: float = 0, error: str = None):
+    """Track every LLM call — genesis key + in-memory stats + DB stats."""
+    # In-memory stats for BI dashboard
+    with _stats_lock:
+        _usage_stats["total_calls"] += 1
+        _usage_stats["total_latency_ms"] += latency_ms
+        if error:
+            _usage_stats["total_errors"] += 1
+        if provider not in _usage_stats["by_provider"]:
+            _usage_stats["by_provider"][provider] = {"calls": 0, "errors": 0, "latency_ms": 0}
+        _usage_stats["by_provider"][provider]["calls"] += 1
+        _usage_stats["by_provider"][provider]["latency_ms"] += latency_ms
+        if error:
+            _usage_stats["by_provider"][provider]["errors"] += 1
+
+    # DB stats (fire-and-forget)
+    try:
+        from database.session import SessionLocal
+        if SessionLocal:
+            db = SessionLocal()
+            try:
+                from sqlalchemy import text
+                db.execute(text(
+                    "INSERT INTO llm_usage_stats (provider, model, call_type, prompt_tokens, "
+                    "completion_tokens, latency_ms, success, error_message, caller, created_at, updated_at) "
+                    "VALUES (:prov, :model, 'generate', :pt, :ct, :lat, :suc, :err, :caller, :now, :now)"
+                ), {
+                    "prov": provider, "model": "", "pt": len(prompt.split()),
+                    "ct": len(response.split()) if isinstance(response, str) else 0,
+                    "lat": latency_ms, "suc": error is None,
+                    "err": error, "caller": "governance_wrapper",
+                    "now": __import__("datetime").datetime.utcnow(),
+                })
+                db.commit()
+            except Exception:
+                db.rollback()
+            finally:
+                db.close()
+    except Exception:
+        pass
+
+    # Genesis key
     try:
         from api._genesis_tracker import track
         track(
@@ -114,17 +163,41 @@ def _track_llm_call(prompt: str, response: str, provider: str):
             who="system",
             how=f"GovernanceAwareLLM → {provider}",
             input_data={"prompt": prompt},
-            output_data={"response": response},
+            output_data={"response": response, "latency_ms": latency_ms},
             tags=["llm_call", provider.lower()],
         )
     except Exception:
         pass
 
+    # Event bus notification
+    try:
+        from cognitive.event_bus import publish_async
+        publish_async("llm.called", {
+            "provider": provider, "latency_ms": latency_ms,
+            "success": error is None,
+        })
+    except Exception:
+        pass
+
+
+def get_llm_usage_stats() -> dict:
+    """Get aggregated LLM usage statistics for BI dashboard."""
+    with _stats_lock:
+        stats = dict(_usage_stats)
+        stats["by_provider"] = dict(stats["by_provider"])
+        if stats["total_calls"] > 0:
+            stats["avg_latency_ms"] = round(stats["total_latency_ms"] / stats["total_calls"], 1)
+            stats["error_rate"] = round(stats["total_errors"] / stats["total_calls"], 4)
+        else:
+            stats["avg_latency_ms"] = 0
+            stats["error_rate"] = 0
+    return stats
+
 
 class GovernanceAwareLLM(BaseLLMClient):
     """
     Wraps any LLM client to inject governance rules and persona
-    into every call automatically.
+    into every call automatically. Tracks usage stats for BI.
     """
 
     def __init__(self, inner: BaseLLMClient):
@@ -140,14 +213,27 @@ class GovernanceAwareLLM(BaseLLMClient):
         stream: bool = False,
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
+        import time as _time
         gov_prefix = build_governance_prefix()
         if gov_prefix:
             system_prompt = (system_prompt or "") + gov_prefix
-        result = self._inner.generate(
-            prompt=prompt, model_id=model_id, system_prompt=system_prompt,
-            temperature=temperature, max_tokens=max_tokens, stream=stream, **kwargs
-        )
-        _track_llm_call(prompt[:200], result if isinstance(result, str) else str(result)[:200], type(self._inner).__name__)
+
+        provider_name = type(self._inner).__name__
+        start = _time.time()
+        error_msg = None
+        try:
+            result = self._inner.generate(
+                prompt=prompt, model_id=model_id, system_prompt=system_prompt,
+                temperature=temperature, max_tokens=max_tokens, stream=stream, **kwargs
+            )
+        except Exception as e:
+            error_msg = str(e)
+            latency = (_time.time() - start) * 1000
+            _track_llm_call(prompt[:200], "", provider_name, latency, error_msg)
+            raise
+
+        latency = (_time.time() - start) * 1000
+        _track_llm_call(prompt[:200], result if isinstance(result, str) else str(result)[:200], provider_name, latency)
         return result
 
     def chat(
@@ -158,6 +244,7 @@ class GovernanceAwareLLM(BaseLLMClient):
         temperature: Optional[float] = None,
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
+        import time as _time
         gov_prefix = build_governance_prefix()
         prompt_preview = messages[-1].get("content", "")[:200] if messages else ""
         if gov_prefix:
@@ -169,11 +256,23 @@ class GovernanceAwareLLM(BaseLLMClient):
                 }
             else:
                 messages.insert(0, {"role": "system", "content": gov_prefix.strip()})
-        result = self._inner.chat(
-            messages=messages, model=model, stream=stream,
-            temperature=temperature, **kwargs
-        )
-        _track_llm_call(prompt_preview, result if isinstance(result, str) else str(result)[:200], type(self._inner).__name__)
+
+        provider_name = type(self._inner).__name__
+        start = _time.time()
+        error_msg = None
+        try:
+            result = self._inner.chat(
+                messages=messages, model=model, stream=stream,
+                temperature=temperature, **kwargs
+            )
+        except Exception as e:
+            error_msg = str(e)
+            latency = (_time.time() - start) * 1000
+            _track_llm_call(prompt_preview, "", provider_name, latency, error_msg)
+            raise
+
+        latency = (_time.time() - start) * 1000
+        _track_llm_call(prompt_preview, result if isinstance(result, str) else str(result)[:200], provider_name, latency)
         return result
 
     def is_running(self) -> bool:

@@ -340,3 +340,79 @@ class GovernanceDecision(BaseModel):
             "action_type": self.action_type,
             "target_resource": self.target_resource,
         }
+
+
+# ── Learning & Memory ORM Models (consolidation) ─────────────────────
+
+class LearningExample(BaseModel):
+    """Training data examples with trust scores."""
+    __tablename__ = "learning_examples"
+    __table_args__ = {"extend_existing": True}
+
+    example_type = Column(String(100), default="general", index=True)
+    input_context = Column(Text, nullable=True)
+    expected_output = Column(Text, nullable=True)
+    actual_output = Column(Text, nullable=True)
+    trust_score = Column(Float, default=0.5, index=True)
+    source = Column(String(255), default="system")
+    file_path = Column(String(512), nullable=True)
+    source_reliability = Column(Float, default=0.5)
+    content_quality = Column(Float, default=0.5)
+    consensus_score = Column(Float, default=0.5)
+    recency_score = Column(Float, default=1.0)
+
+
+class LearningPattern(BaseModel):
+    """Extracted knowledge patterns."""
+    __tablename__ = "learning_patterns"
+    __table_args__ = {"extend_existing": True}
+
+    pattern_name = Column(String(255), nullable=True)
+    pattern_type = Column(String(100), default="general", index=True)
+    pattern_data = Column(Text, nullable=True)
+    trust_score = Column(Float, default=0.5, index=True)
+    success_rate = Column(Float, default=0.5)
+    usage_count = Column(Integer, default=0)
+
+
+class Episode(BaseModel):
+    """Episodic memory — concrete past experiences."""
+    __tablename__ = "episodes"
+    __table_args__ = {"extend_existing": True}
+
+    problem = Column(Text, nullable=True)
+    action = Column(Text, nullable=True)
+    outcome = Column(Text, nullable=True)
+    trust_score = Column(Float, default=0.5, index=True)
+    source = Column(String(255), default="system")
+    context = Column(Text, nullable=True)
+
+
+class Procedure(BaseModel):
+    """Procedural memory — learned skills."""
+    __tablename__ = "procedures"
+    __table_args__ = {"extend_existing": True}
+
+    name = Column(String(255), nullable=True)
+    goal = Column(Text, nullable=True)
+    procedure_type = Column(String(100), default="general", index=True)
+    steps = Column(Text, nullable=True)
+    trust_score = Column(Float, default=0.5, index=True)
+    success_rate = Column(Float, default=0.5)
+    usage_count = Column(Integer, default=0)
+
+
+class LLMUsageStats(BaseModel):
+    """LLM usage tracking for BI dashboard (Improvement #7)."""
+    __tablename__ = "llm_usage_stats"
+    __table_args__ = {"extend_existing": True}
+
+    provider = Column(String(100), nullable=False, index=True)
+    model = Column(String(255), nullable=True)
+    call_type = Column(String(50), default="generate")
+    prompt_tokens = Column(Integer, default=0)
+    completion_tokens = Column(Integer, default=0)
+    latency_ms = Column(Float, default=0)
+    success = Column(Boolean, default=True)
+    error_message = Column(Text, nullable=True)
+    caller = Column(String(255), nullable=True)
