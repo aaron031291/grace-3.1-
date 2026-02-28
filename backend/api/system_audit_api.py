@@ -430,6 +430,37 @@ async def get_loop_detail(loop_name: str):
     return status[loop_name]
 
 
+# ── Composite Loops ───────────────────────────────────────────────────
+
+@router.get("/composites")
+async def list_composites():
+    """List all composite loop definitions."""
+    from cognitive.loop_orchestrator import get_loop_orchestrator
+    return {"composites": get_loop_orchestrator().get_available_composites()}
+
+
+@router.post("/composites/{composite_id}/run")
+async def run_composite(composite_id: str):
+    """Execute a composite loop (multiple loops cross-referencing)."""
+    from cognitive.loop_orchestrator import get_loop_orchestrator
+    orch = get_loop_orchestrator()
+    result = orch.execute_composite(composite_id)
+    return {
+        "composite_id": result.composite_id,
+        "verdict": result.verdict,
+        "loops_executed": result.loops_executed,
+        "loops_passed": result.loops_passed,
+        "loops_failed": result.loops_failed,
+        "total_duration_ms": result.total_duration_ms,
+        "cross_references": result.cross_references,
+        "results": [
+            {"loop": r.loop_id, "success": r.success, "duration_ms": r.duration_ms,
+             "output": r.output, "error": r.error}
+            for r in result.results
+        ],
+    }
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """

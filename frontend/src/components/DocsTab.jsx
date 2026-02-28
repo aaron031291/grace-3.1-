@@ -324,20 +324,22 @@ export default function DocsTab() {
 
         {/* Upload bar */}
         {showUpload && (
-          <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <input
-              placeholder="Folder (optional, e.g. reports/2024)"
-              value={uploadFolder}
-              onChange={e => setUploadFolder(e.target.value)}
-              style={{ padding: '5px 8px', border: `1px solid ${C.border}`, borderRadius: 4, background: C.bg, color: C.text, fontSize: 12, flex: '1 1 180px', outline: 'none' }}
-            />
-            <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} multiple />
-            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn, background: C.success, fontSize: 12, padding: '5px 12px' }}>
-              {uploading ? '⏳ Uploading...' : '📎 Choose Files (up to 5 GB)'}
-            </button>
-            <button onClick={() => setShowUpload(false)} style={{ ...btn, background: C.border, fontSize: 12, padding: '5px 8px' }}>✕</button>
-          </div>
-          {uploadProgress && <div style={{ padding: '4px 16px' }}><UploadProgress progress={uploadProgress} /></div>}
+          <>
+            <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                placeholder="Folder (optional, e.g. reports/2024)"
+                value={uploadFolder}
+                onChange={e => setUploadFolder(e.target.value)}
+                style={{ padding: '5px 8px', border: `1px solid ${C.border}`, borderRadius: 4, background: C.bg, color: C.text, fontSize: 12, flex: '1 1 180px', outline: 'none' }}
+              />
+              <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} multiple />
+              <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn, background: C.success, fontSize: 12, padding: '5px 12px' }}>
+                {uploading ? '⏳ Uploading...' : '📎 Choose Files (up to 5 GB)'}
+              </button>
+              <button onClick={() => setShowUpload(false)} style={{ ...btn, background: C.border, fontSize: 12, padding: '5px 8px' }}>✕</button>
+            </div>
+            {uploadProgress && <div style={{ padding: '4px 16px' }}><UploadProgress progress={uploadProgress} /></div>}
+          </>
         )}
 
         {/* View toggle + search + sort */}

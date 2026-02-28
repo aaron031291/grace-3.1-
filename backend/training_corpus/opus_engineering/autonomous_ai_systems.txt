@@ -1,0 +1,795 @@
+# Comprehensive Training Data: Building Autonomous AI Systems
+
+## Table of Contents
+1. [Self-Healing Architectures](#self-healing-architectures)
+2. [Trust Scoring Mechanisms](#trust-scoring-mechanisms)
+3. [Multi-Model Consensus Protocols](#multi-model-consensus-protocols)
+4. [Feedback Loop Design](#feedback-loop-design)
+5. [Knowledge Graph Construction and Maintenance](#knowledge-graph-construction-and-maintenance)
+6. [Retrieval-Augmented Generation (RAG) Advanced Patterns](#retrieval-augmented-generation-rag-advanced-patterns)
+7. [Prompt Engineering for Code Generation](#prompt-engineering-for-code-generation)
+8. [Code Verification Pipelines](#code-verification-pipelines)
+9. [Autonomous File Management and Organisation](#autonomous-file-management-and-organisation)
+10. [LLM Hallucination Detection and Mitigation](#llm-hallucination-detection-and-mitigation)
+11. [Circuit Breaker Patterns for AI Systems](#circuit-breaker-patterns-for-ai-systems)
+12. [Governance and Safety Rails for Autonomous Agents](#governance-and-safety-rails-for-autonomous-agents)
+
+---
+
+## 1. Self-Healing Architectures
+
+Self-healing architectures automatically detect, diagnose, fix, verify, and learn from system failures without human intervention.
+
+### Core Components Implementation
+
+```python
+import asyncio
+import logging
+import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Callable, Any, Tuple
+import json
+import pickle
+from pathlib import Path
+import threading
+from concurrent.futures import ThreadPoolExecutor
+import psutil
+import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+class HealthStatus(Enum):
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    CRITICAL = "critical"
+    FAILED = "failed"
+
+class IncidentSeverity(Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    CRITICAL = 4
+
+@dataclass
+class HealthMetric:
+    name: str
+    value: float
+    threshold_warning: float
+    threshold_critical: float
+    timestamp: datetime = field(default_factory=datetime.now)
+    
+    @property
+    def status(self) -> HealthStatus:
+        if self.value >= self.threshold_critical:
+            return HealthStatus.CRITICAL
+        elif self.value >= self.threshold_warning:
+            return HealthStatus.DEGRADED
+        return HealthStatus.HEALTHY
+
+@dataclass
+class Incident:
+    id: str
+    component: str
+    severity: IncidentSeverity
+    description: str
+    detected_at: datetime
+    resolved_at: Optional[datetime] = None
+    root_cause: Optional[str] = None
+    fix_applied: Optional[str] = None
+    verification_result: Optional[bool] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+class HealthMonitor(ABC):
+    @abstractmethod
+    async def collect_metrics(self) -> List[HealthMetric]:
+        pass
+    
+    @abstractmethod
+    def get_component_name(self) -> str:
+        pass
+
+class SystemResourceMonitor(HealthMonitor):
+    def __init__(self):
+        self.component_name = "system_resources"
+    
+    def get_component_name(self) -> str:
+        return self.component_name
+    
+    async def collect_metrics(self) -> List[HealthMetric]:
+        metrics = []
+        
+        # CPU usage
+        cpu_percent = psutil.cpu_percent(interval=1)
+        metrics.append(HealthMetric(
+            name="cpu_usage",
+            value=cpu_percent,
+            threshold_warning=70.0,
+            threshold_critical=90.0
+        ))
+        
+        # Memory usage
+        memory = psutil.virtual_memory()
+        metrics.append(HealthMetric(
+            name="memory_usage",
+            value=memory.percent,
+            threshold_warning=80.0,
+            threshold_critical=95.0
+        ))
+        
+        # Disk usage
+        disk = psutil.disk_usage('/')
+        disk_percent = (disk.used / disk.total) * 100
+        metrics.append(HealthMetric(
+            name="disk_usage",
+            value=disk_percent,
+            threshold_warning=85.0,
+            threshold_critical=95.0
+        ))
+        
+        return metrics
+
+class AIModelMonitor(HealthMonitor):
+    def __init__(self, model_endpoint: str):
+        self.model_endpoint = model_endpoint
+        self.component_name = f"ai_model_{model_endpoint}"
+        self.response_times = []
+        self.error_count = 0
+        self.total_requests = 0
+    
+    def get_component_name(self) -> str:
+        return self.component_name
+    
+    async def collect_metrics(self) -> List[HealthMetric]:
+        metrics = []
+        
+        # Response time metric
+        if self.response_times:
+            avg_response_time = np.mean(self.response_times[-100:])  # Last 100 requests
+            metrics.append(HealthMetric(
+                name="avg_response_time",
+                value=avg_response_time,
+                threshold_warning=2000.0,  # 2 seconds
+                threshold_critical=5000.0  # 5 seconds
+            ))
+        
+        # Error rate metric
+        if self.total_requests > 0:
+            error_rate = (self.error_count / self.total_requests) * 100
+            metrics.append(HealthMetric(
+                name="error_rate",
+                value=error_rate,
+                threshold_warning=5.0,  # 5%
+                threshold_critical=15.0  # 15%
+            ))
+        
+        return metrics
+    
+    def record_request(self, response_time: float, success: bool):
+        self.response_times.append(response_time)
+        self.total_requests += 1
+        if not success:
+            self.error_count += 1
+
+class AnomalyDetector:
+    def __init__(self, contamination: float = 0.1):
+        self.isolation_forest = IsolationForest(contamination=contamination, random_state=42)
+        self.scaler = StandardScaler()
+        self.is_trained = False
+        self.feature_history = []
+    
+    def train(self, historical_data: List[List[float]]):
+        """Train the anomaly detector with historical normal data"""
+        if len(historical_data) < 10:
+            return False
+        
+        scaled_data = self.scaler.fit_transform(historical_data)
+        self.isolation_forest.fit(scaled_data)
+        self.is_trained = True
+        return True
+    
+    def detect_anomaly(self, features: List[float]) -> Tuple[bool, float]:
+        """Detect if current features represent an anomaly"""
+        if not self.is_trained:
+            return False, 0.0
+        
+        scaled_features = self.scaler.transform([features])
+        anomaly_score = self.isolation_forest.decision_function(scaled_features)[0]
+        is_anomaly = self.isolation_forest.predict(scaled_features)[0] == -1
+        
+        return is_anomaly, anomaly_score
+
+class DiagnosticEngine:
+    def __init__(self):
+        self.diagnostic_rules = {}
+        self.setup_default_rules()
+    
+    def setup_default_rules(self):
+        """Setup default diagnostic rules"""
+        self.diagnostic_rules = {
+            "high_cpu_usage": {
+                "condition": lambda metrics: any(m.name == "cpu_usage" and m.value > 90 for m in metrics),
+                "diagnosis": "High CPU usage detected",
+                "potential_causes": ["Resource-intensive process", "Memory leak", "Infinite loop"],
+                "recommended_actions": ["restart_service", "kill_high_cpu_processes", "scale_resources"]
+            },
+            "high_memory_usage": {
+                "condition": lambda metrics: any(m.name == "memory_usage" and m.value > 95 for m in metrics),
+                "diagnosis": "High memory usage detected",
+                "potential_causes": ["Memory leak", "Large dataset processing", "Insufficient memory allocation"],
+                "recommended_actions": ["restart_service", "garbage_collect", "scale_memory"]
+            },
+            "high_error_rate": {
+                "condition": lambda metrics: any(m.name == "error_rate" and m.value > 15 for m in metrics),
+                "diagnosis": "High error rate in AI model",
+                "potential_causes": ["Model degradation", "Input data quality issues", "Service dependency failure"],
+                "recommended_actions": ["rollback_model", "validate_input_data", "check_dependencies"]
+            }
+        }
+    
+    def diagnose(self, metrics: List[HealthMetric], component: str) -> Dict[str, Any]:
+        """Diagnose issues based on metrics"""
+        diagnosis = {
+            "component": component,
+            "issues_found": [],
+            "recommended_actions": [],
+            "severity": IncidentSeverity.LOW
+        }
+        
+        max_severity = IncidentSeverity.LOW
+        
+        for rule_name, rule in self.diagnostic_rules.items():
+            if rule["condition"](metrics):
+                diagnosis["issues_found"].append({
+                    "rule": rule_name,
+                    "diagnosis": rule["diagnosis"],
+                    "potential_causes": rule["potential_causes"]
+                })
+                diagnosis["recommended_actions"].extend(rule["recommended_actions"])
+                
+                # Determine severity based on metric values
+                critical_metrics = [m for m in metrics if m.status == HealthStatus.CRITICAL]
+                if critical_metrics:
+                    max_severity = IncidentSeverity.CRITICAL
+                elif any(m.status == HealthStatus.DEGRADED for m in metrics):
+                    max_severity = max(max_severity, IncidentSeverity.MEDIUM)
+        
+        diagnosis["severity"] = max_severity
+        return diagnosis
+
+class AutoFixEngine:
+    def __init__(self):
+        self.fix_strategies = {}
+        self.setup_default_fixes()
+    
+    def setup_default_fixes(self):
+        """Setup default fix strategies"""
+        self.fix_strategies = {
+            "restart_service": self._restart_service,
+            "kill_high_cpu_processes": self._kill_high_cpu_processes,
+            "scale_resources": self._scale_resources,
+            "garbage_collect": self._garbage_collect,
+            "rollback_model": self._rollback_model,
+            "validate_input_data": self._validate_input_data,
+            "check_dependencies": self._check_dependencies
+        }
+    
+    async def apply_fix(self, action: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply a fix action"""
+        if action not in self.fix_strategies:
+            return {"success": False, "error": f"Unknown fix action: {action}"}
+        
+        try:
+            result = await self.fix_strategies[action](context)
+            return {"success": True, "result": result}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def _restart_service(self, context: Dict[str, Any]) -> str:
+        """Restart a service (mock implementation)"""
+        service_name = context.get("service_name", "unknown")
+        # In a real implementation, this would restart the actual service
+        await asyncio.sleep(1)  # Simulate restart time
+        return f"Service {service_name} restarted successfully"
+    
+    async def _kill_high_cpu_processes(self, context: Dict[str, Any]) -> str:
+        """Kill high CPU processes (mock implementation)"""
+        # In a real implementation, this would identify and kill high CPU processes
+        await asyncio.sleep(0.5)
+        return "High CPU processes terminated"
+    
+    async def _scale_resources(self, context: Dict[str, Any]) -> str:
+        """Scale resources (mock implementation)"""
+        # In a real implementation, this would scale cloud resources
+        await asyncio.sleep(2)
+        return "Resources scaled up successfully"
+    
+    async def _garbage_collect(self, context: Dict[str, Any]) -> str:
+        """Force garbage collection"""
+        import gc
+        gc.collect()
+        return "Garbage collection completed"
+    
+    async def _rollback_model(self, context: Dict[str, Any]) -> str:
+        """Rollback AI model to previous version"""
+        # In a real implementation, this would rollback the model
+        await asyncio.sleep(1)
+        return "Model rolled back to previous version"
+    
+    async def _validate_input_data(self, context: Dict[str, Any]) -> str:
+        """Validate input data quality"""
+        # In a real implementation, this would run data validation
+        await asyncio.sleep(0.5)
+        return "Input data validation completed"
+    
+    async def _check_dependencies(self, context: Dict[str, Any]) -> str:
+        """Check service dependencies"""
+        # In a real implementation, this would check external dependencies
+        await asyncio.sleep(1)
+        return "Dependencies checked and restored"
+
+class VerificationEngine:
+    def __init__(self):
+        self.verification_strategies = {}
+        self.setup_default_verifications()
+    
+    def setup_default_verifications(self):
+        """Setup default verification strategies"""
+        self.verification_strategies = {
+            "restart_service": self._verify_service_restart,
+            "kill_high_cpu_processes": self._verify_cpu_usage,
+            "scale_resources": self._verify_resource_scaling,
+            "garbage_collect": self._verify_memory_usage,
+            "rollback_model": self._verify_model_rollback,
+            "validate_input_data": self._verify_data_validation,
+            "check_dependencies": self._verify_dependencies
+        }
+    
+    async def verify_fix(self, action: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Verify that a fix was successful"""
+        if action not in self.verification_strategies:
+            return {"verified": False, "error": f"No verification strategy for action: {action}"}
+        
+        try:
+            result = await self.verification_strategies[action](context)
+            return {"verified": True, "result": result}
+        except Exception as e:
+            return {"verified": False, "error": str(e)}
+    
+    async def _verify_service_restart(self, context: Dict[str, Any]) -> str:
+        """Verify service restart"""
+        # In a real implementation, this would check service status
+        await asyncio.sleep(0.5)
+        return "Service is running and responding"
+    
+    async def _verify_cpu_usage(self, context: Dict[str, Any]) -> str:
+        """Verify CPU usage is normal"""
+        cpu_percent = psutil.cpu_percent(interval=1)
+        if cpu_percent < 70:
+            return f"CPU usage normalized to {cpu_percent}%"
+        else:
+            raise Exception(f"CPU usage still high: {cpu_percent}%")
+    
+    async def _verify_resource_scaling(self, context: Dict[str, Any]) -> str:
+        """Verify resource scaling"""
+        # In a real implementation, this would check resource allocation
+        await asyncio.sleep(1)
+        return "Resource scaling verified"
+    
+    async def _verify_memory_usage(self, context: Dict[str, Any]) -> str:
+        """Verify memory usage"""
+        memory = psutil.virtual_memory()
+        if memory.percent < 80:
+            return f"Memory usage normalized to {memory.percent}%"
+        else:
+            raise Exception(f"Memory usage still high: {memory.percent}%")
+    
+    async def _verify_model_rollback(self, context: Dict[str, Any]) -> str:
+        """Verify model rollback"""
+        # In a real implementation, this would test the rolled-back model
+        await asyncio.sleep(1)
+        return "Model rollback verified and functioning"
+    
+    async def _verify_data_validation(self, context: Dict[str, Any]) -> str:
+        """Verify data validation"""
+        # In a real implementation, this would check data quality metrics
+        await asyncio.sleep(0.5)
+        return "Data validation rules are working correctly"
+    
+    async def _verify_dependencies(self, context: Dict[str, Any]) -> str:
+        """Verify dependencies"""
+        # In a real implementation, this would test external dependencies
+        await asyncio.sleep(1)
+        return "All dependencies are healthy"
+
+class LearningEngine:
+    def __init__(self, knowledge_base_path: str = "self_healing_knowledge.json"):
+        self.knowledge_base_path = Path(knowledge_base_path)
+        self.knowledge_base = self._load_knowledge_base()
+        self.incident_history = []
+    
+    def _load_knowledge_base(self) -> Dict[str, Any]:
+        """Load existing knowledge base"""
+        if self.knowledge_base_path.exists():
+            with open(self.knowledge_base_path, 'r') as f:
+                return json.load(f)
+        return {
+            "successful_fixes": {},
+            "failed_fixes": {},
+            "patterns": {},
+            "effectiveness_scores": {}
+        }
+    
+    def _save_knowledge_base(self):
+        """Save knowledge base to disk"""
+        with open(self.knowledge_base_path, 'w') as f:
+            json.dump(self.knowledge_base, f, indent=2, default=str)
+    
+    def learn_from_incident(self, incident: Incident):
+        """Learn from an incident and its resolution"""
+        self.incident_history.append(incident)
+        
+        if incident.resolved_at and incident.fix_applied:
+            # Record successful fix
+            fix_key = f"{incident.component}_{incident.fix_applied}"
+            
+            if incident.verification_result:
+                # Successful fix
+                if fix_key not in self.knowledge_base["successful_fixes"]:
+                    self.knowledge_base["successful_fixes"][fix_key] = []
+                
+                self.knowledge_base["successful_fixes"][fix_key].append({
+                    "incident_id": incident.id,
+                    "severity": incident.severity.value,
+                    "description": incident.description,
+                    "resolution_time": (incident.resolved_at - incident.detected_at).total_seconds(),
+                    "timestamp": incident.resolved_at.isoformat()
+                })
+                
+                # Update effectiveness score
+                self._update_effectiveness_score(fix_key, True)
+            else:
+                # Failed fix
+                if fix_key not in self.knowledge_base["failed_fixes"]:
+                    self.knowledge_base["failed_fixes"][fix_key] = []
+                
+                self.knowledge_base["failed_fixes"][fix_key].append({
+                    "incident_id": incident.id,
+                    "severity": incident.severity.value,
+                    "description": incident.description,
+                    "timestamp": incident.detected_at.isoformat()
+                })
+                
+                self._update_effectiveness_score(fix_key, False)
+        
+        # Detect patterns
+        self._detect_patterns()
+        
+        # Save updated knowledge base
+        self._save_knowledge_base()
+    
+    def _update_effectiveness_score(self, fix_key: str, success: bool):
+        """Update effectiveness score for a fix"""
+        if fix_key not in self.knowledge_base["effectiveness_scores"]:
+            self.knowledge_base["effectiveness_scores"][fix_key] = {
+                "successes": 0,
+                "failures": 0,
+                "score": 0.0
+            }
+        
+        scores = self.knowledge_base["effectiveness_scores"][fix_key]
+        if success:
+            scores["successes"] += 1
+        else:
+            scores["failures"] += 1
+        
+        total = scores["successes"] + scores["failures"]
+        scores["score"] = scores["successes"] / total if total > 0 else 0.0
+    
+    def _detect_patterns(self):
+        """Detect patterns in incident history"""
+        if len(self.incident_history) < 5:
+            return
+        
+        # Pattern: Recurring incidents in the same component
+        component_incidents = {}
+        for incident in self.incident_history[-20:]:  # Last 20 incidents
+            if incident.component not in component_incidents:
+                component_incidents[incident.component] = []
+            component_incidents[incident.component].append(incident)
+        
+        for component, incidents in component_incidents.items():
+            if len(incidents) >= 3:
+                # Check if incidents are recurring (within 24 hours)
+                recent_incidents = [i for i in incidents 
+                                 if (datetime.now() - i.detected_at).total_seconds() < 86400]
+                
+                if len(recent_incidents) >= 2:
+                    pattern_key = f"recurring_{component}"
+                    self.knowledge_base["patterns"][pattern_key] = {
+                        "type": "recurring_incidents",
+                        "component": component,
+                        "frequency": len(recent_incidents),
+                        "last_occurrence": max(i.detected_at for i in recent_incidents).isoformat(),
+                        "recommendation": "Consider proactive monitoring or architectural changes"
+                    }
+    
+    def get_recommended_fix(self, component: str, issue_type: str) -> Optional[str]:
+        """Get recommended fix based on historical data"""
+        # Find the most effective fix for similar issues
+        best_fix = None
+        best_score = 0.0
+        
+        for fix_key, score_data in self.knowledge_base["effectiveness_scores"].items():
+            if component in fix_key and score_data["score"] > best_score:
+                best_fix = fix_key.split('_', 1)[1]  # Remove component prefix
+                best_score = score_data["score"]
+        
+        return best_fix if best_score > 0.5 else None
+
+class SelfHealingSystem:
+    def __init__(self):
+        self.monitors: List[HealthMonitor] = []
+        self.anomaly_detector = AnomalyDetector()
+        self.diagnostic_engine = DiagnosticEngine()
+        self.autofix_engine = AutoFixEngine()
+        self.verification_engine = VerificationEngine()
+        self.learning_engine = LearningEngine()
+        
+        self.active_incidents: Dict[str, Incident] = {}
+        self.monitoring_interval = 30  # seconds
+        self.is_running = False
+        self.logger = logging.getLogger(__name__)
+        
+        # Setup logging
+        logging.basicConfig(level=logging.INFO)
+    
+    def add_monitor(self, monitor: HealthMonitor):
+        """Add a health monitor"""
+        self.monitors.append(monitor)
+    
+    async def start(self):
+        """Start the self-healing system"""
+        self.is_running = True
+        self.logger.info("Self-healing system started")
+        
+        # Start monitoring loop
+        monitoring_task = asyncio.create_task(self._monitoring_loop())
+        
+        # Train anomaly detector with historical data if available
+        await self._train_anomaly_detector()
+        
+        await monitoring_task
+    
+    def stop(self):
+        """Stop the self-healing system"""
+        self.is_running = False
+        self.logger.info("Self-healing system stopped")
+    
+    async def _monitoring_loop(self):
+        """Main monitoring loop"""
+        while self.is_running:
+            try:
+                await self._monitor_and_heal()
+                await asyncio.sleep(self.monitoring_interval)
+            except Exception as e:
+                self.logger.error(f"Error in monitoring loop: {e}")
+                await asyncio.sleep(5)  # Short delay before retrying
+    
+    async def _monitor_and_heal(self):
+        """Monitor system health and trigger healing if needed"""
+        for monitor in self.monitors:
+            try:
+                # Collect metrics
+                metrics = await monitor.collect_metrics()
+                component = monitor.get_component_name()
+                
+                # Check for anomalies
+                feature_vector = [m.value for m in metrics]
+                is_anomaly, anomaly_score = self.anomaly_detector.detect_anomaly(feature_vector)
+                
+                # Check for critical metrics or anomalies
+                critical_metrics = [m for m in metrics if m.status == HealthStatus.CRITICAL]
+                degraded_metrics = [m for m in metrics if m.status == HealthStatus.DEGRADED]
+                
+                if critical_metrics or (is_anomaly and anomaly_score < -0.5):
+                    # Create or update incident
+                    incident_id = f"{component}_{int(time.time())}"
+                    
+                    if incident_id not in self.active_incidents:
+                        # Diagnose the issue
+                        diagnosis = self.diagnostic_engine.diagnose(metrics, component)
+                        
+                        # Create incident
+                        incident = Incident(
+                            id=incident_id,
+                            component=component,
+                            severity=diagnosis["severity"],
+                            description=f"Health issues detected: {diagnosis['issues_found']}",
+                            detected_at=datetime.now(),
+                            metadata={
+                                "metrics": [{"name": m.name, "value": m.value, "status": m.status.value} 
+                                          for m in metrics],
+                                "anomaly_detected": is_anomaly,
+                                "anomaly_score": anomaly_score,
+                                "diagnosis": diagnosis
+                            }
+                        )
+                        
+                        self.active_incidents[incident_id] = incident
+                        self.logger.warning(f"Incident detected: {incident_id}")
+                        
+                        # Attempt to heal
+                        await self._heal_incident(incident)
+                
+                elif degraded_metrics:
+                    self.logger.warning(f"Degraded performance detected in {component}: {degraded_metrics}")
+                
+            except Exception as e:
+                self.logger.error(f"Error monitoring {monitor.get_component_name()}: {e}")
+    
+    async def _heal_incident(self, incident: Incident):
+        """Attempt to heal an incident"""
+        try:
+            diagnosis = incident.metadata.get("diagnosis", {})
+            recommended_actions = diagnosis.get("recommended_actions", [])
+            
+            # Get learning-based recommendation
+            learned_fix = self.learning_engine.get_recommended_fix(
+                incident.component, 
+                incident.description
+            )
+            
+            if learned_fix and learned_fix not in recommended_actions:
+                recommended_actions.insert(0, learned_fix)  # Prioritize learned fix
+            
+            # Try each recommended action
+            for action in recommended_actions:
+                self.logger.info(f"Attempting fix: {action} for incident {incident.id}")
+                
+                # Apply fix
+                fix_result = await self.autofix_engine.apply_fix(action, {
+                    "incident": incident,
+                    "component": incident.component,
+                    "service_name": incident.component
+                })
+                
+                if fix_result["success"]:
+                    incident.fix_applied = action
+                    self.logger.info(f"Fix applied successfully: {action}")
+                    
+                    # Wait a bit for the fix to take effect
+                    await asyncio.sleep(10)
+                    
+                    # Verify the fix
+                    verification_result = await self.verification_engine.verify_fix(action, {
+                        "incident": incident,
+                        "component": incident.component
+                    })
+                    
+                    incident.verification_result = verification_result["verified"]
+                    
+                    if verification_result["verified"]:
+                        # Fix successful
+                        incident.resolved_at = datetime.now()
+                        self.logger.info(f"Incident {incident.id} resolved successfully")
+                        
+                        # Learn from successful resolution
+                        self.learning_engine.learn_from_incident(incident)
+                        
+                        # Remove from active incidents
+                        if incident.id in self.active_incidents:
+                            del self.active_incidents[incident.id]
+                        
+                        break
+                    else:
+                        self.logger.warning(f"Fix verification failed for {action}")
+                else:
+                    self.logger.error(f"Fix failed: {fix_result.get('error', 'Unknown error')}")
+            
+            # If no fix worked, escalate
+            if not incident.resolved_at:
+                await self._escalate_incident(incident)
+                
+        except Exception as e:
+            self.logger.error(f"Error healing incident {incident.id}: {e}")
+            await self._escalate_incident(incident)
+    
+    async def _escalate_incident(self, incident: Incident):
+        """Escalate incident to human operators"""
+        self.logger.critical(f"Escalating incident {incident.id} - automatic healing failed")
+        
+        # In a real implementation, this would:
+        # - Send alerts to operations team
+        # - Create tickets in incident management system
+        # - Trigger emergency procedures
+        
+        # Learn from failed resolution
+        self.learning_engine.learn_from_incident(incident)
+    
+    async def _train_anomaly_detector(self):
+        """Train anomaly detector with historical normal data"""
+        # In a real implementation, this would load historical metrics
+        # For demo purposes, we'll generate some sample data
+        
+        historical_data = []
+        for _ in range(100):
+            # Generate normal system metrics
+            cpu = np.random.normal(30, 10)  # Normal CPU around 30%
+            memory = np.random.normal(50, 15)  # Normal memory around 50%
+            disk = np.random.normal(40, 10)  # Normal disk around 40%
+            response_time = np.random.normal(500, 100)  # Normal response time around 500ms
+            error_rate = np.random.normal(1, 0.5)  # Normal error rate around 1%
+            
+            historical_data.append([cpu, memory, disk, response_time, error_rate])
+        
+        success = self.anomaly_detector.train(historical_data)
+        if success:
+            self.logger.info("Anomaly detector trained successfully")
+        else:
+            self.logger.warning("Failed to train anomaly detector - insufficient data")
+
+# Example usage and testing
+async def main():
+    # Create self-healing system
+    healing_system = SelfHealingSystem()
+    
+    # Add monitors
+    system_monitor = SystemResourceMonitor()
+    ai_model_monitor = AIModelMonitor("model_endpoint_1")
+    
+    healing_system.add_monitor(system_monitor)
+    healing_system.add_monitor(ai_model_monitor)
+    
+    # Simulate some AI model requests
+    for i in range(10):
+        # Simulate normal requests
+        response_time = np.random.normal(800, 200)
+        success = np.random.random() > 0.02  # 2% error rate
+        ai_model_monitor.record_request(response_time, success)
+    
+    # Start the system (this would run indefinitely in production)
+    print("Starting self-healing system...")
+    
+    # For demo purposes, run for a short time
+    start_task = asyncio.create_task(healing_system.start())
+    
+    # Let it run for 60 seconds
+    await asyncio.sleep(60)
+    
+    healing_system.stop()
+    print("Self-healing system demonstration completed")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Advanced Self-Healing Features
+
+```python
+# Advanced self-healing features: Predictive healing and adaptive thresholds
+
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from typing import List, Tuple, Dict
+import warnings
+warnings.filterwarnings('ignore')
+
+class PredictiveHealingEngine:
+    """Predicts potential failures before they occur"""
+    
+    def __init__(self, prediction_horizon: int = 300):  # 5 minutes ahead
+        self.prediction_horizon = prediction_horizon
+        self.models = {}
+        self.feature_history = {}
+        self.min_history_size = 50
+    
+    def add_metric_history(self, metric_name: str, timestamp: float, value: float):
+        """Add metric data point to history"""
+        if metric_name not in self.feature_history:
+            self.feature_history[metric_name] = []
+        
+        self.feature_history[metric_name

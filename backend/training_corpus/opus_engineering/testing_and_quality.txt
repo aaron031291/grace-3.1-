@@ -1,0 +1,886 @@
+# Comprehensive Python Testing Training Data
+
+## 1. Pytest Advanced Patterns
+
+### Custom Markers and Configuration
+
+```python
+# pytest.ini
+[tool:pytest]
+markers =
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    integration: marks tests as integration tests
+    unit: marks tests as unit tests
+    smoke: marks tests as smoke tests
+    critical: marks tests as critical functionality
+
+# conftest.py
+import pytest
+from typing import Generator, Any
+import asyncio
+import logging
+
+# Custom marker implementation
+def pytest_configure(config):
+    """Configure custom markers and logging."""
+    config.addinivalue_line(
+        "markers", "database: mark test as requiring database"
+    )
+    
+    # Configure logging for tests
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+
+def pytest_collection_modifyitems(config, items):
+    """Modify test collection to add markers automatically."""
+    for item in items:
+        # Auto-mark slow tests
+        if "slow" in item.nodeid:
+            item.add_marker(pytest.mark.slow)
+        
+        # Auto-mark integration tests
+        if "integration" in item.nodeid:
+            item.add_marker(pytest.mark.integration)
+
+# Advanced fixture with cleanup
+@pytest.fixture(scope="session")
+def database_session() -> Generator[Any, None, None]:
+    """Session-scoped database fixture with proper cleanup."""
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    
+    engine = create_engine("sqlite:///:memory:")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    
+    try:
+        yield session
+    finally:
+        session.close()
+        engine.dispose()
+
+# Parametrized fixture
+@pytest.fixture(params=["sqlite", "postgresql", "mysql"])
+def database_type(request):
+    """Parametrized database type fixture."""
+    return request.param
+
+# Async fixture
+@pytest.fixture
+async def async_client():
+    """Async HTTP client fixture."""
+    import aiohttp
+    async with aiohttp.ClientSession() as session:
+        yield session
+```
+
+### Advanced Test Classes and Parametrization
+
+```python
+# test_advanced_patterns.py
+import pytest
+from typing import List, Dict, Any
+from dataclasses import dataclass
+from enum import Enum
+
+class TestPriority(Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    CRITICAL = 4
+
+@dataclass
+class TestCase:
+    name: str
+    input_data: Any
+    expected: Any
+    priority: TestPriority = TestPriority.MEDIUM
+
+class TestAdvancedPatterns:
+    """Advanced pytest patterns demonstration."""
+    
+    # Class-level fixtures
+    @pytest.fixture(autouse=True)
+    def setup_class_data(self):
+        """Auto-use fixture for class setup."""
+        self.test_data = {
+            "users": [
+                {"id": 1, "name": "Alice", "role": "admin"},
+                {"id": 2, "name": "Bob", "role": "user"},
+            ]
+        }
+    
+    @pytest.mark.parametrize("test_case", [
+        TestCase("valid_user", {"name": "Alice"}, True, TestPriority.HIGH),
+        TestCase("invalid_user", {"name": "Charlie"}, False, TestPriority.MEDIUM),
+        TestCase("empty_name", {"name": ""}, False, TestPriority.LOW),
+    ], ids=lambda tc: tc.name)
+    def test_user_validation(self, test_case: TestCase):
+        """Test with custom test case objects."""
+        def validate_user(user_data):
+            return bool(user_data.get("name", "").strip())
+        
+        result = validate_user(test_case.input_data)
+        assert result == test_case.expected
+    
+    @pytest.mark.parametrize("user_id,expected_role", [
+        (1, "admin"),
+        (2, "user"),
+        pytest.param(3, "guest", marks=pytest.mark.xfail(reason="User 3 doesn't exist")),
+    ])
+    def test_user_roles(self, user_id: int, expected_role: str):
+        """Test with expected failures."""
+        user = next((u for u in self.test_data["users"] if u["id"] == user_id), None)
+        if user is None:
+            pytest.fail(f"User {user_id} not found")
+        assert user["role"] == expected_role
+
+# Custom pytest plugin
+class TestResultCollector:
+    """Custom test result collector."""
+    
+    def __init__(self):
+        self.results = []
+    
+    def pytest_runtest_logreport(self, report):
+        """Collect test results."""
+        if report.when == "call":
+            self.results.append({
+                "nodeid": report.nodeid,
+                "outcome": report.outcome,
+                "duration": report.duration
+            })
+
+# Conditional skipping
+@pytest.mark.skipif(
+    not pytest.importorskip("requests"),
+    reason="requests library not available"
+)
+def test_http_request():
+    """Test that requires external dependency."""
+    import requests
+    response = requests.get("https://httpbin.org/json")
+    assert response.status_code == 200
+```
+
+## 2. Property-Based Testing with Hypothesis
+
+### Basic Hypothesis Strategies
+
+```python
+# test_hypothesis_basic.py
+from hypothesis import given, strategies as st, assume, example
+from hypothesis.stateful import RuleBasedStateMachine, rule, invariant
+import pytest
+from typing import List, Dict, Any
+
+class Calculator:
+    """Simple calculator for testing."""
+    
+    def add(self, a: float, b: float) -> float:
+        return a + b
+    
+    def divide(self, a: float, b: float) -> float:
+        if b == 0:
+            raise ValueError("Division by zero")
+        return a / b
+    
+    def factorial(self, n: int) -> int:
+        if n < 0:
+            raise ValueError("Factorial of negative number")
+        if n == 0 or n == 1:
+            return 1
+        return n * self.factorial(n - 1)
+
+class TestCalculatorProperties:
+    """Property-based tests for calculator."""
+    
+    def setup_method(self):
+        self.calc = Calculator()
+    
+    @given(st.floats(allow_nan=False, allow_infinity=False))
+    def test_add_identity(self, x: float):
+        """Adding zero should return the original number."""
+        result = self.calc.add(x, 0)
+        assert result == x
+    
+    @given(
+        st.floats(allow_nan=False, allow_infinity=False),
+        st.floats(allow_nan=False, allow_infinity=False)
+    )
+    def test_add_commutative(self, a: float, b: float):
+        """Addition should be commutative."""
+        assert self.calc.add(a, b) == self.calc.add(b, a)
+    
+    @given(
+        st.floats(allow_nan=False, allow_infinity=False, min_value=-1e10, max_value=1e10),
+        st.floats(allow_nan=False, allow_infinity=False, min_value=-1e10, max_value=1e10),
+        st.floats(allow_nan=False, allow_infinity=False, min_value=-1e10, max_value=1e10)
+    )
+    def test_add_associative(self, a: float, b: float, c: float):
+        """Addition should be associative."""
+        left = self.calc.add(self.calc.add(a, b), c)
+        right = self.calc.add(a, self.calc.add(b, c))
+        assert abs(left - right) < 1e-10  # Account for floating point precision
+    
+    @given(
+        st.floats(allow_nan=False, allow_infinity=False),
+        st.floats(allow_nan=False, allow_infinity=False).filter(lambda x: x != 0)
+    )
+    def test_divide_multiply_inverse(self, a: float, b: float):
+        """Division and multiplication should be inverse operations."""
+        result = self.calc.add(self.calc.divide(a, b) * b, 0)  # Using add to avoid direct multiplication
+        assert abs(result - a) < 1e-10
+    
+    @given(st.integers(min_value=0, max_value=10))
+    @example(0)  # Explicit example
+    @example(1)
+    def test_factorial_properties(self, n: int):
+        """Test factorial properties."""
+        result = self.calc.factorial(n)
+        
+        # Factorial should always be positive
+        assert result > 0
+        
+        # Factorial should be increasing (for n > 0)
+        if n > 0:
+            prev_result = self.calc.factorial(n - 1)
+            assert result >= prev_result
+```
+
+### Advanced Hypothesis Strategies
+
+```python
+# test_hypothesis_advanced.py
+from hypothesis import given, strategies as st, assume, settings, Verbosity
+from hypothesis.extra.numpy import arrays
+import numpy as np
+from typing import List, Dict, Optional
+from dataclasses import dataclass
+import json
+
+@dataclass
+class User:
+    id: int
+    name: str
+    email: str
+    age: Optional[int] = None
+    is_active: bool = True
+
+class UserRepository:
+    """User repository for testing."""
+    
+    def __init__(self):
+        self.users: Dict[int, User] = {}
+        self.next_id = 1
+    
+    def create_user(self, user: User) -> User:
+        if user.id in self.users:
+            raise ValueError(f"User with id {user.id} already exists")
+        
+        if user.id <= 0:
+            user.id = self.next_id
+            self.next_id += 1
+        
+        self.users[user.id] = user
+        return user
+    
+    def get_user(self, user_id: int) -> Optional[User]:
+        return self.users.get(user_id)
+    
+    def update_user(self, user: User) -> User:
+        if user.id not in self.users:
+            raise ValueError(f"User with id {user.id} not found")
+        self.users[user.id] = user
+        return user
+    
+    def delete_user(self, user_id: int) -> bool:
+        if user_id in self.users:
+            del self.users[user_id]
+            return True
+        return False
+    
+    def list_active_users(self) -> List[User]:
+        return [user for user in self.users.values() if user.is_active]
+
+# Custom strategies
+@st.composite
+def user_strategy(draw):
+    """Composite strategy for generating User objects."""
+    return User(
+        id=draw(st.integers(min_value=1, max_value=10000)),
+        name=draw(st.text(min_size=1, max_size=50, alphabet=st.characters(whitelist_categories=('Lu', 'Ll', 'Nd', 'Zs')))),
+        email=draw(st.emails()),
+        age=draw(st.one_of(st.none(), st.integers(min_value=13, max_value=120))),
+        is_active=draw(st.booleans())
+    )
+
+@st.composite
+def valid_json_strategy(draw):
+    """Strategy for generating valid JSON data."""
+    return draw(st.recursive(
+        st.one_of(
+            st.none(),
+            st.booleans(),
+            st.integers(),
+            st.floats(allow_nan=False, allow_infinity=False),
+            st.text()
+        ),
+        lambda children: st.one_of(
+            st.lists(children, max_size=10),
+            st.dictionaries(st.text(), children, max_size=10)
+        ),
+        max_leaves=50
+    ))
+
+class TestUserRepositoryProperties:
+    """Property-based tests for UserRepository."""
+    
+    def setup_method(self):
+        self.repo = UserRepository()
+    
+    @given(user_strategy())
+    def test_create_user_properties(self, user: User):
+        """Test user creation properties."""
+        created_user = self.repo.create_user(user)
+        
+        # User should be retrievable
+        retrieved_user = self.repo.get_user(created_user.id)
+        assert retrieved_user == created_user
+        
+        # User should be in active users if active
+        active_users = self.repo.list_active_users()
+        if created_user.is_active:
+            assert created_user in active_users
+        else:
+            assert created_user not in active_users
+    
+    @given(st.lists(user_strategy(), min_size=1, max_size=20, unique_by=lambda u: u.id))
+    def test_multiple_users_properties(self, users: List[User]):
+        """Test properties with multiple users."""
+        created_users = []
+        
+        for user in users:
+            created_user = self.repo.create_user(user)
+            created_users.append(created_user)
+        
+        # All users should be retrievable
+        for user in created_users:
+            assert self.repo.get_user(user.id) == user
+        
+        # Active users count should match
+        active_users = self.repo.list_active_users()
+        expected_active_count = sum(1 for u in created_users if u.is_active)
+        assert len(active_users) == expected_active_count
+    
+    @given(user_strategy(), st.text(min_size=1, max_size=50))
+    def test_update_user_properties(self, user: User, new_name: str):
+        """Test user update properties."""
+        # Create user first
+        created_user = self.repo.create_user(user)
+        
+        # Update user
+        created_user.name = new_name
+        updated_user = self.repo.update_user(created_user)
+        
+        # Updated user should have new name
+        assert updated_user.name == new_name
+        
+        # Retrieved user should have new name
+        retrieved_user = self.repo.get_user(created_user.id)
+        assert retrieved_user.name == new_name
+    
+    @given(st.lists(user_strategy(), min_size=1, max_size=10, unique_by=lambda u: u.id))
+    @settings(max_examples=50, verbosity=Verbosity.verbose)
+    def test_delete_user_properties(self, users: List[User]):
+        """Test user deletion properties."""
+        # Create all users
+        for user in users:
+            self.repo.create_user(user)
+        
+        # Delete half the users
+        users_to_delete = users[:len(users)//2]
+        remaining_users = users[len(users)//2:]
+        
+        for user in users_to_delete:
+            assert self.repo.delete_user(user.id) is True
+            assert self.repo.get_user(user.id) is None
+        
+        # Remaining users should still exist
+        for user in remaining_users:
+            assert self.repo.get_user(user.id) is not None
+```
+
+### Stateful Testing with Hypothesis
+
+```python
+# test_hypothesis_stateful.py
+from hypothesis.stateful import RuleBasedStateMachine, rule, invariant, initialize
+from hypothesis import strategies as st
+import pytest
+
+class BankAccount:
+    """Bank account for stateful testing."""
+    
+    def __init__(self, initial_balance: float = 0.0):
+        self.balance = initial_balance
+        self.transaction_history = []
+    
+    def deposit(self, amount: float) -> None:
+        if amount <= 0:
+            raise ValueError("Deposit amount must be positive")
+        self.balance += amount
+        self.transaction_history.append(f"DEPOSIT: {amount}")
+    
+    def withdraw(self, amount: float) -> None:
+        if amount <= 0:
+            raise ValueError("Withdrawal amount must be positive")
+        if amount > self.balance:
+            raise ValueError("Insufficient funds")
+        self.balance -= amount
+        self.transaction_history.append(f"WITHDRAW: {amount}")
+    
+    def get_balance(self) -> float:
+        return self.balance
+    
+    def get_transaction_count(self) -> int:
+        return len(self.transaction_history)
+
+class BankAccountStateMachine(RuleBasedStateMachine):
+    """Stateful testing for BankAccount."""
+    
+    def __init__(self):
+        super().__init__()
+        self.account = None
+    
+    @initialize()
+    def setup_account(self):
+        """Initialize the bank account."""
+        initial_balance = 1000.0
+        self.account = BankAccount(initial_balance)
+        self.expected_balance = initial_balance
+        self.transaction_count = 0
+    
+    @rule(amount=st.floats(min_value=0.01, max_value=1000.0))
+    def deposit(self, amount: float):
+        """Rule for depositing money."""
+        self.account.deposit(amount)
+        self.expected_balance += amount
+        self.transaction_count += 1
+    
+    @rule(amount=st.floats(min_value=0.01, max_value=500.0))
+    def withdraw(self, amount: float):
+        """Rule for withdrawing money."""
+        if amount <= self.account.get_balance():
+            self.account.withdraw(amount)
+            self.expected_balance -= amount
+            self.transaction_count += 1
+    
+    @invariant()
+    def balance_is_consistent(self):
+        """Invariant: balance should match expected balance."""
+        assert abs(self.account.get_balance() - self.expected_balance) < 0.01
+    
+    @invariant()
+    def balance_is_non_negative(self):
+        """Invariant: balance should never be negative."""
+        assert self.account.get_balance() >= 0
+    
+    @invariant()
+    def transaction_count_is_consistent(self):
+        """Invariant: transaction count should match history."""
+        assert self.account.get_transaction_count() == self.transaction_count
+
+# Run the stateful test
+TestBankAccount = BankAccountStateMachine.TestCase
+```
+
+## 3. Mutation Testing
+
+### Mutation Testing Setup and Implementation
+
+```python
+# mutation_testing_example.py
+"""
+Example code for mutation testing.
+Run with: mutmut run --paths-to-mutate=mutation_testing_example.py
+"""
+
+class StringProcessor:
+    """String processing utilities for mutation testing."""
+    
+    @staticmethod
+    def is_palindrome(s: str) -> bool:
+        """Check if string is a palindrome."""
+        if not s:
+            return True
+        
+        cleaned = ''.join(c.lower() for c in s if c.isalnum())
+        return cleaned == cleaned[::-1]
+    
+    @staticmethod
+    def count_vowels(s: str) -> int:
+        """Count vowels in string."""
+        if not s:
+            return 0
+        
+        vowels = 'aeiouAEIOU'
+        count = 0
+        for char in s:
+            if char in vowels:
+                count += 1
+        return count
+    
+    @staticmethod
+    def reverse_words(s: str) -> str:
+        """Reverse words in string."""
+        if not s:
+            return s
+        
+        words = s.split()
+        return ' '.join(reversed(words))
+    
+    @staticmethod
+    def capitalize_words(s: str) -> str:
+        """Capitalize first letter of each word."""
+        if not s:
+            return s
+        
+        result = []
+        words = s.split()
+        for word in words:
+            if word:
+                result.append(word[0].upper() + word[1:].lower())
+        return ' '.join(result)
+
+class MathOperations:
+    """Math operations for mutation testing."""
+    
+    @staticmethod
+    def factorial(n: int) -> int:
+        """Calculate factorial."""
+        if n < 0:
+            raise ValueError("Factorial not defined for negative numbers")
+        if n == 0 or n == 1:
+            return 1
+        
+        result = 1
+        for i in range(2, n + 1):
+            result *= i
+        return result
+    
+    @staticmethod
+    def fibonacci(n: int) -> int:
+        """Calculate nth Fibonacci number."""
+        if n < 0:
+            raise ValueError("Fibonacci not defined for negative numbers")
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, a + b
+        return b
+    
+    @staticmethod
+    def is_prime(n: int) -> bool:
+        """Check if number is prime."""
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        
+        for i in range(3, int(n ** 0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+    
+    @staticmethod
+    def gcd(a: int, b: int) -> int:
+        """Calculate greatest common divisor."""
+        a, b = abs(a), abs(b)
+        while b:
+            a, b = b, a % b
+        return a
+
+# test_mutation_testing.py
+import pytest
+from mutation_testing_example import StringProcessor, MathOperations
+
+class TestStringProcessor:
+    """Comprehensive tests for StringProcessor to catch mutations."""
+    
+    def test_is_palindrome_empty(self):
+        assert StringProcessor.is_palindrome("") is True
+    
+    def test_is_palindrome_single_char(self):
+        assert StringProcessor.is_palindrome("a") is True
+    
+    def test_is_palindrome_valid(self):
+        assert StringProcessor.is_palindrome("racecar") is True
+        assert StringProcessor.is_palindrome("A man a plan a canal Panama") is True
+        assert StringProcessor.is_palindrome("race a car") is False
+    
+    def test_is_palindrome_case_insensitive(self):
+        assert StringProcessor.is_palindrome("Aa") is True
+        assert StringProcessor.is_palindrome("AbA") is True
+    
+    def test_is_palindrome_with_punctuation(self):
+        assert StringProcessor.is_palindrome("A man, a plan, a canal: Panama") is True
+    
+    def test_count_vowels_empty(self):
+        assert StringProcessor.count_vowels("") == 0
+    
+    def test_count_vowels_no_vowels(self):
+        assert StringProcessor.count_vowels("bcdfg") == 0
+    
+    def test_count_vowels_all_vowels(self):
+        assert StringProcessor.count_vowels("aeiou") == 5
+        assert StringProcessor.count_vowels("AEIOU") == 5
+    
+    def test_count_vowels_mixed(self):
+        assert StringProcessor.count_vowels("hello world") == 3
+        assert StringProcessor.count_vowels("Programming") == 3
+    
+    def test_reverse_words_empty(self):
+        assert StringProcessor.reverse_words("") == ""
+    
+    def test_reverse_words_single_word(self):
+        assert StringProcessor.reverse_words("hello") == "hello"
+    
+    def test_reverse_words_multiple(self):
+        assert StringProcessor.reverse_words("hello world") == "world hello"
+        assert StringProcessor.reverse_words("the quick brown fox") == "fox brown quick the"
+    
+    def test_capitalize_words_empty(self):
+        assert StringProcessor.capitalize_words("") == ""
+    
+    def test_capitalize_words_single(self):
+        assert StringProcessor.capitalize_words("hello") == "Hello"
+    
+    def test_capitalize_words_multiple(self):
+        assert StringProcessor.capitalize_words("hello world") == "Hello World"
+        assert StringProcessor.capitalize_words("HELLO WORLD") == "Hello World"
+
+class TestMathOperations:
+    """Comprehensive tests for MathOperations to catch mutations."""
+    
+    def test_factorial_edge_cases(self):
+        assert MathOperations.factorial(0) == 1
+        assert MathOperations.factorial(1) == 1
+        
+        with pytest.raises(ValueError):
+            MathOperations.factorial(-1)
+    
+    def test_factorial_positive(self):
+        assert MathOperations.factorial(2) == 2
+        assert MathOperations.factorial(3) == 6
+        assert MathOperations.factorial(4) == 24
+        assert MathOperations.factorial(5) == 120
+    
+    def test_fibonacci_edge_cases(self):
+        assert MathOperations.fibonacci(0) == 0
+        assert MathOperations.fibonacci(1) == 1
+        
+        with pytest.raises(ValueError):
+            MathOperations.fibonacci(-1)
+    
+    def test_fibonacci_sequence(self):
+        expected = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+        for i, expected_val in enumerate(expected):
+            assert MathOperations.fibonacci(i) == expected_val
+    
+    def test_is_prime_edge_cases(self):
+        assert MathOperations.is_prime(0) is False
+        assert MathOperations.is_prime(1) is False
+        assert MathOperations.is_prime(2) is True
+    
+    def test_is_prime_small_primes(self):
+        primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+        for prime in primes:
+            assert MathOperations.is_prime(prime) is True
+    
+    def test_is_prime_composites(self):
+        composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18]
+        for composite in composites:
+            assert MathOperations.is_prime(composite) is False
+    
+    def test_gcd_edge_cases(self):
+        assert MathOperations.gcd(0, 5) == 5
+        assert MathOperations.gcd(5, 0) == 5
+        assert MathOperations.gcd(0, 0) == 0
+    
+    def test_gcd_positive(self):
+        assert MathOperations.gcd(12, 8) == 4
+        assert MathOperations.gcd(17, 13) == 1
+        assert MathOperations.gcd(48, 18) == 6
+    
+    def test_gcd_negative(self):
+        assert MathOperations.gcd(-12, 8) == 4
+        assert MathOperations.gcd(12, -8) == 4
+        assert MathOperations.gcd(-12, -8) == 4
+```
+
+### Mutation Testing Configuration
+
+```python
+# mutmut_config.py
+"""
+Configuration for mutation testing with mutmut.
+Create a .mutmut-config file in your project root.
+"""
+
+# .mutmut-config
+"""
+[mutmut]
+paths_to_mutate=src/
+backup=False
+runner=python -m pytest tests/ -x
+tests_dir=tests/
+dict_synonyms=Struct, NamedStruct
+total=100
+use_coverage=True
+coverage_data=.coverage
+pre_mutation=echo "Running mutation {}"
+post_mutation=echo "Completed mutation {}"
+"""
+
+# Custom mutation testing runner
+import subprocess
+import sys
+from pathlib import Path
+from typing import List, Dict, Any
+
+class MutationTestRunner:
+    """Custom mutation testing runner."""
+    
+    def __init__(self, source_dir: str, test_dir: str):
+        self.source_dir = Path(source_dir)
+        self.test_dir = Path(test_dir)
+        self.results = []
+    
+    def run_mutation_tests(self) -> Dict[str, Any]:
+        """Run mutation tests and collect results."""
+        try:
+            # Run mutmut
+            result = subprocess.run([
+                "mutmut", "run",
+                f"--paths-to-mutate={self.source_dir}",
+                f"--tests-dir={self.test_dir}",
+                "--use-coverage"
+            ], capture_output=True, text=True)
+            
+            # Parse results
+            return self._parse_results(result.stdout)
+            
+        except subprocess.CalledProcessError as e:
+            return {"error": str(e), "output": e.output}
+    
+    def _parse_results(self, output: str) -> Dict[str, Any]:
+        """Parse mutmut output."""
+        lines = output.split('\n')
+        results = {
+            "total_mutants": 0,
+            "killed": 0,
+            "survived": 0,
+            "timeout": 0,
+            "suspicious": 0,
+            "mutation_score": 0.0
+        }
+        
+        for line in lines:
+            if "mutants" in line.lower():
+                # Parse mutation statistics
+                pass  # Implementation depends on mutmut output format
+        
+        return results
+    
+    def generate_report(self) -> str:
+        """Generate mutation testing report."""
+        results = self.run_mutation_tests()
+        
+        report = f"""
+Mutation Testing Report
+======================
+
+Total Mutants: {results.get('total_mutants', 0)}
+Killed: {results.get('killed', 0)}
+Survived: {results.get('survived', 0)}
+Timeout: {results.get('timeout', 0)}
+Suspicious: {results.get('suspicious', 0)}
+
+Mutation Score: {results.get('mutation_score', 0.0):.2%}
+"""
+        return report
+
+if __name__ == "__main__":
+    runner = MutationTestRunner("src", "tests")
+    print(runner.generate_report())
+```
+
+## 4. Integration Testing with Testcontainers
+
+### Database Integration Testing
+
+```python
+# test_database_integration.py
+import pytest
+from testcontainers.postgres import PostgresContainer
+from testcontainers.mysql import MySqlContainer
+from testcontainers.redis import RedisContainer
+import psycopg2
+import redis
+import sqlalchemy as sa
+from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from datetime import datetime
+from typing import Generator, Any
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    is_active = Column(Boolean, default=True)
+
+class UserRepository:
+    """User repository for database operations."""
+    
+    def __init__(self, session):
+        self.session = session
+    
+    def create_user(self, username: str, email: str) -> User:
+        user = User(username=username, email=email)
+        self.session.add(user)
+        self.session.commit()
+        return user
+    
+    def get_user_by_id(self, user_id: int) -> User:
+        return self.session.query(User).filter(User.id == user_id).first()
+    
+    def get_user_by_username(self, username: str) -> User:
+        return self.session.query(User).filter(User.username == username).first()
+    
+    def update_user(self, user_id: int, **kwargs) -> User:
+        user = self.get_user_by_id(user_id)
+        if user:
+            for key, value in kwargs.items():
+                setattr(user, key, value)
+            self.session.commit()
+        return user
+    
+    def delete_user(self, user_id: int) -> bool:
+        user = self.get_user_by_id(user_id)
+        if user:
+            self.session.delete(user)
+            self.

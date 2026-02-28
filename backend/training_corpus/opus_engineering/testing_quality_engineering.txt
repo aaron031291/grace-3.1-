@@ -1,0 +1,806 @@
+# Comprehensive Testing and Software Quality Training Data
+
+## Table of Contents
+1. [Property-Based Testing with Hypothesis](#property-based-testing)
+2. [Mutation Testing Strategies](#mutation-testing)
+3. [Contract Testing for APIs](#contract-testing)
+4. [Chaos Engineering Principles](#chaos-engineering)
+5. [Load Testing Patterns](#load-testing)
+6. [Test Data Factories and Builders](#test-data-factories)
+7. [Snapshot Testing](#snapshot-testing)
+8. [Visual Regression Testing](#visual-regression)
+9. [Security Testing](#security-testing)
+10. [Performance Profiling and Benchmarking](#performance-profiling)
+11. [Code Coverage Analysis](#code-coverage)
+12. [Test-Driven Development Workflows](#tdd-workflows)
+
+---
+
+## 1. Property-Based Testing with Hypothesis {#property-based-testing}
+
+Property-based testing generates test cases automatically based on specifications of what the code should do, rather than specific examples.
+
+### Core Concepts and Implementation
+
+```python
+# requirements.txt
+"""
+hypothesis>=6.82.0
+pytest>=7.4.0
+pytest-hypothesis>=0.19.0
+"""
+
+# src/math_utils.py
+from typing import List, Union
+import math
+
+def sort_list(items: List[int]) -> List[int]:
+    """Sort a list of integers."""
+    return sorted(items)
+
+def reverse_string(s: str) -> str:
+    """Reverse a string."""
+    return s[::-1]
+
+def calculate_mean(numbers: List[Union[int, float]]) -> float:
+    """Calculate arithmetic mean of numbers."""
+    if not numbers:
+        raise ValueError("Cannot calculate mean of empty list")
+    return sum(numbers) / len(numbers)
+
+def fibonacci(n: int) -> int:
+    """Calculate nth Fibonacci number."""
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+def gcd(a: int, b: int) -> int:
+    """Calculate greatest common divisor."""
+    while b:
+        a, b = b, a % b
+    return abs(a)
+
+class BankAccount:
+    def __init__(self, initial_balance: float = 0.0):
+        if initial_balance < 0:
+            raise ValueError("Initial balance cannot be negative")
+        self._balance = initial_balance
+    
+    def deposit(self, amount: float) -> None:
+        if amount <= 0:
+            raise ValueError("Deposit amount must be positive")
+        self._balance += amount
+    
+    def withdraw(self, amount: float) -> None:
+        if amount <= 0:
+            raise ValueError("Withdrawal amount must be positive")
+        if amount > self._balance:
+            raise ValueError("Insufficient funds")
+        self._balance -= amount
+    
+    @property
+    def balance(self) -> float:
+        return self._balance
+```
+
+```python
+# tests/test_property_based.py
+import pytest
+from hypothesis import given, strategies as st, assume, example, note
+from hypothesis.stateful import RuleBasedStateMachine, rule, invariant
+from typing import List
+import math
+
+from src.math_utils import (
+    sort_list, reverse_string, calculate_mean, 
+    fibonacci, gcd, BankAccount
+)
+
+class TestPropertyBasedTesting:
+    
+    @given(st.lists(st.integers()))
+    def test_sort_idempotent(self, items: List[int]):
+        """Sorting twice should give same result as sorting once."""
+        sorted_once = sort_list(items)
+        sorted_twice = sort_list(sorted_once)
+        assert sorted_once == sorted_twice
+    
+    @given(st.lists(st.integers()))
+    def test_sort_preserves_length(self, items: List[int]):
+        """Sorting should preserve the length of the list."""
+        sorted_items = sort_list(items)
+        assert len(sorted_items) == len(items)
+    
+    @given(st.lists(st.integers()))
+    def test_sort_preserves_elements(self, items: List[int]):
+        """Sorting should preserve all elements (multiset equality)."""
+        sorted_items = sort_list(items)
+        assert sorted(items) == sorted_items
+    
+    @given(st.lists(st.integers(), min_size=2))
+    def test_sort_is_ordered(self, items: List[int]):
+        """Sorted list should be in non-decreasing order."""
+        sorted_items = sort_list(items)
+        for i in range(len(sorted_items) - 1):
+            assert sorted_items[i] <= sorted_items[i + 1]
+    
+    @given(st.text())
+    def test_reverse_involution(self, s: str):
+        """Reversing twice should give original string."""
+        assert reverse_string(reverse_string(s)) == s
+    
+    @given(st.text())
+    def test_reverse_preserves_length(self, s: str):
+        """Reversing should preserve string length."""
+        assert len(reverse_string(s)) == len(s)
+    
+    @given(st.lists(st.floats(allow_nan=False, allow_infinity=False), min_size=1))
+    def test_mean_bounds(self, numbers: List[float]):
+        """Mean should be between min and max of the list."""
+        mean = calculate_mean(numbers)
+        assert min(numbers) <= mean <= max(numbers)
+    
+    @given(st.lists(st.floats(allow_nan=False, allow_infinity=False), min_size=1))
+    def test_mean_single_value(self, numbers: List[float]):
+        """Mean of list with single repeated value should be that value."""
+        if len(set(numbers)) == 1:  # All elements are the same
+            assert calculate_mean(numbers) == numbers[0]
+    
+    @given(st.integers(min_value=0, max_value=30))
+    def test_fibonacci_properties(self, n: int):
+        """Test Fibonacci number properties."""
+        fib_n = fibonacci(n)
+        
+        # Fibonacci numbers are non-negative
+        assert fib_n >= 0
+        
+        # Base cases
+        if n == 0:
+            assert fib_n == 0
+        elif n == 1:
+            assert fib_n == 1
+        else:
+            # Recurrence relation
+            assert fib_n == fibonacci(n - 1) + fibonacci(n - 2)
+    
+    @given(st.integers(), st.integers())
+    def test_gcd_properties(self, a: int, b: int):
+        """Test GCD properties."""
+        assume(a != 0 or b != 0)  # Avoid gcd(0, 0)
+        
+        result = gcd(a, b)
+        
+        # GCD is always positive
+        assert result > 0
+        
+        # GCD divides both numbers
+        if a != 0:
+            assert a % result == 0
+        if b != 0:
+            assert b % result == 0
+        
+        # Commutative property
+        assert gcd(a, b) == gcd(b, a)
+    
+    @given(st.integers(min_value=1, max_value=100), 
+           st.integers(min_value=1, max_value=100))
+    def test_gcd_with_multiplication(self, a: int, b: int):
+        """GCD properties with multiplication."""
+        k = 5  # arbitrary multiplier
+        assert gcd(k * a, k * b) == k * gcd(a, b)
+
+# Advanced Property-Based Testing with Custom Strategies
+
+@st.composite
+def valid_email_strategy(draw):
+    """Generate valid email addresses."""
+    username = draw(st.text(
+        alphabet=st.characters(whitelist_categories=('Lu', 'Ll', 'Nd')),
+        min_size=1, max_size=20
+    ))
+    domain = draw(st.text(
+        alphabet=st.characters(whitelist_categories=('Lu', 'Ll', 'Nd')),
+        min_size=1, max_size=20
+    ))
+    tld = draw(st.sampled_from(['com', 'org', 'net', 'edu', 'gov']))
+    return f"{username}@{domain}.{tld}"
+
+@st.composite
+def transaction_strategy(draw):
+    """Generate valid bank transactions."""
+    transaction_type = draw(st.sampled_from(['deposit', 'withdraw']))
+    amount = draw(st.floats(min_value=0.01, max_value=1000.0))
+    return {'type': transaction_type, 'amount': amount}
+
+class TestAdvancedPropertyBased:
+    
+    @given(valid_email_strategy())
+    def test_email_format(self, email: str):
+        """Test email format validation."""
+        assert '@' in email
+        assert '.' in email.split('@')[1]
+        parts = email.split('@')
+        assert len(parts) == 2
+        assert len(parts[0]) > 0
+        assert len(parts[1]) > 0
+    
+    @given(st.floats(min_value=0, max_value=10000))
+    def test_bank_account_creation(self, initial_balance: float):
+        """Test bank account creation with various initial balances."""
+        if initial_balance >= 0:
+            account = BankAccount(initial_balance)
+            assert account.balance == initial_balance
+        else:
+            with pytest.raises(ValueError):
+                BankAccount(initial_balance)
+
+# Stateful Testing with Hypothesis
+class BankAccountStateMachine(RuleBasedStateMachine):
+    """Stateful testing for BankAccount class."""
+    
+    def __init__(self):
+        super().__init__()
+        self.account = BankAccount(100.0)  # Start with $100
+        self.expected_balance = 100.0
+    
+    @rule(amount=st.floats(min_value=0.01, max_value=100.0))
+    def deposit(self, amount: float):
+        """Rule for depositing money."""
+        note(f"Depositing ${amount:.2f}")
+        self.account.deposit(amount)
+        self.expected_balance += amount
+    
+    @rule(amount=st.floats(min_value=0.01, max_value=50.0))
+    def withdraw(self, amount: float):
+        """Rule for withdrawing money."""
+        assume(amount <= self.expected_balance)
+        note(f"Withdrawing ${amount:.2f}")
+        self.account.withdraw(amount)
+        self.expected_balance -= amount
+    
+    @invariant()
+    def balance_is_correct(self):
+        """Invariant: balance should match expected balance."""
+        assert abs(self.account.balance - self.expected_balance) < 0.01
+    
+    @invariant()
+    def balance_is_non_negative(self):
+        """Invariant: balance should never be negative."""
+        assert self.account.balance >= 0
+
+TestBankAccountStateMachine = BankAccountStateMachine.TestCase
+
+# Property-Based Testing with Examples and Edge Cases
+class TestPropertyBasedWithExamples:
+    
+    @given(st.lists(st.integers()))
+    @example([])  # Empty list
+    @example([1])  # Single element
+    @example([1, 1, 1])  # All same elements
+    @example([3, 1, 4, 1, 5, 9, 2, 6])  # Mixed elements
+    def test_sort_comprehensive(self, items: List[int]):
+        """Comprehensive sorting test with specific examples."""
+        sorted_items = sort_list(items)
+        
+        # Length preservation
+        assert len(sorted_items) == len(items)
+        
+        # Order property
+        for i in range(len(sorted_items) - 1):
+            assert sorted_items[i] <= sorted_items[i + 1]
+        
+        # Element preservation
+        assert sorted(items) == sorted_items
+    
+    @given(st.text(min_size=1))
+    @example("a")
+    @example("ab")
+    @example("aba")
+    @example("abcba")
+    def test_palindrome_detection(self, s: str):
+        """Test palindrome detection properties."""
+        reversed_s = reverse_string(s)
+        is_palindrome = s == reversed_s
+        
+        # If string is palindrome, reversing shouldn't change it
+        if is_palindrome:
+            assert reverse_string(s) == s
+        
+        # Single character is always palindrome
+        if len(s) == 1:
+            assert is_palindrome
+
+# Performance-Aware Property Testing
+class TestPerformanceProperties:
+    
+    @given(st.lists(st.integers(), max_size=1000))
+    def test_sort_performance_property(self, items: List[int]):
+        """Test that sorting performance is reasonable."""
+        import time
+        
+        start_time = time.time()
+        result = sort_list(items)
+        end_time = time.time()
+        
+        # Should complete in reasonable time (adjust threshold as needed)
+        assert end_time - start_time < 1.0  # 1 second max
+        
+        # Verify correctness
+        assert len(result) == len(items)
+        if len(result) > 1:
+            for i in range(len(result) - 1):
+                assert result[i] <= result[i + 1]
+
+# Hypothesis Settings and Profiles
+from hypothesis import settings, Verbosity
+
+class TestHypothesisSettings:
+    
+    @settings(max_examples=1000, deadline=None)
+    @given(st.lists(st.integers()))
+    def test_extensive_sorting(self, items: List[int]):
+        """Test with many examples."""
+        result = sort_list(items)
+        assert result == sorted(items)
+    
+    @settings(verbosity=Verbosity.verbose)
+    @given(st.integers(min_value=0, max_value=20))
+    def test_fibonacci_verbose(self, n: int):
+        """Test with verbose output."""
+        result = fibonacci(n)
+        assert result >= 0
+```
+
+### Hypothesis Configuration and Profiles
+
+```python
+# hypothesis_profiles.py
+from hypothesis import settings, Verbosity
+import os
+
+# Define different testing profiles
+settings.register_profile("default", max_examples=100, deadline=200)
+settings.register_profile("ci", max_examples=1000, deadline=1000)
+settings.register_profile("dev", max_examples=10, deadline=None, verbosity=Verbosity.verbose)
+settings.register_profile("thorough", max_examples=10000, deadline=5000)
+
+# Load profile based on environment
+profile = os.getenv("HYPOTHESIS_PROFILE", "default")
+settings.load_profile(profile)
+```
+
+---
+
+## 2. Mutation Testing Strategies {#mutation-testing}
+
+Mutation testing evaluates test quality by introducing bugs and checking if tests catch them.
+
+```python
+# requirements.txt additions
+"""
+mutmut>=2.4.3
+cosmic-ray>=8.3.4
+"""
+
+# src/calculator.py
+from typing import Union, List
+import math
+
+class Calculator:
+    """A calculator class for mutation testing demonstration."""
+    
+    def add(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+        """Add two numbers."""
+        return a + b
+    
+    def subtract(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+        """Subtract b from a."""
+        return a - b
+    
+    def multiply(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+        """Multiply two numbers."""
+        return a * b
+    
+    def divide(self, a: Union[int, float], b: Union[int, float]) -> float:
+        """Divide a by b."""
+        if b == 0:
+            raise ZeroDivisionError("Cannot divide by zero")
+        return a / b
+    
+    def power(self, base: Union[int, float], exponent: Union[int, float]) -> Union[int, float]:
+        """Raise base to the power of exponent."""
+        return base ** exponent
+    
+    def square_root(self, x: Union[int, float]) -> float:
+        """Calculate square root of x."""
+        if x < 0:
+            raise ValueError("Cannot calculate square root of negative number")
+        return math.sqrt(x)
+    
+    def factorial(self, n: int) -> int:
+        """Calculate factorial of n."""
+        if n < 0:
+            raise ValueError("Factorial is not defined for negative numbers")
+        if n == 0 or n == 1:
+            return 1
+        result = 1
+        for i in range(2, n + 1):
+            result *= i
+        return result
+    
+    def is_prime(self, n: int) -> bool:
+        """Check if n is a prime number."""
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        
+        for i in range(3, int(math.sqrt(n)) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+    
+    def gcd(self, a: int, b: int) -> int:
+        """Calculate greatest common divisor using Euclidean algorithm."""
+        while b:
+            a, b = b, a % b
+        return abs(a)
+    
+    def lcm(self, a: int, b: int) -> int:
+        """Calculate least common multiple."""
+        return abs(a * b) // self.gcd(a, b)
+
+def process_list(numbers: List[int]) -> dict:
+    """Process a list of numbers and return statistics."""
+    if not numbers:
+        return {
+            'sum': 0,
+            'average': 0,
+            'min': None,
+            'max': None,
+            'count': 0
+        }
+    
+    total = sum(numbers)
+    count = len(numbers)
+    
+    return {
+        'sum': total,
+        'average': total / count,
+        'min': min(numbers),
+        'max': max(numbers),
+        'count': count
+    }
+
+def find_max_subarray_sum(arr: List[int]) -> int:
+    """Find maximum sum of contiguous subarray (Kadane's algorithm)."""
+    if not arr:
+        return 0
+    
+    max_sum = current_sum = arr[0]
+    
+    for i in range(1, len(arr)):
+        current_sum = max(arr[i], current_sum + arr[i])
+        max_sum = max(max_sum, current_sum)
+    
+    return max_sum
+
+def binary_search(arr: List[int], target: int) -> int:
+    """Binary search implementation. Returns index or -1 if not found."""
+    left, right = 0, len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+```
+
+```python
+# tests/test_mutation_comprehensive.py
+import pytest
+import math
+from typing import List
+from src.calculator import Calculator, process_list, find_max_subarray_sum, binary_search
+
+class TestCalculatorMutationReady:
+    """Comprehensive tests designed to catch mutations."""
+    
+    def setup_method(self):
+        self.calc = Calculator()
+    
+    # Addition tests - designed to catch operator mutations
+    def test_add_positive_numbers(self):
+        assert self.calc.add(2, 3) == 5
+        assert self.calc.add(10, 15) == 25
+    
+    def test_add_negative_numbers(self):
+        assert self.calc.add(-2, -3) == -5
+        assert self.calc.add(-10, 5) == -5
+    
+    def test_add_zero(self):
+        assert self.calc.add(0, 5) == 5
+        assert self.calc.add(5, 0) == 5
+        assert self.calc.add(0, 0) == 0
+    
+    def test_add_identity(self):
+        """Test additive identity property."""
+        assert self.calc.add(42, 0) == 42
+        assert self.calc.add(0, 42) == 42
+    
+    # Subtraction tests
+    def test_subtract_basic(self):
+        assert self.calc.subtract(5, 3) == 2
+        assert self.calc.subtract(10, 15) == -5
+    
+    def test_subtract_zero(self):
+        assert self.calc.subtract(5, 0) == 5
+        assert self.calc.subtract(0, 5) == -5
+    
+    def test_subtract_same_number(self):
+        assert self.calc.subtract(5, 5) == 0
+        assert self.calc.subtract(-3, -3) == 0
+    
+    # Multiplication tests - catch operator and constant mutations
+    def test_multiply_positive(self):
+        assert self.calc.multiply(3, 4) == 12
+        assert self.calc.multiply(7, 8) == 56
+    
+    def test_multiply_negative(self):
+        assert self.calc.multiply(-3, 4) == -12
+        assert self.calc.multiply(-3, -4) == 12
+    
+    def test_multiply_zero(self):
+        assert self.calc.multiply(0, 5) == 0
+        assert self.calc.multiply(5, 0) == 0
+        assert self.calc.multiply(0, 0) == 0
+    
+    def test_multiply_one(self):
+        assert self.calc.multiply(1, 5) == 5
+        assert self.calc.multiply(5, 1) == 5
+    
+    # Division tests - catch condition mutations
+    def test_divide_basic(self):
+        assert self.calc.divide(6, 2) == 3.0
+        assert self.calc.divide(10, 4) == 2.5
+    
+    def test_divide_negative(self):
+        assert self.calc.divide(-6, 2) == -3.0
+        assert self.calc.divide(6, -2) == -3.0
+        assert self.calc.divide(-6, -2) == 3.0
+    
+    def test_divide_by_zero(self):
+        with pytest.raises(ZeroDivisionError):
+            self.calc.divide(5, 0)
+        with pytest.raises(ZeroDivisionError):
+            self.calc.divide(0, 0)
+    
+    def test_divide_zero_numerator(self):
+        assert self.calc.divide(0, 5) == 0.0
+    
+    # Power tests
+    def test_power_basic(self):
+        assert self.calc.power(2, 3) == 8
+        assert self.calc.power(5, 2) == 25
+    
+    def test_power_zero_exponent(self):
+        assert self.calc.power(5, 0) == 1
+        assert self.calc.power(0, 0) == 1  # By convention
+    
+    def test_power_negative_exponent(self):
+        assert self.calc.power(2, -2) == 0.25
+        assert self.calc.power(4, -1) == 0.25
+    
+    # Square root tests - catch condition mutations
+    def test_square_root_positive(self):
+        assert self.calc.square_root(4) == 2.0
+        assert self.calc.square_root(9) == 3.0
+        assert abs(self.calc.square_root(2) - 1.4142135623730951) < 1e-10
+    
+    def test_square_root_zero(self):
+        assert self.calc.square_root(0) == 0.0
+    
+    def test_square_root_negative(self):
+        with pytest.raises(ValueError):
+            self.calc.square_root(-1)
+        with pytest.raises(ValueError):
+            self.calc.square_root(-4)
+    
+    # Factorial tests - catch loop and condition mutations
+    def test_factorial_base_cases(self):
+        assert self.calc.factorial(0) == 1
+        assert self.calc.factorial(1) == 1
+    
+    def test_factorial_positive(self):
+        assert self.calc.factorial(2) == 2
+        assert self.calc.factorial(3) == 6
+        assert self.calc.factorial(4) == 24
+        assert self.calc.factorial(5) == 120
+    
+    def test_factorial_negative(self):
+        with pytest.raises(ValueError):
+            self.calc.factorial(-1)
+        with pytest.raises(ValueError):
+            self.calc.factorial(-5)
+    
+    # Prime number tests - catch condition and loop mutations
+    def test_is_prime_small_numbers(self):
+        assert not self.calc.is_prime(0)
+        assert not self.calc.is_prime(1)
+        assert self.calc.is_prime(2)
+        assert self.calc.is_prime(3)
+        assert not self.calc.is_prime(4)
+        assert self.calc.is_prime(5)
+    
+    def test_is_prime_larger_numbers(self):
+        assert self.calc.is_prime(7)
+        assert self.calc.is_prime(11)
+        assert self.calc.is_prime(13)
+        assert not self.calc.is_prime(9)
+        assert not self.calc.is_prime(15)
+        assert not self.calc.is_prime(21)
+    
+    def test_is_prime_edge_cases(self):
+        assert not self.calc.is_prime(-2)
+        assert not self.calc.is_prime(-5)
+        assert self.calc.is_prime(97)  # Large prime
+        assert not self.calc.is_prime(100)  # Large composite
+    
+    # GCD tests - catch loop condition mutations
+    def test_gcd_basic(self):
+        assert self.calc.gcd(12, 8) == 4
+        assert self.calc.gcd(15, 25) == 5
+        assert self.calc.gcd(17, 19) == 1  # Coprime
+    
+    def test_gcd_with_zero(self):
+        assert self.calc.gcd(5, 0) == 5
+        assert self.calc.gcd(0, 5) == 5
+    
+    def test_gcd_negative_numbers(self):
+        assert self.calc.gcd(-12, 8) == 4
+        assert self.calc.gcd(12, -8) == 4
+        assert self.calc.gcd(-12, -8) == 4
+    
+    # LCM tests
+    def test_lcm_basic(self):
+        assert self.calc.lcm(4, 6) == 12
+        assert self.calc.lcm(15, 25) == 75
+    
+    def test_lcm_coprime(self):
+        assert self.calc.lcm(7, 11) == 77
+
+class TestProcessListMutationReady:
+    """Tests for process_list function to catch mutations."""
+    
+    def test_process_empty_list(self):
+        result = process_list([])
+        expected = {
+            'sum': 0,
+            'average': 0,
+            'min': None,
+            'max': None,
+            'count': 0
+        }
+        assert result == expected
+    
+    def test_process_single_element(self):
+        result = process_list([5])
+        expected = {
+            'sum': 5,
+            'average': 5.0,
+            'min': 5,
+            'max': 5,
+            'count': 1
+        }
+        assert result == expected
+    
+    def test_process_multiple_elements(self):
+        result = process_list([1, 2, 3, 4, 5])
+        expected = {
+            'sum': 15,
+            'average': 3.0,
+            'min': 1,
+            'max': 5,
+            'count': 5
+        }
+        assert result == expected
+    
+    def test_process_negative_numbers(self):
+        result = process_list([-2, -1, 0, 1, 2])
+        expected = {
+            'sum': 0,
+            'average': 0.0,
+            'min': -2,
+            'max': 2,
+            'count': 5
+        }
+        assert result == expected
+    
+    def test_process_duplicate_numbers(self):
+        result = process_list([3, 3, 3, 3])
+        expected = {
+            'sum': 12,
+            'average': 3.0,
+            'min': 3,
+            'max': 3,
+            'count': 4
+        }
+        assert result == expected
+
+class TestMaxSubarraySumMutationReady:
+    """Tests for maximum subarray sum to catch mutations."""
+    
+    def test_empty_array(self):
+        assert find_max_subarray_sum([]) == 0
+    
+    def test_single_element_positive(self):
+        assert find_max_subarray_sum([5]) == 5
+    
+    def test_single_element_negative(self):
+        assert find_max_subarray_sum([-3]) == -3
+    
+    def test_all_positive(self):
+        assert find_max_subarray_sum([1, 2, 3, 4]) == 10
+    
+    def test_all_negative(self):
+        assert find_max_subarray_sum([-4, -3, -2, -1]) == -1
+    
+    def test_mixed_numbers(self):
+        assert find_max_subarray_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6
+    
+    def test_kadane_algorithm_edge_cases(self):
+        assert find_max_subarray_sum([1, -1, 1]) == 1
+        assert find_max_subarray_sum([-1, 1, -1]) == 1
+        assert find_max_subarray_sum([5, -10, 3]) == 5
+
+class TestBinarySearchMutationReady:
+    """Tests for binary search to catch mutations."""
+    
+    def test_empty_array(self):
+        assert binary_search([], 5) == -1
+    
+    def test_single_element_found(self):
+        assert binary_search([5], 5) == 0
+    
+    def test_single_element_not_found(self):
+        assert binary_search([5], 3) == -1
+    
+    def test_multiple_elements_found(self):
+        arr = [1, 3, 5, 7, 9, 11]
+        assert binary_search(arr, 1) == 0  # First element
+        assert binary_search(arr, 11) == 5  # Last element
+        assert binary_search(arr, 5) == 2  # Middle element
+        assert binary_search(arr, 7) == 3  # Another middle element
+    
+    def test_multiple_elements_not_found(self):
+        arr = [1, 3, 5, 7, 9, 11]
+        assert binary_search(arr, 0) == -1  # Less than first
+        assert binary_search(arr, 12) == -1  # Greater than last
+        assert binary_search(arr, 4) == -1  # Between elements
+        assert binary_search(arr, 6) == -1  # Between elements
+    
+    def test_boundary_conditions(self):
+        arr = [2, 4, 6, 8, 10]
+        # Test conditions that might be mutated (<=, <, >=, >)
+        assert binary_search(arr, 2) == 0
+        assert binary_search(arr, 10) == 4
+        assert binary_search(arr, 1) == -1
+        assert binary_search(arr, 11) == -1
+
+# Mutation Testing Configuration
+class TestMutationTestingHelpers:
+    """Helper tests to ensure mutation testing catches common issues."""
+    
+    def test_off_by_one_errors(self):
+        """Tests designed to catch off-by-one mutations."""
+        # These tests should fail if loop conditions are mutated
