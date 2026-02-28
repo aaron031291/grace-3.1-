@@ -352,6 +352,168 @@ def _track_blueprint(bp: Blueprint, outcome: str):
     except Exception:
         pass
 
+    # Log the coding pattern (good or bad) for future training data
+    _log_coding_pattern(bp, outcome)
+
+
+def _log_coding_pattern(bp: Blueprint, outcome: str):
+    """
+    Log every coding pattern — successful or failed — as training data.
+    Over 18 months this builds a deterministic backbone of coding knowledge.
+
+    Successful patterns become a PLAYBOOK:
+      - What was asked
+      - What blueprint was designed
+      - What code was generated
+      - What the trust score was
+      - How many attempts it took
+      - Locked as a positive pattern in memory
+
+    Failed patterns become LESSONS:
+      - What went wrong
+      - What errors occurred
+      - What was tried
+      - Why it failed
+    """
+    pattern = {
+        "pattern_id": bp.id,
+        "timestamp": datetime.utcnow().isoformat(),
+        "outcome": outcome,
+        "task": bp.task,
+        "architecture": bp.architecture[:1000],
+        "functions": bp.functions[:10],
+        "code": bp.generated_code[:5000] if bp.generated_code else "",
+        "trust_score": bp.trust_score,
+        "build_attempts": bp.build_attempts,
+        "revision_count": bp.revision_count,
+        "errors": bp.errors[-5:],
+    }
+
+    # Save to playbook directory
+    playbook_dir = BLUEPRINTS_DIR.parent / "coding_playbook"
+    playbook_dir.mkdir(parents=True, exist_ok=True)
+
+    if outcome == "deployed":
+        # Successful pattern → positive playbook entry
+        (playbook_dir / f"success_{bp.id}.json").write_text(
+            json.dumps(pattern, indent=2, default=str)
+        )
+
+        # Store in unified memory as a learned procedure
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+
+            # Store the successful coding pattern
+            mem.store_procedure(
+                name=f"coding_pattern_{bp.id}",
+                goal=bp.task[:200],
+                steps=json.dumps({
+                    "architecture": bp.architecture[:500],
+                    "functions": bp.functions[:5],
+                    "code_preview": bp.generated_code[:1000] if bp.generated_code else "",
+                    "trust_score": bp.trust_score,
+                    "attempts": bp.build_attempts,
+                }, default=str),
+                trust=bp.trust_score,
+                proc_type="coding_playbook",
+            )
+
+            # Store as a learning example
+            mem.store_learning(
+                input_ctx=f"Code task: {bp.task}",
+                expected=bp.generated_code[:3000] if bp.generated_code else "",
+                actual=f"Trust: {bp.trust_score}, Attempts: {bp.build_attempts}",
+                trust=bp.trust_score,
+                source="blueprint_engine_success",
+                example_type="coding_pattern",
+            )
+        except Exception:
+            pass
+
+        # Store in flash cache for keyword discovery
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            kw = fc.extract_keywords(f"{bp.task} {bp.architecture}")
+            fc.register(
+                source_uri=f"internal://playbook/{bp.id}",
+                source_type="internal",
+                source_name=f"Playbook: {bp.task[:50]}",
+                keywords=kw,
+                summary=f"Successful coding pattern: {bp.task[:200]}",
+                trust_score=bp.trust_score,
+                ttl_hours=8760 * 10,
+            )
+        except Exception:
+            pass
+
+        # Feed to intelligence layer as positive ML observation
+        try:
+            from cognitive.intelligence_layer import get_intelligence_layer
+            il = get_intelligence_layer()
+            il.observe_loop("blueprint_build", {
+                "trust_score": bp.trust_score,
+                "attempts": bp.build_attempts,
+                "revisions": bp.revision_count,
+                "code_length": len(bp.generated_code or ""),
+            }, "success")
+        except Exception:
+            pass
+
+        logger.info(f"[PLAYBOOK] Positive pattern logged: {bp.task[:60]} (trust: {bp.trust_score})")
+
+    else:
+        # Failed pattern → lesson learned
+        (playbook_dir / f"failure_{bp.id}.json").write_text(
+            json.dumps(pattern, indent=2, default=str)
+        )
+
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+            mem.store_episode(
+                problem=f"Coding failed: {bp.task[:200]}",
+                action=f"Attempted {bp.build_attempts} builds, {bp.revision_count} revisions",
+                outcome=f"FAILED. Errors: {'; '.join(bp.errors[-3:])}",
+                trust=0.3,
+                source="blueprint_engine_failure",
+            )
+        except Exception:
+            pass
+
+        try:
+            from cognitive.intelligence_layer import get_intelligence_layer
+            il = get_intelligence_layer()
+            il.observe_loop("blueprint_build", {
+                "trust_score": bp.trust_score,
+                "attempts": bp.build_attempts,
+                "revisions": bp.revision_count,
+                "code_length": len(bp.generated_code or ""),
+            }, "failure")
+        except Exception:
+            pass
+
+        logger.info(f"[PLAYBOOK] Failure pattern logged: {bp.task[:60]}")
+
+
+def get_playbook_stats() -> Dict[str, Any]:
+    """Get stats on the coding playbook — the training data being built over time."""
+    playbook_dir = BLUEPRINTS_DIR.parent / "coding_playbook"
+    if not playbook_dir.exists():
+        return {"total": 0, "successes": 0, "failures": 0}
+
+    successes = list(playbook_dir.glob("success_*.json"))
+    failures = list(playbook_dir.glob("failure_*.json"))
+
+    return {
+        "total": len(successes) + len(failures),
+        "successes": len(successes),
+        "failures": len(failures),
+        "success_rate": round(len(successes) / max(len(successes) + len(failures), 1), 3),
+        "total_size_kb": round(sum(f.stat().st_size for f in successes + failures) / 1024, 1),
+    }
+
 
 def list_blueprints() -> List[Dict]:
     BLUEPRINTS_DIR.mkdir(parents=True, exist_ok=True)

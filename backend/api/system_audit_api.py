@@ -474,6 +474,13 @@ async def create_blueprint(task: str):
     return create_from_prompt(task)
 
 
+@router.get("/blueprint/playbook")
+async def blueprint_playbook():
+    """View the coding playbook — training data being built over time."""
+    from cognitive.blueprint_engine import get_playbook_stats
+    return get_playbook_stats()
+
+
 @router.get("/blueprint/list")
 async def list_blueprints():
     """List all blueprints."""
