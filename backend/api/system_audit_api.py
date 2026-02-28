@@ -285,6 +285,95 @@ async def route_task(task_type: str, data: dict = None):
     return orch.route_task(task_type, data or {})
 
 
+# ── Architecture Compass ──────────────────────────────────────────────
+
+@router.get("/compass/explain/{component}")
+async def compass_explain(component: str):
+    """Grace asks: What does this component do?"""
+    from cognitive.architecture_compass import get_compass
+    compass = get_compass()
+    return {"component": component, "explanation": compass.explain(component)}
+
+
+@router.get("/compass/find")
+async def compass_find(capability: str):
+    """Grace asks: What can handle this task?"""
+    from cognitive.architecture_compass import get_compass
+    compass = get_compass()
+    results = compass.find_for(capability)
+    return {"capability": capability, "components": results}
+
+
+@router.get("/compass/path")
+async def compass_path(from_comp: str, to_comp: str):
+    """Grace asks: How does data flow from A to B?"""
+    from cognitive.architecture_compass import get_compass
+    compass = get_compass()
+    path = compass.how_connected(from_comp, to_comp)
+    return {"from": from_comp, "to": to_comp, "path": path}
+
+
+@router.get("/compass/diagnose")
+async def compass_diagnose():
+    """Grace self-diagnoses her architecture."""
+    from cognitive.architecture_compass import get_compass
+    compass = get_compass()
+    return compass.diagnose()
+
+
+@router.get("/compass/map")
+async def compass_full_map():
+    """Complete architecture map with all components."""
+    from cognitive.architecture_compass import get_compass
+    compass = get_compass()
+    return compass.get_full_map()
+
+
+# ── User Intent Override ──────────────────────────────────────────────
+
+@router.post("/override/analyse")
+async def analyse_override(command: str, context: str = ""):
+    """Analyse a user command for governance impacts and offer alternatives."""
+    from cognitive.user_intent_override import get_override_system
+    system = get_override_system()
+    analysis = system.analyse(command, context)
+    return {
+        "original_intent": analysis.original_intent,
+        "parsed_action": analysis.parsed_action,
+        "governance_impacts": [
+            {"rule": i.rule_name, "severity": i.severity,
+             "description": i.description, "skipped_check": i.skipped_check}
+            for i in analysis.governance_impacts
+        ],
+        "blast_radius": analysis.blast_radius,
+        "risk_level": analysis.risk_level,
+        "alternatives": [
+            {"description": a.description, "compliance_level": a.compliance_level,
+             "trade_offs": a.trade_offs, "recommended": a.recommended}
+            for a in analysis.alternatives
+        ],
+        "override_token": analysis.override_token,
+        "explanation": analysis.explanation,
+        "can_proceed": analysis.can_proceed,
+    }
+
+
+@router.post("/override/execute")
+async def execute_override(token: str):
+    """Execute with user override — explicit permission confirmed."""
+    from cognitive.user_intent_override import get_override_system
+    system = get_override_system()
+    return system.execute_override(token)
+
+
+@router.get("/override/active")
+async def active_overrides():
+    """List all active override tokens."""
+    from cognitive.user_intent_override import get_override_system
+    system = get_override_system()
+    return {"overrides": system.get_active_overrides()}
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """
