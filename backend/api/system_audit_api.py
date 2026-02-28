@@ -461,6 +461,40 @@ async def run_composite(composite_id: str):
     }
 
 
+# ── Code Sandbox ──────────────────────────────────────────────────────
+
+@router.post("/sandbox/run")
+async def sandbox_run(code: str):
+    """Execute code in sandboxed environment. Returns compile + runtime results."""
+    from cognitive.code_sandbox import execute_sandboxed
+    result = execute_sandboxed(code)
+    return result.to_dict()
+
+
+@router.post("/sandbox/verify")
+async def sandbox_verify(code: str):
+    """Full code quality check: compile + static + execute + score."""
+    from cognitive.code_sandbox import verify_code_quality
+    return verify_code_quality(code)
+
+
+# ── Reverse kNN Oracle Discovery ─────────────────────────────────────
+
+@router.get("/knowledge-gaps")
+async def scan_knowledge_gaps():
+    """Scan for knowledge gaps using reverse kNN."""
+    from cognitive.reverse_knn import get_reverse_knn
+    return get_reverse_knn().scan_knowledge_gaps()
+
+
+@router.get("/knowledge-gaps/suggestions")
+async def expansion_suggestions(limit: int = 10):
+    """Get suggested topics to expand based on discovered gaps."""
+    from cognitive.reverse_knn import get_reverse_knn
+    topics = get_reverse_knn().suggest_expansion_topics(limit=limit)
+    return {"suggestions": topics}
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """
