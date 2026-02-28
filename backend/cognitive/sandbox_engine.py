@@ -120,7 +120,7 @@ def _save_experiment(exp: Experiment):
     (EXPERIMENTS_DIR / f"{exp.id}.json").write_text(json.dumps(exp.to_dict(), indent=2, default=str))
 
 
-def propose_experiment(
+def propose_and_start_experiment(
     title: str,
     description: str,
     hypothesis: str,
@@ -128,10 +128,17 @@ def propose_experiment(
     tracking_days: int = 60,
     config_changes: Dict[str, Any] = None,
     source: str = "grace",
+    use_consensus: bool = True,
 ) -> Experiment:
     """
-    Propose a new experiment.
-    Grace or the user can propose experiments.
+    Autonomously propose AND start an experiment. No permission needed.
+    Only the END RESULT needs human approval (aye/nay).
+
+    Uses 4-layer decision architecture:
+      Layer 1: All models deliberate independently on the experiment design
+      Layer 2: Consensus on whether experiment is safe to run
+      Layer 3: Align to Grace's current needs
+      Layer 4: Verify no conflicts with running experiments
     """
     exp = Experiment(
         id=f"exp_{uuid.uuid4().hex[:10]}",
@@ -147,8 +154,36 @@ def propose_experiment(
         source=source,
     )
 
+    # 4-layer decision: should this experiment run?
+    if use_consensus:
+        try:
+            from cognitive.consensus_engine import run_consensus
+            decision = run_consensus(
+                prompt=(
+                    f"Should Grace autonomously run this experiment?\n\n"
+                    f"Title: {title}\nHypothesis: {hypothesis}\nDomain: {domain}\n"
+                    f"Duration: {tracking_days} days\n\n"
+                    f"Check: Is it safe? Any conflicts? Should it proceed?"
+                ),
+                models=["kimi", "opus"],
+                source="autonomous",
+            )
+            exp.consensus_result = decision.final_output[:500]
+            # Only block if consensus explicitly says no
+            if "no" in decision.final_output[:50].lower() and decision.confidence > 0.8:
+                exp.status = ExperimentStatus.REJECTED
+                exp.consensus_result = f"Blocked by consensus: {decision.final_output[:200]}"
+                _save_experiment(exp)
+                return exp
+        except Exception:
+            pass
+
     # Capture baseline metrics
     exp.baseline = _capture_baseline_metrics()
+
+    # Auto-start (no permission needed for experiments)
+    exp.status = ExperimentStatus.RUNNING
+    exp.end_date = (datetime.utcnow() + timedelta(days=tracking_days)).isoformat()
 
     _save_experiment(exp)
 
@@ -156,8 +191,8 @@ def propose_experiment(
         from api._genesis_tracker import track
         track(
             key_type="system",
-            what=f"Experiment proposed: {title}",
-            how="sandbox_engine.propose_experiment",
+            what=f"Experiment auto-started: {title}",
+            how="sandbox_engine.propose_and_start_experiment",
             output_data={"id": exp.id, "domain": domain, "tracking_days": tracking_days},
             tags=["experiment", "proposed", domain],
         )

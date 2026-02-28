@@ -113,7 +113,11 @@ def track(
             code_after=code_after,
         )
         gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
-        return str(gk_id) if gk_id else None
+        if not gk_id:
+            # Fallback: generate our own ID if service didn't return one
+            import uuid
+            gk_id = f"GK-{uuid.uuid4().hex}"
+        return str(gk_id)
     except Exception as e:
         logger.debug(f"Genesis tracking skipped: {e}")
         return None
