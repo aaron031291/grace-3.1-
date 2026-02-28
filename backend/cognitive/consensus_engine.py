@@ -525,7 +525,7 @@ def run_consensus(
         source=source,
     )
 
-    # Route disagreements to governance approval queue
+    # Route disagreements to governance approval queue + ML reward buffer
     if disagreements:
         try:
             from cognitive.event_bus import publish
@@ -535,6 +535,17 @@ def run_consensus(
                 "prompt_preview": prompt[:200],
                 "requires_governance": True,
             }, source="consensus_engine")
+        except Exception:
+            pass
+
+        # Feed disagreement as ML training signal
+        try:
+            from cognitive.ml_trainer import get_ml_trainer
+            get_ml_trainer().observe("consensus_refinement", {
+                "agreement_count": len(agreements),
+                "disagreement_count": len(disagreements),
+                "confidence": result.confidence,
+            }, "degradation" if len(disagreements) > len(agreements) else "success")
         except Exception:
             pass
 

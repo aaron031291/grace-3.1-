@@ -490,6 +490,44 @@ async def list_blueprints():
 
 # ── Qwen Coding Net (unified execution) ──────────────────────────────
 
+# ── ML Training + Memory Reconciler ───────────────────────────────────
+
+@router.post("/ml/train")
+async def ml_train():
+    """Train ML models on loop execution data. Real training, not bookkeeping."""
+    from cognitive.ml_trainer import get_ml_trainer
+    return get_ml_trainer().train()
+
+
+@router.post("/ml/predict")
+async def ml_predict(loop_name: str):
+    """Predict if a loop will succeed or fail."""
+    from cognitive.ml_trainer import get_ml_trainer
+    return get_ml_trainer().predict(loop_name, {})
+
+
+@router.get("/ml/stats")
+async def ml_stats():
+    """ML training status and model info."""
+    from cognitive.ml_trainer import get_ml_trainer
+    return get_ml_trainer().get_stats()
+
+
+@router.get("/memory/reconcile")
+async def memory_reconcile():
+    """Force sync all memory systems."""
+    from cognitive.memory_reconciler import get_reconciler
+    return get_reconciler().reconcile()
+
+
+@router.get("/memory/get")
+async def memory_get(key: str):
+    """Get from freshest memory source."""
+    from cognitive.memory_reconciler import get_reconciler
+    result = get_reconciler().atomic_get(key)
+    return result or {"found": False}
+
+
 @router.post("/qwen-net/execute")
 async def qwen_net_execute(task: str):
     """Full unified coding: ghost memory + consensus + Qwen + compiler."""

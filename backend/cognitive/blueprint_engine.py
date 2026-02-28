@@ -247,13 +247,13 @@ def _build_from_blueprint(bp: Blueprint, attempt: int) -> Optional[str]:
 
 
 def _test_code(code: str) -> Dict[str, Any]:
-    """Test generated code through Grace's compiler."""
+    """Test generated code through Grace's compiler. Feed errors back as training data."""
     try:
         from cognitive.grace_compiler import get_grace_compiler
         compiler = get_grace_compiler()
         result = compiler.compile(code)
 
-        return {
+        test_result = {
             "passed": result.success,
             "trust_score": result.trust_score,
             "error": "; ".join(result.errors) if result.errors else "",
@@ -261,6 +261,21 @@ def _test_code(code: str) -> Dict[str, Any]:
             "tests_passed": result.tests_passed,
             "tests_failed": result.tests_failed,
         }
+
+        # Feed compile results to ML trainer (Ticket #1: blueprint feedback)
+        try:
+            from cognitive.ml_trainer import get_ml_trainer
+            get_ml_trainer().observe("blueprint_build", {
+                "trust_score": result.trust_score,
+                "error_count": len(result.errors),
+                "warning_count": len(result.warnings),
+                "tests_passed": result.tests_passed,
+                "code_length": len(code),
+            }, "success" if result.success else "failure")
+        except Exception:
+            pass
+
+        return test_result
     except Exception as e:
         return {"passed": False, "error": str(e), "trust_score": 0}
 

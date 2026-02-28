@@ -424,6 +424,17 @@ def enter_loop(loop_name: str) -> bool:
         depth = _call_depths[loop_name]
         _metrics[loop_name]["executions"] += 1
 
+    # Feed ML trainer with every loop entry
+    try:
+        from cognitive.ml_trainer import get_ml_trainer
+        get_ml_trainer().observe(loop_name, {
+            "depth": depth, "max_depth": max_depth,
+            "executions": _metrics[loop_name]["executions"],
+            "breaks": _metrics[loop_name]["breaks"],
+        }, "success" if depth <= max_depth else "failure")
+    except Exception:
+        pass
+
     if depth > max_depth:
         with _depth_lock:
             _metrics[loop_name]["breaks"] += 1
