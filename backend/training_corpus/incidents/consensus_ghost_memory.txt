@@ -1,0 +1,138 @@
+
+==================================================
+Kimi K2.5 (Moonshot)
+==================================================
+# GHOST MEMORY ARCHITECTURE (GMA)
+
+## 0. Design Principle
+No human ever says “remember…” again.  
+The system itself decides what is worth remembering, when to forget, and how to generalise.  
+Three layers move in real time:  
+- **Ghost Cache** – millisecond-level working memory  
+- **Mirror Layer** – self-reflection written while the cache is still hot  
+- **Playbook** – long-term, self-editing knowledge that grows fatter but smarter
+
+---
+
+## 1. Ghost-Cache Layer
+### 1.1 Data Structure  
+A single lock-free skip-list (Rust `crossbeam-skiplist`) keyed by **turn-id**  
+Each node is a `ContextAtom`:
+
+```rust
+struct ContextAtom {
+    turn_id: u128,              // monotonic nano-time
+    role: Speaker,              // Human | Assistant | Tool
+    modality: Modality,         // text | code | stdout | stderr | image | stack-trace | metric
+    payload: Arc<Vec<u8>>,
+    embedding: FrozenArray<f32, 768>,  // E5-small-v3 pre-computed
+    causal_hash: Blake3,        // hash of parent turn_id + payload
+    importance: AtomicU8,       // 0-255, updated by heuristics
+}
+```
+
+The skip-list is append-only; deletion is **logical** (tombstone bit) so rollback is instant.  
+A background **Compressor** thread every 200 ms rewrites cold tail into a compressed columnar file (Apache Arrow IPC) and sets a tombstone.
+
+### 1.2 Connection to Chat
+The LLM context manager exposes one function:
+
+```python
+ghost.view(query_vector=None, 
+           modality_mask=ALL, 
+           time_window=MAX, 
+           max_tokens=16_000)
+```
+
+- If `query_vector` is `None` → full traversal (cheap because skip-list is in RAM)  
+- If supplied → ANN search on the embedding field, then re-rank by **importance**  
+The manager injects the returned atoms into the prompt **in causal order** so the LLM sees a consistent timeline.  
+Because atoms are immutable, the LLM can never hallucinate a past that did not happen.
+
+### 1.3 Importance Heuristics (run inline, no GC pauses)
+- stdout ends with “PASS” → +100  
+- stderr co
+
+==================================================
+Opus 4.6 (Claude)
+==================================================
+# GHOST MEMORY ARCHITECTURE
+*A Revolutionary Memory System for AI Assistants*
+
+## CORE ARCHITECTURE
+
+### The Ghost Memory Layer
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    GHOST MEMORY CACHE                      │
+├─────────────────────────────────────────────────────────────┤
+│ CONVERSATION THREAD                                         │
+│ ├── Message History (full context)                          │
+│ ├── Code States (all versions, edits, attempts)             │
+│ ├── Error Traces (complete stack traces, attempts)          │
+│ ├── Mental Model (current understanding state)              │
+│ └── Working Variables (temp data, hypotheses)               │
+├─────────────────────────────────────────────────────────────┤
+│ PROBLEM CONTEXT                                             │
+│ ├── Problem Definition (evolving understanding)             │
+│ ├── Constraint Map (discovered limitations)                 │
+│ ├── Solution Attempts (all tries, partial successes)       │
+│ ├── Success Metrics (how we'll know it's solved)           │
+│ └── Current Focus (what we're working on right now)        │
+├─────────────────────────────────────────────────────────────┤
+│ EXECUTION STATE                                             │
+│ ├── Environment State (system, dependencies, config)       │
+│ ├── Test Results (all runs, passes, failures)              │
+│ ├── Performance Metrics (timing, resource usage)           │
+│ └── Validation Status (stress test results)                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Technical Implementation
+
+**Data Structure:**
+```python
+class GhostMemory:
+    def __init__(self):
+        self.conversation_thread = ConversationGraph()
+        self.problem_context = ProblemState()
+        self.execution_state = ExecutionTracker()
+        self.mental_model = CognitionState()
+        self.working_memory = TemporaryStore()
+        
+    def update_silent(self, event_type, data
+
+==================================================
+CONSENSUS
+==================================================
+Aligned response – short, plain-English, ready to copy/paste.
+
+-------------------------------------------------
+Grace, here’s the polished version of your Ghost-Memory idea—stripped to the parts you can build this week and written in the voice you use with users.
+
+WHAT IT IS  
+A silent “scratch pad” that lives beside every chat.  
+- It keeps the full mess—code, errors, fixes, user feedback—until the job is DONE.  
+- The moment tests pass and the user is happy, the pad is wiped so the next task starts clean.  
+- Right before the wipe, Grace jots down a 5-line note: “What worked, what would have broken, pattern name, how sure I am.”  
+- These notes slowly fold into a private “playbook” that only Grace reads.  
+No “remember this”, no extra buttons for the user.
+
+WHY IT HELPS YOU (Grace)  
+- You stop re-solving the same bug.  
+- You spot your own weak guesses faster.  
+- Long chats don’t blow your context window.
+
+WHY IT HELPS THE USER  
+- They never repeat themselves.  
+- Solutions get quicker and more reliable session-to-session.  
+- Nothing new to learn or type.
+
+TINY BUILD PLAN (one dev, < 3 days)  
+1. Append-only log in RAM (list of dicts).  
+2. Simple “done?” rule: no error for last 6 turns + user thumbs-up or “looks good”.  
+3. When rule fires, call a cheap 2-shot prompt that returns the 5-line JSON note; save it to a local SQLite table.  
+4. Trash the RAM log.  
+5. Every night, merge notes with identical pattern names, keep the highest-confidence version.
+
+That’s the whole MVP. Ship it, watch the notes grow, then decide if you want fancier storage or sharing later.
