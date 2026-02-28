@@ -378,6 +378,14 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         description="Trigger: 3+ thumbs-down on one topic. Action: flag knowledge gap, trigger learning cycle. Rollback: N/A. Fallback: route to human.",
         max_depth=4,
     ),
+    "blueprint_build": NamedLoop(
+        name="Blueprint Build Loop",
+        category="coding",
+        components=["consensus_engine", "pipeline", "grace_compiler", "trust_engine", "live_integration"],
+        status="healthy",
+        description="Kimi+Opus design blueprint → Qwen builds code → compiler verifies → retry/escalate → deploy. Up to 20 retries + 3 revisions. Rollback: discard code. Fallback: escalate to human.",
+        max_depth=5,
+    ),
     "ethics_governance": NamedLoop(
         name="Ethics & Governance Loop",
         category="safety",

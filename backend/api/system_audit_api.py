@@ -465,6 +465,22 @@ async def run_composite(composite_id: str):
 
 # ── Grace Compiler ────────────────────────────────────────────────────
 
+# ── Blueprint Engine (Kimi+Opus design → Qwen builds) ────────────────
+
+@router.post("/blueprint/create")
+async def create_blueprint(task: str):
+    """Full pipeline: describe what you want → Grace builds it."""
+    from cognitive.blueprint_engine import create_from_prompt
+    return create_from_prompt(task)
+
+
+@router.get("/blueprint/list")
+async def list_blueprints():
+    """List all blueprints."""
+    from cognitive.blueprint_engine import list_blueprints as _list
+    return {"blueprints": _list()}
+
+
 @router.post("/compiler/compile")
 async def grace_compile(code: str, context: dict = None):
     """Compile code through Grace's native compiler (5-stage pipeline)."""
