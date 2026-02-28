@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./DirectoryChat.css";
+import { API_BASE_URL } from '../config/api';
 
 export default function DirectoryChat({ currentPath = "", chatId = null }) {
   const [messages, setMessages] = useState([]);

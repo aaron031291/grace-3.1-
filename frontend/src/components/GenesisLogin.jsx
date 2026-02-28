@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./GenesisLogin.css";
+import { API_BASE_URL } from '../config/api';
 
 export default function GenesisLogin({ onLogin }) {
   const [username, setUsername] = useState("");

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./GenesisKeyPanel.css";
+import { API_BASE_URL } from '../config/api';
 
 export default function GenesisKeyPanel() {
   const [keys, setKeys] = useState([]);

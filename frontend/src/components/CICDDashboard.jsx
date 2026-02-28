@@ -42,6 +42,7 @@ import {
   Divider
 } from '@mui/material';
 import {
+import { API_BASE_URL } from '../config/api';
   PlayArrow as PlayIcon,
   Stop as StopIcon,
   Refresh as RefreshIcon,

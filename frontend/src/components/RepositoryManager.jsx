@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import "./RepositoryManager.css";
+import { API_BASE_URL } from '../config/api';
 
 const API_BASE = API_BASE_URL;
 

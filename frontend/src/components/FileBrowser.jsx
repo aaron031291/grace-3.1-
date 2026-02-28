@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./FileBrowser.css";
 import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import { API_BASE_URL } from '../config/api';
 
 export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [currentPath, setCurrentPath] = useState("");

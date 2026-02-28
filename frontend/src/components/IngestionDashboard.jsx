@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './IngestionDashboard.css';
+import { API_BASE_URL } from '../config/api';
 
 const API_BASE = API_BASE_URL;
 

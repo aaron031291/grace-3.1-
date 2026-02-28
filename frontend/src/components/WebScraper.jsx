@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './WebScraper.css';
+import { API_BASE_URL } from '../config/api';
 
 export default function WebScraper() {
   const [url, setUrl] = useState('');
