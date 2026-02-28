@@ -136,6 +136,15 @@ class GraceImmuneSystem:
         except Exception:
             pass
 
+        # Register with event bus for system-wide awareness
+        try:
+            from cognitive.event_bus import subscribe, publish
+            subscribe("llm.failed", lambda e: self._on_realtime_error(e.data))
+            subscribe("trust.threshold_crossed", lambda e: self._on_realtime_alert(e.data))
+            logger.info("[IMMUNE] Connected to event bus")
+        except Exception:
+            pass
+
     def _on_realtime_error(self, event: Dict):
         """Called INSTANTLY when an error genesis key is created."""
         self._realtime_errors.append(event)

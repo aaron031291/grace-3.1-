@@ -248,6 +248,43 @@ async def model_version_history():
     return get_version_history()
 
 
+# ── Central Orchestrator ──────────────────────────────────────────────
+
+@router.get("/orchestrator/dashboard")
+async def orchestrator_dashboard():
+    """Get the central orchestrator's dashboard — global state, integration health."""
+    from cognitive.central_orchestrator import get_orchestrator
+    orch = get_orchestrator()
+    orch.initialize()
+    return orch.get_dashboard()
+
+
+@router.post("/orchestrator/sync")
+async def orchestrator_sync():
+    """Force a full state sync across all systems."""
+    from cognitive.central_orchestrator import get_orchestrator
+    orch = get_orchestrator()
+    orch.initialize()
+    return orch.sync_state()
+
+
+@router.get("/orchestrator/health")
+async def integration_health():
+    """Check all integration points — find broken connections."""
+    from cognitive.central_orchestrator import get_orchestrator
+    orch = get_orchestrator()
+    return orch.check_integration_health()
+
+
+@router.post("/orchestrator/route")
+async def route_task(task_type: str, data: dict = None):
+    """Route a task to the appropriate cognitive module."""
+    from cognitive.central_orchestrator import get_orchestrator
+    orch = get_orchestrator()
+    orch.initialize()
+    return orch.route_task(task_type, data or {})
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """
