@@ -78,6 +78,13 @@ async def propose_experiment(req: ExperimentProposal):
     return exp.to_dict()
 
 
+@router.post("/experiments/autonomous")
+async def run_autonomous_experiment(title: str, hypothesis: str, domain: str = "general"):
+    """Fully autonomous experiment — no permission to start, only to approve results."""
+    from cognitive.sandbox_engine import run_autonomous_experiment as _run
+    return _run(title=title, hypothesis=hypothesis, domain=domain)
+
+
 @router.post("/experiments/{exp_id}/start")
 async def start_experiment(exp_id: str):
     """Start tracking an experiment."""
