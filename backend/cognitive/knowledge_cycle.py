@@ -159,6 +159,9 @@ class KnowledgeExpansionCycle:
             # Source 3: Magma memory graphs
             discovered.extend(self._search_magma(query))
 
+            # Source 4: FlashCache — cached external references
+            discovered.extend(self._search_flash_cache(query))
+
         return discovered
 
     def _search_oracle(self, query: str) -> List[Dict]:
@@ -182,6 +185,25 @@ class KnowledgeExpansionCycle:
                       "trust": c.get("score", 0.5) * 100,
                       "metadata": c.get("metadata", {})}
                     for c in chunks]
+        except Exception:
+            return []
+
+    def _search_flash_cache(self, query: str) -> List[Dict]:
+        """Search FlashCache for cached external references."""
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            refs = fc.search(query, limit=5, min_trust=0.4)
+            results = []
+            for ref in refs:
+                summary = ref.get("summary", "")
+                name = ref.get("source_name", "")
+                uri = ref.get("source_uri", "")
+                trust = (ref.get("trust_score", 0.5)) * 100
+                content = f"{name}: {summary}" if summary else f"{name} ({uri})"
+                results.append({"content": content, "source": "flash_cache",
+                                "trust": trust, "metadata": {"uri": uri}})
+            return results
         except Exception:
             return []
 

@@ -232,6 +232,20 @@ class CognitivePipeline:
             except Exception:
                 pass
 
+            # FlashCache — discover related external references
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                fc_results = fc.search(ctx.prompt[:200], limit=5, min_trust=0.4)
+                if fc_results:
+                    observations["flash_cache_refs"] = [
+                        {"name": r.get("source_name", ""), "uri": r.get("source_uri", ""),
+                         "trust": r.get("trust_score", 0)}
+                        for r in fc_results[:5]
+                    ]
+            except Exception:
+                pass
+
             # DECIDE: classify approach
             observations["approach"] = "direct" if observations["prompt_type"] in ("code_generation", "bug_fix") else "analytical"
 

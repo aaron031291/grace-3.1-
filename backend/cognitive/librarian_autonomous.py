@@ -250,6 +250,29 @@ class AutonomousLibrarian:
         if suggestion:
             return suggestion
 
+        # Check FlashCache for similar files/topics before asking Kimi
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            kw = fc.extract_keywords(name)
+            if kw:
+                refs = fc.lookup(keywords=kw[:5], limit=3, min_trust=0.5)
+                for ref in refs:
+                    meta = ref.get("metadata", {})
+                    if isinstance(meta, str):
+                        import json
+                        try:
+                            meta = json.loads(meta)
+                        except Exception:
+                            meta = {}
+                    source_type = meta.get("source_type", ref.get("source_type", ""))
+                    if source_type in ("api", "web"):
+                        return "research/external"
+                    if source_type == "document":
+                        return "documentation"
+        except Exception:
+            pass
+
         # Unknown file type — ask Kimi to reason about where it should go
         return self._ask_kimi_for_location(file_path)
 
@@ -338,27 +361,64 @@ class AutonomousLibrarian:
     # ── Ensure directory structure exists ───────────────────────────────
 
     def on_new_folder(self, folder_path: str) -> Dict[str, Any]:
-        """Called when a new domain folder is created. Triggers auto-research analysis."""
+        """Called when a new domain folder is created. Triggers auto-research and idle learning."""
+        analysis = {}
         try:
             from cognitive.auto_research import get_auto_research
             research = get_auto_research()
             analysis = research.analyse_folder(folder_path)
-            
+        except Exception:
+            analysis = {"suggested_research": []}
+
+        # Register folder topic in FlashCache for keyword discovery
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            folder_name = Path(folder_path).name
+            kw = fc.extract_keywords(folder_name.replace("_", " ").replace("-", " "))
+            fc.register(
+                source_uri=f"internal://folders/{folder_path}",
+                source_type="internal",
+                source_name=f"Folder: {folder_name}",
+                keywords=kw,
+                summary=f"Knowledge base folder: {folder_path}",
+                trust_score=0.8,
+                ttl_hours=8760,
+            )
+        except Exception:
+            pass
+
+        # Trigger idle learner to research the folder topic
+        try:
+            from cognitive.idle_learner import IdleLearner
+            learner = IdleLearner()
+            folder_name = Path(folder_path).name.replace("_", " ").replace("-", " ")
+            if folder_name and len(folder_name) > 2:
+                from cognitive.consensus_engine import queue_autonomous_query
+                queue_autonomous_query(
+                    prompt=f"Research the topic '{folder_name}' and identify key concepts, sub-topics, and recommended learning resources.",
+                    context=f"New folder created at {folder_path}",
+                    priority="normal",
+                )
+        except Exception:
+            pass
+
+        try:
             from api._genesis_tracker import track
             track(key_type="librarian",
-                  what=f"New folder detected: {folder_path} — auto-research suggested",
+                  what=f"New folder detected: {folder_path} — auto-research + idle learning triggered",
                   where=folder_path,
                   output_data={"topics": len(analysis.get("suggested_research", []))},
                   tags=["librarian", "new_folder", "auto_research"])
+        except Exception:
+            pass
 
-            return {
-                "notification": f"New folder '{folder_path}' detected. {len(analysis.get('suggested_research', []))} research topics suggested.",
-                "folder": folder_path,
-                "suggested_topics": analysis.get("suggested_research", []),
-                "analysis": analysis,
-            }
-        except Exception as e:
-            return {"folder": folder_path, "error": str(e)}
+        return {
+            "notification": f"New folder '{folder_path}' detected. Research queued.",
+            "folder": folder_path,
+            "suggested_topics": analysis.get("suggested_research", []),
+            "analysis": analysis,
+        }
 
     def ensure_taxonomy(self) -> Dict[str, Any]:
         """Create the full directory taxonomy if it doesn't exist."""
