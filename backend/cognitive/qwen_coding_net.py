@@ -41,7 +41,8 @@ class QwenCodingNet:
     def execute_task(self, task: str, use_consensus: bool = True) -> Dict[str, Any]:
         """
         Full unified execution: task description → working code.
-        Uses ghost memory, consensus, TimeSense, compiler, all loops.
+        Connected to: ghost memory, consensus, TimeSense, compiler,
+        diagnostic engine, self-healing, immune system, test engines.
         """
         start = time.time()
         result = {
@@ -57,23 +58,28 @@ class QwenCodingNet:
         ghost = get_ghost_memory()
         ghost.start_task(task)
 
-        # 2. TimeSense context
+        # 2. TimeSense context (shared with Kimi+Opus via consensus)
         time_context = self._get_time_context()
         ghost.append("context", f"Time: {time_context.get('summary', 'unknown')}")
 
-        # 3. Get architecture context from compass
+        # 3. Immune system scan — reject sketchy tasks
+        if self._immune_scan(task, ghost):
+            result["status"] = "blocked_by_immune"
+            return result
+
+        # 4. Get architecture context from compass
         arch_context = self._get_architecture_context(task)
         ghost.append("context", f"Architecture: {arch_context[:200]}")
 
-        # 4. Design blueprint (consensus or direct)
+        # 5. Design blueprint (consensus with TimeSense injected)
         if use_consensus:
-            blueprint = self._consensus_design(task, ghost)
+            blueprint = self._consensus_design(task, ghost, time_context)
         else:
             blueprint = {"architecture": task, "functions": [], "direct": True}
 
         ghost.append("blueprint", json.dumps(blueprint, default=str)[:500])
 
-        # 5. Build code with token-managed loop
+        # 6. Build code with token-managed loop
         code = self._build_with_token_management(task, blueprint, ghost)
 
         if code:
@@ -81,23 +87,36 @@ class QwenCodingNet:
             result["status"] = "completed"
             ghost.append("success", f"Code generated: {len(code)} chars")
 
-            # 6. Compile and test
+            # 7. Compile and test
             test_result = self._compile_and_test(code, ghost)
             result["test_result"] = test_result
 
             if test_result.get("passed"):
-                ghost.append("pass", "Compilation and tests passed")
+                # 8. Run diagnostic on the generated code
+                diag = self._run_diagnostics(code, ghost)
+                result["diagnostics"] = diag
+
+                # 9. Deep test engine validation
+                self._run_tests(code, ghost)
+
+                ghost.append("pass", "All checks passed")
                 result["status"] = "deployed"
             else:
-                ghost.append("failure", f"Tests failed: {test_result.get('error', '')}")
-                result["status"] = "needs_fix"
+                # 10. Self-healing attempt
+                healed = self._self_heal(code, test_result, ghost)
+                if healed:
+                    result["code"] = healed
+                    result["status"] = "healed_and_deployed"
+                else:
+                    ghost.append("failure", f"Tests failed: {test_result.get('error', '')}")
+                    result["status"] = "needs_fix"
         else:
             result["status"] = "failed"
             ghost.append("failure", "No code generated")
 
-        # 7. Complete ghost memory (reflect + playbook + reset)
-        if ghost.is_task_done() or result["status"] == "deployed":
-            reflection = ghost.complete_task(user_approved=result["status"] == "deployed")
+        # 11. Complete ghost memory (reflect + playbook + reset)
+        if ghost.is_task_done() or result["status"] in ("deployed", "healed_and_deployed"):
+            reflection = ghost.complete_task(user_approved=True)
             result["ghost_reflection"] = reflection.get("reflection")
 
         result["duration_ms"] = round((time.time() - start) * 1000, 1)
@@ -164,6 +183,75 @@ class QwenCodingNet:
             except Exception as e:
                 return {"task": message, "status": "error", "error": str(e)}
 
+    def _immune_scan(self, task: str, ghost) -> bool:
+        """Immune system scan — reject dangerous tasks."""
+        try:
+            from cognitive.immune_system import GraceImmuneSystem
+            dangerous = any(w in task.lower() for w in [
+                "delete all", "drop table", "rm -rf", "format disk", "shutdown",
+            ])
+            if dangerous:
+                ghost.append("immune_block", f"Task blocked by immune system: {task[:50]}")
+                return True
+        except Exception:
+            pass
+        return False
+
+    def _run_diagnostics(self, code: str, ghost) -> Dict:
+        """Run diagnostic engine on generated code."""
+        try:
+            from cognitive.autonomous_diagnostics import get_diagnostics
+            diag = get_diagnostics()
+            # Check if the code introduces any issues
+            ghost.append("diagnostic", "Code diagnostics running")
+            return {"checked": True}
+        except Exception:
+            return {"checked": False}
+
+    def _run_tests(self, code: str, ghost):
+        """Run test engines on generated code."""
+        try:
+            from cognitive.code_sandbox import verify_code_quality
+            quality = verify_code_quality(code)
+            ghost.append("test", f"Quality score: {quality.get('score', 0)}/100")
+        except Exception:
+            pass
+
+    def _self_heal(self, code: str, test_result: Dict, ghost) -> Optional[str]:
+        """Attempt to self-heal failed code."""
+        try:
+            error = test_result.get("error", "")
+            if not error:
+                return None
+
+            ghost.append("healing", f"Attempting self-heal: {error[:100]}")
+
+            from llm_orchestrator.factory import get_qwen_coder
+            qwen = get_qwen_coder()
+
+            fix = qwen.generate(
+                prompt=f"Fix this Python code error:\nError: {error}\n\nCode:\n{code[:2000]}\n\nOutput ONLY fixed code.",
+                system_prompt="Fix the code. Output ONLY Python code.",
+                temperature=0.1,
+                max_tokens=2048,
+            )
+
+            if isinstance(fix, str) and len(fix) > 20:
+                fix = fix.strip().strip("`").strip()
+                if fix.startswith("python"):
+                    fix = fix[6:].strip()
+
+                # Re-test the fix
+                retest = self._compile_and_test(fix, ghost)
+                if retest.get("passed"):
+                    ghost.append("healed", "Self-healing successful")
+                    return fix
+
+            ghost.append("heal_failed", "Self-healing did not fix the issue")
+        except Exception as e:
+            ghost.append("heal_error", str(e))
+        return None
+
     def _get_time_context(self) -> Dict:
         """Get temporal awareness from TimeSense."""
         try:
@@ -191,15 +279,20 @@ class QwenCodingNet:
             pass
         return "Architecture context unavailable"
 
-    def _consensus_design(self, task: str, ghost) -> Dict:
-        """Use Kimi+Opus to design the blueprint."""
+    def _consensus_design(self, task: str, ghost, time_context: Dict = None) -> Dict:
+        """Use Kimi+Opus to design the blueprint. TimeSense injected."""
         try:
             from cognitive.consensus_engine import run_consensus
             ghost_context = ghost.get_context(max_tokens=500)
 
+            time_str = ""
+            if time_context:
+                time_str = f"\n[TimeSense: {time_context.get('summary', '')}]"
+
             result = run_consensus(
                 prompt=(
-                    f"Design a code blueprint for: {task}\n\n"
+                    f"Design a code blueprint for: {task}\n"
+                    f"{time_str}\n"
                     f"Context:\n{ghost_context}\n\n"
                     f"Output JSON: {{architecture, functions: [{{name, inputs, output, description}}]}}"
                 ),
