@@ -59,6 +59,7 @@ from api.unified_coding_agent_api import router as unified_coding_agent_router
 from api.api_explorer_api import router as api_explorer_router
 from api.chunked_upload_api import router as chunked_upload_router
 from api.flash_cache_api import router as flash_cache_router
+from api.consensus_api import router as consensus_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -505,6 +506,7 @@ app.include_router(api_explorer_router)      # /api/explorer
 app.include_router(manifest_router)          # /api/manifest
 app.include_router(chunked_upload_router)    # /api/upload — chunked 5GB uploads
 app.include_router(flash_cache_router)       # /api/flash-cache — reference caching
+app.include_router(consensus_router)         # /api/consensus — multi-model roundtable
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

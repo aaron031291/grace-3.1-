@@ -464,10 +464,26 @@ export default function ChatTab() {
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
 
+  // Multi-model roundtable state
+  const [modelToggles, setModelToggles] = useState({
+    opus: false,
+    kimi: false,
+    qwen: false,
+    reasoning: false,
+  });
+  const [availableModels, setAvailableModels] = useState([]);
+  const [consensusMode, setConsensusMode] = useState(false);
+  const [consensusResult, setConsensusResult] = useState(null);
+  const [consensusRunning, setConsensusRunning] = useState(false);
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/docs/by-folder`)
       .then(r => r.ok ? r.json() : { folders: [] })
       .then(d => setAvailableFolders((d.folders || []).map(f => f.folder)))
+      .catch(() => {});
+    fetch(`${API_BASE_URL}/api/consensus/models`)
+      .then(r => r.ok ? r.json() : { models: [] })
+      .then(d => setAvailableModels(d.models || []))
       .catch(() => {});
   }, []);
 
@@ -556,32 +572,64 @@ export default function ChatTab() {
       {/* Toolbar */}
       <div style={styles.toolbar}>
         <div style={styles.toolbarLeft}>
-          <div style={styles.kimiToggle}>
-            <label style={styles.toggleLabel}>
-              <input
-                type="checkbox"
-                checked={useKimi}
-                onChange={(e) => setUseKimi(e.target.checked)}
-                style={styles.toggleCheckbox}
-              />
-              <span
-                style={{
-                  ...styles.toggleTrack,
-                  backgroundColor: useKimi ? "#e94560" : "#333",
-                }}
-              >
-                <span
-                  style={{
-                    ...styles.toggleThumb,
-                    transform: useKimi ? "translateX(18px)" : "translateX(2px)",
+          {/* Model toggles */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {[
+              { id: "opus", label: "Opus", icon: "🧠", color: "#9c27b0" },
+              { id: "kimi", label: "Kimi", icon: "🌙", color: "#e94560" },
+              { id: "qwen", label: "Qwen", icon: "⚡", color: "#2196f3" },
+              { id: "reasoning", label: "Reason", icon: "🔮", color: "#ff9800" },
+            ].map(m => {
+              const isOn = modelToggles[m.id];
+              const modelInfo = availableModels.find(am => am.id === m.id);
+              const isAvail = modelInfo ? modelInfo.available : true;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    const newToggles = { ...modelToggles, [m.id]: !isOn };
+                    setModelToggles(newToggles);
+                    const activeCount = Object.values(newToggles).filter(Boolean).length;
+                    setConsensusMode(activeCount >= 2);
+                    if (m.id === "kimi") setUseKimi(!isOn);
                   }}
-                />
-              </span>
-              <span style={{ color: useKimi ? "#e94560" : "#aaa", fontSize: 13, fontWeight: 500 }}>
-                {useKimi ? "Kimi 2.5 Cloud" : "Local LLM"}
-              </span>
-            </label>
+                  disabled={!isAvail}
+                  title={`${m.label}${modelInfo ? ` — ${modelInfo.strengths?.join(", ")}` : ""}${!isAvail ? " (not configured)" : ""}`}
+                  style={{
+                    padding: "3px 8px",
+                    border: `1px solid ${isOn ? m.color : "#444"}`,
+                    borderRadius: 12,
+                    background: isOn ? `${m.color}22` : "transparent",
+                    color: isOn ? m.color : "#666",
+                    fontSize: 11,
+                    fontWeight: isOn ? 700 : 500,
+                    cursor: isAvail ? "pointer" : "not-allowed",
+                    opacity: isAvail ? 1 : 0.4,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 3,
+                    transition: "all .15s",
+                  }}
+                >
+                  <span style={{ fontSize: 12 }}>{m.icon}</span>
+                  {m.label}
+                  <span style={{
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: isOn ? m.color : "#444",
+                    transition: "background .15s",
+                  }} />
+                </button>
+              );
+            })}
+            {consensusMode && (
+              <span style={{
+                fontSize: 9, padding: "2px 6px", borderRadius: 3,
+                background: "#4caf5022", color: "#4caf50", fontWeight: 700,
+                border: "1px solid #4caf5044", marginLeft: 2,
+              }}>ROUNDTABLE</span>
+            )}
           </div>
+
           {/* Folder context selector */}
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 12, color: "#888" }}>📁</span>
