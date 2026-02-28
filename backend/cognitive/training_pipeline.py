@@ -344,16 +344,31 @@ def get_recommended_plan(available_storage_gb: int = 1000) -> Dict[str, Any]:
     }
 
     # Priority order based on relevance to Grace
-    priority = [
-        ("the_stack_v2", 100, "Start with Python subset only (~100GB)"),
-        ("dolma", 200, "AI2's curated mix — code, web, academic (~200GB subset)"),
-        ("stack_overflow", 50, "All Python/JS/architecture Q&A (~50GB)"),
-        ("refinedweb", 100, "High-quality web text (~100GB subset)"),
-        ("arxiv_papers", 30, "CS/AI papers (~30GB)"),
-        ("redpajama", 200, "Web data for general knowledge (~200GB subset)"),
-        ("github_code", 100, "Additional code samples (~100GB)"),
-        ("wikipedia", 22, "General knowledge base (~22GB)"),
-    ]
+    # Scales up with available storage — subsets for <1TB, full datasets for 2TB+
+    if available_storage_gb >= 1500:
+        # 2TB plan — pull FULL datasets, not subsets
+        priority = [
+            ("the_stack_v2", 500, "FULL Python + JS + TS + Rust + Go (~500GB)"),
+            ("dolma", 500, "FULL Dolma — code, web, academic, books (~500GB)"),
+            ("refinedweb", 300, "FULL RefinedWeb — high-quality web text (~300GB)"),
+            ("redpajama", 300, "FULL RedPajama subset — curated web data (~300GB)"),
+            ("stack_overflow", 50, "FULL Stack Overflow dump — all Q&A (~50GB)"),
+            ("github_code", 200, "FULL GitHub Code — all languages (~200GB)"),
+            ("arxiv_papers", 50, "FULL ArXiv CS/AI/ML papers (~50GB)"),
+            ("openwebtext2", 65, "FULL OpenWebText2 (~65GB)"),
+            ("wikipedia", 22, "FULL English Wikipedia (~22GB)"),
+        ]
+    else:
+        priority = [
+            ("the_stack_v2", 100, "Start with Python subset only (~100GB)"),
+            ("dolma", 200, "AI2's curated mix — code, web, academic (~200GB subset)"),
+            ("stack_overflow", 50, "All Python/JS/architecture Q&A (~50GB)"),
+            ("refinedweb", 100, "High-quality web text (~100GB subset)"),
+            ("arxiv_papers", 30, "CS/AI papers (~30GB)"),
+            ("redpajama", 200, "Web data for general knowledge (~200GB subset)"),
+            ("github_code", 100, "Additional code samples (~100GB)"),
+            ("wikipedia", 22, "General knowledge base (~22GB)"),
+        ]
 
     running_total = 0
     for source_id, est_gb, note in priority:
