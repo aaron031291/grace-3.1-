@@ -69,6 +69,29 @@ class MemoryMeshIntegration:
         Returns:
             Learning example ID
         """
+        # Handle both dict and JSON string inputs
+        import json as _json
+        if isinstance(context, str):
+            try:
+                context = _json.loads(context)
+            except Exception:
+                context = {"raw": context}
+        if isinstance(action_taken, str):
+            try:
+                action_taken = _json.loads(action_taken)
+            except Exception:
+                action_taken = {"raw": action_taken}
+        if isinstance(outcome, str):
+            try:
+                outcome = _json.loads(outcome)
+            except Exception:
+                outcome = {"raw": outcome}
+        if isinstance(expected_outcome, str):
+            try:
+                expected_outcome = _json.loads(expected_outcome)
+            except Exception:
+                expected_outcome = {"raw": expected_outcome}
+
         # 1. Store in learning memory with trust scoring
         learning_data = {
             'context': context,
