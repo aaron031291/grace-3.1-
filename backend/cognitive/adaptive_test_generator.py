@@ -68,9 +68,13 @@ def generate_tests_for_module(module_path: str) -> Dict[str, Any]:
     if not functions:
         return {**result, "message": "No testable functions found"}
 
-    # Step 2: REASON + DETERMINE + GENERATE — use LLM to understand and create tests
-    for func in functions[:15]:  # Limit to avoid token explosion
-        test_code = _generate_test_for_function(func, source, module_path)
+    # Step 2: REASON using consensus — Kimi+Opus understand the module's PURPOSE
+    module_purpose = _consensus_reason_about_module(source[:3000], module_path)
+    result["module_purpose"] = module_purpose
+
+    # Step 3: GENERATE tests for each function
+    for func in functions[:15]:
+        test_code = _generate_test_for_function(func, source, module_path, module_purpose)
         if not test_code:
             continue
 
@@ -190,7 +194,32 @@ def _extract_functions(source: str) -> List[Dict]:
     return functions
 
 
-def _generate_test_for_function(func: Dict, module_source: str, module_path: str) -> Optional[str]:
+def _consensus_reason_about_module(source: str, module_path: str) -> str:
+    """Use Kimi+Opus to understand what a module SHOULD do before generating tests."""
+    try:
+        from cognitive.consensus_engine import run_consensus, _check_model_available
+        available = [m for m in ["kimi", "opus"] if _check_model_available(m)]
+        if not available:
+            available = ["qwen"]
+
+        result = run_consensus(
+            prompt=(
+                f"Read this Python module and explain in 3 sentences:\n"
+                f"1. What is its purpose?\n"
+                f"2. What are its critical functions?\n"
+                f"3. What should tests verify?\n\n"
+                f"Module: {module_path}\n\n{source[:2000]}"
+            ),
+            models=available[:2],
+            source="autonomous",
+        )
+        return result.final_output[:500] if result.final_output else ""
+    except Exception:
+        return ""
+
+
+def _generate_test_for_function(func: Dict, module_source: str, module_path: str,
+                                module_purpose: str = "") -> Optional[str]:
     """
     Generate a test for a specific function.
     Uses LLM to reason about expected behaviour, or falls back to basic tests.
@@ -205,15 +234,19 @@ def _generate_test_for_function(func: Dict, module_source: str, module_path: str
         from llm_orchestrator.factory import get_llm_client
         client = get_llm_client()
 
+        purpose_ctx = f"\nModule purpose: {module_purpose}\n" if module_purpose else ""
+
         prompt = (
             f"Generate a Python test for this function:\n\n"
             f"Function: {name}({', '.join(a['name'] + (': ' + a['type'] if a['type'] else '') for a in args)})"
             f"{' -> ' + returns if returns else ''}\n"
-            f"Docstring: {docstring}\n\n"
+            f"Docstring: {docstring}\n"
+            f"{purpose_ctx}\n"
             f"The test should:\n"
             f"1. Call the function with valid inputs\n"
             f"2. Assert the output type is correct\n"
-            f"3. Assert the output is not None/empty\n\n"
+            f"3. Assert the output makes sense for the function's purpose\n"
+            f"4. Test at least one edge case\n\n"
             f"Output ONLY the test function code. No imports, no explanation.\n"
             f"Start with: def test_{name}():"
         )

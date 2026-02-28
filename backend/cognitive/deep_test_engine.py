@@ -112,6 +112,12 @@ class DeepTestEngine:
             except Exception:
                 pass
 
+            # Escalate to Kimi+Opus for diagnosis and fix suggestions
+            failed_tests = [t for t in results["tests"] if not t["passed"]]
+            if failed_tests:
+                consensus_analysis = self._consensus_analyse_failures(failed_tests)
+                results["consensus_analysis"] = consensus_analysis
+
         # Feed to intelligence layer
         try:
             from cognitive.intelligence_layer import get_intelligence_layer
@@ -126,6 +132,73 @@ class DeepTestEngine:
 
         self._save_results("logic_test", results)
         return results
+
+    def _consensus_analyse_failures(self, failed_tests: List[Dict]) -> Dict[str, Any]:
+        """
+        Send test failures to Kimi+Opus for root cause analysis and fix suggestions.
+        They diagnose WHY it failed and suggest the exact fix.
+        """
+        try:
+            from cognitive.consensus_engine import run_consensus
+
+            failures_text = "\n".join(
+                f"- {t['name']}: {t['detail']}" for t in failed_tests[:10]
+            )
+
+            result = run_consensus(
+                prompt=(
+                    f"Grace's logic tests found {len(failed_tests)} failure(s):\n\n"
+                    f"{failures_text}\n\n"
+                    f"For each failure:\n"
+                    f"1. What's the root cause? (plain English)\n"
+                    f"2. Can Grace fix this herself? How?\n"
+                    f"3. What should be done to prevent this happening again?\n"
+                    f"4. Is this a real bug or a test issue?\n\n"
+                    f"Be specific and actionable."
+                ),
+                models=["kimi", "opus"],
+                source="autonomous",
+            )
+
+            analysis = {
+                "diagnosis": result.final_output[:2000],
+                "confidence": result.confidence,
+                "models_used": result.models_used,
+            }
+
+            # Store the diagnosis as a learning episode
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                mem = get_unified_memory()
+                mem.store_episode(
+                    problem=f"Test failures: {failures_text[:300]}",
+                    action=f"Kimi+Opus consensus diagnosis",
+                    outcome=result.final_output[:500],
+                    trust=0.8,
+                    source="deep_test_consensus",
+                )
+            except Exception:
+                pass
+
+            # Log to playbook
+            try:
+                from pathlib import Path
+                playbook_dir = Path(__file__).parent.parent / "data" / "test_playbook"
+                playbook_dir.mkdir(parents=True, exist_ok=True)
+                ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+                (playbook_dir / f"diagnosis_{ts}.json").write_text(json.dumps({
+                    "failures": [{"name": t["name"], "detail": t["detail"]} for t in failed_tests],
+                    "diagnosis": analysis["diagnosis"],
+                    "confidence": analysis["confidence"],
+                    "timestamp": datetime.utcnow().isoformat(),
+                }, indent=2, default=str))
+            except Exception:
+                pass
+
+            return analysis
+
+        except Exception as e:
+            return {"diagnosis": f"Consensus unavailable: {e}", "confidence": 0}
 
     def start_stress_test(self, duration_minutes: int = 5, interval_seconds: int = 30) -> Dict:
         """Start continuous stress testing in background."""
@@ -168,13 +241,25 @@ class DeepTestEngine:
                 mini_result["duration_ms"] = round((time.time() - cycle_start) * 1000, 1)
                 self._stress_results.append(mini_result)
 
-                # If something broke, trigger healing
+                # If something broke, trigger healing + consensus diagnosis
                 if passed < len(checks):
                     try:
                         from cognitive.event_bus import publish
                         publish("stress_test.failure", {
                             "cycle": cycle, "passed": passed, "total": len(checks),
                         }, source="deep_test_engine")
+                    except Exception:
+                        pass
+
+                    # Escalate to autonomous diagnostics (triggers consensus if recurring)
+                    try:
+                        from cognitive.autonomous_diagnostics import get_diagnostics
+                        failed_names = [c["name"] for c in mini_result["checks"] if not c["ok"]]
+                        get_diagnostics().on_error(
+                            "stress_test_failure",
+                            f"Stress cycle {cycle}: {', '.join(failed_names)} failed",
+                            "deep_test_engine",
+                        )
                     except Exception:
                         pass
 
