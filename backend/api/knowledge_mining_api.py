@@ -258,6 +258,7 @@ async def seed_engineering_sources():
     recommended by Kimi+Opus consensus. These feed the reverse kNN pipeline.
     """
     sources = [
+        # Software Engineering
         {"name": "Python PEPs", "url": "https://peps.python.org/api/peps.json",
          "description": "All Python Enhancement Proposals in JSON", "source_type": "api", "tags": ["python", "peps", "standards"]},
         {"name": "Python Packaging Guide", "url": "https://packaging.python.org/sitemap.xml",
@@ -278,6 +279,30 @@ async def seed_engineering_sources():
          "description": "Software packaging and distribution policy", "source_type": "website", "tags": ["linux", "packaging", "policy"]},
         {"name": "GitHub REST API", "url": "https://api.github.com",
          "description": "GitHub API — endpoints, auth, best practices", "source_type": "api", "tags": ["github", "api", "git"]},
+
+        # AI Research APIs (free, no key needed)
+        {"name": "ArXiv AI Papers", "url": "http://export.arxiv.org/api/query?search_query=cat:cs.AI+OR+cat:cs.LG&sortBy=submittedDate&sortOrder=descending&max_results=50",
+         "description": "Latest AI and machine learning research papers from ArXiv", "source_type": "api", "tags": ["ai", "research", "papers", "arxiv", "machine-learning"]},
+        {"name": "ArXiv NLP Papers", "url": "http://export.arxiv.org/api/query?search_query=cat:cs.CL&sortBy=submittedDate&sortOrder=descending&max_results=50",
+         "description": "Latest NLP and language model research papers", "source_type": "api", "tags": ["nlp", "research", "papers", "language-models"]},
+        {"name": "ArXiv Software Engineering", "url": "http://export.arxiv.org/api/query?search_query=cat:cs.SE&sortBy=submittedDate&sortOrder=descending&max_results=50",
+         "description": "Latest software engineering research papers", "source_type": "api", "tags": ["software-engineering", "research", "papers"]},
+        {"name": "Semantic Scholar AI", "url": "https://api.semanticscholar.org/graph/v1/paper/search?query=autonomous+AI+systems&limit=50&fields=title,abstract,year,citationCount",
+         "description": "200M+ academic papers — search for autonomous AI research", "source_type": "api", "tags": ["ai", "research", "academic", "citations"]},
+        {"name": "Semantic Scholar Code Gen", "url": "https://api.semanticscholar.org/graph/v1/paper/search?query=code+generation+LLM&limit=50&fields=title,abstract,year,citationCount",
+         "description": "Research on LLM code generation", "source_type": "api", "tags": ["code-generation", "llm", "research"]},
+        {"name": "Papers With Code", "url": "https://paperswithcode.com/api/v1/papers/?ordering=-proceeding&limit=50",
+         "description": "Latest papers with code implementations", "source_type": "api", "tags": ["papers", "code", "implementations", "benchmarks"]},
+        {"name": "Papers With Code — Methods", "url": "https://paperswithcode.com/api/v1/methods/?limit=50",
+         "description": "ML methods and techniques with implementations", "source_type": "api", "tags": ["methods", "techniques", "ml", "implementations"]},
+        {"name": "HuggingFace Models", "url": "https://huggingface.co/api/models?sort=downloads&direction=-1&limit=50",
+         "description": "Most popular AI models on HuggingFace", "source_type": "api", "tags": ["models", "huggingface", "ai", "downloads"]},
+        {"name": "HuggingFace Datasets", "url": "https://huggingface.co/api/datasets?sort=downloads&direction=-1&limit=50",
+         "description": "Most popular datasets for AI training", "source_type": "api", "tags": ["datasets", "training", "ai", "huggingface"]},
+        {"name": "GitHub Trending AI", "url": "https://api.github.com/search/repositories?q=topic:artificial-intelligence&sort=stars&order=desc&per_page=30",
+         "description": "Top trending AI repositories on GitHub", "source_type": "api", "tags": ["github", "ai", "trending", "open-source"]},
+        {"name": "GitHub Trending Python", "url": "https://api.github.com/search/repositories?q=language:python+stars:>1000&sort=updated&order=desc&per_page=30",
+         "description": "Most active Python repositories with 1000+ stars", "source_type": "api", "tags": ["github", "python", "trending", "popular"]},
     ]
     
     registered = []
@@ -301,11 +326,42 @@ async def seed_engineering_sources():
         except Exception as e:
             registered.append({"name": src["name"], "error": str(e)})
     
+    # Also register API sources in the whitelist hub
+    try:
+        from pathlib import Path
+        import json as _json
+        data_dir = Path(__file__).parent.parent / "data" / "whitelist_sources"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        api_sources_file = data_dir / "api_sources.json"
+        existing = []
+        if api_sources_file.exists():
+            try:
+                existing = _json.loads(api_sources_file.read_text())
+            except Exception:
+                pass
+        existing_urls = {s.get("url") for s in existing}
+        for src in sources:
+            if src["source_type"] == "api" and src["url"] not in existing_urls:
+                existing.append({
+                    "id": f"api-seed-{len(existing)}",
+                    "name": src["name"],
+                    "url": src["url"],
+                    "description": src["description"],
+                    "status": "active",
+                    "headers": {},
+                    "api_key": "",
+                    "run_count": 0,
+                    "documents": [],
+                })
+        api_sources_file.write_text(_json.dumps(existing, indent=2, default=str))
+    except Exception:
+        pass
+
     try:
         from api._genesis_tracker import track
         track(
             key_type="system",
-            what=f"Seeded {len(registered)} engineering sources from Kimi+Opus consensus",
+            what=f"Seeded {len(registered)} sources (engineering + AI research) into whitelist + FlashCache",
             how="seed_engineering_sources",
             tags=["reverse_knn", "seed", "sources"],
         )
