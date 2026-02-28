@@ -561,6 +561,36 @@ async def diagnostics_status():
     return get_diagnostics().get_status()
 
 
+# ── Deep Logic Tests + Stress Tests ───────────────────────────────────
+
+@router.get("/test/logic")
+async def run_logic_tests():
+    """Test actual LOGIC of every component (not just imports)."""
+    from cognitive.deep_test_engine import get_deep_test_engine
+    return get_deep_test_engine().run_logic_tests()
+
+
+@router.post("/test/stress/start")
+async def start_stress_test(duration_minutes: int = 5, interval_seconds: int = 30):
+    """Start continuous stress testing in background."""
+    from cognitive.deep_test_engine import get_deep_test_engine
+    return get_deep_test_engine().start_stress_test(duration_minutes, interval_seconds)
+
+
+@router.post("/test/stress/stop")
+async def stop_stress_test():
+    """Stop background stress testing."""
+    from cognitive.deep_test_engine import get_deep_test_engine
+    return get_deep_test_engine().stop_stress_test()
+
+
+@router.get("/test/stress/status")
+async def stress_test_status():
+    """Get current stress test status."""
+    from cognitive.deep_test_engine import get_deep_test_engine
+    return get_deep_test_engine().get_stress_status()
+
+
 @router.get("/test/smoke")
 async def run_smoke_test():
     """Quick 30-second health check — is everything alive?"""
