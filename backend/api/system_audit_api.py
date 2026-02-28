@@ -374,6 +374,36 @@ async def active_overrides():
     return {"overrides": system.get_active_overrides()}
 
 
+# ── Live Integration Protocol ─────────────────────────────────────────
+
+@router.post("/lip/integrate")
+async def lip_integrate(file_path: str):
+    """Integrate a single component into Grace's world."""
+    from cognitive.live_integration import integrate_component
+    return integrate_component(file_path)
+
+
+@router.post("/lip/integrate-directory")
+async def lip_integrate_directory(dir_path: str):
+    """Integrate all Python files in a directory."""
+    from cognitive.live_integration import integrate_directory
+    return integrate_directory(dir_path)
+
+
+@router.get("/lip/ledger")
+async def lip_ledger():
+    """Get the full citizenship ledger."""
+    from cognitive.live_integration import get_citizenship_ledger
+    return get_citizenship_ledger()
+
+
+@router.post("/lip/promote")
+async def lip_promote(file_path: str, level: str):
+    """Manually promote a component's citizenship level."""
+    from cognitive.live_integration import promote_component
+    return promote_component(file_path, level)
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """

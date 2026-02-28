@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
+import PlannerPanelIDE from './PlannerPanel';
 
 const C = {
   bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
@@ -529,7 +530,8 @@ export default function TasksTab() {
     { id: 'live', label: 'Live', icon: '🟢' },
     { id: 'submit', label: 'Submit Task', icon: '📝' },
     { id: 'schedule', label: 'Schedule', icon: '⏰' },
-    { id: 'planner', label: 'Planner', icon: '🤝' },
+    { id: 'planner', label: 'Planner Chat', icon: '🤝' },
+    { id: 'blueprint', label: 'Blueprint IDE', icon: '🧠' },
   ];
 
   return (
@@ -551,6 +553,7 @@ export default function TasksTab() {
         {activeTab === 'submit' && <SubmitPanel />}
         {activeTab === 'schedule' && <SchedulePanel />}
         {activeTab === 'planner' && <PlannerPanel />}
+        {activeTab === 'blueprint' && <PlannerPanelIDE />}
       </div>
     </div>
   );
