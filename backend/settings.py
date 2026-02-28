@@ -110,8 +110,8 @@ class Settings:
 
     # ==================== Kimi 2.5 (Moonshot AI) Configuration ====================
     KIMI_API_KEY: str = os.getenv("KIMI_API_KEY", "")
-    KIMI_BASE_URL: str = os.getenv("KIMI_BASE_URL", "https://api.moonshot.cn/v1")
-    KIMI_MODEL: str = os.getenv("KIMI_MODEL", "kimi-k2-0711-preview")
+    KIMI_BASE_URL: str = os.getenv("KIMI_BASE_URL", "https://api.moonshot.ai/v1")
+    KIMI_MODEL: str = os.getenv("KIMI_MODEL", "kimi-k2.5")
 
     # ==================== Opus (Anthropic Claude) Configuration ====================
     OPUS_API_KEY: str = os.getenv("OPUS_API_KEY", "")
