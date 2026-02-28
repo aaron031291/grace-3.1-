@@ -591,6 +591,22 @@ async def stress_test_status():
     return get_deep_test_engine().get_stress_status()
 
 
+# ── Adaptive Test Generator ───────────────────────────────────────────
+
+@router.post("/test/generate/{module_path:path}")
+async def generate_tests(module_path: str):
+    """Auto-generate tests for any module by reading its code."""
+    from cognitive.adaptive_test_generator import generate_tests_for_module
+    return generate_tests_for_module(module_path)
+
+
+@router.post("/test/generate-all-new")
+async def generate_all_new_tests():
+    """Find untested modules and generate tests for them."""
+    from cognitive.adaptive_test_generator import generate_tests_for_all_new
+    return generate_tests_for_all_new()
+
+
 @router.get("/test/smoke")
 async def run_smoke_test():
     """Quick 30-second health check — is everything alive?"""

@@ -349,6 +349,15 @@ def _stage_citizenship(c: ComponentCandidate) -> ComponentCandidate:
 
 def _stage_live(c: ComponentCandidate) -> ComponentCandidate:
     """Mark component as live — fully integrated into Grace's world."""
+    # Auto-generate tests for the new component
+    try:
+        from cognitive.adaptive_test_generator import generate_tests_for_module
+        test_result = generate_tests_for_module(c.file_path)
+        if test_result.get("tests_passed", 0) > 0:
+            c.trust_score = min(1.0, c.trust_score + 0.05)
+    except Exception:
+        pass
+
     # Store in unified memory
     try:
         from cognitive.unified_memory import get_unified_memory
