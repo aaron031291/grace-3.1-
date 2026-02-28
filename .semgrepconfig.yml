@@ -1,0 +1,43 @@
+# Semgrep Security Scanning Config for Grace
+# Run: semgrep --config .semgrepconfig.yml backend/
+#
+# Install: pip install semgrep
+# Or: brew install semgrep
+
+rules:
+  - id: no-eval-exec
+    patterns:
+      - pattern: eval(...)
+    message: "eval() is forbidden — use Grace's Code Sandbox instead"
+    languages: [python]
+    severity: ERROR
+
+  - id: no-os-system
+    patterns:
+      - pattern: os.system(...)
+    message: "os.system() is forbidden — use Grace's Code Sandbox instead"
+    languages: [python]
+    severity: ERROR
+
+  - id: no-subprocess-shell
+    patterns:
+      - pattern: subprocess.run(..., shell=True, ...)
+    message: "subprocess with shell=True is risky — review carefully"
+    languages: [python]
+    severity: WARNING
+
+  - id: no-hardcoded-secrets
+    patterns:
+      - pattern: |
+          $KEY = "sk-..."
+    message: "Possible hardcoded API key — use .env file instead"
+    languages: [python]
+    severity: ERROR
+
+  - id: sql-injection-risk
+    patterns:
+      - pattern: |
+          $DB.execute(f"...")
+    message: "Possible SQL injection — use parameterized queries"
+    languages: [python]
+    severity: WARNING

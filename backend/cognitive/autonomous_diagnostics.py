@@ -104,6 +104,18 @@ class AutonomousDiagnostics:
             "component": component,
         }
 
+        # Fire notification
+        try:
+            from cognitive.notification_system import get_notifications
+            severity = "high" if "critical" in error_type.lower() or "crash" in error_type.lower() else "medium"
+            get_notifications().alert(
+                title=f"Error: {error_type}",
+                message=error_message[:200],
+                severity=severity,
+            )
+        except Exception:
+            pass
+
         # Try to self-fix
         fix_result = self._attempt_fix(component or error_type, error_message)
         result["auto_fixed"] = fix_result.get("fixed", False)
