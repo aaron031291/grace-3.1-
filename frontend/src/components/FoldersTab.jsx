@@ -198,6 +198,7 @@ const FoldersTab = () => {
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false);
   const [newFileName, setNewFileName] = useState('');
+  const [viewMode, setViewMode] = useState('grid'); // grid or list
 
   const fileInputRef = useRef(null);
   const notifTimer = useRef(null);
@@ -870,22 +871,88 @@ const FoldersTab = () => {
               </div>
             )}
 
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            {/* View toggle */}
+            <div style={{ display: 'flex', gap: 2, padding: '4px 8px', background: COLORS.bg }}>
+              <button onClick={() => setViewMode('grid')} style={{
+                padding: '3px 8px', border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11,
+                background: viewMode === 'grid' ? COLORS.accentAlt : 'transparent', color: viewMode === 'grid' ? '#fff' : COLORS.dim,
+              }}>▦ Grid</button>
+              <button onClick={() => setViewMode('list')} style={{
+                padding: '3px 8px', border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11,
+                background: viewMode === 'list' ? COLORS.accentAlt : 'transparent', color: viewMode === 'list' ? '#fff' : COLORS.dim,
+              }}>☰ List</button>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: viewMode === 'grid' ? 8 : 0 }}>
               {dirLoading ? (
                 <div style={{ padding: 16, fontSize: 12, color: COLORS.textDim, textAlign: 'center' }}>Loading...</div>
+              ) : viewMode === 'grid' ? (
+                /* ── GRID VIEW (Windows Explorer style) ──────────── */
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {/* Folders */}
+                  {dirItems.filter(i => i.type === 'directory' || i.is_dir).map(item => (
+                    <div
+                      key={item.path || item.name}
+                      onClick={() => handleDirItemClick(item)}
+                      style={{
+                        width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
+                        borderRadius: 6, background: 'transparent', transition: 'background .15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div style={{ fontSize: 36, marginBottom: 4 }}>📁</div>
+                      <div style={{ fontSize: 10, color: COLORS.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {item.name}
+                      </div>
+                      <div style={{ fontSize: 9, color: COLORS.textDim }}>{item.file_count ?? ''} items</div>
+                    </div>
+                  ))}
+                  {/* Files */}
+                  {dirItems.filter(i => i.type !== 'directory' && !i.is_dir).map(item => {
+                    const isActive = selectedFile?.path === item.path;
+                    return (
+                      <div
+                        key={item.path || item.name}
+                        onClick={() => handleDirItemClick(item)}
+                        style={{
+                          width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
+                          borderRadius: 6, transition: 'background .15s',
+                          background: isActive ? COLORS.bgDark : 'transparent',
+                          border: isActive ? `1px solid ${COLORS.accent}` : '1px solid transparent',
+                        }}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = COLORS.bgAlt; }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = isActive ? COLORS.bgDark : 'transparent'; }}
+                      >
+                        <div style={{ fontSize: 32, marginBottom: 4 }}>{_fileIcon(item.extension || item.name)}</div>
+                        <div style={{
+                          fontSize: 10, color: isActive ? COLORS.text : COLORS.textMuted,
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        }}>
+                          {item.name}
+                        </div>
+                        <div style={{ fontSize: 9, color: COLORS.textDim }}>{formatBytes(item.size)}</div>
+                      </div>
+                    );
+                  })}
+                  {dirItems.length === 0 && (
+                    <div style={{ padding: '30px 16px', textAlign: 'center', color: COLORS.textDim, fontSize: 12, width: '100%' }}>
+                      <div style={{ fontSize: 40, marginBottom: 8 }}>📂</div>
+                      Empty folder
+                    </div>
+                  )}
+                </div>
               ) : (
+                /* ── LIST VIEW (original) ────────────────────────── */
                 <>
-                  {/* Subdirectories first */}
                   {dirItems.filter(i => i.type === 'directory' || i.is_dir).map(item => (
                     <div
                       key={item.path || item.name}
                       onClick={() => handleDirItemClick(item)}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
-                        cursor: 'pointer', fontSize: 12,
-                        color: COLORS.textMuted,
-                        background: 'transparent',
-                        transition: 'background .1s',
+                        cursor: 'pointer', fontSize: 12, color: COLORS.textMuted,
+                        background: 'transparent', transition: 'background .1s',
                       }}
                       onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
@@ -893,15 +960,10 @@ const FoldersTab = () => {
                       <span style={{ flexShrink: 0 }}>📁</span>
                       <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
                       <span style={{ fontSize: 10, color: COLORS.textDim }}>{item.file_count ?? ''}</span>
-                      <span
-                        onClick={e => { e.stopPropagation(); handleDeleteDir(item.path); }}
-                        title="Delete folder"
-                        style={{ cursor: 'pointer', fontSize: 12, color: COLORS.textDim, opacity: 0.6, padding: '0 2px' }}
-                      >🗑</span>
+                      <span onClick={e => { e.stopPropagation(); handleDeleteDir(item.path); }}
+                        title="Delete folder" style={{ cursor: 'pointer', fontSize: 12, color: COLORS.textDim, opacity: 0.6 }}>🗑</span>
                     </div>
                   ))}
-
-                  {/* Files */}
                   {dirItems.filter(i => i.type !== 'directory' && !i.is_dir).map(item => {
                     const isActive = selectedFile?.path === item.path;
                     return (
@@ -913,8 +975,7 @@ const FoldersTab = () => {
                           cursor: 'pointer', fontSize: 12,
                           background: isActive ? COLORS.bgDark : 'transparent',
                           borderLeft: isActive ? `2px solid ${COLORS.accent}` : '2px solid transparent',
-                          color: isActive ? COLORS.text : COLORS.textMuted,
-                          transition: 'all .1s',
+                          color: isActive ? COLORS.text : COLORS.textMuted, transition: 'all .1s',
                         }}
                         onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = COLORS.bgAlt; }}
                         onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
@@ -928,7 +989,6 @@ const FoldersTab = () => {
                       </div>
                     );
                   })}
-
                   {dirItems.length === 0 && (
                     <div style={{ padding: '30px 16px', textAlign: 'center', color: COLORS.textDim, fontSize: 12 }}>
                       <div style={{ fontSize: 32, marginBottom: 8 }}>📂</div>
