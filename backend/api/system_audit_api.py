@@ -463,6 +463,35 @@ async def run_composite(composite_id: str):
 
 # ── Code Sandbox ──────────────────────────────────────────────────────
 
+# ── Grace Compiler ────────────────────────────────────────────────────
+
+@router.post("/compiler/compile")
+async def grace_compile(code: str, context: dict = None):
+    """Compile code through Grace's native compiler (5-stage pipeline)."""
+    from cognitive.grace_compiler import get_grace_compiler
+    compiler = get_grace_compiler()
+    result = compiler.compile(code, context or {})
+    return result.to_dict()
+
+
+# ── Domain Environments ──────────────────────────────────────────────
+
+@router.post("/domain/create")
+async def create_domain(name: str, description: str = ""):
+    """Create a domain environment with auto-populated structure and learning."""
+    from cognitive.librarian_autonomous import AutonomousLibrarian
+    lib = AutonomousLibrarian()
+    return lib.create_domain_environment(name, description)
+
+
+@router.post("/domain/smart-ingest")
+async def smart_ingest(file_path: str):
+    """Smart document ingestion: read → understand → name → categorise → index."""
+    from cognitive.librarian_autonomous import AutonomousLibrarian
+    lib = AutonomousLibrarian()
+    return lib.smart_ingest_document(file_path)
+
+
 @router.post("/sandbox/run")
 async def sandbox_run(code: str):
     """Execute code in sandboxed environment. Returns compile + runtime results."""

@@ -420,6 +420,240 @@ class AutonomousLibrarian:
             "analysis": analysis,
         }
 
+    def create_domain_environment(self, domain_name: str, description: str = "") -> Dict[str, Any]:
+        """
+        Create a full domain environment — like a venv but for ANY topic.
+        Auto-populates with structure, governance, and triggers learning.
+        """
+        kb = _get_kb()
+        domain_path = kb / "domains" / domain_name.lower().replace(" ", "_")
+        domain_path.mkdir(parents=True, exist_ok=True)
+
+        # Create domain structure
+        subdirs = ["documents", "code", "research", "data", "governance", "notes"]
+        created = []
+        for sub in subdirs:
+            (domain_path / sub).mkdir(exist_ok=True)
+            created.append(sub)
+
+        # Create domain config
+        config = {
+            "domain": domain_name,
+            "description": description,
+            "created_at": datetime.utcnow().isoformat(),
+            "subdirectories": subdirs,
+            "auto_learn": True,
+            "governance_rules": [],
+        }
+        (domain_path / "domain_config.json").write_text(json.dumps(config, indent=2))
+
+        # Register in FlashCache for keyword discovery
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            kw = fc.extract_keywords(f"{domain_name} {description}")
+            fc.register(
+                source_uri=f"internal://domain/{domain_name}",
+                source_type="internal",
+                source_name=f"Domain: {domain_name}",
+                keywords=kw,
+                summary=description or f"Knowledge domain: {domain_name}",
+                trust_score=0.8,
+                ttl_hours=8760 * 10,
+            )
+        except Exception:
+            pass
+
+        # Trigger reverse kNN to find relevant sources
+        try:
+            from cognitive.reverse_knn import get_reverse_knn
+            knn = get_reverse_knn()
+            knn.log_query(domain_name, had_results=False)
+            knn.log_query(f"{domain_name} best practices", had_results=False)
+        except Exception:
+            pass
+
+        # Queue consensus research on the domain
+        try:
+            from cognitive.consensus_engine import queue_autonomous_query
+            queue_autonomous_query(
+                prompt=f"Research the domain '{domain_name}' ({description}). What are the key sub-topics, best practices, and learning resources?",
+                context=f"New domain environment created at {domain_path}",
+            )
+        except Exception:
+            pass
+
+        # Genesis Key
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="librarian",
+                what=f"Domain environment created: {domain_name}",
+                where=str(domain_path),
+                output_data={"domain": domain_name, "subdirs": subdirs},
+                tags=["librarian", "domain", "environment"],
+            )
+        except Exception:
+            pass
+
+        try:
+            from cognitive.event_bus import publish
+            publish("domain.created", {
+                "domain": domain_name, "path": str(domain_path),
+            }, source="librarian")
+        except Exception:
+            pass
+
+        return {
+            "created": True,
+            "domain": domain_name,
+            "path": str(domain_path.relative_to(kb)),
+            "subdirectories": created,
+            "config": config,
+        }
+
+    def smart_ingest_document(self, file_path: str) -> Dict[str, Any]:
+        """
+        Intelligent document processing: Read → Understand → Name → Categorise → Index.
+        The librarian READS the document, extracts key concepts, auto-names it,
+        and places it in the right domain/folder.
+        """
+        path = Path(file_path)
+        if not path.exists():
+            return {"error": f"File not found: {file_path}"}
+
+        result = {
+            "original_path": file_path,
+            "original_name": path.name,
+            "processed": False,
+        }
+
+        # Step 1: Read the document
+        content = ""
+        try:
+            if path.suffix.lower() in ['.txt', '.md', '.py', '.js', '.json', '.csv', '.html', '.xml', '.yml', '.yaml']:
+                content = path.read_text(errors="ignore")[:10000]
+            elif path.suffix.lower() == '.pdf':
+                try:
+                    from ingestion.service import extract_file_text
+                    content = extract_file_text(str(path))[:10000]
+                except Exception:
+                    content = f"[PDF file: {path.name}, {path.stat().st_size} bytes]"
+            else:
+                content = f"[{path.suffix} file: {path.name}, {path.stat().st_size} bytes]"
+        except Exception as e:
+            content = f"[Error reading: {e}]"
+
+        result["content_preview"] = content[:200]
+
+        # Step 2: Understand — extract key concepts via LLM or heuristics
+        concepts = []
+        suggested_name = path.stem
+        suggested_category = self.suggest_location(path) or "uncategorized"
+
+        if content and len(content) > 100:
+            # Extract keywords
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                concepts = fc.extract_keywords(content[:2000])
+            except Exception:
+                pass
+
+            # Try LLM for smart naming
+            try:
+                from llm_orchestrator.factory import get_llm_client
+                client = get_llm_client()
+                naming_response = client.generate(
+                    prompt=f"Given this document content, suggest a short filename (no extension, snake_case) and one-line description:\n\n{content[:1000]}",
+                    system_prompt="Respond with ONLY: filename|description. Example: api_design_guide|REST API design best practices",
+                    temperature=0.1,
+                    max_tokens=50,
+                )
+                if isinstance(naming_response, str) and "|" in naming_response:
+                    parts = naming_response.strip().split("|")
+                    suggested_name = parts[0].strip().replace(" ", "_")[:50]
+                    result["ai_description"] = parts[1].strip() if len(parts) > 1 else ""
+            except Exception:
+                pass
+
+        result["concepts"] = concepts[:10]
+        result["suggested_name"] = suggested_name
+        result["suggested_category"] = suggested_category
+
+        # Step 3: Move to the right location with the right name
+        kb = _get_kb()
+        target_dir = kb / suggested_category
+        target_dir.mkdir(parents=True, exist_ok=True)
+        new_name = f"{suggested_name}{path.suffix}"
+        target_path = target_dir / new_name
+
+        # Avoid overwrite
+        counter = 1
+        while target_path.exists():
+            target_path = target_dir / f"{suggested_name}_{counter}{path.suffix}"
+            counter += 1
+
+        try:
+            import shutil
+            shutil.move(str(path), str(target_path))
+            result["new_path"] = str(target_path.relative_to(kb))
+            result["new_name"] = target_path.name
+            result["processed"] = True
+        except Exception as e:
+            result["error"] = f"Move failed: {e}"
+            return result
+
+        # Step 4: Register in docs library
+        try:
+            from api.docs_library_api import register_document
+            register_document(
+                filename=target_path.name,
+                file_path=str(target_path),
+                file_size=target_path.stat().st_size,
+                source="librarian_smart_ingest",
+                upload_method="smart_ingest",
+                directory=suggested_category,
+                tags=concepts[:5],
+            )
+        except Exception:
+            pass
+
+        # Step 5: Index in FlashCache
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            fc.register(
+                source_uri=f"internal://doc/{target_path.name}",
+                source_type="document",
+                source_name=target_path.name,
+                keywords=concepts,
+                summary=content[:300],
+                trust_score=0.7,
+            )
+        except Exception:
+            pass
+
+        # Step 6: Genesis Key
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="librarian",
+                what=f"Smart ingest: {path.name} → {target_path.name} in {suggested_category}",
+                where=str(target_path),
+                output_data={
+                    "original": path.name,
+                    "new_name": target_path.name,
+                    "category": suggested_category,
+                    "concepts": concepts[:5],
+                },
+                tags=["librarian", "smart_ingest", "auto_name"],
+            )
+        except Exception:
+            pass
+
+        return result
+
     def ensure_taxonomy(self) -> Dict[str, Any]:
         """Create the full directory taxonomy if it doesn't exist."""
         kb = _get_kb()
