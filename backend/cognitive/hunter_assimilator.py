@@ -235,7 +235,11 @@ class HunterAssimilator:
 
     def _step_kimi_analyse(self, code: str, description: str) -> Dict:
         # Try consensus first if multiple models available (multi-perspective code review)
+        # Protected by circuit breaker (prevents pipeline↔consensus loop)
         try:
+            from cognitive.circuit_breaker import enter_loop, exit_loop
+            if not enter_loop("consensus_refinement"):
+                raise RuntimeError("Circuit breaker: consensus loop depth exceeded")
             from cognitive.consensus_engine import run_consensus, _check_model_available
             available = [m for m in ["opus", "kimi", "qwen"] if _check_model_available(m)]
             if len(available) >= 2:
@@ -258,6 +262,11 @@ class HunterAssimilator:
                     }
         except Exception:
             pass
+        finally:
+            try:
+                exit_loop("consensus_refinement")
+            except Exception:
+                pass
 
         # Fallback to single Kimi analysis
         try:

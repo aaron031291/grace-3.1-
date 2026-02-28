@@ -404,6 +404,32 @@ async def lip_promote(file_path: str, level: str):
     return promote_component(file_path, level)
 
 
+# ── Circuit Breaker & Named Loops ─────────────────────────────────────
+
+@router.get("/loops")
+async def get_named_loops():
+    """Get all named system loops with status and metrics."""
+    from cognitive.circuit_breaker import get_loop_status
+    return {"loops": get_loop_status()}
+
+
+@router.get("/loops/by-category")
+async def get_loops_by_category():
+    """Get loops grouped by category (homeostasis, learning, healing, trust, knowledge)."""
+    from cognitive.circuit_breaker import get_loops_by_category
+    return get_loops_by_category()
+
+
+@router.get("/loops/{loop_name}")
+async def get_loop_detail(loop_name: str):
+    """Get detail for a specific named loop."""
+    from cognitive.circuit_breaker import get_loop_status
+    status = get_loop_status()
+    if loop_name not in status:
+        raise HTTPException(status_code=404, detail=f"Loop not found: {loop_name}")
+    return status[loop_name]
+
+
 @router.get("/integration-matrix")
 async def get_integration_matrix():
     """
