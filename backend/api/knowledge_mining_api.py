@@ -158,6 +158,37 @@ async def corpus_stats():
     return get_corpus_stats()
 
 
+# ── Terabyte-Scale Training Pipeline ──────────────────────────────────
+
+@router.get("/pipeline/sources")
+async def list_data_sources():
+    """List all free terabyte-scale training data sources."""
+    from cognitive.training_pipeline import list_sources
+    return {"sources": list_sources()}
+
+
+@router.get("/pipeline/instructions/{source_id}")
+async def get_download_instructions(source_id: str):
+    """Get download instructions for a specific data source."""
+    from cognitive.training_pipeline import get_download_instructions
+    return get_download_instructions(source_id)
+
+
+@router.get("/pipeline/plan")
+async def get_recommended_plan(storage_gb: int = 1000):
+    """Get a recommended download plan based on available storage."""
+    from cognitive.training_pipeline import get_recommended_plan
+    return get_recommended_plan(storage_gb)
+
+
+@router.post("/pipeline/generate-scripts")
+async def generate_download_scripts():
+    """Generate download scripts for all HuggingFace datasets."""
+    from cognitive.training_pipeline import generate_all_download_scripts
+    scripts = generate_all_download_scripts()
+    return {"scripts_generated": len(scripts), "scripts": scripts}
+
+
 @router.get("/training-data")
 async def list_training_data():
     """List all mined training data files."""
