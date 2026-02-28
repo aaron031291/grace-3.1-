@@ -488,6 +488,36 @@ async def list_blueprints():
     return {"blueprints": _list()}
 
 
+# ── Qwen Coding Net (unified execution) ──────────────────────────────
+
+@router.post("/qwen-net/execute")
+async def qwen_net_execute(task: str):
+    """Full unified coding: ghost memory + consensus + Qwen + compiler."""
+    from cognitive.qwen_coding_net import get_qwen_net
+    return get_qwen_net().execute_task(task)
+
+
+@router.post("/qwen-net/chat")
+async def qwen_net_chat(message: str):
+    """Execute from chat — detects if coding or conversation."""
+    from cognitive.qwen_coding_net import get_qwen_net
+    return get_qwen_net().chat_execute(message)
+
+
+@router.get("/ghost-memory/stats")
+async def ghost_memory_stats():
+    """Ghost memory current status."""
+    from cognitive.ghost_memory import get_ghost_memory
+    return get_ghost_memory().get_stats()
+
+
+@router.post("/ghost-memory/evolve")
+async def ghost_memory_evolve():
+    """Merge and evolve playbook patterns."""
+    from cognitive.ghost_memory import get_ghost_memory
+    return get_ghost_memory().evolve_playbook()
+
+
 @router.post("/compiler/compile")
 async def grace_compile(code: str, context: dict = None):
     """Compile code through Grace's native compiler (5-stage pipeline)."""

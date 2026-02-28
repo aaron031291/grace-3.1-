@@ -386,6 +386,15 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         description="Kimi+Opus design blueprint → Qwen builds code → compiler verifies → retry/escalate → deploy. Up to 20 retries + 3 revisions. Rollback: discard code. Fallback: escalate to human.",
         max_depth=5,
     ),
+    "qwen_coding_net": NamedLoop(
+        name="Qwen Coding Net Loop",
+        category="coding",
+        components=["qwen_coding_net", "ghost_memory", "consensus_engine", "grace_compiler",
+                     "trust_engine", "architecture_compass", "time_sense", "unified_memory"],
+        status="healthy",
+        description="Unified coding: consensus designs → ghost memory tracks → Qwen codes → compiler tests → playbook learns. Token-managed with circuit breaker. Resets ghost memory on task completion.",
+        max_depth=50,
+    ),
     "ethics_governance": NamedLoop(
         name="Ethics & Governance Loop",
         category="safety",
