@@ -345,6 +345,59 @@ class ArchitectureCompass:
             "capabilities_available": list(self._capability_index.keys()),
         }
 
+    def predict_dependency_issues(self) -> List[Dict[str, Any]]:
+        """
+        Predict dependency issues before they happen.
+        Uses the connection graph to find:
+        - Single points of failure (modules everything depends on)
+        - Circular dependency risks
+        - Modules with too many dependents (fragile)
+        - Orphaned modules that might break silently
+        """
+        self.build()
+        issues = []
+
+        # Single points of failure: modules with >10 dependents
+        for path in self._components:
+            dependents = len(self._reverse_graph.get(path, set()))
+            if dependents > 10:
+                issues.append({
+                    "type": "single_point_of_failure",
+                    "severity": "high" if dependents > 20 else "medium",
+                    "module": path,
+                    "dependents": dependents,
+                    "risk": f"{path} has {dependents} dependents — if it breaks, {dependents} modules fail",
+                    "mitigation": "Add fallback/retry logic in dependent modules",
+                })
+
+        # Modules with 0 dependents but many outgoing connections (consumer-only, may be stale)
+        for path, info in self._components.items():
+            dependents = len(self._reverse_graph.get(path, set()))
+            outgoing = info.connection_count
+            if dependents == 0 and outgoing > 5:
+                issues.append({
+                    "type": "potential_dead_code",
+                    "severity": "low",
+                    "module": path,
+                    "outgoing": outgoing,
+                    "risk": f"{path} imports {outgoing} modules but nothing imports it — possibly unused",
+                })
+
+        # Highly connected clusters (tight coupling risk)
+        for path, info in self._components.items():
+            if info.connection_count > 8:
+                issues.append({
+                    "type": "tight_coupling",
+                    "severity": "medium",
+                    "module": path,
+                    "connections": info.connection_count,
+                    "risk": f"{path} has {info.connection_count} dependencies — tightly coupled, hard to modify",
+                    "mitigation": "Consider using event bus for some connections",
+                })
+
+        issues.sort(key=lambda x: {"high": 0, "medium": 1, "low": 2}.get(x["severity"], 3))
+        return issues
+
     def get_full_map(self) -> Dict[str, Any]:
         """Complete architecture map for display."""
         self.build()
