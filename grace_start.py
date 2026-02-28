@@ -110,38 +110,60 @@ def fix_frontend():
 
 
 def start_qdrant():
-    """Start Qdrant via Docker."""
-    header("STEP 4: Starting Qdrant")
+    """Connect to Qdrant — Cloud first, Docker fallback."""
+    header("STEP 4: Connecting to Qdrant")
 
-    # Check Docker
+    # Check for Qdrant Cloud URL in .env
+    env_path = BACKEND / ".env"
+    qdrant_url = ""
+    qdrant_key = ""
+    if env_path.exists():
+        for line in env_path.read_text().split("\n"):
+            if line.startswith("QDRANT_URL=") and "cloud.qdrant.io" in line:
+                qdrant_url = line.split("=", 1)[1].strip()
+            if line.startswith("QDRANT_API_KEY=") and len(line.split("=", 1)[1].strip()) > 10:
+                qdrant_key = line.split("=", 1)[1].strip()
+
+    if qdrant_url:
+        # Qdrant Cloud configured — verify connection
+        try:
+            import requests
+            resp = requests.get(
+                f"{qdrant_url}/collections",
+                headers={"api-key": qdrant_key} if qdrant_key else {},
+                timeout=10,
+            )
+            if resp.status_code == 200:
+                collections = resp.json().get("result", {}).get("collections", [])
+                p("✅", f"Qdrant Cloud connected ({len(collections)} collections)")
+                return
+            else:
+                p("⚠️", f"Qdrant Cloud responded with {resp.status_code}")
+        except Exception as e:
+            p("⚠️", f"Qdrant Cloud unreachable: {str(e)[:80]}")
+        return
+
+    # No cloud — try Docker
     r = subprocess.run('docker --version', shell=True, capture_output=True, text=True)
     if r.returncode != 0:
-        p("⚠️", "Docker not found — Qdrant will be skipped")
+        p("⚠️", "No Qdrant Cloud or Docker — vector search disabled")
         return
 
-    # Check if already running
     r = subprocess.run('docker ps --filter name=qdrant --format "{{.Names}}"', shell=True, capture_output=True, text=True)
     if 'qdrant' in r.stdout:
-        p("✅", "Qdrant already running")
+        p("✅", "Qdrant Docker running")
         return
 
-    # Check if container exists but stopped
     r = subprocess.run('docker ps -a --filter name=qdrant --format "{{.Names}}"', shell=True, capture_output=True, text=True)
     if 'qdrant' in r.stdout:
         subprocess.run('docker start qdrant', shell=True, capture_output=True)
-        p("✅", "Qdrant restarted")
+        p("✅", "Qdrant Docker restarted")
         return
 
-    # Create new container
-    cmd = (
-        'docker run -d --name qdrant '
-        '-p 6333:6333 -p 6334:6334 '
-        '-v qdrant_storage:/qdrant/storage '
-        'qdrant/qdrant'
-    )
+    cmd = 'docker run -d --name qdrant -p 6333:6333 -p 6334:6334 -v qdrant_storage:/qdrant/storage qdrant/qdrant'
     r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     if r.returncode == 0:
-        p("✅", "Qdrant started on ports 6333/6334")
+        p("✅", "Qdrant Docker started")
     else:
         p("⚠️", f"Qdrant failed: {r.stderr[:100]}")
 
