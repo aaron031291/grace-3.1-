@@ -63,6 +63,7 @@ from api.consensus_api import router as consensus_router
 from api.system_audit_api import router as system_audit_router
 from api.api_vault_api import router as api_vault_router
 from api.planner_api import router as planner_router
+from api.reporting_api import router as reporting_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -513,6 +514,7 @@ app.include_router(consensus_router)         # /api/consensus — multi-model ro
 app.include_router(system_audit_router)      # /api/audit — system analysis + model updates
 app.include_router(api_vault_router)         # /api/vault — central API key management
 app.include_router(planner_router)           # /api/planner — intelligent dual-pane planner
+app.include_router(reporting_router)         # /api/reports — system reports + sandbox experiments
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
