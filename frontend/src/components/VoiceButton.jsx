@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "./VoiceButton.css";
+import { API_BASE_URL } from '../config/api';
 
 /**
  * VoiceButton Component
@@ -20,7 +21,7 @@ export default function VoiceButton({
   disabled = false,
   size = "medium",
   showTTSButton = false,
-  placeholder = "Click to speak...",
+  placeholder: _placeholder = "Click to speak...",
 }) {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -36,8 +37,10 @@ export default function VoiceButton({
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setSupported(false);
-      setError("Speech recognition not supported in this browser");
+      queueMicrotask(() => {
+        setSupported(false);
+        setError("Speech recognition not supported in this browser");
+      });
     }
   }, []);
 
@@ -127,6 +130,33 @@ export default function VoiceButton({
     }
   };
 
+  // Helper to convert base64 to Blob
+  const base64ToBlob = (base64, mimeType) => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  };
+
+  // Browser fallback TTS
+  const fallbackSpeak = (text) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setIsSpeaking(false);
+      setError("Text-to-speech not supported");
+    }
+  };
+
   // Text-to-Speech function
   const speak = useCallback(async (text) => {
     if (!text || isSpeaking) return;
@@ -135,7 +165,7 @@ export default function VoiceButton({
 
     try {
       // Try backend TTS first (higher quality)
-      const response = await fetch("http://localhost:8000/voice/tts/base64", {
+      const response = await fetch(`${API_BASE_URL}/voice/tts/base64`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -173,22 +203,6 @@ export default function VoiceButton({
       fallbackSpeak(text);
     }
   }, [isSpeaking]);
-
-  // Browser fallback TTS
-  const fallbackSpeak = (text) => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      setIsSpeaking(false);
-      setError("Text-to-speech not supported");
-    }
-  };
 
   // Stop speaking
   const stopSpeaking = () => {
@@ -229,17 +243,6 @@ export default function VoiceButton({
       }
     };
   }, []);
-
-  // Helper to convert base64 to Blob
-  const base64ToBlob = (base64, mimeType) => {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
-  };
 
   if (!supported) {
     return (

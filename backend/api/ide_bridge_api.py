@@ -178,7 +178,7 @@ async def explain_code(request: CodeExplanationRequest):
     Generate natural language explanation of code.
     """
     try:
-        from llm_orchestrator.llm_orchestrator import get_llm_response
+        from llm_orchestrator.factory import get_llm_client
 
         prompt = f"""Explain the following {request.language} code in clear, concise terms:
 
@@ -191,7 +191,8 @@ Provide:
 2. Key components and their purposes
 3. How it works step by step
 """
-        explanation = await get_llm_response(prompt)
+        client = get_llm_client()
+        explanation = client.generate(prompt=prompt)
         return {"explanation": explanation}
     except ImportError:
         return {
@@ -208,7 +209,7 @@ async def suggest_refactoring(request: RefactoringRequest):
     Suggest refactoring improvements for code.
     """
     try:
-        from llm_orchestrator.llm_orchestrator import get_llm_response
+        from llm_orchestrator.factory import get_llm_client
 
         prompt = f"""Analyze the following {request.language} code and suggest refactoring improvements:
 
@@ -221,10 +222,11 @@ Provide:
 2. Refactored code (if applicable)
 3. Explanation of changes
 """
-        result = await get_llm_response(prompt)
+        client = get_llm_client()
+        result = client.generate(prompt=prompt)
         return {
             "suggestions": [result],
-            "refactored_code": None,  # LLM can provide this
+            "refactored_code": None,
             "explanation": "Refactoring analysis complete"
         }
     except ImportError:
@@ -636,9 +638,8 @@ async def ide_chat(request: IDEChatRequest):
     Process a chat message from the IDE.
     """
     try:
-        from llm_orchestrator.llm_orchestrator import get_llm_response
+        from llm_orchestrator.factory import get_llm_client
 
-        # Build context-aware prompt
         prompt = request.message
 
         if request.context:
@@ -647,7 +648,8 @@ async def ide_chat(request: IDEChatRequest):
             elif request.context.get("surroundingCode"):
                 prompt = f"Context:\n```\n{request.context['surroundingCode']}\n```\n\nQuestion: {request.message}"
 
-        response = await get_llm_response(prompt)
+        client = get_llm_client()
+        response = client.generate(prompt=prompt)
 
         return {
             "role": "assistant",
@@ -702,19 +704,17 @@ async def handle_websocket_message(message: Dict[str, Any]) -> Dict[str, Any]:
 
     elif msg_type == "chat":
         try:
-            from llm_orchestrator.llm_orchestrator import stream_llm_response
+            from llm_orchestrator.factory import get_llm_client
 
             content = payload.get("content", "")
-            context = payload.get("context", {})
-
-            # For streaming, we'd typically use async generator
-            # Here's simplified response
+            client = get_llm_client()
+            response = client.generate(prompt=content)
             return {
                 "type": "stream_end",
-                "payload": {"content": f"Response to: {content}"},
+                "payload": {"content": response},
                 "timestamp": datetime.utcnow().isoformat()
             }
-        except ImportError:
+        except Exception:
             return {
                 "type": "stream_end",
                 "payload": {"content": f"Received: {payload.get('content', '')}"},

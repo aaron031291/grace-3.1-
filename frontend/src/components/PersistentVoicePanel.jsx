@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "./PersistentVoicePanel.css";
+import { API_BASE_URL } from '../config/api';
 
 /**
  * PersistentVoicePanel Component
@@ -42,7 +43,7 @@ export default function PersistentVoicePanel({
   // Refs
   const recognitionRef = useRef(null);
   const audioRef = useRef(null);
-  const wsRef = useRef(null);
+  const _wsRef = useRef(null);
 
   // Available voices
   const [availableVoices, setAvailableVoices] = useState([]);
@@ -54,7 +55,7 @@ export default function PersistentVoicePanel({
 
   const fetchVoices = async () => {
     try {
-      const response = await fetch("http://localhost:8000/voice/voices?locale=en-US");
+      const response = await fetch(`${API_BASE_URL}/voice/voices?locale=en-US`);
       if (response.ok) {
         const data = await response.json();
         setAvailableVoices(data.voices || []);
@@ -195,7 +196,7 @@ export default function PersistentVoicePanel({
     setIsSpeaking(true);
 
     try {
-      const response = await fetch("http://localhost:8000/voice/tts/base64", {
+      const response = await fetch(`${API_BASE_URL}/voice/tts/base64`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

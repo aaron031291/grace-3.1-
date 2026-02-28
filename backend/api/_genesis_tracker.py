@@ -1,0 +1,112 @@
+"""
+Thin Genesis Key tracking helper used by all CRUD APIs.
+
+Every new output — uploads, directories, subdirectories, files,
+document registrations, edits, and intelligence operations — gets
+a Genesis Key so the full provenance chain is preserved.
+
+NOW: Also fires the real-time event engine so the immune system
+and watchers get notified INSTANTLY, not on the next poll.
+"""
+
+import logging
+from typing import Optional, Dict, Any
+
+logger = logging.getLogger(__name__)
+
+
+def track(
+    key_type: str,
+    what: str,
+    who: str = "system",
+    where: str = "",
+    why: str = "",
+    how: str = "",
+    file_path: str = "",
+    input_data: Optional[Dict[str, Any]] = None,
+    output_data: Optional[Dict[str, Any]] = None,
+    context: Optional[Dict[str, Any]] = None,
+    tags: Optional[list] = None,
+    parent_key_id: Optional[str] = None,
+    is_error: bool = False,
+    error_type: str = "",
+    error_message: str = "",
+    code_before: str = None,
+    code_after: str = None,
+) -> Optional[str]:
+    """
+    Create a Genesis Key for any system output.
+    Returns the genesis key id (GK-...) or None if tracking fails.
+
+    This is fire-and-forget — tracking failures never break the caller.
+    Also fires the real-time event engine for instant notification.
+    """
+    # Fire real-time engine FIRST (even if DB write fails)
+    try:
+        from genesis.realtime import get_realtime_engine
+        get_realtime_engine().on_key_created(
+            key_type=key_type, what=what, who=who, where=where,
+            is_error=is_error, error_type=error_type, error_message=error_message,
+            data={"tags": tags, "input": input_data, "output": output_data},
+        )
+    except Exception:
+        pass
+
+    # Fire event bus for system-wide awareness
+    try:
+        from cognitive.event_bus import publish_async
+        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
+        publish_async(event_topic, {
+            "key_type": key_type, "what": what, "who": who,
+            "is_error": is_error, "tags": tags,
+        }, source="genesis_tracker")
+    except Exception:
+        pass
+
+    # Write to database
+    try:
+        from genesis.genesis_key_service import get_genesis_service
+        from models.genesis_key_models import GenesisKeyType
+
+        type_map = {
+            "upload": GenesisKeyType.USER_UPLOAD,
+            "file_op": GenesisKeyType.FILE_OPERATION,
+            "file_ingestion": GenesisKeyType.FILE_INGESTION,
+            "librarian": GenesisKeyType.LIBRARIAN_ACTION,
+            "ai_response": GenesisKeyType.AI_RESPONSE,
+            "ai_code_generation": GenesisKeyType.AI_CODE_GENERATION,
+            "coding_agent_action": GenesisKeyType.CODING_AGENT_ACTION,
+            "api_request": GenesisKeyType.API_REQUEST,
+            "system": GenesisKeyType.SYSTEM_EVENT,
+            "db_change": GenesisKeyType.DATABASE_CHANGE,
+            "code_change": GenesisKeyType.CODE_CHANGE,
+            "web_fetch": GenesisKeyType.WEB_FETCH,
+            "error": GenesisKeyType.ERROR,
+        }
+        gk_type = type_map.get(key_type, GenesisKeyType.SYSTEM_EVENT)
+
+        service = get_genesis_service()
+        key = service.create_key(
+            key_type=gk_type,
+            what_description=what,
+            who_actor=who,
+            where_location=where,
+            why_reason=why,
+            how_method=how,
+            file_path=file_path or None,
+            input_data=input_data,
+            output_data=output_data,
+            context_data=context,
+            tags=tags,
+            parent_key_id=parent_key_id,
+            is_error=is_error,
+            error_type=error_type,
+            error_message=error_message,
+            code_before=code_before,
+            code_after=code_after,
+        )
+        gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
+        return str(gk_id) if gk_id else None
+    except Exception as e:
+        logger.debug(f"Genesis tracking skipped: {e}")
+        return None

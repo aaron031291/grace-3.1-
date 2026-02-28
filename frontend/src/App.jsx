@@ -1,42 +1,51 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
-import { API_BASE_URL, API_ENDPOINTS } from "./config/api";
+import { API_ENDPOINTS } from "./config/api";
 import ChatTab from "./components/ChatTab";
-import RAGTab from "./components/RAGTab";
-import MonitoringTab from "./components/MonitoringTab";
-import VersionControl from "./components/VersionControl";
-import CognitiveTab from "./components/CognitiveTab";
-import NotionTab from "./components/NotionTab";
+import FoldersTab from "./components/FoldersTab";
+import DocsTab from "./components/DocsTab";
 import GovernanceTab from "./components/GovernanceTab";
-import CodeBaseTab from "./components/CodeBaseTab";
-import ResearchTab from "./components/ResearchTab";
-import SandboxTab from "./components/SandboxTab";
-import InsightsTab from "./components/InsightsTab";
-import APITab from "./components/APITab";
-import LibrarianTab from "./components/LibrarianTab";
-import PersistentVoicePanel from "./components/PersistentVoicePanel";
-import GenesisKeyTab from "./components/GenesisKeyTab";
-import LearningTab from "./components/LearningTab";
-import MLIntelligenceTab from "./components/MLIntelligenceTab";
 import WhitelistTab from "./components/WhitelistTab";
-import ExperimentTab from "./components/ExperimentTab";
-import ConnectorsTab from "./components/ConnectorsTab";
-import OrchestrationTab from "./components/OrchestrationTab";
-import TelemetryTab from "./components/TelemetryTab";
-import WebScraper from "./components/WebScraper";
-import GraceTodosTab from "./components/GraceTodosTab";
-import GracePlanningTab from "./components/GracePlanningTab";
+import OracleTab from "./components/OracleTab";
+import CodebaseTab from "./components/CodebaseTab";
+import TasksTab from "./components/TasksTab";
+import APIsTab from "./components/APIsTab";
+import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
+import SystemHealthTab from "./components/SystemHealthTab";
+import LearningHealingTab from "./components/LearningHealingTab";
+import PersistentVoicePanel from "./components/PersistentVoicePanel";
+import ActivityFeed from "./components/ActivityFeed";
+import UndoToast from "./components/UndoManager";
+import CrossTabNotifier, { setNavigator } from "./components/CrossTabNotifier";
+import TabGuide from "./components/TabGuide";
+
+const VIEWS = [
+  { id: "chat", label: "Chat", icon: "💬" },
+  { id: "folders", label: "Folders", icon: "📁" },
+  { id: "docs", label: "Docs", icon: "📚" },
+  { id: "governance", label: "Governance", icon: "🏛️" },
+  { id: "whitelist", label: "Whitelist", icon: "🛡️" },
+  { id: "oracle", label: "Oracle", icon: "🔮" },
+  { id: "codebase", label: "Codebase", icon: "💻" },
+  { id: "tasks", label: "Tasks", icon: "📋" },
+  { id: "apis", label: "APIs", icon: "🔗" },
+  { id: "bi", label: "BI", icon: "📈" },
+  { id: "health", label: "Health", icon: "🏥" },
+  { id: "learn-heal", label: "Learn", icon: "🧬" },
+];
 
 function App() {
-  const [activeTab, setActiveTab] = useState("chat");
+  const [activeView, setActiveView] = useState("chat");
   const [apiHealth, setApiHealth] = useState(null);
   const [lastVoiceResponse, setLastVoiceResponse] = useState("");
   const [isVoiceProcessing, setIsVoiceProcessing] = useState(false);
 
+  // Wire cross-tab navigator
+  useEffect(() => { setNavigator(setActiveView); }, []);
+
   useEffect(() => {
-    // Check API health on mount
     checkHealth();
-    const interval = setInterval(checkHealth, 30000); // Check every 30 seconds
+    const interval = setInterval(checkHealth, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -45,17 +54,14 @@ function App() {
       const response = await fetch(API_ENDPOINTS.health);
       const data = await response.json();
       setApiHealth(data);
-    } catch (error) {
-      console.error("Failed to check API health:", error);
+    } catch {
       setApiHealth(null);
     }
   };
 
-  // Handle voice messages from PersistentVoicePanel
   const handleVoiceMessage = async (message) => {
     setIsVoiceProcessing(true);
     try {
-      // Send voice message to Grace's chat API
       const response = await fetch(API_ENDPOINTS.chat, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,19 +70,13 @@ function App() {
           temperature: 0.7,
         }),
       });
-
       if (response.ok) {
         const data = await response.json();
         setLastVoiceResponse(data.message);
-      } else if (response.status === 404) {
-        setLastVoiceResponse(
-          "I don't have information about that in my knowledge base yet. Please upload relevant documents."
-        );
       } else {
-        setLastVoiceResponse("Sorry, I encountered an error processing your request.");
+        setLastVoiceResponse("Sorry, I encountered an issue.");
       }
-    } catch (error) {
-      console.error("Voice message error:", error);
+    } catch {
       setLastVoiceResponse("Sorry, I couldn't connect to the server.");
     } finally {
       setIsVoiceProcessing(false);
@@ -85,520 +85,85 @@ function App() {
 
   return (
     <div className="app">
-      {/* Header */}
-      <header className="app-header">
-        <div className="header-content">
-          <h1>Grace</h1>
-          <div className="health-indicator">
-            {apiHealth ? (
-              <>
-                <span
-                  className={`status-dot ${apiHealth.ollama_running ? "healthy" : "unhealthy"
-                    }`}
-                ></span>
-                <span className="status-text">
-                  {apiHealth.ollama_running ? "Connected" : "Disconnected"}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="status-dot unhealthy"></span>
-                <span className="status-text">Loading...</span>
-              </>
-            )}
+      {/* ── Header with Horizontal Tab Bar ─────────────────────── */}
+      <header style={{
+        background: '#12122a', borderBottom: '1px solid #333',
+        display: 'flex', alignItems: 'center', padding: '0 12px',
+        height: 48, flexShrink: 0,
+      }}>
+        {/* Logo */}
+        <h1 style={{
+          fontSize: 18, fontWeight: 800, color: '#e94560', margin: 0,
+          marginRight: 16, letterSpacing: '-0.5px', flexShrink: 0,
+        }}>Grace</h1>
+
+        {/* Horizontal Tab Bar */}
+        <div style={{
+          display: 'flex', gap: 0, overflow: 'auto', flex: 1,
+          scrollbarWidth: 'none', msOverflowStyle: 'none',
+        }}>
+          {VIEWS.map(v => (
+            <button
+              key={v.id}
+              onClick={() => setActiveView(v.id)}
+              style={{
+                padding: '6px 12px', border: 'none', background: 'none',
+                cursor: 'pointer', fontSize: 12, whiteSpace: 'nowrap',
+                color: activeView === v.id ? '#e94560' : '#888',
+                borderBottom: activeView === v.id ? '2px solid #e94560' : '2px solid transparent',
+                fontWeight: activeView === v.id ? 700 : 500,
+                transition: 'all .15s',
+                display: 'flex', alignItems: 'center', gap: 4,
+              }}
+            >
+              <span style={{ fontSize: 14 }}>{v.icon}</span>
+              {v.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Right side: guide + notifications + health */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, position: 'relative' }}>
+          <TabGuide tabId={activeView} />
+          <CrossTabNotifier />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{
+              width: 8, height: 8, borderRadius: '50%',
+              background: apiHealth?.ollama_running ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
+            }} />
+            <span style={{ fontSize: 11, color: '#888' }}>
+              {apiHealth?.ollama_running ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
+            </span>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="app-container">
-        {/* Sidebar */}
-        <aside className="sidebar">
-          <nav className="tabs-nav">
-            <button
-              className={`tab-button ${activeTab === "chat" ? "active" : ""}`}
-              onClick={() => setActiveTab("chat")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              Chat
-            </button>
-            <button
-              className={`tab-button ${activeTab === "governance" ? "active" : ""}`}
-              onClick={() => setActiveTab("governance")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"
-                />
-              </svg>
-              Governance
-            </button>
-            <button
-              className={`tab-button ${activeTab === "sandbox" ? "active" : ""}`}
-              onClick={() => setActiveTab("sandbox")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="3" y1="9" x2="21" y2="9"></line>
-                <line x1="9" y1="21" x2="9" y2="9"></line>
-              </svg>
-              Sandbox
-            </button>
-            <button
-              className={`tab-button ${activeTab === "insights" ? "active" : ""}`}
-              onClick={() => setActiveTab("insights")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 16v-4"></path>
-                <path d="M12 8h.01"></path>
-              </svg>
-              Insights
-            </button>
-            <button
-              className={`tab-button ${activeTab === "codebase" ? "active" : ""}`}
-              onClick={() => setActiveTab("codebase")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0" />
-              </svg>
-              Code Base
-            </button>
-            <button
-              className={`tab-button ${activeTab === "rag" ? "active" : ""}`}
-              onClick={() => setActiveTab("rag")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
-              Documents
-            </button>
-            <button
-              className={`tab-button ${activeTab === "research" ? "active" : ""}`}
-              onClick={() => setActiveTab("research")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                width={20}
-                height={20}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-                />
-              </svg>
-              Research
-            </button>
-            <button
-              className={`tab-button ${activeTab === "api" ? "active" : ""}`}
-              onClick={() => setActiveTab("api")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M18 20V10"></path>
-                <path d="M12 20V4"></path>
-                <path d="M6 20v-6"></path>
-              </svg>
-              APIs
-            </button>
-            <button
-              className={`tab-button ${activeTab === "librarian" ? "active" : ""}`}
-              onClick={() => setActiveTab("librarian")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-              </svg>
-              Librarian
-            </button>
-            <button
-              className={`tab-button ${activeTab === "cognitive" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("cognitive")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M12 1v6m0 6v6m5-9l-4 4m-2 2l-4 4m10-12l-4 4m-2 2l-4 4M1 12h6m6 0h6"></path>
-              </svg>
-              Cognitive
-            </button>
-            <button
-              className={`tab-button ${activeTab === "monitoring" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("monitoring")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
-                <line x1="12" y1="12" x2="20" y2="7.5"></line>
-                <line x1="12" y1="12" x2="12" y2="21"></line>
-                <line x1="12" y1="12" x2="4" y2="7.5"></line>
-              </svg>
-              Monitoring
-            </button>
-            <button
-              className={`tab-button ${activeTab === "version-control" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("version-control")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="6" cy="6" r="3"></circle>
-                <circle cx="18" cy="6" r="3"></circle>
-                <circle cx="12" cy="18" r="3"></circle>
-                <line x1="8.5" y1="8" x2="12" y2="16"></line>
-                <line x1="15.5" y1="8" x2="12" y2="16"></line>
-              </svg>
-              Version Control
-            </button>
-            <button
-              className={`tab-button ${activeTab === "notion" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("notion")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-              </svg>
-              Task Manager
-            </button>
-            <button
-              className={`tab-button ${activeTab === "grace-todos" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("grace-todos")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M9 11l3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
-              </svg>
-              Grace Todos
-            </button>
-            <button
-              className={`tab-button ${activeTab === "grace-planning" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("grace-planning")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-              Planning
-            </button>
-            <button
-              className={`tab-button ${activeTab === "genesis" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("genesis")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-              Genesis Keys
-            </button>
-            <button
-              className={`tab-button ${activeTab === "learning" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("learning")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
-              </svg>
-              Learning
-            </button>
-            <button
-              className={`tab-button ${activeTab === "ml-intelligence" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("ml-intelligence")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                <path d="M12 17h.01"></path>
-              </svg>
-              ML Intelligence
-            </button>
-            <button
-              className={`tab-button ${activeTab === "whitelist" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("whitelist")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                <path d="M9 12l2 2 4-4"></path>
-              </svg>
-              Whitelist
-            </button>
-            <button
-              className={`tab-button ${activeTab === "experiments" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("experiments")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M9 3h6v2H9z"></path>
-                <path d="M10 5v4l-4 8h12l-4-8V5"></path>
-                <circle cx="12" cy="15" r="1"></circle>
-              </svg>
-              Experiments
-            </button>
-            <button
-              className={`tab-button ${activeTab === "connectors" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("connectors")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-              </svg>
-              Connectors
-            </button>
-            <button
-              className={`tab-button ${activeTab === "orchestration" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("orchestration")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="5" r="3"></circle>
-                <circle cx="5" cy="19" r="3"></circle>
-                <circle cx="19" cy="19" r="3"></circle>
-                <line x1="12" y1="8" x2="5" y2="16"></line>
-                <line x1="12" y1="8" x2="19" y2="16"></line>
-              </svg>
-              Orchestration
-            </button>
-            <button
-              className={`tab-button ${activeTab === "telemetry" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("telemetry")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg>
-              Telemetry
-            </button>
-            <button
-              className={`tab-button ${activeTab === "webscraper" ? "active" : ""
-                }`}
-              onClick={() => setActiveTab("webscraper")}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-              </svg>
-              Web Scraper
-            </button>
-          </nav>
-        </aside>
-
-        {/* Tab Content */}
-        <main className="main-content">
-          {activeTab === "chat" && <ChatTab />}
-          {activeTab === "governance" && <GovernanceTab />}
-          {activeTab === "sandbox" && <SandboxTab />}
-          {activeTab === "insights" && <InsightsTab />}
-          {activeTab === "codebase" && <CodeBaseTab />}
-          {activeTab === "rag" && <RAGTab />}
-          {activeTab === "research" && <ResearchTab />}
-          {activeTab === "api" && <APITab />}
-          {activeTab === "librarian" && <LibrarianTab />}
-          {activeTab === "cognitive" && <CognitiveTab />}
-          {activeTab === "monitoring" && <MonitoringTab />}
-          {activeTab === "version-control" && <VersionControl />}
-          {activeTab === "notion" && <NotionTab />}
-          {activeTab === "genesis" && <GenesisKeyTab />}
-          {activeTab === "learning" && <LearningTab />}
-          {activeTab === "ml-intelligence" && <MLIntelligenceTab />}
-          {activeTab === "whitelist" && <WhitelistTab />}
-          {activeTab === "experiments" && <ExperimentTab />}
-          {activeTab === "connectors" && <ConnectorsTab />}
-          {activeTab === "orchestration" && <OrchestrationTab />}
-          {activeTab === "telemetry" && <TelemetryTab />}
-          {activeTab === "webscraper" && <WebScraper />}
-          {activeTab === "grace-todos" && <GraceTodosTab />}
-          {activeTab === "grace-planning" && <GracePlanningTab />}
+      {/* ── Main Content ───────────────────────────────────────── */}
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+        <main style={{ width: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          {activeView === "chat" && <ChatTab />}
+          {activeView === "folders" && <FoldersTab />}
+          {activeView === "docs" && <DocsTab />}
+          {activeView === "governance" && <GovernanceTab />}
+          {activeView === "whitelist" && <WhitelistTab />}
+          {activeView === "oracle" && <OracleTab />}
+          {activeView === "codebase" && <CodebaseTab />}
+          {activeView === "tasks" && <TasksTab />}
+          {activeView === "apis" && <APIsTab />}
+          {activeView === "bi" && <BusinessIntelligenceTab />}
+          {activeView === "health" && <SystemHealthTab />}
+          {activeView === "learn-heal" && <LearningHealingTab />}
         </main>
       </div>
 
-      {/* Persistent Voice Panel - Always visible floating button */}
+      {/* ── Floating Components ────────────────────────────────── */}
       <PersistentVoicePanel
         onSendMessage={handleVoiceMessage}
         lastResponse={lastVoiceResponse}
         isProcessing={isVoiceProcessing}
       />
+      <ActivityFeed />
+      <UndoToast />
     </div>
   );
 }

@@ -1,0 +1,31 @@
+{
+  "name": "Grace Training Corpus",
+  "description": "Opus-mined software engineering knowledge for Oracle training data. Auto-ingested on startup.",
+  "total_files": 2,
+  "total_size_bytes": 59693,
+  "categories": {
+    "opus_engineering": {
+      "files": [
+        {
+          "filename": "opus_knowledge_dump_001.txt",
+          "size_bytes": 29151,
+          "size_kb": 28.5,
+          "sections": 8,
+          "preview": "# Comprehensive Software Engineering Knowledge Base  ## 1. Software Architecture Patterns  ### Microservices Architecture  **Core Principles:** - Single responsibility per service - Decentralized data"
+        },
+        {
+          "filename": "opus_knowledge_dump_002.txt",
+          "size_bytes": 30542,
+          "size_kb": 29.8,
+          "sections": 6,
+          "preview": "# Software Engineering Knowledge Dump - Part 2  ## 11. Error Handling & Resilience Patterns  ### Retry with Exponential Backoff  ```python import asyncio import random import time from typing import C"
+        }
+      ],
+      "total_files": 2,
+      "total_size_kb": 58.3
+    }
+  },
+  "auto_ingest": true,
+  "ingest_target": "oracle",
+  "total_size_kb": 58.3
+}

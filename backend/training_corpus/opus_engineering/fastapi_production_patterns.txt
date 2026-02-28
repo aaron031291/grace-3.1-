@@ -1,0 +1,919 @@
+# Comprehensive FastAPI Production Training Data
+
+## Table of Contents
+1. [Middleware Chains](#middleware-chains)
+2. [Dependency Injection Deep Patterns](#dependency-injection-deep-patterns)
+3. [Background Tasks and Worker Patterns](#background-tasks-and-worker-patterns)
+4. [WebSocket Management at Scale](#websocket-management-at-scale)
+5. [Database Session Management](#database-session-management)
+6. [File Upload Handling](#file-upload-handling)
+7. [API Versioning Strategies](#api-versioning-strategies)
+8. [Health Checks and Readiness Probes](#health-checks-and-readiness-probes)
+9. [Structured Logging with Request Correlation](#structured-logging-with-request-correlation)
+10. [Testing FastAPI Apps](#testing-fastapi-apps)
+11. [OpenAPI/Swagger Customization](#openapi-swagger-customization)
+12. [Error Handling Patterns](#error-handling-patterns)
+
+---
+
+## Middleware Chains
+
+### Complete Middleware Stack Implementation
+
+```python
+# middleware/auth.py
+import jwt
+from fastapi import Request, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Optional, Dict, Any
+import time
+import logging
+
+logger = logging.getLogger(__name__)
+
+class JWTAuthMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, secret_key: str, algorithm: str = "HS256", exclude_paths: list = None):
+        super().__init__(app)
+        self.secret_key = secret_key
+        self.algorithm = algorithm
+        self.exclude_paths = exclude_paths or ["/docs", "/redoc", "/openapi.json", "/health"]
+    
+    async def dispatch(self, request: Request, call_next):
+        # Skip auth for excluded paths
+        if request.url.path in self.exclude_paths:
+            return await call_next(request)
+        
+        # Extract token from Authorization header
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing or invalid authorization header"
+            )
+        
+        token = auth_header.split(" ")[1]
+        
+        try:
+            # Decode and validate JWT
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            request.state.user = payload
+            request.state.user_id = payload.get("sub")
+            
+            # Add user context to logs
+            logger.info(f"Authenticated user: {payload.get('sub')}")
+            
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired"
+            )
+        except jwt.JWTError as e:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Invalid token: {str(e)}"
+            )
+        
+        response = await call_next(request)
+        return response
+
+# middleware/cors.py
+from fastapi.middleware.cors import CORSMiddleware
+from typing import List
+
+def setup_cors_middleware(app, 
+                         allowed_origins: List[str] = None,
+                         allowed_methods: List[str] = None,
+                         allowed_headers: List[str] = None):
+    """Configure CORS middleware with production-ready defaults"""
+    
+    if allowed_origins is None:
+        allowed_origins = [
+            "https://yourdomain.com",
+            "https://www.yourdomain.com",
+            "https://admin.yourdomain.com"
+        ]
+    
+    if allowed_methods is None:
+        allowed_methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+    
+    if allowed_headers is None:
+        allowed_headers = [
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "X-Request-ID",
+            "Accept",
+            "Origin"
+        ]
+    
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,
+        allow_credentials=True,
+        allow_methods=allowed_methods,
+        allow_headers=allowed_headers,
+        expose_headers=["X-Request-ID", "X-RateLimit-Remaining"]
+    )
+
+# middleware/rate_limiting.py
+import asyncio
+import time
+from collections import defaultdict, deque
+from fastapi import Request, HTTPException, status
+from starlette.middleware.base import BaseHTTPMiddleware
+import redis.asyncio as redis
+from typing import Optional
+
+class InMemoryRateLimiter:
+    def __init__(self):
+        self.clients = defaultdict(deque)
+        self.lock = asyncio.Lock()
+    
+    async def is_allowed(self, key: str, limit: int, window: int) -> tuple[bool, dict]:
+        async with self.lock:
+            now = time.time()
+            client_requests = self.clients[key]
+            
+            # Remove old requests outside the window
+            while client_requests and client_requests[0] <= now - window:
+                client_requests.popleft()
+            
+            # Check if limit exceeded
+            if len(client_requests) >= limit:
+                return False, {
+                    "remaining": 0,
+                    "reset_time": int(client_requests[0] + window),
+                    "retry_after": int(client_requests[0] + window - now)
+                }
+            
+            # Add current request
+            client_requests.append(now)
+            
+            return True, {
+                "remaining": limit - len(client_requests),
+                "reset_time": int(now + window),
+                "retry_after": 0
+            }
+
+class RedisRateLimiter:
+    def __init__(self, redis_client: redis.Redis):
+        self.redis = redis_client
+    
+    async def is_allowed(self, key: str, limit: int, window: int) -> tuple[bool, dict]:
+        pipe = self.redis.pipeline()
+        now = time.time()
+        
+        # Use sliding window log approach
+        pipe.zremrangebyscore(key, 0, now - window)
+        pipe.zcard(key)
+        pipe.zadd(key, {str(now): now})
+        pipe.expire(key, window)
+        
+        results = await pipe.execute()
+        current_requests = results[1]
+        
+        if current_requests >= limit:
+            # Get the oldest request to calculate reset time
+            oldest = await self.redis.zrange(key, 0, 0, withscores=True)
+            reset_time = int(oldest[0][1] + window) if oldest else int(now + window)
+            
+            return False, {
+                "remaining": 0,
+                "reset_time": reset_time,
+                "retry_after": max(0, reset_time - int(now))
+            }
+        
+        return True, {
+            "remaining": limit - current_requests - 1,
+            "reset_time": int(now + window),
+            "retry_after": 0
+        }
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, 
+                 default_limit: int = 100,
+                 default_window: int = 3600,
+                 redis_client: Optional[redis.Redis] = None,
+                 key_func: callable = None):
+        super().__init__(app)
+        self.default_limit = default_limit
+        self.default_window = default_window
+        self.key_func = key_func or self._default_key_func
+        
+        if redis_client:
+            self.limiter = RedisRateLimiter(redis_client)
+        else:
+            self.limiter = InMemoryRateLimiter()
+    
+    def _default_key_func(self, request: Request) -> str:
+        # Use user ID if authenticated, otherwise IP
+        if hasattr(request.state, 'user_id') and request.state.user_id:
+            return f"user:{request.state.user_id}"
+        return f"ip:{request.client.host}"
+    
+    async def dispatch(self, request: Request, call_next):
+        # Skip rate limiting for health checks
+        if request.url.path in ["/health", "/ready"]:
+            return await call_next(request)
+        
+        key = self.key_func(request)
+        
+        # Check rate limit
+        allowed, info = await self.limiter.is_allowed(
+            key, self.default_limit, self.default_window
+        )
+        
+        if not allowed:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Rate limit exceeded",
+                headers={
+                    "X-RateLimit-Limit": str(self.default_limit),
+                    "X-RateLimit-Remaining": str(info["remaining"]),
+                    "X-RateLimit-Reset": str(info["reset_time"]),
+                    "Retry-After": str(info["retry_after"])
+                }
+            )
+        
+        response = await call_next(request)
+        
+        # Add rate limit headers to response
+        response.headers["X-RateLimit-Limit"] = str(self.default_limit)
+        response.headers["X-RateLimit-Remaining"] = str(info["remaining"])
+        response.headers["X-RateLimit-Reset"] = str(info["reset_time"])
+        
+        return response
+
+# middleware/logging.py
+import uuid
+import time
+import json
+import logging
+from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Dict, Any
+
+logger = logging.getLogger(__name__)
+
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, 
+                 log_request_body: bool = False,
+                 log_response_body: bool = False,
+                 exclude_paths: list = None):
+        super().__init__(app)
+        self.log_request_body = log_request_body
+        self.log_response_body = log_response_body
+        self.exclude_paths = exclude_paths or ["/health", "/ready", "/metrics"]
+    
+    async def dispatch(self, request: Request, call_next):
+        # Generate request ID
+        request_id = str(uuid.uuid4())
+        request.state.request_id = request_id
+        
+        # Skip logging for excluded paths
+        if request.url.path in self.exclude_paths:
+            return await call_next(request)
+        
+        start_time = time.time()
+        
+        # Log request
+        request_data = {
+            "request_id": request_id,
+            "method": request.method,
+            "url": str(request.url),
+            "headers": dict(request.headers),
+            "client_ip": request.client.host,
+            "user_agent": request.headers.get("user-agent"),
+            "timestamp": time.time()
+        }
+        
+        if self.log_request_body and request.method in ["POST", "PUT", "PATCH"]:
+            try:
+                body = await request.body()
+                if body:
+                    request_data["body"] = body.decode("utf-8")[:1000]  # Limit body size
+            except Exception as e:
+                request_data["body_error"] = str(e)
+        
+        logger.info("Request started", extra={"request_data": request_data})
+        
+        # Process request
+        try:
+            response = await call_next(request)
+            process_time = time.time() - start_time
+            
+            # Log response
+            response_data = {
+                "request_id": request_id,
+                "status_code": response.status_code,
+                "process_time": round(process_time, 4),
+                "response_headers": dict(response.headers)
+            }
+            
+            # Add request ID to response headers
+            response.headers["X-Request-ID"] = request_id
+            
+            logger.info("Request completed", extra={"response_data": response_data})
+            
+            return response
+            
+        except Exception as e:
+            process_time = time.time() - start_time
+            
+            error_data = {
+                "request_id": request_id,
+                "error": str(e),
+                "error_type": type(e).__name__,
+                "process_time": round(process_time, 4)
+            }
+            
+            logger.error("Request failed", extra={"error_data": error_data})
+            raise
+
+# middleware/error_handling.py
+import traceback
+from fastapi import Request, HTTPException
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+import logging
+
+logger = logging.getLogger(__name__)
+
+class ErrorHandlingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        try:
+            response = await call_next(request)
+            return response
+        except HTTPException:
+            # Re-raise HTTP exceptions to be handled by FastAPI
+            raise
+        except Exception as e:
+            # Log unexpected errors
+            request_id = getattr(request.state, 'request_id', 'unknown')
+            
+            logger.error(
+                f"Unhandled exception in request {request_id}",
+                extra={
+                    "request_id": request_id,
+                    "error": str(e),
+                    "traceback": traceback.format_exc(),
+                    "path": request.url.path,
+                    "method": request.method
+                }
+            )
+            
+            # Return generic error response
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "error": "Internal server error",
+                    "request_id": request_id,
+                    "message": "An unexpected error occurred"
+                },
+                headers={"X-Request-ID": request_id}
+            )
+
+# Complete middleware setup
+def setup_middleware(app, config: Dict[str, Any]):
+    """Setup all middleware in the correct order"""
+    
+    # 1. Error handling (outermost)
+    app.add_middleware(ErrorHandlingMiddleware)
+    
+    # 2. CORS
+    setup_cors_middleware(
+        app,
+        allowed_origins=config.get("cors_origins"),
+        allowed_methods=config.get("cors_methods"),
+        allowed_headers=config.get("cors_headers")
+    )
+    
+    # 3. Request logging
+    app.add_middleware(
+        RequestLoggingMiddleware,
+        log_request_body=config.get("log_request_body", False),
+        log_response_body=config.get("log_response_body", False)
+    )
+    
+    # 4. Rate limiting
+    redis_client = None
+    if config.get("redis_url"):
+        import redis.asyncio as redis
+        redis_client = redis.from_url(config["redis_url"])
+    
+    app.add_middleware(
+        RateLimitMiddleware,
+        default_limit=config.get("rate_limit", 1000),
+        default_window=config.get("rate_window", 3600),
+        redis_client=redis_client
+    )
+    
+    # 5. JWT Authentication (innermost, closest to routes)
+    if config.get("jwt_secret"):
+        app.add_middleware(
+            JWTAuthMiddleware,
+            secret_key=config["jwt_secret"],
+            algorithm=config.get("jwt_algorithm", "HS256"),
+            exclude_paths=config.get("auth_exclude_paths")
+        )
+```
+
+---
+
+## Dependency Injection Deep Patterns
+
+### Advanced Dependency Injection Patterns
+
+```python
+# dependencies/auth.py
+from fastapi import Depends, HTTPException, status, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Optional, List, Dict, Any, Callable
+import jwt
+from functools import wraps
+import asyncio
+from contextlib import asynccontextmanager
+
+security = HTTPBearer()
+
+class User:
+    def __init__(self, user_id: str, email: str, roles: List[str], permissions: List[str]):
+        self.user_id = user_id
+        self.email = email
+        self.roles = roles
+        self.permissions = permissions
+    
+    def has_permission(self, permission: str) -> bool:
+        return permission in self.permissions
+    
+    def has_role(self, role: str) -> bool:
+        return role in self.roles
+
+class AuthService:
+    def __init__(self, secret_key: str, algorithm: str = "HS256"):
+        self.secret_key = secret_key
+        self.algorithm = algorithm
+        self.user_cache = {}  # Simple in-memory cache
+    
+    async def get_user_from_token(self, token: str) -> User:
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            user_id = payload.get("sub")
+            
+            # Check cache first
+            if user_id in self.user_cache:
+                return self.user_cache[user_id]
+            
+            # Simulate database lookup
+            user = await self._fetch_user_from_db(user_id)
+            self.user_cache[user_id] = user
+            return user
+            
+        except jwt.JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials"
+            )
+    
+    async def _fetch_user_from_db(self, user_id: str) -> User:
+        # Simulate async database call
+        await asyncio.sleep(0.01)
+        return User(
+            user_id=user_id,
+            email=f"{user_id}@example.com",
+            roles=["user"],
+            permissions=["read", "write"]
+        )
+
+# Dependency factory pattern
+def create_auth_dependency(auth_service: AuthService):
+    async def get_current_user(
+        credentials: HTTPAuthorizationCredentials = Depends(security)
+    ) -> User:
+        return await auth_service.get_user_from_token(credentials.credentials)
+    
+    return get_current_user
+
+# Permission-based dependency
+def require_permission(permission: str):
+    def permission_dependency(user: User = Depends(create_auth_dependency)):
+        if not user.has_permission(permission):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Permission '{permission}' required"
+            )
+        return user
+    return permission_dependency
+
+# Role-based dependency
+def require_role(role: str):
+    def role_dependency(user: User = Depends(create_auth_dependency)):
+        if not user.has_role(role):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Role '{role}' required"
+            )
+        return user
+    return role_dependency
+
+# dependencies/database.py
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
+import logging
+
+logger = logging.getLogger(__name__)
+
+class Base(DeclarativeBase):
+    pass
+
+class DatabaseManager:
+    def __init__(self, database_url: str, echo: bool = False):
+        self.engine = create_async_engine(
+            database_url,
+            echo=echo,
+            pool_size=20,
+            max_overflow=30,
+            pool_pre_ping=True,
+            pool_recycle=3600
+        )
+        self.async_session = async_sessionmaker(
+            self.engine,
+            class_=AsyncSession,
+            expire_on_commit=False
+        )
+    
+    async def create_tables(self):
+        async with self.engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    
+    async def close(self):
+        await self.engine.dispose()
+    
+    @asynccontextmanager
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
+        async with self.async_session() as session:
+            try:
+                yield session
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+            finally:
+                await session.close()
+
+# Global database manager instance
+db_manager: Optional[DatabaseManager] = None
+
+async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+    if not db_manager:
+        raise RuntimeError("Database manager not initialized")
+    
+    async with db_manager.get_session() as session:
+        yield session
+
+# Transaction management dependency
+@asynccontextmanager
+async def transaction_context(session: AsyncSession = Depends(get_db_session)):
+    """Context manager for explicit transaction control"""
+    try:
+        yield session
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
+
+# dependencies/services.py
+from abc import ABC, abstractmethod
+from typing import Protocol, TypeVar, Generic
+from dataclasses import dataclass
+import asyncio
+
+# Service layer pattern with dependency injection
+class Repository(Protocol):
+    async def get(self, id: str): ...
+    async def create(self, data: dict): ...
+    async def update(self, id: str, data: dict): ...
+    async def delete(self, id: str): ...
+
+T = TypeVar('T')
+
+class BaseService(Generic[T]):
+    def __init__(self, repository: Repository):
+        self.repository = repository
+    
+    async def get_by_id(self, id: str) -> T:
+        return await self.repository.get(id)
+    
+    async def create(self, data: dict) -> T:
+        return await self.repository.create(data)
+
+class UserService(BaseService):
+    def __init__(self, user_repository: Repository, email_service: 'EmailService'):
+        super().__init__(user_repository)
+        self.email_service = email_service
+    
+    async def create_user(self, user_data: dict):
+        user = await self.create(user_data)
+        # Send welcome email asynchronously
+        asyncio.create_task(self.email_service.send_welcome_email(user.email))
+        return user
+
+class EmailService:
+    async def send_welcome_email(self, email: str):
+        # Simulate email sending
+        await asyncio.sleep(0.1)
+        logger.info(f"Welcome email sent to {email}")
+
+# Service container for dependency injection
+class ServiceContainer:
+    def __init__(self):
+        self._services = {}
+        self._factories = {}
+    
+    def register(self, service_type: type, factory: Callable):
+        self._factories[service_type] = factory
+    
+    def register_singleton(self, service_type: type, instance):
+        self._services[service_type] = instance
+    
+    def get(self, service_type: type):
+        if service_type in self._services:
+            return self._services[service_type]
+        
+        if service_type in self._factories:
+            instance = self._factories[service_type]()
+            self._services[service_type] = instance
+            return instance
+        
+        raise ValueError(f"Service {service_type} not registered")
+
+# Global service container
+container = ServiceContainer()
+
+def get_service(service_type: type):
+    def service_dependency():
+        return container.get(service_type)
+    return service_dependency
+
+# dependencies/caching.py
+import redis.asyncio as redis
+import json
+import pickle
+from typing import Any, Optional, Union
+from functools import wraps
+import hashlib
+
+class CacheService:
+    def __init__(self, redis_client: redis.Redis):
+        self.redis = redis_client
+    
+    async def get(self, key: str) -> Optional[Any]:
+        try:
+            value = await self.redis.get(key)
+            if value:
+                return pickle.loads(value)
+        except Exception as e:
+            logger.error(f"Cache get error: {e}")
+        return None
+    
+    async def set(self, key: str, value: Any, ttl: int = 3600):
+        try:
+            await self.redis.set(key, pickle.dumps(value), ex=ttl)
+        except Exception as e:
+            logger.error(f"Cache set error: {e}")
+    
+    async def delete(self, key: str):
+        try:
+            await self.redis.delete(key)
+        except Exception as e:
+            logger.error(f"Cache delete error: {e}")
+
+# Cache dependency
+cache_service: Optional[CacheService] = None
+
+async def get_cache() -> CacheService:
+    if not cache_service:
+        raise RuntimeError("Cache service not initialized")
+    return cache_service
+
+# Caching decorator for dependencies
+def cached(ttl: int = 3600, key_prefix: str = ""):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            # Generate cache key from function name and arguments
+            key_data = f"{key_prefix}:{func.__name__}:{str(args)}:{str(kwargs)}"
+            cache_key = hashlib.md5(key_data.encode()).hexdigest()
+            
+            cache = await get_cache()
+            
+            # Try to get from cache
+            cached_result = await cache.get(cache_key)
+            if cached_result is not None:
+                return cached_result
+            
+            # Execute function and cache result
+            result = await func(*args, **kwargs)
+            await cache.set(cache_key, result, ttl)
+            
+            return result
+        return wrapper
+    return decorator
+
+# dependencies/validation.py
+from pydantic import BaseModel, validator
+from typing import List, Optional, Dict, Any
+from fastapi import HTTPException, status, Depends, Query, Path, Body
+
+class PaginationParams(BaseModel):
+    page: int = Query(1, ge=1, description="Page number")
+    size: int = Query(20, ge=1, le=100, description="Page size")
+    
+    @property
+    def offset(self) -> int:
+        return (self.page - 1) * self.size
+
+class SortParams(BaseModel):
+    sort_by: Optional[str] = Query(None, description="Field to sort by")
+    sort_order: str = Query("asc", regex="^(asc|desc)$", description="Sort order")
+
+class FilterParams(BaseModel):
+    search: Optional[str] = Query(None, min_length=1, max_length=100)
+    status: Optional[str] = Query(None)
+    created_after: Optional[str] = Query(None)
+    created_before: Optional[str] = Query(None)
+
+# Complex validation dependency
+async def validate_user_access(
+    user_id: str = Path(...),
+    current_user: User = Depends(create_auth_dependency)
+) -> str:
+    """Validate that user can access the specified user_id"""
+    if current_user.user_id != user_id and not current_user.has_role("admin"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied"
+        )
+    return user_id
+
+# Conditional dependency
+def conditional_dependency(condition_func: Callable[[Request], bool], 
+                         dependency_func: Callable):
+    async def conditional_dep(request: Request):
+        if condition_func(request):
+            return await dependency_func()
+        return None
+    return conditional_dep
+
+# Example usage in routes
+from fastapi import APIRouter, Depends
+
+router = APIRouter()
+
+@router.get("/users/{user_id}")
+async def get_user(
+    user_id: str = Depends(validate_user_access),
+    db: AsyncSession = Depends(get_db_session),
+    cache: CacheService = Depends(get_cache),
+    current_user: User = Depends(require_permission("read_users"))
+):
+    # Route implementation
+    pass
+
+@router.get("/admin/users")
+async def list_users(
+    pagination: PaginationParams = Depends(),
+    sorting: SortParams = Depends(),
+    filters: FilterParams = Depends(),
+    admin_user: User = Depends(require_role("admin")),
+    db: AsyncSession = Depends(get_db_session)
+):
+    # Admin route implementation
+    pass
+```
+
+---
+
+## Background Tasks and Worker Patterns
+
+### Comprehensive Background Task Implementation
+
+```python
+# tasks/base.py
+import asyncio
+import json
+import logging
+import time
+import uuid
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, asdict
+from enum import Enum
+from typing import Any, Dict, List, Optional, Callable, Union
+import redis.asyncio as redis
+from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
+
+class TaskStatus(Enum):
+    PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILED = "failed"
+    RETRY = "retry"
+    CANCELLED = "cancelled"
+
+@dataclass
+class TaskResult:
+    task_id: str
+    status: TaskStatus
+    result: Any = None
+    error: Optional[str] = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    retry_count: int = 0
+    max_retries: int = 3
+
+class BaseTask(ABC):
+    def __init__(self, name: str, max_retries: int = 3, retry_delay: int = 60):
+        self.name = name
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
+    
+    @abstractmethod
+    async def execute(self, *args, **kwargs) -> Any:
+        """Execute the task logic"""
+        pass
+    
+    async def on_success(self, result: Any, task_id: str):
+        """Called when task succeeds"""
+        logger.info(f"Task {task_id} ({self.name}) completed successfully")
+    
+    async def on_failure(self, error: Exception, task_id: str, retry_count: int):
+        """Called when task fails"""
+        logger.error(f"Task {task_id} ({self.name}) failed: {error}")
+    
+    async def should_retry(self, error: Exception, retry_count: int) -> bool:
+        """Determine if task should be retried"""
+        return retry_count < self.max_retries
+
+# tasks/queue.py
+class TaskQueue:
+    def __init__(self, redis_client: redis.Redis, queue_name: str = "default"):
+        self.redis = redis_client
+        self.queue_name = queue_name
+        self.task_registry: Dict[str, BaseTask] = {}
+    
+    def register_task(self, task: BaseTask):
+        """Register a task type"""
+        self.task_registry[task.name] = task
+    
+    async def enqueue(self, 
+                     task_name: str, 
+                     args: tuple = (), 
+                     kwargs: dict = None,
+                     delay: Optional[int] = None,
+                     priority: int = 0) -> str:
+        """Enqueue a task for execution"""
+        
+        task_id = str(uuid.uuid4())
+        task_data = {
+            "task_id": task_id,
+            "task_name": task_name,
+            "args": args,
+            "kwargs": kwargs or {},
+            "priority": priority,
+            "enqueued_at": time.time(),
+            "retry_count": 0
+        }
+        
+        if delay:
+            # Schedule for later execution
+            execute_at = time.time() + delay
+            await self.redis.zadd(
+                f"{self.queue_name}:delayed",
+                {json.dumps(task_data): execute_at}
+            )
+        else:
+            # Add to immediate execution queue
+            await self.redis.lpush(
+                f"{self.queue_name}:queue",
+                json.dumps(task_data)
+            )
+        
+        # Store task result placeholder
+        result = TaskResult(task_id=task_id, status=TaskStatus.PENDING)
+        await self.redis.setex(
+            f"{self.queue_name}:result:{task_id}",
+            3600,  # 1 hour TTL
+            json.dumps(asdict(result), default=str)
+        )
+        
+        logger.info(f"Enqueued task {task_id} ({task_name})")
+        return task_id
+    
+    async def get_task_result(self, task_id: str) -> Optional[TaskResult]:
+        """Get task result by ID"""
+        result_data

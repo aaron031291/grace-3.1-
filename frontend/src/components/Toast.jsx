@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Toast Notification System
  * =========================
@@ -134,7 +135,7 @@ function ToastContainer({ toasts, onClose }) {
 /**
  * Individual Toast Item
  */
-function ToastItem({ toast, onClose, index }) {
+function ToastItem({ toast, onClose }) {
   const [open, setOpen] = useState(true);
 
   const handleClose = (event, reason) => {

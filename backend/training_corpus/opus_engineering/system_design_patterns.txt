@@ -1,0 +1,926 @@
+# Comprehensive System Design and Architecture Training Data
+
+## 1. Event Sourcing with Python (Complete Implementation)
+
+Event sourcing is a pattern where state changes are stored as a sequence of events rather than just the current state.
+
+### Core Event Sourcing Implementation
+
+```python
+import json
+import uuid
+from abc import ABC, abstractmethod
+from datetime import datetime
+from typing import Dict, List, Any, Optional, Type
+from dataclasses import dataclass, asdict
+from enum import Enum
+import asyncio
+import aioredis
+import asyncpg
+from contextlib import asynccontextmanager
+
+# Base Event Classes
+@dataclass
+class Event:
+    """Base event class"""
+    event_id: str
+    aggregate_id: str
+    event_type: str
+    event_data: Dict[str, Any]
+    version: int
+    timestamp: datetime
+    metadata: Dict[str, Any] = None
+    
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+
+class EventStore(ABC):
+    """Abstract event store interface"""
+    
+    @abstractmethod
+    async def save_events(self, aggregate_id: str, events: List[Event], 
+                         expected_version: int) -> None:
+        pass
+    
+    @abstractmethod
+    async def get_events(self, aggregate_id: str, 
+                        from_version: int = 0) -> List[Event]:
+        pass
+    
+    @abstractmethod
+    async def get_all_events(self, from_position: int = 0) -> List[Event]:
+        pass
+
+# PostgreSQL Event Store Implementation
+class PostgreSQLEventStore(EventStore):
+    def __init__(self, connection_string: str):
+        self.connection_string = connection_string
+        self.pool = None
+    
+    async def initialize(self):
+        """Initialize connection pool and create tables"""
+        self.pool = await asyncpg.create_pool(self.connection_string)
+        
+        async with self.pool.acquire() as conn:
+            await conn.execute("""
+                CREATE TABLE IF NOT EXISTS events (
+                    id SERIAL PRIMARY KEY,
+                    event_id UUID UNIQUE NOT NULL,
+                    aggregate_id UUID NOT NULL,
+                    event_type VARCHAR(255) NOT NULL,
+                    event_data JSONB NOT NULL,
+                    version INTEGER NOT NULL,
+                    timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+                    metadata JSONB,
+                    UNIQUE(aggregate_id, version)
+                )
+            """)
+            
+            await conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_events_aggregate_id 
+                ON events(aggregate_id)
+            """)
+            
+            await conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_events_timestamp 
+                ON events(timestamp)
+            """)
+    
+    async def save_events(self, aggregate_id: str, events: List[Event], 
+                         expected_version: int) -> None:
+        """Save events with optimistic concurrency control"""
+        async with self.pool.acquire() as conn:
+            async with conn.transaction():
+                # Check current version
+                current_version = await conn.fetchval(
+                    "SELECT COALESCE(MAX(version), 0) FROM events WHERE aggregate_id = $1",
+                    uuid.UUID(aggregate_id)
+                )
+                
+                if current_version != expected_version:
+                    raise ConcurrencyError(
+                        f"Expected version {expected_version}, got {current_version}"
+                    )
+                
+                # Insert events
+                for event in events:
+                    await conn.execute("""
+                        INSERT INTO events (event_id, aggregate_id, event_type, 
+                                          event_data, version, timestamp, metadata)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    """, 
+                    uuid.UUID(event.event_id),
+                    uuid.UUID(event.aggregate_id),
+                    event.event_type,
+                    json.dumps(event.event_data),
+                    event.version,
+                    event.timestamp,
+                    json.dumps(event.metadata) if event.metadata else None
+                    )
+    
+    async def get_events(self, aggregate_id: str, 
+                        from_version: int = 0) -> List[Event]:
+        """Get events for specific aggregate"""
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch("""
+                SELECT event_id, aggregate_id, event_type, event_data, 
+                       version, timestamp, metadata
+                FROM events 
+                WHERE aggregate_id = $1 AND version > $2
+                ORDER BY version
+            """, uuid.UUID(aggregate_id), from_version)
+            
+            return [self._row_to_event(row) for row in rows]
+    
+    async def get_all_events(self, from_position: int = 0) -> List[Event]:
+        """Get all events from position"""
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch("""
+                SELECT event_id, aggregate_id, event_type, event_data, 
+                       version, timestamp, metadata
+                FROM events 
+                WHERE id > $1
+                ORDER BY id
+            """, from_position)
+            
+            return [self._row_to_event(row) for row in rows]
+    
+    def _row_to_event(self, row) -> Event:
+        """Convert database row to Event"""
+        return Event(
+            event_id=str(row['event_id']),
+            aggregate_id=str(row['aggregate_id']),
+            event_type=row['event_type'],
+            event_data=json.loads(row['event_data']),
+            version=row['version'],
+            timestamp=row['timestamp'],
+            metadata=json.loads(row['metadata']) if row['metadata'] else {}
+        )
+
+# Aggregate Root Base Class
+class AggregateRoot:
+    """Base class for aggregates in event sourcing"""
+    
+    def __init__(self, aggregate_id: str = None):
+        self.aggregate_id = aggregate_id or str(uuid.uuid4())
+        self.version = 0
+        self.uncommitted_events: List[Event] = []
+    
+    def apply_event(self, event: Event):
+        """Apply event to aggregate state"""
+        handler_name = f"_handle_{event.event_type.lower()}"
+        handler = getattr(self, handler_name, None)
+        
+        if handler:
+            handler(event.event_data)
+        
+        self.version = event.version
+    
+    def raise_event(self, event_type: str, event_data: Dict[str, Any], 
+                   metadata: Dict[str, Any] = None):
+        """Raise a new event"""
+        event = Event(
+            event_id=str(uuid.uuid4()),
+            aggregate_id=self.aggregate_id,
+            event_type=event_type,
+            event_data=event_data,
+            version=self.version + 1,
+            timestamp=datetime.utcnow(),
+            metadata=metadata or {}
+        )
+        
+        self.apply_event(event)
+        self.uncommitted_events.append(event)
+    
+    def mark_events_as_committed(self):
+        """Mark uncommitted events as committed"""
+        self.uncommitted_events.clear()
+    
+    def load_from_history(self, events: List[Event]):
+        """Load aggregate from event history"""
+        for event in events:
+            self.apply_event(event)
+
+# Example: Bank Account Aggregate
+class BankAccountAggregate(AggregateRoot):
+    def __init__(self, aggregate_id: str = None):
+        super().__init__(aggregate_id)
+        self.balance = 0.0
+        self.is_active = False
+        self.account_holder = ""
+    
+    def open_account(self, account_holder: str, initial_deposit: float = 0.0):
+        """Open a new bank account"""
+        if self.is_active:
+            raise ValueError("Account is already open")
+        
+        self.raise_event("AccountOpened", {
+            "account_holder": account_holder,
+            "initial_deposit": initial_deposit
+        })
+        
+        if initial_deposit > 0:
+            self.raise_event("MoneyDeposited", {
+                "amount": initial_deposit,
+                "description": "Initial deposit"
+            })
+    
+    def deposit(self, amount: float, description: str = ""):
+        """Deposit money"""
+        if not self.is_active:
+            raise ValueError("Account is not active")
+        
+        if amount <= 0:
+            raise ValueError("Amount must be positive")
+        
+        self.raise_event("MoneyDeposited", {
+            "amount": amount,
+            "description": description
+        })
+    
+    def withdraw(self, amount: float, description: str = ""):
+        """Withdraw money"""
+        if not self.is_active:
+            raise ValueError("Account is not active")
+        
+        if amount <= 0:
+            raise ValueError("Amount must be positive")
+        
+        if self.balance < amount:
+            raise ValueError("Insufficient funds")
+        
+        self.raise_event("MoneyWithdrawn", {
+            "amount": amount,
+            "description": description
+        })
+    
+    def close_account(self):
+        """Close account"""
+        if not self.is_active:
+            raise ValueError("Account is not active")
+        
+        if self.balance > 0:
+            raise ValueError("Cannot close account with positive balance")
+        
+        self.raise_event("AccountClosed", {})
+    
+    # Event Handlers
+    def _handle_accountopened(self, event_data: Dict[str, Any]):
+        self.account_holder = event_data["account_holder"]
+        self.is_active = True
+    
+    def _handle_moneydeposited(self, event_data: Dict[str, Any]):
+        self.balance += event_data["amount"]
+    
+    def _handle_moneywithdrawn(self, event_data: Dict[str, Any]):
+        self.balance -= event_data["amount"]
+    
+    def _handle_accountclosed(self, event_data: Dict[str, Any]):
+        self.is_active = False
+
+# Repository Pattern for Aggregates
+class Repository:
+    """Generic repository for aggregates"""
+    
+    def __init__(self, event_store: EventStore, aggregate_class: Type[AggregateRoot]):
+        self.event_store = event_store
+        self.aggregate_class = aggregate_class
+    
+    async def get_by_id(self, aggregate_id: str) -> Optional[AggregateRoot]:
+        """Load aggregate by ID"""
+        events = await self.event_store.get_events(aggregate_id)
+        
+        if not events:
+            return None
+        
+        aggregate = self.aggregate_class(aggregate_id)
+        aggregate.load_from_history(events)
+        return aggregate
+    
+    async def save(self, aggregate: AggregateRoot):
+        """Save aggregate"""
+        if not aggregate.uncommitted_events:
+            return
+        
+        expected_version = aggregate.version - len(aggregate.uncommitted_events)
+        
+        await self.event_store.save_events(
+            aggregate.aggregate_id,
+            aggregate.uncommitted_events,
+            expected_version
+        )
+        
+        aggregate.mark_events_as_committed()
+
+# Event Bus for Publishing Events
+class EventBus:
+    """Simple event bus for publishing domain events"""
+    
+    def __init__(self):
+        self.handlers: Dict[str, List[callable]] = {}
+    
+    def subscribe(self, event_type: str, handler: callable):
+        """Subscribe to event type"""
+        if event_type not in self.handlers:
+            self.handlers[event_type] = []
+        self.handlers[event_type].append(handler)
+    
+    async def publish(self, event: Event):
+        """Publish event to subscribers"""
+        handlers = self.handlers.get(event.event_type, [])
+        
+        for handler in handlers:
+            try:
+                if asyncio.iscoroutinefunction(handler):
+                    await handler(event)
+                else:
+                    handler(event)
+            except Exception as e:
+                # Log error but don't stop processing
+                print(f"Error handling event {event.event_type}: {e}")
+
+# Projection Builder
+class ProjectionBuilder:
+    """Base class for building projections from events"""
+    
+    def __init__(self, event_store: EventStore):
+        self.event_store = event_store
+        self.last_processed_position = 0
+    
+    async def rebuild_projection(self):
+        """Rebuild projection from all events"""
+        events = await self.event_store.get_all_events()
+        
+        for event in events:
+            await self.handle_event(event)
+        
+        self.last_processed_position = len(events)
+    
+    async def update_projection(self):
+        """Update projection with new events"""
+        events = await self.event_store.get_all_events(self.last_processed_position)
+        
+        for event in events:
+            await self.handle_event(event)
+        
+        self.last_processed_position += len(events)
+    
+    async def handle_event(self, event: Event):
+        """Handle individual event - override in subclasses"""
+        handler_name = f"handle_{event.event_type.lower()}"
+        handler = getattr(self, handler_name, None)
+        
+        if handler:
+            await handler(event)
+
+# Example: Account Balance Projection
+class AccountBalanceProjection(ProjectionBuilder):
+    def __init__(self, event_store: EventStore, redis_client):
+        super().__init__(event_store)
+        self.redis = redis_client
+    
+    async def handle_accountopened(self, event: Event):
+        """Handle account opened event"""
+        await self.redis.hset(
+            f"account:{event.aggregate_id}",
+            mapping={
+                "balance": event.event_data.get("initial_deposit", 0),
+                "account_holder": event.event_data["account_holder"],
+                "is_active": "true"
+            }
+        )
+    
+    async def handle_moneydeposited(self, event: Event):
+        """Handle money deposited event"""
+        await self.redis.hincrbyfloat(
+            f"account:{event.aggregate_id}",
+            "balance",
+            event.event_data["amount"]
+        )
+    
+    async def handle_moneywithdrawn(self, event: Event):
+        """Handle money withdrawn event"""
+        await self.redis.hincrbyfloat(
+            f"account:{event.aggregate_id}",
+            "balance",
+            -event.event_data["amount"]
+        )
+    
+    async def handle_accountclosed(self, event: Event):
+        """Handle account closed event"""
+        await self.redis.hset(
+            f"account:{event.aggregate_id}",
+            "is_active",
+            "false"
+        )
+
+# Custom Exceptions
+class ConcurrencyError(Exception):
+    """Raised when there's a concurrency conflict"""
+    pass
+
+# Usage Example
+async def main():
+    # Initialize event store
+    event_store = PostgreSQLEventStore("postgresql://user:pass@localhost/eventstore")
+    await event_store.initialize()
+    
+    # Initialize Redis for projections
+    redis = await aioredis.from_url("redis://localhost")
+    
+    # Create repository
+    account_repo = Repository(event_store, BankAccountAggregate)
+    
+    # Create and use aggregate
+    account = BankAccountAggregate()
+    account.open_account("John Doe", 1000.0)
+    account.deposit(500.0, "Salary")
+    account.withdraw(200.0, "ATM Withdrawal")
+    
+    # Save aggregate
+    await account_repo.save(account)
+    
+    # Load aggregate
+    loaded_account = await account_repo.get_by_id(account.aggregate_id)
+    print(f"Account balance: {loaded_account.balance}")
+    
+    # Build projection
+    projection = AccountBalanceProjection(event_store, redis)
+    await projection.rebuild_projection()
+    
+    # Get balance from projection
+    balance = await redis.hget(f"account:{account.aggregate_id}", "balance")
+    print(f"Projected balance: {balance}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## 2. CQRS Pattern Implementation
+
+CQRS (Command Query Responsibility Segregation) separates read and write operations.
+
+```python
+import asyncio
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Union
+from datetime import datetime
+import json
+import uuid
+from enum import Enum
+
+# Command and Query Base Classes
+@dataclass
+class Command:
+    """Base command class"""
+    command_id: str
+    timestamp: datetime
+    user_id: str
+    
+    def __post_init__(self):
+        if not hasattr(self, 'command_id') or not self.command_id:
+            self.command_id = str(uuid.uuid4())
+        if not hasattr(self, 'timestamp') or not self.timestamp:
+            self.timestamp = datetime.utcnow()
+
+@dataclass
+class Query:
+    """Base query class"""
+    query_id: str
+    timestamp: datetime
+    user_id: str
+    
+    def __post_init__(self):
+        if not hasattr(self, 'query_id') or not self.query_id:
+            self.query_id = str(uuid.uuid4())
+        if not hasattr(self, 'timestamp') or not self.timestamp:
+            self.timestamp = datetime.utcnow()
+
+class CommandResult:
+    """Result of command execution"""
+    def __init__(self, success: bool, message: str = "", data: Any = None):
+        self.success = success
+        self.message = message
+        self.data = data
+
+class QueryResult:
+    """Result of query execution"""
+    def __init__(self, data: Any = None, total_count: int = 0):
+        self.data = data
+        self.total_count = total_count
+
+# Handler Interfaces
+class CommandHandler(ABC):
+    """Base command handler"""
+    
+    @abstractmethod
+    async def handle(self, command: Command) -> CommandResult:
+        pass
+
+class QueryHandler(ABC):
+    """Base query handler"""
+    
+    @abstractmethod
+    async def handle(self, query: Query) -> QueryResult:
+        pass
+
+# Command and Query Buses
+class CommandBus:
+    """Command bus for routing commands to handlers"""
+    
+    def __init__(self):
+        self.handlers: Dict[type, CommandHandler] = {}
+        self.middleware: List[callable] = []
+    
+    def register_handler(self, command_type: type, handler: CommandHandler):
+        """Register command handler"""
+        self.handlers[command_type] = handler
+    
+    def add_middleware(self, middleware: callable):
+        """Add middleware to command pipeline"""
+        self.middleware.append(middleware)
+    
+    async def send(self, command: Command) -> CommandResult:
+        """Send command through pipeline"""
+        handler = self.handlers.get(type(command))
+        
+        if not handler:
+            return CommandResult(False, f"No handler for {type(command).__name__}")
+        
+        # Execute middleware pipeline
+        async def execute():
+            return await handler.handle(command)
+        
+        for middleware in reversed(self.middleware):
+            execute = middleware(execute, command)
+        
+        return await execute()
+
+class QueryBus:
+    """Query bus for routing queries to handlers"""
+    
+    def __init__(self):
+        self.handlers: Dict[type, QueryHandler] = {}
+        self.middleware: List[callable] = []
+    
+    def register_handler(self, query_type: type, handler: QueryHandler):
+        """Register query handler"""
+        self.handlers[query_type] = handler
+    
+    def add_middleware(self, middleware: callable):
+        """Add middleware to query pipeline"""
+        self.middleware.append(middleware)
+    
+    async def send(self, query: Query) -> QueryResult:
+        """Send query through pipeline"""
+        handler = self.handlers.get(type(query))
+        
+        if not handler:
+            return QueryResult(data=None)
+        
+        # Execute middleware pipeline
+        async def execute():
+            return await handler.handle(query)
+        
+        for middleware in reversed(self.middleware):
+            execute = middleware(execute, query)
+        
+        return await execute()
+
+# Example Domain: E-commerce Order System
+
+# Commands
+@dataclass
+class CreateOrderCommand(Command):
+    customer_id: str
+    items: List[Dict[str, Any]]
+    shipping_address: Dict[str, str]
+
+@dataclass
+class UpdateOrderStatusCommand(Command):
+    order_id: str
+    status: str
+    notes: str = ""
+
+@dataclass
+class CancelOrderCommand(Command):
+    order_id: str
+    reason: str
+
+# Queries
+@dataclass
+class GetOrderByIdQuery(Query):
+    order_id: str
+
+@dataclass
+class GetOrdersByCustomerQuery(Query):
+    customer_id: str
+    page: int = 1
+    page_size: int = 10
+
+@dataclass
+class GetOrdersReportQuery(Query):
+    start_date: datetime
+    end_date: datetime
+    status_filter: Optional[str] = None
+
+# Write Model (Command Side)
+class Order:
+    """Order aggregate for write operations"""
+    
+    def __init__(self, order_id: str = None):
+        self.order_id = order_id or str(uuid.uuid4())
+        self.customer_id = ""
+        self.items = []
+        self.total_amount = 0.0
+        self.status = "pending"
+        self.shipping_address = {}
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
+        self.events = []
+    
+    def create(self, customer_id: str, items: List[Dict], shipping_address: Dict):
+        """Create new order"""
+        self.customer_id = customer_id
+        self.items = items
+        self.shipping_address = shipping_address
+        self.total_amount = sum(item['price'] * item['quantity'] for item in items)
+        self.status = "created"
+        
+        self.events.append({
+            "type": "OrderCreated",
+            "data": {
+                "order_id": self.order_id,
+                "customer_id": customer_id,
+                "total_amount": self.total_amount
+            }
+        })
+    
+    def update_status(self, new_status: str, notes: str = ""):
+        """Update order status"""
+        old_status = self.status
+        self.status = new_status
+        self.updated_at = datetime.utcnow()
+        
+        self.events.append({
+            "type": "OrderStatusUpdated",
+            "data": {
+                "order_id": self.order_id,
+                "old_status": old_status,
+                "new_status": new_status,
+                "notes": notes
+            }
+        })
+    
+    def cancel(self, reason: str):
+        """Cancel order"""
+        if self.status in ["shipped", "delivered", "cancelled"]:
+            raise ValueError(f"Cannot cancel order with status: {self.status}")
+        
+        old_status = self.status
+        self.status = "cancelled"
+        self.updated_at = datetime.utcnow()
+        
+        self.events.append({
+            "type": "OrderCancelled",
+            "data": {
+                "order_id": self.order_id,
+                "old_status": old_status,
+                "reason": reason
+            }
+        })
+
+# Write Repository
+class OrderWriteRepository:
+    """Repository for write operations"""
+    
+    def __init__(self, db_connection):
+        self.db = db_connection
+    
+    async def save(self, order: Order):
+        """Save order to write database"""
+        await self.db.execute("""
+            INSERT INTO orders (order_id, customer_id, items, total_amount, 
+                              status, shipping_address, created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            ON CONFLICT (order_id) DO UPDATE SET
+                status = EXCLUDED.status,
+                updated_at = EXCLUDED.updated_at
+        """, 
+        order.order_id, order.customer_id, json.dumps(order.items),
+        order.total_amount, order.status, json.dumps(order.shipping_address),
+        order.created_at, order.updated_at)
+    
+    async def get_by_id(self, order_id: str) -> Optional[Order]:
+        """Get order by ID"""
+        row = await self.db.fetchrow(
+            "SELECT * FROM orders WHERE order_id = $1", order_id
+        )
+        
+        if not row:
+            return None
+        
+        order = Order(row['order_id'])
+        order.customer_id = row['customer_id']
+        order.items = json.loads(row['items'])
+        order.total_amount = row['total_amount']
+        order.status = row['status']
+        order.shipping_address = json.loads(row['shipping_address'])
+        order.created_at = row['created_at']
+        order.updated_at = row['updated_at']
+        
+        return order
+
+# Read Models (Query Side)
+@dataclass
+class OrderReadModel:
+    """Optimized read model for orders"""
+    order_id: str
+    customer_id: str
+    customer_name: str
+    customer_email: str
+    total_amount: float
+    status: str
+    item_count: int
+    created_at: datetime
+    updated_at: datetime
+    shipping_city: str
+    shipping_country: str
+
+@dataclass
+class OrderSummaryReadModel:
+    """Summary read model for reports"""
+    date: datetime
+    total_orders: int
+    total_revenue: float
+    avg_order_value: float
+    status_breakdown: Dict[str, int]
+
+# Read Repository
+class OrderReadRepository:
+    """Repository for read operations"""
+    
+    def __init__(self, db_connection):
+        self.db = db_connection
+    
+    async def get_order_by_id(self, order_id: str) -> Optional[OrderReadModel]:
+        """Get detailed order view"""
+        row = await self.db.fetchrow("""
+            SELECT o.*, c.name as customer_name, c.email as customer_email
+            FROM order_read_model o
+            JOIN customers c ON o.customer_id = c.customer_id
+            WHERE o.order_id = $1
+        """, order_id)
+        
+        if not row:
+            return None
+        
+        return OrderReadModel(**dict(row))
+    
+    async def get_orders_by_customer(self, customer_id: str, page: int, 
+                                   page_size: int) -> List[OrderReadModel]:
+        """Get orders for customer with pagination"""
+        offset = (page - 1) * page_size
+        
+        rows = await self.db.fetch("""
+            SELECT o.*, c.name as customer_name, c.email as customer_email
+            FROM order_read_model o
+            JOIN customers c ON o.customer_id = c.customer_id
+            WHERE o.customer_id = $1
+            ORDER BY o.created_at DESC
+            LIMIT $2 OFFSET $3
+        """, customer_id, page_size, offset)
+        
+        return [OrderReadModel(**dict(row)) for row in rows]
+    
+    async def get_orders_report(self, start_date: datetime, end_date: datetime,
+                              status_filter: Optional[str] = None) -> List[OrderSummaryReadModel]:
+        """Get orders report"""
+        status_condition = ""
+        params = [start_date, end_date]
+        
+        if status_filter:
+            status_condition = "AND status = $3"
+            params.append(status_filter)
+        
+        rows = await self.db.fetch(f"""
+            SELECT 
+                DATE(created_at) as date,
+                COUNT(*) as total_orders,
+                SUM(total_amount) as total_revenue,
+                AVG(total_amount) as avg_order_value,
+                jsonb_object_agg(status, status_count) as status_breakdown
+            FROM (
+                SELECT 
+                    created_at,
+                    total_amount,
+                    status,
+                    COUNT(*) OVER (PARTITION BY DATE(created_at), status) as status_count
+                FROM order_read_model
+                WHERE created_at BETWEEN $1 AND $2 {status_condition}
+            ) subq
+            GROUP BY DATE(created_at)
+            ORDER BY date
+        """, *params)
+        
+        return [OrderSummaryReadModel(**dict(row)) for row in rows]
+
+# Command Handlers
+class CreateOrderCommandHandler(CommandHandler):
+    def __init__(self, write_repo: OrderWriteRepository, event_bus):
+        self.write_repo = write_repo
+        self.event_bus = event_bus
+    
+    async def handle(self, command: CreateOrderCommand) -> CommandResult:
+        try:
+            # Validate command
+            if not command.items:
+                return CommandResult(False, "Order must have at least one item")
+            
+            # Create order
+            order = Order()
+            order.create(command.customer_id, command.items, command.shipping_address)
+            
+            # Save to write store
+            await self.write_repo.save(order)
+            
+            # Publish events
+            for event in order.events:
+                await self.event_bus.publish(event)
+            
+            return CommandResult(True, "Order created successfully", 
+                               {"order_id": order.order_id})
+        
+        except Exception as e:
+            return CommandResult(False, f"Failed to create order: {str(e)}")
+
+class UpdateOrderStatusCommandHandler(CommandHandler):
+    def __init__(self, write_repo: OrderWriteRepository, event_bus):
+        self.write_repo = write_repo
+        self.event_bus = event_bus
+    
+    async def handle(self, command: UpdateOrderStatusCommand) -> CommandResult:
+        try:
+            order = await self.write_repo.get_by_id(command.order_id)
+            
+            if not order:
+                return CommandResult(False, "Order not found")
+            
+            order.update_status(command.status, command.notes)
+            await self.write_repo.save(order)
+            
+            # Publish events
+            for event in order.events:
+                await self.event_bus.publish(event)
+            
+            return CommandResult(True, "Order status updated successfully")
+        
+        except Exception as e:
+            return CommandResult(False, f"Failed to update order: {str(e)}")
+
+# Query Handlers
+class GetOrderByIdQueryHandler(QueryHandler):
+    def __init__(self, read_repo: OrderReadRepository):
+        self.read_repo = read_repo
+    
+    async def handle(self, query: GetOrderByIdQuery) -> QueryResult:
+        order = await self.read_repo.get_order_by_id(query.order_id)
+        return QueryResult(data=order)
+
+class GetOrdersByCustomerQueryHandler(QueryHandler):
+    def __init__(self, read_repo: OrderReadRepository):
+        self.read_repo = read_repo
+    
+    async def handle(self, query: GetOrdersByCustomerQuery) -> QueryResult:
+        orders = await self.read_repo.get_orders_by_customer(
+            query.customer_id, query.page, query.page_size
+        )
+        return QueryResult(data=orders, total_count=len(orders))
+
+# Middleware Examples
+def logging_middleware(next_handler, command_or_query):
+    """Logging middleware"""
+    async def wrapper():
+        start_time = datetime.utcnow()
+        print(f"Executing {type(command_or_query).__name__}")
+        
+        try:
+            result = await next_handler()
+            duration = (datetime.utcnow() - start_time).total_seconds()
+            print(f"Completed in {duration:.3f}s")
+            return result
+        except Exception as e:
+            print(f"Failed with error: {e}")
+            raise
+    
+    return wrapper
+
+def validation_middleware(next_handler, command_or_query):
+    """Validation middleware"""
+    async def wrapper():
+        # Basic validation
+        if hasattr(command_or_query, 'user_id') and not command_or_query.user_id:
+            if isinstance(command_or_query, Command):
+                return CommandResult(False, "User ID is required")

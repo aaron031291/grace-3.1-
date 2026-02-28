@@ -108,7 +108,29 @@ class SerpAPIService:
             logger.info(f"[SERPAPI] [OK] Found {len(formatted_results)} results")
             for idx, res in enumerate(formatted_results, 1):
                 logger.info(f"[SERPAPI]   {idx}. {res['title'][:60]}... - {res['link']}")
-            
+
+            # Register each result in FlashCache for future fast lookup
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                for res in formatted_results:
+                    if res.get("link"):
+                        kw = fc.extract_keywords(
+                            f"{query} {res.get('title', '')} {res.get('snippet', '')}"
+                        )
+                        fc.register(
+                            source_uri=res["link"],
+                            source_type="search",
+                            source_name=res.get("title", "")[:100],
+                            keywords=kw,
+                            summary=res.get("snippet", ""),
+                            trust_score=0.5,
+                            ttl_hours=48,
+                            metadata={"search_query": query, "position": res.get("position")},
+                        )
+            except Exception:
+                pass
+
             return formatted_results
         
         except requests.exceptions.Timeout:

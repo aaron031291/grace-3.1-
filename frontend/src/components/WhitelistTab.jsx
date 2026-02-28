@@ -1,452 +1,548 @@
-import React, { useState, useEffect } from 'react';
-import './WhitelistTab.css';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { API_BASE_URL } from '../config/api';
+import FlashCachePanel from './FlashCachePanel';
 
-const WhitelistTab = () => {
-  const [view, setView] = useState('overview'); // overview, domains, paths, patterns, logs
-  const [loading, setLoading] = useState(true);
-  const [whitelistData, setWhitelistData] = useState(null);
-  const [domains, setDomains] = useState([]);
-  const [paths, setPaths] = useState([]);
-  const [patterns, setPatterns] = useState([]);
-  const [logs, setLogs] = useState([]);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [addType, setAddType] = useState('domain');
-  const [newEntry, setNewEntry] = useState({ value: '', description: '', priority: 'medium' });
-
-  useEffect(() => {
-    fetchWhitelistData();
-  }, []);
-
-  const fetchWhitelistData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/layer1/whitelist');
-      if (response.ok) {
-        const data = await response.json();
-        setWhitelistData(data);
-        setDomains(data.domains || []);
-        setPaths(data.paths || []);
-        setPatterns(data.patterns || []);
-      } else {
-        // Demo data
-        setWhitelistData({
-          total_entries: 156,
-          domains_count: 45,
-          paths_count: 68,
-          patterns_count: 43,
-          last_updated: '2025-01-11T10:30:00Z',
-          blocked_today: 12,
-          allowed_today: 892,
-        });
-        setDomains([
-          { id: 'd-1', domain: 'github.com', status: 'active', added: '2025-01-01', hits: 245, description: 'GitHub API access' },
-          { id: 'd-2', domain: 'api.openai.com', status: 'active', added: '2025-01-02', hits: 189, description: 'OpenAI API' },
-          { id: 'd-3', domain: 'huggingface.co', status: 'active', added: '2025-01-03', hits: 67, description: 'Hugging Face models' },
-          { id: 'd-4', domain: 'arxiv.org', status: 'active', added: '2025-01-05', hits: 34, description: 'Research papers' },
-          { id: 'd-5', domain: 'pypi.org', status: 'paused', added: '2025-01-08', hits: 12, description: 'Python packages' },
-        ]);
-        setPaths([
-          { id: 'p-1', path: '/api/*', type: 'wildcard', status: 'active', hits: 1250, description: 'All API endpoints' },
-          { id: 'p-2', path: '/auth/login', type: 'exact', status: 'active', hits: 450, description: 'Login endpoint' },
-          { id: 'p-3', path: '/data/export/*', type: 'wildcard', status: 'active', hits: 89, description: 'Data export paths' },
-          { id: 'p-4', path: '/admin/*', type: 'wildcard', status: 'restricted', hits: 23, description: 'Admin paths' },
-        ]);
-        setPatterns([
-          { id: 'pt-1', pattern: '^[a-zA-Z0-9_]+\\.py$', type: 'regex', status: 'active', hits: 890, description: 'Python files' },
-          { id: 'pt-2', pattern: '^test_.*', type: 'regex', status: 'active', hits: 234, description: 'Test files' },
-          { id: 'pt-3', pattern: '*.md', type: 'glob', status: 'active', hits: 156, description: 'Markdown files' },
-          { id: 'pt-4', pattern: 'config.*', type: 'glob', status: 'active', hits: 45, description: 'Config files' },
-        ]);
-      }
-    } catch (error) {
-      console.error('Error fetching whitelist:', error);
-    }
-    setLoading(false);
-  };
-
-  const fetchLogs = async () => {
-    try {
-      const response = await fetch('/api/layer1/whitelist/logs');
-      if (response.ok) {
-        const data = await response.json();
-        setLogs(data.logs || []);
-      } else {
-        setLogs([
-          { id: 'l-1', timestamp: '2025-01-11T10:28:00Z', action: 'allowed', type: 'domain', value: 'github.com', source: 'API request' },
-          { id: 'l-2', timestamp: '2025-01-11T10:27:00Z', action: 'blocked', type: 'path', value: '/admin/delete', source: 'User input' },
-          { id: 'l-3', timestamp: '2025-01-11T10:25:00Z', action: 'allowed', type: 'pattern', value: 'utils.py', source: 'File access' },
-          { id: 'l-4', timestamp: '2025-01-11T10:22:00Z', action: 'allowed', type: 'domain', value: 'api.openai.com', source: 'LLM request' },
-          { id: 'l-5', timestamp: '2025-01-11T10:20:00Z', action: 'blocked', type: 'domain', value: 'malicious.com', source: 'External API' },
-        ]);
-      }
-    } catch (error) {
-      console.error('Error fetching logs:', error);
-    }
-  };
-
-  const handleAddEntry = async () => {
-    try {
-      await fetch('/api/layer1/whitelist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: addType, ...newEntry }),
-      });
-      setShowAddModal(false);
-      setNewEntry({ value: '', description: '', priority: 'medium' });
-      fetchWhitelistData();
-    } catch (error) {
-      console.error('Error adding entry:', error);
-    }
-  };
-
-  const handleToggleStatus = async (type, id, currentStatus) => {
-    const newStatus = currentStatus === 'active' ? 'paused' : 'active';
-    try {
-      await fetch(`/api/layer1/whitelist/${type}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      fetchWhitelistData();
-    } catch (error) {
-      console.error('Error toggling status:', error);
-    }
-  };
-
-  const handleDelete = async (type, id) => {
-    if (!window.confirm('Are you sure you want to delete this entry?')) return;
-    try {
-      await fetch(`/api/layer1/whitelist/${type}/${id}`, { method: 'DELETE' });
-      fetchWhitelistData();
-    } catch (error) {
-      console.error('Error deleting entry:', error);
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  };
-
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  if (loading) {
-    return (
-      <div className="whitelist-tab">
-        <div className="loading-state">
-          <div className="spinner"></div>
-          <p>Loading whitelist...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="whitelist-tab">
-      <div className="whitelist-header">
-        <div className="header-left">
-          <h2>Whitelist Management</h2>
-          <p>Control allowed domains, paths, and patterns</p>
-        </div>
-        <div className="header-stats">
-          {whitelistData && (
-            <>
-              <div className="stat-item">
-                <span className="stat-value">{whitelistData.total_entries}</span>
-                <span className="stat-label">Total Entries</span>
-              </div>
-              <div className="stat-item allowed">
-                <span className="stat-value">{whitelistData.allowed_today}</span>
-                <span className="stat-label">Allowed Today</span>
-              </div>
-              <div className="stat-item blocked">
-                <span className="stat-value">{whitelistData.blocked_today}</span>
-                <span className="stat-label">Blocked Today</span>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      <div className="whitelist-toolbar">
-        <div className="view-tabs">
-          <button className={view === 'overview' ? 'active' : ''} onClick={() => setView('overview')}>
-            Overview
-          </button>
-          <button className={view === 'domains' ? 'active' : ''} onClick={() => setView('domains')}>
-            Domains ({domains.length})
-          </button>
-          <button className={view === 'paths' ? 'active' : ''} onClick={() => setView('paths')}>
-            Paths ({paths.length})
-          </button>
-          <button className={view === 'patterns' ? 'active' : ''} onClick={() => setView('patterns')}>
-            Patterns ({patterns.length})
-          </button>
-          <button className={view === 'logs' ? 'active' : ''} onClick={() => { setView('logs'); fetchLogs(); }}>
-            Logs
-          </button>
-        </div>
-        <button className="btn-add" onClick={() => setShowAddModal(true)}>
-          + Add Entry
-        </button>
-      </div>
-
-      <div className="whitelist-content">
-        {/* Overview View */}
-        {view === 'overview' && whitelistData && (
-          <div className="overview-view">
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-icon">🌐</div>
-                <div className="stat-info">
-                  <span className="stat-value">{whitelistData.domains_count}</span>
-                  <span className="stat-label">Domains</span>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">📁</div>
-                <div className="stat-info">
-                  <span className="stat-value">{whitelistData.paths_count}</span>
-                  <span className="stat-label">Paths</span>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">🔍</div>
-                <div className="stat-info">
-                  <span className="stat-value">{whitelistData.patterns_count}</span>
-                  <span className="stat-label">Patterns</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="recent-activity">
-              <h4>Recent Top Hits</h4>
-              <div className="activity-list">
-                {domains.slice(0, 3).map((d) => (
-                  <div key={d.id} className="activity-item">
-                    <span className="activity-type">🌐</span>
-                    <span className="activity-value">{d.domain}</span>
-                    <span className="activity-hits">{d.hits} hits</span>
-                  </div>
-                ))}
-                {paths.slice(0, 2).map((p) => (
-                  <div key={p.id} className="activity-item">
-                    <span className="activity-type">📁</span>
-                    <span className="activity-value">{p.path}</span>
-                    <span className="activity-hits">{p.hits} hits</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="quick-actions">
-              <h4>Quick Actions</h4>
-              <div className="action-buttons">
-                <button onClick={() => { setAddType('domain'); setShowAddModal(true); }}>
-                  + Add Domain
-                </button>
-                <button onClick={() => { setAddType('path'); setShowAddModal(true); }}>
-                  + Add Path
-                </button>
-                <button onClick={() => { setAddType('pattern'); setShowAddModal(true); }}>
-                  + Add Pattern
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Domains View */}
-        {view === 'domains' && (
-          <div className="list-view">
-            <div className="list-header">
-              <h4>Whitelisted Domains</h4>
-            </div>
-            <div className="entries-list">
-              {domains.map((domain) => (
-                <div key={domain.id} className={`entry-card status-${domain.status}`}>
-                  <div className="entry-icon">🌐</div>
-                  <div className="entry-info">
-                    <span className="entry-value">{domain.domain}</span>
-                    <span className="entry-description">{domain.description}</span>
-                  </div>
-                  <div className="entry-stats">
-                    <span className="entry-hits">{domain.hits} hits</span>
-                    <span className="entry-date">Added: {formatDate(domain.added)}</span>
-                  </div>
-                  <div className={`entry-status status-${domain.status}`}>{domain.status}</div>
-                  <div className="entry-actions">
-                    <button
-                      className="btn-toggle"
-                      onClick={() => handleToggleStatus('domains', domain.id, domain.status)}
-                    >
-                      {domain.status === 'active' ? 'Pause' : 'Activate'}
-                    </button>
-                    <button className="btn-delete" onClick={() => handleDelete('domains', domain.id)}>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Paths View */}
-        {view === 'paths' && (
-          <div className="list-view">
-            <div className="list-header">
-              <h4>Whitelisted Paths</h4>
-            </div>
-            <div className="entries-list">
-              {paths.map((path) => (
-                <div key={path.id} className={`entry-card status-${path.status}`}>
-                  <div className="entry-icon">📁</div>
-                  <div className="entry-info">
-                    <span className="entry-value">{path.path}</span>
-                    <span className="entry-description">{path.description}</span>
-                  </div>
-                  <div className="entry-type-badge">{path.type}</div>
-                  <div className="entry-stats">
-                    <span className="entry-hits">{path.hits} hits</span>
-                  </div>
-                  <div className={`entry-status status-${path.status}`}>{path.status}</div>
-                  <div className="entry-actions">
-                    <button
-                      className="btn-toggle"
-                      onClick={() => handleToggleStatus('paths', path.id, path.status)}
-                    >
-                      {path.status === 'active' ? 'Pause' : 'Activate'}
-                    </button>
-                    <button className="btn-delete" onClick={() => handleDelete('paths', path.id)}>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Patterns View */}
-        {view === 'patterns' && (
-          <div className="list-view">
-            <div className="list-header">
-              <h4>Whitelisted Patterns</h4>
-            </div>
-            <div className="entries-list">
-              {patterns.map((pattern) => (
-                <div key={pattern.id} className={`entry-card status-${pattern.status}`}>
-                  <div className="entry-icon">🔍</div>
-                  <div className="entry-info">
-                    <code className="entry-value">{pattern.pattern}</code>
-                    <span className="entry-description">{pattern.description}</span>
-                  </div>
-                  <div className="entry-type-badge">{pattern.type}</div>
-                  <div className="entry-stats">
-                    <span className="entry-hits">{pattern.hits} hits</span>
-                  </div>
-                  <div className={`entry-status status-${pattern.status}`}>{pattern.status}</div>
-                  <div className="entry-actions">
-                    <button
-                      className="btn-toggle"
-                      onClick={() => handleToggleStatus('patterns', pattern.id, pattern.status)}
-                    >
-                      {pattern.status === 'active' ? 'Pause' : 'Activate'}
-                    </button>
-                    <button className="btn-delete" onClick={() => handleDelete('patterns', pattern.id)}>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Logs View */}
-        {view === 'logs' && (
-          <div className="logs-view">
-            <div className="list-header">
-              <h4>Access Logs</h4>
-              <button className="btn-refresh" onClick={fetchLogs}>Refresh</button>
-            </div>
-            <div className="logs-list">
-              {logs.map((log) => (
-                <div key={log.id} className={`log-entry action-${log.action}`}>
-                  <span className="log-time">{formatTime(log.timestamp)}</span>
-                  <span className={`log-action action-${log.action}`}>{log.action}</span>
-                  <span className="log-type">{log.type}</span>
-                  <span className="log-value">{log.value}</span>
-                  <span className="log-source">{log.source}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Add Modal */}
-      {showAddModal && (
-        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add Whitelist Entry</h3>
-              <button className="modal-close" onClick={() => setShowAddModal(false)}>×</button>
-            </div>
-            <form onSubmit={(e) => { e.preventDefault(); handleAddEntry(); }}>
-              <div className="form-group">
-                <label>Type</label>
-                <select value={addType} onChange={(e) => setAddType(e.target.value)}>
-                  <option value="domain">Domain</option>
-                  <option value="path">Path</option>
-                  <option value="pattern">Pattern</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Value</label>
-                <input
-                  type="text"
-                  value={newEntry.value}
-                  onChange={(e) => setNewEntry({ ...newEntry, value: e.target.value })}
-                  placeholder={addType === 'domain' ? 'example.com' : addType === 'path' ? '/api/*' : '*.py'}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <input
-                  type="text"
-                  value={newEntry.description}
-                  onChange={(e) => setNewEntry({ ...newEntry, description: e.target.value })}
-                  placeholder="Brief description..."
-                />
-              </div>
-              <div className="form-group">
-                <label>Priority</label>
-                <select value={newEntry.priority} onChange={(e) => setNewEntry({ ...newEntry, priority: e.target.value })}>
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
-                </select>
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn-submit">
-                  Add Entry
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+const C = {
+  bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
+  accent: '#e94560', accentAlt: '#533483',
+  text: '#eee', muted: '#aaa', dim: '#666', border: '#333',
+  success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3',
 };
 
-export default WhitelistTab;
+const btn = (bg = C.accentAlt) => ({
+  padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer',
+  fontSize: 12, fontWeight: 600, color: '#fff', background: bg,
+});
+
+const input = {
+  padding: '7px 10px', border: `1px solid ${C.border}`, borderRadius: 4,
+  background: C.bg, color: C.text, fontSize: 12, outline: 'none', width: '100%', boxSizing: 'border-box',
+};
+
+function TypeIcon({ type }) {
+  const icons = { website: '🌐', youtube: '📺', podcast: '🎙️', blog: '📝', person: '👤', github: '🐙' };
+  return <span style={{ fontSize: 16 }}>{icons[type] || '🔗'}</span>;
+}
+
+// ── Source Row ────────────────────────────────────────────────────────
+function SourceRow({ source, selected, onSelect, onDelete, onRun, running }) {
+  return (
+    <div
+      onClick={() => onSelect(source)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
+        cursor: 'pointer', borderBottom: `1px solid ${C.border}`,
+        background: selected ? C.bgDark : 'transparent',
+        borderLeft: selected ? `3px solid ${C.accent}` : '3px solid transparent',
+        transition: 'background .1s',
+      }}
+      onMouseEnter={e => { if (!selected) e.currentTarget.style.background = C.bgAlt; }}
+      onMouseLeave={e => { if (!selected) e.currentTarget.style.background = selected ? C.bgDark : 'transparent'; }}
+    >
+      <TypeIcon type={source.source_type || 'api'} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{source.name}</div>
+        <div style={{ fontSize: 10, color: C.dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{source.url}</div>
+      </div>
+      <div style={{ display: 'flex', gap: 4, flexShrink: 0, alignItems: 'center' }}>
+        {source.run_count > 0 && <span style={{ fontSize: 9, color: C.dim }}>{source.run_count} runs</span>}
+        <button onClick={e => { e.stopPropagation(); onRun(source.id); }} disabled={running === source.id}
+          style={{ ...btn(C.success), fontSize: 10, padding: '3px 8px', opacity: running === source.id ? 0.5 : 1 }}>
+          {running === source.id ? '⏳' : '▶'}
+        </button>
+        <button onClick={e => { e.stopPropagation(); onDelete(source.id); }}
+          style={{ ...btn(C.border), fontSize: 10, padding: '3px 6px' }}>🗑</button>
+      </div>
+    </div>
+  );
+}
+
+// ── API Sources Sub-tab ───────────────────────────────────────────────
+function APISourcesPanel() {
+  const [sources, setSources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [name, setName] = useState('');
+  const [url, setUrl] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [desc, setDesc] = useState('');
+  const [running, setRunning] = useState(null);
+  const [runResult, setRunResult] = useState(null);
+  const [runQuery, setRunQuery] = useState('');
+
+  // Doc state
+  const [docs, setDocs] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [docContent, setDocContent] = useState('');
+  const [docEdit, setDocEdit] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/api-sources`);
+      if (res.ok) setSources((await res.json()).sources || []);
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  useEffect(() => {
+    if (selected) {
+      fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents`)
+        .then(r => r.ok ? r.json() : { documents: [] })
+        .then(d => setDocs(d.documents || []))
+        .catch(() => setDocs([]));
+    }
+  }, [selected]);
+
+  const addSource = async () => {
+    if (!name.trim() || !url.trim()) return;
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/api-sources`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, url, api_key: apiKey, description: desc }),
+    });
+    setShowAdd(false); setName(''); setUrl(''); setApiKey(''); setDesc('');
+    refresh();
+  };
+
+  const deleteSource = async (id) => {
+    if (!window.confirm('Delete this API source?')) return;
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/api-sources/${id}`, { method: 'DELETE' });
+    if (selected?.id === id) setSelected(null);
+    refresh();
+  };
+
+  const runSource = async (id) => {
+    setRunning(id); setRunResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/api-sources/${id}/run`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source_id: id, query: runQuery || null, use_kimi: true }),
+      });
+      if (res.ok) setRunResult(await res.json());
+    } catch { /* silent */ }
+    finally { setRunning(null); refresh(); }
+  };
+
+  const uploadDoc = async (e) => {
+    if (!e.target.files?.length || !selected) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('file', e.target.files[0]);
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/upload`, { method: 'POST', body: fd });
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = '';
+    fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents`).then(r => r.ok ? r.json() : { documents: [] }).then(d => setDocs(d.documents || []));
+  };
+
+  const openDoc = async (doc) => {
+    setSelectedDoc(doc); setEditing(false);
+    const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents/${encodeURIComponent(doc.filename)}/content`);
+    if (res.ok) { const d = await res.json(); setDocContent(d.content || ''); setDocEdit(d.content || ''); }
+  };
+
+  const saveDoc = async () => {
+    setSaving(true);
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents/${encodeURIComponent(selectedDoc.filename)}/content`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: docEdit }),
+    });
+    setDocContent(docEdit); setSaving(false); setEditing(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100%' }}>
+      {/* Source list */}
+      <div style={{ flex: '0 0 320px', borderRight: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6, background: C.bgAlt }}>
+          <button onClick={() => setShowAdd(!showAdd)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>+ Add API Source</button>
+          <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
+        </div>
+        {showAdd && (
+          <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <input placeholder="Name (e.g. GitHub)" value={name} onChange={e => setName(e.target.value)} style={input} />
+            <input placeholder="API URL (paste endpoint)" value={url} onChange={e => setUrl(e.target.value)} style={input} />
+            <input placeholder="API Key (optional)" value={apiKey} onChange={e => setApiKey(e.target.value)} style={input} type="password" />
+            <input placeholder="Description" value={desc} onChange={e => setDesc(e.target.value)} style={input} />
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={addSource} style={{ ...btn(C.success), flex: 1 }}>Add</button>
+              <button onClick={() => setShowAdd(false)} style={{ ...btn(C.border), flex: 1 }}>Cancel</button>
+            </div>
+          </div>
+        )}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {loading ? <div style={{ padding: 20, textAlign: 'center', color: C.dim }}>Loading...</div>
+           : sources.length === 0 ? <div style={{ padding: 30, textAlign: 'center', color: C.dim }}><div style={{ fontSize: 32 }}>🔌</div><div style={{ fontSize: 12, marginTop: 8 }}>No API sources yet</div></div>
+           : sources.map(s => <SourceRow key={s.id} source={{...s, source_type: 'api'}} selected={selected?.id === s.id} onSelect={setSelected} onDelete={deleteSource} onRun={runSource} running={running} />)}
+        </div>
+      </div>
+
+      {/* Detail panel */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {selected ? (
+          <>
+            <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 16 }}>🔌</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>{selected.name}</div>
+                <div style={{ fontSize: 10, color: C.dim }}>{selected.url}</div>
+              </div>
+              <input placeholder="Query (optional)" value={runQuery} onChange={e => setRunQuery(e.target.value)} style={{ ...input, width: 160, fontSize: 11 }} />
+              <button onClick={() => runSource(selected.id)} disabled={running === selected.id} style={{ ...btn(C.success), fontSize: 11 }}>▶ Run</button>
+            </div>
+
+            <div style={{ flex: 1, overflow: 'auto', padding: 16 }}>
+              {/* Run result */}
+              {runResult && (
+                <div style={{ marginBottom: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: C.success, marginBottom: 8 }}>Run Result</div>
+                  {runResult.kimi_analysis && (
+                    <div style={{ marginBottom: 8 }}>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: C.accent, marginBottom: 4 }}>🧠 Kimi Analysis</div>
+                      <pre style={{ margin: 0, fontSize: 11, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>{runResult.kimi_analysis}</pre>
+                    </div>
+                  )}
+                  <details>
+                    <summary style={{ fontSize: 10, color: C.muted, cursor: 'pointer' }}>Raw data</summary>
+                    <pre style={{ margin: '8px 0 0', fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 200, overflow: 'auto' }}>
+                      {typeof runResult.data === 'string' ? runResult.data : JSON.stringify(runResult.data, null, 2)}
+                    </pre>
+                  </details>
+                </div>
+              )}
+
+              {/* Source documents */}
+              <div style={{ fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                📎 Documents ({docs.length})
+                <input type="file" ref={fileRef} onChange={uploadDoc} style={{ display: 'none' }} />
+                <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn(C.accentAlt), fontSize: 10, padding: '2px 8px', marginLeft: 'auto' }}>
+                  {uploading ? '⏳' : '📤 Upload'}
+                </button>
+              </div>
+              {docs.map(d => (
+                <div key={d.filename} onClick={() => openDoc(d)} style={{
+                  padding: '6px 10px', marginBottom: 3, borderRadius: 4, cursor: 'pointer', fontSize: 12,
+                  background: selectedDoc?.filename === d.filename ? C.bgDark : C.bgAlt,
+                  border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  <span>📄</span>
+                  <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.filename}</span>
+                  <span style={{ fontSize: 10, color: C.dim }}>{d.size ? (d.size / 1024).toFixed(1) + ' KB' : ''}</span>
+                </div>
+              ))}
+
+              {/* Doc viewer/editor */}
+              {selectedDoc && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <span style={{ fontWeight: 600, fontSize: 13 }}>{selectedDoc.filename}</span>
+                    {editing ? (
+                      <>
+                        <button onClick={saveDoc} disabled={saving} style={{ ...btn(C.success), fontSize: 10, marginLeft: 'auto' }}>💾 Save</button>
+                        <button onClick={() => { setEditing(false); setDocEdit(docContent); }} style={{ ...btn(C.border), fontSize: 10 }}>Cancel</button>
+                      </>
+                    ) : (
+                      <button onClick={() => { setEditing(true); setDocEdit(docContent); }} style={{ ...btn(C.accentAlt), fontSize: 10, marginLeft: 'auto' }}>✏️ Edit</button>
+                    )}
+                  </div>
+                  {editing ? (
+                    <textarea value={docEdit} onChange={e => setDocEdit(e.target.value)}
+                      onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveDoc(); } }}
+                      style={{ width: '100%', height: 200, resize: 'vertical', background: '#0d1117', color: '#e6edf3', border: 'none', padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, borderRadius: 4, outline: 'none', boxSizing: 'border-box' }} />
+                  ) : (
+                    <pre style={{ margin: 0, padding: 12, background: '#0d1117', color: '#e6edf3', borderRadius: 4, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', maxHeight: 300, overflow: 'auto' }}>{docContent || '(empty)'}</pre>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 48, opacity: 0.5 }}>🔌</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: C.muted, marginTop: 8 }}>Select an API source</div>
+              <div style={{ fontSize: 12, marginTop: 4 }}>Paste an API endpoint and Grace auto-connects</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Web Sources Sub-tab ───────────────────────────────────────────────
+function WebSourcesPanel() {
+  const [sources, setSources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [name, setName] = useState('');
+  const [url, setUrl] = useState('');
+  const [sourceType, setSourceType] = useState('website');
+  const [desc, setDesc] = useState('');
+  const [running, setRunning] = useState(null);
+  const [runResult, setRunResult] = useState(null);
+  const [runQuery, setRunQuery] = useState('');
+
+  const [docs, setDocs] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [docContent, setDocContent] = useState('');
+  const [docEdit, setDocEdit] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/web-sources`);
+      if (res.ok) setSources((await res.json()).sources || []);
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  useEffect(() => {
+    if (selected) {
+      fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents`)
+        .then(r => r.ok ? r.json() : { documents: [] })
+        .then(d => setDocs(d.documents || [])).catch(() => setDocs([]));
+    }
+  }, [selected]);
+
+  const addSource = async () => {
+    if (!name.trim() || !url.trim()) return;
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/web-sources`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, url, source_type: sourceType, description: desc }),
+    });
+    setShowAdd(false); setName(''); setUrl(''); setDesc('');
+    refresh();
+  };
+
+  const deleteSource = async (id) => {
+    if (!window.confirm('Delete this web source?')) return;
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/web-sources/${id}`, { method: 'DELETE' });
+    if (selected?.id === id) setSelected(null);
+    refresh();
+  };
+
+  const runSource = async (id) => {
+    setRunning(id); setRunResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/web-sources/${id}/run`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source_id: id, query: runQuery || null, use_kimi: true }),
+      });
+      if (res.ok) setRunResult(await res.json());
+    } catch { /* silent */ }
+    finally { setRunning(null); refresh(); }
+  };
+
+  const uploadDoc = async (e) => {
+    if (!e.target.files?.length || !selected) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('file', e.target.files[0]);
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/upload`, { method: 'POST', body: fd });
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = '';
+    fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents`).then(r => r.ok ? r.json() : { documents: [] }).then(d => setDocs(d.documents || []));
+  };
+
+  const openDoc = async (doc) => {
+    setSelectedDoc(doc); setEditing(false);
+    const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents/${encodeURIComponent(doc.filename)}/content`);
+    if (res.ok) { const d = await res.json(); setDocContent(d.content || ''); setDocEdit(d.content || ''); }
+  };
+
+  const saveDoc = async () => {
+    setSaving(true);
+    await fetch(`${API_BASE_URL}/api/whitelist-hub/sources/${selected.id}/documents/${encodeURIComponent(selectedDoc.filename)}/content`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: docEdit }),
+    });
+    setDocContent(docEdit); setSaving(false); setEditing(false);
+  };
+
+  const typeOptions = [
+    { id: 'website', label: '🌐 Website' }, { id: 'youtube', label: '📺 YouTube' },
+    { id: 'podcast', label: '🎙️ Podcast' }, { id: 'blog', label: '📝 Blog' },
+    { id: 'person', label: '👤 Person' }, { id: 'github', label: '🐙 GitHub' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', height: '100%' }}>
+      <div style={{ flex: '0 0 320px', borderRight: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6, background: C.bgAlt }}>
+          <button onClick={() => setShowAdd(!showAdd)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>+ Add Web Source</button>
+          <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
+        </div>
+        {showAdd && (
+          <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} style={input} />
+            <input placeholder="URL" value={url} onChange={e => setUrl(e.target.value)} style={input} />
+            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+              {typeOptions.map(t => (
+                <button key={t.id} onClick={() => setSourceType(t.id)}
+                  style={{ ...btn(sourceType === t.id ? C.accentAlt : C.bgDark), fontSize: 10, padding: '3px 8px' }}>{t.label}</button>
+              ))}
+            </div>
+            <input placeholder="Description" value={desc} onChange={e => setDesc(e.target.value)} style={input} />
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={addSource} style={{ ...btn(C.success), flex: 1 }}>Add</button>
+              <button onClick={() => setShowAdd(false)} style={{ ...btn(C.border), flex: 1 }}>Cancel</button>
+            </div>
+          </div>
+        )}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {loading ? <div style={{ padding: 20, textAlign: 'center', color: C.dim }}>Loading...</div>
+           : sources.length === 0 ? <div style={{ padding: 30, textAlign: 'center', color: C.dim }}><div style={{ fontSize: 32 }}>🌐</div><div style={{ fontSize: 12, marginTop: 8 }}>No web sources yet</div></div>
+           : sources.map(s => <SourceRow key={s.id} source={s} selected={selected?.id === s.id} onSelect={setSelected} onDelete={deleteSource} onRun={runSource} running={running} />)}
+        </div>
+      </div>
+
+      {/* Detail — identical pattern to API sources */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {selected ? (
+          <>
+            <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <TypeIcon type={selected.source_type} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>{selected.name}</div>
+                <div style={{ fontSize: 10, color: C.dim }}>{selected.url} · {selected.source_type}</div>
+              </div>
+              <input placeholder="Extra context..." value={runQuery} onChange={e => setRunQuery(e.target.value)} style={{ ...input, width: 160, fontSize: 11 }} />
+              <button onClick={() => runSource(selected.id)} disabled={running === selected.id} style={{ ...btn(C.success), fontSize: 11 }}>▶ Run</button>
+            </div>
+
+            <div style={{ flex: 1, overflow: 'auto', padding: 16 }}>
+              {runResult && (
+                <div style={{ marginBottom: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: C.success, marginBottom: 8 }}>
+                    {runResult.title && <span>{runResult.title}</span>}
+                  </div>
+                  {runResult.kimi_analysis && (
+                    <div style={{ marginBottom: 8 }}>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: C.accent, marginBottom: 4 }}>🧠 Kimi Analysis</div>
+                      <pre style={{ margin: 0, fontSize: 11, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>{runResult.kimi_analysis}</pre>
+                    </div>
+                  )}
+                  <details>
+                    <summary style={{ fontSize: 10, color: C.muted, cursor: 'pointer' }}>Extracted text</summary>
+                    <pre style={{ margin: '8px 0 0', fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 200, overflow: 'auto' }}>{runResult.text}</pre>
+                  </details>
+                </div>
+              )}
+
+              <div style={{ fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                📎 Documents ({docs.length})
+                <input type="file" ref={fileRef} onChange={uploadDoc} style={{ display: 'none' }} />
+                <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn(C.accentAlt), fontSize: 10, padding: '2px 8px', marginLeft: 'auto' }}>
+                  {uploading ? '⏳' : '📤 Upload'}
+                </button>
+              </div>
+              {docs.map(d => (
+                <div key={d.filename} onClick={() => openDoc(d)} style={{
+                  padding: '6px 10px', marginBottom: 3, borderRadius: 4, cursor: 'pointer', fontSize: 12,
+                  background: selectedDoc?.filename === d.filename ? C.bgDark : C.bgAlt,
+                  border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  <span>📄</span>
+                  <span style={{ flex: 1 }}>{d.filename}</span>
+                  <span style={{ fontSize: 10, color: C.dim }}>{d.size ? (d.size / 1024).toFixed(1) + ' KB' : ''}</span>
+                </div>
+              ))}
+
+              {selectedDoc && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <span style={{ fontWeight: 600, fontSize: 13 }}>{selectedDoc.filename}</span>
+                    {editing ? (
+                      <>
+                        <button onClick={saveDoc} disabled={saving} style={{ ...btn(C.success), fontSize: 10, marginLeft: 'auto' }}>💾 Save</button>
+                        <button onClick={() => { setEditing(false); setDocEdit(docContent); }} style={{ ...btn(C.border), fontSize: 10 }}>Cancel</button>
+                      </>
+                    ) : (
+                      <button onClick={() => { setEditing(true); setDocEdit(docContent); }} style={{ ...btn(C.accentAlt), fontSize: 10, marginLeft: 'auto' }}>✏️ Edit</button>
+                    )}
+                  </div>
+                  {editing ? (
+                    <textarea value={docEdit} onChange={e => setDocEdit(e.target.value)}
+                      onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveDoc(); } }}
+                      style={{ width: '100%', height: 200, resize: 'vertical', background: '#0d1117', color: '#e6edf3', border: 'none', padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, borderRadius: 4, outline: 'none', boxSizing: 'border-box' }} />
+                  ) : (
+                    <pre style={{ margin: 0, padding: 12, background: '#0d1117', color: '#e6edf3', borderRadius: 4, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', maxHeight: 300, overflow: 'auto' }}>{docContent || '(empty)'}</pre>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 48, opacity: 0.5 }}>🌐</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: C.muted, marginTop: 8 }}>Select a web source</div>
+              <div style={{ fontSize: 12, marginTop: 4 }}>Add websites, YouTube, podcasts, blogs, people</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main WhitelistTab ─────────────────────────────────────────────────
+export default function WhitelistTab() {
+  const [activeTab, setActiveTab] = useState('api');
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/whitelist-hub/stats`)
+      .then(r => r.ok ? r.json() : null).then(setStats).catch(() => {});
+  }, []);
+
+  const tabs = [
+    { id: 'api', label: 'API Sources', icon: '🔌' },
+    { id: 'web', label: 'Web Sources', icon: '🌐' },
+    { id: 'cache', label: 'Flash Cache', icon: '⚡' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: C.text, background: C.bg }}>
+      <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
+        <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+          🛡️ Whitelist
+        </span>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+            padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
+            color: activeTab === t.id ? C.accent : C.muted,
+            borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',
+            fontSize: 13, fontWeight: activeTab === t.id ? 700 : 500,
+            display: 'flex', alignItems: 'center', gap: 6, transition: 'all .15s',
+          }}><span>{t.icon}</span> {t.label}</button>
+        ))}
+        {stats && (
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, fontSize: 11, color: C.dim, paddingRight: 8 }}>
+            <span>🔌 {stats.api_source_count} APIs</span>
+            <span>🌐 {stats.web_source_count} web</span>
+            <span>📎 {stats.total_documents} docs</span>
+          </div>
+        )}
+      </div>
+
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {activeTab === 'api' && <APISourcesPanel />}
+        {activeTab === 'web' && <WebSourcesPanel />}
+        {activeTab === 'cache' && <FlashCachePanel />}
+      </div>
+    </div>
+  );
+}

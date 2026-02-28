@@ -1,1142 +1,1351 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import "./GovernanceTab.css";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = "http://localhost:8000";
-
-// Trust score visualization
-const getTrustColor = (score) => {
-  if (score >= 0.8) return "#10b981";
-  if (score >= 0.6) return "#3b82f6";
-  if (score >= 0.4) return "#f59e0b";
-  return "#ef4444";
+const C = {
+  bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
+  accent: '#e94560', accentAlt: '#533483',
+  text: '#eee', muted: '#aaa', dim: '#666', border: '#333',
+  success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3',
 };
 
-const getTrustLevel = (score) => {
-  if (score >= 0.8) return "High";
-  if (score >= 0.6) return "Medium";
-  if (score >= 0.4) return "Low";
-  return "Critical";
-};
+const btn = (bg = C.accentAlt) => ({
+  padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer',
+  fontSize: 12, fontWeight: 600, color: '#fff', background: bg, transition: 'opacity .15s',
+});
 
-// Governance Pillar Icons
-const PillarIcon = ({ type }) => {
-  const icons = {
-    operational: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-      </svg>
-    ),
-    behavioral: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="8" r="5"/>
-        <path d="M20 21a8 8 0 0 0-16 0"/>
-      </svg>
-    ),
-    immutable: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        <path d="M9 12l2 2 4-4"/>
-      </svg>
-    )
+function StatusBadge({ status }) {
+  const colors = {
+    approved: C.success, completed: C.success, healthy: C.success, excellent: C.success, good: C.success,
+    pending: C.warn, discussion: C.warn, fair: C.warn, degraded: C.warn, warning: C.warn,
+    denied: C.error, failed: C.error, poor: C.error, critical: C.error,
   };
-  return icons[type] || null;
-};
-
-// Document Upload Component
-function DocumentUpload({ pillarType, onUpload, existingDocs }) {
-  const [dragActive, setDragActive] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef(null);
-
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer?.files;
-    if (files && files.length > 0) {
-      await uploadFiles(files);
-    }
-  };
-
-  const handleFileSelect = async (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      await uploadFiles(files);
-    }
-  };
-
-  const uploadFiles = async (files) => {
-    setUploading(true);
-    try {
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("pillar_type", pillarType);
-        formData.append("filename", file.name);
-
-        await fetch(`${API_BASE}/governance/documents/upload`, {
-          method: "POST",
-          body: formData,
-        });
-      }
-      onUpload();
-    } catch (err) {
-      console.error("Upload failed:", err);
-      alert("Failed to upload document: " + err.message);
-    }
-    setUploading(false);
-  };
-
+  const bg = colors[(status || '').toLowerCase()] || C.dim;
   return (
-    <div className="document-upload-section">
-      <div
-        className={`upload-zone ${dragActive ? "drag-active" : ""} ${uploading ? "uploading" : ""}`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept=".pdf,.doc,.docx,.txt,.md,.json"
-          onChange={handleFileSelect}
-          style={{ display: "none" }}
-        />
-        {uploading ? (
-          <div className="upload-status">
-            <div className="spinner small" />
-            <span>Uploading...</span>
-          </div>
-        ) : (
-          <>
-            <div className="upload-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-              </svg>
-            </div>
-            <p>Drag & drop governance documents here</p>
-            <span className="upload-hint">PDF, DOC, TXT, MD, JSON supported</span>
-          </>
-        )}
-      </div>
+    <span style={{
+      fontSize: 10, padding: '2px 8px', borderRadius: 10, fontWeight: 700,
+      background: bg + '30', color: bg, textTransform: 'uppercase', letterSpacing: '0.3px',
+    }}>{status || 'unknown'}</span>
+  );
+}
 
-      {existingDocs && existingDocs.length > 0 && (
-        <div className="existing-docs">
-          <h5>Uploaded Documents ({existingDocs.length})</h5>
-          <ul>
-            {existingDocs.map((doc, i) => (
-              <li key={i} className="doc-item">
-                <span className="doc-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                    <polyline points="14,2 14,8 20,8"/>
-                  </svg>
-                </span>
-                <span className="doc-name">{doc.filename}</span>
-                <span className="doc-status" data-status={doc.status}>
-                  {doc.status === "processed" ? "Active" : doc.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+function MeterBar({ value, max = 100, color = C.accent }) {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div style={{ height: 6, background: C.bgDark, borderRadius: 3, overflow: 'hidden', flex: 1 }}>
+      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 3, transition: 'width .4s' }} />
     </div>
   );
 }
 
-// Natural Language Rule Input Component
-function NaturalLanguageRuleInput({ pillarType, onRuleAdded }) {
-  const [ruleText, setRuleText] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+function Card({ title, children, extra }) {
+  return (
+    <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{title}</span>
+        {extra}
+      </div>
+      {children}
+    </div>
+  );
+}
 
-  const placeholders = {
-    operational: "e.g., \"Always follow HIPAA guidelines when handling medical data\" or \"Require approval for any action costing over $1000\"",
-    behavioral: "e.g., \"Use a friendly, casual tone in responses\" or \"Always provide step-by-step explanations\""
-  };
+// ── Sub-tab: Approvals ────────────────────────────────────────────────
+function ApprovalsPanel() {
+  const [pending, setPending] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [actioning, setActioning] = useState(null);
 
-  const handleAddRule = async () => {
-    if (!ruleText.trim()) return;
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const [pRes, hRes] = await Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/governance-hub/approvals`),
+      fetch(`${API_BASE_URL}/api/governance-hub/approvals/history?limit=30`),
+    ]);
+    if (pRes.status === 'fulfilled' && pRes.value.ok) setPending((await pRes.value.json()).decisions || []);
+    if (hRes.status === 'fulfilled' && hRes.value.ok) setHistory((await hRes.value.json()).decisions || []);
+    setLoading(false);
+  }, []);
 
-    setIsProcessing(true);
-    setFeedback(null);
+  useEffect(() => { refresh(); }, [refresh]);
 
+  const handleAction = async (id, decision) => {
+    setActioning(id);
     try {
-      // Parse natural language into a rule structure
-      const parsedRule = parseNaturalLanguageRule(ruleText, pillarType);
-
-      // Send to backend
-      const response = await fetch(`${API_BASE}/governance/rules/new`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...parsedRule,
-          pillar_type: pillarType,
-          source: "User-defined (natural language)"
-        })
+      await fetch(`${API_BASE_URL}/api/governance-hub/approvals/${id}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision }),
       });
-
-      if (response.ok) {
-        setFeedback({ type: "success", message: "Rule added successfully!" });
-        setRuleText("");
-        onRuleAdded();
-      } else {
-        const error = await response.json();
-        setFeedback({ type: "error", message: error.detail || "Failed to add rule" });
-      }
-    } catch (err) {
-      console.error("Error adding rule:", err);
-      setFeedback({ type: "error", message: "Failed to add rule. Please try again." });
-    }
-
-    setIsProcessing(false);
-
-    // Clear feedback after 3 seconds
-    setTimeout(() => setFeedback(null), 3000);
+      refresh();
+    } catch { /* silent */ }
+    finally { setActioning(null); }
   };
 
-  // Parse natural language into rule structure
-  const parseNaturalLanguageRule = (text, pillar) => {
-    const lowerText = text.toLowerCase();
-
-    // Determine severity based on keywords
-    let severity = pillar === "operational" ? 6 : 3;
-    if (lowerText.includes("always") || lowerText.includes("must") || lowerText.includes("never")) {
-      severity = pillar === "operational" ? 8 : 5;
-    }
-    if (lowerText.includes("critical") || lowerText.includes("required") || lowerText.includes("mandatory")) {
-      severity = 9;
-    }
-
-    // Determine action based on keywords
-    let action = "warn";
-    if (lowerText.includes("block") || lowerText.includes("prevent") || lowerText.includes("never")) {
-      action = "block";
-    } else if (lowerText.includes("review") || lowerText.includes("approval") || lowerText.includes("approve")) {
-      action = "flag";
-    }
-
-    // Extract a name from the text (first 50 chars or until first period/comma)
-    let name = text.split(/[.,!?]/)[0].trim();
-    if (name.length > 50) {
-      name = name.substring(0, 47) + "...";
-    }
-
-    // Try to extract patterns for matching
-    let pattern = null;
-    const patternMatches = text.match(/["']([^"']+)["']/g);
-    if (patternMatches) {
-      pattern = patternMatches.map(p => p.replace(/["']/g, "")).join("|");
-    }
-
-    return {
-      name: name,
-      description: text,
-      severity: severity,
-      action: action,
-      pattern: pattern,
-      enabled: true
-    };
-  };
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading approvals...</div>;
 
   return (
-    <div className="natural-language-input">
-      <div className="nl-input-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 20h9"/>
-          <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/>
-        </svg>
-        <span>Add Rule in Natural Language</span>
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <Card title={`Pending Approvals (${pending.length})`} extra={
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh</button>
+      }>
+        {pending.length === 0 ? (
+          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 13 }}>No pending approvals</div>
+        ) : pending.map(d => (
+          <div key={d.id} style={{ padding: '10px 12px', marginBottom: 6, background: C.bg, borderRadius: 6, border: `1px solid ${C.border}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <StatusBadge status={d.severity} />
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{d.title}</span>
+              <span style={{ fontSize: 10, color: C.dim, marginLeft: 'auto' }}>{d.pillar_type}</span>
+            </div>
+            {d.description && <div style={{ fontSize: 12, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>{d.description}</div>}
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={() => handleAction(d.id, 'approve')} disabled={actioning === d.id} style={btn(C.success)}>✓ Approve</button>
+              <button onClick={() => handleAction(d.id, 'deny')} disabled={actioning === d.id} style={btn(C.error)}>✕ Deny</button>
+              <button onClick={() => handleAction(d.id, 'discuss')} disabled={actioning === d.id} style={btn(C.warn)}>💬 Discuss</button>
+            </div>
+          </div>
+        ))}
+      </Card>
+
+      <Card title={`Decision History (${history.length})`}>
+        {history.length === 0 ? (
+          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No history</div>
+        ) : history.map(d => (
+          <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: `1px solid ${C.border}`, fontSize: 12 }}>
+            <StatusBadge status={d.status} />
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.title}</span>
+            <span style={{ color: C.dim, fontSize: 10, flexShrink: 0 }}>{d.created_at ? new Date(d.created_at).toLocaleDateString() : ''}</span>
+          </div>
+        ))}
+      </Card>
+    </div>
+  );
+}
+
+// ── Sub-tab: Scores ───────────────────────────────────────────────────
+function ScoresPanel() {
+  const [scores, setScores] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/governance-hub/scores`)
+      .then(r => r.ok ? r.json() : { components: [] })
+      .then(setScores).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading scores...</div>;
+  if (!scores) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
+
+  const systemTrust = scores.system_trust?.trust_score || 0;
+  const trustColor = systemTrust >= 0.8 ? C.success : systemTrust >= 0.5 ? C.warn : C.error;
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <Card title="System Trust Score">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
+          <span style={{ fontSize: 36, fontWeight: 800, color: trustColor }}>{(systemTrust * 100).toFixed(0)}%</span>
+          <div style={{ flex: 1 }}>
+            <MeterBar value={systemTrust * 100} color={trustColor} />
+            <div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>
+              Status: <StatusBadge status={scores.system_trust?.status || 'unknown'} />
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card title={`Component Scores (${scores.component_count})`}>
+        {(scores.components || []).length === 0 ? (
+          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No components tracked yet</div>
+        ) : (scores.components || []).map((comp, i) => {
+          const ts = comp.trust_score || 0;
+          const tc = ts >= 0.8 ? C.success : ts >= 0.5 ? C.warn : C.error;
+          return (
+            <div key={i} style={{ padding: '8px 0', borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, flex: 1 }}>{comp.name}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: tc }}>{(ts * 100).toFixed(0)}%</span>
+                <StatusBadge status={comp.status} />
+              </div>
+              <MeterBar value={ts * 100} color={tc} />
+            </div>
+          );
+        })}
+      </Card>
+    </div>
+  );
+}
+
+// ── Sub-tab: Performance ──────────────────────────────────────────────
+function PerformancePanel() {
+  const [metrics, setMetrics] = useState(null);
+  const [bridge, setBridge] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [fullData, setFullData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/tabs/governance/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  }, []);
+
+  const refresh = useCallback(() => {
+    setLoading(true);
+    Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/governance-hub/performance`).then(r => r.ok ? r.json() : null),
+      fetch(`${API_BASE_URL}/api/bridge/governance/full`).then(r => r.ok ? r.json() : null),
+    ]).then(([mRes, bRes]) => {
+      if (mRes.status === 'fulfilled') setMetrics(mRes.value);
+      if (bRes.status === 'fulfilled') setBridge(bRes.value);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
+
+  if (loading && !metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading metrics...</div>;
+  if (!metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
+
+  const cpuColor = (metrics.cpu?.total_percent || 0) > 80 ? C.error : (metrics.cpu?.total_percent || 0) > 50 ? C.warn : C.success;
+  const memColor = (metrics.memory?.percent || 0) > 80 ? C.error : (metrics.memory?.percent || 0) > 50 ? C.warn : C.success;
+  const diskColor = (metrics.disk?.percent || 0) > 80 ? C.error : (metrics.disk?.percent || 0) > 50 ? C.warn : C.success;
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
+        {[
+          { label: 'CPU', val: metrics.cpu?.total_percent, unit: '%', color: cpuColor, sub: `${metrics.cpu?.core_count} cores` },
+          { label: 'Memory', val: metrics.memory?.percent, unit: '%', color: memColor, sub: `${metrics.memory?.used_gb} / ${metrics.memory?.total_gb} GB` },
+          { label: 'Disk', val: metrics.disk?.percent, unit: '%', color: diskColor, sub: `${metrics.disk?.used_gb} / ${metrics.disk?.total_gb} GB` },
+        ].map((m, i) => (
+          <div key={i} style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+            <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 8 }}>{m.label}</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: m.color }}>{(m.val || 0).toFixed(1)}{m.unit}</div>
+            <MeterBar value={m.val || 0} color={m.color} />
+            <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>{m.sub}</div>
+          </div>
+        ))}
       </div>
-      <div className="nl-input-container">
-        <textarea
-          value={ruleText}
-          onChange={(e) => setRuleText(e.target.value)}
-          placeholder={placeholders[pillarType]}
-          rows={2}
-          disabled={isProcessing}
-        />
-        <button
-          className="btn-add-rule"
-          onClick={handleAddRule}
-          disabled={!ruleText.trim() || isProcessing}
-        >
-          {isProcessing ? (
-            <>
-              <div className="spinner small" />
-              Processing...
-            </>
-          ) : (
-            <>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Add Rule
-            </>
+
+      {metrics.cpu?.per_core && (
+        <Card title="CPU Per Core">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 6 }}>
+            {metrics.cpu.per_core.map((v, i) => (
+              <div key={i} style={{ textAlign: 'center', padding: 6, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: 10, color: C.dim }}>Core {i}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: v > 80 ? C.error : v > 50 ? C.warn : C.success }}>{v.toFixed(0)}%</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {metrics.database && (
+        <Card title="Database">
+          <div style={{ display: 'flex', gap: 24, fontSize: 13 }}>
+            <div><span style={{ color: C.muted }}>Tables:</span> <b>{metrics.database.tables}</b></div>
+            <div><span style={{ color: C.muted }}>Rows:</span> <b>{(metrics.database.total_rows || 0).toLocaleString()}</b></div>
+          </div>
+        </Card>
+      )}
+
+      {/* Bridge data — connected subsystems */}
+      {bridge && (
+        <>
+          {bridge.memory_mesh && Object.keys(bridge.memory_mesh).length > 0 && (
+            <Card title="🧠 Memory Mesh">
+              {Object.entries(bridge.memory_mesh).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '3px 0', borderBottom: `1px solid ${C.border}` }}>
+                  <span style={{ color: C.muted }}>{k.replace(/_/g, ' ')}</span>
+                  <span style={{ fontWeight: 700 }}>{(v || 0).toLocaleString()}</span>
+                </div>
+              ))}
+            </Card>
           )}
-        </button>
-      </div>
-      {feedback && (
-        <div className={`nl-feedback ${feedback.type}`}>
-          {feedback.type === "success" ? (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-              <polyline points="22,4 12,14.01 9,11.01"/>
-            </svg>
-          ) : (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
+
+          {bridge.monitoring?.organs && (
+            <Card title="🫀 Organs of Grace">
+              {bridge.monitoring.organs.map((o, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0', borderBottom: `1px solid ${C.border}` }}>
+                  <span style={{ fontSize: 12, flex: 1 }}>{o.name}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: o.progress >= 50 ? C.success : C.warn }}>{o.progress}%</span>
+                  <MeterBar value={o.progress} color={o.progress >= 50 ? C.success : C.warn} />
+                </div>
+              ))}
+            </Card>
           )}
-          {feedback.message}
+
+          {bridge.ml_intelligence?.available && (
+            <Card title="🤖 ML Intelligence">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {(bridge.ml_intelligence.components || []).map((c, i) => (
+                  <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{c.replace(/_/g, ' ')}</span>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {bridge.ooda?.recent_decisions?.length > 0 && (
+            <Card title="🔄 Recent OODA Decisions">
+              {bridge.ooda.recent_decisions.slice(0, 5).map((d, i) => (
+                <div key={i} style={{ fontSize: 11, padding: '4px 0', borderBottom: `1px solid ${C.border}`, color: C.muted }}>
+                  <span style={{ color: C.text }}>{d.type}</span> — {d.action} ({((d.confidence || 0) * 100).toFixed(0)}%)
+                </div>
+              ))}
+            </Card>
+          )}
+        </>
+      )}
+
+      {/* Full aggregation: extra sections */}
+      {fullData?.governance_pillars && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Governance Pillars</div>
+          {typeof fullData.governance_pillars === 'object' ? (
+            Object.entries(fullData.governance_pillars).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.governance_pillars)}</span>
+          )}
         </div>
       )}
-      <div className="nl-hint">
-        Write your rule in plain English. Grace will interpret and apply it automatically.
+      {fullData?.kpi_dashboard && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KPI Dashboard</div>
+          {typeof fullData.kpi_dashboard === 'object' ? (
+            Object.entries(fullData.kpi_dashboard).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kpi_dashboard)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.monitoring_organs && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Monitoring Organs</div>
+          {typeof fullData.monitoring_organs === 'object' ? (
+            Object.entries(fullData.monitoring_organs).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.monitoring_organs)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.diagnostic_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Status</div>
+          {typeof fullData.diagnostic_status === 'object' ? (
+            Object.entries(fullData.diagnostic_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_status)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.telemetry_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Telemetry Status</div>
+          {typeof fullData.telemetry_status === 'object' ? (
+            Object.entries(fullData.telemetry_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.telemetry_status)}</span>
+          )}
+        </div>
+      )}
+      {fullData?.autonomous_status && (
+        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Autonomous Status</div>
+          {typeof fullData.autonomous_status === 'object' ? (
+            Object.entries(fullData.autonomous_status).map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
+                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
+                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+              </div>
+            ))
+          ) : (
+            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.autonomous_status)}</span>
+          )}
+        </div>
+      )}
+
+      <div style={{ textAlign: 'center', marginTop: 8 }}>
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh All</button>
       </div>
     </div>
   );
 }
 
-// Governance Pillar Card
-function GovernancePillar({ type, title, description, rules, documents, onUpload, onToggleRule, onEditRule, onRuleAdded }) {
-  const [expanded, setExpanded] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
+// ── Sub-tab: Actions (Healing + Learning) ─────────────────────────────
+function ActionsPanel() {
+  const [healActions, setHealActions] = useState([]);
+  const [triggering, setTriggering] = useState(null);
+  const [learnQuery, setLearnQuery] = useState('');
+  const [learnMethod, setLearnMethod] = useState('kimi');
+  const [learnResult, setLearnResult] = useState(null);
+  const [learnLoading, setLearnLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
 
-  const pillarColors = {
-    operational: { bg: "#dbeafe", border: "#3b82f6", icon: "#1e40af" },
-    behavioral: { bg: "#fef3c7", border: "#f59e0b", icon: "#92400e" },
-    immutable: { bg: "#fee2e2", border: "#ef4444", icon: "#991b1b" }
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/governance-hub/healing/actions`)
+      .then(r => r.ok ? r.json() : { actions: [] })
+      .then(d => setHealActions(d.actions || []))
+      .catch(() => {});
+  }, []);
+
+  const triggerHealing = async (action) => {
+    setTriggering(action);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/healing/trigger`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      if (res.ok) setNotification(`Healing action '${action}' triggered`);
+    } catch { /* silent */ }
+    finally { setTriggering(null); setTimeout(() => setNotification(null), 3000); }
   };
 
-  const colors = pillarColors[type];
+  const triggerLearning = async () => {
+    if (!learnQuery.trim()) return;
+    setLearnLoading(true);
+    setLearnResult(null);
+    try {
+      const body = { method: learnMethod };
+      if (learnMethod === 'kimi' || learnMethod === 'websearch') body.query = learnQuery;
+      if (learnMethod === 'study') body.topic = learnQuery;
+      if (learnMethod === 'websearch') body.url = learnQuery;
+
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/learning/trigger`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) setLearnResult(await res.json());
+    } catch (e) { setLearnResult({ error: e.message }); }
+    finally { setLearnLoading(false); }
+  };
 
   return (
-    <div
-      className={`governance-pillar pillar-${type}`}
-      style={{ borderColor: colors.border }}
-    >
-      <div
-        className="pillar-header"
-        onClick={() => setExpanded(!expanded)}
-        style={{ backgroundColor: colors.bg }}
-      >
-        <div className="pillar-icon" style={{ color: colors.icon }}>
-          <PillarIcon type={type} />
-        </div>
-        <div className="pillar-info">
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-        <div className="pillar-stats">
-          <span className="rule-count">{rules?.length || 0} rules</span>
-          <span className="doc-count">{documents?.length || 0} docs</span>
-        </div>
-        <span className={`expand-icon ${expanded ? "expanded" : ""}`}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="6,9 12,15 18,9"/>
-          </svg>
-        </span>
-      </div>
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      {notification && (
+        <div style={{ padding: '8px 16px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>
+      )}
 
-      {expanded && (
-        <div className="pillar-content">
-          <div className="pillar-actions">
+      <Card title="🔧 Self-Healing Actions">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {healActions.map(a => (
             <button
-              className={`btn-upload ${showUpload ? "active" : ""}`}
-              onClick={() => setShowUpload(!showUpload)}
+              key={a.id}
+              onClick={() => triggerHealing(a.id)}
+              disabled={triggering === a.id}
+              style={{
+                ...btn(C.bgDark), padding: '10px 12px', textAlign: 'left',
+                display: 'flex', flexDirection: 'column', gap: 4,
+                opacity: triggering === a.id ? 0.5 : 1,
+              }}
             >
-              {showUpload ? "Hide Upload" : "Upload Documents"}
+              <span style={{ fontWeight: 700, fontSize: 12 }}>{a.name}</span>
+              <span style={{ fontWeight: 400, fontSize: 10, color: C.dim }}>{a.description}</span>
+            </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card title="🧠 Self-Learning Triggers">
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+            {[
+              { id: 'kimi', label: '🌐 Kimi 2.5' },
+              { id: 'websearch', label: '🔍 Web Search' },
+              { id: 'study', label: '📚 Self-Study' },
+              { id: 'ingestion', label: '📥 Ingestion' },
+            ].map(m => (
+              <button
+                key={m.id}
+                onClick={() => setLearnMethod(m.id)}
+                style={{
+                  ...btn(learnMethod === m.id ? C.accentAlt : C.bgDark),
+                  fontSize: 11, padding: '4px 10px',
+                }}
+              >{m.label}</button>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              placeholder={learnMethod === 'websearch' ? 'URL to scrape...' : learnMethod === 'study' ? 'Topic to study...' : 'Ask Kimi...'}
+              value={learnQuery}
+              onChange={e => setLearnQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && triggerLearning()}
+              disabled={learnMethod === 'ingestion'}
+              style={{
+                flex: 1, padding: '8px 10px', background: C.bg, border: `1px solid ${C.border}`,
+                borderRadius: 4, color: C.text, fontSize: 12, outline: 'none',
+              }}
+            />
+            <button
+              onClick={triggerLearning}
+              disabled={learnLoading || learnMethod === 'ingestion'}
+              style={{ ...btn(C.accent), opacity: learnLoading ? 0.5 : 1 }}
+            >
+              {learnLoading ? '⏳' : '▶ Go'}
             </button>
           </div>
+        </div>
 
-          {showUpload && (
-            <DocumentUpload
-              pillarType={type}
-              onUpload={onUpload}
-              existingDocs={documents}
-            />
-          )}
-
-          {/* Natural Language Rule Input - only for operational and behavioral */}
-          {type !== "immutable" && (
-            <NaturalLanguageRuleInput
-              pillarType={type}
-              onRuleAdded={onRuleAdded}
-            />
-          )}
-
-          <div className="rules-section">
-            <h4>Active Rules</h4>
-            {rules && rules.length > 0 ? (
-              <ul className="rules-list">
-                {rules.map((rule, i) => (
-                  <li key={i} className={`rule-item ${rule.enabled ? "enabled" : "disabled"}`}>
-                    <div className="rule-toggle">
-                      <input
-                        type="checkbox"
-                        checked={rule.enabled}
-                        onChange={() => onToggleRule(rule.id, !rule.enabled)}
-                        disabled={type === "immutable"}
-                      />
-                    </div>
-                    <div className="rule-content">
-                      <span className="rule-name">{rule.name}</span>
-                      <span className="rule-description">{rule.description}</span>
-                      {rule.source && (
-                        <span className="rule-source">Source: {rule.source}</span>
-                      )}
-                    </div>
-                    <div className="rule-severity" data-severity={rule.severity}>
-                      {rule.severity}
-                    </div>
-                    {type !== "immutable" && (
-                      <button
-                        className="btn-edit-rule"
-                        onClick={() => onEditRule(rule)}
-                      >
-                        Edit
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
+        {learnResult && (
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12, fontSize: 12, maxHeight: 300, overflowY: 'auto' }}>
+            {learnResult.error ? (
+              <div style={{ color: C.error }}>{learnResult.error}</div>
+            ) : learnResult.response ? (
+              <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: C.text, lineHeight: 1.6 }}>{learnResult.response}</pre>
             ) : (
-              <p className="no-rules">No rules configured. Upload governance documents to generate rules.</p>
+              <pre style={{ margin: 0, color: C.muted }}>{JSON.stringify(learnResult, null, 2)}</pre>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </Card>
     </div>
   );
 }
 
-// Human-in-the-Loop Decision Card
-function DecisionCard({ decision, onAction }) {
-  const [note, setNote] = useState("");
-  const [showDiscuss, setShowDiscuss] = useState(false);
+// ── Sub-tab: Rules & Persona ──────────────────────────────────────────
+function RulesPersonaPanel() {
+  const [docs, setDocs] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [docContent, setDocContent] = useState('');
+  const [docLoading, setDocLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editText, setEditText] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [hasUnsaved, setHasUnsaved] = useState(false);
 
-  const statusColors = {
-    pending: "#f59e0b",
-    confirmed: "#10b981",
-    denied: "#ef4444",
-    discussing: "#3b82f6"
+  // Persona
+  const [personal, setPersonal] = useState('');
+  const [professional, setProfessional] = useState('');
+  const [personaLoading, setPersonaLoading] = useState(true);
+  const [personaSaving, setPersonaSaving] = useState(false);
+
+  // Upload
+  const [showUpload, setShowUpload] = useState(false);
+  const [uploadCat, setUploadCat] = useState('general');
+  const [uploadDesc, setUploadDesc] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef(null);
+
+  // Reasoning
+  const [reasonQ, setReasonQ] = useState('');
+  const [reasonResult, setReasonResult] = useState(null);
+  const [reasoning, setReasoning] = useState(false);
+
+  // Domain rules
+  const [domainMode, setDomainMode] = useState('global'); // 'global' or 'domain'
+  const [domainFolders, setDomainFolders] = useState([]);
+  const [selectedDomain, setSelectedDomain] = useState('');
+  const [domainRules, setDomainRules] = useState([]);
+  const domainFileRef = useRef(null);
+
+  useEffect(() => {
+    if (domainMode === 'domain') {
+      fetch(`${API_BASE_URL}/api/librarian-fs/tree?max_depth=1`)
+        .then(r => r.ok ? r.json() : { children: [] })
+        .then(d => {
+          const folders = (d.children || []).filter(c => c.type === 'directory').map(c => c.name);
+          setDomainFolders(folders);
+        }).catch(() => {});
+    }
+  }, [domainMode]);
+
+  useEffect(() => {
+    if (selectedDomain) {
+      fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`)
+        .then(r => r.ok ? r.json() : { rules: [] })
+        .then(d => setDomainRules(d.rules || []))
+        .catch(() => setDomainRules([]));
+    }
+  }, [selectedDomain]);
+
+  const [notification, setNotification] = useState(null);
+  const notifTimer = useRef(null);
+  const notify = useCallback((msg, type = 'success') => {
+    setNotification({ msg, type });
+    clearTimeout(notifTimer.current);
+    notifTimer.current = setTimeout(() => setNotification(null), 4000);
+  }, []);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents`);
+      if (res.ok) {
+        const d = await res.json();
+        setDocs(d.documents || []);
+        setCategories(d.categories || []);
+      }
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    fetch(`${API_BASE_URL}/api/governance-rules/persona`)
+      .then(r => r.ok ? r.json() : {})
+      .then(d => { setPersonal(d.personal || ''); setProfessional(d.professional || ''); })
+      .catch(() => {})
+      .finally(() => setPersonaLoading(false));
+  }, [refresh]);
+
+  const openDoc = async (doc) => {
+    setSelectedDoc(doc);
+    setDocLoading(true);
+    setEditMode(false);
+    setHasUnsaved(false);
+    setReasonResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(doc.id)}/content`);
+      if (res.ok) { const d = await res.json(); setDocContent(d.content || ''); setEditText(d.content || ''); }
+    } catch { /* silent */ }
+    finally { setDocLoading(false); }
   };
 
-  const getSeverityLabel = (severity) => {
-    if (severity >= 9) return "Critical";
-    if (severity >= 7) return "High";
-    if (severity >= 4) return "Medium";
-    return "Low";
+  const saveDoc = async () => {
+    if (!selectedDoc) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(selectedDoc.id)}/content`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editText }),
+      });
+      if (res.ok) { setDocContent(editText); setHasUnsaved(false); notify('Rule document saved'); }
+    } catch { notify('Save failed', 'error'); }
+    finally { setSaving(false); }
   };
+
+  const deleteDoc = async (docId) => {
+    if (!window.confirm('Delete this governance rule document?')) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(docId)}`, { method: 'DELETE' });
+      notify('Document deleted');
+      if (selectedDoc?.id === docId) { setSelectedDoc(null); setDocContent(''); }
+      refresh();
+    } catch { notify('Delete failed', 'error'); }
+  };
+
+  const handleUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', files[0]);
+      fd.append('category', uploadCat);
+      fd.append('description', uploadDesc);
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/upload`, { method: 'POST', body: fd });
+      if (res.ok) { notify('Rule document uploaded — it is now LAW'); refresh(); setShowUpload(false); }
+    } catch { notify('Upload failed', 'error'); }
+    finally { setUploading(false); if (fileRef.current) fileRef.current.value = ''; }
+  };
+
+  const savePersona = async () => {
+    setPersonaSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/persona`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ personal, professional }),
+      });
+      if (res.ok) notify('Persona saved');
+    } catch { notify('Save failed', 'error'); }
+    finally { setPersonaSaving(false); }
+  };
+
+  const handleReason = async () => {
+    if (!reasonQ.trim() || !selectedDoc) return;
+    setReasoning(true); setReasonResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/reason`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_id: selectedDoc.id, question: reasonQ, use_kimi: true }),
+      });
+      if (res.ok) setReasonResult(await res.json());
+    } catch { setReasonResult({ error: 'Reasoning failed' }); }
+    finally { setReasoning(false); }
+  };
+
+  const catOptions = ['general', 'gdpr', 'iso', 'anti_bribery', 'code_standards', 'user_rules', 'industry'];
 
   return (
-    <div className={`decision-card status-${decision.status}`}>
-      <div className="decision-header">
-        <div className="decision-type">
-          <span className={`pillar-badge pillar-${decision.pillar_type}`}>
-            {decision.pillar_type}
-          </span>
-          <span className={`severity-badge severity-${getSeverityLabel(decision.severity).toLowerCase()}`}>
-            {getSeverityLabel(decision.severity)}
-          </span>
+    <div style={{ display: 'flex', height: '100%', overflow: 'hidden', position: 'relative' }}>
+      {notification && (
+        <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', zIndex: 100, padding: '8px 20px', borderRadius: 6, fontSize: 13, fontWeight: 500, background: notification.type === 'success' ? C.success : C.error, color: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,.4)' }}>{notification.msg}</div>
+      )}
+
+      {/* Left: Document list + Persona */}
+      <div style={{ flex: '0 0 280px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+
+        {/* Persona context windows */}
+        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '12px' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, marginBottom: 8 }}>🎭 Persona</div>
+
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Personal — how Grace talks to you</div>
+            <textarea
+              value={personal}
+              onChange={e => setPersonal(e.target.value)}
+              placeholder="e.g. Be casual and friendly, use my name, explain things simply..."
+              disabled={personaLoading}
+              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Professional — how Grace shows up externally</div>
+            <textarea
+              value={professional}
+              onChange={e => setProfessional(e.target.value)}
+              placeholder="e.g. Formal tone, use company name, cite sources, UK English..."
+              disabled={personaLoading}
+              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+            />
+          </div>
+
+          <button onClick={savePersona} disabled={personaSaving} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
+            {personaSaving ? '⏳ Saving...' : '💾 Save Persona'}
+          </button>
         </div>
-        <span
-          className="decision-status"
-          style={{ color: statusColors[decision.status] }}
-        >
-          {decision.status.toUpperCase()}
-        </span>
-      </div>
 
-      <div className="decision-content">
-        <h4>{decision.title}</h4>
-        <p>{decision.description}</p>
-
-        {decision.context && (
-          <div className="decision-context">
-            <strong>Context:</strong>
-            <pre>{JSON.stringify(decision.context, null, 2)}</pre>
+        {/* Scope toggle: Global vs Domain */}
+        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
+            <button onClick={() => setDomainMode('global')} style={{ ...btn(domainMode === 'global' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>🌐 Global Rules</button>
+            <button onClick={() => setDomainMode('domain')} style={{ ...btn(domainMode === 'domain' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>📁 Per Domain</button>
           </div>
-        )}
-
-        {decision.rule_reference && (
-          <div className="rule-reference">
-            <span className="ref-label">Related Rule:</span>
-            <span className="ref-value">{decision.rule_reference}</span>
-          </div>
-        )}
-      </div>
-
-      {decision.status === "pending" && (
-        <div className="decision-actions">
-          {showDiscuss ? (
-            <div className="discuss-form">
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Add your thoughts or questions..."
-                rows={3}
-              />
-              <div className="discuss-buttons">
-                <button
-                  className="btn-send-discuss"
-                  onClick={() => {
-                    onAction(decision.id, "discuss", note);
-                    setNote("");
-                    setShowDiscuss(false);
-                  }}
-                >
-                  Send for Discussion
-                </button>
-                <button
-                  className="btn-cancel"
-                  onClick={() => setShowDiscuss(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="action-buttons">
-              <button
-                className="btn-confirm"
-                onClick={() => onAction(decision.id, "confirm")}
-              >
-                Confirm
-              </button>
-              <button
-                className="btn-discuss"
-                onClick={() => setShowDiscuss(true)}
-              >
-                Discuss
-              </button>
-              <button
-                className="btn-deny"
-                onClick={() => onAction(decision.id, "deny")}
-              >
-                Deny
-              </button>
+          {domainMode === 'domain' && (
+            <div>
+              <select value={selectedDomain} onChange={e => setSelectedDomain(e.target.value)}
+                style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', marginBottom: 6 }}>
+                <option value="">Select domain folder...</option>
+                {domainFolders.map(f => <option key={f} value={f}>{f}</option>)}
+              </select>
+              {selectedDomain && (
+                <>
+                  <input type="file" ref={domainFileRef} style={{ display: 'none' }} onChange={async (e) => {
+                    if (!e.target.files?.length) return;
+                    const fd = new FormData();
+                    fd.append('file', e.target.files[0]);
+                    await fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules/upload`, { method: 'POST', body: fd });
+                    e.target.value = '';
+                    fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`).then(r => r.ok ? r.json() : { rules: [] }).then(d => setDomainRules(d.rules || []));
+                    notify('Domain rule uploaded');
+                  }} />
+                  <button onClick={() => domainFileRef.current?.click()} style={{ ...btn(C.success), width: '100%', fontSize: 10, marginBottom: 4 }}>📤 Upload Rule to {selectedDomain}</button>
+                  {domainRules.length > 0 && domainRules.map(r => (
+                    <div key={r.filename} style={{ padding: '4px 8px', fontSize: 11, borderBottom: `1px solid ${C.border}22`, display: 'flex', alignItems: 'center', gap: 6, color: C.muted }}>
+                      <span>⚖️</span><span style={{ flex: 1 }}>{r.filename}</span>
+                    </div>
+                  ))}
+                  {domainRules.length === 0 && <div style={{ fontSize: 10, color: C.dim, textAlign: 'center', padding: 8 }}>No domain rules yet</div>}
+                </>
+              )}
             </div>
           )}
         </div>
-      )}
 
-      {decision.status === "discussing" && decision.discussion && (
-        <div className="discussion-thread">
-          <h5>Discussion</h5>
-          {decision.discussion.map((msg, i) => (
-            <div key={i} className={`discussion-msg ${msg.from}`}>
-              <span className="msg-author">{msg.from === "grace" ? "Grace" : "You"}</span>
-              <span className="msg-content">{msg.content}</span>
-              <span className="msg-time">{new Date(msg.timestamp).toLocaleString()}</span>
+        {/* Upload global */}
+        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6 }}>
+          <button onClick={() => setShowUpload(!showUpload)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>📤 Upload Global Rule</button>
+          <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
+        </div>
+
+        {showUpload && (
+          <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+            <select value={uploadCat} onChange={e => setUploadCat(e.target.value)} style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none' }}>
+              {catOptions.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ').toUpperCase()}</option>)}
+            </select>
+            <input placeholder="Description..." value={uploadDesc} onChange={e => setUploadDesc(e.target.value)} style={{ width: '100%', padding: '5px 8px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none', boxSizing: 'border-box' }} />
+            <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} />
+            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
+              {uploading ? '⏳' : '📎 Choose File'}
+            </button>
+          </div>
+        )}
+
+        {/* Document list by category */}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {loading ? (
+            <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>Loading...</div>
+          ) : categories.length === 0 && docs.length === 0 ? (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>📜</div>
+              <div style={{ fontSize: 12 }}>No rule documents yet</div>
+              <div style={{ fontSize: 10, marginTop: 4 }}>Upload GDPR, ISO, or custom rules</div>
+            </div>
+          ) : categories.map(cat => (
+            <div key={cat.name}>
+              <div style={{ padding: '6px 12px', fontSize: 10, fontWeight: 700, color: C.muted, textTransform: 'uppercase', background: C.bgAlt, borderBottom: `1px solid ${C.border}` }}>
+                📂 {cat.name.replace(/_/g, ' ')} ({cat.count})
+              </div>
+              {cat.documents.map(doc => (
+                <div
+                  key={doc.id}
+                  onClick={() => openDoc(doc)}
+                  style={{
+                    padding: '7px 12px', cursor: 'pointer', fontSize: 12,
+                    background: selectedDoc?.id === doc.id ? C.bgDark : 'transparent',
+                    borderLeft: selectedDoc?.id === doc.id ? `3px solid ${C.accent}` : '3px solid transparent',
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    transition: 'background .1s',
+                  }}
+                  onMouseEnter={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = C.bgAlt; }}
+                  onMouseLeave={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <span>{doc.enforced ? '⚖️' : '📄'}</span>
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <div style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.filename}</div>
+                    {doc.description && <div style={{ fontSize: 10, color: C.dim }}>{doc.description}</div>}
+                  </div>
+                  <span onClick={e => { e.stopPropagation(); deleteDoc(doc.id); }} style={{ cursor: 'pointer', fontSize: 12, color: C.dim, padding: '0 2px' }}>🗑</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
-      )}
+      </div>
 
-      <div className="decision-meta">
-        <span>Created: {new Date(decision.created_at).toLocaleString()}</span>
-        {decision.resolved_at && (
-          <span>Resolved: {new Date(decision.resolved_at).toLocaleString()}</span>
+      {/* Right: Document viewer/editor + Reasoning */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {selectedDoc ? (
+          <>
+            {/* Toolbar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+              <span>⚖️</span>
+              <span style={{ fontWeight: 700, fontSize: 13 }}>{selectedDoc.filename}</span>
+              {hasUnsaved && <span style={{ fontSize: 10, color: C.accent, fontWeight: 600 }}>UNSAVED</span>}
+              <span style={{ fontSize: 10, color: C.dim }}>({selectedDoc.category})</span>
+              <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
+                {editMode ? (
+                  <>
+                    <button onClick={saveDoc} disabled={saving || !hasUnsaved} style={{ ...btn(hasUnsaved ? C.success : C.bgDark), fontSize: 11 }}>{saving ? '⏳' : '💾 Save'}</button>
+                    <button onClick={() => { if (hasUnsaved && !window.confirm('Discard?')) return; setEditMode(false); setEditText(docContent); setHasUnsaved(false); }} style={{ ...btn(C.border), fontSize: 11 }}>View</button>
+                  </>
+                ) : (
+                  <button onClick={() => { setEditMode(true); setEditText(docContent); }} style={{ ...btn(C.accentAlt), fontSize: 11 }}>✏️ Edit</button>
+                )}
+                <span onClick={() => { setSelectedDoc(null); setDocContent(''); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, overflow: 'auto' }}>
+              {docLoading ? (
+                <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading...</div>
+              ) : editMode ? (
+                <textarea
+                  value={editText}
+                  onChange={e => { setEditText(e.target.value); setHasUnsaved(e.target.value !== docContent); }}
+                  onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveDoc(); } }}
+                  spellCheck={false}
+                  style={{ width: '100%', height: '100%', resize: 'none', background: '#0d1117', color: '#e6edf3', border: 'none', outline: 'none', padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, boxSizing: 'border-box' }}
+                />
+              ) : (
+                <pre style={{ margin: 0, padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#e6edf3', background: '#0d1117', height: '100%', overflow: 'auto' }}>
+                  {docContent || '(empty document)'}
+                </pre>
+              )}
+            </div>
+
+            {/* Reasoning bar — type or upload */}
+            <div style={{ borderTop: `1px solid ${C.border}`, padding: '8px 16px', background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>🤖</span>
+              <input
+                placeholder="Ask about this rule, or upload a document to compare..."
+                value={reasonQ}
+                onChange={e => setReasonQ(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleReason()}
+                disabled={reasoning}
+                style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }}
+              />
+              <input type="file" id="govReasonUpload" accept=".pdf,.txt,.md,.doc,.docx,.csv,.json" style={{ display: 'none' }}
+                onChange={async (e) => {
+                  if (!e.target.files?.length) return;
+                  const f = e.target.files[0];
+                  const text = await f.text().catch(() => `[File: ${f.name}]`);
+                  setReasonQ(`Analyse this document and compare with current rules: ${f.name}\n\n${text.substring(0, 2000)}`);
+                  e.target.value = '';
+                }}
+              />
+              <button onClick={() => document.getElementById('govReasonUpload')?.click()} title="Upload document to reason about"
+                style={{ ...btn(C.bgDark), fontSize: 14, padding: '4px 8px' }}>📎</button>
+              <button onClick={handleReason} disabled={reasoning || !reasonQ.trim()} style={{ ...btn(C.accent), fontSize: 11, opacity: reasoning ? 0.5 : 1 }}>
+                {reasoning ? '⏳' : '🧠 Reason'}
+              </button>
+            </div>
+            {reasonResult && (
+              <div style={{ borderTop: `1px solid ${C.border}`, padding: '12px 16px', background: C.bg, maxHeight: 200, overflowY: 'auto' }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, marginBottom: 6 }}>
+                  Grace + Kimi Analysis ({reasonResult.provider || 'kimi'})
+                </div>
+                <pre style={{ margin: 0, fontSize: 12, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                  {reasonResult.response || reasonResult.error || JSON.stringify(reasonResult)}
+                </pre>
+              </div>
+            )}
+          </>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center', color: C.dim }}>
+              <div style={{ fontSize: 56, marginBottom: 12, opacity: 0.5 }}>⚖️</div>
+              <div style={{ fontSize: 15, fontWeight: 500, color: C.muted }}>Select a rule document</div>
+              <div style={{ fontSize: 12, marginTop: 4, maxWidth: 300 }}>
+                Upload industry standards (GDPR, ISO, anti-bribery), code parameters, or custom rules.
+                They become law — Grace and Kimi will follow them.
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-// Rule Editor Modal
-function RuleEditorModal({ rule, onSave, onClose }) {
-  const [editedRule, setEditedRule] = useState(rule || {
-    name: "",
-    description: "",
-    pattern: "",
-    action: "warn",
-    severity: 5,
-    enabled: true
-  });
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3>{rule ? "Edit Rule" : "Create Rule"}</h3>
-
-        <div className="form-group">
-          <label>Rule Name</label>
-          <input
-            type="text"
-            value={editedRule.name}
-            onChange={(e) => setEditedRule({ ...editedRule, name: e.target.value })}
-            placeholder="e.g., No PII in Responses"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            value={editedRule.description}
-            onChange={(e) => setEditedRule({ ...editedRule, description: e.target.value })}
-            placeholder="What does this rule enforce?"
-            rows={2}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Pattern (regex or keyword)</label>
-          <input
-            type="text"
-            value={editedRule.pattern}
-            onChange={(e) => setEditedRule({ ...editedRule, pattern: e.target.value })}
-            placeholder="e.g., SSN|social security|\\d{3}-\\d{2}-\\d{4}"
-          />
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Action</label>
-            <select
-              value={editedRule.action}
-              onChange={(e) => setEditedRule({ ...editedRule, action: e.target.value })}
-            >
-              <option value="warn">Warn</option>
-              <option value="block">Block</option>
-              <option value="flag">Flag for Review</option>
-              <option value="redact">Redact</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Severity (1-10)</label>
-            <input
-              type="number"
-              min="1"
-              max="10"
-              value={editedRule.severity}
-              onChange={(e) => setEditedRule({ ...editedRule, severity: parseInt(e.target.value) })}
-            />
-          </div>
-        </div>
-
-        <div className="modal-actions">
-          <button className="btn-save" onClick={() => onSave(editedRule)}>
-            Save Rule
-          </button>
-          <button className="btn-cancel" onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Main Governance Tab
-export default function GovernanceTab() {
-  const [activeView, setActiveView] = useState("pillars");
-  const [pillarsData, setPillarsData] = useState({
-    operational: { rules: [], documents: [] },
-    behavioral: { rules: [], documents: [] },
-    immutable: { rules: [], documents: [] }
-  });
-  const [pendingDecisions, setPendingDecisions] = useState([]);
-  const [decisionHistory, setDecisionHistory] = useState([]);
-  const [stats, setStats] = useState(null);
+// ── Sub-tab: Genesis Keys ─────────────────────────────────────────────
+function GenesisKeysPanel() {
+  const [folders, setFolders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingRule, setEditingRule] = useState(null);
-  const [showRuleEditor, setShowRuleEditor] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [dayData, setDayData] = useState(null);
+  const [dayLoading, setDayLoading] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [keyDetail, setKeyDetail] = useState(null);
+  const [keyLoading, setKeyLoading] = useState(false);
+  const [stats, setStats] = useState(null);
+  const [expandedTypes, setExpandedTypes] = useState(new Set());
 
-  // Fetch governance data
-  const fetchGovernanceData = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/pillars`);
-      if (response.ok) {
-        const data = await response.json();
-        setPillarsData(data);
-      } else {
-        // Use default data if endpoint doesn't exist yet
-        setPillarsData({
-          operational: {
-            rules: [
-              { id: 1, name: "Industry Compliance", description: "Ensure outputs comply with industry standards", severity: 8, enabled: true, source: "ISO 27001" },
-              { id: 2, name: "Data Classification", description: "Classify and handle data according to sensitivity", severity: 7, enabled: true, source: "GDPR" },
-            ],
-            documents: []
-          },
-          behavioral: {
-            rules: [
-              { id: 3, name: "Professional Tone", description: "Maintain professional communication style", severity: 3, enabled: true },
-              { id: 4, name: "Response Length", description: "Keep responses concise and actionable", severity: 2, enabled: true },
-            ],
-            documents: []
-          },
-          immutable: {
-            rules: [
-              { id: 5, name: "No Harmful Content", description: "Never generate content that could cause harm", severity: 10, enabled: true },
-              { id: 6, name: "No Illegal Activities", description: "Never assist with illegal activities", severity: 10, enabled: true },
-              { id: 7, name: "No PII Exposure", description: "Never expose personally identifiable information", severity: 10, enabled: true },
-              { id: 8, name: "Safety Override", description: "Safety cannot be bypassed by any prompt", severity: 10, enabled: true },
-            ],
-            documents: []
-          }
-        });
-      }
-    } catch (err) {
-      console.error("Error fetching governance data:", err);
-    }
-  }, []);
-
-  // Fetch pending decisions
-  const fetchPendingDecisions = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/decisions/pending`);
-      if (response.ok) {
-        const data = await response.json();
-        setPendingDecisions(data.decisions || []);
-      } else {
-        // Mock data for demonstration
-        setPendingDecisions([
-          {
-            id: 1,
-            title: "External API Integration Request",
-            description: "Grace wants to integrate with a third-party analytics API to enhance response accuracy.",
-            pillar_type: "operational",
-            severity: 6,
-            status: "pending",
-            context: { api_name: "AnalyticsAPI", data_types: ["usage_metrics", "response_quality"] },
-            rule_reference: "Data Classification",
-            created_at: new Date().toISOString()
-          },
-          {
-            id: 2,
-            title: "Tone Adjustment Request",
-            description: "User prefers more casual communication style. This change would affect all future interactions.",
-            pillar_type: "behavioral",
-            severity: 2,
-            status: "pending",
-            context: { current_tone: "professional", requested_tone: "casual" },
-            created_at: new Date(Date.now() - 3600000).toISOString()
-          }
-        ]);
-      }
-    } catch (err) {
-      console.error("Error fetching decisions:", err);
-    }
-  }, []);
-
-  // Fetch stats
-  const fetchStats = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/governance/stats`);
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      } else {
-        setStats({
-          total_rules: 8,
-          active_rules: 8,
-          pending_decisions: 2,
-          confirmed_today: 5,
-          denied_today: 1,
-          compliance_score: 0.94
-        });
-      }
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  }, []);
-
-  // Initial load
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await Promise.all([
-        fetchGovernanceData(),
-        fetchPendingDecisions(),
-        fetchStats()
-      ]);
+    Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/genesis-daily/folders?days=60`).then(r => r.ok ? r.json() : { folders: [] }),
+      fetch(`${API_BASE_URL}/api/genesis-daily/stats`).then(r => r.ok ? r.json() : null),
+    ]).then(([fRes, sRes]) => {
+      if (fRes.status === 'fulfilled') setFolders(fRes.value.folders || []);
+      if (sRes.status === 'fulfilled') setStats(sRes.value);
       setLoading(false);
-    };
-    loadData();
-  }, [fetchGovernanceData, fetchPendingDecisions, fetchStats]);
+    });
+  }, []);
 
-  // Handle decision action
-  const handleDecisionAction = async (decisionId, action, note = "") => {
+  const openFolder = useCallback(async (date) => {
+    setSelectedDate(date);
+    setSelectedKey(null);
+    setKeyDetail(null);
+    setDayLoading(true);
     try {
-      await fetch(`${API_BASE}/governance/decisions/${decisionId}/${action}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note, reviewed_by: "user" })
-      });
-      fetchPendingDecisions();
-      fetchStats();
-    } catch (err) {
-      console.error("Error handling decision:", err);
-      // Update locally for demo
-      setPendingDecisions(prev =>
-        prev.map(d => d.id === decisionId
-          ? { ...d, status: action === "confirm" ? "confirmed" : action === "deny" ? "denied" : "discussing" }
-          : d
-        )
-      );
-    }
-  };
+      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/folder/${date}`);
+      if (res.ok) setDayData(await res.json());
+    } catch { /* silent */ }
+    finally { setDayLoading(false); }
+  }, []);
 
-  // Handle rule toggle
-  const handleRuleToggle = async (ruleId, enabled) => {
+  const openKey = useCallback(async (keyId) => {
+    setSelectedKey(keyId);
+    setKeyLoading(true);
+    setKeyDetail(null);
     try {
-      await fetch(`${API_BASE}/governance/rules/${ruleId}/toggle`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled })
-      });
-      fetchGovernanceData();
-    } catch (err) {
-      console.error("Error toggling rule:", err);
-      // Update locally for demo
-      setPillarsData(prev => {
-        const newData = { ...prev };
-        for (const pillar of Object.keys(newData)) {
-          newData[pillar].rules = newData[pillar].rules.map(r =>
-            r.id === ruleId ? { ...r, enabled } : r
-          );
-        }
-        return newData;
-      });
-    }
+      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/key/${keyId}`);
+      if (res.ok) setKeyDetail(await res.json());
+    } catch { /* silent */ }
+    finally { setKeyLoading(false); }
+  }, []);
+
+  const toggleType = (type) => {
+    setExpandedTypes(prev => {
+      const n = new Set(prev);
+      if (n.has(type)) n.delete(type); else n.add(type);
+      return n;
+    });
   };
 
-  // Handle rule edit
-  const handleRuleEdit = (rule) => {
-    setEditingRule(rule);
-    setShowRuleEditor(true);
-  };
-
-  // Handle rule save
-  const handleRuleSave = async (rule) => {
-    try {
-      await fetch(`${API_BASE}/governance/rules/${rule.id || "new"}`, {
-        method: rule.id ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(rule)
-      });
-      fetchGovernanceData();
-    } catch (err) {
-      console.error("Error saving rule:", err);
-    }
-    setShowRuleEditor(false);
-    setEditingRule(null);
-  };
-
-  if (loading) {
-    return (
-      <div className="governance-tab">
-        <div className="loading-state">
-          <div className="spinner" />
-          <p>Loading Governance Framework...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading Genesis Keys...</div>;
 
   return (
-    <div className="governance-tab">
-      <div className="governance-header">
-        <div className="header-left">
-          <h2>Governance Framework</h2>
-          <p>Three-pillar governance with human-in-the-loop decision making</p>
+    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+
+      {/* Left: Date folders */}
+      <div style={{ flex: '0 0 240px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+        {stats && (
+          <div style={{ padding: '10px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
+            <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>Total Keys: <b style={{ color: C.text }}>{(stats.total_keys || 0).toLocaleString()}</b></div>
+            <div style={{ fontSize: 11, color: C.muted }}>Today: <b style={{ color: C.accent }}>{(stats.today_keys || 0).toLocaleString()}</b></div>
+          </div>
+        )}
+        <div style={{ padding: '8px 12px', fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', borderBottom: `1px solid ${C.border}` }}>
+          📅 Daily Folders
         </div>
-        <div className="header-stats">
-          {stats && (
+        {folders.length === 0 ? (
+          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>No genesis keys yet</div>
+        ) : folders.map(f => (
+          <div
+            key={f.date}
+            onClick={() => openFolder(f.date)}
+            style={{
+              padding: '8px 12px', cursor: 'pointer', fontSize: 12,
+              background: selectedDate === f.date ? C.bgDark : 'transparent',
+              borderLeft: selectedDate === f.date ? `3px solid ${C.accent}` : '3px solid transparent',
+              borderBottom: `1px solid ${C.border}22`,
+              transition: 'background .1s',
+            }}
+            onMouseEnter={e => { if (selectedDate !== f.date) e.currentTarget.style.background = C.bgAlt; }}
+            onMouseLeave={e => { if (selectedDate !== f.date) e.currentTarget.style.background = 'transparent'; }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>📁</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600 }}>{f.date}</div>
+                <div style={{ fontSize: 10, color: C.dim }}>{f.label}</div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontWeight: 700, color: C.text }}>{f.key_count}</div>
+                {f.error_count > 0 && <div style={{ fontSize: 9, color: C.error }}>{f.error_count} err</div>}
+              </div>
+            </div>
+            {/* Metadata summary */}
+            {f.summary && (
+              <div style={{ fontSize: 10, color: C.muted, marginTop: 4, lineHeight: 1.5, paddingLeft: 24 }}>
+                {f.summary}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: 8, fontSize: 9, color: C.dim, marginTop: 3, paddingLeft: 24, flexWrap: 'wrap' }}>
+              {f.unique_actors > 0 && <span>👤 {f.unique_actors}</span>}
+              {f.unique_files > 0 && <span>📄 {f.unique_files} files</span>}
+              {f.fix_count > 0 && <span style={{ color: C.success }}>✅ {f.fix_count} fixes</span>}
+              {f.top_file && <span title={f.top_file}>📌 {f.top_file}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Center: Day contents grouped by type */}
+      <div style={{ flex: 1, overflow: 'auto', borderRight: selectedKey ? `1px solid ${C.border}` : 'none' }}>
+        {!selectedDate ? (
+          <div style={{ padding: 60, textAlign: 'center', color: C.dim }}>
+            <div style={{ fontSize: 48, marginBottom: 12, opacity: 0.5 }}>🔑</div>
+            <div style={{ fontSize: 14, fontWeight: 500, color: C.muted }}>Select a daily folder</div>
+            <div style={{ fontSize: 12 }}>Each folder contains all Genesis Keys from that 24-hour window</div>
+          </div>
+        ) : dayLoading ? (
+          <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading keys...</div>
+        ) : dayData ? (
+          <div style={{ padding: 16 }}>
+            {/* Demographics bar */}
+            <div style={{
+              display: 'flex', gap: 16, padding: '10px 14px', marginBottom: 14,
+              background: C.bgAlt, borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 12, flexWrap: 'wrap',
+            }}>
+              <span>🔑 <b>{dayData.demographics?.total_keys || 0}</b> keys</span>
+              <span>❌ <b style={{ color: C.error }}>{dayData.demographics?.total_errors || 0}</b> errors</span>
+              <span>✅ <b style={{ color: C.success }}>{dayData.demographics?.total_fixes || 0}</b> fixes</span>
+              <span>👤 <b>{dayData.demographics?.unique_actors || 0}</b> actors</span>
+              <span>📄 <b>{dayData.demographics?.unique_files || 0}</b> files</span>
+            </div>
+
+            {/* Types */}
+            {(dayData.by_type || []).map(group => {
+              const isOpen = expandedTypes.has(group.type);
+              return (
+                <div key={group.type} style={{ marginBottom: 6 }}>
+                  <div
+                    onClick={() => toggleType(group.type)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                      background: C.bgAlt, borderRadius: 6, cursor: 'pointer',
+                      border: `1px solid ${C.border}`, userSelect: 'none',
+                    }}
+                  >
+                    <span style={{ fontSize: 10, width: 14, textAlign: 'center', color: C.muted }}>{isOpen ? '▼' : '▶'}</span>
+                    <span style={{ fontSize: 16 }}>{group.icon}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{group.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: C.accent }}>{group.count}</span>
+                    {group.error_count > 0 && <span style={{ fontSize: 10, color: C.error }}>({group.error_count} errors)</span>}
+                  </div>
+                  {isOpen && (
+                    <div style={{ paddingLeft: 12, borderLeft: `2px solid ${C.border}`, marginLeft: 20, marginTop: 4 }}>
+                      {group.keys.map(k => (
+                        <div
+                          key={k.key_id || k.id}
+                          onDoubleClick={() => openKey(k.key_id)}
+                          onClick={() => openKey(k.key_id)}
+                          style={{
+                            padding: '6px 10px', marginBottom: 2, borderRadius: 4, cursor: 'pointer',
+                            background: selectedKey === k.key_id ? C.bgDark : 'transparent',
+                            borderLeft: selectedKey === k.key_id ? `2px solid ${C.accent}` : '2px solid transparent',
+                            fontSize: 12, transition: 'background .1s',
+                          }}
+                          onMouseEnter={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = C.bgAlt; }}
+                          onMouseLeave={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            {k.is_error && <span style={{ color: C.error }}>❌</span>}
+                            {k.fix_applied && <span style={{ color: C.success }}>✅</span>}
+                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: C.text }}>{k.what}</span>
+                            <span style={{ fontSize: 10, color: C.dim, flexShrink: 0 }}>
+                              {k.timestamp ? new Date(k.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                            </span>
+                          </div>
+                          {k.file_path && <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>📄 {k.file_path}</div>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+
+      {/* Right: Key detail panel */}
+      {selectedKey && (
+        <div style={{ flex: '0 0 380px', overflow: 'auto', padding: '12px 16px' }}>
+          {keyLoading ? (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Loading key...</div>
+          ) : keyDetail ? (
             <>
-              <div className="stat-item primary">
-                <span className="stat-value">{Math.round(stats.compliance_score * 100)}%</span>
-                <span className="stat-label">Compliance</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>🔑</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 11, fontFamily: 'monospace', color: C.accent, wordBreak: 'break-all' }}>{keyDetail.key_id}</div>
+                  <StatusBadge status={keyDetail.key_type} />
+                </div>
+                <span onClick={() => { setSelectedKey(null); setKeyDetail(null); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
               </div>
-              <div className="stat-item warning">
-                <span className="stat-value">{stats.pending_decisions}</span>
-                <span className="stat-label">Pending</span>
-              </div>
-              <div className="stat-item success">
-                <span className="stat-value">{stats.confirmed_today}</span>
-                <span className="stat-label">Confirmed</span>
-              </div>
-              <div className="stat-item info">
-                <span className="stat-value">{stats.active_rules}</span>
-                <span className="stat-label">Active Rules</span>
-              </div>
+
+              {/* What/Who/When/Where/Why/How */}
+              <Card title="Details">
+                {[
+                  ['What', keyDetail.what],
+                  ['Who', keyDetail.who],
+                  ['When', keyDetail.timestamp ? new Date(keyDetail.timestamp).toLocaleString() : ''],
+                  ['Where', keyDetail.where],
+                  ['Why', keyDetail.why],
+                  ['How', keyDetail.how],
+                  ['Status', keyDetail.status],
+                  ['File', keyDetail.file_path],
+                  ['Function', keyDetail.function_name],
+                  ['Line', keyDetail.line_number],
+                ].filter(([, v]) => v).map(([label, val]) => (
+                  <div key={label} style={{ display: 'flex', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
+                    <span style={{ color: C.muted, width: 55, flexShrink: 0 }}>{label}</span>
+                    <span style={{ color: C.text, wordBreak: 'break-all' }}>{String(val)}</span>
+                  </div>
+                ))}
+              </Card>
+
+              {/* Source code context */}
+              {keyDetail.source_context && (
+                <Card title={`📄 Source: ${keyDetail.source_context.file_path || keyDetail.file_path}`}>
+                  <pre style={{
+                    margin: 0, padding: 10, background: '#0d1117', borderRadius: 4,
+                    fontSize: 11, lineHeight: 1.5, overflow: 'auto', maxHeight: 300,
+                    fontFamily: '"Fira Code", "JetBrains Mono", Consolas, monospace',
+                    color: '#e6edf3', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                  }}>
+                    {keyDetail.source_context.lines
+                      ? keyDetail.source_context.lines.map((line, i) => {
+                          const lineNum = (keyDetail.source_context.start_line || 1) + i;
+                          const isHighlight = lineNum === keyDetail.source_context.highlight_line;
+                          return (
+                            <div key={i} style={{ background: isHighlight ? '#e9456020' : 'transparent', display: 'flex' }}>
+                              <span style={{ width: 40, textAlign: 'right', paddingRight: 10, color: isHighlight ? C.accent : '#484f58', userSelect: 'none', flexShrink: 0 }}>{lineNum}</span>
+                              <span>{line}</span>
+                            </div>
+                          );
+                        })
+                      : keyDetail.source_context.preview || '(no preview)'
+                    }
+                  </pre>
+                </Card>
+              )}
+
+              {/* Code before/after */}
+              {(keyDetail.code_before || keyDetail.code_after) && (
+                <Card title="Code Change">
+                  {keyDetail.code_before && (
+                    <div style={{ marginBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: C.error, fontWeight: 600, marginBottom: 4 }}>— Before</div>
+                      <pre style={{ margin: 0, padding: 8, background: C.error + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_before}</pre>
+                    </div>
+                  )}
+                  {keyDetail.code_after && (
+                    <div>
+                      <div style={{ fontSize: 10, color: C.success, fontWeight: 600, marginBottom: 4 }}>+ After</div>
+                      <pre style={{ margin: 0, padding: 8, background: C.success + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_after}</pre>
+                    </div>
+                  )}
+                </Card>
+              )}
+
+              {/* Error info */}
+              {keyDetail.is_error && (
+                <Card title="❌ Error">
+                  <div style={{ fontSize: 12, color: C.error, fontWeight: 600 }}>{keyDetail.error_type}</div>
+                  <div style={{ fontSize: 11, color: C.muted, marginTop: 4, whiteSpace: 'pre-wrap' }}>{keyDetail.error_message}</div>
+                </Card>
+              )}
+
+              {/* Tags */}
+              {keyDetail.tags && keyDetail.tags.length > 0 && (
+                <Card title="Tags">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    {keyDetail.tags.map((t, i) => (
+                      <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{t}</span>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {/* Input/Output data */}
+              {keyDetail.input_data && Object.keys(keyDetail.input_data).length > 0 && (
+                <Card title="Input Data">
+                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.input_data, null, 2)}</pre>
+                </Card>
+              )}
+              {keyDetail.output_data && Object.keys(keyDetail.output_data).length > 0 && (
+                <Card title="Output Data">
+                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.output_data, null, 2)}</pre>
+                </Card>
+              )}
+
+              {/* Child/parent keys */}
+              {keyDetail.parent_key && (
+                <Card title="Parent Key">
+                  <div onClick={() => openKey(keyDetail.parent_key.key_id)} style={{ cursor: 'pointer', fontSize: 12, color: C.info }}>
+                    🔗 {keyDetail.parent_key.what} <span style={{ fontSize: 10, color: C.dim }}>({keyDetail.parent_key.type})</span>
+                  </div>
+                </Card>
+              )}
+              {keyDetail.child_keys && keyDetail.child_keys.length > 0 && (
+                <Card title={`Child Keys (${keyDetail.child_keys.length})`}>
+                  {keyDetail.child_keys.map(ck => (
+                    <div key={ck.key_id} onClick={() => openKey(ck.key_id)} style={{ cursor: 'pointer', fontSize: 11, padding: '3px 0', borderBottom: `1px solid ${C.border}`, color: C.info }}>
+                      🔗 {ck.what} <span style={{ fontSize: 9, color: C.dim }}>({ck.type})</span>
+                    </div>
+                  ))}
+                </Card>
+              )}
+
+              {/* Fix suggestions */}
+              {keyDetail.fix_suggestions && keyDetail.fix_suggestions.length > 0 && (
+                <Card title={`Fix Suggestions (${keyDetail.fix_suggestions.length})`}>
+                  {keyDetail.fix_suggestions.map(fs => (
+                    <div key={fs.id} style={{ padding: '6px 8px', marginBottom: 4, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+                      <div style={{ fontSize: 12, fontWeight: 600 }}>{fs.title}</div>
+                      <div style={{ fontSize: 10, color: C.muted }}><StatusBadge status={fs.status} /> · {fs.severity} · {fs.confidence ? (fs.confidence * 100).toFixed(0) + '% confidence' : ''}</div>
+                      {fs.fix_code && <pre style={{ margin: '4px 0 0', fontSize: 10, color: C.success, background: C.success + '10', padding: 6, borderRadius: 3, whiteSpace: 'pre-wrap', maxHeight: 80, overflow: 'auto' }}>{fs.fix_code}</pre>}
+                    </div>
+                  ))}
+                </Card>
+              )}
             </>
+          ) : (
+            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Failed to load key detail</div>
           )}
         </div>
-      </div>
-
-      <div className="governance-toolbar">
-        <div className="view-tabs">
-          <button
-            className={activeView === "pillars" ? "active" : ""}
-            onClick={() => setActiveView("pillars")}
-          >
-            Governance Pillars
-          </button>
-          <button
-            className={activeView === "decisions" ? "active" : ""}
-            onClick={() => setActiveView("decisions")}
-          >
-            Decisions
-            {pendingDecisions.length > 0 && (
-              <span className="badge">{pendingDecisions.length}</span>
-            )}
-          </button>
-          <button
-            className={activeView === "history" ? "active" : ""}
-            onClick={() => setActiveView("history")}
-          >
-            History
-          </button>
-          <button
-            className={activeView === "analytics" ? "active" : ""}
-            onClick={() => setActiveView("analytics")}
-          >
-            Analytics
-          </button>
-        </div>
-        <div className="toolbar-spacer" />
-        <button className="btn-refresh" onClick={() => {
-          fetchGovernanceData();
-          fetchPendingDecisions();
-          fetchStats();
-        }}>
-          Refresh
-        </button>
-      </div>
-
-      <div className="governance-content">
-        {activeView === "pillars" && (
-          <div className="pillars-view">
-            <GovernancePillar
-              type="operational"
-              title="Operational Governance"
-              description="Industry standards, compliance requirements, and professional protocols that guide Grace's decision-making in real-world scenarios."
-              rules={pillarsData.operational.rules}
-              documents={pillarsData.operational.documents}
-              onUpload={fetchGovernanceData}
-              onToggleRule={handleRuleToggle}
-              onEditRule={handleRuleEdit}
-              onRuleAdded={fetchGovernanceData}
-            />
-
-            <GovernancePillar
-              type="behavioral"
-              title="Behavioral Governance"
-              description="Personal interaction preferences, communication style, and user-specific adaptations that shape Grace's personality."
-              rules={pillarsData.behavioral.rules}
-              documents={pillarsData.behavioral.documents}
-              onUpload={fetchGovernanceData}
-              onToggleRule={handleRuleToggle}
-              onEditRule={handleRuleEdit}
-              onRuleAdded={fetchGovernanceData}
-            />
-
-            {/* Immutable governance status indicator - rules are enforced internally */}
-            <div className="immutable-status-card">
-              <div className="immutable-header">
-                <div className="immutable-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="M9 12l2 2 4-4"/>
-                  </svg>
-                </div>
-                <div className="immutable-info">
-                  <h3>Safety & Compliance</h3>
-                  <p>Core safety rules are always active and enforced automatically behind the scenes.</p>
-                </div>
-                <div className="immutable-badge">
-                  <span className="active-indicator"></span>
-                  Always Active
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeView === "decisions" && (
-          <div className="decisions-view">
-            <div className="decisions-intro">
-              <h3>Human-in-the-Loop Decisions</h3>
-              <p>Review and approve decisions that require human judgment. You can confirm, discuss, or deny each request.</p>
-            </div>
-
-            {pendingDecisions.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M9 12l2 2 4-4"/>
-                  </svg>
-                </div>
-                <p>No pending decisions require your review</p>
-              </div>
-            ) : (
-              <div className="decisions-list">
-                {pendingDecisions.map((decision) => (
-                  <DecisionCard
-                    key={decision.id}
-                    decision={decision}
-                    onAction={handleDecisionAction}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeView === "history" && (
-          <div className="history-view">
-            <h3>Decision History</h3>
-            <p>View past governance decisions and their outcomes.</p>
-
-            <div className="history-filters">
-              <select defaultValue="all">
-                <option value="all">All Pillars</option>
-                <option value="operational">Operational</option>
-                <option value="behavioral">Behavioral</option>
-                <option value="immutable">Immutable</option>
-              </select>
-              <select defaultValue="7d">
-                <option value="24h">Last 24 hours</option>
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="all">All time</option>
-              </select>
-            </div>
-
-            <div className="history-list">
-              <div className="history-item confirmed">
-                <span className="history-status">CONFIRMED</span>
-                <span className="history-title">API Integration Request</span>
-                <span className="history-pillar">operational</span>
-                <span className="history-date">2 hours ago</span>
-              </div>
-              <div className="history-item denied">
-                <span className="history-status">DENIED</span>
-                <span className="history-title">Disable Logging Request</span>
-                <span className="history-pillar">immutable</span>
-                <span className="history-date">5 hours ago</span>
-              </div>
-              <div className="history-item confirmed">
-                <span className="history-status">CONFIRMED</span>
-                <span className="history-title">Tone Adjustment</span>
-                <span className="history-pillar">behavioral</span>
-                <span className="history-date">1 day ago</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeView === "analytics" && (
-          <div className="analytics-view">
-            <h3>Governance Analytics</h3>
-
-            <div className="analytics-grid">
-              <div className="analytics-card">
-                <h4>Decision Distribution</h4>
-                <div className="distribution-bars">
-                  <div className="bar-item">
-                    <span className="bar-label">Confirmed</span>
-                    <div className="bar-track">
-                      <div className="bar-fill confirmed" style={{ width: "75%" }} />
-                    </div>
-                    <span className="bar-value">75%</span>
-                  </div>
-                  <div className="bar-item">
-                    <span className="bar-label">Denied</span>
-                    <div className="bar-track">
-                      <div className="bar-fill denied" style={{ width: "15%" }} />
-                    </div>
-                    <span className="bar-value">15%</span>
-                  </div>
-                  <div className="bar-item">
-                    <span className="bar-label">Discussed</span>
-                    <div className="bar-track">
-                      <div className="bar-fill discussed" style={{ width: "10%" }} />
-                    </div>
-                    <span className="bar-value">10%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Pillar Activity</h4>
-                <div className="pillar-stats">
-                  <div className="pillar-stat operational">
-                    <span className="pillar-name">Operational</span>
-                    <span className="pillar-count">45 decisions</span>
-                  </div>
-                  <div className="pillar-stat behavioral">
-                    <span className="pillar-name">Behavioral</span>
-                    <span className="pillar-count">23 decisions</span>
-                  </div>
-                  <div className="pillar-stat immutable">
-                    <span className="pillar-name">Immutable</span>
-                    <span className="pillar-count">12 blocks</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Compliance Trend</h4>
-                <div className="trend-indicator positive">
-                  <span className="trend-arrow">↑</span>
-                  <span className="trend-value">+2.3%</span>
-                  <span className="trend-period">vs last week</span>
-                </div>
-              </div>
-
-              <div className="analytics-card">
-                <h4>Response Time</h4>
-                <div className="response-stats">
-                  <div className="response-stat">
-                    <span className="response-label">Avg. Review Time</span>
-                    <span className="response-value">4.2 min</span>
-                  </div>
-                  <div className="response-stat">
-                    <span className="response-label">Auto-resolved</span>
-                    <span className="response-value">67%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {showRuleEditor && (
-        <RuleEditorModal
-          rule={editingRule}
-          onSave={handleRuleSave}
-          onClose={() => {
-            setShowRuleEditor(false);
-            setEditingRule(null);
-          }}
-        />
       )}
+    </div>
+  );
+}
+
+// ── Main GovernanceTab ────────────────────────────────────────────────
+export default function GovernanceTab() {
+  const [activeTab, setActiveTab] = useState('approvals');
+  const [dashboard, setDashboard] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/governance-hub/dashboard`)
+      .then(r => r.ok ? r.json() : null)
+      .then(setDashboard).catch(() => {});
+  }, []);
+
+  const tabs = [
+    { id: 'approvals', label: 'Approvals', icon: '✓', badge: dashboard?.approvals?.pending_count },
+    { id: 'scores', label: 'Scores', icon: '📊' },
+    { id: 'performance', label: 'Performance', icon: '⚡' },
+    { id: 'actions', label: 'Actions', icon: '🔧' },
+    { id: 'rules', label: 'Rules & Persona', icon: '⚖️' },
+    { id: 'genesis', label: 'Genesis Keys', icon: '🔑' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: C.text, background: C.bg }}>
+
+      {/* Header with sub-tabs */}
+      <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
+        <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+          🏛️ Governance
+        </span>
+        {tabs.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            style={{
+              padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
+              color: activeTab === t.id ? C.accent : C.muted,
+              borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',
+              fontSize: 13, fontWeight: activeTab === t.id ? 700 : 500,
+              display: 'flex', alignItems: 'center', gap: 6,
+              transition: 'all .15s',
+            }}
+          >
+            <span>{t.icon}</span> {t.label}
+            {t.badge > 0 && (
+              <span style={{
+                background: C.error, color: '#fff', fontSize: 9, fontWeight: 700,
+                padding: '1px 6px', borderRadius: 10, lineHeight: '14px',
+              }}>{t.badge}</span>
+            )}
+          </button>
+        ))}
+
+        {/* Quick stats from dashboard */}
+        {dashboard && (
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, fontSize: 11, color: C.dim, paddingRight: 8 }}>
+            {dashboard.trust?.system_score != null && (
+              <span>Trust: <b style={{ color: dashboard.trust.system_score >= 0.7 ? C.success : C.warn }}>{(dashboard.trust.system_score * 100).toFixed(0)}%</b></span>
+            )}
+            {dashboard.performance?.cpu_percent != null && (
+              <span>CPU: <b>{dashboard.performance.cpu_percent.toFixed(0)}%</b></span>
+            )}
+            {dashboard.healing?.available && dashboard.healing.health_status && (
+              <span>Health: <StatusBadge status={dashboard.healing.health_status} /></span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Tab content */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {activeTab === 'approvals' && <ApprovalsPanel />}
+        {activeTab === 'scores' && <ScoresPanel />}
+        {activeTab === 'performance' && <PerformancePanel />}
+        {activeTab === 'actions' && <ActionsPanel />}
+        {activeTab === 'rules' && <RulesPersonaPanel />}
+        {activeTab === 'genesis' && <GenesisKeysPanel />}
+      </div>
     </div>
   );
 }

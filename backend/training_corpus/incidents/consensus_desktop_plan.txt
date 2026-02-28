@@ -1,0 +1,292 @@
+
+==================================================
+Kimi 2.5 (Moonshot)
+==================================================
+## 1. DESKTOP SETUP CHECKLIST FOR RTX 5090
+
+```bash
+# 1. Verify CUDA setup (5090 needs CUDA 12.6+)
+nvidia-smi
+nvcc --version
+
+# 2. Fix Ollama for RTX 5090
+sudo systemctl stop ollama
+sudo nano /etc/systemd/system/ollama.service
+# Add under [Service]:
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="OLLAMA_CUDA_MAX_VRAM=32000"
+sudo systemctl daemon-reload
+sudo systemctl start ollama
+
+# 3. Clone and setup Grace
+cd ~/projects
+git clone https://github.com/your-org/grace.git
+cd grace
+
+# 4. Setup Python environment
+python3.11 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip setuptools wheel
+
+# 5. Install CUDA-specific packages
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install -r requirements.txt
+pip install chromadb==0.4.22 qdrant-client fastembed
+
+# 6. Download models (32GB VRAM = big models possible)
+# Pull these specific models:
+ollama pull llama3.1:70b-instruct-q4_K_M      # 40GB
+ollama mixstral:8x7b-instruct-v0.1-q4_K_M     # 26GB
+ollama nomic-embed-text:latest               # Embedding model
+
+# 7. Setup vector databases
+mkdir -p ~/.local/share/grace/{chroma,qdrant}
+docker run -d --name qdrant -p 6333:6333 -v ~/.local/share/grace/qdrant:/qdrant/storage qdrant/qdrant
+
+# 8. Configure Grace for local
+cp config/local.example.yaml config/local.yaml
+nano config/local.yaml
+# Set:
+# ollama_host: http://localhost:11434
+# default_model: llama3.1:70b-instruct-q4_K_M
+# embedding_model: nomic-embed-text
+# vector_store: qdrant
+# cuda_device: cuda:0
+
+# 9. Initialize knowledge base
+python scripts/init_kb.py --create-tables --setup-vectors
+python scripts/ingest_docs.py --path ~/Documents/knowledge --recursive
+
+# 10. Start services
+npm install
+npm run build
+./start_grace.sh --local --gpu
+```
+
+## 2. REVERSE KNN ORACLE DISCOVERY
+
+```python
+# knowledge_gap_detector.py
+import numpy as np
+from sklearn.neighbors import NearestNeighbors
+from datetime import datetime, timedelta
+
+class ReverseKNNOracle:
+    def __init__(self,
+
+==================================================
+Opus 4.6 (Claude)
+==================================================
+# System Architect Answers: Grace Local Deployment & Architecture
+
+## 1. DESKTOP SETUP CHECKLIST
+
+**Prerequisites Check:**
+```bash
+# Verify GPU
+nvidia-smi
+# Verify Ollama
+ollama --version
+```
+
+**Step-by-Step Setup:**
+
+```bash
+# 1. Clone and setup Grace
+git clone https://github.com/your-org/grace.git
+cd grace
+git pull origin main
+
+# 2. Python environment
+python -m venv grace-env
+source grace-env/bin/activate  # Linux/Mac
+# grace-env\Scripts\activate   # Windows
+pip install -r requirements.txt
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# 3. Node.js dependencies
+npm install
+npm run build
+
+# 4. Download models (RTX 5090 can handle large models)
+ollama pull llama3.1:70b
+ollama pull codellama:34b
+ollama pull mistral-nemo:12b
+
+# 5. Database setup
+python scripts/init_database.py
+python scripts/create_vector_indices.py
+
+# 6. Training data ingestion
+python scripts/ingest_training_data.py --source ./data/training/
+python scripts/build_knowledge_graph.py
+python scripts/generate_embeddings.py --batch-size 32
+
+# 7. Configuration
+cp config/local.example.json config/local.json
+# Edit config/local.json with your GPU settings:
+# "gpu_memory_fraction": 0.8
+# "max_batch_size": 16
+
+# 8. Start services
+python -m grace.services.vector_db &
+python -m grace.services.model_server &
+python -m grace.main
+
+# 9. Verify installation
+curl http://localhost:8080/health
+python scripts/run_diagnostics.py
+```
+
+## 2. REVERSE KNN ORACLE DISCOVERY
+
+**Technical Implementation:**
+
+```python
+class ReverseKNNOracle:
+    def __init__(self, knowledge_base, embedding_dim=1536):
+        self.kb = knowledge_base
+        self.faiss_index = faiss.IndexFlatIP(embedding_dim)
+        self.knowledge_density_threshold = 0.3
+        self.distance_threshold = 0.7
+        self.staleness_days = 90
+    
+    def find_knowledge_gaps(self):
+        # 1. Low density areas (sparse neighborhoods)
+        density_map = self._calculate_density_map()
+        sparse_regions = density_map[density_m
+
+==================================================
+CONSENSUS
+==================================================
+Grace-aligned answer for a hands-on system architect
+-------------------------------------------------
+
+1. WHAT DO I HAVE TO DO ON THE DESKTOP TODAY?
+   (copy-paste, in order – ~45 min if your pipe is fast)
+
+   ```bash
+   # 0. 5-second GPU sanity check
+   nvidia-smi | grep -q 5090 || echo "STOP – no 5090 visible"
+
+   # 1. Give Ollama access to the whole card
+   sudo systemctl stop ollama
+   sudo sh -c 'cat >> /etc/systemd/system/ollama.service <<EOF
+   Environment="CUDA_VISIBLE_DEVICES=0"
+   Environment="OLLAMA_CUDA_MAX_VRAM=32000"
+   EOF'
+   sudo systemctl daemon-reload && sudo systemctl restart ollama
+
+   # 2. One-time Python 3.11 venv
+   python3.11 -m venv ~/grace-env
+   source ~/grace-env/bin/activate
+   pip install -U pip setuptools wheel torch==2.3.1+cu121 \
+       -f https://download.pytorch.org/whl/torch_stable.html
+
+   # 3. Vector store (pick ONE)
+   docker run -d --name qdrant -p 6333:6333 -v $HOME/qdrant:/qdrant/storage qdrant/qdrant
+   # OR if you hate docker:  pip install chromadb && mkdir -p ~/grace/chroma
+
+   # 4. Grace repo
+   mkdir -p ~/grace && cd ~/grace
+   git clone https://github.com/your-org/grace.git .
+   git pull origin main
+
+   # 5. Dependencies
+   pip install -r requirements.txt   # includes ollama, qdrant-client, fastembed, psycopg2-binary
+
+   # 6. Models (32 GB footprint)
+   ollama pull llama3.1:70b-instruct-q4_K_M   # 38 GB on disk, ~24 GB RAM at runtime
+   ollama pull codellama:34b-code-q4_K_M      # 20 GB disk, 14 GB RAM
+   ollama pull nomic-embed-text               # 0.4 GB
+
+   # 7. 30-second config
+   cp config/local.example.yaml config/local.yaml
+   # set:
+   #   ollama_host: http://127.0.0.1:11434
+   #   default_model: llama3.1:70b-instruct-q4_K_M
+   #   embedding_model: nomic-embed-text
+   #   vector_store: qdrant   # or chroma
+   #   cuda_device: cuda:0
+
+   # 8. Create DB & collections
+   python scripts/init_kb.py --create-tables --vector-size 768
+
+   # 9. Ingest your existing artefacts (markdown, pdf, py, sql…)
+   python scripts/ingest_folder.py ~/my-docs --workers 8
+
+   # 10. Start Grace runtime
+   python -m grace.server --port 8000
+   ```
+   Hit `http://localhost:8000/health` → `{"status":"ok"}` means you’re live.
+
+2. REVERSE-kNN: FIND WHAT THE ORACLE **DOESN’T** KNOW
+   (code you can drop into `scripts/gaps.py`)
+
+   ```python
+   import numpy as np, qdrant_client, pandas as pd
+   from qdrant_client.http import models as q
+
+   client = qdrant_client.QdrantClient(host="localhost", port=6333)
+   COLLECTION = "grace_kb"
+
+   # 1. Pull every embedding once
+   ids, vectors = [], []
+   for offset in range(0, 1_000_000, 10_000):
+       r = client.scroll(COLLECTION, offset=offset, limit=10_000, with_payload=False, with_vectors=True)
+       if not r: break
+       ids   += [p.id for p in r[0]]
+       vectors += [p.vector for p in r[0]]
+   X = np.array(vectors, dtype=np.float32)
+
+   # 2. Build an *exact* kNN index (Faiss CPU is fine for <1 M)
+   import faiss
+   index = faiss.IndexFlatIP(X.shape[1])   # inner-product = cosine if unit vectors
+   faiss.normalize_L2(X)
+   index.add(X)
+
+   # 3. Reverse sweep: for each point, how many neighbours within radius τ ?
+   τ = 0.75   # cosine <0.75 => “far”
+   low_coverage = []
+   for i, v in enumerate(X):
+       D, I = index.search(v.reshape(1, -1), k=200)
+       near = (D >= τ).sum()
+       if near < 5:                      # <5 close neighbours → gap
+           low_coverage.append((ids[i], near, 1-D[0][1]))   # id, count, dist-to-NN
+
+   # 4. Cluster gaps by metadata (here by folder tags)
+   df = pd.DataFrame(low_coverage, columns=["id","neighbours","nn_dist"])
+   payload = client.retrieve(COLLECTION, ids=df.id.tolist(), with_payload=["path","title"])
+   df["folder"] = df.id.map({p.id: p.payload["path"].split("/")[0] for p in payload})
+   gaps = df.groupby("folder").agg({"neighbours":"mean","nn_dist":"mean","id":"count"})
+   print("Knowledge gaps (top folders):")
+   print(gaps.sort_values("neighbours").head(10))
+   ```
+   Run nightly; anything with <3 neighbours or >0.8 NN-distance lands on the “write-more-here” list.
+
+3. DIAGNOSTICS – ONE COMMAND, NOT SIX
+   We still expose independent sub-engines, so wrap them:
+
+   ```bash
+   python -m grace.diagnose all   # runs immune, healing, trust, compass, kb_consistency, model_drift
+   ```
+   Exit 0 = green; non-zero prints a JSON block of whatever failed.
+
+4. GUARDED COMPILER – HOW TO SHIP CODE SAFELY TODAY
+   Grace now auto-sandboxes any generated source file:
+
+   - Python → `RestrictedPython` compile + `resource.setrlimit(RLIMIT_CPU, 10 s)`
+   - C/C++ → compile with `-O0 -fsanitize=address,undefined` inside `podman` with `--memory=1g --cpus=0.5 --no-new-privileges`
+   - Anything else → `firejail --seccomp --private-tmp --quiet`
+
+   The runtime verifier blocks the PR until tests pass; no manual step needed.
+
+5. INTEGRATION BACK TO GRACE
+   If you already run Claude / Kimi / Opus externally, expose the internal REST bridge:
+
+   ```bash
+   python -m grace.bridge.mcp --port 8500   # serves Model Context Protocol
+   ```
+   Point your external client to `localhost:8500` and it sees Grace tools as MCP functions; no plug-in rebuild required.
+
+You’re done – local Grace is serving on 8000, reverse-kNN gaps script is in `scripts/gaps.py`, and any generated code is auto-sandboxed before it reaches you.

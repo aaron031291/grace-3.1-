@@ -1,0 +1,14 @@
+{
+  "decision_id": "TIEBREAK-001",
+  "timestamp": "2026-02-28T11:30:00Z",
+  "context": "Kimi vs Opus disagreement on hallucination guard scope",
+  "kimi_position": "Only inside consensus (faster, -12% latency)",
+  "opus_position": "On EVERY LLM call (safer, +12% latency)",
+  "user_decision": "OPUS \u2014 quality over quantity, every LLM call gets hallucination guard",
+  "user_reasoning": "Every LLM call. Quality over quantity every time.",
+  "governance_note": "Future tiebreaks should be triggered to governance approval system",
+  "action_items": [
+    "Enable hallucination guard on ALL LLM calls via governance_wrapper.py",
+    "Future consensus disagreements route to governance approval queue"
+  ]
+}

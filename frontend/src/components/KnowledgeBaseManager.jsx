@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import "./KnowledgeBaseManager.css";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = API_BASE_URL;
 
 // Connector type icons (emoji placeholders)
 const CONNECTOR_ICONS = {

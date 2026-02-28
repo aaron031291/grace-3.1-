@@ -386,6 +386,19 @@ class MCPOrchestrator:
             if self.llm_provider == "openai":
                 headers["Authorization"] = f"Bearer {self.llm_api_key}"
 
+            # Inject governance rules + persona into messages
+            try:
+                from llm_orchestrator.governance_wrapper import build_governance_prefix
+                gov_prefix = build_governance_prefix()
+                if gov_prefix:
+                    messages = list(messages)
+                    if messages and messages[0].get("role") == "system":
+                        messages[0] = {**messages[0], "content": messages[0]["content"] + gov_prefix}
+                    else:
+                        messages.insert(0, {"role": "system", "content": gov_prefix.strip()})
+            except Exception:
+                pass
+
             payload = {
                 "model": model,
                 "messages": messages,

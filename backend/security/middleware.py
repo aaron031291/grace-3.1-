@@ -271,11 +271,16 @@ class RequestValidationMiddleware(BaseHTTPMiddleware):
         if request.method in ["POST", "PUT", "PATCH"]:
             content_length = request.headers.get("content-length")
             if content_length:
-                max_size = self.config.MAX_REQUEST_SIZE_MB * 1024 * 1024
+                path = request.url.path
+                # Chunked upload chunks get a higher limit (individual chunks ≤ 50MB)
+                if path.startswith("/api/upload/chunk"):
+                    max_size = 60 * 1024 * 1024  # 60 MB (chunk + form overhead)
+                else:
+                    max_size = self.config.MAX_REQUEST_SIZE_MB * 1024 * 1024
                 if int(content_length) > max_size:
                     return JSONResponse(
                         status_code=413,
-                        content={"detail": f"Request too large. Maximum size: {self.config.MAX_REQUEST_SIZE_MB}MB"},
+                        content={"detail": f"Request too large. Maximum size: {max_size // (1024*1024)}MB"},
                     )
 
         return await call_next(request)

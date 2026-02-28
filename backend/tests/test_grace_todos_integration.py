@@ -25,11 +25,15 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from api.grace_todos_api import (
-    router, tasks, requirements, team_members, grace_agents, boards,
-    autonomous_actions, task_connections,
+    router,
+    tasks_store as tasks, requirements_store as requirements,
+    team_store as team_members, agents_store as grace_agents,
+    actions_store as autonomous_actions,
     TaskStatus, TaskPriority, TaskType, ProcessingMode, AgentType,
     GraceTask, UserRequirement, TeamMember, GraceAgent, TaskBoard
 )
+boards: dict = {}
+task_connections: dict = {}
 from services.grace_autonomous_engine import (
     GraceAutonomousEngine, SubAgent, SubAgentPool, TaskScheduler, ParallelExecutor
 )

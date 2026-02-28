@@ -16,7 +16,7 @@ import { devtools } from 'zustand/middleware';
 export const usePreferencesStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set, _get) => ({
         // Theme
         theme: 'system', // 'light' | 'dark' | 'system'
         setTheme: (theme) => set({ theme }),
@@ -75,7 +75,7 @@ export const usePreferencesStore = create(
 export const useChatStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set, _get) => ({
         // Active chat
         activeChat: null,
         setActiveChat: (chat) => set({ activeChat: chat }),
@@ -139,7 +139,7 @@ export const useChatStore = create(
 
 export const useUIStore = create(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       // Loading states
       isLoading: false,
       loadingMessage: '',
@@ -195,7 +195,7 @@ export const useUIStore = create(
 export const useAuthStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set, _get) => ({
         // User
         user: null,
         isAuthenticated: false,
@@ -248,7 +248,7 @@ export const useAuthStore = create(
 
 export const useSystemStore = create(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       // Connection status
       isOnline: navigator.onLine,
       wsConnected: false,

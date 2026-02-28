@@ -1,0 +1,956 @@
+# Comprehensive Software Engineering Knowledge Base
+
+## 1. Software Architecture Patterns
+
+### Microservices Architecture
+
+**Core Principles:**
+- Single responsibility per service
+- Decentralized data management
+- Failure isolation
+- Technology diversity
+- Evolutionary design
+
+**Best Practices:**
+```python
+# Service boundary definition using Domain-Driven Design
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List, Optional
+import aiohttp
+
+
+# Custom exceptions for service communication
+class ServiceUnavailableError(Exception):
+    """Raised when a downstream service is unreachable."""
+    pass
+
+class ServiceNotFoundError(Exception):
+    """Raised when a service is not registered in the registry."""
+    pass
+
+
+@dataclass
+class User:
+    id: str
+    email: str
+    name: str
+
+@dataclass
+class Order:
+    id: str
+    user_id: str
+    items: List[dict]
+    total: float
+    status: str
+
+# Domain service interface
+class UserService(ABC):
+    @abstractmethod
+    async def get_user(self, user_id: str) -> Optional[User]:
+        pass
+    
+    @abstractmethod
+    async def create_user(self, user: User) -> User:
+        pass
+
+# Implementation with HTTP client for inter-service communication
+class HTTPUserService(UserService):
+    def __init__(self, base_url: str, timeout: int = 30):
+        self.base_url = base_url
+        self.timeout = aiohttp.ClientTimeout(total=timeout)
+    
+    async def get_user(self, user_id: str) -> Optional[User]:
+        async with aiohttp.ClientSession(timeout=self.timeout) as session:
+            try:
+                async with session.get(f"{self.base_url}/users/{user_id}") as response:
+                    if response.status == 404:
+                        return None
+                    response.raise_for_status()
+                    data = await response.json()
+                    return User(**data)
+            except aiohttp.ClientError as e:
+                raise ServiceUnavailableError(f"User service unavailable: {e}")
+
+# Service mesh with actual round-robin load balancing
+class ServiceRegistry:
+    def __init__(self):
+        self.services = {}
+        self._counters = {}
+    
+    def register(self, service_name: str, instances: List[str]):
+        self.services[service_name] = instances
+        self._counters[service_name] = 0
+    
+    def discover(self, service_name: str) -> str:
+        instances = self.services.get(service_name, [])
+        if not instances:
+            raise ServiceNotFoundError(f"Service {service_name} not found")
+        # True round-robin: cycles through instances using a counter
+        index = self._counters[service_name] % len(instances)
+        self._counters[service_name] += 1
+        return instances[index]
+```
+
+**Anti-patterns:**
+- Distributed monolith (tight coupling between services)
+- Chatty interfaces (too many network calls)
+- Shared databases between services
+- Over-reliance on synchronous communication where async would be more appropriate
+
+### Event-Driven Architecture
+
+**Core Principles:**
+```python
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List
+import json
+import uuid
+import asyncio
+import threading
+from enum import Enum
+
+
+class ConcurrencyError(Exception):
+    """Raised when optimistic concurrency check fails in event store."""
+    pass
+
+@dataclass
+class DomainEvent:
+    event_id: str
+    event_type: str
+    aggregate_id: str
+    aggregate_type: str
+    event_data: Dict[str, Any]
+    occurred_at: datetime = field(default_factory=datetime.utcnow)
+    version: int = 1
+
+class EventStore(ABC):
+    @abstractmethod
+    async def append_events(self, stream_id: str, events: List[DomainEvent], expected_version: int = -1):
+        pass
+    
+    @abstractmethod
+    async def get_events(self, stream_id: str, from_version: int = 0) -> List[DomainEvent]:
+        pass
+
+class InMemoryEventStore(EventStore):
+    def __init__(self):
+        self.streams: Dict[str, List[DomainEvent]] = {}
+    
+    async def append_events(self, stream_id: str, events: List[DomainEvent], expected_version: int = -1):
+        if stream_id not in self.streams:
+            self.streams[stream_id] = []
+        
+        current_version = len(self.streams[stream_id])
+        if expected_version != -1 and current_version != expected_version:
+            raise ConcurrencyError(f"Expected version {expected_version}, got {current_version}")
+        
+        self.streams[stream_id].extend(events)
+    
+    async def get_events(self, stream_id: str, from_version: int = 0) -> List[DomainEvent]:
+        return self.streams.get(stream_id, [])[from_version:]
+
+# Event sourcing aggregate pattern
+class OrderAggregate:
+    def __init__(self, order_id: str):
+        self.order_id = order_id
+        self.version = 0
+        self.status = "pending"
+        self.items = []
+        self.total = 0.0
+        self._uncommitted_events = []
+    
+    def add_item(self, item_id: str, quantity: int, price: float):
+        event = DomainEvent(
+            event_id=str(uuid.uuid4()),  # Use UUID for globally unique event IDs
+            event_type="ItemAdded",
+            aggregate_id=self.order_id,
+            aggregate_type="Order",
+            event_data={
+                "item_id": item_id,
+                "quantity": quantity,
+                "price": price
+            }
+        )
+        self._apply_event(event)
+        self._uncommitted_events.append(event)
+    
+    def _apply_event(self, event: DomainEvent):
+        if event.event_type == "ItemAdded":
+            data = event.event_data
+            self.items.append(data)
+            self.total += data["quantity"] * data["price"]
+        elif event.event_type == "OrderConfirmed":
+            self.status = "confirmed"
+        self.version += 1
+    
+    def get_uncommitted_events(self) -> List[DomainEvent]:
+        # Thread-safe: lock prevents race between get and mark_committed
+        with threading.Lock():
+            return self._uncommitted_events.copy()
+    
+    def mark_events_as_committed(self):
+        with threading.Lock():
+            self._uncommitted_events.clear()
+    
+    @classmethod
+    def from_events(cls, order_id: str, events: List[DomainEvent]) -> 'OrderAggregate':
+        aggregate = cls(order_id)
+        for event in events:
+            aggregate._apply_event(event)
+        return aggregate
+
+# Event handler pattern
+class EventHandler(ABC):
+    @abstractmethod
+    async def handle(self, event: DomainEvent):
+        pass
+
+class OrderConfirmationEmailHandler(EventHandler):
+    def __init__(self, email_service: "EmailService"):
+        self.email_service = email_service
+    
+    async def handle(self, event: DomainEvent):
+        if event.event_type == "OrderConfirmed":
+            await self.email_service.send_confirmation_email(
+                event.aggregate_id,
+                event.event_data
+            )
+
+# Event bus implementation
+class EventBus:
+    def __init__(self):
+        self.handlers: Dict[str, List[EventHandler]] = {}
+    
+    def subscribe(self, event_type: str, handler: EventHandler):
+        if event_type not in self.handlers:
+            self.handlers[event_type] = []
+        self.handlers[event_type].append(handler)
+    
+    async def publish(self, event: DomainEvent):
+        handlers = self.handlers.get(event.event_type, [])
+        await asyncio.gather(*[handler.handle(event) for handler in handlers])
+```
+
+### CQRS (Command Query Responsibility Segregation)
+
+```python
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Generic, TypeVar, Optional
+import asyncio
+
+# Command side
+@dataclass
+class CreateOrderCommand:
+    user_id: str
+    items: List[dict]
+
+@dataclass
+class AddItemCommand:
+    order_id: str
+    item_id: str
+    quantity: int
+
+TCommand = TypeVar('TCommand')
+TResult = TypeVar('TResult')
+
+class CommandHandler(ABC, Generic[TCommand, TResult]):
+    @abstractmethod
+    async def handle(self, command: TCommand) -> TResult:
+        pass
+
+class CreateOrderCommandHandler(CommandHandler[CreateOrderCommand, str]):
+    def __init__(self, event_store: EventStore, event_bus: EventBus):
+        self.event_store = event_store
+        self.event_bus = event_bus
+    
+    async def handle(self, command: CreateOrderCommand) -> str:
+        order_id = f"order_{uuid.uuid4()}"
+        aggregate = OrderAggregate(order_id)
+        
+        # Business logic
+        for item in command.items:
+            aggregate.add_item(item["id"], item["quantity"], item["price"])
+        
+        # Persist events
+        events = aggregate.get_uncommitted_events()
+        await self.event_store.append_events(order_id, events)
+        
+        # Publish events
+        for event in events:
+            await self.event_bus.publish(event)
+        
+        aggregate.mark_events_as_committed()
+        return order_id
+
+# Query side - separate read models
+@dataclass
+class OrderSummary:
+    order_id: str
+    user_id: str
+    total: float
+    status: str
+    item_count: int
+
+class OrderQueryService:
+    def __init__(self, read_db):
+        self.read_db = read_db
+    
+    async def get_order_summary(self, order_id: str) -> Optional[OrderSummary]:
+        # Query optimized read model
+        result = await self.read_db.fetch_one(
+            "SELECT order_id, user_id, total, status, item_count FROM order_summaries WHERE order_id = ?",
+            (order_id,)
+        )
+        return OrderSummary(**result) if result else None
+    
+    async def get_user_orders(self, user_id: str, limit: int = 10) -> List[OrderSummary]:
+        results = await self.read_db.fetch_all(
+            "SELECT order_id, user_id, total, status, item_count FROM order_summaries WHERE user_id = ? LIMIT ?",
+            (user_id, limit)
+        )
+        return [OrderSummary(**row) for row in results]
+
+# Read model projector
+class OrderSummaryProjector(EventHandler):
+    def __init__(self, read_db):
+        self.read_db = read_db
+    
+    async def handle(self, event: DomainEvent):
+        if event.event_type == "OrderCreated":
+            await self.read_db.execute(
+                "INSERT INTO order_summaries (order_id, user_id, total, status, item_count) VALUES (?, ?, ?, ?, ?)",
+                (event.aggregate_id, event.event_data["user_id"], 0.0, "pending", 0)
+            )
+        elif event.event_type == "ItemAdded":
+            await self.read_db.execute(
+                "UPDATE order_summaries SET total = total + ?, item_count = item_count + ? WHERE order_id = ?",
+                (event.event_data["price"] * event.event_data["quantity"], event.event_data["quantity"], event.aggregate_id)
+            )
+```
+
+### Clean Architecture / Hexagonal Architecture
+
+```python
+# Domain layer - pure business logic
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List, Optional
+from datetime import datetime
+
+# Domain entities
+@dataclass
+class Product:
+    id: str
+    name: str
+    price: float
+    stock: int
+    
+    def reserve_stock(self, quantity: int):
+        if self.stock < quantity:
+            raise InsufficientStockError(f"Only {self.stock} items available")
+        self.stock -= quantity
+
+# Domain services
+class PricingService:
+    def calculate_discount(self, product: Product, quantity: int) -> float:
+        if quantity >= 10:
+            return product.price * 0.1  # 10% bulk discount
+        return 0.0
+
+# Application layer - use cases
+class OrderService:
+    def __init__(self, 
+                 product_repository: 'ProductRepository',
+                 order_repository: 'OrderRepository',
+                 pricing_service: PricingService,
+                 event_publisher: 'EventPublisher'):
+        self.product_repository = product_repository
+        self.order_repository = order_repository
+        self.pricing_service = pricing_service
+        self.event_publisher = event_publisher
+    
+    async def create_order(self, user_id: str, items: List[dict]) -> str:
+        order = Order(id=generate_id(), user_id=user_id, items=[], total=0.0)
+        
+        for item_data in items:
+            product = await self.product_repository.get_by_id(item_data["product_id"])
+            if not product:
+                raise ProductNotFoundError(f"Product {item_data['product_id']} not found")
+            
+            quantity = item_data["quantity"]
+            product.reserve_stock(quantity)
+            
+            discount = self.pricing_service.calculate_discount(product, quantity)
+            item_total = (product.price * quantity) - discount
+            
+            order.add_item(product.id, quantity, product.price, discount)
+            order.total += item_total
+            
+            await self.product_repository.save(product)
+        
+        await self.order_repository.save(order)
+        await self.event_publisher.publish(OrderCreatedEvent(order.id, user_id))
+        
+        return order.id
+
+# Infrastructure layer - ports and adapters
+class ProductRepository(ABC):
+    @abstractmethod
+    async def get_by_id(self, product_id: str) -> Optional[Product]:
+        pass
+    
+    @abstractmethod
+    async def save(self, product: Product):
+        pass
+
+class SQLProductRepository(ProductRepository):
+    def __init__(self, db_connection):
+        self.db = db_connection
+    
+    async def get_by_id(self, product_id: str) -> Optional[Product]:
+        result = await self.db.fetch_one(
+            "SELECT id, name, price, stock FROM products WHERE id = ?",
+            (product_id,)
+        )
+        return Product(**result) if result else None
+    
+    async def save(self, product: Product):
+        await self.db.execute(
+            "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?",
+            (product.name, product.price, product.stock, product.id)
+        )
+
+# Dependency injection container
+class Container:
+    def __init__(self):
+        self._services = {}
+        self._singletons = {}
+    
+    def register(self, interface, implementation, singleton=False):
+        self._services[interface] = (implementation, singleton)
+    
+    def resolve(self, interface):
+        if interface in self._singletons:
+            return self._singletons[interface]
+        
+        implementation, is_singleton = self._services[interface]
+        instance = implementation()
+        
+        if is_singleton:
+            self._singletons[interface] = instance
+        
+        return instance
+
+# Configuration
+def configure_container() -> Container:
+    container = Container()
+    container.register(ProductRepository, SQLProductRepository, singleton=True)
+    container.register(PricingService, PricingService, singleton=True)
+    return container
+```
+
+### Domain-Driven Design (DDD)
+
+```python
+# Value objects
+@dataclass(frozen=True)
+class Money:
+    amount: float
+    currency: str
+    
+    def __post_init__(self):
+        if self.amount < 0:
+            raise ValueError("Amount cannot be negative")
+        if not self.currency:
+            raise ValueError("Currency is required")
+    
+    def add(self, other: 'Money') -> 'Money':
+        if self.currency != other.currency:
+            raise ValueError("Cannot add different currencies")
+        return Money(self.amount + other.amount, self.currency)
+
+@dataclass(frozen=True)
+class Email:
+    value: str
+    
+    def __post_init__(self):
+        if "@" not in self.value:
+            raise ValueError("Invalid email format")
+
+# Aggregate root
+class Customer:
+    def __init__(self, customer_id: str, email: Email):
+        self.id = customer_id
+        self.email = email
+        self._orders: List[Order] = []
+        self._domain_events: List[DomainEvent] = []
+    
+    def place_order(self, order_items: List[dict]) -> 'Order':
+        order = Order(
+            id=generate_id(),
+            customer_id=self.id,
+            items=order_items
+        )
+        self._orders.append(order)
+        
+        # Raise domain event
+        self._domain_events.append(
+            OrderPlacedEvent(order.id, self.id, order.total)
+        )
+        
+        return order
+    
+    def get_domain_events(self) -> List[DomainEvent]:
+        return self._domain_events.copy()
+    
+    def clear_domain_events(self):
+        self._domain_events.clear()
+
+# Domain service
+class CustomerCreditService:
+    def __init__(self, credit_repository: 'CreditRepository'):
+        self.credit_repository = credit_repository
+    
+    async def check_credit_limit(self, customer_id: str, amount: Money) -> bool:
+        credit_info = await self.credit_repository.get_by_customer(customer_id)
+        return credit_info.available_credit.amount >= amount.amount
+
+# Repository pattern with specifications
+class Specification(ABC):
+    @abstractmethod
+    def is_satisfied_by(self, candidate) -> bool:
+        pass
+    
+    def and_(self, other: 'Specification') -> 'Specification':
+        return AndSpecification(self, other)
+
+class HighValueCustomerSpecification(Specification):
+    def __init__(self, minimum_order_value: Money):
+        self.minimum_order_value = minimum_order_value
+    
+    def is_satisfied_by(self, customer: Customer) -> bool:
+        total_orders = sum(order.total.amount for order in customer._orders)
+        return total_orders >= self.minimum_order_value.amount
+
+class CustomerRepository(ABC):
+    @abstractmethod
+    async def find_by_specification(self, spec: Specification) -> List[Customer]:
+        pass
+    
+    @abstractmethod
+    async def get_by_id(self, customer_id: str) -> Optional[Customer]:
+        pass
+    
+    @abstractmethod
+    async def save(self, customer: Customer):
+        pass
+
+# Bounded context integration
+class OrderContext:
+    def __init__(self, order_service: OrderService):
+        self.order_service = order_service
+    
+    async def handle_customer_registered(self, event: CustomerRegisteredEvent):
+        # Create welcome order or setup customer preferences
+        await self.order_service.setup_new_customer(event.customer_id)
+
+class CustomerContext:
+    def __init__(self, customer_service: CustomerService):
+        self.customer_service = customer_service
+    
+    async def handle_order_placed(self, event: OrderPlacedEvent):
+        # Update customer statistics
+        await self.customer_service.update_order_history(
+            event.customer_id, 
+            event.order_total
+        )
+```
+
+## 2. API Design Best Practices
+
+### REST API Design
+
+```python
+from fastapi import FastAPI, HTTPException, Depends, Query, Path
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel, Field, validator
+from typing import List, Optional
+from datetime import datetime
+import jwt
+import os
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
+
+# Request/Response models with validation
+class CreateUserRequest(BaseModel):
+    email: str = Field(..., regex=r'^[^@]+@[^@]+\.[^@]+$')
+    name: str = Field(..., min_length=1, max_length=100)
+    age: Optional[int] = Field(None, ge=0, le=150)
+    
+    @validator('email')
+    def email_must_be_lowercase(cls, v):
+        return v.lower()
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    name: str
+    age: Optional[int]
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        orm_mode = True
+
+class PaginatedResponse(BaseModel):
+    items: List[UserResponse]
+    total: int
+    page: int
+    size: int
+    has_next: bool
+    has_prev: bool
+
+# Error handling
+class APIError(BaseModel):
+    error_code: str
+    message: str
+    details: Optional[dict] = None
+
+class ErrorHandler:
+    @staticmethod
+    def validation_error(details: dict) -> HTTPException:
+        return HTTPException(
+            status_code=422,
+            detail=APIError(
+                error_code="VALIDATION_ERROR",
+                message="Request validation failed",
+                details=details
+            ).dict()
+        )
+    
+    @staticmethod
+    def not_found(resource: str, id: str) -> HTTPException:
+        return HTTPException(
+            status_code=404,
+            detail=APIError(
+                error_code="RESOURCE_NOT_FOUND",
+                message=f"{resource} not found",
+                details={"id": id}
+            ).dict()
+        )
+
+# Authentication and authorization
+security = HTTPBearer()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        return user_id
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+# Rate limiting
+from functools import wraps
+import time
+from collections import defaultdict
+
+class RateLimiter:
+    def __init__(self, max_requests: int, window_seconds: int):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self.requests = defaultdict(list)
+    
+    def is_allowed(self, key: str) -> bool:
+        now = time.time()
+        window_start = now - self.window_seconds
+        
+        # Clean old requests
+        self.requests[key] = [req_time for req_time in self.requests[key] if req_time > window_start]
+        
+        if len(self.requests[key]) >= self.max_requests:
+            return False
+        
+        self.requests[key].append(now)
+        return True
+
+rate_limiter = RateLimiter(max_requests=100, window_seconds=3600)
+
+def rate_limit(key_func=lambda request: request.client.host):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(request, *args, **kwargs):
+            key = key_func(request)
+            if not rate_limiter.is_allowed(key):
+                raise HTTPException(status_code=429, detail="Rate limit exceeded")
+            return await func(request, *args, **kwargs)
+        return wrapper
+    return decorator
+
+# API versioning
+app = FastAPI(title="User API", version="2.0.0")
+
+@app.get("/v2/users", response_model=PaginatedResponse)
+async def list_users(
+    page: int = Query(1, ge=1, description="Page number"),
+    size: int = Query(10, ge=1, le=100, description="Page size"),
+    search: Optional[str] = Query(None, description="Search term"),
+    sort_by: str = Query("created_at", description="Sort field"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$"),
+    current_user: str = Depends(get_current_user)
+):
+    """
+    Retrieve a paginated list of users.
+    
+    - **page**: Page number (starts from 1)
+    - **size**: Number of items per page (max 100)
+    - **search**: Optional search term to filter users
+    - **sort_by**: Field to sort by
+    - **sort_order**: Sort order (asc or desc)
+    """
+    try:
+        users, total = await user_service.list_users(
+            page=page,
+            size=size,
+            search=search,
+            sort_by=sort_by,
+            sort_order=sort_order
+        )
+        
+        return PaginatedResponse(
+            items=users,
+            total=total,
+            page=page,
+            size=size,
+            has_next=(page * size) < total,
+            has_prev=page > 1
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.post("/v2/users", response_model=UserResponse, status_code=201)
+async def create_user(
+    user_data: CreateUserRequest,
+    current_user: str = Depends(get_current_user)
+):
+    """Create a new user."""
+    try:
+        user = await user_service.create_user(user_data.dict())
+        return UserResponse.from_orm(user)
+    except ValidationError as e:
+        raise ErrorHandler.validation_error(e.errors())
+    except DuplicateEmailError:
+        raise HTTPException(
+            status_code=409,
+            detail=APIError(
+                error_code="DUPLICATE_EMAIL",
+                message="User with this email already exists"
+            ).dict()
+        )
+
+@app.get("/v2/users/{user_id}", response_model=UserResponse)
+async def get_user(
+    user_id: str = Path(..., description="User ID"),
+    current_user: str = Depends(get_current_user)
+):
+    """Get user by ID."""
+    user = await user_service.get_user(user_id)
+    if not user:
+        raise ErrorHandler.not_found("User", user_id)
+    return UserResponse.from_orm(user)
+
+# Content negotiation and caching
+from fastapi.responses import JSONResponse
+from fastapi import Request
+
+@app.get("/v2/users/{user_id}/profile")
+async def get_user_profile(
+    request: Request,
+    user_id: str = Path(...),
+    current_user: str = Depends(get_current_user)
+):
+    """Get user profile with caching headers."""
+    user = await user_service.get_user(user_id)
+    if not user:
+        raise ErrorHandler.not_found("User", user_id)
+    
+    # ETags for caching
+    etag = f'"{hash(str(user.updated_at))}"'
+    if request.headers.get("If-None-Match") == etag:
+        return JSONResponse(status_code=304, content=None)
+    
+    response = JSONResponse(content=UserResponse.from_orm(user).dict())
+    response.headers["ETag"] = etag
+    response.headers["Cache-Control"] = "private, max-age=300"
+    return response
+
+# Bulk operations
+class BulkUpdateRequest(BaseModel):
+    user_ids: List[str] = Field(..., max_items=100)
+    updates: dict
+
+@app.patch("/v2/users/bulk", response_model=List[UserResponse])
+async def bulk_update_users(
+    bulk_request: BulkUpdateRequest,
+    current_user: str = Depends(get_current_user)
+):
+    """Bulk update users."""
+    results = await user_service.bulk_update(
+        bulk_request.user_ids,
+        bulk_request.updates
+    )
+    return [UserResponse.from_orm(user) for user in results]
+```
+
+### GraphQL API Design
+
+```python
+import strawberry
+from strawberry.fastapi import GraphQLRouter
+from typing import List, Optional
+from dataclasses import dataclass
+import asyncio
+
+# GraphQL types
+@strawberry.type
+class User:
+    id: str
+    email: str
+    name: str
+    age: Optional[int]
+    created_at: str
+    
+    @strawberry.field
+    async def orders(self, info) -> List['Order']:
+        """Lazy load user orders."""
+        order_service = info.context["order_service"]
+        return await order_service.get_user_orders(self.id)
+
+@strawberry.type
+class Order:
+    id: str
+    user_id: str
+    total: float
+    status: str
+    created_at: str
+    
+    @strawberry.field
+    async def user(self, info) -> User:
+        """Lazy load order user."""
+        user_service = info.context["user_service"]
+        return await user_service.get_user(self.user_id)
+    
+    @strawberry.field
+    async def items(self, info) -> List['OrderItem']:
+        """Lazy load order items."""
+        order_service = info.context["order_service"]
+        return await order_service.get_order_items(self.id)
+
+@strawberry.type
+class OrderItem:
+    id: str
+    order_id: str
+    product_id: str
+    quantity: int
+    price: float
+
+# Input types
+@strawberry.input
+class CreateUserInput:
+    email: str
+    name: str
+    age: Optional[int] = None
+
+@strawberry.input
+class UserFilter:
+    email: Optional[str] = None
+    name_contains: Optional[str] = None
+    min_age: Optional[int] = None
+    max_age: Optional[int] = None
+
+@strawberry.input
+class PaginationInput:
+    page: int = 1
+    size: int = 10
+
+# DataLoader for N+1 problem prevention
+from strawberry.dataloader import DataLoader
+
+class UserDataLoader:
+    def __init__(self, user_service):
+        self.user_service = user_service
+        self.loader = DataLoader(load_fn=self.load_users)
+    
+    async def load_users(self, user_ids: List[str]) -> List[User]:
+        users = await self.user_service.get_users_by_ids(user_ids)
+        user_map = {user.id: user for user in users}
+        return [user_map.get(user_id) for user_id in user_ids]
+    
+    async def load(self, user_id: str) -> Optional[User]:
+        return await self.loader.load(user_id)
+
+# Query resolvers
+@strawberry.type
+class Query:
+    @strawberry.field
+    async def users(
+        self,
+        info,
+        filter: Optional[UserFilter] = None,
+        pagination: Optional[PaginationInput] = None
+    ) -> List[User]:
+        """Get users with filtering and pagination."""
+        user_service = info.context["user_service"]
+        return await user_service.get_users(filter, pagination)
+    
+    @strawberry.field
+    async def user(self, info, id: str) -> Optional[User]:
+        """Get user by ID."""
+        user_loader = info.context["user_loader"]
+        return await user_loader.load(id)
+    
+    @strawberry.field
+    async def search_users(self, info, query: str, limit: int = 10) -> List[User]:
+        """Full-text search users."""
+        search_service = info.context["search_service"]
+        return await search_service.search_users(query, limit)
+
+# Mutation resolvers
+@strawberry.type
+class Mutation:
+    @strawberry.field
+    async def create_user(self, info, input: CreateUserInput) -> User:
+        """Create a new user."""
+        user_service = info.context["user_service"]
+        try:
+            user = await user_service.create_user(input.__dict__)
+            return User(**user.__dict__)
+        except ValidationError as e:
+            raise Exception(f"Validation error: {e}")
+    
+    @strawberry.field
+    async def update_user(self, info, id: str, input: CreateUserInput) -> Optional[User]:
+        """Update an existing user."""
+        user_service = info.context["user_service"]
+        user = await user_service.update_user(id, input.__dict__)
+        return User(**user.__dict__) if user else None
+    
+    @strawberry.field
+    async def delete_user(self, info, id: str) -> bool:
+        """Delete a user."""
+        user_service = info.context["user_service"]
+        return await user_service.delete_user(id)
+
+# Subscription for real-time updates
+@strawberry.type
+class Subscription:
+    @strawberry.subscription
+    async def user_updates

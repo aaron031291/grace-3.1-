@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import './SearchInternetButton.css';
+import { API_BASE_URL } from '../config/api';
 
 /**
  * Button component that triggers auto-search when no results are found.
@@ -14,7 +14,7 @@ export default function SearchInternetButton({ query, folderPath, chatId, onSear
     const logSystemMessage = async (content) => {
         if (!chatId) return;
         try {
-            await fetch(`http://localhost:8000/chats/${chatId}/messages`, {
+            await fetch(`${API_BASE_URL}/chats/${chatId}/messages`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ role: 'system', content: content })
@@ -42,7 +42,7 @@ export default function SearchInternetButton({ query, folderPath, chatId, onSear
             });
 
             // Call the auto-search endpoint with query parameters
-            const response = await fetch(`http://localhost:8000/retrieve/search-with-auto?${params}`, {
+            const response = await fetch(`${API_BASE_URL}/retrieve/search-with-auto?${params}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function SearchInternetButton({ query, folderPath, chatId, onSear
         while (attempts < maxAttempts) {
             try {
                 // Check status of first job (they all run together)
-                const response = await fetch(`http://localhost:8000/scrape/status/${jobIds[0]}`);
+                const response = await fetch(`${API_BASE_URL}/scrape/status/${jobIds[0]}`);
                 const status = await response.json();
 
                 if (status.status === 'completed') {

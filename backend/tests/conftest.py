@@ -23,6 +23,10 @@ sys.path.insert(0, str(backend_dir))
 # Set test environment
 os.environ["TESTING"] = "true"
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ.setdefault("SKIP_EMBEDDING_LOAD", "true")
+os.environ.setdefault("SKIP_QDRANT_CHECK", "true")
+os.environ.setdefault("SKIP_OLLAMA_CHECK", "true")
+os.environ.setdefault("SKIP_AUTO_INGESTION", "true")
 
 # Diagnostic data collection
 _diagnostics: Dict[str, Any] = {

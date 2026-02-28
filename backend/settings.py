@@ -80,23 +80,20 @@ class Settings:
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
     MAX_NUM_PREDICT: int = int(os.getenv("MAX_NUM_PREDICT", "512"))
 
-    # ==================== Component Control Flags ====================
-    SKIP_QDRANT_CHECK: bool = os.getenv("SKIP_QDRANT_CHECK", "false").lower() == "true"
-    SKIP_OLLAMA_CHECK: bool = os.getenv("SKIP_OLLAMA_CHECK", "false").lower() == "true"
-    SKIP_AUTO_INGESTION: bool = os.getenv("SKIP_AUTO_INGESTION", "false").lower() == "true"
-    SKIP_EMBEDDING_LOAD: bool = os.getenv("SKIP_EMBEDDING_LOAD", "false").lower() == "true"
-    LIGHTWEIGHT_MODE: bool = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
-    DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
+    # ==================== Component Control Flags (deduplicated) ====================
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
 
-    # ==================== Error Handling Configuration ====================
-    SUPPRESS_INGESTION_ERRORS: bool = os.getenv("SUPPRESS_INGESTION_ERRORS", "false").lower() == "true"
+    # ==================== Error Handling (deduplicated) ====================
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
     SUPPRESS_QDRANT_ERRORS: bool = os.getenv("SUPPRESS_QDRANT_ERRORS", "false").lower() == "true"
     SUPPRESS_EMBEDDING_ERRORS: bool = os.getenv("SUPPRESS_EMBEDDING_ERRORS", "false").lower() == "true"
 
     # ==================== Ingestion Configuration ====================
     EXCLUDE_GENESIS_FROM_INGESTION: bool = os.getenv("EXCLUDE_GENESIS_FROM_INGESTION", "true").lower() == "true"
+
+    # ==================== Consensus Engine ====================
+    CONSENSUS_BATCH_SCHEDULE: str = os.getenv("CONSENSUS_BATCH_SCHEDULE", "daily")
+    CONSENSUS_MAX_BATCH_SIZE: int = int(os.getenv("CONSENSUS_MAX_BATCH_SIZE", "5"))
 
     # ==================== SerpAPI Configuration ====================
     SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")
@@ -106,10 +103,25 @@ class Settings:
 
 
     # ==================== LLM Provider Configuration ====================
-    # LLM_PROVIDER: 'ollama' or 'openai'
+    # LLM_PROVIDER: 'ollama', 'openai', or 'kimi'
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama").lower()
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "")
+
+    # ==================== Kimi 2.5 (Moonshot AI) Configuration ====================
+    KIMI_API_KEY: str = os.getenv("KIMI_API_KEY", "")
+    KIMI_BASE_URL: str = os.getenv("KIMI_BASE_URL", "https://api.moonshot.ai/v1")
+    KIMI_MODEL: str = os.getenv("KIMI_MODEL", "kimi-k2.5")
+
+    # ==================== Opus (Anthropic Claude) Configuration ====================
+    OPUS_API_KEY: str = os.getenv("OPUS_API_KEY", "")
+    OPUS_BASE_URL: str = os.getenv("OPUS_BASE_URL", "https://api.anthropic.com/v1")
+    OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
+
+    # ==================== Local Model Configuration (per-task) ====================
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:7b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "deepseek-r1:7b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen2.5:7b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
