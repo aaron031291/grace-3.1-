@@ -519,12 +519,39 @@ def run_consensus(
         source=source,
     )
 
+    # Route disagreements to governance approval queue
+    if disagreements:
+        try:
+            from cognitive.event_bus import publish
+            publish("consensus.disagreement", {
+                "models": models,
+                "disagreements": disagreements,
+                "prompt_preview": prompt[:200],
+                "requires_governance": True,
+            }, source="consensus_engine")
+        except Exception:
+            pass
+
+    # Log to reporting engine
+    try:
+        from cognitive.event_bus import publish
+        publish("consensus.completed", {
+            "models": models,
+            "agreements": len(agreements),
+            "disagreements": len(disagreements),
+            "confidence": result.confidence,
+            "latency_ms": result.total_latency_ms,
+            "passed": verification["passed"],
+        }, source="consensus_engine")
+    except Exception:
+        pass
+
     # Track via Genesis
     try:
         from api._genesis_tracker import track
         track(
             key_type="ai_response",
-            what=f"Consensus roundtable: {len(models)} models, {len(agreements)} agreements",
+            what=f"Consensus roundtable: {len(models)} models, {len(agreements)} agreements, {len(disagreements)} disagreements",
             how="consensus_engine.run_consensus",
             output_data={
                 "models": models,
@@ -532,6 +559,7 @@ def run_consensus(
                 "passed_verification": verification["passed"],
                 "agreements": len(agreements),
                 "disagreements": len(disagreements),
+                "disagreement_details": disagreements[:5],
             },
             tags=["consensus", "roundtable", source],
         )

@@ -351,6 +351,41 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         description="Graph consistency validation → relationship verification → redundancy detection → optimization → consensus on changes. Rollback: last consistent checkpoint. Fallback: simplified graph.",
         max_depth=4,
     ),
+
+    # ── 4 Missing Loops from Kimi+Opus Consensus Audit ────────────────
+
+    "resource_exhaustion": NamedLoop(
+        name="Resource Exhaustion Loop",
+        category="homeostasis",
+        components=["central_orchestrator", "immune_system", "event_bus"],
+        status="healthy",
+        description="Trigger: RAM > 85%. Action: spin down idle processes, flush caches, notify. Rollback: restore previous load. Fallback: safe mode.",
+        max_depth=2,
+    ),
+    "model_drift_detection": NamedLoop(
+        name="Model Drift Detection Loop",
+        category="trust",
+        components=["intelligence_layer", "trust_engine", "consensus_engine", "event_bus"],
+        status="healthy",
+        description="Trigger: LLM quality drops >15% vs baseline. Action: auto-switch primary model, flag in UI. Rollback: revert model. Fallback: use consensus.",
+        max_depth=3,
+    ),
+    "user_feedback": NamedLoop(
+        name="User Feedback Loop",
+        category="learning",
+        components=["unified_memory", "intelligence_layer", "trust_engine", "event_bus"],
+        status="healthy",
+        description="Trigger: 3+ thumbs-down on one topic. Action: flag knowledge gap, trigger learning cycle. Rollback: N/A. Fallback: route to human.",
+        max_depth=4,
+    ),
+    "ethics_governance": NamedLoop(
+        name="Ethics & Governance Loop",
+        category="safety",
+        components=["governance_wrapper", "trust_engine", "consensus_engine", "event_bus"],
+        status="healthy",
+        description="Trigger: governance rule violated. Action: halt response, queue for human review, log incident. Rollback: block action. Fallback: most restrictive policy.",
+        max_depth=1,
+    ),
 }
 
 # Thread-local call depth tracking

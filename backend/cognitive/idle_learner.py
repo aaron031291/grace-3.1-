@@ -175,6 +175,22 @@ class IdleLearner:
                 except Exception:
                     pass
 
+                # Route research output to Librarian for organisation
+                try:
+                    from cognitive.librarian_autonomous import AutonomousLibrarian
+                    librarian = AutonomousLibrarian()
+                    from pathlib import Path
+                    from settings import settings
+                    kb = Path(settings.KNOWLEDGE_BASE_PATH)
+                    research_dir = kb / "research" / category.replace(" ", "_")
+                    research_dir.mkdir(parents=True, exist_ok=True)
+                    safe_name = topic.replace(" ", "_").replace("/", "_")[:40]
+                    research_file = research_dir / f"{safe_name}.md"
+                    research_file.write_text(f"# {topic}\n\n{teaching['knowledge']}")
+                    librarian.organise_file(str(research_file))
+                except Exception:
+                    pass
+
                 logger.info(f"[IDLE LEARNER] Taught: {topic} ({len(teaching['knowledge'])} chars)")
             else:
                 result["success"] = False

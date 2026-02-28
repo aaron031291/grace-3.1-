@@ -553,7 +553,37 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             <div className="message-content">
               <div className="message-role">{msg.role}</div>
               {msg.content ? (
-                <div className="message-text">{msg.content}</div>
+                <div className="message-text">
+                  {msg.content}
+                  {msg.role === 'assistant' && !msg.isSystemMessage && (
+                    <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'center' }}>
+                      <button onClick={() => {
+                        try {
+                          fetch(`${API_BASE_URL}/api/oracle/feedback`, {
+                            method: 'POST', headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'positive'}),
+                          });
+                        } catch {}
+                        msg._feedback = 'up';
+                      }} title="Good response" style={{
+                        background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
+                        opacity: msg._feedback === 'up' ? 1 : 0.4,
+                      }}>👍</button>
+                      <button onClick={() => {
+                        try {
+                          fetch(`${API_BASE_URL}/api/oracle/feedback`, {
+                            method: 'POST', headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'negative'}),
+                          });
+                        } catch {}
+                        msg._feedback = 'down';
+                      }} title="Bad response" style={{
+                        background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
+                        opacity: msg._feedback === 'down' ? 1 : 0.4,
+                      }}>👎</button>
+                    </div>
+                  )}
+                </div>
               ) : msg.is_streaming && (!msg.tool_calls || msg.tool_calls.length === 0) ? (
                 <div className="loading-text" style={{ marginTop: '0.5rem' }}>
                   Starting agent workflow...

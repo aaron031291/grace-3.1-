@@ -234,6 +234,37 @@ class GovernanceAwareLLM(BaseLLMClient):
 
         latency = (_time.time() - start) * 1000
         _track_llm_call(prompt[:200], result if isinstance(result, str) else str(result)[:200], provider_name, latency)
+
+        # Hallucination guard on EVERY call (TIEBREAK-001: quality over quantity)
+        result = self._hallucination_check(result, prompt)
+
+        return result
+
+    def _hallucination_check(self, result, prompt: str):
+        """Quick hallucination check on every LLM response."""
+        if not isinstance(result, str) or len(result) < 20:
+            return result
+        try:
+            flags = []
+            lower = result.lower()
+            if "as an ai language model" in lower:
+                flags.append("self_referential")
+            if any(p in lower for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
+                flags.append("overconfident")
+            if len(result) < 30 and "?" not in prompt:
+                flags.append("suspiciously_short")
+
+            if flags:
+                try:
+                    from cognitive.event_bus import publish_async
+                    publish_async("hallucination.detected", {
+                        "flags": flags, "provider": type(self._inner).__name__,
+                        "prompt_preview": prompt[:100],
+                    }, source="governance_wrapper")
+                except Exception:
+                    pass
+        except Exception:
+            pass
         return result
 
     def chat(
