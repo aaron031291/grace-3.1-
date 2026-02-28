@@ -27,6 +27,7 @@ class Episode(BaseModel):
     - Episodic Memory = learning substrate (used for pattern extraction)
     """
     __tablename__ = "episodes"
+    __table_args__ = {"extend_existing": True}
 
     # What happened
     problem = Column(Text, nullable=False)

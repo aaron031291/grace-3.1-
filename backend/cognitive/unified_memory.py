@@ -220,13 +220,14 @@ class UnifiedMemory:
         }
 
         # Magma graph memory
+        results["magma"] = []
         try:
             from cognitive.magma_bridge import query_context
             ctx = query_context(query[:200])
             if ctx:
                 results["magma"] = [{"context": ctx[:500]}]
         except Exception:
-            results["magma"] = []
+            pass
 
         # Flash cache references
         try:

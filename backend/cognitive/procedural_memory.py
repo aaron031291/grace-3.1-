@@ -26,6 +26,7 @@ class Procedure(BaseModel):
     vs "What is a Dockerfile" (semantic knowledge)
     """
     __tablename__ = "procedures"
+    __table_args__ = {"extend_existing": True}
 
     # Identification
     name = Column(String, nullable=False, unique=True)
