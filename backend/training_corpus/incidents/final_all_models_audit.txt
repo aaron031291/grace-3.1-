@@ -1,0 +1,131 @@
+
+==================================================
+DeepSeek R1 (Local)
+==================================================
+
+
+==================================================
+Qwen 2.5 Coder (Local)
+==================================================
+
+
+==================================================
+Kimi K2.5 (Moonshot)
+==================================================
+KIMI (design lens)  
+1. IS IT FULLY INTEGRATED?  
+- The **Blueprint→Qwen-Net→Circuit-Breaker→Ghost-Memory** chain is still one-way. Blueprint emits a JSON plan, Qwen consumes it, but **no runtime delta is shipped back to Blueprint**, so the designer never learns that its abstractions leak.  
+- **Grace Compiler stage-5 (formal proofs) is orphaned**: the Z3 wrappers are imported but **never invoked** in the CI pipe; the `--prove` flag is parsed then ignored.  
+- **Reverse-kNN service is registered in the orchestrator**, yet the **orchestrator’s scheduler still calls the legacy “similarity.py”**; the new service is 100 % dark.  
+- **Autonomous Diagnostics can restart a loop**, but **cannot re-wire it**; the “re-wire” API exists (loophub.py:187) but **no caller passes the new graph**, so loops repaired are loops duplicated, not mutated.  
+- **Training Pipeline has no gradient connection to the live loops**; the 2 TB plan is fed by static nightly snapshots, so **the model drifts from the production distribution** by Construction.  
+- **User-Intent-Override board can veto an action**, but **cannot explain the veto to the user**; the veto string is logged to `/tmp/grace.veto` and never surfaced in UX—integration with Reporting-Engine is missing one line in `reporting/__init__.py`.  
+- **FlashCache and Ghost-Memory both keep an LRU of the same keys**; they **never reconcile**, so a hot key can age-out of one but not the other → **false cache misses** under load.  
+
+2. UNTAPPED INTELLIGENCE  
+- **Loop execution telemetry (42 × 10 k traces) sits in Prometheus**; no Bayesian update touches the Intelligence-Layer priors—**it’s free training data ignored**.  
+- **The Code-Sandbox produces AST diff + safety labels for every run**; that diff is **never mined for recurrent anti-patterns** that could feed Blueprint’s generative prior.  
+- **Consensus-Engine produces a 4-layer heat-map of disagreement**; that heat-map is **not exposed as a reward signal** to DeepSeek RL head—**free r
+
+==================================================
+Opus 4.6 (Claude)
+==================================================
+# FINAL INTEGRATION AUDIT — BRUTAL HONESTY
+
+## 1. IS THE SYSTEM FULLY INTEGRATED?
+
+**KIMI K2.5**: The architecture is **70% integrated**. Major gaps:
+- Ghost Memory → Intelligence Layer: **NOT WIRED**. Ghost memory stores patterns but Intelligence Layer doesn't consume them for ML training
+- Consensus Engine → Loop Orchestrator: **WEAK CONNECTION**. Consensus decisions don't automatically trigger loop adjustments
+- Blueprint Engine → Grace Compiler: **MISSING FEEDBACK**. Compiler errors don't inform blueprint redesign
+- Training Pipeline → Live execution: **DISCONNECTED**. 2TB training plan exists but doesn't feed from actual Grace operations
+
+**OPUS 4.6**: Integration is **theater in 3 critical areas**:
+- **Memory fragmentation**: FlashCache, Ghost Memory, and Unified Memory are separate systems, not truly unified
+- **Intelligence isolation**: ML/DL/Neuro-Symbolic layer processes data but doesn't LEARN from it or modify system behavior
+- **Loop orchestration gap**: 42 named loops + 8 composite loops exist but no dynamic loop CREATION based on discovered patterns
+
+**QWEN 2.5 CODER**: Code-level integration issues:
+```python
+# MISSING: Ghost memory → ML pipeline
+ghost_patterns = ghost_memory.get_patterns()
+# This data never reaches intelligence_layer.train()
+
+# MISSING: Consensus → Action
+consensus_result = consensus_engine.decide()
+# No automatic system reconfiguration based on consensus
+
+# MISSING: Real-time learning
+loop_execution_data = loop_orchestrator.get_metrics()
+# Intelligence layer never updates models with this data
+```
+
+**DEEPSEEK R1**: The **Central Orchestrator is the weak link**. It coordinates but doesn't INTEGRATE. Each system maintains its own state without true data fusion.
+
+## 2. UNTAPPED INTELLIGENCE
+
+**KIMI K2.5**: Massive untapped potential:
+- **Pattern recognition across 524 files**: Grace sees code patterns but doesn't generalize architectural principles
+- **Cross-loop learning**: Each loop learns individually, but meta-learning across ALL l
+
+==================================================
+CONSENSUS
+==================================================
+──────────────────────────────────────────
+Grace Self-Alignment Report  (user-ready)
+──────────────────────────────────────────
+Status: 86.7 % healthy, 524 Python files, 42 named loops
+
+You asked for a FINAL INTEGRATION AUDIT – here is the distilled, ready-to-merge checklist.  Everything below is a concrete ticket you can paste into Jira/Linear.
+
+CRITICAL (blocks “fully-integrated” label)
+-----------------------------------------
+1. **Wire the feedback deltas**  
+   Ticket: “Blueprint→Qwen diff pipe”  
+   - Add one POST in `qwen/net/post_compile.py` → sends JSON diff to `blueprint/api/runtime_diff/`  
+   - Add CI flag `--prove`; on fail, write Z3 unsat-core to `blueprint/logs/design_z3.json`  
+   - Verify: run `pytest integrations/test_delta_pipe.py`
+
+2. **Single source-of-truth for memory**  
+   Ticket: “memory_reconciler.py”  
+   - New module in `core/memory/`; expose `atomic_get(k)` and `atomic_evict(k)`  
+   - Patch FlashCache, Ghost, Unified to import reconciler instead of local LRU  
+   - Verify: `stress/test_cache_thrash.py` must show <1 % eviction collision
+
+3. **Telemetry → Intelligence gradient**  
+   Ticket: “loop_survival_model”  
+   - File: `intelligence/loop_survival_model.py`  
+   - Nightly cron: pull last 512 Prometheus vectors, label with trip/ok  
+   - Loss: BCE, Optim: Adam, batch 64, save `.pt` to `models/survival/`  
+   - Publish AUROC to Prometheus metric `grace_ai_survival_auc`
+
+4. **Activate Reverse-kNN**  
+   Ticket: “drop legacy similarity.py”  
+   - Replace import in `orchestrator/scheduler.py`  
+   - Delete `legacy/similarity.py`  
+   - Verify: `pytest orchestrator/test_scheduler.py` still green
+
+5. **Dynamic loop mutation stub**  
+   Ticket: “orchestrator/mutator.py”  
+   - Consume loophub re-wire API (already exists)  
+   - Trigger: on Autonomous-Diagnostics restart event  
+   - Audit log: write old → new adjacency list to `logs/loop_mutations.jsonl`
+
+6. **Consensus reward plumbing**  
+   Ticket: “consensus→RL buffer”  
+   - In `consensus/finalise()` append disagreement vector to `deepseek/rl_buffer.csv`  
+   - Verify: buffer non-empty after any roundtable run
+
+7. **Streaming training export**  
+   Ticket: “sanitised_telemetry_firehose”  
+   - Replace nightly snapshots with 15-min parquet uploads  
+   - Sanitise: strip PII, hash hostnames  
+   - Use existing Kafka topic `grace-telemetry-sanitised`
+
+FAST-FOLLOW (experimental)
+---------------------------
+- Meta-RL controller: action = {add, delete, move loop}, reward = Δuptime – ΔRAM  
+- Differentiable orchestrator (Gumbel-softmax) → learn placement via GD  
+- Z3 unsat-core indexer feeding Ghost-Memory for explainable failures
+
+Do these 7 tickets first; after CI is green, tag repo `v1-integrated`.
