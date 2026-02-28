@@ -1,0 +1,889 @@
+# Software Engineering Knowledge Dump - Part 2
+
+## 11. Error Handling & Resilience Patterns
+
+### Retry with Exponential Backoff
+
+```python
+import asyncio
+import random
+import time
+from typing import Callable, Any, Optional, Type
+from functools import wraps
+import logging
+
+class RetryConfig:
+    def __init__(
+        self,
+        max_attempts: int = 3,
+        base_delay: float = 1.0,
+        max_delay: float = 60.0,
+        exponential_base: float = 2.0,
+        jitter: bool = True,
+        retryable_exceptions: tuple = (Exception,)
+    ):
+        self.max_attempts = max_attempts
+        self.base_delay = base_delay
+        self.max_delay = max_delay
+        self.exponential_base = exponential_base
+        self.jitter = jitter
+        self.retryable_exceptions = retryable_exceptions
+
+def retry_with_backoff(config: RetryConfig):
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            last_exception = None
+            
+            for attempt in range(config.max_attempts):
+                try:
+                    return await func(*args, **kwargs)
+                except config.retryable_exceptions as e:
+                    last_exception = e
+                    
+                    if attempt == config.max_attempts - 1:
+                        break
+                    
+                    # Calculate delay with exponential backoff
+                    delay = min(
+                        config.base_delay * (config.exponential_base ** attempt),
+                        config.max_delay
+                    )
+                    
+                    # Add jitter to prevent thundering herd
+                    if config.jitter:
+                        delay *= (0.5 + random.random() * 0.5)
+                    
+                    logging.warning(
+                        f"Attempt {attempt + 1} failed: {e}. "
+                        f"Retrying in {delay:.2f}s"
+                    )
+                    await asyncio.sleep(delay)
+            
+            raise last_exception
+        
+        @wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            last_exception = None
+            
+            for attempt in range(config.max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except config.retryable_exceptions as e:
+                    last_exception = e
+                    
+                    if attempt == config.max_attempts - 1:
+                        break
+                    
+                    delay = min(
+                        config.base_delay * (config.exponential_base ** attempt),
+                        config.max_delay
+                    )
+                    
+                    if config.jitter:
+                        delay *= (0.5 + random.random() * 0.5)
+                    
+                    logging.warning(
+                        f"Attempt {attempt + 1} failed: {e}. "
+                        f"Retrying in {delay:.2f}s"
+                    )
+                    time.sleep(delay)
+            
+            raise last_exception
+        
+        return async_wrapper if asyncio.iscoroutinefunction(func) else sync_wrapper
+    return decorator
+
+# Usage example
+@retry_with_backoff(RetryConfig(
+    max_attempts=5,
+    base_delay=0.5,
+    retryable_exceptions=(ConnectionError, TimeoutError)
+))
+async def unreliable_api_call(url: str) -> dict:
+    # Simulate unreliable API
+    if random.random() < 0.7:
+        raise ConnectionError("Network error")
+    return {"status": "success", "data": "response"}
+```
+
+### Circuit Breaker Implementation
+
+```python
+import asyncio
+import time
+from enum import Enum
+from typing import Callable, Any, Optional
+from dataclasses import dataclass
+import threading
+
+class CircuitState(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+@dataclass
+class CircuitBreakerConfig:
+    failure_threshold: int = 5
+    recovery_timeout: float = 60.0
+    expected_exception: Type[Exception] = Exception
+    success_threshold: int = 3  # For half-open state
+
+class CircuitBreaker:
+    def __init__(self, config: CircuitBreakerConfig):
+        self.config = config
+        self.state = CircuitState.CLOSED
+        self.failure_count = 0
+        self.success_count = 0
+        self.last_failure_time = None
+        self._lock = threading.Lock()
+    
+    def __call__(self, func: Callable) -> Callable:
+        @wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            if not self._can_execute():
+                raise CircuitBreakerOpenException(
+                    f"Circuit breaker is {self.state.value}"
+                )
+            
+            try:
+                result = await func(*args, **kwargs)
+                self._on_success()
+                return result
+            except self.config.expected_exception as e:
+                self._on_failure()
+                raise
+        
+        @wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            if not self._can_execute():
+                raise CircuitBreakerOpenException(
+                    f"Circuit breaker is {self.state.value}"
+                )
+            
+            try:
+                result = func(*args, **kwargs)
+                self._on_success()
+                return result
+            except self.config.expected_exception as e:
+                self._on_failure()
+                raise
+        
+        return async_wrapper if asyncio.iscoroutinefunction(func) else sync_wrapper
+    
+    def _can_execute(self) -> bool:
+        with self._lock:
+            if self.state == CircuitState.CLOSED:
+                return True
+            elif self.state == CircuitState.OPEN:
+                if self._should_attempt_reset():
+                    self.state = CircuitState.HALF_OPEN
+                    self.success_count = 0
+                    return True
+                return False
+            else:  # HALF_OPEN
+                return True
+    
+    def _should_attempt_reset(self) -> bool:
+        return (
+            self.last_failure_time and
+            time.time() - self.last_failure_time >= self.config.recovery_timeout
+        )
+    
+    def _on_success(self):
+        with self._lock:
+            if self.state == CircuitState.HALF_OPEN:
+                self.success_count += 1
+                if self.success_count >= self.config.success_threshold:
+                    self.state = CircuitState.CLOSED
+                    self.failure_count = 0
+            else:
+                self.failure_count = 0
+    
+    def _on_failure(self):
+        with self._lock:
+            self.failure_count += 1
+            self.last_failure_time = time.time()
+            
+            if self.failure_count >= self.config.failure_threshold:
+                self.state = CircuitState.OPEN
+
+class CircuitBreakerOpenException(Exception):
+    pass
+
+# Usage example
+circuit_breaker = CircuitBreaker(CircuitBreakerConfig(
+    failure_threshold=3,
+    recovery_timeout=30.0,
+    expected_exception=ConnectionError
+))
+
+@circuit_breaker
+async def external_service_call():
+    # Simulate external service
+    if random.random() < 0.5:
+        raise ConnectionError("Service unavailable")
+    return "Success"
+```
+
+### Graceful Degradation
+
+```python
+from typing import Optional, Callable, Any, Dict
+import asyncio
+import logging
+
+class GracefulDegradationManager:
+    def __init__(self):
+        self.fallback_strategies: Dict[str, Callable] = {}
+        self.health_checks: Dict[str, Callable] = {}
+        self.service_status: Dict[str, bool] = {}
+    
+    def register_service(
+        self,
+        service_name: str,
+        primary_func: Callable,
+        fallback_func: Optional[Callable] = None,
+        health_check: Optional[Callable] = None
+    ):
+        if fallback_func:
+            self.fallback_strategies[service_name] = fallback_func
+        if health_check:
+            self.health_checks[service_name] = health_check
+        self.service_status[service_name] = True
+    
+    async def execute_with_fallback(
+        self,
+        service_name: str,
+        primary_func: Callable,
+        *args,
+        **kwargs
+    ) -> Any:
+        try:
+            # Check service health
+            if not await self._is_service_healthy(service_name):
+                return await self._execute_fallback(service_name, *args, **kwargs)
+            
+            # Try primary function
+            result = await primary_func(*args, **kwargs)
+            self.service_status[service_name] = True
+            return result
+            
+        except Exception as e:
+            logging.warning(f"Primary service {service_name} failed: {e}")
+            self.service_status[service_name] = False
+            return await self._execute_fallback(service_name, *args, **kwargs)
+    
+    async def _is_service_healthy(self, service_name: str) -> bool:
+        if service_name not in self.health_checks:
+            return self.service_status.get(service_name, True)
+        
+        try:
+            return await self.health_checks[service_name]()
+        except Exception:
+            return False
+    
+    async def _execute_fallback(self, service_name: str, *args, **kwargs) -> Any:
+        if service_name not in self.fallback_strategies:
+            raise ServiceUnavailableException(
+                f"Service {service_name} unavailable and no fallback configured"
+            )
+        
+        logging.info(f"Executing fallback for service {service_name}")
+        return await self.fallback_strategies[service_name](*args, **kwargs)
+
+class ServiceUnavailableException(Exception):
+    pass
+
+# Example implementation
+class RecommendationService:
+    def __init__(self):
+        self.degradation_manager = GracefulDegradationManager()
+        self._setup_fallbacks()
+    
+    def _setup_fallbacks(self):
+        self.degradation_manager.register_service(
+            "ml_recommendations",
+            primary_func=self._get_ml_recommendations,
+            fallback_func=self._get_popular_items,
+            health_check=self._check_ml_service_health
+        )
+        
+        self.degradation_manager.register_service(
+            "user_preferences",
+            primary_func=self._get_user_preferences,
+            fallback_func=self._get_default_preferences
+        )
+    
+    async def get_recommendations(self, user_id: str) -> list:
+        return await self.degradation_manager.execute_with_fallback(
+            "ml_recommendations",
+            self._get_ml_recommendations,
+            user_id
+        )
+    
+    async def _get_ml_recommendations(self, user_id: str) -> list:
+        # Simulate ML service call
+        if random.random() < 0.3:
+            raise ConnectionError("ML service unavailable")
+        return [f"ml_item_{i}" for i in range(5)]
+    
+    async def _get_popular_items(self, user_id: str) -> list:
+        # Fallback to popular items
+        return [f"popular_item_{i}" for i in range(3)]
+    
+    async def _check_ml_service_health(self) -> bool:
+        # Health check implementation
+        try:
+            # Simulate health check
+            await asyncio.sleep(0.1)
+            return random.random() > 0.2
+        except Exception:
+            return False
+    
+    async def _get_user_preferences(self, user_id: str) -> dict:
+        # Primary preference service
+        return {"category": "electronics", "price_range": "medium"}
+    
+    async def _get_default_preferences(self, user_id: str) -> dict:
+        # Fallback preferences
+        return {"category": "general", "price_range": "all"}
+```
+
+### Dead Letter Queue
+
+```python
+import asyncio
+import json
+import time
+from typing import Any, Dict, Optional, Callable
+from dataclasses import dataclass, asdict
+from enum import Enum
+import uuid
+
+class MessageStatus(Enum):
+    PENDING = "pending"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    DEAD_LETTER = "dead_letter"
+
+@dataclass
+class Message:
+    id: str
+    payload: Dict[str, Any]
+    status: MessageStatus
+    created_at: float
+    retry_count: int = 0
+    max_retries: int = 3
+    last_error: Optional[str] = None
+    processing_started_at: Optional[float] = None
+
+class DeadLetterQueue:
+    def __init__(self, max_retries: int = 3, retry_delay: float = 5.0):
+        self.messages: Dict[str, Message] = {}
+        self.dead_letters: Dict[str, Message] = {}
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
+        self.processors: Dict[str, Callable] = {}
+    
+    def register_processor(self, message_type: str, processor: Callable):
+        """Register a processor for a specific message type"""
+        self.processors[message_type] = processor
+    
+    async def enqueue(self, message_type: str, payload: Dict[str, Any]) -> str:
+        """Add a message to the queue"""
+        message_id = str(uuid.uuid4())
+        message = Message(
+            id=message_id,
+            payload={"type": message_type, **payload},
+            status=MessageStatus.PENDING,
+            created_at=time.time(),
+            max_retries=self.max_retries
+        )
+        self.messages[message_id] = message
+        return message_id
+    
+    async def process_messages(self):
+        """Main processing loop"""
+        while True:
+            await self._process_pending_messages()
+            await self._retry_failed_messages()
+            await asyncio.sleep(1)
+    
+    async def _process_pending_messages(self):
+        """Process all pending messages"""
+        pending_messages = [
+            msg for msg in self.messages.values()
+            if msg.status == MessageStatus.PENDING
+        ]
+        
+        for message in pending_messages:
+            await self._process_message(message)
+    
+    async def _process_message(self, message: Message):
+        """Process a single message"""
+        message.status = MessageStatus.PROCESSING
+        message.processing_started_at = time.time()
+        
+        try:
+            message_type = message.payload.get("type")
+            if message_type not in self.processors:
+                raise ValueError(f"No processor for message type: {message_type}")
+            
+            processor = self.processors[message_type]
+            await processor(message.payload)
+            
+            message.status = MessageStatus.COMPLETED
+            logging.info(f"Message {message.id} processed successfully")
+            
+        except Exception as e:
+            await self._handle_processing_error(message, str(e))
+    
+    async def _handle_processing_error(self, message: Message, error: str):
+        """Handle processing errors and implement retry logic"""
+        message.last_error = error
+        message.retry_count += 1
+        
+        if message.retry_count >= message.max_retries:
+            # Move to dead letter queue
+            message.status = MessageStatus.DEAD_LETTER
+            self.dead_letters[message.id] = message
+            del self.messages[message.id]
+            
+            logging.error(
+                f"Message {message.id} moved to dead letter queue "
+                f"after {message.retry_count} attempts. Last error: {error}"
+            )
+            
+            # Trigger dead letter handler
+            await self._handle_dead_letter(message)
+        else:
+            message.status = MessageStatus.FAILED
+            logging.warning(
+                f"Message {message.id} failed (attempt {message.retry_count}): {error}"
+            )
+    
+    async def _retry_failed_messages(self):
+        """Retry failed messages after delay"""
+        current_time = time.time()
+        failed_messages = [
+            msg for msg in self.messages.values()
+            if (msg.status == MessageStatus.FAILED and
+                msg.processing_started_at and
+                current_time - msg.processing_started_at >= self.retry_delay)
+        ]
+        
+        for message in failed_messages:
+            message.status = MessageStatus.PENDING
+            message.processing_started_at = None
+    
+    async def _handle_dead_letter(self, message: Message):
+        """Handle messages that have exhausted all retries"""
+        # Could implement notifications, logging, manual review queue, etc.
+        await self._notify_dead_letter(message)
+    
+    async def _notify_dead_letter(self, message: Message):
+        """Notify about dead letter messages"""
+        notification = {
+            "message_id": message.id,
+            "payload": message.payload,
+            "retry_count": message.retry_count,
+            "last_error": message.last_error,
+            "created_at": message.created_at
+        }
+        
+        # Could send to monitoring system, email, Slack, etc.
+        logging.critical(f"Dead letter notification: {json.dumps(notification)}")
+    
+    def get_queue_stats(self) -> Dict[str, int]:
+        """Get queue statistics"""
+        stats = {
+            "pending": 0,
+            "processing": 0,
+            "completed": 0,
+            "failed": 0,
+            "dead_letters": len(self.dead_letters)
+        }
+        
+        for message in self.messages.values():
+            stats[message.status.value] += 1
+        
+        return stats
+
+# Example usage
+class EmailProcessor:
+    def __init__(self):
+        self.dlq = DeadLetterQueue(max_retries=3, retry_delay=10.0)
+        self._setup_processors()
+    
+    def _setup_processors(self):
+        self.dlq.register_processor("send_email", self._send_email)
+        self.dlq.register_processor("send_sms", self._send_sms)
+    
+    async def _send_email(self, payload: Dict[str, Any]):
+        """Email sending processor"""
+        recipient = payload.get("recipient")
+        subject = payload.get("subject")
+        body = payload.get("body")
+        
+        # Simulate email sending
+        if random.random() < 0.3:
+            raise ConnectionError("SMTP server unavailable")
+        
+        logging.info(f"Email sent to {recipient}: {subject}")
+    
+    async def _send_sms(self, payload: Dict[str, Any]):
+        """SMS sending processor"""
+        phone = payload.get("phone")
+        message = payload.get("message")
+        
+        # Simulate SMS sending
+        if random.random() < 0.2:
+            raise Exception("SMS gateway error")
+        
+        logging.info(f"SMS sent to {phone}: {message}")
+    
+    async def send_email(self, recipient: str, subject: str, body: str):
+        """Public method to send email"""
+        await self.dlq.enqueue("send_email", {
+            "recipient": recipient,
+            "subject": subject,
+            "body": body
+        })
+    
+    async def start_processing(self):
+        """Start the message processing loop"""
+        await self.dlq.process_messages()
+```
+
+### Bulkhead Pattern
+
+```python
+import asyncio
+import time
+from typing import Dict, Any, Optional, Callable
+from dataclasses import dataclass
+from enum import Enum
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+class ResourceType(Enum):
+    CPU_INTENSIVE = "cpu_intensive"
+    IO_INTENSIVE = "io_intensive"
+    MEMORY_INTENSIVE = "memory_intensive"
+    NETWORK_INTENSIVE = "network_intensive"
+
+@dataclass
+class BulkheadConfig:
+    max_concurrent: int
+    queue_size: int
+    timeout: float
+    resource_type: ResourceType
+
+class BulkheadIsolation:
+    def __init__(self):
+        self.bulkheads: Dict[str, 'Bulkhead'] = {}
+        self.thread_pools: Dict[ResourceType, ThreadPoolExecutor] = {}
+        self._setup_thread_pools()
+    
+    def _setup_thread_pools(self):
+        """Setup dedicated thread pools for different resource types"""
+        self.thread_pools = {
+            ResourceType.CPU_INTENSIVE: ThreadPoolExecutor(
+                max_workers=2, thread_name_prefix="cpu-"
+            ),
+            ResourceType.IO_INTENSIVE: ThreadPoolExecutor(
+                max_workers=10, thread_name_prefix="io-"
+            ),
+            ResourceType.MEMORY_INTENSIVE: ThreadPoolExecutor(
+                max_workers=3, thread_name_prefix="memory-"
+            ),
+            ResourceType.NETWORK_INTENSIVE: ThreadPoolExecutor(
+                max_workers=8, thread_name_prefix="network-"
+            )
+        }
+    
+    def create_bulkhead(self, name: str, config: BulkheadConfig) -> 'Bulkhead':
+        """Create a new bulkhead with specified configuration"""
+        bulkhead = Bulkhead(name, config, self.thread_pools[config.resource_type])
+        self.bulkheads[name] = bulkhead
+        return bulkhead
+    
+    def get_bulkhead(self, name: str) -> Optional['Bulkhead']:
+        """Get existing bulkhead by name"""
+        return self.bulkheads.get(name)
+    
+    def get_stats(self) -> Dict[str, Dict[str, Any]]:
+        """Get statistics for all bulkheads"""
+        return {
+            name: bulkhead.get_stats()
+            for name, bulkhead in self.bulkheads.items()
+        }
+
+class BulkheadException(Exception):
+    pass
+
+class Bulkhead:
+    def __init__(self, name: str, config: BulkheadConfig, thread_pool: ThreadPoolExecutor):
+        self.name = name
+        self.config = config
+        self.thread_pool = thread_pool
+        self.semaphore = asyncio.Semaphore(config.max_concurrent)
+        self.queue = asyncio.Queue(maxsize=config.queue_size)
+        self.active_tasks = 0
+        self.total_requests = 0
+        self.successful_requests = 0
+        self.failed_requests = 0
+        self.rejected_requests = 0
+        self._lock = threading.Lock()
+    
+    async def execute(self, func: Callable, *args, **kwargs) -> Any:
+        """Execute function within bulkhead constraints"""
+        self.total_requests += 1
+        
+        # Check if queue is full
+        if self.queue.full():
+            self.rejected_requests += 1
+            raise BulkheadException(f"Bulkhead {self.name} queue is full")
+        
+        # Add to queue
+        await self.queue.put((func, args, kwargs))
+        
+        try:
+            # Acquire semaphore (limits concurrent execution)
+            async with self.semaphore:
+                with self._lock:
+                    self.active_tasks += 1
+                
+                try:
+                    # Get task from queue
+                    task_func, task_args, task_kwargs = await asyncio.wait_for(
+                        self.queue.get(), timeout=self.config.timeout
+                    )
+                    
+                    # Execute based on resource type
+                    if self.config.resource_type == ResourceType.CPU_INTENSIVE:
+                        result = await self._execute_cpu_intensive(
+                            task_func, *task_args, **task_kwargs
+                        )
+                    else:
+                        result = await self._execute_async(
+                            task_func, *task_args, **task_kwargs
+                        )
+                    
+                    self.successful_requests += 1
+                    return result
+                    
+                except asyncio.TimeoutError:
+                    self.failed_requests += 1
+                    raise BulkheadException(f"Bulkhead {self.name} timeout")
+                except Exception as e:
+                    self.failed_requests += 1
+                    raise
+                finally:
+                    with self._lock:
+                        self.active_tasks -= 1
+                    self.queue.task_done()
+        
+        except asyncio.TimeoutError:
+            self.rejected_requests += 1
+            raise BulkheadException(f"Bulkhead {self.name} acquisition timeout")
+    
+    async def _execute_cpu_intensive(self, func: Callable, *args, **kwargs) -> Any:
+        """Execute CPU-intensive tasks in dedicated thread pool"""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(self.thread_pool, func, *args, **kwargs)
+    
+    async def _execute_async(self, func: Callable, *args, **kwargs) -> Any:
+        """Execute async or IO-intensive tasks"""
+        if asyncio.iscoroutinefunction(func):
+            return await func(*args, **kwargs)
+        else:
+            loop = asyncio.get_event_loop()
+            return await loop.run_in_executor(self.thread_pool, func, *args, **kwargs)
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get bulkhead statistics"""
+        return {
+            "name": self.name,
+            "config": {
+                "max_concurrent": self.config.max_concurrent,
+                "queue_size": self.config.queue_size,
+                "timeout": self.config.timeout,
+                "resource_type": self.config.resource_type.value
+            },
+            "stats": {
+                "active_tasks": self.active_tasks,
+                "queue_size": self.queue.qsize(),
+                "total_requests": self.total_requests,
+                "successful_requests": self.successful_requests,
+                "failed_requests": self.failed_requests,
+                "rejected_requests": self.rejected_requests,
+                "success_rate": (
+                    self.successful_requests / max(self.total_requests, 1) * 100
+                )
+            }
+        }
+
+# Example usage
+class ServiceManager:
+    def __init__(self):
+        self.isolation = BulkheadIsolation()
+        self._setup_bulkheads()
+    
+    def _setup_bulkheads(self):
+        """Setup bulkheads for different services"""
+        
+        # Database operations bulkhead
+        self.db_bulkhead = self.isolation.create_bulkhead(
+            "database",
+            BulkheadConfig(
+                max_concurrent=5,
+                queue_size=20,
+                timeout=30.0,
+                resource_type=ResourceType.IO_INTENSIVE
+            )
+        )
+        
+        # External API calls bulkhead
+        self.api_bulkhead = self.isolation.create_bulkhead(
+            "external_api",
+            BulkheadConfig(
+                max_concurrent=3,
+                queue_size=10,
+                timeout=15.0,
+                resource_type=ResourceType.NETWORK_INTENSIVE
+            )
+        )
+        
+        # CPU-intensive processing bulkhead
+        self.cpu_bulkhead = self.isolation.create_bulkhead(
+            "cpu_processing",
+            BulkheadConfig(
+                max_concurrent=2,
+                queue_size=5,
+                timeout=60.0,
+                resource_type=ResourceType.CPU_INTENSIVE
+            )
+        )
+    
+    async def database_operation(self, query: str) -> dict:
+        """Execute database operation with bulkhead protection"""
+        return await self.db_bulkhead.execute(self._db_query, query)
+    
+    async def external_api_call(self, url: str) -> dict:
+        """Execute external API call with bulkhead protection"""
+        return await self.api_bulkhead.execute(self._api_call, url)
+    
+    async def cpu_intensive_task(self, data: list) -> list:
+        """Execute CPU-intensive task with bulkhead protection"""
+        return await self.cpu_bulkhead.execute(self._process_data, data)
+    
+    async def _db_query(self, query: str) -> dict:
+        """Simulate database query"""
+        await asyncio.sleep(0.5)  # Simulate DB latency
+        if random.random() < 0.1:
+            raise Exception("Database error")
+        return {"result": f"Query result for: {query}"}
+    
+    async def _api_call(self, url: str) -> dict:
+        """Simulate external API call"""
+        await asyncio.sleep(1.0)  # Simulate network latency
+        if random.random() < 0.2:
+            raise Exception("API error")
+        return {"status": "success", "url": url}
+    
+    def _process_data(self, data: list) -> list:
+        """Simulate CPU-intensive processing"""
+        # Simulate heavy computation
+        result = []
+        for item in data:
+            # Simulate complex calculation
+            processed = sum(i ** 2 for i in range(1000))
+            result.append(processed + hash(str(item)))
+        return result
+    
+    async def get_system_health(self) -> dict:
+        """Get health status of all bulkheads"""
+        return {
+            "bulkheads": self.isolation.get_stats(),
+            "timestamp": time.time()
+        }
+
+# Usage example
+async def main():
+    service_manager = ServiceManager()
+    
+    # Simulate concurrent requests
+    tasks = []
+    
+    # Database operations
+    for i in range(10):
+        tasks.append(service_manager.database_operation(f"SELECT * FROM table_{i}"))
+    
+    # API calls
+    for i in range(5):
+        tasks.append(service_manager.external_api_call(f"https://api.example.com/data/{i}"))
+    
+    # CPU-intensive tasks
+    for i in range(3):
+        tasks.append(service_manager.cpu_intensive_task(list(range(100))))
+    
+    # Execute all tasks concurrently
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    
+    # Print results and health status
+    print("Results:", len([r for r in results if not isinstance(r, Exception)]))
+    print("Errors:", len([r for r in results if isinstance(r, Exception)]))
+    print("Health:", await service_manager.get_system_health())
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## 12. Testing Pyramid & Strategies
+
+### Unit Testing Patterns (pytest)
+
+```python
+import pytest
+from unittest.mock import Mock, patch, MagicMock
+from typing import List, Dict, Any
+import asyncio
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+
+# Example class to test
+class UserService:
+    def __init__(self, db_client, email_service, cache_client):
+        self.db_client = db_client
+        self.email_service = email_service
+        self.cache_client = cache_client
+    
+    async def create_user(self, user_data: dict) -> dict:
+        # Validate user data
+        if not user_data.get('email'):
+            raise ValueError("Email is required")
+        
+        # Check if user exists
+        existing_user = await self.db_client.find_user_by_email(user_data['email'])
+        if existing_user:
+            raise ValueError("User already exists")
+        
+        # Create user
+        user_id = await self.db_client.create_user(user_data)
+        user = await self.db_client.get_user(user_id)
+        
+        # Send welcome email
+        await self.email_service.send_welcome_email(user['email'], user['name'])
+        
+        # Cache user
+        await self.cache_client.set(f"user:{user_id}", user, ttl=3600)
+        
+        return user
+    
+    async def get_user(self, user_id: str) -> dict:
+        # Try cache first
+        cached_user = await self.cache_client.get(f"user:{user_id}")
+        if cached_user:
