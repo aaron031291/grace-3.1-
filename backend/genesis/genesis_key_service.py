@@ -328,17 +328,17 @@ class GenesisKeyService:
                 kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
                 memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
 
-                # Use extracted data instead of accessing object attributes
+                # Use extracted data — convert dicts to JSON strings for SQLite
                 memory_mesh.ingest_learning_experience(
                     experience_type=extracted_key_data["key_type"],
-                    context={
+                    context=json.dumps({
                         "what": extracted_key_data["what_description"],
                         "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
                         "why": extracted_key_data["why_reason"],
                         "how": extracted_key_data["how_method"]
-                    },
-                    action_taken=extracted_key_data.get("input_data") or {},
-                    outcome=extracted_key_data.get("output_data") or {},
+                    }),
+                    action_taken=json.dumps(extracted_key_data.get("input_data") or {}),
+                    outcome=json.dumps(extracted_key_data.get("output_data") or {}),
                     source="genesis_key",
                     user_id=extracted_key_data.get("user_id"),
                     genesis_key_id=extracted_key_id
