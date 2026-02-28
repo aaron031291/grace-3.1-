@@ -138,6 +138,17 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         status="healthy",
         description="New components auto-integrate. LIP scans, compass maps, trust scores, event bus notifies all systems of the new citizen.",
     ),
+
+    # The 13th Loop — from HEAL-001 incident
+    "autonomous_healing": NamedLoop(
+        name="Autonomous Healing Loop (13th Loop)",
+        category="healing",
+        components=["immune_system", "consensus_engine", "trust_engine", "unified_memory",
+                     "event_bus", "intelligence_layer", "circuit_breaker"],
+        status="healthy",
+        description="Complete autonomous healing: Detect→Triage→Diagnose→Select Strategy→Validate→Snapshot→Execute→Verify Quality→Commit/Rollback→Learn. Born from HEAL-001: wholesale rewrite caused 50.6% content loss. Now enforces surgical patches, size gates, quality gates, and automatic rollback.",
+        max_depth=3,
+    ),
 }
 
 # Thread-local call depth tracking
