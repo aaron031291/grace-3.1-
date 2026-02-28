@@ -26,7 +26,7 @@ class Settings:
     OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "mistral:7b")
     
     # ==================== Embedding Configuration ====================
-    EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "qwen_4b")
+    EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "all-MiniLM-L6-v2")
     EMBEDDING_MODEL_PATH: str = str(BACKEND_DIR / "models" / "embedding" / EMBEDDING_DEFAULT)
     EMBEDDING_DEVICE: str = os.getenv("EMBEDDING_DEVICE", "cuda")  # cuda or cpu
     EMBEDDING_NORMALIZE: bool = os.getenv("EMBEDDING_NORMALIZE", "true").lower() == "true"
