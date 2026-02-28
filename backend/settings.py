@@ -59,6 +59,7 @@ class Settings:
     QDRANT_HOST: str = os.getenv("QDRANT_HOST", "localhost")
     QDRANT_PORT: int = int(os.getenv("QDRANT_PORT", "6333"))
     QDRANT_API_KEY: str = os.getenv("QDRANT_API_KEY", "")
+    QDRANT_URL: str = os.getenv("QDRANT_URL", "")
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "documents")
     QDRANT_TIMEOUT: int = int(os.getenv("QDRANT_TIMEOUT", "30"))
     
