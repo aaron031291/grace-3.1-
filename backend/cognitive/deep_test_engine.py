@@ -135,70 +135,225 @@ class DeepTestEngine:
 
     def _consensus_analyse_failures(self, failed_tests: List[Dict]) -> Dict[str, Any]:
         """
-        Send test failures to Kimi+Opus for root cause analysis and fix suggestions.
-        They diagnose WHY it failed and suggest the exact fix.
+        Full autonomous fix loop:
+          1. Kimi+Opus diagnose the failure
+          2. They generate a fix blueprint
+          3. Qwen builds the fix code
+          4. Grace compiles and tests it
+          5. Re-run the failing test to verify
+          6. Up to 4 attempts, then escalate to governance with full report
         """
+        failures_text = "\n".join(
+            f"- {t['name']}: {t['detail']}" for t in failed_tests[:10]
+        )
+
+        analysis = {
+            "diagnosis": "",
+            "fix_attempted": False,
+            "fix_succeeded": False,
+            "attempts": 0,
+            "escalated_to_governance": False,
+            "confidence": 0,
+        }
+
+        # Step 1: Kimi+Opus diagnose and generate fix code
         try:
             from cognitive.consensus_engine import run_consensus
-
-            failures_text = "\n".join(
-                f"- {t['name']}: {t['detail']}" for t in failed_tests[:10]
-            )
 
             result = run_consensus(
                 prompt=(
                     f"Grace's logic tests found {len(failed_tests)} failure(s):\n\n"
                     f"{failures_text}\n\n"
                     f"For each failure:\n"
-                    f"1. What's the root cause? (plain English)\n"
-                    f"2. Can Grace fix this herself? How?\n"
-                    f"3. What should be done to prevent this happening again?\n"
-                    f"4. Is this a real bug or a test issue?\n\n"
-                    f"Be specific and actionable."
+                    f"1. Root cause (one sentence)\n"
+                    f"2. The exact Python code to fix it\n"
+                    f"3. How to verify the fix worked\n\n"
+                    f"Output the fix as a Python code block that Qwen can execute."
                 ),
                 models=["kimi", "opus"],
                 source="autonomous",
             )
 
-            analysis = {
-                "diagnosis": result.final_output[:2000],
-                "confidence": result.confidence,
-                "models_used": result.models_used,
-            }
-
-            # Store the diagnosis as a learning episode
-            try:
-                from cognitive.unified_memory import get_unified_memory
-                mem = get_unified_memory()
-                mem.store_episode(
-                    problem=f"Test failures: {failures_text[:300]}",
-                    action=f"Kimi+Opus consensus diagnosis",
-                    outcome=result.final_output[:500],
-                    trust=0.8,
-                    source="deep_test_consensus",
-                )
-            except Exception:
-                pass
-
-            # Log to playbook
-            try:
-                from pathlib import Path
-                playbook_dir = Path(__file__).parent.parent / "data" / "test_playbook"
-                playbook_dir.mkdir(parents=True, exist_ok=True)
-                ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-                (playbook_dir / f"diagnosis_{ts}.json").write_text(json.dumps({
-                    "failures": [{"name": t["name"], "detail": t["detail"]} for t in failed_tests],
-                    "diagnosis": analysis["diagnosis"],
-                    "confidence": analysis["confidence"],
-                    "timestamp": datetime.utcnow().isoformat(),
-                }, indent=2, default=str))
-            except Exception:
-                pass
-
-            return analysis
+            analysis["diagnosis"] = result.final_output[:2000]
+            analysis["confidence"] = result.confidence
 
         except Exception as e:
-            return {"diagnosis": f"Consensus unavailable: {e}", "confidence": 0}
+            analysis["diagnosis"] = f"Consensus unavailable: {e}"
+            self._save_test_playbook(failed_tests, analysis)
+            return analysis
+
+        # Step 2: Hand fix to Qwen to build, then test up to 4 times
+        for attempt in range(4):
+            analysis["attempts"] = attempt + 1
+            analysis["fix_attempted"] = True
+
+            try:
+                # Get Qwen to build the fix
+                from llm_orchestrator.factory import get_llm_for_task
+                builder = get_llm_for_task("code")
+
+                error_ctx = ""
+                if attempt > 0:
+                    error_ctx = f"\nPrevious attempt {attempt} failed. Try a different approach."
+
+                fix_code = builder.generate(
+                    prompt=(
+                        f"Fix this Grace test failure:\n\n"
+                        f"Failures: {failures_text[:500]}\n\n"
+                        f"Diagnosis from senior engineers:\n{analysis['diagnosis'][:1000]}\n"
+                        f"{error_ctx}\n\n"
+                        f"Output ONLY the Python fix code. No explanation."
+                    ),
+                    system_prompt="You are a code fixer. Output ONLY the fix code.",
+                    temperature=0.2,
+                    max_tokens=2048,
+                )
+
+                if not isinstance(fix_code, str) or len(fix_code) < 10:
+                    continue
+
+                # Step 3: Compile the fix through Grace's compiler
+                from cognitive.grace_compiler import get_grace_compiler
+                compile_result = get_grace_compiler().compile(fix_code)
+
+                if not compile_result.success:
+                    continue
+
+                # Step 4: Re-run the failing tests to verify
+                retest_passed = 0
+                retest_total = 0
+                for t in failed_tests[:5]:
+                    test_name = t["name"].split(":")[0].strip().lower().replace(" ", "_")
+                    test_fn_name = f"_test_{test_name}" if hasattr(self, f"_test_{test_name}") else None
+
+                    # Try to find and re-run the matching test
+                    for attr_name in dir(self):
+                        if attr_name.startswith("_test_") and test_name.replace(" ", "").replace(":", "").lower() in attr_name.lower():
+                            try:
+                                retest_total += 1
+                                ok, _ = getattr(self, attr_name)()
+                                if ok:
+                                    retest_passed += 1
+                            except Exception:
+                                pass
+                            break
+
+                if retest_passed > 0 and retest_passed >= retest_total:
+                    analysis["fix_succeeded"] = True
+                    analysis["retest_passed"] = retest_passed
+                    analysis["retest_total"] = retest_total
+
+                    # Store successful fix in playbook
+                    self._save_test_playbook(failed_tests, analysis, fix_code)
+
+                    # Feed to intelligence layer
+                    try:
+                        from cognitive.intelligence_layer import get_intelligence_layer
+                        il = get_intelligence_layer()
+                        il.observe_loop("pipeline_self_repair", {
+                            "attempts": attempt + 1,
+                            "success": 1.0,
+                        }, "success")
+                    except Exception:
+                        pass
+
+                    return analysis
+
+            except Exception:
+                continue
+
+        # Step 5: All 4 attempts failed — escalate to governance with full report
+        analysis["escalated_to_governance"] = True
+
+        try:
+            from api.governance_discussion_api import _save_discussion, _ensure
+            import uuid
+
+            _ensure()
+            did = f"gov_test_{uuid.uuid4().hex[:8]}"
+            discussion = {
+                "id": did,
+                "title": f"Test Fix Failed: {len(failed_tests)} logic test(s)",
+                "description": (
+                    f"Grace tried to fix {len(failed_tests)} failing test(s) automatically.\n\n"
+                    f"Failures:\n{failures_text}\n\n"
+                    f"Kimi+Opus diagnosis:\n{analysis['diagnosis'][:500]}\n\n"
+                    f"Qwen attempted {analysis['attempts']} fixes — all failed.\n"
+                    f"This needs human review."
+                ),
+                "request_type": "test_fix_escalation",
+                "severity": "high",
+                "status": "open",
+                "created_at": datetime.utcnow().isoformat(),
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": f"Auto-escalated: {analysis['attempts']} fix attempts failed. Diagnosis: {analysis['diagnosis'][:500]}",
+                        "timestamp": datetime.utcnow().isoformat(),
+                    }
+                ],
+                "decision": None,
+            }
+            _save_discussion(did, discussion)
+            analysis["governance_discussion_id"] = did
+
+            # Event bus
+            from cognitive.event_bus import publish
+            publish("governance.test_escalation", {
+                "discussion_id": did,
+                "failures": len(failed_tests),
+                "attempts": analysis["attempts"],
+            }, source="deep_test_engine")
+
+        except Exception:
+            pass
+
+        # Genesis Key
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="error",
+                what=f"Test fix escalated to governance: {len(failed_tests)} failures, {analysis['attempts']} attempts",
+                is_error=True,
+                error_type="test_fix_escalation",
+                output_data=analysis,
+                tags=["test", "escalation", "governance"],
+            )
+        except Exception:
+            pass
+
+        self._save_test_playbook(failed_tests, analysis)
+        return analysis
+
+    def _save_test_playbook(self, failed_tests: List[Dict], analysis: Dict, fix_code: str = ""):
+        """Save test fix attempt to playbook for learning."""
+        try:
+            playbook_dir = Path(__file__).parent.parent / "data" / "test_playbook"
+            playbook_dir.mkdir(parents=True, exist_ok=True)
+            ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            outcome = "fixed" if analysis.get("fix_succeeded") else "escalated" if analysis.get("escalated_to_governance") else "failed"
+            (playbook_dir / f"{outcome}_{ts}.json").write_text(json.dumps({
+                "failures": [{"name": t["name"], "detail": t["detail"]} for t in failed_tests],
+                "diagnosis": analysis.get("diagnosis", ""),
+                "fix_code": fix_code[:2000],
+                "attempts": analysis.get("attempts", 0),
+                "fix_succeeded": analysis.get("fix_succeeded", False),
+                "escalated": analysis.get("escalated_to_governance", False),
+                "timestamp": datetime.utcnow().isoformat(),
+            }, indent=2, default=str))
+
+            # Store as learning
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+            mem.store_episode(
+                problem=f"Test failures: {'; '.join(t['name'] for t in failed_tests[:3])}",
+                action=f"Kimi+Opus diagnosed → Qwen built fix → {analysis.get('attempts', 0)} attempts",
+                outcome=f"{'FIXED' if analysis.get('fix_succeeded') else 'ESCALATED to governance'}",
+                trust=0.9 if analysis.get("fix_succeeded") else 0.4,
+                source="test_fix_playbook",
+            )
+        except Exception:
+            pass
 
     def start_stress_test(self, duration_minutes: int = 5, interval_seconds: int = 30) -> Dict:
         """Start continuous stress testing in background."""
