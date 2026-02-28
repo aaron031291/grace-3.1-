@@ -13,7 +13,7 @@ export default function GenesisKeyPanel() {
   const [_selectedArchive, _setSelectedArchive] = useState(null);
   const [stats, setStats] = useState(null);
 
-  const API_BASE = "http://localhost:8000";
+  const API_BASE = API_BASE_URL;
 
   // Load Genesis Keys
   useEffect(() => {

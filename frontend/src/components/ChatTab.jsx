@@ -498,7 +498,7 @@ export default function ChatTab() {
         ? `&folder_path=${encodeURIComponent(selectedFolder)}`
         : "";
       const response = await fetch(
-        `http://localhost:8000/chats?limit=50${folderParam}`
+        `${API_BASE_URL}/chats?limit=50${folderParam}`
       );
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -521,7 +521,7 @@ export default function ChatTab() {
 
   const createNewChat = async () => {
     try {
-      const response = await fetch("http://localhost:8000/chats", {
+      const response = await fetch(`${API_BASE_URL}/chats`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -540,7 +540,7 @@ export default function ChatTab() {
 
   const deleteChat = async (chatId) => {
     try {
-      await fetch(`http://localhost:8000/chats/${chatId}`, {
+      await fetch(`${API_BASE_URL}/chats/${chatId}`, {
         method: "DELETE",
       });
       const updatedChats = chats.filter((c) => c.id !== chatId);
@@ -555,7 +555,7 @@ export default function ChatTab() {
 
   const updateChatTitle = async (chatId, newTitle) => {
     try {
-      const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
+      const response = await fetch(`${API_BASE_URL}/chats/${chatId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: newTitle }),

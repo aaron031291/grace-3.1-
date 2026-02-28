@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "./VoiceButton.css";
+import { API_BASE_URL } from '../config/api';
 
 /**
  * VoiceButton Component
@@ -164,7 +165,7 @@ export default function VoiceButton({
 
     try {
       // Try backend TTS first (higher quality)
-      const response = await fetch("http://localhost:8000/voice/tts/base64", {
+      const response = await fetch(`${API_BASE_URL}/voice/tts/base64`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

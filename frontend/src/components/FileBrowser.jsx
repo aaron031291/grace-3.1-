@@ -12,7 +12,7 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadingFiles, setUploadingFiles] = useState([]);
-  const API_BASE = "http://localhost:8000";
+  const API_BASE = API_BASE_URL;
 
   // Load directory on mount and when path changes
   useEffect(() => {

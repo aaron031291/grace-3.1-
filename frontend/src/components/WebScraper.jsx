@@ -15,7 +15,7 @@ export default function WebScraper() {
   const [scraping, setScraping] = useState(false);
   const [error, setError] = useState(null);
 
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   // Restore session from localStorage on mount
   useEffect(() => {
