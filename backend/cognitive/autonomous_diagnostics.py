@@ -118,10 +118,27 @@ class AutonomousDiagnostics:
         if len(similar) >= 3:
             result["recurring"] = True
             result["occurrence_count"] = len(similar)
-            result["plain_english"] = (
-                f"This problem ({error_type}) has happened {len(similar)} times. "
-                f"Grace is learning from it and will try harder fixes next time."
-            )
+
+            # Auto-escalate to Kimi+Opus consensus for recurring unfixed problems
+            if not fix_result.get("fixed") and len(similar) >= 3:
+                try:
+                    diagnosis = self.consensus_diagnose(error_type, error_message)
+                    result["consensus_diagnosis"] = diagnosis.get("consensus_diagnosis", "")[:500]
+                    result["plain_english"] = (
+                        f"This problem ({error_type}) has happened {len(similar)} times. "
+                        f"Grace asked Kimi and Opus for help. Their diagnosis:\n"
+                        f"{diagnosis.get('consensus_diagnosis', 'Analysis pending')[:300]}"
+                    )
+                except Exception:
+                    result["plain_english"] = (
+                        f"This problem ({error_type}) has happened {len(similar)} times. "
+                        f"Grace is learning from it and will try harder fixes next time."
+                    )
+            else:
+                result["plain_english"] = (
+                    f"This problem ({error_type}) has happened {len(similar)} times. "
+                    f"Grace is learning from it."
+                )
 
         return result
 
@@ -150,7 +167,7 @@ class AutonomousDiagnostics:
         return result
 
     def daily_report(self) -> Dict[str, Any]:
-        """Daily comprehensive report in plain English."""
+        """Daily comprehensive report in plain English with consensus analysis."""
         today = datetime.utcnow().strftime("%Y-%m-%d")
         today_failures = [f for f in self._failure_history if f.get("timestamp", "")[:10] == today]
         today_fixes = [f for f in today_failures if f.get("auto_fixed")]
@@ -159,35 +176,68 @@ class AutonomousDiagnostics:
         from cognitive.test_framework import diagnostic
         diag = diagnostic()
 
+        # Get integration health
+        integration_health = 0
+        try:
+            from cognitive.central_orchestrator import get_orchestrator
+            h = get_orchestrator().check_integration_health()
+            integration_health = h.get("health_percent", 0)
+        except Exception:
+            pass
+
+        # Build ranked actions
+        actions = []
+        for check in diag.get("smoke_test", {}).get("checks", []):
+            if not check.get("passed"):
+                actions.append({
+                    "priority": "CRITICAL",
+                    "system": check["name"],
+                    "problem": check["detail"],
+                    "user_visible": check["name"] in ("Database connection", "Frontend build", "Consensus Engine"),
+                })
+
+        for warning in self._check_early_warnings():
+            actions.append({
+                "priority": "HIGH" if warning["severity"] == "high" else "MEDIUM",
+                "system": warning["type"],
+                "problem": warning["message"],
+                "user_visible": False,
+            })
+
+        # Build the 15-line report
+        smoke_passed = diag.get("smoke_test", {}).get("passed", 0)
+        smoke_total = smoke_passed + diag.get("smoke_test", {}).get("failed", 0)
+        test_passed = diag.get("full_test", {}).get("passed", 0)
+
+        lines = []
+        lines.append(f"Grace health: {integration_health:.0f}/100 | Smoke: {smoke_passed}/{smoke_total} | Tests: {test_passed}")
+
+        if not actions:
+            lines.append("All clear. No actions needed.")
+        else:
+            for i, action in enumerate(actions[:5], 1):
+                lines.append(f"ACTION {i} ({action['priority']}): {action['system']} — {action['problem'][:80]}")
+
+        if today_fixes:
+            lines.append(f"Grace auto-fixed {len(today_fixes)} issue(s) today without your help.")
+        if today_failures and len(today_failures) > len(today_fixes):
+            lines.append(f"{len(today_failures) - len(today_fixes)} issue(s) still need attention.")
+
         report = {
             "event": "daily_report",
             "date": today,
-            "summary": "",
+            "one_line": lines[0],
+            "actions": actions[:5],
+            "summary": "\n".join(lines),
             "failures_today": len(today_failures),
             "auto_fixed_today": len(today_fixes),
             "human_alerts": self._human_alerts_sent,
             "early_warnings": self._check_early_warnings(),
-            "diagnostic": diag.get("summary", ""),
-            "smoke_status": diag.get("overall_status", "unknown"),
-            "test_results": diag.get("full_test", {}).get("summary", ""),
+            "integration_health": integration_health,
+            "smoke_passed": smoke_passed,
+            "smoke_total": smoke_total,
+            "tests_passed": test_passed,
         }
-
-        # Build plain English summary
-        if len(today_failures) == 0:
-            report["summary"] = f"Perfect day. No failures. All systems healthy."
-        else:
-            report["summary"] = (
-                f"Today: {len(today_failures)} issues detected, "
-                f"{len(today_fixes)} auto-fixed by Grace.\n"
-            )
-            if len(today_failures) > len(today_fixes):
-                unfixed = len(today_failures) - len(today_fixes)
-                report["summary"] += f"{unfixed} issue(s) need your attention.\n"
-
-        if report["early_warnings"]:
-            report["summary"] += f"\nHeads up: {len(report['early_warnings'])} early warnings.\n"
-            for w in report["early_warnings"][:3]:
-                report["summary"] += f"  - {w['message']}\n"
 
         self._save_diagnostic(report)
 
@@ -196,8 +246,8 @@ class AutonomousDiagnostics:
             from cognitive.unified_memory import get_unified_memory
             mem = get_unified_memory()
             mem.store_episode(
-                problem=f"Daily diagnostic: {len(today_failures)} failures",
-                action=f"Auto-fixed {len(today_fixes)}, warnings: {len(report['early_warnings'])}",
+                problem=f"Daily diagnostic: {len(today_failures)} failures, health {integration_health}%",
+                action=f"Auto-fixed {len(today_fixes)}, {len(actions)} actions needed",
                 outcome=report["summary"][:500],
                 trust=0.9,
                 source="autonomous_diagnostics",
@@ -206,6 +256,56 @@ class AutonomousDiagnostics:
             pass
 
         return report
+
+    def consensus_diagnose(self, error_type: str, error_detail: str) -> Dict[str, Any]:
+        """
+        Escalate a problem to Kimi+Opus for diagnosis.
+        Called when self-fix fails and the problem is recurring.
+        """
+        try:
+            from cognitive.consensus_engine import run_consensus
+
+            result = run_consensus(
+                prompt=(
+                    f"Grace has a problem she can't fix herself:\n\n"
+                    f"Error type: {error_type}\n"
+                    f"Detail: {error_detail}\n"
+                    f"Occurrence count: {sum(1 for f in self._failure_history if f.get('error_type') == error_type)}\n"
+                    f"Auto-fix attempted: Yes, failed\n\n"
+                    f"Diagnose:\n"
+                    f"1. What's the root cause?\n"
+                    f"2. What's the fix? (plain English, no jargon)\n"
+                    f"3. Can Grace fix this herself with different approach?\n"
+                    f"4. Does the user need to do something?"
+                ),
+                models=["kimi", "opus"],
+                source="autonomous",
+            )
+
+            diagnosis = {
+                "error_type": error_type,
+                "consensus_diagnosis": result.final_output[:2000],
+                "confidence": result.confidence,
+                "models_used": result.models_used,
+                "auto_fixable": "grace can fix" in result.final_output.lower(),
+            }
+
+            # Log
+            try:
+                from api._genesis_tracker import track
+                track(
+                    key_type="system",
+                    what=f"Consensus diagnosis: {error_type}",
+                    how="autonomous_diagnostics.consensus_diagnose",
+                    output_data=diagnosis,
+                    tags=["diagnostics", "consensus", "escalation"],
+                )
+            except Exception:
+                pass
+
+            return diagnosis
+        except Exception as e:
+            return {"error": str(e), "consensus_available": False}
 
     # ── Self-Fixing ───────────────────────────────────────────────────
 

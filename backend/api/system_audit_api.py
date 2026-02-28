@@ -524,6 +524,13 @@ async def diagnostics_error(error_type: str, error_message: str, component: str 
     return get_diagnostics().on_error(error_type, error_message, component)
 
 
+@router.post("/diagnostics/consensus-diagnose")
+async def consensus_diagnose(error_type: str, error_detail: str):
+    """Escalate a problem to Kimi+Opus for consensus diagnosis."""
+    from cognitive.autonomous_diagnostics import get_diagnostics
+    return get_diagnostics().consensus_diagnose(error_type, error_detail)
+
+
 @router.get("/diagnostics/status")
 async def diagnostics_status():
     """Current diagnostic system status."""
