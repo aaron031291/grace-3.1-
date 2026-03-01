@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
 import ConsensusChat from "./ConsensusChat";
+import DevChat from "./DevChat";
 import { API_BASE_URL } from "../config/api";
 import "./ChatTab.css";
 
@@ -635,8 +636,9 @@ export default function ChatTab() {
           {/* Chat mode selector */}
           <div style={{ display: "flex", gap: 2, background: "#111", borderRadius: 6, padding: 2 }}>
             {[
-              { id: "general", label: "💬 Chat", },
+              { id: "general", label: "💬 Chat" },
               { id: "consensus", label: "🤝 Consensus" },
+              { id: "dev", label: "🛠️ Dev" },
             ].map(m => (
               <button key={m.id} onClick={() => setChatMode(m.id)} style={{
                 padding: "4px 10px", border: "none", borderRadius: 4, cursor: "pointer",
@@ -697,6 +699,10 @@ export default function ChatTab() {
         {chatMode === "consensus" ? (
           <div style={{ flex: showWorldModel ? "1 1 70%" : "1 1 100%", overflow: "hidden" }}>
             <ConsensusChat />
+          </div>
+        ) : chatMode === "dev" ? (
+          <div style={{ flex: showWorldModel ? "1 1 70%" : "1 1 100%", overflow: "hidden" }}>
+            <DevChat />
           </div>
         ) : (
           <div

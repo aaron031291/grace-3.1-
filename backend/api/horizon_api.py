@@ -279,3 +279,14 @@ async def run_forensic_audit():
     """
     from cognitive.forensic_audit import run_full_audit
     return run_full_audit()
+
+
+@router.get("/verify")
+async def run_verification():
+    """
+    Run integration verification tests.
+    Every claim is TESTED — imports, schemas, function signatures.
+    Returns pass/fail rate with evidence for each test.
+    """
+    from cognitive.integration_verifier import run_integration_tests
+    return run_integration_tests()

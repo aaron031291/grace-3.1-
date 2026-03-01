@@ -72,6 +72,7 @@ from api.patch_consensus_api import router as patch_consensus_router
 from api.self_healing_api import router as self_healing_router
 from api.horizon_api import router as horizon_router
 from api.sandbox_lab import router as sandbox_lab_router
+from api.dev_chat_api import router as dev_chat_router
 from genesis.middleware import GenesisKeyMiddleware
 
 # ── Safe imports for previously-unregistered API routers ──────────────
@@ -629,6 +630,7 @@ app.include_router(patch_consensus_router)       # /api/patch-consensus — trus
 app.include_router(self_healing_router)          # /api/health — self-healing + vector search
 app.include_router(horizon_router)               # /api/horizon — long-term goals + sandbox mirror
 app.include_router(sandbox_lab_router)           # /sandbox-lab — autonomous experimentation
+app.include_router(dev_chat_router)              # /api/dev-chat — developer education chat
 
 # ── Register all previously-unregistered API routers (safe) ───────────
 _registered_count = 0
