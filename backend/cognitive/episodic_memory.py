@@ -6,11 +6,11 @@ This is different from semantic knowledge - it's experiential.
 
 OPTIMIZED: Now supports semantic similarity using embeddings
 """
-from sqlalchemy import Column, String, Float, Text, DateTime, JSON
+from sqlalchemy import Column, String, Float, Text, DateTime
+from sqlalchemy.orm import Session, validates
 from database.base import BaseModel
 from datetime import datetime
 from typing import Dict, Any, List, Optional
-from sqlalchemy.orm import Session
 import logging
 import json
 import numpy as np
@@ -18,42 +18,50 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
+def _to_json_str(val) -> str:
+    if val is None:
+        return "{}"
+    if isinstance(val, str):
+        return val
+    try:
+        return json.dumps(val, ensure_ascii=False, default=str)
+    except (TypeError, ValueError):
+        if isinstance(val, dict):
+            return json.dumps({str(k): str(v) for k, v in val.items()})
+        return json.dumps({"raw": str(val)})
+
+
 class Episode(BaseModel):
     """
     Single episodic memory - a concrete experience.
-
-    Difference from Decision Logger:
-    - Decision Logger = audit trail (immutable record)
-    - Episodic Memory = learning substrate (used for pattern extraction)
+    All dict-like fields stored as Text (JSON strings) to avoid
+    SQLite 'dict is not supported' binding errors.
     """
     __tablename__ = "episodes"
     __table_args__ = {"extend_existing": True}
 
-    # What happened
     problem = Column(Text, nullable=False)
-    action = Column(JSON, nullable=False)
-    outcome = Column(JSON, nullable=False)
-    predicted_outcome = Column(JSON, nullable=True)
+    action = Column(Text, nullable=False, default="{}")
+    outcome = Column(Text, nullable=False, default="{}")
+    predicted_outcome = Column(Text, nullable=True)
 
-    # How accurate was prediction
     prediction_error = Column(Float, default=0.0)
 
-    # Trust and quality
     trust_score = Column(Float, default=0.5, nullable=False)
-    source = Column(String, nullable=False)  # Where this episode came from
+    source = Column(String, nullable=False)
 
-    # Provenance
     genesis_key_id = Column(String, nullable=True)
-    decision_id = Column(String, nullable=True)  # Link to OODA decision
+    decision_id = Column(String, nullable=True)
 
-    # Temporal
     timestamp = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    # Embedding for similarity search
-    embedding = Column(Text, nullable=True)  # JSON array
+    embedding = Column(Text, nullable=True)
 
-    # Metadata
-    episode_metadata = Column(JSON, nullable=True)
+    episode_metadata = Column(Text, nullable=True)
+
+    @validates("action", "outcome", "predicted_outcome", "episode_metadata")
+    def _coerce_json(self, key, value):
+        return _to_json_str(value)
 
 
 class EpisodicBuffer:
@@ -103,13 +111,13 @@ class EpisodicBuffer:
         )
 
         episode = Episode(
-            problem=problem,
-            action=action,
-            outcome=outcome,
-            predicted_outcome=predicted_outcome,
+            problem=str(problem)[:2000] if problem else "",
+            action=_to_json_str(action),
+            outcome=_to_json_str(outcome),
+            predicted_outcome=_to_json_str(predicted_outcome) if predicted_outcome else None,
             prediction_error=prediction_error,
-            trust_score=trust_score,
-            source=source,
+            trust_score=float(trust_score) if trust_score else 0.5,
+            source=source or "system",
             genesis_key_id=genesis_key_id,
             decision_id=decision_id,
             timestamp=datetime.utcnow()

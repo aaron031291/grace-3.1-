@@ -74,31 +74,65 @@ class GenesisFileWatcher(FileSystemEventHandler):
             self.symbiotic_vc = get_symbiotic_version_control()
         return self.symbiotic_vc
 
+    # Paths that should NEVER be watched — OS/browser/temp junk that
+    # generates a firehose of events and poisons the DB session.
+    _HARD_IGNORE_FRAGMENTS = (
+        "AppData",
+        "appdata",
+        ".cache",
+        "cache2",
+        "Cache",
+        "mozilla",
+        "firefox",
+        "Firefox",
+        "chromium",
+        "chrome",
+        "Google",
+        ".mozilla",
+        "Temp",
+        "tmp",
+        ".tmp",
+        "Local\\Packages",
+        ".local/share/Trash",
+        "Recycle.Bin",
+        "thumbnails",
+        ".thumbnails",
+        "Recently Used",
+        "recently-used",
+        "fontconfig",
+        "dconf",
+        "pulse",
+        "snap",
+        "flatpak",
+        "BrowserMetrics",
+        "CrashReports",
+    )
+
     def _should_ignore(self, file_path: str) -> bool:
         """Check if file should be ignored based on exclude patterns."""
-        path_parts = Path(file_path).parts
         file_path_str = str(file_path)
 
-        # CRITICAL: Explicitly check for genesis_key folder anywhere in path
-        # This prevents recursive tracking of Genesis Key files
+        # Hard-ignore non-repo paths (browser caches, OS temp, etc.)
+        for frag in self._HARD_IGNORE_FRAGMENTS:
+            if frag in file_path_str:
+                return True
+
+        path_parts = Path(file_path).parts
+
         if 'genesis_key' in file_path_str or '/layer_1/' in file_path_str:
             return True
         
-        # Check for Genesis User folders (GU-xxxxx pattern)
-        if '/GU-' in file_path_str:
+        if '/GU-' in file_path_str or '\\GU-' in file_path_str:
             return True
         
-        # Check for session files (session_SS- pattern)
         if 'session_SS-' in file_path_str:
             return True
 
-        # Check each part of the path against exclude patterns
         for part in path_parts:
             for pattern in self.exclude_patterns:
                 if pattern in part or part.endswith(pattern) or part.startswith(pattern):
                     return True
 
-        # Also check the full filename
         filename = os.path.basename(file_path)
         for pattern in self.exclude_patterns:
             if filename.endswith(pattern) or pattern in filename or filename.startswith(pattern):

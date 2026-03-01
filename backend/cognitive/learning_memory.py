@@ -3,15 +3,50 @@ Learning Memory System - Connects to Memory Mesh
 
 Manages training data from learning memory folders and feeds it
 to the memory mesh with trust scores for continuous improvement.
+
+NOTE: All JSON-like columns use Text + json.dumps/loads instead of
+Column(JSON) because SQLite's JSON type adapter does not reliably
+serialize Python dicts on INSERT — the sqlite3 C driver raises
+"ProgrammingError: type 'dict' is not supported" when it encounters
+a raw dict in a parameter slot.
 """
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from pathlib import Path
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, validates
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boolean, ForeignKey
 import json
 
 from database.base import BaseModel
+
+
+def _to_json_str(val) -> str:
+    """Coerce any value to a JSON string safe for SQLite Text columns."""
+    if val is None:
+        return "{}"
+    if isinstance(val, str):
+        return val
+    try:
+        return json.dumps(val, ensure_ascii=False, default=str)
+    except (TypeError, ValueError):
+        if isinstance(val, dict):
+            return json.dumps({str(k): str(v) for k, v in val.items()})
+        return json.dumps({"raw": str(val)})
+
+
+def _from_json_str(val) -> dict:
+    """Parse a stored JSON string back to a dict."""
+    if val is None:
+        return {}
+    if isinstance(val, dict):
+        return val
+    if isinstance(val, str):
+        try:
+            parsed = json.loads(val)
+            return parsed if isinstance(parsed, dict) else {"raw": val}
+        except Exception:
+            return {"raw": val}
+    return {"raw": str(val)}
 
 
 class LearningExample(BaseModel):
@@ -23,11 +58,10 @@ class LearningExample(BaseModel):
     __tablename__ = "learning_examples"
     __table_args__ = {"extend_existing": True}
 
-    # What was learned
-    example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
-    input_context = Column(JSON, nullable=False)  # What was the situation
-    expected_output = Column(JSON, nullable=False)  # What should have happened
-    actual_output = Column(JSON, nullable=True)  # What actually happened
+    example_type = Column(String, nullable=False, index=True)
+    input_context = Column(Text, nullable=False, default="{}")
+    expected_output = Column(Text, nullable=False, default="{}")
+    actual_output = Column(Text, nullable=True)
 
     # Trust scoring
     trust_score = Column(Float, default=0.5, nullable=False)  # Overall trust (0-1)
@@ -54,8 +88,11 @@ class LearningExample(BaseModel):
     episodic_episode_id = Column(String, nullable=True)  # Link to episodic memory
     procedure_id = Column(String, nullable=True)  # Link to learned procedure
 
-    # Metadata
-    example_metadata = Column(JSON, nullable=True)
+    example_metadata = Column(Text, nullable=True)
+
+    @validates("input_context", "expected_output", "actual_output", "example_metadata")
+    def _coerce_to_json_str(self, key, value):
+        return _to_json_str(value)
 
 
 class LearningPattern(BaseModel):
@@ -70,18 +107,19 @@ class LearningPattern(BaseModel):
     pattern_name = Column(String, nullable=False, unique=True)
     pattern_type = Column(String, nullable=False)  # behavioral, optimization, error_recovery, etc.
 
-    # Pattern definition
-    preconditions = Column(JSON, nullable=False)  # When this pattern applies
-    actions = Column(JSON, nullable=False)  # What to do
-    expected_outcomes = Column(JSON, nullable=False)  # What should happen
+    preconditions = Column(Text, nullable=False, default="{}")
+    actions = Column(Text, nullable=False, default="{}")
+    expected_outcomes = Column(Text, nullable=False, default="{}")
 
-    # Trust and quality
     trust_score = Column(Float, default=0.5, nullable=False)
-    success_rate = Column(Float, default=0.0, nullable=False)  # % of times it worked
-    sample_size = Column(Integer, default=0)  # How many examples support this
+    success_rate = Column(Float, default=0.0, nullable=False)
+    sample_size = Column(Integer, default=0)
 
-    # Supporting evidence
-    supporting_examples = Column(JSON, nullable=False)  # List of learning_example IDs
+    supporting_examples = Column(Text, nullable=False, default="[]")
+
+    @validates("preconditions", "actions", "expected_outcomes", "supporting_examples")
+    def _coerce_pattern_json(self, key, value):
+        return _to_json_str(value)
 
     # Usage tracking
     times_applied = Column(Integer, default=0)
@@ -307,12 +345,11 @@ class LearningMemoryManager:
             age_days=0
         )
 
-        # Create learning example
         example = LearningExample(
             example_type=learning_type,
-            input_context=input_context,
-            expected_output=expected_output,
-            actual_output=actual_output,
+            input_context=_to_json_str(input_context),
+            expected_output=_to_json_str(expected_output),
+            actual_output=_to_json_str(actual_output),
             trust_score=trust_score,
             source_reliability=self.trust_scorer.source_weights.get(source, 0.5),
             outcome_quality=outcome_quality,
@@ -402,15 +439,21 @@ class LearningMemoryManager:
 
         return consistent_count / total_count if total_count > 0 else 0.5
 
-    def _contexts_similar(self, ctx1: Dict, ctx2: Dict) -> bool:
+    def _contexts_similar(self, ctx1, ctx2) -> bool:
         """Check if contexts are similar (simplified)."""
-        # Simple overlap check - should use embeddings
+        ctx1 = _from_json_str(ctx1)
+        ctx2 = _from_json_str(ctx2)
+        if not ctx1 or not ctx2:
+            return False
         overlap = set(ctx1.keys()) & set(ctx2.keys())
         return len(overlap) > len(ctx1.keys()) * 0.5
 
-    def _outputs_similar(self, out1: Dict, out2: Dict) -> bool:
+    def _outputs_similar(self, out1, out2) -> bool:
         """Check if outputs are similar (simplified)."""
-        # Simple overlap check - should use embeddings
+        out1 = _from_json_str(out1)
+        out2 = _from_json_str(out2)
+        if not out1 or not out2:
+            return False
         overlap = set(out1.keys()) & set(out2.keys())
         return len(overlap) > len(out1.keys()) * 0.5
 
@@ -467,29 +510,26 @@ class LearningMemoryManager:
 
     def _extract_common_preconditions(self, examples: List[LearningExample]) -> Dict:
         """Extract common preconditions from examples."""
-        # Simplified - should use more sophisticated extraction
         all_keys = set()
-        for ex in examples:
-            all_keys.update(ex.input_context.keys())
+        parsed = [_from_json_str(ex.input_context) for ex in examples]
+        for d in parsed:
+            all_keys.update(d.keys())
 
         common = {}
         for key in all_keys:
-            values = [ex.input_context.get(key) for ex in examples if key in ex.input_context]
-            if len(values) >= len(examples) * 0.7:  # 70% threshold
-                # This key appears in most examples
-                common[key] = values[0]  # Simplified - should find common value
+            values = [d.get(key) for d in parsed if key in d]
+            if len(values) >= len(examples) * 0.7:
+                common[key] = values[0]
 
         return common
 
     def _extract_common_actions(self, examples: List[LearningExample]) -> Dict:
         """Extract common actions from examples."""
-        # Simplified pattern extraction
-        return examples[0].expected_output  # Should be more sophisticated
+        return _from_json_str(examples[0].expected_output)
 
     def _extract_common_outcomes(self, examples: List[LearningExample]) -> Dict:
         """Extract common outcomes from examples."""
-        # Simplified pattern extraction
-        return examples[0].expected_output  # Should be more sophisticated
+        return _from_json_str(examples[0].expected_output)
 
     def get_training_data(
         self,
