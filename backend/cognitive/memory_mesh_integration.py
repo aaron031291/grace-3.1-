@@ -69,30 +69,31 @@ class MemoryMeshIntegration:
         Returns:
             Learning example ID
         """
-        # Handle both dict and JSON string inputs
-        import json as _json
-        if isinstance(context, str):
-            try:
-                context = _json.loads(context)
-            except Exception:
-                context = {"raw": context}
-        if isinstance(action_taken, str):
-            try:
-                action_taken = _json.loads(action_taken)
-            except Exception:
-                action_taken = {"raw": action_taken}
-        if isinstance(outcome, str):
-            try:
-                outcome = _json.loads(outcome)
-            except Exception:
-                outcome = {"raw": outcome}
-        if isinstance(expected_outcome, str):
-            try:
-                expected_outcome = _json.loads(expected_outcome)
-            except Exception:
-                expected_outcome = {"raw": expected_outcome}
+        def _safe_dict(val):
+            """Coerce any value to a JSON-safe dict for SQLite."""
+            if val is None:
+                return {}
+            if isinstance(val, str):
+                import json as _j
+                try:
+                    parsed = _j.loads(val)
+                    return parsed if isinstance(parsed, dict) else {"raw": val}
+                except Exception:
+                    return {"raw": val}
+            if isinstance(val, dict):
+                import json as _j
+                try:
+                    _j.dumps(val, default=str)
+                    return val
+                except (TypeError, ValueError):
+                    return {k: str(v) for k, v in val.items()}
+            return {"raw": str(val)}
 
-        # 1. Store in learning memory with trust scoring
+        context = _safe_dict(context)
+        action_taken = _safe_dict(action_taken)
+        outcome = _safe_dict(outcome)
+        expected_outcome = _safe_dict(expected_outcome) if expected_outcome else None
+
         learning_data = {
             'context': context,
             'expected': expected_outcome or outcome,
@@ -163,19 +164,39 @@ class MemoryMeshIntegration:
         """
         Add high-trust learning example to episodic memory.
         """
-        # Create episode from learning example
+        import json as _json
+
+        def _json_safe(val):
+            if val is None:
+                return None
+            if isinstance(val, str):
+                try:
+                    return _json.loads(val) if val.strip().startswith(("{", "[")) else {"raw": val}
+                except Exception:
+                    return {"raw": val}
+            if isinstance(val, dict):
+                try:
+                    _json.dumps(val, default=str)
+                    return val
+                except (TypeError, ValueError):
+                    return {k: str(v) for k, v in val.items()}
+            return {"raw": str(val)}
+
+        problem_text = str(context) if not isinstance(context, str) else context
+        if len(problem_text) > 2000:
+            problem_text = problem_text[:2000]
+
         episode = Episode(
-            problem=str(context),
-            action=action,
-            outcome=outcome,
-            predicted_outcome=expected_outcome,
+            problem=problem_text,
+            action=_json_safe(action),
+            outcome=_json_safe(outcome),
+            predicted_outcome=_json_safe(expected_outcome),
             prediction_error=self._calculate_prediction_error(outcome, expected_outcome),
             trust_score=learning_example.trust_score,
             source=learning_example.source,
             genesis_key_id=learning_example.genesis_key_id,
             timestamp=datetime.utcnow(),
-            # Link back to learning example
-            metadata={'learning_example_id': learning_example.id}
+            metadata={'learning_example_id': str(learning_example.id)}
         )
 
         self.session.add(episode)

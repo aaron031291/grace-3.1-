@@ -217,6 +217,26 @@ class GenesisKeyService:
             }
 
             # Create Genesis Key
+            def _sqlite_json_safe(val):
+                """Ensure value is JSON-serializable for SQLite JSON columns."""
+                if val is None:
+                    return None
+                if isinstance(val, (list, tuple)):
+                    try:
+                        json.dumps(val, default=str)
+                        return val
+                    except (TypeError, ValueError):
+                        return [str(v) for v in val]
+                if isinstance(val, dict):
+                    try:
+                        json.dumps(val, default=str)
+                        return val
+                    except (TypeError, ValueError):
+                        return {str(k): str(v) for k, v in val.items()}
+                if isinstance(val, str):
+                    return val
+                return str(val)
+
             key = GenesisKey(
                 key_id=key_id,
                 parent_key_id=parent_key_id,
@@ -242,11 +262,11 @@ class GenesisKeyService:
                 commit_sha=commit_sha,
                 branch_name=branch_name,
                 metadata_human=metadata_human,
-                metadata_ai=metadata_ai,
-                input_data=input_data,
-                output_data=output_data,
-                context_data=context_data,
-                tags=tags
+                metadata_ai=_sqlite_json_safe(metadata_ai),
+                input_data=_sqlite_json_safe(input_data),
+                output_data=_sqlite_json_safe(output_data),
+                context_data=_sqlite_json_safe(context_data),
+                tags=_sqlite_json_safe(tags),
             )
 
             sess.add(key)
@@ -328,17 +348,32 @@ class GenesisKeyService:
                 kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
                 memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
 
-                # Use extracted data — convert dicts to JSON strings for SQLite
+                def _safe_json(val):
+                    if val is None:
+                        return {}
+                    if isinstance(val, dict):
+                        try:
+                            json.dumps(val, default=str)
+                            return val
+                        except (TypeError, ValueError):
+                            return {k: str(v) for k, v in val.items()}
+                    if isinstance(val, str):
+                        try:
+                            return json.loads(val)
+                        except Exception:
+                            return {"raw": val}
+                    return {"raw": str(val)}
+
                 memory_mesh.ingest_learning_experience(
                     experience_type=extracted_key_data["key_type"],
-                    context=json.dumps({
-                        "what": extracted_key_data["what_description"],
-                        "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
-                        "why": extracted_key_data["why_reason"],
-                        "how": extracted_key_data["how_method"]
+                    context=_safe_json({
+                        "what": extracted_key_data.get("what_description") or "",
+                        "where": extracted_key_data.get("where_location") or extracted_key_data.get("file_path") or "",
+                        "why": extracted_key_data.get("why_reason") or "",
+                        "how": extracted_key_data.get("how_method") or ""
                     }),
-                    action_taken=json.dumps(extracted_key_data.get("input_data") or {}),
-                    outcome=json.dumps(extracted_key_data.get("output_data") or {}),
+                    action_taken=_safe_json(extracted_key_data.get("input_data")),
+                    outcome=_safe_json(extracted_key_data.get("output_data")),
                     source="genesis_key",
                     user_id=extracted_key_data.get("user_id"),
                     genesis_key_id=extracted_key_id

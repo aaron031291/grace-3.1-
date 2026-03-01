@@ -231,6 +231,27 @@ class LearningMemoryManager:
         self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
         self.trust_scorer = TrustScorer()
 
+    @staticmethod
+    def _ensure_dict(value) -> dict:
+        """Coerce value to a plain dict safe for SQLite JSON columns."""
+        if value is None:
+            return {}
+        if isinstance(value, str):
+            try:
+                import json as _j
+                parsed = _j.loads(value)
+                return parsed if isinstance(parsed, dict) else {"raw": value}
+            except Exception:
+                return {"raw": value}
+        if isinstance(value, dict):
+            import json as _j
+            try:
+                _j.dumps(value, default=str)
+                return value
+            except (TypeError, ValueError):
+                return {k: str(v) for k, v in value.items()}
+        return {"raw": str(value)}
+
     def ingest_learning_data(
         self,
         learning_type: str,
@@ -252,10 +273,18 @@ class LearningMemoryManager:
         Returns:
             Created learning example
         """
-        # Extract context and outcomes
-        input_context = learning_data.get('context', {})
-        expected_output = learning_data.get('expected', {})
-        actual_output = learning_data.get('actual', {})
+        if isinstance(learning_data, str):
+            try:
+                import json as _j
+                learning_data = _j.loads(learning_data)
+            except Exception:
+                learning_data = {"raw": learning_data}
+        if not isinstance(learning_data, dict):
+            learning_data = {"raw": str(learning_data)}
+
+        input_context = self._ensure_dict(learning_data.get('context', {}))
+        expected_output = self._ensure_dict(learning_data.get('expected', {}))
+        actual_output = self._ensure_dict(learning_data.get('actual', {}))
 
         # Calculate outcome quality
         outcome_quality = self._calculate_outcome_quality(
@@ -313,10 +342,12 @@ class LearningMemoryManager:
 
         Compares expected vs actual outcomes.
         """
-        if not actual:
-            return 0.5  # Neutral if no actual outcome
+        expected = self._ensure_dict(expected)
+        actual = self._ensure_dict(actual)
 
-        # Simple similarity for now (can be enhanced with semantic similarity)
+        if not actual:
+            return 0.5
+
         matching_keys = set(expected.keys()) & set(actual.keys())
 
         if not matching_keys:
@@ -348,6 +379,8 @@ class LearningMemoryManager:
 
         Checks if this aligns with other learning examples.
         """
+        input_context = self._ensure_dict(input_context)
+        expected_output = self._ensure_dict(expected_output)
         # Find similar learning examples
         similar_examples = self.session.query(LearningExample).filter(
             LearningExample.trust_score > 0.7
