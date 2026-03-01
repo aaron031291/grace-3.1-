@@ -522,6 +522,11 @@ async def get_healing_capabilities():
         engine = get_proactive_engine()
         caps = engine.get_capabilities()
         lims = engine.get_limitations()
+
+        subsystems = set()
+        for c in caps.values():
+            subsystems.add(c.get("subsystem", "core"))
+
         return {
             "capabilities": caps,
             "limitations": lims,
@@ -533,9 +538,29 @@ async def get_healing_capabilities():
             "manual_capabilities": sum(
                 1 for c in caps.values() if not c.get("autonomous")
             ),
+            "subsystems_used": sorted(subsystems),
         }
     except Exception as e:
         return {"capabilities": {}, "limitations": [], "error": str(e)}
+
+
+@router.get("/proactive-healing/subsystems")
+async def get_integrated_subsystems():
+    """Get the integration status of all 14 subsystems."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        status = engine.get_status()
+        return {
+            "subsystems": status.get("subsystems_integrated", []),
+            "total": len(status.get("subsystems_integrated", [])),
+            "connected": sum(
+                1 for s in status.get("subsystems_integrated", [])
+                if s.get("status") == "connected"
+            ),
+        }
+    except Exception as e:
+        return {"subsystems": [], "error": str(e)}
 
 
 @router.post("/proactive-healing/trigger")

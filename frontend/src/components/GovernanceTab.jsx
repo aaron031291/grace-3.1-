@@ -1487,6 +1487,23 @@ function SelfHealingPanel() {
         )}
       </Card>
 
+      {/* Subsystem Integration Status */}
+      <Card title={`Integrated Subsystems (${(s.subsystems_integrated || []).length})`} extra={
+        <span onClick={() => toggle('subsystems')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'subsystems' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'subsystems' && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+            {(s.subsystems_integrated || []).map((sub, i) => (
+              <div key={i} style={{ padding: '6px 10px', background: C.bg, borderRadius: 4, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: sub.status === 'connected' ? C.success : C.error, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, flex: 1 }}>{(sub.name || '').replace(/_/g, ' ')}</span>
+                <span style={{ fontSize: 9, color: sub.status === 'connected' ? C.success : C.dim }}>{sub.status}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
       {/* Trend Data */}
       {trendData.memory_samples?.length > 0 && (
         <Card title="Resource Trends" extra={
