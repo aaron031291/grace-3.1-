@@ -11,6 +11,7 @@ const SECTIONS = [
   { id: "stress", label: "Stress Test" },
   { id: "triggers", label: "Triggers" },
   { id: "gaps", label: "Knowledge Gaps" },
+  { id: "probe", label: "Probe Agent" },
   { id: "apis", label: "API Audit" },
   { id: "connectivity", label: "Connectivity" },
   { id: "runtime", label: "Runtime" },
@@ -31,6 +32,7 @@ export default function DevTab() {
         {section === "stress" && <StressTestPanel />}
         {section === "triggers" && <TriggersPanel />}
         {section === "gaps" && <KnowledgeGapsPanel />}
+        {section === "probe" && <ProbeAgentPanel />}
         {section === "apis" && <APIAuditPanel />}
         {section === "connectivity" && <ConnectivityPanel />}
         {section === "runtime" && <RuntimePanel />}
@@ -737,6 +739,101 @@ function KnowledgeGapsPanel() {
               ))}</tbody>
             </table>
           ) : <pre style={pre}>{JSON.stringify(matrix, null, 2)}</pre>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Probe Agent Panel ─────────────────────────────────────────────── */
+
+function ProbeAgentPanel() {
+  const [sweep, setSweep] = useState(null);
+  const [modelSweep, setModelSweep] = useState(null);
+  const [fullResult, setFullResult] = useState(null);
+  const [loading, setLoading] = useState({});
+
+  const run = async (key, url, setter) => {
+    setLoading(p => ({ ...p, [key]: true }));
+    setter(await jf(url, { method: "POST" }));
+    setLoading(p => ({ ...p, [key]: false }));
+  };
+
+  const statusColor = { active: "#4caf50", broken: "#f44336", dormant: "#f59e0b", not_configured: "#888" };
+
+  return (
+    <div>
+      <h2 style={h2s}>Probe Agent</h2>
+      <p style={{ fontSize: 12, color: "#888", marginBottom: 12 }}>Automated crawler — sends synthetic pulses to every API + LLM model. Broken endpoints trigger consensus diagnosis + self-healing.</p>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+        <button onClick={() => run("sweep", `${B}/api/probe/sweep`, setSweep)} style={actBtn("#2563eb")} disabled={loading.sweep}>{loading.sweep ? "Probing APIs..." : "Probe All APIs"}</button>
+        <button onClick={() => run("models", `${B}/api/probe/sweep-models`, setModelSweep)} style={actBtn("#8b5cf6")} disabled={loading.models}>{loading.models ? "Probing Models..." : "Probe All LLMs"}</button>
+        <button onClick={() => run("full", `${B}/api/probe/sweep-and-heal`, setFullResult)} style={actBtn("#ef4444")} disabled={loading.full}>{loading.full ? "Running Full Pipeline..." : "Probe → Diagnose → Heal"}</button>
+      </div>
+
+      {modelSweep?.models && (
+        <div style={{ marginBottom: 16 }}>
+          <h3 style={h3s}>LLM Model Status</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
+            {modelSweep.models.map((m, i) => (
+              <div key={i} style={{ ...card, padding: "10px 14px", borderLeft: `4px solid ${statusColor[m.status] || "#888"}` }}>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{m.model_id}</div>
+                <div style={{ fontSize: 11, color: "#888" }}>{m.model_name}</div>
+                <div style={{ fontSize: 12, color: statusColor[m.status], fontWeight: 700, marginTop: 4 }}>{m.status.toUpperCase()}</div>
+                {m.error && <div style={{ fontSize: 10, color: "#f44336", marginTop: 2 }}>{m.error.slice(0, 100)}</div>}
+                {m.latency_ms > 0 && <div style={{ fontSize: 10, color: "#888" }}>{m.latency_ms}ms</div>}
+                {m.response_preview && <div style={{ fontSize: 10, color: "#4caf50" }}>{m.response_preview}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sweep && (
+        <div style={{ marginBottom: 16 }}>
+          <h3 style={h3s}>API Sweep Results</h3>
+          <div style={{ display: "flex", gap: 12, marginBottom: 8 }}>
+            <div style={{ ...card, padding: "6px 14px" }}>Total: <strong>{sweep.total}</strong></div>
+            <div style={{ ...card, padding: "6px 14px", color: "#4caf50" }}>Active: <strong>{sweep.active}</strong></div>
+            <div style={{ ...card, padding: "6px 14px", color: "#f44336" }}>Broken: <strong>{sweep.broken}</strong></div>
+            <div style={{ ...card, padding: "6px 14px", color: "#f59e0b" }}>Dormant: <strong>{sweep.dormant}</strong></div>
+          </div>
+          {sweep.broken_endpoints?.length > 0 && (
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#f44336", marginBottom: 6 }}>Broken Endpoints</div>
+              {sweep.broken_endpoints.map((e, i) => (
+                <div key={i} style={{ fontSize: 11, color: "#aaa", padding: "2px 0" }}>
+                  <span style={{ color: "#f44336" }}>{e.status_code}</span> {e.path} — {e.error}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {fullResult?.diagnoses?.length > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <h3 style={h3s}>Consensus Diagnoses</h3>
+          {fullResult.diagnoses.map((d, i) => (
+            <div key={i} style={{ ...card, marginBottom: 8, borderLeft: `3px solid ${d.all_agree ? "#4caf50" : "#f59e0b"}` }}>
+              <div style={{ fontSize: 13, fontWeight: 700 }}>{d.endpoint}</div>
+              <div style={{ fontSize: 11, color: "#f44336", marginBottom: 4 }}>Error: {d.error}</div>
+              <div style={{ fontSize: 12, color: "#ccc", whiteSpace: "pre-wrap" }}>{d.diagnosis}</div>
+              <div style={{ fontSize: 10, color: "#888", marginTop: 4 }}>
+                Confidence: {((d.confidence || 0) * 100).toFixed(0)}% |
+                Models: {(d.models_used || []).join(", ")} |
+                {d.all_agree ? <span style={{ color: "#4caf50" }}> ALL AGREE</span> : <span style={{ color: "#f59e0b" }}> DISAGREEMENT</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {fullResult?.summary && (
+        <div>
+          <h3 style={h3s}>Pipeline Summary</h3>
+          <pre style={pre}>{JSON.stringify(fullResult.summary, null, 2)}</pre>
         </div>
       )}
     </div>
