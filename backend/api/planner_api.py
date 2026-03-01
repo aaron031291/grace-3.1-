@@ -238,11 +238,53 @@ async def execute_plan(req: PlanExecuteRequest):
     except Exception:
         pass
 
+    # Actually execute steps through the consensus/patch pipeline
+    execution_results = []
+    for i, step in enumerate(steps):
+        step_result = {"step_index": i, "title": step.get("title", ""), "status": "pending"}
+        try:
+            step_desc = step.get("description", step.get("title", ""))
+
+            # Use patch consensus for code changes, regular consensus for analysis
+            if step.get("type") in ("implementation", "code", "fix", "build"):
+                from cognitive.patch_consensus import run_patch_consensus
+                result = run_patch_consensus(
+                    task=step_desc,
+                    auto_apply=False,
+                    threshold=0.67,
+                )
+                step_result["status"] = result.get("status", "completed")
+                step_result["proposal_id"] = result.get("proposal_id")
+                step_result["patch_hash"] = result.get("patch_hash")
+            else:
+                from cognitive.consensus_engine import run_consensus
+                result = run_consensus(
+                    prompt=step_desc,
+                    source="planner",
+                )
+                step_result["status"] = "completed"
+                step_result["output"] = result.final_output[:1000] if result.final_output else ""
+                step_result["confidence"] = result.confidence
+
+        except Exception as e:
+            step_result["status"] = "failed"
+            step_result["error"] = str(e)[:200]
+
+        execution_results.append(step_result)
+
+    session["execution"]["results"] = execution_results
+    session["execution"]["completed_at"] = datetime.utcnow().isoformat()
+    completed = sum(1 for r in execution_results if r["status"] in ("completed", "verified"))
+    session["status"] = "completed" if completed == len(steps) else "partial"
+    _save_session(req.session_id, session)
+
     return {
         "session_id": req.session_id,
-        "status": "executing",
+        "status": session["status"],
         "steps_approved": len(steps),
-        "steps": steps,
+        "steps_completed": completed,
+        "steps_failed": len(steps) - completed,
+        "results": execution_results,
     }
 
 

@@ -73,6 +73,66 @@ from api.self_healing_api import router as self_healing_router
 from api.horizon_api import router as horizon_router
 from api.sandbox_lab import router as sandbox_lab_router
 from genesis.middleware import GenesisKeyMiddleware
+
+# ── Safe imports for previously-unregistered API routers ──────────────
+# Each wrapped in try/except so a single broken import doesn't crash the app
+_optional_routers = []
+
+def _try_import(module_path, router_name="router", label=""):
+    """Safely import an API router; returns (router, label) or None."""
+    try:
+        mod = __import__(module_path, fromlist=[router_name])
+        r = getattr(mod, router_name, None)
+        if r:
+            _optional_routers.append((r, label or module_path))
+    except Exception:
+        pass
+
+_try_import("api.tab_aggregator_api", label="/api/tabs — tab aggregator (monitoring)")
+_try_import("api.grace_planning_api", label="/api/grace-planning — full planning workflow")
+_try_import("api.websocket", label="/ws — WebSocket live chat")
+_try_import("api.version_control", label="/api/version-control — git operations")
+_try_import("api.streaming", label="/stream — SSE streaming")
+_try_import("api.repositories_api", label="/repositories — repo management")
+_try_import("api.testing_api", label="/test — autonomous testing")
+_try_import("api.repo_genesis", label="/repo-genesis — repo scanning")
+_try_import("api.training", label="/training — active learning")
+_try_import("api.proactive_learning", label="/proactive-learning — background learning")
+_try_import("api.telemetry", label="/telemetry — self-modeling")
+_try_import("api.scraping", label="/scrape — web scraping")
+_try_import("api.notion", label="/notion — kanban tasks")
+_try_import("api.ingestion_integration", label="/ingestion-integration — full ingestion")
+_try_import("api.ingestion_api", label="/api/ingestion — ingestion pipeline")
+_try_import("api.kpi_api", label="/kpi — KPI tracking")
+_try_import("api.knowledge_base_api", label="/knowledge-base — KB connectors")
+_try_import("api.governance_api", label="/governance — three-pillar governance")
+_try_import("api.llm_orchestration", label="/llm — multi-LLM orchestration")
+_try_import("api.librarian_api", label="/librarian — tag/rules/approval")
+_try_import("api.learning_efficiency_api", label="/learning-efficiency — data-to-insight")
+_try_import("api.metrics", label="/metrics — prometheus metrics")
+_try_import("api.ide_bridge_api", label="/api/ide — VSCode bridge")
+_try_import("api.knowledge_base_cicd", label="/api/knowledge-base/cicd — KB CI/CD")
+_try_import("api.monitoring_api", label="/monitoring — system monitoring")
+_try_import("api.learning_memory_api", label="/learning-memory — memory mesh API")
+_try_import("api.ml_intelligence_api", label="/ml-intelligence — neural trust/bandit")
+_try_import("api.grace_todos_api", label="/api/grace-todos — autonomous tasks")
+_try_import("api.layer1", label="/layer1 — layer 1 inputs")
+_try_import("api.master_integration", label="/grace — master integration")
+_try_import("api.ingest", label="/ingest — text/document ingestion")
+_try_import("api.context_api", label="/api/context — user context")
+_try_import("api.directory_hierarchy", label="/directory-hierarchy — directory genesis")
+_try_import("api.cicd_api", label="/api/cicd — genesis CI/CD")
+_try_import("api.file_management", label="/files — KB file operations")
+_try_import("api.genesis_keys", label="/genesis — genesis key tracking")
+_try_import("api.cognitive", label="/cognitive — OODA/ambiguity/invariants")
+_try_import("api.cicd_versioning_api", label="/api/cicd/versions — CI/CD versioning")
+_try_import("api.autonomous_learning", label="/autonomous-learning — multi-process learning")
+_try_import("api.file_ingestion", label="/file-ingest — file ingestion")
+_try_import("api.autonomous_api", label="/api/autonomous — autonomous engine")
+_try_import("api.codebase_api", label="/codebase — codebase browser")
+_try_import("api.adaptive_cicd_api", label="/api/cicd/adaptive — adaptive CI/CD")
+_try_import("api.agent_api", label="/agent — software engineering agent")
+_try_import("api.auth", label="/auth — authentication")
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 from search.serpapi_service import SerpAPIService
@@ -449,6 +509,23 @@ async def lifespan(app: FastAPI):
 
     # ==================== Start Continuous Learning Orchestrator ====================
     # Connect sandbox lab to continuous training data
+    # ==================== Activate Event Bridge ====================
+    try:
+        from cognitive.event_bridge import activate_all_bridges
+        activate_all_bridges()
+        print("[OK] Event bridge activated (Grace OS ↔ cognitive event_bus)", flush=True)
+    except Exception as e:
+        print(f"[WARN] Event bridge activation failed: {e}", flush=True)
+
+    # ==================== Initialize Self-Healing Tracker ====================
+    try:
+        from cognitive.self_healing_tracker import get_self_healing_tracker
+        tracker = get_self_healing_tracker()
+        tracker.initialize()
+        print(f"[OK] Self-healing tracker initialized ({len(tracker._components)} components)", flush=True)
+    except Exception as e:
+        print(f"[WARN] Self-healing tracker init failed: {e}", flush=True)
+
     if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning
@@ -551,6 +628,17 @@ app.include_router(patch_consensus_router)       # /api/patch-consensus — trus
 app.include_router(self_healing_router)          # /api/health — self-healing + vector search
 app.include_router(horizon_router)               # /api/horizon — long-term goals + sandbox mirror
 app.include_router(sandbox_lab_router)           # /sandbox-lab — autonomous experimentation
+
+# ── Register all previously-unregistered API routers (safe) ───────────
+_registered_count = 0
+for _router, _label in _optional_routers:
+    try:
+        app.include_router(_router)
+        _registered_count += 1
+    except Exception as _e:
+        print(f"[WARN] Failed to register {_label}: {_e}")
+if _registered_count > 0:
+    print(f"[OK] Registered {_registered_count} additional API routers")
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
