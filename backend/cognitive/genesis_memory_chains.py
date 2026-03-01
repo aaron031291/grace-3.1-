@@ -21,8 +21,8 @@ from models.database_models import (
     LearningExample,
     Episode,
     Procedure,
-    GenesisKey
 )
+from models.genesis_key_models import GenesisKey
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ class GenesisMemoryChain:
         try:
             # Get Genesis Key
             genesis_key = self.session.query(GenesisKey).filter(
-                GenesisKey.id == genesis_key_id
+                GenesisKey.key_id == genesis_key_id
             ).first()
 
             if not genesis_key:
@@ -363,14 +363,14 @@ class GenesisMemoryChain:
         try:
             # Get all Genesis Keys with learning
             genesis_keys = self.session.query(
-                GenesisKey.id,
-                GenesisKey.name,
+                GenesisKey.key_id,
+                GenesisKey.what_description,
                 func.count(LearningExample.id).label('example_count')
             ).outerjoin(
                 LearningExample,
-                GenesisKey.id == LearningExample.genesis_key_id
+                GenesisKey.key_id == LearningExample.genesis_key_id
             ).group_by(
-                GenesisKey.id, GenesisKey.name
+                GenesisKey.key_id, GenesisKey.what_description
             ).having(
                 func.count(LearningExample.id) >= min_learning_examples
             ).all()

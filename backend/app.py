@@ -85,8 +85,9 @@ def _try_import(module_path, router_name="router", label=""):
         r = getattr(mod, router_name, None)
         if r:
             _optional_routers.append((r, label or module_path))
-    except Exception:
-        pass
+    except Exception as e:
+        # Log the failure so we can see what's broken (not silent anymore)
+        print(f"[API] Skip {label or module_path}: {type(e).__name__}: {str(e)[:80]}")
 
 _try_import("api.tab_aggregator_api", label="/api/tabs — tab aggregator (monitoring)")
 _try_import("api.grace_planning_api", label="/api/grace-planning — full planning workflow")

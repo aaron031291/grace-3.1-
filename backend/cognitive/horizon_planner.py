@@ -499,11 +499,12 @@ def _collect_baselines(goal: HorizonGoal):
         pass
 
     try:
-        from cognitive.memory_mesh_metrics import get_metrics
-        metrics = get_metrics()
+        from cognitive.memory_mesh_metrics import get_performance_metrics
+        metrics = get_performance_metrics()
         if metrics:
-            goal.baseline_metrics["avg_query_latency_ms"] = metrics.get("avg_query_latency_ms", 0)
-            goal.baseline_metrics["cache_hit_rate"] = metrics.get("cache_hit_rate", 0)
+            all_metrics = metrics.get_all_metrics() if hasattr(metrics, 'get_all_metrics') else {}
+            goal.baseline_metrics["avg_query_latency_ms"] = all_metrics.get("avg_query_latency_ms", 0)
+            goal.baseline_metrics["cache_hit_rate"] = all_metrics.get("cache_hit_rate", 0)
     except Exception:
         pass
 

@@ -266,3 +266,16 @@ async def get_event_bus_gaps():
     from cognitive.integration_gap_detector import detect_event_bus_gaps
     gaps = detect_event_bus_gaps()
     return {"gaps": gaps, "total": len(gaps)}
+
+
+# ── Forensic Audit ────────────────────────────────────────────────────
+
+@router.get("/forensic-audit")
+async def run_forensic_audit():
+    """
+    Run a deep forensic audit of all Grace systems.
+    Returns the truth about what's connected vs ghost code.
+    No hallucinations — just real import tests and schema checks.
+    """
+    from cognitive.forensic_audit import run_full_audit
+    return run_full_audit()

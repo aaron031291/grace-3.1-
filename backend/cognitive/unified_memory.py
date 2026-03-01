@@ -85,11 +85,11 @@ class UnifiedMemory:
             from sqlalchemy import text
             db.execute(text(
                 "INSERT INTO learning_examples (example_type, input_context, expected_output, actual_output, "
-                "trust_score, source, source_reliability, content_quality, consensus_score, recency_score, "
-                "created_at, updated_at) VALUES (:et, :ic, :eo, :ao, :ts, :src, :sr, :cq, :cs, :rs, :now, :now)"
+                "trust_score, source, source_reliability, outcome_quality, consistency_score, recency_weight, "
+                "created_at, updated_at) VALUES (:et, :ic, :eo, :ao, :ts, :src, :sr, :oq, :cs, :rw, :now, :now)"
             ), {"et": example_type, "ic": input_ctx[:5000], "eo": expected[:5000],
                 "ao": actual[:5000], "ts": trust, "src": source,
-                "sr": 0.5, "cq": 0.5, "cs": 0.5, "rs": 1.0,
+                "sr": 0.5, "oq": 0.5, "cs": 0.5, "rw": 1.0,
                 "now": datetime.utcnow()})
             db.commit()
             return True

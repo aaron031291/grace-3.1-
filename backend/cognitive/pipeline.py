@@ -96,6 +96,8 @@ class CognitivePipeline:
             self._stage_invariants(ctx)
         if "trust_pre" not in skip:
             self._stage_trust_pre(ctx)
+        if "memory_recall" not in skip:
+            self._stage_memory_recall(ctx)
 
         if "generate" not in skip:
             self._stage_generate(ctx, use_kimi)
@@ -422,6 +424,50 @@ class CognitivePipeline:
         except Exception as e:
             ctx.stages_failed.append("trust_pre")
             ctx.errors.append(f"TrustPre: {e}")
+
+    # ── Stage 5a: Memory Recall — pull relevant episodes + procedures ──
+    def _stage_memory_recall(self, ctx: PipelineContext):
+        """Recall relevant episodic and procedural memories to enrich context."""
+        try:
+            from database.session import get_session
+            sess = next(get_session())
+
+            # Recall similar episodes
+            try:
+                from cognitive.episodic_memory import EpisodicBuffer
+                episodic = EpisodicBuffer(sess)
+                episodes = episodic.recall_similar(ctx.prompt, limit=3)
+                if episodes:
+                    ctx.trust_context["recalled_episodes"] = len(episodes)
+                    episode_context = []
+                    for ep in episodes:
+                        ep_text = f"[Episode] {ep.problem[:200]} → {str(ep.outcome)[:200]}"
+                        episode_context.append(ep_text)
+                    if episode_context and not ctx.system_prompt:
+                        ctx.system_prompt = ""
+                    if episode_context:
+                        ctx.system_prompt += "\n\nRelevant past experiences:\n" + "\n".join(episode_context[:3])
+            except Exception:
+                pass
+
+            # Suggest procedures
+            try:
+                from cognitive.procedural_memory import ProceduralRepository
+                procedures = ProceduralRepository(sess)
+                proc = procedures.find_procedure(ctx.prompt, {})
+                if proc and proc.success_rate >= 0.6:
+                    ctx.trust_context["suggested_procedure"] = proc.name
+                    steps_str = str(proc.steps)[:500] if proc.steps else ""
+                    if steps_str:
+                        ctx.system_prompt = (ctx.system_prompt or "") + f"\n\nSuggested procedure ({proc.name}, {proc.success_rate:.0%} success): {steps_str}"
+            except Exception:
+                pass
+
+            sess.close()
+            ctx.stages_passed.append("memory_recall")
+        except Exception as e:
+            ctx.stages_failed.append("memory_recall")
+            ctx.errors.append(f"MemoryRecall: {e}")
 
     # ── Stage 5b: Generate — LLM call ─────────────────────────────────
     def _stage_generate(self, ctx: PipelineContext, use_kimi: bool):

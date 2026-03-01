@@ -450,8 +450,10 @@ class HealingExecutor:
 
             # Try to clear Memory Mesh cache
             try:
-                from cognitive.memory_mesh_cache import MemoryMeshCache
-                MemoryMeshCache.clear_all()
+                from cognitive.memory_mesh_cache import get_memory_mesh_cache
+                cache = get_memory_mesh_cache()
+                if cache:
+                    cache.invalidate_all()
                 cleared.append('memory_mesh_cache')
             except (ImportError, AttributeError):
                 pass
