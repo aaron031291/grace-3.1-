@@ -107,38 +107,39 @@ def _chat() -> dict:
 
 
 def _files() -> dict:
-    import requests as req
-    B = "http://127.0.0.1:8000"
-    j = lambda r: r.json() if r.ok else {"error": f"{r.status_code}"}
+    from core.services.files_service import tree, browse, read, write, create, delete, search, stats, docs_all
     return {
-        "tree":     lambda p: j(req.get(f"{B}/api/librarian-fs/tree", params=p, timeout=10)),
-        "browse":   lambda p: j(req.get(f"{B}/api/librarian-fs/browse", params={"path": p.get("path", "")}, timeout=10)),
-        "read":     lambda p: j(req.get(f"{B}/api/librarian-fs/file/content", params={"path": p["path"]}, timeout=10)),
-        "write":    lambda p: j(req.put(f"{B}/api/librarian-fs/file/content", json=p, timeout=10)),
-        "create":   lambda p: j(req.post(f"{B}/api/librarian-fs/file/create", json=p, timeout=10)),
-        "delete":   lambda p: j(req.delete(f"{B}/api/librarian-fs/file", params={"path": p["path"]}, timeout=10)),
-        "search":   lambda p: j(req.post(f"{B}/retrieve/search", params={"query": p["query"]}, timeout=15)),
-        "docs_all": lambda p: j(req.get(f"{B}/api/docs/all", timeout=10)),
-        "stats":    lambda p: j(req.get(f"{B}/api/librarian-fs/stats", timeout=10)),
+        "tree":     lambda p: tree(p.get("path"), p.get("max_depth", 3)),
+        "browse":   lambda p: browse(p.get("path", "")),
+        "read":     lambda p: read(p["path"]),
+        "write":    lambda p: write(p["path"], p["content"]),
+        "create":   lambda p: create(p.get("path", ""), p.get("content", ""), p.get("directory")),
+        "delete":   lambda p: delete(p["path"]),
+        "search":   lambda p: search(p["query"], p.get("limit", 10)),
+        "docs_all": lambda p: docs_all(),
+        "stats":    lambda p: stats(),
     }
 
 
 def _govern() -> dict:
-    import requests as req
-    B = "http://127.0.0.1:8000"
-    j = lambda r: r.json() if r.ok else {"error": f"{r.status_code}"}
+    from core.services.govern_service import (
+        dashboard, get_approvals, approve_action, get_scores,
+        list_rules, get_persona, update_persona, genesis_stats,
+        trigger_healing, trigger_learning, genesis_keys, approvals_history,
+    )
     return {
-        "dashboard":  lambda p: j(req.get(f"{B}/api/governance-hub/dashboard", timeout=10)),
-        "approvals":  lambda p: j(req.get(f"{B}/api/governance-hub/approvals", timeout=10)),
-        "approve":    lambda p: j(req.post(f"{B}/api/governance-hub/approvals/{p['id']}", json=p, timeout=10)),
-        "scores":     lambda p: j(req.get(f"{B}/api/governance-hub/scores", timeout=10)),
-        "rules":      lambda p: j(req.get(f"{B}/api/governance-rules/documents", timeout=10)),
-        "persona":    lambda p: j(req.get(f"{B}/api/governance-rules/persona", timeout=10)),
-        "genesis_stats": lambda p: _genesis_stats(),
-        "heal":       lambda p: j(req.post(f"{B}/api/governance-hub/healing/trigger", timeout=30)),
-        "learn":      lambda p: j(req.post(f"{B}/api/governance-hub/learning/trigger", timeout=30)),
-        "genesis_keys": lambda p: _genesis_keys(p.get("limit", 20)),
-        "approvals_history": lambda p: j(req.get(f"{B}/api/governance-hub/approvals/history", params=p, timeout=10)),
+        "dashboard":  lambda p: dashboard(),
+        "approvals":  lambda p: get_approvals(),
+        "approve":    lambda p: approve_action(p["id"], p.get("action", "approved"), p.get("reason", "")),
+        "scores":     lambda p: get_scores(),
+        "rules":      lambda p: list_rules(),
+        "persona":    lambda p: get_persona(),
+        "update_persona": lambda p: update_persona(p.get("personal"), p.get("professional")),
+        "genesis_stats": lambda p: genesis_stats(),
+        "heal":       lambda p: trigger_healing(),
+        "learn":      lambda p: trigger_learning(),
+        "genesis_keys": lambda p: genesis_keys(p.get("limit", 20)),
+        "approvals_history": lambda p: approvals_history(p.get("limit", 30)),
     }
 
 
@@ -194,69 +195,55 @@ def _system() -> dict:
 
 
 def _data() -> dict:
-    import requests as req
-    B = "http://127.0.0.1:8000"
-    j = lambda r: r.json() if r.ok else {"error": f"{r.status_code}"}
+    from core.services.data_service import api_sources, web_sources, add_api, add_web, delete_source, stats as data_stats, flash_cache_stats
     return {
-        "api_sources": lambda p: j(req.get(f"{B}/api/whitelist-hub/api-sources", timeout=10)),
-        "web_sources": lambda p: j(req.get(f"{B}/api/whitelist-hub/web-sources", timeout=10)),
-        "add_api":     lambda p: j(req.post(f"{B}/api/whitelist-hub/api-sources", json=p, timeout=10)),
-        "add_web":     lambda p: j(req.post(f"{B}/api/whitelist-hub/web-sources", json=p, timeout=10)),
-        "stats":       lambda p: j(req.get(f"{B}/api/whitelist-hub/stats", timeout=10)),
-        "flash_cache": lambda p: _flash_cache_stats(),
+        "api_sources": lambda p: api_sources(),
+        "web_sources": lambda p: web_sources(),
+        "add_api":     lambda p: add_api(p),
+        "add_web":     lambda p: add_web(p),
+        "delete":      lambda p: delete_source(p["source_id"]),
+        "stats":       lambda p: data_stats(),
+        "flash_cache": lambda p: flash_cache_stats(),
     }
 
 
 def _tasks() -> dict:
-    import requests as req
-    B = "http://127.0.0.1:8000"
-    j = lambda r: r.json() if r.ok else {"error": f"{r.status_code}"}
+    from core.services.tasks_service import (
+        live_activity, task_history, submit_task, get_scheduled,
+        schedule_task, delete_scheduled, time_sense, planner_sessions,
+    )
     return {
-        "live":       lambda p: j(req.get(f"{B}/api/tasks-hub/live", timeout=10)),
-        "history":    lambda p: j(req.get(f"{B}/api/tasks-hub/history", params={"limit": p.get("limit", 40)}, timeout=10)),
-        "submit":     lambda p: j(req.post(f"{B}/api/tasks-hub/submit", json=p, timeout=15)),
-        "scheduled":  lambda p: j(req.get(f"{B}/api/tasks-hub/scheduled", timeout=10)),
-        "schedule":   lambda p: j(req.post(f"{B}/api/tasks-hub/schedule", json=p, timeout=10)),
-        "time_sense": lambda p: _time_sense(),
-        "planner":    lambda p: j(req.get(f"{B}/api/planner/sessions", timeout=10)),
+        "live":       lambda p: live_activity(),
+        "history":    lambda p: task_history(p.get("limit", 40)),
+        "submit":     lambda p: submit_task(p),
+        "scheduled":  lambda p: get_scheduled(),
+        "schedule":   lambda p: schedule_task(p),
+        "delete":     lambda p: delete_scheduled(p["task_id"]),
+        "time_sense": lambda p: time_sense(),
+        "planner":    lambda p: planner_sessions(),
     }
 
 
 def _code() -> dict:
-    import requests as req
-    B = "http://127.0.0.1:8000"
-    j = lambda r: r.json() if r.ok else {"error": f"{r.status_code}"}
+    from core.services.code_service import (
+        list_projects, project_tree, read_file, write_file,
+        create_file, delete_file, generate_code, apply_code,
+    )
     return {
-        "projects":  lambda p: j(req.get(f"{B}/api/codebase-hub/projects", timeout=10)),
-        "tree":      lambda p: j(req.get(f"{B}/api/codebase-hub/tree/{p['folder']}", timeout=10)),
-        "read":      lambda p: j(req.get(f"{B}/api/codebase-hub/file", params={"path": p["path"]}, timeout=10)),
-        "write":     lambda p: j(req.put(f"{B}/api/codebase-hub/file", json=p, timeout=10)),
-        "generate":  lambda p: _code_generate(p),
-        "apply":     lambda p: j(req.post(f"{B}/api/coding-agent/apply", json=p, timeout=30)),
+        "projects":  lambda p: list_projects(),
+        "tree":      lambda p: project_tree(p["folder"], p.get("max_depth", 3)),
+        "read":      lambda p: read_file(p["path"]),
+        "write":     lambda p: write_file(p["path"], p["content"]),
+        "create":    lambda p: create_file(p["path"], p.get("content", "")),
+        "delete":    lambda p: delete_file(p["path"]),
+        "generate":  lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
+        "apply":     lambda p: apply_code(p["path"], p["content"]),
     }
 
 
 # ═══════════════════════════════════════════════════════════════════
 #  INTERNAL HELPERS — direct calls replacing HTTP
 # ═══════════════════════════════════════════════════════════════════
-
-def _genesis_stats():
-    from database.session import session_scope
-    from models.genesis_key_models import GenesisKey
-    from sqlalchemy import func
-    from datetime import timedelta
-    with session_scope() as s:
-        total = s.query(func.count(GenesisKey.id)).scalar() or 0
-        errors = s.query(func.count(GenesisKey.id)).filter(GenesisKey.is_error == True).scalar() or 0
-        return {"total_keys": total, "total_errors": errors}
-
-
-def _genesis_keys(limit: int = 20):
-    from database.session import session_scope
-    from models.genesis_key_models import GenesisKey
-    with session_scope() as s:
-        keys = s.query(GenesisKey).order_by(GenesisKey.when_timestamp.desc()).limit(limit).all()
-        return {"keys": [{"key_id": k.key_id, "key_type": str(k.key_type), "what": k.what_description} for k in keys]}
 
 
 def _run_consensus_full(p):
@@ -438,18 +425,6 @@ def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
 
-
-def _flash_cache_stats():
-    try:
-        from cognitive.flash_cache import get_flash_cache
-        return get_flash_cache().get_stats()
-    except Exception:
-        return {"entries": 0}
-
-
-def _time_sense():
-    from cognitive.time_sense import TimeSense
-    return TimeSense.get_context()
 
 
 # ═══════════════════════════════════════════════════════════════════

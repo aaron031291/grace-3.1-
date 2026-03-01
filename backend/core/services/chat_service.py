@@ -95,11 +95,55 @@ def get_history(payload: dict) -> dict:
 
 
 def send_prompt(payload: dict) -> dict:
-    """This still needs the LLM — delegate to the app endpoint."""
-    import requests as req
-    r = req.post("http://127.0.0.1:8000/chats/{}/prompt".format(payload["chat_id"]),
-                 json={"content": payload["message"]}, timeout=120)
-    return r.json() if r.ok else {"error": f"{r.status_code}"}
+    """Send prompt through the LLM pipeline directly."""
+    from models.repositories import ChatRepository, ChatHistoryRepository
+    from llm_orchestrator.factory import get_llm_client
+    import time as _time
+
+    factory = get_session_factory()
+    session = factory()
+    try:
+        chat_repo = ChatRepository(session)
+        history_repo = ChatHistoryRepository(session)
+
+        chat = chat_repo.get(payload["chat_id"])
+        if not chat:
+            return {"error": "Chat not found"}
+
+        user_msg = history_repo.add_message(
+            chat_id=payload["chat_id"], role="user", content=payload["message"]
+        )
+
+        client = get_llm_client()
+        start = _time.time()
+        response = client.chat(
+            model=chat.model,
+            messages=[
+                {"role": "system", "content": "You are Grace, a helpful AI assistant."},
+                {"role": "user", "content": payload["message"]},
+            ],
+            stream=False,
+            temperature=chat.temperature or 0.7,
+        )
+        gen_time = _time.time() - start
+
+        assistant_msg = history_repo.add_message(
+            chat_id=payload["chat_id"], role="assistant",
+            content=response if isinstance(response, str) else str(response),
+        )
+        session.commit()
+
+        return {
+            "chat_id": payload["chat_id"],
+            "message": response if isinstance(response, str) else str(response),
+            "model": chat.model,
+            "generation_time": round(gen_time, 2),
+        }
+    except Exception as e:
+        session.rollback()
+        return {"error": str(e)[:200]}
+    finally:
+        session.close()
 
 
 def run_consensus(payload: dict) -> dict:
