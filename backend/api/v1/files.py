@@ -91,3 +91,47 @@ async def analyze(file_path: str, use_kimi: bool = False):
 async def stats():
     import requests as req
     return req.get(f"{BASE}/api/librarian-fs/stats", timeout=10).json()
+
+
+# ── Chunked upload proxies ────────────────────────────────────────────
+
+@router.post("/upload/initiate")
+async def chunked_initiate(request: dict):
+    import requests as req
+    return req.post(f"{BASE}/api/upload/initiate", json=request, timeout=10).json()
+
+@router.post("/upload/chunk")
+async def chunked_chunk(
+    upload_id: str = Form(...),
+    chunk_index: int = Form(...),
+    chunk_hash: Optional[str] = Form(None),
+    chunk: UploadFile = File(...),
+):
+    import requests as req
+    r = req.post(
+        f"{BASE}/api/upload/chunk",
+        files={"chunk": (chunk.filename, chunk.file, chunk.content_type)},
+        data={"upload_id": upload_id, "chunk_index": str(chunk_index), "chunk_hash": chunk_hash or ""},
+        timeout=60,
+    )
+    return r.json()
+
+@router.get("/upload/status")
+async def chunked_status(upload_id: str):
+    import requests as req
+    return req.get(f"{BASE}/api/upload/status?upload_id={upload_id}", timeout=10).json()
+
+@router.post("/upload/complete")
+async def chunked_complete(request: dict):
+    import requests as req
+    return req.post(f"{BASE}/api/upload/complete", json=request, timeout=120).json()
+
+@router.delete("/upload/cancel")
+async def chunked_cancel(upload_id: str):
+    import requests as req
+    return req.delete(f"{BASE}/api/upload/cancel?upload_id={upload_id}", timeout=10).json()
+
+@router.get("/upload/active")
+async def chunked_active():
+    import requests as req
+    return req.get(f"{BASE}/api/upload/active", timeout=10).json()

@@ -14,6 +14,7 @@ class OllamaLLMClient(BaseLLMClient):
     
     def __init__(self, base_url: str = None):
         self.client = OllamaClient(base_url or settings.OLLAMA_URL)
+        self._default_model = None  # Set by factory for per-task models
 
     def generate(
         self,
@@ -35,13 +36,30 @@ class OllamaLLMClient(BaseLLMClient):
         # Merge other options from kwargs
         options.update(kwargs.get("options", {}))
         
-        return self.client.generate(
-            model=model_id or settings.LLM_MODEL or "mistral:7b",
-            prompt=prompt,
-            system=system_prompt,
-            stream=stream,
-            options=options
+        model = model_id or self._default_model or settings.LLM_MODEL or settings.OLLAMA_LLM_DEFAULT or "qwen2.5:7b"
+        
+        # Use generate_response (the actual OllamaClient method)
+        gen_method = getattr(self.client, 'generate', None) or getattr(self.client, 'generate_response', None)
+        if gen_method:
+            return gen_method(
+                model=model,
+                prompt=prompt,
+                system=system_prompt,
+                stream=stream,
+                options=options
+            )
+        
+        # Fallback: direct HTTP call to Ollama API
+        import requests
+        resp = requests.post(
+            f"{settings.OLLAMA_URL}/api/generate",
+            json={"model": model, "prompt": prompt, "system": system_prompt or "",
+                  "stream": False, "options": options},
+            timeout=120,
         )
+        if resp.status_code == 200:
+            return resp.json().get("response", "")
+        return f"Ollama error: {resp.status_code}"
 
     def chat(
         self,

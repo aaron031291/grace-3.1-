@@ -21,6 +21,7 @@ class LearningExample(BaseModel):
     Stores experiences that Grace learns from.
     """
     __tablename__ = "learning_examples"
+    __table_args__ = {"extend_existing": True}
 
     # What was learned
     example_type = Column(String, nullable=False, index=True)  # feedback, correction, pattern, success, failure
@@ -64,6 +65,7 @@ class LearningPattern(BaseModel):
     Higher-level abstractions learned from concrete examples.
     """
     __tablename__ = "learning_patterns"
+    __table_args__ = {"extend_existing": True}
 
     pattern_name = Column(String, nullable=False, unique=True)
     pattern_type = Column(String, nullable=False)  # behavioral, optimization, error_recovery, etc.

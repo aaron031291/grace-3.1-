@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 import VoiceButton from "./VoiceButton";
 import SearchInternetButton from "./SearchInternetButton";
+import { API_BASE_URL } from '../config/api';
 
 export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
@@ -93,7 +94,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const fetchChatHistory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/chats/${chatId}/messages`
+        `${API_BASE_URL}/chats/${chatId}/messages`
       );
       const data = await response.json();
       setMessages(data.messages);
@@ -104,7 +105,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
   const fetchChatInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/chats/${chatId}`);
+      const response = await fetch(`${API_BASE_URL}/chats/${chatId}`);
       const data = await response.json();
       setChatInfo(data);
       setTemperature(data.temperature || 0.7);
@@ -116,7 +117,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const updateTemperature = async (newTemp) => {
     setTemperature(newTemp);
     try {
-      await fetch(`http://localhost:8000/chats/${chatId}`, {
+      await fetch(`${API_BASE_URL}/chats/${chatId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ temperature: newTemp }),
@@ -133,7 +134,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
       console.log("Chat ID:", chatId);
       console.log("First message:", firstMessage);
 
-      const response = await fetch(`http://localhost:8000/generate-title`, {
+      const response = await fetch(`${API_BASE_URL}/generate-title`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -161,7 +162,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         // Update chat with the generated title
         console.log("Updating chat with title:", generatedTitle);
         const updateResponse = await fetch(
-          `http://localhost:8000/chats/${chatId}`,
+          `${API_BASE_URL}/chats/${chatId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -228,8 +229,8 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     try {
       // Determine which API endpoint to use
       const endpoint = useAgent
-        ? `http://localhost:8000/api/mcp/chat`
-        : `http://localhost:8000/chats/${chatId}/prompt`;
+        ? `${API_BASE_URL}/api/mcp/chat`
+        : `${API_BASE_URL}/chats/${chatId}/prompt`;
 
       const payload = useAgent ? {
         chat_id: chatId,
@@ -552,7 +553,37 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
             <div className="message-content">
               <div className="message-role">{msg.role}</div>
               {msg.content ? (
-                <div className="message-text">{msg.content}</div>
+                <div className="message-text">
+                  {msg.content}
+                  {msg.role === 'assistant' && !msg.isSystemMessage && (
+                    <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'center' }}>
+                      <button onClick={() => {
+                        try {
+                          fetch(`${API_BASE_URL}/api/oracle/feedback`, {
+                            method: 'POST', headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'positive'}),
+                          });
+                        } catch {}
+                        msg._feedback = 'up';
+                      }} title="Good response" style={{
+                        background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
+                        opacity: msg._feedback === 'up' ? 1 : 0.4,
+                      }}>👍</button>
+                      <button onClick={() => {
+                        try {
+                          fetch(`${API_BASE_URL}/api/oracle/feedback`, {
+                            method: 'POST', headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'negative'}),
+                          });
+                        } catch {}
+                        msg._feedback = 'down';
+                      }} title="Bad response" style={{
+                        background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
+                        opacity: msg._feedback === 'down' ? 1 : 0.4,
+                      }}>👎</button>
+                    </div>
+                  )}
+                </div>
               ) : msg.is_streaming && (!msg.tool_calls || msg.tool_calls.length === 0) ? (
                 <div className="loading-text" style={{ marginTop: '0.5rem' }}>
                   Starting agent workflow...

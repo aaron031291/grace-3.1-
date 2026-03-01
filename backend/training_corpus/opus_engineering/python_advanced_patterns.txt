@@ -1,0 +1,983 @@
+# Advanced Python Patterns: Comprehensive Software Engineering Training Data
+
+## Table of Contents
+1. [Metaclasses and Class Factories](#metaclasses-and-class-factories)
+2. [Descriptor Protocol](#descriptor-protocol)
+3. [Context Managers](#context-managers)
+4. [Generator Pipelines and Coroutine Chaining](#generator-pipelines-and-coroutine-chaining)
+5. [Abstract Base Classes vs Protocol](#abstract-base-classes-vs-protocol)
+6. [Dependency Injection Patterns](#dependency-injection-patterns)
+7. [Plugin Architectures](#plugin-architectures)
+8. [Observer/Event Patterns](#observer-event-patterns)
+9. [State Machines](#state-machines)
+10. [Concurrency Patterns](#concurrency-patterns)
+11. [Memory Management and Garbage Collection](#memory-management-and-garbage-collection)
+12. [C Extension Patterns](#c-extension-patterns)
+
+---
+
+## Metaclasses and Class Factories
+
+### Understanding Metaclasses
+
+Metaclasses are classes whose instances are classes themselves. They control class creation and can modify class behavior at definition time.
+
+```python
+import weakref
+from typing import Dict, Any, Type, Optional
+import threading
+import time
+
+class SingletonMeta(type):
+    """
+    Thread-safe singleton metaclass implementation.
+    Ensures only one instance of a class exists per thread.
+    """
+    _instances: Dict[Type, Any] = {}
+    _lock = threading.Lock()
+    
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            with cls._lock:
+                # Double-checked locking pattern
+                if cls not in cls._instances:
+                    instance = super().__call__(*args, **kwargs)
+                    cls._instances[cls] = instance
+        return cls._instances[cls]
+    
+    def clear_instances(cls):
+        """Clear all singleton instances - useful for testing"""
+        with cls._lock:
+            cls._instances.clear()
+
+class DatabaseConnection(metaclass=SingletonMeta):
+    """Example singleton database connection"""
+    
+    def __init__(self, connection_string: str = "default"):
+        self.connection_string = connection_string
+        self.connected = False
+        print(f"Creating database connection: {connection_string}")
+    
+    def connect(self):
+        if not self.connected:
+            print(f"Connecting to {self.connection_string}")
+            self.connected = True
+    
+    def disconnect(self):
+        if self.connected:
+            print(f"Disconnecting from {self.connection_string}")
+            self.connected = False
+
+# Advanced metaclass for automatic registration
+class RegistryMeta(type):
+    """
+    Metaclass that automatically registers classes in a registry.
+    Useful for plugin systems and factory patterns.
+    """
+    registry: Dict[str, Type] = {}
+    
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        # Extract registration key from kwargs or use class name
+        register_as = kwargs.pop('register_as', name.lower())
+        
+        # Create the class
+        cls = super().__new__(mcs, name, bases, namespace)
+        
+        # Register the class
+        if register_as:
+            mcs.registry[register_as] = cls
+            cls._registry_key = register_as
+        
+        return cls
+    
+    @classmethod
+    def get_class(mcs, key: str) -> Optional[Type]:
+        """Get a registered class by key"""
+        return mcs.registry.get(key)
+    
+    @classmethod
+    def list_registered(mcs) -> Dict[str, Type]:
+        """List all registered classes"""
+        return mcs.registry.copy()
+
+class Handler(metaclass=RegistryMeta):
+    """Base handler class"""
+    def handle(self, data):
+        raise NotImplementedError
+
+class JSONHandler(Handler, register_as='json'):
+    """JSON data handler"""
+    def handle(self, data):
+        import json
+        return json.loads(data) if isinstance(data, str) else json.dumps(data)
+
+class XMLHandler(Handler, register_as='xml'):
+    """XML data handler"""
+    def handle(self, data):
+        return f"<xml>{data}</xml>"
+
+# Validation metaclass
+class ValidatedMeta(type):
+    """
+    Metaclass that adds automatic validation to class attributes.
+    """
+    
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        # Extract validation rules
+        validations = {}
+        for key, value in list(namespace.items()):
+            if hasattr(value, '__validation__'):
+                validations[key] = value.__validation__
+        
+        # Store validations in class
+        namespace['_validations'] = validations
+        
+        # Create the class
+        cls = super().__new__(mcs, name, bases, namespace)
+        
+        # Override __setattr__ to include validation
+        original_setattr = cls.__setattr__
+        
+        def validated_setattr(self, name, value):
+            if name in self._validations:
+                validator = self._validations[name]
+                if not validator(value):
+                    raise ValueError(f"Validation failed for {name}: {value}")
+            original_setattr(self, name, value)
+        
+        cls.__setattr__ = validated_setattr
+        return cls
+
+def validate(func):
+    """Decorator to mark a function as a validator"""
+    func.__validation__ = func
+    return func
+
+class User(metaclass=ValidatedMeta):
+    """User class with automatic validation"""
+    
+    @validate
+    def email(value):
+        return isinstance(value, str) and '@' in value
+    
+    @validate  
+    def age(value):
+        return isinstance(value, int) and 0 <= value <= 150
+    
+    def __init__(self, email: str, age: int):
+        self.email = email
+        self.age = age
+```
+
+### Class Factories
+
+Class factories provide dynamic class creation with customizable behavior.
+
+```python
+from typing import Dict, Any, Callable, Type, List
+import inspect
+
+def create_dataclass_factory(fields: Dict[str, type], 
+                           validators: Dict[str, Callable] = None,
+                           defaults: Dict[str, Any] = None) -> Type:
+    """
+    Factory function to create dataclass-like classes with validation.
+    
+    Args:
+        fields: Dictionary mapping field names to types
+        validators: Optional validators for fields
+        defaults: Default values for fields
+    
+    Returns:
+        Dynamically created class
+    """
+    validators = validators or {}
+    defaults = defaults or {}
+    
+    def __init__(self, **kwargs):
+        # Set defaults first
+        for name, default_value in defaults.items():
+            setattr(self, name, default_value)
+        
+        # Set provided values with validation
+        for name, value in kwargs.items():
+            if name not in fields:
+                raise AttributeError(f"Unknown field: {name}")
+            
+            # Type checking
+            expected_type = fields[name]
+            if not isinstance(value, expected_type):
+                raise TypeError(f"Field {name} must be of type {expected_type.__name__}")
+            
+            # Custom validation
+            if name in validators:
+                if not validators[name](value):
+                    raise ValueError(f"Validation failed for field {name}")
+            
+            setattr(self, name, value)
+        
+        # Check required fields
+        for name in fields:
+            if not hasattr(self, name):
+                raise ValueError(f"Required field {name} not provided")
+    
+    def __repr__(self):
+        field_strs = []
+        for name in fields:
+            if hasattr(self, name):
+                field_strs.append(f"{name}={getattr(self, name)!r}")
+        return f"{self.__class__.__name__}({', '.join(field_strs)})"
+    
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return all(getattr(self, name) == getattr(other, name) 
+                  for name in fields)
+    
+    # Create class dynamically
+    class_name = "DynamicDataClass"
+    class_dict = {
+        '__init__': __init__,
+        '__repr__': __repr__,
+        '__eq__': __eq__,
+        '_fields': fields,
+        '_validators': validators,
+        '_defaults': defaults,
+    }
+    
+    return type(class_name, (), class_dict)
+
+# Advanced class factory with method injection
+class MethodInjectorFactory:
+    """
+    Factory for creating classes with dynamically injected methods.
+    """
+    
+    def __init__(self):
+        self.method_registry: Dict[str, Callable] = {}
+    
+    def register_method(self, name: str, method: Callable):
+        """Register a method to be injected into created classes"""
+        self.method_registry[name] = method
+    
+    def create_class(self, 
+                    class_name: str,
+                    base_classes: tuple = (),
+                    attributes: Dict[str, Any] = None,
+                    inject_methods: List[str] = None) -> Type:
+        """
+        Create a class with injected methods.
+        
+        Args:
+            class_name: Name of the class to create
+            base_classes: Base classes to inherit from
+            attributes: Class attributes
+            inject_methods: List of method names to inject
+        
+        Returns:
+            Dynamically created class
+        """
+        attributes = attributes or {}
+        inject_methods = inject_methods or []
+        
+        # Inject registered methods
+        for method_name in inject_methods:
+            if method_name in self.method_registry:
+                attributes[method_name] = self.method_registry[method_name]
+        
+        return type(class_name, base_classes, attributes)
+
+# Example usage of method injection
+factory = MethodInjectorFactory()
+
+def debug_method(self):
+    """Debug method to be injected"""
+    return f"Debug info for {self.__class__.__name__}: {vars(self)}"
+
+def serialize_method(self):
+    """Serialization method to be injected"""
+    import json
+    return json.dumps({k: str(v) for k, v in vars(self).items()})
+
+factory.register_method('debug', debug_method)
+factory.register_method('serialize', serialize_method)
+
+# Mixin factory for composition
+class MixinFactory:
+    """
+    Factory for creating mixin classes with specific capabilities.
+    """
+    
+    @staticmethod
+    def create_observable_mixin():
+        """Create a mixin that adds observer pattern capabilities"""
+        
+        class ObservableMixin:
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self._observers = []
+            
+            def add_observer(self, observer):
+                if observer not in self._observers:
+                    self._observers.append(observer)
+            
+            def remove_observer(self, observer):
+                if observer in self._observers:
+                    self._observers.remove(observer)
+            
+            def notify_observers(self, event, *args, **kwargs):
+                for observer in self._observers:
+                    if hasattr(observer, 'on_event'):
+                        observer.on_event(self, event, *args, **kwargs)
+        
+        return ObservableMixin
+    
+    @staticmethod
+    def create_cacheable_mixin():
+        """Create a mixin that adds caching capabilities"""
+        
+        class CacheableMixin:
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self._cache = {}
+            
+            def cached_call(self, method_name, *args, **kwargs):
+                cache_key = (method_name, args, tuple(sorted(kwargs.items())))
+                
+                if cache_key not in self._cache:
+                    method = getattr(self, method_name)
+                    result = method(*args, **kwargs)
+                    self._cache[cache_key] = result
+                
+                return self._cache[cache_key]
+            
+            def clear_cache(self):
+                self._cache.clear()
+        
+        return CacheableMixin
+
+# Example: Creating a class with multiple mixins
+ObservableMixin = MixinFactory.create_observable_mixin()
+CacheableMixin = MixinFactory.create_cacheable_mixin()
+
+class SmartCalculator(ObservableMixin, CacheableMixin):
+    """Calculator with observer and caching capabilities"""
+    
+    def __init__(self):
+        super().__init__()
+    
+    def calculate(self, expression):
+        """Calculate expression and notify observers"""
+        result = eval(expression)  # In production, use ast.literal_eval or similar
+        self.notify_observers('calculation', expression=expression, result=result)
+        return result
+    
+    def cached_calculate(self, expression):
+        """Calculate with caching"""
+        return self.cached_call('calculate', expression)
+```
+
+---
+
+## Descriptor Protocol
+
+The descriptor protocol allows customization of attribute access through `__get__`, `__set__`, and `__delete__` methods.
+
+```python
+import weakref
+from typing import Any, Optional, Dict, Callable, Type
+import threading
+import time
+import functools
+
+class ValidatedDescriptor:
+    """
+    A descriptor that validates values before setting them.
+    """
+    
+    def __init__(self, validator: Callable[[Any], bool], 
+                 error_message: str = "Validation failed"):
+        self.validator = validator
+        self.error_message = error_message
+        self.name = None
+    
+    def __set_name__(self, owner, name):
+        """Called when the descriptor is assigned to a class attribute"""
+        self.name = name
+        self.private_name = f'_{name}'
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return getattr(instance, self.private_name, None)
+    
+    def __set__(self, instance, value):
+        if not self.validator(value):
+            raise ValueError(f"{self.error_message}: {value}")
+        setattr(instance, self.private_name, value)
+    
+    def __delete__(self, instance):
+        delattr(instance, self.private_name)
+
+class TypedDescriptor:
+    """
+    A descriptor that enforces type checking.
+    """
+    
+    def __init__(self, expected_type: Type, allow_none: bool = False):
+        self.expected_type = expected_type
+        self.allow_none = allow_none
+        self.name = None
+    
+    def __set_name__(self, owner, name):
+        self.name = name
+        self.private_name = f'_{name}'
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return getattr(instance, self.private_name, None)
+    
+    def __set__(self, instance, value):
+        if value is None and self.allow_none:
+            setattr(instance, self.private_name, value)
+            return
+        
+        if not isinstance(value, self.expected_type):
+            raise TypeError(
+                f"{self.name} must be of type {self.expected_type.__name__}, "
+                f"got {type(value).__name__}"
+            )
+        setattr(instance, self.private_name, value)
+
+class CachedProperty:
+    """
+    A descriptor that caches the result of a method call.
+    Thread-safe implementation with TTL support.
+    """
+    
+    def __init__(self, func: Callable, ttl: Optional[float] = None):
+        self.func = func
+        self.ttl = ttl
+        self.name = func.__name__
+        self.lock = threading.RLock()
+        
+        # Use weak references to avoid memory leaks
+        self.cache = weakref.WeakKeyDictionary()
+        self.timestamps = weakref.WeakKeyDictionary()
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        
+        with self.lock:
+            # Check if we have a cached value
+            if instance in self.cache:
+                # Check TTL if specified
+                if self.ttl is not None:
+                    if time.time() - self.timestamps[instance] > self.ttl:
+                        # Cache expired, remove it
+                        del self.cache[instance]
+                        del self.timestamps[instance]
+                    else:
+                        return self.cache[instance]
+                else:
+                    return self.cache[instance]
+            
+            # Compute and cache the value
+            value = self.func(instance)
+            self.cache[instance] = value
+            if self.ttl is not None:
+                self.timestamps[instance] = time.time()
+            
+            return value
+    
+    def __set__(self, instance, value):
+        """Allow manual setting of cached value"""
+        with self.lock:
+            self.cache[instance] = value
+            if self.ttl is not None:
+                self.timestamps[instance] = time.time()
+    
+    def __delete__(self, instance):
+        """Clear cached value"""
+        with self.lock:
+            self.cache.pop(instance, None)
+            self.timestamps.pop(instance, None)
+
+class ObservableDescriptor:
+    """
+    A descriptor that notifies observers when the value changes.
+    """
+    
+    def __init__(self, initial_value=None):
+        self.initial_value = initial_value
+        self.name = None
+        # Use weak references for observers to prevent memory leaks
+        self.observers = weakref.WeakSet()
+    
+    def __set_name__(self, owner, name):
+        self.name = name
+        self.private_name = f'_{name}'
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return getattr(instance, self.private_name, self.initial_value)
+    
+    def __set__(self, instance, value):
+        old_value = getattr(instance, self.private_name, self.initial_value)
+        setattr(instance, self.private_name, value)
+        
+        # Notify observers of the change
+        for observer in self.observers:
+            try:
+                observer.on_attribute_changed(instance, self.name, old_value, value)
+            except Exception as e:
+                # Log error but don't break the assignment
+                print(f"Observer error: {e}")
+    
+    def add_observer(self, observer):
+        """Add an observer for this descriptor"""
+        self.observers.add(observer)
+    
+    def remove_observer(self, observer):
+        """Remove an observer"""
+        self.observers.discard(observer)
+
+class LazyDescriptor:
+    """
+    A descriptor that lazily loads values using a factory function.
+    """
+    
+    def __init__(self, factory: Callable, *args, **kwargs):
+        self.factory = factory
+        self.args = args
+        self.kwargs = kwargs
+        self.name = None
+    
+    def __set_name__(self, owner, name):
+        self.name = name
+        self.private_name = f'_{name}'
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        
+        # Check if value is already loaded
+        if hasattr(instance, self.private_name):
+            return getattr(instance, self.private_name)
+        
+        # Lazy load the value
+        value = self.factory(instance, *self.args, **self.kwargs)
+        setattr(instance, self.private_name, value)
+        return value
+    
+    def __set__(self, instance, value):
+        setattr(instance, self.private_name, value)
+    
+    def __delete__(self, instance):
+        if hasattr(instance, self.private_name):
+            delattr(instance, self.private_name)
+
+# Custom property implementation
+class CustomProperty:
+    """
+    Custom property implementation with additional features.
+    """
+    
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None, 
+                 validator=None, transformer=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+        self.validator = validator
+        self.transformer = transformer
+        
+        if doc is None and fget is not None:
+            doc = fget.__doc__
+        self.__doc__ = doc
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        if self.fget is None:
+            raise AttributeError("unreadable attribute")
+        return self.fget(instance)
+    
+    def __set__(self, instance, value):
+        if self.fset is None:
+            raise AttributeError("can't set attribute")
+        
+        # Apply transformer if provided
+        if self.transformer:
+            value = self.transformer(value)
+        
+        # Apply validation if provided
+        if self.validator and not self.validator(value):
+            raise ValueError(f"Validation failed for value: {value}")
+        
+        self.fset(instance, value)
+    
+    def __delete__(self, instance):
+        if self.fdel is None:
+            raise AttributeError("can't delete attribute")
+        self.fdel(instance)
+    
+    def getter(self, fget):
+        return type(self)(fget, self.fset, self.fdel, self.__doc__, 
+                         self.validator, self.transformer)
+    
+    def setter(self, fset):
+        return type(self)(self.fget, fset, self.fdel, self.__doc__, 
+                         self.validator, self.transformer)
+    
+    def deleter(self, fdel):
+        return type(self)(self.fget, self.fset, fdel, self.__doc__, 
+                         self.validator, self.transformer)
+
+# Example usage of descriptors
+class Person:
+    """Example class using various descriptors"""
+    
+    # Type validation
+    name = TypedDescriptor(str)
+    age = TypedDescriptor(int)
+    
+    # Custom validation
+    email = ValidatedDescriptor(
+        lambda x: isinstance(x, str) and '@' in x,
+        "Email must be a string containing @"
+    )
+    
+    # Observable attribute
+    status = ObservableDescriptor("active")
+    
+    # Cached property with TTL
+    @CachedProperty
+    def expensive_calculation(self):
+        """Simulate expensive calculation"""
+        time.sleep(0.1)  # Simulate work
+        return f"Calculated value for {self.name}"
+    
+    # Custom property with validation and transformation
+    @CustomProperty
+    def formatted_name(self):
+        return getattr(self, '_formatted_name', '')
+    
+    @formatted_name.setter
+    def formatted_name(self, value):
+        # Transform to title case
+        self._formatted_name = str(value).title()
+    
+    def __init__(self, name: str, age: int, email: str):
+        self.name = name
+        self.age = age
+        self.email = email
+
+# Advanced descriptor for method caching
+class MethodCacheDescriptor:
+    """
+    Descriptor that caches method results based on arguments.
+    """
+    
+    def __init__(self, method):
+        self.method = method
+        self.cache = weakref.WeakKeyDictionary()
+        self.lock = threading.RLock()
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        
+        if instance not in self.cache:
+            with self.lock:
+                if instance not in self.cache:
+                    self.cache[instance] = {}
+        
+        def cached_method(*args, **kwargs):
+            # Create cache key from arguments
+            key = (args, tuple(sorted(kwargs.items())))
+            
+            if key not in self.cache[instance]:
+                result = self.method(instance, *args, **kwargs)
+                self.cache[instance][key] = result
+            
+            return self.cache[instance][key]
+        
+        return cached_method
+
+# Example of method caching descriptor
+class Calculator:
+    """Calculator with method result caching"""
+    
+    @MethodCacheDescriptor
+    def fibonacci(self, n):
+        """Calculate fibonacci number with caching"""
+        if n <= 1:
+            return n
+        return self.fibonacci(n-1) + self.fibonacci(n-2)
+```
+
+---
+
+## Context Managers
+
+Context managers provide a way to allocate and release resources precisely when you want to.
+
+```python
+import asyncio
+import threading
+import time
+import tempfile
+import os
+import sqlite3
+from contextlib import contextmanager, asynccontextmanager
+from typing import Optional, Any, AsyncGenerator, Generator
+import logging
+import weakref
+
+class DatabaseConnection:
+    """
+    Thread-safe database connection context manager with connection pooling.
+    """
+    
+    _pool = []
+    _pool_lock = threading.Lock()
+    _max_pool_size = 10
+    
+    def __init__(self, database_url: str, autocommit: bool = False):
+        self.database_url = database_url
+        self.autocommit = autocommit
+        self.connection = None
+        self.transaction_active = False
+    
+    def __enter__(self):
+        # Try to get connection from pool
+        with self._pool_lock:
+            if self._pool:
+                self.connection = self._pool.pop()
+            else:
+                self.connection = sqlite3.connect(self.database_url)
+                self.connection.row_factory = sqlite3.Row
+        
+        if not self.autocommit:
+            self.connection.execute("BEGIN")
+            self.transaction_active = True
+        
+        return self.connection
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.connection:
+            try:
+                if self.transaction_active:
+                    if exc_type is None:
+                        self.connection.commit()
+                    else:
+                        self.connection.rollback()
+                
+                # Return connection to pool
+                with self._pool_lock:
+                    if len(self._pool) < self._max_pool_size:
+                        self._pool.append(self.connection)
+                    else:
+                        self.connection.close()
+            
+            except Exception as e:
+                logging.error(f"Error in database context manager: {e}")
+                if self.connection:
+                    self.connection.close()
+            
+            finally:
+                self.connection = None
+                self.transaction_active = False
+        
+        # Don't suppress exceptions
+        return False
+
+class TimedContext:
+    """
+    Context manager that measures execution time and optionally enforces timeouts.
+    """
+    
+    def __init__(self, name: str = "Operation", 
+                 timeout: Optional[float] = None,
+                 logger: Optional[logging.Logger] = None):
+        self.name = name
+        self.timeout = timeout
+        self.logger = logger or logging.getLogger(__name__)
+        self.start_time = None
+        self.end_time = None
+        self.timer_thread = None
+        self.timed_out = False
+    
+    def __enter__(self):
+        self.start_time = time.time()
+        self.logger.info(f"Starting {self.name}")
+        
+        if self.timeout:
+            self.timer_thread = threading.Timer(self.timeout, self._timeout_handler)
+            self.timer_thread.start()
+        
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.end_time = time.time()
+        duration = self.end_time - self.start_time
+        
+        if self.timer_thread:
+            self.timer_thread.cancel()
+        
+        if self.timed_out:
+            self.logger.error(f"{self.name} timed out after {self.timeout}s")
+            raise TimeoutError(f"{self.name} exceeded timeout of {self.timeout}s")
+        
+        if exc_type is None:
+            self.logger.info(f"{self.name} completed in {duration:.3f}s")
+        else:
+            self.logger.error(f"{self.name} failed after {duration:.3f}s: {exc_val}")
+        
+        return False
+    
+    def _timeout_handler(self):
+        self.timed_out = True
+    
+    @property
+    def elapsed_time(self) -> Optional[float]:
+        if self.start_time and self.end_time:
+            return self.end_time - self.start_time
+        return None
+
+class ResourceManager:
+    """
+    Advanced resource manager with automatic cleanup and resource tracking.
+    """
+    
+    def __init__(self):
+        self.resources = []
+        self.cleanup_functions = []
+        self.lock = threading.RLock()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.cleanup_all()
+        return False
+    
+    def add_resource(self, resource, cleanup_func=None):
+        """Add a resource to be managed"""
+        with self.lock:
+            self.resources.append(resource)
+            if cleanup_func:
+                self.cleanup_functions.append(cleanup_func)
+            elif hasattr(resource, 'close'):
+                self.cleanup_functions.append(resource.close)
+            elif hasattr(resource, '__exit__'):
+                self.cleanup_functions.append(
+                    lambda: resource.__exit__(None, None, None)
+                )
+            else:
+                self.cleanup_functions.append(lambda: None)
+        
+        return resource
+    
+    def cleanup_all(self):
+        """Clean up all managed resources"""
+        with self.lock:
+            errors = []
+            
+            # Cleanup in reverse order
+            for resource, cleanup_func in zip(
+                reversed(self.resources), 
+                reversed(self.cleanup_functions)
+            ):
+                try:
+                    cleanup_func()
+                except Exception as e:
+                    errors.append(e)
+            
+            self.resources.clear()
+            self.cleanup_functions.clear()
+            
+            if errors:
+                # Log all errors but raise the first one
+                for error in errors[1:]:
+                    logging.error(f"Resource cleanup error: {error}")
+                raise errors[0]
+
+# Async context managers
+class AsyncDatabaseConnection:
+    """
+    Async database connection context manager.
+    """
+    
+    def __init__(self, database_url: str):
+        self.database_url = database_url
+        self.connection = None
+    
+    async def __aenter__(self):
+        # Simulate async database connection
+        await asyncio.sleep(0.1)  # Connection delay
+        self.connection = f"AsyncConnection({self.database_url})"
+        print(f"Connected to {self.database_url}")
+        return self.connection
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        if self.connection:
+            # Simulate async cleanup
+            await asyncio.sleep(0.05)  # Cleanup delay
+            print(f"Disconnected from {self.database_url}")
+            self.connection = None
+        return False
+
+class AsyncResourcePool:
+    """
+    Async resource pool with semaphore-based resource limiting.
+    """
+    
+    def __init__(self, resource_factory, max_resources: int = 10):
+        self.resource_factory = resource_factory
+        self.semaphore = asyncio.Semaphore(max_resources)
+        self.resources = []
+        self.lock = asyncio.Lock()
+    
+    async def __aenter__(self):
+        await self.semaphore.acquire()
+        
+        async with self.lock:
+            if self.resources:
+                resource = self.resources.pop()
+            else:
+                resource = await self.resource_factory()
+        
+        return resource
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        # Return resource to pool
+        async with self.lock:
+            # In a real implementation, you'd check if the resource is still valid
+            self.resources.append(resource)
+        
+        self.semaphore.release()
+        return False
+
+# Context manager decorators
+@contextmanager
+def temporary_directory(prefix: str = "tmp") -> Generator[str, None, None]:
+    """
+    Context manager that creates and cleans up a temporary directory.
+    """
+    temp_dir = tempfile.mkdtemp(prefix=prefix)
+    try:
+        yield temp_dir
+    finally:
+        import shutil
+        shutil.rmtree(temp_dir, ignore_errors=True)
+
+@contextmanager
+def environment_variable(name: str, value: str) -> Generator[None, None, None]:
+    """
+    Context manager that temporarily sets an environment variable.
+    """
+    old_value = os.environ

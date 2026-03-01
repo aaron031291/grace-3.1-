@@ -14,8 +14,8 @@ from settings import settings
 
 logger = logging.getLogger(__name__)
 
-KIMI_BASE_URL = "https://api.moonshot.cn/v1"
-KIMI_DEFAULT_MODEL = "kimi-k2-0711-preview"
+KIMI_BASE_URL = "https://api.moonshot.ai/v1"
+KIMI_DEFAULT_MODEL = "kimi-k2.5"
 
 
 class KimiLLMClient(BaseLLMClient):
@@ -68,10 +68,18 @@ class KimiLLMClient(BaseLLMClient):
     ) -> Union[str, Dict[str, Any]]:
         url = f"{self.base_url}/chat/completions"
 
+        model_name = model or self.default_model
+
+        # Kimi K2.5 reasoning models only support temperature=1
+        if "k2" in model_name or "thinking" in model_name:
+            temp = 1.0
+        else:
+            temp = temperature if temperature is not None else 0.7
+
         payload = {
-            "model": model or self.default_model,
+            "model": model_name,
             "messages": messages,
-            "temperature": temperature if temperature is not None else 0.7,
+            "temperature": temp,
             "stream": stream
         }
 

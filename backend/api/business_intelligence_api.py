@@ -134,3 +134,58 @@ async def bi_trends():
         return {"days": days}
     finally:
         db.close()
+
+
+@router.get("/llm-usage")
+async def llm_usage_stats():
+    """LLM usage statistics — calls, latency, errors, by provider."""
+    from llm_orchestrator.governance_wrapper import get_llm_usage_stats
+    stats = get_llm_usage_stats()
+
+    # Also pull from DB for historical data
+    db = _get_db()
+    try:
+        from sqlalchemy import text
+        try:
+            rows = db.execute(text(
+                "SELECT provider, COUNT(*), AVG(latency_ms), SUM(CASE WHEN success=0 THEN 1 ELSE 0 END) "
+                "FROM llm_usage_stats GROUP BY provider"
+            )).fetchall()
+            stats["historical"] = {
+                r[0]: {"calls": r[1], "avg_latency": round(r[2] or 0, 1), "errors": r[3]}
+                for r in rows
+            }
+        except Exception:
+            stats["historical"] = {}
+
+        try:
+            today = datetime.utcnow().date()
+            today_calls = db.execute(text(
+                "SELECT COUNT(*) FROM llm_usage_stats WHERE DATE(created_at) = :d"
+            ), {"d": str(today)}).scalar() or 0
+            stats["today_calls"] = today_calls
+        except Exception:
+            stats["today_calls"] = 0
+    except Exception:
+        pass
+    finally:
+        db.close()
+
+    return stats
+
+
+@router.get("/memory-stats")
+async def memory_stats():
+    """Unified memory statistics across all memory systems."""
+    from cognitive.unified_memory import get_unified_memory
+    return get_unified_memory().get_stats()
+
+
+@router.get("/event-log")
+async def event_log(limit: int = 50):
+    """Recent events from the event bus."""
+    from cognitive.event_bus import get_recent_events, get_subscriber_count
+    return {
+        "events": get_recent_events(limit),
+        "subscribers": get_subscriber_count(),
+    }

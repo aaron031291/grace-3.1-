@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./DirectoryChat.css";
+import { API_BASE_URL } from '../config/api';
 
 export default function DirectoryChat({ currentPath = "", chatId = null }) {
   const [messages, setMessages] = useState([]);
@@ -9,7 +10,7 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const API_BASE = "http://localhost:8000";
+  const API_BASE = API_BASE_URL;
 
   // Load chat history when chatId changes
   useEffect(() => {

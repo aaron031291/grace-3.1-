@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import UploadProgress from './UploadProgress';
 
 const C = {
   bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
@@ -108,6 +110,7 @@ export default function DocsTab() {
   const [uploading, setUploading] = useState(false);
   const [uploadFolder, setUploadFolder] = useState('');
   const [showUpload, setShowUpload] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(null);
   const fileRef = useRef(null);
 
   const [fullData, setFullData] = useState(null);
@@ -206,17 +209,69 @@ export default function DocsTab() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
     setUploading(true);
+    setUploadProgress(null);
     let count = 0;
     for (const f of Array.from(files)) {
       try {
-        const fd = new FormData();
-        fd.append('file', f);
-        fd.append('folder', uploadFolder);
-        const res = await fetch(`${API_BASE_URL}/api/docs/upload`, { method: 'POST', body: fd });
-        if (res.ok) count++;
+        if (f.size > CHUNKED_THRESHOLD) {
+          // Large file — chunked upload
+          const initRes = await fetch(`${API_BASE_URL}/api/upload/initiate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: f.name,
+              file_size: f.size,
+              folder: uploadFolder,
+              auto_ingest: true,
+              source: 'docs_library',
+            }),
+          });
+          if (!initRes.ok) continue;
+          const { upload_id, total_chunks, chunk_size } = await initRes.json();
+
+          for (let i = 0; i < total_chunks; i++) {
+            const start = i * chunk_size;
+            const end = Math.min(start + chunk_size, f.size);
+            const blob = f.slice(start, end);
+            const chunkData = await blob.arrayBuffer();
+            const hashBuf = await crypto.subtle.digest('SHA-256', chunkData);
+            const chunkHash = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            const fd = new FormData();
+            fd.append('upload_id', upload_id);
+            fd.append('chunk_index', String(i));
+            fd.append('chunk_hash', chunkHash);
+            fd.append('chunk', new Blob([chunkData]), `chunk_${i}`);
+
+            const cRes = await fetch(`${API_BASE_URL}/api/upload/chunk`, { method: 'POST', body: fd });
+            if (!cRes.ok) throw new Error(`Chunk ${i} failed`);
+
+            setUploadProgress({
+              phase: 'uploading', percent: ((i + 1) / total_chunks) * 90,
+              bytesUploaded: end, totalBytes: f.size,
+            });
+          }
+
+          setUploadProgress({ phase: 'assembling', percent: 95, bytesUploaded: f.size, totalBytes: f.size });
+          const compRes = await fetch(`${API_BASE_URL}/api/upload/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ upload_id }),
+          });
+          if (compRes.ok) count++;
+          setUploadProgress({ phase: 'complete', percent: 100, bytesUploaded: f.size, totalBytes: f.size });
+        } else {
+          // Small file — direct upload
+          const fd = new FormData();
+          fd.append('file', f);
+          fd.append('folder', uploadFolder);
+          const res = await fetch(`${API_BASE_URL}/api/docs/upload`, { method: 'POST', body: fd });
+          if (res.ok) count++;
+        }
       } catch { /* continue */ }
     }
     setUploading(false);
+    setUploadProgress(null);
     if (fileRef.current) fileRef.current.value = '';
     if (count > 0) {
       notify(`${count} file${count > 1 ? 's' : ''} added to library`);
@@ -269,19 +324,22 @@ export default function DocsTab() {
 
         {/* Upload bar */}
         {showUpload && (
-          <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <input
-              placeholder="Folder (optional, e.g. reports/2024)"
-              value={uploadFolder}
-              onChange={e => setUploadFolder(e.target.value)}
-              style={{ padding: '5px 8px', border: `1px solid ${C.border}`, borderRadius: 4, background: C.bg, color: C.text, fontSize: 12, flex: '1 1 180px', outline: 'none' }}
-            />
-            <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} multiple />
-            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn, background: C.success, fontSize: 12, padding: '5px 12px' }}>
-              {uploading ? '⏳ Uploading...' : '📎 Choose Files'}
-            </button>
-            <button onClick={() => setShowUpload(false)} style={{ ...btn, background: C.border, fontSize: 12, padding: '5px 8px' }}>✕</button>
-          </div>
+          <>
+            <div style={{ padding: '10px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                placeholder="Folder (optional, e.g. reports/2024)"
+                value={uploadFolder}
+                onChange={e => setUploadFolder(e.target.value)}
+                style={{ padding: '5px 8px', border: `1px solid ${C.border}`, borderRadius: 4, background: C.bg, color: C.text, fontSize: 12, flex: '1 1 180px', outline: 'none' }}
+              />
+              <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} multiple />
+              <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn, background: C.success, fontSize: 12, padding: '5px 12px' }}>
+                {uploading ? '⏳ Uploading...' : '📎 Choose Files (up to 5 GB)'}
+              </button>
+              <button onClick={() => setShowUpload(false)} style={{ ...btn, background: C.border, fontSize: 12, padding: '5px 8px' }}>✕</button>
+            </div>
+            {uploadProgress && <div style={{ padding: '4px 16px' }}><UploadProgress progress={uploadProgress} /></div>}
+          </>
         )}
 
         {/* View toggle + search + sort */}

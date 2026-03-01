@@ -1,10 +1,29 @@
 """
-Factory for creating LLM clients based on settings.
+LLM Factory — Central access point for ALL AI models.
 
-Every client returned is wrapped with GovernanceAwareLLM so that
-uploaded governance rules (GDPR, ISO, anti-bribery, code standards,
-user rules) and persona context (personal + professional) are
-automatically injected into every LLM call system-wide.
+Model hierarchy:
+  LOCAL (free, fast, private):
+    - Qwen 2.5 Coder (code generation — best open-source coder)
+    - DeepSeek R1 (reasoning — best open-source reasoning)
+    - Qwen 2.5 (general — fast default)
+
+  CLOUD (paid, powerful, reasoning):
+    - Opus 4.6 / Claude (deep reasoning, architecture, audit)
+    - Kimi K2.5 (long context, document analysis, 262K window)
+
+Task routing:
+    code    → Qwen 2.5 Coder (local)
+    reason  → DeepSeek R1 (local) or Opus (cloud)
+    fast    → Qwen 2.5 (local)
+    general → default model
+    audit   → Opus (cloud)
+    document→ Kimi (cloud, 262K context)
+
+Every client wrapped with GovernanceAwareLLM:
+    - Governance rules injected into every call
+    - Hallucination guard on every response
+    - Usage stats tracked for BI dashboard
+    - Genesis Key on every call
 """
 
 from .base_client import BaseLLMClient
@@ -17,15 +36,21 @@ from settings import settings
 
 
 def _wrap(client: BaseLLMClient) -> BaseLLMClient:
-    """Wrap a client with governance rules + persona injection."""
+    """Wrap a client with governance rules + persona + hallucination guard."""
     return GovernanceAwareLLM(client)
+
+
+def _ollama_with_model(model: str) -> BaseLLMClient:
+    """Create an Ollama client with a specific model override."""
+    client = OllamaLLMClient(base_url=settings.OLLAMA_URL)
+    client._default_model = model
+    return _wrap(client)
 
 
 def get_llm_client(provider: str = None) -> BaseLLMClient:
     """
-    Get a LLM client instance with governance rules enforced.
-    If provider is specified, returns that specific provider's client.
-    Otherwise uses the configured default from settings.
+    Get a LLM client with governance rules enforced.
+    Providers: ollama, kimi, opus, openai
     """
     provider = provider or settings.LLM_PROVIDER
 
@@ -46,43 +71,66 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
 def get_llm_for_task(task: str = "general") -> BaseLLMClient:
     """
     Get the best model for a specific task type.
-    Falls back gracefully if specialised models aren't configured.
-    
-    Tasks: code, reason, fast, general
-    """
-    model_override = None
-    
-    if task == "code" and settings.OLLAMA_MODEL_CODE:
-        model_override = settings.OLLAMA_MODEL_CODE
-    elif task == "reason" and settings.OLLAMA_MODEL_REASON:
-        model_override = settings.OLLAMA_MODEL_REASON
-    elif task == "fast" and settings.OLLAMA_MODEL_FAST:
-        model_override = settings.OLLAMA_MODEL_FAST
+    Routes to the optimal model based on task requirements.
 
-    if model_override:
-        client = OllamaLLMClient(base_url=settings.OLLAMA_URL)
-        client._default_model = model_override
-        return _wrap(client)
+    Tasks:
+      code     → Qwen 2.5 Coder (local, specialised for code)
+      reason   → DeepSeek R1 (local, specialised for reasoning)
+      fast     → Qwen 2.5 (local, quick responses)
+      audit    → Opus (cloud, deep analysis)
+      document → Kimi (cloud, 262K context)
+      general  → default model
+    """
+    if task == "code" and settings.OLLAMA_MODEL_CODE:
+        return _ollama_with_model(settings.OLLAMA_MODEL_CODE)
+
+    elif task == "reason" and settings.OLLAMA_MODEL_REASON:
+        return _ollama_with_model(settings.OLLAMA_MODEL_REASON)
+
+    elif task == "fast" and settings.OLLAMA_MODEL_FAST:
+        return _ollama_with_model(settings.OLLAMA_MODEL_FAST)
+
+    elif task == "audit":
+        if getattr(settings, 'OPUS_API_KEY', ''):
+            return get_opus_client()
+        return get_llm_client()
+
+    elif task == "document":
+        if getattr(settings, 'KIMI_API_KEY', ''):
+            return get_kimi_client()
+        return get_llm_client()
 
     return get_llm_client()
 
 
-def get_kimi_client() -> KimiLLMClient:
-    """Get a Kimi 2.5 client with governance rules enforced."""
+def get_kimi_client() -> BaseLLMClient:
+    """Get Kimi K2.5 — long context, document analysis, 262K window."""
     return _wrap(KimiLLMClient(
         api_key=getattr(settings, 'KIMI_API_KEY', '') or settings.LLM_API_KEY,
     ))
 
 
-def get_opus_client() -> OpusLLMClient:
-    """Get an Opus 4.6 client with governance rules enforced."""
+def get_opus_client() -> BaseLLMClient:
+    """Get Opus 4.6 (Claude) — deep reasoning, architecture, audit."""
     return _wrap(OpusLLMClient(
         api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
     ))
 
 
+def get_qwen_coder() -> BaseLLMClient:
+    """Get Qwen 2.5 Coder — best open-source code generation."""
+    model = settings.OLLAMA_MODEL_CODE or "qwen2.5-coder:7b"
+    return _ollama_with_model(model)
+
+
+def get_deepseek_reasoner() -> BaseLLMClient:
+    """Get DeepSeek R1 — best open-source reasoning model."""
+    model = settings.OLLAMA_MODEL_REASON or "deepseek-r1:7b"
+    return _ollama_with_model(model)
+
+
 def get_raw_client(provider: str = None) -> BaseLLMClient:
-    """Get a raw client WITHOUT governance wrapping (for internal use only)."""
+    """Get a raw client WITHOUT governance wrapping (internal use only)."""
     provider = provider or settings.LLM_PROVIDER
     if provider == "openai":
         return OpenAILLMClient(api_key=settings.LLM_API_KEY)
@@ -96,3 +144,47 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
         )
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
+
+
+def get_all_available_models() -> list:
+    """List all available models across all providers."""
+    models = []
+
+    # Local models
+    for task, model_attr, desc in [
+        ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 2.5 Coder)"),
+        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (DeepSeek R1)"),
+        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 2.5)"),
+    ]:
+        model = getattr(settings, model_attr, "")
+        models.append({
+            "id": task,
+            "provider": "ollama",
+            "model": model or "(not set)",
+            "description": desc,
+            "available": bool(model),
+            "cost": "free",
+            "location": "local",
+        })
+
+    # Cloud models
+    models.append({
+        "id": "kimi",
+        "provider": "kimi",
+        "model": settings.KIMI_MODEL,
+        "description": "Kimi K2.5 — long context, document analysis, 262K window",
+        "available": bool(settings.KIMI_API_KEY),
+        "cost": "cloud",
+        "location": "cloud",
+    })
+    models.append({
+        "id": "opus",
+        "provider": "opus",
+        "model": settings.OPUS_MODEL,
+        "description": "Opus 4.6 (Claude) — deep reasoning, architecture, audit",
+        "available": bool(settings.OPUS_API_KEY),
+        "cost": "cloud",
+        "location": "cloud",
+    })
+
+    return models

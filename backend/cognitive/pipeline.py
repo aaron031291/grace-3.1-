@@ -232,6 +232,20 @@ class CognitivePipeline:
             except Exception:
                 pass
 
+            # FlashCache — discover related external references
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                fc_results = fc.search(ctx.prompt[:200], limit=5, min_trust=0.4)
+                if fc_results:
+                    observations["flash_cache_refs"] = [
+                        {"name": r.get("source_name", ""), "uri": r.get("source_uri", ""),
+                         "trust": r.get("trust_score", 0)}
+                        for r in fc_results[:5]
+                    ]
+            except Exception:
+                pass
+
             # DECIDE: classify approach
             observations["approach"] = "direct" if observations["prompt_type"] in ("code_generation", "bug_fix") else "analytical"
 
@@ -285,6 +299,32 @@ class CognitivePipeline:
 
             has_blocking = len(unknown) > 0 and ctx.ooda.get("approach") != "analytical"
 
+            # If blocking unknowns exist, escalate to consensus for resolution
+            # Protected by circuit breaker (Loop 8: Cognitive Consensus Loop)
+            consensus_resolution = None
+            if has_blocking and len(unknown) >= 2:
+                try:
+                    from cognitive.circuit_breaker import enter_loop, exit_loop
+                    if enter_loop("cognitive_consensus"):
+                        try:
+                            from cognitive.consensus_engine import run_consensus, _check_model_available
+                            available = [m for m in ["qwen", "reasoning"] if _check_model_available(m)]
+                            if available:
+                                unknowns_text = ", ".join(f"{k}: {v}" for k, v in unknown)
+                                cr = run_consensus(
+                                    prompt=f"Resolve these unknowns for the task '{ctx.prompt[:200]}':\n{unknowns_text}",
+                                    models=available,
+                                    source="autonomous",
+                                )
+                                if cr.verification.get("passed"):
+                                    consensus_resolution = cr.final_output[:500]
+                                    for u_key, u_val in unknown:
+                                        inferred.append((u_key, f"[consensus] {consensus_resolution[:100]}"))
+                        finally:
+                            exit_loop("cognitive_consensus")
+                except Exception:
+                    pass
+
             ctx.ambiguity = {
                 "known": known,
                 "inferred": inferred,
@@ -292,6 +332,7 @@ class CognitivePipeline:
                 "unknown": unknown,
                 "implicit_refs": implicit_refs,
                 "has_blocking": has_blocking,
+                "consensus_resolution": consensus_resolution,
                 "known_count": len(known),
                 "assumed_count": len(assumed),
                 "unknown_count": len(unknown),

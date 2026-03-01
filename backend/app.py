@@ -57,6 +57,17 @@ from api.system_health_api import router as system_health_router
 from api.learning_healing_api import router as learning_healing_router
 from api.unified_coding_agent_api import router as unified_coding_agent_router
 from api.api_explorer_api import router as api_explorer_router
+from api.chunked_upload_api import router as chunked_upload_router
+from api.flash_cache_api import router as flash_cache_router
+from api.consensus_api import router as consensus_router
+from api.system_audit_api import router as system_audit_router
+from api.api_vault_api import router as api_vault_router
+from api.planner_api import router as planner_router
+from api.reporting_api import router as reporting_router
+from api.knowledge_mining_api import router as knowledge_mining_router
+from api.governance_discussion_api import router as governance_discussion_router
+from api.live_console_api import router as live_console_router
+from api.feedback_api import router as feedback_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -233,8 +244,28 @@ async def lifespan(app: FastAPI):
         print("[OK] Database tables created/verified")
     except Exception as e:
         print(f"[WARN] Database initialization error: {e}")
-        raise
+        print("[WARN] Grace will continue with limited functionality")
     
+    # Auto-ingest training corpus on startup
+    try:
+        from cognitive.training_ingest import ingest_training_corpus
+        result = ingest_training_corpus()
+        if result.get("ingested", 0) > 0:
+            print(f"[OK] Training corpus: {result['ingested']} files ingested")
+        else:
+            print(f"[OK] Training corpus up to date")
+    except Exception as e:
+        print(f"[WARN] Training ingest skipped: {e}")
+
+    # Run startup diagnostic
+    try:
+        from cognitive.autonomous_diagnostics import get_diagnostics
+        diag = get_diagnostics()
+        startup_result = diag.on_startup()
+        print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')} ({startup_result.get('healthy', 0)}/{startup_result.get('total', 0)} healthy)")
+    except Exception as e:
+        print(f"[WARN] Startup diagnostic skipped: {e}")
+
     # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
     if not settings.SKIP_EMBEDDING_LOAD:
         try:
@@ -501,6 +532,17 @@ app.include_router(learning_healing_router)  # /api/learn-heal
 app.include_router(api_registry_router)      # /api/registry
 app.include_router(api_explorer_router)      # /api/explorer
 app.include_router(manifest_router)          # /api/manifest
+app.include_router(chunked_upload_router)    # /api/upload — chunked 5GB uploads
+app.include_router(flash_cache_router)       # /api/flash-cache — reference caching
+app.include_router(consensus_router)         # /api/consensus — multi-model roundtable
+app.include_router(system_audit_router)      # /api/audit — system analysis + model updates
+app.include_router(api_vault_router)         # /api/vault — central API key management
+app.include_router(planner_router)           # /api/planner — intelligent dual-pane planner
+app.include_router(reporting_router)         # /api/reports — system reports + sandbox experiments
+app.include_router(knowledge_mining_router)  # /api/knowledge-mine — LLM knowledge extraction
+app.include_router(governance_discussion_router)  # /api/governance/discuss — chat about approvals
+app.include_router(live_console_router)           # /api/console — real-time Kimi+Opus interaction
+app.include_router(feedback_router)              # /api/feedback — user feedback on generated code
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

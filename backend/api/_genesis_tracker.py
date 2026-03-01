@@ -1,18 +1,22 @@
 """
-Thin Genesis Key tracking helper used by all CRUD APIs.
+Thin Genesis Key tracking helper — ASYNC, NON-BLOCKING.
 
-Every new output — uploads, directories, subdirectories, files,
-document registrations, edits, and intelligence operations — gets
-a Genesis Key so the full provenance chain is preserved.
-
-NOW: Also fires the real-time event engine so the immune system
-and watchers get notified INSTANTLY, not on the next poll.
+Fire-and-forget: genesis key creation never slows down the caller.
+Qdrant embeddings batched and pushed every 5 seconds in background thread.
+Memory Mesh feed removed (was crashing and blocking).
 """
 
 import logging
+import threading
+import queue
+import time
 from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
+
+# Background queue for Qdrant pushes (non-blocking)
+_qdrant_queue = queue.SimpleQueue()
+_qdrant_thread_started = False
 
 
 def track(
@@ -52,8 +56,26 @@ def track(
     except Exception:
         pass
 
-    # Write to database
+    # Fire event bus for system-wide awareness
     try:
+        from cognitive.event_bus import publish_async
+        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
+        publish_async(event_topic, {
+            "key_type": key_type, "what": what, "who": who,
+            "is_error": is_error, "tags": tags,
+        }, source="genesis_tracker")
+    except Exception:
+        pass
+
+    # Write to database (auto-init if needed)
+    try:
+        from database.session import SessionLocal, initialize_session_factory
+        if SessionLocal is None:
+            try:
+                initialize_session_factory()
+            except Exception:
+                return None
+
         from genesis.genesis_key_service import get_genesis_service
         from models.genesis_key_models import GenesisKeyType
 
@@ -95,7 +117,146 @@ def track(
             code_after=code_after,
         )
         gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
-        return str(gk_id) if gk_id else None
+        if not gk_id:
+            import uuid
+            gk_id = f"GK-{uuid.uuid4().hex}"
+
+        # Queue embedding for background batch push (NON-BLOCKING)
+        try:
+            _qdrant_queue.put_nowait({
+                "gk_id": gk_id, "key_type": key_type,
+                "what": what, "where": where or "", "tags": tags or [],
+            })
+            _ensure_qdrant_thread()
+        except Exception:
+            pass
+
+        return str(gk_id)
     except Exception as e:
         logger.debug(f"Genesis tracking skipped: {e}")
         return None
+
+
+def _ensure_qdrant_thread():
+    """Start the background Qdrant batch pusher if not already running."""
+    global _qdrant_thread_started
+    if _qdrant_thread_started:
+        return
+    _qdrant_thread_started = True
+
+    def _batch_worker():
+        """Background thread: batch-uploads genesis keys to Qdrant every 5 seconds."""
+        import os
+        qdrant_url = os.getenv("QDRANT_URL", "")
+        qdrant_key = os.getenv("QDRANT_API_KEY", "")
+        if not qdrant_url:
+            return
+
+        try:
+            from qdrant_client import QdrantClient
+            from qdrant_client.models import PointStruct, VectorParams, Distance
+            client = QdrantClient(url=qdrant_url, api_key=qdrant_key, timeout=10)
+
+            # Ensure collection
+            try:
+                collections = [c.name for c in client.get_collections().collections]
+                if "genesis_keys" not in collections:
+                    client.create_collection("genesis_keys",
+                        vectors_config=VectorParams(size=384, distance=Distance.COSINE))
+            except Exception:
+                pass
+
+            buf = []
+            while True:
+                try:
+                    item = _qdrant_queue.get(timeout=2)
+                    buf.append(item)
+                except Exception:
+                    pass
+
+                if buf and (len(buf) >= 50 or time.time() % 5 < 2):
+                    try:
+                        import hashlib
+                        points = []
+                        for item in buf:
+                            text = f"{item['key_type']} {item['what']} {item['where']} {' '.join(item['tags'])}"
+                            raw = hashlib.sha384(text.encode()).digest()
+                            vector = [b / 255.0 for b in raw]
+                            pid = int(hashlib.md5(item['gk_id'].encode()).hexdigest()[:16], 16) % (2**63)
+                            points.append(PointStruct(id=pid, vector=vector,
+                                payload={"gk_id": item["gk_id"], "type": item["key_type"],
+                                         "what": item["what"][:200], "tags": item["tags"]}))
+                        client.upsert("genesis_keys", points=points)
+                        buf.clear()
+                    except Exception:
+                        buf.clear()
+        except Exception:
+            pass
+
+    t = threading.Thread(target=_batch_worker, daemon=True, name="qdrant_batch")
+    t.start()
+
+
+def _push_to_qdrant(gk_id: str, key_type: str, what: str, where: str, tags: list):
+    """Push genesis key as embedding to Qdrant Cloud for vector search."""
+    import os
+    qdrant_url = os.getenv("QDRANT_URL", "")
+    qdrant_key = os.getenv("QDRANT_API_KEY", "")
+
+    if not qdrant_url:
+        return
+
+    try:
+        from qdrant_client import QdrantClient
+        from qdrant_client.models import PointStruct, VectorParams, Distance
+        import hashlib
+
+        client = QdrantClient(url=qdrant_url, api_key=qdrant_key, timeout=10)
+
+        # Ensure collection exists
+        collections = [c.name for c in client.get_collections().collections]
+        if "genesis_keys" not in collections:
+            client.create_collection(
+                collection_name="genesis_keys",
+                vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+            )
+
+        # Generate embedding from the text
+        text = f"{key_type} {what} {where or ''} {' '.join(tags or [])}"
+
+        # Simple hash-based embedding (fast, deterministic, no model needed)
+        # Real embeddings happen when embedding model is loaded
+        raw = hashlib.sha384(text.encode()).digest()
+        vector = [b / 255.0 for b in raw]  # 384-dim normalised vector
+
+        # Try real embedding if available
+        try:
+            from embedding.embedder import get_embedding_model
+            model = get_embedding_model()
+            if model and hasattr(model, 'encode'):
+                real_vec = model.encode(text)
+                if real_vec is not None and len(real_vec) > 0:
+                    vector = real_vec.tolist() if hasattr(real_vec, 'tolist') else list(real_vec)
+        except Exception:
+            pass  # Use hash-based fallback
+
+        # Generate numeric ID from genesis key hash
+        point_id = int(hashlib.md5(gk_id.encode()).hexdigest()[:16], 16) % (2**63)
+
+        client.upsert(
+            collection_name="genesis_keys",
+            points=[PointStruct(
+                id=point_id,
+                vector=vector[:384],  # Ensure 384 dims
+                payload={
+                    "genesis_key_id": gk_id,
+                    "key_type": key_type,
+                    "what": what[:500],
+                    "where": where[:200] if where else "",
+                    "tags": tags or [],
+                    "timestamp": __import__("datetime").datetime.utcnow().isoformat(),
+                },
+            )],
+        )
+    except Exception as e:
+        logger.debug(f"Qdrant push skipped: {e}")

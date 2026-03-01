@@ -5,6 +5,7 @@ import GitTree from "./version_control/GitTree";
 import DiffViewer from "./version_control/DiffViewer";
 import ModuleHistory from "./version_control/ModuleHistory";
 import RevertModal from "./version_control/RevertModal";
+import { API_BASE_URL } from '../config/api';
 
 export default function VersionControl() {
   const [activeView, setActiveView] = useState("timeline");
@@ -35,7 +36,7 @@ export default function VersionControl() {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:8000/api/version-control/commits?limit=100"
+        `${API_BASE_URL}/api/version-control/commits?limit=100`
       );
       if (!response.ok) throw new Error("Failed to fetch commits");
       const data = await response.json();
@@ -55,7 +56,7 @@ export default function VersionControl() {
   const fetchCommitDiff = async (sha) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/version-control/commits/${sha}/diff`
+        `${API_BASE_URL}/api/version-control/commits/${sha}/diff`
       );
       if (!response.ok) throw new Error("Failed to fetch diff");
       const data = await response.json();
@@ -72,7 +73,7 @@ export default function VersionControl() {
       if (sha) params.append("commit_sha", sha);
       if (path) params.append("path", path);
       const response = await fetch(
-        `http://localhost:8000/api/version-control/tree?${params.toString()}`
+        `${API_BASE_URL}/api/version-control/tree?${params.toString()}`
       );
       if (!response.ok) throw new Error("Failed to fetch tree");
       const data = await response.json();
@@ -86,7 +87,7 @@ export default function VersionControl() {
   const fetchModuleStatistics = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/version-control/modules/statistics"
+        `${API_BASE_URL}/api/version-control/modules/statistics`
       );
       if (!response.ok) throw new Error("Failed to fetch module statistics");
       const data = await response.json();
@@ -99,7 +100,7 @@ export default function VersionControl() {
   const handleRevert = async (commitSha) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/version-control/revert?commit_sha=${commitSha}`,
+        `${API_BASE_URL}/api/version-control/revert?commit_sha=${commitSha}`,
         {
           method: "POST",
         }

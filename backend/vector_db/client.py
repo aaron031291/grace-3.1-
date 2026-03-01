@@ -43,18 +43,31 @@ class QdrantVectorDB:
         
     def connect(self) -> bool:
         """
-        Connect to Qdrant server.
+        Connect to Qdrant server (local or cloud).
         
         Returns:
             bool: True if connection successful, False otherwise
         """
         try:
-            self.client = QdrantClient(
-                host=self.host,
-                port=self.port,
-                api_key=self.api_key,
-                timeout=self.timeout,
-            )
+            # Check for cloud URL (Qdrant Cloud uses HTTPS)
+            qdrant_url = os.getenv("QDRANT_URL", "")
+            
+            if qdrant_url and qdrant_url.startswith("https://"):
+                # Cloud Qdrant connection
+                self.client = QdrantClient(
+                    url=qdrant_url,
+                    api_key=self.api_key,
+                    timeout=self.timeout,
+                )
+                logger.info(f"Connecting to Qdrant Cloud: {qdrant_url[:50]}...")
+            else:
+                # Local Qdrant connection
+                self.client = QdrantClient(
+                    host=self.host,
+                    port=self.port,
+                    api_key=self.api_key,
+                    timeout=self.timeout,
+                )
             
             # Test connection by getting server info
             info = self.client.get_collections()
@@ -331,26 +344,29 @@ class QdrantVectorDB:
 
 
 def get_qdrant_client(
-    host: str = "localhost",
-    port: int = 6333,
+    host: str = None,
+    port: int = None,
     api_key: Optional[str] = None,
     force_new: bool = False,
 ) -> QdrantVectorDB:
     """
     Get or create a Qdrant client instance (singleton pattern).
-    
-    Args:
-        host: Qdrant server host
-        port: Qdrant server port
-        api_key: Optional API key
-        force_new: If True, create a new instance even if one exists
-        
-    Returns:
-        QdrantVectorDB instance
+    Reads from settings/env if not provided. Supports both local and cloud Qdrant.
     """
     global _qdrant_client
     
     if _qdrant_client is None or force_new:
+        # Read from settings
+        try:
+            from settings import settings
+            host = host or getattr(settings, 'QDRANT_HOST', 'localhost')
+            port = port or getattr(settings, 'QDRANT_PORT', 6333)
+            api_key = api_key or getattr(settings, 'QDRANT_API_KEY', '') or None
+        except Exception:
+            host = host or os.getenv('QDRANT_HOST', 'localhost')
+            port = port or int(os.getenv('QDRANT_PORT', '6333'))
+            api_key = api_key or os.getenv('QDRANT_API_KEY', '') or None
+        
         _qdrant_client = QdrantVectorDB(host=host, port=port, api_key=api_key)
         _qdrant_client.connect()
     

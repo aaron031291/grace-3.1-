@@ -13,30 +13,42 @@ import APIsTab from "./components/APIsTab";
 import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
 import SystemHealthTab from "./components/SystemHealthTab";
 import LearningHealingTab from "./components/LearningHealingTab";
+import LabTab from "./components/LabTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
+import ActivityFeed from "./components/ActivityFeed";
+import UndoToast from "./components/UndoManager";
+import CrossTabNotifier, { setNavigator } from "./components/CrossTabNotifier";
+import TabGuide from "./components/TabGuide";
+
+const VIEWS = [
+  { id: "chat", label: "Chat", icon: "💬" },
+  { id: "folders", label: "Folders", icon: "📁" },
+  { id: "docs", label: "Docs", icon: "📚" },
+  { id: "governance", label: "Governance", icon: "🏛️" },
+  { id: "whitelist", label: "Whitelist", icon: "🛡️" },
+  { id: "oracle", label: "Oracle", icon: "🔮" },
+  { id: "codebase", label: "Codebase", icon: "💻" },
+  { id: "tasks", label: "Tasks", icon: "📋" },
+  { id: "apis", label: "APIs", icon: "🔗" },
+  { id: "bi", label: "BI", icon: "📈" },
+  { id: "health", label: "Health", icon: "🏥" },
+  { id: "learn-heal", label: "Learn", icon: "🧬" },
+  { id: "lab", label: "Lab", icon: "🧪" },
+];
 
 function App() {
   const [activeView, setActiveView] = useState("chat");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [apiHealth, setApiHealth] = useState(null);
   const [lastVoiceResponse, setLastVoiceResponse] = useState("");
   const [isVoiceProcessing, setIsVoiceProcessing] = useState(false);
-  const dropdownRef = useRef(null);
+
+  // Wire cross-tab navigator
+  useEffect(() => { setNavigator(setActiveView); }, []);
 
   useEffect(() => {
     checkHealth();
     const interval = setInterval(checkHealth, 30000);
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const checkHealth = async () => {
@@ -63,10 +75,8 @@ function App() {
       if (response.ok) {
         const data = await response.json();
         setLastVoiceResponse(data.message);
-      } else if (response.status === 404) {
-        setLastVoiceResponse("I don't have information about that in my knowledge base yet.");
       } else {
-        setLastVoiceResponse("Sorry, I encountered an error processing your request.");
+        setLastVoiceResponse("Sorry, I encountered an issue.");
       }
     } catch {
       setLastVoiceResponse("Sorry, I couldn't connect to the server.");
@@ -75,89 +85,64 @@ function App() {
     }
   };
 
-  const views = [
-    { id: "chat", label: "Chat", icon: "💬", desc: "World model & system chat" },
-    { id: "folders", label: "Folders", icon: "📁", desc: "File management & librarian" },
-    { id: "docs", label: "Docs", icon: "📚", desc: "Document library — all uploads" },
-    { id: "governance", label: "Governance", icon: "🏛️", desc: "Approvals, scores, healing, learning" },
-    { id: "whitelist", label: "Whitelist", icon: "🛡️", desc: "API & web sources, learning pipeline" },
-    { id: "oracle", label: "Oracle", icon: "🔮", desc: "Training data, audit, gap filling" },
-    { id: "codebase", label: "Codebase", icon: "💻", desc: "Code projects & coding agent" },
-    { id: "tasks", label: "Tasks", icon: "📋", desc: "Live activity, submit & schedule tasks" },
-    { id: "apis", label: "APIs", icon: "🔗", desc: "All endpoints, health checks, diagnostics" },
-    { id: "bi", label: "BI", icon: "📈", desc: "Business intelligence & analytics" },
-    { id: "health", label: "Health", icon: "🏥", desc: "System health, services, organs" },
-    { id: "learn-heal", label: "Learn & Heal", icon: "🧬", desc: "Self-learning, healing, skills" },
-  ];
-
-  const current = views.find((v) => v.id === activeView) || views[0];
-
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <h1>Grace</h1>
+      {/* ── Header with Horizontal Tab Bar ─────────────────────── */}
+      <header style={{
+        background: '#12122a', borderBottom: '1px solid #333',
+        display: 'flex', alignItems: 'center', padding: '0 12px',
+        height: 48, flexShrink: 0,
+      }}>
+        {/* Logo */}
+        <h1 style={{
+          fontSize: 18, fontWeight: 800, color: '#e94560', margin: 0,
+          marginRight: 16, letterSpacing: '-0.5px', flexShrink: 0,
+        }}>Grace</h1>
 
-          <div className="view-selector" ref={dropdownRef}>
+        {/* Horizontal Tab Bar */}
+        <div style={{
+          display: 'flex', gap: 0, overflow: 'auto', flex: 1,
+          scrollbarWidth: 'none', msOverflowStyle: 'none',
+        }}>
+          {VIEWS.map(v => (
             <button
-              className="view-selector-btn"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              key={v.id}
+              onClick={() => setActiveView(v.id)}
+              style={{
+                padding: '6px 12px', border: 'none', background: 'none',
+                cursor: 'pointer', fontSize: 12, whiteSpace: 'nowrap',
+                color: activeView === v.id ? '#e94560' : '#888',
+                borderBottom: activeView === v.id ? '2px solid #e94560' : '2px solid transparent',
+                fontWeight: activeView === v.id ? 700 : 500,
+                transition: 'all .15s',
+                display: 'flex', alignItems: 'center', gap: 4,
+              }}
             >
-              <span className="view-icon">{current.icon}</span>
-              <span className="view-label">{current.label}</span>
-              <svg
-                width="12" height="12" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" strokeWidth="3"
-                style={{ transform: dropdownOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
+              <span style={{ fontSize: 14 }}>{v.icon}</span>
+              {v.label}
             </button>
+          ))}
+        </div>
 
-            {dropdownOpen && (
-              <div className="view-dropdown">
-                {views.map((v) => (
-                  <button
-                    key={v.id}
-                    className={`view-dropdown-item ${v.id === activeView ? "active" : ""}`}
-                    onClick={() => { setActiveView(v.id); setDropdownOpen(false); }}
-                  >
-                    <span className="view-dropdown-icon">{v.icon}</span>
-                    <div>
-                      <div className="view-dropdown-label">{v.label}</div>
-                      <div className="view-dropdown-desc">{v.desc}</div>
-                    </div>
-                    {v.id === activeView && (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="3">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="health-indicator">
-            {apiHealth ? (
-              <>
-                <span className={`status-dot ${apiHealth.ollama_running ? "healthy" : "unhealthy"}`} />
-                <span className="status-text">
-                  {apiHealth.ollama_running ? "Connected" : "Disconnected"}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="status-dot unhealthy" />
-                <span className="status-text">Loading...</span>
-              </>
-            )}
+        {/* Right side: guide + notifications + health */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, position: 'relative' }}>
+          <TabGuide tabId={activeView} />
+          <CrossTabNotifier />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{
+              width: 8, height: 8, borderRadius: '50%',
+              background: apiHealth?.ollama_running ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
+            }} />
+            <span style={{ fontSize: 11, color: '#888' }}>
+              {apiHealth?.ollama_running ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
+            </span>
           </div>
         </div>
       </header>
 
-      <div className="app-container">
-        <main className="main-content" style={{ width: "100%" }}>
+      {/* ── Main Content ───────────────────────────────────────── */}
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+        <main style={{ width: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           {activeView === "chat" && <ChatTab />}
           {activeView === "folders" && <FoldersTab />}
           {activeView === "docs" && <DocsTab />}
@@ -170,14 +155,18 @@ function App() {
           {activeView === "bi" && <BusinessIntelligenceTab />}
           {activeView === "health" && <SystemHealthTab />}
           {activeView === "learn-heal" && <LearningHealingTab />}
+          {activeView === "lab" && <LabTab />}
         </main>
       </div>
 
+      {/* ── Floating Components ────────────────────────────────── */}
       <PersistentVoicePanel
         onSendMessage={handleVoiceMessage}
         lastResponse={lastVoiceResponse}
         isProcessing={isVoiceProcessing}
       />
+      <ActivityFeed />
+      <UndoToast />
     </div>
   );
 }

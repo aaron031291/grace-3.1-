@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import "./ChatList.css";
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = API_BASE_URL;
 
 export default function ChatList({
   chats,

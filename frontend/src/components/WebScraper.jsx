@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './WebScraper.css';
+import { API_BASE_URL } from '../config/api';
 
 export default function WebScraper() {
   const [url, setUrl] = useState('');
@@ -15,7 +16,7 @@ export default function WebScraper() {
   const [scraping, setScraping] = useState(false);
   const [error, setError] = useState(null);
 
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   // Restore session from localStorage on mount
   useEffect(() => {

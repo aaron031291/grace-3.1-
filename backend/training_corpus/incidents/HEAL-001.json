@@ -1,0 +1,77 @@
+{
+  "incident_id": "HEAL-001",
+  "timestamp": "2026-02-28T09:25:00Z",
+  "type": "healing_regression",
+  "severity": "high",
+  "summary": "Autonomous healing of training data caused quality regression from 6.7/10 to 4.5/10",
+  "what_happened": {
+    "trigger": "10 errors detected in Opus-mined training data via verification pipeline",
+    "action_taken": "Sent full files to Opus with instruction to rewrite and fix all 10 errors",
+    "expected_outcome": "Fixed training data scoring 9-10/10",
+    "actual_outcome": "Training data scored 4.5/10 \u2014 worse than original"
+  },
+  "root_cause_analysis": {
+    "primary_cause": "LLM token limit truncation",
+    "detail": "Opus was asked to rewrite 29,151 chars of content but max_tokens=8192 produced only 14,393 chars \u2014 a 50.6% content loss",
+    "secondary_cause": "Wholesale rewrite vs surgical fix",
+    "detail_2": "Instead of patching 10 specific lines, the entire file was regenerated, losing good content that had no bugs",
+    "contributing_factors": [
+      "No content preservation check before overwriting original",
+      "No size comparison (new < old = red flag)",
+      "No section-by-section diff to detect lost content",
+      "No rollback mechanism when healed output is worse",
+      "Verification was run AFTER overwrite, not BEFORE commit"
+    ]
+  },
+  "data_points": {
+    "file_1_before": {
+      "chars": 29151,
+      "sections": 8,
+      "code_blocks": 11,
+      "code_validity": "100%"
+    },
+    "file_1_after_bad_heal": {
+      "chars": 14393,
+      "sections": "~4",
+      "code_blocks": "~6",
+      "content_lost": "50.6%"
+    },
+    "file_1_after_surgical_fix": {
+      "chars": 29196,
+      "sections": 8,
+      "code_blocks": 11,
+      "code_validity": "100%"
+    },
+    "opus_score_before": 6.7,
+    "opus_score_after_bad_heal": 4.5,
+    "opus_score_after_surgical_fix": 6.8
+  },
+  "lessons_learned": [
+    "NEVER rewrite entire files through LLM \u2014 apply surgical patches only",
+    "ALWAYS compare output size to input size \u2014 if smaller, flag it",
+    "ALWAYS verify BEFORE committing healed output, not after",
+    "ALWAYS keep a backup/snapshot before healing",
+    "Healing should use diff-based approach, not wholesale replacement",
+    "Token limits make LLMs unreliable for large-file rewriting",
+    "The immune system needs a pre-commit verification gate",
+    "Surgical fixes worked (6.7\u21926.8), wholesale rewrites failed (6.7\u21924.5)"
+  ],
+  "system_gaps_exposed": [
+    "No pre-healing snapshot/backup mechanism",
+    "No post-healing quality gate (verify before commit)",
+    "No content size regression check",
+    "No automatic rollback on quality degradation",
+    "Healing coordinator doesn't diff old vs new",
+    "No 'healing made it worse' detection circuit"
+  ],
+  "resolution": {
+    "immediate": "Restored original files from git, applied surgical patches manually",
+    "permanent": "Build healing safeguards into the system (snapshot, verify, rollback)",
+    "status": "resolved_with_improvements_needed"
+  },
+  "kpi_impact": {
+    "trust_score": "should decrease for healing_coordinator component",
+    "healing_success_rate": "this counts as a failed heal + successful retry",
+    "learning_value": "HIGH \u2014 this failure teaches Grace how NOT to heal"
+  }
+}

@@ -7,8 +7,9 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './IngestionDashboard.css';
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = API_BASE_URL;
 
 // Status icons and colors
 const STATUS_CONFIG = {

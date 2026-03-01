@@ -1,0 +1,598 @@
+# THE AUTONOMOUS HEALING LOOP - COMPLETE DESIGN
+
+## 1. THE AUTONOMOUS HEALING PIPELINE
+
+### EXACT SEQUENCE - HEAL-001 AUTONOMOUS RESOLUTION
+
+```python
+# File: src/core/loops/autonomous_healing_loop.py
+class AutonomousHealingLoop:
+    """The 13th Loop - Complete autonomous healing from detection to resolution"""
+    
+    def execute_healing_cycle(self, incident_data):
+        """HEAL-001 would flow through these exact steps autonomously"""
+        
+        # STAGE 1: DETECTION & TRIAGE
+        detection = self.immune_system.detect_anomaly(incident_data)
+        severity = self.trust_engine.assess_severity(detection)
+        
+        if severity < self.HEALING_THRESHOLD:
+            return self.log_and_monitor(detection)
+        
+        # STAGE 2: DIAGNOSTIC CONSENSUS
+        diagnosis = self.consensus_engine.diagnose({
+            'opus_analysis': self.llm_diagnose(detection, model='opus'),
+            'sonnet_analysis': self.llm_diagnose(detection, model='sonnet'),
+            'haiku_analysis': self.llm_diagnose(detection, model='haiku'),
+            'system_metrics': self.architecture_compass.analyze_failure_point(detection)
+        })
+        
+        # STAGE 3: HEALING STRATEGY SELECTION
+        strategy = self.select_healing_strategy(diagnosis)
+        
+        # STAGE 4: PRE-HEALING SAFETY CHECKS
+        if not self.pre_healing_validation(strategy):
+            return self.escalate_to_human(diagnosis, "Pre-healing validation failed")
+        
+        # STAGE 5: HEALING EXECUTION WITH CIRCUIT BREAKER
+        with self.circuit_breaker.protect("healing_execution"):
+            healing_result = self.execute_healing_strategy(strategy)
+        
+        # STAGE 6: POST-HEALING VERIFICATION
+        verification = self.verify_healing_quality(healing_result)
+        
+        # STAGE 7: COMMIT OR ROLLBACK DECISION
+        if verification.quality_improved:
+            self.commit_healing(healing_result)
+            self.unified_memory.record_success(strategy, verification)
+        else:
+            self.rollback_healing(healing_result)
+            self.unified_memory.record_failure(strategy, verification)
+            # Try alternative strategy
+            return self.retry_with_alternative_strategy(diagnosis)
+        
+        # STAGE 8: SYSTEM-WIDE NOTIFICATION
+        self.event_bus.publish('healing_completed', {
+            'incident_id': incident_data['incident_id'],
+            'strategy_used': strategy,
+            'outcome': verification,
+            'lessons_learned': self.extract_lessons(healing_result)
+        })
+        
+        return healing_result
+```
+
+### HEAL-001 SPECIFIC EXECUTION PATH
+
+```python
+# File: src/core/healing/strategies/file_healing_strategy.py
+class FileHealingStrategy:
+    """Handles the exact HEAL-001 scenario autonomously"""
+    
+    def heal_training_data_errors(self, file_path, detected_errors):
+        """This would have handled HEAL-001 without human intervention"""
+        
+        # STEP 1: Content Analysis
+        original_content = self.file_manager.read_file(file_path)
+        content_metrics = self.analyze_content_complexity(original_content)
+        
+        # STEP 2: Strategy Decision (THIS IS THE KEY FIX)
+        if content_metrics.size > self.MAX_WHOLESALE_REWRITE_SIZE:
+            strategy = 'surgical_patch'
+        elif len(detected_errors) < content_metrics.total_sections * 0.3:
+            strategy = 'surgical_patch'  # <30% of content has errors
+        else:
+            strategy = 'guided_rewrite'
+        
+        # STEP 3: Pre-Healing Snapshot
+        snapshot_id = self.create_healing_snapshot(file_path)
+        
+        # STEP 4: Execute Strategy
+        if strategy == 'surgical_patch':
+            healed_content = self.surgical_patch_errors(original_content, detected_errors)
+        else:
+            healed_content = self.guided_rewrite_with_validation(original_content, detected_errors)
+        
+        # STEP 5: Quality Gate (THE CRITICAL MISSING PIECE)
+        quality_check = self.validate_healed_content(original_content, healed_content)
+        
+        if not quality_check.passes_all_gates():
+            self.restore_from_snapshot(snapshot_id)
+            raise HealingQualityException(quality_check.failure_reasons)
+        
+        # STEP 6: Commit
+        self.file_manager.write_file(file_path, healed_content)
+        self.cleanup_snapshot(snapshot_id)
+        
+        return HealingResult(
+            strategy_used=strategy,
+            original_score=quality_check.original_score,
+            healed_score=quality_check.healed_score,
+            content_preserved=quality_check.content_preservation_ratio
+        )
+```
+
+### QUALITY VALIDATION GATES
+
+```python
+# File: src/core/healing/validation/quality_gates.py
+class HealingQualityGates:
+    """The safety net that would have prevented HEAL-001"""
+    
+    def validate_healed_content(self, original, healed):
+        """Multi-stage validation that catches regressions"""
+        
+        gates = [
+            self.size_regression_gate(original, healed),
+            self.content_completeness_gate(original, healed),
+            self.structural_integrity_gate(original, healed),
+            self.quality_score_gate(original, healed),
+            self.functional_validation_gate(original, healed)
+        ]
+        
+        results = []
+        for gate in gates:
+            result = gate.validate()
+            results.append(result)
+            if result.is_critical_failure():
+                return ValidationResult(passed=False, critical_failure=result)
+        
+        return ValidationResult(passed=all(r.passed for r in results), gate_results=results)
+    
+    def size_regression_gate(self, original, healed):
+        """Catches the 50.6% content loss from HEAL-001"""
+        size_ratio = len(healed) / len(original)
+        
+        if size_ratio < 0.8:  # More than 20% content loss
+            return GateResult(
+                passed=False,
+                is_critical=True,
+                reason=f"Content loss detected: {(1-size_ratio)*100:.1f}% of content missing"
+            )
+        
+        return GateResult(passed=True)
+    
+    def quality_score_gate(self, original, healed):
+        """Prevents quality regressions like 6.7→4.5"""
+        original_score = self.trust_engine.score_content(original)
+        healed_score = self.trust_engine.score_content(healed)
+        
+        if healed_score < original_score - 0.5:  # Significant regression
+            return GateResult(
+                passed=False,
+                is_critical=True,
+                reason=f"Quality regression: {original_score}→{healed_score}"
+            )
+        
+        return GateResult(passed=True, improvement=healed_score - original_score)
+```
+
+## 2. WHY GRACE IS BUILT THIS WAY - HEAL-001 PROOF
+
+### Genesis Keys (Provenance)
+```python
+# HEAL-001 Application: Track every healing attempt
+genesis_record = {
+    "healing_attempt_id": "heal_001_attempt_1",
+    "original_file_hash": "sha256:abc123...",
+    "healing_strategy": "wholesale_rewrite",
+    "llm_model": "opus-4.6",
+    "input_tokens": 29151,
+    "output_tokens": 8192,
+    "truncation_detected": True,
+    "quality_regression": {"from": 6.7, "to": 4.5}
+}
+# This provenance enables the system to learn "wholesale_rewrite + large_files = failure"
+```
+
+### Trust Engine (Scoring)
+```python
+# HEAL-001 Application: Continuous quality assessment
+class TrustEngine:
+    def score_healing_attempt(self, original, healed):
+        """The missing piece - score BEFORE commit"""
+        scores = {
+            'content_completeness': self.score_completeness(original, healed),
+            'structural_integrity': self.score_structure(original, healed),
+            'functional_correctness': self.score_functionality(healed),
+            'improvement_factor': self.score_improvement(original, healed)
+        }
+        
+        # HEAL-001 would have scored: completeness=0.5, improvement=-2.2
+        # Automatic rejection threshold: improvement < -1.0
+        return TrustScore(scores)
+```
+
+### Immune System (Detection)
+```python
+# HEAL-001 Application: Detect the original training data errors
+class ImmuneSystem:
+    def scan_training_data(self):
+        """Detected the 10 errors that triggered HEAL-001"""
+        errors = self.verification_pipeline.validate_all_files()
+        
+        for error in errors:
+            self.event_bus.publish('immune_system_alert', {
+                'type': 'training_data_corruption',
+                'severity': self.calculate_severity(error),
+                'healing_required': True
+            })
+```
+
+### Consensus Engine (Multi-Model Diagnosis)
+```python
+# HEAL-001 Application: Multiple models diagnose the healing strategy
+class ConsensusEngine:
+    def diagnose_healing_approach(self, file_errors):
+        """Prevents single-model bias that caused HEAL-001"""
+        
+        opus_recommendation = "rewrite_entire_file"  # What actually happened
+        sonnet_recommendation = "surgical_patch_only"  # What should have happened
+        haiku_recommendation = "surgical_patch_only"
+        
+        # Consensus: 2/3 models recommend surgical approach
+        # Override Opus's wholesale rewrite tendency
+        return ConsensusDecision(
+            strategy="surgical_patch",
+            confidence=0.85,
+            dissenting_opinion=opus_recommendation
+        )
+```
+
+### Circuit Breakers (Loop Protection)
+```python
+# HEAL-001 Application: Prevent cascading healing failures
+class HealingCircuitBreaker:
+    def protect_healing_execution(self):
+        """Stops healing loops when they consistently fail"""
+        
+        if self.recent_healing_failures > 3:
+            return CircuitBreakerState.OPEN  # Stop autonomous healing
+        
+        if self.quality_regression_rate > 0.5:
+            return CircuitBreakerState.HALF_OPEN  # Require human approval
+        
+        return CircuitBreakerState.CLOSED  # Full autonomous operation
+```
+
+### Event Bus (System-Wide Awareness)
+```python
+# HEAL-001 Application: Real-time healing status across all components
+self.event_bus.publish('healing_quality_regression', {
+    'incident_id': 'HEAL-001',
+    'original_score': 6.7,
+    'healed_score': 4.5,
+    'regression_severity': 'high',
+    'rollback_initiated': True,
+    'alternative_strategy': 'surgical_patch'
+})
+
+# All system components immediately aware of healing failure
+# Reporting engine updates dashboards
+# Architecture compass adjusts healing parameters
+# Unified memory records the failure pattern
+```
+
+### Unified Memory (Learning from Failure)
+```python
+# HEAL-001 Application: Permanent learning from the failure
+class UnifiedMemory:
+    def record_healing_failure(self, incident):
+        """HEAL-001 becomes permanent system knowledge"""
+        
+        self.healing_patterns.add_anti_pattern({
+            'pattern': 'large_file_wholesale_rewrite',
+            'failure_mode': 'token_truncation_quality_loss',
+            'prevention': 'force_surgical_approach_when_size > 20000_chars',
+            'evidence': incident.to_dict()
+        })
+        
+        # Future healing attempts automatically avoid this failure mode
+```
+
+### Intelligence Layer (Pattern Recognition)
+```python
+# HEAL-001 Application: Recognize similar scenarios before they fail
+class IntelligenceLayer:
+    def predict_healing_outcome(self, strategy, content):
+        """Learned from HEAL-001 to predict failures"""
+        
+        if (strategy.type == 'wholesale_rewrite' and 
+            len(content) > 20000 and 
+            strategy.model == 'opus'):
+            
+            return PredictionResult(
+                likely_outcome='quality_regression',
+                confidence=0.92,
+                recommendation='use_surgical_approach',
+                evidence='HEAL-001_pattern_match'
+            )
+```
+
+### Reporting Engine (Visibility)
+```python
+# HEAL-001 Application: Real-time healing operation visibility
+class ReportingEngine:
+    def generate_healing_report(self, incident):
+        """Live dashboard showing healing progress and quality"""
+        
+        return HealingReport(
+            incident_id=incident.id,
+            healing_stage='quality_verification',
+            quality_trend={'before': 6.7, 'after': 4.5, 'status': 'REGRESSION'},
+            action_taken='automatic_rollback_initiated',
+            next_strategy='surgical_patch_queued'
+        )
+```
+
+### Architecture Compass (Self-Awareness)
+```python
+# HEAL-001 Application: System understands its own healing capabilities
+class ArchitectureCompass:
+    def assess_healing_capability(self, task):
+        """Self-awareness prevents overreach like HEAL-001"""
+        
+        if task.content_size > self.max_reliable_rewrite_size:
+            return CapabilityAssessment(
+                can_handle=False,
+                reason='content_exceeds_reliable_rewrite_threshold',
+                alternative='surgical_patch_recommended',
+                confidence_in_alternative=0.95
+            )
+```
+
+## 3. WHAT'S STILL MISSING - EXACT CODE GAPS
+
+### Critical Missing Files:
+
+```python
+# File: src/core/healing/pre_healing_validator.py
+class PreHealingValidator:
+    """MISSING: The safety check that would have prevented HEAL-001"""
+    
+    def validate_healing_feasibility(self, strategy, content):
+        """Check if healing strategy will succeed before attempting"""
+        
+        # Size validation
+        if strategy.type == 'rewrite' and len(content) > strategy.model.max_output_chars:
+            return ValidationResult(
+                feasible=False,
+                reason="Content exceeds model output capacity",
+                alternative_strategy="surgical_patch"
+            )
+        
+        # Token estimation
+        estimated_tokens = self.estimate_output_tokens(content, strategy)
+        if estimated_tokens > strategy.model.max_tokens:
+            return ValidationResult(
+                feasible=False,
+                reason=f"Estimated {estimated_tokens} tokens exceeds {strategy.model.max_tokens}",
+                alternative_strategy="chunked_healing"
+            )
+        
+        return ValidationResult(feasible=True)
+
+# File: src/core/healing/surgical_patcher.py
+class SurgicalPatcher:
+    """MISSING: Precise error fixing without wholesale rewrite"""
+    
+    def patch_specific_errors(self, content, error_list):
+        """Fix only the broken parts, preserve everything else"""
+        
+        patches = []
+        for error in error_list:
+            patch = self.generate_surgical_patch(content, error)
+            patches.append(patch)
+        
+        # Apply patches in reverse order to preserve line numbers
+        patched_content = content
+        for patch in sorted(patches, key=lambda p: p.line_number, reverse=True):
+            patched_content = self.apply_patch(patched_content, patch)
+        
+        return patched_content
+
+# File: src/core/healing/healing_snapshots.py
+class HealingSnapshotManager:
+    """MISSING: Backup/restore mechanism for safe healing"""
+    
+    def create_healing_snapshot(self, file_path):
+        """Create point-in-time backup before healing"""
+        snapshot_id = f"heal_snapshot_{uuid.uuid4()}"
+        
+        self.snapshots[snapshot_id] = {
+            'file_path': file_path,
+            'content': self.file_manager.read_file(file_path),
+            'timestamp': datetime.utcnow(),
+            'checksum': self.calculate_checksum(file_path)
+        }
+        
+        return snapshot_id
+    
+    def restore_from_snapshot(self, snapshot_id):
+        """Rollback to pre-healing state"""
+        snapshot = self.snapshots[snapshot_id]
+        self.file_manager.write_file(snapshot['file_path'], snapshot['content'])
+        return True
+
+# File: src/core/healing/quality_regression_detector.py
+class QualityRegressionDetector:
+    """MISSING: Detect when healing makes things worse"""
+    
+    def detect_regression(self, original_content, healed_content):
+        """The critical check missing from HEAL-001"""
+        
+        original_score = self.trust_engine.score_content(original_content)
+        healed_score = self.trust_engine.score_content(healed_content)
+        
+        regression_detected = healed_score < original_score - self.REGRESSION_THRESHOLD
+        
+        return RegressionResult(
+            regression_detected=regression_detected,
+            original_score=original_score,
+            healed_score=healed_score,
+            severity=self.calculate_regression_severity(original_score, healed_score)
+        )
+```
+
+### Configuration Changes Needed:
+
+```python
+# File: src/config/healing_config.py
+HEALING_SAFETY_LIMITS = {
+    'max_wholesale_rewrite_size': 15000,  # Chars - prevents HEAL-001
+    'max_tokens_per_healing_request': 6000,  # Leave buffer for truncation
+    'quality_regression_threshold': 0.5,  # Auto-rollback if score drops > 0.5
+    'content_loss_threshold': 0.2,  # Auto-rollback if >20% content lost
+    'surgical_patch_preference_threshold': 0.3  # Use surgical if <30% needs fixing
+}
+
+# File: src/core/loops/loop_registry.py
+AUTONOMOUS_LOOPS = {
+    # ... existing 12 loops ...
+    13: {
+        'name': 'autonomous_healing_loop',
+        'description': 'Complete autonomous healing from detection to resolution',
+        'circuit_breaker': 'healing_execution',
+        'max_failures': 3,
+        'cooldown_period': 300,  # 5 minutes
+        'escalation_threshold': 2  # Escalate to human after 2 failures
+    }
+}
+```
+
+## 4. THE 13TH LOOP - AUTONOMOUS HEALING LOOP
+
+### Loop Definition:
+```python
+# File: src/core/loops/autonomous_healing_loop.py
+class AutonomousHealingLoop(BaseLoop):
+    """
+    The 13th Loop: Complete autonomous healing pipeline
+    
+    Stages:
+    1. Detection & Triage
+    2. Diagnostic Consensus  
+    3. Strategy Selection
+    4. Pre-Healing Validation
+    5. Healing Execution
+    6. Quality Verification
+    7. Commit/Rollback Decision
+    8. System Learning & Notification
+    """
+    
+    LOOP_ID = 13
+    LOOP_NAME = "autonomous_healing_loop"
+    
+    def __init__(self):
+        super().__init__()
+        self.circuit_breaker = CircuitBreaker(
+            name="healing_execution",
+            failure_threshold=3,
+            recovery_timeout=300,
+            expected_exception=HealingException
+        )
+    
+    @circuit_breaker.protect
+    def execute_cycle(self, trigger_event):
+        """Execute complete autonomous healing cycle"""
+        
+        # Stage 1: Detection & Triage
+        incident = self.detect_and_triage(trigger_event)
+        if not incident.requires_healing():
+            return self.log_and_continue(incident)
+        
+        # Stage 2: Diagnostic Consensus
+        diagnosis = self.consensus_engine.diagnose_multi_model(incident)
+        
+        # Stage 3: Strategy Selection
+        strategy = self.select_optimal_strategy(diagnosis)
+        
+        # Stage 4: Pre-Healing Validation
+        validation = self.pre_healing_validator.validate(strategy, incident)
+        if not validation.feasible:
+            return self.try_alternative_or_escalate(validation)
+        
+        # Stage 5: Healing Execution
+        snapshot_id = self.snapshot_manager.create_snapshot(incident.affected_files)
+        
+        try:
+            healing_result = self.execute_healing_strategy(strategy, incident)
+        except HealingException as e:
+            self.snapshot_manager.restore_snapshot(snapshot_id)
+            raise e
+        
+        # Stage 6: Quality Verification
+        quality_check = self.quality_gates.validate_healing(
+            incident.original_state, 
+            healing_result.new_state
+        )
+        
+        # Stage 7: Commit/Rollback Decision
+        if quality_check.passes_all_gates():
+            self.commit_healing(healing_result)
+            outcome = 'success'
+        else:
+            self.snapshot_manager.restore_snapshot(snapshot_id)
+            outcome = 'rollback_due_to_quality_regression'
+        
+        # Stage 8: System Learning & Notification
+        self.unified_memory.record_healing_attempt(
+            strategy=strategy,
+            outcome=outcome,
+            quality_metrics=quality_check,
+            lessons_learned=self.extract_lessons(healing_result, quality_check)
+        )
+        
+        self.event_bus.publish('healing_cycle_completed', {
+            'incident_id': incident.id,
+            'outcome': outcome,
+            'strategy_used': strategy.name,
+            'quality_improvement': quality_check.improvement_score
+        })
+        
+        return healing_result
+
+# Circuit Breaker Registration
+CIRCUIT_BREAKERS['autonomous_healing_loop'] = {
+    'failure_threshold': 3,
+    'recovery_timeout': 300,
+    'half_open_max_calls': 1,
+    'expected_exceptions': [HealingException, QualityRegressionException],
+    'fallback_action': 'escalate_to_human_operator'
+}
+```
+
+### Integration with Existing Architecture:
+
+```python
+# File: src/core/grace_orchestrator.py
+class GraceOrchestrator:
+    def __init__(self):
+        # ... existing loops ...
+        self.autonomous_healing_loop = AutonomousHealingLoop()
+        
+        # Register healing loop with event bus
+        self.event_bus.subscribe('immune_system_alert', self.autonomous_healing_loop.handle_alert)
+        self.event_bus.subscribe('quality_regression_detected', self.autonomous_healing_loop.handle_regression)
+        self.event_bus.subscribe('training_data_corruption', self.autonomous_healing_loop.handle_corruption)
+    
+    def start_autonomous_operations(self):
+        """Start all loops including the new healing loop"""
+        # ... start existing loops ...
+        self.autonomous_healing_loop.start()
+        
+        logger.info("All 13 autonomous loops active - Grace is fully autonomous")
+```
+
+**HEAL-001 would never happen again.** The autonomous healing loop would have:
+
+1. **Detected** the training data errors via immune system
+2. **Diagnosed** via consensus (surgical patch recommended 2/3)
+3. **Validated** that wholesale rewrite would exceed token limits
+4. **Selected** surgical patch strategy automatically
+5. **Executed** precise fixes preserving good content
+6. **Verified** quality improvement (6.7→6.8) before commit
+7. **Committed** the healed files
+8. **Learned** the pattern for future prevention
+
+**Zero human intervention required.** Grace becomes truly autonomous.

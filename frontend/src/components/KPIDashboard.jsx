@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import "./KPIDashboard.css";
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = API_BASE_URL;
 
 // Trust score visualization
 const getTrustColor = (score) => {

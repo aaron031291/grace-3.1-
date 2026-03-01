@@ -234,6 +234,41 @@ class HunterAssimilator:
     # ── Step 2: Kimi analysis ──────────────────────────────────────────
 
     def _step_kimi_analyse(self, code: str, description: str) -> Dict:
+        # Try consensus first if multiple models available (multi-perspective code review)
+        # Protected by circuit breaker (prevents pipeline↔consensus loop)
+        try:
+            from cognitive.circuit_breaker import enter_loop, exit_loop
+            if not enter_loop("consensus_refinement"):
+                raise RuntimeError("Circuit breaker: consensus loop depth exceeded")
+            from cognitive.consensus_engine import run_consensus, _check_model_available
+            available = [m for m in ["opus", "kimi", "qwen"] if _check_model_available(m)]
+            if len(available) >= 2:
+                result = run_consensus(
+                    prompt=(
+                        f"Analyse this code being integrated into Grace AI:\n\n"
+                        f"Description: {description}\n\nCode:\n{code[:4000]}\n\n"
+                        f"Provide: 1) What it does 2) Dependencies needed 3) Potential conflicts "
+                        f"4) Integration points 5) Risk assessment"
+                    ),
+                    models=available,
+                    source="autonomous",
+                )
+                if result.verification.get("passed"):
+                    return {
+                        "step": "kimi_analyse", "analysis": result.final_output,
+                        "success": True, "method": "consensus",
+                        "models_used": result.models_used,
+                        "confidence": result.confidence,
+                    }
+        except Exception:
+            pass
+        finally:
+            try:
+                exit_loop("consensus_refinement")
+            except Exception:
+                pass
+
+        # Fallback to single Kimi analysis
         try:
             from llm_orchestrator.kimi_enhanced import get_kimi_enhanced
             kimi = get_kimi_enhanced()
@@ -246,7 +281,7 @@ class HunterAssimilator:
                 system="You are reviewing code for autonomous integration into an AI system.",
                 temperature=0.2,
             )
-            return {"step": "kimi_analyse", "analysis": response, "success": bool(response)}
+            return {"step": "kimi_analyse", "analysis": response, "success": bool(response), "method": "kimi_solo"}
         except Exception as e:
             return {"step": "kimi_analyse", "analysis": None, "error": str(e)}
 

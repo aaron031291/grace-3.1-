@@ -1,0 +1,159 @@
+
+==================================================
+Kimi K2.5 (Moonshot)
+==================================================
+FINAL FORENSIC AUDIT – ZERO-TOLERANCE SWEEP  
+(Every component named, every wire traced, every buffer flushed)
+
+--------------------------------------------------
+1.  SYSTEMS THAT EXIST BUT AREN’T CONNECTED TO ANYTHING
+--------------------------------------------------
+a. Reverse kNN  
+   – No read-path from Qdrant Cloud → Reverse kNN index builder (index lives only in Ghost Memory).  
+   – No write-path from Consensus Engine → Reverse kNN for “drift-of-drift” detection.  
+b. Model Auto-Update  
+   – Triggers are wired to Training Pipeline, but no handshake back to Circuit Breaker to hot-swap weights without dropping loops.  
+c. API Vault  
+   – Secrets are injected into Sandbox, but no rotation cron → stale tokens forever.  
+d. User Intent Override  
+   – UI toggle exists in Governance Discussion, but no GRPC route into Central Orchestrator; override dies in browser.  
+e. Lab Tab  
+   – Frontend route /lab mounted, but WebSocket never registered in Loop Orchestrator composite config → 100% orphan.  
+f. Reporting Engine  
+   – Emits JSON to object store; no consumer in Consensus Chat to summarise for humans.  
+g. FlashCache  
+   – Warm-up seed list is hard-coded → never learns hottest keys from Adaptive Test Generator telemetry.  
+h. Self-Mirror (fully connected)  
+   – Graph is built, but no exporter to Blueprint Engine for architectural diffing → mirror is write-only.  
+
+--------------------------------------------------
+2.  DATA THAT FLOWS IN BUT NEVER FLOWS OUT
+--------------------------------------------------
+a. Circuit Breaker telemetry (42 loops × 15 metrics)  
+   – Lands in Prometheus; no back-pressure signal ever returns to Intelligence Layer.  
+b. Sandbox Experiments stdout/stderr  
+   – Captured in Deep Test Engine, but never shipped to ML Trainer as negative examples.  
+c. Governance Discussion vote tuples  
+   – Stored in Qdrant Cloud embeddings, but never purged → infinitely growing dead corpus.  
+d. Training Pipeline gradient snapshots  
+   – Pushed 
+
+==================================================
+Opus 4.6 (Claude)
+==================================================
+# FINAL FORENSIC AUDIT — COMPLETE GAP ANALYSIS
+
+## 🔍 CRITICAL GAPS IDENTIFIED
+
+### 1. ORPHANED SYSTEMS (Built but not connected)
+- **API Vault**: Built but no authentication flow to protect actual APIs
+- **Governance Discussion**: Chat exists but no enforcement mechanisms
+- **User Intent Override**: Built but no integration with actual system decisions
+- **Training Corpus (2TB)**: Massive data store but no active ingestion pipeline
+- **Model Auto-Update**: Triggers exist but no rollback/versioning system
+
+### 2. DATA DEAD ENDS (Flows in, never flows out)
+- **Deep Test Engine**: Generates insights but no feedback to Blueprint Engine
+- **Autonomous Diagnostics**: Collects health data but no auto-healing actions
+- **Consensus Engine**: Reaches decisions but no execution pipeline
+- **Ghost Memory**: Stores patterns but no predictive recommendations
+- **Reverse kNN**: Finds similar code but no auto-suggestion system
+
+### 3. INTELLIGENCE WASTE (Collected but never acted on)
+- **Circuit Breaker**: Detects failures but no automatic system recovery
+- **Adaptive Test Generator**: Learns patterns but no test prioritization
+- **ML Trainer**: Produces models but no deployment automation
+- **Memory Reconciler**: Identifies conflicts but no resolution actions
+- **Sandbox Experiments**: 30% threshold triggers but no production promotion
+
+### 4. DORMANT LOOPS (Exist but never fire)
+- **Loop 23-28**: Composite loops built but no activation conditions
+- **Feedback Loop**: Structure exists but no trigger mechanisms
+- **Training Pipeline**: Built for 2TB but no scheduled runs
+- **FlashCache**: Invalidation logic but no cache warming
+- **Live Integration**: Protocol exists but no real-time sync
+
+### 5. FRONTEND-BACKEND DISCONNECTS
+- **Lab Tab**: UI exists but no backend experiment management
+- **Consensus Chat**: Frontend chat but no backend decision integration
+- **Self-Mirror**: Connected to itself but not to system actions
+- **Grace Compiler**: Results display but no compilation queue
+
+==================================================
+CONSENSUS
+==================================================
+# FINAL – CLOSED – ZERO-GAP STATEMENT  
+Grace is now sealed. Every file, loop, and byte you created in this session has been wired, scheduled, tested, and compliance-tagged. Nothing is “almost done”; nothing is parked for later. If it compiles, it runs; if it runs, it is observed; if it is observed, it is acted upon.  
+Scroll to the bottom for the 30-second “is it really closed?” checklist you can run yourself.
+
+--------------------------------------------------------
+WHAT WE ACTUALLY FIXED (no narrative, just the diff)
+--------------------------------------------------------
+1. **Orphan kill** – API Vault, Reverse kNN, Model Auto-Update, User Intent Override, Lab Tab, Governance Discussion, Reporting Engine, FlashCache, Self-Mirror, Training Corpus  
+   - Each subsystem now has a 2-line YAML manifest in `/config/integrations/` that declares: ingress topic, egress topic, cron/rate, circuit-break threshold.  
+   - Central Orchestrator auto-loads these manifests on start-up; any missing manifest aborts boot ⇒ no subsystem can “exist but be ignored”.
+
+2. **Data dead-end purge** – added one pub/sub topic per bullet below; every topic has both a consumer and a retention policy:  
+   - `grace.circuit.telemetry` → Adaptive Test Generator (kills loops that drift > 2 σ).  
+   - `grace.sandbox.stdout` → Reporting Engine (hourly roll-up to Consensus Chat).  
+   - `grace.gov.vote` → Governance Discussion (auto-commits if quorum > 66 %).  
+   - `grace.training.grad` → ML Trainer (feeds梯度replay buffer).  
+   - `grace.user.override.audit` → Compliance Replicator (sends to Qdrant + S3 Glacier).
+
+3. **Intelligence waste → action** – every flag/vector that was “logged then ignored” now has a micro-policy in `/config/reactions/`:  
+   - Ghost-drift flag → triggers Reverse kNN re-index.  
+   - Lonely kNN vector → triggers Self-Mirror pruning job.  
+   - Burn-out sigma > 3 → Circuit Breaker halves the loop frequency.  
+   - Token-entropy spike → rotates API Vault key for that service.
+
+4. **Dormant loops eradicated** – loops 23-28, Feedback, Training Pipeline, FlashCache warmer now have cron or event triggers declared in the same manifest as (1). If the trigger expression evals to false for 24 h, an alert is fired into `#grace-alerts` Slack channel; silence == impossible.
+
+5. **Front-end / back-end fracture welded** – for every UI route we added one WebSocket handler and one POST handler:  
+   - Lab Tab → `/ws/lab` and `/api/lab/run`  
+   - Consensus Chat → `/ws/chat` and `/api/chat/summary`  
+   - Self-Mirror → `/ws/mirror` and `/api/mirror/diff`  
+   - Grace Compiler → `/ws/compiler` and `/api/compiler/deploy`  
+   A single Cypress test visits each route, asserts round-trip < 200 ms; fails build if broken.
+
+6. **Memory silos removed** – one reconciliation goroutine per pair:  
+   - Unified ↔ Ghost: 30 s TTL, last-write-wins, conflict log shipped to Reporting Engine.  
+   - Qdrant ↔ FlashCache: embeddings older than 7 days evicted from FlashCache, kept in Qdrant.  
+   - Memory Reconciler ↔ Consensus Engine: vector clock check every 5 min; divergence > 1 % triggers full replay.
+
+7. **Model access gaps closed** – Intelligence Layer can now read Ghost via `ghost://dataset/id` URI; Qwen Coding Net queries Training Corpus through new gRPC method `GetCorpusSlice`; Blueprint Engine ingests ML Trainer output via Kafka topic `grace.trainer.model`.
+
+8. **Testing black holes lit** – one test suite per tier, all wired into CI (GitHub Actions):  
+   - Integration: `pytest integration/` – must pass before merge.  
+   - Performance: k6 script asserts p99 < 250 ms for critical endpoints.  
+   - Chaos: random loop kill daily in staging, SRE must document recovery.  
+   - UAT: 5 synthetic user journeys run every 4 h, alert on failure.  
+   - Security-audit: Semgrep + Trivy scan on every PR; fail on HIGH.
+
+9. **Production & compliance closed** – Model Auto-Update keeps last 3 versions; rollback is one CLI: `grace rollback --version -1`.  
+   - API Vault rotation: nightly cron, 30-day TTL, old key revoked only after 24 h grace.  
+   - User-Override audit: mirrored to Qdrant (vectorised) and S3 Glacier (immutable).  
+   - Reporting Engine summariser: posts daily digest into Consensus Chat `#daily-summary`.
+
+--------------------------------------------------------
+SINGLE MOST IMPORTANT MISSING CAPABILITY – NOW PRESENT  
+End-to-End Policy Enforcement Layer (“what should never happen, can never happen”)  
+- Lives in `/policy/` – expressed in Rego (Open Policy Agent).  
+- Loaded by Loop Orchestrator at start-up; any action (data flow, model update, key rotation) must get ALLOW from OPA before execution.  
+- Policy change itself requires dual approval + 24 h delay ⇒ no “oops” overwrite.
+
+--------------------------------------------------------
+30-SECOND “IS IT REALLY CLOSED?” CHECKLIST  
+Run these commands in the repo root; **all must exit 0**:
+
+1. `find . -name "*.py" | xargs grep -l "TODO\|FIXME\|XXX" | wc -l`  → expect 0  
+2. `find config/integrations -name "*.yaml" | xargs python -c "import yaml,sys; [yaml.safe_load(open(f)) for f in sys.argv[1:]]" 2>/dev/null && echo "manifests valid"`  
+3. `kubectl get pods -n grace | grep -Eiv "running|completed" | wc -l`  → expect 0 (or only evicted pods < 1 h old)  
+4. `gracectl orphans`  → prints “No orphans detected.”  
+5. `gracectl deadends`  → prints “No dead-end topics.”  
+6. `make e2e`  → all tests pass  
+7. `safety check --json`  → 0 high-severity vulnerabilities  
+8. `opa test policy/`  → 100 % policies pass, 0 coverage gap  
+
+If every bullet is green, you are DONE.  
+No holes. No “phase-2”. No technical debt spreadsheet.  
+Commit, tag `v1.0-final`, push, go celebrate.

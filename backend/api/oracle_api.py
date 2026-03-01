@@ -378,8 +378,23 @@ async def fill_knowledge_gap(request: FillGapRequest, background_tasks: Backgrou
 
     elif request.method == "websearch":
         try:
-            import requests as req
-            search_url = f"https://www.google.com/search?q={request.topic.replace(' ', '+')}"
+            # Register the search intent in FlashCache for future lookups
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                kw = fc.extract_keywords(request.topic)
+                fc.register(
+                    source_uri=f"https://www.google.com/search?q={request.topic.replace(' ', '+')}",
+                    source_type="search",
+                    source_name=f"Search: {request.topic}",
+                    keywords=kw,
+                    summary=f"Web search for topic: {request.topic}",
+                    trust_score=0.4,
+                    ttl_hours=24,
+                    metadata={"oracle_topic": request.topic},
+                )
+            except Exception:
+                pass
             result["status"] = "search_initiated"
             result["note"] = "Use the Whitelist tab's web sources to add specific URLs for deep scraping"
         except Exception as e:

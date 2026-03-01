@@ -136,6 +136,15 @@ class GraceImmuneSystem:
         except Exception:
             pass
 
+        # Register with event bus for system-wide awareness
+        try:
+            from cognitive.event_bus import subscribe, publish
+            subscribe("llm.failed", lambda e: self._on_realtime_error(e.data))
+            subscribe("trust.threshold_crossed", lambda e: self._on_realtime_alert(e.data))
+            logger.info("[IMMUNE] Connected to event bus")
+        except Exception:
+            pass
+
     def _on_realtime_error(self, event: Dict):
         """Called INSTANTLY when an error genesis key is created."""
         self._realtime_errors.append(event)
@@ -594,6 +603,23 @@ class GraceImmuneSystem:
         improved = post_snapshot.health_score > pre_snapshot.health_score
         if not improved and success:
             success = False  # Rollback: healing didn't actually help
+
+        # If healing failed, escalate to consensus roundtable for diagnosis
+        if not success and anomaly.severity >= 0.6:
+            try:
+                from cognitive.consensus_engine import queue_autonomous_query
+                queue_autonomous_query(
+                    prompt=(
+                        f"Component '{anomaly.component}' has an anomaly: {anomaly.anomaly_type.value}. "
+                        f"Severity: {anomaly.severity}. Healing action '{action}' failed. "
+                        f"Pre-healing health: {pre_snapshot.health_score}, Post: {post_snapshot.health_score}. "
+                        f"Diagnose the root cause and suggest alternative healing strategies."
+                    ),
+                    context=f"Side effects: {side_effects}. Trust: {trust_before}.",
+                    priority="high",
+                )
+            except Exception:
+                pass
 
         # Update trust
         trust_after = trust_before

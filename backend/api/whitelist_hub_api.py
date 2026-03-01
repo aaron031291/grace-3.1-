@@ -111,6 +111,25 @@ async def add_api_source(request: APISourceAdd):
     track(key_type="system", what=f"API source added: {request.name} ({request.url})",
           how="POST /api/whitelist-hub/api-sources", tags=["whitelist", "api_source"])
 
+    # Pre-register in FlashCache for instant keyword discovery
+    try:
+        from cognitive.flash_cache import get_flash_cache
+        fc = get_flash_cache()
+        kw = fc.extract_keywords(f"{request.name} {request.description or ''}")
+        fc.register(
+            source_uri=request.url,
+            source_type="api",
+            source_name=request.name,
+            keywords=kw,
+            summary=request.description or "",
+            headers=request.headers,
+            auth_type="bearer" if request.api_key else "none",
+            trust_score=0.6,
+            metadata={"whitelist_id": source["id"]},
+        )
+    except Exception:
+        pass
+
     return {"added": True, **source}
 
 
@@ -180,6 +199,27 @@ async def run_api_source(source_id: str, request: SourceRunRequest):
               input_data={"url": source["url"], "query": request.query},
               tags=["whitelist", "api_run"])
 
+        # Register in FlashCache — store URI + keywords, not the full content
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            data_str = str(result.get("data", ""))[:2000]
+            kw = fc.extract_keywords(f"{source['name']} {source.get('description', '')} {data_str}")
+            summary = result.get("kimi_analysis", data_str)[:500]
+            fc.register(
+                source_uri=source["url"],
+                source_type="api",
+                source_name=source["name"],
+                keywords=kw,
+                summary=summary,
+                headers=source.get("headers", {}),
+                auth_type="bearer" if source.get("api_key") else "none",
+                trust_score=0.7,
+                metadata={"whitelist_id": source["id"], "query": request.query},
+            )
+        except Exception:
+            pass
+
         # Store in Oracle (training data) + Magma
         try:
             from cognitive.pipeline import FeedbackLoop
@@ -239,6 +279,25 @@ async def add_web_source(request: WebSourceAdd):
     from api._genesis_tracker import track
     track(key_type="system", what=f"Web source added: {request.name} ({request.source_type})",
           how="POST /api/whitelist-hub/web-sources", tags=["whitelist", "web_source", request.source_type])
+
+    # Pre-register in FlashCache for instant keyword discovery
+    try:
+        from cognitive.flash_cache import get_flash_cache
+        fc = get_flash_cache()
+        kw = fc.extract_keywords(f"{request.name} {request.description or ''}")
+        kw.extend(request.tags or [])
+        fc.register(
+            source_uri=request.url,
+            source_type="web",
+            source_name=request.name,
+            keywords=list(set(kw)),
+            summary=request.description or "",
+            trust_score=0.5,
+            ttl_hours=48,
+            metadata={"whitelist_id": source["id"], "source_type": request.source_type},
+        )
+    except Exception:
+        pass
 
     return {"added": True, **source}
 
@@ -305,6 +364,31 @@ async def run_web_source(source_id: str, request: SourceRunRequest):
               how="POST /api/whitelist-hub/web-sources/run",
               input_data={"url": source["url"], "type": source["source_type"]},
               tags=["whitelist", "web_run", source["source_type"]])
+
+        # Register in FlashCache — store URI + extracted keywords, not full HTML
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            fc = get_flash_cache()
+            content_text = (result.get("text", "") or "")[:2000]
+            kw = fc.extract_keywords(f"{source['name']} {content_text}")
+            kw.extend(source.get("tags", []))
+            summary = result.get("kimi_analysis", content_text)[:500]
+            fc.register(
+                source_uri=source["url"],
+                source_type="web",
+                source_name=source["name"],
+                keywords=list(set(kw)),
+                summary=summary,
+                trust_score=0.6,
+                ttl_hours=48,
+                metadata={
+                    "whitelist_id": source["id"],
+                    "source_type": source["source_type"],
+                    "title": result.get("title", ""),
+                },
+            )
+        except Exception:
+            pass
 
         # Store in Oracle + Magma
         try:

@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { useChunkedUpload, CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import UploadProgress from './UploadProgress';
 
 const COLORS = {
   bg: '#1a1a2e',
@@ -170,6 +172,7 @@ const FoldersTab = () => {
   const [moveDest, setMoveDest] = useState('');
   const [showMove, setShowMove] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(null);
 
   // AI state
   const [analyzeTarget, setAnalyzeTarget] = useState('');
@@ -195,6 +198,7 @@ const FoldersTab = () => {
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false);
   const [newFileName, setNewFileName] = useState('');
+  const [viewMode, setViewMode] = useState('grid'); // grid or list
 
   const fileInputRef = useRef(null);
   const notifTimer = useRef(null);
@@ -340,18 +344,68 @@ const FoldersTab = () => {
     const files = e.target ? e.target.files : e;
     if (!files || files.length === 0) return;
     setUploading(true);
+    setUploadProgress(null);
     const uploadDir = targetDir ?? currentPath;
     let uploadCount = 0;
     try {
       for (const f of Array.from(files)) {
-        const formData = new FormData();
-        formData.append('file', f);
-        formData.append('directory', uploadDir);
-        const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (!res.ok) throw new Error(`Upload failed for ${f.name}`);
+        if (f.size > CHUNKED_THRESHOLD) {
+          // Large file — use chunked upload
+          const initRes = await fetch(`${API_BASE_URL}/api/upload/initiate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: f.name,
+              file_size: f.size,
+              folder: uploadDir,
+              auto_ingest: true,
+            }),
+          });
+          if (!initRes.ok) throw new Error(`Initiation failed for ${f.name}`);
+          const { upload_id, total_chunks, chunk_size } = await initRes.json();
+
+          for (let i = 0; i < total_chunks; i++) {
+            const start = i * chunk_size;
+            const end = Math.min(start + chunk_size, f.size);
+            const blob = f.slice(start, end);
+            const chunkData = await blob.arrayBuffer();
+            const hashBuf = await crypto.subtle.digest('SHA-256', chunkData);
+            const chunkHash = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            const fd = new FormData();
+            fd.append('upload_id', upload_id);
+            fd.append('chunk_index', String(i));
+            fd.append('chunk_hash', chunkHash);
+            fd.append('chunk', new Blob([chunkData]), `chunk_${i}`);
+
+            const cRes = await fetch(`${API_BASE_URL}/api/upload/chunk`, { method: 'POST', body: fd });
+            if (!cRes.ok) throw new Error(`Chunk ${i} failed for ${f.name}`);
+
+            setUploadProgress({
+              phase: 'uploading', percent: ((i + 1) / total_chunks) * 90,
+              bytesUploaded: end, totalBytes: f.size,
+            });
+          }
+
+          setUploadProgress({ phase: 'assembling', percent: 95, bytesUploaded: f.size, totalBytes: f.size });
+          const compRes = await fetch(`${API_BASE_URL}/api/upload/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ upload_id }),
+          });
+          if (!compRes.ok) throw new Error(`Assembly failed for ${f.name}`);
+          setUploadProgress({ phase: 'complete', percent: 100, bytesUploaded: f.size, totalBytes: f.size });
+        } else {
+          // Small file — direct upload
+          const formData = new FormData();
+          formData.append('file', f);
+          formData.append('directory', uploadDir);
+          const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/upload`, {
+            method: 'POST',
+            body: formData,
+          });
+          if (!res.ok) throw new Error(`Upload failed for ${f.name}`);
+        }
         uploadCount++;
       }
       notify(`${uploadCount} file${uploadCount > 1 ? 's' : ''} uploaded to ${uploadDir || 'root'}`);
@@ -360,6 +414,7 @@ const FoldersTab = () => {
       setError(err.message);
     } finally {
       setUploading(false);
+      setUploadProgress(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -816,22 +871,88 @@ const FoldersTab = () => {
               </div>
             )}
 
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            {/* View toggle */}
+            <div style={{ display: 'flex', gap: 2, padding: '4px 8px', background: COLORS.bg }}>
+              <button onClick={() => setViewMode('grid')} style={{
+                padding: '3px 8px', border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11,
+                background: viewMode === 'grid' ? COLORS.accentAlt : 'transparent', color: viewMode === 'grid' ? '#fff' : COLORS.dim,
+              }}>▦ Grid</button>
+              <button onClick={() => setViewMode('list')} style={{
+                padding: '3px 8px', border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11,
+                background: viewMode === 'list' ? COLORS.accentAlt : 'transparent', color: viewMode === 'list' ? '#fff' : COLORS.dim,
+              }}>☰ List</button>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: viewMode === 'grid' ? 8 : 0 }}>
               {dirLoading ? (
                 <div style={{ padding: 16, fontSize: 12, color: COLORS.textDim, textAlign: 'center' }}>Loading...</div>
+              ) : viewMode === 'grid' ? (
+                /* ── GRID VIEW (Windows Explorer style) ──────────── */
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {/* Folders */}
+                  {dirItems.filter(i => i.type === 'directory' || i.is_dir).map(item => (
+                    <div
+                      key={item.path || item.name}
+                      onClick={() => handleDirItemClick(item)}
+                      style={{
+                        width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
+                        borderRadius: 6, background: 'transparent', transition: 'background .15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div style={{ fontSize: 36, marginBottom: 4 }}>📁</div>
+                      <div style={{ fontSize: 10, color: COLORS.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {item.name}
+                      </div>
+                      <div style={{ fontSize: 9, color: COLORS.textDim }}>{item.file_count ?? ''} items</div>
+                    </div>
+                  ))}
+                  {/* Files */}
+                  {dirItems.filter(i => i.type !== 'directory' && !i.is_dir).map(item => {
+                    const isActive = selectedFile?.path === item.path;
+                    return (
+                      <div
+                        key={item.path || item.name}
+                        onClick={() => handleDirItemClick(item)}
+                        style={{
+                          width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
+                          borderRadius: 6, transition: 'background .15s',
+                          background: isActive ? COLORS.bgDark : 'transparent',
+                          border: isActive ? `1px solid ${COLORS.accent}` : '1px solid transparent',
+                        }}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = COLORS.bgAlt; }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = isActive ? COLORS.bgDark : 'transparent'; }}
+                      >
+                        <div style={{ fontSize: 32, marginBottom: 4 }}>{_fileIcon(item.extension || item.name)}</div>
+                        <div style={{
+                          fontSize: 10, color: isActive ? COLORS.text : COLORS.textMuted,
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        }}>
+                          {item.name}
+                        </div>
+                        <div style={{ fontSize: 9, color: COLORS.textDim }}>{formatBytes(item.size)}</div>
+                      </div>
+                    );
+                  })}
+                  {dirItems.length === 0 && (
+                    <div style={{ padding: '30px 16px', textAlign: 'center', color: COLORS.textDim, fontSize: 12, width: '100%' }}>
+                      <div style={{ fontSize: 40, marginBottom: 8 }}>📂</div>
+                      Empty folder
+                    </div>
+                  )}
+                </div>
               ) : (
+                /* ── LIST VIEW (original) ────────────────────────── */
                 <>
-                  {/* Subdirectories first */}
                   {dirItems.filter(i => i.type === 'directory' || i.is_dir).map(item => (
                     <div
                       key={item.path || item.name}
                       onClick={() => handleDirItemClick(item)}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
-                        cursor: 'pointer', fontSize: 12,
-                        color: COLORS.textMuted,
-                        background: 'transparent',
-                        transition: 'background .1s',
+                        cursor: 'pointer', fontSize: 12, color: COLORS.textMuted,
+                        background: 'transparent', transition: 'background .1s',
                       }}
                       onMouseEnter={e => e.currentTarget.style.background = COLORS.bgAlt}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
@@ -839,15 +960,10 @@ const FoldersTab = () => {
                       <span style={{ flexShrink: 0 }}>📁</span>
                       <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
                       <span style={{ fontSize: 10, color: COLORS.textDim }}>{item.file_count ?? ''}</span>
-                      <span
-                        onClick={e => { e.stopPropagation(); handleDeleteDir(item.path); }}
-                        title="Delete folder"
-                        style={{ cursor: 'pointer', fontSize: 12, color: COLORS.textDim, opacity: 0.6, padding: '0 2px' }}
-                      >🗑</span>
+                      <span onClick={e => { e.stopPropagation(); handleDeleteDir(item.path); }}
+                        title="Delete folder" style={{ cursor: 'pointer', fontSize: 12, color: COLORS.textDim, opacity: 0.6 }}>🗑</span>
                     </div>
                   ))}
-
-                  {/* Files */}
                   {dirItems.filter(i => i.type !== 'directory' && !i.is_dir).map(item => {
                     const isActive = selectedFile?.path === item.path;
                     return (
@@ -859,8 +975,7 @@ const FoldersTab = () => {
                           cursor: 'pointer', fontSize: 12,
                           background: isActive ? COLORS.bgDark : 'transparent',
                           borderLeft: isActive ? `2px solid ${COLORS.accent}` : '2px solid transparent',
-                          color: isActive ? COLORS.text : COLORS.textMuted,
-                          transition: 'all .1s',
+                          color: isActive ? COLORS.text : COLORS.textMuted, transition: 'all .1s',
                         }}
                         onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = COLORS.bgAlt; }}
                         onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
@@ -874,7 +989,6 @@ const FoldersTab = () => {
                       </div>
                     );
                   })}
-
                   {dirItems.length === 0 && (
                     <div style={{ padding: '30px 16px', textAlign: 'center', color: COLORS.textDim, fontSize: 12 }}>
                       <div style={{ fontSize: 32, marginBottom: 8 }}>📂</div>
@@ -1019,8 +1133,9 @@ const FoldersTab = () => {
             disabled={uploading}
             style={{ ...btnStyle, width: '100%', background: COLORS.accent, opacity: uploading ? 0.6 : 1 }}
           >
-            {uploading ? 'Uploading...' : '📤 Upload File'}
+            {uploading ? 'Uploading...' : '📤 Upload File (up to 5 GB)'}
           </button>
+          {uploadProgress && <UploadProgress progress={uploadProgress} />}
         </div>
 
         {/* Create directory */}

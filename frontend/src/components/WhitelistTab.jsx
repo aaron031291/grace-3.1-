@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
+import FlashCachePanel from './FlashCachePanel';
 
 const C = {
   bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
@@ -510,6 +511,7 @@ export default function WhitelistTab() {
   const tabs = [
     { id: 'api', label: 'API Sources', icon: '🔌' },
     { id: 'web', label: 'Web Sources', icon: '🌐' },
+    { id: 'cache', label: 'Flash Cache', icon: '⚡' },
   ];
 
   return (
@@ -539,6 +541,7 @@ export default function WhitelistTab() {
       <div style={{ flex: 1, overflow: 'hidden' }}>
         {activeTab === 'api' && <APISourcesPanel />}
         {activeTab === 'web' && <WebSourcesPanel />}
+        {activeTab === 'cache' && <FlashCachePanel />}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./GenesisLogin.css";
+import { API_BASE_URL } from '../config/api';
 
 export default function GenesisLogin({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -9,7 +10,7 @@ export default function GenesisLogin({ onLogin }) {
   const [genesisId, setGenesisId] = useState(null);
   const [sessionInfo, setSessionInfo] = useState(null);
 
-  const API_BASE = "http://localhost:8000";
+  const API_BASE = API_BASE_URL;
 
   // Check if user already has Genesis ID on mount
   useEffect(() => {
