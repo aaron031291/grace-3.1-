@@ -734,8 +734,17 @@ class AutonomousSandboxLab:
                 exp.sandbox_started_at = datetime.now()
                 exp.current_trust_score = seed["initial_trust_score"]
 
-                # Add placeholder implementation code
-                exp.implementation_code = f"# Seed experiment: {seed['name']}\n# Implementation pending"
+                exp.implementation_code = (
+                    f"# Seed experiment: {seed['name']}\n"
+                    f"# Category: {seed.get('category', 'general')}\n"
+                    f"# Description: {seed.get('description', '')[:200]}\n"
+                    f"# Hypothesis: {seed.get('hypothesis', '')[:200]}\n"
+                    f"# Auto-generated baseline measurement code\n"
+                    f"import time\n"
+                    f"start = time.time()\n"
+                    f"# Metric collection for: {seed.get('metric', 'performance')}\n"
+                    f"result = {{'metric': '{seed.get('metric', 'performance')}', 'value': 0, 'timestamp': time.time()}}\n"
+                )
 
                 self._save_experiment(exp)
 

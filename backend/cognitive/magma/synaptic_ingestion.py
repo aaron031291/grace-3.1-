@@ -452,12 +452,16 @@ class SynapticIngestionPipeline:
         logger.info("[MAGMA-INGESTION] SynapticIngestionPipeline initialized")
 
     def _default_embedding(self, text: str) -> List[float]:
-        """Default embedding function (placeholder)."""
-        # Simple hash-based pseudo-embedding for testing
-        # In production, use actual embedding model
-        import hashlib
-        hash_bytes = hashlib.sha256(text.encode()).digest()
-        return [b / 255.0 for b in hash_bytes] * 12  # 384 dimensions
+        """Generate embedding using real model if available, hash fallback."""
+        try:
+            from embedding.embedder import get_embedding_model
+            model = get_embedding_model()
+            embedding = model.embed_text(text, convert_to_numpy=True)
+            return embedding.tolist()
+        except Exception:
+            import hashlib
+            hash_bytes = hashlib.sha256(text.encode()).digest()
+            return [b / 255.0 for b in hash_bytes] * 12
 
     def ingest(
         self,

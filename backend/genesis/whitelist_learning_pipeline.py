@@ -476,9 +476,18 @@ class WhitelistLearningPipeline:
 
             # Additional verification based on source
             if entry.user_id:
-                # Check user's historical trust
-                # Could integrate with user reputation system
-                pass
+                try:
+                    from genesis.genesis_key_service import get_genesis_service
+                    service = get_genesis_service()
+                    user = service.get_or_create_user(user_id=entry.user_id)
+                    if user and hasattr(user, 'total_actions') and user.total_actions > 0:
+                        error_rate = (user.total_errors / user.total_actions) if user.total_actions > 0 else 0
+                        if error_rate < 0.3:
+                            trust_score = min(1.0, trust_score + 0.1)
+                        elif error_rate > 0.7:
+                            trust_score = max(0.0, trust_score - 0.2)
+                except Exception:
+                    pass
 
             # Minimum trust threshold
             if trust_score < 0.25 and entry.trust_level == TrustLevel.UNTRUSTED:

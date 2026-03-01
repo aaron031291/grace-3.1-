@@ -263,15 +263,23 @@ class GraceActiveLearningSystem:
             for chunk in material['chunks']:
                 text = chunk.get('text', '')
 
-                # Extract concepts relevant to learning objectives
-                # (In production, this would use NLP/LLM to extract structured concepts)
+                keywords = []
+                try:
+                    from cognitive.flash_cache import get_flash_cache
+                    fc = get_flash_cache()
+                    keywords = fc.extract_keywords(text[:500])
+                except Exception:
+                    words = text.lower().split()
+                    keywords = list(set(w for w in words if len(w) > 4))[:10]
+
                 concept = {
                     'text': text,
                     'source_document': material['document_id'],
                     'source_file': material['source'],
                     'relevance_score': chunk.get('score', 0.0),
                     'extracted_at': datetime.utcnow().isoformat(),
-                    'learning_objectives': learning_objectives
+                    'learning_objectives': learning_objectives,
+                    'keywords': keywords[:10],
                 }
                 concepts.append(concept)
 
@@ -602,14 +610,28 @@ class GraceActiveLearningSystem:
         - Observe results
         - Compare to expected outcome
         """
-        # Simulated execution
-        simulated_success = approach.get('estimated_success_rate', 0.5) > 0.5
+        try:
+            from cognitive.code_sandbox import run_in_sandbox
+            code = task.get("code", approach.get("implementation", ""))
+            if code:
+                result = run_in_sandbox(code, timeout=15)
+                return {
+                    "success": result.get("success", False),
+                    "output": result.get("stdout", "")[:500],
+                    "feedback": "Execution succeeded" if result.get("success") else f"Error: {result.get('stderr', '')[:200]}",
+                    "execution_time": result.get("execution_time", 0),
+                    "sandbox": True,
+                }
+        except Exception:
+            pass
 
+        estimated_success = approach.get('estimated_success_rate', 0.5) > 0.5
         return {
-            "success": simulated_success,
-            "output": "Task executed in sandbox",
-            "feedback": "Good attempt" if simulated_success else "Needs improvement",
-            "execution_time": 1.5
+            "success": estimated_success,
+            "output": "Estimated from approach analysis",
+            "feedback": "Good approach" if estimated_success else "Needs refinement",
+            "execution_time": 0,
+            "sandbox": False,
         }
 
     def _learn_from_practice(

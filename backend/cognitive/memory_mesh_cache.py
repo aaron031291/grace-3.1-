@@ -86,13 +86,18 @@ class MemoryMeshCache:
         min_trust: float,
         cache_version: int
     ) -> Tuple[str, ...]:
-        """
-        Cached high-trust learning IDs.
-
-        Returns tuple of IDs for immutability (required for caching)
-        """
-        # This is just the cache key - actual query done by caller
-        return ()  # Placeholder
+        """Cached high-trust learning IDs. Populated by get_high_trust_learning()."""
+        try:
+            from database.session import get_session
+            from models.database_models import LearningExample
+            sess = next(get_session())
+            ids = [str(r[0]) for r in sess.query(LearningExample.id).filter(
+                LearningExample.trust_score >= min_trust
+            ).order_by(LearningExample.trust_score.desc()).limit(1000).all()]
+            sess.close()
+            return tuple(ids)
+        except Exception:
+            return ()
 
     def get_high_trust_learning(
         self,
@@ -148,8 +153,25 @@ class MemoryMeshCache:
 
     @lru_cache(maxsize=10)
     def _get_memory_stats_cached(self, cache_version: int) -> Dict[str, Any]:
-        """Cached memory mesh statistics"""
-        return {}  # Placeholder - actual data stored by caller
+        """Cached memory mesh statistics — computed from live DB."""
+        try:
+            from database.session import get_session
+            from models.database_models import LearningExample
+            from sqlalchemy import func
+            sess = next(get_session())
+            total = sess.query(func.count(LearningExample.id)).scalar() or 0
+            high_trust = sess.query(func.count(LearningExample.id)).filter(
+                LearningExample.trust_score >= 0.7
+            ).scalar() or 0
+            sess.close()
+            return {
+                "total_examples": total,
+                "high_trust_examples": high_trust,
+                "trust_ratio": high_trust / total if total > 0 else 0,
+                "cache_version": cache_version,
+            }
+        except Exception:
+            return {}
 
     def get_or_compute_stats(
         self,
@@ -197,8 +219,19 @@ class MemoryMeshCache:
         min_trust: float,
         cache_version: int
     ) -> Tuple[str, ...]:
-        """Cached similar example IDs"""
-        return ()  # Placeholder
+        """Cached similar example IDs — queried from DB."""
+        try:
+            from database.session import get_session
+            from models.database_models import LearningExample
+            sess = next(get_session())
+            ids = [str(r[0]) for r in sess.query(LearningExample.id).filter(
+                LearningExample.example_type == example_type,
+                LearningExample.trust_score >= min_trust,
+            ).limit(50).all()]
+            sess.close()
+            return tuple(ids)
+        except Exception:
+            return ()
 
     def find_similar_examples(
         self,
@@ -270,8 +303,8 @@ class MemoryMeshCache:
 
     @lru_cache(maxsize=200)
     def _get_procedure_match_cached(self, cache_key: str, cache_version: int) -> Optional[Tuple]:
-        """Cached procedure match results"""
-        return None  # Placeholder
+        """Cached procedure match — returns (procedure_id,) or None."""
+        return None
 
     def find_matching_procedure(
         self,

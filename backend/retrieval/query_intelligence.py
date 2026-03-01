@@ -212,12 +212,20 @@ class MultiTierQueryHandler:
         if conversation_history:
             logger.info(f"[{query_id}] Using conversation context with {len(conversation_history)} messages")
         
-        # If context provided, integrate it
         if context:
             logger.info(f"[{query_id}] User context provided, integrating...")
-            # TODO: Implement context integration
-            # For now, just add to query
-            query = f"{query}\n\nContext: {context.get('text', '')}"
+            context_text = context.get('text', '')
+            context_topic = context.get('topic', '')
+            context_history = context.get('history', [])
+
+            if context_text:
+                query = f"{query}\n\nContext: {context_text}"
+            if context_topic:
+                query = f"{query}\n\nTopic focus: {context_topic}"
+            if context_history:
+                recent = context_history[-3:] if len(context_history) > 3 else context_history
+                history_text = "\n".join(str(h)[:100] for h in recent)
+                query = f"{query}\n\nRecent history:\n{history_text}"
         
         # ==================== MODEL-FIRST STRATEGY ====================
         # Try Model Knowledge FIRST (Tier 2)

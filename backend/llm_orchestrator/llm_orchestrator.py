@@ -452,10 +452,18 @@ class LLMOrchestrator:
             "timestamp": datetime.now().isoformat()
         }
 
-        # Genesis Keys will be created via Layer 1 integration
-        # For now, return a placeholder
-        genesis_key_id = f"GK-LLM-{task_request.task_id}"
-        return genesis_key_id
+        try:
+            from api._genesis_tracker import track
+            gk_id = track(
+                key_type="ai_response",
+                what=f"LLM task: {task_request.prompt[:100]}",
+                how="llm_orchestrator",
+                output_data={"content_length": len(content), "task_id": task_request.task_id},
+                tags=["llm", "generation"],
+            )
+            return gk_id or f"GK-LLM-{task_request.task_id}"
+        except Exception:
+            return f"GK-LLM-{task_request.task_id}"
 
     def _integrate_layer1(
         self,

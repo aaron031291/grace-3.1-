@@ -60,10 +60,22 @@ class FileGenerator:
         file_path = target_dir / filename
         
         if file_type == 'pdf':
-            # Generate PDF as formatted text (real PDF needs reportlab in production)
-            pdf_content = self._format_as_pdf_text(content, filename)
-            file_path = file_path.with_suffix('.pdf.txt')  # Placeholder until reportlab
-            file_path.write_text(pdf_content, encoding='utf-8')
+            try:
+                from reportlab.lib.pagesizes import letter
+                from reportlab.pdfgen import canvas
+                c = canvas.Canvas(str(file_path), pagesize=letter)
+                y = 750
+                for line in content.split('\n'):
+                    if y < 50:
+                        c.showPage()
+                        y = 750
+                    c.drawString(72, y, line[:90])
+                    y -= 14
+                c.save()
+            except ImportError:
+                pdf_content = self._format_as_pdf_text(content, filename)
+                file_path = file_path.with_suffix('.pdf.txt')
+                file_path.write_text(pdf_content, encoding='utf-8')
         else:
             file_path.write_text(content, encoding='utf-8')
 

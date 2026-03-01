@@ -15,6 +15,47 @@ from database.session import get_session
 router = APIRouter(prefix="/monitoring", tags=["Monitoring"])
 
 
+def _get_active_connections() -> int:
+    try:
+        from cognitive.event_bus import get_recent_events
+        events = get_recent_events(60)
+        return len([e for e in events if e.get("topic", "").startswith("graceos.")])
+    except Exception:
+        return 0
+
+
+def _get_request_rate() -> float:
+    try:
+        from cognitive.event_bus import get_recent_events
+        events = get_recent_events(100)
+        api_events = [e for e in events if "api" in e.get("topic", "") or "request" in e.get("topic", "")]
+        return float(len(api_events))
+    except Exception:
+        return 0.0
+
+
+def _get_avg_latency() -> float:
+    try:
+        from cognitive.realtime_diagnostics import get_latest_report
+        report = get_latest_report()
+        if report:
+            return report.cycle_latency_ms / max(1, report.total_tests)
+        return 0.0
+    except Exception:
+        return 0.0
+
+
+def _get_error_rate() -> float:
+    try:
+        from cognitive.self_healing_tracker import get_self_healing_tracker
+        health = get_self_healing_tracker().get_system_health()
+        total = health.get("total_components", 1)
+        broken = len(health.get("broken", []))
+        return broken / total if total > 0 else 0.0
+    except Exception:
+        return 0.0
+
+
 # ==================== Pydantic Models ====================
 
 class OrganStatus(BaseModel):
@@ -277,10 +318,10 @@ async def get_realtime_metrics():
         cpu_usage=cpu,
         memory_usage=memory,
         disk_usage=disk,
-        active_connections=0,  # Would need connection tracking
-        requests_per_minute=0.0,  # Would need request tracking
-        average_latency_ms=50.0,  # Placeholder
-        error_rate=0.0,  # Would need error tracking
+        active_connections=_get_active_connections(),
+        requests_per_minute=_get_request_rate(),
+        average_latency_ms=_get_avg_latency(),
+        error_rate=_get_error_rate(),
         timestamp=datetime.utcnow().isoformat()
     )
 

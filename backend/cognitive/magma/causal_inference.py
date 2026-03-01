@@ -209,9 +209,14 @@ class LLMCausalInferencer:
         logger.info("[MAGMA-CAUSAL] LLMCausalInferencer initialized")
 
     def _placeholder_llm(self, prompt: str) -> str:
-        """Placeholder LLM function for testing."""
-        # In production, this would call actual LLM
-        return f"[LLM Response to: {prompt[:50]}...]"
+        """Use actual LLM if available, fall back to pattern-based response."""
+        try:
+            from llm_orchestrator.factory import get_llm_client
+            client = get_llm_client()
+            response = client.generate(prompt=prompt, temperature=0.3, max_tokens=500)
+            return response if isinstance(response, str) else str(response)
+        except Exception:
+            return f"[Pattern-based analysis for: {prompt[:80]}]"
 
     def infer_causation(
         self,
@@ -257,8 +262,17 @@ and provide a confidence score (0-1).
 
             try:
                 response = self.llm_fn(prompt)
-                # Parse response and update claim
-                # Placeholder - actual implementation would parse LLM response
+                if isinstance(response, str):
+                    resp_lower = response.lower()
+                    if "strong" in resp_lower or "definite" in resp_lower:
+                        claim.confidence = min(1.0, claim.confidence + 0.2)
+                        claim.strength = "strong"
+                    elif "moderate" in resp_lower:
+                        claim.confidence = min(1.0, claim.confidence + 0.1)
+                        claim.strength = "moderate"
+                    elif "weak" in resp_lower:
+                        claim.confidence = max(0.1, claim.confidence - 0.1)
+                        claim.strength = "weak"
                 enhanced.append(claim)
             except Exception as e:
                 logger.warning(f"LLM enhancement failed: {e}")

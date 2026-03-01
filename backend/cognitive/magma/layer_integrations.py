@@ -1220,16 +1220,43 @@ class MagmaTrustIntegration:
         result_id: str,
         helpful: bool
     ):
-        """Update trust based on user feedback."""
-        if not self.trust_scorer:
-            return
+        """Update trust based on user feedback — feeds into learning memory."""
+        if self.trust_scorer:
+            try:
+                adjustment = 0.05 if helpful else -0.05
+                self.trust_scorer.adjust_global_trust(adjustment)
+            except Exception:
+                pass
 
-        # This would update the trust scorer's model
-        # For now, just log
-        logger.debug(
-            f"[MAGMA-SECURITY] Trust feedback for {result_id}: "
-            f"helpful={helpful}"
-        )
+        try:
+            from cognitive.event_bus import publish
+            publish("trust.feedback", {
+                "result_id": result_id,
+                "helpful": helpful,
+                "source": "magma_security",
+            }, source="magma_layer_integrations")
+        except Exception:
+            pass
+
+        try:
+            from database.session import get_session
+            from cognitive.memory_mesh_integration import MemoryMeshIntegration
+            from pathlib import Path
+            import json
+            sess = next(get_session())
+            mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=Path("knowledge_base"))
+            mesh.ingest_learning_experience(
+                experience_type="success" if helpful else "failure",
+                context=json.dumps({"result_id": result_id, "source": "user_feedback"}),
+                action_taken=json.dumps({"feedback": "helpful" if helpful else "not_helpful"}),
+                outcome=json.dumps({"trust_adjusted": True}),
+                source="user_feedback",
+            )
+            sess.close()
+        except Exception:
+            pass
+
+        logger.debug(f"[MAGMA-SECURITY] Trust feedback for {result_id}: helpful={helpful}")
 
 
 # =============================================================================
