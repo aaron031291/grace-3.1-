@@ -68,6 +68,7 @@ function Sidebar({ section, setSection }) {
       <div style={{ borderTop: "1px solid #222", padding: "10px 12px" }}>
         <div style={{ fontSize: 10, color: "#555", marginBottom: 6 }}>QUICK ACTIONS</div>
         <button onClick={() => act("Hot Reload", `${B}/api/runtime/hot-reload`)} style={qBtn("#2563eb")}>Hot Reload</button>
+        <button onClick={() => act("Fix All", `${B}/api/consensus-fix/fix-all`)} style={qBtn("#e94560")}>Consensus Fix All</button>
         <button onClick={() => act("Scan+Heal", `${B}/api/triggers/scan-and-heal`)} style={qBtn("#8b5cf6")}>Scan &amp; Heal</button>
         <button onClick={() => act("Pause", `${B}/api/runtime/pause`)} style={qBtn("#f59e0b")}>Pause Runtime</button>
         <button onClick={() => act("Resume", `${B}/api/runtime/resume`)} style={qBtn("#10b981")}>Resume Runtime</button>

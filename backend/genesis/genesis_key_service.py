@@ -341,65 +341,59 @@ class GenesisKeyService:
                 logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
 
             # Hook 2: Feed into Memory Mesh for learning
+            # CRITICAL: Uses a SEPARATE session so failures here never
+            # poison the Genesis key creation session.
             try:
-                from cognitive.memory_mesh_integration import MemoryMeshIntegration
-                from pathlib import Path
+                import threading
+                _mesh_data = dict(extracted_key_data)
 
-                kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
-                memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
+                def _feed_mesh():
+                    try:
+                        from database.session import session_scope
+                        from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                        from pathlib import Path
 
-                def _safe_json(val):
-                    if val is None:
-                        return {}
-                    if isinstance(val, dict):
-                        try:
-                            json.dumps(val, default=str)
-                            return val
-                        except (TypeError, ValueError):
-                            return {k: str(v) for k, v in val.items()}
-                    if isinstance(val, str):
-                        try:
-                            return json.loads(val)
-                        except Exception:
-                            return {"raw": val}
-                    return {"raw": str(val)}
+                        kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
 
-                memory_mesh.ingest_learning_experience(
-                    experience_type=extracted_key_data["key_type"],
-                    context=_safe_json({
-                        "what": extracted_key_data.get("what_description") or "",
-                        "where": extracted_key_data.get("where_location") or extracted_key_data.get("file_path") or "",
-                        "why": extracted_key_data.get("why_reason") or "",
-                        "how": extracted_key_data.get("how_method") or ""
-                    }),
-                    action_taken=_safe_json(extracted_key_data.get("input_data")),
-                    outcome=_safe_json(extracted_key_data.get("output_data")),
-                    source="genesis_key",
-                    user_id=extracted_key_data.get("user_id"),
-                    genesis_key_id=extracted_key_id
-                )
-                logger.info(f"✅ Genesis Key fed into Memory Mesh: {extracted_key_id}")
+                        def _s(val):
+                            if val is None: return json.dumps({})
+                            if isinstance(val, str): return val
+                            try: return json.dumps(val, default=str)
+                            except Exception: return json.dumps({"raw": str(val)})
+
+                        with session_scope() as mesh_sess:
+                            mesh = MemoryMeshIntegration(session=mesh_sess, knowledge_base_path=kb_path)
+                            mesh.ingest_learning_experience(
+                                experience_type=_mesh_data.get("key_type", "system"),
+                                context=_s({
+                                    "what": _mesh_data.get("what_description") or "",
+                                    "where": _mesh_data.get("where_location") or _mesh_data.get("file_path") or "",
+                                    "why": _mesh_data.get("why_reason") or "",
+                                    "how": _mesh_data.get("how_method") or "",
+                                }),
+                                action_taken=_s(_mesh_data.get("input_data")),
+                                outcome=_s(_mesh_data.get("output_data")),
+                                source="genesis_key",
+                                user_id=_mesh_data.get("user_id"),
+                                genesis_key_id=_mesh_data.get("key_id"),
+                            )
+                    except Exception as e:
+                        logger.debug(f"Memory mesh feed skipped: {e}")
+
+                t = threading.Thread(target=_feed_mesh, daemon=True)
+                t.start()
             except Exception as mesh_error:
-                logger.warning(f"Failed to feed Genesis Key to Memory Mesh: {mesh_error}")
+                logger.debug(f"Memory mesh feed skipped: {mesh_error}")
 
-            # Hook 3: Trigger autonomous pipeline
+            # Hook 3: Trigger autonomous pipeline (fire-and-forget, never blocks)
             try:
                 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
                 trigger_pipeline = get_genesis_trigger_pipeline()
-                # Pass extracted data instead of object
                 trigger_result = trigger_pipeline.on_genesis_key_created_data(extracted_key_data)
-                if trigger_result.get("triggered"):
-                    logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {extracted_key_id}")
-            except AttributeError:
-                # Fallback: try old method if new method doesn't exist
-                try:
-                    trigger_result = trigger_pipeline.on_genesis_key_created(key)
-                    if trigger_result.get("triggered"):
-                        logger.info(f"✅ Triggered {len(trigger_result['actions_triggered'])} autonomous action(s) from Genesis Key: {extracted_key_id}")
-                except Exception as trigger_error:
-                    logger.warning(f"Failed to trigger autonomous pipeline: {trigger_error}")
-            except Exception as trigger_error:
-                logger.warning(f"Failed to trigger autonomous pipeline: {trigger_error}")
+                if trigger_result and trigger_result.get("triggered"):
+                    logger.debug(f"Triggered autonomous actions from Genesis Key: {extracted_key_id}")
+            except Exception:
+                pass
 
             logger.info(f"Created Genesis Key: {extracted_key_id} - {what_description}")
             return key
