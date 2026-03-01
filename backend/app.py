@@ -83,6 +83,7 @@ from api.websocket import router as websocket_router
 from api.telemetry import router as telemetry_router
 from diagnostic_machine.api import router as diagnostic_router
 from api.runtime_triggers_api import router as runtime_triggers_router
+from api.component_health_api import router as component_health_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -592,6 +593,7 @@ app.include_router(websocket_router)             # WebSocket — real-time event
 app.include_router(telemetry_router)             # /telemetry — system telemetry
 app.include_router(diagnostic_router)            # /diagnostic — 4-layer diagnostic machine + healing
 app.include_router(runtime_triggers_router)      # /api/triggers — trigger scanning + auto-healing pipeline
+app.include_router(component_health_router)      # /api/component-health — behavioral profiling + health map
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
