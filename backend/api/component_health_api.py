@@ -269,6 +269,32 @@ def _get_genesis_keys(minutes: int = 60, component_id: str = None,
         return []
 
 
+def _get_time_context() -> dict:
+    """Get temporal context for health classification."""
+    try:
+        from cognitive.time_sense import TimeSense
+        return TimeSense.get_context()
+    except Exception:
+        return {}
+
+
+def _publish_health_change(component_id: str, old_status: str, new_status: str, reason: str):
+    """Publish health changes to the event bus for system-wide awareness."""
+    try:
+        from cognitive.event_bus import publish_async
+        publish_async("system.health_changed", {
+            "component": component_id,
+            "old_status": old_status,
+            "new_status": new_status,
+            "reason": reason,
+        }, source="component_health")
+    except Exception:
+        pass
+
+
+_last_known_status: Dict[str, str] = {}
+
+
 def _classify_component(comp_id: str, comp: dict, keys: List[dict],
                         service_health: dict) -> dict:
     """Classify a component's health status."""
@@ -341,6 +367,12 @@ def _classify_component(comp_id: str, comp: dict, keys: List[dict],
     elif total == 0 and not comp.get("always_on"):
         status = "yellow"
         reason = "Idle (expected)"
+
+    # Publish health change to event bus if status changed
+    prev = _last_known_status.get(comp_id)
+    if prev and prev != status:
+        _publish_health_change(comp_id, prev, status, reason)
+    _last_known_status[comp_id] = status
 
     return {
         "id": comp_id,
@@ -441,6 +473,8 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
                     "queued_at": datetime.utcnow().isoformat(),
                 })
 
+    time_ctx = _get_time_context()
+
     return {
         "components": components,
         "summary": dict(status_counts),
@@ -449,6 +483,11 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
         "remediation": remediation,
         "window_minutes": window_minutes,
         "generated_at": datetime.utcnow().isoformat(),
+        "time_context": {
+            "period": time_ctx.get("period", "unknown"),
+            "is_business_hours": time_ctx.get("is_business_hours", False),
+            "day_of_week": time_ctx.get("day_of_week", "unknown"),
+        },
     }
 
 
@@ -622,6 +661,46 @@ async def get_component_registry():
             for cid, c in COMPONENT_REGISTRY.items()
         },
         "total": len(COMPONENT_REGISTRY),
+    }
+
+
+@router.get("/mirror-feed")
+async def mirror_feed():
+    """
+    Data feed for the Mirror Self-Model — component health patterns
+    suitable for self-reflection and anomaly observation.
+    """
+    keys = _get_genesis_keys(minutes=60, limit=2000)
+    service_health = _check_service_health()
+
+    components = []
+    for comp_id, comp in COMPONENT_REGISTRY.items():
+        classified = _classify_component(comp_id, comp, keys, service_health)
+        components.append(classified)
+
+    time_ctx = _get_time_context()
+    problems = [c for c in components if c["status"] in ("red", "orange")]
+
+    # Activity patterns for the mirror
+    try:
+        from cognitive.time_sense import TimeSense
+        timestamps = [k["when"] for k in keys if k.get("when")]
+        activity = TimeSense.activity_patterns(timestamps) if timestamps else {}
+    except Exception:
+        activity = {}
+
+    return {
+        "component_statuses": {c["id"]: c["status"] for c in components},
+        "problems": [{"id": p["id"], "status": p["status"], "reason": p["reason"]} for p in problems],
+        "total_events_1h": len(keys),
+        "error_count_1h": sum(1 for k in keys if k.get("is_error")),
+        "activity_patterns": activity,
+        "time_context": time_ctx,
+        "observation": (
+            f"{len(problems)} components degraded/broken out of {len(components)} total. "
+            f"Period: {time_ctx.get('period', '?')}. "
+            f"Events in last hour: {len(keys)}."
+        ),
     }
 
 

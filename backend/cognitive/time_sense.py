@@ -22,6 +22,11 @@ class TimeSense:
     """Grace's sense of time — temporal awareness for the entire system."""
 
     @staticmethod
+    def get_context() -> Dict[str, Any]:
+        """Alias for now_context() — used by mirror, qwen-net, and component health."""
+        return TimeSense.now_context()
+
+    @staticmethod
     def now_context() -> Dict[str, Any]:
         """What does Grace know about RIGHT NOW."""
         now = datetime.utcnow()

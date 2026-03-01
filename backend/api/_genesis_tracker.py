@@ -59,11 +59,13 @@ def track(
     # Fire event bus for system-wide awareness
     try:
         from cognitive.event_bus import publish_async
-        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
-        publish_async(event_topic, {
+        event_data = {
             "key_type": key_type, "what": what, "who": who,
             "is_error": is_error, "tags": tags,
-        }, source="genesis_tracker")
+        }
+        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
+        publish_async(event_topic, event_data, source="genesis_tracker")
+        publish_async("genesis.key_created", event_data, source="genesis_tracker")
     except Exception:
         pass
 

@@ -198,4 +198,22 @@ def _commit_with_retry(session: Session) -> None:
                 session.rollback()
                 time.sleep(wait)
             else:
+                _track_db_error(e)
                 raise
+
+
+def _track_db_error(exc: Exception) -> None:
+    """Fire-and-forget Genesis key for DB errors."""
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="error",
+            what=f"Database error: {str(exc)[:100]}",
+            who="database.session",
+            is_error=True,
+            error_type=type(exc).__name__,
+            error_message=str(exc)[:300],
+            tags=["database", "db", "operational_error"],
+        )
+    except Exception:
+        pass
