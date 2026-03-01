@@ -45,6 +45,46 @@ class BrainResponse(BaseModel):
     genesis_key_id: Optional[str] = None
 
 
+def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
+    """
+    Cross-brain orchestration — any brain can call another brain.
+    This is how brains collaborate on complex tasks.
+
+    Usage from within a brain handler:
+        user_data = call_brain("govern", "persona", {})
+        chat_result = call_brain("chat", "send", {"chat_id": 1, "message": "hi"})
+    """
+    brain_map = {
+        "chat": _chat_handlers,
+        "files": _files_handlers,
+        "govern": _govern_handlers,
+        "ai": _ai_handlers,
+        "system": _system_handlers,
+        "data": _data_handlers,
+        "tasks": _tasks_handlers,
+        "code": _code_handlers,
+    }
+    factory = brain_map.get(brain_name)
+    if not factory:
+        return {"ok": False, "error": f"Unknown brain: {brain_name}"}
+
+    handlers = factory()
+    handler = handlers.get(action)
+    if not handler:
+        return {"ok": False, "error": f"Unknown action '{action}' in brain '{brain_name}'"}
+
+    try:
+        data = handler(payload or {})
+        return {"ok": True, "data": data}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
+
+
+class BrainOrchestration(BaseModel):
+    """Multi-brain request — execute actions across multiple brains in one call."""
+    steps: list  # [{"brain": "chat", "action": "list", "payload": {}}, ...]
+
+
 def _brain_call(brain: str, action: str, payload: dict, handler_map: dict) -> BrainResponse:
     """Route an action to its handler, track via Genesis, return clean response."""
     start = time.time()
@@ -332,4 +372,60 @@ async def brain_directory():
         "total_brains": len(BRAIN_DIRECTORY),
         "total_actions": total_actions,
         "usage": "POST /brain/{name} with { action: '...', payload: {...} }",
+        "orchestration": "POST /brain/orchestrate with { steps: [{brain, action, payload}, ...] }",
+    }
+
+
+@router.post("/orchestrate")
+async def brain_orchestrate(req: BrainOrchestration):
+    """
+    Multi-brain orchestration — execute a sequence of actions across
+    multiple brains in one call. Each step can reference previous results.
+
+    Example:
+      { "steps": [
+          {"brain": "system", "action": "runtime"},
+          {"brain": "system", "action": "health_map"},
+          {"brain": "ai", "action": "models"},
+          {"brain": "govern", "action": "genesis_stats"}
+      ]}
+    """
+    results = []
+    start = time.time()
+
+    for i, step in enumerate(req.steps):
+        brain_name = step.get("brain", "")
+        action = step.get("action", "")
+        payload = step.get("payload", {})
+
+        result = call_brain(brain_name, action, payload)
+        results.append({
+            "step": i,
+            "brain": brain_name,
+            "action": action,
+            "ok": result.get("ok", False),
+            "data": result.get("data"),
+            "error": result.get("error"),
+        })
+
+    latency = round((time.time() - start) * 1000, 1)
+
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="api_request",
+            what=f"brain/orchestrate: {len(req.steps)} steps across {len(set(s.get('brain','') for s in req.steps))} brains",
+            who="brain_api.orchestrate",
+            output_data={"steps": len(req.steps), "ok": sum(1 for r in results if r["ok"]), "latency_ms": latency},
+            tags=["brain", "orchestration"],
+        )
+    except Exception:
+        pass
+
+    return {
+        "steps": results,
+        "total": len(results),
+        "succeeded": sum(1 for r in results if r["ok"]),
+        "failed": sum(1 for r in results if not r["ok"]),
+        "latency_ms": latency,
     }
