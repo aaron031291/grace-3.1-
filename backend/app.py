@@ -86,7 +86,7 @@ from api.runtime_triggers_api import router as runtime_triggers_router
 from api.component_health_api import router as component_health_router
 from api.probe_agent_api import router as probe_agent_router
 from api.consensus_fixer_api import router as consensus_fixer_router
-from api.brain_api import router as brain_router
+from api.brain_api_v2 import router as brain_router
 from api.autonomous_loop_api import router as autonomous_loop_router
 from api.core.brain_controller import router as brain_v2_router
 from api.monitoring.health_controller import router as unified_monitor_router
