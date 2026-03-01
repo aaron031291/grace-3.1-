@@ -99,6 +99,47 @@ async def quick_consensus(req: ConsensusRequest):
     return await run_consensus(req)
 
 
+@router.post("/fast")
+async def fast_chat(req: ConsensusRequest):
+    """
+    FAST mode — all models in parallel, NO synthesis step.
+    Returns raw responses immediately. 10x faster than full consensus.
+    """
+    from cognitive.consensus_engine import layer1_deliberate, _check_model_available
+    import time
+
+    models = req.models or [m for m in ["kimi", "opus", "qwen", "reasoning"] if _check_model_available(m)]
+    start = time.time()
+
+    responses = layer1_deliberate(req.prompt, models, req.system_prompt or "", req.context or "")
+    latency = (time.time() - start) * 1000
+
+    individual = []
+    for r in responses:
+        if r.response or r.error:
+            individual.append({
+                "model_id": r.model_id,
+                "model_name": r.model_name,
+                "response": r.response[:3000] if r.response else "",
+                "latency_ms": r.latency_ms,
+                "error": r.error,
+            })
+
+    # Use the first successful response as final output (no synthesis delay)
+    first_good = next((r for r in responses if r.response and not r.error), None)
+    final = first_good.response if first_good else "No models responded"
+
+    return {
+        "final_output": final[:3000],
+        "confidence": 0.7,
+        "models_used": models,
+        "individual_responses": individual,
+        "consensus": final[:3000],
+        "total_latency_ms": round(latency, 1),
+        "mode": "fast",
+    }
+
+
 # ── Autonomous Batch Queue ────────────────────────────────────────────
 
 @router.post("/batch/queue")

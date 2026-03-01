@@ -144,7 +144,7 @@ export default function ConsensusChat() {
     }]);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/consensus/run`, {
+      const res = await fetch(`${API_BASE_URL}/api/consensus/fast`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
