@@ -70,6 +70,8 @@ from api.live_console_api import router as live_console_router
 from api.feedback_api import router as feedback_router
 from api.patch_consensus_api import router as patch_consensus_router
 from api.self_healing_api import router as self_healing_router
+from api.horizon_api import router as horizon_router
+from api.sandbox_lab import router as sandbox_lab_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -547,6 +549,8 @@ app.include_router(live_console_router)           # /api/console — real-time K
 app.include_router(feedback_router)              # /api/feedback — user feedback on generated code
 app.include_router(patch_consensus_router)       # /api/patch-consensus — trustless code changes
 app.include_router(self_healing_router)          # /api/health — self-healing + vector search
+app.include_router(horizon_router)               # /api/horizon — long-term goals + sandbox mirror
+app.include_router(sandbox_lab_router)           # /sandbox-lab — autonomous experimentation
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
