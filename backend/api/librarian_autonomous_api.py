@@ -163,7 +163,10 @@ async def browse_directory(path: str = ""):
             continue
         rel = str(item.relative_to(kb))
         if item.is_dir():
-            file_count = sum(1 for _ in item.rglob('*') if _.is_file() and not _.name.startswith('.'))
+            try:
+                file_count = sum(1 for f in item.iterdir() if not f.name.startswith('.'))
+            except PermissionError:
+                file_count = 0
             items.append({
                 "path": rel,
                 "name": item.name,
@@ -642,9 +645,68 @@ def _suggest_directory(filename: str, content: str, extension: str) -> Optional[
     return ext_map.get(extension)
 
 
+@router.get("/file/download")
+async def download_file(path: str):
+    """Download a file from the knowledge base."""
+    from fastapi.responses import FileResponse
+    target = _resolve_safe_path(path)
+    if not target.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    if not target.is_file():
+        raise HTTPException(status_code=400, detail="Path is not a file")
+
+    return FileResponse(
+        path=str(target),
+        filename=target.name,
+        media_type="application/octet-stream",
+    )
+
+
+@router.get("/file/export")
+async def export_file(path: str, format: str = "json"):
+    """Export file metadata and content for external use."""
+    target = _resolve_safe_path(path)
+    if not target.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    if not target.is_file():
+        raise HTTPException(status_code=400, detail="Path is not a file")
+
+    stat = target.stat()
+    content = _read_file_preview(target, max_chars=100000)
+
+    export_data = {
+        "path": path,
+        "name": target.name,
+        "size": stat.st_size,
+        "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+        "extension": target.suffix.lower(),
+        "content": content,
+    }
+
+    if format == "json":
+        return export_data
+    else:
+        from fastapi.responses import Response
+        return Response(
+            content=json.dumps(export_data, indent=2),
+            media_type="application/json",
+            headers={"Content-Disposition": f'attachment; filename="{target.stem}_export.json"'},
+        )
+
+
+import time as _time
+
+_stats_cache = {"data": None, "timestamp": 0}
+_STATS_CACHE_TTL = 30  # seconds
+
+
 @router.get("/stats")
 async def get_knowledge_base_stats():
-    """Get detailed statistics about the knowledge base."""
+    """Get detailed statistics about the knowledge base (cached 30s)."""
+    now = _time.time()
+    if _stats_cache["data"] and (now - _stats_cache["timestamp"]) < _STATS_CACHE_TTL:
+        return _stats_cache["data"]
+
     kb = _get_kb_path()
     if not kb.exists():
         return {"exists": False}
@@ -673,7 +735,7 @@ async def get_knowledge_base_stats():
             top_dir = rel_root.split(os.sep)[0] if rel_root != '.' else '(root)'
             top_dirs[top_dir] = top_dirs.get(top_dir, 0) + 1
 
-    return {
+    result = {
         "exists": True,
         "total_files": total_files,
         "total_directories": total_dirs,
@@ -682,3 +744,6 @@ async def get_knowledge_base_stats():
         "file_types": dict(sorted(file_types.items(), key=lambda x: x[1], reverse=True)),
         "top_level_distribution": dict(sorted(top_dirs.items(), key=lambda x: x[1], reverse=True)),
     }
+    _stats_cache["data"] = result
+    _stats_cache["timestamp"] = now
+    return result

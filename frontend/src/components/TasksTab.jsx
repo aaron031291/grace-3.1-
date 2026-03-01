@@ -57,7 +57,7 @@ function LivePanel() {
     if (tsRes.status === 'fulfilled') setTimeSense(tsRes.value);
   }, []);
 
-  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 5000); return () => clearInterval(i); }, [refresh]);
+  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 30000); return () => clearInterval(i); }, [refresh]);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -157,7 +157,7 @@ function SubmitPanel() {
     } catch { /* silent */ }
   }, []);
 
-  useEffect(() => { fetchTasks(); const i = setInterval(fetchTasks, 10000); return () => clearInterval(i); }, [fetchTasks]);
+  useEffect(() => { fetchTasks(); const i = setInterval(fetchTasks, 30000); return () => clearInterval(i); }, [fetchTasks]);
 
   const submit = async () => {
     if (!title.trim()) return;

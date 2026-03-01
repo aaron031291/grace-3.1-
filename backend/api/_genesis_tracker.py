@@ -3,7 +3,7 @@ Thin Genesis Key tracking helper — ASYNC, NON-BLOCKING.
 
 Fire-and-forget: genesis key creation never slows down the caller.
 Qdrant embeddings batched and pushed every 5 seconds in background thread.
-Memory Mesh feed removed (was crashing and blocking).
+Memory Mesh feed re-enabled via background thread (non-blocking).
 """
 
 import logging
@@ -17,6 +17,10 @@ logger = logging.getLogger(__name__)
 # Background queue for Qdrant pushes (non-blocking)
 _qdrant_queue = queue.SimpleQueue()
 _qdrant_thread_started = False
+
+# Background queue for memory mesh feed (non-blocking, was crashing before)
+_mesh_queue = queue.SimpleQueue()
+_mesh_thread_started = False
 
 
 def track(
@@ -131,6 +135,30 @@ def track(
         except Exception:
             pass
 
+        # Queue memory mesh feed (NON-BLOCKING — was crashing before, now async)
+        try:
+            _mesh_queue.put_nowait({
+                "gk_id": gk_id, "key_type": key_type,
+                "what": what, "where": where or file_path or "",
+                "why": why, "how": how,
+                "input_data": input_data, "output_data": output_data,
+                "tags": tags or [], "is_error": is_error,
+            })
+            _ensure_mesh_thread()
+        except Exception:
+            pass
+
+        # Report to self-healing tracker
+        try:
+            from cognitive.self_healing_tracker import get_self_healing_tracker
+            tracker = get_self_healing_tracker()
+            if is_error:
+                tracker.report_error("genesis_keys", f"{key_type}: {what[:100]}", auto_heal=False)
+            else:
+                tracker.report_healthy("genesis_keys")
+        except Exception:
+            pass
+
         return str(gk_id)
     except Exception as e:
         logger.debug(f"Genesis tracking skipped: {e}")
@@ -167,14 +195,16 @@ def _ensure_qdrant_thread():
                 pass
 
             buf = []
+            last_flush = time.time()
             while True:
                 try:
-                    item = _qdrant_queue.get(timeout=2)
+                    item = _qdrant_queue.get(timeout=5)
                     buf.append(item)
                 except Exception:
                     pass
 
-                if buf and (len(buf) >= 50 or time.time() % 5 < 2):
+                elapsed = time.time() - last_flush
+                if buf and (len(buf) >= 50 or elapsed >= 10):
                     try:
                         import hashlib
                         points = []
@@ -188,12 +218,73 @@ def _ensure_qdrant_thread():
                                          "what": item["what"][:200], "tags": item["tags"]}))
                         client.upsert("genesis_keys", points=points)
                         buf.clear()
+                        last_flush = time.time()
                     except Exception:
                         buf.clear()
+                        last_flush = time.time()
         except Exception:
             pass
 
     t = threading.Thread(target=_batch_worker, daemon=True, name="qdrant_batch")
+    t.start()
+
+
+def _ensure_mesh_thread():
+    """Start the background memory mesh feeder if not already running."""
+    global _mesh_thread_started
+    if _mesh_thread_started:
+        return
+    _mesh_thread_started = True
+
+    def _mesh_worker():
+        """Background thread: feeds genesis keys into memory mesh every 5 seconds."""
+        buf = []
+        while True:
+            try:
+                item = _mesh_queue.get(timeout=3)
+                buf.append(item)
+            except Exception:
+                pass
+
+            if buf and (len(buf) >= 20 or (buf and time.time() % 5 < 3)):
+                batch = list(buf)
+                buf.clear()
+                try:
+                    from database.session import SessionLocal, initialize_session_factory
+                    if SessionLocal is None:
+                        initialize_session_factory()
+                    from database.session import get_session
+                    from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                    from pathlib import Path
+                    import json as _json
+
+                    sess = next(get_session())
+                    kb_path = Path(__file__).parent.parent / "knowledge_base"
+                    mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
+
+                    for item in batch:
+                        try:
+                            mesh.ingest_learning_experience(
+                                experience_type=item["key_type"],
+                                context={
+                                    "what": item["what"],
+                                    "where": item["where"],
+                                    "why": item.get("why", ""),
+                                    "how": item.get("how", ""),
+                                },
+                                action_taken=item.get("input_data") or {},
+                                outcome=item.get("output_data") or {},
+                                source="genesis_key",
+                                genesis_key_id=item["gk_id"],
+                            )
+                        except Exception:
+                            pass
+
+                    sess.close()
+                except Exception as e:
+                    logger.debug(f"Memory mesh batch feed skipped: {e}")
+
+    t = threading.Thread(target=_mesh_worker, daemon=True, name="mesh_feed")
     t.start()
 
 

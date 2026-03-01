@@ -74,7 +74,7 @@ function _fileIcon(nameOrExt) {
 }
 
 // ── Tree Node ──────────────────────────────────────────────────────────
-function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleExpand, searchFilter }) {
+function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleExpand, searchFilter, onContextMenu: onCtx }) {
   const isDir = node.type === 'directory';
   const isExpanded = expandedPaths.has(node.path);
   const isSelected = selectedPath === node.path;
@@ -98,6 +98,7 @@ function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleEx
           onSelect(node);
           if (isDir) toggleExpand(node.path);
         }}
+        onContextMenu={e => { if (onCtx) onCtx(e, node); }}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -139,6 +140,7 @@ function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleEx
           expandedPaths={expandedPaths}
           toggleExpand={toggleExpand}
           searchFilter={searchFilter}
+          onContextMenu={onCtx}
         />
       ))}
     </>
@@ -200,7 +202,12 @@ const FoldersTab = () => {
   const [newFileName, setNewFileName] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // grid or list
 
+  // Context menu state
+  const [contextMenu, setContextMenu] = useState(null); // { x, y, item, isDir }
+  const contextMenuRef = useRef(null);
+
   const fileInputRef = useRef(null);
+  const contextUploadRef = useRef(null);
   const notifTimer = useRef(null);
   const editorRef = useRef(null);
 
@@ -581,6 +588,124 @@ const FoldersTab = () => {
     }
   };
 
+  // ── Context Menu ─────────────────────────────────────────────────────
+  const handleContextMenu = useCallback((e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const isDir = item.type === 'directory' || item.is_dir;
+    setContextMenu({ x: e.clientX, y: e.clientY, item, isDir });
+  }, []);
+
+  const closeContextMenu = useCallback(() => setContextMenu(null), []);
+
+  useEffect(() => {
+    if (!contextMenu) return;
+    const handler = (e) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
+        closeContextMenu();
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    document.addEventListener('contextmenu', handler);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('contextmenu', handler);
+    };
+  }, [contextMenu, closeContextMenu]);
+
+  const handleContextAction = useCallback(async (action) => {
+    if (!contextMenu) return;
+    const { item, isDir } = contextMenu;
+    closeContextMenu();
+
+    switch (action) {
+      case 'open':
+        handleDirItemClick(item);
+        break;
+      case 'edit':
+        if (!isDir) {
+          handleDirItemClick(item);
+          setTimeout(() => enterEditMode(), 200);
+        }
+        break;
+      case 'rename':
+        setShowRename(true);
+        setRenameOld(item.path);
+        setRenameNew(item.path);
+        break;
+      case 'delete':
+        if (isDir) handleDeleteDir(item.path);
+        else handleDeleteFile(item.path);
+        break;
+      case 'download':
+        if (!isDir) {
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/download?path=${encodeURIComponent(item.path)}`);
+            if (!res.ok) throw new Error('Download failed');
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = item.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            notify(`Downloaded ${item.name}`);
+          } catch (err) {
+            setError(err.message);
+          }
+        }
+        break;
+      case 'export':
+        if (!isDir) {
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/librarian-fs/file/export?path=${encodeURIComponent(item.path)}&format=download`);
+            if (!res.ok) throw new Error('Export failed');
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${item.name.split('.')[0]}_export.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            notify(`Exported ${item.name}`);
+          } catch (err) {
+            setError(err.message);
+          }
+        }
+        break;
+      case 'upload':
+        if (isDir) {
+          setCurrentPath(item.path);
+          setTimeout(() => contextUploadRef.current?.click(), 100);
+        }
+        break;
+      case 'move':
+        setShowMove(true);
+        setMoveSource(item.path);
+        setMoveDest(currentPath);
+        break;
+      case 'analyze':
+        setAnalyzeTarget(item.path);
+        handleAnalyze();
+        break;
+      case 'new_folder':
+        if (isDir) setCurrentPath(item.path);
+        setShowNewDir(true);
+        break;
+      case 'new_file':
+        if (isDir) setCurrentPath(item.path);
+        setShowNewFile(true);
+        break;
+      default:
+        break;
+    }
+  }, [contextMenu, closeContextMenu, handleDirItemClick, enterEditMode,
+      handleDeleteDir, handleDeleteFile, handleAnalyze, currentPath, notify]);
+
   // ── AI ───────────────────────────────────────────────────────────────
   const handleAnalyze = async () => {
     if (!analyzeTarget.trim()) return;
@@ -717,6 +842,7 @@ const FoldersTab = () => {
                   expandedPaths={expandedPaths}
                   toggleExpand={toggleExpand}
                   searchFilter={treeSearch.toLowerCase()}
+                  onContextMenu={handleContextMenu}
                 />
               ))
               : tree.children
@@ -730,6 +856,7 @@ const FoldersTab = () => {
                     expandedPaths={expandedPaths}
                     toggleExpand={toggleExpand}
                     searchFilter={treeSearch.toLowerCase()}
+                    onContextMenu={handleContextMenu}
                   />
                 ))
                 : <TreeNode
@@ -740,6 +867,7 @@ const FoldersTab = () => {
                     expandedPaths={expandedPaths}
                     toggleExpand={toggleExpand}
                     searchFilter={treeSearch.toLowerCase()}
+                    onContextMenu={handleContextMenu}
                   />
           )}
           {!treeLoading && !tree && (
@@ -894,6 +1022,7 @@ const FoldersTab = () => {
                     <div
                       key={item.path || item.name}
                       onClick={() => handleDirItemClick(item)}
+                      onContextMenu={e => handleContextMenu(e, item)}
                       style={{
                         width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
                         borderRadius: 6, background: 'transparent', transition: 'background .15s',
@@ -915,6 +1044,7 @@ const FoldersTab = () => {
                       <div
                         key={item.path || item.name}
                         onClick={() => handleDirItemClick(item)}
+                        onContextMenu={e => handleContextMenu(e, item)}
                         style={{
                           width: 90, padding: '10px 4px', textAlign: 'center', cursor: 'pointer',
                           borderRadius: 6, transition: 'background .15s',
@@ -949,6 +1079,7 @@ const FoldersTab = () => {
                     <div
                       key={item.path || item.name}
                       onClick={() => handleDirItemClick(item)}
+                      onContextMenu={e => handleContextMenu(e, item)}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
                         cursor: 'pointer', fontSize: 12, color: COLORS.textMuted,
@@ -970,6 +1101,7 @@ const FoldersTab = () => {
                       <div
                         key={item.path || item.name}
                         onClick={() => handleDirItemClick(item)}
+                        onContextMenu={e => handleContextMenu(e, item)}
                         style={{
                           display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px',
                           cursor: 'pointer', fontSize: 12,
@@ -1279,8 +1411,116 @@ const FoldersTab = () => {
           <div style={{ color: COLORS.textDim, fontSize: 12 }}>No stats available</div>
         )}
       </div>
+
+      {/* Hidden upload input for context menu upload-into-folder */}
+      <input
+        type="file"
+        ref={contextUploadRef}
+        onChange={e => handleUpload(e)}
+        style={{ display: 'none' }}
+        multiple
+      />
+
+      {/* ── Right-Click Context Menu (Windows-style) ─────────────── */}
+      {contextMenu && (
+        <div
+          ref={contextMenuRef}
+          style={{
+            position: 'fixed',
+            top: contextMenu.y,
+            left: contextMenu.x,
+            zIndex: 9999,
+            background: '#1e1e2e',
+            border: `1px solid ${COLORS.border}`,
+            borderRadius: 8,
+            boxShadow: '0 8px 32px rgba(0,0,0,.6)',
+            minWidth: 200,
+            padding: '4px 0',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          }}
+        >
+          {/* Header */}
+          <div style={{
+            padding: '6px 14px 4px', fontSize: 11, color: COLORS.textDim,
+            borderBottom: `1px solid ${COLORS.border}`, marginBottom: 2,
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {contextMenu.isDir ? '📁' : _fileIcon(contextMenu.item?.name)} {contextMenu.item?.name}
+          </div>
+
+          {/* Open */}
+          <ContextMenuItem icon="📂" label="Open" onClick={() => handleContextAction('open')} />
+
+          {/* Edit (files only) */}
+          {!contextMenu.isDir && (
+            <ContextMenuItem icon="✏️" label="Edit" onClick={() => handleContextAction('edit')} />
+          )}
+
+          <div style={{ height: 1, background: COLORS.border, margin: '3px 8px' }} />
+
+          {/* Upload into folder */}
+          {contextMenu.isDir && (
+            <ContextMenuItem icon="📤" label="Upload Here" onClick={() => handleContextAction('upload')} />
+          )}
+
+          {/* Download (files only) */}
+          {!contextMenu.isDir && (
+            <ContextMenuItem icon="📥" label="Download" onClick={() => handleContextAction('download')} />
+          )}
+
+          {/* Export (files only) */}
+          {!contextMenu.isDir && (
+            <ContextMenuItem icon="📋" label="Export" onClick={() => handleContextAction('export')} />
+          )}
+
+          <div style={{ height: 1, background: COLORS.border, margin: '3px 8px' }} />
+
+          {/* Rename */}
+          <ContextMenuItem icon="✏️" label="Rename" onClick={() => handleContextAction('rename')} />
+
+          {/* Move */}
+          <ContextMenuItem icon="📦" label="Move" onClick={() => handleContextAction('move')} />
+
+          {/* New Folder */}
+          <ContextMenuItem icon="📁" label="New Folder" onClick={() => handleContextAction('new_folder')} />
+
+          {/* New File */}
+          <ContextMenuItem icon="📝" label="New File" onClick={() => handleContextAction('new_file')} />
+
+          <div style={{ height: 1, background: COLORS.border, margin: '3px 8px' }} />
+
+          {/* AI Analyze */}
+          <ContextMenuItem icon="🔬" label="AI Analyze" onClick={() => handleContextAction('analyze')} />
+
+          <div style={{ height: 1, background: COLORS.border, margin: '3px 8px' }} />
+
+          {/* Delete */}
+          <ContextMenuItem icon="🗑️" label="Delete" danger onClick={() => handleContextAction('delete')} />
+        </div>
+      )}
     </div>
   );
 };
+
+function ContextMenuItem({ icon, label, onClick, danger = false }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '7px 14px', cursor: 'pointer',
+        fontSize: 13, color: danger ? '#e94560' : '#eee',
+        background: hovered ? (danger ? 'rgba(233,69,96,.15)' : 'rgba(255,255,255,.08)') : 'transparent',
+        transition: 'background .1s',
+      }}
+    >
+      <span style={{ fontSize: 14, width: 18, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export default FoldersTab;

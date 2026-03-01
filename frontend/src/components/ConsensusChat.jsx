@@ -73,7 +73,7 @@ export default function ConsensusChat() {
       } catch { /* skip */ }
     };
 
-    pollRef.current = setInterval(poll, 10000);
+    pollRef.current = setInterval(poll, 30000);
     return () => clearInterval(pollRef.current);
   }, [autoMode, messages]);
 
@@ -209,10 +209,97 @@ export default function ConsensusChat() {
     setSending(false);
   }, [input, sending]);
 
+  const runHealthCheck = useCallback(async () => {
+    setSending(true);
+    setMessages(prev => [...prev, {
+      role: 'system', model: 'Self-Healing',
+      content: '🏥 Running system health check...',
+      ts: new Date().toISOString(),
+    }]);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/health/check`, { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        const health = data.system_health || {};
+        const broken = health.broken || [];
+        const degraded = health.degraded || [];
+        const healthy = health.healthy || [];
+        let msg = `**System Health: ${health.overall_status?.toUpperCase()}**\n`;
+        if (broken.length) msg += `\n🔴 Broken: ${broken.join(', ')}`;
+        if (degraded.length) msg += `\n🟡 Degraded: ${degraded.join(', ')}`;
+        msg += `\n🟢 Healthy: ${healthy.length} components`;
+        if (health.recent_errors?.length) {
+          msg += `\n\nRecent errors:\n${health.recent_errors.slice(0, 3).map(e => `• ${e.component}: ${e.error?.substring(0, 100)}`).join('\n')}`;
+        }
+        setMessages(prev => [...prev, {
+          role: 'consensus', model: 'Health Monitor',
+          content: msg,
+          confidence: broken.length === 0 ? 1.0 : 0.3,
+          ts: new Date().toISOString(),
+        }]);
+      }
+    } catch (e) {
+      setMessages(prev => [...prev, {
+        role: 'system', model: 'Error',
+        content: `Health check failed: ${e.message}`,
+        ts: new Date().toISOString(),
+      }]);
+    }
+    setSending(false);
+  }, []);
+
+  const runPatchConsensus = useCallback(async () => {
+    if (!input.trim()) return;
+    const task = input.trim();
+    setInput('');
+    setSending(true);
+    setMessages(prev => [...prev, {
+      role: 'user', model: 'You',
+      content: `🔧 Patch consensus: ${task}`,
+      ts: new Date().toISOString(),
+    }]);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/patch-consensus/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task, auto_apply: false }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        let msg = `**Patch Proposal: ${data.proposal_id}**\nStatus: ${data.status}\nHash: ${data.patch_hash?.substring(0, 16)}...\n`;
+        if (data.instructions?.length) {
+          msg += `\nInstructions (${data.instructions.length}):\n`;
+          for (const inst of data.instructions.slice(0, 5)) {
+            msg += `• ${inst.action} ${inst.file}: ${inst.reason}\n`;
+          }
+        }
+        if (data.votes?.length) {
+          const approved = data.votes.filter(v => v.approved).length;
+          msg += `\nVotes: ${approved}/${data.votes.length} approved`;
+        }
+        setMessages(prev => [...prev, {
+          role: 'consensus', model: 'Patch Consensus',
+          content: msg,
+          confidence: data.status === 'verified' ? 0.95 : 0.4,
+          ts: new Date().toISOString(),
+        }]);
+      }
+    } catch (e) {
+      setMessages(prev => [...prev, {
+        role: 'system', model: 'Error',
+        content: `Patch consensus failed: ${e.message}`,
+        ts: new Date().toISOString(),
+      }]);
+    }
+    setSending(false);
+  }, [input]);
+
   const getColor = (model) => {
     for (const [key, color] of Object.entries(MODEL_COLORS)) {
       if (model?.toLowerCase().includes(key.toLowerCase().split(' ')[0])) return color;
     }
+    if (model?.includes('Health') || model?.includes('Self-Heal')) return C.success;
+    if (model?.includes('Patch')) return '#ff6b35';
     return C.muted;
   };
 
@@ -232,6 +319,19 @@ export default function ConsensusChat() {
             <input type="checkbox" checked={autoMode} onChange={e => setAutoMode(e.target.checked)} />
             Auto-notify
           </label>
+          <button onClick={runHealthCheck} disabled={sending} style={{
+            padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
+            background: '#2196f3', color: '#fff', fontSize: 11, fontWeight: 600,
+          }}>
+            🏥 Health
+          </button>
+          <button onClick={runPatchConsensus} disabled={sending || !input.trim()} style={{
+            padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
+            background: '#ff6b35', color: '#fff', fontSize: 11, fontWeight: 600,
+            opacity: !input.trim() ? 0.5 : 1,
+          }} title="Type a code task then click to run through patch consensus">
+            🔧 Patch
+          </button>
           <button onClick={startConversation} disabled={sending} style={{
             padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
             background: C.success, color: '#fff', fontSize: 11, fontWeight: 600,

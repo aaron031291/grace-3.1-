@@ -229,7 +229,7 @@ class ContinuousLearningOrchestrator:
 
                 # Sleep until next cycle
                 cycle_duration = time.time() - cycle_start
-                sleep_time = max(1, 10 - cycle_duration)  # Run at least every 10 seconds
+                sleep_time = max(5, 30 - cycle_duration)  # Run at most every 30 seconds to save CPU
                 time.sleep(sleep_time)
 
             except Exception as e:

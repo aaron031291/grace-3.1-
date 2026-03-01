@@ -381,8 +381,8 @@ export default function CICDDashboard() {
   useEffect(() => {
     fetchData();
 
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(fetchData, 10000);
+    // Auto-refresh every 30 seconds
+    const interval = setInterval(fetchData, 30000);
     setRefreshInterval(interval);
 
     return () => clearInterval(interval);
