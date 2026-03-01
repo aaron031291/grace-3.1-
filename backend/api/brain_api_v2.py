@@ -221,6 +221,10 @@ def _system() -> dict:
         "auto_log":     lambda p: {"log": list(reversed(_loop_log[-20:]))},
         "consensus_fix": lambda p: _consensus_fix(),
         "connectivity": lambda p: _connectivity(),
+        "intelligence": lambda p: _intelligence_report(p),
+        "trust":        lambda p: _trust_state(),
+        "mine_keys":    lambda p: _mine_genesis_keys(p),
+        "mine_episodes": lambda p: _mine_episodes(),
     }
 
 
@@ -454,6 +458,26 @@ def _consensus_fix():
 def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
+
+
+def _intelligence_report(p):
+    from core.intelligence import get_intelligence_report
+    return get_intelligence_report(hours=p.get("hours", 24))
+
+
+def _trust_state():
+    from core.intelligence import AdaptiveTrust
+    return AdaptiveTrust.get_all_trust()
+
+
+def _mine_genesis_keys(p):
+    from core.intelligence import GenesisKeyMiner
+    return GenesisKeyMiner().mine_patterns(hours=p.get("hours", 24), limit=p.get("limit", 5000))
+
+
+def _mine_episodes():
+    from core.intelligence import EpisodicMiner
+    return EpisodicMiner().mine_episodes()
 
 
 
