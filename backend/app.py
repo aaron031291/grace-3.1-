@@ -68,6 +68,20 @@ from api.knowledge_mining_api import router as knowledge_mining_router
 from api.governance_discussion_api import router as governance_discussion_router
 from api.live_console_api import router as live_console_router
 from api.feedback_api import router as feedback_router
+from api.tab_aggregator_api import router as tab_aggregator_router
+from api.version_control import router as version_control_router
+from api.ingestion_api import router as ingestion_router
+from api.genesis_keys import router as genesis_keys_router
+from api.auth import router as auth_router
+from api.kpi_api import router as kpi_router
+from api.knowledge_base_api import router as knowledge_base_router
+from api.repositories_api import router as repositories_router
+from api.cicd_api import router as cicd_router
+from api.scraping import router as scraping_router
+from api.streaming import router as streaming_router
+from api.websocket import router as websocket_router
+from api.telemetry import router as telemetry_router
+from diagnostic_machine.api import router as diagnostic_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -444,30 +458,49 @@ async def lifespan(app: FastAPI):
 
 
     # ==================== Start Continuous Learning Orchestrator ====================
-    # Connect sandbox lab to continuous training data
     if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning
-            # print("\n[CONTINUOUS_LEARNING] Starting continuous autonomous learning orchestration...", flush=True)
             orchestrator = start_continuous_learning()
             print("[OK] Continuous learning activated", flush=True)
-            # Suppress verbose startup messages
-            # print("[CONTINUOUS_LEARNING] Grace will now continuously:", flush=True)
-            # print("  - Ingest new data from knowledge_base", flush=True)
-            # print("  - Learn autonomously from content", flush=True)
-            # print("  - Mirror observes and proposes experiments", flush=True)
-            # print("  - Run sandbox experiments and trials", flush=True)
-            # print("  - Request approval for validated improvements", flush=True)
-            # print("[CONTINUOUS_LEARNING] Grace's continuous self-improvement loop is active!\n", flush=True)
         except Exception as e:
             print(f"[WARN] Could not start continuous learning: {e}", flush=True)
     else:
         print("[SKIP] Continuous learning disabled (DISABLE_CONTINUOUS_LEARNING=true)")
 
+    # ==================== Start Diagnostic Engine (Self-Healing Runtime) ====================
+    _diag_engine = None
+    try:
+        from diagnostic_machine.diagnostic_engine import get_diagnostic_engine
+        _diag_engine = get_diagnostic_engine()
+        started = _diag_engine.start()
+        if started:
+            print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
+        else:
+            print("[WARN] Diagnostic engine already running")
+    except Exception as e:
+        print(f"[WARN] Diagnostic engine not started: {e}")
+
+    # ==================== Runtime Management State ====================
+    app.state.runtime_paused = False
+    app.state.diagnostic_engine = _diag_engine
+    app.state._start_time = time.time()
+
     yield
     
-    # Shutdown
+    # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
+    if _diag_engine:
+        try:
+            _diag_engine.stop()
+            print("[OK] Diagnostic engine stopped")
+        except Exception:
+            pass
+    try:
+        DatabaseConnection.close()
+        print("[OK] Database connection closed")
+    except Exception:
+        pass
 
 
 # ==================== FastAPI App ====================
@@ -543,6 +576,20 @@ app.include_router(knowledge_mining_router)  # /api/knowledge-mine — LLM knowl
 app.include_router(governance_discussion_router)  # /api/governance/discuss — chat about approvals
 app.include_router(live_console_router)           # /api/console — real-time Kimi+Opus interaction
 app.include_router(feedback_router)              # /api/feedback — user feedback on generated code
+app.include_router(tab_aggregator_router)        # /api/tabs — aggregated tab data for frontend
+app.include_router(version_control_router)       # /api/version-control — git history & diffs
+app.include_router(ingestion_router)             # /api/ingestion — document ingestion pipeline
+app.include_router(genesis_keys_router)          # /genesis — genesis key tracking UI
+app.include_router(auth_router)                  # /auth — authentication/sessions
+app.include_router(kpi_router)                   # /kpi — KPI dashboards
+app.include_router(knowledge_base_router)        # /knowledge-base — KB connectors
+app.include_router(repositories_router)          # /repositories — enterprise repo management
+app.include_router(cicd_router)                  # /api/cicd — CI/CD pipelines
+app.include_router(scraping_router)              # /scrape — web scraping engine
+app.include_router(streaming_router)             # /stream — SSE streaming
+app.include_router(websocket_router)             # WebSocket — real-time events
+app.include_router(telemetry_router)             # /telemetry — system telemetry
+app.include_router(diagnostic_router)            # /diagnostic — 4-layer diagnostic machine + healing
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
@@ -1526,6 +1573,137 @@ async def delete_message(chat_id: int, message_id: int, session = Depends(get_se
             status_code=500,
             detail=f"Error deleting message: {str(e)}"
         )
+
+
+# ==================== Runtime Management Endpoints ====================
+
+@app.get("/api/runtime/status", tags=["Runtime"])
+async def runtime_status():
+    """Full runtime status: diagnostic engine, self-healing, pause state."""
+    diag = getattr(app.state, "diagnostic_engine", None)
+    diag_status = "unavailable"
+    if diag:
+        try:
+            diag_status = diag.state.value if hasattr(diag.state, "value") else str(diag.state)
+        except Exception:
+            diag_status = "unknown"
+    return {
+        "paused": getattr(app.state, "runtime_paused", False),
+        "diagnostic_engine": diag_status,
+        "self_healing": diag_status not in ("unavailable", "stopped"),
+        "uptime_seconds": time.time() - getattr(app.state, "_start_time", time.time()),
+    }
+
+
+@app.post("/api/runtime/pause", tags=["Runtime"])
+async def runtime_pause():
+    """Pause the runtime — stops diagnostic heartbeat and self-healing without killing the process."""
+    app.state.runtime_paused = True
+    diag = getattr(app.state, "diagnostic_engine", None)
+    if diag:
+        try:
+            diag.pause()
+        except Exception:
+            pass
+    return {"status": "paused", "message": "Runtime paused — heartbeat and self-healing suspended"}
+
+
+@app.post("/api/runtime/resume", tags=["Runtime"])
+async def runtime_resume():
+    """Resume a paused runtime."""
+    app.state.runtime_paused = False
+    diag = getattr(app.state, "diagnostic_engine", None)
+    if diag:
+        try:
+            diag.resume()
+        except Exception:
+            pass
+    return {"status": "resumed", "message": "Runtime resumed — heartbeat and self-healing active"}
+
+
+@app.post("/api/runtime/hot-reload", tags=["Runtime"])
+async def runtime_hot_reload():
+    """
+    Hot-reload: re-read configs, refresh model registry, reconnect DB,
+    and re-run startup diagnostic — all without restarting the process.
+    """
+    results = {}
+
+    # 1. Reload settings from .env
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(Path(__file__).parent / ".env", override=True)
+        results["settings"] = "reloaded"
+    except Exception as e:
+        results["settings"] = f"error: {e}"
+
+    # 2. Refresh consensus model registry
+    try:
+        from cognitive.consensus_engine import _build_model_registry, get_available_models
+        import cognitive.consensus_engine as ce
+        ce.MODEL_REGISTRY = _build_model_registry()
+        models = get_available_models()
+        results["consensus_models"] = {m["id"]: m["available"] for m in models}
+    except Exception as e:
+        results["consensus_models"] = f"error: {e}"
+
+    # 3. Reconnect DB (dispose and re-create pool)
+    try:
+        engine = DatabaseConnection.get_engine()
+        engine.dispose()
+        results["database"] = "pool refreshed"
+    except Exception as e:
+        results["database"] = f"error: {e}"
+
+    # 4. Run a quick diagnostic
+    try:
+        from cognitive.autonomous_diagnostics import get_diagnostics
+        diag = get_diagnostics()
+        diag_result = diag.on_startup()
+        results["diagnostic"] = diag_result.get("status", "unknown")
+    except Exception as e:
+        results["diagnostic"] = f"error: {e}"
+
+    return {"status": "hot-reload complete", "results": results}
+
+
+@app.get("/api/runtime/connectivity", tags=["Runtime"])
+async def runtime_connectivity():
+    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
+    checks = {}
+
+    # Ollama
+    try:
+        client = get_llm_client()
+        checks["ollama"] = {"connected": client.is_running(), "url": settings.OLLAMA_URL}
+    except Exception as e:
+        checks["ollama"] = {"connected": False, "error": str(e)}
+
+    # Qdrant
+    try:
+        qdrant = get_qdrant_client()
+        connected = qdrant.is_connected()
+        checks["qdrant"] = {"connected": connected, "host": settings.QDRANT_HOST}
+    except Exception as e:
+        checks["qdrant"] = {"connected": False, "error": str(e)}
+
+    # Kimi
+    checks["kimi"] = {"configured": bool(settings.KIMI_API_KEY), "model": settings.KIMI_MODEL}
+
+    # Opus
+    checks["opus"] = {"configured": bool(settings.OPUS_API_KEY), "model": settings.OPUS_MODEL}
+
+    # Database
+    try:
+        checks["database"] = {"connected": DatabaseConnection.health_check(), "type": settings.DATABASE_TYPE}
+    except Exception as e:
+        checks["database"] = {"connected": False, "error": str(e)}
+
+    all_ok = all(
+        c.get("connected", False) or c.get("configured", False)
+        for c in checks.values()
+    )
+    return {"status": "all_connected" if all_ok else "partial", "services": checks}
 
 
 # ==================== Root Endpoint ====================
