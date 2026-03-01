@@ -115,11 +115,17 @@ def _scan_services() -> List[dict]:
         triggers.append(TriggerEntry("SERVICE", "ollama_down", "critical",
                                      f"Ollama unreachable: {e}"))
 
-    # Qdrant
+    # Qdrant (cloud or local)
     try:
-        import urllib.request as ur
-        qdrant_url = f"http://{settings.QDRANT_HOST}:{settings.QDRANT_PORT}/collections"
-        ur.urlopen(qdrant_url, timeout=3)
+        cloud_url = getattr(settings, "QDRANT_URL", "")
+        api_key = getattr(settings, "QDRANT_API_KEY", "")
+        if cloud_url:
+            from qdrant_client import QdrantClient as _QC
+            _qc = _QC(url=cloud_url, api_key=api_key, timeout=5)
+            _qc.get_collections()
+        else:
+            import urllib.request as ur
+            ur.urlopen(f"http://{settings.QDRANT_HOST}:{settings.QDRANT_PORT}/collections", timeout=3)
     except Exception as e:
         triggers.append(TriggerEntry("SERVICE", "qdrant_down", "critical",
                                      f"Qdrant unreachable: {e}"))

@@ -1689,7 +1689,8 @@ async def runtime_connectivity():
     try:
         qdrant = get_qdrant_client()
         connected = qdrant.is_connected()
-        checks["qdrant"] = {"connected": connected, "host": settings.QDRANT_HOST}
+        qdrant_loc = settings.QDRANT_URL if settings.QDRANT_URL else f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
+        checks["qdrant"] = {"connected": connected, "url": qdrant_loc}
     except Exception as e:
         checks["qdrant"] = {"connected": False, "error": str(e)}
 

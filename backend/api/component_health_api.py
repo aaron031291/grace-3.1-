@@ -143,7 +143,6 @@ COMPONENT_REGISTRY = {
         "expected_interval_min": None,
         "always_on": True,
         "dependencies": [],
-        "health_check_url": "http://localhost:6333/collections",
     },
     "kimi_service": {
         "label": "Kimi K2.5",
@@ -390,9 +389,10 @@ def _classify_component(comp_id: str, comp: dict, keys: List[dict],
 
 
 def _check_service_health() -> dict:
-    """Check health URLs for services that expose them."""
+    """Check health for services with URLs or known endpoints."""
     import urllib.request
     results = {}
+
     for comp_id, comp in COMPONENT_REGISTRY.items():
         url = comp.get("health_check_url")
         if not url:
@@ -403,6 +403,35 @@ def _check_service_health() -> dict:
             results[comp_id] = True
         except Exception:
             results[comp_id] = False
+
+    # Qdrant — use qdrant_client for cloud (handles gRPC/auth properly)
+    try:
+        from settings import settings
+        cloud_url = getattr(settings, "QDRANT_URL", "")
+        api_key = getattr(settings, "QDRANT_API_KEY", "")
+        if cloud_url:
+            from qdrant_client import QdrantClient as _QC
+            _qc = _QC(url=cloud_url, api_key=api_key, timeout=5)
+            _qc.get_collections()
+            results["qdrant_service"] = True
+        else:
+            host = getattr(settings, "QDRANT_HOST", "localhost")
+            port = getattr(settings, "QDRANT_PORT", 6333)
+            urllib.request.urlopen(f"http://{host}:{port}/collections", timeout=2)
+            results["qdrant_service"] = True
+    except Exception:
+        results["qdrant_service"] = False
+
+    # Ollama
+    if "ollama_service" not in results:
+        try:
+            from settings import settings
+            url = (getattr(settings, "OLLAMA_URL", "") or "http://localhost:11434").rstrip("/")
+            urllib.request.urlopen(f"{url}/api/tags", timeout=2)
+            results["ollama_service"] = True
+        except Exception:
+            results["ollama_service"] = False
+
     return results
 
 
