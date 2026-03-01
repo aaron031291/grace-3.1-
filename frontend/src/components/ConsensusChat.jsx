@@ -149,7 +149,7 @@ export default function ConsensusChat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: msg,
-          models: ['kimi', 'opus'],
+          models: ['kimi', 'opus', 'qwen', 'reasoning'],
           source: 'user',
         }),
       });
@@ -310,8 +310,9 @@ export default function ConsensusChat() {
           );
         })}
         {sending && (
-          <div style={{ padding: 10, color: C.dim, fontSize: 12, fontStyle: 'italic' }}>
-            Models are thinking...
+          <div style={{ padding: 12, color: C.warn, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ animation: 'pulse 1.5s infinite', fontSize: 18 }}>🧠</span>
+            <span>All models are thinking... this takes 10-60 seconds for consensus.</span>
           </div>
         )}
         <div ref={endRef} />
