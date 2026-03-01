@@ -99,13 +99,21 @@ class MemoryMeshIntegration:
             'actual': outcome
         }
 
-        learning_example = self.learning_memory.ingest_learning_data(
-            learning_type=experience_type,
-            learning_data=learning_data,
-            source=source,
-            user_id=user_id,
-            genesis_key_id=genesis_key_id
-        )
+        try:
+            learning_example = self.learning_memory.ingest_learning_data(
+                learning_type=experience_type,
+                learning_data=learning_data,
+                source=source,
+                user_id=user_id,
+                genesis_key_id=genesis_key_id
+            )
+        except Exception as e:
+            # Rollback and retry once to clear poisoned session state
+            try:
+                self.session.rollback()
+            except Exception:
+                pass
+            raise e
 
         # 2. If high trust, add to episodic memory
         if learning_example.trust_score >= 0.7:

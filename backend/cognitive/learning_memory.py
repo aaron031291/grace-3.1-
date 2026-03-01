@@ -278,12 +278,21 @@ class LearningMemoryManager:
             age_days=0
         )
 
+        # Serialize dicts to JSON strings for SQLite Text column compatibility
+        import json as _json
+        def _serialize(val):
+            if isinstance(val, dict):
+                return _json.dumps(val, default=str)
+            if isinstance(val, list):
+                return _json.dumps(val, default=str)
+            return val if isinstance(val, str) else str(val) if val is not None else None
+
         # Create learning example
         example = LearningExample(
             example_type=learning_type,
-            input_context=input_context,
-            expected_output=expected_output,
-            actual_output=actual_output,
+            input_context=_serialize(input_context),
+            expected_output=_serialize(expected_output),
+            actual_output=_serialize(actual_output),
             trust_score=trust_score,
             source_reliability=self.trust_scorer.source_weights.get(source, 0.5),
             outcome_quality=outcome_quality,
@@ -294,9 +303,12 @@ class LearningMemoryManager:
             genesis_key_id=genesis_key_id
         )
 
-
-        self.session.add(example)
-        self.session.flush()  # Use flush instead of commit to keep object attached
+        try:
+            self.session.add(example)
+            self.session.flush()
+        except Exception as flush_err:
+            self.session.rollback()
+            raise flush_err
 
         # Check if this contributes to a pattern
         self._check_pattern_extraction(example)

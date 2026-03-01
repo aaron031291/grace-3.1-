@@ -357,6 +357,10 @@ class LearningExample(BaseModel):
     source = Column(String(255), default="system")
     file_path = Column(String(512), nullable=True)
     source_reliability = Column(Float, default=0.5)
+    outcome_quality = Column(Float, default=0.5)
+    consistency_score = Column(Float, default=0.5)
+    recency_weight = Column(Float, default=1.0)
+    # Legacy aliases for DB compatibility
     content_quality = Column(Float, default=0.5)
     consensus_score = Column(Float, default=0.5)
     recency_score = Column(Float, default=1.0)

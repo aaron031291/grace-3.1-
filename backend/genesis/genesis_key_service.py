@@ -321,31 +321,46 @@ class GenesisKeyService:
                 logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
 
             # Hook 2: Feed into Memory Mesh for learning
+            # CRITICAL: Use a SEPARATE session to avoid poisoning the main session
+            # If this fails, the main genesis key creation must NOT be affected
             try:
                 from cognitive.memory_mesh_integration import MemoryMeshIntegration
                 from pathlib import Path
+                from database.session import get_session
 
-                kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
-                memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
+                mesh_sess = next(get_session())
+                try:
+                    kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
+                    memory_mesh = MemoryMeshIntegration(session=mesh_sess, knowledge_base_path=kb_path)
 
-                # Use extracted data — convert dicts to JSON strings for SQLite
-                memory_mesh.ingest_learning_experience(
-                    experience_type=extracted_key_data["key_type"],
-                    context=json.dumps({
-                        "what": extracted_key_data["what_description"],
-                        "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
-                        "why": extracted_key_data["why_reason"],
-                        "how": extracted_key_data["how_method"]
-                    }),
-                    action_taken=json.dumps(extracted_key_data.get("input_data") or {}),
-                    outcome=json.dumps(extracted_key_data.get("output_data") or {}),
-                    source="genesis_key",
-                    user_id=extracted_key_data.get("user_id"),
-                    genesis_key_id=extracted_key_id
-                )
-                logger.info(f"✅ Genesis Key fed into Memory Mesh: {extracted_key_id}")
+                    memory_mesh.ingest_learning_experience(
+                        experience_type=extracted_key_data["key_type"],
+                        context=json.dumps({
+                            "what": extracted_key_data["what_description"],
+                            "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
+                            "why": extracted_key_data["why_reason"],
+                            "how": extracted_key_data["how_method"]
+                        }),
+                        action_taken=json.dumps(extracted_key_data.get("input_data") or {}),
+                        outcome=json.dumps(extracted_key_data.get("output_data") or {}),
+                        source="genesis_key",
+                        user_id=extracted_key_data.get("user_id"),
+                        genesis_key_id=extracted_key_id
+                    )
+                    logger.info(f"Genesis Key fed into Memory Mesh: {extracted_key_id}")
+                except Exception as mesh_inner:
+                    try:
+                        mesh_sess.rollback()
+                    except Exception:
+                        pass
+                    logger.debug(f"Memory Mesh feed skipped: {mesh_inner}")
+                finally:
+                    try:
+                        mesh_sess.close()
+                    except Exception:
+                        pass
             except Exception as mesh_error:
-                logger.warning(f"Failed to feed Genesis Key to Memory Mesh: {mesh_error}")
+                logger.debug(f"Memory Mesh session skipped: {mesh_error}")
 
             # Hook 3: Trigger autonomous pipeline
             try:
