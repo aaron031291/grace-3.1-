@@ -50,29 +50,56 @@ SKIP_PREFIXES = (
 
 
 def _discover_routes() -> List[dict]:
-    """Discover all GET routes from the running FastAPI app via OpenAPI spec."""
+    """Discover all routes from the running FastAPI app — both GET and POST."""
+    routes = []
+
+    # Method 1: direct app introspection (fastest, no HTTP call)
+    try:
+        from starlette.routing import Route, Mount
+        from app import app as _app
+
+        def _extract(routes_list, prefix=""):
+            for route in routes_list:
+                if isinstance(route, Mount) and hasattr(route, "routes"):
+                    _extract(route.routes, prefix + (route.path or ""))
+                elif isinstance(route, Route):
+                    path = prefix + route.path
+                    if any(path.startswith(p) for p in SKIP_PREFIXES):
+                        continue
+                    if "{" in path:
+                        continue
+                    for method in (route.methods or {"GET"}):
+                        if method in ("GET", "HEAD"):
+                            routes.append({"path": path, "method": "GET"})
+                            break
+
+        _extract(_app.routes)
+        if routes:
+            logger.info("Probe discovered %d routes via app introspection", len(routes))
+            return routes
+    except Exception as e:
+        logger.debug("App introspection failed, falling back to OpenAPI: %s", e)
+
+    # Method 2: OpenAPI spec fallback
     try:
         url = f"{BASE}/openapi.json"
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=10) as resp:
-            raw = resp.read()
-        spec = json.loads(raw)
+            spec = json.loads(resp.read())
 
-        routes = []
         for path, methods in spec.get("paths", {}).items():
             if any(path.startswith(p) for p in SKIP_PREFIXES):
                 continue
-            # Skip paths with {parameters} — they need real IDs
             if "{" in path:
                 continue
             if "get" in methods:
                 routes.append({"path": path, "method": "GET"})
 
-        logger.info("Probe discovered %d GET routes", len(routes))
-        return routes
+        logger.info("Probe discovered %d routes via OpenAPI", len(routes))
     except Exception as e:
         logger.warning("Route discovery failed: %s", e)
-        return []
+
+    return routes
 
 
 def _probe_endpoint(path: str, method: str = "GET") -> dict:
