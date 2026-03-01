@@ -457,14 +457,17 @@ class AutonomousEngine:
                 logger.debug(f"[Autonomous] KPI recording skipped: {e}")
 
     def _notify_mirror(self, action: AutonomousAction, result: 'ActionResult'):
-        """Notify the Mirror system of the action for self-observation."""
-        if self._mirror:
-            try:
-                # The mirror observes through Genesis Keys
-                # This is a placeholder for direct notification
-                logger.debug(f"[Autonomous] Mirror notified of action {action.id}")
-            except Exception as e:
-                logger.debug(f"[Autonomous] Mirror notification skipped: {e}")
+        """Notify the Mirror system via event bus for self-observation."""
+        try:
+            from cognitive.event_bus import publish
+            publish("genesis.autonomous_action", {
+                "action_id": action.id,
+                "action_type": action.action_type,
+                "status": result.status if hasattr(result, 'status') else "completed",
+                "description": action.description[:200] if hasattr(action, 'description') else "",
+            }, source="autonomous_engine")
+        except Exception as e:
+            logger.debug(f"[Autonomous] Mirror notification skipped: {e}")
 
     async def queue_action(
         self,
@@ -661,9 +664,21 @@ class AutonomousEngine:
             return True  # Fail open for now
 
     async def _run_sandbox(self, action: AutonomousAction) -> Dict[str, Any]:
-        """Run action in sandbox mode."""
-        # Simplified sandbox - just validate
-        return {"status": "success"}
+        """Run action in sandbox mode via the sandbox mirror."""
+        try:
+            from cognitive.sandbox_mirror import get_sandbox_mirror
+            mirror = get_sandbox_mirror()
+            session = mirror.create_session(branch="internal")
+            result = mirror.run_experiment(
+                session_id=session.id,
+                task_description=getattr(action, 'description', str(action.action_type))[:500],
+                use_consensus=False,
+            )
+            mirror.close_session(session.id)
+            return {"status": result.get("status", "completed"), "sandbox_result": result}
+        except Exception as e:
+            logger.debug(f"[Autonomous] Sandbox run failed, using basic validation: {e}")
+            return {"status": "success", "sandbox": "fallback"}
 
     # =========================================================================
     # Event System

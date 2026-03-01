@@ -411,10 +411,42 @@ class MirrorSelfModelingSystem:
         return patterns
 
     def _detect_efficiency_drops(self) -> List[Dict[str, Any]]:
-        """Detect operations that are taking longer over time."""
-        # This would analyze execution times from Genesis Keys
-        # For now, return empty list (can be enhanced with actual timing data)
-        return []
+        """Detect operations taking longer over time by analyzing genesis key timestamps."""
+        patterns = []
+        try:
+            from database.session import get_session
+            from models.genesis_key_models import GenesisKey
+            from sqlalchemy import func
+            from datetime import timedelta
+
+            sess = next(get_session())
+            now = datetime.utcnow()
+            recent = now - timedelta(hours=self.observation_window_hours)
+            older = recent - timedelta(hours=self.observation_window_hours)
+
+            recent_errors = sess.query(func.count(GenesisKey.id)).filter(
+                GenesisKey.when_timestamp >= recent,
+                GenesisKey.is_error == True,
+            ).scalar() or 0
+
+            older_errors = sess.query(func.count(GenesisKey.id)).filter(
+                GenesisKey.when_timestamp >= older,
+                GenesisKey.when_timestamp < recent,
+                GenesisKey.is_error == True,
+            ).scalar() or 0
+
+            if recent_errors > older_errors * 1.5 and recent_errors >= 3:
+                patterns.append({
+                    "pattern_type": "EFFICIENCY_DROP",
+                    "description": f"Error rate increased: {older_errors} → {recent_errors} in last {self.observation_window_hours}h",
+                    "severity": "medium" if recent_errors < 10 else "high",
+                    "recent_errors": recent_errors,
+                    "previous_errors": older_errors,
+                })
+            sess.close()
+        except Exception:
+            pass
+        return patterns
 
     def _detect_improvement_opportunities(self) -> List[Dict[str, Any]]:
         """Detect areas where Grace could improve."""

@@ -447,11 +447,14 @@ class ProactiveLearningSubagent:
                 knowledge_base_path=self.knowledge_base_path
             )
 
-            # Practice implementation would go here
-            # For now, return placeholder
+            result = learning_system.practice_skill(
+                topic=task.topic,
+                difficulty="intermediate",
+            )
             return {
                 "skill": task.topic,
-                "practiced": True
+                "practiced": True,
+                "result": result if isinstance(result, dict) else {"output": str(result)[:500]},
             }
 
         finally:

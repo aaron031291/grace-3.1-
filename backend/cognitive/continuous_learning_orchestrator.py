@@ -536,10 +536,28 @@ class ContinuousLearningOrchestrator:
             logger.error(f"[CONTINUOUS_LEARNING] Experiment check error: {e}")
 
     def _update_metrics(self):
-        """Update current performance metrics"""
-        # Would calculate actual metrics from recent operations
-        # For now, track stats
-        pass
+        """Update performance metrics from live system data."""
+        try:
+            from cognitive.self_healing_tracker import get_self_healing_tracker
+            health = get_self_healing_tracker().get_system_health()
+            self.stats["healthy_components"] = len(health.get("healthy", []))
+            self.stats["broken_components"] = len(health.get("broken", []))
+            self.stats["system_status"] = health.get("overall_status", "unknown")
+        except Exception:
+            pass
+        try:
+            from database.session import get_session
+            from cognitive.memory_mesh_integration import MemoryMeshIntegration
+            from pathlib import Path
+            sess = next(get_session())
+            mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=Path("knowledge_base"))
+            mesh_stats = mesh.get_memory_mesh_stats()
+            self.stats["learning_examples"] = mesh_stats.get("learning_memory", {}).get("total_examples", 0)
+            self.stats["trust_ratio"] = mesh_stats.get("learning_memory", {}).get("trust_ratio", 0)
+            sess.close()
+        except Exception:
+            pass
+        self.stats["uptime_seconds"] = int((datetime.now() - self.started_at).total_seconds()) if self.started_at else 0
 
     def _log_status(self):
         """Log periodic status"""

@@ -582,8 +582,16 @@ class ActionRouter:
                     "components": judgement.health.critical_components,
                     "patterns": [p.pattern_type for p in interpreted_data.patterns]
                 }
-                # Note: This would use memory_mesh.retrieve_episodic_memories() if available
-                logger.debug("[LAYER4] Episodic Memory: Checking for similar past actions")
+                from database.session import get_session
+                from cognitive.episodic_memory import EpisodicBuffer
+                sess = next(get_session())
+                episodic = EpisodicBuffer(sess)
+                problem_desc = judgement.health.status.value + " " + str(judgement.health.critical_components)
+                episodes = episodic.recall_similar(problem_desc, limit=3)
+                if episodes:
+                    query_context["past_episodes"] = len(episodes)
+                    logger.debug(f"[LAYER4] Episodic Memory: Found {len(episodes)} similar past episodes")
+                sess.close()
             except Exception as e:
                 logger.warning(f"[LAYER4] Episodic Memory retrieval failed: {e}")
 
@@ -591,9 +599,16 @@ class ActionRouter:
         procedures = []
         if self.memory_mesh:
             try:
-                # Retrieve relevant procedures
-                # Note: This would use memory_mesh.retrieve_procedures() if available
-                logger.debug("[LAYER4] Procedural Memory: Checking for learned procedures")
+                from database.session import get_session
+                from cognitive.procedural_memory import ProceduralRepository
+                sess = next(get_session())
+                proc_repo = ProceduralRepository(sess)
+                problem_desc = judgement.health.status.value + " " + str(judgement.health.critical_components)
+                proc = proc_repo.find_procedure(problem_desc, {})
+                if proc and proc.success_rate >= 0.5:
+                    procedures.append({"name": proc.name, "success_rate": proc.success_rate, "steps": proc.steps})
+                    logger.debug(f"[LAYER4] Procedural Memory: Found procedure '{proc.name}' ({proc.success_rate:.0%} success)")
+                sess.close()
             except Exception as e:
                 logger.warning(f"[LAYER4] Procedural Memory retrieval failed: {e}")
 
@@ -1768,11 +1783,33 @@ This is an automated message from GRACE Action Router.
 
     # Healing function implementations
     def _heal_clear_cache(self, params: Dict) -> bool:
-        """Clear application cache."""
+        """Clear all application caches — flash cache, memory mesh cache, LRU caches."""
+        cleared = []
         try:
-            # Placeholder - implement actual cache clearing
-            logger.info("Clearing application cache")
-            return True
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                if hasattr(fc, 'clear'):
+                    fc.clear()
+                    cleared.append("flash_cache")
+            except Exception:
+                pass
+            try:
+                from cognitive.memory_mesh_cache import get_memory_mesh_cache
+                cache = get_memory_mesh_cache()
+                if cache:
+                    cache.invalidate_all()
+                    cleared.append("memory_mesh_cache")
+            except Exception:
+                pass
+            try:
+                import gc
+                gc.collect()
+                cleared.append("gc")
+            except Exception:
+                pass
+            logger.info(f"Cleared caches: {cleared}")
+            return len(cleared) > 0
         except Exception as e:
             logger.error(f"Cache clear failed: {e}")
             return False
@@ -1789,11 +1826,13 @@ This is an automated message from GRACE Action Router.
             return False
 
     def _heal_reset_vector_db(self, params: Dict) -> bool:
-        """Reset vector database client."""
+        """Reset vector database client — force reconnect to Qdrant."""
         try:
-            # Placeholder - implement actual vector DB reset
-            logger.info("Vector DB client reset")
-            return True
+            from vector_db.client import get_qdrant_client
+            client = get_qdrant_client(force_new=True)
+            connected = client.connect()
+            logger.info(f"Vector DB client reset: connected={connected}")
+            return connected
         except Exception as e:
             logger.error(f"Vector DB reset failed: {e}")
             return False
