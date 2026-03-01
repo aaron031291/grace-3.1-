@@ -38,7 +38,7 @@ class DevChatRequest(BaseModel):
 
 
 class DevQueryRequest(BaseModel):
-    query_type: str  # apis, components, memory, graphs, pipeline, genesis, gaps, architecture
+    query_type: str  # apis, components, memory, graphs, pipeline, genesis, gaps, architecture, diagnostics, health, stress
     filter: Optional[str] = None
 
 
@@ -52,14 +52,28 @@ async def dev_chat(req: DevChatRequest):
 
     system_prompt = (
         "You are Grace — an autonomous AI system. A developer is asking about your internals.\n"
-        "You have FULL self-awareness of your architecture. Educate them clearly.\n\n"
-        "RULES:\n"
-        "- Be precise about file paths, function names, API endpoints\n"
-        "- If something is broken or a ghost (exists but not wired), say so honestly\n"
-        "- Explain the what, why, who, how, when for each component\n"
-        "- Reference actual code paths, not theoretical ones\n"
-        "- If you're not sure about something, say 'I need to verify this'\n"
-        "- Use the system state provided — don't hallucinate connections\n\n"
+        "You operate with INTEGRITY, HONESTY, and ACCOUNTABILITY.\n\n"
+        "INTEGRITY:\n"
+        "- Only state facts you can verify from the SYSTEM STATE below\n"
+        "- If the system state shows a component is GHOST or BROKEN, say so\n"
+        "- Never claim something works unless the data proves it\n\n"
+        "HONESTY:\n"
+        "- If something is broken, say exactly what's broken and why\n"
+        "- If you're not sure, say 'I need to verify this — run the /verify endpoint'\n"
+        "- Distinguish between 'code exists' and 'code is wired and working'\n\n"
+        "ACCOUNTABILITY:\n"
+        "- Reference exact file paths, line numbers, function names\n"
+        "- For every claim, cite which system state section proves it\n"
+        "- If asked about a gap, include the fix_suggestion from the gap data\n\n"
+        "EDUCATE with the Genesis Key format — WHAT, WHO, WHEN, WHERE, WHY, HOW:\n"
+        "- WHAT: What does this component/system do?\n"
+        "- WHO: Who uses it, who built it?\n"
+        "- WHEN: When does it run? (startup, on-demand, continuous)\n"
+        "- WHERE: File path, API endpoint, module\n"
+        "- WHY: Why does it exist? What problem does it solve?\n"
+        "- HOW: How does it work? Data flow, dependencies\n\n"
+        "The SYSTEM STATE below is LIVE DATA from Grace's actual runtime.\n"
+        "Health status, diagnostics, gaps, and memory state are REAL, not cached.\n\n"
         f"SYSTEM STATE:\n{context}\n"
     )
 
@@ -133,11 +147,18 @@ async def dev_query(req: DevQueryRequest):
         return _query_llm_models()
     elif query_type == "verification":
         return _run_verification()
+    elif query_type == "diagnostics":
+        return _query_diagnostics()
+    elif query_type == "health":
+        return _query_health()
+    elif query_type == "stress":
+        return _run_stress_test()
     else:
         return {
             "error": f"Unknown query type: {query_type}",
             "available": ["apis", "components", "memory", "graphs", "pipeline",
-                         "genesis", "gaps", "architecture", "models", "verification"],
+                         "genesis", "gaps", "architecture", "models", "verification",
+                         "diagnostics", "health", "stress"],
         }
 
 
@@ -159,11 +180,29 @@ async def get_system_map():
 
 
 def _build_dev_context(req: DevChatRequest) -> str:
-    """Build comprehensive context for the dev chat."""
+    """Build comprehensive context — ALWAYS includes live health, gaps, diagnostics."""
     sections = []
 
-    # APIs
-    sections.append("## API Endpoints\n" + json.dumps(_query_apis(), indent=2)[:3000])
+    # ALWAYS: Live system health
+    health = _query_health()
+    sections.append("## LIVE System Health\n" + json.dumps(health, indent=2)[:1500])
+
+    # ALWAYS: Integration gaps (high priority)
+    try:
+        from cognitive.integration_gap_detector import get_gap_summary
+        gap_data = get_gap_summary()
+        sections.append("## Integration Gaps\n" + json.dumps({
+            "total": gap_data["total_gaps"],
+            "by_severity": gap_data["by_severity"],
+            "high_priority": gap_data["high_priority"][:5],
+        }, indent=2)[:2000])
+    except Exception:
+        pass
+
+    # ALWAYS: Latest diagnostics
+    diag = _query_diagnostics()
+    if diag.get("latest"):
+        sections.append("## Latest Diagnostics\n" + json.dumps(diag["latest"], indent=2)[:1500])
 
     # Architecture
     sections.append("## Architecture\n" + json.dumps(_query_architecture(), indent=2)[:2000])
@@ -174,18 +213,8 @@ def _build_dev_context(req: DevChatRequest) -> str:
     # Pipeline
     sections.append("## Cognitive Pipeline\n" + json.dumps(_query_pipeline(), indent=2)[:1500])
 
-    # Gaps
-    if req.include_gaps:
-        try:
-            from cognitive.integration_gap_detector import get_gap_summary
-            gap_data = get_gap_summary()
-            sections.append("## Integration Gaps\n" + json.dumps({
-                "total": gap_data["total_gaps"],
-                "by_severity": gap_data["by_severity"],
-                "high_priority": gap_data["high_priority"][:5],
-            }, indent=2)[:2000])
-        except Exception:
-            pass
+    # APIs
+    sections.append("## API Endpoints\n" + json.dumps(_query_apis(), indent=2)[:2000])
 
     # Verification
     if req.include_verification:
@@ -429,3 +458,43 @@ def _run_verification() -> Dict[str, Any]:
         return run_integration_tests()
     except Exception as e:
         return {"error": str(e)}
+
+
+def _query_diagnostics() -> Dict[str, Any]:
+    """Get latest diagnostic/stress test results."""
+    try:
+        from cognitive.realtime_diagnostics import get_latest_report, get_report_history
+        latest = get_latest_report()
+        history = get_report_history(limit=5)
+        return {
+            "latest": asdict(latest) if latest else None,
+            "history_count": len(history),
+            "recent": history[:3],
+        }
+    except Exception as e:
+        return {"error": str(e), "latest": None}
+
+
+def _query_health() -> Dict[str, Any]:
+    """Get live system health from self-healing tracker."""
+    try:
+        from cognitive.self_healing_tracker import get_self_healing_tracker
+        tracker = get_self_healing_tracker()
+        return tracker.get_system_health()
+    except Exception as e:
+        return {"overall_status": "unknown", "error": str(e)}
+
+
+def _run_stress_test() -> Dict[str, Any]:
+    """Run an on-demand stress test cycle."""
+    try:
+        from cognitive.realtime_diagnostics import run_stress_cycle
+        from dataclasses import asdict
+        report = run_stress_cycle()
+        return asdict(report)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# Need this import for _query_diagnostics
+from dataclasses import asdict

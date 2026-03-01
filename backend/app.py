@@ -528,6 +528,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Self-healing tracker init failed: {e}", flush=True)
 
+    # ==================== Start Continuous Diagnostics ====================
+    try:
+        from cognitive.realtime_diagnostics import start_continuous_diagnostics
+        start_continuous_diagnostics(interval_seconds=300)  # Every 5 minutes
+        print("[OK] Continuous diagnostics started (every 5 min)", flush=True)
+    except Exception as e:
+        print(f"[WARN] Continuous diagnostics failed: {e}", flush=True)
+
     if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning

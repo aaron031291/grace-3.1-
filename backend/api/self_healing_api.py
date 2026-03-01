@@ -115,6 +115,36 @@ async def vector_search(req: VectorSearchRequest):
         raise HTTPException(status_code=500, detail=f"Vector search failed: {e}")
 
 
+@router.post("/stress-test")
+async def run_stress_test():
+    """Run an on-demand stress test cycle — tests all components, heals failures."""
+    from cognitive.realtime_diagnostics import run_stress_cycle
+    from dataclasses import asdict
+    report = run_stress_cycle()
+    return asdict(report)
+
+
+@router.get("/diagnostics")
+async def get_diagnostics():
+    """Get latest diagnostic report and recent history."""
+    from cognitive.realtime_diagnostics import get_latest_report, get_report_history
+    from dataclasses import asdict
+    latest = get_latest_report()
+    history = get_report_history(limit=10)
+    return {
+        "latest": asdict(latest) if latest else None,
+        "history": history,
+        "continuous_active": True,
+    }
+
+
+@router.get("/diagnostics/history")
+async def get_diagnostics_history(limit: int = 20):
+    """Get diagnostic report history."""
+    from cognitive.realtime_diagnostics import get_report_history
+    return {"reports": get_report_history(limit=limit)}
+
+
 def _get_query_vector(query: str) -> Optional[list]:
     """Generate embedding for a search query."""
     try:

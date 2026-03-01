@@ -15,16 +15,19 @@ const C = {
 };
 
 const QUICK_QUERIES = [
-  { label: 'All APIs', query: 'apis' },
-  { label: 'Components', query: 'components' },
-  { label: 'Memory', query: 'memory' },
-  { label: 'Graphs', query: 'graphs' },
-  { label: 'Pipeline', query: 'pipeline' },
-  { label: 'Architecture', query: 'architecture' },
-  { label: 'LLM Models', query: 'models' },
-  { label: 'Genesis', query: 'genesis' },
-  { label: 'Gaps', query: 'gaps' },
-  { label: 'Verify', query: 'verification' },
+  { label: '🏥 Health', query: 'health', color: '#4caf50' },
+  { label: '🔬 Stress Test', query: 'stress', color: '#f44336' },
+  { label: '📊 Diagnostics', query: 'diagnostics', color: '#ff9800' },
+  { label: '🔌 Gaps', query: 'gaps', color: '#e94560' },
+  { label: '✓ Verify', query: 'verification', color: '#2196f3' },
+  { label: '🧠 Memory', query: 'memory', color: '#9c27b0' },
+  { label: '🔗 APIs', query: 'apis', color: '#00bcd4' },
+  { label: '🏗️ Architecture', query: 'architecture', color: '#607d8b' },
+  { label: '⚙️ Pipeline', query: 'pipeline', color: '#795548' },
+  { label: '📈 Graphs', query: 'graphs', color: '#ff5722' },
+  { label: '🤖 Models', query: 'models', color: '#673ab7' },
+  { label: '📦 Components', query: 'components', color: '#3f51b5' },
+  { label: '🔑 Genesis', query: 'genesis', color: '#009688' },
 ];
 
 export default function DevChat() {
@@ -32,21 +35,41 @@ export default function DevChat() {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [systemMap, setSystemMap] = useState(null);
-  const [includeGaps, setIncludeGaps] = useState(false);
+  const [includeGaps, setIncludeGaps] = useState(true);
   const [includeVerification, setIncludeVerification] = useState(false);
+  const [liveHealth, setLiveHealth] = useState(null);
+  const [liveDiag, setLiveDiag] = useState(null);
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Load live health + diagnostics on mount and every 30s
+  const fetchLiveStatus = useCallback(async () => {
+    try {
+      const [hRes, dRes] = await Promise.allSettled([
+        fetch(`${API_BASE_URL}/api/health/status`),
+        fetch(`${API_BASE_URL}/api/health/diagnostics`),
+      ]);
+      if (hRes.status === 'fulfilled' && hRes.value.ok) setLiveHealth(await hRes.value.json());
+      if (dRes.status === 'fulfilled' && dRes.value.ok) setLiveDiag(await dRes.value.json());
+    } catch { /* skip */ }
+  }, []);
+
+  useEffect(() => {
+    fetchLiveStatus();
+    const i = setInterval(fetchLiveStatus, 30000);
+    return () => clearInterval(i);
+  }, [fetchLiveStatus]);
+
   useEffect(() => {
     setMessages([{
       role: 'system', sender: 'Grace',
-      content: "Welcome, developer. I'm Grace — ask me anything about my systems.\n\n" +
-        "Try: 'How does the consensus engine work?' or 'What memory systems exist?' or " +
-        "'Show me all API endpoints' or 'What integration gaps are there?'\n\n" +
-        "Use the quick query buttons below for raw data, or ask in natural language for explanations.",
+      content: "Welcome, developer. I'm Grace — I operate with integrity, honesty, and accountability.\n\n" +
+        "Ask me anything: APIs, components, memory systems, architecture, what's broken, what's working.\n" +
+        "I'll tell you the WHAT, WHO, WHEN, WHERE, WHY, and HOW — Genesis Key style.\n\n" +
+        "Hit 🏥 Health or 🔬 Stress Test for live system status. I always include real-time diagnostics in my answers.",
       ts: new Date().toISOString(),
     }]);
   }, []);
@@ -145,9 +168,21 @@ export default function DevChat() {
         padding: '8px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 14, fontWeight: 700, color: C.dev }}>🛠️ Dev Chat</span>
-          <span style={{ fontSize: 11, color: C.dim, marginLeft: 8 }}>Ask Grace about her systems</span>
+          {liveHealth && (
+            <span style={{
+              padding: '2px 6px', borderRadius: 4, fontSize: 9, fontWeight: 700,
+              background: liveHealth.overall_status === 'healthy' ? C.success :
+                         liveHealth.overall_status === 'degraded' ? C.warn : '#f44336',
+              color: '#fff',
+            }}>{liveHealth.overall_status?.toUpperCase()}</span>
+          )}
+          {liveDiag?.latest && (
+            <span style={{ fontSize: 9, color: C.muted }}>
+              Tests: {liveDiag.latest.passed}/{liveDiag.latest.total_tests} ({liveDiag.latest.pass_rate}%)
+            </span>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <label style={{ fontSize: 10, color: C.muted, display: 'flex', alignItems: 'center', gap: 3, cursor: 'pointer' }}>
@@ -158,6 +193,10 @@ export default function DevChat() {
             <input type="checkbox" checked={includeVerification} onChange={e => setIncludeVerification(e.target.checked)} />
             +Verify
           </label>
+          <button onClick={fetchLiveStatus} style={{
+            padding: '4px 8px', border: 'none', borderRadius: 4, cursor: 'pointer',
+            background: C.success, color: '#fff', fontSize: 10, fontWeight: 600,
+          }}>↻</button>
           <button onClick={loadSystemMap} style={{
             padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
             background: C.dev, color: '#fff', fontSize: 11, fontWeight: 600,
@@ -172,9 +211,9 @@ export default function DevChat() {
       }}>
         {QUICK_QUERIES.map(q => (
           <button key={q.query} onClick={() => runQuickQuery(q.query)} disabled={sending} style={{
-            padding: '3px 8px', border: `1px solid ${C.border}`, borderRadius: 4,
+            padding: '3px 8px', border: `1px solid ${q.color || C.border}`, borderRadius: 4,
             cursor: 'pointer', fontSize: 10, fontWeight: 600,
-            background: 'transparent', color: C.muted,
+            background: 'transparent', color: q.color || C.muted,
           }}>{q.label}</button>
         ))}
       </div>
