@@ -85,12 +85,19 @@ if [ "$1" == "--setup" ]; then
             ollama pull qwen2.5-coder:32b
             ollama pull deepseek-r1:32b
             ollama pull qwen2.5:14b
-            # Update .env with large model names
             sed -i 's/OLLAMA_MODEL_CODE=.*/OLLAMA_MODEL_CODE=qwen2.5-coder:32b/' "$BACKEND_DIR/.env"
             sed -i 's/OLLAMA_MODEL_REASON=.*/OLLAMA_MODEL_REASON=deepseek-r1:32b/' "$BACKEND_DIR/.env"
             sed -i 's/OLLAMA_MODEL_FAST=.*/OLLAMA_MODEL_FAST=qwen2.5:14b/' "$BACKEND_DIR/.env"
-        elif [ "$VRAM_MB" -gt 20000 ]; then
-            echo "  Detected ${VRAM_MB}MB VRAM — pulling medium models"
+        elif [ "$VRAM_MB" -gt 12000 ]; then
+            echo "  Detected ${VRAM_MB}MB VRAM — pulling 16GB-class models"
+            ollama pull qwen2.5-coder:14b
+            ollama pull deepseek-r1:14b
+            ollama pull qwen2.5:7b
+            sed -i 's/OLLAMA_MODEL_CODE=.*/OLLAMA_MODEL_CODE=qwen2.5-coder:14b/' "$BACKEND_DIR/.env"
+            sed -i 's/OLLAMA_MODEL_REASON=.*/OLLAMA_MODEL_REASON=deepseek-r1:14b/' "$BACKEND_DIR/.env"
+            sed -i 's/OLLAMA_MODEL_FAST=.*/OLLAMA_MODEL_FAST=qwen2.5:7b/' "$BACKEND_DIR/.env"
+        elif [ "$VRAM_MB" -gt 6000 ]; then
+            echo "  Detected ${VRAM_MB}MB VRAM — pulling 7B models"
             ollama pull qwen2.5-coder:7b
             ollama pull deepseek-r1:7b
             ollama pull qwen2.5:7b
