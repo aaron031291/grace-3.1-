@@ -50,26 +50,25 @@ SKIP_PREFIXES = (
 
 
 def _discover_routes() -> List[dict]:
-    """Discover all GET routes from the running FastAPI app."""
+    """Discover all GET routes from the running FastAPI app via OpenAPI spec."""
     try:
         url = f"{BASE}/openapi.json"
         req = urllib.request.Request(url, method="GET")
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            spec = json.loads(resp.read())
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            raw = resp.read()
+        spec = json.loads(raw)
 
         routes = []
         for path, methods in spec.get("paths", {}).items():
-            skip = False
-            for prefix in SKIP_PREFIXES:
-                if path.startswith(prefix):
-                    skip = True
-                    break
-            if skip:
+            if any(path.startswith(p) for p in SKIP_PREFIXES):
                 continue
-
+            # Skip paths with {parameters} — they need real IDs
+            if "{" in path:
+                continue
             if "get" in methods:
                 routes.append({"path": path, "method": "GET"})
 
+        logger.info("Probe discovered %d GET routes", len(routes))
         return routes
     except Exception as e:
         logger.warning("Route discovery failed: %s", e)
