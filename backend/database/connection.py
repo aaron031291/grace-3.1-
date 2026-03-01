@@ -1,10 +1,16 @@
 """
 Database connection management module.
 Handles engine creation and connection pooling.
+
+SQLite anti-lock strategy:
+  - WAL journal mode for concurrent read/write access
+  - busy_timeout to auto-retry on lock instead of failing immediately
+  - Serialized connection pool (StaticPool) to prevent thread contention
+  - Session-level retry decorator for transient OperationalErrors
 """
 
 from sqlalchemy import create_engine, Engine, event, text
-from sqlalchemy.pool import QueuePool, NullPool
+from sqlalchemy.pool import QueuePool, NullPool, StaticPool
 from typing import Optional
 import logging
 
@@ -12,6 +18,9 @@ from .config import DatabaseConfig, DatabaseType
 
 
 logger = logging.getLogger(__name__)
+
+SQLITE_BUSY_TIMEOUT_MS = 30_000
+SQLITE_CONNECT_TIMEOUT_S = 60
 
 
 class DatabaseConnection:
@@ -93,30 +102,39 @@ class DatabaseConnection:
         
         logger.info(f"Creating database engine for {config.db_type}")
         
-        # SQLite uses a different pool strategy
         if config.db_type == DatabaseType.SQLITE:
-            from sqlalchemy.pool import QueuePool, NullPool
             engine = create_engine(
                 connection_string,
-                connect_args={"check_same_thread": False, "timeout": 15},
-                poolclass=NullPool,
+                connect_args={
+                    "check_same_thread": False,
+                    "timeout": SQLITE_CONNECT_TIMEOUT_S,
+                },
+                poolclass=StaticPool,
                 echo=config.echo,
             )
-            # Enable foreign keys for SQLite
+
             @event.listens_for(engine, "connect")
-            def set_sqlite_pragma(dbapi_conn, connection_record):
+            def _set_sqlite_pragmas(dbapi_conn, connection_record):
                 cursor = dbapi_conn.cursor()
+                cursor.execute("PRAGMA journal_mode=WAL")
+                cursor.execute(f"PRAGMA busy_timeout={SQLITE_BUSY_TIMEOUT_MS}")
                 cursor.execute("PRAGMA foreign_keys=ON")
+                cursor.execute("PRAGMA synchronous=NORMAL")
                 cursor.close()
+
+            logger.info(
+                "SQLite engine configured: WAL mode, "
+                f"busy_timeout={SQLITE_BUSY_TIMEOUT_MS}ms, "
+                f"connect_timeout={SQLITE_CONNECT_TIMEOUT_S}s"
+            )
         else:
-            # Use QueuePool for remote databases with enhanced scalability
             engine = create_engine(
                 connection_string,
                 poolclass=QueuePool,
                 pool_size=config.pool_size,
                 max_overflow=config.max_overflow,
                 pool_pre_ping=config.pool_pre_ping,
-                pool_recycle=getattr(config, 'pool_recycle', 3600),  # Recycle connections
+                pool_recycle=getattr(config, 'pool_recycle', 3600),
                 echo=config.echo,
             )
         

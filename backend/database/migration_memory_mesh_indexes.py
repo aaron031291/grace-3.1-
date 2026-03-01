@@ -61,7 +61,8 @@ def safe_create_index(cursor, index_name: str, table: str, columns: str):
 def upgrade(db_path: str = "backend/data/grace.db"):
     """Add composite indexes for Memory Mesh scalability"""
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=60)
+    conn.execute("PRAGMA busy_timeout=60000")
     cursor = conn.cursor()
     created_count = 0
 
@@ -148,7 +149,8 @@ def upgrade(db_path: str = "backend/data/grace.db"):
 def downgrade(db_path: str = "backend/data/grace.db"):
     """Remove composite indexes"""
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=60)
+    conn.execute("PRAGMA busy_timeout=60000")
     cursor = conn.cursor()
 
     try:
