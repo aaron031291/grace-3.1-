@@ -1,0 +1,22 @@
+# Grace OS — Trust Thresholds Configuration
+# Score weights and gate thresholds for the deployment pipeline.
+
+gates:
+  deploy: 85.0      # Minimum aggregate trust to auto-deploy
+  warn: 70.0        # Emit warning below this threshold
+  abort: 50.0       # Abort pipeline below this threshold
+
+layer_weights:
+  L1_Runtime: 0.8
+  L2_Planning: 1.0
+  L3_Proposer: 0.9
+  L4_Evaluator: 1.0
+  L5_Simulation: 1.1
+  L6_Codegen: 1.0
+  L7_Testing: 1.2    # Testing weighted higher
+  L8_Verification: 1.2  # Verification weighted higher
+  L9_Deployment: 1.0
+
+decay:
+  rate_per_second: 0.01   # 1% decay per second of inactivity
+  max_age_seconds: 300    # Re-verify if older than 5 minutes

@@ -4,14 +4,19 @@ Grace OS — Central Message Bus
 The central nervous system for Grace OS. 
 Every inter-layer call is a message routed through this bus. 
 Provides delivery, exponential backoff retries, and cycle detection.
+Integrates with TrustScorekeeper and EventSystem for full observability.
 """
 
 import asyncio
 import logging
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 import time
 
 from .message_protocol import LayerMessage, LayerResponse
+
+if TYPE_CHECKING:
+    from .trust_scorekeeper import TrustScorekeeper
+    from .event_system import EventSystem
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +28,17 @@ class MessageBus:
     Routes messages between Grace OS layers.
     """
     
-    def __init__(self):
+    def __init__(
+        self,
+        trust_scorekeeper: Optional["TrustScorekeeper"] = None,
+        event_system: Optional["EventSystem"] = None,
+    ):
         # Maps message_type -> list of handlers
         self._subscriptions: Dict[str, List[MessageHandler]] = {}
+        
+        # Cross-cutting modules
+        self.trust_scorekeeper = trust_scorekeeper
+        self.event_system = event_system
         
         # Configuration
         self._max_retries = 3
@@ -88,10 +101,35 @@ class MessageBus:
         # the execution is immediate. The priority field acts as a metadata parameter for handlers
         # that might internalize their own queueing.
         
+        # Emit MESSAGE_SENT event
+        if self.event_system:
+            self.event_system.emit(
+                "MESSAGE_SENT", message.trace_id, message.from_layer,
+                {"to": message.to_layer, "type": message.message_type, "id": message.id}
+            )
+
         for handler in handlers:
             response = await self._execute_with_retry(handler, message)
             if response:
                 response.duration_ms = int((time.time() - start_time) * 1000)
+                
+                # Record trust score
+                if self.trust_scorekeeper and response.trust_score > 0:
+                    self.trust_scorekeeper.record_score(
+                        trace_id=message.trace_id,
+                        layer=response.from_layer,
+                        score=response.trust_score,
+                        message_type=message.message_type,
+                        message_id=message.id,
+                    )
+                
+                # Emit RESPONSE_RETURNED event
+                if self.event_system:
+                    self.event_system.emit(
+                        "RESPONSE_RETURNED", message.trace_id, response.from_layer,
+                        {"status": response.status, "trust": response.trust_score, "ms": response.duration_ms}
+                    )
+                
                 return response
 
         return self._build_error_response(

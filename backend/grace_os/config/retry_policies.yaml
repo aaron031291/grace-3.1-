@@ -1,0 +1,68 @@
+# Grace OS — Retry Policies
+# Backoff settings, max retries, and fallback layer configurations.
+
+default:
+  max_retries: 3
+  base_backoff_ms: 100
+  backoff_multiplier: 2     # exponential: 100ms -> 200ms -> 400ms
+  max_backoff_ms: 5000
+
+per_layer:
+  L2_Planning:
+    max_retries: 2
+    fallback_layers: []
+
+  L3_Proposer:
+    max_retries: 3
+    fallback_layers: []
+
+  L4_Evaluator:
+    max_retries: 2
+    fallback_layers: [L3_Proposer]  # Ask L3 for more options
+
+  L5_Simulation:
+    max_retries: 1
+    fallback_layers: []  # Simulation is optional, don't block pipeline
+
+  L6_Codegen:
+    max_retries: 3
+    fallback_layers: []
+
+  L7_Testing:
+    max_retries: 3
+    fallback_layers: [L6_Codegen]   # Fix code on test failure
+
+  L8_Verification:
+    max_retries: 2
+    fallback_layers: [L6_Codegen]   # Regenerate on verification failure
+
+  L9_Deployment:
+    max_retries: 1
+    fallback_layers: [L2_Planning]  # Re-plan on gate failure
+
+self_healing_loops:
+  code_fix:
+    trigger: L7_Testing
+    flow: [L6_Codegen, L7_Testing]
+    max_cycles: 3
+
+  re_plan:
+    trigger: L4_Evaluator
+    flow: [L2_Planning, L3_Proposer, L4_Evaluator]
+    max_cycles: 2
+
+  fact_check:
+    trigger: L8_Verification
+    flow: [L6_Codegen, L5_Simulation, L8_Verification]
+    max_cycles: 2
+
+  environment_fix:
+    trigger: L7_Testing
+    flow: [L1_Runtime, L7_Testing]
+    max_cycles: 2
+
+  escalation:
+    trigger: any
+    flow: [L9_Deployment]
+    max_cycles: 1
+    action: human_review

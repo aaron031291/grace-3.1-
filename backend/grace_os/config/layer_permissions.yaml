@@ -1,0 +1,80 @@
+# Grace OS — Layer Permissions
+# Defines which MCP tools each layer is allowed to use.
+# Principle of least privilege: layers only access what they need.
+
+L1_Runtime:
+  allowed_tools:
+    - terminal_exec
+    - terminal_background
+    - terminal_kill
+    - file_read
+    - dir_list
+
+L2_Planning:
+  allowed_tools:
+    - file_read
+    - file_search
+    - text_search
+    - dir_list
+    - git_status
+    - git_log
+    - db_query
+
+L3_Proposer:
+  allowed_tools:
+    - file_read
+    - web_search
+    - web_fetch
+    - db_query
+
+L4_Evaluator:
+  allowed_tools:
+    - file_read
+    - db_query
+
+L5_Simulation:
+  allowed_tools:
+    - file_read
+    - file_search
+    - text_search
+    - dir_list
+    - db_query
+  # NOTE: L5 should NEVER write files or run terminals
+
+L6_Codegen:
+  allowed_tools:
+    - file_read
+    - file_write
+    - file_edit
+    - file_delete
+    - file_move
+    - dir_create
+    - db_query
+
+L7_Testing:
+  allowed_tools:
+    - terminal_exec
+    - terminal_background
+    - terminal_kill
+    - file_read
+    - db_write
+
+L8_Verification:
+  allowed_tools:
+    - file_read
+    - file_search
+    - text_search
+    - web_search
+    - web_fetch
+    - git_diff
+    - db_query
+    - db_write
+
+L9_Deployment:
+  allowed_tools:
+    - git_status
+    - git_diff
+    - git_commit
+    - git_branch
+    - git_log
+    - db_write

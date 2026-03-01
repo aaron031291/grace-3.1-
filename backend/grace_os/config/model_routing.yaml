@@ -1,0 +1,38 @@
+# Grace OS — Model Routing Configuration
+# Defines which LLM model to use for different task types.
+
+default_model: "gpt-4o"
+
+routing:
+  # Complex reasoning tasks -> strong model
+  reasoning:
+    model: "gpt-4o"
+    max_tokens: 4096
+    temperature: 0.3
+    layers: [L2_Planning, L4_Evaluator, L5_Simulation, L8_Verification]
+
+  # Code generation -> code-optimized model
+  codegen:
+    model: "gpt-4o"
+    max_tokens: 8192
+    temperature: 0.2
+    layers: [L6_Codegen]
+
+  # Creative tasks -> higher temperature
+  creative:
+    model: "gpt-4o"
+    max_tokens: 4096
+    temperature: 0.7
+    layers: [L3_Proposer]
+
+  # Quick formatting/simple tasks -> fast model
+  fast:
+    model: "gpt-4o-mini"
+    max_tokens: 2048
+    temperature: 0.1
+    layers: []
+
+token_budget:
+  max_per_session: 100000
+  max_per_layer_call: 8192
+  warning_threshold: 80000
