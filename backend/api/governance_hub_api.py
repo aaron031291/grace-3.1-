@@ -111,19 +111,38 @@ async def governance_dashboard():
     except Exception:
         result["approvals"] = {"pending_count": 0}
 
-    # Healing status
+    # Healing status — use proactive engine if available, fall back to old system
     try:
-        from cognitive.autonomous_healing_system import AutonomousHealingSystem
-        healer = AutonomousHealingSystem()
-        status = healer.get_system_status()
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        engine_status = engine.get_status()
         result["healing"] = {
             "available": True,
-            "health_status": status.get("health_status", "unknown") if isinstance(status, dict) else "unknown",
-            "anomalies_detected": status.get("anomalies_detected", 0) if isinstance(status, dict) else 0,
-            "actions_executed": status.get("actions_executed", 0) if isinstance(status, dict) else 0,
+            "health_status": (
+                "healthy" if engine_status.get("active_issues", 0) == 0
+                else "degraded" if engine_status.get("active_issues", 0) < 3
+                else "critical"
+            ),
+            "running": engine_status.get("running", False),
+            "active_issues": engine_status.get("active_issues", 0),
+            "total_healed": engine_status.get("total_healed", 0),
+            "limitations": engine_status.get("limitations_count", 0),
+            "stubs_detected": engine_status.get("stubs_detected", 0),
+            "kimi_enabled": engine_status.get("kimi_enabled", False),
         }
     except Exception:
-        result["healing"] = {"available": False}
+        try:
+            from cognitive.autonomous_healing_system import AutonomousHealingSystem
+            healer = AutonomousHealingSystem()
+            status = healer.get_system_status()
+            result["healing"] = {
+                "available": True,
+                "health_status": status.get("health_status", "unknown") if isinstance(status, dict) else "unknown",
+                "anomalies_detected": status.get("anomalies_detected", 0) if isinstance(status, dict) else 0,
+                "actions_executed": status.get("actions_executed", 0) if isinstance(status, dict) else 0,
+            }
+        except Exception:
+            result["healing"] = {"available": False}
 
     # Learning status
     try:
@@ -306,9 +325,40 @@ async def get_healing_actions():
 
 @router.post("/healing/trigger")
 async def trigger_healing(request: HealingTriggerRequest, background_tasks: BackgroundTasks):
-    """Trigger a self-healing action."""
+    """Trigger a self-healing action — routes through proactive engine when available."""
     from api._genesis_tracker import track
 
+    # Try proactive engine first
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+
+        action_remap = {
+            "gc_collect": "memory_pressure",
+            "cache_flush": "memory_pressure",
+            "buffer_clear": "memory_pressure",
+            "connection_reset": "connection_pool_reset",
+            "session_cleanup": "memory_pressure",
+            "health_check": "database_reconnect",
+            "embedding_reload": "embedding_model_reload",
+            "log_rotation": "log_rotation",
+        }
+
+        proactive_action = action_remap.get(request.action, request.action)
+        result = engine.trigger_manual_heal(proactive_action)
+
+        track(
+            key_type="system",
+            what=f"Self-healing triggered: {request.action} (via proactive engine)",
+            how="POST /api/governance-hub/healing/trigger",
+            output_data=result,
+            tags=["healing", request.action, "proactive"],
+        )
+        return {"triggered": True, "action": request.action, "status": "executed", "result": result}
+    except Exception:
+        pass
+
+    # Fall back to legacy handlers
     action_map = {
         "gc_collect": _heal_gc,
         "cache_flush": _heal_cache,
@@ -419,7 +469,123 @@ def _run_study(topic: str):
 
 
 # ---------------------------------------------------------------------------
-# 6. Performance metrics
+# 6. Proactive Self-Healing — real-time engine status, capabilities, limitations
+# ---------------------------------------------------------------------------
+
+@router.get("/proactive-healing/status")
+async def get_proactive_healing_status():
+    """Get full status of the proactive self-healing engine."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return {
+            "status": engine.get_status(),
+            "capabilities": engine.get_capabilities(),
+            "limitations": engine.get_limitations(),
+            "trend_data": engine.get_trend_data(),
+        }
+    except Exception as e:
+        return {"error": str(e), "status": {"running": False}}
+
+
+@router.get("/proactive-healing/issues")
+async def get_proactive_healing_issues():
+    """Get active and recently resolved issues."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return {
+            "active": engine.get_active_issues(),
+            "resolved": engine.get_resolved_issues(),
+            "healing_log": engine.get_healing_log(),
+        }
+    except Exception as e:
+        return {"active": [], "resolved": [], "healing_log": [], "error": str(e)}
+
+
+@router.get("/proactive-healing/stubs")
+async def get_detected_stubs():
+    """Get detected placeholder/stub code that needs implementation."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return {"stubs": engine.get_stubs(), "count": len(engine.get_stubs())}
+    except Exception as e:
+        return {"stubs": [], "count": 0, "error": str(e)}
+
+
+@router.get("/proactive-healing/capabilities")
+async def get_healing_capabilities():
+    """Get what the self-healing system can and cannot do."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        caps = engine.get_capabilities()
+        lims = engine.get_limitations()
+        return {
+            "capabilities": caps,
+            "limitations": lims,
+            "total_capabilities": len(caps),
+            "total_limitations": len(lims),
+            "autonomous_capabilities": sum(
+                1 for c in caps.values() if c.get("autonomous")
+            ),
+            "manual_capabilities": sum(
+                1 for c in caps.values() if not c.get("autonomous")
+            ),
+        }
+    except Exception as e:
+        return {"capabilities": {}, "limitations": [], "error": str(e)}
+
+
+@router.post("/proactive-healing/trigger")
+async def trigger_proactive_healing(
+    request: HealingTriggerRequest, background_tasks: BackgroundTasks
+):
+    """Trigger a specific healing action through the proactive engine."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        result = engine.trigger_manual_heal(request.action)
+
+        from api._genesis_tracker import track
+        track(
+            key_type="system",
+            what=f"Proactive healing triggered: {request.action}",
+            how="POST /api/governance-hub/proactive-healing/trigger",
+            output_data=result,
+            tags=["healing", "proactive", request.action],
+        )
+
+        return {"triggered": True, "action": request.action, "result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/proactive-healing/full-diagnostic")
+async def run_full_diagnostic():
+    """Run a comprehensive diagnostic scan."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return engine.run_full_diagnostic()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/proactive-healing/notifications")
+async def get_governance_notifications():
+    """Get self-healing notifications for the governance panel."""
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return {"notifications": engine.get_governance_notifications()}
+    except Exception as e:
+        return {"notifications": [], "error": str(e)}
+
+
+# ---------------------------------------------------------------------------
+# 7. Performance metrics
 # ---------------------------------------------------------------------------
 
 @router.get("/performance")
