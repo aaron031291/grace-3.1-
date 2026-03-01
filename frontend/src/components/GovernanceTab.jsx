@@ -1270,6 +1270,258 @@ function GenesisKeysPanel() {
   );
 }
 
+// ── Sub-tab: Self-Healing / Self-Learning / Self-Building ──────────────
+function SelfHealingPanel() {
+  const [status, setStatus] = useState(null);
+  const [issues, setIssues] = useState(null);
+  const [stubs, setStubs] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [diagnosticRunning, setDiagnosticRunning] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [expandedSection, setExpandedSection] = useState('status');
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const [sRes, iRes, stubRes] = await Promise.allSettled([
+      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/status`),
+      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/issues`),
+      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/stubs`),
+    ]);
+    if (sRes.status === 'fulfilled' && sRes.value.ok) setStatus(await sRes.value.json());
+    if (iRes.status === 'fulfilled' && iRes.value.ok) setIssues(await iRes.value.json());
+    if (stubRes.status === 'fulfilled' && stubRes.value.ok) setStubs(await stubRes.value.json());
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { refresh(); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
+
+  const runDiagnostic = async () => {
+    setDiagnosticRunning(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/full-diagnostic`, { method: 'POST' });
+      if (res.ok) {
+        setNotification('Full diagnostic completed');
+        refresh();
+      }
+    } catch { /* silent */ }
+    finally { setDiagnosticRunning(false); setTimeout(() => setNotification(null), 3000); }
+  };
+
+  const triggerHeal = async (action) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/trigger`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      if (res.ok) {
+        setNotification(`Healing action '${action}' executed`);
+        setTimeout(refresh, 1000);
+      }
+    } catch { /* silent */ }
+    finally { setTimeout(() => setNotification(null), 3000); }
+  };
+
+  if (loading && !status) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading self-healing status...</div>;
+
+  const s = status?.status || {};
+  const caps = status?.capabilities || {};
+  const lims = status?.limitations || [];
+  const activeIssues = issues?.active || [];
+  const resolvedIssues = issues?.resolved || [];
+  const healingLog = issues?.healing_log || [];
+  const detectedStubs = stubs?.stubs || [];
+  const trendData = status?.trend_data || {};
+
+  const engineHealthColor = s.running ? (s.active_issues === 0 ? C.success : s.active_issues < 3 ? C.warn : C.error) : C.dim;
+  const engineStatusLabel = s.running ? (s.active_issues === 0 ? 'HEALTHY' : s.active_issues < 3 ? 'DEGRADED' : 'CRITICAL') : 'OFFLINE';
+
+  const toggle = (section) => setExpandedSection(prev => prev === section ? null : section);
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      {notification && (
+        <div style={{ padding: '8px 16px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>
+      )}
+
+      {/* Engine Status Header */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Engine Status</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: engineHealthColor }}>{engineStatusLabel}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{s.running ? `Cycle #${s.cycle_count || 0}` : 'Not running'}</div>
+        </div>
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Auto-Healed</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: C.success }}>{s.total_healed || 0}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{resolvedIssues.length} resolved</div>
+        </div>
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Active Issues</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: activeIssues.length > 0 ? C.error : C.success }}>{activeIssues.length}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{(detectedStubs || []).length} stubs</div>
+        </div>
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Limitations</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: lims.length > 0 ? C.warn : C.success }}>{lims.length}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>expand below</div>
+        </div>
+      </div>
+
+      {/* Action buttons */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <button onClick={runDiagnostic} disabled={diagnosticRunning} style={{ ...btn(C.accent), opacity: diagnosticRunning ? 0.5 : 1 }}>
+          {diagnosticRunning ? '⏳ Running...' : '🔍 Run Full Diagnostic'}
+        </button>
+        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh</button>
+        <span style={{ marginLeft: 'auto', fontSize: 10, color: C.dim, alignSelf: 'center' }}>
+          Kimi: {s.kimi_enabled ? '✓ ON' : '✕ OFF'} | Auto-heal: {s.auto_heal_enabled ? '✓ ON' : '✕ OFF'} | Interval: {s.check_interval_seconds}s
+        </span>
+      </div>
+
+      {/* Capabilities Section */}
+      <Card title={`Self-Healing Capabilities (${Object.keys(caps).length})`} extra={
+        <span onClick={() => toggle('caps')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'caps' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'caps' && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+            {Object.entries(caps).map(([key, cap]) => (
+              <div key={key} style={{ padding: '8px 10px', background: C.bg, borderRadius: 6, border: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 8, background: cap.autonomous ? C.success + '30' : C.warn + '30', color: cap.autonomous ? C.success : C.warn, fontWeight: 600 }}>
+                    {cap.autonomous ? 'AUTO' : 'MANUAL'}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 600, flex: 1 }}>{key.replace(/_/g, ' ')}</span>
+                  <span style={{ fontSize: 10, color: C.dim }}>{cap.risk} risk</span>
+                </div>
+                <div style={{ fontSize: 10, color: C.muted }}>{cap.description}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <MeterBar value={(cap.success_rate || 0) * 100} color={cap.success_rate > 0.8 ? C.success : C.warn} />
+                  <span style={{ fontSize: 10, color: C.dim, flexShrink: 0 }}>{((cap.success_rate || 0) * 100).toFixed(0)}%</span>
+                  {cap.autonomous && <button onClick={() => triggerHeal(key)} style={{ ...btn(C.bgDark), fontSize: 9, padding: '2px 8px' }}>▶</button>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {/* Limitations Section */}
+      <Card title={`Limitations & Expansion Needed (${lims.length})`} extra={
+        <span onClick={() => toggle('lims')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'lims' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'lims' && (
+          lims.length === 0 ? (
+            <div style={{ padding: 12, textAlign: 'center', color: C.dim, fontSize: 12 }}>No limitations registered yet</div>
+          ) : lims.map((lim, i) => (
+            <div key={i} style={{ padding: '8px 10px', marginBottom: 6, background: C.bg, borderRadius: 6, border: `1px solid ${C.warn}40` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                <span style={{ fontSize: 12 }}>⚠️</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: C.warn }}>{lim.type?.replace(/_/g, ' ') || 'Unknown'}</span>
+                {lim.count && <span style={{ fontSize: 10, color: C.dim }}>({lim.count} items)</span>}
+              </div>
+              <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>{lim.message}</div>
+              {lim.action_required && (
+                <div style={{ fontSize: 10, color: C.accent, fontStyle: 'italic' }}>Action needed: {lim.action_required}</div>
+              )}
+            </div>
+          ))
+        )}
+      </Card>
+
+      {/* Active Issues */}
+      <Card title={`Active Issues (${activeIssues.length})`} extra={
+        <span onClick={() => toggle('active')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'active' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'active' && (
+          activeIssues.length === 0 ? (
+            <div style={{ padding: 12, textAlign: 'center', color: C.success, fontSize: 12 }}>No active issues — system healthy</div>
+          ) : activeIssues.map((issue, i) => (
+            <div key={i} style={{ padding: '6px 10px', marginBottom: 4, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}`, fontSize: 11 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <StatusBadge status={issue.severity || 'unknown'} />
+                <span style={{ flex: 1 }}>{issue.message}</span>
+                <span style={{ fontSize: 9, color: C.dim }}>{issue.service}</span>
+              </div>
+              {issue.kimi_diagnosis?.diagnosis && (
+                <div style={{ marginTop: 4, padding: '4px 8px', background: C.bgDark, borderRadius: 4, fontSize: 10, color: C.muted }}>
+                  🤖 Kimi: {issue.kimi_diagnosis.diagnosis.substring(0, 200)}...
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </Card>
+
+      {/* Healing Log */}
+      <Card title={`Healing Log (${healingLog.length})`} extra={
+        <span onClick={() => toggle('log')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'log' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'log' && (
+          healingLog.length === 0 ? (
+            <div style={{ padding: 12, textAlign: 'center', color: C.dim, fontSize: 12 }}>No healing actions yet</div>
+          ) : healingLog.slice(-20).reverse().map((entry, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
+              <span style={{ color: entry.outcome === 'healed' ? C.success : C.error }}>{entry.outcome === 'healed' ? '✓' : '✕'}</span>
+              <span style={{ flex: 1 }}>{entry.action?.replace(/_/g, ' ')}</span>
+              <span style={{ fontSize: 10, color: C.dim }}>{entry.issue?.substring(0, 40)}</span>
+              {entry.manual && <span style={{ fontSize: 9, padding: '1px 4px', borderRadius: 4, background: C.info + '30', color: C.info }}>manual</span>}
+              <span style={{ fontSize: 9, color: C.dim }}>{entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString() : ''}</span>
+            </div>
+          ))
+        )}
+      </Card>
+
+      {/* Detected Stubs */}
+      <Card title={`Placeholder/Stub Code (${(detectedStubs || []).length})`} extra={
+        <span onClick={() => toggle('stubs')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'stubs' ? '▼' : '▶'}</span>
+      }>
+        {expandedSection === 'stubs' && (
+          (detectedStubs || []).length === 0 ? (
+            <div style={{ padding: 12, textAlign: 'center', color: C.success, fontSize: 12 }}>No stubs detected</div>
+          ) : (detectedStubs || []).slice(0, 30).map((stub, i) => (
+            <div key={i} style={{ padding: '4px 8px', marginBottom: 2, fontSize: 10, fontFamily: 'monospace', background: C.bg, borderRadius: 3, borderLeft: `2px solid ${C.warn}` }}>
+              <span style={{ color: C.muted }}>{stub.file}:{stub.line}</span>
+              <span style={{ color: C.dim, marginLeft: 8 }}>{stub.content}</span>
+            </div>
+          ))
+        )}
+      </Card>
+
+      {/* Trend Data */}
+      {trendData.memory_samples?.length > 0 && (
+        <Card title="Resource Trends" extra={
+          <span onClick={() => toggle('trends')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'trends' ? '▼' : '▶'}</span>
+        }>
+          {expandedSection === 'trends' && (
+            <div>
+              <div style={{ fontSize: 11, color: C.muted, marginBottom: 6 }}>Memory Usage (last {trendData.sample_count} samples)</div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 40 }}>
+                {(trendData.memory_samples || []).map((val, i) => (
+                  <div key={i} style={{
+                    flex: 1, height: `${Math.max(2, val || 0) * 0.4}px`,
+                    background: val > 85 ? C.error : val > 70 ? C.warn : C.success,
+                    borderRadius: '2px 2px 0 0', minWidth: 2,
+                  }} title={`${val?.toFixed(1)}%`} />
+                ))}
+              </div>
+              <div style={{ fontSize: 11, color: C.muted, marginTop: 8 }}>Error Counts (last {trendData.sample_count} samples)</div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 30 }}>
+                {(trendData.error_counts || []).map((val, i) => (
+                  <div key={i} style={{
+                    flex: 1, height: `${Math.max(2, (val || 0) * 3)}px`,
+                    background: val > 10 ? C.error : val > 3 ? C.warn : C.success,
+                    borderRadius: '2px 2px 0 0', minWidth: 2,
+                  }} title={`${val} errors`} />
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+    </div>
+  );
+}
+
 // ── Main GovernanceTab ────────────────────────────────────────────────
 export default function GovernanceTab() {
   const [activeTab, setActiveTab] = useState('approvals');
@@ -1286,6 +1538,7 @@ export default function GovernanceTab() {
     { id: 'scores', label: 'Scores', icon: '📊' },
     { id: 'performance', label: 'Performance', icon: '⚡' },
     { id: 'actions', label: 'Actions', icon: '🔧' },
+    { id: 'selfhealing', label: 'Self-Healing', icon: '🩺' },
     { id: 'rules', label: 'Rules & Persona', icon: '⚖️' },
     { id: 'genesis', label: 'Genesis Keys', icon: '🔑' },
   ];
@@ -1343,6 +1596,7 @@ export default function GovernanceTab() {
         {activeTab === 'scores' && <ScoresPanel />}
         {activeTab === 'performance' && <PerformancePanel />}
         {activeTab === 'actions' && <ActionsPanel />}
+        {activeTab === 'selfhealing' && <SelfHealingPanel />}
         {activeTab === 'rules' && <RulesPersonaPanel />}
         {activeTab === 'genesis' && <GenesisKeysPanel />}
       </div>
