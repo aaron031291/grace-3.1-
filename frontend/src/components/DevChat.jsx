@@ -28,6 +28,8 @@ const QUICK_QUERIES = [
   { label: '🤖 Models', query: 'models', color: '#673ab7' },
   { label: '📦 Components', query: 'components', color: '#3f51b5' },
   { label: '🔑 Genesis', query: 'genesis', color: '#009688' },
+  { label: '📚 Learning', query: 'learning', color: '#e91e63' },
+  { label: '⚡ Events', query: 'events', color: '#ff9800' },
 ];
 
 export default function DevChat() {

@@ -153,12 +153,16 @@ async def dev_query(req: DevQueryRequest):
         return _query_health()
     elif query_type == "stress":
         return _run_stress_test()
+    elif query_type == "learning":
+        return _query_learning()
+    elif query_type == "events":
+        return _query_events()
     else:
         return {
             "error": f"Unknown query type: {query_type}",
             "available": ["apis", "components", "memory", "graphs", "pipeline",
                          "genesis", "gaps", "architecture", "models", "verification",
-                         "diagnostics", "health", "stress"],
+                         "diagnostics", "health", "stress", "learning", "events"],
         }
 
 
@@ -203,6 +207,31 @@ def _build_dev_context(req: DevChatRequest) -> str:
     diag = _query_diagnostics()
     if diag.get("latest"):
         sections.append("## Latest Diagnostics\n" + json.dumps(diag["latest"], indent=2)[:1500])
+
+    # ALWAYS: Learning memory stats (what Grace has actually learned)
+    try:
+        from database.session import get_session
+        from cognitive.memory_mesh_integration import MemoryMeshIntegration
+        sess = next(get_session())
+        mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=Path("knowledge_base"))
+        learning_stats = mesh.get_memory_mesh_stats()
+        sections.append("## Learning Memory (LIVE)\n" + json.dumps(learning_stats, indent=2)[:1500])
+        sess.close()
+    except Exception:
+        pass
+
+    # ALWAYS: Recent events from event bus
+    try:
+        from cognitive.event_bus import get_recent_events
+        events = get_recent_events(limit=15)
+        if events:
+            sections.append("## Recent System Events\n" + json.dumps(events[:15], indent=2)[:1500])
+    except Exception:
+        pass
+
+    # ALWAYS: Genesis key recent history
+    genesis = _query_genesis()
+    sections.append("## Genesis Keys\n" + json.dumps(genesis, indent=2)[:1000])
 
     # Architecture
     sections.append("## Architecture\n" + json.dumps(_query_architecture(), indent=2)[:2000])
@@ -376,14 +405,27 @@ def _query_pipeline() -> Dict[str, Any]:
 
 
 def _query_genesis() -> Dict[str, Any]:
-    """Get genesis key system info."""
+    """Get genesis key system info with recent history."""
     try:
         from database.session import get_session
         from models.genesis_key_models import GenesisKey
         sess = next(get_session())
         total = sess.query(GenesisKey).count()
+        recent = sess.query(GenesisKey).order_by(
+            GenesisKey.when_timestamp.desc()
+        ).limit(10).all()
+        recent_keys = []
+        for k in recent:
+            recent_keys.append({
+                "key_id": k.key_id,
+                "type": k.key_type.value if hasattr(k.key_type, 'value') else str(k.key_type),
+                "what": k.what_description[:120] if k.what_description else "",
+                "who": k.who_actor,
+                "when": str(k.when_timestamp) if k.when_timestamp else "",
+                "is_error": k.is_error,
+            })
         sess.close()
-        return {"total_keys": total, "system": "active"}
+        return {"total_keys": total, "system": "active", "recent_keys": recent_keys}
     except Exception:
         return {"system": "unavailable"}
 
@@ -494,6 +536,31 @@ def _run_stress_test() -> Dict[str, Any]:
         return asdict(report)
     except Exception as e:
         return {"error": str(e)}
+
+
+def _query_learning() -> Dict[str, Any]:
+    """Get live learning memory stats — what Grace has actually learned."""
+    try:
+        from database.session import get_session
+        from cognitive.memory_mesh_integration import MemoryMeshIntegration
+        from pathlib import Path
+        sess = next(get_session())
+        mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=Path("knowledge_base"))
+        stats = mesh.get_memory_mesh_stats()
+        sess.close()
+        return stats
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _query_events(limit: int = 30) -> Dict[str, Any]:
+    """Get recent events from the event bus."""
+    try:
+        from cognitive.event_bus import get_recent_events
+        events = get_recent_events(limit=limit)
+        return {"events": events, "total": len(events)}
+    except Exception as e:
+        return {"error": str(e), "events": []}
 
 
 # Need this import for _query_diagnostics

@@ -344,28 +344,63 @@ class ContinuousLearningOrchestrator:
             logger.error(f"[CONTINUOUS_LEARNING] Ingestion check error: {e}")
 
     def _run_learning_cycle(self):
-        """Run autonomous learning cycle"""
+        """Run autonomous learning cycle — actually ingest into memory mesh."""
         self.last_learning_cycle = datetime.now()
 
-        if not self.learning_orchestrator:
-            return
-
         try:
-            # Process learning queue
-            if self.learning_queue:
-                logger.info(f"[CONTINUOUS_LEARNING] Running learning cycle with {len(self.learning_queue)} items")
+            if not self.learning_queue:
+                self.stats["total_learning_cycles"] += 1
+                return
 
-                # Take up to 10 items for this cycle
-                items = self.learning_queue[:10]
-                self.learning_queue = self.learning_queue[10:]
+            logger.info(f"[CONTINUOUS_LEARNING] Learning cycle: {len(self.learning_queue)} items")
 
-                for item in items:
-                    # Trigger autonomous learning
-                    # This would integrate with the autonomous learning API
+            items = self.learning_queue[:10]
+            self.learning_queue = self.learning_queue[10:]
+            learned = 0
+
+            for item in items:
+                try:
+                    from database.session import get_session
+                    from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                    from pathlib import Path
+                    import json
+
+                    sess = next(get_session())
+                    mesh = MemoryMeshIntegration(
+                        session=sess,
+                        knowledge_base_path=Path("knowledge_base"),
+                    )
+
+                    content = ""
+                    source_path = item.get("path", item.get("file_path", ""))
+                    if source_path:
+                        try:
+                            content = Path(source_path).read_text(errors="ignore")[:2000]
+                        except Exception:
+                            content = str(item)[:2000]
+                    else:
+                        content = str(item)[:2000]
+
+                    mesh.ingest_learning_experience(
+                        experience_type="knowledge_ingestion",
+                        context=json.dumps({
+                            "source": source_path or "learning_queue",
+                            "content_preview": content[:500],
+                        }),
+                        action_taken=json.dumps({"action": "ingest", "item": str(item)[:200]}),
+                        outcome=json.dumps({"status": "ingested"}),
+                        source="continuous_learning",
+                    )
+                    sess.close()
+                    learned += 1
                     self.stats["knowledge_items_learned"] += 1
 
-                self.stats["total_learning_cycles"] += 1
-                logger.info(f"[CONTINUOUS_LEARNING] Learning cycle complete")
+                except Exception as e:
+                    logger.debug(f"[CONTINUOUS_LEARNING] Item learn failed: {e}")
+
+            self.stats["total_learning_cycles"] += 1
+            if learned > 0:
+                logger.info(f"[CONTINUOUS_LEARNING] Learned {learned}/{len(items)} items into memory mesh")
 
         except Exception as e:
             logger.error(f"[CONTINUOUS_LEARNING] Learning cycle error: {e}")

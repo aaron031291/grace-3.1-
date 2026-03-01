@@ -209,6 +209,29 @@ class SelfHealingTracker:
         except Exception:
             pass
 
+        # Feed healing outcome into learning memory so Grace learns from healing
+        try:
+            from database.session import get_session
+            from cognitive.memory_mesh_integration import MemoryMeshIntegration
+            from pathlib import Path
+            import json as _json
+
+            learn_sess = next(get_session())
+            mesh = MemoryMeshIntegration(
+                session=learn_sess,
+                knowledge_base_path=Path("knowledge_base"),
+            )
+            mesh.ingest_learning_experience(
+                experience_type="success" if comp.status == "healthy" else "failure",
+                context=_json.dumps({"component": component, "error": error[:500]}),
+                action_taken=_json.dumps(heal_result),
+                outcome=_json.dumps({"new_status": comp.status, "healed": comp.status == "healthy"}),
+                source="self_healing_tracker",
+            )
+            learn_sess.close()
+        except Exception:
+            pass
+
     def get_system_health(self) -> Dict[str, Any]:
         """Get complete system health overview."""
         self.initialize()
