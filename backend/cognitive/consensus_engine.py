@@ -49,34 +49,47 @@ logger = logging.getLogger(__name__)
 
 BATCH_DIR = Path(__file__).parent.parent / "data" / "consensus_batches"
 
-MODEL_REGISTRY = {
-    "opus": {
-        "name": "Opus 4.6 (Claude)",
-        "provider": "opus",
-        "strengths": ["deep reasoning", "architecture", "audit", "code review"],
-        "cost_tier": "cloud",
-    },
-    "kimi": {
-        "name": "Kimi K2.5 (Moonshot)",
-        "provider": "kimi",
-        "strengths": ["long context (262K)", "document analysis", "system reasoning"],
-        "cost_tier": "cloud",
-    },
-    "qwen": {
-        "name": "Qwen 2.5 Coder (Local)",
-        "provider": "ollama",
-        "task": "code",
-        "strengths": ["code generation", "fast iteration", "local/private", "free"],
-        "cost_tier": "free",
-    },
-    "reasoning": {
-        "name": "DeepSeek R1 (Local)",
-        "provider": "ollama",
-        "task": "reason",
-        "strengths": ["chain-of-thought", "mathematical reasoning", "problem decomposition"],
-        "cost_tier": "free",
-    },
-}
+def _build_model_registry() -> dict:
+    """Build model registry using the actual configured model names."""
+    try:
+        from settings import settings
+        reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
+        code_model = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen2.5-coder:7b"
+    except Exception:
+        reason_model = "deepseek-r1:7b"
+        code_model = "qwen2.5-coder:7b"
+
+    return {
+        "opus": {
+            "name": "Opus 4.6 (Claude)",
+            "provider": "opus",
+            "strengths": ["deep reasoning", "architecture", "audit", "code review"],
+            "cost_tier": "cloud",
+        },
+        "kimi": {
+            "name": "Kimi K2.5 (Moonshot)",
+            "provider": "kimi",
+            "strengths": ["long context (262K)", "document analysis", "system reasoning"],
+            "cost_tier": "cloud",
+        },
+        "qwen": {
+            "name": f"Qwen Coder — {code_model} (Local)",
+            "provider": "ollama",
+            "task": "code",
+            "strengths": ["code generation", "fast iteration", "local/private", "free"],
+            "cost_tier": "free",
+        },
+        "reasoning": {
+            "name": f"DeepSeek R1 — {reason_model} (Local)",
+            "provider": "ollama",
+            "task": "reason",
+            "strengths": ["chain-of-thought", "mathematical reasoning", "problem decomposition"],
+            "cost_tier": "free",
+        },
+    }
+
+
+MODEL_REGISTRY = _build_model_registry()
 
 
 @dataclass
@@ -132,7 +145,13 @@ def _get_client(model_id: str):
 
 
 def _check_model_available(model_id: str) -> bool:
-    """Check if a model is available and configured."""
+    """Check if a model is available and configured.
+
+    For cloud models (Opus, Kimi) this checks API keys.
+    For local Ollama models this pings the Ollama API to confirm the model
+    is actually pulled and reachable, falling back to a simple config check
+    if Ollama is unreachable.
+    """
     from settings import settings
     info = MODEL_REGISTRY.get(model_id)
     if not info:
@@ -142,15 +161,45 @@ def _check_model_available(model_id: str) -> bool:
         return bool(getattr(settings, "OPUS_API_KEY", ""))
     elif info["provider"] == "kimi":
         return bool(getattr(settings, "KIMI_API_KEY", ""))
-    elif info.get("task") == "code":
-        return bool(getattr(settings, "OLLAMA_MODEL_CODE", "")) or True
-    elif info.get("task") == "reason":
-        return bool(getattr(settings, "OLLAMA_MODEL_REASON", "")) or True
+    elif info["provider"] == "ollama":
+        if info.get("task") == "code":
+            model_name = getattr(settings, "OLLAMA_MODEL_CODE", "")
+        elif info.get("task") == "reason":
+            model_name = getattr(settings, "OLLAMA_MODEL_REASON", "")
+        else:
+            model_name = getattr(settings, "OLLAMA_MODEL_FAST", "")
+
+        if not model_name:
+            return False
+
+        return _ollama_model_exists(model_name, settings)
     return True
+
+
+def _ollama_model_exists(model_name: str, settings) -> bool:
+    """Verify an Ollama model is pulled and reachable."""
+    import urllib.request
+    import json as _json
+    try:
+        url = (getattr(settings, "OLLAMA_URL", "http://localhost:11434")
+               .rstrip("/") + "/api/tags")
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = _json.loads(resp.read())
+        available = [m.get("name", "") for m in data.get("models", [])]
+        needle = model_name if ":" in model_name else f"{model_name}:latest"
+        return any(
+            needle == a or needle.split(":")[0] == a.split(":")[0]
+            for a in available
+        )
+    except Exception:
+        return True
 
 
 def get_available_models() -> List[dict]:
     """Return list of available models with their status."""
+    global MODEL_REGISTRY
+    MODEL_REGISTRY = _build_model_registry()
     result = []
     for mid, info in MODEL_REGISTRY.items():
         available = _check_model_available(mid)
@@ -465,10 +514,18 @@ def run_consensus(
     """
     Execute the full 4-layer consensus pipeline.
     """
+    global MODEL_REGISTRY
+    MODEL_REGISTRY = _build_model_registry()
+
     if not models:
         models = [m for m in MODEL_REGISTRY if _check_model_available(m)]
     if not models:
         models = ["qwen"]
+
+    logger.info(
+        "Consensus roundtable starting — models: %s",
+        ", ".join(f"{m} ({MODEL_REGISTRY.get(m, {}).get('name', '?')})" for m in models),
+    )
 
     start = time.time()
 

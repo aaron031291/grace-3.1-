@@ -14,6 +14,7 @@ import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
 import SystemHealthTab from "./components/SystemHealthTab";
 import LearningHealingTab from "./components/LearningHealingTab";
 import LabTab from "./components/LabTab";
+import DevTab from "./components/DevTab";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 import UndoToast from "./components/UndoManager";
@@ -34,6 +35,7 @@ const VIEWS = [
   { id: "health", label: "Health", icon: "🏥" },
   { id: "learn-heal", label: "Learn", icon: "🧬" },
   { id: "lab", label: "Lab", icon: "🧪" },
+  { id: "dev", label: "Dev", icon: "🛠️" },
 ];
 
 function App() {
@@ -131,10 +133,10 @@ function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{
               width: 8, height: 8, borderRadius: '50%',
-              background: apiHealth?.ollama_running ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
+              background: (apiHealth?.llm_running || apiHealth?.ollama_running) ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
             }} />
             <span style={{ fontSize: 11, color: '#888' }}>
-              {apiHealth?.ollama_running ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
+              {(apiHealth?.llm_running || apiHealth?.ollama_running) ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
             </span>
           </div>
         </div>
@@ -156,6 +158,7 @@ function App() {
           {activeView === "health" && <SystemHealthTab />}
           {activeView === "learn-heal" && <LearningHealingTab />}
           {activeView === "lab" && <LabTab />}
+          {activeView === "dev" && <DevTab />}
         </main>
       </div>
 

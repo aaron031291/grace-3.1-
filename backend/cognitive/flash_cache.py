@@ -122,7 +122,9 @@ class FlashCache:
 
     def _init_db(self):
         with self._db_lock:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=30)
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA busy_timeout=30000")
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS flash_entries (
                     id TEXT PRIMARY KEY,
@@ -171,7 +173,9 @@ class FlashCache:
             conn.close()
 
     def _get_conn(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self._db_path)
+        conn = sqlite3.connect(self._db_path, timeout=30)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=30000")
         conn.row_factory = sqlite3.Row
         return conn
 

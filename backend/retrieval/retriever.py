@@ -165,6 +165,21 @@ class DocumentRetriever:
                         enriched_results.append(result_dict)
                 
                 logger.info(f"Retrieved {len(enriched_results)} chunks for query: {query}")
+
+                try:
+                    from api._genesis_tracker import track
+                    track(
+                        key_type="ai_response",
+                        what=f"RAG retrieval: {len(enriched_results)} chunks for '{query[:60]}'",
+                        who="retriever.retrieve",
+                        how="qdrant_vector_search",
+                        input_data={"query": query[:200], "limit": limit, "threshold": score_threshold},
+                        output_data={"chunks_found": len(enriched_results), "top_score": enriched_results[0]["score"] if enriched_results else 0},
+                        tags=["rag", "retrieval", "search"],
+                    )
+                except Exception:
+                    pass
+
                 return enriched_results
             
             finally:
@@ -172,7 +187,20 @@ class DocumentRetriever:
         
         except Exception as e:
             logger.error(f"Retrieval error for query '{query}': {e}", exc_info=True)
-            raise  # Re-raise so caller knows about the failure
+            try:
+                from api._genesis_tracker import track
+                track(
+                    key_type="error",
+                    what=f"RAG retrieval failed: {query[:60]}",
+                    who="retriever.retrieve",
+                    is_error=True,
+                    error_type=type(e).__name__,
+                    error_message=str(e)[:200],
+                    tags=["rag", "retrieval", "error"],
+                )
+            except Exception:
+                pass
+            raise
     
     def retrieve_hybrid(
         self,
