@@ -443,6 +443,17 @@ async def lifespan(app: FastAPI):
         print("[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)")
 
 
+    # ==================== Start Proactive Self-Healing Engine ====================
+    if not getattr(settings, 'DISABLE_PROACTIVE_HEALING', False):
+        try:
+            from cognitive.proactive_healing_engine import start_proactive_healing
+            healing_engine = start_proactive_healing()
+            print("[OK] Proactive self-healing engine started (real-time monitoring active)")
+        except Exception as e:
+            print(f"[WARN] Could not start proactive self-healing engine: {e}")
+    else:
+        print("[SKIP] Proactive self-healing disabled (DISABLE_PROACTIVE_HEALING=true)")
+
     # ==================== Start Continuous Learning Orchestrator ====================
     # Connect sandbox lab to continuous training data
     if not settings.DISABLE_CONTINUOUS_LEARNING:
@@ -468,6 +479,14 @@ async def lifespan(app: FastAPI):
     
     # Shutdown
     print("Grace API shutting down...")
+    
+    # Stop proactive healing engine
+    try:
+        from cognitive.proactive_healing_engine import stop_proactive_healing
+        stop_proactive_healing()
+        print("[OK] Proactive self-healing engine stopped")
+    except Exception:
+        pass
 
 
 # ==================== FastAPI App ====================
