@@ -90,13 +90,6 @@ export default function ConsensusChat() {
       const res = await fetch(`${API_BASE_URL}/api/console/diagnose`, { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
-        if (data.diagnosis) {
-          setMessages(prev => [...prev, {
-            role: 'assistant', model: 'Kimi + Opus',
-            content: data.diagnosis,
-            ts: new Date().toISOString(),
-          }]);
-        }
         if (data.errors?.length) {
           for (const err of data.errors) {
             setMessages(prev => [...prev, {
@@ -106,8 +99,36 @@ export default function ConsensusChat() {
             }]);
           }
         }
+        if (data.diagnosis) {
+          setMessages(prev => [...prev, {
+            role: 'consensus', model: 'Kimi + Opus Diagnosis',
+            content: data.diagnosis,
+            confidence: data.confidence,
+            ts: new Date().toISOString(),
+          }]);
+        }
+        if (data.warnings?.length) {
+          setMessages(prev => [...prev, {
+            role: 'system', model: 'Grace',
+            content: `Warnings:\n${data.warnings.join('\n')}`,
+            ts: new Date().toISOString(),
+          }]);
+        }
+      } else {
+        const errText = await res.text().catch(() => '');
+        setMessages(prev => [...prev, {
+          role: 'system', model: 'Error',
+          content: `Diagnose failed (${res.status}): ${errText.substring(0, 200)}`,
+          ts: new Date().toISOString(),
+        }]);
       }
-    } catch { /* skip */ }
+    } catch (e) {
+      setMessages(prev => [...prev, {
+        role: 'system', model: 'Error',
+        content: `Connection failed: ${e.message}`,
+        ts: new Date().toISOString(),
+      }]);
+    }
     setSending(false);
   };
 
@@ -137,32 +158,51 @@ export default function ConsensusChat() {
         const data = await res.json();
 
         // Add individual responses
-        for (const r of (data.individual_responses || [])) {
-          if (r.response) {
+        const responses = data.individual_responses || data.individual_analyses || [];
+        for (const r of responses) {
+          const text = r.response || r.analysis || r.content || '';
+          if (text) {
             setMessages(prev => [...prev, {
               role: 'assistant',
-              model: r.model_name || r.model_id,
-              content: r.response,
+              model: r.model_name || r.model_id || 'Model',
+              content: text,
               latency: r.latency_ms,
               ts: new Date().toISOString(),
             }]);
           }
         }
 
-        // Add consensus
-        if (data.consensus && data.consensus !== data.final_output) {
+        // Add consensus/final output
+        const finalText = data.final_output || data.consensus || data.aligned_output || data.response || data.diagnosis || '';
+        if (finalText) {
           setMessages(prev => [...prev, {
             role: 'consensus', model: 'Consensus',
-            content: data.final_output || data.consensus,
+            content: finalText,
             confidence: data.confidence,
             ts: new Date().toISOString(),
           }]);
         }
+
+        // If nothing came through, show the raw response
+        if (responses.length === 0 && !finalText) {
+          setMessages(prev => [...prev, {
+            role: 'system', model: 'Grace',
+            content: `Response received but empty. Raw: ${JSON.stringify(data).substring(0, 500)}`,
+            ts: new Date().toISOString(),
+          }]);
+        }
+      } else {
+        const errText = await res.text().catch(() => `HTTP ${res.status}`);
+        setMessages(prev => [...prev, {
+          role: 'system', model: 'Error',
+          content: `Server returned ${res.status}: ${errText.substring(0, 300)}`,
+          ts: new Date().toISOString(),
+        }]);
       }
     } catch (e) {
       setMessages(prev => [...prev, {
         role: 'system', model: 'Error',
-        content: `Failed: ${e.message}`,
+        content: `Connection failed: ${e.message}. Is the backend running on port 8000?`,
         ts: new Date().toISOString(),
       }]);
     }
