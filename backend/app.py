@@ -88,6 +88,8 @@ from api.probe_agent_api import router as probe_agent_router
 from api.consensus_fixer_api import router as consensus_fixer_router
 from api.brain_api import router as brain_router
 from api.autonomous_loop_api import router as autonomous_loop_router
+from api.core.brain_controller import router as brain_v2_router
+from api.monitoring.health_controller import router as unified_monitor_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -614,8 +616,10 @@ app.include_router(probe_agent_router)           # /api/probe — automated API 
 app.include_router(consensus_fixer_router)       # /api/consensus-fix — autonomous consensus diagnosis + repair
 app.include_router(brain_router)                 # /brain/* — domain brain API (8 brains, ~80 actions)
 app.include_router(autonomous_loop_router)       # /api/autonomous — unified self-heal/learn/code loop
+app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean brain dispatch
+app.include_router(unified_monitor_router)       # /api/monitor — unified health/probe/triggers
 
-# v1 resource API (enterprise pattern — the public surface)
+# v1 resource API (legacy — will be removed after frontend migration)
 register_v1(app)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
@@ -1689,6 +1693,16 @@ async def runtime_hot_reload():
         results["diagnostic"] = f"error: {e}"
 
     return {"status": "hot-reload complete", "results": results}
+
+
+@app.get("/api/runtime/resilience", tags=["Runtime"])
+async def runtime_resilience():
+    """Circuit breaker and degradation status."""
+    from core.resilience import all_breaker_statuses, GracefulDegradation
+    return {
+        "degradation_level": GracefulDegradation.get_level(),
+        "circuit_breakers": all_breaker_statuses(),
+    }
 
 
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
