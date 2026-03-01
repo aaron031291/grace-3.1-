@@ -82,6 +82,7 @@ from api.streaming import router as streaming_router
 from api.websocket import router as websocket_router
 from api.telemetry import router as telemetry_router
 from diagnostic_machine.api import router as diagnostic_router
+from api.runtime_triggers_api import router as runtime_triggers_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -590,6 +591,7 @@ app.include_router(streaming_router)             # /stream — SSE streaming
 app.include_router(websocket_router)             # WebSocket — real-time events
 app.include_router(telemetry_router)             # /telemetry — system telemetry
 app.include_router(diagnostic_router)            # /diagnostic — 4-layer diagnostic machine + healing
+app.include_router(runtime_triggers_router)      # /api/triggers — trigger scanning + auto-healing pipeline
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
