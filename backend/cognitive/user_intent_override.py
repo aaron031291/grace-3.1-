@@ -228,7 +228,8 @@ class UserIntentOverride:
 
         # Check if any uploaded governance documents would be violated
         try:
-            from api.governance_rules_api import _list_rule_files
+            from core.services.govern_service import list_rules
+            _list_rule_files = lambda: list_rules().get("documents", [])
             rules = _list_rule_files()
             if rules and action in ("governance_bypass", "destructive_operation"):
                 for rule in rules[:3]:
