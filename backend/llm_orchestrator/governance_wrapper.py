@@ -34,7 +34,8 @@ def _load_governance_context() -> Dict[str, str]:
         return _rules_cache
 
     try:
-        from api.governance_rules_api import get_active_persona, _list_rule_files, RULES_DIR
+        from core.services.govern_service import get_persona as get_active_persona, list_rules, RULES_DIR
+        _list_rule_files = lambda: list_rules().get("documents", [])
         import json
 
         persona = get_active_persona()
@@ -98,8 +99,8 @@ def build_governance_prefix() -> str:
 def build_domain_prefix(folder_path: str) -> str:
     """Build governance prefix specific to a domain folder."""
     try:
-        from api.domain_api import _get_domain_rules
-        return _get_domain_rules(folder_path)
+        from core.services.govern_service import get_rule_content
+        return get_rule_content(folder_path).get("content", "")
     except Exception:
         return ""
 

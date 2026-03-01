@@ -33,63 +33,37 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-from api.retrieve import router as retrieve_router, get_document_retriever
-from api.voice_api import router as voice_router
-from api.health import router as health_router
-from api.mcp_api import router as mcp_router  # MCP - Model Context Protocol file/terminal/git tools
-from api.world_model_api import router as world_model_router
-from api.librarian_autonomous_api import router as librarian_autonomous_router
-from api.docs_library_api import router as docs_library_router
-from api.cross_tab_api import router as cross_tab_router
-from api.governance_hub_api import router as governance_hub_router
-from api.genesis_daily_api import router as genesis_daily_router
-from api.governance_rules_api import router as governance_rules_router
-from api.whitelist_hub_api import router as whitelist_hub_router
-from api.oracle_api import router as oracle_router
-from api.codebase_hub_api import router as codebase_hub_router
-from api.system_bridge_api import router as system_bridge_router
-from api.manifest_api import router as manifest_router
-from api.v1.router import register_v1
-from api.tasks_hub_api import router as tasks_hub_router
-from api.api_registry_api import router as api_registry_router
-from api.business_intelligence_api import router as bi_router
-from api.system_health_api import router as system_health_router
-from api.learning_healing_api import router as learning_healing_router
-from api.unified_coding_agent_api import router as unified_coding_agent_router
-from api.api_explorer_api import router as api_explorer_router
-from api.chunked_upload_api import router as chunked_upload_router
-from api.flash_cache_api import router as flash_cache_router
-from api.consensus_api import router as consensus_router
-from api.system_audit_api import router as system_audit_router
-from api.api_vault_api import router as api_vault_router
-from api.planner_api import router as planner_router
-from api.reporting_api import router as reporting_router
-from api.knowledge_mining_api import router as knowledge_mining_router
-from api.governance_discussion_api import router as governance_discussion_router
-from api.live_console_api import router as live_console_router
-from api.feedback_api import router as feedback_router
-from api.tab_aggregator_api import router as tab_aggregator_router
-from api.version_control import router as version_control_router
-from api.ingestion_api import router as ingestion_router
-from api.genesis_keys import router as genesis_keys_router
-from api.auth import router as auth_router
-from api.kpi_api import router as kpi_router
-from api.knowledge_base_api import router as knowledge_base_router
-from api.repositories_api import router as repositories_router
-from api.cicd_api import router as cicd_router
-from api.scraping import router as scraping_router
-from api.streaming import router as streaming_router
-from api.websocket import router as websocket_router
-from api.telemetry import router as telemetry_router
-from diagnostic_machine.api import router as diagnostic_router
-from api.runtime_triggers_api import router as runtime_triggers_router
+# ==================== Clean Architecture Imports ====================
+# Brain API (single entry point for all domain actions)
+from api.brain_api_v2 import router as brain_router
+from api.core.brain_controller import router as brain_v2_router
+
+# Monitoring (unified health + probe + triggers)
+from api.monitoring.health_controller import router as unified_monitor_router
 from api.component_health_api import router as component_health_router
 from api.probe_agent_api import router as probe_agent_router
-from api.consensus_fixer_api import router as consensus_fixer_router
-from api.brain_api_v2 import router as brain_router
+from api.runtime_triggers_api import router as runtime_triggers_router
+
+# Autonomous (Ouroboros loop + consensus fixer)
 from api.autonomous_loop_api import router as autonomous_loop_router
-from api.core.brain_controller import router as brain_v2_router
-from api.monitoring.health_controller import router as unified_monitor_router
+from api.consensus_fixer_api import router as consensus_fixer_router
+
+# Core services (health, auth, genesis, voice, MCP, retrieval)
+from api.health import router as health_router
+from api.auth import router as auth_router
+from api.genesis_keys import router as genesis_keys_router
+from api.consensus_api import router as consensus_router
+from api.voice_api import router as voice_router
+from api.mcp_api import router as mcp_router
+from api.retrieve import router as retrieve_router, get_document_retriever
+from api.flash_cache_api import router as flash_cache_router
+from api.kpi_api import router as kpi_router
+from api.live_console_api import router as live_console_router
+from api.docs_library_api import router as docs_library_router
+from api.file_ingestion import get_file_manager
+
+# Diagnostic machine
+from diagnostic_machine.api import router as diagnostic_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -561,66 +535,37 @@ app.add_middleware(
 # =============================================================================
 
 # Core: needed by app.py's own chat/RAG endpoints
-app.include_router(retrieve_router)          # /retrieve — used by app.py chat
-app.include_router(health_router)            # /health — used by frontend health check
-app.include_router(mcp_router)               # /api/mcp — MCP tool-calling
-app.include_router(voice_router)             # /voice — TTS/STT
+# =============================================================================
+# CLEAN ARCHITECTURE — 15 routers (down from 56)
+# =============================================================================
 
-# Hub APIs: called by v1 resource layer via direct imports
-app.include_router(world_model_router)       # /api/world-model
-app.include_router(librarian_autonomous_router)  # /api/librarian-fs
-app.include_router(docs_library_router)      # /api/docs
-app.include_router(cross_tab_router)         # /api/intelligence
-app.include_router(governance_hub_router)    # /api/governance-hub
-app.include_router(genesis_daily_router)     # /api/genesis-daily
-app.include_router(governance_rules_router)  # /api/governance-rules
-app.include_router(whitelist_hub_router)     # /api/whitelist-hub
-app.include_router(oracle_router)            # /api/oracle
-app.include_router(codebase_hub_router)      # /api/codebase-hub
-app.include_router(tasks_hub_router)         # /api/tasks-hub
-app.include_router(unified_coding_agent_router)  # /api/coding-agent
-app.include_router(bi_router)                # /api/bi
-app.include_router(system_health_router)     # /api/system-health
-app.include_router(learning_healing_router)  # /api/learn-heal
-app.include_router(api_registry_router)      # /api/registry
-app.include_router(api_explorer_router)      # /api/explorer
-app.include_router(manifest_router)          # /api/manifest
-app.include_router(chunked_upload_router)    # /api/upload — chunked 5GB uploads
-app.include_router(flash_cache_router)       # /api/flash-cache — reference caching
-app.include_router(consensus_router)         # /api/consensus — multi-model roundtable
-app.include_router(system_audit_router)      # /api/audit — system analysis + model updates
-app.include_router(api_vault_router)         # /api/vault — central API key management
-app.include_router(planner_router)           # /api/planner — intelligent dual-pane planner
-app.include_router(reporting_router)         # /api/reports — system reports + sandbox experiments
-app.include_router(knowledge_mining_router)  # /api/knowledge-mine — LLM knowledge extraction
-app.include_router(governance_discussion_router)  # /api/governance/discuss — chat about approvals
-app.include_router(live_console_router)           # /api/console — real-time Kimi+Opus interaction
-app.include_router(feedback_router)              # /api/feedback — user feedback on generated code
-app.include_router(tab_aggregator_router)        # /api/tabs — aggregated tab data for frontend
-app.include_router(version_control_router)       # /api/version-control — git history & diffs
-app.include_router(ingestion_router)             # /api/ingestion — document ingestion pipeline
-app.include_router(genesis_keys_router)          # /genesis — genesis key tracking UI
-app.include_router(auth_router)                  # /auth — authentication/sessions
-app.include_router(kpi_router)                   # /kpi — KPI dashboards
-app.include_router(knowledge_base_router)        # /knowledge-base — KB connectors
-app.include_router(repositories_router)          # /repositories — enterprise repo management
-app.include_router(cicd_router)                  # /api/cicd — CI/CD pipelines
-app.include_router(scraping_router)              # /scrape — web scraping engine
-app.include_router(streaming_router)             # /stream — SSE streaming
-app.include_router(websocket_router)             # WebSocket — real-time events
-app.include_router(telemetry_router)             # /telemetry — system telemetry
-app.include_router(diagnostic_router)            # /diagnostic — 4-layer diagnostic machine + healing
-app.include_router(runtime_triggers_router)      # /api/triggers — trigger scanning + auto-healing pipeline
-app.include_router(component_health_router)      # /api/component-health — behavioral profiling + health map
-app.include_router(probe_agent_router)           # /api/probe — automated API crawler + dormancy protocol
-app.include_router(consensus_fixer_router)       # /api/consensus-fix — autonomous consensus diagnosis + repair
-app.include_router(brain_router)                 # /brain/* — domain brain API (8 brains, ~80 actions)
-app.include_router(autonomous_loop_router)       # /api/autonomous — unified self-heal/learn/code loop
-app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean brain dispatch
-app.include_router(unified_monitor_router)       # /api/monitor — unified health/probe/triggers
+# Brain API — single entry point for all 95+ domain actions
+app.include_router(brain_router)                 # /brain/{domain} — 8 domains
+app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean REST
 
-# v1 resource API (legacy — will be removed after frontend migration)
-register_v1(app)
+# Monitoring — unified health + probe + triggers
+app.include_router(unified_monitor_router)       # /api/monitor/*
+app.include_router(component_health_router)      # /api/component-health/*
+app.include_router(probe_agent_router)           # /api/probe/*
+app.include_router(runtime_triggers_router)      # /api/triggers/*
+
+# Autonomous — Ouroboros loop + consensus fixer
+app.include_router(autonomous_loop_router)       # /api/autonomous/*
+app.include_router(consensus_fixer_router)       # /api/consensus-fix/*
+
+# Core services
+app.include_router(health_router)                # /health
+app.include_router(auth_router)                  # /auth
+app.include_router(genesis_keys_router)          # /genesis
+app.include_router(consensus_router)             # /api/consensus
+app.include_router(retrieve_router)              # /retrieve
+app.include_router(voice_router)                 # /voice
+app.include_router(mcp_router)                   # /api/mcp
+app.include_router(flash_cache_router)           # /api/flash-cache
+app.include_router(kpi_router)                   # /kpi
+app.include_router(live_console_router)          # /api/console
+app.include_router(docs_library_router)          # /api/docs
+app.include_router(diagnostic_router)            # /diagnostic
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
