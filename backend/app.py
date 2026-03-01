@@ -87,6 +87,7 @@ from api.component_health_api import router as component_health_router
 from api.probe_agent_api import router as probe_agent_router
 from api.consensus_fixer_api import router as consensus_fixer_router
 from api.brain_api import router as brain_router
+from api.autonomous_loop_api import router as autonomous_loop_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -486,6 +487,18 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Diagnostic engine not started: {e}")
 
+    # ==================== Start Autonomous Loop ====================
+    try:
+        from api.autonomous_loop_api import _background_loop, _stop_event, _loop_state
+        import threading
+        _stop_event.clear()
+        _loop_state["running"] = True
+        _auto_thread = threading.Thread(target=_background_loop, args=(30,), daemon=True)
+        _auto_thread.start()
+        print("[OK] Autonomous loop started (30s cycle: heal → learn → code → verify)")
+    except Exception as e:
+        print(f"[WARN] Autonomous loop not started: {e}")
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
@@ -600,6 +613,7 @@ app.include_router(component_health_router)      # /api/component-health — beh
 app.include_router(probe_agent_router)           # /api/probe — automated API crawler + dormancy protocol
 app.include_router(consensus_fixer_router)       # /api/consensus-fix — autonomous consensus diagnosis + repair
 app.include_router(brain_router)                 # /brain/* — domain brain API (8 brains, ~80 actions)
+app.include_router(autonomous_loop_router)       # /api/autonomous — unified self-heal/learn/code loop
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)

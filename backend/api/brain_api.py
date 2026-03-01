@@ -212,6 +212,9 @@ def _govern_handlers() -> dict:
         "genesis_stats": lambda p: _j(req.get(f"{B}/genesis/stats", timeout=10)),
         "heal":       lambda p: _j(req.post(f"{B}/api/governance-hub/healing/trigger", timeout=30)),
         "learn":      lambda p: _j(req.post(f"{B}/api/governance-hub/learning/trigger", timeout=30)),
+        "genesis_keys": lambda p: _j(req.get(f"{B}/genesis/keys", params={"limit": p.get("limit", 20)}, timeout=10)),
+        "genesis_key":  lambda p: _j(req.get(f"{B}/genesis/keys/{p['key_id']}", timeout=10)),
+        "approvals_history": lambda p: _j(req.get(f"{B}/api/governance-hub/approvals/history", params=p, timeout=10)),
     }
 
 @router.post("/govern", response_model=BrainResponse)
@@ -237,6 +240,13 @@ def _ai_handlers() -> dict:
         "oracle":     lambda p: _j(req.get(f"{B}/api/oracle/dashboard", timeout=10)),
         "training":   lambda p: _j(req.get(f"{B}/api/oracle/training-data", timeout=10)),
         "console":    lambda p: _j(req.post(f"{B}/api/console/ask", json=p, timeout=60)),
+        "diagnose":   lambda p: _j(req.post(f"{B}/api/console/diagnose", timeout=30)),
+        "knowledge_gaps": lambda p: _j(req.get(f"{B}/api/audit/knowledge-gaps", timeout=15)),
+        "integration_matrix": lambda p: _j(req.get(f"{B}/api/audit/integration-matrix", timeout=15)),
+        "logic_tests": lambda p: _j(req.get(f"{B}/api/audit/test/logic", timeout=30)),
+        "stress_start": lambda p: _j(req.post(f"{B}/api/audit/test/stress/start", params=p, timeout=10)),
+        "stress_stop":  lambda p: _j(req.post(f"{B}/api/audit/test/stress/stop", timeout=10)),
+        "stress_status": lambda p: _j(req.get(f"{B}/api/audit/test/stress/status", timeout=5)),
     }
 
 @router.post("/ai", response_model=BrainResponse)
@@ -271,6 +281,13 @@ def _system_handlers() -> dict:
         "orphans":      lambda p: _j(req.get(f"{B}/api/component-health/orphans", timeout=10)),
         "diagnostics":  lambda p: _j(req.get(f"{B}/api/audit/diagnostics/status", timeout=10)),
         "bi":           lambda p: _j(req.get(f"{B}/api/bi/dashboard", timeout=10)),
+        "auto_status":  lambda p: _j(req.get(f"{B}/api/autonomous/status", timeout=5)),
+        "auto_start":   lambda p: _j(req.post(f"{B}/api/autonomous/start", params=p, timeout=5)),
+        "auto_stop":    lambda p: _j(req.post(f"{B}/api/autonomous/stop", timeout=5)),
+        "auto_cycle":   lambda p: _j(req.post(f"{B}/api/autonomous/cycle", timeout=30)),
+        "auto_log":     lambda p: _j(req.get(f"{B}/api/autonomous/log", params=p, timeout=5)),
+        "correlate":    lambda p: _j(req.get(f"{B}/api/component-health/correlate/{p.get('component','')}", timeout=10)),
+        "consensus_fix": lambda p: _j(req.post(f"{B}/api/consensus-fix/fix-all", timeout=120)),
     }
 
 @router.post("/system", response_model=BrainResponse)
@@ -352,16 +369,19 @@ async def brain_code(req: BrainRequest):
 #  BRAIN DIRECTORY — list all brains and their actions
 # ═══════════════════════════════════════════════════════════════════
 
-BRAIN_DIRECTORY = {
-    "chat":   {"actions": list(_chat_handlers().keys()), "description": "Conversations, prompts, consensus chat, world model"},
-    "files":  {"actions": list(_files_handlers().keys()), "description": "Folders, documents, uploads, search, librarian"},
-    "govern": {"actions": list(_govern_handlers().keys()), "description": "Governance, approvals, rules, persona, genesis, healing"},
-    "ai":     {"actions": list(_ai_handlers().keys()), "description": "Consensus, models, coding agent, oracle, console"},
-    "system": {"actions": list(_system_handlers().keys()), "description": "Health, diagnostics, runtime, triggers, probe, component health"},
-    "data":   {"actions": list(_data_handlers().keys()), "description": "Whitelist sources, knowledge mining, flash cache"},
-    "tasks":  {"actions": list(_tasks_handlers().keys()), "description": "Task scheduling, time sense, planner"},
-    "code":   {"actions": list(_code_handlers().keys()), "description": "Codebase, projects, version control, code generation"},
-}
+def _build_directory():
+    return {
+        "chat":   {"actions": list(_chat_handlers().keys()), "description": "Conversations, prompts, consensus chat, world model"},
+        "files":  {"actions": list(_files_handlers().keys()), "description": "Folders, documents, uploads, search, librarian"},
+        "govern": {"actions": list(_govern_handlers().keys()), "description": "Governance, approvals, rules, persona, genesis, healing"},
+        "ai":     {"actions": list(_ai_handlers().keys()), "description": "Consensus, models, coding agent, oracle, console, testing"},
+        "system": {"actions": list(_system_handlers().keys()), "description": "Health, diagnostics, runtime, triggers, probe, autonomous loop"},
+        "data":   {"actions": list(_data_handlers().keys()), "description": "Whitelist sources, knowledge mining, flash cache"},
+        "tasks":  {"actions": list(_tasks_handlers().keys()), "description": "Task scheduling, time sense, planner"},
+        "code":   {"actions": list(_code_handlers().keys()), "description": "Codebase, projects, version control, code generation"},
+    }
+
+BRAIN_DIRECTORY = _build_directory()
 
 @router.get("/directory")
 async def brain_directory():
