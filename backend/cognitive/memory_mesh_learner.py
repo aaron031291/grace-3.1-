@@ -335,6 +335,26 @@ class MemoryMeshLearner:
                 f"{len(priorities)} top priorities"
             )
 
+            try:
+                from api._genesis_tracker import track
+                track(
+                    key_type="gap_identified",
+                    what=f"Memory mesh analysis: {len(suggestions['knowledge_gaps'])} gaps, "
+                         f"{len(suggestions['failure_patterns'])} failures, "
+                         f"{len(priorities)} priorities",
+                    who="memory_mesh_learner",
+                    how="identify_gaps + high_value + failures + clusters",
+                    output_data={
+                        "gap_count": len(suggestions["knowledge_gaps"]),
+                        "failure_count": len(suggestions["failure_patterns"]),
+                        "priority_count": len(priorities),
+                        "top_topics": [p["topic"] for p in priorities[:5]],
+                    },
+                    tags=["memory-mesh", "learning", "gap-analysis"],
+                )
+            except Exception:
+                pass
+
         except Exception as e:
             logger.error(f"Error getting learning suggestions: {e}")
 

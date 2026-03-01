@@ -131,6 +131,25 @@ class MemoryMeshIntegration:
 
         self.session.commit()
 
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="learning_complete",
+                what=f"Memory mesh ingested: {experience_type} (trust={learning_example.trust_score:.2f})",
+                who="memory_mesh_integration.ingest",
+                how="learning_memory → episodic → procedural",
+                input_data={"experience_type": experience_type, "source": source},
+                output_data={
+                    "learning_id": str(learning_example.id),
+                    "trust_score": learning_example.trust_score,
+                    "has_episode": learning_example.trust_score >= 0.7,
+                },
+                tags=["memory-mesh", "learning", experience_type],
+                parent_key_id=genesis_key_id,
+            )
+        except Exception:
+            pass
+
         return learning_example.id
 
     def _add_to_episodic_memory(

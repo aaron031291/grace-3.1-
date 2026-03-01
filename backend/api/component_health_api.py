@@ -704,6 +704,232 @@ async def mirror_feed():
     }
 
 
+@router.get("/orphans")
+async def detect_orphan_services():
+    """
+    Detect orphan services — components that exist and are running
+    but receive zero business calls. Different from 'idle' because
+    the service is alive but nobody uses it.
+    """
+    keys = _get_genesis_keys(minutes=1440, limit=5000)  # 24h window
+    service_health = _check_service_health()
+
+    orphans = []
+    for comp_id, comp in COMPONENT_REGISTRY.items():
+        if not comp.get("always_on"):
+            continue
+
+        # Check: service is reachable but has zero Genesis key activity
+        url_healthy = service_health.get(comp_id)
+        comp_keys = _filter_keys_for_component(comp_id, comp, keys)
+
+        if url_healthy is True and len(comp_keys) == 0:
+            orphans.append({
+                "id": comp_id,
+                "label": comp.get("label"),
+                "health_check": "reachable",
+                "business_calls_24h": 0,
+                "diagnosis": "Service is alive but receives no business traffic — orphan candidate",
+            })
+        elif url_healthy is None and comp.get("always_on") and len(comp_keys) == 0:
+            orphans.append({
+                "id": comp_id,
+                "label": comp.get("label"),
+                "health_check": "no_healthcheck",
+                "business_calls_24h": 0,
+                "diagnosis": "No health endpoint and no activity — may be orphaned",
+            })
+
+    return {
+        "orphans": orphans,
+        "total": len(orphans),
+        "checked_at": datetime.utcnow().isoformat(),
+    }
+
+
+@router.get("/learned-baselines")
+async def learned_baselines():
+    """
+    ML-learned baselines — analyze historical Genesis key timestamps
+    to learn each component's natural activity rhythm and replace
+    static interval configs.
+    """
+    keys = _get_genesis_keys(minutes=10080, limit=10000)  # 7 days
+
+    baselines = {}
+    for comp_id, comp in COMPONENT_REGISTRY.items():
+        comp_keys = _filter_keys_for_component(comp_id, comp, keys)
+        if len(comp_keys) < 3:
+            baselines[comp_id] = {
+                "label": comp.get("label"),
+                "sample_size": len(comp_keys),
+                "learned": False,
+                "reason": "insufficient data (< 3 events in 7 days)",
+                "configured_interval_min": comp.get("expected_interval_min"),
+            }
+            continue
+
+        timestamps = []
+        for k in comp_keys:
+            if k.get("when"):
+                try:
+                    timestamps.append(datetime.fromisoformat(k["when"]))
+                except Exception:
+                    pass
+
+        if len(timestamps) < 3:
+            baselines[comp_id] = {
+                "label": comp.get("label"),
+                "sample_size": len(timestamps),
+                "learned": False,
+                "reason": "insufficient valid timestamps",
+                "configured_interval_min": comp.get("expected_interval_min"),
+            }
+            continue
+
+        timestamps.sort()
+        intervals = [
+            (timestamps[i+1] - timestamps[i]).total_seconds() / 60
+            for i in range(len(timestamps) - 1)
+        ]
+
+        avg_interval = sum(intervals) / len(intervals)
+        median_interval = sorted(intervals)[len(intervals) // 2]
+        max_gap = max(intervals)
+        min_gap = min(intervals)
+
+        # Use activity_patterns from TimeSense
+        activity = {}
+        try:
+            from cognitive.time_sense import TimeSense
+            ts_strings = [t.isoformat() for t in timestamps]
+            activity = TimeSense.activity_patterns(ts_strings)
+        except Exception:
+            pass
+
+        baselines[comp_id] = {
+            "label": comp.get("label"),
+            "sample_size": len(timestamps),
+            "learned": True,
+            "avg_interval_min": round(avg_interval, 1),
+            "median_interval_min": round(median_interval, 1),
+            "max_gap_min": round(max_gap, 1),
+            "min_gap_min": round(min_gap, 1),
+            "configured_interval_min": comp.get("expected_interval_min"),
+            "recommended_interval_min": round(median_interval * 1.5, 0),
+            "peak_hour": activity.get("peak_hour"),
+            "peak_day": activity.get("peak_day"),
+            "quiet_hour": activity.get("quiet_hour"),
+            "busiest_period": activity.get("busiest_period"),
+        }
+
+    return {
+        "baselines": baselines,
+        "total": len(baselines),
+        "learned_count": sum(1 for b in baselines.values() if b.get("learned")),
+    }
+
+
+@router.get("/correlate/{component_id}")
+async def correlate_failure(component_id: str):
+    """
+    Correlation engine — when a component is degraded/broken,
+    check upstream dependencies to find the root cause.
+    Suppresses leaf alerts and identifies the actual source.
+    """
+    if component_id not in COMPONENT_REGISTRY:
+        raise HTTPException(404, f"Unknown component: {component_id}")
+
+    keys = _get_genesis_keys(minutes=60, limit=2000)
+    service_health = _check_service_health()
+
+    comp = COMPONENT_REGISTRY[component_id]
+    target = _classify_component(component_id, comp, keys, service_health)
+
+    if target["status"] == "green":
+        return {
+            "component_id": component_id,
+            "status": "healthy",
+            "message": "Component is healthy — no correlation needed",
+        }
+
+    upstream_ids = comp.get("dependencies", [])
+    upstream_statuses = []
+    root_causes = []
+
+    for uid in upstream_ids:
+        if uid not in COMPONENT_REGISTRY:
+            continue
+        uc = COMPONENT_REGISTRY[uid]
+        classified = _classify_component(uid, uc, keys, service_health)
+        upstream_statuses.append(classified)
+        if classified["status"] in ("red", "orange"):
+            root_causes.append(classified)
+
+    # Check downstream — who depends on the broken component?
+    downstream_ids = [
+        cid for cid, c in COMPONENT_REGISTRY.items()
+        if component_id in c.get("dependencies", [])
+    ]
+    downstream_statuses = []
+    for did in downstream_ids:
+        if did not in COMPONENT_REGISTRY:
+            continue
+        dc = COMPONENT_REGISTRY[did]
+        classified = _classify_component(did, dc, keys, service_health)
+        downstream_statuses.append(classified)
+
+    is_leaf = len(root_causes) > 0
+    cascade_count = sum(1 for d in downstream_statuses if d["status"] in ("red", "orange"))
+
+    diagnosis = ""
+    if root_causes:
+        root_names = ", ".join(r["label"] for r in root_causes)
+        diagnosis = (
+            f"UPSTREAM ROOT CAUSE: {root_names} — this component's failure "
+            f"is likely a downstream effect, not the root issue. "
+            f"Fix {root_names} first."
+        )
+    elif cascade_count > 0:
+        diagnosis = (
+            f"ROOT CAUSE IDENTIFIED: {target['label']} is the source — "
+            f"{cascade_count} downstream component(s) also affected."
+        )
+    else:
+        diagnosis = f"ISOLATED ISSUE: {target['label']} has no upstream failures — issue is local."
+
+    return {
+        "component_id": component_id,
+        "status": target["status"],
+        "reason": target["reason"],
+        "is_leaf_failure": is_leaf,
+        "root_causes": [{"id": r["id"], "label": r["label"], "status": r["status"], "reason": r["reason"]} for r in root_causes],
+        "upstream": [{"id": u["id"], "label": u["label"], "status": u["status"]} for u in upstream_statuses],
+        "downstream_affected": [{"id": d["id"], "label": d["label"], "status": d["status"]} for d in downstream_statuses if d["status"] in ("red", "orange")],
+        "cascade_count": cascade_count,
+        "diagnosis": diagnosis,
+        "suppress_alert": is_leaf,
+    }
+
+
+def _filter_keys_for_component(comp_id: str, comp: dict, keys: List[dict]) -> List[dict]:
+    """Filter Genesis keys that belong to a specific component."""
+    result = []
+    for k in keys:
+        tags = k.get("tags", [])
+        who = (k.get("who") or "").lower()
+        for tag in comp.get("tags", []):
+            if tag in tags:
+                result.append(k)
+                break
+        else:
+            for pat in comp.get("who_patterns", []):
+                if pat in who:
+                    result.append(k)
+                    break
+    return result
+
+
 def _auto_execute_remediation(action: dict):
     """Execute a remediation action."""
     act = action.get("action", "")
