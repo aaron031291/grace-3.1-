@@ -242,38 +242,37 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Database initialization error: {e}")
         print("[WARN] Grace will continue with limited functionality")
     
-    # Auto-ingest training corpus on startup
-    try:
-        from cognitive.training_ingest import ingest_training_corpus
-        result = ingest_training_corpus()
-        if result.get("ingested", 0) > 0:
-            print(f"[OK] Training corpus: {result['ingested']} files ingested")
-        else:
-            print(f"[OK] Training corpus up to date")
-    except Exception as e:
-        print(f"[WARN] Training ingest skipped: {e}")
+    # ==================== Lazy Background Init (non-blocking) ====================
+    import threading
 
-    # Run startup diagnostic
-    try:
-        from cognitive.autonomous_diagnostics import get_diagnostics
-        diag = get_diagnostics()
-        startup_result = diag.on_startup()
-        print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')} ({startup_result.get('healthy', 0)}/{startup_result.get('total', 0)} healthy)")
-    except Exception as e:
-        print(f"[WARN] Startup diagnostic skipped: {e}")
-
-    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
-    if not settings.SKIP_EMBEDDING_LOAD:
+    def _background_init():
+        """Heavy init tasks run in background so server starts fast."""
         try:
-            from embedding import get_embedding_model
-            print("\n[STARTUP] Pre-initializing embedding model...")
-            embedding_model = get_embedding_model()
-            print("[STARTUP] [OK] Embedding model loaded and ready\n")
+            from cognitive.training_ingest import ingest_training_corpus
+            result = ingest_training_corpus()
+            if result.get("ingested", 0) > 0:
+                print(f"[OK] Training corpus: {result['ingested']} files ingested")
         except Exception as e:
-            print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
-            print("[STARTUP] [WARN] Model will be loaded on first use\n")
-    else:
-        print("[STARTUP] Embedding model loading skipped (SKIP_EMBEDDING_LOAD=true)\n")
+            print(f"[WARN] Training ingest: {e}")
+
+        try:
+            from cognitive.autonomous_diagnostics import get_diagnostics
+            diag = get_diagnostics()
+            startup_result = diag.on_startup()
+            print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')}")
+        except Exception as e:
+            print(f"[WARN] Diagnostic: {e}")
+
+        if not settings.SKIP_EMBEDDING_LOAD:
+            try:
+                from embedding import get_embedding_model
+                get_embedding_model()
+                print("[OK] Embedding model loaded")
+            except Exception as e:
+                print(f"[WARN] Embedding: {e}")
+
+    threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
+    print("[OK] Background init started (training, diagnostics, embedding)")
     
     # Check LLM Provider
     if not getattr(settings, 'SKIP_LLM_CHECK', False):
@@ -1638,6 +1637,24 @@ async def runtime_hot_reload():
         results["diagnostic"] = f"error: {e}"
 
     return {"status": "hot-reload complete", "results": results}
+
+
+@app.get("/api/runtime/security", tags=["Runtime"])
+async def runtime_security():
+    """Rate limit status and security configuration."""
+    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE
+    return {
+        "rate_limits": get_rate_limit_status(),
+        "max_request_size_mb": round(MAX_REQUEST_SIZE / 1048576, 1),
+    }
+
+
+@app.post("/api/runtime/backup", tags=["Runtime"])
+async def runtime_backup():
+    """Create a database backup."""
+    from core.security import backup_database
+    path = backup_database()
+    return {"backup_path": path}
 
 
 @app.get("/api/runtime/resilience", tags=["Runtime"])

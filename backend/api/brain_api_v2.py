@@ -35,8 +35,38 @@ class BrainOrchestration(BaseModel):
     steps: list
 
 
-def _call(brain: str, action: str, payload: dict, handlers: dict) -> BrainResponse:
-    """Route action to handler, track via Genesis."""
+def _call(brain: str, action: str, payload: dict, handlers: dict,
+          client_ip: str = "unknown") -> BrainResponse:
+    """Route action to handler with rate limiting, validation, Genesis tracking."""
+
+    # Rate limit check
+    try:
+        from core.security import check_rate_limit
+        if not check_rate_limit(brain, client_ip):
+            return BrainResponse(brain=brain, action=action, ok=False,
+                                 error="Rate limit exceeded — try again in 60s")
+    except Exception:
+        pass
+
+    # Input sanitization
+    try:
+        from core.security import check_sql_injection, sanitize_string
+        for key, val in (payload or {}).items():
+            if isinstance(val, str):
+                if check_sql_injection(val):
+                    return BrainResponse(brain=brain, action=action, ok=False,
+                                         error=f"Invalid input in field '{key}'")
+                payload[key] = sanitize_string(val)
+    except Exception:
+        pass
+
+    # Set correlation ID
+    try:
+        from core.logging import set_correlation_id
+        set_correlation_id()
+    except Exception:
+        pass
+
     start = time.time()
     handler = handlers.get(action)
     if not handler:
