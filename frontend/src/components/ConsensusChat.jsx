@@ -32,6 +32,11 @@ export default function ConsensusChat() {
   const [sending, setSending] = useState(false);
   const [autoMode, setAutoMode] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [showCollab, setShowCollab] = useState(true);
+  const [gaps, setGaps] = useState(null);
+  const [gapsLoading, setGapsLoading] = useState(false);
+  const [verification, setVerification] = useState(null);
+  const [healthData, setHealthData] = useState(null);
   const endRef = useRef(null);
   const pollRef = useRef(null);
 
@@ -294,17 +299,88 @@ export default function ConsensusChat() {
     setSending(false);
   }, [input]);
 
+  const fetchGaps = useCallback(async () => {
+    setGapsLoading(true);
+    try {
+      const [gapRes, verifyRes, healthRes] = await Promise.allSettled([
+        fetch(`${API_BASE_URL}/api/horizon/gaps`),
+        fetch(`${API_BASE_URL}/api/horizon/verify`),
+        fetch(`${API_BASE_URL}/api/health/status`),
+      ]);
+      if (gapRes.status === 'fulfilled' && gapRes.value.ok) setGaps(await gapRes.value.json());
+      if (verifyRes.status === 'fulfilled' && verifyRes.value.ok) setVerification(await verifyRes.value.json());
+      if (healthRes.status === 'fulfilled' && healthRes.value.ok) setHealthData(await healthRes.value.json());
+    } catch { /* skip */ }
+    setGapsLoading(false);
+  }, []);
+
+  useEffect(() => { if (showCollab) fetchGaps(); }, [showCollab, fetchGaps]);
+
+  const askKimiAboutGap = useCallback(async (gap) => {
+    setSending(true);
+    const prompt = `Analyze this integration gap and suggest a precise fix:\n\n` +
+      `Component: ${gap.component}\n` +
+      `Type: ${gap.type}\n` +
+      `Description: ${gap.description}\n` +
+      `Severity: ${gap.severity}\n` +
+      `Suggestion: ${gap.fix_suggestion || 'none'}\n\n` +
+      `Give me: 1) Root cause, 2) Exact fix (file paths + code), 3) How to verify it worked.`;
+
+    setMessages(prev => [...prev, {
+      role: 'user', model: 'You',
+      content: `🔌 Fix gap: [${gap.component}] ${gap.description}`,
+      ts: new Date().toISOString(),
+    }]);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/consensus/fast`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, models: ['kimi', 'opus'], source: 'collaboration' }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const responses = data.individual_responses || [];
+        for (const r of responses) {
+          if (r.response) {
+            setMessages(prev => [...prev, {
+              role: 'assistant', model: r.model_name || r.model_id,
+              content: r.response, latency: r.latency_ms,
+              ts: new Date().toISOString(),
+            }]);
+          }
+        }
+        if (data.final_output) {
+          setMessages(prev => [...prev, {
+            role: 'consensus', model: 'Fix Suggestion',
+            content: data.final_output,
+            confidence: data.confidence,
+            ts: new Date().toISOString(),
+          }]);
+        }
+      }
+    } catch (e) {
+      setMessages(prev => [...prev, {
+        role: 'system', model: 'Error', content: e.message,
+        ts: new Date().toISOString(),
+      }]);
+    }
+    setSending(false);
+  }, []);
+
   const getColor = (model) => {
     for (const [key, color] of Object.entries(MODEL_COLORS)) {
       if (model?.toLowerCase().includes(key.toLowerCase().split(' ')[0])) return color;
     }
     if (model?.includes('Health') || model?.includes('Self-Heal')) return C.success;
-    if (model?.includes('Patch')) return '#ff6b35';
+    if (model?.includes('Patch') || model?.includes('Fix')) return '#ff6b35';
     return C.muted;
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: C.bg }}>
+    <div style={{ display: 'flex', height: '100%', background: C.bg }}>
+      {/* Main chat area */}
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
       {/* Header */}
       <div style={{
         padding: '8px 14px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt,
@@ -312,7 +388,7 @@ export default function ConsensusChat() {
       }}>
         <div>
           <span style={{ fontSize: 14, fontWeight: 700, color: C.text }}>🤝 Consensus Chat</span>
-          <span style={{ fontSize: 11, color: C.dim, marginLeft: 8 }}>All models • bi-directional</span>
+          <span style={{ fontSize: 11, color: C.dim, marginLeft: 8 }}>All models • collaboration</span>
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <label style={{ fontSize: 11, color: C.muted, display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
@@ -338,6 +414,12 @@ export default function ConsensusChat() {
           }}>
             {messages.length === 0 ? '▶ Start' : '🔄 Diagnose'}
           </button>
+          <button onClick={() => setShowCollab(!showCollab)} style={{
+            padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
+            background: showCollab ? C.accent : C.border, color: '#fff', fontSize: 11, fontWeight: 600,
+          }}>
+            {showCollab ? '◀ Gaps' : '▶ Gaps'}
+          </button>
         </div>
       </div>
 
@@ -346,11 +428,10 @@ export default function ConsensusChat() {
         {messages.length === 0 && (
           <div style={{ textAlign: 'center', padding: 40, color: C.dim }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🤝</div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>Consensus Chat</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>Consensus Chat + Collaboration</div>
             <div style={{ fontSize: 12, marginTop: 8, maxWidth: 400, margin: '8px auto' }}>
               All LLMs in one conversation. Click "Start" for them to diagnose Grace,
-              or type a message for all models to discuss together.
-              Toggle "Auto-notify" for real-time alerts.
+              or click a gap in the sidebar to ask Kimi + Opus for a fix.
             </div>
           </div>
         )}
@@ -441,6 +522,156 @@ export default function ConsensusChat() {
           </button>
         </div>
       </div>
+      </div>
+
+      {/* ── Collaboration Sidebar — Gaps & Fixes ────────────────────── */}
+      {showCollab && (
+        <div style={{
+          flex: '0 0 320px', borderLeft: `1px solid ${C.border}`, overflow: 'auto',
+          background: C.bg, display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Sidebar Header */}
+          <div style={{
+            padding: '10px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>🔌 Gaps & Fixes</span>
+            <button onClick={fetchGaps} disabled={gapsLoading} style={{
+              padding: '3px 8px', border: 'none', borderRadius: 4, cursor: 'pointer',
+              background: C.info, color: '#fff', fontSize: 10, fontWeight: 600,
+            }}>{gapsLoading ? '...' : '↻ Scan'}</button>
+          </div>
+
+          {/* Summary stats */}
+          {gaps && (
+            <div style={{ display: 'flex', gap: 4, padding: '8px 12px', borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ flex: 1, textAlign: 'center', padding: 6, background: C.bgAlt, borderRadius: 4 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.accent }}>{gaps.total_gaps}</div>
+                <div style={{ fontSize: 9, color: C.dim }}>Total</div>
+              </div>
+              <div style={{ flex: 1, textAlign: 'center', padding: 6, background: C.bgAlt, borderRadius: 4 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#f44336' }}>{gaps.by_severity?.high || 0}</div>
+                <div style={{ fontSize: 9, color: C.dim }}>High</div>
+              </div>
+              <div style={{ flex: 1, textAlign: 'center', padding: 6, background: C.bgAlt, borderRadius: 4 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.warn }}>{gaps.by_severity?.medium || 0}</div>
+                <div style={{ fontSize: 9, color: C.dim }}>Med</div>
+              </div>
+              {verification && (
+                <div style={{ flex: 1, textAlign: 'center', padding: 6, background: C.bgAlt, borderRadius: 4 }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: C.success }}>{verification.pass_rate}%</div>
+                  <div style={{ fontSize: 9, color: C.dim }}>Verified</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Health status */}
+          {healthData && (
+            <div style={{ padding: '6px 12px', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
+              <span style={{
+                display: 'inline-block', padding: '2px 6px', borderRadius: 4, fontWeight: 700, fontSize: 10,
+                background: healthData.overall_status === 'healthy' ? C.success : healthData.overall_status === 'degraded' ? C.warn : '#f44336',
+                color: '#fff',
+              }}>{healthData.overall_status?.toUpperCase()}</span>
+              {healthData.broken?.length > 0 && (
+                <span style={{ color: '#f44336', marginLeft: 6 }}>Broken: {healthData.broken.join(', ')}</span>
+              )}
+            </div>
+          )}
+
+          {/* Gap list */}
+          <div style={{ flex: 1, overflow: 'auto' }}>
+            {!gaps && !gapsLoading && (
+              <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>
+                Click Scan to load gaps
+              </div>
+            )}
+
+            {gaps?.high_priority?.length > 0 && (
+              <div style={{ padding: '8px 12px 4px' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: '#f44336', textTransform: 'uppercase', marginBottom: 4 }}>
+                  High Priority
+                </div>
+                {gaps.high_priority.map((g, i) => (
+                  <div key={`high-${i}`} onClick={() => askKimiAboutGap(g)} style={{
+                    padding: '8px 10px', marginBottom: 4, borderRadius: 6, cursor: 'pointer',
+                    background: C.bgAlt, borderLeft: '3px solid #f44336', fontSize: 11,
+                    transition: 'background .1s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = C.bgDark}
+                  onMouseLeave={e => e.currentTarget.style.background = C.bgAlt}
+                  >
+                    <div style={{ fontWeight: 600, color: C.text, marginBottom: 2 }}>[{g.component}]</div>
+                    <div style={{ color: C.muted, lineHeight: 1.4 }}>{g.description}</div>
+                    {g.fix_suggestion && (
+                      <div style={{ color: C.info, fontSize: 10, marginTop: 4 }}>💡 {g.fix_suggestion}</div>
+                    )}
+                    <div style={{ color: C.accent, fontSize: 9, marginTop: 4, fontWeight: 600 }}>Click → Ask Kimi + Opus for fix</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {gaps?.all_gaps && (
+              <div style={{ padding: '8px 12px 4px' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>
+                  By Type ({gaps.total_gaps} total)
+                </div>
+                {Object.entries(gaps.by_type || {}).map(([type, count]) => (
+                  <div key={type} style={{
+                    display: 'flex', justifyContent: 'space-between', padding: '5px 10px',
+                    background: C.bgAlt, borderRadius: 4, marginBottom: 3, fontSize: 11,
+                  }}>
+                    <span style={{ color: C.muted }}>{type.replace(/_/g, ' ')}</span>
+                    <span style={{ fontWeight: 700, color: C.text }}>{count}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Medium priority gaps (clickable) */}
+            {gaps?.all_gaps?.filter(g => g.severity === 'medium').slice(0, 15).length > 0 && (
+              <div style={{ padding: '8px 12px 4px' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: C.warn, textTransform: 'uppercase', marginBottom: 4 }}>
+                  Medium Priority (top 15)
+                </div>
+                {gaps.all_gaps.filter(g => g.severity === 'medium').slice(0, 15).map((g, i) => (
+                  <div key={`med-${i}`} onClick={() => askKimiAboutGap(g)} style={{
+                    padding: '6px 10px', marginBottom: 3, borderRadius: 4, cursor: 'pointer',
+                    background: C.bgAlt, borderLeft: `2px solid ${C.warn}`, fontSize: 10,
+                    transition: 'background .1s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = C.bgDark}
+                  onMouseLeave={e => e.currentTarget.style.background = C.bgAlt}
+                  >
+                    <span style={{ color: C.muted }}>[{g.component}] </span>
+                    <span style={{ color: C.text }}>{g.description?.substring(0, 80)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Verification failures */}
+            {verification?.failures?.length > 0 && (
+              <div style={{ padding: '8px 12px 4px' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: C.accent, textTransform: 'uppercase', marginBottom: 4 }}>
+                  Verification Failures ({verification.failures.length})
+                </div>
+                {verification.failures.slice(0, 10).map((f, i) => (
+                  <div key={`fail-${i}`} style={{
+                    padding: '5px 10px', marginBottom: 3, borderRadius: 4,
+                    background: C.bgAlt, borderLeft: `2px solid ${C.accent}`, fontSize: 10,
+                  }}>
+                    <div style={{ color: C.text }}>{f.claim?.substring(0, 70)}</div>
+                    <div style={{ color: C.accent, fontSize: 9 }}>{f.error?.substring(0, 80)}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
