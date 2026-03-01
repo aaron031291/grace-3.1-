@@ -133,6 +133,54 @@ def session_scope() -> Generator[Session, None, None]:
         session.close()
 
 
+@contextmanager
+def batch_session_scope(batch_size: int = 100):
+    """
+    Context manager optimised for high-volume bulk inserts.
+
+    Yields (session, flush_batch) — call flush_batch() after adding
+    `batch_size` objects to flush and clear the identity map, keeping
+    memory bounded on large ingests.
+
+    Example::
+
+        with batch_session_scope(batch_size=250) as (session, flush):
+            for i, row in enumerate(rows):
+                session.add(SomeModel(**row))
+                if (i + 1) % 250 == 0:
+                    flush()
+    """
+    if SessionLocal is None:
+        initialize_session_factory()
+
+    session = SessionLocal()
+    counter = {"n": 0}
+
+    def flush_batch():
+        counter["n"] += 1
+        try:
+            session.flush()
+            session.expire_all()
+        except OperationalError as e:
+            if _is_lock_error(e):
+                logger.warning("Batch flush hit lock — retrying after rollback")
+                session.rollback()
+                time.sleep(_RETRY_BACKOFF_S)
+            else:
+                raise
+
+    try:
+        yield session, flush_batch
+        _commit_with_retry(session)
+        logger.debug("Batch session committed (%d flushes)", counter["n"])
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Batch session error: {e}")
+        raise
+    finally:
+        session.close()
+
+
 def _commit_with_retry(session: Session) -> None:
     """Attempt session.commit(), retrying on transient lock errors."""
     for attempt in range(1, _RETRY_MAX + 1):
