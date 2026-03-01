@@ -49,8 +49,83 @@ _loop_lock = threading.Lock()
 _loop_log: list = []
 
 
+def _get_time_context() -> dict:
+    try:
+        from cognitive.time_sense import TimeSense
+        return TimeSense.get_context()
+    except Exception:
+        return {}
+
+
+def _get_trust_score(component: str) -> float:
+    try:
+        from cognitive.trust_engine import get_trust_engine
+        te = get_trust_engine()
+        score = te.score_output(component, component, "", source="autonomous_loop")
+        return float(score) if isinstance(score, (int, float)) else 0.7
+    except Exception:
+        return 0.7
+
+
+def _get_mirror_observation() -> dict:
+    try:
+        from api.component_health_api import _get_genesis_keys, _get_time_context as _tc
+        import urllib.request, json as _j
+        req = urllib.request.Request("http://127.0.0.1:8000/api/component-health/mirror-feed")
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            return _j.loads(resp.read())
+    except Exception:
+        return {}
+
+
+def _recall_similar_episode(problem_text: str) -> dict:
+    """Check episodic memory for similar past problems and what worked."""
+    try:
+        from database.session import session_scope
+        from cognitive.episodic_memory import EpisodicBuffer
+        with session_scope() as sess:
+            buffer = EpisodicBuffer(sess)
+            episodes = buffer.recall_similar(problem_text, k=3, min_trust=0.6)
+            if episodes:
+                ep = episodes[0]
+                return {
+                    "found": True,
+                    "past_problem": ep.problem[:200] if ep.problem else "",
+                    "past_action": ep.action[:200] if isinstance(ep.action, str) else str(ep.action)[:200],
+                    "past_outcome": ep.outcome[:200] if isinstance(ep.outcome, str) else str(ep.outcome)[:200],
+                    "trust": ep.trust_score,
+                }
+    except Exception:
+        pass
+    return {"found": False}
+
+
+def _update_kpis(cycle_result: dict):
+    """Update KPI tracker with loop metrics."""
+    try:
+        from api.kpi_api import get_kpi_tracker
+        tracker = get_kpi_tracker()
+        tracker.increment_kpi("autonomous_loop", "cycles_completed", 1)
+        tracker.increment_kpi("autonomous_loop", "triggers_detected", cycle_result.get("triggers_found", 0))
+        for a in cycle_result.get("actions", []):
+            tracker.increment_kpi("autonomous_loop", f"actions_{a['type']}", 1)
+        if cycle_result.get("trust_blocked", 0) > 0:
+            tracker.increment_kpi("autonomous_loop", "trust_blocked", cycle_result["trust_blocked"])
+    except Exception:
+        pass
+
+
+# Trust thresholds per action type
+TRUST_THRESHOLDS = {
+    "heal": 0.5,
+    "learn": 0.4,
+    "code": 0.8,
+    "escalate": 0.0,
+}
+
+
 def _run_cycle() -> dict:
-    """Execute one full autonomous cycle."""
+    """Execute one full autonomous cycle with trust, time, mirror, memory."""
     cycle_start = time.time()
     result = {
         "cycle_id": f"AUTO-{int(time.time())}",
@@ -58,28 +133,53 @@ def _run_cycle() -> dict:
         "triggers_found": 0,
         "actions": [],
         "outcome": "clean",
+        "trust_blocked": 0,
+        "deferred": 0,
+    }
+
+    # ── TIME FILTER: Check temporal context ──────────────────────
+    time_ctx = _get_time_context()
+    is_quiet = time_ctx.get("period") in ("late_night", "night")
+    result["time_context"] = {
+        "period": time_ctx.get("period", "unknown"),
+        "is_business_hours": time_ctx.get("is_business_hours", False),
+        "is_quiet": is_quiet,
+    }
+
+    # ── MIRROR: Get self-observation ─────────────────────────────
+    mirror = _get_mirror_observation()
+    result["mirror"] = {
+        "problems_observed": len(mirror.get("problems", [])),
+        "total_events_1h": mirror.get("total_events_1h", 0),
+        "error_count_1h": mirror.get("error_count_1h", 0),
     }
 
     # ── 1. TRIGGER: Scan for problems ────────────────────────────
     problems = []
     try:
-        from api.brain_api import call_brain
-        health = call_brain("system", "problems", {})
-        if health.get("ok") and health.get("data", {}).get("problems"):
-            for p in health["data"]["problems"]:
+        from api.component_health_api import (
+            COMPONENT_REGISTRY, _get_genesis_keys, _classify_component,
+            _check_service_health
+        )
+        keys = _get_genesis_keys(minutes=60, limit=2000)
+        svc_health = _check_service_health()
+        for comp_id, comp in COMPONENT_REGISTRY.items():
+            classified = _classify_component(comp_id, comp, keys, svc_health)
+            if classified["status"] in ("red", "orange"):
                 problems.append({
                     "source": "component_health",
-                    "target": p.get("label", p.get("id", "")),
-                    "status": p.get("status"),
-                    "reason": p.get("reason", ""),
-                    "severity": "critical" if p.get("status") == "red" else "warning",
+                    "target": classified["label"],
+                    "component_id": comp_id,
+                    "status": classified["status"],
+                    "reason": classified["reason"],
+                    "severity": "critical" if classified["status"] == "red" else "warning",
                 })
     except Exception as e:
         logger.debug(f"Health scan skipped: {e}")
 
     try:
-        from api.runtime_triggers_api import _scan_resources, _scan_services, _scan_code
-        for scanner in [_scan_resources, _scan_services, _scan_code]:
+        from api.runtime_triggers_api import _scan_resources, _scan_code
+        for scanner in [_scan_resources, _scan_code]:
             try:
                 found = scanner()
                 for t in found:
@@ -102,42 +202,71 @@ def _run_cycle() -> dict:
     if not problems:
         result["outcome"] = "clean"
         result["latency_ms"] = round((time.time() - cycle_start) * 1000, 1)
+        _update_kpis(result)
         return result
 
-    # ── 2. DECIDE + ACT for each problem ─────────────────────────
+    # ── 2. DECIDE + ACT (with trust gate + time filter + memory) ──
     for problem in problems[:5]:
         action = _decide_and_act(problem)
+
+        # TRUST GATE: check trust before executing
+        trust = _get_trust_score(problem.get("target", "system"))
+        threshold = TRUST_THRESHOLDS.get(action["type"], 0.5)
+        action["trust_score"] = trust
+        action["trust_threshold"] = threshold
+
+        if trust < threshold and action["type"] != "escalate":
+            action["trust_blocked"] = True
+            action["type"] = "escalate"
+            action["result"] = {"reason": f"Trust {trust:.2f} < threshold {threshold}"}
+            result["trust_blocked"] += 1
+        else:
+            action["trust_blocked"] = False
+
+        # TIME FILTER: defer non-urgent during quiet hours
+        if is_quiet and problem.get("severity") != "critical" and action["type"] not in ("escalate",):
+            action["deferred"] = True
+            action["result"] = {"reason": "Deferred to business hours (non-critical, quiet period)"}
+            result["deferred"] += 1
+        else:
+            action["deferred"] = False
+
+        # EPISODIC MEMORY: recall similar past problems
+        episode = _recall_similar_episode(problem.get("reason", ""))
+        action["episodic_recall"] = episode
+
         result["actions"].append(action)
 
         with _loop_lock:
             _loop_state["actions_taken"] += 1
-            if action["type"] == "heal":
-                _loop_state["healed"] += 1
-            elif action["type"] == "learn":
-                _loop_state["learned"] += 1
-            elif action["type"] == "code":
-                _loop_state["coded"] += 1
-            elif action["type"] == "escalate":
-                _loop_state["escalated"] += 1
+            cat = action["type"]
+            if cat in _loop_state:
+                _loop_state[cat] += 1
 
-    # ── 3. LEARN: Record outcome ─────────────────────────────────
+    # ── 3. LEARN: Record outcome + update KPIs ──────────────────
     try:
         from api._genesis_tracker import track
         track(
             key_type="system_event",
-            what=f"Autonomous cycle {result['cycle_id']}: {len(problems)} triggers, {len(result['actions'])} actions",
+            what=f"Ouroboros cycle {result['cycle_id']}: {len(problems)} triggers, "
+                 f"{len(result['actions'])} actions, {result['trust_blocked']} trust-blocked, "
+                 f"{result['deferred']} deferred",
             who="autonomous_loop",
             how="ouroboros_cycle",
             output_data={
                 "triggers": len(problems),
                 "actions": len(result["actions"]),
-                "healed": sum(1 for a in result["actions"] if a["type"] == "heal"),
-                "learned": sum(1 for a in result["actions"] if a["type"] == "learn"),
+                "trust_blocked": result["trust_blocked"],
+                "deferred": result["deferred"],
+                "time_period": time_ctx.get("period"),
+                "mirror_errors": mirror.get("error_count_1h", 0),
             },
             tags=["autonomous", "ouroboros", "cycle"],
         )
     except Exception:
         pass
+
+    _update_kpis(result)
 
     result["outcome"] = "acted"
     result["latency_ms"] = round((time.time() - cycle_start) * 1000, 1)
