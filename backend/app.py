@@ -86,6 +86,7 @@ from api.runtime_triggers_api import router as runtime_triggers_router
 from api.component_health_api import router as component_health_router
 from api.probe_agent_api import router as probe_agent_router
 from api.consensus_fixer_api import router as consensus_fixer_router
+from api.brain_api import router as brain_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -598,6 +599,7 @@ app.include_router(runtime_triggers_router)      # /api/triggers — trigger sca
 app.include_router(component_health_router)      # /api/component-health — behavioral profiling + health map
 app.include_router(probe_agent_router)           # /api/probe — automated API crawler + dormancy protocol
 app.include_router(consensus_fixer_router)       # /api/consensus-fix — autonomous consensus diagnosis + repair
+app.include_router(brain_router)                 # /brain/* — domain brain API (8 brains, ~80 actions)
 
 # v1 resource API (enterprise pattern — the public surface)
 register_v1(app)
