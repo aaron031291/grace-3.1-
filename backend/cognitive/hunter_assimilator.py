@@ -488,7 +488,7 @@ class HunterAssimilator:
                 if kb.exists():
                     existing_files = [f.name for f in kb.rglob("*.py")]
                     # Check for naming conflicts
-                    new_files = [Path(f).name for f in self._history[-1].files_created if self._history else []]
+                    new_files = [Path(f).name for f in (self._history[-1].files_created if self._history else [])]
                     conflicts = [f for f in new_files if f in existing_files]
                     if conflicts:
                         return {"step": "contradiction_check", "conflicts": conflicts, "clean": False}
