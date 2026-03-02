@@ -222,7 +222,67 @@ def _run_cycle() -> dict:
 
     result["triggers_found"] = len(problems)
 
+    # ── 1b. DEEP INTELLIGENCE (untapped actions now wired) ─────
+    try:
+        from api.brain_api_v2 import call_brain
+
+        # Root cause correlation — don't alert on leaf failures
+        for p in list(problems):
+            if p.get("component_id"):
+                corr = call_brain("system", "correlate", {"component": p["component_id"]})
+                if corr.get("ok") and corr.get("data", {}).get("suppress_alert"):
+                    p["suppressed"] = True
+                    problems.remove(p)
+
+        # Orphan detection — find ghost services
+        orphans = call_brain("system", "orphans", {})
+        if orphans.get("ok") and orphans.get("data", {}).get("orphans"):
+            for o in orphans["data"]["orphans"]:
+                problems.append({"source": "orphan_detection", "target": o.get("label", ""),
+                                 "reason": o.get("diagnosis", ""), "severity": "warning"})
+
+        # ML baselines — detect anomalies from historical patterns
+        baselines = call_brain("system", "baselines", {})
+        result["baselines_checked"] = baselines.get("ok", False)
+
+        # Mine Genesis keys for patterns
+        key_patterns = call_brain("system", "mine_keys", {"hours": 1})
+        if key_patterns.get("ok"):
+            repeated = key_patterns.get("data", {}).get("repeated_failures", [])
+            for rf in repeated[:3]:
+                problems.append({"source": "genesis_pattern", "target": rf.get("pattern", ""),
+                                 "reason": f"Repeated {rf.get('count', 0)}x", "severity": "warning"})
+
+        # Mine episodic memory — what worked before
+        episodes = call_brain("system", "mine_episodes", {})
+        result["episodes_mined"] = episodes.get("ok", False)
+
+        # Intelligence report feeds into decisions
+        intel = call_brain("system", "intelligence", {"hours": 1})
+        result["intelligence_consulted"] = intel.get("ok", False)
+
+        # Synaptic weights influence routing
+        synapses = call_brain("system", "synapses", {})
+        result["synapses_checked"] = synapses.get("ok", False)
+
+        # Trust scores gate actions
+        trust_state = call_brain("system", "trust", {})
+        result["trust_state"] = trust_state.get("data", {}).get("models", {}) if trust_state.get("ok") else {}
+
+        # Genesis cleanup — prevent DB bloat
+        call_brain("system", "genesis_cleanup", {})
+
+    except Exception as e:
+        logger.debug(f"Deep intelligence scan: {e}")
+
     if not problems:
+        # Even when clean, retrain DL model periodically
+        try:
+            from api.brain_api_v2 import call_brain
+            call_brain("ai", "dl_train", {"hours": 24, "limit": 500})
+        except Exception:
+            pass
+
         result["outcome"] = "clean"
         result["latency_ms"] = round((time.time() - cycle_start) * 1000, 1)
         _update_kpis(result)

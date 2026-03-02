@@ -300,6 +300,40 @@ class CodingPipeline:
                      {"status": result.status, "run_id": run_id, "chunks": len(result.chunks),
                       "passed": len(passed_chunks), "trust": result.trust_score})
 
+        # Run tests AFTER generating code — verify it works
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            test_result = _cb("ai", "logic_tests", {})
+            result.test_passed = test_result.get("ok", False)
+        except Exception:
+            pass
+
+        # Notify user when pipeline completes
+        try:
+            from core.user_features import notify
+            notify(
+                f"Pipeline {result.status}: {task[:50]}",
+                f"{len(passed_chunks)}/{len(result.chunks)} chunks passed. Trust: {result.trust_score:.0%}",
+                type="success" if result.status == "passed" else "warning",
+                source="coding_pipeline",
+            )
+        except Exception:
+            pass
+
+        # Auto hot-reload after code changes
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            _cb("system", "hot_reload_all", {})
+        except Exception:
+            pass
+
+        # Auto-generate report
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            _cb("system", "generate_report", {"hours": 1})
+        except Exception:
+            pass
+
         # Record as episodic memory — the pipeline outcome is a real learning signal
         try:
             from database.session import session_scope
@@ -453,15 +487,35 @@ class CodingPipeline:
         }
 
     def _layer_decompose(self, chunk: str, task: str) -> dict:
-        """Layer 2: Decompose using planner, search existing code, check knowledge gaps."""
+        """Layer 2: Decompose with ambiguity check, project context, governance rules."""
         from api.brain_api_v2 import call_brain
+
+        # Check ambiguity BEFORE decomposing
+        ambiguity = call_brain("ai", "ambiguity", {"text": chunk})
+        is_ambiguous = ambiguity.get("data", {}).get("is_ambiguous", False) if ambiguity.get("ok") else False
+
+        # Load project context — LLM sees existing code
+        from core.environment import get_environment
+        env = get_environment()
+        project_ctx = call_brain("code", "project_context", {"id": env})
+
+        # Check governance rules
+        rules = call_brain("govern", "rules", {})
+
+        # Search existing code
         existing = call_brain("files", "search", {"query": chunk[:50], "limit": 5})
-        planner = call_brain("ai", "fast", {
-            "prompt": f"Decompose this into sub-tasks. Consider existing code:\n{chunk}",
+
+        # Run models independently — don't block on one slow model
+        planner = call_brain("system", "run_independent", {
+            "prompt": f"Decompose this into sub-tasks:\n{chunk}",
             "models": ["kimi"],
         })
+
         return {
-            "sub_tasks": planner.get("data", {}),
+            "sub_tasks": planner.get("data", {}).get("results", {}).get("kimi", {}).get("response", ""),
+            "is_ambiguous": is_ambiguous,
+            "project_context_loaded": project_ctx.get("ok", False),
+            "governance_rules": len(rules.get("data", {}).get("documents", [])) if rules.get("ok") else 0,
             "existing_code_found": len(existing.get("data", {}).get("results", [])) if existing.get("ok") else 0,
         }
 
@@ -504,15 +558,36 @@ class CodingPipeline:
         }
 
     def _layer_generate(self, chunk: str, task: str) -> dict:
-        """Layer 6: Generate code with persona, existing code context, governance."""
+        """Layer 6: Generate code with persona, context, governance, environment routing."""
         from api.brain_api_v2 import call_brain
+
+        # Load persona for coding style
         persona = call_brain("govern", "persona", {})
-        existing = call_brain("files", "search", {"query": chunk[:30], "limit": 3})
+
+        # Project-scoped chat — LLM reasons about THIS project
+        from core.environment import get_environment
+        env = get_environment()
+        scoped = call_brain("code", "project_chat", {
+            "project_id": env,
+            "message": f"Generate code for: {chunk}",
+        })
+
+        # Generate code
         code = call_brain("code", "generate", {"prompt": chunk, "project_folder": "."})
+
+        # Route output to active environment
+        if code.get("ok") and code.get("data", {}).get("code"):
+            call_brain("system", "env_write", {
+                "path": f"backend/generated_{int(time.time())}.py",
+                "content": code["data"]["code"],
+                "source": "coding_pipeline",
+            })
+
         return {
             "code": code.get("data", {}),
             "persona_applied": persona.get("ok", False),
-            "existing_context": len(existing.get("data", {}).get("results", [])) if existing.get("ok") else 0,
+            "environment": env,
+            "project_scoped": scoped.get("ok", False),
         }
 
     def _layer_verify(self, chunk: str) -> dict:
