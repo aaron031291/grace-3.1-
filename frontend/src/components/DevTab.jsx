@@ -201,21 +201,27 @@ const ACTIONS = [
     items: [
       {
         id: "upload_rules", label: "Upload Rules", icon: "📜",
-        special: "upload_file",
+        special: "upload_govern",
         uploadTarget: "rules",
-        desc: "Upload a document (TXT, CSV, MD, JSON, YAML, PDF) that becomes LAW for the LLMs. Whatever this document specifies — coding standards, schemas, configs, API specs, Python environments — Grace will follow it in all code generation and responses. Connects to: core/services/govern_service.py → data/governance_rules/ → GovernanceAwareLLM wrapper injects these into every LLM system prompt.",
+        desc: "Upload documents that become LAW for the LLMs — PDF, Word, TXT, CSV, JSON, YAML, code files, anything up to 5GB. Whatever these documents specify (coding standards, schemas, configs, API specs, environments) Grace follows in all outputs. Supports: PDF, DOCX, TXT, CSV, JSON, YAML, TOML, MD, XML, SQL, Python, JS, TS, HTML, CSS, ZIP. Connects to: chunked upload → governance_rules/ → GovernanceAwareLLM injects into every system prompt.",
       },
       {
         id: "upload_config", label: "Upload Config", icon: "⚙️",
-        special: "upload_file",
+        special: "upload_govern",
         uploadTarget: "config",
-        desc: "Upload a configuration file (env, JSON, YAML, TOML) that defines how Grace should behave. This could be a Python requirements.txt, a Docker compose, an API schema, or any technical spec. Gets stored and injected as context. Connects to: govern_service → governance_rules_api → governance_wrapper.",
+        desc: "Upload configuration files — requirements.txt, Docker compose, env files, package.json, tsconfig, any technical spec up to 5GB. Grace uses these as context for code generation. Connects to: chunked upload → governance_rules/config/ → governance wrapper.",
       },
       {
         id: "upload_schema", label: "Upload Schema", icon: "📐",
-        special: "upload_file",
+        special: "upload_govern",
         uploadTarget: "schema",
-        desc: "Upload a database schema, API payload format, data model, or type definition. Grace will use this to generate code that matches your exact structure. Supports SQL, JSON Schema, Proto, TypeScript types. Connects to: governance rules → LLM system prompt injection.",
+        desc: "Upload database schemas, API payloads, data models, type definitions — SQL, JSON Schema, Proto, TypeScript, GraphQL, OpenAPI specs. Grace generates code matching your exact structure. Up to 5GB. Connects to: chunked upload → governance_rules/schema/ → LLM context injection.",
+      },
+      {
+        id: "upload_codebase", label: "Upload Codebase", icon: "📦",
+        special: "upload_govern",
+        uploadTarget: "codebase",
+        desc: "Upload a full codebase as a ZIP, tarball, or individual files — up to 5GB. Grace analyzes the architecture and uses it as a blueprint for building new features that align with the existing code patterns. Connects to: chunked upload → governance_rules/codebase/ → LLM context with full project awareness.",
       },
       {
         id: "view_rules", label: "View Active Rules", icon: "📋",
@@ -376,30 +382,101 @@ function LeftPanel({ onDetail, width = 200 }) {
   const [lastResults, setLastResults] = useState({});
 
   const run = async (item) => {
-    // File upload actions
-    if (item.special === "upload_file") {
+    // File upload with 5GB chunked support
+    if (item.special === "upload_govern") {
       const input = document.createElement("input");
       input.type = "file";
-      input.accept = ".txt,.csv,.md,.json,.yaml,.yml,.toml,.pdf,.env,.sql,.proto,.ts,.py,.xml";
+      input.multiple = true;
+      input.accept = ".txt,.csv,.md,.json,.yaml,.yml,.toml,.pdf,.env,.sql,.proto,.ts,.tsx,.js,.jsx,.py,.xml,.html,.css,.scss,.zip,.tar,.gz,.docx,.doc,.xlsx,.xls,.pptx,.graphql,.openapi,.swagger,.prisma,.tf,.sh,.bat,.cfg,.ini,.conf,.log,.r,.go,.rs,.java,.kt,.swift,.c,.cpp,.h,.hpp,.cs,.rb,.php,.pl,.ex,.exs,.hs,.ml,.scala,.lua,.dart,.vue,.svelte,.astro";
       input.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
         setLoading(p => ({ ...p, [item.id]: true }));
-        const content = await file.text();
+
         const category = item.uploadTarget || "general";
-        const r = await brainCall("govern", "update_persona", {});
-        // Save as governance rule
-        const saveResult = await brainCall("files", "create", {
-          path: `governance_rules/${category}/${file.name}`,
-          content: content,
-          directory: `governance_rules/${category}`,
-        });
+        const results = [];
+
+        for (const file of files) {
+          const sizeMB = (file.size / 1048576).toFixed(1);
+
+          if (file.size > 50 * 1024 * 1024) {
+            // Large file (>50MB): use chunked upload
+            try {
+              const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+              const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+              const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+              // Initiate
+              const initResp = await fetch(`${BASE}/api/upload/initiate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ filename: file.name, file_size: file.size, folder: `governance_rules/${category}`, auto_ingest: true }),
+              });
+              const initData = await initResp.json();
+              const uploadId = initData.upload_id;
+
+              // Upload chunks
+              for (let i = 0; i < totalChunks; i++) {
+                const start = i * CHUNK_SIZE;
+                const end = Math.min(start + CHUNK_SIZE, file.size);
+                const chunk = file.slice(start, end);
+                const formData = new FormData();
+                formData.append("file", chunk);
+                formData.append("upload_id", uploadId);
+                formData.append("chunk_index", i.toString());
+                await fetch(`${BASE}/api/upload/chunk`, { method: "POST", body: formData });
+              }
+
+              // Complete
+              await fetch(`${BASE}/api/upload/complete`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ upload_id: uploadId }),
+              });
+
+              results.push({ file: file.name, size: `${sizeMB}MB`, status: "uploaded (chunked)", chunks: totalChunks });
+            } catch (err) {
+              results.push({ file: file.name, size: `${sizeMB}MB`, status: "failed", error: err.message });
+            }
+          } else {
+            // Small file: direct read and save
+            try {
+              let content;
+              if (file.name.endsWith(".pdf") || file.name.endsWith(".docx") || file.name.endsWith(".zip") || file.name.endsWith(".gz") || file.name.endsWith(".tar")) {
+                // Binary files: upload via FormData to librarian
+                const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("folder", `governance_rules/${category}`);
+                const r = await fetch(`${BASE}/api/librarian-fs/file/upload`, { method: "POST", body: formData });
+                results.push({ file: file.name, size: `${sizeMB}MB`, status: r.ok ? "uploaded" : "failed" });
+                continue;
+              }
+
+              content = await file.text();
+              const r = await brainCall("files", "create", {
+                path: `governance_rules/${category}/${file.name}`,
+                content: content,
+                directory: `governance_rules/${category}`,
+              });
+              results.push({
+                file: file.name,
+                size: `${sizeMB}MB`,
+                status: r.ok ? "uploaded" : "failed",
+                preview: content.slice(0, 200),
+              });
+            } catch (err) {
+              results.push({ file: file.name, size: `${sizeMB}MB`, status: "failed", error: err.message });
+            }
+          }
+        }
+
         setLoading(p => ({ ...p, [item.id]: false }));
         onDetail({
-          title: `Uploaded: ${file.name}`,
+          title: `Uploaded ${results.length} file(s)`,
           icon: item.icon,
-          desc: `${file.name} (${(file.size / 1024).toFixed(1)}KB) saved as ${category} rule. This document now governs all LLM behavior. It will be injected into every system prompt.`,
-          data: saveResult.ok ? { saved: true, file: file.name, category, size: file.size, content_preview: content.slice(0, 500) } : { error: saveResult.error },
+          desc: `Saved to governance_rules/${category}/. These documents now govern all LLM behavior — injected into every system prompt as mandatory rules.`,
+          data: { files: results, category, total: results.length, succeeded: results.filter(r => r.status.includes("uploaded")).length },
         });
       };
       input.click();
