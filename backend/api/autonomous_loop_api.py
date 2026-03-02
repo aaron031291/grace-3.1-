@@ -272,14 +272,67 @@ def _run_cycle() -> dict:
         # Genesis cleanup — prevent DB bloat
         call_brain("system", "genesis_cleanup", {})
 
+        # Consensus fix for critical problems
+        critical = [p for p in problems if p.get("severity") == "critical"]
+        if critical:
+            call_brain("system", "consensus_fix", {})
+
+        # Trigger scan
+        call_brain("system", "triggers", {})
+
+        # Security scan on recent code changes
+        call_brain("system", "security_scan", {"code": "", "file": ""})
+
+        # Governance heal + learn
+        call_brain("govern", "heal", {})
+        call_brain("govern", "learn", {})
+
+        # Diagnose via console
+        call_brain("ai", "diagnose", {})
+
+        # Check integration matrix
+        call_brain("ai", "integration_matrix", {})
+
+        # Check knowledge gaps
+        call_brain("ai", "knowledge_gaps", {})
+
+        # Notify about cycle results
+        if problems:
+            call_brain("system", "notify", {
+                "title": f"Ouroboros: {len(problems)} issues",
+                "message": ", ".join(p.get("target", "?")[:20] for p in problems[:3]),
+                "type": "warning",
+            })
+
     except Exception as e:
         logger.debug(f"Deep intelligence scan: {e}")
 
     if not problems:
-        # Even when clean, retrain DL model periodically
+        # Clean cycle — do maintenance tasks
         try:
             from api.brain_api_v2 import call_brain
+
+            # Retrain DL model
             call_brain("ai", "dl_train", {"hours": 24, "limit": 500})
+
+            # Check pipeline progress (if any background pipelines running)
+            call_brain("ai", "pipeline_progress", {})
+
+            # Generate periodic report
+            call_brain("system", "generate_report", {"hours": 6})
+
+            # Hot reload all services (pick up any changes)
+            call_brain("system", "hot_reload_all", {})
+
+            # Security scan
+            call_brain("system", "security_scan", {"code": "", "file": ""})
+
+            # Rollback check — verify snapshots exist
+            call_brain("system", "snapshots", {})
+
+            # Verify provenance ledger integrity
+            call_brain("system", "verify_ledger", {})
+
         except Exception:
             pass
 

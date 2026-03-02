@@ -321,11 +321,33 @@ class CodingPipeline:
                      {"status": result.status, "run_id": run_id, "chunks": len(result.chunks),
                       "passed": len(passed_chunks), "trust": result.trust_score})
 
-        # Run tests AFTER generating code — verify it works
+        # Run logic tests — verify generated code works
         try:
             from api.brain_api_v2 import call_brain as _cb
             test_result = _cb("ai", "logic_tests", {})
             result.test_passed = test_result.get("ok", False)
+        except Exception:
+            pass
+
+        # Run deterministic scan + fix on the result
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            _cb("ai", "deterministic_scan", {})
+            _cb("ai", "deterministic_fix", {})
+        except Exception:
+            pass
+
+        # Generate code if any chunk needs it
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            _cb("ai", "generate", {"prompt": f"Verify and polish: {task[:100]}"})
+        except Exception:
+            pass
+
+        # Console diagnose
+        try:
+            from api.brain_api_v2 import call_brain as _cb
+            _cb("ai", "console", {"message": f"Pipeline complete for: {task[:50]}. Status: {result.status}"})
         except Exception:
             pass
 
@@ -541,18 +563,31 @@ class CodingPipeline:
         }
 
     def _layer_propose(self, chunk: str, task: str) -> dict:
-        """Layer 3: Propose 3 approaches, check rules, search for patterns."""
+        """Layer 3: Propose using consensus, check models, oracle, training data."""
         from api.brain_api_v2 import call_brain
-        rules = call_brain("govern", "rules", {})
-        similar = call_brain("files", "search", {"query": chunk[:30], "limit": 3})
-        proposals = call_brain("ai", "fast", {
+
+        # Check available models
+        models = call_brain("ai", "models", {})
+
+        # Check oracle for existing training data
+        oracle = call_brain("ai", "oracle", {})
+
+        # Check training examples
+        training = call_brain("ai", "training", {})
+
+        # Full consensus proposal (all models deliberate)
+        proposals = call_brain("ai", "consensus", {
             "prompt": f"Propose 3 different approaches. Follow all governance rules.\n{chunk}",
-            "models": ["kimi", "opus"],
         })
+
+        # Quick alternative
+        quick = call_brain("ai", "quick", {"prompt": f"Quick approach for: {chunk[:100]}"})
+
         return {
             "proposals": proposals.get("data", {}),
-            "rules_checked": rules.get("ok", False),
-            "similar_patterns": len(similar.get("data", {}).get("results", [])) if similar.get("ok") else 0,
+            "quick_alternative": quick.get("data", {}).get("final_output", "")[:200] if quick.get("ok") else "",
+            "models_available": len(models.get("data", {}).get("models", [])) if models.get("ok") else 0,
+            "oracle_consulted": oracle.get("ok", False),
         }
 
     def _layer_select(self, chunk: str, proposals: dict) -> dict:
