@@ -300,6 +300,34 @@ class CodingPipeline:
                      {"status": result.status, "run_id": run_id, "chunks": len(result.chunks),
                       "passed": len(passed_chunks), "trust": result.trust_score})
 
+        # Record as episodic memory — the pipeline outcome is a real learning signal
+        try:
+            from database.session import session_scope
+            from cognitive.episodic_memory import EpisodicBuffer
+            with session_scope() as s:
+                buf = EpisodicBuffer(s)
+                buf.record_episode(
+                    problem=f"Build task: {task[:200]}",
+                    action={
+                        "pipeline": "8-layer",
+                        "chunks": len(result.chunks),
+                        "layers_per_chunk": 8,
+                    },
+                    outcome={
+                        "status": result.status,
+                        "trust_score": result.trust_score,
+                        "passed_chunks": len(passed_chunks),
+                        "total_chunks": len(result.chunks),
+                        "duration_ms": result.total_duration_ms,
+                    },
+                    predicted_outcome={"status": "passed"},
+                    trust_score=result.trust_score,
+                    source="coding_pipeline",
+                    genesis_key_id=run_id,
+                )
+        except Exception:
+            pass
+
         return result
 
     def _plan_task(self, task: str, context: dict) -> list:
@@ -338,6 +366,25 @@ class CodingPipeline:
 
             # Self-mirror observation
             mirror_obs = self._mirror_observe(layer_num, chunk)
+
+            # Episodic recall — check for similar past failures
+            past_failure = None
+            try:
+                from database.session import session_scope as _ss
+                from cognitive.episodic_memory import EpisodicBuffer
+                with _ss() as _s:
+                    buf = EpisodicBuffer(_s)
+                    similar = buf.recall_similar(chunk[:100], k=3, min_trust=0.3)
+                    failed = [e for e in similar
+                              if isinstance(e.outcome, str) and "fail" in e.outcome.lower()
+                              or isinstance(e.outcome, dict) and e.outcome.get("status") == "failed"]
+                    if failed:
+                        past_failure = failed[0]
+                        task = (f"WARNING: A similar task failed before. "
+                                f"Past problem: {past_failure.problem[:100]}. "
+                                f"Be careful with the same approach.\n\n{task}")
+            except Exception:
+                pass
 
             # LLM Reasoning about this layer
             reasoning = self._reason(layer_num, chunk, task)

@@ -268,6 +268,26 @@ def _run_cycle() -> dict:
 
     _update_kpis(result)
 
+    # Record as episodic memory — real learning from real outcomes
+    for action in result.get("actions", []):
+        try:
+            from database.session import session_scope
+            from cognitive.episodic_memory import EpisodicBuffer
+            from cognitive.learning_memory import _to_json_str
+            with session_scope() as s:
+                buf = EpisodicBuffer(s)
+                buf.record_episode(
+                    problem=action.get("reason", action.get("target", "unknown problem")),
+                    action={"type": action.get("type", "unknown"), "target": action.get("target", "")},
+                    outcome=action.get("result", {}),
+                    predicted_outcome={"success": True} if not action.get("deferred") else None,
+                    trust_score=action.get("trust_score", 0.5),
+                    source="ouroboros_loop",
+                    genesis_key_id=result.get("cycle_id"),
+                )
+        except Exception:
+            pass
+
     result["outcome"] = "acted"
     result["latency_ms"] = round((time.time() - cycle_start) * 1000, 1)
     return result
