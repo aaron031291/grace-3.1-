@@ -268,6 +268,8 @@ def _system() -> dict:
         "genesis_hot": lambda p: _genesis_hot(p),
         "file_events": lambda p: _file_events(p),
         "scan_upload": lambda p: _scan_upload(p),
+        "process_documents": lambda p: _process_docs(p),
+        "processing_status": lambda p: _processing_status(),
         "workspace_context": lambda p: _workspace_ctx(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
@@ -564,6 +566,14 @@ def _genesis_cleanup():
 def _file_events(p):
     from core.workspace_bridge import get_recent_events
     return {"events": get_recent_events(p.get("limit", 50))}
+
+def _process_docs(p):
+    from core.document_processor import process_documents
+    return process_documents(p.get("files", []), p.get("category", "general"), p.get("workspace", ""))
+
+def _processing_status():
+    from core.document_processor import get_processing_status
+    return get_processing_status()
 
 def _scan_upload(p):
     from core.workspace_bridge import scan_upload
