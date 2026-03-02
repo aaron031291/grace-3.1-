@@ -99,8 +99,13 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
                              error=str(e)[:300], latency_ms=latency)
 
 
+_calling_brain = "external"
+
+
 def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
-    """Cross-brain call — any brain can call another."""
+    """Cross-brain call with Hebbian learning — synapses strengthen on success."""
+    global _calling_brain
+    source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
               "system": _system, "data": _data, "tasks": _tasks, "code": _code}
     factory = brains.get(brain_name)
@@ -110,8 +115,24 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
     if not handler:
         return {"ok": False, "error": f"Unknown action '{action}' in brain '{brain_name}'"}
     try:
-        return {"ok": True, "data": handler(payload or {})}
+        old_caller = _calling_brain
+        _calling_brain = brain_name
+        data = handler(payload or {})
+        _calling_brain = old_caller
+
+        try:
+            from core.hebbian import get_hebbian_mesh
+            get_hebbian_mesh().record(source, brain_name, success=True)
+        except Exception:
+            pass
+
+        return {"ok": True, "data": data}
     except Exception as e:
+        try:
+            from core.hebbian import get_hebbian_mesh
+            get_hebbian_mesh().record(source, brain_name, success=False)
+        except Exception:
+            pass
         return {"ok": False, "error": str(e)[:200]}
 
 
@@ -223,6 +244,8 @@ def _system() -> dict:
         "auto_log":     lambda p: {"log": list(reversed(_loop_log[-20:]))},
         "consensus_fix": lambda p: _consensus_fix(),
         "connectivity": lambda p: _connectivity(),
+        "synapses":    lambda p: _synapses(),
+        "synapse_map": lambda p: _synapse_brain(p),
         "intelligence": lambda p: _intelligence_report(p),
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
@@ -460,6 +483,17 @@ def _consensus_fix():
 def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
+
+
+def _synapses():
+    from core.hebbian import get_hebbian_mesh
+    mesh = get_hebbian_mesh()
+    return {"weights": mesh.get_weights(), "strongest": mesh.get_strongest(10)}
+
+
+def _synapse_brain(p):
+    from core.hebbian import get_hebbian_mesh
+    return get_hebbian_mesh().get_brain_connectivity(p.get("brain", ""))
 
 
 def _intelligence_report(p):
