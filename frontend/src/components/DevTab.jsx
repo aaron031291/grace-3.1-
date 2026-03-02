@@ -3,13 +3,62 @@ import { brainCall } from "../api/brain-client";
 
 export default function DevTab() {
   const [detail, setDetail] = useState(null);
+  const [leftWidth, setLeftWidth] = useState(200);
+  const [rightWidth, setRightWidth] = useState(320);
+  const [leftCollapsed, setLeftCollapsed] = useState(false);
+  const [rightCollapsed, setRightCollapsed] = useState(false);
 
   return (
     <div style={{ display: "flex", height: "100%", background: "#0a0a1a", color: "#ccc" }}>
-      <LeftPanel onDetail={setDetail} />
-      <CenterChat onDetail={setDetail} />
-      <RightDetail content={detail} onClose={() => setDetail(null)} />
+      {!leftCollapsed ? (
+        <>
+          <LeftPanel onDetail={setDetail} width={leftWidth} />
+          <Resizer onResize={(dx) => setLeftWidth(w => Math.max(160, Math.min(350, w + dx)))} />
+        </>
+      ) : (
+        <button onClick={() => setLeftCollapsed(false)} style={{ width: 28, background: "#0d0d20", border: "none", borderRight: "1px solid #1a1a2e", color: "#555", cursor: "pointer", fontSize: 14, writingMode: "vertical-lr" }}>Actions ▸</button>
+      )}
+
+      <CenterChat
+        onDetail={setDetail}
+        onToggleLeft={() => setLeftCollapsed(p => !p)}
+        onToggleRight={() => setRightCollapsed(p => !p)}
+      />
+
+      {!rightCollapsed && detail ? (
+        <>
+          <Resizer onResize={(dx) => setRightWidth(w => Math.max(220, Math.min(500, w - dx)))} />
+          <RightDetail content={detail} onClose={() => setDetail(null)} width={rightWidth} />
+        </>
+      ) : !rightCollapsed ? (
+        <div style={{ width: 220, background: "#08081a", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <div style={{ color: "#333", fontSize: 11, textAlign: "center" }}>Click any action<br />to view details</div>
+        </div>
+      ) : (
+        <button onClick={() => setRightCollapsed(false)} style={{ width: 28, background: "#08081a", border: "none", borderLeft: "1px solid #1a1a2e", color: "#555", cursor: "pointer", fontSize: 14, writingMode: "vertical-lr" }}>◂ Detail</button>
+      )}
     </div>
+  );
+}
+
+function Resizer({ onResize }) {
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const onMove = (ev) => onResize(ev.clientX - startX);
+    const onUp = () => { document.removeEventListener("mousemove", onMove); document.removeEventListener("mouseup", onUp); };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  };
+
+  return (
+    <div onMouseDown={handleMouseDown} style={{
+      width: 4, cursor: "col-resize", background: "transparent", flexShrink: 0,
+      borderLeft: "1px solid #1a1a2e", borderRight: "1px solid #1a1a2e",
+    }}
+    onMouseEnter={e => e.target.style.background = "#e9456033"}
+    onMouseLeave={e => e.target.style.background = "transparent"}
+    />
   );
 }
 
@@ -286,7 +335,7 @@ const SECTION_MENU = {
 };
 
 
-function LeftPanel({ onDetail }) {
+function LeftPanel({ onDetail, width = 200 }) {
   const [loading, setLoading] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
@@ -294,6 +343,23 @@ function LeftPanel({ onDetail }) {
   const [lastResults, setLastResults] = useState({});
 
   const run = async (item) => {
+    // Actions that need user input first
+    if (item.special === "search_prompt") {
+      const query = prompt("Search codebase for:");
+      if (!query) return;
+      item = { ...item, payload: { query } };
+    }
+    if (item.special === "generate_prompt") {
+      const p = prompt("Describe what code to generate:");
+      if (!p) return;
+      item = { ...item, payload: { prompt: p, project_folder: "." } };
+    }
+    if (item.special === "create_prompt") {
+      const path = prompt("File path (e.g. core/services/new_service.py):");
+      if (!path) return;
+      item = { ...item, payload: { path, content: "" } };
+    }
+
     setLoading(p => ({ ...p, [item.id]: true }));
     let data;
     if (item.special === "frontend_tree") {
@@ -367,12 +433,55 @@ function LeftPanel({ onDetail }) {
       onDetail({ title: "Loop Resumed", icon: "▶️", data: { status: "resumed" } });
       return;
     }
+    if (menuItem.id === "suggest_fix") {
+      const err = prompt("Paste the error or describe what's broken:");
+      if (!err) return;
+      const r = await brainCall("ai", "fast", { prompt: `Fix this error in Grace: ${err}. Propose a specific code fix.`, models: ["kimi", "opus"] });
+      onDetail({ title: "AI Fix Suggestion", icon: "🔧", desc: "Consensus fix proposal from all models.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "explain") {
+      const file = prompt("File path to explain:");
+      if (!file) return;
+      const content = await brainCall("code", "read", { path: file });
+      if (content.ok) {
+        const r = await brainCall("ai", "fast", { prompt: `Explain this code in plain English:\n\n${(content.data?.content || "").slice(0, 2000)}`, models: ["kimi"] });
+        onDetail({ title: `Explain: ${file}`, icon: "💡", desc: "AI plain-English explanation.", data: r.ok ? r.data : { error: r.error } });
+      }
+      return;
+    }
+    if (menuItem.id === "file_history") {
+      const r = await brainCall("govern", "genesis_keys", { limit: 30 });
+      onDetail({ title: "File History", icon: "📜", desc: "Genesis key changes for files.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "stress10") {
+      const results = [];
+      for (let i = 0; i < 10; i++) {
+        const r = await brainCall("system", "probe", {});
+        results.push({ run: i + 1, ok: r.ok });
+      }
+      onDetail({ title: "Stress x10 Results", icon: "⚡", desc: "10 parallel probe runs.", data: results });
+      return;
+    }
+    if (menuItem.id === "baseline") {
+      const last = lastResults[item.id];
+      if (last) localStorage.setItem(`baseline_${item.id}`, JSON.stringify(last.data));
+      onDetail({ title: "Baseline Saved", icon: "📌", data: { saved: true, action: item.id } });
+      return;
+    }
+    if (menuItem.id === "compare") {
+      const baseline = localStorage.getItem(`baseline_${item.id}`);
+      const current = lastResults[item.id]?.data;
+      onDetail({ title: "Compare", icon: "🔄", desc: "Current vs baseline.", data: { baseline: baseline ? JSON.parse(baseline) : "No baseline saved", current: current || "No current result" } });
+      return;
+    }
     // Default: just run the parent action
     run(item);
   };
 
   return (
-    <div style={{ width: 190, borderRight: "1px solid #1a1a2e", overflow: "auto", flexShrink: 0 }}
+    <div style={{ width: width, borderRight: "1px solid #1a1a2e", overflow: "auto", flexShrink: 0 }}
          onClick={() => setContextMenu(null)}>
       {ACTIONS.map(section => (
         <div key={section.section}>
@@ -497,7 +606,7 @@ function CtxMenuItem({ item, onClick }) {
    and Genesis keys. Connected to the full brain API pipeline.
    ═══════════════════════════════════════════════════════════════════ */
 
-function CenterChat({ onDetail }) {
+function CenterChat({ onDetail, onToggleLeft, onToggleRight }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [model, setModel] = useState("consensus");
@@ -542,6 +651,7 @@ function CenterChat({ onDetail }) {
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", borderRight: "1px solid #1a1a2e" }}>
       <div style={{ padding: "6px 12px", borderBottom: "1px solid #1a1a2e", display: "flex", alignItems: "center", gap: 8 }}>
+        {onToggleLeft && <button onClick={onToggleLeft} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 12 }}>☰</button>}
         <span style={{ fontSize: 13, fontWeight: 700, color: "#e94560" }}>Dev Console</span>
         <select value={model} onChange={e => setModel(e.target.value)} style={{
           background: "#12122a", border: "1px solid #333", borderRadius: 4,
@@ -550,6 +660,8 @@ function CenterChat({ onDetail }) {
           <option value="consensus">All Models</option>
           {models.map(m => <option key={m.id} value={m.id} disabled={!m.available}>{m.name}</option>)}
         </select>
+        <div style={{ flex: 1 }} />
+        {onToggleRight && <button onClick={onToggleRight} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 12 }}>◧</button>}
       </div>
 
       <div style={{ flex: 1, overflow: "auto", padding: "8px 12px", display: "flex", flexDirection: "column", gap: 6 }}>
@@ -599,7 +711,7 @@ function CenterChat({ onDetail }) {
    individual model responses, file trees, and error details.
    ═══════════════════════════════════════════════════════════════════ */
 
-function RightDetail({ content, onClose }) {
+function RightDetail({ content, onClose, width = 320 }) {
   if (!content) {
     return (
       <div style={{ width: 260, background: "#08081a", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
@@ -614,7 +726,7 @@ function RightDetail({ content, onClose }) {
   const isTree = content.data?.children || content.data?.type === "directory";
 
   return (
-    <div style={{ width: 320, background: "#08081a", borderLeft: "1px solid #1a1a2e", display: "flex", flexDirection: "column" }}>
+    <div style={{ width: width, background: "#08081a", borderLeft: "1px solid #1a1a2e", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "6px 12px", borderBottom: "1px solid #1a1a2e", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 12, fontWeight: 700 }}>{content.icon} {content.title}</span>
         <button onClick={onClose} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 16 }}>×</button>
