@@ -311,16 +311,42 @@ def _code() -> dict:
         list_projects, project_tree, read_file, write_file,
         create_file, delete_file, generate_code, apply_code,
     )
+    from core.services.project_service import (
+        list_projects as list_visual_projects,
+        create_project, get_project, get_project_context,
+        write_project_file, read_project_file,
+    )
     return {
         "projects":  lambda p: list_projects(),
-        "tree":      lambda p: project_tree(p["folder"], p.get("max_depth", 3)),
+        "tree":      lambda p: project_tree(p.get("folder", "."), p.get("max_depth", 3)),
         "read":      lambda p: read_file(p["path"]),
         "write":     lambda p: write_file(p["path"], p["content"]),
         "create":    lambda p: create_file(p["path"], p.get("content", "")),
         "delete":    lambda p: delete_file(p["path"]),
         "generate":  lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
         "apply":     lambda p: apply_code(p["path"], p["content"]),
+        "visual_projects": lambda p: list_visual_projects(),
+        "create_project": lambda p: create_project(p.get("name", ""), p.get("description", ""), p.get("type", "fullstack")),
+        "get_project": lambda p: get_project(p.get("id", p.get("project_id", ""))),
+        "project_context": lambda p: {"context": get_project_context(p.get("id", ""))},
+        "project_write": lambda p: write_project_file(p["project_id"], p["path"], p["content"]),
+        "project_read": lambda p: read_project_file(p["project_id"], p["path"]),
+        "project_chat": lambda p: _project_scoped_chat(p),
     }
+
+
+def _project_scoped_chat(p):
+    """Chat scoped to a specific project — LLM sees project files as context."""
+    from core.services.project_service import get_project_context
+    project_id = p.get("project_id", p.get("id", ""))
+    message = p.get("message", p.get("prompt", ""))
+    context = get_project_context(project_id)
+
+    from api.brain_api_v2 import call_brain
+    return call_brain("ai", "fast", {
+        "prompt": f"Project context:\n{context[:8000]}\n\nUser question: {message}",
+        "models": p.get("models", ["kimi"]),
+    }).get("data", {})
 
 
 # ═══════════════════════════════════════════════════════════════════

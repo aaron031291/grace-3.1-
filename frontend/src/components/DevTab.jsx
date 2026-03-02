@@ -39,6 +39,8 @@ export default function DevTab() {
         onDetail={setDetail}
         onToggleLeft={() => setLeftCollapsed(p => !p)}
         onToggleRight={() => setRightCollapsed(p => !p)}
+        activeProject={null}
+        setActiveProject={() => {}}
       />
 
       {!rightCollapsed && detail ? (
@@ -269,6 +271,17 @@ const ACTIONS = [
         id: "frontend_tree", label: "Frontend Files", icon: "⚛️",
         special: "frontend_tree",
         desc: "Shows the frontend file tree (React/Vite). Browse src/ components, hooks, and config. Click any file to view its content. Connects to: core/services/files_service.py → frontend/src/ directory.",
+      },
+      {
+        id: "visual_projects", label: "Project Cards", icon: "🃏",
+        brain: "code", action: "visual_projects",
+        desc: "Shows all projects as visual cards — name, type, file count, last updated. Double-click a card to drill into its file tree. Right-click to upload files directly into the project. Each project has its own scoped chat context. Connects to: core/services/project_service.py → data/projects/.",
+      },
+      {
+        id: "create_project", label: "New Project", icon: "🆕",
+        brain: "code", action: "create_project",
+        special: "create_project_prompt",
+        desc: "Create a new project with standard folder structure (frontend, backend, docs, tests). Give it a name and Grace sets up everything. Projects are isolated workspaces with scoped chat. Connects to: project_service.create_project().",
       },
       {
         id: "search_code", label: "Search Code", icon: "🔍",
@@ -690,6 +703,12 @@ function LeftPanel({ onDetail, width = 200 }) {
       const p = prompt("Describe what code to generate:");
       if (!p) return;
       item = { ...item, payload: { prompt: p, project_folder: "." } };
+    }
+    if (item.special === "create_project_prompt") {
+      const name = prompt("Project name (e.g. Tim-AI, Green-Gardens):");
+      if (!name) return;
+      const desc = prompt("Brief description (optional):");
+      item = { ...item, payload: { name, description: desc || "" } };
     }
     if (item.special === "create_prompt") {
       const path = prompt("File path (e.g. core/services/new_service.py):");
@@ -1172,7 +1191,7 @@ function CtxMenuItem({ item, onClick }) {
    and Genesis keys. Connected to the full brain API pipeline.
    ═══════════════════════════════════════════════════════════════════ */
 
-function CenterChat({ onDetail, onToggleLeft, onToggleRight }) {
+function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject, setActiveProject }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [model, setModel] = useState("consensus");
