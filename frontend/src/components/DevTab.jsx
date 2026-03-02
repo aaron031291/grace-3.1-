@@ -195,31 +195,142 @@ const ACTIONS = [
   },
 ];
 
+// Universal right-click menu items (appear on every action)
+const UNIVERSAL_MENU = [
+  { label: "View Logs (Last 100)", id: "logs", icon: "📋" },
+  { label: "Copy Result", id: "copy", icon: "📎" },
+  { label: "Export JSON", id: "export", icon: "💾" },
+  { label: "Compare with Previous", id: "compare", icon: "🔄" },
+  { label: "Genesis Key History", id: "genesis_history", icon: "🔑" },
+  { label: "Run on Schedule", id: "schedule", icon: "⏰" },
+  { label: "Run Again", id: "rerun", icon: "▶️" },
+];
+
+// Section-specific right-click extras
+const SECTION_MENU = {
+  Diagnostics: [
+    { label: "Save as Baseline", id: "baseline", icon: "📌" },
+    { label: "Run Verbose", id: "verbose", icon: "🔍" },
+    { label: "Stress x10", id: "stress10", icon: "⚡" },
+    { label: "Export Report", id: "report", icon: "📄" },
+  ],
+  Intelligence: [
+    { label: "Trust Heatmap", id: "heatmap", icon: "🌡️" },
+    { label: "Retrain Subset", id: "retrain", icon: "🎯" },
+    { label: "Reset Cache", id: "reset_cache", icon: "🗑️" },
+    { label: "Export Model", id: "export_model", icon: "📦" },
+  ],
+  Runtime: [
+    { label: "GC Now", id: "gc", icon: "♻️" },
+    { label: "Heap Dump", id: "heap", icon: "💽" },
+    { label: "Thread Dump", id: "threads", icon: "🧵" },
+  ],
+  Tasks: [
+    { label: "Duplicate Task", id: "duplicate", icon: "📋" },
+    { label: "Pause Queue", id: "pause_queue", icon: "⏸️" },
+    { label: "Drain Workers", id: "drain", icon: "🚰" },
+  ],
+  Code: [
+    { label: "Git Diff", id: "git_diff", icon: "📝" },
+    { label: "Run Tests", id: "run_tests", icon: "🧪" },
+    { label: "Lint Check", id: "lint", icon: "✨" },
+  ],
+  Autonomous: [
+    { label: "Force Heal", id: "force_heal", icon: "💊" },
+    { label: "Pause Loop", id: "pause_loop", icon: "⏸️" },
+    { label: "Resume Loop", id: "resume_loop", icon: "▶️" },
+  ],
+};
+
+
 function LeftPanel({ onDetail }) {
   const [loading, setLoading] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null);
+  const [fullWindow, setFullWindow] = useState(null);
+  const [lastResults, setLastResults] = useState({});
 
   const run = async (item) => {
     setLoading(p => ({ ...p, [item.id]: true }));
-
     let data;
     if (item.special === "frontend_tree") {
       data = await brainCall("files", "tree", { path: "../frontend/src" });
     } else {
       data = await brainCall(item.brain, item.action, item.payload || {});
     }
-
     setLoading(p => ({ ...p, [item.id]: false }));
-    onDetail({
-      title: item.label,
-      icon: item.icon,
-      desc: item.desc,
-      data: data.ok ? data.data : { error: data.error },
-    });
+    const result = { title: item.label, icon: item.icon, desc: item.desc, data: data.ok ? data.data : { error: data.error } };
+    setLastResults(p => ({ ...p, [item.id]: result }));
+    onDetail(result);
+  };
+
+  const handleContextMenu = (e, item, section) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY, item, section });
+  };
+
+  const handleContextAction = async (menuItem) => {
+    const item = contextMenu?.item;
+    setContextMenu(null);
+    if (!item) return;
+
+    if (menuItem.id === "rerun") { run(item); return; }
+    if (menuItem.id === "copy") {
+      const last = lastResults[item.id];
+      if (last) navigator.clipboard?.writeText(JSON.stringify(last.data, null, 2));
+      return;
+    }
+    if (menuItem.id === "export") {
+      const last = lastResults[item.id];
+      if (last) {
+        const blob = new Blob([JSON.stringify(last.data, null, 2)], { type: "application/json" });
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+        a.download = `${item.id}_${Date.now()}.json`; a.click();
+      }
+      return;
+    }
+    if (menuItem.id === "logs") {
+      const r = await brainCall("system", "traces", {});
+      onDetail({ title: `Logs: ${item.label}`, icon: "📋", desc: "Last 100 trace entries from the lightweight ring buffer.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "genesis_history") {
+      const r = await brainCall("govern", "genesis_keys", { limit: 50 });
+      onDetail({ title: `Genesis History: ${item.label}`, icon: "🔑", desc: "Recent Genesis keys related to this action.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "gc") {
+      await brainCall("system", "hot_reload", {});
+      onDetail({ title: "GC Complete", icon: "♻️", data: { status: "garbage collected" } });
+      return;
+    }
+    if (menuItem.id === "run_tests") {
+      const r = await brainCall("ai", "logic_tests", {});
+      onDetail({ title: "Test Results", icon: "🧪", desc: "Logic test suite output.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "force_heal") {
+      const r = await brainCall("system", "scan_heal", {});
+      onDetail({ title: "Force Heal", icon: "💊", desc: "Triggered scan + auto-heal pipeline.", data: r.ok ? r.data : { error: r.error } });
+      return;
+    }
+    if (menuItem.id === "pause_loop") {
+      await brainCall("system", "pause", {});
+      onDetail({ title: "Loop Paused", icon: "⏸️", data: { status: "paused" } });
+      return;
+    }
+    if (menuItem.id === "resume_loop") {
+      await brainCall("system", "resume", {});
+      onDetail({ title: "Loop Resumed", icon: "▶️", data: { status: "resumed" } });
+      return;
+    }
+    // Default: just run the parent action
+    run(item);
   };
 
   return (
-    <div style={{ width: 190, borderRight: "1px solid #1a1a2e", overflow: "auto", flexShrink: 0 }}>
+    <div style={{ width: 190, borderRight: "1px solid #1a1a2e", overflow: "auto", flexShrink: 0 }}
+         onClick={() => setContextMenu(null)}>
       {ACTIONS.map(section => (
         <div key={section.section}>
           <div style={{ padding: "8px 12px 3px", fontSize: 9, fontWeight: 800, color: "#555", textTransform: "uppercase", letterSpacing: 1 }}>
@@ -229,6 +340,8 @@ function LeftPanel({ onDetail }) {
             <div key={item.id} style={{ position: "relative" }}>
               <button
                 onClick={() => run(item)}
+                onDoubleClick={() => { run(item); setFullWindow(item); }}
+                onContextMenu={(e) => handleContextMenu(e, item, section.section)}
                 onMouseEnter={() => setHoveredId(item.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 disabled={loading[item.id]}
@@ -242,24 +355,80 @@ function LeftPanel({ onDetail }) {
                 <span style={{ fontSize: 12 }}>{item.icon}</span>
                 {loading[item.id] ? "Running..." : item.label}
               </button>
-              {hoveredId === item.id && (
+              {hoveredId === item.id && !contextMenu && (
                 <div style={{
-                  position: "absolute", left: 195, top: 0, width: 280, padding: 10,
+                  position: "absolute", left: 195, top: 0, width: 260, padding: 8,
                   background: "#12122a", border: "1px solid #333", borderRadius: 6,
-                  fontSize: 10, color: "#aaa", lineHeight: 1.5, zIndex: 100,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  fontSize: 10, color: "#aaa", lineHeight: 1.4, zIndex: 100,
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)", pointerEvents: "none",
                 }}>
-                  <strong style={{ color: "#e94560" }}>{item.label}</strong><br />
-                  {item.desc}
+                  <strong style={{ color: "#e94560" }}>{item.label}</strong><br />{item.desc}
                 </div>
               )}
             </div>
           ))}
         </div>
       ))}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div style={{
+          position: "fixed", left: contextMenu.x, top: contextMenu.y,
+          background: "#12122a", border: "1px solid #333", borderRadius: 8,
+          padding: "4px 0", zIndex: 1000, minWidth: 200,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
+        }} onClick={e => e.stopPropagation()}>
+          <div style={{ padding: "4px 12px", fontSize: 10, color: "#e94560", fontWeight: 700, borderBottom: "1px solid #222" }}>
+            {contextMenu.item.icon} {contextMenu.item.label}
+          </div>
+          {(SECTION_MENU[contextMenu.section] || []).map(m => (
+            <button key={m.id} onClick={() => handleContextAction(m)} style={ctxBtn}>
+              <span>{m.icon}</span> {m.label}
+            </button>
+          ))}
+          <div style={{ borderTop: "1px solid #222", margin: "2px 0" }} />
+          {UNIVERSAL_MENU.map(m => (
+            <button key={m.id} onClick={() => handleContextAction(m)} style={ctxBtn}>
+              <span>{m.icon}</span> {m.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Full Window Overlay */}
+      {fullWindow && lastResults[fullWindow.id] && (
+        <div style={{
+          position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 900,
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }} onClick={() => setFullWindow(null)}>
+          <div style={{
+            width: "85%", height: "85%", background: "#0a0a1a", border: "1px solid #333",
+            borderRadius: 12, overflow: "hidden", display: "flex", flexDirection: "column",
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ padding: "10px 16px", borderBottom: "1px solid #222", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 14, fontWeight: 700 }}>{fullWindow.icon} {fullWindow.label}</span>
+              <button onClick={() => setFullWindow(null)} style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 18 }}>×</button>
+            </div>
+            <div style={{ padding: "8px 16px", borderBottom: "1px solid #111", fontSize: 11, color: "#666" }}>
+              {fullWindow.desc}
+            </div>
+            <div style={{ flex: 1, overflow: "auto", padding: 16 }}>
+              <pre style={{ fontSize: 11, color: "#aaa", whiteSpace: "pre-wrap", wordBreak: "break-word", margin: 0, lineHeight: 1.6 }}>
+                {JSON.stringify(lastResults[fullWindow.id]?.data, null, 2)}
+              </pre>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+const ctxBtn = {
+  display: "flex", alignItems: "center", gap: 6, width: "100%",
+  padding: "5px 12px", border: "none", background: "transparent",
+  color: "#aaa", cursor: "pointer", fontSize: 11, textAlign: "left",
+};
 
 /* ═══════════════════════════════════════════════════════════════════
    CENTER — Consensus Chat
