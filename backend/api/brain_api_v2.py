@@ -211,6 +211,12 @@ def _ai() -> dict:
         "training": lambda p: _oracle_training(),
         "dl_predict": lambda p: _dl_predict(p),
         "dl_train": lambda p: _dl_train(p),
+        "ooda": lambda p: _ooda(p),
+        "ambiguity": lambda p: _ambiguity(p),
+        "invariants": lambda p: _invariants(),
+        "cognitive_report": lambda p: _cognitive_report(p),
+        "bandit_select": lambda p: _bandit_select(p),
+        "knowledge_gaps_deep": lambda p: _knowledge_gaps_deep(),
     }
 
 
@@ -524,6 +530,36 @@ def _dl_predict(p):
 def _dl_train(p):
     from core.deep_learning import get_model
     return get_model().train_from_db(hours=p.get("hours", 24), limit=p.get("limit", 1000))
+
+
+def _ooda(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.ooda_cycle(p.get("observation", ""), p)
+
+
+def _ambiguity(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.resolve_ambiguity(p.get("text", ""), p)
+
+
+def _invariants():
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.check_invariants()
+
+
+def _cognitive_report(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.full_cognitive_report(p.get("query", ""))
+
+
+def _bandit_select(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.bandit_select(p.get("options", []), p)
+
+
+def _knowledge_gaps_deep():
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.analyze_knowledge_gaps()
 
 
 
