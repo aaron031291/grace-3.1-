@@ -260,7 +260,18 @@ const ACTIONS = [
         id: "pipeline", label: "Run Pipeline", icon: "🏗️",
         brain: "ai", action: "pipeline",
         special: "generate_prompt",
-        desc: "Runs the full 8-layer coding pipeline: plan → decompose → propose 3 approaches → select → simulate → generate → verify → deploy gate. All models must agree at each stage. Every layer tracked via Genesis key with trust scores. Connects to: core/coding_pipeline.py → consensus_engine → all brains.",
+        desc: "Runs the full 8-layer coding pipeline synchronously. Layers 3+4 run in parallel (propose + select). All models must agree at each stage. Every layer tracked via Genesis key. Shows layer-by-layer results with trust scores when complete. Connects to: core/coding_pipeline.py → 24 brain calls across 8 layers.",
+      },
+      {
+        id: "pipeline_bg", label: "Pipeline (Background)", icon: "⏳",
+        brain: "ai", action: "pipeline_bg",
+        special: "generate_prompt",
+        desc: "Starts the pipeline in a background thread so you can keep working. Returns a run_id immediately. Check progress with Pipeline Progress button. Parallel execution where possible. Connects to: coding_pipeline.run_background() → threading.Thread.",
+      },
+      {
+        id: "pipeline_progress", label: "Pipeline Progress", icon: "📊",
+        brain: "ai", action: "pipeline_progress",
+        desc: "Shows real-time progress of all running/completed pipelines. Includes: % complete, current chunk/layer, trust scores, errors, duration. Auto-refreshes. Use this after starting a background pipeline. Connects to: PipelineProgress tracker.",
       },
       {
         id: "generate_code", label: "AI Generate", icon: "✨",

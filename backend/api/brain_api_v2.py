@@ -214,6 +214,8 @@ def _ai() -> dict:
         "dl_predict": lambda p: _dl_predict(p),
         "dl_train": lambda p: _dl_train(p),
         "pipeline": lambda p: _run_pipeline(p),
+        "pipeline_progress": lambda p: _run_pipeline({"progress": True, "run_id": p.get("run_id")}),
+        "pipeline_bg": lambda p: _run_pipeline({"background": True, "task": p.get("task", p.get("prompt", ""))}),
         "ooda": lambda p: _ooda(p),
         "ambiguity": lambda p: _ambiguity(p),
         "invariants": lambda p: _invariants(),
@@ -538,8 +540,20 @@ def _mine_episodes():
 
 
 def _run_pipeline(p):
-    from core.coding_pipeline import get_coding_pipeline
+    from core.coding_pipeline import get_coding_pipeline, get_pipeline_progress
     pipeline = get_coding_pipeline()
+
+    if p.get("background"):
+        run_id = pipeline.run_background(p.get("task", p.get("prompt", "")), p)
+        return {"run_id": run_id, "status": "queued", "message": "Pipeline running in background. Use ai/pipeline_progress to check status."}
+
+    if p.get("progress"):
+        progress = get_pipeline_progress()
+        run_id = p.get("run_id")
+        if run_id:
+            return progress.get(run_id)
+        return {"runs": progress.get_all()}
+
     result = pipeline.run(p.get("task", p.get("prompt", "")), p)
     return {
         "status": result.status,

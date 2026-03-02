@@ -84,77 +84,214 @@ LAYER_NAMES = {
 }
 
 
+class PipelineProgress:
+    """Real-time progress tracking for the pipeline."""
+
+    def __init__(self):
+        self._runs: Dict[str, dict] = {}
+        self._lock = __import__("threading").Lock()
+
+    def start(self, run_id: str, task: str, total_chunks: int):
+        with self._lock:
+            self._runs[run_id] = {
+                "run_id": run_id,
+                "task": task[:100],
+                "status": "running",
+                "total_chunks": total_chunks,
+                "completed_chunks": 0,
+                "current_chunk": 0,
+                "current_layer": 0,
+                "current_layer_name": "",
+                "percent": 0,
+                "started_at": datetime.utcnow().isoformat(),
+                "layers_completed": 0,
+                "total_layers": total_chunks * 8,
+                "errors": [],
+                "trust_scores": [],
+            }
+
+    def update_layer(self, run_id: str, chunk: int, layer: int, layer_name: str, status: str, trust: float = 0):
+        with self._lock:
+            if run_id not in self._runs:
+                return
+            r = self._runs[run_id]
+            r["current_chunk"] = chunk
+            r["current_layer"] = layer
+            r["current_layer_name"] = layer_name
+            if status == "passed":
+                r["layers_completed"] += 1
+                r["trust_scores"].append(trust)
+            elif status == "failed":
+                r["errors"].append(f"Chunk {chunk} Layer {layer}: {layer_name}")
+            total = r["total_layers"]
+            r["percent"] = round((r["layers_completed"] / total) * 100) if total > 0 else 0
+
+    def complete_chunk(self, run_id: str):
+        with self._lock:
+            if run_id in self._runs:
+                self._runs[run_id]["completed_chunks"] += 1
+
+    def finish(self, run_id: str, status: str):
+        with self._lock:
+            if run_id in self._runs:
+                self._runs[run_id]["status"] = status
+                self._runs[run_id]["percent"] = 100 if status == "passed" else self._runs[run_id]["percent"]
+                self._runs[run_id]["finished_at"] = datetime.utcnow().isoformat()
+
+    def get(self, run_id: str) -> dict:
+        with self._lock:
+            return dict(self._runs.get(run_id, {}))
+
+    def get_all(self) -> list:
+        with self._lock:
+            return [dict(v) for v in self._runs.values()]
+
+
+_progress = PipelineProgress()
+
+
+def get_pipeline_progress() -> PipelineProgress:
+    return _progress
+
+
 class CodingPipeline:
     """
     The 8-layer coding pipeline. Every code task goes through this.
+    Supports background processing, progress tracking, and parallel layer execution.
     """
 
     def __init__(self):
         self.max_retries = 2
         self.min_trust_score = 0.6
         self.require_unanimous = True
+        self.progress = _progress
 
-    def run(self, task: str, context: dict = None) -> PipelineResult:
-        """Execute the full pipeline for a task."""
+    def run_background(self, task: str, context: dict = None) -> str:
+        """Run the pipeline in a background thread. Returns run_id for tracking."""
+        import uuid
+        run_id = f"PIPE-{uuid.uuid4().hex[:8]}"
+
+        def _bg():
+            self.run(task, context, run_id=run_id)
+
+        import threading
+        t = threading.Thread(target=_bg, daemon=True, name=f"pipeline-{run_id}")
+        t.start()
+
+        self._track("pipeline_background", f"Pipeline queued: {task[:80]}", {"run_id": run_id})
+        return run_id
+
+    def run(self, task: str, context: dict = None, run_id: str = None) -> PipelineResult:
+        """Execute the full pipeline for a task with progress tracking."""
+        import uuid
+        import concurrent.futures
+
         start = time.time()
+        if not run_id:
+            run_id = f"PIPE-{uuid.uuid4().hex[:8]}"
         result = PipelineResult(task=task)
 
-        # Track via Genesis
-        self._track("pipeline_start", f"Pipeline started: {task[:100]}", {"task": task})
+        self._track("pipeline_start", f"Pipeline started: {task[:100]}", {"task": task, "run_id": run_id})
 
-        # Step 1: Plan — break task into chunks
+        # Step 1: Plan
         chunks = self._plan_task(task, context or {})
         if not chunks:
             result.status = "failed"
-            result.chunks = []
+            self.progress.start(run_id, task, 0)
+            self.progress.finish(run_id, "failed")
             return result
 
-        # Step 2: Consensus on the plan
+        self.progress.start(run_id, task, len(chunks))
+
+        # Step 2: Consensus on plan
         plan_consensus = self._consensus(f"Plan for: {task}\nChunks: {json.dumps(chunks, default=str)}")
         if not plan_consensus.get("agreed"):
             result.status = "plan_rejected"
             result.final_consensus = plan_consensus
+            self.progress.finish(run_id, "plan_rejected")
             return result
 
-        # Step 3: Execute each chunk through all 8 layers
+        # Step 3: Execute each chunk
         for i, chunk_desc in enumerate(chunks):
             chunk = ChunkResult(chunk_id=i, description=chunk_desc)
             chunk.status = "running"
 
-            for layer_num in range(1, 9):
+            # Layers 1-2 run sequentially (setup + decompose)
+            for layer_num in [1, 2]:
                 layer_result = self._execute_layer(layer_num, chunk_desc, task, context or {})
                 chunk.layers.append(layer_result)
-
+                self.progress.update_layer(run_id, i, layer_num, layer_result.name, layer_result.status, layer_result.trust_score)
                 if layer_result.status == "failed":
                     chunk.status = "failed"
-                    self._track("layer_failed", f"Layer {layer_num} failed for chunk {i}: {chunk_desc[:50]}")
                     break
 
-            if chunk.status != "failed":
-                # Consensus on completed chunk
-                chunk.consensus = self._consensus(
-                    f"Chunk {i} complete: {chunk_desc}\n"
-                    f"All {len(chunk.layers)} layers passed."
-                )
+            if chunk.status == "failed":
+                result.chunks.append(chunk)
+                continue
+
+            # Layers 3-4 run in PARALLEL (propose + select are independent)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix=f"pipe-{run_id}") as pool:
+                future_propose = pool.submit(self._execute_layer, 3, chunk_desc, task, context or {})
+                future_select = pool.submit(self._execute_layer, 4, chunk_desc, task, context or {})
+                l3 = future_propose.result(timeout=60)
+                l4 = future_select.result(timeout=60)
+
+            chunk.layers.append(l3)
+            self.progress.update_layer(run_id, i, 3, l3.name, l3.status, l3.trust_score)
+            chunk.layers.append(l4)
+            self.progress.update_layer(run_id, i, 4, l4.name, l4.status, l4.trust_score)
+
+            if l3.status == "failed" or l4.status == "failed":
+                chunk.status = "failed"
+                result.chunks.append(chunk)
+                continue
+
+            # Layer 5 (simulate) — sequential, depends on 3+4
+            l5 = self._execute_layer(5, chunk_desc, task, context or {})
+            chunk.layers.append(l5)
+            self.progress.update_layer(run_id, i, 5, l5.name, l5.status, l5.trust_score)
+
+            # Layer 6 (generate) — sequential, depends on 5
+            l6 = self._execute_layer(6, chunk_desc, task, context or {})
+            chunk.layers.append(l6)
+            self.progress.update_layer(run_id, i, 6, l6.name, l6.status, l6.trust_score)
+
+            # Layer 7 (verify) — sequential, depends on 6
+            l7 = self._execute_layer(7, chunk_desc, task, context or {})
+            chunk.layers.append(l7)
+            self.progress.update_layer(run_id, i, 7, l7.name, l7.status, l7.trust_score)
+
+            # Layer 8 (deploy gate) — sequential
+            l8 = self._execute_layer(8, chunk_desc, task, context or {})
+            chunk.layers.append(l8)
+            self.progress.update_layer(run_id, i, 8, l8.name, l8.status, l8.trust_score)
+
+            failed_layers = [l for l in chunk.layers if l.status == "failed"]
+            if failed_layers:
+                chunk.status = "failed"
+            else:
+                chunk.consensus = self._consensus(f"Chunk {i} complete: {chunk_desc}")
                 chunk.status = "passed" if chunk.consensus.get("agreed") else "failed"
 
+            self.progress.complete_chunk(run_id)
             result.chunks.append(chunk)
 
-        # Step 4: Final consensus on all chunks
+        # Step 4: Final consensus
         passed_chunks = [c for c in result.chunks if c.status == "passed"]
-        if len(passed_chunks) == len(result.chunks):
-            result.final_consensus = self._consensus(
-                f"All {len(result.chunks)} chunks passed for: {task}"
-            )
+        if len(passed_chunks) == len(result.chunks) and result.chunks:
+            result.final_consensus = self._consensus(f"All {len(result.chunks)} chunks passed for: {task}")
             result.status = "passed" if result.final_consensus.get("agreed") else "failed"
-        else:
+        elif passed_chunks:
             result.status = "partial"
+        else:
+            result.status = "failed"
 
         result.total_duration_ms = round((time.time() - start) * 1000, 1)
         result.trust_score = self._calculate_trust(result)
 
+        self.progress.finish(run_id, result.status)
         self._track("pipeline_complete", f"Pipeline {result.status}: {task[:100]}",
-                     {"status": result.status, "chunks": len(result.chunks),
+                     {"status": result.status, "run_id": run_id, "chunks": len(result.chunks),
                       "passed": len(passed_chunks), "trust": result.trust_score})
 
         return result
