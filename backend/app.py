@@ -33,37 +33,19 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-# ==================== Clean Architecture Imports ====================
-# Brain API (single entry point for all domain actions)
+# ==================== MINIMAL IMPORTS — Brain-Centric Architecture ====================
+# 1. Brain router — contains ALL 93+ actions across 8 domains
 from api.brain_api_v2 import router as brain_router
 from api.core.brain_controller import router as brain_v2_router
 
-# Monitoring (unified health + probe + triggers)
-from api.monitoring.health_controller import router as unified_monitor_router
-from api.component_health_api import router as component_health_router
-from api.probe_agent_api import router as probe_agent_router
-from api.runtime_triggers_api import router as runtime_triggers_router
-
-# Autonomous (Ouroboros loop + consensus fixer)
-from api.autonomous_loop_api import router as autonomous_loop_router
-from api.consensus_fixer_api import router as consensus_fixer_router
-
-# Core services (health, auth, genesis, voice, MCP, retrieval)
+# 2. Health — required by k8s/load balancers (must be separate route)
 from api.health import router as health_router
-from api.auth import router as auth_router
-from api.genesis_keys import router as genesis_keys_router
-from api.consensus_api import router as consensus_router
-from api.voice_api import router as voice_router
-from api.mcp_api import router as mcp_router
-from api.retrieve import router as retrieve_router, get_document_retriever
-from api.flash_cache_api import router as flash_cache_router
-from api.kpi_api import router as kpi_router
-from api.live_console_api import router as live_console_router
-from api.docs_library_api import router as docs_library_router
-from api.file_ingestion import get_file_manager
 
-# Diagnostic machine
-from diagnostic_machine.api import router as diagnostic_router
+# 3. Auth — middleware requirement
+from api.auth import router as auth_router
+
+# 4. Voice — WebSocket (can't route through sync brain)
+from api.voice_api import router as voice_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -535,36 +517,17 @@ app.add_middleware(
 
 # Core: needed by app.py's own chat/RAG endpoints
 # =============================================================================
-# CLEAN ARCHITECTURE — 15 routers (down from 56)
+# BRAIN-CENTRIC ARCHITECTURE — 4 routers only
 # =============================================================================
 
-# Brain API — single entry point for all 95+ domain actions
-app.include_router(brain_router)                 # /brain/{domain} — 8 domains
-app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean REST
+# THE BRAIN — all 93+ actions, all 8 domains, all logic
+app.include_router(brain_router)                 # /brain/{domain}
+app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 
-# Monitoring — unified health + probe + triggers
-app.include_router(unified_monitor_router)       # /api/monitor/*
-app.include_router(component_health_router)      # /api/component-health/*
-app.include_router(probe_agent_router)           # /api/probe/*
-app.include_router(runtime_triggers_router)      # /api/triggers/*
-
-# Autonomous — Ouroboros loop + consensus fixer
-app.include_router(autonomous_loop_router)       # /api/autonomous/*
-app.include_router(consensus_fixer_router)       # /api/consensus-fix/*
-
-# Core services
-app.include_router(health_router)                # /health
-app.include_router(auth_router)                  # /auth
-app.include_router(genesis_keys_router)          # /genesis
-app.include_router(consensus_router)             # /api/consensus
-app.include_router(retrieve_router)              # /retrieve
-app.include_router(voice_router)                 # /voice
-app.include_router(mcp_router)                   # /api/mcp
-app.include_router(flash_cache_router)           # /api/flash-cache
-app.include_router(kpi_router)                   # /kpi
-app.include_router(live_console_router)          # /api/console
-app.include_router(docs_library_router)          # /api/docs
-app.include_router(diagnostic_router)            # /diagnostic
+# Infrastructure (can't live inside brain)
+app.include_router(health_router)                # /health (k8s probes)
+app.include_router(auth_router)                  # /auth (middleware)
+app.include_router(voice_router)                 # /voice (WebSocket)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
