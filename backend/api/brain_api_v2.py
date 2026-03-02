@@ -615,6 +615,25 @@ async def brain_tasks(req: BrainRequest):
 async def brain_code(req: BrainRequest):
     return _call("code", req.action, req.payload or {}, _code())
 
+@router.post("/ask")
+async def brain_ask(request: Request):
+    """
+    Smart routing — describe what you want in natural language.
+    Grace auto-routes to the optimal brain + action.
+
+    POST /brain/ask { "query": "what is the system health?" }
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    query = body.get("query", body.get("message", body.get("q", "")))
+    payload = body.get("payload", {})
+
+    from core.auto_router import smart_call
+    return smart_call(query, payload)
+
+
 @router.get("/directory")
 async def brain_directory():
     d = _build_directory()
