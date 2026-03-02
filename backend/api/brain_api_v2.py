@@ -271,6 +271,16 @@ def _system() -> dict:
         "process_documents": lambda p: _process_docs(p),
         "processing_status": lambda p: _processing_status(),
         "workspace_context": lambda p: _workspace_ctx(p),
+        "undo": lambda p: _undo(p),
+        "redo": lambda p: _redo(p),
+        "profile": lambda p: _profile(p),
+        "update_profile": lambda p: _update_profile(p),
+        "notifications": lambda p: _notifications(p),
+        "notify": lambda p: _notify(p),
+        "permissions": lambda p: _permissions(p),
+        "set_permission": lambda p: _set_perm(p),
+        "shortcuts": lambda p: _shortcuts(),
+        "fuzzy_search": lambda p: _fuzzy(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -578,6 +588,49 @@ def _processing_status():
 def _scan_upload(p):
     from core.workspace_bridge import scan_upload
     return scan_upload(p.get("path", ""), p.get("content", ""))
+
+def _undo(p):
+    from core.user_features import undo
+    r = undo(p.get("path", ""))
+    return {"undone": r is not None}
+
+def _redo(p):
+    from core.user_features import redo
+    r = redo(p.get("path", ""))
+    return {"redone": r is not None}
+
+def _profile(p):
+    from core.user_features import get_profile
+    return get_profile(p.get("user_id", "default"))
+
+def _update_profile(p):
+    from core.user_features import update_profile
+    uid = p.pop("user_id", "default")
+    return update_profile(uid, p)
+
+def _notifications(p):
+    from core.user_features import get_notifications
+    return {"notifications": get_notifications(p.get("unread_only", False))}
+
+def _notify(p):
+    from core.user_features import notify
+    return notify(p.get("title", ""), p.get("message", ""), p.get("type", "info"))
+
+def _permissions(p):
+    from core.user_features import get_workspace_permissions
+    return get_workspace_permissions(p.get("workspace", ""))
+
+def _set_perm(p):
+    from core.user_features import set_permission
+    return set_permission(p.get("workspace", ""), p.get("user_id", ""), p.get("level", "read"))
+
+def _shortcuts():
+    from core.user_features import get_shortcuts
+    return get_shortcuts()
+
+def _fuzzy(p):
+    from core.user_features import fuzzy_search
+    return {"results": fuzzy_search(p.get("query", ""), p.get("limit", 20))}
 
 def _workspace_ctx(p):
     from core.workspace_bridge import get_workspace_context
