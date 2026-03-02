@@ -456,6 +456,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Autonomous loop not started: {e}")
 
+    # ==================== Register Auto-Probe ====================
+    try:
+        from core.tracing import register_auto_probe
+        register_auto_probe()
+        print("[OK] Auto-probe registered (triggers on code changes)")
+    except Exception as e:
+        print(f"[WARN] Auto-probe: {e}")
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine

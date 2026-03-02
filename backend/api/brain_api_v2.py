@@ -37,7 +37,16 @@ class BrainOrchestration(BaseModel):
 
 def _call(brain: str, action: str, payload: dict, handlers: dict,
           client_ip: str = "unknown") -> BrainResponse:
-    """Route action to handler with rate limiting, validation, Genesis tracking."""
+    """Route action to handler with tracing, rate limiting, validation, Genesis tracking."""
+
+    # Start trace
+    try:
+        from core.tracing import new_trace, add_span, light_track
+        trace_id = new_trace()
+        add_span(f"brain/{brain}/{action}", {"client_ip": client_ip})
+        light_track("api_request", f"brain/{brain}/{action}", f"brain.{brain}", ["brain", brain, action])
+    except Exception:
+        trace_id = None
 
     # Rate limit check
     try:
@@ -57,13 +66,6 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
                     return BrainResponse(brain=brain, action=action, ok=False,
                                          error=f"Invalid input in field '{key}'")
                 payload[key] = sanitize_string(val)
-    except Exception:
-        pass
-
-    # Set correlation ID
-    try:
-        from core.logging import set_correlation_id
-        set_correlation_id()
     except Exception:
         pass
 
@@ -252,6 +254,8 @@ def _system() -> dict:
         "connectivity": lambda p: _connectivity(),
         "synapses":    lambda p: _synapses(),
         "synapse_map": lambda p: _synapse_brain(p),
+        "traces":      lambda p: _recent_traces(),
+        "trace_stats": lambda p: _trace_stats(),
         "intelligence": lambda p: _intelligence_report(p),
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
@@ -489,6 +493,16 @@ def _consensus_fix():
 def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
+
+
+def _recent_traces():
+    from core.tracing import get_recent_keys
+    return {"keys": get_recent_keys(50)}
+
+
+def _trace_stats():
+    from core.tracing import get_buffer_stats
+    return get_buffer_stats()
 
 
 def _synapses():
