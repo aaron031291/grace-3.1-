@@ -117,6 +117,32 @@ const ACTIONS = [
     ],
   },
   {
+    section: "Tasks",
+    items: [
+      {
+        id: "task_live", label: "Live Activity", icon: "📺",
+        brain: "tasks", action: "live",
+        desc: "Real-time activity feed showing what Grace is doing right now — recent Genesis key events, running tasks, active brain calls. Updates from the last 5 minutes of system activity. Connects to: tasks_service.py → genesis_key DB (last 5 min).",
+      },
+      {
+        id: "task_scheduled", label: "Scheduled Tasks", icon: "📅",
+        brain: "tasks", action: "scheduled",
+        desc: "View and manage scheduled tasks. Tasks can be created, prioritised, and reordered by drag-and-drop. Overdue tasks are auto-flagged. Connects to: tasks_service.py → data/scheduled_tasks.json.",
+      },
+      {
+        id: "task_planner", label: "Planner", icon: "🗓️",
+        brain: "tasks", action: "planner",
+        desc: "Session-based planner for complex multi-step work. Create a plan, break it into steps, track progress. Uses TimeSense for urgency scoring and deadline tracking. Connects to: tasks_service.py → cognitive/time_sense.py.",
+      },
+      {
+        id: "task_submit", label: "New Task", icon: "➕",
+        brain: "tasks", action: "submit",
+        payload: { title: "New task from Dev tab" },
+        desc: "Create a new task with title, priority, and optional deadline. Tasks are tracked via Genesis key and appear in the live activity feed. Connects to: tasks_service.py → genesis_tracker.",
+      },
+    ],
+  },
+  {
     section: "Code",
     items: [
       {
@@ -129,6 +155,41 @@ const ACTIONS = [
         id: "frontend_tree", label: "Frontend Files", icon: "⚛️",
         special: "frontend_tree",
         desc: "Shows the frontend file tree (React/Vite). Browse the src/ components, hooks, and config. Connects to: core/services/files_service.py → frontend/src/ directory.",
+      },
+      {
+        id: "cicd", label: "CI/CD Pipeline", icon: "🚀",
+        brain: "system", action: "diagnostics",
+        desc: "Grace's native CI/CD: runs lint, tests, and builds on code changes. Auto-triggered by Genesis key code_change events via the auto-probe system. Shows last pipeline status, pass/fail, and deployment readiness. Connects to: auto_probe → test_grace_system.py → GitHub Actions CI.",
+      },
+    ],
+  },
+  {
+    section: "Autonomous",
+    items: [
+      {
+        id: "auto_status", label: "Loop Status", icon: "♾️",
+        brain: "system", action: "auto_status",
+        desc: "Shows the Ouroboros autonomous loop state: running/stopped, cycle count, actions taken (healed/learned/coded/escalated), last cycle timestamp. The loop runs every 30s with trust gates, TimeSense, mirror, and episodic recall. Connects to: autonomous_loop_api → _loop_state.",
+      },
+      {
+        id: "auto_cycle", label: "Run Cycle", icon: "🔁",
+        brain: "system", action: "auto_cycle",
+        desc: "Manually triggers one full autonomous cycle: TIME_FILTER → MIRROR → TRIGGER → DECIDE → TRUST_GATE → EPISODIC_RECALL → ACT → LEARN → KPI_UPDATE. Shows exactly what was found and what action was taken. Connects to: autonomous_loop_api → all cognitive modules.",
+      },
+      {
+        id: "auto_log", label: "Cycle Log", icon: "📜",
+        brain: "system", action: "auto_log",
+        desc: "History of recent autonomous cycles — what triggers were found, what actions were taken, whether healing succeeded. Each cycle creates a Genesis key for full provenance. Connects to: autonomous_loop_api → _loop_log.",
+      },
+      {
+        id: "consensus_fix", label: "Consensus Fix", icon: "🔧",
+        brain: "system", action: "consensus_fix",
+        desc: "Scans all problems, sends each to ALL models (Kimi, Opus, Qwen, DeepSeek) for diagnosis. If all models agree with >60% confidence, auto-executes the fix. Everything tracked via Genesis key. Connects to: consensus_fixer_api → consensus_engine → diagnostic_engine.",
+      },
+      {
+        id: "intelligence_loop", label: "Intelligence Report", icon: "🧠",
+        brain: "system", action: "intelligence",
+        desc: "Full intelligence report combining Genesis key pattern mining (58K+ keys), adaptive trust state, and episodic memory analysis. This is the system's self-awareness output. Connects to: core/intelligence.py → GenesisKeyMiner + AdaptiveTrust + EpisodicMiner.",
       },
     ],
   },
