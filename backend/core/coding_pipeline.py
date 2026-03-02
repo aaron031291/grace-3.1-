@@ -36,6 +36,7 @@ Cross-cutting concerns (run at EVERY layer):
   - Hebbian learning (strengthen successful brain connections)
 """
 
+import hashlib
 import logging
 import time
 import json
@@ -197,6 +198,18 @@ class CodingPipeline:
             run_id = f"PIPE-{uuid.uuid4().hex[:8]}"
         result = PipelineResult(task=task)
 
+        # SAFETY: snapshot state before any changes
+        try:
+            from core.safety import snapshot_state, check_budget
+            snapshot_id = snapshot_state(f"pipeline:{task[:30]}")
+            if not check_budget():
+                result.status = "budget_exceeded"
+                self.progress.start(run_id, task, 0)
+                self.progress.finish(run_id, "budget_exceeded")
+                return result
+        except Exception:
+            snapshot_id = None
+
         self._track("pipeline_start", f"Pipeline started: {task[:100]}", {"task": task, "run_id": run_id})
 
         # Step 1: Plan
@@ -291,6 +304,14 @@ class CodingPipeline:
             result.status = "partial"
         else:
             result.status = "failed"
+            # SAFETY: rollback on complete failure
+            try:
+                from core.safety import rollback_to
+                if snapshot_id:
+                    rollback_to()
+                    self._track("pipeline_rollback", f"Pipeline failed, rolled back to {snapshot_id}")
+            except Exception:
+                pass
 
         result.total_duration_ms = round((time.time() - start) * 1000, 1)
         result.trust_score = self._calculate_trust(result)
@@ -575,11 +596,25 @@ class CodingPipeline:
         # Generate code
         code = call_brain("code", "generate", {"prompt": chunk, "project_folder": "."})
 
-        # Route output to active environment
-        if code.get("ok") and code.get("data", {}).get("code"):
+        # SAFETY: security scan generated code before accepting
+        generated_code = code.get("data", {}).get("code", "") if code.get("ok") else ""
+        if generated_code:
+            try:
+                from core.safety import scan_code_security, record_provenance, record_usage
+                scan = scan_code_security(generated_code, f"pipeline_chunk")
+                if scan.get("blocked"):
+                    return {"code": None, "security_blocked": True, "findings": scan["findings"]}
+
+                record_provenance("code_generation", hashlib.sha256(generated_code.encode()).hexdigest()[:16],
+                                  model="pipeline", prompt_hash=hashlib.sha256(chunk.encode()).hexdigest()[:16])
+                record_usage(tokens=len(generated_code.split()))
+            except Exception:
+                pass
+
+            # Route output to active environment
             call_brain("system", "env_write", {
                 "path": f"backend/generated_{int(time.time())}.py",
-                "content": code["data"]["code"],
+                "content": generated_code,
                 "source": "coding_pipeline",
             })
 

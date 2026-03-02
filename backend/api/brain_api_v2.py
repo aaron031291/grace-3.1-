@@ -289,6 +289,14 @@ def _system() -> dict:
         "env_write": lambda p: _env_write(p),
         "run_independent": lambda p: _run_independent(p),
         "run_failover": lambda p: _run_failover(p),
+        "snapshot": lambda p: _snapshot(p),
+        "rollback": lambda p: _rollback(p),
+        "snapshots": lambda p: _list_snapshots(),
+        "security_scan": lambda p: _security_scan(p),
+        "budget_status": lambda p: _budget_status(),
+        "set_budget": lambda p: _set_budget(p),
+        "provenance": lambda p: _provenance_entries(p),
+        "verify_ledger": lambda p: _verify_ledger(),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -652,6 +660,38 @@ def _list_envs():
 def _env_write(p):
     from core.environment import route_file_write
     return route_file_write(p.get("path", ""), p.get("content", ""), p.get("source", "dev_tab"))
+
+def _snapshot(p):
+    from core.safety import snapshot_state
+    return {"snapshot_id": snapshot_state(p.get("label", ""))}
+
+def _rollback(p):
+    from core.safety import rollback_to
+    return rollback_to(p.get("snapshot_id"))
+
+def _list_snapshots():
+    from core.safety import list_snapshots
+    return {"snapshots": list_snapshots()}
+
+def _security_scan(p):
+    from core.safety import scan_code_security
+    return scan_code_security(p.get("code", ""), p.get("file", ""))
+
+def _budget_status():
+    from core.safety import get_budget_status
+    return get_budget_status()
+
+def _set_budget(p):
+    from core.safety import set_budget_limits
+    return set_budget_limits(p.get("calls_per_hour"), p.get("tokens_per_hour"))
+
+def _provenance_entries(p):
+    from core.safety import get_ledger_entries
+    return {"entries": get_ledger_entries(p.get("limit", 20))}
+
+def _verify_ledger():
+    from core.safety import verify_ledger
+    return verify_ledger()
 
 def _run_independent(p):
     from core.independent_models import run_independent
