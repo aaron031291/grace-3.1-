@@ -46,6 +46,7 @@ from api.auth import router as auth_router
 
 # 4. Voice — WebSocket (can't route through sync brain)
 from api.voice_api import router as voice_router
+from api.stream_api import router as stream_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -536,6 +537,7 @@ app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 app.include_router(health_router)                # /health (k8s probes)
 app.include_router(auth_router)                  # /auth (middleware)
 app.include_router(voice_router)                 # /voice (WebSocket)
+app.include_router(stream_router)                # /api/stream (SSE streaming)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

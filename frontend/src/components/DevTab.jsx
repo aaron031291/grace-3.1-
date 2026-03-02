@@ -8,6 +8,22 @@ export default function DevTab() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
 
+  // Listen for file open events from file tree
+  useEffect(() => {
+    const handler = (e) => {
+      const { path, content } = e.detail;
+      setDetail({
+        title: path.split("/").pop(),
+        icon: "📝",
+        desc: `Editing: ${path}. Ctrl+S to save + hot reload.`,
+        data: { _special: "editor", path, content },
+      });
+      setRightCollapsed(false);
+    };
+    window.addEventListener("grace-open-editor", handler);
+    return () => window.removeEventListener("grace-open-editor", handler);
+  }, []);
+
   return (
     <div style={{ display: "flex", height: "100%", background: "#0a0a1a", color: "#ccc" }}>
       {!leftCollapsed ? (
@@ -868,6 +884,90 @@ function LeftPanel({ onDetail, width = 200 }) {
   );
 }
 
+function CodeEditor({ filePath, initialContent, onSave }) {
+  const [content, setContent] = useState(initialContent || "");
+  const [saved, setSaved] = useState(false);
+
+  const save = async () => {
+    const { brainCall } = await import("../api/brain-client");
+    const r = await brainCall("code", "write", { path: filePath, content });
+    setSaved(r.ok);
+    if (onSave) onSave(r);
+    // Hot reload
+    await brainCall("system", "hot_reload_service", { service: "code" });
+  };
+
+  const lang = filePath?.split(".").pop() || "txt";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div style={{ display: "flex", gap: 4, marginBottom: 4, alignItems: "center" }}>
+        <span style={{ fontSize: 10, color: "#888", flex: 1 }}>{filePath} ({lang})</span>
+        <button onClick={save} style={{ padding: "2px 8px", background: "#10b981", border: "none", borderRadius: 3, color: "#fff", fontSize: 10, cursor: "pointer" }}>
+          {saved ? "Saved ✓" : "Save + Reload"}
+        </button>
+      </div>
+      <textarea
+        value={content}
+        onChange={e => { setContent(e.target.value); setSaved(false); }}
+        spellCheck={false}
+        style={{
+          flex: 1, width: "100%", background: "#0d0d20", color: "#e0e0e0",
+          border: "1px solid #222", borderRadius: 4, padding: 8,
+          fontFamily: "monospace", fontSize: 12, lineHeight: 1.5,
+          resize: "none", outline: "none", tabSize: 2,
+        }}
+        onKeyDown={e => {
+          if (e.key === "Tab") {
+            e.preventDefault();
+            const start = e.target.selectionStart;
+            const end = e.target.selectionEnd;
+            setContent(content.substring(0, start) + "  " + content.substring(end));
+            setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 2; }, 0);
+          }
+          if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+            e.preventDefault();
+            save();
+          }
+        }}
+      />
+    </div>
+  );
+}
+
+function DiffViewer({ original, modified, fileName }) {
+  const origLines = (original || "").split("\n");
+  const modLines = (modified || "").split("\n");
+  const maxLines = Math.max(origLines.length, modLines.length);
+
+  return (
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 6 }}>{fileName || "Diff View"}</div>
+      <div style={{ display: "flex", gap: 2, fontSize: 10, fontFamily: "monospace", maxHeight: 400, overflow: "auto" }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 9, color: "#f44336", marginBottom: 2 }}>Original</div>
+          {origLines.map((line, i) => (
+            <div key={i} style={{
+              padding: "1px 4px", background: modLines[i] !== line ? "#2a1515" : "transparent",
+              color: modLines[i] !== line ? "#f44336" : "#888", whiteSpace: "pre",
+            }}>{line}</div>
+          ))}
+        </div>
+        <div style={{ width: 1, background: "#333" }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 9, color: "#4caf50", marginBottom: 2 }}>Modified</div>
+          {modLines.map((line, i) => (
+            <div key={i} style={{
+              padding: "1px 4px", background: origLines[i] !== line ? "#152a15" : "transparent",
+              color: origLines[i] !== line ? "#4caf50" : "#888", whiteSpace: "pre",
+            }}>{line}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DrawingCanvas() {
   const canvasRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -988,11 +1088,64 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight }) {
 
   const send = async () => {
     if (!input.trim() || loading) return;
-    setMessages(p => [...p, { role: "user", content: input, ts: Date.now() }]);
-    const query = input;
+    const rawInput = input;
+    setMessages(p => [...p, { role: "user", content: rawInput, ts: Date.now() }]);
     setInput("");
     setLoading(true);
 
+    // Parse @ mentions
+    const { parseMentions } = await import("../api/stream");
+    const { cleanText, mentions } = parseMentions(rawInput);
+
+    // Try streaming first
+    try {
+      const { streamChat } = await import("../api/stream");
+      const streamModel = model === "consensus" ? "kimi" : model;
+
+      let tokens = "";
+      const msgIdx = { current: -1 };
+
+      // Add placeholder message
+      setMessages(p => {
+        msgIdx.current = p.length;
+        return [...p, { role: "assistant", model: streamModel, content: "▌", streaming: true, ts: Date.now() }];
+      });
+
+      await streamChat(
+        cleanText || rawInput,
+        streamModel,
+        mentions,
+        (token) => {
+          tokens += token;
+          setMessages(p => {
+            const updated = [...p];
+            if (msgIdx.current >= 0 && updated[msgIdx.current]) {
+              updated[msgIdx.current] = { ...updated[msgIdx.current], content: tokens + "▌" };
+            }
+            return updated;
+          });
+        },
+        () => {
+          setMessages(p => {
+            const updated = [...p];
+            if (msgIdx.current >= 0 && updated[msgIdx.current]) {
+              updated[msgIdx.current] = { ...updated[msgIdx.current], content: tokens, streaming: false };
+            }
+            return updated;
+          });
+          setLoading(false);
+        },
+        (err) => {
+          // Fallback to batch if streaming fails
+          fallbackBatch(cleanText || rawInput, mentions);
+        }
+      );
+    } catch {
+      fallbackBatch(cleanText || rawInput, mentions);
+    }
+  };
+
+  const fallbackBatch = async (query, mentions) => {
     try {
       const mods = model === "consensus" ? ["kimi", "opus"] : [model];
       const data = await brainCall("ai", "fast", { prompt: query, models: mods });
@@ -1002,8 +1155,6 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight }) {
         model: model === "consensus" ? "Consensus" : model,
         content: d.individual_responses?.[0]?.response || d.final_output || d.error || "No response",
         individual: d.individual_responses,
-        confidence: d.confidence,
-        models_used: d.models_used,
         ts: Date.now(),
       }]);
     } catch (e) {
@@ -1057,7 +1208,7 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight }) {
       <div style={{ padding: "8px 12px", borderTop: "1px solid #1a1a2e", display: "flex", gap: 6 }}>
         <input value={input} onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-          placeholder="Ask about errors, architecture, run diagnostics..."
+          placeholder="Ask Grace... Use @file.py to include context"
           style={{ flex: 1, padding: "8px 10px", background: "#12122a", border: "1px solid #222", borderRadius: 6, color: "#ccc", fontSize: 12, outline: "none" }}
           disabled={loading} />
         <button onClick={send} disabled={loading} style={{
@@ -1111,8 +1262,23 @@ function RightDetail({ content, onClose, width = 320 }) {
               <div style={{ fontSize: 11, color: "#aaa", marginTop: 4, whiteSpace: "pre-wrap" }}>{(r.response || JSON.stringify(r, null, 2)).slice(0, 600)}</div>
             </div>
           ))
+        ) : content.data?._special === "editor" ? (
+          <CodeEditor filePath={content.data.path} initialContent={content.data.content} />
+        ) : content.data?._special === "diff" ? (
+          <DiffViewer original={content.data.original} modified={content.data.modified} fileName={content.data.fileName} />
         ) : isTree ? (
-          <FileTree node={content.data} />
+          <FileTree node={content.data} onOpenFile={async (path) => {
+            const { brainCall } = await import("../api/brain-client");
+            const r = await brainCall("code", "read", { path });
+            if (r.ok && r.data?.content != null) {
+              onClose();
+              setTimeout(() => {
+                // Re-open with editor
+                const event = new CustomEvent("grace-open-editor", { detail: { path, content: r.data.content } });
+                window.dispatchEvent(event);
+              }, 50);
+            }
+          }} />
         ) : content.data?._special === "canvas" ? (
           <DrawingCanvas />
         ) : content.data?.error ? (
@@ -1131,25 +1297,36 @@ function RightDetail({ content, onClose, width = 320 }) {
 
 /* ── File Tree Renderer ───────────────────────────────────────── */
 
-function FileTree({ node, depth = 0 }) {
+function FileTree({ node, depth = 0, onOpenFile }) {
   const [open, setOpen] = useState(depth < 2);
   if (!node) return null;
 
   const isDir = node.type === "directory" || node.children;
 
+  const handleClick = async () => {
+    if (isDir) {
+      setOpen(p => !p);
+    } else if (onOpenFile) {
+      onOpenFile(node.path || node.name);
+    }
+  };
+
   return (
     <div style={{ marginLeft: depth * 12 }}>
-      <div onClick={() => isDir && setOpen(p => !p)} style={{
-        padding: "2px 4px", cursor: isDir ? "pointer" : "default",
+      <div onClick={handleClick} style={{
+        padding: "2px 4px", cursor: "pointer",
         fontSize: 11, color: isDir ? "#ccc" : "#888",
         display: "flex", alignItems: "center", gap: 4,
-      }}>
+      }}
+      onMouseEnter={e => !isDir && (e.target.style.color = "#e94560")}
+      onMouseLeave={e => !isDir && (e.target.style.color = "#888")}
+      >
         <span style={{ fontSize: 10, width: 12 }}>{isDir ? (open ? "📂" : "📁") : "📄"}</span>
         {node.name}
         {!isDir && node.size != null && <span style={{ fontSize: 9, color: "#444", marginLeft: 4 }}>{(node.size / 1024).toFixed(1)}kb</span>}
       </div>
       {open && node.children?.map((child, i) => (
-        <FileTree key={i} node={child} depth={depth + 1} />
+        <FileTree key={i} node={child} depth={depth + 1} onOpenFile={onOpenFile} />
       ))}
     </div>
   );
