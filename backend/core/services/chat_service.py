@@ -114,6 +114,19 @@ def send_prompt(payload: dict) -> dict:
             chat_id=payload["chat_id"], role="user", content=payload["message"]
         )
 
+        # Track user input as learnable event
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="user_input",
+                what=f"User message: {payload['message'][:100]}",
+                who="chat_service",
+                input_data={"message": payload["message"][:500], "chat_id": payload["chat_id"]},
+                tags=["user_input", "chat"],
+            )
+        except Exception:
+            pass
+
         client = get_llm_client()
         start = _time.time()
         response = client.chat(
@@ -148,10 +161,38 @@ def send_prompt(payload: dict) -> dict:
 
 def run_consensus(payload: dict) -> dict:
     from cognitive.consensus_engine import run_consensus as _run
-    result = _run(
-        prompt=payload.get("message", payload.get("prompt", "")),
-        models=payload.get("models"),
-    )
+    prompt = payload.get("message", payload.get("prompt", ""))
+
+    # Track user input
+    try:
+        from api._genesis_tracker import track
+        track(key_type="user_input", what=f"Consensus query: {prompt[:100]}",
+              who="chat_service.consensus", input_data={"prompt": prompt[:500]},
+              tags=["user_input", "consensus"])
+    except Exception:
+        pass
+
+    result = _run(prompt=prompt, models=payload.get("models"))
+
+    # Track consensus output as learnable event
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="ai_response",
+            what=f"Consensus output: {result.final_output[:100]}",
+            who="consensus_engine",
+            input_data={"prompt": prompt[:200], "models": result.models_used},
+            output_data={
+                "output": result.final_output[:500],
+                "confidence": result.confidence,
+                "agreements": len(result.agreements),
+                "disagreements": len(result.disagreements),
+            },
+            tags=["consensus", "ai_response", "learning_signal"],
+        )
+    except Exception:
+        pass
+
     return {
         "final_output": result.final_output,
         "confidence": result.confidence,

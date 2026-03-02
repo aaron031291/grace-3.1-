@@ -31,6 +31,15 @@ async def stream_chat(request: Request):
 
         full_prompt = f"{file_context}\n\n{prompt}" if file_context else prompt
 
+        # Track user input as learnable
+        try:
+            from api._genesis_tracker import track
+            track(key_type="user_input", what=f"Stream chat: {prompt[:100]}",
+                  who="stream_api", input_data={"prompt": prompt[:500], "model": model, "mentions": mentions},
+                  tags=["user_input", "stream", "chat"])
+        except Exception:
+            pass
+
         try:
             from settings import settings
 
