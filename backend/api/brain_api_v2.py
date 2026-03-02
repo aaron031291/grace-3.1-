@@ -259,6 +259,13 @@ def _system() -> dict:
         "synapse_map": lambda p: _synapse_brain(p),
         "traces":      lambda p: _recent_traces(),
         "trace_stats": lambda p: _trace_stats(),
+        "hot_reload_service": lambda p: _hot_reload_svc(p),
+        "hot_reload_all": lambda p: _hot_reload_all(),
+        "save_and_reload": lambda p: _save_reload(p),
+        "reload_history": lambda p: _reload_history(),
+        "genesis_storage": lambda p: _genesis_storage_stats(),
+        "genesis_cleanup": lambda p: _genesis_cleanup(),
+        "genesis_hot": lambda p: _genesis_hot(p),
         "intelligence": lambda p: _intelligence_report(p),
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
@@ -497,6 +504,34 @@ def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
 
+
+def _hot_reload_svc(p):
+    from core.hot_reload import hot_reload_service
+    return hot_reload_service(p.get("service", p.get("name", "")))
+
+def _hot_reload_all():
+    from core.hot_reload import hot_reload_all_services
+    return hot_reload_all_services()
+
+def _save_reload(p):
+    from core.hot_reload import save_and_reload
+    return save_and_reload(p.get("path", ""), p.get("content", ""))
+
+def _reload_history():
+    from core.hot_reload import get_reload_history
+    return {"history": get_reload_history()}
+
+def _genesis_storage_stats():
+    from core.genesis_storage import get_genesis_storage
+    return get_genesis_storage().get_stats()
+
+def _genesis_cleanup():
+    from core.genesis_storage import get_genesis_storage
+    return get_genesis_storage().cleanup_expired()
+
+def _genesis_hot(p):
+    from core.genesis_storage import get_genesis_storage
+    return {"keys": get_genesis_storage().get_hot(p.get("limit", 100))}
 
 def _recent_traces():
     from core.tracing import get_recent_keys

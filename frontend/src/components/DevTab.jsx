@@ -226,7 +226,12 @@ const ACTIONS = [
       {
         id: "view_rules", label: "View Active Rules", icon: "📋",
         brain: "govern", action: "rules",
-        desc: "Shows all governance documents currently active. These are injected into every LLM call as mandatory instructions. You can see what rules are governing Grace's behavior right now. Connects to: govern_service.list_rules() → data/governance_rules/.",
+        desc: "Shows all governance documents currently active PLUS the 8-layer coding pipeline. These are injected into every LLM call as mandatory instructions — coding standards, schemas, configs, and the full pipeline workflow. Connects to: govern_service.list_rules() → data/governance_rules/ → coding_pipeline.",
+      },
+      {
+        id: "view_pipeline", label: "Pipeline Workflow", icon: "🏗️",
+        special: "show_pipeline",
+        desc: "Shows the 8-layer coding pipeline that ALL models must follow as LAW: Runtime → Decompose → Propose → Select → Simulate → Generate → Verify → Deploy Gate. Each layer shows which brains are called and what trust score is required. This is the governance contract.",
       },
       {
         id: "dev_instruction", label: "Dev Instruction", icon: "📝",
@@ -298,6 +303,21 @@ const ACTIONS = [
         desc: "Grace's native CI/CD status. Auto-triggered by Genesis key code_change events via the auto-probe system. Shows last pipeline status, pass/fail, and deployment readiness. Connects to: auto_probe → test_grace_system.py → GitHub Actions CI.",
       },
       {
+        id: "api_client", label: "API Client", icon: "🌐",
+        special: "api_client",
+        desc: "Built-in REST API client. Enter a URL, method, headers, and body to test any endpoint. Shows response status, headers, body, and latency. Like Postman but inside Grace. No external tool needed.",
+      },
+      {
+        id: "draw", label: "Whiteboard", icon: "🎨",
+        special: "drawing",
+        desc: "Simple drawing canvas for sketching system diagrams, architecture, flows. Export as PNG to share with team. Draw boxes, arrows, text — plan visually before coding. Canvas saves to localStorage.",
+      },
+      {
+        id: "custom_action", label: "+ Custom Action", icon: "➕",
+        special: "custom_action",
+        desc: "Create your own action button. Define a name, brain domain, action, and payload. The button is saved to localStorage and appears in your action list permanently. Build the Dev tab that fits YOUR workflow.",
+      },
+      {
         id: "ai_review", label: "AI Code Review", icon: "🤖",
         brain: "ai", action: "cognitive_report",
         desc: "Sends the current codebase state through the full cognitive pipeline for review. OODA analysis, ambiguity check, invariant validation, and knowledge gap detection — applied to the code. Connects to: core/cognitive_mesh.py → all cognitive modules.",
@@ -307,6 +327,26 @@ const ACTIONS = [
   {
     section: "Autonomous",
     items: [
+      {
+        id: "hot_reload_all", label: "Hot Reload Code", icon: "🔥",
+        brain: "system", action: "hot_reload_all",
+        desc: "Reloads ALL service modules without stopping Grace. Preserves state, rolls back on failure. Use after editing code — changes take effect immediately. Connects to: core/hot_reload.py → importlib.reload → state preservation.",
+      },
+      {
+        id: "reload_history", label: "Reload History", icon: "📜",
+        brain: "system", action: "reload_history",
+        desc: "Shows the history of hot code reloads — which modules were reloaded, which failed, which rolled back. Useful for debugging reload issues. Connects to: core/hot_reload.py → _reload_history.",
+      },
+      {
+        id: "genesis_storage", label: "Genesis Storage", icon: "💾",
+        brain: "system", action: "genesis_storage",
+        desc: "Shows Genesis key storage stats: hot tier size, sampling rate, unique fingerprints, compression stats, TTL config. The tiered system keeps 1000 keys in memory, samples high-frequency at 1%, and expires old keys by type. Connects to: core/genesis_storage.py.",
+      },
+      {
+        id: "genesis_cleanup", label: "Cleanup Expired", icon: "🧹",
+        brain: "system", action: "genesis_cleanup",
+        desc: "Removes expired Genesis keys based on TTL: debug=48h, performance=7d, errors=30d, learning=90d. Reduces DB size while keeping important audit data. Connects to: genesis_storage.cleanup_expired() → SQLite DELETE.",
+      },
       {
         id: "auto_status", label: "Loop Status", icon: "♾️",
         brain: "system", action: "auto_status",
@@ -390,6 +430,13 @@ const SECTION_MENU = {
   ],
 };
 
+
+// Load custom actions from localStorage
+function getCustomActions() {
+  try {
+    return JSON.parse(localStorage.getItem("grace_custom_actions") || "[]");
+  } catch { return []; }
+}
 
 function LeftPanel({ onDetail, width = 200 }) {
   const [loading, setLoading] = useState({});
@@ -518,6 +565,77 @@ function LeftPanel({ onDetail, width = 200 }) {
         desc: "This instruction is now active. Grace will follow it in all future code generation and responses.",
         data: r.ok ? { saved: true, instruction, active: true } : { error: r.error },
       });
+      return;
+    }
+
+    // Pipeline Workflow View
+    if (item.special === "show_pipeline") {
+      onDetail({
+        title: "8-Layer Coding Pipeline", icon: "🏗️",
+        desc: "This is the LAW that governs how ALL models produce code. No model can skip layers. No layer passes without 100% completion.",
+        data: {
+          pipeline: [
+            { layer: 1, name: "Runtime Environment", brains: ["system/health", "system/connectivity", "govern/rules", "ai/knowledge_gaps"], trust_required: 0.6 },
+            { layer: 2, name: "Task Decomposition", brains: ["files/search", "ai/fast"], trust_required: 0.6 },
+            { layer: 3, name: "Solution Proposal", brains: ["govern/rules", "files/search", "ai/fast(kimi+opus)"], trust_required: 0.6, parallel: true },
+            { layer: 4, name: "Solution Selection", brains: ["system/trust", "ai/bandit_select", "ai/dl_predict"], trust_required: 0.6, parallel: true },
+            { layer: 5, name: "Simulation & Reasoning", brains: ["ai/dl_predict", "ai/cognitive_report"], trust_required: 0.6 },
+            { layer: 6, name: "Code Generation", brains: ["govern/persona", "files/search", "code/generate"], trust_required: 0.7 },
+            { layer: 7, name: "Verification & Testing", brains: ["ai/invariants", "system/probe", "system/triggers", "ai/cognitive_report"], trust_required: 0.8 },
+            { layer: 8, name: "Deployment Gate", brains: ["govern/approvals", "system/trust", "system/auto_cycle"], trust_required: 0.9, requires_human: true },
+          ],
+          cross_cutting: ["Genesis Key tracking", "Trust Score at every layer", "Self-Mirror observation", "TimeSense awareness", "LLM Reasoning (OODA)", "Probe verification", "Activity tracking"],
+          total_brain_calls: 24,
+        },
+      });
+      return;
+    }
+
+    // API Client
+    if (item.special === "api_client") {
+      const url = prompt("URL (e.g. http://localhost:8000/health):");
+      if (!url) return;
+      setLoading(p => ({ ...p, [item.id]: true }));
+      try {
+        const start = performance.now();
+        const resp = await fetch(url);
+        const latency = Math.round(performance.now() - start);
+        const body = await resp.text();
+        let parsed;
+        try { parsed = JSON.parse(body); } catch { parsed = body; }
+        setLoading(p => ({ ...p, [item.id]: false }));
+        onDetail({ title: `${resp.status} ${url}`, icon: "🌐", desc: `${resp.status} in ${latency}ms`,
+          data: { status: resp.status, latency_ms: latency, headers: Object.fromEntries(resp.headers.entries()), body: parsed } });
+      } catch (e) {
+        setLoading(p => ({ ...p, [item.id]: false }));
+        onDetail({ title: "Request Failed", icon: "🌐", data: { error: e.message, url } });
+      }
+      return;
+    }
+
+    // Drawing/Whiteboard
+    if (item.special === "drawing") {
+      onDetail({
+        title: "Whiteboard", icon: "🎨",
+        desc: "Draw system diagrams. Click and drag to draw. Right-click to add text. Export button saves as PNG.",
+        data: { _special: "canvas" },
+      });
+      return;
+    }
+
+    // Custom Action Builder
+    if (item.special === "custom_action") {
+      const name = prompt("Action name:");
+      if (!name) return;
+      const brain = prompt("Brain domain (chat/files/govern/ai/system/data/tasks/code):");
+      if (!brain) return;
+      const action = prompt("Action name in that brain:");
+      if (!action) return;
+      const newAction = { id: `custom_${Date.now()}`, label: name, icon: "⚡", brain, action, desc: `Custom action: ${brain}/${action}. User-created.` };
+      const saved = JSON.parse(localStorage.getItem("grace_custom_actions") || "[]");
+      saved.push(newAction);
+      localStorage.setItem("grace_custom_actions", JSON.stringify(saved));
+      onDetail({ title: "Action Created", icon: "➕", data: { saved: true, name, brain, action, total_custom: saved.length } });
       return;
     }
 
@@ -661,7 +779,7 @@ function LeftPanel({ onDetail, width = 200 }) {
   return (
     <div style={{ width: width, borderRight: "1px solid #1a1a2e", overflow: "auto", flexShrink: 0 }}
          onClick={() => setContextMenu(null)}>
-      {ACTIONS.map(section => (
+      {[...ACTIONS, ...(getCustomActions().length ? [{ section: "Custom", items: getCustomActions() }] : [])].map(section => (
         <div key={section.section}>
           <div style={{ padding: "8px 12px 3px", fontSize: 9, fontWeight: 800, color: "#555", textTransform: "uppercase", letterSpacing: 1 }}>
             {section.section}
@@ -746,6 +864,74 @@ function LeftPanel({ onDetail, width = 200 }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function DrawingCanvas() {
+  const canvasRef = useRef(null);
+  const [drawing, setDrawing] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#0a0a1a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#e94560";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+
+    let isDrawing = false;
+    const start = (e) => { isDrawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+    const draw = (e) => { if (!isDrawing) return; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); };
+    const stop = () => { isDrawing = false; };
+
+    canvas.addEventListener("mousedown", start);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stop);
+    canvas.addEventListener("mouseleave", stop);
+
+    return () => {
+      canvas.removeEventListener("mousedown", start);
+      canvas.removeEventListener("mousemove", draw);
+      canvas.removeEventListener("mouseup", stop);
+      canvas.removeEventListener("mouseleave", stop);
+    };
+  }, []);
+
+  const exportPNG = () => {
+    const canvas = canvasRef.current;
+    const link = document.createElement("a");
+    link.download = `grace_diagram_${Date.now()}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
+  const clear = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#0a0a1a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+        <button onClick={exportPNG} style={{ padding: "3px 8px", background: "#2563eb", border: "none", borderRadius: 4, color: "#fff", fontSize: 10, cursor: "pointer" }}>Export PNG</button>
+        <button onClick={clear} style={{ padding: "3px 8px", background: "#333", border: "none", borderRadius: 4, color: "#aaa", fontSize: 10, cursor: "pointer" }}>Clear</button>
+        <select onChange={(e) => {
+          const canvas = canvasRef.current;
+          canvas.getContext("2d").strokeStyle = e.target.value;
+        }} style={{ padding: "2px 4px", background: "#12122a", border: "1px solid #333", borderRadius: 4, color: "#ccc", fontSize: 10 }}>
+          <option value="#e94560">Red</option>
+          <option value="#4caf50">Green</option>
+          <option value="#2563eb">Blue</option>
+          <option value="#f59e0b">Yellow</option>
+          <option value="#ffffff">White</option>
+        </select>
+      </div>
+      <canvas ref={canvasRef} width={280} height={400} style={{ border: "1px solid #222", borderRadius: 4, cursor: "crosshair" }} />
     </div>
   );
 }
@@ -927,6 +1113,8 @@ function RightDetail({ content, onClose, width = 320 }) {
           ))
         ) : isTree ? (
           <FileTree node={content.data} />
+        ) : content.data?._special === "canvas" ? (
+          <DrawingCanvas />
         ) : content.data?.error ? (
           <div style={{ color: "#f44336", fontSize: 12, padding: 8, background: "#2a1515", borderRadius: 6 }}>
             {typeof content.data.error === "string" ? content.data.error : JSON.stringify(content.data.error)}
