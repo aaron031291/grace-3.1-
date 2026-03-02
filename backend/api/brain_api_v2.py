@@ -266,6 +266,9 @@ def _system() -> dict:
         "genesis_storage": lambda p: _genesis_storage_stats(),
         "genesis_cleanup": lambda p: _genesis_cleanup(),
         "genesis_hot": lambda p: _genesis_hot(p),
+        "file_events": lambda p: _file_events(p),
+        "scan_upload": lambda p: _scan_upload(p),
+        "workspace_context": lambda p: _workspace_ctx(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -557,6 +560,18 @@ def _genesis_storage_stats():
 def _genesis_cleanup():
     from core.genesis_storage import get_genesis_storage
     return get_genesis_storage().cleanup_expired()
+
+def _file_events(p):
+    from core.workspace_bridge import get_recent_events
+    return {"events": get_recent_events(p.get("limit", 50))}
+
+def _scan_upload(p):
+    from core.workspace_bridge import scan_upload
+    return scan_upload(p.get("path", ""), p.get("content", ""))
+
+def _workspace_ctx(p):
+    from core.workspace_bridge import get_workspace_context
+    return {"context": get_workspace_context(p.get("workspace", ""))}
 
 def _generate_report(p):
     from core.reports import generate_daily_report
