@@ -188,6 +188,8 @@ def _ai() -> dict:
         "generate": lambda p: _code_generate(p),
         "oracle": lambda p: _oracle_dashboard(),
         "training": lambda p: _oracle_training(),
+        "dl_predict": lambda p: _dl_predict(p),
+        "dl_train": lambda p: _dl_train(p),
     }
 
 
@@ -478,6 +480,16 @@ def _mine_genesis_keys(p):
 def _mine_episodes():
     from core.intelligence import EpisodicMiner
     return EpisodicMiner().mine_episodes()
+
+
+def _dl_predict(p):
+    from core.deep_learning import get_model
+    return get_model().predict(p)
+
+
+def _dl_train(p):
+    from core.deep_learning import get_model
+    return get_model().train_from_db(hours=p.get("hours", 24), limit=p.get("limit", 1000))
 
 
 
