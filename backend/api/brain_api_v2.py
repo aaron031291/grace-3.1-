@@ -283,6 +283,12 @@ def _system() -> dict:
         "set_permission": lambda p: _set_perm(p),
         "shortcuts": lambda p: _shortcuts(),
         "fuzzy_search": lambda p: _fuzzy(p),
+        "set_environment": lambda p: _set_env(p),
+        "get_environment": lambda p: _get_env(),
+        "list_environments": lambda p: _list_envs(),
+        "env_write": lambda p: _env_write(p),
+        "run_independent": lambda p: _run_independent(p),
+        "run_failover": lambda p: _run_failover(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -629,6 +635,31 @@ def _set_perm(p):
 def _shortcuts():
     from core.user_features import get_shortcuts
     return get_shortcuts()
+
+def _set_env(p):
+    from core.environment import set_environment
+    return set_environment(p.get("name", p.get("environment", "")))
+
+def _get_env():
+    from core.environment import get_environment, get_environment_path
+    env = get_environment()
+    return {"environment": env, "path": str(get_environment_path())}
+
+def _list_envs():
+    from core.environment import list_environments
+    return {"environments": list_environments()}
+
+def _env_write(p):
+    from core.environment import route_file_write
+    return route_file_write(p.get("path", ""), p.get("content", ""), p.get("source", "dev_tab"))
+
+def _run_independent(p):
+    from core.independent_models import run_independent
+    return run_independent(p.get("prompt", ""), p.get("models"), p.get("system_prompt", ""))
+
+def _run_failover(p):
+    from core.independent_models import run_with_failover
+    return run_with_failover(p.get("prompt", ""), p.get("models"), p.get("system_prompt", ""))
 
 def _fuzzy(p):
     from core.user_features import fuzzy_search

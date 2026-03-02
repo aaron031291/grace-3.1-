@@ -382,6 +382,22 @@ const ACTIONS = [
         desc: "Shows Genesis key storage stats: hot tier size, sampling rate, unique fingerprints, compression stats, TTL config. The tiered system keeps 1000 keys in memory, samples high-frequency at 1%, and expires old keys by type. Connects to: core/genesis_storage.py.",
       },
       {
+        id: "set_env", label: "Switch Environment", icon: "🌍",
+        special: "switch_env",
+        desc: "Select which project/environment all output goes to. Code, files, docs — everything routes to the active environment. Switch between Microsoft, Apple, your own projects. Each environment is isolated. Connects to: core/environment.py → data/projects/{env}/.",
+      },
+      {
+        id: "list_envs", label: "Environments", icon: "📂",
+        brain: "system", action: "list_environments",
+        desc: "Lists all available environments/projects with file counts and active status. Shows which environment is currently selected. Grace-AI environment is always present and locked from deletion. Connects to: core/environment.py → data/projects/.",
+      },
+      {
+        id: "run_independent", label: "Independent Models", icon: "🔀",
+        brain: "system", action: "run_independent",
+        special: "generate_prompt",
+        desc: "Run each model INDEPENDENTLY in parallel. If Kimi is down, Opus/Qwen/DeepSeek still work. Shows individual responses side-by-side — no consensus, just raw model outputs. Connects to: core/independent_models.py → all LLM clients.",
+      },
+      {
         id: "genesis_cleanup", label: "Cleanup Expired", icon: "🧹",
         brain: "system", action: "genesis_cleanup",
         desc: "Removes expired Genesis keys based on TTL: debug=48h, performance=7d, errors=30d, learning=90d. Reduces DB size while keeping important audit data. Connects to: genesis_storage.cleanup_expired() → SQLite DELETE.",
@@ -629,6 +645,19 @@ function LeftPanel({ onDetail, width = 200 }) {
         desc: "Live iframe of the running frontend. Interact with it to test changes.",
         data: { _special: "preview" },
       });
+      return;
+    }
+
+    // Switch Environment
+    if (item.special === "switch_env") {
+      const name = prompt("Environment name (e.g. microsoft, apple, tim-ai, grace-ai):");
+      if (!name) return;
+      setLoading(p => ({ ...p, [item.id]: true }));
+      const r = await brainCall("system", "set_environment", { name: name.toLowerCase().replace(/\s/g, "-") });
+      setLoading(p => ({ ...p, [item.id]: false }));
+      onDetail({ title: `Environment: ${name}`, icon: "🌍",
+        desc: `All output now routes to: ${name}. Code, files, docs — everything goes to this project.`,
+        data: r.ok ? r.data : { error: r.error } });
       return;
     }
 
