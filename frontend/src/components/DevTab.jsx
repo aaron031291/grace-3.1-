@@ -257,6 +257,12 @@ const ACTIONS = [
         desc: "Full-text search across the entire codebase. Enter a keyword, function name, or regex to find every file that contains it. Connects to: core/services/files_service.py → recursive file content search.",
       },
       {
+        id: "pipeline", label: "Run Pipeline", icon: "🏗️",
+        brain: "ai", action: "pipeline",
+        special: "generate_prompt",
+        desc: "Runs the full 8-layer coding pipeline: plan → decompose → propose 3 approaches → select → simulate → generate → verify → deploy gate. All models must agree at each stage. Every layer tracked via Genesis key with trust scores. Connects to: core/coding_pipeline.py → consensus_engine → all brains.",
+      },
+      {
         id: "generate_code", label: "AI Generate", icon: "✨",
         brain: "code", action: "generate",
         payload: { prompt: "" },

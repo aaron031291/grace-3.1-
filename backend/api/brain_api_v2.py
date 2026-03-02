@@ -213,6 +213,7 @@ def _ai() -> dict:
         "training": lambda p: _oracle_training(),
         "dl_predict": lambda p: _dl_predict(p),
         "dl_train": lambda p: _dl_train(p),
+        "pipeline": lambda p: _run_pipeline(p),
         "ooda": lambda p: _ooda(p),
         "ambiguity": lambda p: _ambiguity(p),
         "invariants": lambda p: _invariants(),
@@ -534,6 +535,29 @@ def _mine_genesis_keys(p):
 def _mine_episodes():
     from core.intelligence import EpisodicMiner
     return EpisodicMiner().mine_episodes()
+
+
+def _run_pipeline(p):
+    from core.coding_pipeline import get_coding_pipeline
+    pipeline = get_coding_pipeline()
+    result = pipeline.run(p.get("task", p.get("prompt", "")), p)
+    return {
+        "status": result.status,
+        "trust_score": result.trust_score,
+        "chunks": len(result.chunks),
+        "duration_ms": result.total_duration_ms,
+        "details": [
+            {
+                "chunk": c.chunk_id,
+                "description": c.description[:100],
+                "status": c.status,
+                "layers": [{"layer": l.layer, "name": l.name, "status": l.status,
+                            "trust": l.trust_score, "duration_ms": l.duration_ms}
+                           for l in c.layers],
+            }
+            for c in result.chunks
+        ],
+    }
 
 
 def _dl_predict(p):
