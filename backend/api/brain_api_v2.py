@@ -222,6 +222,8 @@ def _ai() -> dict:
         "cognitive_report": lambda p: _cognitive_report(p),
         "bandit_select": lambda p: _bandit_select(p),
         "knowledge_gaps_deep": lambda p: _knowledge_gaps_deep(),
+        "deterministic_scan": lambda p: _deterministic_scan(),
+        "deterministic_fix": lambda p: _deterministic_fix(p),
     }
 
 
@@ -762,6 +764,14 @@ def _bandit_select(p):
     from core.cognitive_mesh import CognitiveMesh
     return CognitiveMesh.bandit_select(p.get("options", []), p)
 
+
+def _deterministic_scan():
+    from core.deterministic_bridge import build_deterministic_report
+    return build_deterministic_report()
+
+def _deterministic_fix(p):
+    from core.deterministic_bridge import deterministic_fix_cycle
+    return deterministic_fix_cycle(p.get("task", ""))
 
 def _knowledge_gaps_deep():
     from core.cognitive_mesh import CognitiveMesh

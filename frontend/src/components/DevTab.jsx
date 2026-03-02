@@ -117,6 +117,16 @@ const ACTIONS = [
         desc: "Scans 5 trigger categories: RESOURCE (CPU/RAM/disk), SERVICE (Ollama/Qdrant/Kimi/Opus down), CODE (import errors, missing deps), NETWORK (port conflicts), LOGICAL (test failures). Critical triggers auto-fire healing. Connects to: runtime_triggers_api → psutil → urllib checks.",
       },
       {
+        id: "det_scan", label: "Deterministic Scan", icon: "🔬",
+        brain: "ai", action: "deterministic_scan",
+        desc: "Finds problems using ONLY deterministic methods — no LLM, no guessing. Checks: Python syntax (AST parse), imports, critical files, database health, test results, service connectivity. Every finding is a verified fact. Connects to: core/deterministic_bridge.py → ast, importlib, sqlite3, subprocess.",
+      },
+      {
+        id: "det_fix", label: "Deterministic Fix", icon: "🔧",
+        brain: "ai", action: "deterministic_fix",
+        desc: "Full cycle: detect problems deterministically → build fix prompt with EXACT facts → feed to LLM (constrained by facts) → verify fix deterministically. Eliminates hallucination because the LLM only sees verified facts, not guesses. Connects to: deterministic_bridge → coding_pipeline → verification.",
+      },
+      {
         id: "invariants", label: "Invariants", icon: "✅",
         brain: "ai", action: "invariants",
         desc: "Checks system invariants — are all constraints satisfied? Validates trust score bounds (0-1), data integrity, memory consistency. If an invariant is violated, it signals the Ouroboros loop to investigate. Connects to: cognitive_mesh → cognitive/invariants.py → trust_engine.",
