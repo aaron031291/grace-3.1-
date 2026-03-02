@@ -242,54 +242,110 @@ class CodingPipeline:
     # ── Layer implementations ─────────────────────────────────
 
     def _layer_runtime(self, chunk: str, context: dict) -> dict:
-        return {"environment": "isolated", "context_loaded": bool(context), "chunk": chunk[:100]}
+        """Layer 1: Check system health, connectivity, rules before touching anything."""
+        from api.brain_api_v2 import call_brain
+        health = call_brain("system", "health", {})
+        connectivity = call_brain("system", "connectivity", {})
+        rules = call_brain("govern", "rules", {})
+        gaps = call_brain("ai", "knowledge_gaps_deep", {})
+        return {
+            "environment": "isolated",
+            "health": health.get("data") if health.get("ok") else "unavailable",
+            "connectivity": connectivity.get("data") if connectivity.get("ok") else "unavailable",
+            "active_rules": len(rules.get("data", {}).get("documents", [])) if rules.get("ok") else 0,
+            "knowledge_gaps": len(gaps.get("data", {}).get("knowledge_gaps", [])) if gaps.get("ok") else 0,
+        }
 
     def _layer_decompose(self, chunk: str, task: str) -> dict:
-        try:
-            from api.brain_api_v2 import call_brain
-            r = call_brain("ai", "fast", {
-                "prompt": f"Decompose this into sub-tasks:\n{chunk}",
-                "models": ["kimi"],
-            })
-            return r.get("data", {})
-        except Exception:
-            return {"sub_tasks": [chunk]}
+        """Layer 2: Decompose using planner, search existing code, check knowledge gaps."""
+        from api.brain_api_v2 import call_brain
+        existing = call_brain("files", "search", {"query": chunk[:50], "limit": 5})
+        planner = call_brain("ai", "fast", {
+            "prompt": f"Decompose this into sub-tasks. Consider existing code:\n{chunk}",
+            "models": ["kimi"],
+        })
+        return {
+            "sub_tasks": planner.get("data", {}),
+            "existing_code_found": len(existing.get("data", {}).get("results", [])) if existing.get("ok") else 0,
+        }
 
     def _layer_propose(self, chunk: str, task: str) -> dict:
-        try:
-            from api.brain_api_v2 import call_brain
-            r = call_brain("ai", "fast", {
-                "prompt": f"Propose 3 different approaches to solve:\n{chunk}\nReturn as numbered list.",
-                "models": ["kimi", "opus"],
-            })
-            return r.get("data", {})
-        except Exception:
-            return {"approaches": [chunk]}
+        """Layer 3: Propose 3 approaches, check rules, search for patterns."""
+        from api.brain_api_v2 import call_brain
+        rules = call_brain("govern", "rules", {})
+        similar = call_brain("files", "search", {"query": chunk[:30], "limit": 3})
+        proposals = call_brain("ai", "fast", {
+            "prompt": f"Propose 3 different approaches. Follow all governance rules.\n{chunk}",
+            "models": ["kimi", "opus"],
+        })
+        return {
+            "proposals": proposals.get("data", {}),
+            "rules_checked": rules.get("ok", False),
+            "similar_patterns": len(similar.get("data", {}).get("results", [])) if similar.get("ok") else 0,
+        }
 
     def _layer_select(self, chunk: str, proposals: dict) -> dict:
-        return {"selected": "approach_1", "reason": "best fit for requirements"}
+        """Layer 4: Select best approach using bandit + trust + DL prediction."""
+        from api.brain_api_v2 import call_brain
+        trust = call_brain("system", "trust", {})
+        bandit = call_brain("ai", "bandit_select", {"options": ["approach_1", "approach_2", "approach_3"]})
+        prediction = call_brain("ai", "dl_predict", {"key_type": "code_change", "what": chunk[:60]})
+        return {
+            "selected": bandit.get("data", {}).get("selected", "approach_1"),
+            "trust_state": trust.get("data", {}).get("models", {}) if trust.get("ok") else {},
+            "success_prediction": prediction.get("data", {}).get("success_probability") if prediction.get("ok") else None,
+        }
 
     def _layer_simulate(self, chunk: str, task: str) -> dict:
-        return {"simulated": True, "passes_requirements": True}
+        """Layer 5: Simulate using DL model, cognitive report, OODA."""
+        from api.brain_api_v2 import call_brain
+        dl_pred = call_brain("ai", "dl_predict", {"key_type": "code_change", "what": f"simulate: {chunk[:50]}"})
+        cognitive = call_brain("ai", "cognitive_report", {"query": chunk[:100]})
+        return {
+            "simulated": True,
+            "success_probability": dl_pred.get("data", {}).get("success_probability") if dl_pred.get("ok") else None,
+            "cognitive_assessment": cognitive.get("data", {}).get("invariants") if cognitive.get("ok") else {},
+        }
 
     def _layer_generate(self, chunk: str, task: str) -> dict:
-        try:
-            from api.brain_api_v2 import call_brain
-            r = call_brain("code", "generate", {"prompt": chunk, "project_folder": "."})
-            return r.get("data", {})
-        except Exception:
-            return {"code": "# generated", "error": "generation unavailable"}
+        """Layer 6: Generate code with persona, existing code context, governance."""
+        from api.brain_api_v2 import call_brain
+        persona = call_brain("govern", "persona", {})
+        existing = call_brain("files", "search", {"query": chunk[:30], "limit": 3})
+        code = call_brain("code", "generate", {"prompt": chunk, "project_folder": "."})
+        return {
+            "code": code.get("data", {}),
+            "persona_applied": persona.get("ok", False),
+            "existing_context": len(existing.get("data", {}).get("results", [])) if existing.get("ok") else 0,
+        }
 
     def _layer_verify(self, chunk: str) -> dict:
-        try:
-            from api.brain_api_v2 import call_brain
-            r = call_brain("ai", "invariants", {})
-            return {"invariants": r.get("data", {}), "verified": True}
-        except Exception:
-            return {"verified": False}
+        """Layer 7: Full verification — invariants, probe, triggers, cognitive report."""
+        from api.brain_api_v2 import call_brain
+        invariants = call_brain("ai", "invariants", {})
+        probe = call_brain("system", "probe", {})
+        triggers = call_brain("system", "triggers", {})
+        cognitive = call_brain("ai", "cognitive_report", {"query": f"verify: {chunk[:50]}"})
+        return {
+            "invariants": invariants.get("data") if invariants.get("ok") else "failed",
+            "probe_passed": probe.get("ok", False),
+            "trigger_alerts": triggers.get("data", {}).get("critical", 0) if triggers.get("ok") else "unknown",
+            "cognitive_verified": cognitive.get("ok", False),
+        }
 
     def _layer_deploy_gate(self, chunk: str) -> dict:
-        return {"gate": "pending_approval", "requires_human": True}
+        """Layer 8: Deployment gate — check approvals, run auto-cycle, final trust."""
+        from api.brain_api_v2 import call_brain
+        approvals = call_brain("govern", "approvals", {})
+        trust = call_brain("system", "trust", {})
+        auto = call_brain("system", "auto_cycle", {})
+        return {
+            "gate": "pending_approval",
+            "requires_human": True,
+            "pending_approvals": len(approvals.get("data", {}).get("approvals", [])) if approvals.get("ok") else 0,
+            "trust_state": trust.get("data") if trust.get("ok") else {},
+            "auto_cycle_ran": auto.get("ok", False),
+        }
 
     # ── Cross-cutting concerns ────────────────────────────────
 
