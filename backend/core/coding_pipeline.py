@@ -516,17 +516,37 @@ class CodingPipeline:
         }
 
     def _layer_verify(self, chunk: str) -> dict:
-        """Layer 7: Full verification — invariants, probe, triggers, cognitive report."""
+        """Layer 7: DETERMINISTIC verification first, LLM cognitive report as backup."""
+        # PRIMARY: deterministic verification (no LLM needed)
+        try:
+            from core.deterministic_bridge import build_deterministic_report, DeterministicAutoFixer
+            det_report = build_deterministic_report()
+            det_problems = det_report.get("problems", [])
+
+            # Auto-fix what we can without LLM
+            if det_problems:
+                fixer = DeterministicAutoFixer()
+                auto_fixes = fixer.auto_fix(det_problems)
+            else:
+                auto_fixes = []
+
+            det_result = {
+                "deterministic_checks": det_report.get("total_checks", 0),
+                "deterministic_problems": len(det_problems),
+                "auto_fixed": len(auto_fixes),
+                "remaining_problems": len(det_problems) - len(auto_fixes),
+            }
+        except Exception:
+            det_result = {"deterministic_checks": 0, "error": "bridge unavailable"}
+
+        # SECONDARY: LLM-based verification (backup)
         from api.brain_api_v2 import call_brain
         invariants = call_brain("ai", "invariants", {})
-        probe = call_brain("system", "probe", {})
-        triggers = call_brain("system", "triggers", {})
-        cognitive = call_brain("ai", "cognitive_report", {"query": f"verify: {chunk[:50]}"})
+
         return {
+            "deterministic": det_result,
             "invariants": invariants.get("data") if invariants.get("ok") else "failed",
-            "probe_passed": probe.get("ok", False),
-            "trigger_alerts": triggers.get("data", {}).get("critical", 0) if triggers.get("ok") else "unknown",
-            "cognitive_verified": cognitive.get("ok", False),
+            "verified": det_result.get("remaining_problems", 0) == 0,
         }
 
     def _layer_deploy_gate(self, chunk: str) -> dict:

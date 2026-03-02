@@ -44,11 +44,14 @@ async def stream_chat(request: Request):
             from settings import settings
 
             if model in ("kimi", "consensus"):
-                yield from _stream_kimi(full_prompt, settings)
+                for chunk in _stream_kimi(full_prompt, settings):
+                    yield chunk
             elif model == "opus":
-                yield from _stream_opus(full_prompt, settings)
+                for chunk in _stream_opus(full_prompt, settings):
+                    yield chunk
             else:
-                yield from _stream_ollama(full_prompt, model, settings)
+                for chunk in _stream_ollama(full_prompt, model, settings):
+                    yield chunk
 
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
@@ -78,9 +81,11 @@ async def stream_completion(request: Request):
             from settings import settings
             # Use fastest available model for completion
             if settings.OLLAMA_MODEL_CODE:
-                yield from _stream_ollama(prompt, "code", settings)
+                for chunk in _stream_ollama(prompt, "code", settings):
+                    yield chunk
             elif settings.KIMI_API_KEY:
-                yield from _stream_kimi(prompt, settings)
+                for chunk in _stream_kimi(prompt, settings):
+                    yield chunk
             else:
                 yield f"data: {json.dumps({'token': '# No model available'})}\n\n"
         except Exception as e:

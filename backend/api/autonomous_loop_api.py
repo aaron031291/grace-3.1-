@@ -154,8 +154,31 @@ def _run_cycle() -> dict:
         "error_count_1h": mirror.get("error_count_1h", 0),
     }
 
-    # ── 1. TRIGGER: Scan for problems ────────────────────────────
+    # ── 1. TRIGGER: DETERMINISTIC scan first, then component health ──
     problems = []
+
+    # PRIMARY: Deterministic detection (no LLM)
+    try:
+        from core.deterministic_bridge import build_deterministic_report, DeterministicAutoFixer
+        det_report = build_deterministic_report()
+        for p in det_report.get("problems", []):
+            problems.append({
+                "source": "deterministic",
+                "target": p.get("file", p.get("module", p.get("service", ""))),
+                "status": "red" if p.get("severity") == "critical" else "orange",
+                "reason": f"[{p['type']}] {p.get('message', p.get('error', ''))}",
+                "severity": p.get("severity", "warning"),
+            })
+
+        # Auto-fix what we can without LLM
+        if det_report.get("problems"):
+            fixer = DeterministicAutoFixer()
+            auto_fixes = fixer.auto_fix(det_report["problems"])
+            result["auto_fixes"] = len(auto_fixes)
+    except Exception:
+        pass
+
+    # SECONDARY: Component health (existing behavior)
     try:
         from api.component_health_api import (
             COMPONENT_REGISTRY, _get_genesis_keys, _classify_component,

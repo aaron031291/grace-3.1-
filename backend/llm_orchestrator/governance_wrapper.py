@@ -77,10 +77,11 @@ def build_governance_prefix() -> str:
 
     parts = []
 
-    # Inject unified memory context (memory, trust, episodes, genesis patterns)
+    # Inject unified memory context (lazy, catches import loops)
     try:
-        from core.memory_injector import build_llm_context
-        memory_context = build_llm_context()
+        import importlib
+        mi = importlib.import_module("core.memory_injector")
+        memory_context = mi.build_llm_context()
         if memory_context:
             parts.append(f"SYSTEM CONTEXT (from Grace's memory):\n{memory_context}")
     except Exception:
