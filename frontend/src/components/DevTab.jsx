@@ -197,6 +197,39 @@ const ACTIONS = [
     ],
   },
   {
+    section: "Govern",
+    items: [
+      {
+        id: "upload_rules", label: "Upload Rules", icon: "📜",
+        special: "upload_file",
+        uploadTarget: "rules",
+        desc: "Upload a document (TXT, CSV, MD, JSON, YAML, PDF) that becomes LAW for the LLMs. Whatever this document specifies — coding standards, schemas, configs, API specs, Python environments — Grace will follow it in all code generation and responses. Connects to: core/services/govern_service.py → data/governance_rules/ → GovernanceAwareLLM wrapper injects these into every LLM system prompt.",
+      },
+      {
+        id: "upload_config", label: "Upload Config", icon: "⚙️",
+        special: "upload_file",
+        uploadTarget: "config",
+        desc: "Upload a configuration file (env, JSON, YAML, TOML) that defines how Grace should behave. This could be a Python requirements.txt, a Docker compose, an API schema, or any technical spec. Gets stored and injected as context. Connects to: govern_service → governance_rules_api → governance_wrapper.",
+      },
+      {
+        id: "upload_schema", label: "Upload Schema", icon: "📐",
+        special: "upload_file",
+        uploadTarget: "schema",
+        desc: "Upload a database schema, API payload format, data model, or type definition. Grace will use this to generate code that matches your exact structure. Supports SQL, JSON Schema, Proto, TypeScript types. Connects to: governance rules → LLM system prompt injection.",
+      },
+      {
+        id: "view_rules", label: "View Active Rules", icon: "📋",
+        brain: "govern", action: "rules",
+        desc: "Shows all governance documents currently active. These are injected into every LLM call as mandatory instructions. You can see what rules are governing Grace's behavior right now. Connects to: govern_service.list_rules() → data/governance_rules/.",
+      },
+      {
+        id: "dev_instruction", label: "Dev Instruction", icon: "📝",
+        special: "dev_instruction",
+        desc: "Type a free-text instruction that Grace must follow for all future code generation in this session. Example: 'Use TypeScript strict mode', 'Follow PEP 8', 'All APIs must return JSON with status field'. Gets saved as a governance rule. Connects to: govern_service → governance_rules → LLM wrapper.",
+      },
+    ],
+  },
+  {
     section: "Code",
     items: [
       {
@@ -343,6 +376,57 @@ function LeftPanel({ onDetail, width = 200 }) {
   const [lastResults, setLastResults] = useState({});
 
   const run = async (item) => {
+    // File upload actions
+    if (item.special === "upload_file") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".txt,.csv,.md,.json,.yaml,.yml,.toml,.pdf,.env,.sql,.proto,.ts,.py,.xml";
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setLoading(p => ({ ...p, [item.id]: true }));
+        const content = await file.text();
+        const category = item.uploadTarget || "general";
+        const r = await brainCall("govern", "update_persona", {});
+        // Save as governance rule
+        const saveResult = await brainCall("files", "create", {
+          path: `governance_rules/${category}/${file.name}`,
+          content: content,
+          directory: `governance_rules/${category}`,
+        });
+        setLoading(p => ({ ...p, [item.id]: false }));
+        onDetail({
+          title: `Uploaded: ${file.name}`,
+          icon: item.icon,
+          desc: `${file.name} (${(file.size / 1024).toFixed(1)}KB) saved as ${category} rule. This document now governs all LLM behavior. It will be injected into every system prompt.`,
+          data: saveResult.ok ? { saved: true, file: file.name, category, size: file.size, content_preview: content.slice(0, 500) } : { error: saveResult.error },
+        });
+      };
+      input.click();
+      return;
+    }
+
+    // Dev instruction (free text → governance rule)
+    if (item.special === "dev_instruction") {
+      const instruction = prompt("Enter instruction for Grace to follow:\n\nExamples:\n- Use TypeScript strict mode\n- Follow PEP 8 coding standards\n- All API responses must include a 'status' field\n- Use PostgreSQL syntax, not MySQL");
+      if (!instruction) return;
+      setLoading(p => ({ ...p, [item.id]: true }));
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, "");
+      const r = await brainCall("files", "create", {
+        path: `governance_rules/instructions/dev_${timestamp}.txt`,
+        content: `# Dev Instruction\n# Created: ${new Date().toISOString()}\n# Source: Dev Tab manual entry\n\n${instruction}`,
+        directory: "governance_rules/instructions",
+      });
+      setLoading(p => ({ ...p, [item.id]: false }));
+      onDetail({
+        title: "Instruction Saved",
+        icon: "📝",
+        desc: "This instruction is now active. Grace will follow it in all future code generation and responses.",
+        data: r.ok ? { saved: true, instruction, active: true } : { error: r.error },
+      });
+      return;
+    }
+
     // Actions that need user input first
     if (item.special === "search_prompt") {
       const query = prompt("Search codebase for:");
