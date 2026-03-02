@@ -364,6 +364,21 @@ const ACTIONS = [
         desc: "Removes expired Genesis keys based on TTL: debug=48h, performance=7d, errors=30d, learning=90d. Reduces DB size while keeping important audit data. Connects to: genesis_storage.cleanup_expired() → SQLite DELETE.",
       },
       {
+        id: "generate_report", label: "Generate Report", icon: "📊",
+        brain: "system", action: "generate_report",
+        desc: "Generates a daily report of everything Grace achieved: Genesis key activity, errors fixed, trust changes, pipeline runs, code changes. LLM-named with timestamp. Saved to data/reports/ and downloadable. Connects to: core/reports.py → intelligence → brain actions.",
+      },
+      {
+        id: "list_reports", label: "View Reports", icon: "📋",
+        brain: "system", action: "list_reports",
+        desc: "Lists all saved reports with titles, dates, sizes. Click any report to view its full content. Reports are exportable as JSON. Connects to: core/reports.py → data/reports/ directory.",
+      },
+      {
+        id: "frontend_preview", label: "Frontend Preview", icon: "🖥️",
+        special: "frontend_preview",
+        desc: "Opens a live iframe preview of the running frontend. Grace can see the actual UI, interact with it, and log what happens. Use this to test frontend changes in real-time without switching windows. Connects to: iframe → localhost:5173 (Vite dev) or localhost:8000 (built).",
+      },
+      {
         id: "auto_status", label: "Loop Status", icon: "♾️",
         brain: "system", action: "auto_status",
         desc: "Shows the Ouroboros autonomous loop state: running/stopped, cycle count, actions taken (healed/learned/coded/escalated), last cycle timestamp. The loop runs every 30s with trust gates, TimeSense, mirror, and episodic recall. Connects to: autonomous_loop_api → _loop_state.",
@@ -580,6 +595,16 @@ function LeftPanel({ onDetail, width = 200 }) {
         icon: "📝",
         desc: "This instruction is now active. Grace will follow it in all future code generation and responses.",
         data: r.ok ? { saved: true, instruction, active: true } : { error: r.error },
+      });
+      return;
+    }
+
+    // Frontend live preview
+    if (item.special === "frontend_preview") {
+      onDetail({
+        title: "Frontend Preview", icon: "🖥️",
+        desc: "Live iframe of the running frontend. Interact with it to test changes.",
+        data: { _special: "preview" },
       });
       return;
     }
@@ -887,29 +912,93 @@ function LeftPanel({ onDetail, width = 200 }) {
 function CodeEditor({ filePath, initialContent, onSave }) {
   const [content, setContent] = useState(initialContent || "");
   const [saved, setSaved] = useState(false);
+  const [ghost, setGhost] = useState("");
+  const [showCmdK, setShowCmdK] = useState(false);
+  const [cmdKInput, setCmdKInput] = useState("");
+  const textareaRef = useRef(null);
 
   const save = async () => {
     const { brainCall } = await import("../api/brain-client");
     const r = await brainCall("code", "write", { path: filePath, content });
     setSaved(r.ok);
     if (onSave) onSave(r);
-    // Hot reload
     await brainCall("system", "hot_reload_service", { service: "code" });
+  };
+
+  // Tab autocomplete — request completion after pause
+  const requestCompletion = async (cursorPos) => {
+    try {
+      const before = content.substring(0, cursorPos);
+      const after = content.substring(cursorPos);
+      const { brainCall } = await import("../api/brain-client");
+      const r = await brainCall("code", "generate", {
+        prompt: `Complete this code. Return ONLY the next 1-3 lines:\n\n${before.slice(-500)}`,
+        project_folder: ".",
+      });
+      if (r.ok && r.data?.code) {
+        const completion = r.data.code.replace(/^```[\w]*\n?/, "").replace(/\n?```$/, "").trim();
+        if (completion && completion.length < 200) {
+          setGhost(completion);
+        }
+      }
+    } catch {}
+  };
+
+  // Cmd+K refactor
+  const handleCmdK = async () => {
+    if (!cmdKInput.trim()) return;
+    const { brainCall } = await import("../api/brain-client");
+    const r = await brainCall("code", "generate", {
+      prompt: `Refactor this code according to: "${cmdKInput}"\n\nOriginal:\n${content.slice(0, 3000)}`,
+      project_folder: ".",
+    });
+    if (r.ok && r.data?.code) {
+      const newCode = r.data.code.replace(/^```[\w]*\n?/, "").replace(/\n?```$/, "").trim();
+      if (newCode) setContent(newCode);
+    }
+    setShowCmdK(false);
+    setCmdKInput("");
   };
 
   const lang = filePath?.split(".").pop() || "txt";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ display: "flex", gap: 4, marginBottom: 4, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: 4, marginBottom: 4, alignItems: "center", flexWrap: "wrap" }}>
         <span style={{ fontSize: 10, color: "#888", flex: 1 }}>{filePath} ({lang})</span>
         <button onClick={save} style={{ padding: "2px 8px", background: "#10b981", border: "none", borderRadius: 3, color: "#fff", fontSize: 10, cursor: "pointer" }}>
           {saved ? "Saved ✓" : "Save + Reload"}
         </button>
+        <button onClick={() => setShowCmdK(true)} style={{ padding: "2px 8px", background: "#2563eb", border: "none", borderRadius: 3, color: "#fff", fontSize: 10, cursor: "pointer" }}>
+          ⌘K Refactor
+        </button>
       </div>
+
+      {showCmdK && (
+        <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+          <input value={cmdKInput} onChange={e => setCmdKInput(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleCmdK()}
+            placeholder="Describe refactoring (e.g. 'add error handling', 'convert to TypeScript')"
+            autoFocus
+            style={{ flex: 1, padding: "4px 8px", background: "#12122a", border: "1px solid #2563eb", borderRadius: 3, color: "#ccc", fontSize: 11, outline: "none" }}
+          />
+          <button onClick={handleCmdK} style={{ padding: "2px 8px", background: "#2563eb", border: "none", borderRadius: 3, color: "#fff", fontSize: 10, cursor: "pointer" }}>Apply</button>
+          <button onClick={() => setShowCmdK(false)} style={{ padding: "2px 8px", background: "#333", border: "none", borderRadius: 3, color: "#888", fontSize: 10, cursor: "pointer" }}>Cancel</button>
+        </div>
+      )}
+
+      {ghost && (
+        <div style={{ fontSize: 10, color: "#555", padding: "2px 8px", background: "#0d0d15", borderRadius: 3, marginBottom: 2, fontFamily: "monospace" }}>
+          Ghost: <span style={{ color: "#4caf5066" }}>{ghost}</span>
+          <button onClick={() => { setContent(c => c + ghost); setGhost(""); }} style={{ marginLeft: 8, padding: "1px 6px", background: "#10b981", border: "none", borderRadius: 2, color: "#fff", fontSize: 9, cursor: "pointer" }}>Tab ↹ Accept</button>
+          <button onClick={() => setGhost("")} style={{ marginLeft: 4, padding: "1px 6px", background: "#333", border: "none", borderRadius: 2, color: "#888", fontSize: 9, cursor: "pointer" }}>Esc</button>
+        </div>
+      )}
+
       <textarea
+        ref={textareaRef}
         value={content}
-        onChange={e => { setContent(e.target.value); setSaved(false); }}
+        onChange={e => { setContent(e.target.value); setSaved(false); setGhost(""); }}
         spellCheck={false}
         style={{
           flex: 1, width: "100%", background: "#0d0d20", color: "#e0e0e0",
@@ -918,16 +1007,29 @@ function CodeEditor({ filePath, initialContent, onSave }) {
           resize: "none", outline: "none", tabSize: 2,
         }}
         onKeyDown={e => {
-          if (e.key === "Tab") {
+          if (e.key === "Tab" && ghost) {
+            e.preventDefault();
+            setContent(c => c + ghost);
+            setGhost("");
+            return;
+          }
+          if (e.key === "Tab" && !ghost) {
             e.preventDefault();
             const start = e.target.selectionStart;
             const end = e.target.selectionEnd;
             setContent(content.substring(0, start) + "  " + content.substring(end));
             setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 2; }, 0);
           }
-          if ((e.metaKey || e.ctrlKey) && e.key === "s") {
-            e.preventDefault();
-            save();
+          if (e.key === "Escape") { setGhost(""); setShowCmdK(false); }
+          if ((e.metaKey || e.ctrlKey) && e.key === "s") { e.preventDefault(); save(); }
+          if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setShowCmdK(true); }
+        }}
+        onKeyUp={e => {
+          // Request completion after typing pause
+          if (!ghost && e.key !== "Escape" && e.key !== "Tab" && content.length > 10) {
+            const pos = e.target.selectionStart;
+            clearTimeout(window._graceCompletionTimer);
+            window._graceCompletionTimer = setTimeout(() => requestCompletion(pos), 1500);
           }
         }}
       />
@@ -1262,6 +1364,16 @@ function RightDetail({ content, onClose, width = 320 }) {
               <div style={{ fontSize: 11, color: "#aaa", marginTop: 4, whiteSpace: "pre-wrap" }}>{(r.response || JSON.stringify(r, null, 2)).slice(0, 600)}</div>
             </div>
           ))
+        ) : content.data?._special === "preview" ? (
+          <div style={{ height: "100%" }}>
+            <div style={{ fontSize: 10, color: "#888", marginBottom: 4 }}>Live frontend — interact to test</div>
+            <iframe
+              src="http://localhost:5173"
+              style={{ width: "100%", height: "calc(100% - 20px)", border: "1px solid #222", borderRadius: 4, background: "#fff" }}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              title="Frontend Preview"
+            />
+          </div>
         ) : content.data?._special === "editor" ? (
           <CodeEditor filePath={content.data.path} initialContent={content.data.content} />
         ) : content.data?._special === "diff" ? (

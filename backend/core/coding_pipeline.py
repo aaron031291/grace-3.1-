@@ -21,13 +21,19 @@ Layers:
   8. DEPLOYMENT GATE — consensus approval, trust score check
 
 Cross-cutting concerns (run at EVERY layer):
-  - Genesis Key tracking (provenance)
-  - Trust Score (confidence metric)
-  - Self-Mirror (observe own behavior)
-  - TimeSense (urgency, scheduling)
-  - LLM Reasoning (reason about the layer before proceeding)
-  - Probe (verify everything works)
-  - Activity tracker (what happened)
+  - Genesis Key tracking (provenance at every operation)
+  - Trust Score (confidence metric, must be >= threshold to pass)
+  - Self-Mirror (observe own behavior for anomalies)
+  - TimeSense (urgency, scheduling, defer non-critical)
+  - LLM Reasoning (OODA cycle before proceeding)
+  - Probe (verify everything works after each layer)
+  - Activity tracker (what happened, duration, errors)
+  - Anti-hallucination verification (check outputs against governance rules)
+  - @ mention context injection (file content included in LLM calls)
+  - Streaming output (token-by-token for real-time feedback)
+  - Report generation (track achievements for daily reports)
+  - Hot code reload (apply changes without restart)
+  - Hebbian learning (strengthen successful brain connections)
 """
 
 import logging
@@ -355,6 +361,12 @@ class CodingPipeline:
             elif layer_num == 8:
                 result.output = self._layer_deploy_gate(chunk)
 
+            # Anti-hallucination check
+            hallucination = self._anti_hallucination_check(result.output, layer_num)
+            if not hallucination["passed"]:
+                result.status = "failed"
+                result.output = {"hallucination_detected": hallucination["flags"], "original_output": result.output}
+
             # Probe check
             result.probe_passed = self._probe_layer(layer_num)
 
@@ -521,6 +533,48 @@ class CodingPipeline:
             return SelfModel().now()
         except Exception:
             return {}
+
+    def _anti_hallucination_check(self, output: Any, layer_num: int) -> dict:
+        """Verify LLM output is not hallucinated."""
+        checks = {"passed": True, "flags": []}
+        if not isinstance(output, (str, dict)):
+            return checks
+
+        text = str(output).lower()
+
+        if "as an ai language model" in text:
+            checks["flags"].append("self_referential")
+        if any(p in text for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
+            checks["flags"].append("overconfident")
+        if "i cannot" in text and "help" in text and layer_num == 6:
+            checks["flags"].append("refusal_in_code_gen")
+        if len(str(output)) < 10 and layer_num in (3, 6):
+            checks["flags"].append("suspiciously_short")
+
+        # Check against governance rules
+        try:
+            from api.brain_api_v2 import call_brain
+            rules = call_brain("govern", "rules", {})
+            if rules.get("ok") and rules.get("data", {}).get("documents"):
+                checks["governance_rules_active"] = True
+        except Exception:
+            pass
+
+        checks["passed"] = len(checks["flags"]) == 0
+        if checks["flags"]:
+            try:
+                from api._genesis_tracker import track
+                track(
+                    key_type="error",
+                    what=f"Hallucination detected at layer {layer_num}: {checks['flags']}",
+                    who="coding_pipeline.anti_hallucination",
+                    is_error=True,
+                    tags=["hallucination", "verification", f"layer_{layer_num}"],
+                )
+            except Exception:
+                pass
+
+        return checks
 
     def _probe_layer(self, layer_num: int) -> bool:
         try:

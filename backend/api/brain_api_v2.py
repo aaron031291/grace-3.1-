@@ -266,6 +266,9 @@ def _system() -> dict:
         "genesis_storage": lambda p: _genesis_storage_stats(),
         "genesis_cleanup": lambda p: _genesis_cleanup(),
         "genesis_hot": lambda p: _genesis_hot(p),
+        "generate_report": lambda p: _generate_report(p),
+        "list_reports": lambda p: _list_reports(),
+        "get_report": lambda p: _get_report(p),
         "intelligence": lambda p: _intelligence_report(p),
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
@@ -528,6 +531,18 @@ def _genesis_storage_stats():
 def _genesis_cleanup():
     from core.genesis_storage import get_genesis_storage
     return get_genesis_storage().cleanup_expired()
+
+def _generate_report(p):
+    from core.reports import generate_daily_report
+    return generate_daily_report(hours=p.get("hours", 24))
+
+def _list_reports():
+    from core.reports import list_reports
+    return {"reports": list_reports()}
+
+def _get_report(p):
+    from core.reports import get_report
+    return get_report(p.get("filename", ""))
 
 def _genesis_hot(p):
     from core.genesis_storage import get_genesis_storage
