@@ -24,7 +24,8 @@ logger = logging.getLogger(__name__)
 #  1. MULTI-STEP ROLLBACK
 # ═══════════════════════════════════════════════════════════════════
 
-_rollback_stack: deque = deque(maxlen=100)
+MAX_SNAPSHOT_SIZE_MB = 50  # Max total snapshot storage
+_rollback_stack: deque = deque(maxlen=20)  # Reduced from 100 to prevent RAM bloat
 _rollback_lock = threading.Lock()
 
 
@@ -47,6 +48,17 @@ def snapshot_state(label: str = "") -> str:
                 pass
 
     with _rollback_lock:
+        # Size-based eviction — remove oldest if total exceeds limit
+        total_size = sum(
+            sum(len(c) for c in s.get("files", {}).values())
+            for s in _rollback_stack
+        )
+        snapshot_size = sum(len(c) for c in snapshot["files"].values())
+
+        while total_size + snapshot_size > MAX_SNAPSHOT_SIZE_MB * 1024 * 1024 and _rollback_stack:
+            evicted = _rollback_stack.popleft()
+            total_size -= sum(len(c) for c in evicted.get("files", {}).values())
+
         _rollback_stack.append(snapshot)
 
     return snapshot_id

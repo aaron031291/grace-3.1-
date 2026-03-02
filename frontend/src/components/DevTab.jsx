@@ -983,21 +983,15 @@ function CodeEditor({ filePath, initialContent, onSave }) {
     await brainCall("system", "hot_reload_service", { service: "code" });
   };
 
-  // Tab autocomplete — request completion after pause
+  // Tab autocomplete — uses dedicated fast completion API
   const requestCompletion = async (cursorPos) => {
     try {
       const before = content.substring(0, cursorPos);
       const after = content.substring(cursorPos);
-      const { brainCall } = await import("../api/brain-client");
-      const r = await brainCall("code", "generate", {
-        prompt: `Complete this code. Return ONLY the next 1-3 lines:\n\n${before.slice(-500)}`,
-        project_folder: ".",
-      });
-      if (r.ok && r.data?.code) {
-        const completion = r.data.code.replace(/^```[\w]*\n?/, "").replace(/\n?```$/, "").trim();
-        if (completion && completion.length < 200) {
-          setGhost(completion);
-        }
+      const { getCompletion } = await import("../api/completion");
+      const result = await getCompletion(before, after, lang, filePath);
+      if (result.completion && result.completion.length > 0 && result.completion.length < 300) {
+        setGhost(result.completion);
       }
     } catch {}
   };
@@ -1087,7 +1081,7 @@ function CodeEditor({ filePath, initialContent, onSave }) {
           if (!ghost && e.key !== "Escape" && e.key !== "Tab" && content.length > 10) {
             const pos = e.target.selectionStart;
             clearTimeout(window._graceCompletionTimer);
-            window._graceCompletionTimer = setTimeout(() => requestCompletion(pos), 1500);
+            window._graceCompletionTimer = setTimeout(() => requestCompletion(pos), 800);
           }
         }}
       />

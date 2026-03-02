@@ -297,6 +297,9 @@ def _system() -> dict:
         "set_budget": lambda p: _set_budget(p),
         "provenance": lambda p: _provenance_entries(p),
         "verify_ledger": lambda p: _verify_ledger(),
+        "pool_stats": lambda p: _pool_stats(),
+        "cache_stats": lambda p: _cache_stats(),
+        "clear_cache": lambda p: _clear_cache(),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -688,6 +691,19 @@ def _set_budget(p):
 def _provenance_entries(p):
     from core.safety import get_ledger_entries
     return {"entries": get_ledger_entries(p.get("limit", 20))}
+
+def _pool_stats():
+    from core.worker_pool import get_pool_stats, get_cache_stats
+    return {"pool": get_pool_stats(), "cache": get_cache_stats()}
+
+def _cache_stats():
+    from core.worker_pool import get_cache_stats
+    return get_cache_stats()
+
+def _clear_cache():
+    from core.worker_pool import clear_cache
+    clear_cache()
+    return {"cleared": True}
 
 def _verify_ledger():
     from core.safety import verify_ledger
