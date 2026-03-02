@@ -197,48 +197,47 @@ const ACTIONS = [
 
 // Universal right-click menu items (appear on every action)
 const UNIVERSAL_MENU = [
-  { label: "View Logs (Last 100)", id: "logs", icon: "📋" },
-  { label: "Copy Result", id: "copy", icon: "📎" },
-  { label: "Export JSON", id: "export", icon: "💾" },
-  { label: "Compare with Previous", id: "compare", icon: "🔄" },
-  { label: "Genesis Key History", id: "genesis_history", icon: "🔑" },
-  { label: "Run on Schedule", id: "schedule", icon: "⏰" },
-  { label: "Run Again", id: "rerun", icon: "▶️" },
+  { label: "View Logs (Last 100)", id: "logs", icon: "📋", desc: "Pulls the last 100 entries from the lightweight trace ring buffer. Shows what happened recently across all brains — timestamps, actions, errors." },
+  { label: "Copy Result", id: "copy", icon: "📎", desc: "Copies the last action result to your clipboard as formatted JSON. Useful for pasting into bug reports or sharing with team." },
+  { label: "Export JSON", id: "export", icon: "💾", desc: "Downloads the full action result as a .json file with timestamp in the filename. Archives the output for offline analysis." },
+  { label: "Compare with Previous", id: "compare", icon: "🔄", desc: "Side-by-side diff of the current result vs the last time this action ran. Highlights what changed — new errors, resolved issues, metric shifts." },
+  { label: "Genesis Key History", id: "genesis_history", icon: "🔑", desc: "Shows the last 50 Genesis keys related to this action. Full audit trail — who triggered it, when, what happened, whether it was an error." },
+  { label: "Run on Schedule", id: "schedule", icon: "⏰", desc: "Set up this action to run automatically on a recurring schedule (every hour, daily, weekly). Creates a scheduled task tracked by Genesis key." },
+  { label: "Run Again", id: "rerun", icon: "▶️", desc: "Re-executes this action with the same parameters as last time. No need to configure — just fires immediately." },
 ];
 
-// Section-specific right-click extras
 const SECTION_MENU = {
   Diagnostics: [
-    { label: "Save as Baseline", id: "baseline", icon: "📌" },
-    { label: "Run Verbose", id: "verbose", icon: "🔍" },
-    { label: "Stress x10", id: "stress10", icon: "⚡" },
-    { label: "Export Report", id: "report", icon: "📄" },
+    { label: "Save as Baseline", id: "baseline", icon: "📌", desc: "Stores the current output as the 'golden state' for this action. Future runs can be diffed against this baseline to spot regressions." },
+    { label: "Run Verbose", id: "verbose", icon: "🔍", desc: "Runs the same action with extra detail — includes per-component latency, memory usage, and raw sensor data from the diagnostic engine." },
+    { label: "Stress x10", id: "stress10", icon: "⚡", desc: "Runs the probe or stress test 10 times in parallel to simulate high load. Shows aggregate pass/fail rates and identifies flaky endpoints." },
+    { label: "Export Report", id: "report", icon: "📄", desc: "Generates a comprehensive diagnostic report as a downloadable file. Includes health map, trigger scan, problems list, and remediation actions." },
   ],
   Intelligence: [
-    { label: "Trust Heatmap", id: "heatmap", icon: "🌡️" },
-    { label: "Retrain Subset", id: "retrain", icon: "🎯" },
-    { label: "Reset Cache", id: "reset_cache", icon: "🗑️" },
-    { label: "Export Model", id: "export_model", icon: "📦" },
+    { label: "Trust Heatmap", id: "heatmap", icon: "🌡️", desc: "Opens a visual matrix showing trust scores between every model and every brain domain. Red=low trust, green=high trust. Based on consensus feedback loop." },
+    { label: "Retrain Subset", id: "retrain", icon: "🎯", desc: "Trains the DL model on a specific date range or tag subset instead of all keys. Useful for focusing learning on recent activity or a specific domain." },
+    { label: "Reset Cache", id: "reset_cache", icon: "🗑️", desc: "Flushes the cognitive working memory caches without restarting. Clears stale predictions and forces fresh computation on next cycle." },
+    { label: "Export Model", id: "export_model", icon: "📦", desc: "Downloads the current PyTorch model weights (grace_model.pt) as a portable file. Can be loaded on another Grace instance or used for offline analysis." },
   ],
   Runtime: [
-    { label: "GC Now", id: "gc", icon: "♻️" },
-    { label: "Heap Dump", id: "heap", icon: "💽" },
-    { label: "Thread Dump", id: "threads", icon: "🧵" },
+    { label: "GC Now", id: "gc", icon: "♻️", desc: "Forces Python garbage collection immediately. Reclaims memory from dead objects. Shows how many objects were collected." },
+    { label: "Heap Dump", id: "heap", icon: "💽", desc: "Captures a snapshot of current memory allocation. Shows what objects are consuming the most RAM — useful for finding memory leaks." },
+    { label: "Thread Dump", id: "threads", icon: "🧵", desc: "Lists all active Python threads with their current stack traces. Shows if any thread is stuck, deadlocked, or consuming excessive CPU." },
   ],
   Tasks: [
-    { label: "Duplicate Task", id: "duplicate", icon: "📋" },
-    { label: "Pause Queue", id: "pause_queue", icon: "⏸️" },
-    { label: "Drain Workers", id: "drain", icon: "🚰" },
+    { label: "Duplicate Task", id: "duplicate", icon: "📋", desc: "Creates a copy of the selected task with the same title, priority, and config. Pre-fills the new task form so you can adjust and submit." },
+    { label: "Pause Queue", id: "pause_queue", icon: "⏸️", desc: "Stops accepting new tasks into the queue. Tasks already running will finish, but nothing new starts. Resume to accept tasks again." },
+    { label: "Drain Workers", id: "drain", icon: "🚰", desc: "Lets all in-flight tasks complete naturally but prevents new ones from starting. Useful before deployments or maintenance windows." },
   ],
   Code: [
-    { label: "Git Diff", id: "git_diff", icon: "📝" },
-    { label: "Run Tests", id: "run_tests", icon: "🧪" },
-    { label: "Lint Check", id: "lint", icon: "✨" },
+    { label: "Git Diff", id: "git_diff", icon: "📝", desc: "Shows uncommitted changes in the backend or frontend codebase. Compares working directory against the last commit — highlights additions, deletions, and modifications." },
+    { label: "Run Tests", id: "run_tests", icon: "🧪", desc: "Executes the full test suite (35 tests across 4 levels: smoke, component, integration, end-to-end). Reports pass/fail counts and any error details." },
+    { label: "Lint Check", id: "lint", icon: "✨", desc: "Runs flake8 lint check on the backend Python code. Catches syntax errors, undefined names, and style violations before they hit CI." },
   ],
   Autonomous: [
-    { label: "Force Heal", id: "force_heal", icon: "💊" },
-    { label: "Pause Loop", id: "pause_loop", icon: "⏸️" },
-    { label: "Resume Loop", id: "resume_loop", icon: "▶️" },
+    { label: "Force Heal", id: "force_heal", icon: "💊", desc: "Immediately runs the scan-and-heal pipeline: scans all triggers, checks component health, and auto-executes safe healing actions (DB reconnect, GC, diagnostic cycle)." },
+    { label: "Pause Loop", id: "pause_loop", icon: "⏸️", desc: "Pauses the Ouroboros autonomous loop. The 30s cycle stops running, but all API endpoints stay available. Self-healing and auto-probe are suspended." },
+    { label: "Resume Loop", id: "resume_loop", icon: "▶️", desc: "Resumes the Ouroboros autonomous loop after being paused. The 30s cycle restarts with trust gates, TimeSense, mirror, and episodic recall." },
   ],
 };
 
@@ -382,15 +381,11 @@ function LeftPanel({ onDetail }) {
             {contextMenu.item.icon} {contextMenu.item.label}
           </div>
           {(SECTION_MENU[contextMenu.section] || []).map(m => (
-            <button key={m.id} onClick={() => handleContextAction(m)} style={ctxBtn}>
-              <span>{m.icon}</span> {m.label}
-            </button>
+            <CtxMenuItem key={m.id} item={m} onClick={() => handleContextAction(m)} />
           ))}
           <div style={{ borderTop: "1px solid #222", margin: "2px 0" }} />
           {UNIVERSAL_MENU.map(m => (
-            <button key={m.id} onClick={() => handleContextAction(m)} style={ctxBtn}>
-              <span>{m.icon}</span> {m.label}
-            </button>
+            <CtxMenuItem key={m.id} item={m} onClick={() => handleContextAction(m)} />
           ))}
         </div>
       )}
@@ -424,11 +419,33 @@ function LeftPanel({ onDetail }) {
   );
 }
 
-const ctxBtn = {
-  display: "flex", alignItems: "center", gap: 6, width: "100%",
-  padding: "5px 12px", border: "none", background: "transparent",
-  color: "#aaa", cursor: "pointer", fontSize: 11, textAlign: "left",
-};
+function CtxMenuItem({ item, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div style={{ position: "relative" }}
+         onMouseEnter={() => setHovered(true)}
+         onMouseLeave={() => setHovered(false)}>
+      <button onClick={onClick} style={{
+        display: "flex", alignItems: "center", gap: 6, width: "100%",
+        padding: "5px 12px", border: "none",
+        background: hovered ? "#1a1a3a" : "transparent",
+        color: "#aaa", cursor: "pointer", fontSize: 11, textAlign: "left",
+      }}>
+        <span>{item.icon}</span> {item.label}
+      </button>
+      {hovered && item.desc && (
+        <div style={{
+          position: "absolute", left: "100%", top: 0, marginLeft: 4,
+          width: 240, padding: 8, background: "#12122a", border: "1px solid #333",
+          borderRadius: 6, fontSize: 10, color: "#aaa", lineHeight: 1.4, zIndex: 1001,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.5)", pointerEvents: "none",
+        }}>
+          {item.desc}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════════
    CENTER — Consensus Chat
