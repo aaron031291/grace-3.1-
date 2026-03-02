@@ -71,11 +71,20 @@ def _load_governance_context() -> Dict[str, str]:
 def build_governance_prefix() -> str:
     """
     Build the governance prefix that gets prepended to every system prompt.
-    Returns empty string if no rules or persona are configured.
+    Includes governance rules + unified memory context.
     """
     ctx = _load_governance_context()
 
     parts = []
+
+    # Inject unified memory context (memory, trust, episodes, genesis patterns)
+    try:
+        from core.memory_injector import build_llm_context
+        memory_context = build_llm_context()
+        if memory_context:
+            parts.append(f"SYSTEM CONTEXT (from Grace's memory):\n{memory_context}")
+    except Exception:
+        pass
 
     if ctx["rules"]:
         parts.append(

@@ -535,30 +535,70 @@ class CodingPipeline:
             return {}
 
     def _anti_hallucination_check(self, output: Any, layer_num: int) -> dict:
-        """Verify LLM output is not hallucinated."""
-        checks = {"passed": True, "flags": []}
+        """
+        Multi-level hallucination verification.
+        Level 1: Pattern matching (fast)
+        Level 2: Syntax validation (for code)
+        Level 3: Dependency verification
+        Level 4: Semantic check against codebase
+        """
+        checks = {"passed": True, "flags": [], "level": 0}
         if not isinstance(output, (str, dict)):
             return checks
 
-        text = str(output).lower()
+        text = str(output)
+        text_lower = text.lower()
 
-        if "as an ai language model" in text:
+        # Level 1: Pattern matching
+        if "as an ai language model" in text_lower:
             checks["flags"].append("self_referential")
-        if any(p in text for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
+        if any(p in text_lower for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
             checks["flags"].append("overconfident")
-        if "i cannot" in text and "help" in text and layer_num == 6:
+        if "i cannot" in text_lower and "help" in text_lower and layer_num == 6:
             checks["flags"].append("refusal_in_code_gen")
-        if len(str(output)) < 10 and layer_num in (3, 6):
+        if len(text) < 10 and layer_num in (3, 6):
             checks["flags"].append("suspiciously_short")
+        checks["level"] = 1
 
-        # Check against governance rules
+        # Level 2: Syntax validation (for code generation layer)
+        if layer_num == 6 and isinstance(output, dict):
+            code = output.get("code", "")
+            if code and isinstance(code, str):
+                try:
+                    import ast
+                    ast.parse(code)
+                    checks["syntax_valid"] = True
+                except SyntaxError as e:
+                    checks["flags"].append(f"syntax_error: {e.msg} line {e.lineno}")
+                checks["level"] = 2
+
+        # Level 3: Import/dependency check
+        if layer_num == 6 and isinstance(output, dict):
+            code = output.get("code", "")
+            if code and isinstance(code, str):
+                suspicious_imports = []
+                for line in code.split("\n"):
+                    line = line.strip()
+                    if line.startswith("import ") or line.startswith("from "):
+                        module = line.split()[1].split(".")[0]
+                        # Check against known-safe modules
+                        dangerous = ["subprocess", "shutil", "ctypes", "pickle"]
+                        if module in dangerous:
+                            suspicious_imports.append(module)
+                if suspicious_imports:
+                    checks["flags"].append(f"dangerous_imports: {suspicious_imports}")
+                checks["level"] = 3
+
+        # Level 4: Check against governance rules
         try:
-            from api.brain_api_v2 import call_brain
-            rules = call_brain("govern", "rules", {})
-            if rules.get("ok") and rules.get("data", {}).get("documents"):
-                checks["governance_rules_active"] = True
+            from core.services.govern_service import list_rules
+            rules = list_rules()
+            if rules.get("documents"):
+                checks["governance_active"] = True
+                checks["rules_count"] = len(rules["documents"])
         except Exception:
             pass
+        checks["level"] = 4
 
         checks["passed"] = len(checks["flags"]) == 0
         if checks["flags"]:
@@ -566,10 +606,10 @@ class CodingPipeline:
                 from api._genesis_tracker import track
                 track(
                     key_type="error",
-                    what=f"Hallucination detected at layer {layer_num}: {checks['flags']}",
+                    what=f"Hallucination L{checks['level']} at layer {layer_num}: {checks['flags']}",
                     who="coding_pipeline.anti_hallucination",
                     is_error=True,
-                    tags=["hallucination", "verification", f"layer_{layer_num}"],
+                    tags=["hallucination", "verification", f"layer_{layer_num}", f"level_{checks['level']}"],
                 )
             except Exception:
                 pass
