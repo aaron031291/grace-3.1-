@@ -75,6 +75,14 @@ def write_file(path: str, content: str, source: str = "unknown") -> dict:
     except Exception:
         pass
 
+    # Real-time sync — notify all views
+    try:
+        from core.realtime_sync import on_file_write
+        workspace = _get_workspace(path) or ""
+        on_file_write(path, source, workspace)
+    except Exception:
+        pass
+
     # Update workspace context
     workspace = _get_workspace(path)
     if workspace:

@@ -7278,7 +7278,7 @@
       "file_path": "/workspace/backend/api/brain_api_v2.py",
       "absolute_path": "/workspace/backend/api/brain_api_v2.py",
       "created_at": "2026-03-02T21:24:23.423463",
-      "version_count": 14,
+      "version_count": 16,
       "versions": [
         {
           "version_number": 1,
@@ -7433,10 +7433,32 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-82c8ea14d883425c8e91dc3ff53044de",
           "has_content": true
+        },
+        {
+          "version_number": 15,
+          "version_key_id": "VER-6f9b7995bf5f-15",
+          "genesis_key_db_id": "GK-6b5fd530238d4d8c8093eceb7d193a20",
+          "timestamp": "2026-03-03T06:45:08.605533",
+          "file_hash": "ae32c6870a7068ac1b9191f91dbb786e3f05169e2e67fb0878de423890fdc800",
+          "file_size": 44126,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-23fea580d455410fadeab31c5c1dcc80",
+          "has_content": true
+        },
+        {
+          "version_number": 16,
+          "version_key_id": "VER-6f9b7995bf5f-16",
+          "genesis_key_db_id": "GK-cfa38b0272924d4393dd3493fd4f3024",
+          "timestamp": "2026-03-03T06:45:39.398870",
+          "file_hash": "966f2a1081803de26e37e5a46460579a344093c3c58e3a6d028d0d4410ffb925",
+          "file_size": 45024,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0ce2f9d0917b46c688cd1ad10ec46beb",
+          "has_content": true
         }
       ],
-      "last_hash": "a933a93eded8dff433f0a808225f2f1fde5a02a68cf4790b8419c0e551aafece",
-      "last_updated": "2026-03-03T06:40:10.265497"
+      "last_hash": "966f2a1081803de26e37e5a46460579a344093c3c58e3a6d028d0d4410ffb925",
+      "last_updated": "2026-03-03T06:45:39.398882"
     },
     "FILE-dd3f6c7ce19e": {
       "file_genesis_key": "FILE-dd3f6c7ce19e",
@@ -7729,7 +7751,7 @@
       "file_path": "/workspace/backend/data/grace_model.pt",
       "absolute_path": "/workspace/backend/data/grace_model.pt",
       "created_at": "2026-03-02T21:33:47.796680",
-      "version_count": 95,
+      "version_count": 106,
       "versions": [
         {
           "version_number": 1,
@@ -8775,10 +8797,131 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-064af8630bbe4c01ba7432d5fac8c4f7",
           "has_content": false
+        },
+        {
+          "version_number": 96,
+          "version_key_id": "VER-9b69ff650bba-96",
+          "genesis_key_db_id": "GK-c0a71ca9bdd54013813b0d447664ab21",
+          "timestamp": "2026-03-03T06:41:46.927815",
+          "file_hash": "e77ec781373d1dbb72950103a36e039002815dc0964d7ba9c571ca7758b0df5e",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-0e6060c20325423bbc75f4fda2cb296e",
+          "has_content": false
+        },
+        {
+          "version_number": 97,
+          "version_key_id": "VER-9b69ff650bba-97",
+          "genesis_key_db_id": "GK-d2af2fca23104ce78b509538bc6e878f",
+          "timestamp": "2026-03-03T06:42:31.430615",
+          "file_hash": "3c914f38cbd46137d796abe54cdac33b6f445a6cc520b2113e86bb27b13289e1",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-bedea7444c4d4938910f061632aa4330",
+          "has_content": false
+        },
+        {
+          "version_number": 98,
+          "version_key_id": "VER-9b69ff650bba-98",
+          "genesis_key_db_id": "GK-0b81025e80054a74a8c22cb05aac8d77",
+          "timestamp": "2026-03-03T06:43:16.105509",
+          "file_hash": "1beee9337847ba45a7a50175e43246c52ae650c38d48d167b4ca39f4da4c4c81",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-627e8839e5bd497ba47e59b0c58fa275",
+          "has_content": false
+        },
+        {
+          "version_number": 99,
+          "version_key_id": "VER-9b69ff650bba-99",
+          "genesis_key_db_id": "GK-6233dba5fc754d3296765b5030975b6b",
+          "timestamp": "2026-03-03T06:44:00.800969",
+          "file_hash": "06cb92d8ce98cb1af2e3555d25ba0142bbd3fdee8db830f1414868f941a481ef",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c33fc65de57c434daee7f4b7732a36b1",
+          "has_content": false
+        },
+        {
+          "version_number": 100,
+          "version_key_id": "VER-9b69ff650bba-100",
+          "genesis_key_db_id": "GK-0745a30476d44bacbb02f6b56af8e0b6",
+          "timestamp": "2026-03-03T06:44:45.536910",
+          "file_hash": "720a59590455c56296989f9b96e183a4b16ca6449e3a73ce48f40d012b753d38",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-5062427ce811429cba23dbdf797b056b",
+          "has_content": false
+        },
+        {
+          "version_number": 101,
+          "version_key_id": "VER-9b69ff650bba-101",
+          "genesis_key_db_id": "GK-23533501787b4145bf27c1c6013e14fd",
+          "timestamp": "2026-03-03T06:45:30.382742",
+          "file_hash": "2017a236028d65eae1c4dd542ad4f83c5ce145f09645c500003d9d8ae0838753",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-2d41047616234a4ba509688731690317",
+          "has_content": false
+        },
+        {
+          "version_number": 102,
+          "version_key_id": "VER-9b69ff650bba-102",
+          "genesis_key_db_id": "GK-046a3adb154b41fb91f3b184545f5edd",
+          "timestamp": "2026-03-03T06:46:15.475780",
+          "file_hash": "34322d120149d27ac54251b22beb3cf4b731693d5171c290294f09ead985e867",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-e886b056711d40d793e6275c0a59dbaf",
+          "has_content": false
+        },
+        {
+          "version_number": 103,
+          "version_key_id": "VER-9b69ff650bba-103",
+          "genesis_key_db_id": "GK-006440691a334ee6a61c99288a59877a",
+          "timestamp": "2026-03-03T06:47:00.208790",
+          "file_hash": "8cf6a5dc5ef73e6e73231e8ffeb478cb5661d6cc22dbc71e52a0f31b385abe63",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-c4f136e54199482ca4b8c3040a748acf",
+          "has_content": false
+        },
+        {
+          "version_number": 104,
+          "version_key_id": "VER-9b69ff650bba-104",
+          "genesis_key_db_id": "GK-7e26fcf7c1d3408387b25b20618e8e65",
+          "timestamp": "2026-03-03T06:47:47.858451",
+          "file_hash": "66e2a5568b29fd66cf543ac15b2a5a82cebf495dd47c3fd27702b4bc7a2db651",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-121b6ea2b64a4fb99b15ef0496855d20",
+          "has_content": false
+        },
+        {
+          "version_number": 105,
+          "version_key_id": "VER-9b69ff650bba-105",
+          "genesis_key_db_id": "GK-3b8b6288c66f495b9c40009fcc75d9b8",
+          "timestamp": "2026-03-03T06:48:32.419805",
+          "file_hash": "926c94f69fa1842d483753ac5ecf2caf2677544a54e0bb4ac896893b4d2b8ee2",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-aefe0258956e4fd2a85006faa650bf2b",
+          "has_content": false
+        },
+        {
+          "version_number": 106,
+          "version_key_id": "VER-9b69ff650bba-106",
+          "genesis_key_db_id": "GK-4305c3cb354647f8bf55c525913e1a62",
+          "timestamp": "2026-03-03T06:49:16.904948",
+          "file_hash": "5d6fb5c913e1531f989a0bd2d8a8abfc432844935dd3ca9c6c0ba1f07854df59",
+          "file_size": 32517,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-9d530ffe6e3444d686f5647ccbdb241c",
+          "has_content": false
         }
       ],
-      "last_hash": "b8cf4fde5c63ab098efdfd48f3913e8206f9d572a62904fcb7bff2b9951ac6e8",
-      "last_updated": "2026-03-03T06:41:02.673907"
+      "last_hash": "5d6fb5c913e1531f989a0bd2d8a8abfc432844935dd3ca9c6c0ba1f07854df59",
+      "last_updated": "2026-03-03T06:49:16.904961"
     },
     "FILE-2a95d5735497": {
       "file_genesis_key": "FILE-2a95d5735497",
@@ -8983,7 +9126,7 @@
       "file_path": "/workspace/backend/core/governance_engine.py",
       "absolute_path": "/workspace/backend/core/governance_engine.py",
       "created_at": "2026-03-03T06:11:13.532957",
-      "version_count": 1,
+      "version_count": 2,
       "versions": [
         {
           "version_number": 1,
@@ -8995,10 +9138,21 @@
           "user_id": "file_watcher",
           "version_note": "Genesis Key: GK-0cee8f3a703f472f9bbf7f6b00843f04",
           "has_content": true
+        },
+        {
+          "version_number": 2,
+          "version_key_id": "VER-8452c17bcfc5-2",
+          "genesis_key_db_id": "GK-24e129f04d964957ad446509ea4fe249",
+          "timestamp": "2026-03-03T06:48:44.370021",
+          "file_hash": "d8db218e756f48f65d4d2438b454a0148d920a85b4bd8eb89e4fb0c960da0009",
+          "file_size": 12520,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-4ae2f342f19f49d49b29eef234c6ee95",
+          "has_content": true
         }
       ],
-      "last_hash": "9f8e99e6b47b2fbff3b49c877b62ecdf75ea8250cac67decaec4202295c3defc",
-      "last_updated": "2026-03-03T06:11:13.818933"
+      "last_hash": "d8db218e756f48f65d4d2438b454a0148d920a85b4bd8eb89e4fb0c960da0009",
+      "last_updated": "2026-03-03T06:48:44.370034"
     },
     "FILE-b7dcf6148e2f": {
       "file_genesis_key": "FILE-b7dcf6148e2f",
@@ -9021,6 +9175,72 @@
       ],
       "last_hash": "466d0b5e7ee7347f485f5373b3671164ee2c3119709a8c1e9bbdf9466da4e884",
       "last_updated": "2026-03-03T06:38:59.539989"
+    },
+    "FILE-44f3c179e9d4": {
+      "file_genesis_key": "FILE-44f3c179e9d4",
+      "file_path": "/workspace/backend/core/realtime_sync.py",
+      "absolute_path": "/workspace/backend/core/realtime_sync.py",
+      "created_at": "2026-03-03T06:43:57.216108",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-44f3c179e9d4-1",
+          "genesis_key_db_id": "GK-a8f65e1ba0c34f759a6ee7abd7879eda",
+          "timestamp": "2026-03-03T06:43:57.232559",
+          "file_hash": "93cc607225368ef739eefea127c372e2a03a2bf3d3e20df575639fbd74156b32",
+          "file_size": 2735,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7ab9698605cd418a981500f06f84d847",
+          "has_content": true
+        }
+      ],
+      "last_hash": "93cc607225368ef739eefea127c372e2a03a2bf3d3e20df575639fbd74156b32",
+      "last_updated": "2026-03-03T06:43:57.232571"
+    },
+    "FILE-68f199c41ddb": {
+      "file_genesis_key": "FILE-68f199c41ddb",
+      "file_path": "/workspace/backend/core/distributed_state.py",
+      "absolute_path": "/workspace/backend/core/distributed_state.py",
+      "created_at": "2026-03-03T06:44:37.644551",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-68f199c41ddb-1",
+          "genesis_key_db_id": "GK-f781e4dd0f8044b18c1c94e60500096d",
+          "timestamp": "2026-03-03T06:44:37.659270",
+          "file_hash": "d87c294e41c0b536de6ff57caa39419ac6ec87091c774a64a9735f1013a90bbc",
+          "file_size": 4358,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-7ad3ef9842cd4c4aa0884a51a86186c7",
+          "has_content": true
+        }
+      ],
+      "last_hash": "d87c294e41c0b536de6ff57caa39419ac6ec87091c774a64a9735f1013a90bbc",
+      "last_updated": "2026-03-03T06:44:37.659279"
+    },
+    "FILE-c85d1a6e7269": {
+      "file_genesis_key": "FILE-c85d1a6e7269",
+      "file_path": "/workspace/backend/core/workspace_bridge.py",
+      "absolute_path": "/workspace/backend/core/workspace_bridge.py",
+      "created_at": "2026-03-03T06:46:11.366313",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-c85d1a6e7269-1",
+          "genesis_key_db_id": "GK-2ed9f80e14194aacab873b7651d8fd32",
+          "timestamp": "2026-03-03T06:46:11.394533",
+          "file_hash": "1aba9f02dfb15db96aa78182fe29ccc641981e77319f7427cf61824412520549",
+          "file_size": 7025,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-6dccece3a6c0401fa11f8e5da0b7c6f2",
+          "has_content": true
+        }
+      ],
+      "last_hash": "1aba9f02dfb15db96aa78182fe29ccc641981e77319f7427cf61824412520549",
+      "last_updated": "2026-03-03T06:46:11.394548"
     }
   }
 }

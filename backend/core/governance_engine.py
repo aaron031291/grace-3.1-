@@ -265,6 +265,46 @@ COMPLIANCE_PRESETS = {
             "Security configuration must be hardened",
         ],
     },
+    "nist_csf": {
+        "name": "NIST Cybersecurity Framework",
+        "rules": [
+            "Identify: Maintain asset inventory and risk assessment",
+            "Protect: Implement access control and data security",
+            "Detect: Continuous monitoring and anomaly detection",
+            "Respond: Incident response plan and communication",
+            "Recover: Recovery planning and improvement process",
+        ],
+    },
+    "pci_dss": {
+        "name": "PCI DSS Payment Security",
+        "rules": [
+            "Install and maintain network security controls",
+            "Apply secure configurations to all system components",
+            "Protect stored account data with encryption",
+            "Encrypt cardholder data during transmission",
+            "Maintain vulnerability management program",
+        ],
+    },
+    "hipaa": {
+        "name": "HIPAA Healthcare Data",
+        "rules": [
+            "Ensure confidentiality of protected health information (PHI)",
+            "Implement access controls for electronic PHI",
+            "Maintain audit trails of PHI access and modifications",
+            "Implement data backup and disaster recovery for PHI",
+            "Conduct regular risk assessments",
+        ],
+    },
+    "iso_22301": {
+        "name": "ISO 22301 Business Continuity",
+        "rules": [
+            "Business impact analysis must be maintained",
+            "Business continuity plans must be documented and tested",
+            "Recovery time objectives (RTO) must be defined per service",
+            "Recovery point objectives (RPO) must be defined per data type",
+            "Regular exercises and testing must be conducted",
+        ],
+    },
 }
 
 

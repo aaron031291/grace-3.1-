@@ -336,6 +336,13 @@ def _system() -> dict:
         "move_file_cross": lambda p: _move_cross(p),
         "project_rollback": lambda p: _project_rollback(p),
         "list_exports": lambda p: _list_exports(),
+        "sync_events": lambda p: _sync_events(p),
+        "sync_stats": lambda p: _sync_stats(),
+        "dist_state": lambda p: _dist_stats(),
+        "dist_set": lambda p: _dist_set(p),
+        "dist_get": lambda p: _dist_get(p),
+        "dist_instances": lambda p: _dist_instances(),
+        "dist_session": lambda p: _dist_session(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -766,6 +773,34 @@ def _compliance_presets():
 def _apply_compliance(p):
     from core.governance_engine import apply_compliance_preset
     return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _sync_events(p):
+    from core.realtime_sync import get_recent_events
+    return {"events": get_recent_events(p.get("since"), p.get("project_id"), p.get("limit", 50))}
+
+def _sync_stats():
+    from core.realtime_sync import get_sync_stats
+    return get_sync_stats()
+
+def _dist_stats():
+    from core.distributed_state import get_distributed_stats
+    return get_distributed_stats()
+
+def _dist_set(p):
+    from core.distributed_state import set_state
+    return {"set": set_state(p.get("key", ""), p.get("value", ""))}
+
+def _dist_get(p):
+    from core.distributed_state import get_state
+    return {"value": get_state(p.get("key", ""))}
+
+def _dist_instances():
+    from core.distributed_state import list_instances
+    return {"instances": list_instances()}
+
+def _dist_session(p):
+    from core.distributed_state import get_user_session
+    return get_user_session(p.get("user_id", "default"))
 
 def _librarian_ingest(p):
     from core.librarian import ingest_document
