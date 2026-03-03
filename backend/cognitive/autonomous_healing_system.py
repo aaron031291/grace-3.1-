@@ -639,7 +639,7 @@ class AutonomousHealingSystem:
                 
                 # 2. Reset vector DB
                 try:
-                    from vector_db.qdrant_client import _qdrant_client
+                    from vector_db.client import _qdrant_client
                     if _qdrant_client:
                         services_reset.append("qdrant")
                 except:

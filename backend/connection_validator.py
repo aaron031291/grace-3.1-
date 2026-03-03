@@ -1041,8 +1041,8 @@ def validate_ml_intelligence() -> ConnectionReport:
     )
 
     try:
-        from api.ml_intelligence_api import get_orchestrator
-        orchestrator = get_orchestrator()
+        from ml_intelligence.integration_orchestrator import MLIntelligenceOrchestrator
+        orchestrator = MLIntelligenceOrchestrator()
         features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
 
         report.status = ConnectionStatus.CONNECTED
