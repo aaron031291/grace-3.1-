@@ -318,6 +318,13 @@ def _system() -> dict:
         "container_context": lambda p: _container_context(p),
         "clone_grace": lambda p: _clone_grace(p),
         "global_rules": lambda p: {"rules": __import__("core.project_container", fromlist=["GLOBAL_RULES"]).GLOBAL_RULES},
+        "create_user": lambda p: _create_user(p),
+        "list_users": lambda p: _list_users(),
+        "user_activity": lambda p: _user_activity(p),
+        "project_activity": lambda p: _project_activity(p),
+        "daily_summary": lambda p: _daily_summary(p),
+        "switch_project": lambda p: _switch_project(p),
+        "active_session": lambda p: _active_session(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -748,6 +755,34 @@ def _compliance_presets():
 def _apply_compliance(p):
     from core.governance_engine import apply_compliance_preset
     return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _create_user(p):
+    from core.multi_user import create_user
+    return create_user(p.get("email", ""), p.get("name", ""))
+
+def _list_users():
+    from core.multi_user import list_users
+    return {"users": list_users()}
+
+def _user_activity(p):
+    from core.multi_user import get_user_activity
+    return {"activity": get_user_activity(p.get("user_id", ""), p.get("hours", 24))}
+
+def _project_activity(p):
+    from core.multi_user import get_project_activity
+    return {"activity": get_project_activity(p.get("project_id", ""), p.get("hours", 24))}
+
+def _daily_summary(p):
+    from core.multi_user import generate_daily_summary
+    return generate_daily_summary(p.get("project_id", ""), p.get("hours", 24))
+
+def _switch_project(p):
+    from core.multi_user import switch_project
+    return switch_project(p.get("user_id", "default"), p.get("project_id", p.get("project", "")))
+
+def _active_session(p):
+    from core.multi_user import get_active_session
+    return get_active_session(p.get("user_id", "default"))
 
 def _list_containers():
     from core.project_container import list_containers
