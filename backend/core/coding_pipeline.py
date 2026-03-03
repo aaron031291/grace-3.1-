@@ -499,6 +499,13 @@ class CodingPipeline:
 
             result.status = "passed" if result.trust_score >= self.min_trust_score else "failed"
 
+            # Record KPI for this layer
+            try:
+                from core.governance_engine import record_kpi
+                record_kpi("coding_pipeline", name, passed=result.status == "passed", layer=layer_num)
+            except Exception:
+                pass
+
         except Exception as e:
             result.status = "failed"
             result.output = {"error": str(e)}

@@ -300,6 +300,16 @@ def _system() -> dict:
         "pool_stats": lambda p: _pool_stats(),
         "cache_stats": lambda p: _cache_stats(),
         "clear_cache": lambda p: _clear_cache(),
+        "project_governance": lambda p: _project_gov(p),
+        "set_project_rules": lambda p: _set_proj_rules(p),
+        "create_approval": lambda p: _create_approval(p),
+        "approval_list": lambda p: _approval_list(p),
+        "respond_approval": lambda p: _respond_approval(p),
+        "kpi_scores": lambda p: _kpi_scores(p),
+        "kpi_dashboard": lambda p: _kpi_dashboard(),
+        "compliance_presets": lambda p: _compliance_presets(),
+        "apply_compliance": lambda p: _apply_compliance(p),
+        "orchestrate": lambda p: _orchestrate(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -691,6 +701,49 @@ def _set_budget(p):
 def _provenance_entries(p):
     from core.safety import get_ledger_entries
     return {"entries": get_ledger_entries(p.get("limit", 20))}
+
+def _project_gov(p):
+    from core.governance_engine import get_project_rules
+    return get_project_rules(p.get("project_id", p.get("id", "")))
+
+def _set_proj_rules(p):
+    from core.governance_engine import set_project_rules
+    pid = p.pop("project_id", p.pop("id", ""))
+    return set_project_rules(pid, p)
+
+def _create_approval(p):
+    from core.governance_engine import create_approval
+    return create_approval(p.get("title",""), p.get("description",""),
+                           p.get("category","general"), p.get("project_id",""),
+                           p.get("severity","medium"), p.get("data"))
+
+def _approval_list(p):
+    from core.governance_engine import get_approvals
+    return {"approvals": get_approvals(p.get("status"), p.get("project_id"))}
+
+def _respond_approval(p):
+    from core.governance_engine import respond_to_approval
+    return respond_to_approval(p.get("id",0), p.get("action",""), p.get("reason",""))
+
+def _kpi_scores(p):
+    from core.governance_engine import get_kpi_scores
+    return get_kpi_scores(p.get("component"))
+
+def _kpi_dashboard():
+    from core.governance_engine import get_kpi_dashboard
+    return get_kpi_dashboard()
+
+def _compliance_presets():
+    from core.governance_engine import get_compliance_presets
+    return get_compliance_presets()
+
+def _apply_compliance(p):
+    from core.governance_engine import apply_compliance_preset
+    return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _orchestrate(p):
+    from core.brain_orchestrator import get_orchestrator
+    return get_orchestrator().orchestrate(p.get("task_type","analyze"), p)
 
 def _pool_stats():
     from core.worker_pool import get_pool_stats, get_cache_stats
