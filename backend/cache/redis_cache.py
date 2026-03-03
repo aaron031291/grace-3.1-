@@ -126,12 +126,10 @@ class RedisCache:
             full_key = self._make_key(key)
             value = await self._client.get(full_key)
             if value:
-                from api.metrics import inc_cache_hit
-                inc_cache_hit("redis")
+                logger.debug("Cache hit: %s", full_key)
                 return self._deserialize(value)
             else:
-                from api.metrics import inc_cache_miss
-                inc_cache_miss("redis")
+                logger.debug("Cache miss: %s", full_key)
                 return None
         except Exception as e:
             logger.error(f"Cache get error: {e}")

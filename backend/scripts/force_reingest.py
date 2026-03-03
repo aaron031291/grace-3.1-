@@ -11,7 +11,7 @@ backend_dir = Path(__file__).parent
 sys.path.insert(0, str(backend_dir))
 
 from database.connection import get_session
-from models.document_models import Document
+from models.database_models import Document
 
 def reset_ingestion_status():
     """Reset all documents to pending status to force re-ingestion."""

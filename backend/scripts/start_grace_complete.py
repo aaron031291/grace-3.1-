@@ -252,7 +252,7 @@ def verify_systems():
 
     # Check autonomous learning
     try:
-        from api.autonomous_learning import get_learning_orchestrator
+        from cognitive.thread_learning_orchestrator import ThreadLearningOrchestrator
         systems.append("Autonomous Learning")
         print_success("Autonomous Learning ready")
     except Exception as e:

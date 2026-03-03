@@ -206,7 +206,8 @@ def run_consensus(payload: dict) -> dict:
 
 def get_world_model(payload: dict) -> dict:
     try:
-        from cognitive.world_model import get_system_state
-        return get_system_state()
+        from cognitive.system_registry import get_system_registry
+        registry = get_system_registry()
+        return {"state": "active", "components": registry.get_all()}
     except Exception:
         return {"state": "unavailable"}
