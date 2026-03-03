@@ -35,8 +35,40 @@ class BrainOrchestration(BaseModel):
     steps: list
 
 
-def _call(brain: str, action: str, payload: dict, handlers: dict) -> BrainResponse:
-    """Route action to handler, track via Genesis."""
+def _call(brain: str, action: str, payload: dict, handlers: dict,
+          client_ip: str = "unknown") -> BrainResponse:
+    """Route action to handler with tracing, rate limiting, validation, Genesis tracking."""
+
+    # Start trace
+    try:
+        from core.tracing import new_trace, add_span, light_track
+        trace_id = new_trace()
+        add_span(f"brain/{brain}/{action}", {"client_ip": client_ip})
+        light_track("api_request", f"brain/{brain}/{action}", f"brain.{brain}", ["brain", brain, action])
+    except Exception:
+        trace_id = None
+
+    # Rate limit check
+    try:
+        from core.security import check_rate_limit
+        if not check_rate_limit(brain, client_ip):
+            return BrainResponse(brain=brain, action=action, ok=False,
+                                 error="Rate limit exceeded — try again in 60s")
+    except Exception:
+        pass
+
+    # Input sanitization
+    try:
+        from core.security import check_sql_injection, sanitize_string
+        for key, val in (payload or {}).items():
+            if isinstance(val, str):
+                if check_sql_injection(val):
+                    return BrainResponse(brain=brain, action=action, ok=False,
+                                         error=f"Invalid input in field '{key}'")
+                payload[key] = sanitize_string(val)
+    except Exception:
+        pass
+
     start = time.time()
     handler = handlers.get(action)
     if not handler:
@@ -69,8 +101,13 @@ def _call(brain: str, action: str, payload: dict, handlers: dict) -> BrainRespon
                              error=str(e)[:300], latency_ms=latency)
 
 
+_calling_brain = "external"
+
+
 def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
-    """Cross-brain call — any brain can call another."""
+    """Cross-brain call with Hebbian learning — synapses strengthen on success."""
+    global _calling_brain
+    source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
               "system": _system, "data": _data, "tasks": _tasks, "code": _code}
     factory = brains.get(brain_name)
@@ -80,8 +117,24 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
     if not handler:
         return {"ok": False, "error": f"Unknown action '{action}' in brain '{brain_name}'"}
     try:
-        return {"ok": True, "data": handler(payload or {})}
+        old_caller = _calling_brain
+        _calling_brain = brain_name
+        data = handler(payload or {})
+        _calling_brain = old_caller
+
+        try:
+            from core.hebbian import get_hebbian_mesh
+            get_hebbian_mesh().record(source, brain_name, success=True)
+        except Exception:
+            pass
+
+        return {"ok": True, "data": data}
     except Exception as e:
+        try:
+            from core.hebbian import get_hebbian_mesh
+            get_hebbian_mesh().record(source, brain_name, success=False)
+        except Exception:
+            pass
         return {"ok": False, "error": str(e)[:200]}
 
 
@@ -158,6 +211,19 @@ def _ai() -> dict:
         "generate": lambda p: _code_generate(p),
         "oracle": lambda p: _oracle_dashboard(),
         "training": lambda p: _oracle_training(),
+        "dl_predict": lambda p: _dl_predict(p),
+        "dl_train": lambda p: _dl_train(p),
+        "pipeline": lambda p: _run_pipeline(p),
+        "pipeline_progress": lambda p: _run_pipeline({"progress": True, "run_id": p.get("run_id")}),
+        "pipeline_bg": lambda p: _run_pipeline({"background": True, "task": p.get("task", p.get("prompt", ""))}),
+        "ooda": lambda p: _ooda(p),
+        "ambiguity": lambda p: _ambiguity(p),
+        "invariants": lambda p: _invariants(),
+        "cognitive_report": lambda p: _cognitive_report(p),
+        "bandit_select": lambda p: _bandit_select(p),
+        "knowledge_gaps_deep": lambda p: _knowledge_gaps_deep(),
+        "deterministic_scan": lambda p: _deterministic_scan(),
+        "deterministic_fix": lambda p: _deterministic_fix(p),
     }
 
 
@@ -191,6 +257,106 @@ def _system() -> dict:
         "auto_log":     lambda p: {"log": list(reversed(_loop_log[-20:]))},
         "consensus_fix": lambda p: _consensus_fix(),
         "connectivity": lambda p: _connectivity(),
+        "synapses":    lambda p: _synapses(),
+        "synapse_map": lambda p: _synapse_brain(p),
+        "traces":      lambda p: _recent_traces(),
+        "trace_stats": lambda p: _trace_stats(),
+        "hot_reload_service": lambda p: _hot_reload_svc(p),
+        "hot_reload_all": lambda p: _hot_reload_all(),
+        "save_and_reload": lambda p: _save_reload(p),
+        "reload_history": lambda p: _reload_history(),
+        "genesis_storage": lambda p: _genesis_storage_stats(),
+        "genesis_cleanup": lambda p: _genesis_cleanup(),
+        "genesis_hot": lambda p: _genesis_hot(p),
+        "file_events": lambda p: _file_events(p),
+        "scan_upload": lambda p: _scan_upload(p),
+        "process_documents": lambda p: _process_docs(p),
+        "processing_status": lambda p: _processing_status(),
+        "workspace_context": lambda p: _workspace_ctx(p),
+        "undo": lambda p: _undo(p),
+        "redo": lambda p: _redo(p),
+        "profile": lambda p: _profile(p),
+        "update_profile": lambda p: _update_profile(p),
+        "notifications": lambda p: _notifications(p),
+        "notify": lambda p: _notify(p),
+        "permissions": lambda p: _permissions(p),
+        "set_permission": lambda p: _set_perm(p),
+        "shortcuts": lambda p: _shortcuts(),
+        "fuzzy_search": lambda p: _fuzzy(p),
+        "set_environment": lambda p: _set_env(p),
+        "get_environment": lambda p: _get_env(),
+        "list_environments": lambda p: _list_envs(),
+        "env_write": lambda p: _env_write(p),
+        "run_independent": lambda p: _run_independent(p),
+        "run_failover": lambda p: _run_failover(p),
+        "snapshot": lambda p: _snapshot(p),
+        "rollback": lambda p: _rollback(p),
+        "snapshots": lambda p: _list_snapshots(),
+        "security_scan": lambda p: _security_scan(p),
+        "budget_status": lambda p: _budget_status(),
+        "set_budget": lambda p: _set_budget(p),
+        "provenance": lambda p: _provenance_entries(p),
+        "verify_ledger": lambda p: _verify_ledger(),
+        "pool_stats": lambda p: _pool_stats(),
+        "cache_stats": lambda p: _cache_stats(),
+        "clear_cache": lambda p: _clear_cache(),
+        "project_governance": lambda p: _project_gov(p),
+        "set_project_rules": lambda p: _set_proj_rules(p),
+        "create_approval": lambda p: _create_approval(p),
+        "approval_list": lambda p: _approval_list(p),
+        "respond_approval": lambda p: _respond_approval(p),
+        "kpi_scores": lambda p: _kpi_scores(p),
+        "kpi_dashboard": lambda p: _kpi_dashboard(),
+        "compliance_presets": lambda p: _compliance_presets(),
+        "apply_compliance": lambda p: _apply_compliance(p),
+        "orchestrate": lambda p: _orchestrate(p),
+        "containers": lambda p: _list_containers(),
+        "container_stats": lambda p: _container_stats(p),
+        "container_rules": lambda p: _container_rules(p),
+        "container_knowledge": lambda p: _container_knowledge(p),
+        "container_whitelist": lambda p: _container_whitelist(p),
+        "container_context": lambda p: _container_context(p),
+        "clone_grace": lambda p: _clone_grace(p),
+        "global_rules": lambda p: {"rules": __import__("core.project_container", fromlist=["GLOBAL_RULES"]).GLOBAL_RULES},
+        "create_user": lambda p: _create_user(p),
+        "list_users": lambda p: _list_users(),
+        "user_activity": lambda p: _user_activity(p),
+        "project_activity": lambda p: _project_activity(p),
+        "daily_summary": lambda p: _daily_summary(p),
+        "switch_project": lambda p: _switch_project(p),
+        "active_session": lambda p: _active_session(p),
+        "librarian_ingest": lambda p: _librarian_ingest(p),
+        "librarian_search": lambda p: _librarian_search(p),
+        "librarian_versions": lambda p: _librarian_versions(p),
+        "librarian_stats": lambda p: _librarian_stats(),
+        "cross_search": lambda p: _cross_search(p),
+        "export_project": lambda p: _export_project(p),
+        "import_project": lambda p: _import_project(p),
+        "copy_file_cross": lambda p: _copy_cross(p),
+        "move_file_cross": lambda p: _move_cross(p),
+        "project_rollback": lambda p: _project_rollback(p),
+        "list_exports": lambda p: _list_exports(),
+        "sync_events": lambda p: _sync_events(p),
+        "sync_stats": lambda p: _sync_stats(),
+        "dist_state": lambda p: _dist_stats(),
+        "dist_set": lambda p: _dist_set(p),
+        "dist_get": lambda p: _dist_get(p),
+        "dist_instances": lambda p: _dist_instances(),
+        "dist_session": lambda p: _dist_session(p),
+        "semantic_search": lambda p: _semantic_search(p),
+        "component_registry": lambda p: _component_registry(),
+        "component_profile": lambda p: _component_profile(p),
+        "validate_all": lambda p: _validate_all(),
+        "validate_component": lambda p: _validate_one(p),
+        "report_cards": lambda p: _report_cards(),
+        "report_card": lambda p: _report_card(p),
+        "generate_report": lambda p: _generate_report(p),
+        "list_reports": lambda p: _list_reports(),
+        "get_report": lambda p: _get_report(p),
+        "intelligence": lambda p: _intelligence_report(p),
+        "trust":        lambda p: _trust_state(),
+        "mine_keys":    lambda p: _mine_genesis_keys(p),
+        "mine_episodes": lambda p: _mine_episodes(),
     }
 
 
@@ -229,16 +395,42 @@ def _code() -> dict:
         list_projects, project_tree, read_file, write_file,
         create_file, delete_file, generate_code, apply_code,
     )
+    from core.services.project_service import (
+        list_projects as list_visual_projects,
+        create_project, get_project, get_project_context,
+        write_project_file, read_project_file,
+    )
     return {
         "projects":  lambda p: list_projects(),
-        "tree":      lambda p: project_tree(p["folder"], p.get("max_depth", 3)),
+        "tree":      lambda p: project_tree(p.get("folder", "."), p.get("max_depth", 3)),
         "read":      lambda p: read_file(p["path"]),
         "write":     lambda p: write_file(p["path"], p["content"]),
         "create":    lambda p: create_file(p["path"], p.get("content", "")),
         "delete":    lambda p: delete_file(p["path"]),
         "generate":  lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
         "apply":     lambda p: apply_code(p["path"], p["content"]),
+        "visual_projects": lambda p: list_visual_projects(),
+        "create_project": lambda p: create_project(p.get("name", ""), p.get("description", ""), p.get("type", "fullstack")),
+        "get_project": lambda p: get_project(p.get("id", p.get("project_id", ""))),
+        "project_context": lambda p: {"context": get_project_context(p.get("id", ""))},
+        "project_write": lambda p: write_project_file(p["project_id"], p["path"], p["content"]),
+        "project_read": lambda p: read_project_file(p["project_id"], p["path"]),
+        "project_chat": lambda p: _project_scoped_chat(p),
     }
+
+
+def _project_scoped_chat(p):
+    """Chat scoped to a specific project — LLM sees project files as context."""
+    from core.services.project_service import get_project_context
+    project_id = p.get("project_id", p.get("id", ""))
+    message = p.get("message", p.get("prompt", ""))
+    context = get_project_context(project_id)
+
+    from api.brain_api_v2 import call_brain
+    return call_brain("ai", "fast", {
+        "prompt": f"Project context:\n{context[:8000]}\n\nUser question: {message}",
+        "models": p.get("models", ["kimi"]),
+    }).get("data", {})
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -426,6 +618,504 @@ def _connectivity():
     return get_runtime_status()
 
 
+def _hot_reload_svc(p):
+    from core.hot_reload import hot_reload_service
+    return hot_reload_service(p.get("service", p.get("name", "")))
+
+def _hot_reload_all():
+    from core.hot_reload import hot_reload_all_services
+    return hot_reload_all_services()
+
+def _save_reload(p):
+    from core.hot_reload import save_and_reload
+    return save_and_reload(p.get("path", ""), p.get("content", ""))
+
+def _reload_history():
+    from core.hot_reload import get_reload_history
+    return {"history": get_reload_history()}
+
+def _genesis_storage_stats():
+    from core.genesis_storage import get_genesis_storage
+    return get_genesis_storage().get_stats()
+
+def _genesis_cleanup():
+    from core.genesis_storage import get_genesis_storage
+    return get_genesis_storage().cleanup_expired()
+
+def _file_events(p):
+    from core.workspace_bridge import get_recent_events
+    return {"events": get_recent_events(p.get("limit", 50))}
+
+def _process_docs(p):
+    from core.document_processor import process_documents
+    return process_documents(p.get("files", []), p.get("category", "general"), p.get("workspace", ""))
+
+def _processing_status():
+    from core.document_processor import get_processing_status
+    return get_processing_status()
+
+def _scan_upload(p):
+    from core.workspace_bridge import scan_upload
+    return scan_upload(p.get("path", ""), p.get("content", ""))
+
+def _undo(p):
+    from core.user_features import undo
+    r = undo(p.get("path", ""))
+    return {"undone": r is not None}
+
+def _redo(p):
+    from core.user_features import redo
+    r = redo(p.get("path", ""))
+    return {"redone": r is not None}
+
+def _profile(p):
+    from core.user_features import get_profile
+    return get_profile(p.get("user_id", "default"))
+
+def _update_profile(p):
+    from core.user_features import update_profile
+    uid = p.pop("user_id", "default")
+    return update_profile(uid, p)
+
+def _notifications(p):
+    from core.user_features import get_notifications
+    return {"notifications": get_notifications(p.get("unread_only", False))}
+
+def _notify(p):
+    from core.user_features import notify
+    return notify(p.get("title", ""), p.get("message", ""), p.get("type", "info"))
+
+def _permissions(p):
+    from core.user_features import get_workspace_permissions
+    return get_workspace_permissions(p.get("workspace", ""))
+
+def _set_perm(p):
+    from core.user_features import set_permission
+    return set_permission(p.get("workspace", ""), p.get("user_id", ""), p.get("level", "read"))
+
+def _shortcuts():
+    from core.user_features import get_shortcuts
+    return get_shortcuts()
+
+def _set_env(p):
+    from core.environment import set_environment
+    return set_environment(p.get("name", p.get("environment", "")))
+
+def _get_env():
+    from core.environment import get_environment, get_environment_path
+    env = get_environment()
+    return {"environment": env, "path": str(get_environment_path())}
+
+def _list_envs():
+    from core.environment import list_environments
+    return {"environments": list_environments()}
+
+def _env_write(p):
+    from core.environment import route_file_write
+    return route_file_write(p.get("path", ""), p.get("content", ""), p.get("source", "dev_tab"))
+
+def _snapshot(p):
+    from core.safety import snapshot_state
+    return {"snapshot_id": snapshot_state(p.get("label", ""))}
+
+def _rollback(p):
+    from core.safety import rollback_to
+    return rollback_to(p.get("snapshot_id"))
+
+def _list_snapshots():
+    from core.safety import list_snapshots
+    return {"snapshots": list_snapshots()}
+
+def _security_scan(p):
+    from core.safety import scan_code_security
+    return scan_code_security(p.get("code", ""), p.get("file", ""))
+
+def _budget_status():
+    from core.safety import get_budget_status
+    return get_budget_status()
+
+def _set_budget(p):
+    from core.safety import set_budget_limits
+    return set_budget_limits(p.get("calls_per_hour"), p.get("tokens_per_hour"))
+
+def _provenance_entries(p):
+    from core.safety import get_ledger_entries
+    return {"entries": get_ledger_entries(p.get("limit", 20))}
+
+def _project_gov(p):
+    from core.governance_engine import get_project_rules
+    return get_project_rules(p.get("project_id", p.get("id", "")))
+
+def _set_proj_rules(p):
+    from core.governance_engine import set_project_rules
+    pid = p.pop("project_id", p.pop("id", ""))
+    return set_project_rules(pid, p)
+
+def _create_approval(p):
+    from core.governance_engine import create_approval
+    return create_approval(p.get("title",""), p.get("description",""),
+                           p.get("category","general"), p.get("project_id",""),
+                           p.get("severity","medium"), p.get("data"))
+
+def _approval_list(p):
+    from core.governance_engine import get_approvals
+    return {"approvals": get_approvals(p.get("status"), p.get("project_id"))}
+
+def _respond_approval(p):
+    from core.governance_engine import respond_to_approval
+    return respond_to_approval(p.get("id",0), p.get("action",""), p.get("reason",""))
+
+def _kpi_scores(p):
+    from core.governance_engine import get_kpi_scores
+    return get_kpi_scores(p.get("component"))
+
+def _kpi_dashboard():
+    from core.governance_engine import get_kpi_dashboard
+    return get_kpi_dashboard()
+
+def _compliance_presets():
+    from core.governance_engine import get_compliance_presets
+    return get_compliance_presets()
+
+def _apply_compliance(p):
+    from core.governance_engine import apply_compliance_preset
+    return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _semantic_search(p):
+    from core.semantic_search import semantic_query
+    return semantic_query(p.get("query", p.get("question", "")))
+
+def _component_registry():
+    from core.semantic_search import get_component_registry
+    return get_component_registry()
+
+def _component_profile(p):
+    from core.semantic_search import get_component_profile
+    return get_component_profile(p.get("component_id", p.get("id", "")))
+
+def _validate_all():
+    from core.component_validator import validate_all_components
+    return validate_all_components()
+
+def _validate_one(p):
+    from core.component_validator import get_report_card
+    return get_report_card(p.get("component_id", p.get("id", "")))
+
+def _report_cards():
+    from core.component_validator import get_all_report_cards
+    return get_all_report_cards()
+
+def _report_card(p):
+    from core.component_validator import get_report_card
+    return get_report_card(p.get("component_id", p.get("id", "")))
+
+def _sync_events(p):
+    from core.realtime_sync import get_recent_events
+    return {"events": get_recent_events(p.get("since"), p.get("project_id"), p.get("limit", 50))}
+
+def _sync_stats():
+    from core.realtime_sync import get_sync_stats
+    return get_sync_stats()
+
+def _dist_stats():
+    from core.distributed_state import get_distributed_stats
+    return get_distributed_stats()
+
+def _dist_set(p):
+    from core.distributed_state import set_state
+    return {"set": set_state(p.get("key", ""), p.get("value", ""))}
+
+def _dist_get(p):
+    from core.distributed_state import get_state
+    return {"value": get_state(p.get("key", ""))}
+
+def _dist_instances():
+    from core.distributed_state import list_instances
+    return {"instances": list_instances()}
+
+def _dist_session(p):
+    from core.distributed_state import get_user_session
+    return get_user_session(p.get("user_id", "default"))
+
+def _librarian_ingest(p):
+    from core.librarian import ingest_document
+    return ingest_document(p.get("path",""), p.get("content",""), p.get("project_id",""))
+
+def _librarian_search(p):
+    from core.librarian import search_documents
+    return {"results": search_documents(p.get("query",""), p.get("project_id",""), p.get("category",""))}
+
+def _librarian_versions(p):
+    from core.librarian import get_versions
+    return {"versions": get_versions(p.get("path",""))}
+
+def _librarian_stats():
+    from core.librarian import get_document_stats
+    return get_document_stats()
+
+def _cross_search(p):
+    from core.librarian import cross_project_search
+    return {"results": cross_project_search(p.get("query",""), p.get("limit",30))}
+
+def _export_project(p):
+    from core.project_ops import export_project
+    return export_project(p.get("project_id", p.get("id","")))
+
+def _import_project(p):
+    from core.project_ops import import_project
+    return import_project(p.get("project_id",""), p.get("zip_path",""))
+
+def _copy_cross(p):
+    from core.project_ops import copy_file_between_projects
+    return copy_file_between_projects(p.get("from_project",""), p.get("from_path",""),
+                                       p.get("to_project",""), p.get("to_path"))
+
+def _move_cross(p):
+    from core.project_ops import move_file_between_projects
+    return move_file_between_projects(p.get("from_project",""), p.get("from_path",""),
+                                      p.get("to_project",""), p.get("to_path"))
+
+def _project_rollback(p):
+    from core.project_ops import project_rollback
+    return project_rollback(p.get("project_id", p.get("id","")))
+
+def _list_exports():
+    from core.project_ops import list_exports
+    return {"exports": list_exports()}
+
+def _create_user(p):
+    from core.multi_user import create_user
+    return create_user(p.get("email", ""), p.get("name", ""))
+
+def _list_users():
+    from core.multi_user import list_users
+    return {"users": list_users()}
+
+def _user_activity(p):
+    from core.multi_user import get_user_activity
+    return {"activity": get_user_activity(p.get("user_id", ""), p.get("hours", 24))}
+
+def _project_activity(p):
+    from core.multi_user import get_project_activity
+    return {"activity": get_project_activity(p.get("project_id", ""), p.get("hours", 24))}
+
+def _daily_summary(p):
+    from core.multi_user import generate_daily_summary
+    return generate_daily_summary(p.get("project_id", ""), p.get("hours", 24))
+
+def _switch_project(p):
+    from core.multi_user import switch_project
+    return switch_project(p.get("user_id", "default"), p.get("project_id", p.get("project", "")))
+
+def _active_session(p):
+    from core.multi_user import get_active_session
+    return get_active_session(p.get("user_id", "default"))
+
+def _list_containers():
+    from core.project_container import list_containers
+    return {"containers": list_containers()}
+
+def _container_stats(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", p.get("id", ""))).get_stats()
+
+def _container_rules(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_rules()
+
+def _container_knowledge(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_knowledge()
+
+def _container_whitelist(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_whitelist()
+
+def _container_context(p):
+    from core.project_container import get_container
+    return {"context": get_container(p.get("project_id", "")).get_context()}
+
+def _clone_grace(p):
+    from core.project_container import clone_grace_environment
+    return clone_grace_environment(p.get("project_id", p.get("name", "")))
+
+def _orchestrate(p):
+    from core.brain_orchestrator import get_orchestrator
+    return get_orchestrator().orchestrate(p.get("task_type","analyze"), p)
+
+def _pool_stats():
+    from core.worker_pool import get_pool_stats, get_cache_stats
+    return {"pool": get_pool_stats(), "cache": get_cache_stats()}
+
+def _cache_stats():
+    from core.worker_pool import get_cache_stats
+    return get_cache_stats()
+
+def _clear_cache():
+    from core.worker_pool import clear_cache
+    clear_cache()
+    return {"cleared": True}
+
+def _verify_ledger():
+    from core.safety import verify_ledger
+    return verify_ledger()
+
+def _run_independent(p):
+    from core.independent_models import run_independent
+    return run_independent(p.get("prompt", ""), p.get("models"), p.get("system_prompt", ""))
+
+def _run_failover(p):
+    from core.independent_models import run_with_failover
+    return run_with_failover(p.get("prompt", ""), p.get("models"), p.get("system_prompt", ""))
+
+def _fuzzy(p):
+    from core.user_features import fuzzy_search
+    return {"results": fuzzy_search(p.get("query", ""), p.get("limit", 20))}
+
+def _workspace_ctx(p):
+    from core.workspace_bridge import get_workspace_context
+    return {"context": get_workspace_context(p.get("workspace", ""))}
+
+def _generate_report(p):
+    from core.reports import generate_daily_report
+    return generate_daily_report(hours=p.get("hours", 24))
+
+def _list_reports():
+    from core.reports import list_reports
+    return {"reports": list_reports()}
+
+def _get_report(p):
+    from core.reports import get_report
+    return get_report(p.get("filename", ""))
+
+def _genesis_hot(p):
+    from core.genesis_storage import get_genesis_storage
+    return {"keys": get_genesis_storage().get_hot(p.get("limit", 100))}
+
+def _recent_traces():
+    from core.tracing import get_recent_keys
+    return {"keys": get_recent_keys(50)}
+
+
+def _trace_stats():
+    from core.tracing import get_buffer_stats
+    return get_buffer_stats()
+
+
+def _synapses():
+    from core.hebbian import get_hebbian_mesh
+    mesh = get_hebbian_mesh()
+    return {"weights": mesh.get_weights(), "strongest": mesh.get_strongest(10)}
+
+
+def _synapse_brain(p):
+    from core.hebbian import get_hebbian_mesh
+    return get_hebbian_mesh().get_brain_connectivity(p.get("brain", ""))
+
+
+def _intelligence_report(p):
+    from core.intelligence import get_intelligence_report
+    return get_intelligence_report(hours=p.get("hours", 24))
+
+
+def _trust_state():
+    from core.intelligence import AdaptiveTrust
+    return AdaptiveTrust.get_all_trust()
+
+
+def _mine_genesis_keys(p):
+    from core.intelligence import GenesisKeyMiner
+    return GenesisKeyMiner().mine_patterns(hours=p.get("hours", 24), limit=p.get("limit", 5000))
+
+
+def _mine_episodes():
+    from core.intelligence import EpisodicMiner
+    return EpisodicMiner().mine_episodes()
+
+
+def _run_pipeline(p):
+    from core.coding_pipeline import get_coding_pipeline, get_pipeline_progress
+    pipeline = get_coding_pipeline()
+
+    if p.get("background"):
+        run_id = pipeline.run_background(p.get("task", p.get("prompt", "")), p)
+        return {"run_id": run_id, "status": "queued", "message": "Pipeline running in background. Use ai/pipeline_progress to check status."}
+
+    if p.get("progress"):
+        progress = get_pipeline_progress()
+        run_id = p.get("run_id")
+        if run_id:
+            return progress.get(run_id)
+        return {"runs": progress.get_all()}
+
+    result = pipeline.run(p.get("task", p.get("prompt", "")), p)
+    return {
+        "status": result.status,
+        "trust_score": result.trust_score,
+        "chunks": len(result.chunks),
+        "duration_ms": result.total_duration_ms,
+        "details": [
+            {
+                "chunk": c.chunk_id,
+                "description": c.description[:100],
+                "status": c.status,
+                "layers": [{"layer": l.layer, "name": l.name, "status": l.status,
+                            "trust": l.trust_score, "duration_ms": l.duration_ms}
+                           for l in c.layers],
+            }
+            for c in result.chunks
+        ],
+    }
+
+
+def _dl_predict(p):
+    from core.deep_learning import get_model
+    return get_model().predict(p)
+
+
+def _dl_train(p):
+    from core.deep_learning import get_model
+    return get_model().train_from_db(hours=p.get("hours", 24), limit=p.get("limit", 1000))
+
+
+def _ooda(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.ooda_cycle(p.get("observation", ""), p)
+
+
+def _ambiguity(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.resolve_ambiguity(p.get("text", ""), p)
+
+
+def _invariants():
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.check_invariants()
+
+
+def _cognitive_report(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.full_cognitive_report(p.get("query", ""))
+
+
+def _bandit_select(p):
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.bandit_select(p.get("options", []), p)
+
+
+def _deterministic_scan():
+    from core.deterministic_bridge import build_deterministic_report
+    return build_deterministic_report()
+
+def _deterministic_fix(p):
+    from core.deterministic_bridge import deterministic_fix_cycle
+    return deterministic_fix_cycle(p.get("task", ""))
+
+def _knowledge_gaps_deep():
+    from core.cognitive_mesh import CognitiveMesh
+    return CognitiveMesh.analyze_knowledge_gaps()
+
+
 
 # ═══════════════════════════════════════════════════════════════════
 #  DIRECTORY + ENDPOINTS
@@ -478,6 +1168,25 @@ async def brain_tasks(req: BrainRequest):
 @router.post("/code", response_model=BrainResponse)
 async def brain_code(req: BrainRequest):
     return _call("code", req.action, req.payload or {}, _code())
+
+@router.post("/ask")
+async def brain_ask(request: Request):
+    """
+    Smart routing — describe what you want in natural language.
+    Grace auto-routes to the optimal brain + action.
+
+    POST /brain/ask { "query": "what is the system health?" }
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    query = body.get("query", body.get("message", body.get("q", "")))
+    payload = body.get("payload", {})
+
+    from core.auto_router import smart_call
+    return smart_call(query, payload)
+
 
 @router.get("/directory")
 async def brain_directory():

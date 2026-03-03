@@ -1323,6 +1323,7 @@ def start_proactive_healing() -> ProactiveHealingEngine:
 
 
 def stop_proactive_healing():
-    global _proactive_engine
+    global _proactive_engine  # noqa: F824
     if _proactive_engine and _proactive_engine.is_running:
         _proactive_engine.stop()
+        _proactive_engine = None

@@ -45,7 +45,21 @@ def track(
     This is fire-and-forget — tracking failures never break the caller.
     Also fires the real-time event engine for instant notification.
     """
-    # Fire real-time engine FIRST (even if DB write fails)
+    # Tiered storage — hot tier + sampling gate
+    try:
+        from core.genesis_storage import get_genesis_storage
+        storage = get_genesis_storage()
+
+        # Always store in hot tier (in-memory, instant)
+        storage.store_hot(key_type, what, who, is_error, tags)
+
+        # Sampling gate — high-frequency identical calls sampled at 1%
+        if not storage.should_store(key_type, what, who):
+            return None  # Sampled out — skip DB write, keep hot tier
+    except Exception:
+        pass
+
+    # Fire real-time engine
     try:
         from genesis.realtime import get_realtime_engine
         get_realtime_engine().on_key_created(

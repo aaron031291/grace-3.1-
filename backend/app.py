@@ -33,37 +33,21 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-# ==================== Clean Architecture Imports ====================
-# Brain API (single entry point for all domain actions)
+# ==================== MINIMAL IMPORTS — Brain-Centric Architecture ====================
+# 1. Brain router — contains ALL 93+ actions across 8 domains
 from api.brain_api_v2 import router as brain_router
 from api.core.brain_controller import router as brain_v2_router
 
-# Monitoring (unified health + probe + triggers)
-from api.monitoring.health_controller import router as unified_monitor_router
-from api.component_health_api import router as component_health_router
-from api.probe_agent_api import router as probe_agent_router
-from api.runtime_triggers_api import router as runtime_triggers_router
-
-# Autonomous (Ouroboros loop + consensus fixer)
-from api.autonomous_loop_api import router as autonomous_loop_router
-from api.consensus_fixer_api import router as consensus_fixer_router
-
-# Core services (health, auth, genesis, voice, MCP, retrieval)
+# 2. Health — required by k8s/load balancers (must be separate route)
 from api.health import router as health_router
-from api.auth import router as auth_router
-from api.genesis_keys import router as genesis_keys_router
-from api.consensus_api import router as consensus_router
-from api.voice_api import router as voice_router
-from api.mcp_api import router as mcp_router
-from api.retrieve import router as retrieve_router, get_document_retriever
-from api.flash_cache_api import router as flash_cache_router
-from api.kpi_api import router as kpi_router
-from api.live_console_api import router as live_console_router
-from api.docs_library_api import router as docs_library_router
-from api.file_ingestion import get_file_manager
 
-# Diagnostic machine
-from diagnostic_machine.api import router as diagnostic_router
+# 3. Auth — middleware requirement
+from api.auth import router as auth_router
+
+# 4. Voice — WebSocket (can't route through sync brain)
+from api.voice_api import router as voice_router
+from api.stream_api import router as stream_router
+from api.completion_api import router as completion_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -242,38 +226,37 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Database initialization error: {e}")
         print("[WARN] Grace will continue with limited functionality")
     
-    # Auto-ingest training corpus on startup
-    try:
-        from cognitive.training_ingest import ingest_training_corpus
-        result = ingest_training_corpus()
-        if result.get("ingested", 0) > 0:
-            print(f"[OK] Training corpus: {result['ingested']} files ingested")
-        else:
-            print(f"[OK] Training corpus up to date")
-    except Exception as e:
-        print(f"[WARN] Training ingest skipped: {e}")
+    # ==================== Lazy Background Init (non-blocking) ====================
+    import threading
 
-    # Run startup diagnostic
-    try:
-        from cognitive.autonomous_diagnostics import get_diagnostics
-        diag = get_diagnostics()
-        startup_result = diag.on_startup()
-        print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')} ({startup_result.get('healthy', 0)}/{startup_result.get('total', 0)} healthy)")
-    except Exception as e:
-        print(f"[WARN] Startup diagnostic skipped: {e}")
-
-    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
-    if not settings.SKIP_EMBEDDING_LOAD:
+    def _background_init():
+        """Heavy init tasks run in background so server starts fast."""
         try:
-            from embedding import get_embedding_model
-            print("\n[STARTUP] Pre-initializing embedding model...")
-            embedding_model = get_embedding_model()
-            print("[STARTUP] [OK] Embedding model loaded and ready\n")
+            from cognitive.training_ingest import ingest_training_corpus
+            result = ingest_training_corpus()
+            if result.get("ingested", 0) > 0:
+                print(f"[OK] Training corpus: {result['ingested']} files ingested")
         except Exception as e:
-            print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
-            print("[STARTUP] [WARN] Model will be loaded on first use\n")
-    else:
-        print("[STARTUP] Embedding model loading skipped (SKIP_EMBEDDING_LOAD=true)\n")
+            print(f"[WARN] Training ingest: {e}")
+
+        try:
+            from cognitive.autonomous_diagnostics import get_diagnostics
+            diag = get_diagnostics()
+            startup_result = diag.on_startup()
+            print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')}")
+        except Exception as e:
+            print(f"[WARN] Diagnostic: {e}")
+
+        if not settings.SKIP_EMBEDDING_LOAD:
+            try:
+                from embedding import get_embedding_model
+                get_embedding_model()
+                print("[OK] Embedding model loaded")
+            except Exception as e:
+                print(f"[WARN] Embedding: {e}")
+
+    threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
+    print("[OK] Background init started (training, diagnostics, embedding)")
     
     # Check LLM Provider
     if not getattr(settings, 'SKIP_LLM_CHECK', False):
@@ -475,6 +458,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Autonomous loop not started: {e}")
 
+    # ==================== Register Auto-Probe ====================
+    try:
+        from core.tracing import register_auto_probe
+        register_auto_probe()
+        print("[OK] Auto-probe registered (triggers on code changes)")
+    except Exception as e:
+        print(f"[WARN] Auto-probe: {e}")
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
@@ -536,36 +527,19 @@ app.add_middleware(
 
 # Core: needed by app.py's own chat/RAG endpoints
 # =============================================================================
-# CLEAN ARCHITECTURE — 15 routers (down from 56)
+# BRAIN-CENTRIC ARCHITECTURE — 4 routers only
 # =============================================================================
 
-# Brain API — single entry point for all 95+ domain actions
-app.include_router(brain_router)                 # /brain/{domain} — 8 domains
-app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean REST
+# THE BRAIN — all 93+ actions, all 8 domains, all logic
+app.include_router(brain_router)                 # /brain/{domain}
+app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 
-# Monitoring — unified health + probe + triggers
-app.include_router(unified_monitor_router)       # /api/monitor/*
-app.include_router(component_health_router)      # /api/component-health/*
-app.include_router(probe_agent_router)           # /api/probe/*
-app.include_router(runtime_triggers_router)      # /api/triggers/*
-
-# Autonomous — Ouroboros loop + consensus fixer
-app.include_router(autonomous_loop_router)       # /api/autonomous/*
-app.include_router(consensus_fixer_router)       # /api/consensus-fix/*
-
-# Core services
-app.include_router(health_router)                # /health
-app.include_router(auth_router)                  # /auth
-app.include_router(genesis_keys_router)          # /genesis
-app.include_router(consensus_router)             # /api/consensus
-app.include_router(retrieve_router)              # /retrieve
-app.include_router(voice_router)                 # /voice
-app.include_router(mcp_router)                   # /api/mcp
-app.include_router(flash_cache_router)           # /api/flash-cache
-app.include_router(kpi_router)                   # /kpi
-app.include_router(live_console_router)          # /api/console
-app.include_router(docs_library_router)          # /api/docs
-app.include_router(diagnostic_router)            # /diagnostic
+# Infrastructure (can't live inside brain)
+app.include_router(health_router)                # /health (k8s probes)
+app.include_router(auth_router)                  # /auth (middleware)
+app.include_router(voice_router)                 # /voice (WebSocket)
+app.include_router(stream_router)                # /api/stream (SSE streaming)
+app.include_router(completion_router)            # /api/complete (inline code completion)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -1638,6 +1612,24 @@ async def runtime_hot_reload():
         results["diagnostic"] = f"error: {e}"
 
     return {"status": "hot-reload complete", "results": results}
+
+
+@app.get("/api/runtime/security", tags=["Runtime"])
+async def runtime_security():
+    """Rate limit status and security configuration."""
+    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE
+    return {
+        "rate_limits": get_rate_limit_status(),
+        "max_request_size_mb": round(MAX_REQUEST_SIZE / 1048576, 1),
+    }
+
+
+@app.post("/api/runtime/backup", tags=["Runtime"])
+async def runtime_backup():
+    """Create a database backup."""
+    from core.security import backup_database
+    path = backup_database()
+    return {"backup_path": path}
 
 
 @app.get("/api/runtime/resilience", tags=["Runtime"])
