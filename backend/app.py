@@ -48,6 +48,7 @@ from api.auth import router as auth_router
 from api.voice_api import router as voice_router
 from api.stream_api import router as stream_router
 from api.completion_api import router as completion_router
+from api.world_model_api import router as world_model_router
 
 # 5. Connection validation — comprehensive connection status & validation
 from api.connection_api import router as connection_router
@@ -623,6 +624,7 @@ app.include_router(auth_router)                  # /auth (middleware)
 app.include_router(voice_router)                 # /voice (WebSocket)
 app.include_router(stream_router)                # /api/stream (SSE streaming)
 app.include_router(completion_router)            # /api/complete (inline code completion)
+app.include_router(world_model_router)           # /api/world-model (system state)
 app.include_router(connection_router)            # /api/connections (connection validation)
 app.include_router(introspection_router)         # /api/system (introspection + validation)
 
@@ -630,7 +632,6 @@ app.include_router(introspection_router)         # /api/system (introspection + 
 for _name, _router in _optional_routers:
     app.include_router(_router)
     print(f"[OK] Registered previously unwired router: {_name}")
-
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
