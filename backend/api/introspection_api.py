@@ -20,6 +20,7 @@ Endpoints:
 """
 
 from fastapi import APIRouter, Query
+from pydantic import BaseModel
 from typing import Optional
 import logging
 
@@ -224,4 +225,326 @@ async def validate_layer1():
         "category": "layer1_initialization",
         "total": len(issues),
         "issues": [asdict(i) for i in issues],
+    }
+
+
+# ---------------------------------------------------------------------------
+# Problems + Kimi/Opus
+# ---------------------------------------------------------------------------
+
+class AskAboutProblemsRequest(BaseModel):
+    question: str
+    use_kimi: bool = True
+    use_opus: bool = True
+
+
+@router.get("/problems")
+async def get_all_problems():
+    """
+    Find ALL problems in the system right now.
+
+    Combines:
+    1. Deterministic validation (broken imports, silent failures, unwired routers)
+    2. Connection validation (which services are connected/disconnected)
+    3. Runtime health (database, LLM, Qdrant, embedding)
+
+    Returns a single unified problem list that you can then feed to
+    /api/system/problems/ask-kimi-opus to get AI-powered fix suggestions.
+    """
+    from dataclasses import asdict
+
+    problems = {
+        "timestamp": None,
+        "total_problems": 0,
+        "critical": 0,
+        "warning": 0,
+        "categories": {},
+        "structural_issues": [],
+        "connection_issues": [],
+        "runtime_issues": [],
+    }
+
+    # 1. Structural issues (deterministic)
+    try:
+        from deterministic_validator import run_full_validation
+        validation = run_full_validation()
+        problems["timestamp"] = validation.timestamp
+
+        for issue in validation.issues:
+            if issue.file.startswith("tests/"):
+                continue
+            entry = asdict(issue)
+            problems["structural_issues"].append(entry)
+            cat = issue.category
+            problems["categories"][cat] = problems["categories"].get(cat, 0) + 1
+            if issue.severity == "critical":
+                problems["critical"] += 1
+            elif issue.severity == "warning":
+                problems["warning"] += 1
+    except Exception as e:
+        problems["structural_issues"].append({
+            "category": "validator_error", "severity": "critical",
+            "file": "deterministic_validator.py", "line": None,
+            "message": f"Validator failed: {e}",
+        })
+
+    # 2. Connection issues
+    try:
+        from connection_validator import validate_all_connections, ConnectionStatus
+        conn_report = validate_all_connections()
+        for conn in conn_report.connections:
+            if conn.status in (ConnectionStatus.DISCONNECTED, ConnectionStatus.DEGRADED):
+                entry = {
+                    "name": conn.name,
+                    "category": conn.category.value,
+                    "status": conn.status.value,
+                    "message": conn.message,
+                    "actions_failing": conn.actions_failing,
+                    "actions_total": conn.actions_total,
+                }
+                problems["connection_issues"].append(entry)
+                problems["categories"]["disconnected_service"] = (
+                    problems["categories"].get("disconnected_service", 0) + 1
+                )
+                problems["critical"] += 1
+    except Exception as e:
+        problems["connection_issues"].append({
+            "name": "connection_validator",
+            "status": "error",
+            "message": str(e),
+        })
+
+    # 3. Runtime health
+    try:
+        from api.health import check_llm, check_database, check_qdrant, check_embedding_model
+        import asyncio
+
+        async def _gather():
+            return await asyncio.gather(
+                check_llm(), check_database(), check_qdrant(), check_embedding_model(),
+                return_exceptions=True,
+            )
+
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            health_checks = []
+        else:
+            health_checks = loop.run_until_complete(_gather())
+
+        for check in health_checks:
+            if hasattr(check, 'status') and check.status in ("unhealthy", "degraded"):
+                problems["runtime_issues"].append({
+                    "service": check.name,
+                    "status": check.status,
+                    "message": check.message,
+                })
+                problems["categories"]["runtime_unhealthy"] = (
+                    problems["categories"].get("runtime_unhealthy", 0) + 1
+                )
+    except Exception:
+        pass
+
+    problems["total_problems"] = (
+        len(problems["structural_issues"])
+        + len(problems["connection_issues"])
+        + len(problems["runtime_issues"])
+    )
+
+    return problems
+
+
+@router.post("/problems/ask-kimi-opus")
+async def ask_kimi_opus_about_problems(request: AskAboutProblemsRequest):
+    """
+    Ask Kimi and/or Opus about the system's problems.
+
+    First runs the full problem scan, then sends the results plus your
+    question to Kimi and Opus for AI-powered diagnosis and fix suggestions.
+
+    Example questions:
+    - "What are the most important things to fix first?"
+    - "Why is Qdrant disconnected and how do I fix it?"
+    - "Explain the silent failures and which ones matter"
+    - "Give me a prioritized fix plan"
+    """
+    # Get current problems
+    problems_data = await get_all_problems()
+
+    # Build context for the models
+    problem_summary = (
+        f"Grace system has {problems_data['total_problems']} problems: "
+        f"{problems_data['critical']} critical, {problems_data['warning']} warnings.\n\n"
+    )
+
+    if problems_data["connection_issues"]:
+        problem_summary += "DISCONNECTED SERVICES:\n"
+        for c in problems_data["connection_issues"][:10]:
+            problem_summary += f"  - {c['name']} ({c.get('category', '')}): {c.get('message', 'disconnected')}\n"
+        problem_summary += "\n"
+
+    if problems_data["structural_issues"]:
+        # Group by category for summary
+        by_cat = {}
+        for s in problems_data["structural_issues"]:
+            cat = s["category"]
+            by_cat.setdefault(cat, []).append(s)
+
+        problem_summary += "STRUCTURAL ISSUES:\n"
+        for cat, items in by_cat.items():
+            critical_items = [i for i in items if i["severity"] == "critical"]
+            problem_summary += f"  - {cat}: {len(items)} total ({len(critical_items)} critical)\n"
+            for item in critical_items[:3]:
+                problem_summary += f"    * {item['file']}:{item.get('line', '?')} - {item['message'][:100]}\n"
+        problem_summary += "\n"
+
+    if problems_data["runtime_issues"]:
+        problem_summary += "RUNTIME ISSUES:\n"
+        for r in problems_data["runtime_issues"]:
+            problem_summary += f"  - {r['service']}: {r['status']} - {r.get('message', '')}\n"
+
+    full_prompt = (
+        f"You are analyzing the Grace AI system. Here is the current state:\n\n"
+        f"{problem_summary}\n"
+        f"User question: {request.question}\n\n"
+        f"Give specific, actionable answers. Reference file paths and exact fixes."
+    )
+
+    responses = {}
+
+    # Ask Kimi
+    if request.use_kimi:
+        try:
+            from llm_orchestrator.kimi_client import KimiLLMClient
+            kimi = KimiLLMClient()
+            if kimi.api_key:
+                kimi_response = kimi.generate(
+                    prompt=full_prompt,
+                    system_prompt="You are a senior systems engineer analyzing the Grace AI platform. Be specific and actionable.",
+                    temperature=0.3,
+                    max_tokens=2048,
+                )
+                responses["kimi"] = {
+                    "model": "kimi",
+                    "response": kimi_response,
+                    "status": "success",
+                }
+            else:
+                responses["kimi"] = {"model": "kimi", "status": "no_api_key", "response": None}
+        except Exception as e:
+            responses["kimi"] = {"model": "kimi", "status": "error", "error": str(e), "response": None}
+
+    # Ask Opus
+    if request.use_opus:
+        try:
+            from llm_orchestrator.opus_client import OpusLLMClient
+            opus = OpusLLMClient()
+            if opus.api_key:
+                opus_response = opus.generate(
+                    prompt=full_prompt,
+                    system_prompt="You are a senior systems engineer analyzing the Grace AI platform. Be specific and actionable.",
+                    temperature=0.3,
+                    max_tokens=2048,
+                )
+                responses["opus"] = {
+                    "model": "opus",
+                    "response": opus_response,
+                    "status": "success",
+                }
+            else:
+                responses["opus"] = {"model": "opus", "status": "no_api_key", "response": None}
+        except Exception as e:
+            responses["opus"] = {"model": "opus", "status": "error", "error": str(e), "response": None}
+
+    return {
+        "question": request.question,
+        "problem_count": problems_data["total_problems"],
+        "critical_count": problems_data["critical"],
+        "responses": responses,
+        "problem_summary": problem_summary,
+    }
+
+
+@router.post("/ask")
+async def ask_about_system(request: AskAboutProblemsRequest):
+    """
+    Ask Kimi and/or Opus anything about the Grace system.
+
+    This searches the system index for context relevant to your question,
+    then sends it to the models along with your question.
+
+    Example questions:
+    - "How does the consensus engine work?"
+    - "What connects to the memory mesh?"
+    - "Explain the RAG pipeline data flow"
+    - "What models are configured and which are working?"
+    """
+    from system_introspector import search_system
+
+    # Search for relevant context
+    search_results = search_system(request.question)
+
+    context = f"Grace system search results for '{request.question}':\n\n"
+
+    if search_results.get("files"):
+        context += "RELEVANT FILES:\n"
+        for f in search_results["files"][:8]:
+            context += f"  - {f['path']} ({f['category']}): {f.get('docstring', '')[:150]}\n"
+        context += "\n"
+
+    if search_results.get("endpoints"):
+        context += "RELEVANT API ENDPOINTS:\n"
+        for e in search_results["endpoints"][:5]:
+            context += f"  - {e['method']} {e['path']} -> {e['function']} ({e['file']})\n"
+        context += "\n"
+
+    if search_results.get("connectors"):
+        context += "RELEVANT CONNECTORS:\n"
+        for c in search_results["connectors"][:5]:
+            context += f"  - {c['name']} ({c['type']}): {c['file']}\n"
+        context += "\n"
+
+    full_prompt = (
+        f"You are explaining the Grace AI system architecture.\n\n"
+        f"{context}\n"
+        f"User question: {request.question}\n\n"
+        f"Answer based on the system information above. Be specific about file paths and connections."
+    )
+
+    responses = {}
+
+    if request.use_kimi:
+        try:
+            from llm_orchestrator.kimi_client import KimiLLMClient
+            kimi = KimiLLMClient()
+            if kimi.api_key:
+                responses["kimi"] = {
+                    "model": "kimi",
+                    "response": kimi.generate(prompt=full_prompt, temperature=0.3, max_tokens=2048),
+                    "status": "success",
+                }
+            else:
+                responses["kimi"] = {"model": "kimi", "status": "no_api_key", "response": None}
+        except Exception as e:
+            responses["kimi"] = {"model": "kimi", "status": "error", "error": str(e), "response": None}
+
+    if request.use_opus:
+        try:
+            from llm_orchestrator.opus_client import OpusLLMClient
+            opus = OpusLLMClient()
+            if opus.api_key:
+                responses["opus"] = {
+                    "model": "opus",
+                    "response": opus.generate(prompt=full_prompt, temperature=0.3, max_tokens=2048),
+                    "status": "success",
+                }
+            else:
+                responses["opus"] = {"model": "opus", "status": "no_api_key", "response": None}
+        except Exception as e:
+            responses["opus"] = {"model": "opus", "status": "error", "error": str(e), "response": None}
+
+    return {
+        "question": request.question,
+        "search_results_count": search_results.get("total_results", 0),
+        "responses": responses,
+        "context_used": context[:500] + "..." if len(context) > 500 else context,
     }
