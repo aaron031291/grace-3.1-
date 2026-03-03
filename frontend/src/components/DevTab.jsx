@@ -547,6 +547,7 @@ function getCustomActions() {
 function LeftPanel({ onDetail, width = 200 }) {
   const [loading, setLoading] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
+  const [hoveredRect, setHoveredRect] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
   const [fullWindow, setFullWindow] = useState(null);
   const [lastResults, setLastResults] = useState({});
@@ -949,8 +950,8 @@ function LeftPanel({ onDetail, width = 200 }) {
                 onClick={() => run(item)}
                 onDoubleClick={() => { run(item); setFullWindow(item); }}
                 onContextMenu={(e) => handleContextMenu(e, item, section.section)}
-                onMouseEnter={() => setHoveredId(item.id)}
-                onMouseLeave={() => setHoveredId(null)}
+                onMouseEnter={(e) => { setHoveredId(item.id); setHoveredRect(e.currentTarget.getBoundingClientRect()); }}
+                onMouseLeave={() => { setHoveredId(null); setHoveredRect(null); }}
                 disabled={loading[item.id]}
                 style={{
                   display: "flex", alignItems: "center", gap: 6, width: "100%",
@@ -962,8 +963,8 @@ function LeftPanel({ onDetail, width = 200 }) {
                 <span style={{ fontSize: 12 }}>{item.icon}</span>
                 {loading[item.id] ? "Running..." : item.label}
               </button>
-              {hoveredId === item.id && !contextMenu && (
-                <ActionTooltip item={item} leftOffset={width} />
+              {hoveredId === item.id && !contextMenu && hoveredRect && (
+                <ActionTooltip item={item} rect={hoveredRect} />
               )}
             </div>
           ))}
@@ -1025,34 +1026,121 @@ function LeftPanel({ onDetail, width = 200 }) {
    Auto-generated from the action's desc, brain, and action fields.
    ═══════════════════════════════════════════════════════════════════ */
 
-function ActionTooltip({ item, leftOffset = 200 }) {
+function ActionTooltip({ item, rect }) {
   const desc = item.desc || "";
-  const connectsMatch = desc.match(/Connects to:\s*(.+?)\.?$/);
+
+  // Parse "Connects to: ..." from end of desc
+  const connectsMatch = desc.match(/Connects to:\s*(.+?)\.?\s*$/);
   const mainDesc = connectsMatch ? desc.replace(/\s*Connects to:.+$/, "").trim() : desc;
   const connectsTo = connectsMatch ? connectsMatch[1] : "";
 
+  // Extract file paths from connectsTo (anything.py or anything.js pattern)
+  const filePaths = connectsTo.match(/[\w/]+\.\w+/g) || [];
+
+  // Split main desc into sentences for WHAT and WHY
+  const sentences = mainDesc.split(/\.\s+/).filter(Boolean);
+  const whatSentence = sentences[0] || item.label;
+  const whySentence = sentences.length > 1 ? sentences.slice(1).join(". ") : "";
+
+  // Determine the backend route
+  const route = item.brain && item.action
+    ? `POST /brain/${item.brain} → action: "${item.action}"`
+    : item.special
+      ? `Frontend special: "${item.special}"`
+      : "N/A";
+
+  // Determine the brain domain and its backend service
+  const brainName = item.brain ? item.brain.charAt(0).toUpperCase() + item.brain.slice(1) : "System";
+
+  const SERVICE_MAP = {
+    chat: "core/services/chat_service.py",
+    files: "core/services/files_service.py",
+    govern: "core/services/govern_service.py",
+    ai: "api/brain_api_v2.py (AI handlers)",
+    system: "core/services/system_service.py",
+    data: "core/services/data_service.py",
+    tasks: "core/services/tasks_service.py",
+    code: "core/services/code_service.py",
+  };
+  const serviceFile = item.brain ? SERVICE_MAP[item.brain] || "api/brain_api_v2.py" : "";
+
+  // Position: fixed, anchored to the right of the hovered button
+  const top = Math.min(rect.top - 10, window.innerHeight - 400);
+  const left = rect.right + 8;
+
+  const ROW = { display: "flex", gap: 8, padding: "3px 0", borderBottom: "1px solid #151530" };
+  const LABEL = { width: 52, color: "#e94560", fontWeight: 800, fontSize: 9, textTransform: "uppercase", flexShrink: 0, paddingTop: 1 };
+  const VALUE = { flex: 1, fontSize: 10, color: "#bbb", lineHeight: 1.5 };
+
   return (
     <div style={{
-      position: "absolute", left: leftOffset - 5, top: -4, width: 310, padding: 10,
-      background: "#101028", border: "1px solid #2a2a4e", borderRadius: 8,
-      fontSize: 10, color: "#bbb", lineHeight: 1.5, zIndex: 100,
-      boxShadow: "0 6px 20px rgba(0,0,0,0.7)", pointerEvents: "none",
+      position: "fixed", left, top, width: 360, padding: 12,
+      background: "#0c0c24", border: "1px solid #2a2a4e", borderRadius: 10,
+      fontSize: 10, color: "#bbb", lineHeight: 1.5, zIndex: 9999,
+      boxShadow: "0 8px 32px rgba(0,0,0,0.8)", pointerEvents: "none",
+      maxHeight: 420, overflow: "auto",
     }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: "#e94560", marginBottom: 6 }}>
-        {item.icon} {item.label}
+      {/* Header */}
+      <div style={{ fontSize: 13, fontWeight: 800, color: "#e94560", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
+        <span style={{ fontSize: 16 }}>{item.icon}</span> {item.label}
       </div>
-      <div style={{ marginBottom: 8, color: "#999" }}>{mainDesc}</div>
-      <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", gap: "3px 8px", fontSize: 9 }}>
-        <span style={{ color: "#e94560", fontWeight: 700 }}>WHAT</span>
-        <span>{mainDesc.split(".")[0] || item.label}</span>
-        <span style={{ color: "#e94560", fontWeight: 700 }}>WHERE</span>
-        <span>{connectsTo || `${item.brain || "system"}/${item.action || item.special || "?"}`}</span>
-        <span style={{ color: "#e94560", fontWeight: 700 }}>WHO</span>
-        <span>{item.brain ? `${item.brain.charAt(0).toUpperCase() + item.brain.slice(1)} Brain` : "System"}</span>
-        <span style={{ color: "#e94560", fontWeight: 700 }}>WHY</span>
-        <span>{mainDesc.split(".").slice(1, 2).join(".").trim() || "System operation"}</span>
-        <span style={{ color: "#e94560", fontWeight: 700 }}>WHEN</span>
-        <span>{item.special ? "User-triggered" : "On-demand or automated"}</span>
+      <div style={{ fontSize: 10, color: "#777", marginBottom: 10, lineHeight: 1.5 }}>
+        {mainDesc}
+      </div>
+
+      {/* Structured fields */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={ROW}>
+          <span style={LABEL}>What</span>
+          <span style={VALUE}>{whatSentence}</span>
+        </div>
+        <div style={ROW}>
+          <span style={LABEL}>Why</span>
+          <span style={VALUE}>{whySentence || "Core system operation for monitoring, control, or automation"}</span>
+        </div>
+        <div style={ROW}>
+          <span style={LABEL}>Who</span>
+          <span style={VALUE}>{brainName} Brain{item.brain ? ` (1 of 8 domain brains)` : ""}</span>
+        </div>
+        <div style={ROW}>
+          <span style={LABEL}>When</span>
+          <span style={VALUE}>{item.special ? "Manually triggered by user click or input" : "On-demand, or via Ouroboros autonomous loop (every 30s)"}</span>
+        </div>
+        <div style={ROW}>
+          <span style={LABEL}>How</span>
+          <span style={VALUE}>{route}</span>
+        </div>
+        <div style={ROW}>
+          <span style={LABEL}>Where</span>
+          <span style={VALUE}>
+            {serviceFile && <span style={{ color: "#4caf50", fontFamily: "monospace" }}>{serviceFile}</span>}
+            {connectsTo && <><br /><span style={{ color: "#888" }}>Chain: {connectsTo}</span></>}
+          </span>
+        </div>
+        {filePaths.length > 0 && (
+          <div style={ROW}>
+            <span style={LABEL}>Files</span>
+            <span style={VALUE}>
+              {filePaths.map((f, i) => (
+                <span key={i} style={{ display: "inline-block", marginRight: 4, marginBottom: 2, padding: "1px 5px", background: "#151530", borderRadius: 3, fontFamily: "monospace", fontSize: 9 }}>{f}</span>
+              ))}
+            </span>
+          </div>
+        )}
+        <div style={{ ...ROW, borderBottom: "none" }}>
+          <span style={LABEL}>Config</span>
+          <span style={VALUE}>
+            {item.brain === "system" ? "Settings via .env — DATABASE_TYPE, OLLAMA_URL, KIMI_API_KEY" :
+             item.brain === "ai" ? "Model config: OLLAMA_MODEL_CODE, KIMI_MODEL, OPUS_MODEL" :
+             item.brain === "govern" ? "Rules in data/governance_rules/, coding pipeline in core/coding_pipeline.py" :
+             item.brain === "files" ? "Knowledge base at KNOWLEDGE_BASE_PATH, Qdrant for vectors" :
+             item.brain === "code" ? "Project folders at data/projects/, hot reload via importlib" :
+             item.brain === "tasks" ? "Scheduled tasks in data/scheduled_tasks.json, TimeSense for urgency" :
+             item.brain === "data" ? "Whitelist sources in data/whitelist/, flash cache in-memory" :
+             item.brain === "chat" ? "Chat history in DB (chats + chat_history tables), RAG via Qdrant" :
+             "Environment variables in backend/.env"}
+          </span>
+        </div>
       </div>
     </div>
   );
