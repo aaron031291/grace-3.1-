@@ -357,6 +357,14 @@ def _system() -> dict:
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
         "mine_episodes": lambda p: _mine_episodes(),
+        "worker_pool":  lambda p: _worker_pool_status(),
+        "llm_cache":    lambda p: _llm_cache_stats(),
+        "clear_llm_cache": lambda p: _clear_llm_cache(),
+        "api_costs":    lambda p: _api_cost_summary(),
+        "memory_pressure": lambda p: _memory_pressure(),
+        "snapshot_stats": lambda p: _snapshot_stats(),
+        "db_info":      lambda p: _db_info(),
+        "user_rate_limit": lambda p: _user_rate_check(p),
     }
 
 
@@ -1031,6 +1039,59 @@ def _mine_genesis_keys(p):
 def _mine_episodes():
     from core.intelligence import EpisodicMiner
     return EpisodicMiner().mine_episodes()
+
+
+def _worker_pool_status():
+    from core.worker_pool import pool_status
+    return pool_status()
+
+
+def _llm_cache_stats():
+    from core.security import get_llm_cache
+    return get_llm_cache().stats()
+
+
+def _clear_llm_cache():
+    from core.security import get_llm_cache
+    get_llm_cache().clear()
+    return {"cleared": True}
+
+
+def _api_cost_summary():
+    from core.security import get_cost_tracker
+    return get_cost_tracker().get_summary()
+
+
+def _memory_pressure():
+    from core.memory_injector import get_memory_pressure
+    return get_memory_pressure()
+
+
+def _snapshot_stats():
+    from core.memory_injector import get_snapshot_stats
+    return get_snapshot_stats()
+
+
+def _db_info():
+    try:
+        from database.connection import DatabaseConnection
+        from core.db_compat import get_table_stats, get_db_size_mb
+        engine = DatabaseConnection.get_engine()
+        return {
+            "dialect": engine.dialect.name,
+            "size_mb": get_db_size_mb(engine),
+            "tables": get_table_stats(engine),
+            "healthy": DatabaseConnection.health_check(),
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _user_rate_check(p):
+    from core.security import check_user_rate_limit
+    user_id = p.get("user_id", "anonymous")
+    tier = p.get("tier", "default")
+    return check_user_rate_limit(user_id, tier)
 
 
 def _run_pipeline(p):
