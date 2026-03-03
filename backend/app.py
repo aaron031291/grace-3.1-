@@ -466,6 +466,15 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Auto-probe: {e}")
 
+    # ==================== Worker Pool Init ====================
+    try:
+        from core.worker_pool import get_io_pool, get_cpu_pool
+        get_io_pool()
+        get_cpu_pool()
+        print("[OK] Worker pools initialized (IO + CPU)")
+    except Exception as e:
+        print(f"[WARN] Worker pools: {e}")
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
@@ -475,6 +484,12 @@ async def lifespan(app: FastAPI):
     
     # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
+    try:
+        from core.worker_pool import shutdown_all
+        shutdown_all(wait_for=False)
+        print("[OK] Worker pools shut down")
+    except Exception:
+        pass
     if _diag_engine:
         try:
             _diag_engine.stop()
@@ -1616,11 +1631,13 @@ async def runtime_hot_reload():
 
 @app.get("/api/runtime/security", tags=["Runtime"])
 async def runtime_security():
-    """Rate limit status and security configuration."""
-    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE
+    """Rate limit status, cache stats, API cost tracking, and security config."""
+    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE, get_llm_cache, get_cost_tracker
     return {
         "rate_limits": get_rate_limit_status(),
         "max_request_size_mb": round(MAX_REQUEST_SIZE / 1048576, 1),
+        "llm_cache": get_llm_cache().stats(),
+        "api_costs": get_cost_tracker().get_summary(),
     }
 
 
@@ -1640,6 +1657,13 @@ async def runtime_resilience():
         "degradation_level": GracefulDegradation.get_level(),
         "circuit_breakers": all_breaker_statuses(),
     }
+
+
+@app.get("/api/runtime/workers", tags=["Runtime"])
+async def runtime_workers():
+    """Worker pool status: active tasks, latency, queue depth."""
+    from core.worker_pool import pool_status
+    return pool_status()
 
 
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
