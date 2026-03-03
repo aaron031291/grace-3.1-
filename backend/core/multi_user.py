@@ -119,7 +119,7 @@ def get_project_activity(project_id: str, hours: int = 24) -> list:
 # ═══════════════════════════════════════════════════════════════════
 
 def generate_daily_summary(project_id: str = "", hours: int = 24) -> dict:
-    """Generate daily summary: per-person + team."""
+    """Generate daily summary: per-person + team + Genesis key activity."""
     cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
 
     with _activity_lock:
@@ -136,29 +136,66 @@ def generate_daily_summary(project_id: str = "", hours: int = 24) -> dict:
 
     individual = {}
     for uid, acts in by_user.items():
+        action_counts = defaultdict(int)
+        for a in acts:
+            action_counts[a["action"]] += 1
         individual[uid] = {
             "total_actions": len(acts),
-            "actions": defaultdict(int),
-            "projects": list(set(a["project_id"] for a in acts if a["project_id"])),
+            "action_breakdown": dict(action_counts),
+            "projects_touched": list(set(a["project_id"] for a in acts if a["project_id"])),
+            "first_activity": acts[0]["ts"] if acts else None,
+            "last_activity": acts[-1]["ts"] if acts else None,
         }
-        for a in acts:
-            individual[uid]["actions"][a["action"]] += 1
-        individual[uid]["actions"] = dict(individual[uid]["actions"])
 
     # Team summary
+    action_dist = defaultdict(int)
+    for a in activities:
+        action_dist[a["action"]] += 1
+
     team = {
         "total_actions": len(activities),
         "total_users": len(by_user),
+        "users": list(by_user.keys()),
         "projects_touched": list(set(a["project_id"] for a in activities if a["project_id"])),
-        "action_distribution": dict(defaultdict(int, {a["action"]: 0 for a in activities})),
+        "action_distribution": dict(action_dist),
+        "busiest_user": max(by_user, key=lambda u: len(by_user[u])) if by_user else None,
     }
-    for a in activities:
-        team["action_distribution"][a["action"]] = team["action_distribution"].get(a["action"], 0) + 1
+
+    # Enrich with Genesis key stats
+    genesis_stats = {}
+    try:
+        from core.intelligence import GenesisKeyMiner
+        miner = GenesisKeyMiner()
+        patterns = miner.mine_patterns(hours=hours, limit=500)
+        genesis_stats = {
+            "total_keys": patterns.get("keys_analyzed", 0),
+            "error_clusters": len(patterns.get("error_clusters", [])),
+            "repeated_failures": len(patterns.get("repeated_failures", [])),
+        }
+    except Exception:
+        pass
+
+    # Generate LLM summary title
+    title = f"Daily Report: {team['total_users']} users, {team['total_actions']} actions"
+    try:
+        from api.brain_api_v2 import call_brain
+        r = call_brain("ai", "fast", {
+            "prompt": f"Write a 1-sentence summary of this team activity: {team['total_users']} users did {team['total_actions']} actions across {len(team['projects_touched'])} projects. Top action: {max(action_dist, key=action_dist.get) if action_dist else 'none'}.",
+            "models": ["kimi"],
+        })
+        if r.get("ok"):
+            resp = r["data"].get("individual_responses", [{}])[0].get("response", "")
+            if resp and len(resp) < 200:
+                title = resp.strip()
+    except Exception:
+        pass
 
     return {
+        "title": title,
         "period_hours": hours,
         "individual": individual,
         "team": team,
+        "genesis": genesis_stats,
         "generated_at": datetime.utcnow().isoformat(),
     }
 

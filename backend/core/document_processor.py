@@ -134,6 +134,10 @@ def _process_single(job: DocumentJob) -> dict:
                 chunk_path = f"governance_rules/{job.category}/{job.file_name}.chunk_{i}.txt"
                 from core.workspace_bridge import write_file
                 write_file(chunk_path, chunk, source="document_processor")
+
+                # Librarian indexes every chunk
+                from core.librarian import ingest_document
+                ingest_document(chunk_path, chunk, job.workspace, "document_processor")
                 stored += 1
 
                 # Lightweight Genesis key per chunk (fast, no DB)

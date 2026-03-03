@@ -88,6 +88,13 @@ def write_file(path: str, content: str, source: str = "unknown") -> dict:
     if workspace:
         _update_context(workspace, path, content)
 
+    # Librarian — auto-categorize, tag, version every file write
+    try:
+        from core.librarian import ingest_document
+        ingest_document(path, content, workspace or "", source)
+    except Exception:
+        pass
+
     return {"saved": True, "path": path, "genesis_key": gk_id, "hash": content_hash, "source": source}
 
 
