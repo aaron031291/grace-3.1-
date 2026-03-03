@@ -15,7 +15,7 @@ from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
-MAX_CONTEXT_CHARS = 8000
+MAX_CONTEXT_CHARS = 12000
 
 
 def build_llm_context(task: str = "", project: str = "", session_id: str = "") -> str:
@@ -72,6 +72,31 @@ def build_llm_context(task: str = "", project: str = "", session_id: str = "") -
     mirror = _get_mirror_observation()
     if mirror:
         parts.append(f"[SELF-OBSERVATION]\n{mirror}")
+
+    # 9. Recent Genesis keys (actual records, not just count)
+    recent_keys = _get_recent_genesis_keys()
+    if recent_keys:
+        parts.append(f"[RECENT GENESIS KEYS]\n{recent_keys}")
+
+    # 10. Source code awareness (component registry)
+    code_awareness = _get_code_awareness()
+    if code_awareness:
+        parts.append(f"[GRACE SOURCE CODE MAP]\n{code_awareness}")
+
+    # 11. Database table stats
+    db_stats = _get_database_stats()
+    if db_stats:
+        parts.append(f"[DATABASE STATE]\n{db_stats}")
+
+    # 12. Chat history context
+    chat_ctx = _get_chat_context()
+    if chat_ctx:
+        parts.append(f"[RECENT CHAT CONTEXT]\n{chat_ctx}")
+
+    # 13. Component health
+    health = _get_component_health()
+    if health:
+        parts.append(f"[COMPONENT HEALTH]\n{health}")
 
     if not parts:
         return ""
@@ -193,6 +218,104 @@ def _get_hebbian_context() -> str:
             f"  {s['source']}→{s['target']}: weight={s['weight']:.2f} ({s['calls']} calls)"
             for s in strongest
         )
+    except Exception:
+        return ""
+
+
+def _get_recent_genesis_keys() -> str:
+    """Actual Genesis key records — not just a count."""
+    try:
+        from database.session import session_scope
+        from models.genesis_key_models import GenesisKey
+        with session_scope() as s:
+            keys = s.query(GenesisKey).order_by(
+                GenesisKey.when_timestamp.desc()).limit(15).all()
+            if not keys:
+                return ""
+            lines = []
+            for k in keys:
+                kt = k.key_type.value if hasattr(k.key_type, 'value') else str(k.key_type)
+                lines.append(
+                    f"  [{kt}] {k.what_description[:80]} "
+                    f"(who={k.who_actor}, when={k.when_timestamp.strftime('%H:%M') if k.when_timestamp else '?'}"
+                    f"{', ERROR' if k.is_error else ''})"
+                )
+            return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_code_awareness() -> str:
+    """Source code map — what files exist and what they do."""
+    try:
+        from core.semantic_search import COMPONENTS
+        lines = []
+        for cid, info in list(COMPONENTS.items())[:15]:
+            lines.append(f"  {cid}: {info['file']} — {info['purpose'][:60]}")
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_database_stats() -> str:
+    """Actual database table contents."""
+    try:
+        import sqlite3
+        from pathlib import Path
+        db_path = Path(__file__).parent.parent / "data" / "grace.db"
+        if not db_path.exists():
+            return ""
+        conn = sqlite3.connect(str(db_path), timeout=3)
+        tables = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+        lines = []
+        for t in tables:
+            name = t[0]
+            count = conn.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
+            if count > 0:
+                lines.append(f"  {name}: {count:,} rows")
+        conn.close()
+        return "\n".join(lines) if lines else ""
+    except Exception:
+        return ""
+
+
+def _get_chat_context() -> str:
+    """Recent chat messages for continuity."""
+    try:
+        from database.session import session_scope
+        from sqlalchemy import text
+        with session_scope() as s:
+            rows = s.execute(text(
+                "SELECT role, content FROM chat_history "
+                "ORDER BY id DESC LIMIT 5"
+            )).fetchall()
+            if not rows:
+                return ""
+            lines = []
+            for r in reversed(rows):
+                role = r[0] if r[0] else "?"
+                content = (r[1] or "")[:100]
+                lines.append(f"  [{role}] {content}")
+            return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_component_health() -> str:
+    """Current component health status."""
+    try:
+        from core.component_validator import get_all_report_cards
+        cards = get_all_report_cards()
+        if not cards.get("report_cards"):
+            return ""
+        lines = []
+        for cid, card in list(cards["report_cards"].items())[:10]:
+            status = card.get("status", "unknown")
+            purpose = card.get("purpose", "")[:40]
+            icon = "✅" if status == "healthy" else "⚠️" if status == "not_validated" else "❌"
+            lines.append(f"  {icon} {cid}: {status} — {purpose}")
+        return "\n".join(lines)
     except Exception:
         return ""
 
