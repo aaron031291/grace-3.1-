@@ -1,24 +1,28 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import "./App.css";
 import { healthCheck, brainCall } from "./api/brain-client";
 
-// Page components
-import ChatTab from "./components/ChatTab";
-import FoldersTab from "./components/FoldersTab";
-import DocsTab from "./components/DocsTab";
-import GovernanceTab from "./components/GovernanceTab";
-import CodebaseTab from "./components/CodebaseTab";
-import TasksTab from "./components/TasksTab";
-import DevTab from "./components/DevTab";
-import WhitelistTab from "./components/WhitelistTab";
-import OracleTab from "./components/OracleTab";
-import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
-import SystemHealthTab from "./components/SystemHealthTab";
-import LearningHealingTab from "./components/LearningHealingTab";
-import LabTab from "./components/LabTab";
-import APIsTab from "./components/APIsTab";
-import PersistentVoicePanel from "./components/PersistentVoicePanel";
-import ActivityFeed from "./components/ActivityFeed";
+// Lazy-loaded page components (only loaded when the tab is opened)
+const ChatTab = lazy(() => import("./components/ChatTab"));
+const FoldersTab = lazy(() => import("./components/FoldersTab"));
+const DocsTab = lazy(() => import("./components/DocsTab"));
+const GovernanceTab = lazy(() => import("./components/GovernanceTab"));
+const CodebaseTab = lazy(() => import("./components/CodebaseTab"));
+const TasksTab = lazy(() => import("./components/TasksTab"));
+const DevTab = lazy(() => import("./components/DevTab"));
+const WhitelistTab = lazy(() => import("./components/WhitelistTab"));
+const OracleTab = lazy(() => import("./components/OracleTab"));
+const BusinessIntelligenceTab = lazy(() => import("./components/BusinessIntelligenceTab"));
+const SystemHealthTab = lazy(() => import("./components/SystemHealthTab"));
+const LearningHealingTab = lazy(() => import("./components/LearningHealingTab"));
+const LabTab = lazy(() => import("./components/LabTab"));
+const APIsTab = lazy(() => import("./components/APIsTab"));
+const PersistentVoicePanel = lazy(() => import("./components/PersistentVoicePanel"));
+const ActivityFeed = lazy(() => import("./components/ActivityFeed"));
+
+function TabLoader() {
+  return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%",color:"#888"}}>Loading...</div>;
+}
 
 // Sidebar sections
 const WORKSPACE = [
@@ -181,6 +185,7 @@ function App() {
 
         {/* Main Content */}
         <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <Suspense fallback={<TabLoader />}>
           {view === "home" && <HomePage onNavigate={setView} />}
           {view === "chat" && <ChatTab />}
           {view === "folders" && <FoldersTab />}
@@ -196,6 +201,7 @@ function App() {
           {view === "projects" && <TasksTab />}
           {view === "lab" && <LabTab />}
           {view === "apis" && <APIsTab />}
+          </Suspense>
         </div>
       </div>
 
@@ -203,8 +209,10 @@ function App() {
       <InputBar model={model} onNavigate={setView} />
 
       {/* ── Floating ──────────────────────────────────────────── */}
-      <PersistentVoicePanel onSendMessage={handleVoice} lastResponse={voiceResponse} isProcessing={voiceProcessing} />
-      <ActivityFeed />
+      <Suspense fallback={null}>
+        <PersistentVoicePanel onSendMessage={handleVoice} lastResponse={voiceResponse} isProcessing={voiceProcessing} />
+        <ActivityFeed />
+      </Suspense>
 
       {/* ── Command Palette ───────────────────────────────────── */}
       {cmdOpen && <CommandPalette onClose={() => setCmdOpen(false)} onNavigate={(v) => { setView(v); setCmdOpen(false); }} />}

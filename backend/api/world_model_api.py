@@ -210,33 +210,73 @@ async def world_model_chat(request: Request):
         except Exception:
             pass
 
-    # Send to LLM with full context
+    # Send to LLM with full context — try cloud models first, fall back to local Ollama
+    system_prompt = (
+        "You are Grace AI's World Model. You have complete visibility into the system's "
+        "health, components, trust scores, brain actions, database state, and cognitive systems. "
+        "Answer questions about the system accurately and concisely using the provided data."
+    )
+    full_prompt = (
+        f"You are Grace's World Model — you know everything about the system's internal state.\n"
+        f"Answer this question using the system data provided below.\n\n"
+        f"{''.join(context_parts)}\n\n"
+        f"Question: {query}"
+    )
+
+    response = None
+
+    # Try cloud models first (Kimi, Opus, Qwen)
     try:
         from core.independent_models import run_with_failover
-        full_prompt = (
-            f"You are Grace's World Model — you know everything about the system's internal state.\n"
-            f"Answer this question using the system data provided below.\n\n"
-            f"{''.join(context_parts)}\n\n"
-            f"Question: {query}"
-        )
         result = run_with_failover(
             full_prompt,
             preferred_order=["kimi", "opus", "qwen"],
-            system_prompt=(
-                "You are Grace AI's World Model. You have complete visibility into the system's "
-                "health, components, trust scores, brain actions, database state, and cognitive systems. "
-                "Answer questions about the system accurately and concisely using the provided data."
-            ),
+            system_prompt=system_prompt,
         )
-        response = result.get("response", "Unable to generate response.")
+        if result.get("response"):
+            response = result["response"]
     except Exception as e:
+        logger.warning(f"Cloud models failed: {e}")
+
+    # Fall back to local Ollama if cloud models didn't work
+    if not response:
+        try:
+            from llm_orchestrator.factory import get_llm_client
+            client = get_llm_client()
+            if client.is_running():
+                response = client.chat(
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": full_prompt},
+                    ],
+                    stream=False,
+                    temperature=0.5,
+                    max_tokens=2048,
+                )
+        except Exception as e:
+            logger.warning(f"Ollama fallback failed: {e}")
+
+    # Fall back to deterministic search results if no LLM available
+    if not response:
         if semantic_results:
-            response = "Here's what I found:\n\n" + "\n".join(
-                f"- **{r.get('id')}**: {r.get('purpose')} (at `{r.get('file')}`)"
+            response = "No LLM available, but here's what I found in the system:\n\n" + "\n".join(
+                f"- **{r.get('id', r.get('component_id', '?'))}**: {r.get('purpose', '?')} (at `{r.get('file', '?')}`)"
                 for r in semantic_results[:5]
             )
         else:
-            response = f"World model query failed: {e}"
+            # Last resort: use system introspector search
+            try:
+                from system_introspector import search_system
+                search_results = search_system(query)
+                if search_results.get("files"):
+                    response = "No LLM available. System search results:\n\n" + "\n".join(
+                        f"- `{f['path']}` ({f['category']}): {f.get('docstring', '')[:150]}"
+                        for f in search_results["files"][:8]
+                    )
+                else:
+                    response = "No LLM is available (set KIMI_API_KEY, OPUS_API_KEY in .env, or start Ollama). Could not answer your question."
+            except Exception:
+                response = "No LLM is available. Start Ollama (`ollama serve`) or set KIMI_API_KEY / OPUS_API_KEY in your .env file."
 
     return {
         "response": response,
