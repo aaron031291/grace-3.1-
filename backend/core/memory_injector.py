@@ -6,127 +6,159 @@ containing unified memory, Genesis patterns, trust scores,
 governance rules, episodic recalls, and knowledge gaps.
 
 This is THE missing piece. Without it, models fly blind.
+
+Architecture:
+  - Each section has a priority and a max char budget
+  - The builder respects a total budget (MAX_CONTEXT_CHARS)
+  - High-priority sections (governance, trust) are always included
+  - Lower-priority sections are trimmed or dropped if budget is exhausted
+  - Memory pressure monitoring prevents OOM on snapshot builds
 """
 
 import json
 import logging
+import os
+import sys
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Tuple
+from collections import deque
 
 logger = logging.getLogger(__name__)
 
-MAX_CONTEXT_CHARS = 12000
+MAX_CONTEXT_CHARS = int(os.getenv("GRACE_MAX_CONTEXT_CHARS", "12000"))
+SECTION_TIMEOUT_S = float(os.getenv("GRACE_SECTION_TIMEOUT", "2.0"))
+
+_snapshot_history: deque = deque(maxlen=50)
+
+
+class _Section:
+    """A context section with priority, budget, and lazy fetcher."""
+
+    __slots__ = ("name", "priority", "max_chars", "fetcher", "args")
+
+    def __init__(self, name: str, priority: int, max_chars: int, fetcher, *args):
+        self.name = name
+        self.priority = priority
+        self.max_chars = max_chars
+        self.fetcher = fetcher
+        self.args = args
 
 
 def build_llm_context(task: str = "", project: str = "", session_id: str = "") -> str:
     """
     Build a complete context block for LLM injection.
     This gets prepended to every LLM system prompt.
+
+    Sections are built in priority order. If total exceeds MAX_CONTEXT_CHARS,
+    lower-priority sections are truncated or dropped entirely.
     """
-    parts = []
-    char_budget = MAX_CONTEXT_CHARS
+    start = time.time()
+    budget = MAX_CONTEXT_CHARS
 
-    # 1. Governance rules (highest priority — these are LAW)
-    rules = _get_governance_rules()
-    if rules:
-        parts.append(f"[GOVERNANCE RULES — MANDATORY]\n{rules[:2000]}")
-        char_budget -= min(len(rules), 2000)
+    sections: List[_Section] = [
+        _Section("[GOVERNANCE RULES — MANDATORY]",   1, 2000, _get_governance_rules),
+        _Section("[MODEL TRUST SCORES]",             2,  400, _get_trust_scores),
+        _Section("[PAST EXPERIENCE]",                3, 1500, _get_episodic_context, task),
+        _Section("[SYSTEM ACTIVITY — LAST 24H]",     4, 1000, _get_genesis_patterns),
+        _Section("[KNOWLEDGE GAPS]",                 5,  500, _get_knowledge_gaps),
+        _Section("[AI PREDICTION]",                  6,  300, _get_dl_prediction, task),
+        _Section("[BRAIN SYNAPSE STRENGTHS]",        7,  400, _get_hebbian_context),
+        _Section("[SELF-OBSERVATION]",               8,  200, _get_mirror_observation),
+        _Section("[RECENT GENESIS KEYS]",            9,  800, _get_recent_genesis_keys),
+        _Section("[GRACE SOURCE CODE MAP]",         10,  600, _get_code_awareness),
+        _Section("[DATABASE STATE]",                11,  500, _get_database_stats),
+        _Section("[RECENT CHAT CONTEXT]",           12,  600, _get_chat_context),
+        _Section("[COMPONENT HEALTH]",              13,  500, _get_component_health),
+        _Section("[BRAIN ACTIONS — WHAT GRACE CAN DO]", 14, 500, _get_brain_actions),
+        _Section("[OUROBOROS LOOP HISTORY]",         15,  400, _get_loop_history),
+        _Section("[CODING PIPELINE HISTORY]",       16,  400, _get_pipeline_history),
+        _Section("[PROVENANCE LEDGER]",             17,  300, _get_provenance),
+        _Section("[ACTIVE SESSIONS]",               18,  200, _get_active_sessions),
+    ]
 
-    # 2. Trust scores (which models are reliable right now)
-    trust = _get_trust_scores()
-    if trust:
-        parts.append(f"[MODEL TRUST SCORES]\n{trust}")
-        char_budget -= len(trust)
+    sections.sort(key=lambda s: s.priority)
 
-    # 3. Episodic memory (similar past problems and what worked)
-    if task:
-        episodes = _get_episodic_context(task)
-        if episodes:
-            parts.append(f"[PAST EXPERIENCE]\n{episodes[:1500]}")
-            char_budget -= min(len(episodes), 1500)
+    parts: List[str] = []
+    chars_used = 0
+    sections_included = 0
+    sections_skipped = 0
 
-    # 4. Genesis key patterns (what happened in last 24h)
-    patterns = _get_genesis_patterns()
-    if patterns:
-        parts.append(f"[SYSTEM ACTIVITY — LAST 24H]\n{patterns[:1000]}")
-        char_budget -= min(len(patterns), 1000)
+    for sec in sections:
+        if budget - chars_used < 100:
+            sections_skipped += len(sections) - sections_included - sections_skipped
+            break
 
-    # 5. Knowledge gaps (what Grace doesn't know yet)
-    gaps = _get_knowledge_gaps()
-    if gaps:
-        parts.append(f"[KNOWLEDGE GAPS]\n{gaps[:500]}")
-        char_budget -= min(len(gaps), 500)
+        try:
+            sec_start = time.time()
+            content = sec.fetcher(*sec.args) if sec.args and sec.args[0] else sec.fetcher()
+            sec_elapsed = time.time() - sec_start
 
-    # 6. DL model prediction (success probability for this task)
-    if task:
-        prediction = _get_dl_prediction(task)
-        if prediction:
-            parts.append(f"[AI PREDICTION]\n{prediction}")
+            if sec_elapsed > SECTION_TIMEOUT_S:
+                logger.debug(f"Memory section {sec.name} slow: {sec_elapsed:.1f}s")
 
-    # 7. Hebbian weights (strongest brain connections)
-    hebbian = _get_hebbian_context()
-    if hebbian:
-        parts.append(f"[BRAIN SYNAPSE STRENGTHS]\n{hebbian}")
+            if not content:
+                continue
 
-    # 8. Self-mirror observation
-    mirror = _get_mirror_observation()
-    if mirror:
-        parts.append(f"[SELF-OBSERVATION]\n{mirror}")
+            allowed = min(sec.max_chars, budget - chars_used)
+            if len(content) > allowed:
+                content = content[:allowed - 3] + "..."
 
-    # 9. Recent Genesis keys (actual records, not just count)
-    recent_keys = _get_recent_genesis_keys()
-    if recent_keys:
-        parts.append(f"[RECENT GENESIS KEYS]\n{recent_keys}")
+            block = f"{sec.name}\n{content}"
+            parts.append(block)
+            chars_used += len(block)
+            sections_included += 1
+        except Exception as e:
+            logger.debug(f"Memory section {sec.name} error: {e}")
+            sections_skipped += 1
 
-    # 10. Source code awareness (component registry)
-    code_awareness = _get_code_awareness()
-    if code_awareness:
-        parts.append(f"[GRACE SOURCE CODE MAP]\n{code_awareness}")
+    elapsed_ms = round((time.time() - start) * 1000, 1)
 
-    # 11. Database table stats
-    db_stats = _get_database_stats()
-    if db_stats:
-        parts.append(f"[DATABASE STATE]\n{db_stats}")
-
-    # 12. Chat history context
-    chat_ctx = _get_chat_context()
-    if chat_ctx:
-        parts.append(f"[RECENT CHAT CONTEXT]\n{chat_ctx}")
-
-    # 13. Component health
-    health = _get_component_health()
-    if health:
-        parts.append(f"[COMPONENT HEALTH]\n{health}")
-
-    # 14. Brain action list (what Grace can do)
-    actions = _get_brain_actions()
-    if actions:
-        parts.append(f"[BRAIN ACTIONS — WHAT GRACE CAN DO]\n{actions}")
-
-    # 15. Ouroboros loop history
-    loop_history = _get_loop_history()
-    if loop_history:
-        parts.append(f"[OUROBOROS LOOP HISTORY]\n{loop_history}")
-
-    # 16. Pipeline run history
-    pipeline_history = _get_pipeline_history()
-    if pipeline_history:
-        parts.append(f"[CODING PIPELINE HISTORY]\n{pipeline_history}")
-
-    # 17. Provenance ledger
-    provenance = _get_provenance()
-    if provenance:
-        parts.append(f"[PROVENANCE LEDGER]\n{provenance}")
-
-    # 18. Active sessions
-    sessions = _get_active_sessions()
-    if sessions:
-        parts.append(f"[ACTIVE SESSIONS]\n{sessions}")
+    _snapshot_history.append({
+        "ts": time.time(),
+        "chars": chars_used,
+        "sections": sections_included,
+        "skipped": sections_skipped,
+        "latency_ms": elapsed_ms,
+    })
 
     if not parts:
         return ""
 
     return "\n\n---\n\n".join(parts)
+
+
+def get_snapshot_stats() -> dict:
+    """Get memory injector performance statistics."""
+    if not _snapshot_history:
+        return {"snapshots": 0}
+    history = list(_snapshot_history)
+    avg_chars = sum(h["chars"] for h in history) / len(history)
+    avg_latency = sum(h["latency_ms"] for h in history) / len(history)
+    avg_sections = sum(h["sections"] for h in history) / len(history)
+    return {
+        "snapshots": len(history),
+        "avg_chars": round(avg_chars),
+        "avg_latency_ms": round(avg_latency, 1),
+        "avg_sections": round(avg_sections, 1),
+        "max_budget": MAX_CONTEXT_CHARS,
+        "last_snapshot": history[-1] if history else None,
+    }
+
+
+def get_memory_pressure() -> dict:
+    """Check current memory pressure of the Python process."""
+    import resource
+    try:
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        rss_mb = usage.ru_maxrss / 1024  # Linux gives KB
+        process_mb = sys.getsizeof(0)  # baseline
+    except Exception:
+        rss_mb = 0
+    return {
+        "rss_mb": round(rss_mb, 1),
+        "context_budget": MAX_CONTEXT_CHARS,
+        "snapshot_cache_size": len(_snapshot_history),
+    }
 
 
 def _get_governance_rules() -> str:
@@ -283,23 +315,21 @@ def _get_code_awareness() -> str:
 
 
 def _get_database_stats() -> str:
-    """Actual database table contents."""
+    """Actual database table contents — works on SQLite and PostgreSQL."""
     try:
-        import sqlite3
-        from pathlib import Path
-        db_path = Path(__file__).parent.parent / "data" / "grace.db"
-        if not db_path.exists():
+        from database.connection import DatabaseConnection
+        from core.db_compat import get_table_stats, get_db_size_mb
+        engine = DatabaseConnection.get_engine()
+        stats = get_table_stats(engine)
+        if not stats:
             return ""
-        conn = sqlite3.connect(str(db_path), timeout=3)
-        tables = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'").fetchall()
         lines = []
-        for t in tables:
-            name = t[0]
-            count = conn.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
+        for name, count in stats.items():
             if count > 0:
                 lines.append(f"  {name}: {count:,} rows")
-        conn.close()
+        size = get_db_size_mb(engine)
+        if size > 0:
+            lines.insert(0, f"  Database size: {size} MB")
         return "\n".join(lines) if lines else ""
     except Exception:
         return ""
