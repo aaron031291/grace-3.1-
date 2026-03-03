@@ -98,6 +98,18 @@ try:
     _optional_routers.append(("runtime_triggers", runtime_triggers_router))
 except Exception as e:
     print(f"[WARN] Runtime triggers router not loaded: {e}")
+
+try:
+    from api.retrieve import router as retrieve_router
+    _optional_routers.append(("retrieve", retrieve_router))
+except Exception as e:
+    print(f"[WARN] Retrieve router not loaded: {e}")
+
+try:
+    from api.file_ingestion import router as file_ingestion_router
+    _optional_routers.append(("file_ingestion", file_ingestion_router))
+except Exception as e:
+    print(f"[WARN] File ingestion router not loaded: {e}")
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -151,13 +163,6 @@ class RawChatResponse(BaseModel):
     confidence: Optional[float] = Field(None, description="Confidence score (0.0-1.0)")
     knowledge_gaps: Optional[List[dict]] = Field(None, description="Knowledge gaps identified (Tier 3)")
     warnings: Optional[List[str]] = Field(None, description="Warnings about response quality")
-
-
-class HealthResponse(BaseModel):
-    """Health response model."""
-    status: str
-    llm_running: bool
-    models_available: int
 
 
 # ==================== Chat Management Models ====================
@@ -619,40 +624,6 @@ if not (settings and settings.DISABLE_GENESIS_TRACKING):
 else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
-
-# ==================== Health Check Endpoint ====================
-
-@app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check():
-    """
-    Health check endpoint.
-    
-    Returns:
-        HealthResponse: Status of the API and Ollama service
-    """
-    try:
-        client = get_llm_client()
-        status_info = client.is_running()
-        
-        if status_info:
-            models = client.get_all_models()
-            models_available = len(models)
-            status = "healthy"
-        else:
-            models_available = 0
-            status = "unhealthy"
-        
-        return HealthResponse(
-            status=status,
-            llm_running=status_info,
-            models_available=models_available
-        )
-    except Exception as e:
-        return HealthResponse(
-            status="unhealthy",
-            llm_running=False,
-            models_available=0
-        )
 
 
 class TitleGenerationRequest(BaseModel):

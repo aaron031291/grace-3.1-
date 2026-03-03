@@ -103,7 +103,7 @@ def _recall_similar_episode(problem_text: str) -> dict:
 def _update_kpis(cycle_result: dict):
     """Update KPI tracker with loop metrics."""
     try:
-        from api.kpi_api import get_kpi_tracker
+        from ml_intelligence.kpi_tracker import get_kpi_tracker
         tracker = get_kpi_tracker()
         tracker.increment_kpi("autonomous_loop", "cycles_completed", 1)
         tracker.increment_kpi("autonomous_loop", "triggers_detected", cycle_result.get("triggers_found", 0))
@@ -441,7 +441,7 @@ def _decide_and_act(problem: dict) -> dict:
     if "unreachable" in reason.lower() or "down" in reason.lower() or "connection" in reason.lower():
         action["type"] = "heal"
         try:
-            from api.brain_api import call_brain
+            from api.brain_api_v2 import call_brain
             action["result"] = call_brain("system", "scan_heal", {})
         except Exception as e:
             action["result"] = {"error": str(e)[:100]}
