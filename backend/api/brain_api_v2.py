@@ -325,6 +325,17 @@ def _system() -> dict:
         "daily_summary": lambda p: _daily_summary(p),
         "switch_project": lambda p: _switch_project(p),
         "active_session": lambda p: _active_session(p),
+        "librarian_ingest": lambda p: _librarian_ingest(p),
+        "librarian_search": lambda p: _librarian_search(p),
+        "librarian_versions": lambda p: _librarian_versions(p),
+        "librarian_stats": lambda p: _librarian_stats(),
+        "cross_search": lambda p: _cross_search(p),
+        "export_project": lambda p: _export_project(p),
+        "import_project": lambda p: _import_project(p),
+        "copy_file_cross": lambda p: _copy_cross(p),
+        "move_file_cross": lambda p: _move_cross(p),
+        "project_rollback": lambda p: _project_rollback(p),
+        "list_exports": lambda p: _list_exports(),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -755,6 +766,52 @@ def _compliance_presets():
 def _apply_compliance(p):
     from core.governance_engine import apply_compliance_preset
     return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _librarian_ingest(p):
+    from core.librarian import ingest_document
+    return ingest_document(p.get("path",""), p.get("content",""), p.get("project_id",""))
+
+def _librarian_search(p):
+    from core.librarian import search_documents
+    return {"results": search_documents(p.get("query",""), p.get("project_id",""), p.get("category",""))}
+
+def _librarian_versions(p):
+    from core.librarian import get_versions
+    return {"versions": get_versions(p.get("path",""))}
+
+def _librarian_stats():
+    from core.librarian import get_document_stats
+    return get_document_stats()
+
+def _cross_search(p):
+    from core.librarian import cross_project_search
+    return {"results": cross_project_search(p.get("query",""), p.get("limit",30))}
+
+def _export_project(p):
+    from core.project_ops import export_project
+    return export_project(p.get("project_id", p.get("id","")))
+
+def _import_project(p):
+    from core.project_ops import import_project
+    return import_project(p.get("project_id",""), p.get("zip_path",""))
+
+def _copy_cross(p):
+    from core.project_ops import copy_file_between_projects
+    return copy_file_between_projects(p.get("from_project",""), p.get("from_path",""),
+                                       p.get("to_project",""), p.get("to_path"))
+
+def _move_cross(p):
+    from core.project_ops import move_file_between_projects
+    return move_file_between_projects(p.get("from_project",""), p.get("from_path",""),
+                                      p.get("to_project",""), p.get("to_path"))
+
+def _project_rollback(p):
+    from core.project_ops import project_rollback
+    return project_rollback(p.get("project_id", p.get("id","")))
+
+def _list_exports():
+    from core.project_ops import list_exports
+    return {"exports": list_exports()}
 
 def _create_user(p):
     from core.multi_user import create_user
