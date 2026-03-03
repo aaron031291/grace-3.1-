@@ -98,6 +98,31 @@ def build_llm_context(task: str = "", project: str = "", session_id: str = "") -
     if health:
         parts.append(f"[COMPONENT HEALTH]\n{health}")
 
+    # 14. Brain action list (what Grace can do)
+    actions = _get_brain_actions()
+    if actions:
+        parts.append(f"[BRAIN ACTIONS — WHAT GRACE CAN DO]\n{actions}")
+
+    # 15. Ouroboros loop history
+    loop_history = _get_loop_history()
+    if loop_history:
+        parts.append(f"[OUROBOROS LOOP HISTORY]\n{loop_history}")
+
+    # 16. Pipeline run history
+    pipeline_history = _get_pipeline_history()
+    if pipeline_history:
+        parts.append(f"[CODING PIPELINE HISTORY]\n{pipeline_history}")
+
+    # 17. Provenance ledger
+    provenance = _get_provenance()
+    if provenance:
+        parts.append(f"[PROVENANCE LEDGER]\n{provenance}")
+
+    # 18. Active sessions
+    sessions = _get_active_sessions()
+    if sessions:
+        parts.append(f"[ACTIVE SESSIONS]\n{sessions}")
+
     if not parts:
         return ""
 
@@ -315,6 +340,94 @@ def _get_component_health() -> str:
             purpose = card.get("purpose", "")[:40]
             icon = "✅" if status == "healthy" else "⚠️" if status == "not_validated" else "❌"
             lines.append(f"  {icon} {cid}: {status} — {purpose}")
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_brain_actions() -> str:
+    """Full list of what Grace can do."""
+    try:
+        from api.brain_api_v2 import _build_directory
+        d = _build_directory()
+        lines = []
+        for domain, info in d.items():
+            lines.append(f"  {domain} ({len(info['actions'])}): {', '.join(info['actions'][:15])}")
+        total = sum(len(info['actions']) for info in d.values())
+        lines.insert(0, f"  Total: {total} actions across {len(d)} domains")
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_loop_history() -> str:
+    """Recent Ouroboros autonomous loop cycles."""
+    try:
+        from api.autonomous_loop_api import _loop_state, _loop_log
+        state = dict(_loop_state)
+        lines = [
+            f"  Running: {state.get('running')}, Cycles: {state.get('cycle_count', 0)}, "
+            f"Healed: {state.get('healed', 0)}, Learned: {state.get('learned', 0)}, "
+            f"Errors: {state.get('errors', 0)}"
+        ]
+        for log_entry in list(reversed(_loop_log[-5:])):
+            if isinstance(log_entry, dict):
+                lines.append(
+                    f"  Cycle {log_entry.get('cycle_id','?')}: "
+                    f"{log_entry.get('triggers_found',0)} triggers, "
+                    f"{log_entry.get('outcome','?')}"
+                )
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_pipeline_history() -> str:
+    """Recent coding pipeline runs."""
+    try:
+        from core.coding_pipeline import get_pipeline_progress
+        progress = get_pipeline_progress()
+        runs = progress.get_all()
+        if not runs:
+            return "No pipeline runs recorded"
+        lines = []
+        for run in runs[-5:]:
+            lines.append(
+                f"  {run.get('run_id','?')}: {run.get('status','?')} "
+                f"({run.get('percent',0)}% complete, "
+                f"{run.get('completed_chunks',0)}/{run.get('total_chunks',0)} chunks)"
+            )
+        return "\n".join(lines) if lines else ""
+    except Exception:
+        return ""
+
+
+def _get_provenance() -> str:
+    """Recent provenance ledger entries."""
+    try:
+        from core.safety import get_ledger_entries
+        entries = get_ledger_entries(5)
+        if not entries:
+            return ""
+        lines = []
+        for e in entries:
+            lines.append(
+                f"  [{e.get('action','?')}] hash={e.get('hash','?')[:12]}... "
+                f"model={e.get('model','?')} ts={e.get('ts','?')}"
+            )
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
+def _get_active_sessions() -> str:
+    """Active user sessions."""
+    try:
+        from core.multi_user import _active_sessions, list_users
+        users = list_users()
+        lines = [f"  Registered users: {len(users)}"]
+        for uid, session in _active_sessions.items():
+            lines.append(f"  {uid}: project={session.get('project','none')}")
         return "\n".join(lines)
     except Exception:
         return ""
