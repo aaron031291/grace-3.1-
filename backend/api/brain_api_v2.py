@@ -343,6 +343,13 @@ def _system() -> dict:
         "dist_get": lambda p: _dist_get(p),
         "dist_instances": lambda p: _dist_instances(),
         "dist_session": lambda p: _dist_session(p),
+        "semantic_search": lambda p: _semantic_search(p),
+        "component_registry": lambda p: _component_registry(),
+        "component_profile": lambda p: _component_profile(p),
+        "validate_all": lambda p: _validate_all(),
+        "validate_component": lambda p: _validate_one(p),
+        "report_cards": lambda p: _report_cards(),
+        "report_card": lambda p: _report_card(p),
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -773,6 +780,34 @@ def _compliance_presets():
 def _apply_compliance(p):
     from core.governance_engine import apply_compliance_preset
     return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _semantic_search(p):
+    from core.semantic_search import semantic_query
+    return semantic_query(p.get("query", p.get("question", "")))
+
+def _component_registry():
+    from core.semantic_search import get_component_registry
+    return get_component_registry()
+
+def _component_profile(p):
+    from core.semantic_search import get_component_profile
+    return get_component_profile(p.get("component_id", p.get("id", "")))
+
+def _validate_all():
+    from core.component_validator import validate_all_components
+    return validate_all_components()
+
+def _validate_one(p):
+    from core.component_validator import get_report_card
+    return get_report_card(p.get("component_id", p.get("id", "")))
+
+def _report_cards():
+    from core.component_validator import get_all_report_cards
+    return get_all_report_cards()
+
+def _report_card(p):
+    from core.component_validator import get_report_card
+    return get_report_card(p.get("component_id", p.get("id", "")))
 
 def _sync_events(p):
     from core.realtime_sync import get_recent_events
