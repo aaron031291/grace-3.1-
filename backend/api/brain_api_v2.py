@@ -310,6 +310,14 @@ def _system() -> dict:
         "compliance_presets": lambda p: _compliance_presets(),
         "apply_compliance": lambda p: _apply_compliance(p),
         "orchestrate": lambda p: _orchestrate(p),
+        "containers": lambda p: _list_containers(),
+        "container_stats": lambda p: _container_stats(p),
+        "container_rules": lambda p: _container_rules(p),
+        "container_knowledge": lambda p: _container_knowledge(p),
+        "container_whitelist": lambda p: _container_whitelist(p),
+        "container_context": lambda p: _container_context(p),
+        "clone_grace": lambda p: _clone_grace(p),
+        "global_rules": lambda p: {"rules": __import__("core.project_container", fromlist=["GLOBAL_RULES"]).GLOBAL_RULES},
         "generate_report": lambda p: _generate_report(p),
         "list_reports": lambda p: _list_reports(),
         "get_report": lambda p: _get_report(p),
@@ -740,6 +748,34 @@ def _compliance_presets():
 def _apply_compliance(p):
     from core.governance_engine import apply_compliance_preset
     return apply_compliance_preset(p.get("project_id",""), p.get("preset",""))
+
+def _list_containers():
+    from core.project_container import list_containers
+    return {"containers": list_containers()}
+
+def _container_stats(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", p.get("id", ""))).get_stats()
+
+def _container_rules(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_rules()
+
+def _container_knowledge(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_knowledge()
+
+def _container_whitelist(p):
+    from core.project_container import get_container
+    return get_container(p.get("project_id", "")).get_whitelist()
+
+def _container_context(p):
+    from core.project_container import get_container
+    return {"context": get_container(p.get("project_id", "")).get_context()}
+
+def _clone_grace(p):
+    from core.project_container import clone_grace_environment
+    return clone_grace_environment(p.get("project_id", p.get("name", "")))
 
 def _orchestrate(p):
     from core.brain_orchestrator import get_orchestrator
