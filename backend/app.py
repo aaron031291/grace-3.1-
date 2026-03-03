@@ -48,6 +48,9 @@ from api.auth import router as auth_router
 from api.voice_api import router as voice_router
 from api.stream_api import router as stream_router
 from api.completion_api import router as completion_router
+
+# 5. Connection validation — comprehensive connection status & validation
+from api.connection_api import router as connection_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -540,6 +543,7 @@ app.include_router(auth_router)                  # /auth (middleware)
 app.include_router(voice_router)                 # /voice (WebSocket)
 app.include_router(stream_router)                # /api/stream (SSE streaming)
 app.include_router(completion_router)            # /api/complete (inline code completion)
+app.include_router(connection_router)            # /api/connections (connection validation)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -1644,42 +1648,47 @@ async def runtime_resilience():
 
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
 async def runtime_connectivity():
-    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
-    checks = {}
+    """
+    Check connectivity of ALL system dependencies.
+    
+    Uses the comprehensive connection validator to check every connection
+    in the system — infrastructure, external APIs, Layer 1 connectors,
+    background services, and WebSocket.
+    
+    For quick status: GET /api/connections/status
+    For full validation: GET /api/connections/validate
+    """
+    from connection_validator import validate_all_connections
 
-    # Ollama
-    try:
-        client = get_llm_client()
-        checks["ollama"] = {"connected": client.is_running(), "url": settings.OLLAMA_URL}
-    except Exception as e:
-        checks["ollama"] = {"connected": False, "error": str(e)}
-
-    # Qdrant
-    try:
-        qdrant = get_qdrant_client()
-        connected = qdrant.is_connected()
-        qdrant_loc = settings.QDRANT_URL if settings.QDRANT_URL else f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
-        checks["qdrant"] = {"connected": connected, "url": qdrant_loc}
-    except Exception as e:
-        checks["qdrant"] = {"connected": False, "error": str(e)}
-
-    # Kimi
-    checks["kimi"] = {"configured": bool(settings.KIMI_API_KEY), "model": settings.KIMI_MODEL}
-
-    # Opus
-    checks["opus"] = {"configured": bool(settings.OPUS_API_KEY), "model": settings.OPUS_MODEL}
-
-    # Database
-    try:
-        checks["database"] = {"connected": DatabaseConnection.health_check(), "type": settings.DATABASE_TYPE}
-    except Exception as e:
-        checks["database"] = {"connected": False, "error": str(e)}
-
-    all_ok = all(
-        c.get("connected", False) or c.get("configured", False)
-        for c in checks.values()
+    report = validate_all_connections(
+        include_layer1=True,
+        include_background=True,
+        include_external=True,
     )
-    return {"status": "all_connected" if all_ok else "partial", "services": checks}
+
+    services = {}
+    for conn in report.connections:
+        services[conn.name] = {
+            "connected": conn.connected,
+            "status": conn.status.value,
+            "category": conn.category.value,
+            "latency_ms": conn.latency_ms,
+            "actions_passing": conn.actions_passing,
+            "actions_total": conn.actions_total,
+            "message": conn.message,
+        }
+
+    return {
+        "status": report.status,
+        "total_connections": report.total_connections,
+        "connected": report.connected_count,
+        "disconnected": report.disconnected_count,
+        "degraded": report.degraded_count,
+        "actions_validated": report.total_actions_validated,
+        "actions_passing": report.total_actions_passing,
+        "actions_failing": report.total_actions_failing,
+        "services": services,
+    }
 
 
 # ==================== Root Endpoint ====================
