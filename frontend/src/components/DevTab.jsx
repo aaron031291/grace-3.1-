@@ -136,6 +136,42 @@ const ACTIONS = [
         brain: "system", action: "connectivity",
         desc: "Checks connectivity to all external services: Ollama, Qdrant Cloud, Kimi API, Opus API, database. Shows which are connected, which are down, and their URLs. Connects to: app.py runtime endpoints → service health checks.",
       },
+      {
+        id: "world_model", label: "World Model", icon: "🌍",
+        brain: "chat", action: "world_model",
+        desc: "Full snapshot of Grace's internal world model — system health, brain capabilities, trust scores, database state, cognitive systems, worker pools, API costs, Genesis keys. This is Grace's complete self-awareness. Connects to: chat_service.get_world_model() → memory_injector → all subsystems.",
+      },
+      {
+        id: "semantic_search", label: "Semantic Search", icon: "🔎",
+        brain: "system", action: "semantic_search",
+        special: "search_prompt",
+        desc: "Natural language search of Grace's internal architecture. Ask 'where is the coding pipeline?' or 'what handles trust?' and get structured results with code locations, purposes, and connections. Connects to: core/semantic_search.py → COMPONENTS registry.",
+      },
+      {
+        id: "worker_pool", label: "Worker Pool", icon: "🏊",
+        brain: "system", action: "worker_pool",
+        desc: "Shows IO and CPU worker pool status: active tasks, completed count, avg latency, queue depth. Worker pools enable concurrent operation — multiple actions can run simultaneously. Connects to: core/worker_pool.py → ThreadPoolExecutor.",
+      },
+      {
+        id: "db_info", label: "Database Info", icon: "🗄️",
+        brain: "system", action: "db_info",
+        desc: "Shows database dialect (SQLite or PostgreSQL), size in MB, table counts, and health check result. The DB compat layer ensures Grace works identically on both. Connects to: core/db_compat.py → database/connection.py.",
+      },
+      {
+        id: "api_costs", label: "API Costs", icon: "💰",
+        brain: "system", action: "api_costs",
+        desc: "Shows estimated API spend per model (Kimi, Opus, GPT-4o) and per user. Tracks input/output tokens and calculates cost. Local models (Qwen, DeepSeek) show $0. Connects to: core/security.py → APICostTracker.",
+      },
+      {
+        id: "llm_cache", label: "LLM Cache", icon: "💾",
+        brain: "system", action: "llm_cache",
+        desc: "Shows LLM response cache statistics: size, hits, misses, hit rate. The cache avoids re-calling expensive APIs for identical prompts. Clear it to force fresh responses. Connects to: core/security.py → LLMCache.",
+      },
+      {
+        id: "memory_pressure", label: "Memory Pressure", icon: "📊",
+        brain: "system", action: "memory_pressure",
+        desc: "Shows current process memory usage (RSS in MB), context budget limits, and snapshot cache size. Helps diagnose memory issues. Connects to: core/memory_injector.py → resource.getrusage.",
+      },
     ],
   },
   {
@@ -515,6 +551,23 @@ function LeftPanel({ onDetail, width = 200 }) {
   const [fullWindow, setFullWindow] = useState(null);
   const [lastResults, setLastResults] = useState({});
 
+  // Wrap brainCall with timeout to prevent hanging
+  const brainCallWithTimeout = async (domain, action, payload, timeoutMs = 30000) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const result = await brainCall(domain, action, payload);
+      clearTimeout(timer);
+      return result;
+    } catch (e) {
+      clearTimeout(timer);
+      if (e.name === "AbortError") {
+        return { ok: false, error: `Timeout after ${timeoutMs / 1000}s — action may still be running in the background` };
+      }
+      return { ok: false, error: e.message };
+    }
+  };
+
   const run = async (item) => {
     // File upload with 5GB chunked support
     if (item.special === "upload_govern") {
@@ -756,16 +809,23 @@ function LeftPanel({ onDetail, width = 200 }) {
     }
 
     setLoading(p => ({ ...p, [item.id]: true }));
-    let data;
-    if (item.special === "frontend_tree") {
-      data = await brainCall("files", "tree", { path: "../frontend/src" });
-    } else {
-      data = await brainCall(item.brain, item.action, item.payload || {});
+    try {
+      let data;
+      if (item.special === "frontend_tree") {
+        data = await brainCallWithTimeout("files", "tree", { path: "../frontend/src" });
+      } else {
+        data = await brainCallWithTimeout(item.brain, item.action, item.payload || {});
+      }
+      const result = { title: item.label, icon: item.icon, desc: item.desc, data: data.ok ? data.data : { error: data.error || "Action failed — check backend logs" } };
+      setLastResults(p => ({ ...p, [item.id]: result }));
+      onDetail(result);
+    } catch (e) {
+      const result = { title: item.label, icon: item.icon, desc: item.desc, data: { error: e.message || "Unknown error" } };
+      setLastResults(p => ({ ...p, [item.id]: result }));
+      onDetail(result);
+    } finally {
+      setLoading(p => ({ ...p, [item.id]: false }));
     }
-    setLoading(p => ({ ...p, [item.id]: false }));
-    const result = { title: item.label, icon: item.icon, desc: item.desc, data: data.ok ? data.data : { error: data.error } };
-    setLastResults(p => ({ ...p, [item.id]: result }));
-    onDetail(result);
   };
 
   const handleContextMenu = (e, item, section) => {
@@ -903,14 +963,7 @@ function LeftPanel({ onDetail, width = 200 }) {
                 {loading[item.id] ? "Running..." : item.label}
               </button>
               {hoveredId === item.id && !contextMenu && (
-                <div style={{
-                  position: "absolute", left: 195, top: 0, width: 260, padding: 8,
-                  background: "#12122a", border: "1px solid #333", borderRadius: 6,
-                  fontSize: 10, color: "#aaa", lineHeight: 1.4, zIndex: 100,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)", pointerEvents: "none",
-                }}>
-                  <strong style={{ color: "#e94560" }}>{item.label}</strong><br />{item.desc}
-                </div>
+                <ActionTooltip item={item} leftOffset={width} />
               )}
             </div>
           ))}
@@ -966,6 +1019,141 @@ function LeftPanel({ onDetail, width = 200 }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ACTION TOOLTIP — structured What / Where / Who / Why / When
+   Auto-generated from the action's desc, brain, and action fields.
+   ═══════════════════════════════════════════════════════════════════ */
+
+function ActionTooltip({ item, leftOffset = 200 }) {
+  const desc = item.desc || "";
+  const connectsMatch = desc.match(/Connects to:\s*(.+?)\.?$/);
+  const mainDesc = connectsMatch ? desc.replace(/\s*Connects to:.+$/, "").trim() : desc;
+  const connectsTo = connectsMatch ? connectsMatch[1] : "";
+
+  return (
+    <div style={{
+      position: "absolute", left: leftOffset - 5, top: -4, width: 310, padding: 10,
+      background: "#101028", border: "1px solid #2a2a4e", borderRadius: 8,
+      fontSize: 10, color: "#bbb", lineHeight: 1.5, zIndex: 100,
+      boxShadow: "0 6px 20px rgba(0,0,0,0.7)", pointerEvents: "none",
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#e94560", marginBottom: 6 }}>
+        {item.icon} {item.label}
+      </div>
+      <div style={{ marginBottom: 8, color: "#999" }}>{mainDesc}</div>
+      <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", gap: "3px 8px", fontSize: 9 }}>
+        <span style={{ color: "#e94560", fontWeight: 700 }}>WHAT</span>
+        <span>{mainDesc.split(".")[0] || item.label}</span>
+        <span style={{ color: "#e94560", fontWeight: 700 }}>WHERE</span>
+        <span>{connectsTo || `${item.brain || "system"}/${item.action || item.special || "?"}`}</span>
+        <span style={{ color: "#e94560", fontWeight: 700 }}>WHO</span>
+        <span>{item.brain ? `${item.brain.charAt(0).toUpperCase() + item.brain.slice(1)} Brain` : "System"}</span>
+        <span style={{ color: "#e94560", fontWeight: 700 }}>WHY</span>
+        <span>{mainDesc.split(".").slice(1, 2).join(".").trim() || "System operation"}</span>
+        <span style={{ color: "#e94560", fontWeight: 700 }}>WHEN</span>
+        <span>{item.special ? "User-triggered" : "On-demand or automated"}</span>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   MINI CHAT — embedded chat for multitasking in the detail panel
+   Allows chatting with Grace while running diagnostics/actions.
+   ═══════════════════════════════════════════════════════════════════ */
+
+function MiniChat({ context }) {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+  const endRef = useRef(null);
+
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  const send = async () => {
+    if (!input.trim() || sending) return;
+    const query = input.trim();
+    setInput("");
+    setMessages(p => [...p, { role: "user", content: query }]);
+    setSending(true);
+
+    try {
+      const { streamChat } = await import("../api/stream");
+      let tokens = "";
+      setMessages(p => [...p, { role: "assistant", content: "..." }]);
+
+      await streamChat(
+        context ? `Context: ${context}\n\nQuestion: ${query}` : query,
+        "kimi",
+        [],
+        (token) => {
+          tokens += token;
+          setMessages(p => { const u = [...p]; u[u.length - 1] = { role: "assistant", content: tokens + "▌" }; return u; });
+        },
+        () => {
+          setMessages(p => { const u = [...p]; u[u.length - 1] = { role: "assistant", content: tokens }; return u; });
+          setSending(false);
+        },
+        async () => {
+          const r = await brainCall("ai", "fast", { prompt: query, models: ["kimi"] });
+          const resp = r.data?.individual_responses?.[0]?.response || r.data?.final_output || "No response";
+          setMessages(p => { const u = [...p]; u[u.length - 1] = { role: "assistant", content: resp }; return u; });
+          setSending(false);
+        }
+      );
+    } catch {
+      try {
+        const r = await brainCall("ai", "fast", { prompt: query, models: ["kimi"] });
+        const resp = r.data?.individual_responses?.[0]?.response || r.data?.final_output || "No response";
+        setMessages(p => { const u = [...p]; u[u.length - 1] = { role: "assistant", content: resp }; return u; });
+      } catch (e) {
+        setMessages(p => { const u = [...p]; u[u.length - 1] = { role: "assistant", content: `Error: ${e.message}` }; return u; });
+      }
+      setSending(false);
+    }
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 200 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: "#e94560", padding: "4px 0", borderBottom: "1px solid #1a1a2e", marginBottom: 4 }}>
+        Quick Chat — multitask while actions run
+      </div>
+      <div style={{ flex: 1, overflow: "auto", display: "flex", flexDirection: "column", gap: 4, minHeight: 0 }}>
+        {messages.length === 0 && (
+          <div style={{ color: "#444", fontSize: 10, padding: 8, textAlign: "center" }}>
+            Ask Grace anything while actions run in the background
+          </div>
+        )}
+        {messages.map((m, i) => (
+          <div key={i} style={{
+            alignSelf: m.role === "user" ? "flex-end" : "flex-start",
+            maxWidth: "90%", padding: "5px 8px", borderRadius: 6,
+            background: m.role === "user" ? "#1a2a4a" : "#12122a",
+            fontSize: 11, whiteSpace: "pre-wrap", lineHeight: 1.4,
+          }}>
+            {m.content}
+          </div>
+        ))}
+        <div ref={endRef} />
+      </div>
+      <div style={{ display: "flex", gap: 4, paddingTop: 4 }}>
+        <input value={input} onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && send()}
+          placeholder="Ask Grace..."
+          disabled={sending}
+          style={{ flex: 1, padding: "5px 8px", background: "#12122a", border: "1px solid #222", borderRadius: 4, color: "#ccc", fontSize: 10, outline: "none" }}
+        />
+        <button onClick={send} disabled={sending} style={{
+          padding: "4px 10px", background: "#e94560", border: "none", borderRadius: 4,
+          color: "#fff", fontSize: 10, cursor: "pointer", opacity: sending ? 0.5 : 1,
+        }}>{sending ? "..." : "Ask"}</button>
+      </div>
+    </div>
+  );
+}
+
 
 function CodeEditor({ filePath, initialContent, onSave }) {
   const [content, setContent] = useState(initialContent || "");
@@ -1381,6 +1569,8 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject, setA
    ═══════════════════════════════════════════════════════════════════ */
 
 function RightDetail({ content, onClose, width = 320 }) {
+  const [activeTab, setActiveTab] = useState("result");
+
   if (!content) {
     return (
       <div style={{ width: 260, background: "#08081a", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
@@ -1401,6 +1591,28 @@ function RightDetail({ content, onClose, width = 320 }) {
         <button onClick={onClose} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 16 }}>×</button>
       </div>
 
+      {/* Tab bar: Result | Chat */}
+      <div style={{ display: "flex", borderBottom: "1px solid #1a1a2e" }}>
+        {["result", "chat"].map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)} style={{
+            flex: 1, padding: "5px 0", border: "none",
+            background: activeTab === tab ? "#12122a" : "transparent",
+            color: activeTab === tab ? "#e94560" : "#555",
+            fontSize: 10, fontWeight: 700, cursor: "pointer",
+            textTransform: "uppercase", letterSpacing: 0.5,
+            borderBottom: activeTab === tab ? "2px solid #e94560" : "2px solid transparent",
+          }}>
+            {tab === "result" ? "Result" : "Quick Chat"}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === "chat" ? (
+        <div style={{ flex: 1, overflow: "auto", padding: 10, display: "flex", flexDirection: "column" }}>
+          <MiniChat context={content.title ? `Action: ${content.title}. ${(content.desc || "").slice(0, 200)}` : ""} />
+        </div>
+      ) : (
+      <>
       {content.desc && (
         <div style={{ padding: "6px 12px", borderBottom: "1px solid #111", fontSize: 10, color: "#666", lineHeight: 1.5 }}>
           {content.desc}
@@ -1455,6 +1667,8 @@ function RightDetail({ content, onClose, width = 320 }) {
           </pre>
         )}
       </div>
+      </>
+      )}
     </div>
   );
 }
