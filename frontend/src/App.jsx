@@ -17,11 +17,13 @@ import SystemHealthTab from "./components/SystemHealthTab";
 import LearningHealingTab from "./components/LearningHealingTab";
 import LabTab from "./components/LabTab";
 import APIsTab from "./components/APIsTab";
+import QueryChat from "./components/QueryChat";
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 
 // Sidebar sections
 const WORKSPACE = [
+  { id: "query", label: "Ask Grace", icon: "✨" },
   { id: "chat", label: "Chats", icon: "💬" },
   { id: "folders", label: "Folders", icon: "📁" },
   { id: "docs", label: "Docs", icon: "📄" },
@@ -182,6 +184,7 @@ function App() {
         {/* Main Content */}
         <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
           {view === "home" && <HomePage onNavigate={setView} />}
+          {view === "query" && <QueryChat />}
           {view === "chat" && <ChatTab />}
           {view === "folders" && <FoldersTab />}
           {view === "docs" && <DocsTab />}
@@ -231,6 +234,7 @@ function HomePage({ onNavigate }) {
           { label: "Analyze Code", icon: "🔍", view: "codebase" },
           { label: "New Agent", icon: "🤖", view: "agents" },
           { label: "Open Dev Lab", icon: "🧪", view: "dev" },
+          { label: "Ask Grace", icon: "✨", view: "query" },
           { label: "Chat with Grace", icon: "💬", view: "chat" },
           { label: "System Health", icon: "🏥", view: "health" },
         ].map(a => (
@@ -335,7 +339,7 @@ function SidebarItem({ item, active, onClick }) {
 
 function CommandPalette({ onClose, onNavigate }) {
   const [query, setQuery] = useState("");
-  const all = [...WORKSPACE, ...SYSTEM, { id: "home", label: "Home", icon: "🏠" }, { id: "projects", label: "Projects", icon: "📋" }];
+  const all = [...WORKSPACE, ...SYSTEM, { id: "home", label: "Home", icon: "🏠" }, { id: "projects", label: "Projects", icon: "📋" }, { id: "query", label: "Ask Grace", icon: "✨" }];
   const filtered = query ? all.filter(i => i.label.toLowerCase().includes(query.toLowerCase())) : all;
 
   return (
