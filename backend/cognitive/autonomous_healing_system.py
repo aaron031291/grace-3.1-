@@ -551,7 +551,7 @@ class AutonomousHealingSystem:
                 
                 # Reset Qdrant connection if available
                 try:
-                    from vector_db.qdrant_client import get_qdrant_client
+                    from vector_db.client import get_qdrant_client
                     qdrant = get_qdrant_client()
                     if qdrant:
                         # Qdrant client will auto-reconnect on next use
@@ -596,7 +596,7 @@ class AutonomousHealingSystem:
                 reset_items = []
                 try:
                     # Reset embedding model singleton
-                    from embedding.embedding_model import _embedding_model
+                    from embedding.embedder import _embedding_model
                     if _embedding_model:
                         reset_items.append("embedding_model")
                 except:

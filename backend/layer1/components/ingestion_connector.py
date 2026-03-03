@@ -284,7 +284,7 @@ class IngestionConnector:
 
         def _get_status():
             # Get status from database
-            from database.models import Document
+            from models.database_models import Document
             db_session = self.ingestion_service._get_db_session()
             try:
                 document = db_session.query(Document).filter(
