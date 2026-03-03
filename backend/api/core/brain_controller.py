@@ -38,7 +38,7 @@ async def brain_dispatch(domain: str, action: str, request: Request):
     except Exception:
         body = {}
 
-    from api.brain_api import call_brain
+    from api.brain_api_v2 import call_brain
 
     start = time.time()
     result = call_brain(domain, action, body)
@@ -88,7 +88,7 @@ async def brain_dispatch(domain: str, action: str, request: Request):
 @router.get("/directory")
 async def directory():
     """List all domains and actions."""
-    from api.brain_api import BRAIN_DIRECTORY, _build_directory
+    from api.brain_api_v2 import BRAIN_DIRECTORY, _build_directory
     d = _build_directory()
     total = sum(len(b["actions"]) for b in d.values())
     return {

@@ -48,6 +48,68 @@ from api.auth import router as auth_router
 from api.voice_api import router as voice_router
 from api.stream_api import router as stream_router
 from api.completion_api import router as completion_router
+
+# 5. Connection validation — comprehensive connection status & validation
+from api.connection_api import router as connection_router
+
+# 6. System introspection & deterministic validation
+from api.introspection_api import router as introspection_router
+
+# 7. Previously unwired routers (safe imports — won't crash if deps missing)
+_optional_routers = []
+try:
+    from api.ingest import router as ingest_router
+    _optional_routers.append(("ingest", ingest_router))
+except Exception as e:
+    print(f"[WARN] Ingest router not loaded: {e}")
+
+try:
+    from api.component_health_api import router as component_health_router
+    _optional_routers.append(("component_health", component_health_router))
+except Exception as e:
+    print(f"[WARN] Component health router not loaded: {e}")
+
+try:
+    from api.docs_library_api import router as docs_library_router
+    _optional_routers.append(("docs_library", docs_library_router))
+except Exception as e:
+    print(f"[WARN] Docs library router not loaded: {e}")
+
+try:
+    from api.live_console_api import router as live_console_router
+    _optional_routers.append(("live_console", live_console_router))
+except Exception as e:
+    print(f"[WARN] Live console router not loaded: {e}")
+
+try:
+    from api.probe_agent_api import router as probe_agent_router
+    _optional_routers.append(("probe_agent", probe_agent_router))
+except Exception as e:
+    print(f"[WARN] Probe agent router not loaded: {e}")
+
+try:
+    from api.consensus_fixer_api import router as consensus_fixer_router
+    _optional_routers.append(("consensus_fixer", consensus_fixer_router))
+except Exception as e:
+    print(f"[WARN] Consensus fixer router not loaded: {e}")
+
+try:
+    from api.runtime_triggers_api import router as runtime_triggers_router
+    _optional_routers.append(("runtime_triggers", runtime_triggers_router))
+except Exception as e:
+    print(f"[WARN] Runtime triggers router not loaded: {e}")
+
+try:
+    from api.retrieve import router as retrieve_router
+    _optional_routers.append(("retrieve", retrieve_router))
+except Exception as e:
+    print(f"[WARN] Retrieve router not loaded: {e}")
+
+try:
+    from api.file_ingestion import router as file_ingestion_router
+    _optional_routers.append(("file_ingestion", file_ingestion_router))
+except Exception as e:
+    print(f"[WARN] File ingestion router not loaded: {e}")
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -89,26 +151,18 @@ class ChatRequest(BaseModel):
     )
 
 
-class ChatResponse(BaseModel):
-    """Response model for chat endpoint."""
+class RawChatResponse(BaseModel):
+    """Response model for the /chat endpoint (stateless)."""
     message: str = Field(..., description="The generated response from the model")
     model: str = Field(..., description="The model that generated the response")
-    generation_time: float = Field(..., description="Time taken to generate response in seconds")
+    generation_time: float = Field(0.0, description="Time taken to generate response in seconds")
     prompt_tokens: Optional[int] = Field(None, description="Number of tokens in the prompt")
     response_tokens: Optional[int] = Field(None, description="Number of tokens in the response")
     sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
-    # Multi-tier query handling fields
     tier: Optional[str] = Field(None, description="Query tier used: VECTORDB, MODEL_KNOWLEDGE, or USER_CONTEXT")
     confidence: Optional[float] = Field(None, description="Confidence score (0.0-1.0)")
     knowledge_gaps: Optional[List[dict]] = Field(None, description="Knowledge gaps identified (Tier 3)")
     warnings: Optional[List[str]] = Field(None, description="Warnings about response quality")
-
-
-class HealthResponse(BaseModel):
-    """Health response model."""
-    status: str
-    llm_running: bool
-    models_available: int
 
 
 # ==================== Chat Management Models ====================
@@ -311,11 +365,11 @@ async def lifespan(app: FastAPI):
         print("[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)")
 
     # ==================== Initialize ML Intelligence ====================
-    # Initialize ML Intelligence orchestrator
     try:
-        from api.ml_intelligence_api import get_orchestrator
-        orchestrator = get_orchestrator()
-        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
+        from ml_intelligence.integration_orchestrator import MLIntelligenceOrchestrator
+        orchestrator = MLIntelligenceOrchestrator()
+        features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
+        print(f"[OK] ML Intelligence initialized with features: {features}")
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
 
@@ -421,6 +475,20 @@ async def lifespan(app: FastAPI):
     else:
         print("[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)")
 
+
+    # ==================== Initialize Layer 1 Message Bus ====================
+    try:
+        from layer1.initialize import initialize_layer1
+        from database.session import get_session
+
+        _l1_session = next(get_session())
+        _kb_path = settings.KNOWLEDGE_BASE_PATH if settings else "knowledge_base"
+        _layer1 = initialize_layer1(session=_l1_session, kb_path=_kb_path)
+        app.state.layer1 = _layer1
+        print(f"[OK] Layer 1 initialized — {_layer1.get_stats().get('registered_components', 0)} components connected")
+    except Exception as e:
+        print(f"[WARN] Layer 1 initialization: {e}")
+        app.state.layer1 = None
 
     # ==================== Start Continuous Learning Orchestrator ====================
     if not settings.DISABLE_CONTINUOUS_LEARNING:
@@ -540,6 +608,14 @@ app.include_router(auth_router)                  # /auth (middleware)
 app.include_router(voice_router)                 # /voice (WebSocket)
 app.include_router(stream_router)                # /api/stream (SSE streaming)
 app.include_router(completion_router)            # /api/complete (inline code completion)
+app.include_router(connection_router)            # /api/connections (connection validation)
+app.include_router(introspection_router)         # /api/system (introspection + validation)
+
+# Register previously unwired routers
+for _name, _router in _optional_routers:
+    app.include_router(_router)
+    print(f"[OK] Registered previously unwired router: {_name}")
+
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -548,40 +624,6 @@ if not (settings and settings.DISABLE_GENESIS_TRACKING):
 else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
-
-# ==================== Health Check Endpoint ====================
-
-@app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check():
-    """
-    Health check endpoint.
-    
-    Returns:
-        HealthResponse: Status of the API and Ollama service
-    """
-    try:
-        client = get_llm_client()
-        status_info = client.is_running()
-        
-        if status_info:
-            models = client.get_all_models()
-            models_available = len(models)
-            status = "healthy"
-        else:
-            models_available = 0
-            status = "unhealthy"
-        
-        return HealthResponse(
-            status=status,
-            llm_running=status_info,
-            models_available=models_available
-        )
-    except Exception as e:
-        return HealthResponse(
-            status="unhealthy",
-            llm_running=False,
-            models_available=0
-        )
 
 
 class TitleGenerationRequest(BaseModel):
@@ -638,7 +680,7 @@ async def generate_title(request: TitleGenerationRequest):
 
 # ==================== Chat Endpoint ====================
 
-@app.post("/chat", response_model=ChatResponse, tags=["Chat"])
+@app.post("/chat", response_model=RawChatResponse, tags=["Chat"])
 async def chat(request: ChatRequest):
     """
     Chat endpoint using Ollama models with RAG enforcement.
@@ -710,12 +752,11 @@ async def chat(request: ChatRequest):
                 max_tokens=request.top_k or 256,
             )
 
-            return ChatResponse(
-                response=response,
-                sources=[],
+            return RawChatResponse(
+                message=response,
                 model=model_name,
-                temperature=request.temperature,
-                max_tokens=request.top_k
+                generation_time=0.0,
+                sources=[],
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
         # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
@@ -748,7 +789,7 @@ async def chat(request: ChatRequest):
         # Format response
         response_data = format_chat_response(tier_result, model_name, generation_time)
         
-        return ChatResponse(**response_data)
+        return RawChatResponse(**response_data)
     
     except HTTPException:
         raise
@@ -1644,42 +1685,47 @@ async def runtime_resilience():
 
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
 async def runtime_connectivity():
-    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
-    checks = {}
+    """
+    Check connectivity of ALL system dependencies.
+    
+    Uses the comprehensive connection validator to check every connection
+    in the system — infrastructure, external APIs, Layer 1 connectors,
+    background services, and WebSocket.
+    
+    For quick status: GET /api/connections/status
+    For full validation: GET /api/connections/validate
+    """
+    from connection_validator import validate_all_connections
 
-    # Ollama
-    try:
-        client = get_llm_client()
-        checks["ollama"] = {"connected": client.is_running(), "url": settings.OLLAMA_URL}
-    except Exception as e:
-        checks["ollama"] = {"connected": False, "error": str(e)}
-
-    # Qdrant
-    try:
-        qdrant = get_qdrant_client()
-        connected = qdrant.is_connected()
-        qdrant_loc = settings.QDRANT_URL if settings.QDRANT_URL else f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
-        checks["qdrant"] = {"connected": connected, "url": qdrant_loc}
-    except Exception as e:
-        checks["qdrant"] = {"connected": False, "error": str(e)}
-
-    # Kimi
-    checks["kimi"] = {"configured": bool(settings.KIMI_API_KEY), "model": settings.KIMI_MODEL}
-
-    # Opus
-    checks["opus"] = {"configured": bool(settings.OPUS_API_KEY), "model": settings.OPUS_MODEL}
-
-    # Database
-    try:
-        checks["database"] = {"connected": DatabaseConnection.health_check(), "type": settings.DATABASE_TYPE}
-    except Exception as e:
-        checks["database"] = {"connected": False, "error": str(e)}
-
-    all_ok = all(
-        c.get("connected", False) or c.get("configured", False)
-        for c in checks.values()
+    report = validate_all_connections(
+        include_layer1=True,
+        include_background=True,
+        include_external=True,
     )
-    return {"status": "all_connected" if all_ok else "partial", "services": checks}
+
+    services = {}
+    for conn in report.connections:
+        services[conn.name] = {
+            "connected": conn.connected,
+            "status": conn.status.value,
+            "category": conn.category.value,
+            "latency_ms": conn.latency_ms,
+            "actions_passing": conn.actions_passing,
+            "actions_total": conn.actions_total,
+            "message": conn.message,
+        }
+
+    return {
+        "status": report.status,
+        "total_connections": report.total_connections,
+        "connected": report.connected_count,
+        "disconnected": report.disconnected_count,
+        "degraded": report.degraded_count,
+        "actions_validated": report.total_actions_validated,
+        "actions_passing": report.total_actions_passing,
+        "actions_failing": report.total_actions_failing,
+        "services": services,
+    }
 
 
 # ==================== Root Endpoint ====================
