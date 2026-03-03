@@ -51,6 +51,9 @@ from api.completion_api import router as completion_router
 
 # 5. Connection validation — comprehensive connection status & validation
 from api.connection_api import router as connection_router
+
+# 6. System introspection & deterministic validation
+from api.introspection_api import router as introspection_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -544,6 +547,7 @@ app.include_router(voice_router)                 # /voice (WebSocket)
 app.include_router(stream_router)                # /api/stream (SSE streaming)
 app.include_router(completion_router)            # /api/complete (inline code completion)
 app.include_router(connection_router)            # /api/connections (connection validation)
+app.include_router(introspection_router)         # /api/system (introspection + validation)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
