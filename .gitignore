@@ -80,7 +80,8 @@ benchmark_results/
 
 # OS files
 Thumbs.db
-data/ 
+data/
+
 # Windows reserved filenames
 nul
 con
@@ -89,4 +90,18 @@ aux
 NUL
 CON
 PRN
-AUX 
+AUX
+
+# Large binary files
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Qdrant local storage (runtime data)
+qdrant_storage/
+
+# Development/audit artifacts
+*.patch
+commits_audit_diffs/
+commits_audit_diffs.txt
