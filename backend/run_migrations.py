@@ -44,8 +44,21 @@ except ImportError as e:
     print(f"Warning: Telemetry models not available: {e}")
     telemetry_models_available = False
 
-# Memory mesh models (may be in database_models or separate)
-# We'll check what exists in the base model
+try:
+    from models.query_intelligence_models import (
+        QueryHandlingLog, KnowledgeGap, ContextSubmission
+    )
+    query_intelligence_models_available = True
+except ImportError as e:
+    print(f"Warning: Query intelligence models not available: {e}")
+    query_intelligence_models_available = False
+
+try:
+    from scraping.models import ScrapingJob, ScrapedPage
+    scraping_models_available = True
+except ImportError as e:
+    print(f"Warning: Scraping models not available: {e}")
+    scraping_models_available = False
 
 def run_all_migrations():
     """Run all database migrations."""
@@ -95,6 +108,8 @@ def run_all_migrations():
     print(f"   [{'OK' if genesis_models_available else 'SKIP'}] Genesis Key models: {'Available' if genesis_models_available else 'Not available'}")
     print(f"   [{'OK' if librarian_models_available else 'SKIP'}] Librarian models: {'Available' if librarian_models_available else 'Not available'}")
     print(f"   [{'OK' if telemetry_models_available else 'SKIP'}] Telemetry models: {'Available' if telemetry_models_available else 'Not available'}")
+    print(f"   [{'OK' if query_intelligence_models_available else 'SKIP'}] Query Intelligence models: {'Available' if query_intelligence_models_available else 'Not available'}")
+    print(f"   [{'OK' if scraping_models_available else 'SKIP'}] Scraping models: {'Available' if scraping_models_available else 'Not available'}")
 
     print("\n" + "=" * 60)
     print("Migration Complete!")
