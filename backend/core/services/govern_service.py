@@ -138,7 +138,7 @@ def approvals_history(limit=30):
         from database.session import session_scope
         from sqlalchemy import text
         with session_scope() as db:
-            rows = db.execute(text(f"SELECT * FROM governance_decisions ORDER BY id DESC LIMIT {int(limit)}")).fetchall()
+            rows = db.execute(text("SELECT * FROM governance_decisions ORDER BY id DESC LIMIT :lim"), {"lim": int(limit)}).fetchall()
             return {"history": [dict(r._mapping) for r in rows]}
     except Exception:
         return {"history": []}
