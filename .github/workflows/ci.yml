@@ -78,6 +78,58 @@ jobs:
           cd frontend
           npm run build
 
+  vscode-extension-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install extension dependencies
+        run: |
+          cd grace-os-vscode
+          npm install
+
+      - name: Compile extension
+        run: |
+          cd grace-os-vscode
+          npm run compile
+
+  mcp-servers-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build MCP memory server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/memory
+          npm install
+          npm run build
+
+      - name: Build MCP filesystem server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/filesystem
+          npm install
+          npm run build
+
+      - name: Build MCP sequential-thinking server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/sequentialthinking
+          npm install
+          npm run build
+
   docker-build-backend:
     runs-on: ubuntu-latest
     needs: [lint-and-test, frontend-build]
