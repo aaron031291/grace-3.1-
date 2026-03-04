@@ -67,6 +67,15 @@ except ImportError as e:
     print(f"Warning: Workspace models not available: {e}")
     workspace_models_available = False
 
+try:
+    from models.memory_graph_models import (
+        GraphNodeRecord, GraphEdgeRecord, UserThinkingPattern, UserInteractionLog
+    )
+    memory_graph_models_available = True
+except ImportError as e:
+    print(f"Warning: Memory graph models not available: {e}")
+    memory_graph_models_available = False
+
 def run_all_migrations():
     """Run all database migrations."""
     print("=" * 60)
@@ -118,6 +127,7 @@ def run_all_migrations():
     print(f"   [{'OK' if query_intelligence_models_available else 'SKIP'}] Query Intelligence models: {'Available' if query_intelligence_models_available else 'Not available'}")
     print(f"   [{'OK' if scraping_models_available else 'SKIP'}] Scraping models: {'Available' if scraping_models_available else 'Not available'}")
     print(f"   [{'OK' if workspace_models_available else 'SKIP'}] Workspace models: {'Available' if workspace_models_available else 'Not available'}")
+    print(f"   [{'OK' if memory_graph_models_available else 'SKIP'}] Memory Graph models: {'Available' if memory_graph_models_available else 'Not available'}")
 
     print("\n" + "=" * 60)
     print("Migration Complete!")
