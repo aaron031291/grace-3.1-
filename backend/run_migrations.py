@@ -60,6 +60,13 @@ except ImportError as e:
     print(f"Warning: Scraping models not available: {e}")
     scraping_models_available = False
 
+try:
+    from models.workspace_models import Workspace, Branch, FileVersion, PipelineRun
+    workspace_models_available = True
+except ImportError as e:
+    print(f"Warning: Workspace models not available: {e}")
+    workspace_models_available = False
+
 def run_all_migrations():
     """Run all database migrations."""
     print("=" * 60)
@@ -110,6 +117,7 @@ def run_all_migrations():
     print(f"   [{'OK' if telemetry_models_available else 'SKIP'}] Telemetry models: {'Available' if telemetry_models_available else 'Not available'}")
     print(f"   [{'OK' if query_intelligence_models_available else 'SKIP'}] Query Intelligence models: {'Available' if query_intelligence_models_available else 'Not available'}")
     print(f"   [{'OK' if scraping_models_available else 'SKIP'}] Scraping models: {'Available' if scraping_models_available else 'Not available'}")
+    print(f"   [{'OK' if workspace_models_available else 'SKIP'}] Workspace models: {'Available' if workspace_models_available else 'Not available'}")
 
     print("\n" + "=" * 60)
     print("Migration Complete!")
