@@ -14,7 +14,7 @@ Every memory system in Grace is accessible through this single interface.
 
 import logging
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class UnifiedMemory:
                 "INSERT INTO episodes (problem, action, outcome, trust_score, source, created_at, updated_at) "
                 "VALUES (:p, :a, :o, :t, :s, :now, :now)"
             ), {"p": problem[:2000], "a": action[:2000], "o": outcome[:2000],
-                "t": trust, "s": source, "now": datetime.utcnow()})
+                "t": trust, "s": source, "now": datetime.now(timezone.utc)})
             db.commit()
 
             try:
@@ -90,7 +90,7 @@ class UnifiedMemory:
             ), {"et": example_type, "ic": input_ctx[:5000], "eo": expected[:5000],
                 "ao": actual[:5000], "ts": trust, "src": source,
                 "sr": 0.5, "cq": 0.5, "cs": 0.5, "rs": 1.0,
-                "now": datetime.utcnow()})
+                "now": datetime.now(timezone.utc)})
             db.commit()
             return True
         except Exception as e:
@@ -113,7 +113,7 @@ class UnifiedMemory:
                 "success_rate, usage_count, created_at, updated_at) "
                 "VALUES (:n, :g, :pt, :s, :ts, :sr, 0, :now, :now)"
             ), {"n": name, "g": goal[:2000], "pt": proc_type, "s": steps[:5000],
-                "ts": trust, "sr": 0.5, "now": datetime.utcnow()})
+                "ts": trust, "sr": 0.5, "now": datetime.now(timezone.utc)})
             db.commit()
             return True
         except Exception as e:

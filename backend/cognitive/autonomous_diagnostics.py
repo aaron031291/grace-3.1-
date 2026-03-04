@@ -37,7 +37,7 @@ import logging
 import os
 import threading
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -66,7 +66,7 @@ class AutonomousDiagnostics:
 
     def on_startup(self) -> Dict[str, Any]:
         """Run on Grace startup — full system check."""
-        result = {"event": "startup", "timestamp": datetime.utcnow().isoformat(), "checks": []}
+        result = {"event": "startup", "timestamp": datetime.now(timezone.utc).isoformat(), "checks": []}
 
         from cognitive.test_framework import smoke_test
         smoke = smoke_test()
@@ -98,7 +98,7 @@ class AutonomousDiagnostics:
         """Called on ANY error anywhere in Grace."""
         result = {
             "event": "error",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "error_type": error_type,
             "error_message": error_message,
             "component": component,
@@ -161,14 +161,14 @@ class AutonomousDiagnostics:
 
         result = {
             "event": "hourly_check",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "status": smoke["status"],
             "checks_passed": smoke["passed"],
             "checks_total": smoke["passed"] + smoke["failed"],
             "early_warnings": self._check_early_warnings(),
             "auto_fixes_today": self._auto_fixes_applied,
             "failures_today": len([f for f in self._failure_history
-                                   if f.get("timestamp", "")[:10] == datetime.utcnow().strftime("%Y-%m-%d")]),
+                                   if f.get("timestamp", "")[:10] == datetime.now(timezone.utc).strftime("%Y-%m-%d")]),
         }
 
         # Auto-fix any failures
@@ -180,7 +180,7 @@ class AutonomousDiagnostics:
 
     def daily_report(self) -> Dict[str, Any]:
         """Daily comprehensive report in plain English with consensus analysis."""
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         today_failures = [f for f in self._failure_history if f.get("timestamp", "")[:10] == today]
         today_fixes = [f for f in today_failures if f.get("auto_fixed")]
 
@@ -422,7 +422,7 @@ class AutonomousDiagnostics:
                      fix_result: Dict, context: Dict = None):
         """Log failure across all Grace systems."""
         failure = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "error_type": error_type,
             "error_message": error_message[:500],
             "auto_fixed": fix_result.get("fixed", False),
@@ -471,14 +471,14 @@ class AutonomousDiagnostics:
 
     def _save_diagnostic(self, result: Dict):
         DATA_DIR.mkdir(parents=True, exist_ok=True)
-        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         (DATA_DIR / f"{result.get('event', 'diag')}_{ts}.json").write_text(
             json.dumps(result, indent=2, default=str)
         )
 
     def get_status(self) -> Dict[str, Any]:
         """Current diagnostic system status."""
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         today_failures = len([f for f in self._failure_history if f.get("timestamp", "")[:10] == today])
         today_fixes = len([f for f in self._failure_history
                           if f.get("timestamp", "")[:10] == today and f.get("auto_fixed")])

@@ -7,7 +7,7 @@ These endpoints are not exposed to the frontend yet - internal use only.
 from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, List, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 
 from database.session import get_session
@@ -132,7 +132,7 @@ async def get_system_trust_score(session: Session = Depends(get_session)):
             entity="system",
             trust_score=trust_score,
             status=status,
-            calculated_at=datetime.utcnow().isoformat()
+            calculated_at=datetime.now(timezone.utc).isoformat()
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -166,7 +166,7 @@ async def get_component_trust_score(
             entity=component_name,
             trust_score=trust_score,
             status=status,
-            calculated_at=datetime.utcnow().isoformat()
+            calculated_at=datetime.now(timezone.utc).isoformat()
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -413,7 +413,7 @@ async def get_kpi_dashboard(session: Session = Depends(get_session)):
             "components": [],
             "top_performers": [],
             "needs_attention": [],
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
         # Process each component

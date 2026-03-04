@@ -1,0 +1,364 @@
+commit ebde4194bd882983d285826c320f34d0b2e972e3
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Sun Mar 1 14:40:47 2026 +0000
+
+    feat: add Dev tab to frontend ΓÇö runtime controls, API audit, self-healing dashboard
+    
+    New Dev tab (gear icon in nav bar) provides:
+      - Connectivity: live status of all services (Ollama, Qdrant, Kimi, Opus, DB)
+      - Runtime: pause/resume/hot-reload controls without stopping Grace
+      - API Audit: scan all registered APIs and check health status
+      - Diagnostic: view 4-layer diagnostic engine state
+      - Self-Healing: trigger healing actions, view healing log
+      - Quick Actions sidebar: one-click hot-reload, pause, resume, heal
+    
+    Also fixes health indicator: checks llm_running (actual API field name)
+    instead of ollama_running (was always showing 'Partial')
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+---
+ frontend/src/App.jsx               |   7 +-
+ frontend/src/components/DevTab.jsx | 294 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 299 insertions(+), 2 deletions(-)
+
+diff --git a/frontend/src/App.jsx b/frontend/src/App.jsx
+index dd222492..6aec23c7 100644
+--- a/frontend/src/App.jsx
++++ b/frontend/src/App.jsx
+@@ -14,6 +14,7 @@ import BusinessIntelligenceTab from "./components/BusinessIntelligenceTab";
+ import SystemHealthTab from "./components/SystemHealthTab";
+ import LearningHealingTab from "./components/LearningHealingTab";
+ import LabTab from "./components/LabTab";
++import DevTab from "./components/DevTab";
+ import PersistentVoicePanel from "./components/PersistentVoicePanel";
+ import ActivityFeed from "./components/ActivityFeed";
+ import UndoToast from "./components/UndoManager";
+@@ -34,6 +35,7 @@ const VIEWS = [
+   { id: "health", label: "Health", icon: "≡ƒÅÑ" },
+   { id: "learn-heal", label: "Learn", icon: "≡ƒº¼" },
+   { id: "lab", label: "Lab", icon: "≡ƒº¬" },
++  { id: "dev", label: "Dev", icon: "≡ƒ¢á∩╕Å" },
+ ];
+ 
+ function App() {
+@@ -131,10 +133,10 @@ function App() {
+           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+             <span style={{
+               width: 8, height: 8, borderRadius: '50%',
+-              background: apiHealth?.ollama_running ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
++              background: (apiHealth?.llm_running || apiHealth?.ollama_running) ? '#4caf50' : apiHealth ? '#ff9800' : '#f44336',
+             }} />
+             <span style={{ fontSize: 11, color: '#888' }}>
+-              {apiHealth?.ollama_running ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
++              {(apiHealth?.llm_running || apiHealth?.ollama_running) ? 'Online' : apiHealth ? 'Partial' : 'Offline'}
+             </span>
+           </div>
+         </div>
+@@ -156,6 +158,7 @@ function App() {
+           {activeView === "health" && <SystemHealthTab />}
+           {activeView === "learn-heal" && <LearningHealingTab />}
+           {activeView === "lab" && <LabTab />}
++          {activeView === "dev" && <DevTab />}
+         </main>
+       </div>
+ 
+diff --git a/frontend/src/components/DevTab.jsx b/frontend/src/components/DevTab.jsx
+new file mode 100644
+index 00000000..a278f077
+--- /dev/null
++++ b/frontend/src/components/DevTab.jsx
+@@ -0,0 +1,294 @@
++import { useState, useEffect, useCallback } from "react";
++import { API_BASE_URL } from "../config/api";
++
++const B = API_BASE_URL;
++
++const SECTIONS = [
++  { id: "connectivity", label: "Connectivity" },
++  { id: "runtime", label: "Runtime" },
++  { id: "apis", label: "API Audit" },
++  { id: "diagnostic", label: "Diagnostic" },
++  { id: "healing", label: "Self-Healing" },
++];
++
++export default function DevTab() {
++  const [section, setSection] = useState("connectivity");
++  const [connectivity, setConnectivity] = useState(null);
++  const [runtime, setRuntime] = useState(null);
++  const [apis, setApis] = useState(null);
++  const [apiHealth, setApiHealth] = useState(null);
++  const [diagStatus, setDiagStatus] = useState(null);
++  const [healLog, setHealLog] = useState(null);
++  const [loading, setLoading] = useState({});
++  const [actionResult, setActionResult] = useState(null);
++
++  const f = useCallback(async (url, opts) => {
++    try {
++      const r = await fetch(url, opts);
++      return r.ok ? await r.json() : { error: `${r.status} ${r.statusText}` };
++    } catch (e) {
++      return { error: e.message };
++    }
++  }, []);
++
++  const load = useCallback(async (key, url) => {
++    setLoading((p) => ({ ...p, [key]: true }));
++    const data = await f(url);
++    setLoading((p) => ({ ...p, [key]: false }));
++    return data;
++  }, [f]);
++
++  useEffect(() => {
++    load("connectivity", `${B}/api/runtime/connectivity`).then(setConnectivity);
++    load("runtime", `${B}/api/runtime/status`).then(setRuntime);
++  }, [load]);
++
++  useEffect(() => {
++    if (section === "apis" && !apis) {
++      load("apis", `${B}/api/registry/all`).then(setApis);
++      load("apiHealth", `${B}/api/registry/health-check`).then(setApiHealth);
++    }
++    if (section === "diagnostic" && !diagStatus) {
++      load("diag", `${B}/diagnostic/status`).then(setDiagStatus);
++    }
++    if (section === "healing" && !healLog) {
++      load("heal", `${B}/diagnostic/healing/actions`).then(setHealLog);
++    }
++  }, [section, apis, diagStatus, healLog, load]);
++
++  const doAction = async (label, url) => {
++    setActionResult(null);
++    const data = await f(url, { method: "POST" });
++    setActionResult({ label, data });
++    load("runtime", `${B}/api/runtime/status`).then(setRuntime);
++    load("connectivity", `${B}/api/runtime/connectivity`).then(setConnectivity);
++  };
++
++  const badge = (ok, yes = "OK", no = "FAIL") => (
++    <span style={{
++      display: "inline-block", padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 700,
++      background: ok ? "#1b3a2a" : "#3a1b1b", color: ok ? "#4caf50" : "#f44336",
++    }}>{ok ? yes : no}</span>
++  );
++
++  return (
++    <div style={{ display: "flex", height: "100%", background: "#0a0a1a", color: "#ccc" }}>
++      {/* Sidebar */}
++      <div style={{ width: 180, borderRight: "1px solid #222", padding: "12px 0", flexShrink: 0 }}>
++        <div style={{ padding: "0 16px 12px", fontSize: 15, fontWeight: 800, color: "#e94560" }}>Dev Panel</div>
++        {SECTIONS.map((s) => (
++          <button key={s.id} onClick={() => setSection(s.id)} style={{
++            display: "block", width: "100%", textAlign: "left", padding: "8px 16px",
++            background: section === s.id ? "#1a1a3a" : "none", border: "none",
++            color: section === s.id ? "#e94560" : "#888", cursor: "pointer",
++            fontSize: 13, fontWeight: section === s.id ? 700 : 400,
++            borderLeft: section === s.id ? "3px solid #e94560" : "3px solid transparent",
++          }}>{s.label}</button>
++        ))}
++
++        <div style={{ borderTop: "1px solid #222", margin: "16px 0", padding: "12px 16px" }}>
++          <div style={{ fontSize: 11, color: "#666", marginBottom: 8 }}>Quick Actions</div>
++          <button onClick={() => doAction("Hot Reload", `${B}/api/runtime/hot-reload`)}
++            style={qBtn("#2563eb")}>Hot Reload</button>
++          <button onClick={() => doAction("Pause", `${B}/api/runtime/pause`)}
++            style={qBtn("#f59e0b")}>Pause Runtime</button>
++          <button onClick={() => doAction("Resume", `${B}/api/runtime/resume`)}
++            style={qBtn("#10b981")}>Resume Runtime</button>
++          <button onClick={() => doAction("Heal", `${B}/diagnostic/healing/execute`)}
++            style={qBtn("#8b5cf6")}>Trigger Heal</button>
++        </div>
++      </div>
++
++      {/* Main */}
++      <div style={{ flex: 1, overflow: "auto", padding: 20 }}>
++        {actionResult && (
++          <div style={{
++            padding: "10px 16px", marginBottom: 16, borderRadius: 6,
++            background: actionResult.data?.error ? "#3a1b1b" : "#1b3a2a",
++            border: `1px solid ${actionResult.data?.error ? "#f44336" : "#4caf50"}`,
++            fontSize: 13,
++          }}>
++            <strong>{actionResult.label}:</strong>{" "}
++            {actionResult.data?.error || actionResult.data?.status || JSON.stringify(actionResult.data).slice(0, 200)}
++            <button onClick={() => setActionResult(null)} style={{ float: "right", background: "none", border: "none", color: "#888", cursor: "pointer" }}>x</button>
++          </div>
++        )}
++
++        {section === "connectivity" && (
++          <div>
++            <h2 style={h2}>Service Connectivity</h2>
++            {loading.connectivity ? <p>Loading...</p> : connectivity?.services ? (
++              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
++                {Object.entries(connectivity.services).map(([name, info]) => (
++                  <div key={name} style={card}>
++                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
++                      <span style={{ fontSize: 14, fontWeight: 700, textTransform: "capitalize" }}>{name}</span>
++                      {badge(info.connected || info.configured, "Connected", "Disconnected")}
++                    </div>
++                    {Object.entries(info).filter(([k]) => k !== "connected" && k !== "configured").map(([k, v]) => (
++                      <div key={k} style={{ fontSize: 12, color: "#888" }}>{k}: <span style={{ color: "#aaa" }}>{String(v)}</span></div>
++                    ))}
++                  </div>
++                ))}
++              </div>
++            ) : <pre style={pre}>{JSON.stringify(connectivity, null, 2)}</pre>}
++
++            <h2 style={{ ...h2, marginTop: 24 }}>Runtime Status</h2>
++            {runtime && (
++              <div style={card}>
++                <div>Paused: {badge(!runtime.paused, "Running", "Paused")}</div>
++                <div>Diagnostic Engine: {badge(runtime.self_healing, runtime.diagnostic_engine, "Off")}</div>
++                <div>Self-Healing: {badge(runtime.self_healing)}</div>
++                <div>Uptime: {runtime.uptime_seconds ? `${Math.floor(runtime.uptime_seconds)}s` : "?"}</div>
++              </div>
++            )}
++          </div>
++        )}
++
++        {section === "runtime" && (
++          <div>
++            <h2 style={h2}>Runtime Controls</h2>
++            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
++              <div style={card}>
++                <h3 style={{ margin: "0 0 8px", fontSize: 14, color: "#e94560" }}>Pause / Resume</h3>
++                <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>
++                  Pause suspends the diagnostic heartbeat and self-healing without stopping the process.
++                  All API endpoints remain available.
++                </p>
++                <div style={{ display: "flex", gap: 8 }}>
++                  <button onClick={() => doAction("Pause", `${B}/api/runtime/pause`)} style={actionBtn("#f59e0b")}>Pause</button>
++                  <button onClick={() => doAction("Resume", `${B}/api/runtime/resume`)} style={actionBtn("#10b981")}>Resume</button>
++                </div>
++              </div>
++              <div style={card}>
++                <h3 style={{ margin: "0 0 8px", fontSize: 14, color: "#e94560" }}>Hot Reload</h3>
++                <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>
++                  Re-reads .env, refreshes consensus model registry, reconnects DB pool,
++                  and re-runs startup diagnostic ΓÇö without restarting.
++                </p>
++                <button onClick={() => doAction("Hot Reload", `${B}/api/runtime/hot-reload`)} style={actionBtn("#2563eb")}>Hot Reload Now</button>
++              </div>
++              <div style={card}>
++                <h3 style={{ margin: "0 0 8px", fontSize: 14, color: "#e94560" }}>Diagnostic Engine</h3>
++                <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>
++                  4-layer diagnostic machine: Sensors, Interpreters, Judgement, Action Router.
++                  Runs on 60s heartbeat.
++                </p>
++                <div style={{ display: "flex", gap: 8 }}>
++                  <button onClick={() => doAction("Start Engine", `${B}/diagnostic/start`)} style={actionBtn("#10b981")}>Start</button>
++                  <button onClick={() => doAction("Stop Engine", `${B}/diagnostic/stop`)} style={actionBtn("#ef4444")}>Stop</button>
++                  <button onClick={() => doAction("Pause Engine", `${B}/diagnostic/pause`)} style={actionBtn("#f59e0b")}>Pause</button>
++                  <button onClick={() => doAction("Resume Engine", `${B}/diagnostic/resume`)} style={actionBtn("#10b981")}>Resume</button>
++                </div>
++              </div>
++              <div style={card}>
++                <h3 style={{ margin: "0 0 8px", fontSize: 14, color: "#e94560" }}>Self-Healing</h3>
++                <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>
++                  Trigger healing actions: DB reconnect, cache clear, vector DB reset, config reload.
++                </p>
++                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++                  <button onClick={() => doAction("DB Reconnect", `${B}/api/system-health/heal/db_reconnect`)} style={actionBtn("#8b5cf6")}>DB Reconnect</button>
++                  <button onClick={() => doAction("Cache Clear", `${B}/api/system-health/heal/cache_clear`)} style={actionBtn("#8b5cf6")}>Clear Cache</button>
++                  <button onClick={() => doAction("Full Heal", `${B}/api/learn-heal/heal`)} style={actionBtn("#8b5cf6")}>Full Heal</button>
++                </div>
++              </div>
++            </div>
++          </div>
++        )}
++
++        {section === "apis" && (
++          <div>
++            <h2 style={h2}>API Connectivity Audit</h2>
++            <button onClick={() => { setApis(null); setApiHealth(null); load("apis", `${B}/api/registry/all`).then(setApis); load("apiHealth", `${B}/api/registry/health-check`).then(setApiHealth); }}
++              style={{ ...actionBtn("#2563eb"), marginBottom: 12 }}>Re-Scan All APIs</button>
++
++            {loading.apis ? <p>Scanning...</p> : apiHealth?.results ? (
++              <div>
++                <div style={{ marginBottom: 12, fontSize: 13 }}>
++                  Total: {apiHealth.results.length} |
++                  Healthy: <span style={{ color: "#4caf50" }}>{apiHealth.results.filter(r => r.healthy).length}</span> |
++                  Failed: <span style={{ color: "#f44336" }}>{apiHealth.results.filter(r => !r.healthy).length}</span>
++                </div>
++                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
++                  <thead>
++                    <tr style={{ borderBottom: "1px solid #333" }}>
++                      <th style={th}>Endpoint</th><th style={th}>Method</th><th style={th}>Status</th><th style={th}>Latency</th>
++                    </tr>
++                  </thead>
++                  <tbody>
++                    {apiHealth.results.map((r, i) => (
++                      <tr key={i} style={{ borderBottom: "1px solid #1a1a2e" }}>
++                        <td style={td}>{r.path || r.endpoint}</td>
++                        <td style={td}>{r.method || "GET"}</td>
++                        <td style={td}>{badge(r.healthy, `${r.status_code || 200}`, `${r.status_code || "ERR"}`)}</td>
++                        <td style={td}>{r.latency_ms ? `${r.latency_ms}ms` : "-"}</td>
++                      </tr>
++                    ))}
++                  </tbody>
++                </table>
++              </div>
++            ) : apis && !apis.error ? (
++              <div>
++                <div style={{ marginBottom: 12, fontSize: 13 }}>Registry: {apis.apis?.length || 0} APIs</div>
++                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
++                  <thead>
++                    <tr style={{ borderBottom: "1px solid #333" }}>
++                      <th style={th}>Name</th><th style={th}>Prefix</th><th style={th}>Endpoints</th><th style={th}>Status</th>
++                    </tr>
++                  </thead>
++                  <tbody>
++                    {(apis.apis || []).map((a, i) => (
++                      <tr key={i} style={{ borderBottom: "1px solid #1a1a2e" }}>
++                        <td style={td}>{a.name}</td>
++                        <td style={td}><code>{a.prefix}</code></td>
++                        <td style={td}>{a.endpoint_count || a.endpoints?.length || "?"}</td>
++                        <td style={td}>{badge(a.status === "active" || a.healthy, a.status || "active", a.status || "unknown")}</td>
++                      </tr>
++                    ))}
++                  </tbody>
++                </table>
++              </div>
++            ) : <pre style={pre}>{JSON.stringify(apis || apiHealth, null, 2)}</pre>}
++          </div>
++        )}
++
++        {section === "diagnostic" && (
++          <div>
++            <h2 style={h2}>Diagnostic Engine</h2>
++            <button onClick={() => { setDiagStatus(null); load("diag", `${B}/diagnostic/status`).then(setDiagStatus); }}
++              style={{ ...actionBtn("#2563eb"), marginBottom: 12 }}>Refresh</button>
++            {loading.diag ? <p>Loading...</p> : <pre style={pre}>{JSON.stringify(diagStatus, null, 2)}</pre>}
++          </div>
++        )}
++
++        {section === "healing" && (
++          <div>
++            <h2 style={h2}>Self-Healing Log</h2>
++            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
++              <button onClick={() => { setHealLog(null); load("heal", `${B}/diagnostic/healing/actions`).then(setHealLog); }}
++                style={actionBtn("#2563eb")}>Refresh</button>
++              <button onClick={() => doAction("Trigger Heal", `${B}/api/learn-heal/heal`)}
++                style={actionBtn("#8b5cf6")}>Trigger Healing</button>
++            </div>
++            {loading.heal ? <p>Loading...</p> : <pre style={pre}>{JSON.stringify(healLog, null, 2)}</pre>}
++          </div>
++        )}
++      </div>
++    </div>
++  );
++}
++
++const h2 = { fontSize: 16, fontWeight: 700, color: "#e94560", margin: "0 0 16px" };
++const card = { background: "#12122a", border: "1px solid #222", borderRadius: 8, padding: 16 };
++const pre = { background: "#0d0d20", padding: 12, borderRadius: 6, fontSize: 12, overflow: "auto", maxHeight: 500, color: "#aaa" };
++const th = { textAlign: "left", padding: "6px 10px", color: "#888", fontWeight: 600 };
++const td = { padding: "6px 10px", color: "#ccc" };
++const qBtn = (c) => ({
++  display: "block", width: "100%", padding: "6px 10px", marginBottom: 6,
++  border: "none", borderRadius: 4, background: c, color: "#fff",
++  fontSize: 11, fontWeight: 600, cursor: "pointer",
++});
++const actionBtn = (c) => ({
++  padding: "6px 14px", border: "none", borderRadius: 4,
++  background: c, color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer",
++});

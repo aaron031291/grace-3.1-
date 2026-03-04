@@ -215,8 +215,8 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
                                 role="assistant",
                                 content=content
                             )
-                            from datetime import datetime
-                            chat_repo.update(chat_id, updated_at=datetime.utcnow(), last_message_at=datetime.utcnow())
+                            from datetime import datetime, timezone
+                            chat_repo.update(chat_id, updated_at=datetime.now(timezone.utc), last_message_at=datetime.now(timezone.utc))
                         
                         # Yield final content
                         yield f"data: {json.dumps({'type': 'content', 'content': content, 'sources': result.get('sources', []), 'tool_calls': result.get('tool_calls_made', [])})}\n\n"
@@ -262,8 +262,8 @@ async def mcp_chat(request: MCPChatRequest, db: Session = Depends(get_db)):
                 content=content
             )
             # Update chat timestamp
-            from datetime import datetime
-            chat_repo.update(chat_id, updated_at=datetime.utcnow(), last_message_at=datetime.utcnow())
+            from datetime import datetime, timezone
+            chat_repo.update(chat_id, updated_at=datetime.now(timezone.utc), last_message_at=datetime.now(timezone.utc))
 
         return MCPChatResponse(
             content=content,

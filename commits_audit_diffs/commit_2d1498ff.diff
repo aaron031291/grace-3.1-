@@ -1,0 +1,428 @@
+commit 2d1498ffe35e32e3138f9a5db1e9b072ec80923b
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Sun Mar 1 14:54:42 2026 +0000
+
+    feat: add runtime trigger system ΓÇö CPU/RAM/service/code/network/logical scanners + auto-healing pipeline
+    
+    New /api/triggers endpoints:
+      GET  /api/triggers/scan       ΓÇö full scan across all trigger categories
+      POST /api/triggers/scan-and-heal ΓÇö scan + auto-heal critical issues
+      GET  /api/triggers/log        ΓÇö trigger history
+      POST /api/triggers/stress-heal ΓÇö full pipeline: stress ΓåÆ diagnose ΓåÆ scan ΓåÆ heal
+    
+    Trigger categories:
+      RESOURCE   ΓÇö CPU > 90%, RAM > 85%, disk > 95%
+      SERVICE    ΓÇö Ollama/Qdrant/Kimi/Opus/DB unreachable
+      CODE       ΓÇö import errors, missing dependencies, broken modules
+      NETWORK    ΓÇö port conflicts (8000, 11434, 6333)
+      LOGICAL    ΓÇö test failures, broken API routes
+    
+    Critical triggers auto-fire the diagnostic engine + service-specific
+    healing (DB reconnect, GC collect, etc.)
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+---
+ backend/api/runtime_triggers_api.py | 373 ++++++++++++++++++++++++++++++++++++
+ backend/app.py                      |   2 +
+ 2 files changed, 375 insertions(+)
+
+diff --git a/backend/api/runtime_triggers_api.py b/backend/api/runtime_triggers_api.py
+new file mode 100644
+index 00000000..711c710d
+--- /dev/null
++++ b/backend/api/runtime_triggers_api.py
+@@ -0,0 +1,373 @@
++"""
++Runtime Triggers API ΓÇö watches for system anomalies and pipes them
++into the self-healing loop automatically.
++
++Trigger categories:
++  RESOURCE   ΓÇö CPU > 90%, RAM > 85%, disk > 95%
++  SERVICE    ΓÇö Ollama/Qdrant/Kimi/Opus unreachable
++  CODE       ΓÇö import errors, dependency mismatches, missing modules
++  NETWORK    ΓÇö port conflicts, connection refused, timeout
++  LOGICAL    ΓÇö test failures, invariant violations, consensus disagreement
++  DEGRADATIONΓÇö latency spikes, error-rate increase, throughput drop
++
++Each trigger can:
++  1. Be detected by the scan endpoint
++  2. Auto-fire the self-healing pipeline
++  3. Be logged with full context for the Dev tab to display
++"""
++
++from fastapi import APIRouter, HTTPException
++from pydantic import BaseModel
++from typing import Optional, List, Dict, Any
++from datetime import datetime
++import logging
++import os
++import sys
++import threading
++import time
++import importlib
++import socket
++
++logger = logging.getLogger(__name__)
++router = APIRouter(prefix="/api/triggers", tags=["Runtime Triggers"])
++
++_trigger_log: list = []
++_trigger_lock = threading.Lock()
++_MAX_LOG = 200
++
++
++class TriggerEntry:
++    def __init__(self, category: str, name: str, severity: str,
++                 detail: str, value: Any = None, healed: bool = False):
++        self.category = category
++        self.name = name
++        self.severity = severity
++        self.detail = detail
++        self.value = value
++        self.healed = healed
++        self.timestamp = datetime.utcnow().isoformat()
++
++    def to_dict(self):
++        return {
++            "category": self.category,
++            "name": self.name,
++            "severity": self.severity,
++            "detail": self.detail,
++            "value": self.value,
++            "healed": self.healed,
++            "timestamp": self.timestamp,
++        }
++
++
++def _log_trigger(t: TriggerEntry):
++    with _trigger_lock:
++        _trigger_log.append(t.to_dict())
++        if len(_trigger_log) > _MAX_LOG:
++            _trigger_log.pop(0)
++
++
++# ΓöÇΓöÇ Scanners ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++def _scan_resources() -> List[dict]:
++    """CPU, RAM, disk."""
++    triggers = []
++    try:
++        import psutil
++        cpu = psutil.cpu_percent(interval=0.5)
++        mem = psutil.virtual_memory()
++        disk = psutil.disk_usage("/")
++        if cpu > 90:
++            triggers.append(TriggerEntry("RESOURCE", "high_cpu", "critical",
++                                         f"CPU at {cpu}%", cpu))
++        elif cpu > 75:
++            triggers.append(TriggerEntry("RESOURCE", "elevated_cpu", "warning",
++                                         f"CPU at {cpu}%", cpu))
++        if mem.percent > 85:
++            triggers.append(TriggerEntry("RESOURCE", "high_ram", "critical",
++                                         f"RAM at {mem.percent}%", mem.percent))
++        elif mem.percent > 70:
++            triggers.append(TriggerEntry("RESOURCE", "elevated_ram", "warning",
++                                         f"RAM at {mem.percent}%", mem.percent))
++        if disk.percent > 95:
++            triggers.append(TriggerEntry("RESOURCE", "disk_full", "critical",
++                                         f"Disk at {disk.percent}%", disk.percent))
++    except ImportError:
++        triggers.append(TriggerEntry("RESOURCE", "psutil_missing", "info",
++                                     "psutil not installed ΓÇö resource monitoring limited"))
++    return triggers
++
++
++def _scan_services() -> List[dict]:
++    """Ollama, Qdrant, Kimi, Opus, Database."""
++    triggers = []
++    try:
++        from settings import settings
++    except Exception:
++        return triggers
++
++    # Ollama
++    try:
++        import urllib.request
++        url = (settings.OLLAMA_URL or "http://localhost:11434").rstrip("/") + "/api/tags"
++        req = urllib.request.Request(url, method="GET")
++        urllib.request.urlopen(req, timeout=3)
++    except Exception as e:
++        triggers.append(TriggerEntry("SERVICE", "ollama_down", "critical",
++                                     f"Ollama unreachable: {e}"))
++
++    # Qdrant
++    try:
++        import urllib.request as ur
++        qdrant_url = f"http://{settings.QDRANT_HOST}:{settings.QDRANT_PORT}/collections"
++        ur.urlopen(qdrant_url, timeout=3)
++    except Exception as e:
++        triggers.append(TriggerEntry("SERVICE", "qdrant_down", "critical",
++                                     f"Qdrant unreachable: {e}"))
++
++    # Database
++    try:
++        from database.connection import DatabaseConnection
++        if not DatabaseConnection.health_check():
++            triggers.append(TriggerEntry("SERVICE", "db_unhealthy", "critical",
++                                         "Database health check failed"))
++    except Exception as e:
++        triggers.append(TriggerEntry("SERVICE", "db_error", "critical", str(e)))
++
++    # Kimi
++    if settings.KIMI_API_KEY:
++        try:
++            import urllib.request as ur2
++            req = ur2.Request(settings.KIMI_BASE_URL.rstrip("/") + "/models",
++                              headers={"Authorization": f"Bearer {settings.KIMI_API_KEY}"})
++            ur2.urlopen(req, timeout=5)
++        except Exception:
++            triggers.append(TriggerEntry("SERVICE", "kimi_unreachable", "warning",
++                                         "Kimi API unreachable"))
++
++    # Opus
++    if settings.OPUS_API_KEY:
++        try:
++            import urllib.request as ur3
++            req = ur3.Request("https://api.anthropic.com/v1/messages",
++                              headers={"x-api-key": settings.OPUS_API_KEY,
++                                       "anthropic-version": "2023-06-01"})
++            ur3.urlopen(req, timeout=5)
++        except Exception:
++            triggers.append(TriggerEntry("SERVICE", "opus_unreachable", "warning",
++                                         "Opus/Anthropic API unreachable"))
++
++    return triggers
++
++
++def _scan_code() -> List[dict]:
++    """Import errors, missing dependencies."""
++    triggers = []
++    critical_modules = [
++        "sqlalchemy", "fastapi", "pydantic", "uvicorn",
++    ]
++    for mod in critical_modules:
++        try:
++            importlib.import_module(mod)
++        except ImportError as e:
++            triggers.append(TriggerEntry("CODE", "missing_dependency", "critical",
++                                         f"Cannot import {mod}: {e}", mod))
++
++    backend_modules = [
++        "database.connection", "database.session",
++        "cognitive.consensus_engine",
++        "llm_orchestrator.factory",
++    ]
++    for mod in backend_modules:
++        try:
++            importlib.import_module(mod)
++        except Exception as e:
++            triggers.append(TriggerEntry("CODE", "import_error", "warning",
++                                         f"Backend module {mod}: {e}", mod))
++    return triggers
++
++
++def _scan_network() -> List[dict]:
++    """Port conflicts."""
++    triggers = []
++    ports_to_check = [
++        (8000, "Grace API"),
++        (11434, "Ollama"),
++        (6333, "Qdrant"),
++    ]
++    for port, name in ports_to_check:
++        try:
++            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
++                s.settimeout(1)
++                result = s.connect_ex(("127.0.0.1", port))
++                if result != 0 and name != "Grace API":
++                    triggers.append(TriggerEntry("NETWORK", "port_unreachable", "warning",
++                                                 f"{name} port {port} not listening", port))
++        except Exception:
++            pass
++    return triggers
++
++
++def _scan_logical() -> List[dict]:
++    """Test failures, integration gaps."""
++    triggers = []
++    try:
++        from cognitive.test_framework import smoke_test
++        result = smoke_test()
++        if result.get("status") != "pass":
++            failed = result.get("failed", 0)
++            triggers.append(TriggerEntry("LOGICAL", "test_failures", "warning",
++                                         f"Smoke test: {failed} failures",
++                                         result.get("summary")))
++    except Exception:
++        pass
++
++    try:
++        from api.api_registry_api import _build_registry
++        reg = _build_registry()
++        broken = [r for r in reg.get("routes", []) if not r.get("healthy", True)]
++        if broken:
++            triggers.append(TriggerEntry("LOGICAL", "broken_apis", "warning",
++                                         f"{len(broken)} broken API routes",
++                                         [r.get("path") for r in broken[:10]]))
++    except Exception:
++        pass
++
++    return triggers
++
++
++# ΓöÇΓöÇ Healing bridge ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++def _auto_heal(triggers: List[dict]) -> dict:
++    """Pipe critical triggers into self-healing."""
++    healed = []
++    critical = [t for t in triggers if t.get("severity") == "critical"]
++    if not critical:
++        return {"healed": 0, "actions": []}
++
++    # Try diagnostic machine first
++    try:
++        from diagnostic_machine.diagnostic_engine import get_diagnostic_engine
++        engine = get_diagnostic_engine()
++        from diagnostic_machine.diagnostic_engine import TriggerSource
++        cycle = engine.run_cycle(TriggerSource.SENSOR_FLAG)
++        healed.append({
++            "action": "diagnostic_cycle",
++            "result": cycle.get("health_status", "unknown") if isinstance(cycle, dict) else "ran",
++        })
++    except Exception as e:
++        logger.warning("Diagnostic healing failed: %s", e)
++
++    # Service-specific healing
++    for t in critical:
++        name = t.get("name", "")
++        try:
++            if "db" in name:
++                from database.connection import DatabaseConnection
++                DatabaseConnection.get_engine().dispose()
++                healed.append({"action": "db_reconnect", "trigger": name})
++            elif "ollama" in name:
++                healed.append({"action": "ollama_alert", "trigger": name,
++                               "note": "Ollama requires manual restart"})
++            elif "ram" in name or "cpu" in name:
++                import gc
++                gc.collect()
++                healed.append({"action": "gc_collect", "trigger": name})
++        except Exception as e:
++            healed.append({"action": "heal_error", "trigger": name, "error": str(e)})
++
++    return {"healed": len(healed), "actions": healed}
++
++
++# ΓöÇΓöÇ Endpoints ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++@router.get("/scan")
++async def scan_triggers():
++    """Run a full trigger scan across all categories."""
++    all_triggers = []
++    categories = {
++        "RESOURCE": _scan_resources,
++        "SERVICE": _scan_services,
++        "CODE": _scan_code,
++        "NETWORK": _scan_network,
++        "LOGICAL": _scan_logical,
++    }
++    for cat, scanner in categories.items():
++        try:
++            found = scanner()
++            for t in found:
++                entry = t if isinstance(t, dict) else t.to_dict()
++                _log_trigger(t if isinstance(t, TriggerEntry) else
++                             TriggerEntry(cat, entry.get("name", ""), entry.get("severity", "info"),
++                                          entry.get("detail", "")))
++                all_triggers.append(entry if isinstance(entry, dict) else entry)
++        except Exception as e:
++            logger.error("Trigger scan error in %s: %s", cat, e)
++
++    return {
++        "total": len(all_triggers),
++        "critical": sum(1 for t in all_triggers if t.get("severity") == "critical"),
++        "warning": sum(1 for t in all_triggers if t.get("severity") == "warning"),
++        "triggers": all_triggers,
++        "scanned_at": datetime.utcnow().isoformat(),
++    }
++
++
++@router.post("/scan-and-heal")
++async def scan_and_heal():
++    """Scan for triggers and auto-heal critical issues."""
++    scan = await scan_triggers()
++    heal_result = _auto_heal(scan["triggers"])
++    return {
++        "scan": scan,
++        "healing": heal_result,
++    }
++
++
++@router.get("/log")
++async def get_trigger_log(limit: int = 50):
++    """Get recent trigger history."""
++    with _trigger_lock:
++        return {"log": list(reversed(_trigger_log[-limit:])), "total": len(_trigger_log)}
++
++
++@router.post("/stress-heal")
++async def stress_then_heal():
++    """
++    Run stress test, collect results, then auto-heal any issues found.
++    This is the full pipeline: stress ΓåÆ diagnose ΓåÆ heal.
++    """
++    results = {"stress": None, "diagnostic": None, "triggers": None, "healing": None}
++
++    # 1. Run logic tests as a stress indicator
++    try:
++        from cognitive.deep_test_engine import get_deep_test_engine
++        engine = get_deep_test_engine()
++        test_result = engine.run_logic_tests()
++        results["stress"] = {
++            "passed": test_result.get("passed", 0),
++            "failed": test_result.get("failed", 0),
++            "total": test_result.get("total", 0),
++            "pass_rate": test_result.get("pass_rate", 0),
++            "status": test_result.get("status", "unknown"),
++        }
++    except Exception as e:
++        results["stress"] = {"error": str(e)}
++
++    # 2. Run diagnostic
++    try:
++        from cognitive.autonomous_diagnostics import get_diagnostics
++        diag = get_diagnostics()
++        diag_result = diag.on_startup()
++        results["diagnostic"] = diag_result
++    except Exception as e:
++        results["diagnostic"] = {"error": str(e)}
++
++    # 3. Scan triggers
++    scan = await scan_triggers()
++    results["triggers"] = scan
++
++    # 4. Auto-heal
++    heal = _auto_heal(scan["triggers"])
++    results["healing"] = heal
++
++    return results
+diff --git a/backend/app.py b/backend/app.py
+index fd3ab05a..2e44cf22 100644
+--- a/backend/app.py
++++ b/backend/app.py
+@@ -82,6 +82,7 @@ from api.streaming import router as streaming_router
+ from api.websocket import router as websocket_router
+ from api.telemetry import router as telemetry_router
+ from diagnostic_machine.api import router as diagnostic_router
++from api.runtime_triggers_api import router as runtime_triggers_router
+ from genesis.middleware import GenesisKeyMiddleware
+ from vector_db.client import get_qdrant_client
+ from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
+@@ -590,6 +591,7 @@ app.include_router(streaming_router)             # /stream ΓÇö SSE streaming
+ app.include_router(websocket_router)             # WebSocket ΓÇö real-time events
+ app.include_router(telemetry_router)             # /telemetry ΓÇö system telemetry
+ app.include_router(diagnostic_router)            # /diagnostic ΓÇö 4-layer diagnostic machine + healing
++app.include_router(runtime_triggers_router)      # /api/triggers ΓÇö trigger scanning + auto-healing pipeline
+ 
+ # v1 resource API (enterprise pattern ΓÇö the public surface)
+ register_v1(app)
+

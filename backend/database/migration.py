@@ -23,6 +23,11 @@ from models.database_models import (  # noqa: F401
     GovernanceRule,
     GovernanceDocument,
     GovernanceDecision,
+    LearningExample,
+    LearningPattern,
+    Episode,
+    Procedure,
+    LLMUsageStats,
 )
 
 # Import Notion task management models
@@ -58,6 +63,13 @@ from models.librarian_models import (  # noqa: F401
     LibrarianRule,
     LibrarianAction,
     LibrarianAudit,
+)
+
+# Import Query Intelligence models
+from models.query_intelligence_models import (  # noqa: F401
+    QueryHandlingLog,
+    KnowledgeGap,
+    ContextSubmission,
 )
 
 

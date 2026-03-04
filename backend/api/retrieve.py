@@ -34,7 +34,7 @@ def get_document_retriever() -> DocumentRetriever:
         try:
             print("[RETRIEVE] Initializing document retriever...")
             # Get the embedding model from the ingestion service
-            from api.ingest import get_ingestion_service
+            from ingestion.service import get_ingestion_service
             ingest_service = get_ingestion_service()
 
             # Reuse the embedding model from ingestion service

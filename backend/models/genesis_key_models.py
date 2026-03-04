@@ -4,7 +4,7 @@ Genesis Key models for comprehensive version control and tracking.
 Genesis Keys track every input, change, and action in the system with
 complete metadata for what, where, when, why, who, and how.
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 from sqlalchemy import (
     Column, String, Integer, Float, DateTime,
@@ -98,7 +98,7 @@ class GenesisKey(BaseModel):
     # What, Where, When, Why, Who, How
     what_description = Column(Text, nullable=False)  # What happened
     where_location = Column(String(500), nullable=True)  # File path, function, line number
-    when_timestamp = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
+    when_timestamp = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc), index=True)
     why_reason = Column(Text, nullable=True)  # Purpose/justification
     who_actor = Column(String(255), nullable=False)  # User, system, or process
     how_method = Column(Text, nullable=True)  # How it was done
@@ -251,8 +251,8 @@ class UserProfile(BaseModel):
     email = Column(String(255), nullable=True)
 
     # Profile metadata
-    first_seen = Column(DateTime, nullable=False, default=datetime.utcnow)
-    last_seen = Column(DateTime, nullable=False, default=datetime.utcnow)
+    first_seen = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    last_seen = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
 
     # Activity statistics
     total_actions = Column(Integer, nullable=False, default=0)

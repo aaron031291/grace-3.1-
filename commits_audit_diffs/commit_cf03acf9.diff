@@ -1,0 +1,268 @@
+commit cf03acf988bc7772fb41b486a5333216cd9e1ea2
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Sun Mar 1 15:15:36 2026 +0000
+
+    feat: deep Genesis key integration ΓÇö retrieval, DB, event bus, TimeSense, mirror feed
+    
+    Genesis tracking added to:
+      - RAG retrieval (every search gets a key with query, chunks found, top score)
+      - DB session errors (every OperationalError tracked with type/message)
+      - All Genesis keys now publish 'genesis.key_created' on event bus
+        (fixes central_orchestrator subscription mismatch)
+    
+    TimeSense integration:
+      - Added get_context() alias for now_context() (fixes mirror/qwen-net API mismatch)
+      - Component health map now includes time_context (period, business_hours, day_of_week)
+    
+    Event bus fixes:
+      - genesis.key_created now published alongside genesis.{key_type}
+      - system.health_changed published when component status transitions
+    
+    Mirror self-model integration:
+      - New /api/component-health/mirror-feed endpoint provides:
+        component statuses, problems, activity patterns, temporal context
+      - Designed for mirror to observe and reflect on system behavior
+    
+    Closed-loop observability chain:
+      Genesis keys ΓåÆ Event bus ΓåÆ Component health ΓåÆ Mirror ΓåÆ Self-healing
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+---
+ backend/api/_genesis_tracker.py     |  8 ++--
+ backend/api/component_health_api.py | 79 +++++++++++++++++++++++++++++++++++++
+ backend/cognitive/time_sense.py     |  5 +++
+ backend/database/session.py         | 18 +++++++++
+ backend/retrieval/retriever.py      | 30 +++++++++++++-
+ 5 files changed, 136 insertions(+), 4 deletions(-)
+
+diff --git a/backend/api/_genesis_tracker.py b/backend/api/_genesis_tracker.py
+index cc333c43..701e4670 100644
+--- a/backend/api/_genesis_tracker.py
++++ b/backend/api/_genesis_tracker.py
+@@ -59,11 +59,13 @@ def track(
+     # Fire event bus for system-wide awareness
+     try:
+         from cognitive.event_bus import publish_async
+-        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
+-        publish_async(event_topic, {
++        event_data = {
+             "key_type": key_type, "what": what, "who": who,
+             "is_error": is_error, "tags": tags,
+-        }, source="genesis_tracker")
++        }
++        event_topic = f"genesis.{key_type}" if not is_error else "genesis.error"
++        publish_async(event_topic, event_data, source="genesis_tracker")
++        publish_async("genesis.key_created", event_data, source="genesis_tracker")
+     except Exception:
+         pass
+ 
+diff --git a/backend/api/component_health_api.py b/backend/api/component_health_api.py
+index affaa59e..6100c30d 100644
+--- a/backend/api/component_health_api.py
++++ b/backend/api/component_health_api.py
+@@ -269,6 +269,32 @@ def _get_genesis_keys(minutes: int = 60, component_id: str = None,
+         return []
+ 
+ 
++def _get_time_context() -> dict:
++    """Get temporal context for health classification."""
++    try:
++        from cognitive.time_sense import TimeSense
++        return TimeSense.get_context()
++    except Exception:
++        return {}
++
++
++def _publish_health_change(component_id: str, old_status: str, new_status: str, reason: str):
++    """Publish health changes to the event bus for system-wide awareness."""
++    try:
++        from cognitive.event_bus import publish_async
++        publish_async("system.health_changed", {
++            "component": component_id,
++            "old_status": old_status,
++            "new_status": new_status,
++            "reason": reason,
++        }, source="component_health")
++    except Exception:
++        pass
++
++
++_last_known_status: Dict[str, str] = {}
++
++
+ def _classify_component(comp_id: str, comp: dict, keys: List[dict],
+                         service_health: dict) -> dict:
+     """Classify a component's health status."""
+@@ -342,6 +368,12 @@ def _classify_component(comp_id: str, comp: dict, keys: List[dict],
+         status = "yellow"
+         reason = "Idle (expected)"
+ 
++    # Publish health change to event bus if status changed
++    prev = _last_known_status.get(comp_id)
++    if prev and prev != status:
++        _publish_health_change(comp_id, prev, status, reason)
++    _last_known_status[comp_id] = status
++
+     return {
+         "id": comp_id,
+         "label": comp.get("label", comp_id),
+@@ -441,6 +473,8 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
+                     "queued_at": datetime.utcnow().isoformat(),
+                 })
+ 
++    time_ctx = _get_time_context()
++
+     return {
+         "components": components,
+         "summary": dict(status_counts),
+@@ -449,6 +483,11 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
+         "remediation": remediation,
+         "window_minutes": window_minutes,
+         "generated_at": datetime.utcnow().isoformat(),
++        "time_context": {
++            "period": time_ctx.get("period", "unknown"),
++            "is_business_hours": time_ctx.get("is_business_hours", False),
++            "day_of_week": time_ctx.get("day_of_week", "unknown"),
++        },
+     }
+ 
+ 
+@@ -625,6 +664,46 @@ async def get_component_registry():
+     }
+ 
+ 
++@router.get("/mirror-feed")
++async def mirror_feed():
++    """
++    Data feed for the Mirror Self-Model ΓÇö component health patterns
++    suitable for self-reflection and anomaly observation.
++    """
++    keys = _get_genesis_keys(minutes=60, limit=2000)
++    service_health = _check_service_health()
++
++    components = []
++    for comp_id, comp in COMPONENT_REGISTRY.items():
++        classified = _classify_component(comp_id, comp, keys, service_health)
++        components.append(classified)
++
++    time_ctx = _get_time_context()
++    problems = [c for c in components if c["status"] in ("red", "orange")]
++
++    # Activity patterns for the mirror
++    try:
++        from cognitive.time_sense import TimeSense
++        timestamps = [k["when"] for k in keys if k.get("when")]
++        activity = TimeSense.activity_patterns(timestamps) if timestamps else {}
++    except Exception:
++        activity = {}
++
++    return {
++        "component_statuses": {c["id"]: c["status"] for c in components},
++        "problems": [{"id": p["id"], "status": p["status"], "reason": p["reason"]} for p in problems],
++        "total_events_1h": len(keys),
++        "error_count_1h": sum(1 for k in keys if k.get("is_error")),
++        "activity_patterns": activity,
++        "time_context": time_ctx,
++        "observation": (
++            f"{len(problems)} components degraded/broken out of {len(components)} total. "
++            f"Period: {time_ctx.get('period', '?')}. "
++            f"Events in last hour: {len(keys)}."
++        ),
++    }
++
++
+ def _auto_execute_remediation(action: dict):
+     """Execute a remediation action."""
+     act = action.get("action", "")
+diff --git a/backend/cognitive/time_sense.py b/backend/cognitive/time_sense.py
+index 70b309db..c2ed85f4 100644
+--- a/backend/cognitive/time_sense.py
++++ b/backend/cognitive/time_sense.py
+@@ -21,6 +21,11 @@ logger = logging.getLogger(__name__)
+ class TimeSense:
+     """Grace's sense of time ΓÇö temporal awareness for the entire system."""
+ 
++    @staticmethod
++    def get_context() -> Dict[str, Any]:
++        """Alias for now_context() ΓÇö used by mirror, qwen-net, and component health."""
++        return TimeSense.now_context()
++
+     @staticmethod
+     def now_context() -> Dict[str, Any]:
+         """What does Grace know about RIGHT NOW."""
+diff --git a/backend/database/session.py b/backend/database/session.py
+index 5657a173..6703c7db 100644
+--- a/backend/database/session.py
++++ b/backend/database/session.py
+@@ -198,4 +198,22 @@ def _commit_with_retry(session: Session) -> None:
+                 session.rollback()
+                 time.sleep(wait)
+             else:
++                _track_db_error(e)
+                 raise
++
++
++def _track_db_error(exc: Exception) -> None:
++    """Fire-and-forget Genesis key for DB errors."""
++    try:
++        from api._genesis_tracker import track
++        track(
++            key_type="error",
++            what=f"Database error: {str(exc)[:100]}",
++            who="database.session",
++            is_error=True,
++            error_type=type(exc).__name__,
++            error_message=str(exc)[:300],
++            tags=["database", "db", "operational_error"],
++        )
++    except Exception:
++        pass
+diff --git a/backend/retrieval/retriever.py b/backend/retrieval/retriever.py
+index b786594f..d34ab69b 100644
+--- a/backend/retrieval/retriever.py
++++ b/backend/retrieval/retriever.py
+@@ -165,6 +165,21 @@ class DocumentRetriever:
+                         enriched_results.append(result_dict)
+                 
+                 logger.info(f"Retrieved {len(enriched_results)} chunks for query: {query}")
++
++                try:
++                    from api._genesis_tracker import track
++                    track(
++                        key_type="ai_response",
++                        what=f"RAG retrieval: {len(enriched_results)} chunks for '{query[:60]}'",
++                        who="retriever.retrieve",
++                        how="qdrant_vector_search",
++                        input_data={"query": query[:200], "limit": limit, "threshold": score_threshold},
++                        output_data={"chunks_found": len(enriched_results), "top_score": enriched_results[0]["score"] if enriched_results else 0},
++                        tags=["rag", "retrieval", "search"],
++                    )
++                except Exception:
++                    pass
++
+                 return enriched_results
+             
+             finally:
+@@ -172,7 +187,20 @@ class DocumentRetriever:
+         
+         except Exception as e:
+             logger.error(f"Retrieval error for query '{query}': {e}", exc_info=True)
+-            raise  # Re-raise so caller knows about the failure
++            try:
++                from api._genesis_tracker import track
++                track(
++                    key_type="error",
++                    what=f"RAG retrieval failed: {query[:60]}",
++                    who="retriever.retrieve",
++                    is_error=True,
++                    error_type=type(e).__name__,
++                    error_message=str(e)[:200],
++                    tags=["rag", "retrieval", "error"],
++                )
++            except Exception:
++                pass
++            raise
+     
+     def retrieve_hybrid(
+         self,
+

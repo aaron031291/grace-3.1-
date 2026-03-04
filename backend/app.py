@@ -9,7 +9,7 @@ from typing import List, Optional
 import re
 import time
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import sys
 from pathlib import Path
@@ -454,26 +454,36 @@ async def lifespan(app: FastAPI):
     _diag_engine = None
     try:
         from diagnostic_machine.diagnostic_engine import get_diagnostic_engine
-        _diag_engine = get_diagnostic_engine()
+        # Ensure it respects the same setting as the API
+        enable_heartbeat = not getattr(settings, "DISABLE_AUTONOMOUS_LOOP", False)
+        _diag_engine = get_diagnostic_engine(
+            enable_heartbeat=enable_heartbeat
+        )
         started = _diag_engine.start()
         if started:
-            print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
+            if enable_heartbeat:
+                print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
+            else:
+                print("[OK] Diagnostic engine initialized in manual mode (heartbeat disabled)")
         else:
             print("[WARN] Diagnostic engine already running")
     except Exception as e:
         print(f"[WARN] Diagnostic engine not started: {e}")
 
     # ==================== Start Autonomous Loop ====================
-    try:
-        from api.autonomous_loop_api import _background_loop, _stop_event, _loop_state
-        import threading
-        _stop_event.clear()
-        _loop_state["running"] = True
-        _auto_thread = threading.Thread(target=_background_loop, args=(30,), daemon=True)
-        _auto_thread.start()
-        print("[OK] Autonomous loop started (30s cycle: heal → learn → code → verify)")
-    except Exception as e:
-        print(f"[WARN] Autonomous loop not started: {e}")
+    if not settings.DISABLE_AUTONOMOUS_LOOP:
+        try:
+            from api.autonomous_loop_api import _background_loop, _stop_event, _loop_state
+            import threading
+            _stop_event.clear()
+            _loop_state["running"] = True
+            _auto_thread = threading.Thread(target=_background_loop, args=(30,), daemon=True)
+            _auto_thread.start()
+            print("[OK] Autonomous loop started (30s cycle: heal → learn → code → verify)")
+        except Exception as e:
+            print(f"[WARN] Autonomous loop not started: {e}")
+    else:
+        print("[SKIP] Autonomous loop disabled (DISABLE_AUTONOMOUS_LOOP=true)")
 
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False

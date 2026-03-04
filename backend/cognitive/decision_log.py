@@ -5,7 +5,7 @@ Implements Invariant 6: Observability Is Mandatory.
 All decisions are logged with full rationale and alternatives.
 """
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, TYPE_CHECKING
 from pathlib import Path
 
@@ -43,7 +43,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_start',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'problem_statement': context.problem_statement,
             'goal': context.goal,
             'success_criteria': context.success_criteria,
@@ -72,7 +72,7 @@ class DecisionLogger:
         entry = {
             'event': 'alternatives_considered',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'alternatives_count': len(alternatives),
             'alternatives': alternatives,
             'selected': selected,
@@ -96,9 +96,9 @@ class DecisionLogger:
         entry = {
             'event': 'decision_complete',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'duration_seconds': (
-                datetime.utcnow() - context.created_at
+                datetime.now(timezone.utc) - context.created_at
             ).total_seconds(),
             'result_summary': str(result)[:500],  # Truncate long results
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
@@ -121,7 +121,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_finalized',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
         }
 
         self._log_entries.append(entry)
@@ -142,7 +142,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_aborted',
             'decision_id': context.decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'reason': reason,
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
         }
@@ -161,7 +161,7 @@ class DecisionLogger:
         entry = {
             'event': 'warning',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'message': message,
         }
 
@@ -185,7 +185,7 @@ class DecisionLogger:
         entry = {
             'event': 'invariant_violation',
             'decision_id': decision_id,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'invariant_number': invariant_number,
             'violation': violation,
         }

@@ -45,7 +45,13 @@ class ReasoningResult:
     
     def __post_init__(self):
         if self.timestamp is None:
-            self.timestamp = datetime.utcnow()
+            from datetime import timezone
+            self.timestamp = datetime.now(timezone.utc)
+
+    @property
+    def confidence(self) -> float:
+        """Alias for fusion_confidence for compatibility."""
+        return self.fusion_confidence
 
 
 class NeuroSymbolicReasoner:

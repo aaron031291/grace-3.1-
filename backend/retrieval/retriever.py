@@ -474,11 +474,10 @@ class DocumentRetriever:
     
     def close(self):
         """Clean up resources."""
-        try:
-            if hasattr(self.embedding_model, 'unload_model'):
-                self.embedding_model.unload_model()
-        except Exception as e:
-            logger.warning(f"Error closing retriever: {e}")
+        # Note: We don't unload the embedding model here because it's typically
+        # a shared singleton. The model will be unloaded when the process exits
+        # or if explicitly requested via the model instance itself.
+        pass
     
     def __del__(self):
         """Destructor to ensure cleanup."""

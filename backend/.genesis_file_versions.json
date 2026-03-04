@@ -6637,8 +6637,8 @@
     },
     "FILE-722f28d80c20": {
       "file_genesis_key": "FILE-722f28d80c20",
-      "file_path": "/workspace/backend/api/_genesis_tracker.py",
-      "absolute_path": "/workspace/backend/api/_genesis_tracker.py",
+      "file_path": "D:\\grace-3.1-\\backend\\api\\_genesis_tracker.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\api\\_genesis_tracker.py",
       "created_at": "2026-03-01T20:40:36.752867",
       "version_count": 1,
       "versions": [
@@ -6659,8 +6659,8 @@
     },
     "FILE-b505b852b095": {
       "file_genesis_key": "FILE-b505b852b095",
-      "file_path": "/workspace/backend/api/governance_hub_api.py",
-      "absolute_path": "/workspace/backend/api/governance_hub_api.py",
+      "file_path": "D:\\grace-3.1-\\backend\\api\\governance_hub_api.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\api\\governance_hub_api.py",
       "created_at": "2026-03-01T20:40:37.872378",
       "version_count": 1,
       "versions": [
@@ -6681,8 +6681,8 @@
     },
     "FILE-3f41e546893d": {
       "file_genesis_key": "FILE-3f41e546893d",
-      "file_path": "/workspace/backend/app.py",
-      "absolute_path": "/workspace/backend/app.py",
+      "file_path": "D:\\grace-3.1-\\backend\\app.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\app.py",
       "created_at": "2026-03-01T20:40:38.941739",
       "version_count": 1,
       "versions": [
@@ -6703,8 +6703,8 @@
     },
     "FILE-3cc62a78ed67": {
       "file_genesis_key": "FILE-3cc62a78ed67",
-      "file_path": "/workspace/backend/cognitive/consensus_engine.py",
-      "absolute_path": "/workspace/backend/cognitive/consensus_engine.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\consensus_engine.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\consensus_engine.py",
       "created_at": "2026-03-01T20:40:40.108496",
       "version_count": 1,
       "versions": [
@@ -6725,8 +6725,8 @@
     },
     "FILE-a22de21cfc45": {
       "file_genesis_key": "FILE-a22de21cfc45",
-      "file_path": "/workspace/backend/cognitive/episodic_memory.py",
-      "absolute_path": "/workspace/backend/cognitive/episodic_memory.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\episodic_memory.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\episodic_memory.py",
       "created_at": "2026-03-01T20:40:41.312962",
       "version_count": 1,
       "versions": [
@@ -6747,8 +6747,8 @@
     },
     "FILE-449a15854c9d": {
       "file_genesis_key": "FILE-449a15854c9d",
-      "file_path": "/workspace/backend/cognitive/flash_cache.py",
-      "absolute_path": "/workspace/backend/cognitive/flash_cache.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\flash_cache.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\flash_cache.py",
       "created_at": "2026-03-01T20:40:42.469683",
       "version_count": 1,
       "versions": [
@@ -6769,8 +6769,8 @@
     },
     "FILE-07d562d15f39": {
       "file_genesis_key": "FILE-07d562d15f39",
-      "file_path": "/workspace/backend/cognitive/learning_memory.py",
-      "absolute_path": "/workspace/backend/cognitive/learning_memory.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\learning_memory.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\learning_memory.py",
       "created_at": "2026-03-01T20:40:43.671482",
       "version_count": 1,
       "versions": [
@@ -6791,8 +6791,8 @@
     },
     "FILE-bdb59c0fdc2e": {
       "file_genesis_key": "FILE-bdb59c0fdc2e",
-      "file_path": "/workspace/backend/cognitive/memory_mesh_integration.py",
-      "absolute_path": "/workspace/backend/cognitive/memory_mesh_integration.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\memory_mesh_integration.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\memory_mesh_integration.py",
       "created_at": "2026-03-01T20:40:45.060032",
       "version_count": 1,
       "versions": [
@@ -6813,8 +6813,8 @@
     },
     "FILE-ea8ca7a571bd": {
       "file_genesis_key": "FILE-ea8ca7a571bd",
-      "file_path": "/workspace/backend/cognitive/memory_mesh_learner.py",
-      "absolute_path": "/workspace/backend/cognitive/memory_mesh_learner.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\memory_mesh_learner.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\memory_mesh_learner.py",
       "created_at": "2026-03-01T20:40:46.676570",
       "version_count": 1,
       "versions": [
@@ -6835,8 +6835,8 @@
     },
     "FILE-5a705604bba0": {
       "file_genesis_key": "FILE-5a705604bba0",
-      "file_path": "/workspace/backend/cognitive/time_sense.py",
-      "absolute_path": "/workspace/backend/cognitive/time_sense.py",
+      "file_path": "D:\\grace-3.1-\\backend\\cognitive\\time_sense.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\cognitive\\time_sense.py",
       "created_at": "2026-03-01T20:40:48.122258",
       "version_count": 1,
       "versions": [
@@ -6857,8 +6857,8 @@
     },
     "FILE-3aa88643bff4": {
       "file_genesis_key": "FILE-3aa88643bff4",
-      "file_path": "/workspace/backend/database/connection.py",
-      "absolute_path": "/workspace/backend/database/connection.py",
+      "file_path": "D:\\grace-3.1-\\backend\\database\\connection.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\database\\connection.py",
       "created_at": "2026-03-01T20:40:49.416797",
       "version_count": 1,
       "versions": [
@@ -6879,8 +6879,8 @@
     },
     "FILE-6864042b9d6b": {
       "file_genesis_key": "FILE-6864042b9d6b",
-      "file_path": "/workspace/backend/database/migration_memory_mesh_indexes.py",
-      "absolute_path": "/workspace/backend/database/migration_memory_mesh_indexes.py",
+      "file_path": "D:\\grace-3.1-\\backend\\database\\migration_memory_mesh_indexes.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\database\\migration_memory_mesh_indexes.py",
       "created_at": "2026-03-01T20:40:50.497179",
       "version_count": 1,
       "versions": [
@@ -6901,8 +6901,8 @@
     },
     "FILE-4dea7547fb63": {
       "file_genesis_key": "FILE-4dea7547fb63",
-      "file_path": "/workspace/backend/database/session.py",
-      "absolute_path": "/workspace/backend/database/session.py",
+      "file_path": "D:\\grace-3.1-\\backend\\database\\session.py",
+      "absolute_path": "D:\\grace-3.1-\\backend\\database\\session.py",
       "created_at": "2026-03-01T20:40:51.659796",
       "version_count": 1,
       "versions": [
@@ -6920,6 +6920,28 @@
       ],
       "last_hash": "39fce0ab898339e44cf986fb74859d044d21864a55965584e00055499484d8e9",
       "last_updated": "2026-03-01T20:40:51.972649"
+    },
+    "FILE-fc3ac16fd419": {
+      "file_genesis_key": "FILE-fc3ac16fd419",
+      "file_path": "D:\\grace-3.1-\\backend\\tests\\diagnostic_report.json",
+      "absolute_path": "D:\\grace-3.1-\\backend\\tests\\diagnostic_report.json",
+      "created_at": "2026-03-04T14:42:59.170467",
+      "version_count": 1,
+      "versions": [
+        {
+          "version_number": 1,
+          "version_key_id": "VER-fc3ac16fd419-1",
+          "genesis_key_db_id": "GK-c0084e2c02dd4584a71d534771f652fd",
+          "timestamp": "2026-03-04T14:42:59.306621",
+          "file_hash": "47b75b970727c0a2ad4f9cfa4bcead12243bfd65dabd0f4d273cf7d0beca547d",
+          "file_size": 252695,
+          "user_id": "file_watcher",
+          "version_note": "Genesis Key: GK-be7f1683fadd477abd100b9d168b718a",
+          "has_content": true
+        }
+      ],
+      "last_hash": "47b75b970727c0a2ad4f9cfa4bcead12243bfd65dabd0f4d273cf7d0beca547d",
+      "last_updated": "2026-03-04T14:42:59.306621"
     }
   }
 }

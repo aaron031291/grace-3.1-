@@ -158,16 +158,20 @@ def batch_session_scope(batch_size: int = 100):
 
     def flush_batch():
         counter["n"] += 1
-        try:
-            session.flush()
-            session.expire_all()
-        except OperationalError as e:
-            if _is_lock_error(e):
-                logger.warning("Batch flush hit lock — retrying after rollback")
-                session.rollback()
-                time.sleep(_RETRY_BACKOFF_S)
-            else:
-                raise
+        for attempt in range(1, _RETRY_MAX + 1):
+            try:
+                session.flush()
+                session.expire_all()
+                return
+            except OperationalError as e:
+                if _is_lock_error(e) and attempt < _RETRY_MAX:
+                    wait = _RETRY_BACKOFF_S * attempt
+                    logger.warning("Batch flush hit lock (attempt %d/%d) — retrying in %.1fs", 
+                                  attempt, _RETRY_MAX, wait)
+                    time.sleep(wait)
+                else:
+                    _track_db_error(e)
+                    raise
 
     try:
         yield session, flush_batch

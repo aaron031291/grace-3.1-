@@ -12,7 +12,7 @@ Every Grace component emits Genesis keys. This API aggregates them into:
 
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List, Dict, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 import json
 import logging
@@ -215,6 +215,11 @@ REMEDIATION_RULES = [
 _approval_queue: List[dict] = []
 _approval_lock = threading.Lock()
 
+# ── Baseline Cache ───────────────────────────────────────────────────
+_baseline_cache: Dict[str, Any] = None
+_baseline_cache_time: float = 0
+_CACHE_TTL = 300  # 5 minutes
+
 
 # ── Core logic ───────────────────────────────────────────────────────
 
@@ -224,7 +229,7 @@ def _get_genesis_keys(minutes: int = 60, component_id: str = None,
     try:
         from database.session import session_scope
         from models.genesis_key_models import GenesisKey
-        since = datetime.utcnow() - timedelta(minutes=minutes)
+        since = datetime.now(timezone.utc) - timedelta(minutes=minutes)
 
         with session_scope() as session:
             q = session.query(GenesisKey).filter(
@@ -297,7 +302,7 @@ _last_known_status: Dict[str, str] = {}
 def _classify_component(comp_id: str, comp: dict, keys: List[dict],
                         service_health: dict) -> dict:
     """Classify a component's health status."""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     comp_keys = []
     for k in keys:
         tags = k.get("tags", [])
@@ -475,9 +480,28 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
     keys = _get_genesis_keys(minutes=window_minutes, limit=2000)
     service_health = _check_service_health()
 
+    # Optimized single-pass grouping
+    comp_groups = defaultdict(list)
+    for k in keys:
+        tags = set(k.get("tags", []))
+        who = (k.get("who") or "").lower()
+        for comp_id, comp in COMPONENT_REGISTRY.items():
+            matched = False
+            for target_tag in comp.get("tags", []):
+                if target_tag in tags:
+                    matched = True
+                    break
+            if not matched:
+                for pat in comp.get("who_patterns", []):
+                    if pat in who:
+                        matched = True
+                        break
+            if matched:
+                comp_groups[comp_id].append(k)
+
     components = []
     for comp_id, comp in COMPONENT_REGISTRY.items():
-        classified = _classify_component(comp_id, comp, keys, service_health)
+        classified = _classify_component(comp_id, comp, comp_groups[comp_id], service_health)
         components.append(classified)
 
     status_counts = defaultdict(int)
@@ -499,7 +523,7 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
             with _approval_lock:
                 _approval_queue.append({
                     **action,
-                    "queued_at": datetime.utcnow().isoformat(),
+                    "queued_at": datetime.now(timezone.utc).isoformat(),
                 })
 
     time_ctx = _get_time_context()
@@ -511,7 +535,7 @@ async def health_map(window_minutes: int = Query(60, ge=5, le=1440)):
         "problems": problems,
         "remediation": remediation,
         "window_minutes": window_minutes,
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "time_context": {
             "period": time_ctx.get("period", "unknown"),
             "is_business_hours": time_ctx.get("is_business_hours", False),
@@ -586,9 +610,28 @@ async def problems_list():
     keys = _get_genesis_keys(minutes=60, limit=2000)
     service_health = _check_service_health()
 
+    # Optimized single-pass grouping
+    comp_groups = defaultdict(list)
+    for k in keys:
+        tags = set(k.get("tags", []))
+        who = (k.get("who") or "").lower()
+        for comp_id, comp in COMPONENT_REGISTRY.items():
+            matched = False
+            for target_tag in comp.get("tags", []):
+                if target_tag in tags:
+                    matched = True
+                    break
+            if not matched:
+                for pat in comp.get("who_patterns", []):
+                    if pat in who:
+                        matched = True
+                        break
+            if matched:
+                comp_groups[comp_id].append(k)
+
     problems = []
     for comp_id, comp in COMPONENT_REGISTRY.items():
-        classified = _classify_component(comp_id, comp, keys, service_health)
+        classified = _classify_component(comp_id, comp, comp_groups[comp_id], service_health)
         if classified["status"] in ("red", "orange"):
             problems.append(classified)
 
@@ -602,7 +645,7 @@ async def problems_list():
         "critical": sum(1 for p in problems if p["status"] == "red"),
         "degrading": sum(1 for p in problems if p["status"] == "orange"),
         "remediation": remediation,
-        "checked_at": datetime.utcnow().isoformat(),
+        "checked_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -772,7 +815,7 @@ async def detect_orphan_services():
     return {
         "orphans": orphans,
         "total": len(orphans),
-        "checked_at": datetime.utcnow().isoformat(),
+        "checked_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -783,11 +826,41 @@ async def learned_baselines():
     to learn each component's natural activity rhythm and replace
     static interval configs.
     """
+    global _baseline_cache, _baseline_cache_time
+    now_ts = _time.time()
+    
+    if _baseline_cache and (now_ts - _baseline_cache_time < _CACHE_TTL):
+        return {
+            "baselines": _baseline_cache,
+            "total": len(_baseline_cache),
+            "learned_count": sum(1 for b in _baseline_cache.values() if b.get("learned")),
+            "cached": True
+        }
+
     keys = _get_genesis_keys(minutes=10080, limit=10000)  # 7 days
+    
+    # Pre-filter all keys into a component-map in one pass (O(N) instead of O(N*K))
+    comp_groups = defaultdict(list)
+    for k in keys:
+        tags = set(k.get("tags", []))
+        who = (k.get("who") or "").lower()
+        for comp_id, comp in COMPONENT_REGISTRY.items():
+            matched = False
+            for target_tag in comp.get("tags", []):
+                if target_tag in tags:
+                    matched = True
+                    break
+            if not matched:
+                for pat in comp.get("who_patterns", []):
+                    if pat in who:
+                        matched = True
+                        break
+            if matched:
+                comp_groups[comp_id].append(k)
 
     baselines = {}
     for comp_id, comp in COMPONENT_REGISTRY.items():
-        comp_keys = _filter_keys_for_component(comp_id, comp, keys)
+        comp_keys = comp_groups[comp_id]
         if len(comp_keys) < 3:
             baselines[comp_id] = {
                 "label": comp.get("label"),
@@ -852,10 +925,15 @@ async def learned_baselines():
             "busiest_period": activity.get("busiest_period"),
         }
 
+    learned_count = sum(1 for b in baselines.values() if b.get("learned"))
+    _baseline_cache = baselines
+    _baseline_cache_time = now_ts
+
     return {
         "baselines": baselines,
         "total": len(baselines),
-        "learned_count": sum(1 for b in baselines.values() if b.get("learned")),
+        "learned_count": learned_count,
+        "cached": False
     }
 
 

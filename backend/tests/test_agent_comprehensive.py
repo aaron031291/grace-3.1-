@@ -24,7 +24,8 @@ import uuid
 
 # Import the module under test
 import sys
-sys.path.insert(0, '/home/user/grace-3.1-/backend')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agent.grace_agent import (
     TaskStatus,

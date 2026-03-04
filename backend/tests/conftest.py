@@ -14,8 +14,10 @@ os.environ.update({
     "SKIP_OLLAMA_CHECK": "true",
     "SKIP_AUTO_INGESTION": "true",
     "DISABLE_CONTINUOUS_LEARNING": "true",
+    "DISABLE_AUTONOMOUS_LOOP": "true",
     "SKIP_LLM_CHECK": "true",
     "LIGHTWEIGHT_MODE": "true",
+    "DISABLE_GENESIS_TRACKING": "true",
     "DATABASE_PATH": ":memory:",
 })
 
@@ -29,7 +31,8 @@ def app():
 @pytest.fixture(scope="session")
 def client(app):
     from fastapi.testclient import TestClient
-    return TestClient(app)
+    with TestClient(app) as client:
+        yield client
 
 
 @pytest.fixture

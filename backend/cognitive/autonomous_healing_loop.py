@@ -29,7 +29,7 @@ import hashlib
 import json
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -52,7 +52,7 @@ def _create_snapshot(file_path: str, content: str) -> str:
         "file_path": file_path,
         "content": content,
         "checksum": hashlib.sha256(content.encode()).hexdigest(),
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     (SNAPSHOTS_DIR / f"{snapshot_id}.json").write_text(json.dumps(snapshot))
     return snapshot_id
