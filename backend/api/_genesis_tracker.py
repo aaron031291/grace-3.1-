@@ -270,7 +270,7 @@ def _push_to_qdrant(gk_id: str, key_type: str, what: str, where: str, tags: list
                     "what": what[:500],
                     "where": where[:200] if where else "",
                     "tags": tags or [],
-                    "timestamp": __import__("datetime").datetime.utcnow().isoformat(),
+                    "timestamp": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
                 },
             )],
         )

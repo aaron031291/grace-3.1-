@@ -40,7 +40,7 @@ import json
 import logging
 import time
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
@@ -115,7 +115,7 @@ class ConsensusResult:
     disagreements: List[str]
     final_output: str
     total_latency_ms: float
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     source: str = "user"  # user or autonomous
 
 
@@ -683,7 +683,7 @@ def queue_autonomous_query(prompt: str, context: str = "", priority: str = "norm
         "prompt": prompt,
         "context": context,
         "priority": priority,
-        "queued_at": datetime.utcnow().isoformat(),
+        "queued_at": datetime.now(timezone.utc).isoformat(),
         "status": "queued",
     }
     with _batch_lock:
@@ -718,7 +718,7 @@ def run_batch(max_queries: int = 5) -> List[dict]:
                 source="autonomous",
             )
             query["status"] = "completed"
-            query["completed_at"] = datetime.utcnow().isoformat()
+            query["completed_at"] = datetime.now(timezone.utc).isoformat()
             query["result_confidence"] = result.confidence
             query["result_summary"] = result.final_output[:500]
             results.append({

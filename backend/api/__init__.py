@@ -2,6 +2,6 @@
 API routers module.
 """
 
-from .ingest import router as ingest_router
+from .file_ingestion import router as ingest_router
 
 __all__ = ["ingest_router"]

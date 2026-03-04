@@ -25,7 +25,7 @@ import logging
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -88,8 +88,8 @@ class UserIntentOverride:
                 "command": user_command,
                 "action": action,
                 "impacts": [{"rule": i.rule_name, "severity": i.severity} for i in impacts],
-                "created_at": datetime.utcnow().isoformat(),
-                "expires_at": (datetime.utcnow() + timedelta(minutes=OVERRIDE_TTL_MINUTES)).isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=OVERRIDE_TTL_MINUTES)).isoformat(),
                 "executed": False,
             }
 
@@ -120,7 +120,7 @@ class UserIntentOverride:
 
         # Check expiry
         expires = datetime.fromisoformat(token_data["expires_at"])
-        if datetime.utcnow() > expires:
+        if datetime.now(timezone.utc) > expires:
             del _active_tokens[token]
             return {"error": "Override token expired", "executed": False}
 
@@ -129,7 +129,7 @@ class UserIntentOverride:
 
         # Mark as executed
         token_data["executed"] = True
-        token_data["executed_at"] = datetime.utcnow().isoformat()
+        token_data["executed_at"] = datetime.now(timezone.utc).isoformat()
 
         # Log the override via Genesis Key
         try:
@@ -351,7 +351,7 @@ class UserIntentOverride:
 
     def get_active_overrides(self) -> List[Dict[str, Any]]:
         """Get all active (non-expired) override tokens."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         active = []
         expired_keys = []
         for token, data in _active_tokens.items():

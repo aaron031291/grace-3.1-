@@ -7,7 +7,7 @@ import os
 import json
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from pathlib import Path
 
@@ -92,7 +92,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 filename = f"session_{key.session_id}.json"
             else:
                 # Use date-based filename
-                ts = key.when_timestamp or datetime.utcnow()
+                ts = key.when_timestamp or datetime.now(timezone.utc)
                 date_str = ts.strftime('%Y-%m-%d')
                 filename = f"keys_{date_str}.json"
 
@@ -120,7 +120,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                             keys_data = {
                                 "user_id": key.user_id,
                                 "session_id": key.session_id,
-                                "created_at": datetime.utcnow().isoformat(),
+                                "created_at": datetime.now(timezone.utc).isoformat(),
                                 "keys": []
                             }
                 else:
@@ -178,7 +178,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 }
 
                 keys_data["keys"].append(key_dict)
-                keys_data["last_updated"] = datetime.utcnow().isoformat()
+                keys_data["last_updated"] = datetime.now(timezone.utc).isoformat()
                 keys_data["total_keys"] = len(keys_data["keys"])
 
                 # Save to file
@@ -216,7 +216,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 existing_profile.update(profile_data)
                 profile_data = existing_profile
 
-            profile_data["last_updated"] = datetime.utcnow().isoformat()
+            profile_data["last_updated"] = datetime.now(timezone.utc).isoformat()
 
             with open(profile_path, 'w') as f:
                 json.dump(profile_data, f, indent=2, default=str)

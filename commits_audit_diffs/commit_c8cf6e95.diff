@@ -1,0 +1,318 @@
+commit c8cf6e955d7ca0815c7636c201017848ec9623a6
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Sun Mar 1 15:38:26 2026 +0000
+
+    fix: Genesis key ΓåÆ Memory Mesh dict-to-SQLite crash ΓÇö comprehensive JSON sanitization
+    
+    Root cause: Python dicts with non-serializable values (datetime objects,
+    custom types, nested callables) were being passed through the chain:
+      genesis_key_service ΓåÆ memory_mesh_integration ΓåÆ learning_memory ΓåÆ SQLite
+    SQLite's JSON columns can't adapt raw Python dicts that contain
+    non-JSON-serializable types, causing InterfaceError/ProgrammingError.
+    
+    Fixed at THREE boundaries:
+    
+    1. genesis_key_service.py ΓÇö GenesisKey creation:
+       - All JSON columns (input_data, output_data, context_data, tags,
+         metadata_ai) now pass through _sqlite_json_safe() before insertion
+       - Falls back to str() for any non-serializable values
+       - Memory mesh feed now uses _safe_json() instead of json.dumps()
+    
+    2. cognitive/learning_memory.py ΓÇö LearningExample creation:
+       - Added _ensure_dict() static method that coerces any value to a
+         JSON-safe dict (handles str, dict, None, and arbitrary types)
+       - ingest_learning_data() now sanitizes learning_data, input_context,
+         expected_output, actual_output before touching the DB
+       - _calculate_outcome_quality() and _calculate_consistency() now call
+         _ensure_dict() on inputs to prevent .keys() on strings
+    
+    3. cognitive/memory_mesh_integration.py ΓÇö Episode creation:
+       - Replaced basic json.loads() with _safe_dict() that handles all edge
+         cases (nested non-serializable, already-a-dict, None, str)
+       - _add_to_episodic_memory() now uses _json_safe() for action, outcome,
+         predicted_outcome before creating Episode
+       - Problem text truncated to 2000 chars to prevent oversized Text columns
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+---
+ backend/cognitive/learning_memory.py         | 45 +++++++++++++--
+ backend/cognitive/memory_mesh_integration.py | 83 +++++++++++++++++-----------
+ backend/genesis/genesis_key_service.py       | 61 +++++++++++++++-----
+ 3 files changed, 139 insertions(+), 50 deletions(-)
+
+diff --git a/backend/cognitive/learning_memory.py b/backend/cognitive/learning_memory.py
+index d188ff46..3c0a07fb 100644
+--- a/backend/cognitive/learning_memory.py
++++ b/backend/cognitive/learning_memory.py
+@@ -231,6 +231,27 @@ class LearningMemoryManager:
+         self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
+         self.trust_scorer = TrustScorer()
+ 
++    @staticmethod
++    def _ensure_dict(value) -> dict:
++        """Coerce value to a plain dict safe for SQLite JSON columns."""
++        if value is None:
++            return {}
++        if isinstance(value, str):
++            try:
++                import json as _j
++                parsed = _j.loads(value)
++                return parsed if isinstance(parsed, dict) else {"raw": value}
++            except Exception:
++                return {"raw": value}
++        if isinstance(value, dict):
++            import json as _j
++            try:
++                _j.dumps(value, default=str)
++                return value
++            except (TypeError, ValueError):
++                return {k: str(v) for k, v in value.items()}
++        return {"raw": str(value)}
++
+     def ingest_learning_data(
+         self,
+         learning_type: str,
+@@ -252,10 +273,18 @@ class LearningMemoryManager:
+         Returns:
+             Created learning example
+         """
+-        # Extract context and outcomes
+-        input_context = learning_data.get('context', {})
+-        expected_output = learning_data.get('expected', {})
+-        actual_output = learning_data.get('actual', {})
++        if isinstance(learning_data, str):
++            try:
++                import json as _j
++                learning_data = _j.loads(learning_data)
++            except Exception:
++                learning_data = {"raw": learning_data}
++        if not isinstance(learning_data, dict):
++            learning_data = {"raw": str(learning_data)}
++
++        input_context = self._ensure_dict(learning_data.get('context', {}))
++        expected_output = self._ensure_dict(learning_data.get('expected', {}))
++        actual_output = self._ensure_dict(learning_data.get('actual', {}))
+ 
+         # Calculate outcome quality
+         outcome_quality = self._calculate_outcome_quality(
+@@ -313,10 +342,12 @@ class LearningMemoryManager:
+ 
+         Compares expected vs actual outcomes.
+         """
++        expected = self._ensure_dict(expected)
++        actual = self._ensure_dict(actual)
++
+         if not actual:
+-            return 0.5  # Neutral if no actual outcome
++            return 0.5
+ 
+-        # Simple similarity for now (can be enhanced with semantic similarity)
+         matching_keys = set(expected.keys()) & set(actual.keys())
+ 
+         if not matching_keys:
+@@ -348,6 +379,8 @@ class LearningMemoryManager:
+ 
+         Checks if this aligns with other learning examples.
+         """
++        input_context = self._ensure_dict(input_context)
++        expected_output = self._ensure_dict(expected_output)
+         # Find similar learning examples
+         similar_examples = self.session.query(LearningExample).filter(
+             LearningExample.trust_score > 0.7
+diff --git a/backend/cognitive/memory_mesh_integration.py b/backend/cognitive/memory_mesh_integration.py
+index 4a81741a..c40bacc1 100644
+--- a/backend/cognitive/memory_mesh_integration.py
++++ b/backend/cognitive/memory_mesh_integration.py
+@@ -69,30 +69,31 @@ class MemoryMeshIntegration:
+         Returns:
+             Learning example ID
+         """
+-        # Handle both dict and JSON string inputs
+-        import json as _json
+-        if isinstance(context, str):
+-            try:
+-                context = _json.loads(context)
+-            except Exception:
+-                context = {"raw": context}
+-        if isinstance(action_taken, str):
+-            try:
+-                action_taken = _json.loads(action_taken)
+-            except Exception:
+-                action_taken = {"raw": action_taken}
+-        if isinstance(outcome, str):
+-            try:
+-                outcome = _json.loads(outcome)
+-            except Exception:
+-                outcome = {"raw": outcome}
+-        if isinstance(expected_outcome, str):
+-            try:
+-                expected_outcome = _json.loads(expected_outcome)
+-            except Exception:
+-                expected_outcome = {"raw": expected_outcome}
+-
+-        # 1. Store in learning memory with trust scoring
++        def _safe_dict(val):
++            """Coerce any value to a JSON-safe dict for SQLite."""
++            if val is None:
++                return {}
++            if isinstance(val, str):
++                import json as _j
++                try:
++                    parsed = _j.loads(val)
++                    return parsed if isinstance(parsed, dict) else {"raw": val}
++                except Exception:
++                    return {"raw": val}
++            if isinstance(val, dict):
++                import json as _j
++                try:
++                    _j.dumps(val, default=str)
++                    return val
++                except (TypeError, ValueError):
++                    return {k: str(v) for k, v in val.items()}
++            return {"raw": str(val)}
++
++        context = _safe_dict(context)
++        action_taken = _safe_dict(action_taken)
++        outcome = _safe_dict(outcome)
++        expected_outcome = _safe_dict(expected_outcome) if expected_outcome else None
++
+         learning_data = {
+             'context': context,
+             'expected': expected_outcome or outcome,
+@@ -163,19 +164,39 @@ class MemoryMeshIntegration:
+         """
+         Add high-trust learning example to episodic memory.
+         """
+-        # Create episode from learning example
++        import json as _json
++
++        def _json_safe(val):
++            if val is None:
++                return None
++            if isinstance(val, str):
++                try:
++                    return _json.loads(val) if val.strip().startswith(("{", "[")) else {"raw": val}
++                except Exception:
++                    return {"raw": val}
++            if isinstance(val, dict):
++                try:
++                    _json.dumps(val, default=str)
++                    return val
++                except (TypeError, ValueError):
++                    return {k: str(v) for k, v in val.items()}
++            return {"raw": str(val)}
++
++        problem_text = str(context) if not isinstance(context, str) else context
++        if len(problem_text) > 2000:
++            problem_text = problem_text[:2000]
++
+         episode = Episode(
+-            problem=str(context),
+-            action=action,
+-            outcome=outcome,
+-            predicted_outcome=expected_outcome,
++            problem=problem_text,
++            action=_json_safe(action),
++            outcome=_json_safe(outcome),
++            predicted_outcome=_json_safe(expected_outcome),
+             prediction_error=self._calculate_prediction_error(outcome, expected_outcome),
+             trust_score=learning_example.trust_score,
+             source=learning_example.source,
+             genesis_key_id=learning_example.genesis_key_id,
+             timestamp=datetime.utcnow(),
+-            # Link back to learning example
+-            metadata={'learning_example_id': learning_example.id}
++            metadata={'learning_example_id': str(learning_example.id)}
+         )
+ 
+         self.session.add(episode)
+diff --git a/backend/genesis/genesis_key_service.py b/backend/genesis/genesis_key_service.py
+index 309e7956..83d7e918 100644
+--- a/backend/genesis/genesis_key_service.py
++++ b/backend/genesis/genesis_key_service.py
+@@ -217,6 +217,26 @@ class GenesisKeyService:
+             }
+ 
+             # Create Genesis Key
++            def _sqlite_json_safe(val):
++                """Ensure value is JSON-serializable for SQLite JSON columns."""
++                if val is None:
++                    return None
++                if isinstance(val, (list, tuple)):
++                    try:
++                        json.dumps(val, default=str)
++                        return val
++                    except (TypeError, ValueError):
++                        return [str(v) for v in val]
++                if isinstance(val, dict):
++                    try:
++                        json.dumps(val, default=str)
++                        return val
++                    except (TypeError, ValueError):
++                        return {str(k): str(v) for k, v in val.items()}
++                if isinstance(val, str):
++                    return val
++                return str(val)
++
+             key = GenesisKey(
+                 key_id=key_id,
+                 parent_key_id=parent_key_id,
+@@ -242,11 +262,11 @@ class GenesisKeyService:
+                 commit_sha=commit_sha,
+                 branch_name=branch_name,
+                 metadata_human=metadata_human,
+-                metadata_ai=metadata_ai,
+-                input_data=input_data,
+-                output_data=output_data,
+-                context_data=context_data,
+-                tags=tags
++                metadata_ai=_sqlite_json_safe(metadata_ai),
++                input_data=_sqlite_json_safe(input_data),
++                output_data=_sqlite_json_safe(output_data),
++                context_data=_sqlite_json_safe(context_data),
++                tags=_sqlite_json_safe(tags),
+             )
+ 
+             sess.add(key)
+@@ -328,17 +348,32 @@ class GenesisKeyService:
+                 kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
+                 memory_mesh = MemoryMeshIntegration(session=sess, knowledge_base_path=kb_path)
+ 
+-                # Use extracted data ΓÇö convert dicts to JSON strings for SQLite
++                def _safe_json(val):
++                    if val is None:
++                        return {}
++                    if isinstance(val, dict):
++                        try:
++                            json.dumps(val, default=str)
++                            return val
++                        except (TypeError, ValueError):
++                            return {k: str(v) for k, v in val.items()}
++                    if isinstance(val, str):
++                        try:
++                            return json.loads(val)
++                        except Exception:
++                            return {"raw": val}
++                    return {"raw": str(val)}
++
+                 memory_mesh.ingest_learning_experience(
+                     experience_type=extracted_key_data["key_type"],
+-                    context=json.dumps({
+-                        "what": extracted_key_data["what_description"],
+-                        "where": extracted_key_data["where_location"] or extracted_key_data["file_path"],
+-                        "why": extracted_key_data["why_reason"],
+-                        "how": extracted_key_data["how_method"]
++                    context=_safe_json({
++                        "what": extracted_key_data.get("what_description") or "",
++                        "where": extracted_key_data.get("where_location") or extracted_key_data.get("file_path") or "",
++                        "why": extracted_key_data.get("why_reason") or "",
++                        "how": extracted_key_data.get("how_method") or ""
+                     }),
+-                    action_taken=json.dumps(extracted_key_data.get("input_data") or {}),
+-                    outcome=json.dumps(extracted_key_data.get("output_data") or {}),
++                    action_taken=_safe_json(extracted_key_data.get("input_data")),
++                    outcome=_safe_json(extracted_key_data.get("output_data")),
+                     source="genesis_key",
+                     user_id=extracted_key_data.get("user_id"),
+                     genesis_key_id=extracted_key_id
+

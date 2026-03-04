@@ -7,13 +7,13 @@ from fastapi.testclient import TestClient
 from app import app, ChatRequest, ChatResponse, Message, HealthResponse
 
 
-client = TestClient(app)
+# client = TestClient(app)  # Removed global client
 
 
 class TestRootEndpoint:
     """Test the root endpoint."""
     
-    def test_root_endpoint(self):
+    def test_root_endpoint(self, client):
         """Test GET / returns API info."""
         response = client.get("/")
         assert response.status_code == 200
@@ -26,7 +26,7 @@ class TestRootEndpoint:
 class TestHealthEndpoint:
     """Test the health check endpoint."""
     
-    def test_health_endpoint(self):
+    def test_health_endpoint(self, client):
         """Test GET /health returns health status."""
         response = client.get("/health")
         assert response.status_code == 200
@@ -51,7 +51,7 @@ class TestHealthEndpoint:
 class TestChatEndpoint:
     """Test the chat endpoint."""
     
-    def test_chat_endpoint_with_valid_request(self):
+    def test_chat_endpoint_with_valid_request(self, client):
         """Test POST /chat with valid request."""
         request_data = {
             "messages": [
@@ -77,7 +77,7 @@ class TestChatEndpoint:
             assert isinstance(data["generation_time"], float)
             assert data["generation_time"] > 0
     
-    def test_chat_endpoint_with_multiple_messages(self):
+    def test_chat_endpoint_with_multiple_messages(self, client):
         """Test POST /chat with multi-turn conversation."""
         request_data = {
             "messages": [
@@ -92,7 +92,7 @@ class TestChatEndpoint:
         response = client.post("/chat", json=request_data)
         assert response.status_code in [200, 400, 503]
     
-    def test_chat_endpoint_without_model(self):
+    def test_chat_endpoint_without_model(self, client):
         """Test POST /chat without specifying model uses default."""
         request_data = {
             "messages": [
@@ -103,7 +103,7 @@ class TestChatEndpoint:
         response = client.post("/chat", json=request_data)
         assert response.status_code in [200, 400, 503]
     
-    def test_chat_endpoint_with_invalid_temperature(self):
+    def test_chat_endpoint_with_invalid_temperature(self, client):
         """Test POST /chat with invalid temperature."""
         request_data = {
             "messages": [
@@ -120,13 +120,13 @@ class TestChatEndpoint:
 class TestDocumentation:
     """Test the API documentation endpoints."""
     
-    def test_swagger_docs_available(self):
+    def test_swagger_docs_available(self, client):
         """Test that Swagger documentation is available."""
         response = client.get("/docs")
         assert response.status_code == 200
         assert "swagger" in response.text.lower() or "openapi" in response.text.lower()
     
-    def test_redoc_docs_available(self):
+    def test_redoc_docs_available(self, client):
         """Test that ReDoc documentation is available."""
         response = client.get("/redoc")
         assert response.status_code == 200

@@ -1026,3 +1026,26 @@ class TextIngestionService:
         
         finally:
             db.close()
+
+
+_ingestion_service: Optional[TextIngestionService] = None
+
+
+def get_ingestion_service() -> TextIngestionService:
+    """
+    Get or create the global ingestion service instance.
+    
+    Returns:
+        TextIngestionService instance
+    """
+    global _ingestion_service
+    if _ingestion_service is None:
+        from embedding import get_embedding_model
+        embedding_model = get_embedding_model()
+        _ingestion_service = TextIngestionService(
+            collection_name="documents",
+            chunk_size=512,
+            chunk_overlap=50,
+            embedding_model=embedding_model
+        )
+    return _ingestion_service

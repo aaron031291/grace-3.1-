@@ -48,6 +48,12 @@ class DatabaseConnection:
             DatabaseConnection: Singleton instance
         """
         instance = cls()
+        # If we are using :memory: database, don't re-initialize if engine already exists
+        # as it would destroy the in-memory data.
+        if instance._engine and config.database_path == ":memory:":
+            logger.info("Preserving existing :memory: database engine")
+            return instance
+            
         instance._config = config
         instance._engine = instance._create_engine(config)
         return instance

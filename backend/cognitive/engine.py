@@ -5,7 +5,7 @@ Implements the Central Cortex that orchestrates OODA loops,
 enforces invariants, and manages decision-making.
 """
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -376,7 +376,7 @@ class CognitiveEngine:
         if context.decision_freeze_point is None:
             return False
 
-        return datetime.utcnow() >= context.decision_freeze_point
+        return datetime.now(timezone.utc) >= context.decision_freeze_point
 
     def check_recursion_bounds(self, context: DecisionContext) -> bool:
         """

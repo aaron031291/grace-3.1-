@@ -1,0 +1,284 @@
+commit 23e30169709cba91bd0cead4218bfca277ad18d2
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Sun Mar 1 15:08:24 2026 +0000
+
+    feat: add Health Map + Problems panels to Dev tab command center
+    
+    Health Map panel:
+      - Color-coded grid of all 15 components (green/yellow/orange/red)
+      - Click any component to drill down into its timeline
+      - Timeline shows Genesis key events, activity gaps, errors
+      - Dependency graph shows upstream/downstream components
+      - Auto-remediation actions displayed with status
+      - Configurable time window (15min / 1hr / 6hr / 24hr)
+    
+    Problems panel:
+      - All current problems listed with severity color
+      - Critical vs degrading counts
+      - Error rates, event counts, last-seen timestamps
+      - Pending approval queue with approve/reject buttons
+      - Scan & Heal button for immediate remediation
+      - Remediation action log
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+---
+ frontend/src/components/DevTab.jsx | 226 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 225 insertions(+), 1 deletion(-)
+
+diff --git a/frontend/src/components/DevTab.jsx b/frontend/src/components/DevTab.jsx
+index 90144582..af7d4065 100644
+--- a/frontend/src/components/DevTab.jsx
++++ b/frontend/src/components/DevTab.jsx
+@@ -4,6 +4,8 @@ import { API_BASE_URL } from "../config/api";
+ const B = API_BASE_URL;
+ 
+ const SECTIONS = [
++  { id: "healthmap", label: "Health Map" },
++  { id: "problems", label: "Problems" },
+   { id: "console", label: "Console Chat" },
+   { id: "diagnostics", label: "Diagnostics" },
+   { id: "stress", label: "Stress Test" },
+@@ -16,12 +18,14 @@ const SECTIONS = [
+ ];
+ 
+ export default function DevTab() {
+-  const [section, setSection] = useState("console");
++  const [section, setSection] = useState("healthmap");
+ 
+   return (
+     <div style={{ display: "flex", height: "100%", background: "#0a0a1a", color: "#ccc" }}>
+       <Sidebar section={section} setSection={setSection} />
+       <div style={{ flex: 1, overflow: "auto", padding: 20 }}>
++        {section === "healthmap" && <HealthMapPanel />}
++        {section === "problems" && <ProblemsPanel />}
+         {section === "console" && <ConsoleChat />}
+         {section === "diagnostics" && <DiagnosticsPanel />}
+         {section === "stress" && <StressTestPanel />}
+@@ -75,6 +79,226 @@ function Sidebar({ section, setSection }) {
+   );
+ }
+ 
++/* ΓöÇΓöÇ Health Map Panel ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
++
++function HealthMapPanel() {
++  const [data, setData] = useState(null);
++  const [timeline, setTimeline] = useState(null);
++  const [deps, setDeps] = useState(null);
++  const [selected, setSelected] = useState(null);
++  const [loading, setLoading] = useState(false);
++  const [window, setWindow] = useState(60);
++
++  const load = async () => {
++    setLoading(true);
++    setData(await jf(`${B}/api/component-health/map?window_minutes=${window}`));
++    setLoading(false);
++  };
++
++  useEffect(() => { load(); }, [window]);
++
++  const drillDown = async (compId) => {
++    setSelected(compId);
++    setTimeline(await jf(`${B}/api/component-health/timeline/${compId}?window_minutes=${window}&limit=100`));
++    setDeps(await jf(`${B}/api/component-health/dependencies/${compId}`));
++  };
++
++  const statusColor = { green: "#4caf50", yellow: "#fdd835", orange: "#ff9800", red: "#f44336" };
++  const statusLabel = { green: "Healthy", yellow: "Idle", orange: "Degrading", red: "Broken" };
++
++  return (
++    <div>
++      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
++        <h2 style={h2s}>Component Health Map</h2>
++        <select value={window} onChange={e => setWindow(+e.target.value)} style={selectS}>
++          <option value={15}>15 min</option><option value={60}>1 hour</option><option value={360}>6 hours</option><option value={1440}>24 hours</option>
++        </select>
++        <button onClick={load} style={actBtn("#2563eb")} disabled={loading}>{loading ? "..." : "Refresh"}</button>
++      </div>
++
++      {data?.summary && (
++        <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
++          {Object.entries(data.summary).map(([s, c]) => (
++            <div key={s} style={{ ...card, padding: "8px 16px", textAlign: "center", borderLeft: `3px solid ${statusColor[s]}` }}>
++              <div style={{ fontSize: 20, fontWeight: 800, color: statusColor[s] }}>{c}</div>
++              <div style={{ fontSize: 10, color: "#888" }}>{statusLabel[s] || s}</div>
++            </div>
++          ))}
++        </div>
++      )}
++
++      {data?.components && (
++        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8, marginBottom: 16 }}>
++          {data.components.map(c => (
++            <div key={c.id} onClick={() => drillDown(c.id)} style={{
++              ...card, padding: "10px 14px", cursor: "pointer",
++              borderLeft: `4px solid ${statusColor[c.status]}`,
++              background: selected === c.id ? "#1a1a3a" : "#12122a",
++            }}>
++              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
++                <span style={{ fontSize: 13, fontWeight: 700 }}>{c.label}</span>
++                <span style={{ width: 10, height: 10, borderRadius: "50%", background: statusColor[c.status] }} />
++              </div>
++              <div style={{ fontSize: 10, color: "#888", marginTop: 4 }}>{c.reason}</div>
++              <div style={{ fontSize: 10, color: "#666", marginTop: 2 }}>
++                {c.total_events} events{c.errors > 0 ? `, ${c.errors} errors` : ""}{c.last_seen ? ` | ${c.minutes_since?.toFixed(0)}m ago` : ""}
++              </div>
++            </div>
++          ))}
++        </div>
++      )}
++
++      {selected && timeline && (
++        <div style={{ marginBottom: 16 }}>
++          <h3 style={h3s}>Timeline: {timeline.label}</h3>
++          <div style={{ display: "flex", gap: 12, marginBottom: 8 }}>
++            <div style={{ fontSize: 12, color: "#888" }}>Events: {timeline.total_events}</div>
++            <div style={{ fontSize: 12, color: "#f44336" }}>Errors: {timeline.error_count}</div>
++            <div style={{ fontSize: 12, color: "#f59e0b" }}>Gaps: {timeline.gaps?.length || 0}</div>
++          </div>
++
++          {deps && (
++            <div style={{ display: "flex", gap: 16, marginBottom: 12 }}>
++              <div><span style={{ fontSize: 10, color: "#888" }}>Upstream: </span>{deps.upstream?.map(u => <span key={u.id} style={{ fontSize: 11, color: "#2563eb", marginRight: 6 }}>{u.label}</span>)}</div>
++              <div><span style={{ fontSize: 10, color: "#888" }}>Downstream: </span>{deps.downstream?.map(d => <span key={d.id} style={{ fontSize: 11, color: "#10b981", marginRight: 6 }}>{d.label}</span>)}</div>
++            </div>
++          )}
++
++          {timeline.gaps?.length > 0 && (
++            <div style={{ marginBottom: 12 }}>
++              <div style={{ fontSize: 11, fontWeight: 700, color: "#f59e0b", marginBottom: 4 }}>Activity Gaps</div>
++              {timeline.gaps.map((g, i) => (
++                <div key={i} style={{ fontSize: 11, color: "#aaa", padding: "2px 0" }}>
++                  {g.start?.slice(11, 19)} ΓåÆ {g.end?.slice(11, 19)} ({g.gap_minutes} min gap, expected {g.expected_minutes} min)
++                </div>
++              ))}
++            </div>
++          )}
++
++          <div style={{ maxHeight: 300, overflow: "auto" }}>
++            <table style={tbl}>
++              <thead><tr>{["Time", "Type", "What", "Error", "Tags"].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
++              <tbody>{(timeline.events || []).map((e, i) => (
++                <tr key={i} style={{ ...trS, background: e.is_error ? "#2a1515" : "transparent" }}>
++                  <td style={td}>{e.when?.slice(11, 19)}</td>
++                  <td style={td}>{e.key_type}</td>
++                  <td style={{ ...td, maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.what}</td>
++                  <td style={td}>{e.is_error ? <span style={{ color: "#f44336" }}>{e.error_type || "ERR"}</span> : ""}</td>
++                  <td style={td}>{(e.tags || []).slice(0, 3).join(", ")}</td>
++                </tr>
++              ))}</tbody>
++            </table>
++          </div>
++        </div>
++      )}
++
++      {data?.remediation?.length > 0 && (
++        <div>
++          <h3 style={h3s}>Auto-Remediation Actions</h3>
++          {data.remediation.map((r, i) => (
++            <div key={i} style={{ ...card, padding: "8px 12px", marginBottom: 6, borderLeft: `3px solid ${r.severity === "critical" ? "#f44336" : "#f59e0b"}` }}>
++              <div style={{ fontSize: 12, fontWeight: 700 }}>{r.label}: {r.action}</div>
++              <div style={{ fontSize: 11, color: "#888" }}>{r.reason} ΓÇö Status: <span style={{ color: r.status?.includes("executed") ? "#4caf50" : "#f59e0b" }}>{r.status}</span></div>
++            </div>
++          ))}
++        </div>
++      )}
++    </div>
++  );
++}
++
++/* ΓöÇΓöÇ Problems Panel ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
++
++function ProblemsPanel() {
++  const [data, setData] = useState(null);
++  const [approvals, setApprovals] = useState(null);
++  const [loading, setLoading] = useState(false);
++
++  const load = async () => {
++    setLoading(true);
++    setData(await jf(`${B}/api/component-health/problems`));
++    setApprovals(await jf(`${B}/api/component-health/approvals`));
++    setLoading(false);
++  };
++
++  useEffect(() => { load(); }, []);
++
++  const approve = async (idx) => {
++    await jf(`${B}/api/component-health/approvals/${idx}/approve`, { method: "POST" });
++    load();
++  };
++  const reject = async (idx) => {
++    await jf(`${B}/api/component-health/approvals/${idx}/reject`, { method: "POST" });
++    load();
++  };
++
++  const statusColor = { red: "#f44336", orange: "#ff9800" };
++
++  return (
++    <div>
++      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
++        <h2 style={h2s}>Problems</h2>
++        <button onClick={load} style={actBtn("#2563eb")} disabled={loading}>{loading ? "..." : "Refresh"}</button>
++        <button onClick={async () => { await jf(`${B}/api/triggers/scan-and-heal`, { method: "POST" }); load(); }} style={actBtn("#8b5cf6")}>Scan &amp; Heal</button>
++      </div>
++
++      {data && (
++        <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
++          <div style={{ ...card, padding: "8px 16px", borderLeft: "3px solid #f44336" }}>Critical: <strong style={{ color: "#f44336" }}>{data.critical}</strong></div>
++          <div style={{ ...card, padding: "8px 16px", borderLeft: "3px solid #ff9800" }}>Degrading: <strong style={{ color: "#ff9800" }}>{data.degrading}</strong></div>
++          <div style={{ ...card, padding: "8px 16px" }}>Total: <strong>{data.total}</strong></div>
++        </div>
++      )}
++
++      {data?.problems?.map((p, i) => (
++        <div key={i} style={{ ...card, marginBottom: 8, borderLeft: `4px solid ${statusColor[p.status]}` }}>
++          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
++            <span style={{ fontSize: 14, fontWeight: 700 }}>{p.label}</span>
++            <span style={{ fontSize: 11, fontWeight: 700, color: statusColor[p.status] }}>{p.status.toUpperCase()}</span>
++          </div>
++          <div style={{ fontSize: 12, color: "#aaa", marginTop: 4 }}>{p.reason}</div>
++          <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
++            {p.total_events} events | {p.errors} errors | Error rate: {(p.error_rate * 100).toFixed(1)}%
++            {p.last_seen && ` | Last seen: ${p.minutes_since?.toFixed(0)}m ago`}
++          </div>
++          {p.dependencies?.length > 0 && (
++            <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>Dependencies: {p.dependencies.join(", ")}</div>
++          )}
++        </div>
++      ))}
++
++      {data?.problems?.length === 0 && <div style={{ color: "#4caf50", fontSize: 14, padding: 20, textAlign: "center" }}>All components healthy</div>}
++
++      {approvals?.approvals?.length > 0 && (
++        <div style={{ marginTop: 16 }}>
++          <h3 style={h3s}>Pending Approvals</h3>
++          {approvals.approvals.map((a, i) => (
++            <div key={i} style={{ ...card, marginBottom: 6, padding: "10px 14px" }}>
++              <div style={{ fontSize: 13, fontWeight: 700 }}>{a.label}: {a.action}</div>
++              <div style={{ fontSize: 11, color: "#888" }}>{a.reason}</div>
++              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
++                <button onClick={() => approve(i)} style={actBtn("#10b981")}>Approve</button>
++                <button onClick={() => reject(i)} style={actBtn("#ef4444")}>Reject</button>
++              </div>
++            </div>
++          ))}
++        </div>
++      )}
++
++      {data?.remediation?.length > 0 && (
++        <div style={{ marginTop: 16 }}>
++          <h3 style={h3s}>Remediation Actions</h3>
++          {data.remediation.map((r, i) => (
++            <div key={i} style={{ fontSize: 12, color: "#aaa", padding: "4px 0" }}>
++              {r.label} ΓåÆ {r.action} ({r.status})
++            </div>
++          ))}
++        </div>
++      )}
++    </div>
++  );
++}
++
+ /* ΓöÇΓöÇ Console Chat (bidirectional ΓÇö individual models + consensus) ΓöÇΓöÇ */
+ 
+ function ConsoleChat() {
+
