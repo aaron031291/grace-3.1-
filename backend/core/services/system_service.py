@@ -52,8 +52,9 @@ def pause_runtime() -> dict:
         diag = getattr(app.state, "diagnostic_engine", None)
         if diag:
             diag.pause()
-    except Exception:
-        pass
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"pause_runtime failed: {e}")
     return {"status": "paused"}
 
 
@@ -64,8 +65,9 @@ def resume_runtime() -> dict:
         diag = getattr(app.state, "diagnostic_engine", None)
         if diag:
             diag.resume()
-    except Exception:
-        pass
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"resume_runtime failed: {e}")
     return {"status": "resumed"}
 
 
