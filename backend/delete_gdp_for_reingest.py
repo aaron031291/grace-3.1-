@@ -6,8 +6,7 @@ Delete a document completely to allow re-ingestion.
 import sys
 sys.path.insert(0, '.')
 
-from pathlib import Path
-from database.config import DatabaseConfig, DatabaseType
+from database.config import DatabaseConfig
 from database.connection import DatabaseConnection
 from database.session import initialize_session_factory, get_session
 from models.database_models import Document, DocumentChunk
@@ -17,11 +16,8 @@ print("="*80)
 print("DELETE DOCUMENT 3 (GDP) FOR RE-INGESTION")
 print("="*80)
 
-# Initialize database
-db_config = DatabaseConfig(
-    db_type=DatabaseType.SQLITE,
-    database_path=Path("/home/umer/Public/projects/grace_3/backend/data/documents.db")
-)
+# Initialize database from environment
+db_config = DatabaseConfig.from_env()
 DatabaseConnection.initialize(db_config)
 initialize_session_factory()
 

@@ -2,7 +2,8 @@
 Database migration to add web scraping tables.
 """
 
-from database.connection import DatabaseConnection, Base
+from database.connection import DatabaseConnection
+from database.base import Base
 from scraping.models import ScrapingJob, ScrapedPage
 
 

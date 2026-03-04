@@ -13,6 +13,7 @@ sys.path.insert(0, str(backend_dir))
 
 from sqlalchemy import inspect
 from database.connection import DatabaseConnection
+from database.config import DatabaseConfig
 from database.base import BaseModel
 from models.telemetry_models import (
     OperationLog,
@@ -32,7 +33,8 @@ def migrate():
     logger.info("Starting telemetry tables migration...")
 
     # Initialize database connection
-    DatabaseConnection.initialize()
+    config = DatabaseConfig.from_env()
+    DatabaseConnection.initialize(config)
     engine = DatabaseConnection.get_engine()
 
     # Get inspector to check existing tables
