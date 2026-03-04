@@ -346,7 +346,6 @@ class ReverseKNNOracle:
         """Load embeddings from vector DB or flash cache."""
         embeddings = []
 
-        # Try Qdrant
         try:
             from vector_db.client import get_qdrant_client
             client = get_qdrant_client()
@@ -356,12 +355,11 @@ class ReverseKNNOracle:
                 with_vectors=True,
                 with_payload=True,
             )
-            if results and results[0]:
-                for point in results[0]:
-                    vec = point.vector if hasattr(point, 'vector') else []
-                    payload = point.payload if hasattr(point, 'payload') else {}
-                    if vec:
-                        embeddings.append((str(point.id), list(vec), payload))
+            for point in results:
+                vec = point.get("vector") or []
+                payload = point.get("payload") or {}
+                if vec:
+                    embeddings.append((str(point["id"]), list(vec), payload))
         except Exception:
             pass
 
