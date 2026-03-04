@@ -18,10 +18,7 @@ print("DELETE DOCUMENT 3 (GDP) FOR RE-INGESTION")
 print("="*80)
 
 # Initialize database
-db_config = DatabaseConfig(
-    db_type=DatabaseType.SQLITE,
-    database_path=Path("/home/umer/Public/projects/grace_3/backend/data/documents.db")
-)
+db_config = DatabaseConfig.from_env()
 DatabaseConnection.initialize(db_config)
 initialize_session_factory()
 
