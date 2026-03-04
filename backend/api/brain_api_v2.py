@@ -224,6 +224,8 @@ def _ai() -> dict:
         "knowledge_gaps_deep": lambda p: _knowledge_gaps_deep(),
         "deterministic_scan": lambda p: _deterministic_scan(),
         "deterministic_fix": lambda p: _deterministic_fix(p),
+        "genesis_deterministic_scan": lambda p: _genesis_deterministic_scan(),
+        "rag_deterministic_scan": lambda p: _rag_deterministic_scan(),
     }
 
 
@@ -1171,6 +1173,14 @@ def _deterministic_scan():
 def _deterministic_fix(p):
     from core.deterministic_bridge import deterministic_fix_cycle
     return deterministic_fix_cycle(p.get("task", ""))
+
+def _genesis_deterministic_scan():
+    from genesis.deterministic_genesis_validator import run_genesis_validation
+    return run_genesis_validation().to_dict()
+
+def _rag_deterministic_scan():
+    from retrieval.deterministic_rag_validator import run_rag_validation
+    return run_rag_validation().to_dict()
 
 def _knowledge_gaps_deep():
     from core.cognitive_mesh import CognitiveMesh

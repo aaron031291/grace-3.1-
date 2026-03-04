@@ -563,6 +563,40 @@ def run_full_validation(root: Path = BACKEND_ROOT) -> ValidationReport:
     logger.info("[DETERMINISTIC-VALIDATOR] Running Kimi/Opus connectivity validation...")
     all_issues.extend(validate_kimi_opus(root))
 
+    logger.info("[DETERMINISTIC-VALIDATOR] Running Genesis Key validation...")
+    try:
+        from genesis.deterministic_genesis_validator import run_genesis_validation
+        genesis_report = run_genesis_validation()
+        for gi in genesis_report.issues:
+            all_issues.append(Issue(
+                category=f"genesis_{gi.check}",
+                severity=gi.severity,
+                file=f"genesis/{gi.check}",
+                line=None,
+                message=gi.message,
+                details=gi.details,
+                fix_suggestion=gi.fix_suggestion,
+            ))
+    except Exception as e:
+        logger.warning(f"[DETERMINISTIC-VALIDATOR] Genesis validation failed: {e}")
+
+    logger.info("[DETERMINISTIC-VALIDATOR] Running RAG pipeline validation...")
+    try:
+        from retrieval.deterministic_rag_validator import run_rag_validation
+        rag_report = run_rag_validation()
+        for ri in rag_report.issues:
+            all_issues.append(Issue(
+                category=f"rag_{ri.check}",
+                severity=ri.severity,
+                file=f"rag/{ri.check}",
+                line=None,
+                message=ri.message,
+                details=ri.details,
+                fix_suggestion=ri.fix_suggestion,
+            ))
+    except Exception as e:
+        logger.warning(f"[DETERMINISTIC-VALIDATOR] RAG validation failed: {e}")
+
     elapsed = (time.time() - start) * 1000
 
     py_files = sum(1 for _ in root.rglob("*.py")

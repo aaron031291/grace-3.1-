@@ -127,6 +127,16 @@ const ACTIONS = [
         desc: "Full cycle: detect problems deterministically → build fix prompt with EXACT facts → feed to LLM (constrained by facts) → verify fix deterministically. Eliminates hallucination because the LLM only sees verified facts, not guesses. Connects to: deterministic_bridge → coding_pipeline → verification.",
       },
       {
+        id: "genesis_det_scan", label: "Genesis Det. Scan", icon: "🧬",
+        brain: "ai", action: "genesis_deterministic_scan",
+        desc: "Deterministic validation of the Genesis Key system. Checks: schema integrity, parent-child chain integrity, fix linkage, KB sync, user profile consistency, connector wiring, route wiring, timestamp ordering, import chain. Pure structural + data analysis — no LLM. Connects to: genesis/deterministic_genesis_validator.py → models/genesis_key_models.py → SQLite.",
+      },
+      {
+        id: "rag_det_scan", label: "RAG Det. Scan", icon: "📚",
+        brain: "ai", action: "rag_deterministic_scan",
+        desc: "Deterministic validation of the RAG pipeline. Checks: embedding model config, Qdrant connectivity, document-chunk consistency, ingestion pipeline wiring, retriever wiring, RAG prompt integrity, KB file tracking, connector registration, import chain, API wiring. Pure structural + data analysis — no LLM. Connects to: retrieval/deterministic_rag_validator.py → embedding/ → vector_db/ → ingestion/.",
+      },
+      {
         id: "invariants", label: "Invariants", icon: "✅",
         brain: "ai", action: "invariants",
         desc: "Checks system invariants — are all constraints satisfied? Validates trust score bounds (0-1), data integrity, memory consistency. If an invariant is violated, it signals the Ouroboros loop to investigate. Connects to: cognitive_mesh → cognitive/invariants.py → trust_engine.",

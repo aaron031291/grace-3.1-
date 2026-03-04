@@ -228,6 +228,39 @@ async def validate_layer1():
     }
 
 
+@router.get("/validate/genesis")
+async def validate_genesis():
+    """
+    Deterministic validation of the Genesis Key system.
+
+    Checks: schema integrity, chain integrity (parent_key_id),
+    fix linkage, KB sync, user profiles, connector wiring,
+    route wiring, timestamp ordering, import chain.
+
+    No LLM needed. Pure structural + data analysis.
+    """
+    from genesis.deterministic_genesis_validator import run_genesis_validation
+    report = run_genesis_validation()
+    return report.to_dict()
+
+
+@router.get("/validate/rag")
+async def validate_rag():
+    """
+    Deterministic validation of the RAG pipeline.
+
+    Checks: embedding model, Qdrant connectivity, document-chunk
+    consistency, ingestion pipeline wiring, retriever wiring,
+    RAG prompt integrity, KB file tracking, connector registration,
+    import chain, API wiring.
+
+    No LLM needed. Pure structural + data analysis.
+    """
+    from retrieval.deterministic_rag_validator import run_rag_validation
+    report = run_rag_validation()
+    return report.to_dict()
+
+
 # ---------------------------------------------------------------------------
 # Problems + Kimi/Opus
 # ---------------------------------------------------------------------------
