@@ -579,3 +579,62 @@ async def get_loop_log(limit: int = 20):
     """Get recent autonomous loop activity."""
     with _loop_lock:
         return {"log": list(reversed(_loop_log[-limit:])), "total": len(_loop_log)}
+
+
+# ── Deterministic Lifecycle Endpoints ─────────────────────────────
+
+@router.post("/lifecycle/scan")
+async def lifecycle_scan_endpoint():
+    """
+    Quick lifecycle scan: probe all components, scan unhealthy ones.
+    Read-only diagnostic — does NOT attempt fixes.
+
+    Flow: Auto-discover → Probe all → Scan dead components
+    """
+    from core.deterministic_lifecycle import lifecycle_scan
+    return lifecycle_scan()
+
+
+@router.post("/lifecycle/probe-and-heal")
+async def lifecycle_probe_and_heal(component_id: str = ""):
+    """
+    Full deterministic lifecycle: probe → test → scan → fix → reason → heal → verify → loop.
+
+    The recursive self-healing chain:
+    1. Probe: Is it alive?
+    2. Test: Does it work correctly?
+    3. Scan: Find problems deterministically (AST, imports, deps)
+    4. Fix: Try deterministic auto-fix (no LLM)
+    5. Reason: If unfixed → LLM reasoning (constrained by facts)
+    6. Heal: Self-heal via coding agent / healing coordinator
+    7. Verify: Re-probe + re-test
+    8. Loop: Recursive until healthy or max iterations
+
+    If component_id is empty, runs for ALL registered components.
+    """
+    if component_id:
+        from core.deterministic_lifecycle import run_lifecycle, _registry, register_component
+        if component_id not in _registry:
+            register_component(component_id, component_id)
+        result = run_lifecycle(component_id)
+        return result.to_dict()
+    else:
+        from core.deterministic_lifecycle import run_lifecycle_all
+        return run_lifecycle_all()
+
+
+@router.get("/lifecycle/registry")
+async def lifecycle_registry():
+    """Get all components registered in the deterministic lifecycle system."""
+    from core.deterministic_lifecycle import get_registry
+    return {"registry": get_registry(), "total": len(get_registry())}
+
+
+@router.get("/lifecycle/events")
+async def lifecycle_events(component: str = "", limit: int = 50):
+    """Get deterministic lifecycle event log."""
+    from core.deterministic_logger import get_event_log, get_event_summary
+    return {
+        "events": get_event_log(component or None, limit),
+        "summary": get_event_summary(),
+    }

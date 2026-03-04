@@ -118,23 +118,43 @@ const ACTIONS = [
       },
       {
         id: "det_scan", label: "Deterministic Scan", icon: "🔬",
-        brain: "ai", action: "deterministic_scan",
+        brain: "deterministic", action: "scan",
         desc: "Finds problems using ONLY deterministic methods — no LLM, no guessing. Checks: Python syntax (AST parse), imports, critical files, database health, test results, service connectivity. Every finding is a verified fact. Connects to: core/deterministic_bridge.py → ast, importlib, sqlite3, subprocess.",
       },
       {
         id: "det_fix", label: "Deterministic Fix", icon: "🔧",
-        brain: "ai", action: "deterministic_fix",
+        brain: "deterministic", action: "fix",
         desc: "Full cycle: detect problems deterministically → build fix prompt with EXACT facts → feed to LLM (constrained by facts) → verify fix deterministically. Eliminates hallucination because the LLM only sees verified facts, not guesses. Connects to: deterministic_bridge → coding_pipeline → verification.",
       },
       {
         id: "genesis_det_scan", label: "Genesis Det. Scan", icon: "🧬",
-        brain: "ai", action: "genesis_deterministic_scan",
+        brain: "deterministic", action: "genesis_scan",
         desc: "Deterministic validation of the Genesis Key system. Checks: schema integrity, parent-child chain integrity, fix linkage, KB sync, user profile consistency, connector wiring, route wiring, timestamp ordering, import chain. Pure structural + data analysis — no LLM. Connects to: genesis/deterministic_genesis_validator.py → models/genesis_key_models.py → SQLite.",
       },
       {
         id: "rag_det_scan", label: "RAG Det. Scan", icon: "📚",
-        brain: "ai", action: "rag_deterministic_scan",
+        brain: "deterministic", action: "rag_scan",
         desc: "Deterministic validation of the RAG pipeline. Checks: embedding model config, Qdrant connectivity, document-chunk consistency, ingestion pipeline wiring, retriever wiring, RAG prompt integrity, KB file tracking, connector registration, import chain, API wiring. Pure structural + data analysis — no LLM. Connects to: retrieval/deterministic_rag_validator.py → embedding/ → vector_db/ → ingestion/.",
+      },
+      {
+        id: "det_lifecycle", label: "Lifecycle Scan", icon: "🔄",
+        brain: "deterministic", action: "lifecycle_scan",
+        desc: "Auto-discovers all components, probes each one for liveness, and scans any dead components. Read-only diagnostic. Shows which components are alive vs dead and what's wrong with dead ones. Connects to: core/deterministic_lifecycle.py → probe → scan → component_health.",
+      },
+      {
+        id: "det_probe_heal", label: "Probe & Heal", icon: "🩺",
+        brain: "deterministic", action: "probe_heal",
+        desc: "Full recursive agentic lifecycle: PROBE (alive?) → TEST (correct?) → SCAN (find problems) → FIX (deterministic) → REASON (LLM) → HEAL (coding agent) → VERIFY → LOOP. Recursive until healthy or escalated. Multi-entry-point via event bus. Connects to: deterministic_lifecycle → deterministic_bridge → coding_pipeline → healing_coordinator.",
+      },
+      {
+        id: "det_bus_stats", label: "Event Bus", icon: "📡",
+        brain: "deterministic", action: "bus_stats",
+        desc: "Deterministic event bus statistics — shows all entry points, queued tasks, processing status, and bridge connections. Problems can enter at ANY lifecycle stage (probe, scan, fix, heal, verify) via async event topics. Connects to: core/deterministic_event_bus.py → cognitive/event_bus.py → genesis/realtime.py.",
+      },
+      {
+        id: "det_contracts", label: "Coding Contracts", icon: "📜",
+        brain: "deterministic", action: "contracts",
+        desc: "Lists all deterministic coding contracts — hard-enforced governance for code generation, fixes, component creation, and healing. Each contract verifies: syntax (AST), imports, security patterns, docstrings, trust gate. Code is REJECTED if any step fails. Connects to: core/deterministic_coding_contracts.py → governance_wrapper → trust_engine.",
       },
       {
         id: "invariants", label: "Invariants", icon: "✅",

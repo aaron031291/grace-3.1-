@@ -109,7 +109,8 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
     global _calling_brain
     source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
-              "system": _system, "data": _data, "tasks": _tasks, "code": _code}
+              "system": _system, "data": _data, "tasks": _tasks, "code": _code,
+              "deterministic": _deterministic}
     factory = brains.get(brain_name)
     if not factory:
         return {"ok": False, "error": f"Unknown brain: {brain_name}"}
@@ -367,6 +368,9 @@ def _system() -> dict:
         "snapshot_stats": lambda p: _snapshot_stats(),
         "db_info":      lambda p: _db_info(),
         "user_rate_limit": lambda p: _user_rate_check(p),
+        "lifecycle_scan": lambda p: _lifecycle_scan(),
+        "lifecycle_probe_heal": lambda p: _lifecycle_probe_heal(p),
+        "lifecycle_events": lambda p: _lifecycle_events(p),
     }
 
 
@@ -436,11 +440,135 @@ def _project_scoped_chat(p):
     message = p.get("message", p.get("prompt", ""))
     context = get_project_context(project_id)
 
-    from api.brain_api_v2 import call_brain
-    return call_brain("ai", "fast", {
+    from api.brain_api_v2 import call_brain as _cb_inner
+    return _cb_inner("ai", "fast", {
         "prompt": f"Project context:\n{context[:8000]}\n\nUser question: {message}",
         "models": p.get("models", ["kimi"]),
     }).get("data", {})
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  DETERMINISTIC BRAIN — 9th brain domain
+# ═══════════════════════════════════════════════════════════════════
+
+def _deterministic() -> dict:
+    """
+    The Deterministic Brain — all deterministic capabilities as a first-class brain.
+
+    Consolidates: scanning, fixing, lifecycle, event bus, coding contracts,
+    genesis validation, RAG validation, component probing, and logging.
+    """
+    return {
+        # Scanning
+        "scan": lambda p: _deterministic_scan(),
+        "fix": lambda p: _deterministic_fix(p),
+        "genesis_scan": lambda p: _genesis_deterministic_scan(),
+        "rag_scan": lambda p: _rag_deterministic_scan(),
+
+        # Lifecycle
+        "lifecycle_scan": lambda p: _lifecycle_scan(),
+        "probe_heal": lambda p: _lifecycle_probe_heal(p),
+        "probe_all": lambda p: _det_probe_all(),
+        "lifecycle_events": lambda p: _lifecycle_events(p),
+        "registry": lambda p: _det_registry(),
+
+        # Event Bus (multi-entry-point)
+        "publish": lambda p: _det_publish(p),
+        "bus_stats": lambda p: _det_bus_stats(),
+        "bus_log": lambda p: _det_bus_log(p),
+        "init_bridges": lambda p: _det_init_bridges(),
+
+        # Coding Contracts
+        "validate_code": lambda p: _det_validate_code(p),
+        "validate_fix": lambda p: _det_validate_fix(p),
+        "validate_component": lambda p: _det_validate_component(p),
+        "validate_healing": lambda p: _det_validate_healing(p),
+        "contracts": lambda p: _det_contracts(),
+
+        # Logging
+        "log": lambda p: _lifecycle_events(p),
+        "log_summary": lambda p: _det_log_summary(),
+    }
+
+
+def _det_probe_all():
+    from core.deterministic_lifecycle import probe_all_components, _registry, auto_discover_components
+    if not _registry:
+        auto_discover_components()
+    return probe_all_components()
+
+def _det_registry():
+    from core.deterministic_lifecycle import get_registry, _registry, auto_discover_components
+    if not _registry:
+        auto_discover_components()
+    return {"registry": get_registry(), "total": len(get_registry())}
+
+def _det_publish(p):
+    from core.deterministic_event_bus import publish, TOPICS
+    topic = p.get("topic", "deterministic.problem_detected")
+    comp = p.get("component", "unknown")
+    payload = p.get("payload", {})
+    priority = p.get("priority", 5)
+    task_id = publish(topic, comp, payload, priority, source="brain_api")
+    return {"task_id": task_id, "topic": topic, "component": comp, "available_topics": TOPICS}
+
+def _det_bus_stats():
+    from core.deterministic_event_bus import get_bus_stats
+    return get_bus_stats()
+
+def _det_bus_log(p):
+    from core.deterministic_event_bus import get_task_log
+    return {"tasks": get_task_log(p.get("limit", 50))}
+
+def _det_init_bridges():
+    from core.deterministic_event_bus import initialize_bridges
+    initialize_bridges()
+    return {"status": "bridges_initialized"}
+
+def _det_validate_code(p):
+    from core.deterministic_coding_contracts import execute_code_generation_contract
+    return execute_code_generation_contract(
+        component=p.get("component", "unknown"),
+        generated_code=p.get("code", ""),
+        file_path=p.get("file_path"),
+        min_trust=p.get("min_trust", 0.5),
+    ).to_dict()
+
+def _det_validate_fix(p):
+    from core.deterministic_coding_contracts import execute_code_fix_contract
+    return execute_code_fix_contract(
+        component=p.get("component", "unknown"),
+        file_path=p.get("file_path", ""),
+        fix_code=p.get("code", ""),
+        original_problems=p.get("problems", []),
+        min_trust=p.get("min_trust", 0.5),
+    ).to_dict()
+
+def _det_validate_component(p):
+    from core.deterministic_coding_contracts import execute_component_creation_contract
+    return execute_component_creation_contract(
+        component=p.get("component", "unknown"),
+        component_code=p.get("code", ""),
+        file_path=p.get("file_path", ""),
+        min_trust=p.get("min_trust", 0.6),
+    ).to_dict()
+
+def _det_validate_healing(p):
+    from core.deterministic_coding_contracts import execute_healing_contract
+    return execute_healing_contract(
+        component=p.get("component", "unknown"),
+        healing_code=p.get("code", ""),
+        healing_method=p.get("method", "unknown"),
+        min_trust=p.get("min_trust", 0.5),
+    ).to_dict()
+
+def _det_contracts():
+    from core.deterministic_coding_contracts import get_available_contracts
+    return get_available_contracts()
+
+def _det_log_summary():
+    from core.deterministic_logger import get_event_summary
+    return get_event_summary()
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1182,6 +1310,27 @@ def _rag_deterministic_scan():
     from retrieval.deterministic_rag_validator import run_rag_validation
     return run_rag_validation().to_dict()
 
+def _lifecycle_scan():
+    from core.deterministic_lifecycle import lifecycle_scan
+    return lifecycle_scan()
+
+def _lifecycle_probe_heal(p):
+    comp = p.get("component_id", p.get("component", ""))
+    if comp:
+        from core.deterministic_lifecycle import run_lifecycle, _registry, register_component
+        if comp not in _registry:
+            register_component(comp, comp)
+        return run_lifecycle(comp).to_dict()
+    else:
+        from core.deterministic_lifecycle import run_lifecycle_all
+        return run_lifecycle_all()
+
+def _lifecycle_events(p):
+    from core.deterministic_logger import get_event_log, get_event_summary
+    comp = p.get("component", "")
+    limit = p.get("limit", 50)
+    return {"events": get_event_log(comp or None, limit), "summary": get_event_summary()}
+
 def _knowledge_gaps_deep():
     from core.cognitive_mesh import CognitiveMesh
     return CognitiveMesh.analyze_knowledge_gaps()
@@ -1202,6 +1351,7 @@ def _build_directory():
         "data":   {"actions": list(_data().keys()), "description": "Whitelist sources, flash cache"},
         "tasks":  {"actions": list(_tasks().keys()), "description": "Scheduling, time sense, planner"},
         "code":   {"actions": list(_code().keys()), "description": "Codebase, projects, code generation"},
+        "deterministic": {"actions": list(_deterministic().keys()), "description": "Deterministic scanning, lifecycle, event bus, coding contracts, probing"},
     }
 
 
@@ -1239,6 +1389,10 @@ async def brain_tasks(req: BrainRequest):
 @router.post("/code", response_model=BrainResponse)
 async def brain_code(req: BrainRequest):
     return _call("code", req.action, req.payload or {}, _code())
+
+@router.post("/deterministic", response_model=BrainResponse)
+async def brain_deterministic(req: BrainRequest):
+    return _call("deterministic", req.action, req.payload or {}, _deterministic())
 
 @router.post("/ask")
 async def brain_ask(request: Request):
