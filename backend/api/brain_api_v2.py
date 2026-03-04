@@ -110,7 +110,7 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
     source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
               "system": _system, "data": _data, "tasks": _tasks, "code": _code,
-              "deterministic": _deterministic}
+              "deterministic": _deterministic, "workspace": _workspace}
     factory = brains.get(brain_name)
     if not factory:
         return {"ok": False, "error": f"Unknown brain: {brain_name}"}
@@ -569,6 +569,31 @@ def _det_contracts():
 def _det_log_summary():
     from core.deterministic_logger import get_event_summary
     return get_event_summary()
+
+
+def _workspace() -> dict:
+    """Workspace brain — internal VCS, CI/CD, multi-tenant management.
+    Bridges dev tab, codebase, docs, and projects through Grace's platform."""
+    from core.services.workspace_service import (
+        ws_list, ws_create, ws_snapshot, ws_history, ws_diff,
+        ws_rollback, ws_branches, ws_create_branch, ws_files,
+        ws_content, ws_snapshot_dir, ws_pipeline_run, ws_pipeline_history,
+    )
+    return {
+        "list":             lambda p: ws_list(),
+        "create":           ws_create,
+        "snapshot":         ws_snapshot,
+        "snapshot_dir":     ws_snapshot_dir,
+        "history":          ws_history,
+        "diff":             ws_diff,
+        "rollback":         ws_rollback,
+        "content":          ws_content,
+        "files":            ws_files,
+        "branches":         ws_branches,
+        "create_branch":    ws_create_branch,
+        "pipeline_run":     ws_pipeline_run,
+        "pipeline_history": ws_pipeline_history,
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1350,8 +1375,9 @@ def _build_directory():
         "system": {"actions": list(_system().keys()), "description": "Health, runtime, monitoring, autonomous loop"},
         "data":   {"actions": list(_data().keys()), "description": "Whitelist sources, flash cache"},
         "tasks":  {"actions": list(_tasks().keys()), "description": "Scheduling, time sense, planner"},
-        "code":   {"actions": list(_code().keys()), "description": "Codebase, projects, code generation"},
+        "code":          {"actions": list(_code().keys()), "description": "Codebase, projects, code generation"},
         "deterministic": {"actions": list(_deterministic().keys()), "description": "Deterministic scanning, lifecycle, event bus, coding contracts, probing"},
+        "workspace":     {"actions": list(_workspace().keys()), "description": "Internal VCS, CI/CD, multi-tenant workspaces (replaces GitHub)"},
     }
 
 
@@ -1412,6 +1438,9 @@ async def brain_ask(request: Request):
     from core.auto_router import smart_call
     return smart_call(query, payload)
 
+@router.post("/workspace", response_model=BrainResponse)
+async def brain_workspace(req: BrainRequest):
+    return _call("workspace", req.action, req.payload or {}, _workspace())
 
 @router.get("/directory")
 async def brain_directory():

@@ -111,6 +111,12 @@ try:
     _optional_routers.append(("file_ingestion", file_ingestion_router))
 except Exception as e:
     print(f"[WARN] File ingestion router not loaded: {e}")
+
+try:
+    from api.workspace_api import router as workspace_router
+    _optional_routers.append(("workspace", workspace_router))
+except Exception as e:
+    print(f"[WARN] Workspace router not loaded: {e}")
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt

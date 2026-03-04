@@ -49,12 +49,13 @@ jobs:
           LIGHTWEIGHT_MODE: "true"
         run: |
           cd backend
-          python -m pytest tests/test_grace_system.py tests/unit/ tests/reliability/ tests/security/ -v --tb=short || true
+          python -m pytest tests/test_grace_system.py tests/unit/ tests/reliability/ tests/security/ -v --tb=short --ignore=tests/integration
 
       - name: Type checking with mypy
+        continue-on-error: true
         run: |
           cd backend
-          mypy --ignore-missing-imports --no-error-summary app.py || true
+          mypy --ignore-missing-imports --no-error-summary app.py
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -78,11 +79,63 @@ jobs:
       - name: Lint frontend
         run: |
           cd frontend
-          npm run lint || true
+          npm run lint
 
       - name: Build frontend
         run: |
           cd frontend
+          npm run build
+
+  vscode-extension-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install extension dependencies
+        run: |
+          cd grace-os-vscode
+          npm install
+
+      - name: Compile extension
+        run: |
+          cd grace-os-vscode
+          npm run compile
+
+  mcp-servers-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build MCP memory server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/memory
+          npm install
+          npm run build
+
+      - name: Build MCP filesystem server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/filesystem
+          npm install
+          npm run build
+
+      - name: Build MCP sequential-thinking server
+        run: |
+          cd backend/mcp_repos/mcp-servers/src/sequentialthinking
+          npm install
           npm run build
 
   docker-build-backend:
