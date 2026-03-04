@@ -261,6 +261,66 @@ async def validate_rag():
     return report.to_dict()
 
 
+@router.get("/validate/lifecycle")
+async def validate_lifecycle():
+    """
+    Deterministic lifecycle scan: probe all components, scan unhealthy ones.
+
+    Auto-discovers components from component health registry and
+    semantic search, probes each one, and scans any dead components.
+
+    Read-only diagnostic — does NOT attempt fixes.
+    """
+    from core.deterministic_lifecycle import lifecycle_scan
+    return lifecycle_scan()
+
+
+@router.post("/validate/lifecycle/heal")
+async def lifecycle_heal(component_id: str = ""):
+    """
+    Full deterministic lifecycle with recursive self-healing.
+
+    The agentic deterministic loop:
+    1. PROBE → is it alive?
+    2. TEST → does it work correctly?
+    3. SCAN → find problems deterministically (AST, imports, deps)
+    4. FIX → try deterministic auto-fix (no LLM)
+    5. REASON → if unfixed → LLM reasoning (constrained by facts)
+    6. HEAL → self-heal via coding agent / healing coordinator
+    7. VERIFY → re-probe + re-test after fix
+    8. LOOP → recursive until healthy or max iterations
+
+    If component_id is empty, runs for ALL registered components.
+    """
+    if component_id:
+        from core.deterministic_lifecycle import run_lifecycle, _registry, register_component
+        if component_id not in _registry:
+            register_component(component_id, component_id)
+        result = run_lifecycle(component_id)
+        return result.to_dict()
+    else:
+        from core.deterministic_lifecycle import run_lifecycle_all
+        return run_lifecycle_all()
+
+
+@router.get("/validate/lifecycle/events")
+async def lifecycle_events(component: str = "", limit: int = 50):
+    """Get the deterministic lifecycle event log."""
+    from core.deterministic_logger import get_event_log, get_event_summary
+    return {
+        "events": get_event_log(component or None, limit),
+        "summary": get_event_summary(),
+    }
+
+
+@router.get("/validate/lifecycle/registry")
+async def lifecycle_registry():
+    """Get all components registered in the deterministic lifecycle system."""
+    from core.deterministic_lifecycle import get_registry
+    reg = get_registry()
+    return {"registry": reg, "total": len(reg)}
+
+
 # ---------------------------------------------------------------------------
 # Problems + Kimi/Opus
 # ---------------------------------------------------------------------------

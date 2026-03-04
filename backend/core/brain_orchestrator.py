@@ -23,17 +23,20 @@ class BrainOrchestrator:
 
     TASK_BRAIN_MAP = {
         "build": ["code", "ai", "system", "govern"],
-        "fix": ["ai", "code", "system"],
-        "test": ["ai", "system", "code"],
+        "fix": ["deterministic", "ai", "code", "system"],
+        "test": ["deterministic", "ai", "system", "code"],
         "deploy": ["system", "govern", "code"],
-        "analyze": ["ai", "system", "files"],
+        "analyze": ["deterministic", "ai", "system", "files"],
         "search": ["files", "code", "data"],
         "learn": ["ai", "govern", "system"],
-        "heal": ["system", "ai", "govern"],
+        "heal": ["deterministic", "system", "ai", "govern"],
         "chat": ["chat", "ai"],
         "upload": ["files", "data", "govern"],
         "plan": ["tasks", "ai", "govern"],
-        "review": ["ai", "code", "govern"],
+        "review": ["deterministic", "ai", "code", "govern"],
+        "scan": ["deterministic", "system", "ai"],
+        "validate": ["deterministic", "system"],
+        "probe": ["deterministic", "system"],
     }
 
     def __init__(self):
