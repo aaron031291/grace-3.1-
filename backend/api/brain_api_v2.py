@@ -542,6 +542,10 @@ def _deterministic() -> dict:
         # GRACE Protocol (structured AI-to-AI, NLP only human-facing)
         "protocol_route": lambda p: _protocol_route(p),
         "protocol_review": lambda p: _protocol_review(p),
+
+        # E2E Validation (Genesis → Output, fully deterministic)
+        "e2e_validate": lambda p: _e2e_validate(),
+        "e2e_stage": lambda p: _e2e_stage(p),
     }
 
 
@@ -623,6 +627,35 @@ def _det_contracts():
 def _det_log_summary():
     from core.deterministic_logger import get_event_summary
     return get_event_summary()
+
+
+def _e2e_validate():
+    """Run full deterministic e2e LLM pipeline validation: Genesis → Output."""
+    from core.deterministic_e2e_validator import run_e2e_validation
+    return run_e2e_validation().to_dict()
+
+
+def _e2e_stage(p):
+    """Run a single e2e validation stage by number (1-10)."""
+    stage_num = p.get("stage", 0)
+    from core.deterministic_e2e_validator import (
+        _stage_genesis, _stage_governance, _stage_memory,
+        _stage_retrieval, _stage_llm_providers, _stage_cognitive_pipeline,
+        _stage_coding_contracts, _stage_brain_api, _stage_agent_pool,
+        _stage_output_integrity,
+    )
+    stage_map = {
+        1: _stage_genesis, 2: _stage_governance, 3: _stage_memory,
+        4: _stage_retrieval, 5: _stage_llm_providers, 6: _stage_cognitive_pipeline,
+        7: _stage_coding_contracts, 8: _stage_brain_api, 9: _stage_agent_pool,
+        10: _stage_output_integrity,
+    }
+    fn = stage_map.get(stage_num)
+    if not fn:
+        return {"error": f"Invalid stage {stage_num}. Valid: 1-10",
+                "stages": {k: fn.__name__.replace("_stage_", "") for k, fn in stage_map.items()}}
+    from dataclasses import asdict
+    return asdict(fn())
 
 
 def _protocol_route(p):
