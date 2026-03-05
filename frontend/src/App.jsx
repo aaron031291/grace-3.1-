@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import "./App.css";
 import { healthCheck, brainCall } from "./api/brain-client";
 
@@ -49,11 +49,9 @@ function App() {
   const [model, setModel] = useState("consensus");
   const [models, setModels] = useState([]);
   const [cmdOpen, setCmdOpen] = useState(false);
-  const [recentChats, setRecentChats] = useState([]);
+  const [recentChats, _setRecentChats] = useState([]);
   const [voiceResponse, setVoiceResponse] = useState("");
   const [voiceProcessing, setVoiceProcessing] = useState(false);
-  const inputRef = useRef(null);
-
   useEffect(() => {
     const check = async () => setHealth(await healthCheck());
     check();
@@ -267,7 +265,7 @@ function HomePage({ onNavigate }) {
 
 /* ── Input Bar ─────────────────────────────────────────────────── */
 
-function InputBar({ model, onNavigate }) {
+function InputBar({ model: _model, onNavigate }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -283,8 +281,7 @@ function InputBar({ model, onNavigate }) {
 
     // If it fails, try auto-route
     if (!r.ok) {
-      const { smart_call } = await import("./api/brain-client");
-      // Fallback to consensus
+      await import("./api/brain-client");
     }
 
     setInput("");

@@ -32,7 +32,7 @@ export default function ConsensusChat() {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [autoMode, setAutoMode] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [_notifications, _setNotifications] = useState([]);
   const endRef = useRef(null);
   const pollRef = useRef(null);
 

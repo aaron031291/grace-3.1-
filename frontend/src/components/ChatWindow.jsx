@@ -563,7 +563,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                             method: 'POST', headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'positive'}),
                           });
-                        } catch {}
+                        } catch { /* expected */ }
                         msg._feedback = 'up';
                       }} title="Good response" style={{
                         background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
@@ -575,7 +575,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                             method: 'POST', headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'negative'}),
                           });
-                        } catch {}
+                        } catch { /* expected */ }
                         msg._feedback = 'down';
                       }} title="Bad response" style={{
                         background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,

@@ -2,7 +2,7 @@
  * CrossTabNotifier — Notifications when Grace finds something relevant
  * in another tab. Click to navigate to that tab.
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 let _notifications = [];
 let _notifListeners = [];

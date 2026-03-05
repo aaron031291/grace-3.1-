@@ -462,7 +462,6 @@ export default function ChatTab() {
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
   const [chatMode, setChatMode] = useState("general"); // general, consensus
-  const [useKimi, setUseKimi] = useState(false);
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
 
@@ -475,8 +474,6 @@ export default function ChatTab() {
   });
   const [availableModels, setAvailableModels] = useState([]);
   const [consensusMode, setConsensusMode] = useState(false);
-  const [consensusResult, setConsensusResult] = useState(null);
-  const [consensusRunning, setConsensusRunning] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/docs/by-folder`)
@@ -593,7 +590,6 @@ export default function ChatTab() {
                     setModelToggles(newToggles);
                     const activeCount = Object.values(newToggles).filter(Boolean).length;
                     setConsensusMode(activeCount >= 2);
-                    if (m.id === "kimi") setUseKimi(!isOn);
                   }}
                   disabled={!isAvail}
                   title={`${m.label}${modelInfo ? ` — ${modelInfo.strengths?.join(", ")}` : ""}${!isAvail ? " (not configured)" : ""}`}
