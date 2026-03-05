@@ -551,7 +551,7 @@ class AutonomousHealingSystem:
                 
                 # Reset Qdrant connection if available
                 try:
-                    from vector_db.qdrant_client import get_qdrant_client
+                    from vector_db.client import get_qdrant_client
                     qdrant = get_qdrant_client()
                     if qdrant:
                         # Qdrant client will auto-reconnect on next use
@@ -639,7 +639,7 @@ class AutonomousHealingSystem:
                 
                 # 2. Reset vector DB
                 try:
-                    from vector_db.qdrant_client import _qdrant_client
+                    from vector_db.client import _qdrant_client
                     if _qdrant_client:
                         services_reset.append("qdrant")
                 except:

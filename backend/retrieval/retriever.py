@@ -283,6 +283,46 @@ class DocumentRetriever:
                 include_metadata=include_metadata
             )
     
+    def retrieve_and_rank(
+        self,
+        query: str,
+        limit: int = 5,
+        score_threshold: float = 0.3,
+        include_metadata: bool = True,
+        rerank: bool = True,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve chunks and rerank them using a cross-encoder model.
+
+        Args:
+            query: Query text to search for
+            limit: Maximum number of chunks to return
+            score_threshold: Minimum similarity score for initial retrieval
+            include_metadata: Whether to include chunk metadata
+            rerank: Whether to apply reranking (if False, behaves like retrieve)
+
+        Returns:
+            List of relevant chunks, reranked by cross-encoder relevance
+        """
+        candidates = self.retrieve(
+            query=query,
+            limit=limit * 3,
+            score_threshold=score_threshold,
+            include_metadata=include_metadata,
+        )
+
+        if not candidates or not rerank:
+            return candidates[:limit]
+
+        try:
+            from retrieval.reranker import get_reranker
+            reranker = get_reranker()
+            reranked = reranker.rerank(query=query, chunks=candidates, top_k=limit)
+            return reranked
+        except Exception as e:
+            logger.warning(f"Reranking failed, returning unranked results: {e}")
+            return candidates[:limit]
+
     def retrieve_by_document(
         self,
         document_id: int,

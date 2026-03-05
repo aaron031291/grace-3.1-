@@ -242,6 +242,45 @@ class QdrantVectorDB:
             logger.error(f"[FAIL] Search failed: {e}")
             return []
     
+    def scroll(
+        self,
+        collection_name: str,
+        limit: int = 100,
+        offset: Any = None,
+        with_vectors: bool = False,
+        with_payload: bool = True,
+        **kwargs
+    ):
+        """
+        Scroll through all points in a collection.
+
+        Args:
+            collection_name: Name of the collection
+            limit: Maximum points per page
+            offset: Pagination offset (point id)
+            with_vectors: Whether to include vectors in results
+            with_payload: Whether to include payloads in results
+
+        Returns:
+            Tuple of (list of points, next page offset) or ([], None) on error
+        """
+        if not self.is_connected():
+            logger.error("Not connected to Qdrant")
+            return [], None
+
+        try:
+            return self.client.scroll(
+                collection_name=collection_name,
+                limit=limit,
+                offset=offset,
+                with_vectors=with_vectors,
+                with_payload=with_payload,
+                **kwargs
+            )
+        except Exception as e:
+            logger.error(f"[FAIL] Scroll failed on '{collection_name}': {e}")
+            return [], None
+
     def delete_vectors(
         self,
         collection_name: str,

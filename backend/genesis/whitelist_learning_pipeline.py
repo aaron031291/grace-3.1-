@@ -268,10 +268,12 @@ def get_librarian_pipeline():
 def get_learning_memory():
     """Get Learning Memory."""
     try:
-        from cognitive.learning_memory import LearningMemory
+        from cognitive.learning_memory import LearningMemoryManager
         from database.session import get_session
+        from settings import settings
         session = next(get_session())
-        return LearningMemory(session)
+        kb_path = getattr(settings, 'KNOWLEDGE_BASE_PATH', 'knowledge_base')
+        return LearningMemoryManager(session, kb_path)
     except Exception as e:
         logger.debug(f"[WL-Pipeline] Learning Memory not available: {e}")
         return None

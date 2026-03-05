@@ -285,7 +285,7 @@ def _decide_and_act(problem: dict) -> dict:
     if "unreachable" in reason.lower() or "down" in reason.lower() or "connection" in reason.lower():
         action["type"] = "heal"
         try:
-            from api.brain_api import call_brain
+            from api.brain_api_v2 import call_brain
             action["result"] = call_brain("system", "scan_heal", {})
         except Exception as e:
             action["result"] = {"error": str(e)[:100]}
