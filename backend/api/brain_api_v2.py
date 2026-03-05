@@ -229,6 +229,14 @@ def _ai() -> dict:
         "rag_deterministic_scan": lambda p: _rag_deterministic_scan(),
         "triad": lambda p: _run_triad(p),
         "triad_status": lambda p: _triad_status(),
+
+        # Sub-Agent System
+        "agent_submit": lambda p: _agent_submit(p),
+        "agent_status": lambda p: _agent_task_status(p),
+        "agent_parallel": lambda p: _agent_parallel(p),
+        "agent_collaborative": lambda p: _agent_collaborative(p),
+        "agent_pipeline": lambda p: _agent_pipeline(p),
+        "agent_pool_status": lambda p: _agent_pool_status(),
     }
 
 
@@ -1534,6 +1542,80 @@ async def brain_ask(request: Request):
 async def brain_workspace(req: BrainRequest):
     return _call("workspace", req.action, req.payload or {}, _workspace())
 
+def _agent_submit(p):
+    """Submit a task to a specific Qwen agent for background processing."""
+    from cognitive.qwen_agents import get_agent_pool, AgentRole, TaskPriority
+    pool = get_agent_pool()
+    role_map = {"code": AgentRole.CODE, "reason": AgentRole.REASON, "fast": AgentRole.FAST}
+    role = role_map.get(p.get("role", "code"), AgentRole.CODE)
+    priority_map = {"critical": TaskPriority.CRITICAL, "high": TaskPriority.HIGH,
+                    "normal": TaskPriority.NORMAL, "low": TaskPriority.LOW, "background": TaskPriority.BACKGROUND}
+    priority = priority_map.get(p.get("priority", "normal"), TaskPriority.NORMAL)
+    task_id = pool.submit_background(
+        prompt=p.get("prompt", ""),
+        role=role,
+        priority=priority,
+        use_pipeline=p.get("use_pipeline", False),
+        execution_allowed=p.get("execution_allowed", False),
+        project_folder=p.get("project_folder", ""),
+        context=p.get("context", {}),
+    )
+    return {"task_id": task_id, "role": role.value, "status": "queued"}
+
+
+def _agent_task_status(p):
+    """Get status of a background agent task."""
+    from cognitive.qwen_agents import get_agent_pool
+    task_id = p.get("task_id", "")
+    if not task_id:
+        return {"error": "Missing task_id"}
+    result = get_agent_pool().get_task(task_id)
+    return result or {"error": f"Task {task_id} not found"}
+
+
+def _agent_parallel(p):
+    """Run prompt across all 3 agents in parallel (multi-threaded)."""
+    from cognitive.qwen_agents import get_agent_pool, AgentRole
+    pool = get_agent_pool()
+    roles = None
+    if p.get("roles"):
+        role_map = {"code": AgentRole.CODE, "reason": AgentRole.REASON, "fast": AgentRole.FAST}
+        roles = [role_map[r] for r in p["roles"] if r in role_map]
+    return pool.run_parallel(
+        prompt=p.get("prompt", ""),
+        roles=roles,
+        context=p.get("context", {}),
+        timeout=p.get("timeout", 120),
+    )
+
+
+def _agent_collaborative(p):
+    """Full collaborative workflow: triage → parallel → synthesis → contract."""
+    from cognitive.qwen_agents import get_agent_pool
+    return get_agent_pool().run_collaborative(
+        prompt=p.get("prompt", ""),
+        context=p.get("context", {}),
+        execution_allowed=p.get("execution_allowed", False),
+    )
+
+
+def _agent_pipeline(p):
+    """Submit a task to the 9-layer coding pipeline via agent system. Returns task_id."""
+    from cognitive.qwen_agents import get_agent_pool
+    task_id = get_agent_pool().run_pipeline_with_agents(
+        prompt=p.get("prompt", ""),
+        execution_allowed=p.get("execution_allowed", False),
+        project_folder=p.get("project_folder", ""),
+    )
+    return {"task_id": task_id, "status": "queued", "pipeline": "9_layer"}
+
+
+def _agent_pool_status():
+    """Get status of all Qwen agents."""
+    from cognitive.qwen_agents import get_agent_pool
+    return get_agent_pool().get_pool_status()
+
+
 def _run_triad(p):
     """Run the Qwen Triad Orchestrator — async parallel processing across all 3 models."""
     import asyncio
@@ -1605,6 +1687,47 @@ async def brain_directory():
     total = sum(len(b["actions"]) for b in d.values())
     return {"brains": d, "total_brains": len(d), "total_actions": total,
             "usage": "POST /brain/{domain} { action: '...', payload: {...} }"}
+
+@router.post("/agents/submit")
+async def agent_submit_endpoint(req: BrainRequest):
+    """Submit a task to a Qwen agent for background processing. Returns task_id."""
+    return BrainResponse(brain="agents", action="submit", ok=True,
+                         data=_agent_submit(req.payload or {}))
+
+
+@router.post("/agents/status")
+async def agent_status_endpoint(req: BrainRequest):
+    """Check status of a background agent task."""
+    return BrainResponse(brain="agents", action="status", ok=True,
+                         data=_agent_task_status(req.payload or {}))
+
+
+@router.post("/agents/parallel")
+async def agent_parallel_endpoint(req: BrainRequest):
+    """Run prompt across all 3 agents in parallel."""
+    return BrainResponse(brain="agents", action="parallel", ok=True,
+                         data=_agent_parallel(req.payload or {}))
+
+
+@router.post("/agents/collaborative")
+async def agent_collaborative_endpoint(req: BrainRequest):
+    """Full collaborative workflow: triage → parallel → synthesis → contracts."""
+    return BrainResponse(brain="agents", action="collaborative", ok=True,
+                         data=_agent_collaborative(req.payload or {}))
+
+
+@router.post("/agents/pipeline")
+async def agent_pipeline_endpoint(req: BrainRequest):
+    """Submit task to 9-layer coding pipeline via agent system."""
+    return BrainResponse(brain="agents", action="pipeline", ok=True,
+                         data=_agent_pipeline(req.payload or {}))
+
+
+@router.get("/agents/pool")
+async def agent_pool_status_endpoint():
+    """Get status of all Qwen agents and their task queues."""
+    return _agent_pool_status()
+
 
 @router.post("/triad")
 async def triad_endpoint(req: BrainRequest):

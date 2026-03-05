@@ -386,6 +386,15 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
 
+    # ==================== Initialize Qwen Agent Pool ====================
+    try:
+        from cognitive.qwen_agents import get_agent_pool
+        agent_pool = get_agent_pool()
+        agent_pool.start_all()
+        print("[OK] Qwen Agent Pool started (3 agents: code, reason, fast)")
+    except Exception as e:
+        print(f"[WARN] Qwen Agent Pool not available: {e}")
+
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
     import asyncio
@@ -575,6 +584,12 @@ async def lifespan(app: FastAPI):
     
     # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
+    try:
+        from cognitive.qwen_agents import get_agent_pool
+        get_agent_pool().stop_all()
+        print("[OK] Qwen Agent Pool stopped")
+    except Exception:
+        pass
     try:
         from core.worker_pool import shutdown_all
         shutdown_all(wait_for=False)
