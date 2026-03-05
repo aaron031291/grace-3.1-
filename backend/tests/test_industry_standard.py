@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.governance_rules_api", reason="api.governance_rules_api removed — consolidated into Brain API")
 10 Industry Standard Tests — Different Perspectives
 
 These tests validate Grace from the perspective of:

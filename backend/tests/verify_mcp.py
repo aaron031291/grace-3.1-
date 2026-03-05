@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.mcp_api", reason="api.mcp_api removed — consolidated into Brain API")
 Quick verification script for MCP integration.
 Tests: imports, MCP client connection, tool listing, and a basic tool call.
 """

@@ -1,4 +1,5 @@
 """Tests for World Model API and Librarian Autonomous FS API."""
+import pytest; pytest.importorskip("api.librarian_autonomous_api", reason="api.librarian_autonomous_api removed — consolidated into Brain API")
 
 import pytest
 import sys

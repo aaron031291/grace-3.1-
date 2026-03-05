@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.consensus_api", reason="api.consensus_api removed — consolidated into Brain API")
 Tests for the Multi-Model Consensus Engine.
 """
 

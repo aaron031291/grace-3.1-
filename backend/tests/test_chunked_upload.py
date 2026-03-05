@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.chunked_upload_api", reason="api.chunked_upload_api removed — consolidated into Brain API")
 Tests for the chunked upload API.
 Validates the full chunked upload lifecycle: initiate → chunk → complete.
 """

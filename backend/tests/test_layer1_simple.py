@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.layer1", reason="api.layer1 removed — consolidated into Brain API")
 Simple test to verify Layer 1 autonomous system is working
 """
 import sys

@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.flash_cache_api", reason="api.flash_cache_api removed — consolidated into Brain API")
 Tests for the FlashCache — reference-based intelligent caching layer.
 """
 

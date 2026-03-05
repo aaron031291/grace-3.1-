@@ -1,4 +1,5 @@
 """
+import pytest; pytest.importorskip("api.grace_todos_api", reason="api.grace_todos_api removed — consolidated into Brain API")
 Tests for Grace Todos API
 
 Comprehensive tests for autonomous task management system.

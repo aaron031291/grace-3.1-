@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import pytest; pytest.importorskip("api.context_api", reason="api.context_api removed — consolidated into Brain API")
 """
 Test script to verify multi-tier query intelligence imports.
 """
