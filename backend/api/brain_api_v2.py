@@ -227,6 +227,8 @@ def _ai() -> dict:
         "deterministic_fix": lambda p: _deterministic_fix(p),
         "genesis_deterministic_scan": lambda p: _genesis_deterministic_scan(),
         "rag_deterministic_scan": lambda p: _rag_deterministic_scan(),
+        "triad": lambda p: _run_triad(p),
+        "triad_status": lambda p: _triad_status(),
     }
 
 
@@ -1442,12 +1444,96 @@ async def brain_ask(request: Request):
 async def brain_workspace(req: BrainRequest):
     return _call("workspace", req.action, req.payload or {}, _workspace())
 
+def _run_triad(p):
+    """Run the Qwen Triad Orchestrator — async parallel processing across all 3 models."""
+    import asyncio
+    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
+
+    orchestrator = get_triad_orchestrator()
+    prompt = p.get("prompt", p.get("message", p.get("query", "")))
+    if not prompt:
+        return {"error": "Missing 'prompt' in payload"}
+
+    loop = None
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        pass
+
+    if loop and loop.is_running():
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            future = pool.submit(
+                asyncio.run,
+                orchestrator.process(
+                    prompt=prompt,
+                    system_prompt=p.get("system_prompt", ""),
+                    execution_allowed=p.get("execution_allowed", False),
+                    conversation_history=p.get("history", []),
+                    project_folder=p.get("project_folder", ""),
+                )
+            )
+            return future.result(timeout=300)
+    else:
+        return asyncio.run(
+            orchestrator.process(
+                prompt=prompt,
+                system_prompt=p.get("system_prompt", ""),
+                execution_allowed=p.get("execution_allowed", False),
+                conversation_history=p.get("history", []),
+                project_folder=p.get("project_folder", ""),
+            )
+        )
+
+
+def _triad_status():
+    """Get Qwen Triad Orchestrator status and configuration."""
+    from settings import settings
+    return {
+        "models": {
+            "code": settings.OLLAMA_MODEL_CODE or "qwen3:32b",
+            "reason": settings.OLLAMA_MODEL_REASON or "qwen3:30b",
+            "fast": settings.OLLAMA_MODEL_FAST or "qwen3:14b",
+        },
+        "features": {
+            "async_parallel": True,
+            "subsystem_context": [
+                "memory", "genesis_keys", "diagnostics", "self_healing",
+                "self_learning", "self_governance", "self_mirror", "timesense",
+                "trust_scores", "hebbian_mesh",
+            ],
+            "governance": "read_only_unless_user_specifies_execution",
+            "synthesis": "reasoning_model_merges_all_outputs",
+        },
+        "status": "active",
+    }
+
+
 @router.get("/directory")
 async def brain_directory():
     d = _build_directory()
     total = sum(len(b["actions"]) for b in d.values())
     return {"brains": d, "total_brains": len(d), "total_actions": total,
             "usage": "POST /brain/{domain} { action: '...', payload: {...} }"}
+
+@router.post("/triad")
+async def triad_endpoint(req: BrainRequest):
+    """Qwen Triad — async parallel processing across all 3 Qwen models with full subsystem context."""
+    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
+    orchestrator = get_triad_orchestrator()
+    payload = req.payload or {}
+    prompt = payload.get("prompt", payload.get("message", payload.get("query", "")))
+    if not prompt:
+        raise HTTPException(status_code=400, detail="Missing 'prompt' in payload")
+    result = await orchestrator.process(
+        prompt=prompt,
+        system_prompt=payload.get("system_prompt", ""),
+        execution_allowed=payload.get("execution_allowed", False),
+        conversation_history=payload.get("history", []),
+        project_folder=payload.get("project_folder", ""),
+    )
+    return BrainResponse(brain="triad", action="process", ok=True, data=result)
+
 
 @router.post("/orchestrate")
 async def orchestrate(req: BrainOrchestration):

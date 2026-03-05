@@ -843,6 +843,72 @@ async def chat(request: ChatRequest):
         )
 
 
+# ==================== Triad Chat Endpoint ====================
+
+class TriadChatRequest(BaseModel):
+    """Request for Qwen Triad processing — all 3 models in parallel."""
+    messages: List[Message] = Field(..., description="Conversation messages")
+    system_prompt: Optional[str] = Field("", description="System prompt override")
+    execution_allowed: bool = Field(False, description="Allow execution actions (default: read-only)")
+    project_folder: Optional[str] = Field("", description="Project folder for code context")
+
+
+class TriadChatResponse(BaseModel):
+    """Response from Qwen Triad — synthesized from 3 models."""
+    message: str = Field(..., description="Synthesized response from all 3 models")
+    model: str = Field("qwen-triad", description="Model identifier")
+    triage: Optional[dict] = Field(None, description="Triage classification (intent, urgency)")
+    governance: str = Field("read_only", description="Governance mode applied")
+    execution_allowed: bool = Field(False, description="Whether execution was allowed")
+    subsystem_context: Optional[dict] = Field(None, description="Which subsystems provided context")
+    timing: Optional[dict] = Field(None, description="Processing timing breakdown")
+
+
+@app.post("/chat/triad", response_model=TriadChatResponse, tags=["Chat"])
+async def chat_triad(request: TriadChatRequest):
+    """
+    Qwen Triad Chat — async parallel processing across all 3 Qwen models.
+
+    Runs qwen3:32b (code), qwen3:30b (reasoning), qwen3:14b (fast) in parallel,
+    gathers context from ALL subsystems (memory, genesis keys, diagnostics,
+    self-healing, self-learning, self-governance, self-mirror, timesense),
+    and synthesizes a unified response.
+
+    Default mode is read-only. Set execution_allowed=True to permit execution actions.
+    """
+    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
+
+    orchestrator = get_triad_orchestrator()
+
+    user_query = ""
+    history = []
+    for msg in request.messages:
+        history.append({"role": msg.role, "content": msg.content})
+        if msg.role == "user":
+            user_query = msg.content
+
+    if not user_query:
+        raise HTTPException(status_code=400, detail="No user message found")
+
+    result = await orchestrator.process(
+        prompt=user_query,
+        system_prompt=request.system_prompt or "",
+        execution_allowed=request.execution_allowed,
+        conversation_history=history,
+        project_folder=request.project_folder or "",
+    )
+
+    return TriadChatResponse(
+        message=result.get("response", ""),
+        model="qwen-triad",
+        triage=result.get("triage"),
+        governance=result.get("governance", "read_only"),
+        execution_allowed=result.get("execution_allowed", False),
+        subsystem_context=result.get("subsystem_context"),
+        timing=result.get("timing"),
+    )
+
+
 # ==================== Chat Management Endpoints ====================
 
 @app.post("/chats", response_model=ChatSessionResponse, tags=["Chat Management"])
