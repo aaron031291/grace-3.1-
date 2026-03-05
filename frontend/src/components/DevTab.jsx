@@ -1299,7 +1299,7 @@ function CodeEditor({ filePath, initialContent, onSave }) {
       if (result.completion && result.completion.length > 0 && result.completion.length < 300) {
         setGhost(result.completion);
       }
-    } catch {}
+    } catch { /* expected */ }
   };
 
   // Cmd+K refactor
@@ -1398,7 +1398,7 @@ function CodeEditor({ filePath, initialContent, onSave }) {
 function DiffViewer({ original, modified, fileName }) {
   const origLines = (original || "").split("\n");
   const modLines = (modified || "").split("\n");
-  const maxLines = Math.max(origLines.length, modLines.length);
+  const _maxLines = Math.max(origLines.length, modLines.length);
 
   return (
     <div>
@@ -1430,7 +1430,7 @@ function DiffViewer({ original, modified, fileName }) {
 
 function DrawingCanvas() {
   const canvasRef = useRef(null);
-  const [drawing, setDrawing] = useState(false);
+  const [_drawing, _setDrawing] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -1530,7 +1530,7 @@ function CtxMenuItem({ item, onClick }) {
    and Genesis keys. Connected to the full brain API pipeline.
    ═══════════════════════════════════════════════════════════════════ */
 
-function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject, setActiveProject }) {
+function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject: _activeProject, setActiveProject: _setActiveProject }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [model, setModel] = useState("consensus");
@@ -1595,8 +1595,7 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject, setA
           });
           setLoading(false);
         },
-        (err) => {
-          // Fallback to batch if streaming fails
+        (_err) => {
           fallbackBatch(cleanText || rawInput, mentions);
         }
       );
@@ -1605,7 +1604,7 @@ function CenterChat({ onDetail, onToggleLeft, onToggleRight, activeProject, setA
     }
   };
 
-  const fallbackBatch = async (query, mentions) => {
+  const fallbackBatch = async (query, _mentions) => {
     try {
       const mods = model === "consensus" ? ["kimi", "opus"] : [model];
       const data = await brainCall("ai", "fast", { prompt: query, models: mods });

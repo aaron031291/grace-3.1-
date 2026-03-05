@@ -38,6 +38,7 @@ class SensorType(str, Enum):
     GRACE_MIRROR = "grace_mirror"
     COGNITIVE_DECISIONS = "cognitive_decisions"
     FILE_HEALTH = "file_health"
+    E2E_PIPELINE = "e2e_pipeline"
 
 
 @dataclass
@@ -123,6 +124,20 @@ class GraceMirrorData:
 
 
 @dataclass
+class E2EPipelineData:
+    """E2E pipeline validation sensor data."""
+    verdict: str = "unknown"
+    total_checks: int = 0
+    passed: int = 0
+    failed: int = 0
+    warnings: int = 0
+    duration_ms: float = 0
+    broken_stages: List[Dict[str, Any]] = field(default_factory=list)
+    broken_checks: List[Dict[str, Any]] = field(default_factory=list)
+    timestamp: datetime = field(default_factory=datetime.utcnow)
+
+
+@dataclass
 class SensorData:
     """Aggregated sensor data from all sources."""
     test_results: Optional[TestResultData] = None
@@ -131,6 +146,7 @@ class SensorData:
     agent_outputs: Optional[AgentOutputData] = None
     genesis_keys: Optional[GenesisKeyData] = None
     grace_mirror: Optional[GraceMirrorData] = None
+    e2e_pipeline: Optional[E2EPipelineData] = None
     collection_timestamp: datetime = field(default_factory=datetime.utcnow)
     collection_duration_ms: float = 0.0
     sensors_available: List[SensorType] = field(default_factory=list)
@@ -181,6 +197,7 @@ class SensorLayer:
             (SensorType.AGENT_OUTPUTS, self._collect_agent_outputs),
             (SensorType.GENESIS_KEYS, self._collect_genesis_keys),
             (SensorType.GRACE_MIRROR, self._collect_grace_mirror),
+            (SensorType.E2E_PIPELINE, self._collect_e2e_pipeline),
         ]
 
         for sensor_type, collector in sensors:
@@ -199,6 +216,8 @@ class SensorLayer:
                         sensor_data.genesis_keys = result
                     elif sensor_type == SensorType.GRACE_MIRROR:
                         sensor_data.grace_mirror = result
+                    elif sensor_type == SensorType.E2E_PIPELINE:
+                        sensor_data.e2e_pipeline = result
                     sensor_data.sensors_available.append(sensor_type)
             except Exception as e:
                 logger.error(f"Sensor {sensor_type} failed: {e}")
@@ -535,6 +554,42 @@ class SensorLayer:
             return mirror_data
         except Exception as e:
             logger.error(f"Failed to collect grace mirror: {e}")
+            return None
+
+    def _collect_e2e_pipeline(self) -> Optional[E2EPipelineData]:
+        """Collect e2e LLM pipeline validation results — fully deterministic."""
+        try:
+            from core.deterministic_e2e_validator import run_e2e_validation
+            report = run_e2e_validation()
+
+            broken_stages = []
+            broken_checks = []
+            for stage in report.stages:
+                if stage.verdict.value == "fail":
+                    broken_stages.append({
+                        "stage": stage.stage, "name": stage.name,
+                        "failed": stage.failed, "passed": stage.passed,
+                    })
+                for check in stage.checks:
+                    if check.verdict.value in ("fail", "warn"):
+                        broken_checks.append({
+                            "stage": stage.stage, "stage_name": stage.name,
+                            "check": check.name, "verdict": check.verdict.value,
+                            "message": check.message[:200],
+                        })
+
+            return E2EPipelineData(
+                verdict=report.verdict.value,
+                total_checks=report.total_checks,
+                passed=report.total_passed,
+                failed=report.total_failed,
+                warnings=report.total_warnings,
+                duration_ms=report.duration_ms,
+                broken_stages=broken_stages,
+                broken_checks=broken_checks,
+            )
+        except Exception as e:
+            logger.error(f"E2E pipeline sensor failed: {e}")
             return None
 
     def to_dict(self, sensor_data: SensorData) -> Dict[str, Any]:

@@ -101,7 +101,7 @@ function ConnectionRow({ conn, expanded, onToggle }) {
 export default function ConnectionStatusPanel() {
   const {
     summary,
-    connectionStatuses,
+    connectionStatuses: _connectionStatuses,
     loading,
     lastChecked,
     refresh,
@@ -110,7 +110,7 @@ export default function ConnectionStatusPanel() {
   } = useConnectionStatus(30000);
 
   const [expandedConn, setExpandedConn] = useState(null);
-  const [showFullReport, setShowFullReport] = useState(false);
+  const [_showFullReport, setShowFullReport] = useState(false);
 
   const connections = report?.connections || [];
 

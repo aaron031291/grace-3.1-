@@ -56,12 +56,12 @@ export async function streamCompletion(codeBefore, language, onToken, onDone) {
           try {
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
-          } catch {}
+          } catch { /* expected */ }
         }
       }
     }
     onDone?.();
-  } catch {}
+  } catch { /* expected */ }
 }
 
 export default { getCompletion, streamCompletion };

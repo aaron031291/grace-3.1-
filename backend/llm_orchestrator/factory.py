@@ -31,6 +31,8 @@ from .ollama_adapter import OllamaLLMClient
 from .openai_client import OpenAILLMClient
 from .kimi_client import KimiLLMClient
 from .opus_client import OpusLLMClient
+from .qwen_client import QwenLLMClient
+from .qwen_pool import get_qwen_pool, QwenModelPool
 from .governance_wrapper import GovernanceAwareLLM
 from settings import settings
 
@@ -50,7 +52,7 @@ def _ollama_with_model(model: str) -> BaseLLMClient:
 def get_llm_client(provider: str = None) -> BaseLLMClient:
     """
     Get a LLM client with governance rules enforced.
-    Providers: ollama, kimi, opus, openai
+    Providers: ollama, kimi, opus, openai, qwen
     """
     provider = provider or settings.LLM_PROVIDER
 
@@ -64,6 +66,9 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         return _wrap(OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
         ))
+    elif provider == "qwen":
+        pool = get_qwen_pool()
+        return pool.get_client_for_task("general")
     else:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
 
@@ -71,24 +76,19 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
 def get_llm_for_task(task: str = "general") -> BaseLLMClient:
     """
     Get the best model for a specific task type.
-    Routes to the optimal model based on task requirements.
+    Routes through the Qwen pool for code/reason/fast tasks.
 
     Tasks:
-      code     → Qwen 2.5 Coder (local, specialised for code)
-      reason   → DeepSeek R1 (local, specialised for reasoning)
-      fast     → Qwen 2.5 (local, quick responses)
+      code     → Qwen pool (32b)
+      reason   → Qwen pool (30b MoE)
+      fast     → Qwen pool (14b)
       audit    → Opus (cloud, deep analysis)
       document → Kimi (cloud, 262K context)
-      general  → default model
+      general  → Qwen pool (default)
     """
-    if task == "code" and settings.OLLAMA_MODEL_CODE:
-        return _ollama_with_model(settings.OLLAMA_MODEL_CODE)
-
-    elif task == "reason" and settings.OLLAMA_MODEL_REASON:
-        return _ollama_with_model(settings.OLLAMA_MODEL_REASON)
-
-    elif task == "fast" and settings.OLLAMA_MODEL_FAST:
-        return _ollama_with_model(settings.OLLAMA_MODEL_FAST)
+    if task in ("code", "reason", "fast", "general"):
+        pool = get_qwen_pool()
+        return pool.get_client_for_task(task)
 
     elif task == "audit":
         if getattr(settings, 'OPUS_API_KEY', ''):
@@ -117,10 +117,16 @@ def get_opus_client() -> BaseLLMClient:
     ))
 
 
+def get_qwen_client() -> BaseLLMClient:
+    """Get Qwen 3 via the pool — auto-routes to the best model for general tasks."""
+    pool = get_qwen_pool()
+    return pool.get_client_for_task("general")
+
+
 def get_qwen_coder() -> BaseLLMClient:
-    """Get Qwen 2.5 Coder — best open-source code generation."""
-    model = settings.OLLAMA_MODEL_CODE or "qwen2.5-coder:7b"
-    return _ollama_with_model(model)
+    """Get Qwen Coder via the pool — routes to the code-optimized model."""
+    pool = get_qwen_pool()
+    return pool.get_client_for_task("code")
 
 
 def get_deepseek_reasoner() -> BaseLLMClient:
@@ -142,8 +148,23 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
         return OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
         )
+    elif provider == "qwen":
+        return QwenLLMClient(api_key=getattr(settings, 'QWEN_API_KEY', ''))
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
+
+
+def get_ai_mode_client(task: str = "code") -> BaseLLMClient:
+    """
+    Get a LLM client in AI-to-AI mode.
+    Skips NLP governance prefix (persona, rules prose).
+    Uses structured constraints instead of natural language rules.
+    For internal component-to-component calls only.
+    """
+    client = get_llm_for_task(task)
+    if hasattr(client, 'ai_mode'):
+        client.ai_mode = True
+    return client
 
 
 def get_all_available_models() -> list:
@@ -186,5 +207,33 @@ def get_all_available_models() -> list:
         "cost": "cloud",
         "location": "cloud",
     })
+    try:
+        pool = get_qwen_pool()
+        pool_status = pool.get_status()
+        for key, info in pool_status.get("models", {}).items():
+            models.append({
+                "id": f"qwen-{key}",
+                "provider": "qwen",
+                "model": info["model_name"],
+                "description": f"Qwen 3 {key} — {', '.join(info['tasks'])}",
+                "available": info["healthy"],
+                "cost": "free",
+                "location": "local",
+                "strengths": info["tasks"],
+                "pool_stats": {
+                    "calls": info["total_calls"],
+                    "avg_latency": info["avg_latency_ms"],
+                },
+            })
+    except Exception:
+        models.append({
+            "id": "qwen",
+            "provider": "qwen",
+            "model": getattr(settings, 'QWEN_MODEL', 'qwen3:32b'),
+            "description": "Qwen 3 (pool not initialized)",
+            "available": True,
+            "cost": "free",
+            "location": "local",
+        })
 
     return models

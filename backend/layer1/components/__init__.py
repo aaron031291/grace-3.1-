@@ -79,6 +79,15 @@ except ImportError:
     create_kpi_connector = None
     KPI_CONNECTOR_AVAILABLE = False
 
+# Ask Grace connector
+try:
+    from .ask_grace_connector import AskGraceConnector, get_ask_grace_connector
+    ASK_GRACE_CONNECTOR_AVAILABLE = True
+except ImportError:
+    AskGraceConnector = None
+    get_ask_grace_connector = None
+    ASK_GRACE_CONNECTOR_AVAILABLE = False
+
 __all__ = [
     "MemoryMeshConnector",
     "GenesisKeysConnector",
@@ -110,4 +119,11 @@ if KPI_CONNECTOR_AVAILABLE:
     __all__.extend([
         "KPIConnector",
         "create_kpi_connector",
+    ])
+
+# Add Ask Grace connector to exports if available
+if ASK_GRACE_CONNECTOR_AVAILABLE:
+    __all__.extend([
+        "AskGraceConnector",
+        "get_ask_grace_connector",
     ])

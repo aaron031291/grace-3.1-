@@ -50,7 +50,7 @@ export async function streamChat(prompt, model = "kimi", mentions = [], onToken,
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
             if (parsed.error) onError?.(parsed.error);
-          } catch {}
+          } catch { /* expected */ }
         }
       }
     }
@@ -90,12 +90,12 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
           try {
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
-          } catch {}
+          } catch { /* expected */ }
         }
       }
     }
     onDone?.();
-  } catch {}
+  } catch { /* expected */ }
 }
 
 /**
@@ -105,7 +105,7 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
  */
 export function parseMentions(text) {
   const mentions = [];
-  const cleanText = text.replace(/@([\w./\-]+)/g, (match, path) => {
+  const cleanText = text.replace(/@([\w./-]+)/g, (_match, path) => {
     mentions.push(path);
     return "";
   }).trim();

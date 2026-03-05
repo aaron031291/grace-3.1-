@@ -435,3 +435,14 @@ class CognitiveEngine:
 
         if context.decision_id in self._active_contexts:
             del self._active_contexts[context.decision_id]
+
+
+_cognitive_engine: Optional[CognitiveEngine] = None
+
+
+def get_cognitive_engine() -> CognitiveEngine:
+    """Get or create the singleton CognitiveEngine instance."""
+    global _cognitive_engine
+    if _cognitive_engine is None:
+        _cognitive_engine = CognitiveEngine()
+    return _cognitive_engine

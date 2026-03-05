@@ -117,6 +117,12 @@ try:
     _optional_routers.append(("workspace", workspace_router))
 except Exception as e:
     print(f"[WARN] Workspace router not loaded: {e}")
+
+try:
+    from api.ask_grace_api import router as ask_grace_router
+    _optional_routers.append(("ask_grace", ask_grace_router))
+except Exception as e:
+    print(f"[WARN] Ask Grace router not loaded: {e}")
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -183,8 +189,8 @@ class ChatCreateRequest(BaseModel):
     folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
-class ChatResponse(BaseModel):
-    """Response model for chat operations."""
+class ChatSessionResponse(BaseModel):
+    """Response model for chat session operations."""
     id: int = Field(..., description="Chat ID")
     title: Optional[str] = Field(None, description="Chat title")
     description: Optional[str] = Field(None, description="Chat description")
@@ -199,7 +205,7 @@ class ChatResponse(BaseModel):
 
 class ChatListResponse(BaseModel):
     """Response model for chat list."""
-    chats: List[ChatResponse] = Field(..., description="List of chats")
+    chats: List[ChatSessionResponse] = Field(..., description="List of chats")
     total: int = Field(..., description="Total number of chats")
     skip: int = Field(..., description="Skip count")
     limit: int = Field(..., description="Limit count")
@@ -373,12 +379,21 @@ async def lifespan(app: FastAPI):
 
     # ==================== Initialize ML Intelligence ====================
     try:
-        from ml_intelligence.integration_orchestrator import MLIntelligenceOrchestrator
-        orchestrator = MLIntelligenceOrchestrator()
+        from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+        orchestrator = get_ml_orchestrator()
         features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
         print(f"[OK] ML Intelligence initialized with features: {features}")
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
+
+    # ==================== Initialize Qwen Agent Pool ====================
+    try:
+        from cognitive.qwen_agents import get_agent_pool
+        agent_pool = get_agent_pool()
+        agent_pool.start_all()
+        print("[OK] Qwen Agent Pool started (3 agents: code, reason, fast)")
+    except Exception as e:
+        print(f"[WARN] Qwen Agent Pool not available: {e}")
 
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
@@ -570,6 +585,12 @@ async def lifespan(app: FastAPI):
     # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
     try:
+        from cognitive.qwen_agents import get_agent_pool
+        get_agent_pool().stop_all()
+        print("[OK] Qwen Agent Pool stopped")
+    except Exception:
+        pass
+    try:
         from core.worker_pool import shutdown_all
         shutdown_all(wait_for=False)
         print("[OK] Worker pools shut down")
@@ -644,7 +665,7 @@ app.include_router(world_model_router)           # /api/world-model (system stat
 app.include_router(connection_router)            # /api/connections (connection validation)
 app.include_router(introspection_router)         # /api/system (introspection + validation)
 
-# Register previously unwired routers
+# Register previously unwired routers (includes Ask Grace)
 for _name, _router in _optional_routers:
     app.include_router(_router)
     print(f"[OK] Registered previously unwired router: {_name}")
@@ -776,6 +797,8 @@ async def chat(request: ChatRequest):
                 {"role": "user", "content": user_query},
             ]
 
+            import time as _time
+            _greeting_start = _time.time()
             response = client.chat(
                 model=model_name,
                 messages=messages,
@@ -783,11 +806,14 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature or 0.4,
                 max_tokens=request.top_k or 256,
             )
+            _greeting_time = _time.time() - _greeting_start
+
+            msg_text = response.get("message", {}).get("content", "") if isinstance(response, dict) else getattr(getattr(response, "message", None), "content", str(response))
 
             return RawChatResponse(
-                message=response,
+                message=msg_text,
                 model=model_name,
-                generation_time=0.0,
+                generation_time=round(_greeting_time, 3),
                 sources=[],
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
@@ -832,9 +858,75 @@ async def chat(request: ChatRequest):
         )
 
 
+# ==================== Triad Chat Endpoint ====================
+
+class TriadChatRequest(BaseModel):
+    """Request for Qwen Triad processing — all 3 models in parallel."""
+    messages: List[Message] = Field(..., description="Conversation messages")
+    system_prompt: Optional[str] = Field("", description="System prompt override")
+    execution_allowed: bool = Field(False, description="Allow execution actions (default: read-only)")
+    project_folder: Optional[str] = Field("", description="Project folder for code context")
+
+
+class TriadChatResponse(BaseModel):
+    """Response from Qwen Triad — synthesized from 3 models."""
+    message: str = Field(..., description="Synthesized response from all 3 models")
+    model: str = Field("qwen-triad", description="Model identifier")
+    triage: Optional[dict] = Field(None, description="Triage classification (intent, urgency)")
+    governance: str = Field("read_only", description="Governance mode applied")
+    execution_allowed: bool = Field(False, description="Whether execution was allowed")
+    subsystem_context: Optional[dict] = Field(None, description="Which subsystems provided context")
+    timing: Optional[dict] = Field(None, description="Processing timing breakdown")
+
+
+@app.post("/chat/triad", response_model=TriadChatResponse, tags=["Chat"])
+async def chat_triad(request: TriadChatRequest):
+    """
+    Qwen Triad Chat — async parallel processing across all 3 Qwen models.
+
+    Runs qwen3:32b (code), qwen3:30b (reasoning), qwen3:14b (fast) in parallel,
+    gathers context from ALL subsystems (memory, genesis keys, diagnostics,
+    self-healing, self-learning, self-governance, self-mirror, timesense),
+    and synthesizes a unified response.
+
+    Default mode is read-only. Set execution_allowed=True to permit execution actions.
+    """
+    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
+
+    orchestrator = get_triad_orchestrator()
+
+    user_query = ""
+    history = []
+    for msg in request.messages:
+        history.append({"role": msg.role, "content": msg.content})
+        if msg.role == "user":
+            user_query = msg.content
+
+    if not user_query:
+        raise HTTPException(status_code=400, detail="No user message found")
+
+    result = await orchestrator.process(
+        prompt=user_query,
+        system_prompt=request.system_prompt or "",
+        execution_allowed=request.execution_allowed,
+        conversation_history=history,
+        project_folder=request.project_folder or "",
+    )
+
+    return TriadChatResponse(
+        message=result.get("response", ""),
+        model="qwen-triad",
+        triage=result.get("triage"),
+        governance=result.get("governance", "read_only"),
+        execution_allowed=result.get("execution_allowed", False),
+        subsystem_context=result.get("subsystem_context"),
+        timing=result.get("timing"),
+    )
+
+
 # ==================== Chat Management Endpoints ====================
 
-@app.post("/chats", response_model=ChatResponse, tags=["Chat Management"])
+@app.post("/chats", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def create_chat(request: ChatCreateRequest, session = Depends(get_session)):
     """
     Create a new chat session.
@@ -871,7 +963,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
             folder_path=request.folder_path or ""
         )
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -996,7 +1088,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         
         return ChatListResponse(
             chats=[
-                ChatResponse(
+                ChatSessionResponse(
                     id=chat.id,
                     title=chat.title,
                     description=chat.description,
@@ -1021,7 +1113,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         )
 
 
-@app.get("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
+@app.get("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def get_chat(chat_id: int, session = Depends(get_session)):
     """
     Get a specific chat by ID.
@@ -1043,7 +1135,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
                 detail=f"Chat {chat_id} not found"
             )
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -1064,7 +1156,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
         )
 
 
-@app.put("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
+@app.put("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depends(get_session)):
     """
     Update a chat's settings.
@@ -1112,7 +1204,7 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
         # Update chat
         updated_chat = repo.update(chat_id, **update_data)
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=updated_chat.id,
             title=updated_chat.title,
             description=updated_chat.description,

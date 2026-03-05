@@ -9,7 +9,7 @@ import logging
 import json
 import sys
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 from contextvars import ContextVar
 from functools import wraps
