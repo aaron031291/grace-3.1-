@@ -711,6 +711,7 @@ def run_e2e_validation() -> E2EReport:
     Contracts → Brains → Agents → Output.
 
     No LLM called. Every check is deterministic.
+    Every broken check and every fix is logged to Genesis individually.
     """
     report = E2EReport(started_at=datetime.now(timezone.utc).isoformat())
     start = time.time()
@@ -741,6 +742,9 @@ def run_e2e_validation() -> E2EReport:
                 name="stage_execution", verdict=StageVerdict.FAIL,
                 message=f"Stage crashed: {e}",
             ))
+
+        # Log EACH check to Genesis — broken, warning, and passed
+        _log_stage_to_genesis(stage_result)
         report.stages.append(stage_result)
 
     for stage in report.stages:
@@ -759,25 +763,8 @@ def run_e2e_validation() -> E2EReport:
     report.completed_at = datetime.now(timezone.utc).isoformat()
     report.duration_ms = round((time.time() - start) * 1000, 1)
 
-    try:
-        from api._genesis_tracker import track
-        track(
-            key_type="system_event",
-            what=f"E2E validation: {report.verdict.value} "
-                 f"({report.total_passed}P/{report.total_failed}F/{report.total_warnings}W)",
-            who="deterministic_e2e_validator",
-            how="deterministic",
-            output_data={
-                "verdict": report.verdict.value,
-                "passed": report.total_passed,
-                "failed": report.total_failed,
-                "warnings": report.total_warnings,
-                "duration_ms": report.duration_ms,
-            },
-            tags=["e2e", "validation", "deterministic", report.verdict.value],
-        )
-    except Exception:
-        pass
+    # Log overall report to Genesis
+    _log_report_to_genesis(report)
 
     logger.info(
         f"[E2E] {report.verdict.value}: "
@@ -786,3 +773,88 @@ def run_e2e_validation() -> E2EReport:
     )
 
     return report
+
+
+def _log_stage_to_genesis(stage: StageResult):
+    """Log every check in a stage to Genesis — broken checks as errors, passes as events."""
+    try:
+        from api._genesis_tracker import track
+    except Exception:
+        return
+
+    for check in stage.checks:
+        is_broken = check.verdict == StageVerdict.FAIL
+        is_warning = check.verdict == StageVerdict.WARN
+
+        try:
+            track(
+                key_type="error" if is_broken else "system_event",
+                what=f"E2E Stage {stage.stage} ({stage.name}) > {check.name}: {check.verdict.value} — {check.message[:150]}",
+                who="deterministic_e2e_validator",
+                where=f"e2e.stage_{stage.stage}.{check.name}",
+                how="deterministic",
+                is_error=is_broken,
+                error_type="e2e_validation_failure" if is_broken else "",
+                error_message=check.message[:200] if is_broken else "",
+                output_data={
+                    "stage": stage.stage,
+                    "stage_name": stage.name,
+                    "check": check.name,
+                    "verdict": check.verdict.value,
+                    "message": check.message,
+                    "details": check.details,
+                    "duration_ms": check.duration_ms,
+                },
+                tags=[
+                    "e2e", "deterministic",
+                    f"stage_{stage.stage}",
+                    check.verdict.value,
+                    check.name,
+                ],
+            )
+        except Exception:
+            pass
+
+
+def _log_report_to_genesis(report: E2EReport):
+    """Log the overall e2e report summary to Genesis."""
+    try:
+        from api._genesis_tracker import track
+
+        # Build per-stage summary
+        stage_summary = []
+        for stage in report.stages:
+            stage_summary.append({
+                "stage": stage.stage,
+                "name": stage.name,
+                "verdict": stage.verdict.value,
+                "passed": stage.passed,
+                "failed": stage.failed,
+                "checks": len(stage.checks),
+            })
+
+        track(
+            key_type="error" if report.verdict == StageVerdict.FAIL else "system_event",
+            what=(
+                f"E2E Pipeline Validation: {report.verdict.value.upper()} — "
+                f"{report.total_passed}P/{report.total_failed}F/{report.total_warnings}W "
+                f"across {len(report.stages)} stages in {report.duration_ms}ms"
+            ),
+            who="deterministic_e2e_validator",
+            where="e2e.pipeline.full",
+            how="deterministic",
+            is_error=report.verdict == StageVerdict.FAIL,
+            error_type="e2e_pipeline_failure" if report.verdict == StageVerdict.FAIL else "",
+            output_data={
+                "verdict": report.verdict.value,
+                "total_checks": report.total_checks,
+                "passed": report.total_passed,
+                "failed": report.total_failed,
+                "warnings": report.total_warnings,
+                "duration_ms": report.duration_ms,
+                "stages": stage_summary,
+            },
+            tags=["e2e", "validation", "deterministic", "pipeline", report.verdict.value],
+        )
+    except Exception:
+        pass
