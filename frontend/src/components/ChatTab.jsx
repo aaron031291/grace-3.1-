@@ -99,7 +99,7 @@ function WorldModelPanel({ onClose }) {
     setGraceSending(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/world-model/chat`, {
+      const response = await fetch(`${API_BASE_URL}/api/ask-grace/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, include_system_state: true }),

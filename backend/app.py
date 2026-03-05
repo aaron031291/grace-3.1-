@@ -59,6 +59,7 @@ from api.retrieve import router as retrieve_router, get_document_retriever
 from api.flash_cache_api import router as flash_cache_router
 from api.kpi_api import router as kpi_router
 from api.live_console_api import router as live_console_router
+from api.ask_grace_api import router as ask_grace_router
 from api.docs_library_api import router as docs_library_router
 from api.file_ingestion import get_file_manager
 
@@ -574,6 +575,7 @@ app.include_router(mcp_router)                   # /api/mcp
 app.include_router(flash_cache_router)           # /api/flash-cache
 app.include_router(kpi_router)                   # /kpi
 app.include_router(live_console_router)          # /api/console
+app.include_router(ask_grace_router)             # /api/ask-grace
 app.include_router(docs_library_router)          # /api/docs
 app.include_router(diagnostic_router)            # /diagnostic
 
