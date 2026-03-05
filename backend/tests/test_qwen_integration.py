@@ -164,7 +164,7 @@ class TestConsensusEngineIntegration:
         with open(consensus_path) as f:
             content = f.read()
         assert 'provider == "qwen"' in content
-        assert "get_qwen_client" in content
+        assert "get_qwen_pool" in content
 
     def test_check_available_handles_qwen(self):
         consensus_path = os.path.join(os.path.dirname(__file__), "..", "cognitive", "consensus_engine.py")

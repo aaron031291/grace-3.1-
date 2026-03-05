@@ -601,3 +601,26 @@ async def recent_queries(limit: int = 20) -> Dict[str, Any]:
         return {"queries": connector.get_recent_queries(limit)}
     except Exception:
         return {"queries": []}
+
+
+@router.get("/qwen-pool")
+async def qwen_pool_status() -> Dict[str, Any]:
+    """Qwen model pool status — models, health, task routing, governance mode."""
+    try:
+        from llm_orchestrator.qwen_pool import get_qwen_pool
+        pool = get_qwen_pool()
+        return pool.get_status()
+    except Exception as e:
+        return {"error": str(e), "initialized": False}
+
+
+@router.post("/qwen-pool/swap")
+async def qwen_pool_swap(slot: str, model: str) -> Dict[str, Any]:
+    """Hot-swap a Qwen model at runtime."""
+    try:
+        from llm_orchestrator.qwen_pool import get_qwen_pool
+        pool = get_qwen_pool()
+        pool.swap_model(slot, model)
+        return {"status": "swapped", "slot": slot, "new_model": model}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

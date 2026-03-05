@@ -128,7 +128,7 @@ def _get_client(model_id: str):
     if not info:
         return None
 
-    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_qwen_coder, get_qwen_client, get_deepseek_reasoner
+    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_deepseek_reasoner
 
     provider = info.get("provider")
     task = info.get("task")
@@ -138,9 +138,13 @@ def _get_client(model_id: str):
     elif provider == "kimi":
         return get_llm_client(provider="kimi")
     elif provider == "qwen":
-        return get_qwen_client()
+        from llm_orchestrator.qwen_pool import get_qwen_pool
+        pool = get_qwen_pool()
+        return pool.get_client_for_task("general")
     elif task == "code":
-        return get_qwen_coder()
+        from llm_orchestrator.qwen_pool import get_qwen_pool
+        pool = get_qwen_pool()
+        return pool.get_client_for_task("code")
     elif task == "reason":
         return get_deepseek_reasoner()
     elif task:
