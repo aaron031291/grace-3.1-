@@ -341,49 +341,60 @@ class GenesisKeyService:
                 logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
 
             # Hook 2: Feed into Memory Mesh for learning
-            # CRITICAL: Uses a SEPARATE session so failures here never
-            # poison the Genesis key creation session.
-            try:
-                import threading
-                _mesh_data = dict(extracted_key_data)
+            # ONLY feed meaningful events — not system noise.
+            # Meaningful = code changes, AI responses, errors, learning, user actions
+            # Not meaningful = system_event, file_op (file watcher), api_request (every HTTP call)
+            LEARNABLE_TYPES = {
+                "AI_RESPONSE", "AI_CODE_GENERATION", "CODING_AGENT_ACTION",
+                "ERROR", "FIX", "LEARNING_COMPLETE", "GAP_IDENTIFIED",
+                "CODE_CHANGE", "USER_INPUT", "USER_UPLOAD",
+            }
 
-                def _feed_mesh():
-                    try:
-                        from database.session import session_scope
-                        from cognitive.memory_mesh_integration import MemoryMeshIntegration
-                        from pathlib import Path
+            key_type_str = extracted_key_data.get("key_type", "")
+            should_learn = key_type_str in LEARNABLE_TYPES
 
-                        kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
+            if should_learn:
+                try:
+                    import threading
+                    _mesh_data = dict(extracted_key_data)
 
-                        def _s(val):
-                            if val is None: return json.dumps({})
-                            if isinstance(val, str): return val
-                            try: return json.dumps(val, default=str)
-                            except Exception: return json.dumps({"raw": str(val)})
+                    def _feed_mesh():
+                        try:
+                            from database.session import session_scope
+                            from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                            from pathlib import Path
 
-                        with session_scope() as mesh_sess:
-                            mesh = MemoryMeshIntegration(session=mesh_sess, knowledge_base_path=kb_path)
-                            mesh.ingest_learning_experience(
-                                experience_type=_mesh_data.get("key_type", "system"),
-                                context=_s({
-                                    "what": _mesh_data.get("what_description") or "",
-                                    "where": _mesh_data.get("where_location") or _mesh_data.get("file_path") or "",
-                                    "why": _mesh_data.get("why_reason") or "",
-                                    "how": _mesh_data.get("how_method") or "",
-                                }),
-                                action_taken=_s(_mesh_data.get("input_data")),
-                                outcome=_s(_mesh_data.get("output_data")),
-                                source="genesis_key",
-                                user_id=_mesh_data.get("user_id"),
-                                genesis_key_id=_mesh_data.get("key_id"),
-                            )
-                    except Exception as e:
-                        logger.debug(f"Memory mesh feed skipped: {e}")
+                            kb_path = Path(self.repo_path) / "backend" / "knowledge_base"
 
-                t = threading.Thread(target=_feed_mesh, daemon=True)
-                t.start()
-            except Exception as mesh_error:
-                logger.debug(f"Memory mesh feed skipped: {mesh_error}")
+                            def _s(val):
+                                if val is None: return json.dumps({})
+                                if isinstance(val, str): return val
+                                try: return json.dumps(val, default=str)
+                                except Exception: return json.dumps({"raw": str(val)})
+
+                            with session_scope() as mesh_sess:
+                                mesh = MemoryMeshIntegration(session=mesh_sess, knowledge_base_path=kb_path)
+                                mesh.ingest_learning_experience(
+                                    experience_type=_mesh_data.get("key_type", "system"),
+                                    context=_s({
+                                        "what": _mesh_data.get("what_description") or "",
+                                        "where": _mesh_data.get("where_location") or _mesh_data.get("file_path") or "",
+                                        "why": _mesh_data.get("why_reason") or "",
+                                        "how": _mesh_data.get("how_method") or "",
+                                    }),
+                                    action_taken=_s(_mesh_data.get("input_data")),
+                                    outcome=_s(_mesh_data.get("output_data")),
+                                    source="genesis_key",
+                                    user_id=_mesh_data.get("user_id"),
+                                    genesis_key_id=_mesh_data.get("key_id"),
+                                )
+                        except Exception as e:
+                            logger.debug(f"Memory mesh feed skipped: {e}")
+
+                    t = threading.Thread(target=_feed_mesh, daemon=True)
+                    t.start()
+                except Exception:
+                    pass
 
             # Hook 3: Trigger autonomous pipeline (fire-and-forget, never blocks)
             try:

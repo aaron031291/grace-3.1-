@@ -33,38 +33,96 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-# ==================== Clean Architecture Imports ====================
-# Brain API (single entry point for all domain actions)
+# ==================== MINIMAL IMPORTS — Brain-Centric Architecture ====================
+# 1. Brain router — contains ALL 93+ actions across 8 domains
 from api.brain_api_v2 import router as brain_router
 from api.core.brain_controller import router as brain_v2_router
 
-# Monitoring (unified health + probe + triggers)
-from api.monitoring.health_controller import router as unified_monitor_router
-from api.component_health_api import router as component_health_router
-from api.probe_agent_api import router as probe_agent_router
-from api.runtime_triggers_api import router as runtime_triggers_router
-
-# Autonomous (Ouroboros loop + consensus fixer)
-from api.autonomous_loop_api import router as autonomous_loop_router
-from api.consensus_fixer_api import router as consensus_fixer_router
-
-# Core services (health, auth, genesis, voice, MCP, retrieval)
+# 2. Health — required by k8s/load balancers (must be separate route)
 from api.health import router as health_router
-from api.auth import router as auth_router
-from api.genesis_keys import router as genesis_keys_router
-from api.consensus_api import router as consensus_router
-from api.voice_api import router as voice_router
-from api.mcp_api import router as mcp_router
-from api.retrieve import router as retrieve_router, get_document_retriever
-from api.flash_cache_api import router as flash_cache_router
-from api.kpi_api import router as kpi_router
-from api.live_console_api import router as live_console_router
-from api.ask_grace_api import router as ask_grace_router
-from api.docs_library_api import router as docs_library_router
-from api.file_ingestion import get_file_manager
 
-# Diagnostic machine
-from diagnostic_machine.api import router as diagnostic_router
+# 3. Auth — middleware requirement
+from api.auth import router as auth_router
+
+# 4. Voice — WebSocket (can't route through sync brain)
+from api.voice_api import router as voice_router
+from api.stream_api import router as stream_router
+from api.completion_api import router as completion_router
+from api.world_model_api import router as world_model_router
+
+# 5. Connection validation — comprehensive connection status & validation
+from api.connection_api import router as connection_router
+
+# 6. System introspection & deterministic validation
+from api.introspection_api import router as introspection_router
+
+# 7. Previously unwired routers (safe imports — won't crash if deps missing)
+_optional_routers = []
+try:
+    from api.ingest import router as ingest_router
+    _optional_routers.append(("ingest", ingest_router))
+except Exception as e:
+    print(f"[WARN] Ingest router not loaded: {e}")
+
+try:
+    from api.component_health_api import router as component_health_router
+    _optional_routers.append(("component_health", component_health_router))
+except Exception as e:
+    print(f"[WARN] Component health router not loaded: {e}")
+
+try:
+    from api.docs_library_api import router as docs_library_router
+    _optional_routers.append(("docs_library", docs_library_router))
+except Exception as e:
+    print(f"[WARN] Docs library router not loaded: {e}")
+
+try:
+    from api.live_console_api import router as live_console_router
+    _optional_routers.append(("live_console", live_console_router))
+except Exception as e:
+    print(f"[WARN] Live console router not loaded: {e}")
+
+try:
+    from api.probe_agent_api import router as probe_agent_router
+    _optional_routers.append(("probe_agent", probe_agent_router))
+except Exception as e:
+    print(f"[WARN] Probe agent router not loaded: {e}")
+
+try:
+    from api.consensus_fixer_api import router as consensus_fixer_router
+    _optional_routers.append(("consensus_fixer", consensus_fixer_router))
+except Exception as e:
+    print(f"[WARN] Consensus fixer router not loaded: {e}")
+
+try:
+    from api.runtime_triggers_api import router as runtime_triggers_router
+    _optional_routers.append(("runtime_triggers", runtime_triggers_router))
+except Exception as e:
+    print(f"[WARN] Runtime triggers router not loaded: {e}")
+
+try:
+    from api.retrieve import router as retrieve_router
+    _optional_routers.append(("retrieve", retrieve_router))
+except Exception as e:
+    print(f"[WARN] Retrieve router not loaded: {e}")
+
+try:
+    from api.file_ingestion import router as file_ingestion_router
+    _optional_routers.append(("file_ingestion", file_ingestion_router))
+except Exception as e:
+    print(f"[WARN] File ingestion router not loaded: {e}")
+
+try:
+    from api.workspace_api import router as workspace_router
+    _optional_routers.append(("workspace", workspace_router))
+except Exception as e:
+    print(f"[WARN] Workspace router not loaded: {e}")
+
+try:
+    from api.ask_grace_api import router as ask_grace_router
+    _optional_routers.append(("ask_grace", ask_grace_router))
+except Exception as e:
+    print(f"[WARN] Ask Grace router not loaded: {e}")
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -106,26 +164,18 @@ class ChatRequest(BaseModel):
     )
 
 
-class ChatResponse(BaseModel):
-    """Response model for chat endpoint."""
+class RawChatResponse(BaseModel):
+    """Response model for the /chat endpoint (stateless)."""
     message: str = Field(..., description="The generated response from the model")
     model: str = Field(..., description="The model that generated the response")
-    generation_time: float = Field(..., description="Time taken to generate response in seconds")
+    generation_time: float = Field(0.0, description="Time taken to generate response in seconds")
     prompt_tokens: Optional[int] = Field(None, description="Number of tokens in the prompt")
     response_tokens: Optional[int] = Field(None, description="Number of tokens in the response")
     sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
-    # Multi-tier query handling fields
     tier: Optional[str] = Field(None, description="Query tier used: VECTORDB, MODEL_KNOWLEDGE, or USER_CONTEXT")
     confidence: Optional[float] = Field(None, description="Confidence score (0.0-1.0)")
     knowledge_gaps: Optional[List[dict]] = Field(None, description="Knowledge gaps identified (Tier 3)")
     warnings: Optional[List[str]] = Field(None, description="Warnings about response quality")
-
-
-class HealthResponse(BaseModel):
-    """Health response model."""
-    status: str
-    llm_running: bool
-    models_available: int
 
 
 # ==================== Chat Management Models ====================
@@ -243,38 +293,37 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Database initialization error: {e}")
         print("[WARN] Grace will continue with limited functionality")
     
-    # Auto-ingest training corpus on startup
-    try:
-        from cognitive.training_ingest import ingest_training_corpus
-        result = ingest_training_corpus()
-        if result.get("ingested", 0) > 0:
-            print(f"[OK] Training corpus: {result['ingested']} files ingested")
-        else:
-            print(f"[OK] Training corpus up to date")
-    except Exception as e:
-        print(f"[WARN] Training ingest skipped: {e}")
+    # ==================== Lazy Background Init (non-blocking) ====================
+    import threading
 
-    # Run startup diagnostic
-    try:
-        from cognitive.autonomous_diagnostics import get_diagnostics
-        diag = get_diagnostics()
-        startup_result = diag.on_startup()
-        print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')} ({startup_result.get('healthy', 0)}/{startup_result.get('total', 0)} healthy)")
-    except Exception as e:
-        print(f"[WARN] Startup diagnostic skipped: {e}")
-
-    # Pre-initialize embedding model at startup (ONCE) to avoid loading twice
-    if not settings.SKIP_EMBEDDING_LOAD:
+    def _background_init():
+        """Heavy init tasks run in background so server starts fast."""
         try:
-            from embedding import get_embedding_model
-            print("\n[STARTUP] Pre-initializing embedding model...")
-            embedding_model = get_embedding_model()
-            print("[STARTUP] [OK] Embedding model loaded and ready\n")
+            from cognitive.training_ingest import ingest_training_corpus
+            result = ingest_training_corpus()
+            if result.get("ingested", 0) > 0:
+                print(f"[OK] Training corpus: {result['ingested']} files ingested")
         except Exception as e:
-            print(f"[STARTUP] [WARN] Warning: Could not pre-load embedding model: {e}")
-            print("[STARTUP] [WARN] Model will be loaded on first use\n")
-    else:
-        print("[STARTUP] Embedding model loading skipped (SKIP_EMBEDDING_LOAD=true)\n")
+            print(f"[WARN] Training ingest: {e}")
+
+        try:
+            from cognitive.autonomous_diagnostics import get_diagnostics
+            diag = get_diagnostics()
+            startup_result = diag.on_startup()
+            print(f"[OK] Startup diagnostic: {startup_result.get('status', 'unknown')}")
+        except Exception as e:
+            print(f"[WARN] Diagnostic: {e}")
+
+        if not settings.SKIP_EMBEDDING_LOAD:
+            try:
+                from embedding import get_embedding_model
+                get_embedding_model()
+                print("[OK] Embedding model loaded")
+            except Exception as e:
+                print(f"[WARN] Embedding: {e}")
+
+    threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
+    print("[OK] Background init started (training, diagnostics, embedding)")
     
     # Check LLM Provider
     if not getattr(settings, 'SKIP_LLM_CHECK', False):
@@ -329,11 +378,11 @@ async def lifespan(app: FastAPI):
         print("[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)")
 
     # ==================== Initialize ML Intelligence ====================
-    # Initialize ML Intelligence orchestrator
     try:
-        from api.ml_intelligence_api import get_orchestrator
-        orchestrator = get_orchestrator()
-        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
+        from ml_intelligence.integration_orchestrator import MLIntelligenceOrchestrator
+        orchestrator = MLIntelligenceOrchestrator()
+        features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
+        print(f"[OK] ML Intelligence initialized with features: {features}")
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
 
@@ -440,6 +489,20 @@ async def lifespan(app: FastAPI):
         print("[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)")
 
 
+    # ==================== Initialize Layer 1 Message Bus ====================
+    try:
+        from layer1.initialize import initialize_layer1
+        from database.session import get_session
+
+        _l1_session = next(get_session())
+        _kb_path = settings.KNOWLEDGE_BASE_PATH if settings else "knowledge_base"
+        _layer1 = initialize_layer1(session=_l1_session, kb_path=_kb_path)
+        app.state.layer1 = _layer1
+        print(f"[OK] Layer 1 initialized — {_layer1.get_stats().get('registered_components', 0)} components connected")
+    except Exception as e:
+        print(f"[WARN] Layer 1 initialization: {e}")
+        app.state.layer1 = None
+
     # ==================== Start Continuous Learning Orchestrator ====================
     if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
@@ -486,6 +549,23 @@ async def lifespan(app: FastAPI):
     else:
         print("[SKIP] Autonomous loop disabled (DISABLE_AUTONOMOUS_LOOP=true)")
 
+    # ==================== Register Auto-Probe ====================
+    try:
+        from core.tracing import register_auto_probe
+        register_auto_probe()
+        print("[OK] Auto-probe registered (triggers on code changes)")
+    except Exception as e:
+        print(f"[WARN] Auto-probe: {e}")
+
+    # ==================== Worker Pool Init ====================
+    try:
+        from core.worker_pool import get_io_pool, get_cpu_pool
+        get_io_pool()
+        get_cpu_pool()
+        print("[OK] Worker pools initialized (IO + CPU)")
+    except Exception as e:
+        print(f"[WARN] Worker pools: {e}")
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
@@ -495,6 +575,12 @@ async def lifespan(app: FastAPI):
     
     # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
+    try:
+        from core.worker_pool import shutdown_all
+        shutdown_all(wait_for=False)
+        print("[OK] Worker pools shut down")
+    except Exception:
+        pass
     if _diag_engine:
         try:
             _diag_engine.stop()
@@ -547,37 +633,27 @@ app.add_middleware(
 
 # Core: needed by app.py's own chat/RAG endpoints
 # =============================================================================
-# CLEAN ARCHITECTURE — 15 routers (down from 56)
+# BRAIN-CENTRIC ARCHITECTURE — 4 routers only
 # =============================================================================
 
-# Brain API — single entry point for all 95+ domain actions
-app.include_router(brain_router)                 # /brain/{domain} — 8 domains
-app.include_router(brain_v2_router)              # /api/v2/{domain}/{action} — clean REST
+# THE BRAIN — all 93+ actions, all 8 domains, all logic
+app.include_router(brain_router)                 # /brain/{domain}
+app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 
-# Monitoring — unified health + probe + triggers
-app.include_router(unified_monitor_router)       # /api/monitor/*
-app.include_router(component_health_router)      # /api/component-health/*
-app.include_router(probe_agent_router)           # /api/probe/*
-app.include_router(runtime_triggers_router)      # /api/triggers/*
+# Infrastructure (can't live inside brain)
+app.include_router(health_router)                # /health (k8s probes)
+app.include_router(auth_router)                  # /auth (middleware)
+app.include_router(voice_router)                 # /voice (WebSocket)
+app.include_router(stream_router)                # /api/stream (SSE streaming)
+app.include_router(completion_router)            # /api/complete (inline code completion)
+app.include_router(world_model_router)           # /api/world-model (system state)
+app.include_router(connection_router)            # /api/connections (connection validation)
+app.include_router(introspection_router)         # /api/system (introspection + validation)
 
-# Autonomous — Ouroboros loop + consensus fixer
-app.include_router(autonomous_loop_router)       # /api/autonomous/*
-app.include_router(consensus_fixer_router)       # /api/consensus-fix/*
-
-# Core services
-app.include_router(health_router)                # /health
-app.include_router(auth_router)                  # /auth
-app.include_router(genesis_keys_router)          # /genesis
-app.include_router(consensus_router)             # /api/consensus
-app.include_router(retrieve_router)              # /retrieve
-app.include_router(voice_router)                 # /voice
-app.include_router(mcp_router)                   # /api/mcp
-app.include_router(flash_cache_router)           # /api/flash-cache
-app.include_router(kpi_router)                   # /kpi
-app.include_router(live_console_router)          # /api/console
-app.include_router(ask_grace_router)             # /api/ask-grace
-app.include_router(docs_library_router)          # /api/docs
-app.include_router(diagnostic_router)            # /diagnostic
+# Register previously unwired routers (includes Ask Grace)
+for _name, _router in _optional_routers:
+    app.include_router(_router)
+    print(f"[OK] Registered previously unwired router: {_name}")
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -586,40 +662,6 @@ if not (settings and settings.DISABLE_GENESIS_TRACKING):
 else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
-
-# ==================== Health Check Endpoint ====================
-
-@app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check():
-    """
-    Health check endpoint.
-    
-    Returns:
-        HealthResponse: Status of the API and Ollama service
-    """
-    try:
-        client = get_llm_client()
-        status_info = client.is_running()
-        
-        if status_info:
-            models = client.get_all_models()
-            models_available = len(models)
-            status = "healthy"
-        else:
-            models_available = 0
-            status = "unhealthy"
-        
-        return HealthResponse(
-            status=status,
-            llm_running=status_info,
-            models_available=models_available
-        )
-    except Exception as e:
-        return HealthResponse(
-            status="unhealthy",
-            llm_running=False,
-            models_available=0
-        )
 
 
 class TitleGenerationRequest(BaseModel):
@@ -676,7 +718,7 @@ async def generate_title(request: TitleGenerationRequest):
 
 # ==================== Chat Endpoint ====================
 
-@app.post("/chat", response_model=ChatResponse, tags=["Chat"])
+@app.post("/chat", response_model=RawChatResponse, tags=["Chat"])
 async def chat(request: ChatRequest):
     """
     Chat endpoint using Ollama models with RAG enforcement.
@@ -748,12 +790,11 @@ async def chat(request: ChatRequest):
                 max_tokens=request.top_k or 256,
             )
 
-            return ChatResponse(
-                response=response,
-                sources=[],
+            return RawChatResponse(
+                message=response,
                 model=model_name,
-                temperature=request.temperature,
-                max_tokens=request.top_k
+                generation_time=0.0,
+                sources=[],
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
         # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
@@ -786,7 +827,7 @@ async def chat(request: ChatRequest):
         # Format response
         response_data = format_chat_response(tier_result, model_name, generation_time)
         
-        return ChatResponse(**response_data)
+        return RawChatResponse(**response_data)
     
     except HTTPException:
         raise
@@ -1652,6 +1693,26 @@ async def runtime_hot_reload():
     return {"status": "hot-reload complete", "results": results}
 
 
+@app.get("/api/runtime/security", tags=["Runtime"])
+async def runtime_security():
+    """Rate limit status, cache stats, API cost tracking, and security config."""
+    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE, get_llm_cache, get_cost_tracker
+    return {
+        "rate_limits": get_rate_limit_status(),
+        "max_request_size_mb": round(MAX_REQUEST_SIZE / 1048576, 1),
+        "llm_cache": get_llm_cache().stats(),
+        "api_costs": get_cost_tracker().get_summary(),
+    }
+
+
+@app.post("/api/runtime/backup", tags=["Runtime"])
+async def runtime_backup():
+    """Create a database backup."""
+    from core.security import backup_database
+    path = backup_database()
+    return {"backup_path": path}
+
+
 @app.get("/api/runtime/resilience", tags=["Runtime"])
 async def runtime_resilience():
     """Circuit breaker and degradation status."""
@@ -1662,44 +1723,56 @@ async def runtime_resilience():
     }
 
 
+@app.get("/api/runtime/workers", tags=["Runtime"])
+async def runtime_workers():
+    """Worker pool status: active tasks, latency, queue depth."""
+    from core.worker_pool import pool_status
+    return pool_status()
+
+
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
 async def runtime_connectivity():
-    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
-    checks = {}
+    """
+    Check connectivity of ALL system dependencies.
+    
+    Uses the comprehensive connection validator to check every connection
+    in the system — infrastructure, external APIs, Layer 1 connectors,
+    background services, and WebSocket.
+    
+    For quick status: GET /api/connections/status
+    For full validation: GET /api/connections/validate
+    """
+    from connection_validator import validate_all_connections
 
-    # Ollama
-    try:
-        client = get_llm_client()
-        checks["ollama"] = {"connected": client.is_running(), "url": settings.OLLAMA_URL}
-    except Exception as e:
-        checks["ollama"] = {"connected": False, "error": str(e)}
-
-    # Qdrant
-    try:
-        qdrant = get_qdrant_client()
-        connected = qdrant.is_connected()
-        qdrant_loc = settings.QDRANT_URL if settings.QDRANT_URL else f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
-        checks["qdrant"] = {"connected": connected, "url": qdrant_loc}
-    except Exception as e:
-        checks["qdrant"] = {"connected": False, "error": str(e)}
-
-    # Kimi
-    checks["kimi"] = {"configured": bool(settings.KIMI_API_KEY), "model": settings.KIMI_MODEL}
-
-    # Opus
-    checks["opus"] = {"configured": bool(settings.OPUS_API_KEY), "model": settings.OPUS_MODEL}
-
-    # Database
-    try:
-        checks["database"] = {"connected": DatabaseConnection.health_check(), "type": settings.DATABASE_TYPE}
-    except Exception as e:
-        checks["database"] = {"connected": False, "error": str(e)}
-
-    all_ok = all(
-        c.get("connected", False) or c.get("configured", False)
-        for c in checks.values()
+    report = validate_all_connections(
+        include_layer1=True,
+        include_background=True,
+        include_external=True,
     )
-    return {"status": "all_connected" if all_ok else "partial", "services": checks}
+
+    services = {}
+    for conn in report.connections:
+        services[conn.name] = {
+            "connected": conn.connected,
+            "status": conn.status.value,
+            "category": conn.category.value,
+            "latency_ms": conn.latency_ms,
+            "actions_passing": conn.actions_passing,
+            "actions_total": conn.actions_total,
+            "message": conn.message,
+        }
+
+    return {
+        "status": report.status,
+        "total_connections": report.total_connections,
+        "connected": report.connected_count,
+        "disconnected": report.disconnected_count,
+        "degraded": report.degraded_count,
+        "actions_validated": report.total_actions_validated,
+        "actions_passing": report.total_actions_passing,
+        "actions_failing": report.total_actions_failing,
+        "services": services,
+    }
 
 
 # ==================== Root Endpoint ====================

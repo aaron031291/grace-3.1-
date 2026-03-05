@@ -228,9 +228,9 @@ def _scan_logical() -> List[dict]:
         pass
 
     try:
-        from api.api_registry_api import _build_registry
-        reg = _build_registry()
-        broken = [r for r in reg.get("routes", []) if not r.get("healthy", True)]
+        from api.component_health_api import _check_service_health
+        health = _check_service_health()
+        broken = [{"path": k, "healthy": v} for k, v in health.items() if not v]
         if broken:
             triggers.append(TriggerEntry("LOGICAL", "broken_apis", "warning",
                                          f"{len(broken)} broken API routes",

@@ -259,7 +259,7 @@ export const useSystemStore = create(
       systemHealth: null,
       setSystemHealth: (health) => set({ systemHealth: health }),
 
-      // Services status
+      // Services status (legacy - 3 core services)
       services: {
         ollama: { status: 'unknown', lastCheck: null },
         database: { status: 'unknown', lastCheck: null },
@@ -271,6 +271,34 @@ export const useSystemStore = create(
           [service]: { status, lastCheck: new Date().toISOString() },
         },
       })),
+
+      // Comprehensive connection status (all system connections)
+      connectionReport: null,
+      connectionLastChecked: null,
+      connectionLoading: false,
+      setConnectionReport: (report) => set({
+        connectionReport: report,
+        connectionLastChecked: new Date().toISOString(),
+        connectionLoading: false,
+      }),
+      setConnectionLoading: (loading) => set({ connectionLoading: loading }),
+
+      // Per-connection statuses (flat map for quick lookups)
+      connectionStatuses: {},
+      setConnectionStatuses: (statuses) => set({ connectionStatuses: statuses }),
+
+      // Connection summary counts
+      connectionSummary: {
+        total: 0,
+        connected: 0,
+        disconnected: 0,
+        degraded: 0,
+        actionsValidated: 0,
+        actionsPassing: 0,
+        actionsFailing: 0,
+        status: 'unknown',
+      },
+      setConnectionSummary: (summary) => set({ connectionSummary: summary }),
 
       // Models
       availableModels: [],

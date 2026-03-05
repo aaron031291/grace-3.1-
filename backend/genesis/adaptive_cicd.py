@@ -409,9 +409,9 @@ class AdaptiveCICD:
         Integrates with LLM orchestration for intelligent analysis.
         """
         try:
-            from api.llm_orchestration import get_orchestrator
+            from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
 
-            orchestrator = get_orchestrator()
+            orchestrator = get_llm_orchestrator()
 
             # Build context for LLM
             trust = self.trust_scores.get(pipeline_id)
@@ -818,21 +818,22 @@ Format as JSON."""
 
         # Try to integrate with actual governance system
         try:
-            from api.governance_api import submit_governance_request
+            from security.governance import evaluate_governance
 
-            await submit_governance_request({
-                "type": request.action.value,
-                "resource": f"pipeline:{trigger.pipeline_id}",
-                "risk_level": risk_level,
-                "description": request.reason,
-                "analysis": request.llm_analysis,
-                "deadline": deadline,
-                "metadata": {
+            await evaluate_governance(
+                action_type=request.action.value,
+                actor_id="adaptive_cicd",
+                target_resource=f"pipeline:{trigger.pipeline_id}",
+                metadata={
+                    "risk_level": risk_level,
+                    "description": request.reason,
+                    "analysis": request.llm_analysis,
+                    "deadline": deadline,
                     "trigger_id": trigger.id,
                     "trust_score": trigger.trust_score,
                     "confidence": trigger.confidence
                 }
-            })
+            )
 
         except Exception as e:
             logger.warning(f"[Adaptive] Could not submit to governance system: {e}")

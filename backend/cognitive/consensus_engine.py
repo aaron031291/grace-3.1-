@@ -618,6 +618,19 @@ def run_consensus(
         except Exception:
             pass
 
+        # Feed consensus result into adaptive trust (real-time)
+        try:
+            from core.intelligence import ConsensusTrustBridge
+            ConsensusTrustBridge.process_consensus_result({
+                "models_used": models,
+                "agreements": agreements,
+                "disagreements": disagreements,
+                "confidence": result.confidence,
+                "individual_responses": result.individual_responses,
+            })
+        except Exception:
+            pass
+
     # Log to reporting engine
     try:
         from cognitive.event_bus import publish

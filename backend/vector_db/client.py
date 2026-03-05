@@ -324,6 +324,46 @@ class QdrantVectorDB:
             logger.error(f"[FAIL] Failed to delete collection: {e}")
             return False
     
+    def scroll(
+        self,
+        collection_name: str,
+        limit: int = 100,
+        with_vectors: bool = False,
+        with_payload: bool = True,
+        offset: Optional[int] = None,
+        **kwargs,
+    ) -> List[Dict[str, Any]]:
+        """
+        Scroll through all points in a collection (paginated).
+
+        Used by Reverse KNN and other exhaustive search operations.
+        """
+        if not self.is_connected():
+            logger.error("Not connected to Qdrant")
+            return []
+
+        try:
+            results, _next_offset = self.client.scroll(
+                collection_name=collection_name,
+                limit=limit,
+                with_vectors=with_vectors,
+                with_payload=with_payload,
+                offset=offset,
+                **kwargs,
+            )
+
+            return [
+                {
+                    "id": point.id,
+                    "vector": point.vector if with_vectors else None,
+                    "payload": point.payload if with_payload else {},
+                }
+                for point in results
+            ]
+        except Exception as e:
+            logger.error(f"[FAIL] Scroll failed on '{collection_name}': {e}")
+            return []
+
     def list_collections(self) -> List[str]:
         """
         List all collections.

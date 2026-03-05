@@ -124,8 +124,9 @@ class ContinuousLearningOrchestrator:
 
         # Get Learning Orchestrator
         try:
-            from api.autonomous_learning import get_learning_orchestrator
-            self.learning_orchestrator = get_learning_orchestrator()
+            from cognitive.thread_learning_orchestrator import ThreadLearningOrchestrator
+            kb_path = str(Path(__file__).parent.parent / "data" / "knowledge_base")
+            self.learning_orchestrator = ThreadLearningOrchestrator(knowledge_base_path=kb_path)
             logger.info("[CONTINUOUS_LEARNING] [OK] Learning Orchestrator initialized")
         except Exception as e:
             logger.debug(f"[CONTINUOUS_LEARNING] Learning Orchestrator unavailable: {e}")

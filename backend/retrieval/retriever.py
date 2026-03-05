@@ -463,6 +463,52 @@ class DocumentRetriever:
         
         return "\n\n".join(context_parts)
     
+    def retrieve_and_rank(
+        self,
+        query: str,
+        limit: int = 5,
+        score_threshold: float = 0.3,
+        include_metadata: bool = True,
+        rerank_top_k: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve chunks and rerank them using the cross-encoder reranker.
+
+        Flow: embed query → Qdrant search (3x limit) → rerank → top-k
+        """
+        try:
+            candidates = self.retrieve(
+                query=query,
+                limit=limit * 3,
+                score_threshold=0,
+                include_metadata=include_metadata,
+            )
+
+            if not candidates:
+                return []
+
+            try:
+                from retrieval.reranker import get_reranker
+                reranker = get_reranker()
+                reranked = reranker.rerank(
+                    query=query,
+                    chunks=candidates,
+                    top_k=rerank_top_k or limit,
+                    score_threshold=score_threshold,
+                )
+                return reranked
+            except Exception as e:
+                logger.warning(f"Reranker unavailable, falling back to base retrieval: {e}")
+                return candidates[:limit]
+
+        except Exception as e:
+            logger.error(f"retrieve_and_rank error: {e}", exc_info=True)
+            return self.retrieve(
+                query=query, limit=limit,
+                score_threshold=score_threshold,
+                include_metadata=include_metadata,
+            )
+
     @staticmethod
     def _get_db_session():
         """Get a database session, initializing if needed."""

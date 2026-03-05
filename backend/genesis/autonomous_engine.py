@@ -902,7 +902,7 @@ class AutonomousEngine:
 
         # Store in learning memory
         try:
-            from api.learning_memory_api import store_pattern
+            from cognitive.learning_memory import store_pattern
 
             result = await store_pattern({
                 "pattern": pattern,

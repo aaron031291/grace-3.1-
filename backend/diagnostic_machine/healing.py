@@ -392,7 +392,7 @@ class HealingExecutor:
 
             # Try retrieval client reset
             try:
-                from retrieval.qdrant_client import get_qdrant_client
+                from vector_db.client import get_qdrant_client
                 client = get_qdrant_client()
                 if client:
                     return HealingResult(
