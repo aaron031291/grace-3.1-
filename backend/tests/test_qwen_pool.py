@@ -178,24 +178,24 @@ class TestGovernanceContract:
 class TestHotSwap:
 
     def test_swap_changes_model(self, pool):
-        pool.swap_model("fast", "qwen3:4b")
-        assert pool._slots["fast"].model_name == "qwen3:4b"
+        pool.swap_model("fast", "qwen3.5:4b")
+        assert pool._slots["fast"].model_name == "qwen3.5:4b"
 
     def test_swap_resets_health(self, pool):
         pool._slots["fast"].healthy = False
         pool._slots["fast"].total_errors = 10
-        pool.swap_model("fast", "qwen3:8b")
+        pool.swap_model("fast", "qwen3.5:9b")
         assert pool._slots["fast"].healthy is True
         assert pool._slots["fast"].total_errors == 0
 
     def test_swap_creates_new_client(self, pool):
         old_client = pool._clients["fast"]
-        pool.swap_model("fast", "qwen3:8b")
+        pool.swap_model("fast", "qwen3.5:9b")
         assert pool._clients["fast"] is not old_client
 
     def test_swap_invalid_slot_raises(self, pool):
         with pytest.raises(ValueError):
-            pool.swap_model("nonexistent", "qwen3:8b")
+            pool.swap_model("nonexistent", "qwen3.5:9b")
 
 
 class TestFailover:

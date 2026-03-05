@@ -1,11 +1,14 @@
 """
-Qwen 3 LLM Client — open-source model running locally via Ollama.
+Qwen 3.5 LLM Client — open-source model running locally via Ollama.
 
 Default mode: LOCAL via Ollama (no API key, no cloud, fully private).
-  ollama pull qwen3:8b      — 8B parameter model (recommended default)
-  ollama pull qwen3:14b     — 14B for better quality on 16GB VRAM
-  ollama pull qwen3:30b     — 30B MoE with 256K context
-  ollama pull qwen3:32b     — 32B dense model for highest quality
+  ollama pull qwen3.5:9b       — 9B model (fast, efficient)
+  ollama pull qwen3.5:27b      — 27B dense model (recommended default)
+  ollama pull qwen3.5:122b-a10b — 122B MoE, 10B active (high quality, 262K context)
+  ollama pull qwen3.5:397b-a17b — 397B flagship MoE
+
+Qwen 3.5 features: 201 languages, hybrid Gated DeltaNet architecture,
+native 262K context window, unified multimodal (text, images, video).
 
 Optional cloud mode: set QWEN_API_KEY for DashScope API if needed.
 """
@@ -19,12 +22,12 @@ from settings import settings
 logger = logging.getLogger(__name__)
 
 QWEN_DEFAULT_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-QWEN_DEFAULT_MODEL = "qwen3:8b"
+QWEN_DEFAULT_MODEL = "qwen3.5:27b"
 
 
 class QwenLLMClient(BaseLLMClient):
     """
-    Client for Qwen 3 open-source model running locally via Ollama.
+    Client for Qwen 3.5 open-source model running locally via Ollama.
 
     Default: Ollama local mode (free, private, no API key).
     Optional: DashScope cloud mode when QWEN_API_KEY is set.
@@ -146,7 +149,7 @@ class QwenLLMClient(BaseLLMClient):
         **kwargs,
     ) -> str:
         ollama_url = getattr(settings, "OLLAMA_URL", "http://localhost:11434")
-        model_name = model or getattr(settings, "QWEN_MODEL", "") or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3:8b"
+        model_name = model or getattr(settings, "QWEN_MODEL", "") or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3.5:27b"
 
         payload = {
             "model": model_name,
@@ -223,9 +226,9 @@ class QwenLLMClient(BaseLLMClient):
             full_prompt = f"Existing code context:\n```\n{context}\n```\n\n{prompt}"
 
         if self._use_cloud:
-            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen3-coder"
+            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen-coder-plus"
         else:
-            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3:8b"
+            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3.5:27b"
 
         return self.generate(
             prompt=full_prompt,
@@ -236,7 +239,7 @@ class QwenLLMClient(BaseLLMClient):
         )
 
     def reason(self, problem: str, context: str = "") -> str:
-        """Deep reasoning using Qwen's thinking mode or QwQ model."""
+        """Deep reasoning using Qwen 3.5's thinking mode."""
         system = (
             "You are a deep reasoning engine. Think step by step through the problem. "
             "Consider multiple angles, identify assumptions, and verify your conclusions."
@@ -248,7 +251,7 @@ class QwenLLMClient(BaseLLMClient):
         if self._use_cloud:
             reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or "qwq-plus"
         else:
-            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3:8b"
+            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3.5:27b"
 
         return self.generate(
             prompt=full_prompt,

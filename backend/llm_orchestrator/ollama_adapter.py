@@ -36,7 +36,7 @@ class OllamaLLMClient(BaseLLMClient):
         # Merge other options from kwargs
         options.update(kwargs.get("options", {}))
         
-        model = model_id or self._default_model or settings.LLM_MODEL or settings.OLLAMA_LLM_DEFAULT or "qwen3:8b"
+        model = model_id or self._default_model or settings.LLM_MODEL or settings.OLLAMA_LLM_DEFAULT or "qwen3.5:9b"
         
         # Use generate_response (the actual OllamaClient method)
         gen_method = getattr(self.client, 'generate', None) or getattr(self.client, 'generate_response', None)

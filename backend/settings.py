@@ -126,15 +126,15 @@ class Settings:
     # Optional: set QWEN_API_KEY for DashScope cloud API instead
     QWEN_API_KEY: str = os.getenv("QWEN_API_KEY", "")
     QWEN_BASE_URL: str = os.getenv("QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1")
-    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3:32b")
-    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3:32b")
-    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwen3:30b")
+    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.5:27b")
+    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3.5:27b")
+    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwen3.5:27b")
 
     # ==================== Local Model Configuration (per-task) ====================
     # Tuned for RTX 5090 (32GB VRAM, 64GB RAM)
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3:32b")
-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3:30b")
-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:27b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:27b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:9b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

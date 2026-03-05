@@ -1,7 +1,7 @@
 """
-Qwen Model Pool — Async hot-swappable task-routed pool for 3 local Qwen models.
+Qwen Model Pool — Async hot-swappable task-routed pool for 3 local Qwen 3.5 models.
 
-Manages qwen3:32b (code/general), qwen3:30b (reasoning), qwen3:14b (fast)
+Manages qwen3.5:27b (code/general/reasoning), qwen3.5:9b (fast)
 with automatic task-based routing, async execution, health monitoring,
 and governance contract enforcement.
 
@@ -123,16 +123,16 @@ class QwenModelPool:
         model_configs = {
             "code": {
                 "model_name": getattr(settings, "QWEN_CODE_MODEL", None)
-                    or getattr(settings, "OLLAMA_MODEL_CODE", None) or "qwen3:32b",
+                    or getattr(settings, "OLLAMA_MODEL_CODE", None) or "qwen3.5:27b",
                 "tasks": [QwenTask.CODE, QwenTask.GENERAL, QwenTask.AUDIT],
             },
             "reason": {
                 "model_name": getattr(settings, "QWEN_REASON_MODEL", None)
-                    or getattr(settings, "OLLAMA_MODEL_REASON", None) or "qwen3:30b",
+                    or getattr(settings, "OLLAMA_MODEL_REASON", None) or "qwen3.5:27b",
                 "tasks": [QwenTask.REASON, QwenTask.DIAGNOSE, QwenTask.HEAL],
             },
             "fast": {
-                "model_name": getattr(settings, "OLLAMA_MODEL_FAST", None) or "qwen3:14b",
+                "model_name": getattr(settings, "OLLAMA_MODEL_FAST", None) or "qwen3.5:9b",
                 "tasks": [QwenTask.FAST, QwenTask.CHAT, QwenTask.LEARN],
             },
         }

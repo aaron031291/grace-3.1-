@@ -884,7 +884,7 @@ async def chat_triad(request: TriadChatRequest):
     """
     Qwen Triad Chat — async parallel processing across all 3 Qwen models.
 
-    Runs qwen3:32b (code), qwen3:30b (reasoning), qwen3:14b (fast) in parallel,
+    Runs qwen3.5:27b (code), qwen3.5:27b (reasoning), qwen3.5:9b (fast) in parallel,
     gathers context from ALL subsystems (memory, genesis keys, diagnostics,
     self-healing, self-learning, self-governance, self-mirror, timesense),
     and synthesizes a unified response.

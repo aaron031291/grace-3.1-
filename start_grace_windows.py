@@ -156,9 +156,9 @@ def check_ollama():
             
             # Check for required Qwen 3 models (RTX 5090 / 32GB VRAM)
             needed = [
-                ("qwen3:32b", "code + general"),
-                ("qwen3:30b", "reasoning (256K context MoE)"),
-                ("qwen3:14b", "fast tasks"),
+                ("qwen3.5:27b", "code + general + reasoning"),
+                ("qwen3.5:9b", "fast tasks"),
+                ("qwen3.5:122b-a10b", "flagship MoE (262K context)"),
             ]
             for model, desc in needed:
                 found = any(model.split(":")[0] in name for name in model_names)

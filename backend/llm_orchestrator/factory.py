@@ -3,18 +3,19 @@ LLM Factory — Central access point for ALL AI models.
 
 Model hierarchy:
   LOCAL (free, fast, private):
-    - Qwen 2.5 Coder (code generation — best open-source coder)
-    - DeepSeek R1 (reasoning — best open-source reasoning)
-    - Qwen 2.5 (general — fast default)
+    - Qwen 3.5 27B (code generation + general — best open-source)
+    - Qwen 3.5 27B (reasoning — 262K context, hybrid DeltaNet)
+    - Qwen 3.5 9B (fast tasks — efficient)
 
   CLOUD (paid, powerful, reasoning):
     - Opus 4.6 / Claude (deep reasoning, architecture, audit)
     - Kimi K2.5 (long context, document analysis, 262K window)
+    - OpenAI GPT-4o (general purpose)
 
 Task routing:
-    code    → Qwen 2.5 Coder (local)
-    reason  → DeepSeek R1 (local) or Opus (cloud)
-    fast    → Qwen 2.5 (local)
+    code    → Qwen 3.5 27B (local)
+    reason  → Qwen 3.5 27B (local) or Opus (cloud)
+    fast    → Qwen 3.5 9B (local)
     general → default model
     audit   → Opus (cloud)
     document→ Kimi (cloud, 262K context)
@@ -118,13 +119,13 @@ def get_opus_client() -> BaseLLMClient:
 
 
 def get_qwen_client() -> BaseLLMClient:
-    """Get Qwen 3 via the pool — auto-routes to the best model for general tasks."""
+    """Get Qwen 3.5 via the pool — auto-routes to the best model for general tasks."""
     pool = get_qwen_pool()
     return pool.get_client_for_task("general")
 
 
 def get_qwen_coder() -> BaseLLMClient:
-    """Get Qwen Coder via the pool — routes to the code-optimized model."""
+    """Get Qwen 3.5 Coder via the pool — routes to the code-optimized model."""
     pool = get_qwen_pool()
     return pool.get_client_for_task("code")
 
@@ -173,9 +174,9 @@ def get_all_available_models() -> list:
 
     # Local models
     for task, model_attr, desc in [
-        ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 2.5 Coder)"),
-        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (DeepSeek R1)"),
-        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 2.5)"),
+        ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 3.5)"),
+        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (Qwen 3.5)"),
+        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 3.5)"),
     ]:
         model = getattr(settings, model_attr, "")
         models.append({
@@ -215,7 +216,7 @@ def get_all_available_models() -> list:
                 "id": f"qwen-{key}",
                 "provider": "qwen",
                 "model": info["model_name"],
-                "description": f"Qwen 3 {key} — {', '.join(info['tasks'])}",
+                "description": f"Qwen 3.5 {key} — {', '.join(info['tasks'])}",
                 "available": info["healthy"],
                 "cost": "free",
                 "location": "local",
@@ -229,8 +230,8 @@ def get_all_available_models() -> list:
         models.append({
             "id": "qwen",
             "provider": "qwen",
-            "model": getattr(settings, 'QWEN_MODEL', 'qwen3:32b'),
-            "description": "Qwen 3 (pool not initialized)",
+            "model": getattr(settings, 'QWEN_MODEL', 'qwen3.5:27b'),
+            "description": "Qwen 3.5 (pool not initialized)",
             "available": True,
             "cost": "free",
             "location": "local",

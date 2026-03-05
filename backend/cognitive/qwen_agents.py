@@ -10,9 +10,9 @@ Each Qwen model runs as a specialized, independent agent with:
 - Progress tracking and Genesis key provenance
 
 Agents:
-  CodeAgent   (qwen3:32b)  — code generation, structured output, fixes
-  ReasonAgent (qwen3:30b)  — deep analysis, architecture, planning
-  FastAgent   (qwen3:14b)  — triage, classification, summaries, synthesis
+  CodeAgent   (qwen3.5:27b)  — code generation, structured output, fixes
+  ReasonAgent (qwen3.5:27b)  — deep analysis, architecture, planning
+  FastAgent   (qwen3.5:9b)   — triage, classification, summaries, synthesis
 
 The agents collaborate via structured messages (GraceMessage/GraceResponse),
 not NLP. Human-readable text is generated only at the output boundary.

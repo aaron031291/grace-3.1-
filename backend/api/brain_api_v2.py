@@ -1696,9 +1696,9 @@ def _triad_status():
     from settings import settings
     return {
         "models": {
-            "code": settings.OLLAMA_MODEL_CODE or "qwen3:32b",
-            "reason": settings.OLLAMA_MODEL_REASON or "qwen3:30b",
-            "fast": settings.OLLAMA_MODEL_FAST or "qwen3:14b",
+            "code": settings.OLLAMA_MODEL_CODE or "qwen3.5:27b",
+            "reason": settings.OLLAMA_MODEL_REASON or "qwen3.5:27b",
+            "fast": settings.OLLAMA_MODEL_FAST or "qwen3.5:9b",
         },
         "features": {
             "async_parallel": True,

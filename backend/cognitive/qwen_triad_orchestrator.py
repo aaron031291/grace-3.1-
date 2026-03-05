@@ -3,9 +3,9 @@ Qwen Triad Orchestrator — Async parallel processing across 3 Qwen models
 with full subsystem context gathering.
 
 Models:
-  qwen3:32b  (code)     — code generation, structured output
-  qwen3:30b  (reason)   — deep reasoning, analysis, 256K context
-  qwen3:14b  (fast)     — quick triage, classification, summaries
+  qwen3.5:27b  (code)     — code generation, structured output
+  qwen3.5:27b  (reason)   — deep reasoning, analysis, 262K context
+  qwen3.5:9b   (fast)     — quick triage, classification, summaries
 
 Flow:
   1. GATHER  — pull context from ALL subsystems in parallel
