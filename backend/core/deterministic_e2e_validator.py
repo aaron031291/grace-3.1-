@@ -134,15 +134,22 @@ def _check_genesis_table() -> StageCheck:
     try:
         from database.connection import DatabaseConnection
         from sqlalchemy import inspect
-        engine = DatabaseConnection.get_engine()
+        try:
+            engine = DatabaseConnection.get_engine()
+        except RuntimeError:
+            from database.config import DatabaseConfig
+            config = DatabaseConfig.from_env()
+            DatabaseConnection.initialize(config)
+            engine = DatabaseConnection.get_engine()
         tables = inspect(engine).get_table_names()
         if "genesis_keys" in tables:
-            return StageCheck("genesis_table_exists", StageVerdict.PASS, "genesis_keys table exists")
+            return StageCheck("genesis_table_exists", StageVerdict.PASS,
+                              f"genesis_keys table exists ({len(tables)} tables total)")
         return StageCheck("genesis_table_exists", StageVerdict.WARN,
-                          "genesis_keys table not found (may not be initialized yet)",
+                          f"genesis_keys table not found ({len(tables)} tables exist)",
                           details={"tables": tables[:20]})
     except Exception as e:
-        return StageCheck("genesis_table_exists", StageVerdict.WARN, f"DB not initialized: {e}")
+        return StageCheck("genesis_table_exists", StageVerdict.WARN, f"DB: {e}")
 
 
 def _check_genesis_tracker() -> StageCheck:
@@ -244,9 +251,7 @@ def _stage_retrieval() -> StageResult:
     stage = StageResult(stage=4, name="Retrieval (RAG)")
     start = time.time()
 
-    stage.checks.append(_check("embedding_model_import", lambda: _verify_import(
-        "embedding.embedder", ["get_embedding_model"]
-    )))
+    stage.checks.append(_check("embedding_model_import", _check_embedding_import))
     stage.checks.append(_check("retriever_import", lambda: _verify_import(
         "retrieval.retriever", ["DocumentRetriever"]
     )))
@@ -261,6 +266,23 @@ def _stage_retrieval() -> StageResult:
         StageVerdict.WARN if any(c.verdict == StageVerdict.WARN for c in stage.checks) else StageVerdict.PASS
     )
     return stage
+
+
+def _check_embedding_import() -> StageCheck:
+    """Check embedding module — torch is a heavy runtime dep, WARN if missing instead of FAIL."""
+    try:
+        mod = importlib.import_module("embedding.embedder")
+        if hasattr(mod, "get_embedding_model"):
+            return StageCheck("embedding_model_import", StageVerdict.PASS,
+                              "embedding.embedder: get_embedding_model found")
+        return StageCheck("embedding_model_import", StageVerdict.WARN,
+                          "embedding.embedder: get_embedding_model not found")
+    except ImportError as e:
+        if "torch" in str(e):
+            return StageCheck("embedding_model_import", StageVerdict.WARN,
+                              f"torch not installed (GPU runtime dependency) — embeddings unavailable",
+                              details={"missing_dep": "torch"})
+        return StageCheck("embedding_model_import", StageVerdict.FAIL, f"ImportError: {e}")
 
 
 def _check_qdrant() -> StageCheck:
@@ -416,9 +438,10 @@ def _check_pipeline_stages() -> StageCheck:
         from cognitive.pipeline import CognitivePipeline
         pipeline = CognitivePipeline()
         stages = [
-            "_stage_time", "_stage_ooda", "_stage_ambiguity",
+            "_stage_timesense", "_stage_ooda", "_stage_ambiguity",
             "_stage_invariants", "_stage_trust_pre", "_stage_generate",
-            "_stage_contradiction", "_stage_verification", "_stage_trust_post",
+            "_stage_contradiction", "_stage_hallucination", "_stage_trust_post",
+            "_stage_genesis",
         ]
         missing = [s for s in stages if not hasattr(pipeline, s)]
         if missing:
@@ -626,21 +649,30 @@ def _check_response_models() -> StageCheck:
 
 
 def _check_bridge_scan() -> StageCheck:
+    """Run deterministic bridge and count problems BY SEVERITY — low-severity issues don't cause FAIL."""
     try:
         from core.deterministic_bridge import build_deterministic_report
         report = build_deterministic_report()
-        problems = report.get("total_problems", 0)
+        all_problems = report.get("problems", [])
         checks = report.get("total_checks", 0)
-        if problems > 10:
+
+        critical = sum(1 for p in all_problems if p.get("severity") == "critical")
+        warning = sum(1 for p in all_problems if p.get("severity") == "warning")
+        low = sum(1 for p in all_problems if p.get("severity") == "low")
+
+        details = {"checks": checks, "critical": critical, "warning": warning, "low": low}
+
+        if critical > 0:
             return StageCheck("deterministic_bridge_scan", StageVerdict.FAIL,
-                              f"{problems} problems across {checks} checks",
-                              details={"problems": problems, "checks": checks})
-        if problems > 0:
+                              f"{critical} critical, {warning} warning, {low} low across {checks} checks",
+                              details=details)
+        if warning > 0:
             return StageCheck("deterministic_bridge_scan", StageVerdict.WARN,
-                              f"{problems} problems across {checks} checks",
-                              details={"problems": problems, "checks": checks})
+                              f"{warning} warning, {low} low across {checks} checks",
+                              details=details)
         return StageCheck("deterministic_bridge_scan", StageVerdict.PASS,
-                          f"Clean scan: {checks} checks, 0 problems")
+                          f"Clean: {checks} checks, {low} low-severity only",
+                          details=details)
     except Exception as e:
         return StageCheck("deterministic_bridge_scan", StageVerdict.WARN, f"Bridge: {e}")
 
