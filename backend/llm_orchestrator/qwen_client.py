@@ -1,20 +1,13 @@
 """
-Qwen 3 (Alibaba Cloud DashScope) LLM Client.
+Qwen 3 LLM Client — open-source model running locally via Ollama.
 
-Supports both cloud API (DashScope, OpenAI-compatible) and local Ollama mode.
-When QWEN_API_KEY is set, uses the DashScope cloud endpoint.
-When not set, falls back to Ollama with the configured Qwen model.
+Default mode: LOCAL via Ollama (no API key, no cloud, fully private).
+  ollama pull qwen3:8b      — 8B parameter model (recommended default)
+  ollama pull qwen3:14b     — 14B for better quality on 16GB VRAM
+  ollama pull qwen3:30b     — 30B MoE with 256K context
+  ollama pull qwen3:32b     — 32B dense model for highest quality
 
-Cloud models available:
-  - qwen-plus        (balanced cost/performance)
-  - qwen-max         (highest capability)
-  - qwen-turbo       (fastest, cheapest)
-  - qwen3-coder      (code-specialized)
-  - qwq-plus         (reasoning-specialized)
-
-DashScope uses an OpenAI-compatible API at:
-  https://dashscope-intl.aliyuncs.com/compatible-mode/v1  (international)
-  https://dashscope.aliyuncs.com/compatible-mode/v1       (mainland China)
+Optional cloud mode: set QWEN_API_KEY for DashScope API if needed.
 """
 
 import requests
@@ -26,16 +19,15 @@ from settings import settings
 logger = logging.getLogger(__name__)
 
 QWEN_DEFAULT_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-QWEN_DEFAULT_MODEL = "qwen-plus"
+QWEN_DEFAULT_MODEL = "qwen3:8b"
 
 
 class QwenLLMClient(BaseLLMClient):
     """
-    Client for Alibaba Cloud's Qwen 3 API via DashScope.
-    OpenAI-compatible interface with extended context (256K+) and
-    strong multilingual, coding, and reasoning capabilities.
+    Client for Qwen 3 open-source model running locally via Ollama.
 
-    Falls back to Ollama if no API key is configured.
+    Default: Ollama local mode (free, private, no API key).
+    Optional: DashScope cloud mode when QWEN_API_KEY is set.
     """
 
     def __init__(self, api_key: str = None, base_url: str = None, model: str = None):
@@ -154,7 +146,7 @@ class QwenLLMClient(BaseLLMClient):
         **kwargs,
     ) -> str:
         ollama_url = getattr(settings, "OLLAMA_URL", "http://localhost:11434")
-        model_name = model or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen2.5:7b"
+        model_name = model or getattr(settings, "QWEN_MODEL", "") or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3:8b"
 
         payload = {
             "model": model_name,
@@ -230,9 +222,10 @@ class QwenLLMClient(BaseLLMClient):
         if context:
             full_prompt = f"Existing code context:\n```\n{context}\n```\n\n{prompt}"
 
-        code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen3-coder"
-        if not self._use_cloud:
-            code_model = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen2.5-coder:7b"
+        if self._use_cloud:
+            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen3-coder"
+        else:
+            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3:8b"
 
         return self.generate(
             prompt=full_prompt,
@@ -252,9 +245,10 @@ class QwenLLMClient(BaseLLMClient):
         if context:
             full_prompt = f"Context:\n{context}\n\nProblem:\n{problem}"
 
-        reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or "qwq-plus"
-        if not self._use_cloud:
-            reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
+        if self._use_cloud:
+            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or "qwq-plus"
+        else:
+            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3:8b"
 
         return self.generate(
             prompt=full_prompt,

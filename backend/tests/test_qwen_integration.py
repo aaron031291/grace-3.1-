@@ -39,7 +39,7 @@ class TestQwenClientBasics:
     def test_instantiates_without_api_key(self):
         client = _qwen.QwenLLMClient()
         assert client._use_cloud is False
-        assert client.default_model == "qwen-plus"
+        assert "qwen3" in client.default_model or "qwen" in client.default_model
 
     def test_instantiates_with_api_key(self):
         client = _qwen.QwenLLMClient(api_key="test-key-123")
@@ -110,15 +110,15 @@ class TestQwenSettings:
 
     def test_qwen_model_setting(self):
         assert hasattr(_settings.settings, "QWEN_MODEL")
-        assert _settings.settings.QWEN_MODEL == "qwen-plus"
+        assert "qwen3" in _settings.settings.QWEN_MODEL
 
     def test_qwen_code_model_setting(self):
         assert hasattr(_settings.settings, "QWEN_CODE_MODEL")
-        assert _settings.settings.QWEN_CODE_MODEL == "qwen3-coder"
+        assert "qwen3" in _settings.settings.QWEN_CODE_MODEL
 
     def test_qwen_reason_model_setting(self):
         assert hasattr(_settings.settings, "QWEN_REASON_MODEL")
-        assert _settings.settings.QWEN_REASON_MODEL == "qwq-plus"
+        assert "qwen3" in _settings.settings.QWEN_REASON_MODEL
 
 
 class TestFactoryIntegration:

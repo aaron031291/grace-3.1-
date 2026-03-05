@@ -54,13 +54,11 @@ def _build_model_registry() -> dict:
     try:
         from settings import settings
         reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
-        code_model = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen2.5-coder:7b"
-        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen-plus"
+        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen3:8b"
         qwen_has_key = bool(getattr(settings, "QWEN_API_KEY", ""))
     except Exception:
         reason_model = "deepseek-r1:7b"
-        code_model = "qwen2.5-coder:7b"
-        qwen_model = "qwen-plus"
+        qwen_model = "qwen3:8b"
         qwen_has_key = False
 
     registry = {

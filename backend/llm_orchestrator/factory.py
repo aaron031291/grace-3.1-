@@ -130,14 +130,11 @@ def get_qwen_client() -> BaseLLMClient:
 
 
 def get_qwen_coder() -> BaseLLMClient:
-    """Get Qwen Coder — code generation. Cloud if QWEN_API_KEY set, else Ollama."""
+    """Get Qwen Coder — code generation via local Ollama (or cloud if QWEN_API_KEY set)."""
     if getattr(settings, 'QWEN_API_KEY', ''):
         code_model = getattr(settings, 'QWEN_CODE_MODEL', '') or 'qwen3-coder'
-        return _wrap(QwenLLMClient(
-            api_key=settings.QWEN_API_KEY,
-            model=code_model,
-        ))
-    model = settings.OLLAMA_MODEL_CODE or "qwen2.5-coder:7b"
+        return _wrap(QwenLLMClient(api_key=settings.QWEN_API_KEY, model=code_model))
+    model = settings.OLLAMA_MODEL_CODE or "qwen3:8b"
     return _ollama_with_model(model)
 
 
