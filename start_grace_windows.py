@@ -121,7 +121,7 @@ def fix_frontend():
     
     # Force checkout frontend files from repo
     result = subprocess.run(
-        'git checkout origin/Aaron-new -- frontend/src/components/ frontend/vite.config.js frontend/src/App.jsx frontend/src/config/api.js',
+        'git checkout origin/Aaron-new2 -- frontend/src/components/ frontend/vite.config.js frontend/src/App.jsx frontend/src/config/api.js',
         shell=True, capture_output=True, text=True
     )
     
@@ -154,14 +154,18 @@ def check_ollama():
             print_ok(f"Ollama running — {len(models)} models")
             model_names = [m["name"] for m in models]
             
-            # Check for required models
-            needed = ["qwen2.5-coder", "qwen2.5", "deepseek-r1"]
-            for model in needed:
-                found = any(model in name for name in model_names)
+            # Check for required Qwen 3 models (RTX 5090 / 32GB VRAM)
+            needed = [
+                ("qwen3:32b", "code + general"),
+                ("qwen3:30b", "reasoning (256K context MoE)"),
+                ("qwen3:14b", "fast tasks"),
+            ]
+            for model, desc in needed:
+                found = any(model.split(":")[0] in name for name in model_names)
                 if found:
-                    print_ok(f"  {model}: available")
+                    print_ok(f"  {model} ({desc}): available")
                 else:
-                    print_warn(f"  {model}: not found — run 'ollama pull {model}:7b'")
+                    print_warn(f"  {model} ({desc}): not found — run 'ollama pull {model}'")
             return True
         else:
             print_warn("Ollama not responding")
@@ -182,7 +186,7 @@ def check_api_keys():
     
     content = env_path.read_text()
     
-    for key_name, display in [("KIMI_API_KEY", "Kimi K2.5"), ("OPUS_API_KEY", "Opus 4.6")]:
+    for key_name, display in [("KIMI_API_KEY", "Kimi K2.5"), ("OPUS_API_KEY", "Opus 4.6"), ("QWEN_API_KEY", "Qwen 3 Cloud (optional)")]:
         lines = [l for l in content.split('\n') if l.startswith(f"{key_name}=")]
         if lines:
             val = lines[0].split("=", 1)[1].strip()
@@ -293,11 +297,11 @@ def main():
     run_diagnostics()
     
     print_header("Grace is RUNNING!")
-    print("  Frontend:  http://localhost:5173")
-    print("  Backend:   http://localhost:8000")
-    print("  Health:    http://localhost:8000/health")
-    print("  Console:   http://localhost:8000/api/console/status")
-    print("  Vault:     http://localhost:8000/api/vault/status")
+    print("  Frontend:   http://localhost:5173")
+    print("  Backend:    http://localhost:8000")
+    print("  Health:     http://localhost:8000/health")
+    print("  Ask Grace:  http://localhost:8000/api/ask-grace/health")
+    print("  Console:    http://localhost:8000/api/console/status")
     print("")
     print("  Press Ctrl+C to stop Grace")
     print("")

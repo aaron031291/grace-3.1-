@@ -1,464 +1,136 @@
-# Database Architecture Overview
+# Grace AI — Architecture Guide
 
-## System Architecture Diagram
+## Overview
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         FastAPI Application                      │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  @app.post("/users/")                                            │
-│  def create_user(name: str, session: Session = Depends(...)):   │
-│      repo = UserRepository(session)                              │
-│      return repo.create(username=name, email=...)              │
-│                                                                   │
-└──────────────────────┬──────────────────────────────────────────┘
-                       │
-                       ▼
-    ┌──────────────────────────────────┐
-    │   FastAPI Dependency Injection   │
-    │  session: Session = Depends(     │
-    │    get_session()                 │
-    │  )                               │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────┐
-    │   Database Session Management    │
-    │                                  │
-    │  database/session.py             │
-    │  ├─ get_session()                │
-    │  ├─ SessionLocal factory         │
-    │  └─ Transaction handling         │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────┐
-    │   Repository Pattern             │
-    │                                  │
-    │  models/repositories.py          │
-    │  ├─ UserRepository               │
-    │  ├─ ConversationRepository       │
-    │  ├─ MessageRepository            │
-    │  └─ EmbeddingRepository          │
-    │                                  │
-    │  database/repository.py          │
-    │  └─ BaseRepository (CRUD)        │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────┐
-    │   ORM Models                     │
-    │                                  │
-    │  models/database_models.py       │
-    │  ├─ User                         │
-    │  ├─ Conversation                 │
-    │  ├─ Message                      │
-    │  └─ Embedding                    │
-    │                                  │
-    │  database/base.py                │
-    │  ├─ BaseModel (auto timestamps)  │
-    │  └─ Base (declarative)           │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────┐
-    │   SQLAlchemy ORM Engine          │
-    │                                  │
-    │  database/connection.py          │
-    │  ├─ DatabaseConnection (singleton)
-    │  ├─ Engine creation              │
-    │  ├─ Connection pooling           │
-    │  └─ Health checks                │
-    │                                  │
-    │  database/migration.py           │
-    │  ├─ Schema creation              │
-    │  └─ Inspection utilities         │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────┐
-    │   Database Configuration         │
-    │                                  │
-    │  database/config.py              │
-    │  ├─ DatabaseConfig               │
-    │  ├─ DatabaseType enum            │
-    │  ├─ Connection strings           │
-    │  └─ Environment variables        │
-    └──────────────┬───────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────────────────────────┐
-    │          Database Drivers Layer                       │
-    ├──────────────────────────────────────────────────────┤
-    │                                                        │
-    │  ┌─────────────┐  ┌──────────┐  ┌────────┐          │
-    │  │   SQLite    │  │PostgreSQL│  │ MySQL  │          │
-    │  │  (built-in) │  │(psycopg2)│  │(pymysql)
-    │  │             │  │          │  │        │          │
-    │  │ ./data/     │  │  TCP:5432│  │TCP:3306
-    │  │ grace.db    │  │          │  │        │          │
-    │  └─────────────┘  └──────────┘  └────────┘          │
-    │                                                        │
-    └──────────────────────────────────────────────────────┘
-                        │
-                        ▼
-        ┌──────────────────────────────────┐
-        │      Physical Database           │
-        └──────────────────────────────────┘
-```
+Grace is a self-evolving AI platform with autonomous self-healing, self-learning, and multi-model consensus. The architecture follows a **Brain-Domain-Service** pattern where 8 domain brains expose 87+ actions through direct Python function calls.
 
-## Data Flow Example: Creating a User
+## Directory Structure
 
 ```
-1. HTTP Request
-   POST /users?username=john&email=john@example.com
-        │
-        ▼
-2. FastAPI Route Handler
-   @app.post("/users/")
-   def create_user(username: str, session: Session = Depends(get_session)):
-        │
-        ▼
-3. Dependency Injection
-   get_session() yields new Session
-        │
-        ▼
-4. Repository Pattern
-   repo = UserRepository(session)
-   user = repo.create(username=username, email=email)
-        │
-        ▼
-5. Repository Operations
-   - Validate input
-   - Create model instance
-   - session.add(instance)
-   - session.commit()
-   - session.refresh(instance)
-        │
-        ▼
-6. ORM Conversion
-   BaseModel instance
-   - User object with id, created_at, updated_at
-        │
-        ▼
-7. SQLAlchemy
-   - Generate SQL INSERT statement
-   - Use database engine
-        │
-        ▼
-8. Database
-   - INSERT INTO users (username, email, created_at, updated_at)
-   - VALUES ('john', 'john@example.com', timestamp, timestamp)
-        │
-        ▼
-9. Response
-   200 OK
-   {
-     "id": 1,
-     "username": "john",
-     "email": "john@example.com",
-     "created_at": "2025-12-11T18:35:00",
-     "updated_at": "2025-12-11T18:35:00"
-   }
+backend/
+├── app.py                          FastAPI entry point (21 router imports)
+├── api/
+│   ├── brain_api_v2.py             8 domain brains, 87+ actions, zero HTTP self-calls
+│   ├── core/
+│   │   ├── brain_controller.py     POST /api/v2/{domain}/{action}
+│   │   └── autonomous_controller.py Ouroboros loop + consensus fixer
+│   ├── monitoring/
+│   │   └── health_controller.py    Unified health/probe/triggers
+│   ├── component_health_api.py     16-component behavioral profiling
+│   ├── probe_agent_api.py          Automated endpoint crawler
+│   ├── runtime_triggers_api.py     CPU/RAM/service/code/network triggers
+│   ├── autonomous_loop_api.py      30s Ouroboros cycle
+│   ├── consensus_fixer_api.py      All-model consensus auto-fix
+│   ├── consensus_api.py            Multi-model deliberation
+│   ├── health.py                   /health endpoint
+│   ├── auth.py                     Authentication
+│   ├── genesis_keys.py             Genesis key CRUD
+│   ├── _genesis_tracker.py         Fire-and-forget Genesis tracking
+│   ├── retrieve.py                 RAG retrieval
+│   └── [6 more core service APIs]
+├── core/
+│   ├── services/                   ALL business logic (7 modules)
+│   │   ├── chat_service.py         Conversations, prompts, LLM calls
+│   │   ├── files_service.py        File tree, browse, read/write
+│   │   ├── govern_service.py       Governance, rules, persona, genesis
+│   │   ├── data_service.py         Whitelist sources, flash cache
+│   │   ├── tasks_service.py        Scheduling, time sense
+│   │   ├── code_service.py         Codebase, projects, code gen
+│   │   └── system_service.py       Runtime, health, hot-reload
+│   ├── engines/
+│   │   ├── consensus_engine.py     Multi-model consensus (canonical)
+│   │   └── diagnostic_engine.py    4-layer diagnostics + trust
+│   ├── memory/
+│   │   └── unified_memory.py       Learning + episodic + mesh facade
+│   ├── awareness/
+│   │   └── self_model.py           TimeSense + Mirror unified
+│   └── resilience.py               Circuit breakers, error boundaries
+├── cognitive/                      Core intelligence modules
+├── database/                       SQLite with WAL, retry, session isolation
+├── genesis/                        Genesis key provenance system
+├── llm_orchestrator/               Multi-LLM client (Ollama, Kimi, Opus)
+├── diagnostic_machine/             4-layer diagnostic pipeline
+└── tests/                          Enterprise test suite
 ```
 
-## Connection Lifecycle
+## Brain Domains
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Startup                       │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  1. Load configuration from .env
-│     DATABASE_TYPE=postgresql
-│     DATABASE_HOST=localhost
-│                                                               │
-│  2. Create DatabaseConfig
-│     config = DatabaseConfig.from_env()
-│                                                               │
-│  3. Initialize DatabaseConnection (singleton)
-│     DatabaseConnection.initialize(config)
-│     ├─ Create connection string
-│     ├─ Create SQLAlchemy engine
-│     └─ Enable features (foreign keys, pooling, etc.)
-│                                                               │
-│  4. Initialize SessionLocal factory
-│     initialize_session_factory()
-│     └─ Bind engine to session maker
-│                                                               │
-│  5. Create database schema
-│     create_tables()
-│     └─ Create tables from Base.metadata
-│                                                               │
-│  6. Application ready!
-│                                                               │
-└─────────────────────────────────────────────────────────────┘
+| Domain | Actions | Description |
+|--------|---------|-------------|
+| `chat` | 8 | Conversations, prompts, consensus chat, world model |
+| `files` | 9 | File tree, browse, read/write, search, docs |
+| `govern` | 12 | Governance, approvals, rules, persona, genesis keys |
+| `ai` | 12 | Consensus, models, testing, knowledge gaps, oracle |
+| `system` | 23 | Health, runtime, monitoring, autonomous loop, probe |
+| `data` | 7 | Whitelist sources, flash cache |
+| `tasks` | 8 | Scheduling, time sense, planner |
+| `code` | 8 | Codebase, projects, code generation |
 
-┌─────────────────────────────────────────────────────────────┐
-│                    Request Handling                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  For each HTTP Request:
-│                                                               │
-│  1. get_session() dependency called
-│     ├─ Get engine from DatabaseConnection
-│     ├─ Create new session from SessionLocal factory
-│     └─ Provide to route handler
-│                                                               │
-│  2. Route handler executes
-│     ├─ Create repository with session
-│     ├─ Perform database operations
-│     └─ Operations are NOT committed yet
-│                                                               │
-│  3. Route handler returns
-│     ├─ session.commit() if success
-│     ├─ session.rollback() if exception
-│     └─ session.close() always
-│                                                               │
-│  4. Response sent to client
-│                                                               │
-└─────────────────────────────────────────────────────────────┘
+## API Usage
 
-┌─────────────────────────────────────────────────────────────┐
-│                  Application Shutdown                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  1. Application receives shutdown signal
-│                                                               │
-│  2. Lifespan context manager exit
-│     DatabaseConnection.close()
-│     ├─ Dispose of all connections
-│     ├─ Close connection pool
-│     └─ Release resources
-│                                                               │
-│  3. Application stops
-│                                                               │
-└─────────────────────────────────────────────────────────────┘
+```bash
+# Brain v1 (POST with action in body)
+POST /brain/chat { "action": "send", "payload": { "chat_id": 1, "message": "hello" } }
+
+# Brain v2 (clean REST)
+POST /api/v2/chat/send { "chat_id": 1, "message": "hello" }
+
+# Orchestration (multi-brain)
+POST /brain/orchestrate { "steps": [
+    {"brain": "system", "action": "runtime"},
+    {"brain": "ai", "action": "models"}
+]}
 ```
 
-## Connection Pooling Visualization
+## Autonomous Loop (Ouroboros)
 
-### SQLite (StaticPool)
-
-```
-┌────────────────────────────────┐
-│      SQLite Database           │
-│  (Single file: grace.db)       │
-├────────────────────────────────┤
-│                                │
-│  ┌──────────────────────────┐  │
-│  │  Single Connection       │  │
-│  │  (StaticPool)            │  │
-│  └──────────────────────────┘  │
-│         ▲         │             │
-│         │         ▼             │
-│  All requests reuse same connection
-│  Fastest for single-threaded access
-│                                │
-└────────────────────────────────┘
-```
-
-### PostgreSQL/MySQL (QueuePool)
+Runs every 30 seconds:
 
 ```
-┌────────────────────────────────────────┐
-│        PostgreSQL/MySQL Database       │
-├────────────────────────────────────────┤
-│                                        │
-│  Pool Configuration:                   │
-│  - pool_size: 5 (default connections)  │
-│  - max_overflow: 10 (extra connections)│
-│  - pool_pre_ping: true (health check)  │
-│                                        │
-│  ┌────────────────────────────────┐   │
-│  │  Connection Pool (QueuePool)   │   │
-│  ├────────────────────────────────┤   │
-│  │ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐          │   │
-│  │ │1│ │2│ │3│ │4│ │5│  (ready) │   │
-│  │ └─┘ └─┘ └─┘ └─┘ └─┘          │   │
-│  │                              │   │
-│  │ +Overflow: ┌─┐ ┌─┐ ┌─┐       │   │
-│  │            │6│ │7│ │8│ ...   │   │
-│  │            └─┘ └─┘ └─┘       │   │
-│  └────────────────────────────────┘   │
-│         ▲         │                    │
-│         │         ▼                    │
-│  Request pool.connect() → get connection
-│  Request pool.release() → return connection
-│                                        │
-│  Health checks with pool_pre_ping      │
-│  Prevents stale connections            │
-│                                        │
-└────────────────────────────────────────┘
+TIME_FILTER → MIRROR → TRIGGER → DECIDE → TRUST_GATE →
+EPISODIC_RECALL → ACT → LEARN → KPI_UPDATE → LOOP
 ```
 
-## Database Schema Relationships
+- **Trust gates**: Block actions below threshold (heal=0.5, code=0.8)
+- **TimeSense**: Defer non-critical to quiet hours
+- **Mirror**: Observe system patterns, detect anomalies
+- **Episodic memory**: Recall similar past problems
+- **KPIs**: Updated every cycle
 
+## Genesis Keys
+
+Every operation creates a Genesis key tracking:
+- **What** happened
+- **Who** did it
+- **When** it occurred
+- **Where** in the system
+- **Why** it was done
+- **How** it was executed
+
+Keys flow through: Event Bus → Component Health → Mirror → Diagnostics → Self-Healing → back to Genesis Keys (closed loop).
+
+## Resilience Patterns
+
+- **Circuit Breakers**: Per-service (3 failures → 120s open → half-open test)
+- **Error Boundaries**: Contain failures, log via Genesis key
+- **Graceful Degradation**: FULL / REDUCED / EMERGENCY / READ_ONLY
+
+## Configuration
+
+Required `.env` settings:
 ```
-users
-┌──────────────┐
-│ id (PK)      │◄─────────┐
-│ username     │          │ 1
-│ email        │          │
-│ full_name    │          │
-│ is_active    │          │
-│ created_at   │          │
-│ updated_at   │          │
-└──────────────┘          │
-                          │ 1:N
-                          │
-                    conversations
-                    ┌──────────────┐
-                    │ id (PK)      │◄─────────┐
-                    │ user_id (FK)─┘          │ 1
-                    │ title        │          │
-                    │ description  │          │
-                    │ model        │          │
-                    │ created_at   │          │
-                    │ updated_at   │          │
-                    └──────────────┘          │
-                                             │ 1:N
-                                             │
-                                        messages
-                                        ┌──────────────┐
-                                        │ id (PK)      │
-                                        │ conversation │─┘
-                                        │  _id (FK)    │
-                                        │ role         │
-                                        │ content      │
-                                        │ tokens       │
-                                        │ created_at   │
-                                        │ updated_at   │
-                                        └──────────────┘
-
-embeddings
-┌──────────────┐
-│ id (PK)      │
-│ text         │
-│ embedding    │
-│ dimension    │
-│ model        │
-│ source       │
-│ created_at   │
-│ updated_at   │
-└──────────────┘
-
-Legend:
-  PK = Primary Key
-  FK = Foreign Key
-  1:N = One-to-Many relationship
+KIMI_API_KEY=your-key           # Moonshot AI
+OPUS_API_KEY=your-key           # Anthropic Claude
+QDRANT_URL=your-cloud-url       # Qdrant Cloud
+QDRANT_API_KEY=your-key         # Qdrant auth
+OLLAMA_URL=http://localhost:11434
+OLLAMA_MODEL_CODE=qwen2.5-coder:7b
+OLLAMA_MODEL_REASON=deepseek-r1:14b
 ```
 
-## Configuration Switching
+## Verification
 
+```bash
+python scripts/verify_system.py   # 26 checks, all should pass
+python -m pytest tests/ -v        # 47+ tests
 ```
-Development (SQLite)
-├─ .env: DATABASE_TYPE=sqlite
-├─ No server setup needed
-├─ File: ./data/grace.db
-└─ Instant startup
-
-          │
-          ▼ (Update .env)
-
-Production (PostgreSQL)
-├─ .env: DATABASE_TYPE=postgresql
-├─ DATABASE_HOST=prod-db.example.com
-├─ DATABASE_PORT=5432
-├─ Setup PostgreSQL server
-└─ Install psycopg2-binary
-
-          │
-          ▼ (Same application code!)
-
-Code changes: 0
-Configuration changes: Database credentials
-Database drivers: Already installed
-```
-
-## Module Dependencies
-
-```
-FastAPI Application
-    │
-    ├─ settings.py (reads DATABASE_* env vars)
-    │
-    ├─ database/__init__.py
-    │   ├─ database/config.py
-    │   │   └─ ConfigType, DatabaseConfig
-    │   │
-    │   ├─ database/connection.py
-    │   │   ├─ DatabaseConnection (uses config)
-    │   │   └─ (creates engine)
-    │   │
-    │   ├─ database/session.py
-    │   │   ├─ SessionLocal (uses engine from connection)
-    │   │   └─ get_session() (creates sessions)
-    │   │
-    │   ├─ database/base.py
-    │   │   └─ BaseModel, Base (independent)
-    │   │
-    │   ├─ database/migration.py
-    │   │   ├─ create_tables() (uses engine)
-    │   │   └─ inspection utilities
-    │   │
-    │   └─ database/repository.py
-    │       └─ BaseRepository (uses sessions)
-    │
-    ├─ models/database_models.py
-    │   └─ (extends BaseModel from database/base.py)
-    │
-    └─ models/repositories.py
-        ├─ (extends BaseRepository)
-        └─ (uses sessions from database/session.py)
-```
-
-## Type Safety and Error Handling
-
-```
-Try-Catch Flow in get_session()
-│
-├─ Create new session from SessionLocal
-│
-├─ TRY:
-│   ├─ Yield session to route handler
-│   │  (route handler uses session)
-│   │
-│   └─ Route handler completes
-│       ├─ Success: session.commit()
-│       │  (persist all changes)
-│       │
-│       └─ Exception: session.rollback()
-│          (discard all changes)
-│
-└─ FINALLY:
-   └─ session.close()
-      (clean up resources)
-
-
-Type Hints Throughout
-
-config: DatabaseConfig
-engine: Engine
-session: Session
-user: User  or  Optional[User]
-users: List[User]
-repo: UserRepository
-
-→ IDE autocomplete
-→ Type checking with mypy
-→ Better error messages
-```
-
----
-
-This architecture provides:
-
-✅ **Flexibility** - Switch databases by changing one setting
-✅ **Simplicity** - Dependency injection in FastAPI
-✅ **Reusability** - Generic repository pattern
-✅ **Safety** - Automatic transaction management
-✅ **Performance** - Connection pooling
-✅ **Reliability** - Health checks and error handling
-✅ **Scalability** - Works with SQLite to enterprise databases

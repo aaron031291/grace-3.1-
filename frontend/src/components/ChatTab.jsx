@@ -99,7 +99,7 @@ function WorldModelPanel({ onClose }) {
     setGraceSending(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/world-model/chat`, {
+      const response = await fetch(`${API_BASE_URL}/api/ask-grace/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, include_system_state: true }),
@@ -462,7 +462,6 @@ export default function ChatTab() {
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
   const [chatMode, setChatMode] = useState("general"); // general, consensus
-  const [useKimi, setUseKimi] = useState(false);
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
 
@@ -475,8 +474,6 @@ export default function ChatTab() {
   });
   const [availableModels, setAvailableModels] = useState([]);
   const [consensusMode, setConsensusMode] = useState(false);
-  const [consensusResult, setConsensusResult] = useState(null);
-  const [consensusRunning, setConsensusRunning] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/docs/by-folder`)
@@ -579,7 +576,7 @@ export default function ChatTab() {
             {[
               { id: "opus", label: "Opus", icon: "🧠", color: "#9c27b0" },
               { id: "kimi", label: "Kimi", icon: "🌙", color: "#e94560" },
-              { id: "qwen", label: "Qwen", icon: "⚡", color: "#2196f3" },
+              { id: "qwen", label: "Qwen 3", icon: "⚡", color: "#2196f3" },
               { id: "reasoning", label: "Reason", icon: "🔮", color: "#ff9800" },
             ].map(m => {
               const isOn = modelToggles[m.id];
@@ -593,7 +590,6 @@ export default function ChatTab() {
                     setModelToggles(newToggles);
                     const activeCount = Object.values(newToggles).filter(Boolean).length;
                     setConsensusMode(activeCount >= 2);
-                    if (m.id === "kimi") setUseKimi(!isOn);
                   }}
                   disabled={!isAvail}
                   title={`${m.label}${modelInfo ? ` — ${modelInfo.strengths?.join(", ")}` : ""}${!isAvail ? " (not configured)" : ""}`}

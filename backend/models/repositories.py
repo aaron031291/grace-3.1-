@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database.repository import BaseRepository
 from models.database_models import User, Conversation, Message, Embedding, Chat, ChatHistory
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 
 class UserRepository(BaseRepository[User]):

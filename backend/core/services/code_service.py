@@ -20,7 +20,8 @@ def _load_projects():
     PROJECTS_META.parent.mkdir(parents=True, exist_ok=True)
     if PROJECTS_META.exists():
         try: return json.loads(PROJECTS_META.read_text())
-        except Exception: pass
+        except Exception as e:
+            logger.warning(f"Failed to load projects metadata: {e}")
     return []
 
 def _save_projects(data):
@@ -60,7 +61,8 @@ def write_file(path, content):
         from api._genesis_tracker import track
         track(key_type="code_change", what=f"File written: {path}",
               who="code_service", file_path=path, tags=["code", "write"])
-    except Exception: pass
+    except Exception as e:
+        logger.debug(f"Genesis tracking unavailable for code_change: {e}")
     return {"path": path, "saved": True}
 
 def create_file(path, content=""):

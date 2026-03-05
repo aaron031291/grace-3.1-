@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
-import { useChunkedUpload, CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
 import UploadProgress from './UploadProgress';
 
 const COLORS = {

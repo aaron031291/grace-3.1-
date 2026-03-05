@@ -54,12 +54,14 @@ def _build_model_registry() -> dict:
     try:
         from settings import settings
         reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
-        code_model = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen2.5-coder:7b"
+        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen3:8b"
+        qwen_has_key = bool(getattr(settings, "QWEN_API_KEY", ""))
     except Exception:
         reason_model = "deepseek-r1:7b"
-        code_model = "qwen2.5-coder:7b"
+        qwen_model = "qwen3:8b"
+        qwen_has_key = False
 
-    return {
+    registry = {
         "opus": {
             "name": "Opus 4.6 (Claude)",
             "provider": "opus",
@@ -73,11 +75,10 @@ def _build_model_registry() -> dict:
             "cost_tier": "cloud",
         },
         "qwen": {
-            "name": f"Qwen Coder — {code_model} (Local)",
-            "provider": "ollama",
-            "task": "code",
-            "strengths": ["code generation", "fast iteration", "local/private", "free"],
-            "cost_tier": "free",
+            "name": f"Qwen 3 — {qwen_model} ({'Cloud' if qwen_has_key else 'Local'})",
+            "provider": "qwen",
+            "strengths": ["code generation", "reasoning", "multilingual", "256K context", "tool calling"],
+            "cost_tier": "cloud" if qwen_has_key else "free",
         },
         "reasoning": {
             "name": f"DeepSeek R1 — {reason_model} (Local)",
@@ -87,6 +88,8 @@ def _build_model_registry() -> dict:
             "cost_tier": "free",
         },
     }
+
+    return registry
 
 
 MODEL_REGISTRY = _build_model_registry()
@@ -125,7 +128,7 @@ def _get_client(model_id: str):
     if not info:
         return None
 
-    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_qwen_coder, get_deepseek_reasoner
+    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_qwen_coder, get_qwen_client, get_deepseek_reasoner
 
     provider = info.get("provider")
     task = info.get("task")
@@ -134,6 +137,8 @@ def _get_client(model_id: str):
         return get_llm_client(provider="opus")
     elif provider == "kimi":
         return get_llm_client(provider="kimi")
+    elif provider == "qwen":
+        return get_qwen_client()
     elif task == "code":
         return get_qwen_coder()
     elif task == "reason":
@@ -161,6 +166,13 @@ def _check_model_available(model_id: str) -> bool:
         return bool(getattr(settings, "OPUS_API_KEY", ""))
     elif info["provider"] == "kimi":
         return bool(getattr(settings, "KIMI_API_KEY", ""))
+    elif info["provider"] == "qwen":
+        if getattr(settings, "QWEN_API_KEY", ""):
+            return True
+        fallback_model = getattr(settings, "OLLAMA_MODEL_FAST", "")
+        if fallback_model:
+            return _ollama_model_exists(fallback_model, settings)
+        return False
     elif info["provider"] == "ollama":
         if info.get("task") == "code":
             model_name = getattr(settings, "OLLAMA_MODEL_CODE", "")
@@ -603,6 +615,19 @@ def run_consensus(
                 "disagreement_count": len(disagreements),
                 "confidence": result.confidence,
             }, "degradation" if len(disagreements) > len(agreements) else "success")
+        except Exception:
+            pass
+
+        # Feed consensus result into adaptive trust (real-time)
+        try:
+            from core.intelligence import ConsensusTrustBridge
+            ConsensusTrustBridge.process_consensus_result({
+                "models_used": models,
+                "agreements": agreements,
+                "disagreements": disagreements,
+                "confidence": result.confidence,
+                "individual_responses": result.individual_responses,
+            })
         except Exception:
             pass
 

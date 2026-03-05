@@ -133,6 +133,26 @@ class DatabaseConnection:
                 f"busy_timeout={SQLITE_BUSY_TIMEOUT_MS}ms, "
                 f"connect_timeout={SQLITE_CONNECT_TIMEOUT_S}s"
             )
+        elif config.db_type == DatabaseType.POSTGRESQL:
+            connect_args = {
+                "options": "-c statement_timeout=30000",
+            }
+            engine = create_engine(
+                connection_string,
+                poolclass=QueuePool,
+                pool_size=config.pool_size,
+                max_overflow=config.max_overflow,
+                pool_pre_ping=config.pool_pre_ping,
+                pool_recycle=getattr(config, 'pool_recycle', 3600),
+                pool_timeout=30,
+                connect_args=connect_args,
+                isolation_level="READ COMMITTED",
+                echo=config.echo,
+            )
+            logger.info(
+                f"PostgreSQL engine configured: pool_size={config.pool_size}, "
+                f"max_overflow={config.max_overflow}, statement_timeout=30s"
+            )
         else:
             engine = create_engine(
                 connection_string,
@@ -144,7 +164,8 @@ class DatabaseConnection:
                 echo=config.echo,
             )
         
-        logger.info(f"Database engine created successfully: {config.get_connection_string()}")
+        safe_url = connection_string.split("@")[-1] if "@" in connection_string else connection_string
+        logger.info(f"Database engine created successfully: {safe_url}")
         return engine
     
     @classmethod

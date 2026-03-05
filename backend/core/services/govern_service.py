@@ -54,7 +54,7 @@ def save_rule_content(doc_id, content):
 
 def dashboard():
     try:
-        from governance.governance_engine import GovernanceEngine
+        from security.governance import GovernanceEngine
         engine = GovernanceEngine()
         return {"timestamp": datetime.utcnow().isoformat(),
                 "pillars": {"self_governance": True, "human_oversight": True}}
@@ -84,9 +84,9 @@ def approve_action(decision_id, action, reason=""):
 
 def get_scores():
     try:
-        from kpi.kpi_tracker import get_tracker
-        tracker = get_tracker()
-        return tracker.get_system_trust()
+        from ml_intelligence.kpi_tracker import get_kpi_tracker
+        tracker = get_kpi_tracker()
+        return tracker.get_system_health()
     except Exception:
         return {"trust_score": 0.5}
 
@@ -138,7 +138,7 @@ def approvals_history(limit=30):
         from database.session import session_scope
         from sqlalchemy import text
         with session_scope() as db:
-            rows = db.execute(text(f"SELECT * FROM governance_decisions ORDER BY id DESC LIMIT {int(limit)}")).fetchall()
+            rows = db.execute(text("SELECT * FROM governance_decisions ORDER BY id DESC LIMIT :lim"), {"lim": int(limit)}).fetchall()
             return {"history": [dict(r._mapping) for r in rows]}
     except Exception:
         return {"history": []}

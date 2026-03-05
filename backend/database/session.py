@@ -24,9 +24,26 @@ _RETRY_MAX = 3
 _RETRY_BACKOFF_S = 0.5
 
 
-def _is_lock_error(exc: Exception) -> bool:
+def _is_retryable_error(exc: Exception) -> bool:
+    """Check for transient errors that are safe to retry on any dialect."""
     msg = str(exc).lower()
-    return "database is locked" in msg or "locked" in msg
+    # SQLite lock errors
+    if "database is locked" in msg or "locked" in msg:
+        return True
+    # PostgreSQL deadlock / serialization failures
+    if "deadlock detected" in msg:
+        return True
+    if "could not serialize access" in msg:
+        return True
+    if "connection reset" in msg or "connection refused" in msg:
+        return True
+    if "server closed the connection unexpectedly" in msg:
+        return True
+    return False
+
+
+def _is_lock_error(exc: Exception) -> bool:
+    return _is_retryable_error(exc)
 
 
 def initialize_session_factory() -> sessionmaker:

@@ -24,6 +24,15 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 RESULTS_DIR = Path(__file__).parent.parent / "data" / "test_results"
+_DISCUSSION_DIR = Path(__file__).parent.parent / "data" / "governance_discussions"
+
+
+def _save_discussion(did: str, discussion: dict):
+    _DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
+    import json as _json
+    (_DISCUSSION_DIR / f"{did}.json").write_text(
+        _json.dumps(discussion, indent=2, default=str)
+    )
 
 
 class DeepTestEngine:
@@ -266,7 +275,7 @@ class DeepTestEngine:
         analysis["escalated_to_governance"] = True
 
         try:
-            from api.governance_discussion_api import _save_discussion, _ensure
+            from core.services.govern_service import _ensure
             import uuid
 
             _ensure()
