@@ -83,6 +83,21 @@ async def live_status():
     except Exception as e:
         status["models"]["opus"] = {"status": f"error: {str(e)[:80]}"}
 
+    # Check Qwen 3 (DashScope)
+    try:
+        from settings import settings
+        qwen_key = getattr(settings, "QWEN_API_KEY", "")
+        qwen_model = getattr(settings, "QWEN_MODEL", "qwen-plus")
+        if qwen_key:
+            status["models"]["qwen"] = {"status": "configured", "model": qwen_model, "mode": "cloud"}
+        elif getattr(settings, "OLLAMA_MODEL_FAST", ""):
+            status["models"]["qwen"] = {"status": "local (via Ollama)", "model": settings.OLLAMA_MODEL_FAST, "mode": "local"}
+        else:
+            status["models"]["qwen"] = {"status": "not configured"}
+            status["warnings"].append("Qwen: no API key and no Ollama model configured")
+    except Exception as e:
+        status["models"]["qwen"] = {"status": f"error: {str(e)[:80]}"}
+
     # Check Ollama
     try:
         import requests

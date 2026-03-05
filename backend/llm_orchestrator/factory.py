@@ -31,6 +31,7 @@ from .ollama_adapter import OllamaLLMClient
 from .openai_client import OpenAILLMClient
 from .kimi_client import KimiLLMClient
 from .opus_client import OpusLLMClient
+from .qwen_client import QwenLLMClient
 from .governance_wrapper import GovernanceAwareLLM
 from settings import settings
 
@@ -50,7 +51,7 @@ def _ollama_with_model(model: str) -> BaseLLMClient:
 def get_llm_client(provider: str = None) -> BaseLLMClient:
     """
     Get a LLM client with governance rules enforced.
-    Providers: ollama, kimi, opus, openai
+    Providers: ollama, kimi, opus, openai, qwen
     """
     provider = provider or settings.LLM_PROVIDER
 
@@ -63,6 +64,10 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
     elif provider == "opus":
         return _wrap(OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+        ))
+    elif provider == "qwen":
+        return _wrap(QwenLLMClient(
+            api_key=getattr(settings, 'QWEN_API_KEY', ''),
         ))
     else:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
@@ -117,8 +122,21 @@ def get_opus_client() -> BaseLLMClient:
     ))
 
 
+def get_qwen_client() -> BaseLLMClient:
+    """Get Qwen 3 — cloud (DashScope) or local (Ollama) depending on config."""
+    return _wrap(QwenLLMClient(
+        api_key=getattr(settings, 'QWEN_API_KEY', ''),
+    ))
+
+
 def get_qwen_coder() -> BaseLLMClient:
-    """Get Qwen 2.5 Coder — best open-source code generation."""
+    """Get Qwen Coder — code generation. Cloud if QWEN_API_KEY set, else Ollama."""
+    if getattr(settings, 'QWEN_API_KEY', ''):
+        code_model = getattr(settings, 'QWEN_CODE_MODEL', '') or 'qwen3-coder'
+        return _wrap(QwenLLMClient(
+            api_key=settings.QWEN_API_KEY,
+            model=code_model,
+        ))
     model = settings.OLLAMA_MODEL_CODE or "qwen2.5-coder:7b"
     return _ollama_with_model(model)
 
@@ -141,6 +159,10 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
     elif provider == "opus":
         return OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+        )
+    elif provider == "qwen":
+        return QwenLLMClient(
+            api_key=getattr(settings, 'QWEN_API_KEY', ''),
         )
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
@@ -185,6 +207,16 @@ def get_all_available_models() -> list:
         "available": bool(settings.OPUS_API_KEY),
         "cost": "cloud",
         "location": "cloud",
+    })
+    models.append({
+        "id": "qwen",
+        "provider": "qwen",
+        "model": getattr(settings, 'QWEN_MODEL', 'qwen-plus'),
+        "description": "Qwen 3 — 256K context, multilingual, code, reasoning (cloud or local)",
+        "available": bool(getattr(settings, 'QWEN_API_KEY', '')) or bool(getattr(settings, 'OLLAMA_MODEL_FAST', '')),
+        "cost": "cloud" if getattr(settings, 'QWEN_API_KEY', '') else "free",
+        "location": "cloud" if getattr(settings, 'QWEN_API_KEY', '') else "local",
+        "strengths": ["code generation", "reasoning", "multilingual", "256K context", "tool calling"],
     })
 
     return models

@@ -121,6 +121,13 @@ class Settings:
     OPUS_BASE_URL: str = os.getenv("OPUS_BASE_URL", "https://api.anthropic.com/v1")
     OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
 
+    # ==================== Qwen 3 (Alibaba DashScope) Configuration ====================
+    QWEN_API_KEY: str = os.getenv("QWEN_API_KEY", "")
+    QWEN_BASE_URL: str = os.getenv("QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1")
+    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen-plus")
+    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3-coder")
+    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwq-plus")
+
     # ==================== Local Model Configuration (per-task) ====================
     OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:7b")
     OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "deepseek-r1:7b")

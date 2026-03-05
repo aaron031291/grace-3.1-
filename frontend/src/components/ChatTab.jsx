@@ -579,7 +579,7 @@ export default function ChatTab() {
             {[
               { id: "opus", label: "Opus", icon: "🧠", color: "#9c27b0" },
               { id: "kimi", label: "Kimi", icon: "🌙", color: "#e94560" },
-              { id: "qwen", label: "Qwen", icon: "⚡", color: "#2196f3" },
+              { id: "qwen", label: "Qwen 3", icon: "⚡", color: "#2196f3" },
               { id: "reasoning", label: "Reason", icon: "🔮", color: "#ff9800" },
             ].map(m => {
               const isOn = modelToggles[m.id];

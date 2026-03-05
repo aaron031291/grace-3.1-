@@ -20,6 +20,7 @@ const MODEL_COLORS = {
   'Opus 4.6 (Claude)': C.opus,
   'Kimi K2.5 (Moonshot)': C.kimi,
   'Qwen 2.5 Coder (Local)': C.qwen,
+  'Qwen 3': C.qwen,
   'DeepSeek R1 (Local)': C.reasoning,
   'consensus': C.success,
   'system': C.dim,

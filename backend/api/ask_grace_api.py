@@ -331,24 +331,29 @@ async def _generate_llm_response(query: str, context: Dict[str, Any]) -> str:
         f"Answer based on the system context above. Be specific and actionable."
     )
 
-    try:
-        from llm_orchestrator.factory import get_llm_client
-        client = get_llm_client()
-        response = client.generate(
-            prompt=user_prompt,
-            system_prompt=system_prompt,
-            temperature=0.3,
-            max_tokens=1500,
-        )
-        return response
-    except Exception as e:
-        logger.warning(f"[ASK-GRACE] LLM generation failed: {e}")
+    providers_to_try = ["qwen", None, "kimi", "opus"]
+
+    for provider in providers_to_try:
+        try:
+            from llm_orchestrator.factory import get_llm_client
+            client = get_llm_client(provider=provider)
+            response = client.generate(
+                prompt=user_prompt,
+                system_prompt=system_prompt,
+                temperature=0.3,
+                max_tokens=1500,
+            )
+            if response and isinstance(response, str) and len(response.strip()) > 10:
+                return response
+        except Exception as e:
+            logger.debug(f"[ASK-GRACE] Provider {provider} failed: {e}")
+            continue
 
     try:
         from cognitive.consensus_engine import run_consensus
         result = run_consensus(
             prompt=user_prompt,
-            models=["kimi", "opus"],
+            models=["qwen", "kimi", "opus"],
             context=system_prompt,
             source="ask_grace",
         )
