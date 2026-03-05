@@ -189,8 +189,8 @@ class ChatCreateRequest(BaseModel):
     folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
-class ChatResponse(BaseModel):
-    """Response model for chat operations."""
+class ChatSessionResponse(BaseModel):
+    """Response model for chat session operations."""
     id: int = Field(..., description="Chat ID")
     title: Optional[str] = Field(None, description="Chat title")
     description: Optional[str] = Field(None, description="Chat description")
@@ -205,7 +205,7 @@ class ChatResponse(BaseModel):
 
 class ChatListResponse(BaseModel):
     """Response model for chat list."""
-    chats: List[ChatResponse] = Field(..., description="List of chats")
+    chats: List[ChatSessionResponse] = Field(..., description="List of chats")
     total: int = Field(..., description="Total number of chats")
     skip: int = Field(..., description="Skip count")
     limit: int = Field(..., description="Limit count")
@@ -379,8 +379,8 @@ async def lifespan(app: FastAPI):
 
     # ==================== Initialize ML Intelligence ====================
     try:
-        from ml_intelligence.integration_orchestrator import MLIntelligenceOrchestrator
-        orchestrator = MLIntelligenceOrchestrator()
+        from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+        orchestrator = get_ml_orchestrator()
         features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
         print(f"[OK] ML Intelligence initialized with features: {features}")
     except Exception as e:
@@ -782,6 +782,8 @@ async def chat(request: ChatRequest):
                 {"role": "user", "content": user_query},
             ]
 
+            import time as _time
+            _greeting_start = _time.time()
             response = client.chat(
                 model=model_name,
                 messages=messages,
@@ -789,11 +791,14 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature or 0.4,
                 max_tokens=request.top_k or 256,
             )
+            _greeting_time = _time.time() - _greeting_start
+
+            msg_text = response.get("message", {}).get("content", "") if isinstance(response, dict) else getattr(getattr(response, "message", None), "content", str(response))
 
             return RawChatResponse(
-                message=response,
+                message=msg_text,
                 model=model_name,
-                generation_time=0.0,
+                generation_time=round(_greeting_time, 3),
                 sources=[],
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
@@ -840,7 +845,7 @@ async def chat(request: ChatRequest):
 
 # ==================== Chat Management Endpoints ====================
 
-@app.post("/chats", response_model=ChatResponse, tags=["Chat Management"])
+@app.post("/chats", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def create_chat(request: ChatCreateRequest, session = Depends(get_session)):
     """
     Create a new chat session.
@@ -877,7 +882,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
             folder_path=request.folder_path or ""
         )
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -1002,7 +1007,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         
         return ChatListResponse(
             chats=[
-                ChatResponse(
+                ChatSessionResponse(
                     id=chat.id,
                     title=chat.title,
                     description=chat.description,
@@ -1027,7 +1032,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         )
 
 
-@app.get("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
+@app.get("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def get_chat(chat_id: int, session = Depends(get_session)):
     """
     Get a specific chat by ID.
@@ -1049,7 +1054,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
                 detail=f"Chat {chat_id} not found"
             )
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -1070,7 +1075,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
         )
 
 
-@app.put("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
+@app.put("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
 async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depends(get_session)):
     """
     Update a chat's settings.
@@ -1118,7 +1123,7 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
         # Update chat
         updated_chat = repo.update(chat_id, **update_data)
         
-        return ChatResponse(
+        return ChatSessionResponse(
             id=updated_chat.id,
             title=updated_chat.title,
             description=updated_chat.description,
