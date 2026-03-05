@@ -213,8 +213,7 @@ class HealingCoordinator:
         try:
             from retrieval.retriever import DocumentRetriever
             from embedding.embedder import get_embedding_model
-            from vector_db.client import get_qdrant_client
-            retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
+            retriever = DocumentRetriever(embedding_model=get_embedding_model())
             chunks = retriever.retrieve(query=problem.get("description", ""), limit=3, score_threshold=0.3)
             if chunks:
                 context["sources"].append({"type": "knowledge_base", "count": len(chunks),

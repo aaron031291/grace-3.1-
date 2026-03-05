@@ -816,24 +816,22 @@ Format as JSON."""
 
         self.governance_requests[request.id] = request
 
-        # Try to integrate with actual governance system
         try:
-            from security.governance import evaluate_governance
+            from api.brain_api_v2 import call_brain
 
-            await evaluate_governance(
-                action_type=request.action.value,
-                actor_id="adaptive_cicd",
-                target_resource=f"pipeline:{trigger.pipeline_id}",
-                metadata={
-                    "risk_level": risk_level,
-                    "description": request.reason,
-                    "analysis": request.llm_analysis,
-                    "deadline": deadline,
+            call_brain("govern", "submit_request", {
+                "type": request.action.value,
+                "resource": f"pipeline:{trigger.pipeline_id}",
+                "risk_level": risk_level,
+                "description": request.reason,
+                "analysis": request.llm_analysis,
+                "deadline": deadline,
+                "metadata": {
                     "trigger_id": trigger.id,
                     "trust_score": trigger.trust_score,
                     "confidence": trigger.confidence
                 }
-            )
+            })
 
         except Exception as e:
             logger.warning(f"[Adaptive] Could not submit to governance system: {e}")

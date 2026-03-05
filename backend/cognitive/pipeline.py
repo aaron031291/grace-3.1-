@@ -489,11 +489,9 @@ class CognitivePipeline:
             try:
                 from retrieval.retriever import DocumentRetriever
                 from embedding.embedder import get_embedding_model
-                from vector_db.client import get_qdrant_client
 
                 retriever = DocumentRetriever(
                     embedding_model=get_embedding_model(),
-                    qdrant_client=get_qdrant_client(),
                 )
                 # Search for content similar to the output
                 chunks = retriever.retrieve(
