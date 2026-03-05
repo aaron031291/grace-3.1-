@@ -154,6 +154,19 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
 
 
+def get_ai_mode_client(task: str = "code") -> BaseLLMClient:
+    """
+    Get a LLM client in AI-to-AI mode.
+    Skips NLP governance prefix (persona, rules prose).
+    Uses structured constraints instead of natural language rules.
+    For internal component-to-component calls only.
+    """
+    client = get_llm_for_task(task)
+    if hasattr(client, 'ai_mode'):
+        client.ai_mode = True
+    return client
+
+
 def get_all_available_models() -> list:
     """List all available models across all providers."""
     models = []

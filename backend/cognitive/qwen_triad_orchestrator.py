@@ -109,6 +109,14 @@ class QwenTriadOrchestrator:
         # 2. TRIAGE — fast model classifies intent
         await self._triage(ctx)
 
+        # 2b. CODE OPERATIONS — route through GRACE protocol with contract enforcement
+        #     AI-to-AI: structured only, no NLP. NLP generated at human boundary.
+        if ctx.triage.get("intent") in ("code", "execute", "debug") and ctx.triage.get("needs_code"):
+            code_result = await self._route_code_through_protocol(ctx, project_folder)
+            if code_result:
+                ctx.total_time_ms = round((time.time() - start) * 1000, 1)
+                return code_result
+
         # 3. TRIAD — all 3 models process in parallel
         triad_start = time.time()
         await self._run_triad(ctx, system_prompt, conversation_history)
@@ -372,6 +380,84 @@ class QwenTriadOrchestrator:
         loop = asyncio.get_event_loop()
         ctx.triage = await loop.run_in_executor(_executor, _sync)
         ctx.user_intent = ctx.triage.get("intent", "chat")
+
+    # ── Code Protocol Route ─────────────────────────────────────────
+
+    async def _route_code_through_protocol(
+        self, ctx: TriadContext, project_folder: str = ""
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Route code operations through the GRACE protocol.
+
+        AI-to-AI: structured GraceMessage/GraceResponse (no NLP).
+        Contract enforcement: deterministic checks on all generated code.
+        NLP: generated ONLY at the human-facing boundary.
+        """
+        def _sync():
+            from core.grace_protocol import (
+                GraceMessage, OperationType, OutputMode, route_message,
+            )
+
+            op_map = {
+                "code": OperationType.CODE_GENERATE,
+                "execute": OperationType.CODE_GENERATE,
+                "debug": OperationType.CODE_FIX,
+            }
+            operation = op_map.get(ctx.user_intent, OperationType.CODE_GENERATE)
+
+            msg = GraceMessage(
+                operation=operation,
+                source="qwen_triad_orchestrator",
+                target="coding_agent",
+                payload={
+                    "prompt": ctx.prompt,
+                    "project_folder": project_folder,
+                    "component": "user_request",
+                    "problems": [],
+                },
+                output_mode=OutputMode.HUMAN,
+                contract_type=operation.value,
+                execution_allowed=ctx.execution_allowed,
+            )
+
+            response = route_message(msg)
+            return response
+
+        loop = asyncio.get_event_loop()
+        try:
+            response = await loop.run_in_executor(_executor, _sync)
+        except Exception as e:
+            logger.warning(f"Protocol route failed, falling back to triad: {e}")
+            return None
+
+        result = {
+            "response": response.human_text or response.error or "Code operation completed.",
+            "triage": ctx.triage,
+            "governance": "contract_enforced",
+            "execution_allowed": ctx.execution_allowed,
+            "protocol": "grace_structured",
+            "contract_result": response.contract_result,
+            "code": response.code,
+            "subsystem_context": {
+                "time": ctx.time_context,
+                "memory": bool(ctx.memory_context),
+                "genesis": bool(ctx.genesis_context),
+                "diagnostics": bool(ctx.diagnostic_context),
+                "healing": bool(ctx.healing_context),
+                "learning": bool(ctx.learning_context),
+                "governance": bool(ctx.governance_context),
+                "mirror": bool(ctx.mirror_context),
+                "trust": ctx.trust_context,
+            },
+            "timing": {
+                "total_ms": ctx.total_time_ms,
+                "gather_ms": ctx.gather_time_ms,
+                "protocol_ms": response.duration_ms,
+            },
+        }
+
+        self._track(ctx)
+        return result
 
     # ── Parallel Triad ────────────────────────────────────────────────
 

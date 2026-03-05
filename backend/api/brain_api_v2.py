@@ -423,7 +423,8 @@ def _code() -> dict:
         "write":     lambda p: write_file(p["path"], p["content"]),
         "create":    lambda p: create_file(p["path"], p.get("content", "")),
         "delete":    lambda p: delete_file(p["path"]),
-        "generate":  lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
+        "generate":  lambda p: _contract_enforced_generate(p),
+        "generate_raw": lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
         "apply":     lambda p: apply_code(p["path"], p["content"]),
         "visual_projects": lambda p: list_visual_projects(),
         "create_project": lambda p: create_project(p.get("name", ""), p.get("description", ""), p.get("type", "fullstack")),
@@ -433,6 +434,45 @@ def _code() -> dict:
         "project_read": lambda p: read_project_file(p["project_id"], p["path"]),
         "project_chat": lambda p: _project_scoped_chat(p),
     }
+
+
+def _contract_enforced_generate(p):
+    """
+    Code generation through GRACE protocol — contract-enforced.
+
+    AI-to-AI: structured protocol (GraceMessage/GraceResponse).
+    NLP: generated only for human-facing output.
+    Contract: deterministic checks (syntax, imports, security, trust).
+    """
+    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
+
+    prompt = p.get("prompt", "")
+    if not prompt:
+        return {"error": "Missing 'prompt'"}
+
+    execution_allowed = p.get("execution_allowed", p.get("execute", True))
+
+    msg = GraceMessage(
+        operation=OperationType.CODE_GENERATE,
+        source="brain.code",
+        target="coding_agent",
+        payload={
+            "prompt": prompt,
+            "project_folder": p.get("project_folder", ""),
+            "file_path": p.get("file_path", ""),
+            "component": p.get("component", "user_request"),
+        },
+        output_mode=OutputMode.HUMAN if p.get("human_facing", True) else OutputMode.AI,
+        contract_type="code_generation",
+        execution_allowed=execution_allowed,
+    )
+
+    response = route_message(msg)
+    result = response.to_dict()
+
+    if response.human_text:
+        result["explanation"] = response.human_text
+    return result
 
 
 def _project_scoped_chat(p):
@@ -490,6 +530,10 @@ def _deterministic() -> dict:
         # Logging
         "log": lambda p: _lifecycle_events(p),
         "log_summary": lambda p: _det_log_summary(),
+
+        # GRACE Protocol (structured AI-to-AI, NLP only human-facing)
+        "protocol_route": lambda p: _protocol_route(p),
+        "protocol_review": lambda p: _protocol_review(p),
     }
 
 
@@ -571,6 +615,52 @@ def _det_contracts():
 def _det_log_summary():
     from core.deterministic_logger import get_event_summary
     return get_event_summary()
+
+
+def _protocol_route(p):
+    """Route a structured message through the GRACE protocol.
+    AI-to-AI: structured only. NLP generated only when output_mode == 'human'."""
+    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
+
+    op_str = p.get("operation", "analyze")
+    try:
+        operation = OperationType(op_str)
+    except ValueError:
+        return {"error": f"Unknown operation: {op_str}. Valid: {[o.value for o in OperationType]}"}
+
+    output_mode = OutputMode.HUMAN if p.get("human_facing", False) else OutputMode.AI
+
+    msg = GraceMessage(
+        operation=operation,
+        source=p.get("source", "brain.deterministic"),
+        target=p.get("target", "auto"),
+        payload=p.get("payload", {}),
+        output_mode=output_mode,
+        contract_type=p.get("contract_type"),
+        execution_allowed=p.get("execution_allowed", False),
+    )
+    return route_message(msg).to_dict()
+
+
+def _protocol_review(p):
+    """Review code through the GRACE protocol — deterministic checks, structured output."""
+    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
+
+    code = p.get("code", "")
+    if not code:
+        return {"error": "Missing 'code' in payload"}
+
+    msg = GraceMessage(
+        operation=OperationType.CODE_REVIEW,
+        source="brain.deterministic",
+        target="code_reviewer",
+        payload={
+            "code": code,
+            "component": p.get("component", "unknown"),
+        },
+        output_mode=OutputMode.HUMAN if p.get("human_facing", False) else OutputMode.AI,
+    )
+    return route_message(msg).to_dict()
 
 
 def _workspace() -> dict:

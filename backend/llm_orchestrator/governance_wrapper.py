@@ -209,10 +209,15 @@ class GovernanceAwareLLM(BaseLLMClient):
     """
     Wraps any LLM client to inject governance rules and persona
     into every call automatically. Tracks usage stats for BI.
+
+    AI-to-AI calls (ai_mode=True): Skip NLP governance prefix,
+    use structured constraints instead. NLP persona/rules only
+    injected for human-facing calls.
     """
 
     def __init__(self, inner: BaseLLMClient):
         self._inner = inner
+        self.ai_mode = False
 
     def generate(
         self,
@@ -225,9 +230,11 @@ class GovernanceAwareLLM(BaseLLMClient):
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
         import time as _time
-        gov_prefix = build_governance_prefix()
-        if gov_prefix:
-            system_prompt = (system_prompt or "") + gov_prefix
+        ai_mode = kwargs.pop("ai_mode", self.ai_mode)
+        if not ai_mode:
+            gov_prefix = build_governance_prefix()
+            if gov_prefix:
+                system_prompt = (system_prompt or "") + gov_prefix
 
         provider_name = type(self._inner).__name__
         start = _time.time()
@@ -287,8 +294,12 @@ class GovernanceAwareLLM(BaseLLMClient):
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
         import time as _time
-        gov_prefix = build_governance_prefix()
+        ai_mode = kwargs.pop("ai_mode", self.ai_mode)
         prompt_preview = messages[-1].get("content", "")[:200] if messages else ""
+        if not ai_mode:
+            gov_prefix = build_governance_prefix()
+        else:
+            gov_prefix = ""
         if gov_prefix:
             messages = list(messages)
             if messages and messages[0].get("role") == "system":
