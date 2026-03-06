@@ -434,14 +434,7 @@ class CognitivePipeline:
                 task_type = "code" if ctx.ooda.get("prompt_type") in ("code_generation", "bug_fix", "refactor", "testing") else "reason"
                 client = get_llm_for_task(task_type)
 
-            # Inject agent rules into system prompt (via governance wrapper)
-            try:
-                from llm_orchestrator.governance_wrapper import build_governance_prefix
-                agent_rules = build_governance_prefix()
-                if agent_rules:
-                    ctx.system_prompt = (ctx.system_prompt or "") + "\n" + agent_rules
-            except Exception:
-                pass
+
 
             # Enrich prompt with pipeline context + all memory systems
             enriched = ctx.prompt

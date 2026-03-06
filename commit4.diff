@@ -1,0 +1,781 @@
+﻿commit 90cc15369a4efb1e7955918365d509acdb8e4715
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Thu Mar 5 19:23:59 2026 +0000
+
+    docs: expand handover doc with 20 critical missing sections (907ΓåÆ1635 lines)
+    
+    Added sections 22-41 covering every gap identified:
+    
+    CRITICAL:
+    - Authentication & Authorization (cookie-based, genesis_id/session_id, no RBAC)
+    - Error Response Contract (Brain API ok:false vs HTTP status codes, retry semantics)
+    - Complete Chat Request Data Flow (9-step walkthrough through every layer)
+    - Environment Setup Gotchas (API keys, Qdrant init, model download, CUDA fallback, hardware)
+    - Multi-Tenancy Isolation Boundaries (row-level + filesystem, what's shared, security)
+    
+    HIGH:
+    - Concurrency Model (20+ thread pool executors with sizes, SQLite WAL behavior)
+    - Migration Strategy (custom scripts, how to add models/columns, no rollback)
+    - LLM Provider Failover (5 providers, timeout values, no factory-level failover)
+    - Qdrant Collection Management (384-dim cosine, auto-created, chunking config)
+    - WebSocket Protocol (voice API message format, connection lifecycle, no auth)
+    - Logging & Observability (4 log files, structured JSON, request_id/trace_id/correlation_id)
+    
+    MEDIUM:
+    - Testing Strategy (test pyramid, conftest fixtures, LLM mocking patterns)
+    - State Machine Diagrams (OODA, diagnostic engine, Grace OS session)
+    - Autonomous Loop/Ouroboros (30s cycle, trust thresholds, how to stop)
+    - Document Ingestion (30+ formats, size limits, chunking strategy)
+    - LIGHTWEIGHT_MODE (what it skips, full minimal mode flags)
+    - Backup & Disaster Recovery (on-demand API, no automation)
+    - Secret Management (.env, k8s Secrets, local vault)
+    - Frontend State Management (5 Zustand stores, HTTP polling)
+    - API Versioning (v1 removed, v2 only)
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+
+diff --git a/docs/DEVELOPER_HANDOVER.md b/docs/DEVELOPER_HANDOVER.md
+index 4dc83c7a..004d4466 100644
+--- a/docs/DEVELOPER_HANDOVER.md
++++ b/docs/DEVELOPER_HANDOVER.md
+@@ -29,6 +29,26 @@
+ 19. [Configuration Reference](#19-configuration-reference)
+ 20. [How to Run Locally](#20-how-to-run-locally)
+ 21. [Key Patterns & Conventions](#21-key-patterns--conventions)
++22. [Authentication & Authorization](#22-authentication--authorization)
++23. [Error Response Contract](#23-error-response-contract)
++24. [Data Flow ΓÇö Complete Chat Request](#24-data-flow--complete-chat-request)
++25. [Environment Setup ΓÇö Gotchas](#25-environment-setup--gotchas)
++26. [Multi-Tenancy Isolation Boundaries](#26-multi-tenancy-isolation-boundaries)
++27. [Concurrency Model](#27-concurrency-model)
++28. [Migration Strategy](#28-migration-strategy)
++29. [LLM Provider Failover](#29-llm-provider-failover)
++30. [Qdrant Collection Management](#30-qdrant-collection-management)
++31. [WebSocket Protocol (Voice API)](#31-websocket-protocol-voice-api)
++32. [Logging & Observability](#32-logging--observability)
++33. [Autonomous Loop (Ouroboros)](#33-autonomous-loop-ouroboros)
++34. [Testing Strategy](#34-testing-strategy)
++35. [Document Ingestion](#35-document-ingestion)
++36. [LIGHTWEIGHT_MODE](#36-lightweight_mode)
++37. [Backup & Disaster Recovery](#37-backup--disaster-recovery)
++38. [Secret Management](#38-secret-management)
++39. [Frontend State Management](#39-frontend-state-management)
++40. [API Versioning](#40-api-versioning)
++41. [State Machine Diagrams](#41-state-machine-diagrams)
+ 
+ ---
+ 
+@@ -904,4 +924,712 @@ python -m pytest tests/ -v --tb=short
+ 
+ ---
+ 
+-*This document covers Grace 3.1 as of commit `589ccd10` on the `Aaron-new2` branch.*
++## 22. Authentication & Authorization
++
++### Token Format
++
++Grace uses **cookie-based authentication**, not JWT or API keys:
++
++| Cookie | Format | Purpose |
++|--------|--------|---------|
++| `genesis_id` | `GU-{uuid hex}` | User identity |
++| `session_id` | `SS-{token hex}` | Session identity |
++
++### How Clients Authenticate
++
++**Option 1 ΓÇö Cookies** (automatic for browsers):
++- First request: `GenesisKeyMiddleware` assigns `genesis_id` and `session_id` cookies
++- Subsequent requests: cookies are sent automatically
++
++**Option 2 ΓÇö Headers** (for API consumers):
++- `X-Genesis-ID: GU-abc123...` ΓÇö overrides cookie
++- `X-Session-ID: SS-def456...` ΓÇö overrides cookie
++
++**Auth check** (`get_current_user` dependency):
++- Only checks that `genesis_id` exists and starts with `GU-`
++- Returns 401 if missing: `{"detail": "Authentication required. Please login."}`
++
++### Roles / RBAC
++
++**No RBAC exists.** All authenticated users have equal access. Rate limiting tiers (free/pro/admin) exist in `core/security.py` but are not enforced by auth middleware.
++
++### Rate Limiting
++
++| Path | Limit |
++|------|-------|
++| `/auth/`, `/login` | 10/minute |
++| `/upload`, `/ingest` | 20/minute |
++| `/chat`, `/grace/`, `/prompt` | 30/minute |
++| Default | 100/minute |
++
++**Brain-level limits** (per domain, RPM): chat: 60, ai: 30, system: 100, files: 100, govern: 50, data: 50, tasks: 100, code: 30.
++
++On 429: response includes `Retry-After`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` headers.
++
++### CORS Policy
++
++Allowed origins (overridable via `CORS_ALLOWED_ORIGINS` env):
++```
++http://localhost:3000, http://localhost:5173, http://localhost:8000
++http://127.0.0.1:3000, http://127.0.0.1:5173, http://127.0.0.1:8000
++```
++
++Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH. Credentials: true. Max-age: 600s.
++
++Custom headers allowed: `X-Genesis-ID`, `X-Session-ID`, `X-Request-ID`.
++
++---
++
++## 23. Error Response Contract
++
++### Brain API Errors (HTTP 200, `ok: false`)
++
++The Brain API **always returns 200** with the error in the body:
++
++```json
++{
++    "brain": "code",
++    "action": "read",
++    "ok": false,
++    "error": "FileNotFoundError: main.py not found",
++    "latency_ms": 3.2,
++    "genesis_key_id": null
++}
++```
++
++Error categories in the `error` field:
++- `"Unknown action 'xyz'. Available: ..."` ΓÇö bad action name
++- `"Rate limit exceeded ΓÇö try again in 60s"` ΓÇö rate limited
++- `"Invalid input in field 'path'"` ΓÇö validation failure
++- Exception message truncated to 300 chars ΓÇö runtime errors
++
++### REST API Errors (Standard HTTP Codes)
++
++| Code | When | Body |
++|------|------|------|
++| 400 | Bad request / validation | `{"detail": "message"}` |
++| 401 | No `genesis_id` cookie/header | `{"detail": "Authentication required. Please login."}` |
++| 404 | Resource not found | `{"detail": "message"}` |
++| 409 | Conflict (e.g. workspace exists) | `{"detail": "message"}` |
++| 413 | Request body > 50 MB (60 MB for chunks) | `{"detail": "Request too large. Maximum size: 50MB"}` |
++| 429 | Rate limit exceeded | `{"detail": "Rate limit exceeded.", "retry_after": N}` |
++| 500 | Unhandled exception | `{"detail": "Error: message"}` |
++| 503 | Service unavailable (LLM, Qdrant down) | `{"detail": "message"}` |
++
++### Retry Semantics
++
++- **429**: Retry after `Retry-After` seconds
++- **503**: Retry with exponential backoff (service may be starting)
++- **500**: Do not retry (bug, not transient)
++- **Brain API `ok: false`**: Application-level error; check `error` field for details
++
++---
++
++## 24. Data Flow ΓÇö Complete Chat Request
++
++Here's exactly what happens when a user sends `POST /brain/chat { "action": "send", "payload": { "chat_id": 5, "message": "How do I handle errors in Python?" } }`:
++
++```
++1. HTTP REQUEST arrives at FastAPI
++   Γöé
++2. MIDDLEWARE CHAIN (outer ΓåÆ inner):
++   Γö£ΓöÇΓöÇ SecurityHeadersMiddleware: adds X-Content-Type-Options, X-Frame-Options, etc.
++   Γö£ΓöÇΓöÇ RateLimitMiddleware: checks /brain/* ΓåÆ 30/min limit ΓåÆ PASS
++   Γö£ΓöÇΓöÇ RequestValidationMiddleware: scans URL for injection patterns ΓåÆ PASS
++   Γö£ΓöÇΓöÇ CORSMiddleware: validates origin ΓåÆ PASS
++   ΓööΓöÇΓöÇ GenesisKeyMiddleware: reads genesis_id cookie ΓåÆ sets request.state.genesis_id
++       creates Genesis Key: key_type=api_request, what="POST /brain/chat"
++   Γöé
++3. BRAIN ROUTER: POST /brain/chat
++   Γö£ΓöÇΓöÇ Parses BrainRequest: action="send", payload={chat_id: 5, message: "..."}
++   ΓööΓöÇΓöÇ Calls _call("chat", "send", payload, _chat())
++   Γöé
++4. _call() DISPATCHER:
++   Γö£ΓöÇΓöÇ Looks up handler: _chat()["send"] ΓåÆ send_prompt(payload)
++   Γö£ΓöÇΓöÇ Starts timer
++   ΓööΓöÇΓöÇ Calls handler
++   Γöé
++5. send_prompt() in core/services/chat_service.py:
++   Γö£ΓöÇΓöÇ Loads chat from DB (session.query(Chat).get(5))
++   Γö£ΓöÇΓöÇ Loads conversation history (last 20 messages)
++   ΓööΓöÇΓöÇ Decides routing: small-talk? RAG? web search?
++   Γöé
++6. MULTI-TIER QUERY HANDLING:
++   Γöé
++   Γö£ΓöÇΓöÇ Tier 1: VECTORDB SEARCH
++   Γöé   Γö£ΓöÇΓöÇ EmbeddingModel.embed_text(["How do I handle errors..."]) ΓåÆ [384-dim vector]
++   Γöé   Γö£ΓöÇΓöÇ QdrantVectorDB.search_vectors("documents", vector, limit=5, threshold=0.5)
++   Γöé   Γö£ΓöÇΓöÇ Results enriched from DB (DocumentChunk ΓåÆ Document JOIN)
++   Γöé   ΓööΓöÇΓöÇ If quality > 0.6 ΓåÆ RAG response
++   Γöé
++   Γö£ΓöÇΓöÇ Tier 2: MODEL KNOWLEDGE (if Tier 1 insufficient)
++   Γöé   Γö£ΓöÇΓöÇ get_llm_client() ΓåÆ OllamaAdapter (or Kimi/Opus/Qwen)
++   Γöé   ΓööΓöÇΓöÇ LLM generates response with conversation history as context
++   Γöé
++   Γö£ΓöÇΓöÇ Tier 3: INTERNET SEARCH (if Tier 2 confidence < 0.7)
++   Γöé   Γö£ΓöÇΓöÇ SerpAPIService.search("Python error handling")
++   Γöé   ΓööΓöÇΓöÇ Results auto-ingested into VectorDB for future queries
++   Γöé
++   ΓööΓöÇΓöÇ Tier 4: USER CONTEXT (if confidence still low)
++       ΓööΓöÇΓöÇ Returns knowledge gap request to user
++   Γöé
++7. RESPONSE ASSEMBLY:
++   Γö£ΓöÇΓöÇ Build RAG prompt with retrieved chunks as context
++   Γö£ΓöÇΓöÇ LLM generates final response
++   Γö£ΓöÇΓöÇ Save assistant message to ChatHistory
++   ΓööΓöÇΓöÇ Genesis Key: key_type=ai_response, what="RAG retrieval: 3 chunks"
++   Γöé
++8. _call() COMPLETION:
++   Γö£ΓöÇΓöÇ Records latency
++   Γö£ΓöÇΓöÇ Creates Genesis Key: key_type=api_request, what="brain/chat/send"
++   ΓööΓöÇΓöÇ Returns BrainResponse(ok=true, data={response, chunks, model}, latency_ms=450)
++   Γöé
++9. RESPONSE TO CLIENT:
++   ΓööΓöÇΓöÇ HTTP 200 with BrainResponse JSON
++```
++
++---
++
++## 25. Environment Setup ΓÇö Gotchas
++
++### Required API Keys (No Defaults)
++
++| Variable | Required For | Impact Without |
++|----------|-------------|----------------|
++| `KIMI_API_KEY` | Kimi K2.5 LLM | Kimi provider unavailable; consensus runs without it |
++| `OPUS_API_KEY` | Opus 4.6 / Claude | Opus provider unavailable |
++| `SERPAPI_KEY` | Web search (Tier 3) | Internet search disabled; RAG-only |
++| `QDRANT_API_KEY` | Qdrant Cloud only | Not needed for local Qdrant |
++
++### Qdrant Collection Initialization
++
++The `documents` collection is created automatically on first ingestion. Configuration:
++- Vector size: **384** (for `all-MiniLM-L6-v2`) ΓÇö auto-detected from embedding model
++- Distance: **cosine**
++- No manual setup needed; `TextIngestionService.__init__` handles it
++
++### Embedding Model Download
++
++- Default model: `all-MiniLM-L6-v2` (~80 MB download)
++- First run: downloads from HuggingFace (1ΓÇô5 min depending on connection)
++- Cached at: `~/.cache/huggingface/` or `backend/models/embedding/`
++- Skip with: `SKIP_EMBEDDING_LOAD=true` (disables RAG retrieval)
++
++### CUDA vs CPU Fallback
++
++- `EMBEDDING_DEVICE=cuda` (default) ΓÇö uses GPU if available
++- Auto-fallback: if CUDA OOM during retrieval, embedding model moves to CPU and retries
++- Force CPU: `EMBEDDING_DEVICE=cpu`
++- GPU memory: ~500 MB for embedding model, ~2 GB for reranker
++
++### Minimum Hardware
++
++| Mode | CPU | RAM | GPU | Disk |
++|------|-----|-----|-----|------|
++| Development (CPU) | 4 cores | 8 GB | None | 5 GB |
++| Development (GPU) | 4 cores | 16 GB | 4 GB VRAM | 10 GB |
++| Production | 8+ cores | 32 GB | 8 GB VRAM | 50 GB |
++
++---
++
++## 26. Multi-Tenancy Isolation Boundaries
++
++### Isolation Model: Row-Level + Filesystem
++
++Workspaces are isolated at **two levels**:
++
++**1. Database ΓÇö Row-Level Isolation**
++- Every table with tenant data has `workspace_id` column
++- Queries always filter by `workspace_id`: `session.query(FileVersion).filter_by(workspace_id=ws.id)`
++- No schema-level or database-level isolation; all workspaces share one database
++- Cross-workspace queries are impossible through the API (workspace_id is always scoped)
++
++**2. Filesystem ΓÇö Path Namespacing**
++- Each workspace has its own `root_path` directory
++- Workspace creation: `mkdir(root_path / "knowledge_base")`, `mkdir(root_path / "data")`
++- File operations in `InternalVCS` resolve paths relative to `workspace.root_path`
++- No symlink following; no path traversal (resolved via `Path.resolve()`)
++
++### What's NOT Isolated
++
++| Resource | Shared? | Notes |
++|----------|---------|-------|
++| Database connection | Shared | Single engine, single connection pool |
++| Qdrant collection | Shared | All workspaces use `"documents"` collection |
++| Embedding model | Shared | Single model instance in memory |
++| LLM providers | Shared | Same Ollama/Kimi/Opus/Qwen for all |
++| Layer 1 message bus | Shared | Events visible across workspaces |
++| CPU/Memory | Shared | No resource quotas per workspace |
++
++### Can Workspaces Access Each Other's Data?
++
++**No, through the API.** Every workspace operation requires `workspace_id` and the VCS/pipeline code always scopes queries. However, at the database level there's no enforced constraint ΓÇö a raw SQL query could cross boundaries. For stronger isolation in production, use separate databases per tenant.
++
++---
++
++## 27. Concurrency Model
++
++### Thread Pool Executors
++
++| Executor | Size | Location | Purpose |
++|----------|------|----------|---------|
++| `vcs` | 4 | `genesis/internal_vcs.py` | VCS DB operations |
++| `graph-persist` | 2 | `cognitive/magma/graph_persistence.py` | Graph node/edge persistence |
++| `qwen-pool` | 3 | `llm_orchestrator/qwen_pool.py` | Qwen LLM calls |
++| `qwen-triad` | 6 | `cognitive/qwen_triad_orchestrator.py` | Triad orchestration |
++| `agent-coord` | 4 | `cognitive/qwen_agents.py` | Agent coordination |
++| `orchestrator` | 8 | `core/brain_orchestrator.py` | Brain orchestration |
++| IO workers | 16 | `core/worker_pool.py` | General I/O (configurable: `GRACE_IO_WORKERS`) |
++| CPU workers | 4 | `core/worker_pool.py` | CPU-bound tasks (configurable: `GRACE_CPU_WORKERS`) |
++| Layer 1 connectors | 4 each | `layer1/components/*.py` | DB ops in message handlers |
++
++### SQLite Under Load
++
++- **WAL mode**: Multiple concurrent readers, single writer
++- **`StaticPool`**: All threads share one connection ΓÇö writes are serialized
++- **`busy_timeout=30s`**: Writer waits up to 30s for lock before failing
++- **Retry logic**: 3 retries with 0.5s backoff on "database is locked"
++- **Known risk**: Under high concurrent writes, requests queue at the connection level. For production, use PostgreSQL.
++
++### Circuit Breakers
++
++`CircuitBreaker` protects external services:
++- States: CLOSED ΓåÆ OPEN (after 3 failures) ΓåÆ HALF_OPEN (after 120s) ΓåÆ CLOSED (on success)
++- Each external service gets its own breaker via `get_breaker("service_name")`
++
++### Graceful Degradation
++
++System-wide degradation levels: `FULL` ΓåÆ `REDUCED` ΓåÆ `EMERGENCY` ΓåÆ `READ_ONLY`
++
++---
++
++## 28. Migration Strategy
++
++### How Migrations Work
++
++Grace uses **custom Python migration scripts**, not Alembic:
++
++1. `database/migration.py` ΓÇö `create_tables()` calls `BaseModel.metadata.create_all(engine)` which creates any missing tables
++2. `run_migrations.py` ΓÇö imports all models (so they register with SQLAlchemy), then calls `create_all()`
++3. Column migrations ΓÇö individual scripts like `migrate_add_metadata_columns.py`
++
++### Adding a New Model
++
++1. Create the model class in `models/your_models.py`, extending `BaseModel`
++2. Import it in `run_migrations.py` (add to the try/except block)
++3. Import it in `database/migration.py`
++4. Run `python run_migrations.py` ΓÇö `create_all()` creates the new table
++
++### Adding a New Column
++
++1. Write a migration script: `database/migrations/add_your_column.py`
++2. Use `ALTER TABLE` via `engine.execute(text("ALTER TABLE x ADD COLUMN y ..."))` with `IF NOT EXISTS` checks
++3. Register in `run_migrations.py` or `run_all_migrations.py`
++
++### Rollback
++
++**No automated rollback.** Options:
++- Restore from backup (`POST /api/runtime/backup` creates backups in `data/backups/`)
++- Manual SQL to undo column additions
++- `drop_tables()` exists but destroys all data
++
++### Production Recommendation
++
++Use PostgreSQL with proper backup/restore. For column migrations, use the `ALTER TABLE` scripts with `IF NOT EXISTS` guards. Test migrations on a copy first.
++
++---
++
++## 29. LLM Provider Failover
++
++### Providers
++
++| Provider | Config | Timeout | Model |
++|----------|--------|---------|-------|
++| **ollama** (default) | `OLLAMA_URL` | 120s | `mistral:7b` (configurable) |
++| **openai** | `LLM_API_KEY` | 60s | `gpt-4` (configurable) |
++| **kimi** | `KIMI_API_KEY` | 120s | `kimi-k2-0520` |
++| **opus** | `OPUS_API_KEY` | 120s | `claude-sonnet-4-20250514` |
++| **qwen** | `QWEN_*` vars | 180s | `qwen3-235b-a22b` |
++
++### Failover Behavior
++
++**Factory (`get_llm_client`)**: No automatic failover. Returns the single provider configured by `LLM_PROVIDER`. If that provider is down, the call fails.
++
++**Consensus**: Runs all available providers in parallel. If one fails, consensus proceeds with the remaining models. Minimum 1 model required.
++
++**Qwen Pool**: Internal failover within the pool ΓÇö if a model hits >50% error rate after 3+ errors, it's marked unhealthy and the pool switches to the next slot (fast ΓåÆ code ΓåÆ reason).
++
++**Task routing** (`get_llm_for_task`): For audit/document tasks, tries Opus/Kimi first, falls back to the default LLM if API keys are missing.
++
++### What Happens When a Provider Is Down
++
++- LLM call raises exception
++- Brain API catches it, returns `ok: false` with error message
++- Genesis Key tracks the error
++- No automatic provider switching at the factory level
++
++---
++
++## 30. Qdrant Collection Management
++
++| Setting | Value |
++|---------|-------|
++| Collection name | `documents` (configurable: `QDRANT_COLLECTION_NAME`) |
++| Vector dimensions | 384 (for `all-MiniLM-L6-v2`); auto-detected from model |
++| Distance metric | Cosine |
++| Created by | `TextIngestionService.__init__()` (auto on first ingestion) |
++
++### Chunking Strategy
++
++| Setting | Default |
++|---------|---------|
++| `INGESTION_CHUNK_SIZE` | 512 characters |
++| `INGESTION_CHUNK_OVERLAP` | 50 characters |
++| Semantic chunking | Disabled (fallback: character-based) |
++
++### Re-indexing
++
++No built-in re-indexing command. To re-index:
++1. `python force_reingest.py` ΓÇö resets all documents to `pending`
++2. Restart backend ΓÇö auto-ingestion picks up pending documents
++3. Or use `POST /brain/system { "action": "process_documents" }`
++
++---
++
++## 31. WebSocket Protocol (Voice API)
++
++### Endpoint
++
++`ws://localhost:8000/voice/ws/continuous`
++
++### Client ΓåÆ Server Messages
++
++```json
++{"type": "start"}                              // Start session
++{"type": "stop"}                               // End session
++{"type": "transcript", "text": "..."}          // Send transcript
++{"type": "audio", "data": "base64..."}         // Send audio for STT
++{"type": "speak", "text": "...", "voice": "..."} // Request TTS
++{"type": "ping"}                               // Keepalive
++```
++
++### Server ΓåÆ Client Messages
++
++```json
++{"type": "session_started", "message": "...", "timestamp": "..."}
++{"type": "transcript_received", "original": "...", "processed": "...", "intent": "...", "timestamp": "..."}
++{"type": "audio_response", "text": "...", "audio": "base64...", "format": "mp3", "timestamp": "..."}
++{"type": "error", "message": "..."}
++{"type": "pong"}
++```
++
++### Authentication
++
++No authentication on the WebSocket endpoint. Any client can connect. Production should add auth middleware or token validation.
++
++---
++
++## 32. Logging & Observability
++
++### Log Files
++
++| File | Level | Format | Rotation |
++|------|-------|--------|----------|
++| Console (stderr) | WARNING+ | Human-readable | ΓÇö |
++| `logs/grace.log` | DEBUG+ | Human-readable | 10 MB ├ù 5 |
++| `logs/grace_structured.jsonl` | INFO+ | JSON | 20 MB ├ù 3 |
++| `logs/grace_audit.log` | WARNING+ | Audit format | 10 MB ├ù 5 |
++
++### Structured Log Fields
++
++```json
++{
++    "ts": "2026-03-04T12:00:00Z",
++    "level": "INFO",
++    "logger": "retrieval.retriever",
++    "msg": "Retrieved 3 chunks for query",
++    "module": "retriever",
++    "funcName": "retrieve",
++    "line": 167,
++    "request_id": "req-abc123",
++    "user_id": "GU-xyz",
++    "session_id": "SS-def"
++}
++```
++
++### Request Tracing
++
++| Mechanism | ID Format | Scope |
++|-----------|-----------|-------|
++| `request_id` | `req-{uuid}` | Per HTTP request (via `LoggingMiddleware`) |
++| `trace_id` | `trace-{uuid}` | Per brain call (via `core/tracing.py`) |
++| `correlation_id` | `corr-{uuid}` | Cross-service (via `core/logging.py`) |
++| Genesis Key | `gk-{uuid}` | Per action (via `_genesis_tracker`) |
++
++To trace a request: find `request_id` in structured logs ΓåÆ find `genesis_key_id` ΓåÆ query Genesis Keys table for full provenance.
++
++---
++
++## 33. Autonomous Loop (Ouroboros)
++
++### What It Does
++
++Runs every **30 seconds**. Cycle: TRIGGER ΓåÆ DIAGNOSE ΓåÆ DECIDE ΓåÆ ACT ΓåÆ LEARN ΓåÆ VERIFY.
++
++Each cycle:
++1. Runs deterministic scans on all registered components
++2. Checks component health and trust scores
++3. Detects orphan processes, Genesis key patterns, memory drift
++4. Decides action based on trust thresholds
++
++### Actions
++
++| Action | Trust Threshold | What It Does |
++|--------|----------------|--------------|
++| HEAL | 0.5 | DB reconnect, cache clear, GC, service restart |
++| LEARN | 0.4 | Record knowledge gaps, ingest into memory |
++| CODE | 0.8 | (Not implemented ΓÇö escalates instead) |
++| ESCALATE | 0.0 | Queue for human review |
++
++### Safety
++
++- **No direct code edits** ΓÇö the CODE path exists in design but is not implemented; most issues escalate
++- HEAL actions are limited to: garbage collection, cache clearing, pool reconnection, diagnostic cycles
++- All actions tracked via Genesis Keys
++
++### How to Stop
++
++| Method | How |
++|--------|-----|
++| Environment | `DISABLE_AUTONOMOUS_LOOP=true` ΓÇö not started at boot |
++| API | `POST /brain/system { "action": "auto_stop" }` |
++| Emergency | `POST /brain/system { "action": "pause" }` ΓÇö pauses entire runtime |
++
++---
++
++## 34. Testing Strategy
++
++### Test Pyramid
++
++| Level | Tests | Env Vars | What |
++|-------|-------|----------|------|
++| Smoke | `test_grace_system.py` Level 1 | All SKIP flags | Can all modules import? |
++| Component | `test_grace_system.py` Level 2 | All SKIP flags | Does each brain return valid output? |
++| Integration | `tests/test_complete_integration.py` | Minimal deps | Do components work together? |
++| E2E | `tests/integration/` | Full stack | Full request lifecycle |
++
++### Running Tests
++
++```bash
++cd backend
++
++# Quick smoke test (no external deps)
++SKIP_EMBEDDING_LOAD=true SKIP_QDRANT_CHECK=true SKIP_OLLAMA_CHECK=true \
++  python -m pytest tests/test_grace_system.py -v
++
++# Full suite
++python -m pytest tests/ -v --tb=short --ignore=tests/integration
++
++# Specific domain
++python -m pytest tests/test_cognitive_engine.py -v
++```
++
++### Mocking LLM Calls
++
++Tests avoid real LLM calls via:
++- `SKIP_LLM_CHECK=true` ΓÇö skips LLM connectivity checks
++- `LIGHTWEIGHT_MODE=true` ΓÇö disables retrieval in learning subagents
++- `DISABLE_CONTINUOUS_LEARNING=true` ΓÇö stops background learning
++- Module-level mocks: `patch("sys.modules[...]")` with `MockLLM`
++- No central LLM mock factory; each test file handles its own mocking
++
++### Test Fixtures (`conftest.py`)
++
++```python
++@pytest.fixture(scope="session")
++def app():  # FastAPI app with in-memory DB
++    
++@pytest.fixture(scope="session")
++def client(app):  # TestClient
++
++@pytest.fixture
++def db_session():  # Database session via session_scope()
++```
++
++DB uses `:memory:` SQLite in tests.
++
++---
++
++## 35. Document Ingestion
++
++### Supported Formats
++
++| Category | Extensions |
++|----------|-----------|
++| **Text** | `.txt`, `.md`, `.json`, `.xml`, `.csv` |
++| **Code** | `.py`, `.js`, `.jsx`, `.ts`, `.tsx`, `.java`, `.cpp`, `.c`, `.h`, `.cs`, `.php`, `.rb`, `.go`, `.rs`, `.swift`, `.kt`, `.scala`, `.sh`, `.bash`, `.sql`, `.html`, `.css`, `.scss`, `.yaml`, `.yml`, `.toml` |
++| **Documents** | `.pdf`, `.docx`, `.doc`, `.xlsx`, `.xls`, `.pptx`, `.ppt` |
++| **Audio** | `.mp3`, `.wav`, `.m4a`, `.flac`, `.ogg`, `.aac` |
++| **Video** | `.mp4`, `.avi`, `.mov`, `.mkv`, `.webm`, `.flv` |
++
++### Size Limits
++
++- Upload: 50 MB per file (60 MB for chunked upload)
++- Configurable via `RequestValidationMiddleware`
++
++### Chunking
++
++- Default: 512 characters per chunk, 50 character overlap
++- Method: Character-based splitting (semantic chunking disabled by default)
++- Configurable: `INGESTION_CHUNK_SIZE`, `INGESTION_CHUNK_OVERLAP`
++
++---
++
++## 36. LIGHTWEIGHT_MODE
++
++When `LIGHTWEIGHT_MODE=true`:
++
++| Component | Behavior |
++|-----------|----------|
++| Learning subagents | Use `NullRetriever` (no vector search) |
++| Embedding model | Still loads unless `SKIP_EMBEDDING_LOAD=true` |
++| Qdrant | Still connects unless `SKIP_QDRANT_CHECK=true` |
++| Ollama | Still connects unless `SKIP_OLLAMA_CHECK=true` |
++| Auto-ingestion | Still runs unless `SKIP_AUTO_INGESTION=true` |
++
++For true minimal mode, set all SKIP flags:
++```bash
++LIGHTWEIGHT_MODE=true SKIP_EMBEDDING_LOAD=true SKIP_QDRANT_CHECK=true \
++SKIP_OLLAMA_CHECK=true SKIP_AUTO_INGESTION=true DISABLE_AUTONOMOUS_LOOP=true
++```
++
++---
++
++## 37. Backup & Disaster Recovery
++
++### Creating Backups
++
++```
++POST /api/runtime/backup
++```
++
++- **PostgreSQL**: runs `pg_dump` ΓåÆ `data/backups/grace_{timestamp}.sql`
++- **SQLite**: copies DB file ΓåÆ `data/backups/grace_{timestamp}.db`
++
++### Workspace Snapshots
++
++```
++POST /brain/workspace { "action": "snapshot_dir", "payload": { "workspace_id": "...", "directory_path": "" } }
++```
++
++Snapshots entire workspace file tree into VCS (database-backed).
++
++### No Automated Backup
++
++Backups are on-demand via API. For production:
++- Schedule `pg_dump` via cron
++- Backup Qdrant snapshots to object storage
++- Export Genesis Keys via archival service (daily JSON archives in `knowledge_base/layer_1/`)
++
++---
++
++## 38. Secret Management
++
++### Development
++
++Secrets in `.env` file (gitignored). Copy from `.env.example`.
++
++### Kubernetes
++
++```yaml
++apiVersion: v1
++kind: Secret
++metadata:
++  name: grace-secrets
++  namespace: grace
++type: Opaque
++stringData:
++  DATABASE_URL: "postgresql://grace:grace@postgres-service:5432/grace"
++  JWT_SECRET: "change-this-in-production"
++  API_KEY: "change-this-api-key"
++```
++
++Backend deployment mounts via `envFrom: secretRef: grace-secrets`.
++
++### Local Vault
++
++`core/security.py` ΓÇö encrypted vault at `data/.vault.enc`:
++- Encrypted with Fernet using `GRACE_MASTER_KEY` env var
++- API: `store_secret()`, `get_secret()`, `rotate_key()`
++- No HashiCorp Vault integration
++
++---
++
++## 39. Frontend State Management
++
++### Zustand Stores
++
++| Store | Persisted? | Key State |
++|-------|-----------|-----------|
++| `usePreferencesStore` | Yes (`grace-preferences`) | Theme, sidebar, font, shortcuts |
++| `useChatStore` | Yes (`grace-chat`, last 50) | Active chat, messages, streaming, draft |
++| `useUIStore` | No | Loading, modals, toasts, search |
++| `useAuthStore` | Yes (`grace-auth`) | User, tokens, genesis keys |
++| `useSystemStore` | No | Connection status, health, services |
++
++### Data Sync
++
++- **HTTP polling only** ΓÇö no WebSocket or SSE for state sync
++- `brainCall(domain, action, payload)` ΓåÆ `fetch("POST /brain/{domain}")`
++- `useConnectionStatus` polls `/api/connections/status` every **30 seconds**
++- Chat messages are fetched on demand, not pushed
++
++---
++
++## 40. API Versioning
++
++- **v1**: Fully removed. Does not exist in the codebase.
++- **v2**: `brain_api_v2.py` is the only Brain API. `core/brain_controller.py` provides an alternative routing pattern at `/api/v2/{domain}/{action}`.
++- No migration path needed ΓÇö v1 was replaced before external consumers existed.
++
++---
++
++## 41. State Machine Diagrams
++
++### OODA Decision Loop
++
++```
++OBSERVE ΓöÇΓöÇΓåÆ ORIENT ΓöÇΓöÇΓåÆ DECIDE ΓöÇΓöÇΓåÆ ACT ΓöÇΓöÇΓåÆ COMPLETED
++   Γåæ                                          Γöé
++   ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ reset() ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
++```
++
++Strict sequence. Each phase validates the current state; out-of-order calls raise exceptions.
++
++### Diagnostic Engine
++
++```
++STOPPED ΓöÇΓöÇΓåÆ STARTING ΓöÇΓöÇΓåÆ RUNNING ΓöÇΓöÇΓåÆ PAUSED
++                            Γöé           Γöé
++                            ΓööΓöÇΓöÇΓöÇΓåÆ ERROR ΓåÉΓöÿ
++```
++
++Triggers: HEARTBEAT (60s), SENSOR_FLAG, CICD_PIPELINE, MANUAL, API, WEBHOOK.
++
++Pipeline per cycle: Sensors ΓåÆ Interpreters ΓåÆ Judgement ΓåÆ Action Router.
++
++### Grace OS Session
++
++```
++initializing ΓåÆ setting_up ΓåÆ planning ΓåÆ executing ΓåÆ verifying ΓåÆ deploying ΓåÆ completed
++                                                                            Γöé
++                                                                         failed
++                                                                            Γöé
++                                                                        rejected
++```
++
++Maps to layers: L1 (setup) ΓåÆ L2 (plan) ΓåÆ L3 (propose) ΓåÆ L4 (evaluate) ΓåÆ L5 (simulate) ΓåÆ L6 (codegen) ΓåÆ L7 (test) ΓåÆ L8 (verify) ΓåÆ L9 (deploy gate).
++
++---
++
++*This document covers Grace 3.1 as of the `Aaron-new2` branch.*

@@ -1,5 +1,4 @@
 """
-import pytest; pytest.importorskip("api.business_intelligence_api", reason="api.business_intelligence_api removed — consolidated into Brain API")
 Integration tests for the Opus 10 Improvements.
 
 Tests verify that all component connections work as designed:
@@ -14,6 +13,7 @@ Tests verify that all component connections work as designed:
 9. Config Cleanup
 10. This test suite itself
 """
+import pytest; pytest.importorskip("api.business_intelligence_api", reason="api.business_intelligence_api removed — consolidated into Brain API")
 
 import os
 import sys

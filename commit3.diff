@@ -1,0 +1,463 @@
+﻿commit ff76011bfc67b8511253526e8cf0c6fed1cf3852
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Thu Mar 5 20:53:29 2026 +0000
+
+    feat(llm): upgrade entire system from Qwen 3 to Qwen 3.5
+    
+    Updated 12 files across the full stack:
+    - settings.py: defaults ΓåÆ qwen3.5:27b (code/reason), qwen3.5:9b (fast)
+    - .env + .env.example: full Qwen 3.5 model configs with hardware tiers
+    - qwen_client.py: updated to Qwen 3.5 with 262K context, DeltaNet arch
+    - qwen_pool.py: pool slots now qwen3.5:27b/9b
+    - factory.py: task routing docs + model listings updated
+    - consensus_engine.py: fallback models ΓåÆ qwen3.5
+    - ollama_adapter.py: default fallback ΓåÆ qwen3.5:9b
+    - brain_api_v2.py: model status endpoint defaults
+    - qwen_agents.py + qwen_triad_orchestrator.py: docstrings
+    - start_grace_windows.py: pull commands
+    - test_qwen_pool.py: test model names
+    
+    Zero qwen3: references remaining in codebase.
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+
+diff --git a/backend/.env.example b/backend/.env.example
+index 09459399..b1c9015a 100644
+--- a/backend/.env.example
++++ b/backend/.env.example
+@@ -61,29 +61,37 @@ DATABASE_ECHO=false
+ # =============================================================================
+ 
+ OLLAMA_URL=http://localhost:11434
+-OLLAMA_LLM_DEFAULT=qwen3:32b
+-
+-# Per-task local models (open source, runs via Ollama)
+-# Tuned for RTX 5090 32GB VRAM / 64GB RAM
+-# Pull:  ollama pull qwen3:32b && ollama pull qwen3:30b && ollama pull qwen3:14b
+-
+-# Code generation ΓÇö 32B dense, highest quality code output
+-OLLAMA_MODEL_CODE=qwen3:32b
+-# Deep reasoning ΓÇö 30B MoE (only 3B active params), 256K context window
+-OLLAMA_MODEL_REASON=qwen3:30b
+-# Fast tasks ΓÇö 14B fits easily alongside the 32B, quick responses
+-OLLAMA_MODEL_FAST=qwen3:14b
++OLLAMA_LLM_DEFAULT=qwen3.5:27b
++
++# Per-task local models (Qwen 3.5, runs via Ollama)
++# Pull: ollama pull qwen3.5:27b && ollama pull qwen3.5:9b
++# For MoE: ollama pull qwen3.5:122b-a10b (122B total, 10B active)
++#
++# Qwen 3.5 features: 201 languages, hybrid Gated DeltaNet,
++# native 262K context, unified multimodal (text, images, video)
++
++# Code generation ΓÇö 27B dense, highest quality for code
++OLLAMA_MODEL_CODE=qwen3.5:27b
++# Deep reasoning ΓÇö 27B dense (or 122B MoE for deeper reasoning)
++OLLAMA_MODEL_REASON=qwen3.5:27b
++# Fast tasks ΓÇö 9B fits easily in VRAM alongside larger models
++OLLAMA_MODEL_FAST=qwen3.5:9b
+ 
+ # ΓöÇΓöÇ Alternative configs for other hardware ΓöÇΓöÇ
++# For 32GB+ VRAM (best quality):
++# OLLAMA_MODEL_CODE=qwen3.5:122b-a10b
++# OLLAMA_MODEL_REASON=qwen3.5:122b-a10b
++# OLLAMA_MODEL_FAST=qwen3.5:9b
++
+ # For 16GB VRAM:
+-# OLLAMA_MODEL_CODE=qwen3:14b
+-# OLLAMA_MODEL_REASON=qwen3:8b
+-# OLLAMA_MODEL_FAST=qwen3:8b
++# OLLAMA_MODEL_CODE=qwen3.5:27b
++# OLLAMA_MODEL_REASON=qwen3.5:9b
++# OLLAMA_MODEL_FAST=qwen3.5:4b
+ 
+ # For 8GB VRAM:
+-# OLLAMA_MODEL_CODE=qwen3:8b
+-# OLLAMA_MODEL_REASON=qwen3:4b
+-# OLLAMA_MODEL_FAST=qwen3:4b
++# OLLAMA_MODEL_CODE=qwen3.5:9b
++# OLLAMA_MODEL_REASON=qwen3.5:4b
++# OLLAMA_MODEL_FAST=qwen3.5:2b
+ 
+ # ==================== Cloud LLMs ====================
+ # Kimi 2.5 (Moonshot AI) ΓÇö reasoning + document analysis
+@@ -96,11 +104,11 @@ OPUS_API_KEY=
+ OPUS_BASE_URL=https://api.anthropic.com/v1
+ OPUS_MODEL=claude-sonnet-4-20250514
+ 
+-# Qwen 3 (Open Source, runs locally via Ollama ΓÇö no API key needed)
+-# 32B dense for general + code, 30B MoE for reasoning (256K context)
+-QWEN_MODEL=qwen3:32b
+-QWEN_CODE_MODEL=qwen3:32b
+-QWEN_REASON_MODEL=qwen3:30b
++# Qwen 3.5 (Open Source, runs locally via Ollama ΓÇö no API key needed)
++# 27B dense for general + code, 262K context, hybrid DeltaNet architecture
++QWEN_MODEL=qwen3.5:27b
++QWEN_CODE_MODEL=qwen3.5:27b
++QWEN_REASON_MODEL=qwen3.5:27b
+ # Optional: set API key for DashScope cloud API instead of local
+ # QWEN_API_KEY=
+ # QWEN_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+diff --git a/backend/api/brain_api_v2.py b/backend/api/brain_api_v2.py
+index 1f902f96..0cbd8515 100644
+--- a/backend/api/brain_api_v2.py
++++ b/backend/api/brain_api_v2.py
+@@ -1696,9 +1696,9 @@ def _triad_status():
+     from settings import settings
+     return {
+         "models": {
+-            "code": settings.OLLAMA_MODEL_CODE or "qwen3:32b",
+-            "reason": settings.OLLAMA_MODEL_REASON or "qwen3:30b",
+-            "fast": settings.OLLAMA_MODEL_FAST or "qwen3:14b",
++            "code": settings.OLLAMA_MODEL_CODE or "qwen3.5:27b",
++            "reason": settings.OLLAMA_MODEL_REASON or "qwen3.5:27b",
++            "fast": settings.OLLAMA_MODEL_FAST or "qwen3.5:9b",
+         },
+         "features": {
+             "async_parallel": True,
+diff --git a/backend/app.py b/backend/app.py
+index f57d7c1e..ef3544c3 100644
+--- a/backend/app.py
++++ b/backend/app.py
+@@ -884,7 +884,7 @@ async def chat_triad(request: TriadChatRequest):
+     """
+     Qwen Triad Chat ΓÇö async parallel processing across all 3 Qwen models.
+ 
+-    Runs qwen3:32b (code), qwen3:30b (reasoning), qwen3:14b (fast) in parallel,
++    Runs qwen3.5:27b (code), qwen3.5:27b (reasoning), qwen3.5:9b (fast) in parallel,
+     gathers context from ALL subsystems (memory, genesis keys, diagnostics,
+     self-healing, self-learning, self-governance, self-mirror, timesense),
+     and synthesizes a unified response.
+diff --git a/backend/cognitive/consensus_engine.py b/backend/cognitive/consensus_engine.py
+index 24cb78cb..e4962513 100644
+--- a/backend/cognitive/consensus_engine.py
++++ b/backend/cognitive/consensus_engine.py
+@@ -54,11 +54,11 @@ def _build_model_registry() -> dict:
+     try:
+         from settings import settings
+         reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
+-        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen3:8b"
++        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen3.5:27b"
+         qwen_has_key = bool(getattr(settings, "QWEN_API_KEY", ""))
+     except Exception:
+         reason_model = "deepseek-r1:7b"
+-        qwen_model = "qwen3:8b"
++        qwen_model = "qwen3.5:9b"
+         qwen_has_key = False
+ 
+     registry = {
+diff --git a/backend/cognitive/qwen_agents.py b/backend/cognitive/qwen_agents.py
+index ef265c66..05b1ea68 100644
+--- a/backend/cognitive/qwen_agents.py
++++ b/backend/cognitive/qwen_agents.py
+@@ -10,9 +10,9 @@ Each Qwen model runs as a specialized, independent agent with:
+ - Progress tracking and Genesis key provenance
+ 
+ Agents:
+-  CodeAgent   (qwen3:32b)  ΓÇö code generation, structured output, fixes
+-  ReasonAgent (qwen3:30b)  ΓÇö deep analysis, architecture, planning
+-  FastAgent   (qwen3:14b)  ΓÇö triage, classification, summaries, synthesis
++  CodeAgent   (qwen3.5:27b)  ΓÇö code generation, structured output, fixes
++  ReasonAgent (qwen3.5:27b)  ΓÇö deep analysis, architecture, planning
++  FastAgent   (qwen3.5:9b)   ΓÇö triage, classification, summaries, synthesis
+ 
+ The agents collaborate via structured messages (GraceMessage/GraceResponse),
+ not NLP. Human-readable text is generated only at the output boundary.
+diff --git a/backend/cognitive/qwen_triad_orchestrator.py b/backend/cognitive/qwen_triad_orchestrator.py
+index 2079468b..0daca540 100644
+--- a/backend/cognitive/qwen_triad_orchestrator.py
++++ b/backend/cognitive/qwen_triad_orchestrator.py
+@@ -3,9 +3,9 @@ Qwen Triad Orchestrator ΓÇö Async parallel processing across 3 Qwen models
+ with full subsystem context gathering.
+ 
+ Models:
+-  qwen3:32b  (code)     ΓÇö code generation, structured output
+-  qwen3:30b  (reason)   ΓÇö deep reasoning, analysis, 256K context
+-  qwen3:14b  (fast)     ΓÇö quick triage, classification, summaries
++  qwen3.5:27b  (code)     ΓÇö code generation, structured output
++  qwen3.5:27b  (reason)   ΓÇö deep reasoning, analysis, 262K context
++  qwen3.5:9b   (fast)     ΓÇö quick triage, classification, summaries
+ 
+ Flow:
+   1. GATHER  ΓÇö pull context from ALL subsystems in parallel
+diff --git a/backend/llm_orchestrator/factory.py b/backend/llm_orchestrator/factory.py
+index 771dac94..85caea4d 100644
+--- a/backend/llm_orchestrator/factory.py
++++ b/backend/llm_orchestrator/factory.py
+@@ -3,18 +3,19 @@ LLM Factory ΓÇö Central access point for ALL AI models.
+ 
+ Model hierarchy:
+   LOCAL (free, fast, private):
+-    - Qwen 2.5 Coder (code generation ΓÇö best open-source coder)
+-    - DeepSeek R1 (reasoning ΓÇö best open-source reasoning)
+-    - Qwen 2.5 (general ΓÇö fast default)
++    - Qwen 3.5 27B (code generation + general ΓÇö best open-source)
++    - Qwen 3.5 27B (reasoning ΓÇö 262K context, hybrid DeltaNet)
++    - Qwen 3.5 9B (fast tasks ΓÇö efficient)
+ 
+   CLOUD (paid, powerful, reasoning):
+     - Opus 4.6 / Claude (deep reasoning, architecture, audit)
+     - Kimi K2.5 (long context, document analysis, 262K window)
++    - OpenAI GPT-4o (general purpose)
+ 
+ Task routing:
+-    code    ΓåÆ Qwen 2.5 Coder (local)
+-    reason  ΓåÆ DeepSeek R1 (local) or Opus (cloud)
+-    fast    ΓåÆ Qwen 2.5 (local)
++    code    ΓåÆ Qwen 3.5 27B (local)
++    reason  ΓåÆ Qwen 3.5 27B (local) or Opus (cloud)
++    fast    ΓåÆ Qwen 3.5 9B (local)
+     general ΓåÆ default model
+     audit   ΓåÆ Opus (cloud)
+     documentΓåÆ Kimi (cloud, 262K context)
+@@ -118,13 +119,13 @@ def get_opus_client() -> BaseLLMClient:
+ 
+ 
+ def get_qwen_client() -> BaseLLMClient:
+-    """Get Qwen 3 via the pool ΓÇö auto-routes to the best model for general tasks."""
++    """Get Qwen 3.5 via the pool ΓÇö auto-routes to the best model for general tasks."""
+     pool = get_qwen_pool()
+     return pool.get_client_for_task("general")
+ 
+ 
+ def get_qwen_coder() -> BaseLLMClient:
+-    """Get Qwen Coder via the pool ΓÇö routes to the code-optimized model."""
++    """Get Qwen 3.5 Coder via the pool ΓÇö routes to the code-optimized model."""
+     pool = get_qwen_pool()
+     return pool.get_client_for_task("code")
+ 
+@@ -173,9 +174,9 @@ def get_all_available_models() -> list:
+ 
+     # Local models
+     for task, model_attr, desc in [
+-        ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 2.5 Coder)"),
+-        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (DeepSeek R1)"),
+-        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 2.5)"),
++        ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 3.5)"),
++        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (Qwen 3.5)"),
++        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 3.5)"),
+     ]:
+         model = getattr(settings, model_attr, "")
+         models.append({
+@@ -215,7 +216,7 @@ def get_all_available_models() -> list:
+                 "id": f"qwen-{key}",
+                 "provider": "qwen",
+                 "model": info["model_name"],
+-                "description": f"Qwen 3 {key} ΓÇö {', '.join(info['tasks'])}",
++                "description": f"Qwen 3.5 {key} ΓÇö {', '.join(info['tasks'])}",
+                 "available": info["healthy"],
+                 "cost": "free",
+                 "location": "local",
+@@ -229,8 +230,8 @@ def get_all_available_models() -> list:
+         models.append({
+             "id": "qwen",
+             "provider": "qwen",
+-            "model": getattr(settings, 'QWEN_MODEL', 'qwen3:32b'),
+-            "description": "Qwen 3 (pool not initialized)",
++            "model": getattr(settings, 'QWEN_MODEL', 'qwen3.5:27b'),
++            "description": "Qwen 3.5 (pool not initialized)",
+             "available": True,
+             "cost": "free",
+             "location": "local",
+diff --git a/backend/llm_orchestrator/ollama_adapter.py b/backend/llm_orchestrator/ollama_adapter.py
+index ea6e7c29..94276423 100644
+--- a/backend/llm_orchestrator/ollama_adapter.py
++++ b/backend/llm_orchestrator/ollama_adapter.py
+@@ -36,7 +36,7 @@ class OllamaLLMClient(BaseLLMClient):
+         # Merge other options from kwargs
+         options.update(kwargs.get("options", {}))
+         
+-        model = model_id or self._default_model or settings.LLM_MODEL or settings.OLLAMA_LLM_DEFAULT or "qwen3:8b"
++        model = model_id or self._default_model or settings.LLM_MODEL or settings.OLLAMA_LLM_DEFAULT or "qwen3.5:9b"
+         
+         # Use generate_response (the actual OllamaClient method)
+         gen_method = getattr(self.client, 'generate', None) or getattr(self.client, 'generate_response', None)
+diff --git a/backend/llm_orchestrator/qwen_client.py b/backend/llm_orchestrator/qwen_client.py
+index 990b0858..8125304d 100644
+--- a/backend/llm_orchestrator/qwen_client.py
++++ b/backend/llm_orchestrator/qwen_client.py
+@@ -1,11 +1,14 @@
+ """
+-Qwen 3 LLM Client ΓÇö open-source model running locally via Ollama.
++Qwen 3.5 LLM Client ΓÇö open-source model running locally via Ollama.
+ 
+ Default mode: LOCAL via Ollama (no API key, no cloud, fully private).
+-  ollama pull qwen3:8b      ΓÇö 8B parameter model (recommended default)
+-  ollama pull qwen3:14b     ΓÇö 14B for better quality on 16GB VRAM
+-  ollama pull qwen3:30b     ΓÇö 30B MoE with 256K context
+-  ollama pull qwen3:32b     ΓÇö 32B dense model for highest quality
++  ollama pull qwen3.5:9b       ΓÇö 9B model (fast, efficient)
++  ollama pull qwen3.5:27b      ΓÇö 27B dense model (recommended default)
++  ollama pull qwen3.5:122b-a10b ΓÇö 122B MoE, 10B active (high quality, 262K context)
++  ollama pull qwen3.5:397b-a17b ΓÇö 397B flagship MoE
++
++Qwen 3.5 features: 201 languages, hybrid Gated DeltaNet architecture,
++native 262K context window, unified multimodal (text, images, video).
+ 
+ Optional cloud mode: set QWEN_API_KEY for DashScope API if needed.
+ """
+@@ -19,12 +22,12 @@ from settings import settings
+ logger = logging.getLogger(__name__)
+ 
+ QWEN_DEFAULT_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+-QWEN_DEFAULT_MODEL = "qwen3:8b"
++QWEN_DEFAULT_MODEL = "qwen3.5:27b"
+ 
+ 
+ class QwenLLMClient(BaseLLMClient):
+     """
+-    Client for Qwen 3 open-source model running locally via Ollama.
++    Client for Qwen 3.5 open-source model running locally via Ollama.
+ 
+     Default: Ollama local mode (free, private, no API key).
+     Optional: DashScope cloud mode when QWEN_API_KEY is set.
+@@ -146,7 +149,7 @@ class QwenLLMClient(BaseLLMClient):
+         **kwargs,
+     ) -> str:
+         ollama_url = getattr(settings, "OLLAMA_URL", "http://localhost:11434")
+-        model_name = model or getattr(settings, "QWEN_MODEL", "") or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3:8b"
++        model_name = model or getattr(settings, "QWEN_MODEL", "") or getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3.5:27b"
+ 
+         payload = {
+             "model": model_name,
+@@ -223,9 +226,9 @@ class QwenLLMClient(BaseLLMClient):
+             full_prompt = f"Existing code context:\n```\n{context}\n```\n\n{prompt}"
+ 
+         if self._use_cloud:
+-            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen3-coder"
++            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or "qwen-coder-plus"
+         else:
+-            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3:8b"
++            code_model = getattr(settings, "QWEN_CODE_MODEL", "") or getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3.5:27b"
+ 
+         return self.generate(
+             prompt=full_prompt,
+@@ -236,7 +239,7 @@ class QwenLLMClient(BaseLLMClient):
+         )
+ 
+     def reason(self, problem: str, context: str = "") -> str:
+-        """Deep reasoning using Qwen's thinking mode or QwQ model."""
++        """Deep reasoning using Qwen 3.5's thinking mode."""
+         system = (
+             "You are a deep reasoning engine. Think step by step through the problem. "
+             "Consider multiple angles, identify assumptions, and verify your conclusions."
+@@ -248,7 +251,7 @@ class QwenLLMClient(BaseLLMClient):
+         if self._use_cloud:
+             reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or "qwq-plus"
+         else:
+-            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3:8b"
++            reason_model = getattr(settings, "QWEN_REASON_MODEL", "") or getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3.5:27b"
+ 
+         return self.generate(
+             prompt=full_prompt,
+diff --git a/backend/llm_orchestrator/qwen_pool.py b/backend/llm_orchestrator/qwen_pool.py
+index 6891058c..4294153c 100644
+--- a/backend/llm_orchestrator/qwen_pool.py
++++ b/backend/llm_orchestrator/qwen_pool.py
+@@ -1,7 +1,7 @@
+ """
+-Qwen Model Pool ΓÇö Async hot-swappable task-routed pool for 3 local Qwen models.
++Qwen Model Pool ΓÇö Async hot-swappable task-routed pool for 3 local Qwen 3.5 models.
+ 
+-Manages qwen3:32b (code/general), qwen3:30b (reasoning), qwen3:14b (fast)
++Manages qwen3.5:27b (code/general/reasoning), qwen3.5:9b (fast)
+ with automatic task-based routing, async execution, health monitoring,
+ and governance contract enforcement.
+ 
+@@ -123,16 +123,16 @@ class QwenModelPool:
+         model_configs = {
+             "code": {
+                 "model_name": getattr(settings, "QWEN_CODE_MODEL", None)
+-                    or getattr(settings, "OLLAMA_MODEL_CODE", None) or "qwen3:32b",
++                    or getattr(settings, "OLLAMA_MODEL_CODE", None) or "qwen3.5:27b",
+                 "tasks": [QwenTask.CODE, QwenTask.GENERAL, QwenTask.AUDIT],
+             },
+             "reason": {
+                 "model_name": getattr(settings, "QWEN_REASON_MODEL", None)
+-                    or getattr(settings, "OLLAMA_MODEL_REASON", None) or "qwen3:30b",
++                    or getattr(settings, "OLLAMA_MODEL_REASON", None) or "qwen3.5:27b",
+                 "tasks": [QwenTask.REASON, QwenTask.DIAGNOSE, QwenTask.HEAL],
+             },
+             "fast": {
+-                "model_name": getattr(settings, "OLLAMA_MODEL_FAST", None) or "qwen3:14b",
++                "model_name": getattr(settings, "OLLAMA_MODEL_FAST", None) or "qwen3.5:9b",
+                 "tasks": [QwenTask.FAST, QwenTask.CHAT, QwenTask.LEARN],
+             },
+         }
+diff --git a/backend/settings.py b/backend/settings.py
+index 0fb6c77a..3e2ed793 100644
+--- a/backend/settings.py
++++ b/backend/settings.py
+@@ -126,15 +126,15 @@ class Settings:
+     # Optional: set QWEN_API_KEY for DashScope cloud API instead
+     QWEN_API_KEY: str = os.getenv("QWEN_API_KEY", "")
+     QWEN_BASE_URL: str = os.getenv("QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1")
+-    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3:32b")
+-    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3:32b")
+-    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwen3:30b")
++    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.5:27b")
++    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3.5:27b")
++    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwen3.5:27b")
+ 
+     # ==================== Local Model Configuration (per-task) ====================
+     # Tuned for RTX 5090 (32GB VRAM, 64GB RAM)
+-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3:32b")
+-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3:30b")
+-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
++    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:27b")
++    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:27b")
++    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:9b")
+ 
+     # ==================== Knowledge Base Configuration ====================
+     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
+diff --git a/backend/tests/test_qwen_pool.py b/backend/tests/test_qwen_pool.py
+index ac873bdd..37d085de 100644
+--- a/backend/tests/test_qwen_pool.py
++++ b/backend/tests/test_qwen_pool.py
+@@ -178,24 +178,24 @@ class TestGovernanceContract:
+ class TestHotSwap:
+ 
+     def test_swap_changes_model(self, pool):
+-        pool.swap_model("fast", "qwen3:4b")
+-        assert pool._slots["fast"].model_name == "qwen3:4b"
++        pool.swap_model("fast", "qwen3.5:4b")
++        assert pool._slots["fast"].model_name == "qwen3.5:4b"
+ 
+     def test_swap_resets_health(self, pool):
+         pool._slots["fast"].healthy = False
+         pool._slots["fast"].total_errors = 10
+-        pool.swap_model("fast", "qwen3:8b")
++        pool.swap_model("fast", "qwen3.5:9b")
+         assert pool._slots["fast"].healthy is True
+         assert pool._slots["fast"].total_errors == 0
+ 
+     def test_swap_creates_new_client(self, pool):
+         old_client = pool._clients["fast"]
+-        pool.swap_model("fast", "qwen3:8b")
++        pool.swap_model("fast", "qwen3.5:9b")
+         assert pool._clients["fast"] is not old_client
+ 
+     def test_swap_invalid_slot_raises(self, pool):
+         with pytest.raises(ValueError):
+-            pool.swap_model("nonexistent", "qwen3:8b")
++            pool.swap_model("nonexistent", "qwen3.5:9b")
+ 
+ 
+ class TestFailover:
+diff --git a/start_grace_windows.py b/start_grace_windows.py
+index ceb634a8..f72777c0 100644
+--- a/start_grace_windows.py
++++ b/start_grace_windows.py
+@@ -156,9 +156,9 @@ def check_ollama():
+             
+             # Check for required Qwen 3 models (RTX 5090 / 32GB VRAM)
+             needed = [
+-                ("qwen3:32b", "code + general"),
+-                ("qwen3:30b", "reasoning (256K context MoE)"),
+-                ("qwen3:14b", "fast tasks"),
++                ("qwen3.5:27b", "code + general + reasoning"),
++                ("qwen3.5:9b", "fast tasks"),
++                ("qwen3.5:122b-a10b", "flagship MoE (262K context)"),
+             ]
+             for model, desc in needed:
+                 found = any(model.split(":")[0] in name for name in model_names)

@@ -161,7 +161,7 @@ def check_ollama():
                 ("qwen3.5:122b-a10b", "flagship MoE (262K context)"),
             ]
             for model, desc in needed:
-                found = any(model.split(":")[0] in name for name in model_names)
+                found = any(name.startswith(model) for name in model_names)
                 if found:
                     print_ok(f"  {model} ({desc}): available")
                 else:

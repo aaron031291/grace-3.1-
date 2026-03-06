@@ -10,7 +10,7 @@ import shutil
 import logging
 import zipfile
 import io
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any
 
@@ -29,7 +29,7 @@ def export_project(project_id: str) -> dict:
     export_dir = DATA_DIR / "exports"
     export_dir.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     zip_name = f"{project_id}_{timestamp}.zip"
     zip_path = export_dir / zip_name
 

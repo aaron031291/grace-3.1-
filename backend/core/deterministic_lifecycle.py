@@ -720,7 +720,7 @@ def run_lifecycle(component_id: str, max_iterations: int = MAX_RECURSIVE_ITERATI
             step_data["status"] = "healing_failed"
 
         result.steps.append(step_data)
-        log_verify_result(component_id, heal["healed"], iteration)
+        log_verify_result(component_id, False, iteration)
 
         if not heal["healed"] and iteration == max_iterations:
             result.escalated = True

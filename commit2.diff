@@ -1,0 +1,39 @@
+﻿commit 59855c4322af396537765746d1d853186d4dc9cc
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Thu Mar 5 20:58:22 2026 +0000
+
+    fix(cognitive): repair broken import in pipeline.py ΓÇö agent_rules_api ΓåÆ governance_wrapper
+    
+    cognitive/pipeline.py imported from api.agent_rules_api (nonexistent module).
+    Replaced with llm_orchestrator.governance_wrapper.build_governance_prefix()
+    which provides the same governance rules injection.
+    
+    Found by deterministic E2E scan (Stage 10, deterministic_bridge_scan).
+    
+    Scan results: 47/54 passed, 1 fail (this fix), 6 warnings (env-specific).
+    Remaining 13 critical broken imports are in test files referencing
+    removed API modules ΓÇö tests need updating but don't affect production.
+    
+    Co-authored-by: aaron031291 <aaron031291@users.noreply.github.com>
+
+diff --git a/backend/cognitive/pipeline.py b/backend/cognitive/pipeline.py
+index 58096204..d777b3fe 100644
+--- a/backend/cognitive/pipeline.py
++++ b/backend/cognitive/pipeline.py
+@@ -434,12 +434,12 @@ class CognitivePipeline:
+                 task_type = "code" if ctx.ooda.get("prompt_type") in ("code_generation", "bug_fix", "refactor", "testing") else "reason"
+                 client = get_llm_for_task(task_type)
+ 
+-            # Inject agent rules into system prompt
++            # Inject agent rules into system prompt (via governance wrapper)
+             try:
+-                from api.agent_rules_api import get_agent_rules_context
+-                agent_rules = get_agent_rules_context()
++                from llm_orchestrator.governance_wrapper import build_governance_prefix
++                agent_rules = build_governance_prefix()
+                 if agent_rules:
+-                    ctx.system_prompt = (ctx.system_prompt or "") + agent_rules
++                    ctx.system_prompt = (ctx.system_prompt or "") + "\n" + agent_rules
+             except Exception:
+                 pass
+ 
