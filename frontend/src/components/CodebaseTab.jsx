@@ -114,6 +114,14 @@ export default function CodebaseTab({ domain = "Global (All Domains)" }) {
     e.stopPropagation();
     setSelectedNode(node);
     setAnalyzePath(node.path);
+
+    // Inject selected file into universal Dev Lab agent context
+    window.selectedArtifacts = [{
+      id: node.path,
+      type: node.type === 'directory' ? 'folder' : 'code',
+      name: node.name
+    }];
+
     setContextMenu({ x: e.clientX, y: e.clientY, node });
   };
 

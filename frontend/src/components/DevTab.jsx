@@ -312,8 +312,52 @@ function BuildArena({ onOpenTaskManager }) {
         style={{ height: 120, padding: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text, fontSize: 14, resize: "none", outline: "none", fontFamily: "inherit", marginBottom: 16, flexShrink: 0 }}
       />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button style={{ padding: "12px 24px", background: C.accent, border: "none", borderRadius: 6, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-          Run Build Pipeline
+        <button
+          onClick={async () => {
+            if (!prompt.trim()) return;
+            const contextBody = window.selectedArtifacts ? window.selectedArtifacts : [];
+            setLogs(prev => [...prev, `>>> Submitting task: "${prompt}"...`]);
+            if (contextBody.length > 0) {
+              setLogs(prev => [...prev, `>>> Attaching ${contextBody.length} files as context...`]);
+            }
+
+            try {
+              const res = await fetch(`${API_BASE_URL}/api/devlab/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  intent: prompt,
+                  context_files: contextBody,
+                  model: 'qwen'
+                })
+              });
+
+              if (res.ok) {
+                const data = await res.json();
+                setActiveTask({ id: data.task_id, name: "Build Pipeline", intent: prompt });
+                setLogs(prev => [...prev, `>>> Task accepted. ID: ${data.task_id}`]);
+
+                // Open Stream Array
+                const eventSource = new EventSource(`${API_BASE_URL}/api/devlab/stream/${data.task_id}`);
+                eventSource.onmessage = (e) => {
+                  setLogs(l => [...l, e.data]);
+                  if (e.data.includes("[END OF STREAM]")) eventSource.close();
+                };
+                eventSource.onerror = () => {
+                  setLogs(l => [...l, "[ERROR] Connection lost."]);
+                  eventSource.close();
+                };
+              } else {
+                setLogs(prev => [...prev, `[ERROR] Build pipeline rejected the request.`]);
+              }
+            } catch (err) {
+              setLogs(prev => [...prev, `[ERROR] Failed to start task: ${err.message}`]);
+            }
+            setPrompt("");
+          }}
+          disabled={!prompt.trim()}
+          style={{ padding: "12px 24px", background: !prompt.trim() ? C.border : C.accent, border: "none", borderRadius: 6, color: !prompt.trim() ? C.dim : "#fff", fontSize: 13, fontWeight: 700, cursor: !prompt.trim() ? "not-allowed" : "pointer" }}>
+          Run Build Pipeline {window.selectedArtifacts?.length ? `(with ${window.selectedArtifacts.length} files)` : ''}
         </button>
       </div>
 

@@ -291,6 +291,13 @@ const FoldersTab = () => {
   }, []);
 
   const handleTreeSelect = useCallback((node) => {
+    // Mount to global context for agents
+    window.selectedArtifacts = [{
+      id: node.path,
+      type: node.type === 'directory' ? 'folder' : 'code',
+      name: node.name
+    }];
+
     if (node.type === 'directory') {
       setCurrentPath(node.path);
       setSelectedFile(null);
@@ -302,6 +309,13 @@ const FoldersTab = () => {
   }, [loadFile]);
 
   const handleDirItemClick = useCallback((item) => {
+    // Mount to global context for agents
+    window.selectedArtifacts = [{
+      id: item.path,
+      type: (item.type === 'directory' || item.is_dir) ? 'folder' : 'code',
+      name: item.name
+    }];
+
     if (item.type === 'directory' || item.is_dir) {
       setCurrentPath(item.path);
       setSelectedFile(null);
