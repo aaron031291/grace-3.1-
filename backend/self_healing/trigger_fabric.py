@@ -378,8 +378,8 @@ def _route_mirror_pattern(pattern: dict) -> None:
 
 
 def _on_rate_limited(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Rate limit hit — log for ops visibility, future circuit breaker."""
+    data = getattr(event, 'data', event)
     service = data.get("service", "unknown")
     logger.warning(
         "[TRIGGER-FABRIC] ⏸ Rate limited on %s — backing off 60s", service
@@ -399,18 +399,18 @@ def _on_rate_limited(event: Any) -> None:
 
 
 def _on_network_healed(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Network heal completed — log for ops."""
+    data = getattr(event, 'data', event)
     fixes = data.get("fixes", [])
     logger.info("[TRIGGER-FABRIC] 🌐 Network healed: %s", " | ".join(str(f) for f in fixes))
 
 
 def _on_probe_result(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """
     Probe sweep result arrived (probe.light.result / probe.deep.result).
     Route any FAIL checks into the error pipeline for self-healing.
     """
+    data = getattr(event, 'data', event)
     failed = data.get("failed", 0)
     results = data.get("results", [])
 
@@ -518,8 +518,8 @@ def _submit_code_action(problem: dict, action: dict) -> None:
 # ── Event handlers ────────────────────────────────────────────────────────
 
 def _on_llm_error(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """LLM call failed → report to error pipeline for healing."""
+    data = getattr(event, 'data', event)
     try:
         _route_exception(
             Exception(f"LLM error from {data.get('provider', 'unknown')}: {data.get('error', '')}"),
@@ -532,8 +532,8 @@ def _on_llm_error(event: Any) -> None:
 
 
 def _on_hallucination(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Hallucination detected → learning trigger: record as negative example."""
+    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
@@ -560,8 +560,8 @@ def _on_hallucination(event: Any) -> None:
 
 
 def _on_knowledge_gap(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Knowledge gap detected → submit coding task to generate missing knowledge."""
+    data = getattr(event, 'data', event)
     try:
         from api.autonomous_loop_api import submit_coding_task
         gap = data.get("gap", data.get("topic", "unknown knowledge gap"))
@@ -582,8 +582,8 @@ def _on_knowledge_gap(event: Any) -> None:
 
 
 def _on_repeated_error(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Same error pattern repeated — escalate priority."""
+    data = getattr(event, 'data', event)
     try:
         from api.autonomous_loop_api import submit_coding_task
         pattern = data.get("pattern", "unknown")
@@ -604,8 +604,8 @@ def _on_repeated_error(event: Any) -> None:
 
 
 def _on_fix_applied(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Fix successfully applied → immediately reward in learning system."""
+    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
@@ -622,8 +622,8 @@ def _on_fix_applied(event: Any) -> None:
 
 
 def _on_verification_rejected(event: Any) -> None:
-    data = getattr(event, \'data\', event)
     """Verification pass rejected code → record as training signal."""
+    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory

@@ -1,0 +1,11 @@
+.ask-tab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ask-panel {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}

@@ -1,0 +1,11 @@
+.architect-tab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.architect-panel {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}

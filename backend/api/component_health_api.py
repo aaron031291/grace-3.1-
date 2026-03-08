@@ -388,8 +388,16 @@ def _classify_component(comp_id: str, comp: dict, keys: List[dict],
     }
 
 
+import time
+_service_health_cache = {"timestamp": 0, "results": {}}
+CACHE_TTL = 30  # seconds
+
 def _check_service_health() -> dict:
-    """Check health for services with URLs or known endpoints."""
+    """Check health for services with URLs or known endpoints (cached globally)."""
+    global _service_health_cache
+    if time.time() - _service_health_cache["timestamp"] < CACHE_TTL:
+        return _service_health_cache["results"]
+
     import urllib.request
     results = {}
 
@@ -432,7 +440,10 @@ def _check_service_health() -> dict:
         except Exception:
             results["ollama_service"] = False
 
+    _service_health_cache["timestamp"] = time.time()
+    _service_health_cache["results"] = results
     return results
+
 
 
 def _evaluate_remediation(components: List[dict]) -> List[dict]:

@@ -1,0 +1,4 @@
+  File "backend/self_healing/trigger_fabric.py", line 521
+    data = getattr(event, \'data\', event)
+                           ^
+SyntaxError: unexpected character after line continuation character
