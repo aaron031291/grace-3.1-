@@ -45,12 +45,11 @@ class ReasoningResult:
     
     def __post_init__(self):
         if self.timestamp is None:
-            from datetime import timezone
-            self.timestamp = datetime.now(timezone.utc)
-
+            self.timestamp = datetime.utcnow()
+    
     @property
     def confidence(self) -> float:
-        """Alias for fusion_confidence for compatibility."""
+        """Single confidence score for decision-making (fusion-weighted)."""
         return self.fusion_confidence
 
 
@@ -224,7 +223,10 @@ class NeuroSymbolicReasoner:
     ) -> Tuple[List[Dict[str, Any]], float]:
         """Perform symbolic (precise) query."""
         if self.learning_memory is None:
-            logger.warning("No learning memory available, returning empty symbolic results")
+            logger.warning(
+                "[NEURO-SYMBOLIC] No learning memory (symbolic results empty). "
+                "Wire LearningMemoryManager in Layer4 or disable neuro-symbolic to silence."
+            )
             return [], 0.0
         
         try:
@@ -244,9 +246,19 @@ class NeuroSymbolicReasoner:
                     
                     # Convert to result format
                     for example in examples:
-                        # Extract text from context/expected_output
-                        context_text = str(example.input_context.get('text', '')) or str(example.input_context)
-                        output_text = str(example.expected_output.get('text', '')) or str(example.expected_output)
+                        import json
+
+                        def _safe_parse(val):
+                            if isinstance(val, dict): return val
+                            if isinstance(val, str):
+                                try: return json.loads(val)
+                                except Exception: return {"text": val}
+                            return {}
+
+                        ctx = _safe_parse(example.input_context)
+                        out = _safe_parse(example.expected_output)
+                        context_text = str(ctx.get('text', '') or str(ctx)[:200])
+                        output_text = str(out.get('text', '') or str(out)[:200])
                         text = f"{context_text} {output_text}".strip()
                         
                         if text:
@@ -267,8 +279,19 @@ class NeuroSymbolicReasoner:
                     ).limit(limit * 2).all()
                     
                     for example in examples:
-                        context_text = str(example.input_context.get('text', '')) if isinstance(example.input_context, dict) else str(example.input_context)
-                        output_text = str(example.expected_output.get('text', '')) if isinstance(example.expected_output, dict) else str(example.expected_output)
+                        import json
+
+                        def _safe_parse(val):
+                            if isinstance(val, dict): return val
+                            if isinstance(val, str):
+                                try: return json.loads(val)
+                                except Exception: return {"text": val}
+                            return {}
+
+                        ctx = _safe_parse(example.input_context)
+                        out = _safe_parse(example.expected_output)
+                        context_text = str(ctx.get('text', '') or str(ctx)[:200])
+                        output_text = str(out.get('text', '') or str(out)[:200])
                         text = f"{context_text} {output_text}".strip()
                         
                         if text:

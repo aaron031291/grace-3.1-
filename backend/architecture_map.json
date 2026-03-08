@@ -1,0 +1,1364 @@
+{
+  "components": {
+    "api/auth.py": {
+      "name": "api.auth",
+      "purpose": "Module with 3 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 5,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "api/autonomous_loop_api.py": {
+      "name": "api.autonomous_loop_api",
+      "purpose": "Autonomous task loop API. Background and one-shot autonomous runs, progress polling, task lifecycle.",
+      "capabilities": [
+        "autonomous_loop",
+        "background_tasks",
+        "task_progress"
+      ],
+      "connections_out": 10,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "api/brain_api_v2.py": {
+      "name": "api.brain_api_v2",
+      "purpose": "Unified brain router: chat response (Cursor-style), consensus, code generation, RAG, file ops, governance, health. Single entry point for all 93+ actions across 8 domains.",
+      "capabilities": [
+        "chat_response",
+        "full_nlp",
+        "multi_model_consensus",
+        "code_generation",
+        "semantic_search",
+        "file_operations",
+        "governance"
+      ],
+      "connections_out": 16,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "api/completion_api.py": {
+      "name": "api.completion_api",
+      "purpose": "Inline code completion (Cursor-style). Context-aware completion from code before/after cursor, optional streaming. Used by IDE and chat.",
+      "capabilities": [
+        "chat_response",
+        "code_completion",
+        "inline_completion"
+      ],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "api/component_health_api.py": {
+      "name": "api.component_health_api",
+      "purpose": "Module with 0 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "api/consensus_fixer_api.py": {
+      "name": "api.consensus_fixer_api",
+      "purpose": "Module with 0 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 5,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "api/docs_library_api.py": {
+      "name": "api.docs_library_api",
+      "purpose": "Module with 0 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "api/file_ingestion.py": {
+      "name": "api.file_ingestion",
+      "purpose": "Module with 3 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "api/health.py": {
+      "name": "api.health",
+      "purpose": "Module with 2 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "api/ingest.py": {
+      "name": "api.ingest",
+      "purpose": "Module with 7 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 2,
+      "isolated": true
+    },
+    "api/live_console_api.py": {
+      "name": "api.live_console_api",
+      "purpose": "Module with 1 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "api/probe_agent_api.py": {
+      "name": "api.probe_agent_api",
+      "purpose": "Module with 0 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "api/retrieve.py": {
+      "name": "api.retrieve",
+      "purpose": "RAG retrieval and semantic search. Multi-tier retrieval (vector → model → context), reranking, trust-aware scoring. Full NLP pipeline for query understanding and document search.",
+      "capabilities": [
+        "full_nlp",
+        "semantic_search",
+        "rag_retrieval",
+        "reranking",
+        "multi_tier"
+      ],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "api/runtime_triggers_api.py": {
+      "name": "api.runtime_triggers_api",
+      "purpose": "Module with 1 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "api/stream_api.py": {
+      "name": "api.stream_api",
+      "purpose": "SSE streaming chat response. Cursor-style streaming: token-by-token delivery, model selection (Kimi/Opus), mention parsing, RAG context injection.",
+      "capabilities": [
+        "chat_response",
+        "streaming",
+        "full_nlp",
+        "multi_model"
+      ],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "api/voice_api.py": {
+      "name": "api.voice_api",
+      "purpose": "Module with 8 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "api/_genesis_tracker.py": {
+      "name": "api._genesis_tracker",
+      "purpose": "Genesis Key creation helper. Every system output gets a Genesis Key (who/what/when/where/why/how). Fires realtime engine and event bus for instant notification.",
+      "capabilities": [
+        "provenance_tracking",
+        "event_firing"
+      ],
+      "connections_out": 3,
+      "connections_in": 45,
+      "isolated": false
+    },
+    "cognitive/active_learning_system.py": {
+      "name": "cognitive.active_learning_system",
+      "purpose": "Module with 3 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/adaptive_test_generator.py": {
+      "name": "cognitive.adaptive_test_generator",
+      "purpose": "Module with 0 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/ambiguity.py": {
+      "name": "cognitive.ambiguity",
+      "purpose": "Module with 3 classes and 13 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/architecture_compass.py": {
+      "name": "cognitive.architecture_compass",
+      "purpose": "Module with 2 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 6,
+      "isolated": true
+    },
+    "cognitive/autonomous_diagnostics.py": {
+      "name": "cognitive.autonomous_diagnostics",
+      "purpose": "Module with 1 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 9,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/autonomous_healing_loop.py": {
+      "name": "cognitive.autonomous_healing_loop",
+      "purpose": "Module with 0 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 7,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/autonomous_healing_system.py": {
+      "name": "cognitive.autonomous_healing_system",
+      "purpose": "Module with 5 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/autonomous_master_integration.py": {
+      "name": "cognitive.autonomous_master_integration",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/autonomous_sandbox_lab.py": {
+      "name": "cognitive.autonomous_sandbox_lab",
+      "purpose": "Module with 5 classes and 26 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "cognitive/auto_research.py": {
+      "name": "cognitive.auto_research",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/blueprint_engine.py": {
+      "name": "cognitive.blueprint_engine",
+      "purpose": "Module with 2 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 9,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/central_orchestrator.py": {
+      "name": "cognitive.central_orchestrator",
+      "purpose": "Grace's Cognitive Operating System. Coordinates all autonomous systems. Global state container, task routing, integration health monitoring. Event bus subscriptions for system-wide awareness.",
+      "capabilities": [
+        "task_routing",
+        "state_sync",
+        "integration_health",
+        "global_awareness"
+      ],
+      "connections_out": 6,
+      "connections_in": 5,
+      "isolated": false
+    },
+    "cognitive/circuit_breaker.py": {
+      "name": "cognitive.circuit_breaker",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 10,
+      "isolated": false
+    },
+    "cognitive/code_sandbox.py": {
+      "name": "cognitive.code_sandbox",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/communication_layer.py": {
+      "name": "cognitive.communication_layer",
+      "purpose": "Module with 1 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "cognitive/consensus_engine.py": {
+      "name": "cognitive.consensus_engine",
+      "purpose": "Multi-model roundtable (Knights of the Roundtable). 4 layers: independent deliberation → consensus formation → alignment → verification. Runs Opus, Kimi, Qwen, and reasoning models in parallel on the ",
+      "capabilities": [
+        "multi_model_consensus",
+        "autonomous_batch",
+        "conflict_resolution"
+      ],
+      "connections_out": 6,
+      "connections_in": 18,
+      "isolated": false
+    },
+    "cognitive/continuous_learning_orchestrator.py": {
+      "name": "cognitive.continuous_learning_orchestrator",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/contradiction_detector.py": {
+      "name": "cognitive.contradiction_detector",
+      "purpose": "Module with 7 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "cognitive/decision_log.py": {
+      "name": "cognitive.decision_log",
+      "purpose": "Module with 1 classes and 12 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "cognitive/decorators.py": {
+      "name": "cognitive.decorators",
+      "purpose": "Module with 0 classes and 19 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/deep_test_engine.py": {
+      "name": "cognitive.deep_test_engine",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 21,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/engine.py": {
+      "name": "cognitive.engine",
+      "purpose": "Module with 3 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 5,
+      "isolated": true
+    },
+    "cognitive/episodic_memory.py": {
+      "name": "cognitive.episodic_memory",
+      "purpose": "Module with 2 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 4,
+      "isolated": true
+    },
+    "cognitive/event_bus.py": {
+      "name": "cognitive.event_bus",
+      "purpose": "In-process pub/sub event system. Components publish events (llm.called, healing.started, trust.updated), subscribers react. Wildcard support. Non-blocking async publish.",
+      "capabilities": [
+        "event_publishing",
+        "event_subscription",
+        "wildcard_matching"
+      ],
+      "connections_out": 0,
+      "connections_in": 20,
+      "isolated": true
+    },
+    "cognitive/examples.py": {
+      "name": "cognitive.examples",
+      "purpose": "Module with 0 classes and 13 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/file_generator.py": {
+      "name": "cognitive.file_generator",
+      "purpose": "Autonomous file creation from natural language prompts. Supports PDF, code, docs, data files. Auto-detects type, generates via appropriate LLM, saves to KB, registers in docs, organises via librarian.",
+      "capabilities": [
+        "file_generation",
+        "multi_format_output"
+      ],
+      "connections_out": 5,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/flash_cache.py": {
+      "name": "cognitive.flash_cache",
+      "purpose": "Reference-based intelligent caching. Stores source URIs + keywords + summaries, NOT full content. Content streamed on demand from original source. Sub-millisecond keyword lookups via inverted index.",
+      "capabilities": [
+        "keyword_lookup",
+        "source_caching",
+        "on_demand_streaming",
+        "keyword_prediction"
+      ],
+      "connections_out": 0,
+      "connections_in": 17,
+      "isolated": true
+    },
+    "cognitive/genesis_memory_chains.py": {
+      "name": "cognitive.genesis_memory_chains",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/ghost_memory.py": {
+      "name": "cognitive.ghost_memory",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/grace_compiler.py": {
+      "name": "cognitive.grace_compiler",
+      "purpose": "Module with 2 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/healing_coordinator.py": {
+      "name": "cognitive.healing_coordinator",
+      "purpose": "Orchestrates the full healing chain: detect→diagnose→fix→verify→learn. Grace and Kimi independently diagnose, coding agent fixes, web search for context.",
+      "capabilities": [
+        "healing_orchestration",
+        "multi_model_diagnosis"
+      ],
+      "connections_out": 6,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/hunter_assimilator.py": {
+      "name": "cognitive.hunter_assimilator",
+      "purpose": "Autonomous code integration triggered by HUNTER keyword. 15-step pipeline: parse→Kimi analyse→pipeline verify→code review→fix→trust→healing pre-check→write→schema→librarian→handshake→contradiction→lea",
+      "capabilities": [
+        "code_integration",
+        "automated_review",
+        "schema_migration"
+      ],
+      "connections_out": 11,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/idle_learner.py": {
+      "name": "cognitive.idle_learner",
+      "purpose": "Background learning during idle time. Kimi teaches the coding agent from a 26-topic curriculum. Identifies knowledge gaps from failed generations.",
+      "capabilities": [
+        "background_learning",
+        "gap_identification",
+        "curriculum_teaching"
+      ],
+      "connections_out": 5,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/immune_system.py": {
+      "name": "cognitive.immune_system",
+      "purpose": "AVN (Autonomous Vigilance Network). Monitors all system health: DB, Qdrant, LLM, memory, disk, API, ingestion. Adaptive scan intervals (10s-5min). Self-heals with rollback. Connects to genesis realtim",
+      "capabilities": [
+        "health_monitoring",
+        "self_healing",
+        "anomaly_detection",
+        "healing_playbook"
+      ],
+      "connections_out": 12,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/ingestion_self_healing_integration.py": {
+      "name": "cognitive.ingestion_self_healing_integration",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 5,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/intelligence_layer.py": {
+      "name": "cognitive.intelligence_layer",
+      "purpose": "Module with 4 classes and 17 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/invariants.py": {
+      "name": "cognitive.invariants",
+      "purpose": "Module with 2 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/knowledge_cycle.py": {
+      "name": "cognitive.knowledge_cycle",
+      "purpose": "Iterative knowledge expansion: Seed→Discover→Score→Enrich→Validate→Reingest. Sources: Oracle DB, RAG, Magma, FlashCache. Trust-aware with depth limits and cost controls.",
+      "capabilities": [
+        "knowledge_expansion",
+        "multi_source_discovery",
+        "trust_scoring"
+      ],
+      "connections_out": 6,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/learning_efficiency_tracker.py": {
+      "name": "cognitive.learning_efficiency_tracker",
+      "purpose": "Module with 4 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/learning_memory.py": {
+      "name": "cognitive.learning_memory",
+      "purpose": "Module with 4 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 17,
+      "isolated": true
+    },
+    "cognitive/learning_subagent_system.py": {
+      "name": "cognitive.learning_subagent_system",
+      "purpose": "Module with 10 classes and 12 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/librarian_autonomous.py": {
+      "name": "cognitive.librarian_autonomous",
+      "purpose": "Autonomous file organization. Watches for new files from ANY source, analyses content, creates directory structures, moves files to correct locations. Uses Kimi for unknown file types. FlashCache for ",
+      "capabilities": [
+        "file_organization",
+        "directory_management",
+        "content_analysis",
+        "taxonomy_maintenance"
+      ],
+      "connections_out": 12,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/live_integration.py": {
+      "name": "cognitive.live_integration",
+      "purpose": "Module with 3 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 7,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "cognitive/loop_orchestrator.py": {
+      "name": "cognitive.loop_orchestrator",
+      "purpose": "Module with 3 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 6,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/magma_bridge.py": {
+      "name": "cognitive.magma_bridge",
+      "purpose": "Module with 0 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 10,
+      "isolated": false
+    },
+    "cognitive/memory_mesh_cache.py": {
+      "name": "cognitive.memory_mesh_cache",
+      "purpose": "Module with 1 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/memory_mesh_integration.py": {
+      "name": "cognitive.memory_mesh_integration",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "cognitive/memory_mesh_learner.py": {
+      "name": "cognitive.memory_mesh_learner",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/memory_mesh_metrics.py": {
+      "name": "cognitive.memory_mesh_metrics",
+      "purpose": "Module with 2 classes and 15 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/memory_mesh_snapshot.py": {
+      "name": "cognitive.memory_mesh_snapshot",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/memory_reconciler.py": {
+      "name": "cognitive.memory_reconciler",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/mirror_self_modeling.py": {
+      "name": "cognitive.mirror_self_modeling",
+      "purpose": "Grace's self-awareness. Analyses Genesis Keys to detect behavioral patterns: what keeps failing, what's improving, efficiency drops, learning plateaus. Lazy-loadable (no DB session required).",
+      "capabilities": [
+        "self_observation",
+        "pattern_detection",
+        "improvement_suggestions"
+      ],
+      "connections_out": 7,
+      "connections_in": 7,
+      "isolated": false
+    },
+    "cognitive/ml_trainer.py": {
+      "name": "cognitive.ml_trainer",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/model_updater.py": {
+      "name": "cognitive.model_updater",
+      "purpose": "Checks Kimi/Opus/Ollama APIs for new model versions. Auto-updates runtime config and persists to .env. Version history tracked.",
+      "capabilities": [
+        "model_discovery",
+        "version_update",
+        "provider_health_check"
+      ],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/notification_system.py": {
+      "name": "cognitive.notification_system",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/ooda.py": {
+      "name": "cognitive.ooda",
+      "purpose": "Module with 3 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/pipeline.py": {
+      "name": "cognitive.pipeline",
+      "purpose": "9-stage cognitive processing chain: TimeSense→OODA→Ambiguity→Invariants→Generate→Contradiction→Hallucination→Trust→Genesis. Every code generation and reasoning task flows through this pipeline.",
+      "capabilities": [
+        "code_generation",
+        "reasoning",
+        "verification",
+        "trust_scoring"
+      ],
+      "connections_out": 12,
+      "connections_in": 7,
+      "isolated": false
+    },
+    "cognitive/predictive_context_loader.py": {
+      "name": "cognitive.predictive_context_loader",
+      "purpose": "Module with 4 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/proactive_healing_engine.py": {
+      "name": "cognitive.proactive_healing_engine",
+      "purpose": "Module with 4 classes and 17 functions",
+      "capabilities": [],
+      "connections_out": 9,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/proactive_learner.py": {
+      "name": "cognitive.proactive_learner",
+      "purpose": "Module with 5 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/procedural_memory.py": {
+      "name": "cognitive.procedural_memory",
+      "purpose": "Module with 2 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 3,
+      "isolated": true
+    },
+    "cognitive/qwen_coding_net.py": {
+      "name": "cognitive.qwen_coding_net",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 11,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/reporting_engine.py": {
+      "name": "cognitive.reporting_engine",
+      "purpose": "Module with 0 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 8,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "cognitive/reverse_knn.py": {
+      "name": "cognitive.reverse_knn",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 4,
+      "isolated": false
+    },
+    "cognitive/sandbox_engine.py": {
+      "name": "cognitive.sandbox_engine",
+      "purpose": "Module with 3 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 7,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/self_healing.py": {
+      "name": "cognitive.self_healing",
+      "purpose": "Module with 1 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "cognitive/semantic_procedure_finder.py": {
+      "name": "cognitive.semantic_procedure_finder",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/system_registry.py": {
+      "name": "cognitive.system_registry",
+      "purpose": "Module with 2 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/test_framework.py": {
+      "name": "cognitive.test_framework",
+      "purpose": "Module with 0 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 11,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "cognitive/thread_learning_orchestrator.py": {
+      "name": "cognitive.thread_learning_orchestrator",
+      "purpose": "Module with 5 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "cognitive/time_sense.py": {
+      "name": "cognitive.time_sense",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 8,
+      "isolated": true
+    },
+    "cognitive/training_ingest.py": {
+      "name": "cognitive.training_ingest",
+      "purpose": "Module with 0 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "cognitive/training_pipeline.py": {
+      "name": "cognitive.training_pipeline",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "cognitive/trust_engine.py": {
+      "name": "cognitive.trust_engine",
+      "purpose": "Component-level trust scoring (0-100). Breaks output into chunks, scores each chunk on source reliability, content quality, consensus, and recency. Components below threshold get flagged for verificat",
+      "capabilities": [
+        "trust_scoring",
+        "verification_trigger",
+        "component_tracking"
+      ],
+      "connections_out": 1,
+      "connections_in": 18,
+      "isolated": false
+    },
+    "cognitive/unified_memory.py": {
+      "name": "cognitive.unified_memory",
+      "purpose": "Single interface for all 5 memory systems: episodic (experiences), procedural (skills), learning (training data), magma (graph memory), flash cache (external refs). Search all at once.",
+      "capabilities": [
+        "memory_store",
+        "memory_recall",
+        "cross_memory_search"
+      ],
+      "connections_out": 5,
+      "connections_in": 16,
+      "isolated": false
+    },
+    "cognitive/user_intent_override.py": {
+      "name": "cognitive.user_intent_override",
+      "purpose": "Module with 4 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "llm_orchestrator/base_client.py": {
+      "name": "llm_orchestrator.base_client",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/cognitive_enforcer.py": {
+      "name": "llm_orchestrator.cognitive_enforcer",
+      "purpose": "Module with 3 classes and 17 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/factory.py": {
+      "name": "llm_orchestrator.factory",
+      "purpose": "Factory for creating LLM clients. Every client wrapped with GovernanceAwareLLM. Supports: Ollama (local), Kimi (cloud), Opus (cloud). Per-task model selection (code, reason, fast).",
+      "capabilities": [
+        "llm_client_creation",
+        "governance_wrapping",
+        "task_routing"
+      ],
+      "connections_out": 0,
+      "connections_in": 16,
+      "isolated": true
+    },
+    "llm_orchestrator/fine_tuning.py": {
+      "name": "llm_orchestrator.fine_tuning",
+      "purpose": "Module with 7 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/governance_wrapper.py": {
+      "name": "llm_orchestrator.governance_wrapper",
+      "purpose": "Wraps ALL LLM clients. Injects governance rules and persona into every call. Tracks usage stats (latency, errors, tokens) for BI dashboard. Genesis Key on every call.",
+      "capabilities": [
+        "governance_injection",
+        "usage_tracking",
+        "persona_management"
+      ],
+      "connections_out": 2,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "llm_orchestrator/hallucination_guard.py": {
+      "name": "llm_orchestrator.hallucination_guard",
+      "purpose": "Module with 4 classes and 14 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/kimi_client.py": {
+      "name": "llm_orchestrator.kimi_client",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "llm_orchestrator/kimi_enhanced.py": {
+      "name": "llm_orchestrator.kimi_enhanced",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 5,
+      "connections_in": 7,
+      "isolated": false
+    },
+    "llm_orchestrator/learning_integration.py": {
+      "name": "llm_orchestrator.learning_integration",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "llm_orchestrator/llm_collaboration.py": {
+      "name": "llm_orchestrator.llm_collaboration",
+      "purpose": "Module with 8 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/llm_orchestrator.py": {
+      "name": "llm_orchestrator.llm_orchestrator",
+      "purpose": "Module with 3 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "llm_orchestrator/multi_llm_client.py": {
+      "name": "llm_orchestrator.multi_llm_client",
+      "purpose": "Module with 7 classes and 18 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/ollama_adapter.py": {
+      "name": "llm_orchestrator.ollama_adapter",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/openai_client.py": {
+      "name": "llm_orchestrator.openai_client",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/opus_client.py": {
+      "name": "llm_orchestrator.opus_client",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "llm_orchestrator/repo_access.py": {
+      "name": "llm_orchestrator.repo_access",
+      "purpose": "Module with 1 classes and 17 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/adaptive_cicd.py": {
+      "name": "genesis.adaptive_cicd",
+      "purpose": "Module with 8 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "genesis/archival_service.py": {
+      "name": "genesis.archival_service",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "genesis/autonomous_cicd_engine.py": {
+      "name": "genesis.autonomous_cicd_engine",
+      "purpose": "Module with 6 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/autonomous_engine.py": {
+      "name": "genesis.autonomous_engine",
+      "purpose": "Module with 9 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 8,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/autonomous_triggers.py": {
+      "name": "genesis.autonomous_triggers",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 5,
+      "isolated": false
+    },
+    "genesis/cicd.py": {
+      "name": "genesis.cicd",
+      "purpose": "Module with 8 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 3,
+      "isolated": true
+    },
+    "genesis/cicd_versioning.py": {
+      "name": "genesis.cicd_versioning",
+      "purpose": "Module with 4 classes and 12 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "genesis/code_analyzer.py": {
+      "name": "genesis.code_analyzer",
+      "purpose": "Module with 2 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "genesis/cognitive_layer1_integration.py": {
+      "name": "genesis.cognitive_layer1_integration",
+      "purpose": "Module with 1 classes and 22 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "genesis/comprehensive_tracker.py": {
+      "name": "genesis.comprehensive_tracker",
+      "purpose": "Module with 1 classes and 14 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 2,
+      "isolated": true
+    },
+    "genesis/daily_organizer.py": {
+      "name": "genesis.daily_organizer",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "genesis/directory_hierarchy.py": {
+      "name": "genesis.directory_hierarchy",
+      "purpose": "Module with 1 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/file_version_tracker.py": {
+      "name": "genesis.file_version_tracker",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "genesis/file_watcher.py": {
+      "name": "genesis.file_watcher",
+      "purpose": "Module with 2 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/genesis_key_service.py": {
+      "name": "genesis.genesis_key_service",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 16,
+      "isolated": false
+    },
+    "genesis/git_genesis_bridge.py": {
+      "name": "genesis.git_genesis_bridge",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/healing_system.py": {
+      "name": "genesis.healing_system",
+      "purpose": "Module with 1 classes and 7 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "genesis/integration_example.py": {
+      "name": "genesis.integration_example",
+      "purpose": "Module with 0 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/intelligent_cicd_orchestrator.py": {
+      "name": "genesis.intelligent_cicd_orchestrator",
+      "purpose": "Module with 12 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/kb_integration.py": {
+      "name": "genesis.kb_integration",
+      "purpose": "Module with 1 classes and 5 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 4,
+      "isolated": true
+    },
+    "genesis/layer1_integration.py": {
+      "name": "genesis.layer1_integration",
+      "purpose": "Module with 1 classes and 11 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "genesis/librarian_pipeline.py": {
+      "name": "genesis.librarian_pipeline",
+      "purpose": "Module with 5 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 2,
+      "isolated": false
+    },
+    "genesis/middleware.py": {
+      "name": "genesis.middleware",
+      "purpose": "Module with 1 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "genesis/pipeline_integration.py": {
+      "name": "genesis.pipeline_integration",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 4,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "genesis/realtime.py": {
+      "name": "genesis.realtime",
+      "purpose": "Module with 2 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 6,
+      "isolated": true
+    },
+    "genesis/repo_scanner.py": {
+      "name": "genesis.repo_scanner",
+      "purpose": "Module with 1 classes and 12 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "genesis/symbiotic_version_control.py": {
+      "name": "genesis.symbiotic_version_control",
+      "purpose": "Module with 1 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 3,
+      "connections_in": 3,
+      "isolated": false
+    },
+    "genesis/tracking_middleware.py": {
+      "name": "genesis.tracking_middleware",
+      "purpose": "Module with 2 classes and 6 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 1,
+      "isolated": false
+    },
+    "genesis/whitelist_learning_pipeline.py": {
+      "name": "genesis.whitelist_learning_pipeline",
+      "purpose": "Module with 7 classes and 16 functions",
+      "capabilities": [],
+      "connections_out": 10,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "security/api_vault.py": {
+      "name": "security.api_vault",
+      "purpose": "Central secure access point for all API keys. Masked display, per-provider verification, key rotation with audit trail.",
+      "capabilities": [
+        "key_management",
+        "provider_verification",
+        "key_rotation"
+      ],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "security/auth.py": {
+      "name": "security.auth",
+      "purpose": "Module with 1 classes and 10 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "security/config.py": {
+      "name": "security.config",
+      "purpose": "Module with 1 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 2,
+      "isolated": true
+    },
+    "security/governance.py": {
+      "name": "security.governance",
+      "purpose": "Module with 24 classes and 46 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "security/logging.py": {
+      "name": "security.logging",
+      "purpose": "Module with 1 classes and 8 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 1,
+      "isolated": true
+    },
+    "security/middleware.py": {
+      "name": "security.middleware",
+      "purpose": "Module with 3 classes and 0 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "security/validators.py": {
+      "name": "security.validators",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "search/auto_search.py": {
+      "name": "search.auto_search",
+      "purpose": "Module with 1 classes and 1 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "search/serpapi_service.py": {
+      "name": "search.serpapi_service",
+      "purpose": "Module with 1 classes and 2 functions",
+      "capabilities": [],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "retrieval/cognitive_retriever.py": {
+      "name": "retrieval.cognitive_retriever",
+      "purpose": "Module with 1 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 2,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "retrieval/multi_tier_integration.py": {
+      "name": "retrieval.multi_tier_integration",
+      "purpose": "Module with 0 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "retrieval/query_intelligence.py": {
+      "name": "retrieval.query_intelligence",
+      "purpose": "Module with 5 classes and 4 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "retrieval/reranker.py": {
+      "name": "retrieval.reranker",
+      "purpose": "Module with 1 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "retrieval/retriever.py": {
+      "name": "retrieval.retriever",
+      "purpose": "Core vector retrieval against Qdrant. Embedding-based similarity, filters, scoring. Part of full NLP stack for semantic search.",
+      "capabilities": [
+        "full_nlp",
+        "vector_search",
+        "embedding_similarity"
+      ],
+      "connections_out": 1,
+      "connections_in": 0,
+      "isolated": false
+    },
+    "retrieval/trust_aware_retriever.py": {
+      "name": "retrieval.trust_aware_retriever",
+      "purpose": "Module with 1 classes and 9 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "embedding/async_embedder.py": {
+      "name": "embedding.async_embedder",
+      "purpose": "Module with 2 classes and 3 functions",
+      "capabilities": [],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    },
+    "embedding/embedder.py": {
+      "name": "embedding.embedder",
+      "purpose": "Text embedding model (e.g. Qwen). Encodes text to vectors for RAG and semantic search. Foundation for full NLP retrieval.",
+      "capabilities": [
+        "full_nlp",
+        "embeddings",
+        "vector_encoding"
+      ],
+      "connections_out": 0,
+      "connections_in": 0,
+      "isolated": true
+    }
+  },
+  "total": 155,
+  "connected": 99,
+  "isolated": 56
+}

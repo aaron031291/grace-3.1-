@@ -14,14 +14,34 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/stream", tags=["Streaming"])
 
 
+def _stream_rag_and_memory_context(prompt: str) -> str:
+    """Unified spine: RAG + episodic recall for stream. Returns prefix string for prompt."""
+    try:
+        from core.services.chat_service import _get_rag_context, _get_episodic_recall
+        rag = _get_rag_context(prompt, limit=5, score_threshold=0.3)
+        episode = _get_episodic_recall(prompt, k=3, min_trust=0.5)
+        parts = []
+        if rag:
+            parts.append("Relevant context from the knowledge base:\n" + rag)
+        if episode:
+            parts.append("Relevant past experience:\n" + episode)
+        if parts:
+            return "\n\n".join(parts) + "\n\n---\n\nUser: " + prompt
+        return prompt
+    except Exception:
+        return prompt
+
+
 @router.post("/chat")
 async def stream_chat(request: Request):
-    """Stream LLM response token-by-token via SSE."""
+    """Stream LLM response token-by-token via SSE. Supports use_rag + chat_id for unified RAG+memory context."""
     body = await request.json()
     prompt = body.get("prompt", body.get("message", ""))
     model = body.get("model", "kimi")
     context_files = body.get("context_files", [])
     mentions = body.get("mentions", [])
+    use_rag = body.get("use_rag", False)
+    chat_id = body.get("chat_id")
 
     async def generate():
         # Build context from @ mentions
@@ -29,13 +49,17 @@ async def stream_chat(request: Request):
         if mentions or context_files:
             file_context = _resolve_mentions(mentions + context_files)
 
-        full_prompt = f"{file_context}\n\n{prompt}" if file_context else prompt
+        full_prompt = prompt
+        if file_context:
+            full_prompt = f"{file_context}\n\n{full_prompt}"
+        if use_rag:
+            full_prompt = _stream_rag_and_memory_context(full_prompt)
 
         # Track user input as learnable
         try:
             from api._genesis_tracker import track
             track(key_type="user_input", what=f"Stream chat: {prompt[:100]}",
-                  who="stream_api", input_data={"prompt": prompt[:500], "model": model, "mentions": mentions},
+                  who="stream_api", input_data={"prompt": prompt[:500], "model": model, "mentions": mentions, "use_rag": use_rag, "chat_id": chat_id},
                   tags=["user_input", "stream", "chat"])
         except Exception:
             pass

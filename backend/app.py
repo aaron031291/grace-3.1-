@@ -9,7 +9,7 @@ from typing import List, Optional
 import re
 import time
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
+from datetime import datetime
 import os
 import sys
 from pathlib import Path
@@ -48,85 +48,25 @@ from api.auth import router as auth_router
 from api.voice_api import router as voice_router
 from api.stream_api import router as stream_router
 from api.completion_api import router as completion_router
-from api.world_model_api import router as world_model_router
-
-# 5. Connection validation — comprehensive connection status & validation
-from api.connection_api import router as connection_router
-
-# 6. System introspection & deterministic validation
-from api.introspection_api import router as introspection_router
-
-# 7. Previously unwired routers (safe imports — won't crash if deps missing)
-_optional_routers = []
-try:
-    from api.ingest import router as ingest_router
-    _optional_routers.append(("ingest", ingest_router))
-except Exception as e:
-    print(f"[WARN] Ingest router not loaded: {e}")
-
-try:
-    from api.component_health_api import router as component_health_router
-    _optional_routers.append(("component_health", component_health_router))
-except Exception as e:
-    print(f"[WARN] Component health router not loaded: {e}")
-
-try:
-    from api.docs_library_api import router as docs_library_router
-    _optional_routers.append(("docs_library", docs_library_router))
-except Exception as e:
-    print(f"[WARN] Docs library router not loaded: {e}")
-
-try:
-    from api.live_console_api import router as live_console_router
-    _optional_routers.append(("live_console", live_console_router))
-except Exception as e:
-    print(f"[WARN] Live console router not loaded: {e}")
-
-try:
-    from api.probe_agent_api import router as probe_agent_router
-    _optional_routers.append(("probe_agent", probe_agent_router))
-except Exception as e:
-    print(f"[WARN] Probe agent router not loaded: {e}")
-
-try:
-    from api.consensus_fixer_api import router as consensus_fixer_router
-    _optional_routers.append(("consensus_fixer", consensus_fixer_router))
-except Exception as e:
-    print(f"[WARN] Consensus fixer router not loaded: {e}")
-
-try:
-    from api.runtime_triggers_api import router as runtime_triggers_router
-    _optional_routers.append(("runtime_triggers", runtime_triggers_router))
-except Exception as e:
-    print(f"[WARN] Runtime triggers router not loaded: {e}")
-
-try:
-    from api.retrieve import router as retrieve_router
-    _optional_routers.append(("retrieve", retrieve_router))
-except Exception as e:
-    print(f"[WARN] Retrieve router not loaded: {e}")
-
-try:
-    from api.file_ingestion import router as file_ingestion_router
-    _optional_routers.append(("file_ingestion", file_ingestion_router))
-except Exception as e:
-    print(f"[WARN] File ingestion router not loaded: {e}")
-
-try:
-    from api.workspace_api import router as workspace_router
-    _optional_routers.append(("workspace", workspace_router))
-except Exception as e:
-    print(f"[WARN] Workspace router not loaded: {e}")
-
-try:
-    from api.ask_grace_api import router as ask_grace_router
-    _optional_routers.append(("ask_grace", ask_grace_router))
-except Exception as e:
-    print(f"[WARN] Ask Grace router not loaded: {e}")
+from api.runtime_triggers_api import router as runtime_triggers_router
+from api.qdrant_api import router as qdrant_router
+from api.genesis_daily_api import router as genesis_daily_router
+from api.autonomous_loop_api import router as autonomous_loop_router
+from api.component_health_api import router as component_health_router
+from api.ingest import router as ingest_router
+from api.retrieve import router as retrieve_router
+from api.learning_memory_api import router as learning_memory_router
+from api.admin_api import router as admin_router
+from api.validation_api import router as validation_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
 from search.serpapi_service import SerpAPIService
+from api.codebase_hub_api import router as codebase_hub_router
+from api.whitelist_hub_api import router as whitelist_hub_router
+from api.devlab_api import router as devlab_router
+from api.sandbox_api import router as sandbox_router
+from api.tasks_hub_api import router as tasks_hub_router
 
 try:
     from settings import settings
@@ -164,18 +104,26 @@ class ChatRequest(BaseModel):
     )
 
 
-class RawChatResponse(BaseModel):
-    """Response model for the /chat endpoint (stateless)."""
+class ChatResponse(BaseModel):
+    """Response model for chat endpoint."""
     message: str = Field(..., description="The generated response from the model")
     model: str = Field(..., description="The model that generated the response")
-    generation_time: float = Field(0.0, description="Time taken to generate response in seconds")
+    generation_time: float = Field(..., description="Time taken to generate response in seconds")
     prompt_tokens: Optional[int] = Field(None, description="Number of tokens in the prompt")
     response_tokens: Optional[int] = Field(None, description="Number of tokens in the response")
     sources: Optional[List[dict]] = Field(None, description="Source chunks used for RAG context")
+    # Multi-tier query handling fields
     tier: Optional[str] = Field(None, description="Query tier used: VECTORDB, MODEL_KNOWLEDGE, or USER_CONTEXT")
     confidence: Optional[float] = Field(None, description="Confidence score (0.0-1.0)")
     knowledge_gaps: Optional[List[dict]] = Field(None, description="Knowledge gaps identified (Tier 3)")
     warnings: Optional[List[str]] = Field(None, description="Warnings about response quality")
+
+
+class HealthResponse(BaseModel):
+    """Health response model."""
+    status: str
+    llm_running: bool
+    models_available: int
 
 
 # ==================== Chat Management Models ====================
@@ -189,8 +137,8 @@ class ChatCreateRequest(BaseModel):
     folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
-class ChatSessionResponse(BaseModel):
-    """Response model for chat session operations."""
+class ChatResponse(BaseModel):
+    """Response model for chat operations."""
     id: int = Field(..., description="Chat ID")
     title: Optional[str] = Field(None, description="Chat title")
     description: Optional[str] = Field(None, description="Chat description")
@@ -205,7 +153,7 @@ class ChatSessionResponse(BaseModel):
 
 class ChatListResponse(BaseModel):
     """Response model for chat list."""
-    chats: List[ChatSessionResponse] = Field(..., description="List of chats")
+    chats: List[ChatResponse] = Field(..., description="List of chats")
     total: int = Field(..., description="Total number of chats")
     skip: int = Field(..., description="Skip count")
     limit: int = Field(..., description="Limit count")
@@ -265,10 +213,10 @@ async def lifespan(app: FastAPI):
     """Manage app startup and shutdown events."""
     # Startup
     print("Grace API starting up...")
-    
+
     # Initialize database
     try:
-        db_type = DatabaseType(settings.DATABASE_TYPE) if settings else DatabaseType.SQLITE
+        db_type = DatabaseType(settings.DATABASE_TYPE) if settings else DatabaseType.POSTGRESQL
         db_config = DatabaseConfig(
             db_type=db_type,
             host=settings.DATABASE_HOST if settings else None,
@@ -278,6 +226,7 @@ async def lifespan(app: FastAPI):
             database=settings.DATABASE_NAME if settings else "grace",
             database_path=settings.DATABASE_PATH if settings else None,
             echo=settings.DATABASE_ECHO if settings else False,
+            sslmode=(getattr(settings, "DATABASE_SSLMODE", "") or "").strip() or None,
         )
         DatabaseConnection.initialize(db_config)
         print("[OK] Database connection initialized")
@@ -289,15 +238,121 @@ async def lifespan(app: FastAPI):
         # Create tables
         create_tables()
         print("[OK] Database tables created/verified")
+
+        # ── Auto-migrate: detect and fix schema drift on every startup ──
+        # Grace learns from past errors: if any ORM model has columns the
+        # live DB doesn't have yet, they are added automatically here.
+        try:
+            from database.auto_migrate import run_auto_migrate
+            engine = DatabaseConnection.get_engine()
+            changes = run_auto_migrate(engine)
+            if changes:
+                print(f"[OK] Schema auto-migrate: applied {len(changes)} fix(es) -> {changes}")
+            else:
+                print("[OK] Schema auto-migrate: schema is up to date")
+        except Exception as e:
+            print(f"[WARN] Schema auto-migrate: {e}")
+
+        # Auto-add missing learning_examples columns (e.g. outcome_quality on PostgreSQL)
+        try:
+            from database.migrations.add_learning_example_columns import ensure_learning_examples_columns
+            engine = DatabaseConnection.get_engine()
+            n = ensure_learning_examples_columns(engine, quiet=True)
+            if n > 0:
+                print(f"[OK] Schema sync: added {n} column(s) to learning_examples")
+        except Exception as e:
+            print(f"[WARN] Learning examples schema sync: {e}")
+
     except Exception as e:
         print(f"[WARN] Database initialization error: {e}")
-        print("[WARN] Grace will continue with limited functionality")
+        print("[WARN] Grace will continue with limited functionality (DB features may be unavailable). Fix: check backend/.env DATABASE_PATH and run backend/database/migration if needed.")
     
     # ==================== Lazy Background Init (non-blocking) ====================
     import threading
 
     def _background_init():
         """Heavy init tasks run in background so server starts fast."""
+
+        # ── 0. Start error pipeline FIRST — catches all subsequent errors ─
+        try:
+            from self_healing.error_pipeline import get_error_pipeline
+            pipe = get_error_pipeline()
+            print("[OK] Self-healing error pipeline started")
+        except Exception as e:
+            print(f"[WARN] Error pipeline: {e}")
+
+        # ── 0a. Start coding agent worker — processes fix tasks from error pipeline ─
+        try:
+            from coding_agent.task_queue import start_worker
+            start_worker()
+            print("[OK] Coding agent worker started")
+        except Exception as e:
+            print(f"[WARN] Coding agent worker: {e}")
+
+        # ── 0b. Start trigger fabric — multi-source event nervous system ──
+        try:
+            from self_healing.trigger_fabric import start as start_fabric
+            start_fabric(app=app)
+            print("[OK] Multi-trigger fabric started (12 trigger sources)")
+        except Exception as e:
+            print(f"[WARN] Trigger fabric: {e}")
+
+        # ── 0b. Startup health check — validate key tables are queryable ──
+        try:
+            from database.session import session_scope
+            from sqlalchemy import text
+            with session_scope() as session:
+                session.execute(text("SELECT COUNT(*) FROM episodes LIMIT 1"))
+                session.execute(text("SELECT COUNT(*) FROM genesis_key LIMIT 1"))
+            print("[OK] Startup health: core tables queryable")
+        except Exception as e:
+            print(f"[WARN] Startup health check failed: {e}")
+
+        # ── 0c. Autonomous Diagnostics — boot scan then maintenance pulse ─
+        try:
+            from cognitive.autonomous_diagnostics import AutonomousDiagnostics
+            diag = AutonomousDiagnostics.get_instance()
+            # Boot scan (runs on_startup in a background thread — non-blocking)
+            import threading
+            threading.Thread(
+                target=diag.on_startup,
+                daemon=True,
+                name="grace-boot-diag",
+            ).start()
+            print("[OK] Autonomous diagnostics boot scan started")
+        except Exception as e:
+            print(f"[WARN] Autonomous diagnostics: {e}")
+
+        # ── 0d. Probe agent — periodic light + deep API sweeps ────────────
+        try:
+            import threading, time
+
+            def _probe_pulse():
+                time.sleep(30)   # wait for server fully ready
+                while True:
+                    try:
+                        # Light sweep every 10 minutes (internal, non-blocking)
+                        from api.probe_agent_api import _probe_endpoint, _track_probe, _ROUTES
+                        sample = list(_ROUTES)[:5]  # quick sample
+                        results = [_probe_endpoint(r["path"], r["method"]) for r in sample]
+                        _track_probe(results)
+                    except Exception:
+                        pass
+                    time.sleep(600)  # 10 minutes
+
+            threading.Thread(target=_probe_pulse, daemon=True, name="grace-probe-pulse").start()
+            print("[OK] Probe agent maintenance pulse started (light every 10min)")
+        except Exception as e:
+            print(f"[WARN] Probe pulse: {e}")
+
+
+        try:
+            from core.execution_registry import init_registry
+            init_registry()
+            print("[OK] Execution registry initialized")
+        except Exception as e:
+            print(f"[WARN] Registry init: {e}")
+
         try:
             from cognitive.training_ingest import ingest_training_corpus
             result = ingest_training_corpus()
@@ -322,9 +377,25 @@ async def lifespan(app: FastAPI):
             except Exception as e:
                 print(f"[WARN] Embedding: {e}")
 
+        # Warm NLP (voice + intent/entity pipeline) so it's ready at runtime
+
+        try:
+            from api.voice_api import voice_manager
+            voice_manager.preprocess_text_nlp("hello")
+            print("[OK] NLP pipeline ready (voice/intent)")
+        except Exception as e:
+            print(f"[WARN] NLP warm: {e}")
+
     threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
     print("[OK] Background init started (training, diagnostics, embedding)")
-    
+
+    # Optional: auto hot-reload when .py files are saved (HOT_RELOAD_WATCH=1)
+    try:
+        from core.hot_reload import start_reload_watcher
+        start_reload_watcher()
+    except Exception:
+        pass
+
     # Check LLM Provider
     if not getattr(settings, 'SKIP_LLM_CHECK', False):
         try:
@@ -378,22 +449,13 @@ async def lifespan(app: FastAPI):
         print("[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)")
 
     # ==================== Initialize ML Intelligence ====================
+    # Initialize ML Intelligence orchestrator
     try:
-        from ml_intelligence.integration_orchestrator import get_ml_orchestrator
-        orchestrator = get_ml_orchestrator()
-        features = list(orchestrator.enabled_features.keys()) if hasattr(orchestrator, 'enabled_features') else []
-        print(f"[OK] ML Intelligence initialized with features: {features}")
+        from api.ml_intelligence_api import get_orchestrator
+        orchestrator = get_orchestrator()
+        print(f"[OK] ML Intelligence initialized with features: {list(orchestrator.enabled_features.keys())}")
     except Exception as e:
         print(f"[WARN] ML Intelligence not available: {e}")
-
-    # ==================== Initialize Qwen Agent Pool ====================
-    try:
-        from cognitive.qwen_agents import get_agent_pool
-        agent_pool = get_agent_pool()
-        agent_pool.start_all()
-        print("[OK] Qwen Agent Pool started (3 agents: code, reason, fast)")
-    except Exception as e:
-        print(f"[WARN] Qwen Agent Pool not available: {e}")
 
     # ==================== Initialize Auto-Ingestion ====================
     # Start background task for monitoring knowledge base for new files
@@ -498,20 +560,6 @@ async def lifespan(app: FastAPI):
         print("[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)")
 
 
-    # ==================== Initialize Layer 1 Message Bus ====================
-    try:
-        from layer1.initialize import initialize_layer1
-        from database.session import get_session
-
-        _l1_session = next(get_session())
-        _kb_path = settings.KNOWLEDGE_BASE_PATH if settings else "knowledge_base"
-        _layer1 = initialize_layer1(session=_l1_session, kb_path=_kb_path)
-        app.state.layer1 = _layer1
-        print(f"[OK] Layer 1 initialized — {_layer1.get_stats().get('registered_components', 0)} components connected")
-    except Exception as e:
-        print(f"[WARN] Layer 1 initialization: {e}")
-        app.state.layer1 = None
-
     # ==================== Start Continuous Learning Orchestrator ====================
     if not settings.DISABLE_CONTINUOUS_LEARNING:
         try:
@@ -525,38 +573,45 @@ async def lifespan(app: FastAPI):
 
     # ==================== Start Diagnostic Engine (Self-Healing Runtime) ====================
     _diag_engine = None
+    _diag_session = None
     try:
         from diagnostic_machine.diagnostic_engine import get_diagnostic_engine
-        # Ensure it respects the same setting as the API
-        enable_heartbeat = not getattr(settings, "DISABLE_AUTONOMOUS_LOOP", False)
-        _diag_engine = get_diagnostic_engine(
-            enable_heartbeat=enable_heartbeat
-        )
+        # Use module-level SessionLocal/initialize_session_factory (do not re-import here or lifespan sees a local and fails at first use)
+        if SessionLocal is None:
+            initialize_session_factory()
+        from database import session as db_session
+        session_factory = db_session.SessionLocal
+        _diag_session = session_factory() if session_factory else None
+        _kb_path = str(Path(__file__).parent / "knowledge_base")
+        _diag_engine = get_diagnostic_engine(session=_diag_session, kb_path=_kb_path)
         started = _diag_engine.start()
         if started:
-            if enable_heartbeat:
-                print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
-            else:
-                print("[OK] Diagnostic engine initialized in manual mode (heartbeat disabled)")
+            print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
         else:
             print("[WARN] Diagnostic engine already running")
     except Exception as e:
         print(f"[WARN] Diagnostic engine not started: {e}")
 
     # ==================== Start Autonomous Loop ====================
-    if not settings.DISABLE_AUTONOMOUS_LOOP:
-        try:
-            from api.autonomous_loop_api import _background_loop, _stop_event, _loop_state
-            import threading
-            _stop_event.clear()
-            _loop_state["running"] = True
-            _auto_thread = threading.Thread(target=_background_loop, args=(30,), daemon=True)
-            _auto_thread.start()
-            print("[OK] Autonomous loop started (30s cycle: heal → learn → code → verify)")
-        except Exception as e:
-            print(f"[WARN] Autonomous loop not started: {e}")
-    else:
-        print("[SKIP] Autonomous loop disabled (DISABLE_AUTONOMOUS_LOOP=true)")
+    try:
+        from api.autonomous_loop_api import _background_loop, _stop_event, _loop_state, _run_cycle
+        import threading
+        _stop_event.clear()
+        _loop_state["running"] = True
+        # Run first cycle in background (5s delay) so uvicorn can bind the port first
+        def _delayed_start_loop():
+            import time as _time
+            _time.sleep(5)  # Let uvicorn bind and start serving first
+            try:
+                _run_cycle()
+            except Exception as _e:
+                print(f"[WARN] Autonomous first cycle: {_e}")
+            _background_loop(30)
+        _auto_thread = threading.Thread(target=_delayed_start_loop, daemon=True, name="grace-autonomous")
+        _auto_thread.start()
+        print("[OK] Autonomous loop started (first cycle in 5s, then 30s: heal->learn->verify->composite)")
+    except Exception as e:
+        print(f"[WARN] Autonomous loop not started: {e}")
 
     # ==================== Register Auto-Probe ====================
     try:
@@ -566,40 +621,57 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Auto-probe: {e}")
 
-    # ==================== Worker Pool Init ====================
-    try:
-        from core.worker_pool import get_io_pool, get_cpu_pool
-        get_io_pool()
-        get_cpu_pool()
-        print("[OK] Worker pools initialized (IO + CPU)")
-    except Exception as e:
-        print(f"[WARN] Worker pools: {e}")
-
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
+    app.state._diag_session = _diag_session
     app.state._start_time = time.time()
 
     yield
-    
+
     # ==================== Shutdown — clean up background systems ====================
     print("Grace API shutting down...")
+
     try:
-        from cognitive.qwen_agents import get_agent_pool
-        get_agent_pool().stop_all()
-        print("[OK] Qwen Agent Pool stopped")
+        from api.autonomous_loop_api import _stop_event
+        _stop_event.set()
+        print("[OK] Autonomous loop stop signaled")
     except Exception:
         pass
+
+    if not getattr(settings, "DISABLE_CONTINUOUS_LEARNING", False):
+        try:
+            from cognitive.continuous_learning_orchestrator import stop_continuous_learning
+            stop_continuous_learning()
+            print("[OK] Continuous learning stopped")
+        except Exception:
+            pass
+
+    if not getattr(settings, "DISABLE_GENESIS_TRACKING", False):
+        try:
+            from genesis.file_watcher import get_file_watcher_service
+            get_file_watcher_service().stop_all()
+            print("[OK] File watcher stopped")
+        except Exception:
+            pass
+
     try:
-        from core.worker_pool import shutdown_all
-        shutdown_all(wait_for=False)
-        print("[OK] Worker pools shut down")
+        from core.hot_reload import stop_reload_watcher
+        stop_reload_watcher()
+        print("[OK] Hot-reload watcher stopped")
     except Exception:
         pass
+
     if _diag_engine:
         try:
             _diag_engine.stop()
             print("[OK] Diagnostic engine stopped")
+        except Exception:
+            pass
+    if getattr(app.state, "_diag_session", None) is not None:
+        try:
+            app.state._diag_session.close()
+            print("[OK] Diagnostic engine session closed")
         except Exception:
             pass
     try:
@@ -651,7 +723,7 @@ app.add_middleware(
 # BRAIN-CENTRIC ARCHITECTURE — 4 routers only
 # =============================================================================
 
-# THE BRAIN — all 93+ actions, all 8 domains, all logic
+# THE BRAIN — 95+ actions, 9 domains (chat, files, govern, ai, system, data, tasks, code, deterministic)
 app.include_router(brain_router)                 # /brain/{domain}
 app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 
@@ -661,14 +733,49 @@ app.include_router(auth_router)                  # /auth (middleware)
 app.include_router(voice_router)                 # /voice (WebSocket)
 app.include_router(stream_router)                # /api/stream (SSE streaming)
 app.include_router(completion_router)            # /api/complete (inline code completion)
-app.include_router(world_model_router)           # /api/world-model (system state)
-app.include_router(connection_router)            # /api/connections (connection validation)
-app.include_router(introspection_router)         # /api/system (introspection + validation)
+app.include_router(runtime_triggers_router)        # /api/triggers (scan, scan-and-heal, log)
+app.include_router(qdrant_router)                  # /api/qdrant/status (simple Qdrant check)
+app.include_router(genesis_daily_router)            # /api/genesis-daily/* (Governance tab Genesis Keys)
+app.include_router(autonomous_loop_router)           # /api/autonomous/* (loop status, start/stop; used by loop for mirror-feed)
+app.include_router(component_health_router)         # /api/component-health/* (mirror-feed for autonomous loop + health UI)
+app.include_router(ingest_router)                    # /ingest/* (document ingestion; frontend + docs)
+app.include_router(retrieve_router)                  # /retrieve/* (RAG search; frontend FoldersTab, SearchInternetButton)
+app.include_router(learning_memory_router)           # /api/learning-memory/* (neighbour search, fill gaps, expand)
+app.include_router(admin_router)                     # /api/admin/* (registry, state, reload-config, trigger-diagnostics; requires ADMIN_TOKEN)
+app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history — frontend dashboard)
 
-# Register previously unwired routers (includes Ask Grace)
-for _name, _router in _optional_routers:
-    app.include_router(_router)
-    print(f"[OK] Registered previously unwired router: {_name}")
+from api.codebase_hub_api import router as codebase_hub_router
+from api.tasks_hub_api import router as tasks_hub_router
+from api.schema_evolution_api import router as schema_evolution_router
+from api.oracle_api import router as oracle_router
+from api.learn_heal_api import router as learn_heal_router
+from api.system_health_api import router as system_health_router
+from api.bi_api import router as bi_router
+from api.kpi_api import router as kpi_router
+from api.planner_api import router as planner_router
+from api.scrape_api import router as scrape_router
+from api.version_control_api import router as version_control_router
+
+app.include_router(codebase_hub_router, prefix="/api")
+app.include_router(whitelist_hub_router, prefix="/api")
+app.include_router(devlab_router, prefix="/api")
+app.include_router(sandbox_router, prefix="/api")
+app.include_router(tasks_hub_router, prefix="/api")
+app.include_router(schema_evolution_router, prefix="/api")
+app.include_router(oracle_router)
+app.include_router(learn_heal_router)
+app.include_router(system_health_router)
+app.include_router(bi_router)
+app.include_router(kpi_router)
+app.include_router(planner_router)
+app.include_router(scrape_router)
+app.include_router(version_control_router)
+
+from api.docs_library_api import router as docs_library_router
+app.include_router(docs_library_router)
+
+from api.chunked_upload_api import router as chunked_upload_router
+app.include_router(chunked_upload_router)
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -677,6 +784,40 @@ if not (settings and settings.DISABLE_GENESIS_TRACKING):
 else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
+
+# ==================== Health Check Endpoint ====================
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+async def health_check():
+    """
+    Health check endpoint.
+    
+    Returns:
+        HealthResponse: Status of the API and Ollama service
+    """
+    try:
+        client = get_llm_client()
+        status_info = client.is_running()
+        
+        if status_info:
+            models = client.get_all_models()
+            models_available = len(models)
+            status = "healthy"
+        else:
+            models_available = 0
+            status = "unhealthy"
+        
+        return HealthResponse(
+            status=status,
+            llm_running=status_info,
+            models_available=models_available
+        )
+    except Exception as e:
+        return HealthResponse(
+            status="unhealthy",
+            llm_running=False,
+            models_available=0
+        )
 
 
 class TitleGenerationRequest(BaseModel):
@@ -733,7 +874,7 @@ async def generate_title(request: TitleGenerationRequest):
 
 # ==================== Chat Endpoint ====================
 
-@app.post("/chat", response_model=RawChatResponse, tags=["Chat"])
+@app.post("/chat", response_model=ChatResponse, tags=["Chat"])
 async def chat(request: ChatRequest):
     """
     Chat endpoint using Ollama models with RAG enforcement.
@@ -797,8 +938,6 @@ async def chat(request: ChatRequest):
                 {"role": "user", "content": user_query},
             ]
 
-            import time as _time
-            _greeting_start = _time.time()
             response = client.chat(
                 model=model_name,
                 messages=messages,
@@ -806,15 +945,13 @@ async def chat(request: ChatRequest):
                 temperature=request.temperature or 0.4,
                 max_tokens=request.top_k or 256,
             )
-            _greeting_time = _time.time() - _greeting_start
 
-            msg_text = response.get("message", {}).get("content", "") if isinstance(response, dict) else getattr(getattr(response, "message", None), "content", str(response))
-
-            return RawChatResponse(
-                message=msg_text,
-                model=model_name,
-                generation_time=round(_greeting_time, 3),
+            return ChatResponse(
+                response=response,
                 sources=[],
+                model=model_name,
+                temperature=request.temperature,
+                max_tokens=request.top_k
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
         # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
@@ -847,7 +984,7 @@ async def chat(request: ChatRequest):
         # Format response
         response_data = format_chat_response(tier_result, model_name, generation_time)
         
-        return RawChatResponse(**response_data)
+        return ChatResponse(**response_data)
     
     except HTTPException:
         raise
@@ -858,75 +995,9 @@ async def chat(request: ChatRequest):
         )
 
 
-# ==================== Triad Chat Endpoint ====================
-
-class TriadChatRequest(BaseModel):
-    """Request for Qwen Triad processing — all 3 models in parallel."""
-    messages: List[Message] = Field(..., description="Conversation messages")
-    system_prompt: Optional[str] = Field("", description="System prompt override")
-    execution_allowed: bool = Field(False, description="Allow execution actions (default: read-only)")
-    project_folder: Optional[str] = Field("", description="Project folder for code context")
-
-
-class TriadChatResponse(BaseModel):
-    """Response from Qwen Triad — synthesized from 3 models."""
-    message: str = Field(..., description="Synthesized response from all 3 models")
-    model: str = Field("qwen-triad", description="Model identifier")
-    triage: Optional[dict] = Field(None, description="Triage classification (intent, urgency)")
-    governance: str = Field("read_only", description="Governance mode applied")
-    execution_allowed: bool = Field(False, description="Whether execution was allowed")
-    subsystem_context: Optional[dict] = Field(None, description="Which subsystems provided context")
-    timing: Optional[dict] = Field(None, description="Processing timing breakdown")
-
-
-@app.post("/chat/triad", response_model=TriadChatResponse, tags=["Chat"])
-async def chat_triad(request: TriadChatRequest):
-    """
-    Qwen Triad Chat — async parallel processing across all 3 Qwen models.
-
-    Runs qwen3.5:27b (code), qwen3.5:27b (reasoning), qwen3.5:9b (fast) in parallel,
-    gathers context from ALL subsystems (memory, genesis keys, diagnostics,
-    self-healing, self-learning, self-governance, self-mirror, timesense),
-    and synthesizes a unified response.
-
-    Default mode is read-only. Set execution_allowed=True to permit execution actions.
-    """
-    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
-
-    orchestrator = get_triad_orchestrator()
-
-    user_query = ""
-    history = []
-    for msg in request.messages:
-        history.append({"role": msg.role, "content": msg.content})
-        if msg.role == "user":
-            user_query = msg.content
-
-    if not user_query:
-        raise HTTPException(status_code=400, detail="No user message found")
-
-    result = await orchestrator.process(
-        prompt=user_query,
-        system_prompt=request.system_prompt or "",
-        execution_allowed=request.execution_allowed,
-        conversation_history=history,
-        project_folder=request.project_folder or "",
-    )
-
-    return TriadChatResponse(
-        message=result.get("response", ""),
-        model="qwen-triad",
-        triage=result.get("triage"),
-        governance=result.get("governance", "read_only"),
-        execution_allowed=result.get("execution_allowed", False),
-        subsystem_context=result.get("subsystem_context"),
-        timing=result.get("timing"),
-    )
-
-
 # ==================== Chat Management Endpoints ====================
 
-@app.post("/chats", response_model=ChatSessionResponse, tags=["Chat Management"])
+@app.post("/chats", response_model=ChatResponse, tags=["Chat Management"])
 async def create_chat(request: ChatCreateRequest, session = Depends(get_session)):
     """
     Create a new chat session.
@@ -963,7 +1034,7 @@ async def create_chat(request: ChatCreateRequest, session = Depends(get_session)
             folder_path=request.folder_path or ""
         )
         
-        return ChatSessionResponse(
+        return ChatResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -1088,7 +1159,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         
         return ChatListResponse(
             chats=[
-                ChatSessionResponse(
+                ChatResponse(
                     id=chat.id,
                     title=chat.title,
                     description=chat.description,
@@ -1113,7 +1184,7 @@ async def list_chats(skip: int = 0, limit: int = 50, active_only: bool = False, 
         )
 
 
-@app.get("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
+@app.get("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
 async def get_chat(chat_id: int, session = Depends(get_session)):
     """
     Get a specific chat by ID.
@@ -1135,7 +1206,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
                 detail=f"Chat {chat_id} not found"
             )
         
-        return ChatSessionResponse(
+        return ChatResponse(
             id=chat.id,
             title=chat.title,
             description=chat.description,
@@ -1156,7 +1227,7 @@ async def get_chat(chat_id: int, session = Depends(get_session)):
         )
 
 
-@app.put("/chats/{chat_id}", response_model=ChatSessionResponse, tags=["Chat Management"])
+@app.put("/chats/{chat_id}", response_model=ChatResponse, tags=["Chat Management"])
 async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depends(get_session)):
     """
     Update a chat's settings.
@@ -1204,7 +1275,7 @@ async def update_chat(chat_id: int, request: ChatCreateRequest, session = Depend
         # Update chat
         updated_chat = repo.update(chat_id, **update_data)
         
-        return ChatSessionResponse(
+        return ChatResponse(
             id=updated_chat.id,
             title=updated_chat.title,
             description=updated_chat.description,
@@ -1736,8 +1807,9 @@ async def runtime_resume():
 @app.post("/api/runtime/hot-reload", tags=["Runtime"])
 async def runtime_hot_reload():
     """
-    Hot-reload: re-read configs, refresh model registry, reconnect DB,
-    and re-run startup diagnostic — all without restarting the process.
+    Full hot-reload: apply updates immediately without restart.
+    Re-reads .env, refreshes model registry, reconnects DB, reloads all
+    hot-reloadable modules (brain, pipeline, triggers, etc.).
     """
     results = {}
 
@@ -1767,7 +1839,15 @@ async def runtime_hot_reload():
     except Exception as e:
         results["database"] = f"error: {e}"
 
-    # 4. Run a quick diagnostic
+    # 4. Hot-reload all service modules (code changes apply immediately)
+    try:
+        from core.hot_reload import hot_reload_all_services
+        code_reload = hot_reload_all_services()
+        results["code_reload"] = code_reload
+    except Exception as e:
+        results["code_reload"] = f"error: {e}"
+
+    # 5. Run a quick diagnostic
     try:
         from cognitive.autonomous_diagnostics import get_diagnostics
         diag = get_diagnostics()
@@ -1781,13 +1861,11 @@ async def runtime_hot_reload():
 
 @app.get("/api/runtime/security", tags=["Runtime"])
 async def runtime_security():
-    """Rate limit status, cache stats, API cost tracking, and security config."""
-    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE, get_llm_cache, get_cost_tracker
+    """Rate limit status and security configuration."""
+    from core.security import get_rate_limit_status, MAX_REQUEST_SIZE
     return {
         "rate_limits": get_rate_limit_status(),
         "max_request_size_mb": round(MAX_REQUEST_SIZE / 1048576, 1),
-        "llm_cache": get_llm_cache().stats(),
-        "api_costs": get_cost_tracker().get_summary(),
     }
 
 
@@ -1809,56 +1887,58 @@ async def runtime_resilience():
     }
 
 
-@app.get("/api/runtime/workers", tags=["Runtime"])
-async def runtime_workers():
-    """Worker pool status: active tasks, latency, queue depth."""
-    from core.worker_pool import pool_status
-    return pool_status()
-
-
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
 async def runtime_connectivity():
-    """
-    Check connectivity of ALL system dependencies.
-    
-    Uses the comprehensive connection validator to check every connection
-    in the system — infrastructure, external APIs, Layer 1 connectors,
-    background services, and WebSocket.
-    
-    For quick status: GET /api/connections/status
-    For full validation: GET /api/connections/validate
-    """
-    from connection_validator import validate_all_connections
+    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
+    checks = {}
 
-    report = validate_all_connections(
-        include_layer1=True,
-        include_background=True,
-        include_external=True,
-    )
+    # Ollama
+    try:
+        client = get_llm_client()
+        checks["ollama"] = {"connected": client.is_running(), "url": settings.OLLAMA_URL}
+    except Exception as e:
+        checks["ollama"] = {"connected": False, "error": str(e)}
 
-    services = {}
-    for conn in report.connections:
-        services[conn.name] = {
-            "connected": conn.connected,
-            "status": conn.status.value,
-            "category": conn.category.value,
-            "latency_ms": conn.latency_ms,
-            "actions_passing": conn.actions_passing,
-            "actions_total": conn.actions_total,
-            "message": conn.message,
+    # Qdrant
+    try:
+        qdrant = get_qdrant_client()
+        connected = qdrant.is_connected()
+        qdrant_loc = settings.QDRANT_URL if settings.QDRANT_URL else f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
+        checks["qdrant"] = {"connected": connected, "url": qdrant_loc}
+    except Exception as e:
+        checks["qdrant"] = {"connected": False, "error": str(e)}
+
+    # Kimi
+    checks["kimi"] = {"configured": bool(settings.KIMI_API_KEY), "model": settings.KIMI_MODEL}
+
+    # Opus
+    checks["opus"] = {"configured": bool(settings.OPUS_API_KEY), "model": settings.OPUS_MODEL}
+
+    # Database
+    try:
+        checks["database"] = {"connected": DatabaseConnection.health_check(), "type": settings.DATABASE_TYPE}
+    except Exception as e:
+        checks["database"] = {"connected": False, "error": str(e)}
+
+    # Embedding / GPU (setup_gpu.py sets EMBEDDING_DEVICE; only "using_gpu" true when CUDA actually available)
+    try:
+        import torch
+        device = getattr(settings, "EMBEDDING_DEVICE", "cpu")
+        cuda_available = getattr(torch, "cuda", None) and torch.cuda.is_available()
+        checks["embedding"] = {
+            "connected": True,
+            "device": device,
+            "cuda_available": cuda_available,
+            "using_gpu": (device == "cuda" and cuda_available),
         }
+    except Exception as e:
+        checks["embedding"] = {"connected": False, "device": None, "cuda_available": False, "using_gpu": False, "error": str(e)}
 
-    return {
-        "status": report.status,
-        "total_connections": report.total_connections,
-        "connected": report.connected_count,
-        "disconnected": report.disconnected_count,
-        "degraded": report.degraded_count,
-        "actions_validated": report.total_actions_validated,
-        "actions_passing": report.total_actions_passing,
-        "actions_failing": report.total_actions_failing,
-        "services": services,
-    }
+    all_ok = all(
+        c.get("connected", False) or c.get("configured", False)
+        for c in checks.values()
+    )
+    return {"status": "all_connected" if all_ok else "partial", "services": checks}
 
 
 # ==================== Root Endpoint ====================

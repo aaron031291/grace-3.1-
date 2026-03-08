@@ -1,15 +1,21 @@
 """
-Unified Memory — single entry point for all memory operations.
+Unified Memory — sessionful facade for memory when you have a DB session.
 
-Merges the public interfaces of:
-  - cognitive/learning_memory.py (LearningExample, LearningPattern, trust scoring)
+For global (singleton) access without a session, use:
+  from cognitive.unified_memory import get_unified_memory
+  mem = get_unified_memory()
+
+This module provides a sessionful facade that merges:
+  - cognitive/learning_memory.py (LearningExample, LearningPattern, LearningMemoryManager)
   - cognitive/episodic_memory.py (Episode, EpisodicBuffer)
   - cognitive/memory_mesh_integration.py (MemoryMeshIntegration)
-  - genesis/genesis_key_service.py (Genesis key creation)
+  - cognitive/memory_mesh_learner.py (MemoryMeshLearner)
 
-All implementations stay in their original files.
-This module provides a unified facade.
+All Grace memory ultimately uses the same backends; this is the facade for
+callers that already have a session and optional knowledge_base_path.
 """
+
+from pathlib import Path
 
 from cognitive.learning_memory import (
     LearningExample,
@@ -33,16 +39,23 @@ from cognitive.memory_mesh_learner import (
 )
 
 
+def get_unified_memory():
+    """Return the global singleton. Re-export from cognitive.unified_memory."""
+    from cognitive.unified_memory import get_unified_memory as _get
+    return _get()
+
+
 class UnifiedMemory:
-    """Single facade for all memory operations."""
+    """Sessionful facade for all memory operations (use when you have session + optional kb_path)."""
 
     def __init__(self, session, knowledge_base_path=None):
         self.session = session
-        self.learning = LearningMemoryManager(session)
+        kb = Path(knowledge_base_path) if knowledge_base_path else Path(".")
+        self.learning = LearningMemoryManager(session, kb)
         self.episodic = EpisodicBuffer(session)
         self.mesh = MemoryMeshIntegration(
             session=session,
-            knowledge_base_path=knowledge_base_path,
+            knowledge_base_path=kb,
         ) if knowledge_base_path else None
         self.learner = MemoryMeshLearner(session)
 
@@ -75,6 +88,7 @@ class UnifiedMemory:
 
 __all__ = [
     "UnifiedMemory",
+    "get_unified_memory",
     "LearningExample",
     "LearningPattern",
     "Episode",

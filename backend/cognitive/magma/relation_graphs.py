@@ -102,43 +102,25 @@ class BaseRelationGraph:
     - Traverse relationships
     - Find paths between nodes
     - Calculate graph metrics
-
-    All mutations are automatically persisted to the database.
-    On startup, call rehydrate() to restore state from last session.
     """
 
     def __init__(self, graph_type: str):
         self.graph_type = graph_type
         self.nodes: Dict[str, GraphNode] = {}
         self.edges: Dict[str, GraphEdge] = {}
-        self.adjacency: Dict[str, Set[str]] = defaultdict(set)
-        self.reverse_adjacency: Dict[str, Set[str]] = defaultdict(set)
-        self._persistence = None
+        self.adjacency: Dict[str, Set[str]] = defaultdict(set)  # node_id -> set of edge_ids
+        self.reverse_adjacency: Dict[str, Set[str]] = defaultdict(set)  # target_id -> set of edge_ids
 
         logger.info(f"[MAGMA-{graph_type.upper()}] Initialized")
 
-    def _get_persistence(self):
-        if self._persistence is None:
-            try:
-                from cognitive.magma.graph_persistence import get_graph_persistence
-                self._persistence = get_graph_persistence()
-            except Exception:
-                pass
-        return self._persistence
-
     def add_node(self, node: GraphNode) -> str:
-        """Add a node to the graph and persist to database."""
+        """Add a node to the graph."""
         self.nodes[node.id] = node
-        persistence = self._get_persistence()
-        if persistence:
-            try:
-                persistence.save_node(self.graph_type, node)
-            except Exception as e:
-                logger.debug(f"[MAGMA-{self.graph_type}] Persist node skipped: {e}")
+        logger.debug(f"[MAGMA-{self.graph_type}] Added node: {node.id}")
         return node.id
 
     def add_edge(self, edge: GraphEdge) -> str:
-        """Add an edge to the graph and persist to database."""
+        """Add an edge to the graph."""
         if edge.source_id not in self.nodes:
             raise ValueError(f"Source node {edge.source_id} not found")
         if edge.target_id not in self.nodes:
@@ -148,55 +130,8 @@ class BaseRelationGraph:
         self.adjacency[edge.source_id].add(edge.id)
         self.reverse_adjacency[edge.target_id].add(edge.id)
 
-        persistence = self._get_persistence()
-        if persistence:
-            try:
-                persistence.save_edge(self.graph_type, edge)
-            except Exception as e:
-                logger.debug(f"[MAGMA-{self.graph_type}] Persist edge skipped: {e}")
+        logger.debug(f"[MAGMA-{self.graph_type}] Added edge: {edge.source_id} -> {edge.target_id}")
         return edge.id
-
-    def rehydrate(self) -> int:
-        """Restore graph state from database. Returns number of nodes loaded."""
-        persistence = self._get_persistence()
-        if not persistence:
-            return 0
-
-        try:
-            data = persistence.load_graph(self.graph_type)
-            loaded = 0
-
-            for n in data.get("nodes", []):
-                node = GraphNode(
-                    id=n["id"], node_type=n["node_type"], content=n["content"],
-                    embedding=n.get("embedding"), metadata=n.get("metadata", {}),
-                    genesis_key_id=n.get("genesis_key_id"), trust_score=n.get("trust_score", 0.5),
-                )
-                self.nodes[node.id] = node
-                loaded += 1
-
-            for e in data.get("edges", []):
-                if e["source_id"] in self.nodes and e["target_id"] in self.nodes:
-                    rel_type = e["relation_type"]
-                    try:
-                        rel_type = RelationType(rel_type)
-                    except (ValueError, KeyError):
-                        continue
-                    edge = GraphEdge(
-                        id=e["id"], source_id=e["source_id"], target_id=e["target_id"],
-                        relation_type=rel_type, weight=e.get("weight", 1.0),
-                        confidence=e.get("confidence", 0.5), metadata=e.get("metadata", {}),
-                        genesis_key_id=e.get("genesis_key_id"),
-                    )
-                    self.edges[edge.id] = edge
-                    self.adjacency[edge.source_id].add(edge.id)
-                    self.reverse_adjacency[edge.target_id].add(edge.id)
-
-            logger.info(f"[MAGMA-{self.graph_type.upper()}] Rehydrated {loaded} nodes, {len(self.edges)} edges from DB")
-            return loaded
-        except Exception as e:
-            logger.warning(f"[MAGMA-{self.graph_type}] Rehydration failed: {e}")
-            return 0
 
     def get_node(self, node_id: str) -> Optional[GraphNode]:
         """Get a node by ID."""
@@ -820,26 +755,13 @@ class MagmaRelationGraphs:
     Provides cross-graph queries and unified retrieval.
     """
 
-    def __init__(self, auto_rehydrate: bool = True):
+    def __init__(self):
         self.semantic = SemanticGraph()
         self.temporal = TemporalGraph()
         self.causal = CausalGraph()
         self.entity = EntityGraph()
 
-        if auto_rehydrate:
-            self.rehydrate()
-
         logger.info("[MAGMA] Relation Graphs initialized")
-
-    def rehydrate(self) -> Dict[str, int]:
-        """Restore all graphs from database persistence."""
-        results = {}
-        for name, graph in self.get_all_graphs().items():
-            results[name] = graph.rehydrate()
-        total = sum(results.values())
-        if total > 0:
-            logger.info(f"[MAGMA] Rehydrated {total} total nodes from DB: {results}")
-        return results
 
     def get_all_graphs(self) -> Dict[str, BaseRelationGraph]:
         """Get all relation graphs."""

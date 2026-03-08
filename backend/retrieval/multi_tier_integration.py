@@ -8,9 +8,9 @@ with the existing chat endpoint without major refactoring.
 from typing import Dict, Any, Optional, List
 import logging
 from retrieval.query_intelligence import MultiTierQueryHandler, QueryTier
-from database.session import get_session, session_scope
+from database.session import get_session
 from models.query_intelligence_models import QueryHandlingLog, KnowledgeGap, ContextSubmission
-from datetime import datetime, timezone
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,9 @@ def log_query_handling(
         user_id: Optional user identifier
         genesis_key_id: Optional Genesis Key
     """
-    with session_scope() as session:
+    try:
+        session = next(get_session())
+        
         # Create query log
         query_log = QueryHandlingLog(
             query_id=query_id,
@@ -112,7 +114,16 @@ def log_query_handling(
             )
             session.add(knowledge_gap)
         
+        session.commit()
         logger.info(f"Logged query handling for {query_id}: tier={tier_result.tier.value}, confidence={tier_result.confidence.overall_score:.2f}")
+        
+    except Exception as e:
+        logger.error(f"Error logging query handling: {e}")
+        if session:
+            session.rollback()
+    finally:
+        if session:
+            session.close()
 
 
 def format_chat_response(tier_result, model_name: str, generation_time: float) -> Dict[str, Any]:

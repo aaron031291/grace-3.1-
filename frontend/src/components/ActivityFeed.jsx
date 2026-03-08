@@ -34,6 +34,37 @@ export default function ActivityFeed() {
   const [unread, setUnread] = useState(0);
   const intervalRef = useRef(null);
 
+  // Drag state
+  const [pos, setPos] = useState({ bottom: 24, left: 310 });
+  const isDragging = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDragged = useRef(false);
+
+  const handlePointerDown = (e) => {
+    // Prevent dragging from internal panel scroll/text
+    if (expanded && e.target.closest('.activity-feed-panel')) return;
+    isDragging.current = true;
+    hasDragged.current = false;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - dragStartPos.current.x;
+    const dy = e.clientY - dragStartPos.current.y;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) hasDragged.current = true;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    setPos(p => ({ left: p.left + dx, bottom: p.bottom - dy }));
+  };
+
+  const handlePointerUp = (e) => {
+    if (isDragging.current) {
+      isDragging.current = false;
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -52,25 +83,37 @@ export default function ActivityFeed() {
       } catch { /* polling, skip errors */ }
     };
     fetchEvents();
-    intervalRef.current = setInterval(fetchEvents, 30000);
+    intervalRef.current = setInterval(fetchEvents, 5000);
     return () => clearInterval(intervalRef.current);
   }, []);
 
   const toggle = () => {
+    if (hasDragged.current) {
+      hasDragged.current = false;
+      return;
+    }
     setExpanded(!expanded);
     if (!expanded) setUnread(0);
   };
 
   return (
-    <div style={{
-      position: 'fixed', bottom: 16, right: 16, zIndex: 1000,
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    }}>
+    <div
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{
+        position: 'fixed', bottom: pos.bottom, left: pos.left, zIndex: 1000,
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        touchAction: 'none' // Prevent scrolling while dragging
+      }}
+    >
       {expanded && (
-        <div style={{
+        <div className="activity-feed-panel" style={{
           width: 340, maxHeight: 400, background: '#1a1a2e', border: '1px solid #333',
           borderRadius: 10, boxShadow: '0 8px 32px rgba(0,0,0,.5)', overflow: 'hidden',
           marginBottom: 8, display: 'flex', flexDirection: 'column',
+          cursor: 'default'
         }}>
           <div style={{
             padding: '10px 14px', borderBottom: '1px solid #333', background: '#16213e',
@@ -109,9 +152,9 @@ export default function ActivityFeed() {
       )}
 
       <button onClick={toggle} style={{
-        width: 48, height: 48, borderRadius: '50%', border: 'none',
+        width: 40, height: 40, borderRadius: '50%', border: 'none',
         background: expanded ? '#e94560' : '#533483', color: '#fff',
-        fontSize: 20, cursor: 'pointer', position: 'relative',
+        fontSize: 18, cursor: 'pointer', position: 'relative',
         boxShadow: '0 4px 16px rgba(0,0,0,.4)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>

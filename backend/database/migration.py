@@ -1,6 +1,11 @@
 """
 Database initialization and migration utilities.
 Handles database schema creation and management.
+
+Single source of truth: create_tables() creates ALL app tables. To add a new table:
+  1. Define the model in the appropriate models/*.py (using BaseModel from database.base).
+  2. Import it here (so Base.metadata knows about it).
+  Do not create tables via separate migration scripts that use a different Base.
 """
 
 from sqlalchemy import inspect, MetaData
@@ -28,7 +33,16 @@ from models.database_models import (  # noqa: F401
     Episode,
     Procedure,
     LLMUsageStats,
+    GraphNode,
+    AdaptiveOverride,
+    SchemaProposal,
 )
+
+# Import dynamic autonomous schema changes
+try:
+    from models.dynamic_models import *  # noqa: F401, F403
+except ImportError:
+    pass
 
 # Import Notion task management models
 from models.notion_models import (  # noqa: F401
@@ -65,12 +79,23 @@ from models.librarian_models import (  # noqa: F401
     LibrarianAudit,
 )
 
-# Import Query Intelligence models
+# Import Query Intelligence models (query_handling_log, knowledge_gaps, context_submissions)
 from models.query_intelligence_models import (  # noqa: F401
     QueryHandlingLog,
     KnowledgeGap,
     ContextSubmission,
 )
+
+# Import File Intelligence models (file_intelligence, file_relationships, etc.)
+from models.file_intelligence_models import (  # noqa: F401
+    FileIntelligence,
+    FileRelationship,
+    ProcessingStrategy,
+    FileHealthCheck,
+)
+
+# Import Coding Agent task model — creates coding_agent_tasks table
+from database.models.coding_agent_task import CodingAgentTask  # noqa: F401
 
 
 logger = logging.getLogger(__name__)

@@ -20,7 +20,7 @@ import logging
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -57,7 +57,7 @@ class Blueprint:
     revision_count: int = 0
     errors: List[str] = field(default_factory=list)
     trust_score: float = 0.0
-    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
     def to_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
@@ -392,7 +392,7 @@ def _log_coding_pattern(bp: Blueprint, outcome: str):
     """
     pattern = {
         "pattern_id": bp.id,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.utcnow().isoformat(),
         "outcome": outcome,
         "task": bp.task,
         "architecture": bp.architecture[:1000],

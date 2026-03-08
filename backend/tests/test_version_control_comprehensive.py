@@ -522,8 +522,8 @@ class TestRemoteOperations:
         class MockGitService:
             def get_remotes(self) -> List[Dict]:
                 return [
-                    {"name": "origin", "url": "git@github.com:user/repo.git"},
-                    {"name": "upstream", "url": "git@github.com:org/repo.git"}
+                    {"name": "origin", "url": "git@git.example.com:user/repo.git"},
+                    {"name": "upstream", "url": "git@git.example.com:org/repo.git"}
                 ]
 
         service = MockGitService()

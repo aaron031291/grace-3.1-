@@ -32,6 +32,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from enum import Enum
 
+from core.datetime_utils import as_naive_utc
+
 logger = logging.getLogger(__name__)
 
 EXPERIMENTS_DIR = Path(__file__).parent.parent / "data" / "experiments"
@@ -231,7 +233,7 @@ def record_checkpoint(exp_id: str) -> Dict[str, Any]:
     checkpoint = {
         "timestamp": datetime.utcnow().isoformat(),
         "metrics": current,
-        "day": (datetime.utcnow() - datetime.fromisoformat(exp.created_at)).days,
+        "day": (datetime.utcnow() - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     # Calculate deltas from baseline
@@ -290,7 +292,7 @@ def analyse_experiment(exp_id: str) -> Dict[str, Any]:
         "improvement_rate": round(improved_count / total_metrics, 3) if total_metrics else 0,
         "recommendation": "adopt" if improved_count > total_metrics / 2 else "reject",
         "checkpoints_recorded": len(exp.checkpoints),
-        "days_tracked": (datetime.utcnow() - datetime.fromisoformat(exp.created_at)).days,
+        "days_tracked": (datetime.utcnow() - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     exp.final_report = json.dumps(analysis, indent=2)

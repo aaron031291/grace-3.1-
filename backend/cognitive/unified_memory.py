@@ -1,25 +1,38 @@
 """
-Unified Memory Interface — Single access point for all memory systems.
+Unified Memory — Single access point for ALL Grace memory systems.
 
-Combines:
-  - Episodic Memory (concrete past experiences)
-  - Procedural Memory (learned skills)
-  - Learning Memory (training examples + patterns)
-  - Memory Mesh (integration layer)
-  - Magma Memory (graph-based: semantic, temporal, causal)
-  - Flash Cache (external reference cache)
+This is the ONE entry point for memory. All other memory modules are internal;
+callers should use only:
 
-Every memory system in Grace is accessible through this single interface.
+  from cognitive.unified_memory import get_unified_memory
+  mem = get_unified_memory()
+
+Unified memory combines:
+  - Episodic Memory (concrete past experiences) — via cognitive.episodic_memory
+  - Procedural Memory (learned skills) — via cognitive.procedural_memory
+  - Learning Memory (training examples + patterns) — via cognitive.learning_memory
+  - Memory Mesh (integration) — via cognitive.memory_mesh_integration when session+kb_path available
+  - Magma (graph-based context) — via cognitive.magma_bridge
+  - Flash Cache (external reference cache) — via cognitive.flash_cache
+
+All storage and recall go through the same session-based backends (EpisodicBuffer,
+LearningMemoryManager, ProceduralRepository) so there is one code path and one schema.
 """
 
 import logging
+import os
+from pathlib import Path
 from typing import Any, Dict, List, Optional
-from datetime import datetime, timezone
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+# Default knowledge base path when not provided (e.g. for singleton)
+_DEFAULT_KB_PATH = Path(os.environ.get("GRACE_KNOWLEDGE_BASE_PATH", "."))
 
-def _get_db():
+
+def _get_session():
+    """Get a DB session. Caller must close it (or use as context)."""
     try:
         from database.session import SessionLocal
         if SessionLocal is None:
@@ -28,12 +41,29 @@ def _get_db():
             from database.session import SessionLocal as SL
             return SL()
         return SessionLocal()
-    except Exception:
+    except Exception as e:
+        logger.debug(f"Session not available: {e}")
         return None
 
 
+def _coerce_dict(val) -> dict:
+    """Coerce to dict for episode action/outcome."""
+    if val is None:
+        return {}
+    if isinstance(val, dict):
+        return val
+    if isinstance(val, str):
+        try:
+            import json
+            parsed = json.loads(val)
+            return parsed if isinstance(parsed, dict) else {"raw": val}
+        except Exception:
+            return {"raw": val}
+    return {"raw": str(val)}
+
+
 class UnifiedMemory:
-    """Single interface for all Grace memory systems."""
+    """Single interface for all Grace memory systems. Use get_unified_memory() to get the singleton."""
 
     _instance = None
 
@@ -43,175 +73,231 @@ class UnifiedMemory:
             cls._instance = cls()
         return cls._instance
 
-    # ── Store Operations ──────────────────────────────────────────────
+    # ── Store (delegate to session-based backends) ────────────────────────
 
-    def store_episode(self, problem: str, action: str, outcome: str,
-                      trust: float = 0.5, source: str = "system") -> bool:
-        """Store a concrete experience."""
-        db = _get_db()
-        if not db:
+    def store_episode(
+        self,
+        problem: str,
+        action: str,
+        outcome: str,
+        trust: float = 0.5,
+        source: str = "system"
+    ) -> bool:
+        """Store a concrete experience. Uses EpisodicBuffer."""
+        session = _get_session()
+        if not session:
             return False
         try:
-            from sqlalchemy import text
-            db.execute(text(
-                "INSERT INTO episodes (problem, action, outcome, trust_score, source, created_at, updated_at) "
-                "VALUES (:p, :a, :o, :t, :s, :now, :now)"
-            ), {"p": problem[:2000], "a": action[:2000], "o": outcome[:2000],
-                "t": trust, "s": source, "now": datetime.now(timezone.utc)})
-            db.commit()
-
+            from cognitive.episodic_memory import EpisodicBuffer
+            buf = EpisodicBuffer(session)
+            buf.record_episode(
+                problem=problem[:2000] if problem else "",
+                action=_coerce_dict(action),
+                outcome=_coerce_dict(outcome),
+                trust_score=trust,
+                source=source or "system",
+            )
             try:
                 from cognitive.magma_bridge import store_decision
-                store_decision(problem[:200], action[:200], outcome[:200])
+                store_decision(problem[:200], str(action)[:200], str(outcome)[:200])
             except Exception:
                 pass
-
             return True
         except Exception as e:
             logger.debug(f"Store episode failed: {e}")
-            db.rollback()
+            session.rollback()
             return False
         finally:
-            db.close()
+            session.close()
 
-    def store_learning(self, input_ctx: str, expected: str, actual: str = "",
-                       trust: float = 0.5, source: str = "system",
-                       example_type: str = "general") -> bool:
-        """Store a learning example."""
-        db = _get_db()
-        if not db:
+    def store_learning(
+        self,
+        input_ctx: str,
+        expected: str,
+        actual: str = "",
+        trust: float = 0.5,
+        source: str = "system",
+        example_type: str = "general"
+    ) -> bool:
+        """Store a learning example. Uses LearningMemoryManager."""
+        session = _get_session()
+        if not session:
             return False
         try:
-            from sqlalchemy import text
-            db.execute(text(
-                "INSERT INTO learning_examples (example_type, input_context, expected_output, actual_output, "
-                "trust_score, source, source_reliability, content_quality, consensus_score, recency_score, "
-                "created_at, updated_at) VALUES (:et, :ic, :eo, :ao, :ts, :src, :sr, :cq, :cs, :rs, :now, :now)"
-            ), {"et": example_type, "ic": input_ctx[:5000], "eo": expected[:5000],
-                "ao": actual[:5000], "ts": trust, "src": source,
-                "sr": 0.5, "cq": 0.5, "cs": 0.5, "rs": 1.0,
-                "now": datetime.now(timezone.utc)})
-            db.commit()
+            from cognitive.learning_memory import LearningMemoryManager
+            mgr = LearningMemoryManager(session, _DEFAULT_KB_PATH)
+            learning_data = {
+                "context": _coerce_dict(input_ctx),
+                "expected": _coerce_dict(expected),
+                "actual": _coerce_dict(actual) if actual else _coerce_dict(expected),
+            }
+            mgr.ingest_learning_data(
+                learning_type=example_type,
+                learning_data=learning_data,
+                source=source or "system",
+            )
             return True
         except Exception as e:
             logger.debug(f"Store learning failed: {e}")
-            db.rollback()
+            session.rollback()
             return False
         finally:
-            db.close()
+            session.close()
 
-    def store_procedure(self, name: str, goal: str, steps: str,
-                        trust: float = 0.5, proc_type: str = "general") -> bool:
-        """Store a learned skill/procedure."""
-        db = _get_db()
-        if not db:
+    def store_procedure(
+        self,
+        name: str,
+        goal: str,
+        steps: str,
+        trust: float = 0.5,
+        proc_type: str = "general"
+    ) -> bool:
+        """Store a learned skill/procedure. Uses ProceduralRepository."""
+        session = _get_session()
+        if not session:
             return False
         try:
-            from sqlalchemy import text
-            db.execute(text(
-                "INSERT INTO procedures (name, goal, procedure_type, steps, trust_score, "
-                "success_rate, usage_count, created_at, updated_at) "
-                "VALUES (:n, :g, :pt, :s, :ts, :sr, 0, :now, :now)"
-            ), {"n": name, "g": goal[:2000], "pt": proc_type, "s": steps[:5000],
-                "ts": trust, "sr": 0.5, "now": datetime.now(timezone.utc)})
-            db.commit()
+            from cognitive.procedural_memory import ProceduralRepository
+            repo = ProceduralRepository(session)
+            procedure = repo.create_procedure(
+                goal=goal[:2000] if goal else name,
+                action_sequence=[{"raw": steps[:5000] if steps else ""}],
+                preconditions={},
+                procedure_type=proc_type or "general",
+            )
+            procedure.trust_score = trust
+            procedure.success_rate = 0.5
+            session.commit()
             return True
         except Exception as e:
             logger.debug(f"Store procedure failed: {e}")
-            db.rollback()
+            session.rollback()
             return False
         finally:
-            db.close()
+            session.close()
 
-    # ── Query Operations ──────────────────────────────────────────────
+    # ── Recall (delegate to session-based backends) ────────────────────────
 
-    def recall_episodes(self, query: str = "", limit: int = 10,
-                        min_trust: float = 0.0) -> List[dict]:
-        """Recall past experiences, optionally filtered by keyword."""
-        db = _get_db()
-        if not db:
+    def recall_episodes(
+        self,
+        query: str = "",
+        limit: int = 10,
+        min_trust: float = 0.0
+    ) -> List[dict]:
+        """Recall past experiences. Uses EpisodicBuffer when query given, else recent list."""
+        session = _get_session()
+        if not session:
             return []
         try:
-            from sqlalchemy import text
-            if query:
-                rows = db.execute(text(
-                    "SELECT problem, action, outcome, trust_score, source, created_at "
-                    "FROM episodes WHERE trust_score >= :mt AND "
-                    "(problem LIKE :q OR action LIKE :q OR outcome LIKE :q) "
-                    "ORDER BY trust_score DESC LIMIT :lim"
-                ), {"mt": min_trust, "q": f"%{query}%", "lim": limit}).fetchall()
+            from cognitive.episodic_memory import EpisodicBuffer, Episode
+            buf = EpisodicBuffer(session)
+            if query and query.strip():
+                episodes = buf.recall_similar(problem=query, k=limit, min_trust=min_trust)
             else:
-                rows = db.execute(text(
-                    "SELECT problem, action, outcome, trust_score, source, created_at "
-                    "FROM episodes WHERE trust_score >= :mt "
-                    "ORDER BY created_at DESC LIMIT :lim"
-                ), {"mt": min_trust, "lim": limit}).fetchall()
-            return [
-                {"problem": r[0], "action": r[1], "outcome": r[2],
-                 "trust": r[3], "source": r[4],
-                 "created_at": r[5].isoformat() if r[5] else None}
-                for r in rows
-            ]
-        except Exception:
+                episodes = (
+                    session.query(Episode)
+                    .filter(Episode.trust_score >= min_trust)
+                    .order_by(Episode.timestamp.desc())
+                    .limit(limit)
+                    .all()
+                )
+            out = []
+            for e in episodes:
+                ts = getattr(e, "timestamp", None) or getattr(e, "created_at", None)
+                out.append({
+                    "problem": getattr(e, "problem", "") or "",
+                    "action": getattr(e, "action", "") or "",
+                    "outcome": getattr(e, "outcome", "") or "",
+                    "trust": getattr(e, "trust_score", 0) or 0,
+                    "source": getattr(e, "source", "") or "",
+                    "created_at": ts.isoformat() if hasattr(ts, "isoformat") and ts else None,
+                })
+            return out
+        except Exception as e:
+            logger.debug(f"Recall episodes failed: {e}")
             return []
         finally:
-            db.close()
+            session.close()
 
-    def recall_learnings(self, query: str = "", limit: int = 10,
-                         min_trust: float = 0.0) -> List[dict]:
-        """Recall learning examples."""
-        db = _get_db()
-        if not db:
+    def recall_learnings(
+        self,
+        query: str = "",
+        limit: int = 10,
+        min_trust: float = 0.0
+    ) -> List[dict]:
+        """Recall learning examples. Uses LearningExample via session."""
+        session = _get_session()
+        if not session:
             return []
         try:
-            from sqlalchemy import text
-            if query:
-                rows = db.execute(text(
-                    "SELECT input_context, expected_output, trust_score, source, example_type "
-                    "FROM learning_examples WHERE trust_score >= :mt AND "
-                    "input_context LIKE :q ORDER BY trust_score DESC LIMIT :lim"
-                ), {"mt": min_trust, "q": f"%{query}%", "lim": limit}).fetchall()
-            else:
-                rows = db.execute(text(
-                    "SELECT input_context, expected_output, trust_score, source, example_type "
-                    "FROM learning_examples WHERE trust_score >= :mt "
-                    "ORDER BY created_at DESC LIMIT :lim"
-                ), {"mt": min_trust, "lim": limit}).fetchall()
-            return [
-                {"input": (r[0] or "")[:300], "expected": (r[1] or "")[:300],
-                 "trust": r[2], "source": r[3], "type": r[4]}
-                for r in rows
-            ]
-        except Exception:
+            from cognitive.learning_memory import LearningExample
+            q = session.query(LearningExample).filter(LearningExample.trust_score >= min_trust)
+            if query and query.strip():
+                q = q.filter(LearningExample.input_context.contains(query))
+            rows = q.order_by(LearningExample.created_at.desc()).limit(limit).all()
+            out = []
+            for r in rows:
+                ic = getattr(r, "input_context", "") or "{}"
+                eo = getattr(r, "expected_output", "") or "{}"
+                if isinstance(ic, str) and len(ic) > 300:
+                    ic = ic[:300] + "..."
+                if isinstance(eo, str) and len(eo) > 300:
+                    eo = eo[:300] + "..."
+                out.append({
+                    "input": ic,
+                    "expected": eo,
+                    "trust": getattr(r, "trust_score", 0) or 0,
+                    "source": getattr(r, "source", "") or "",
+                    "type": getattr(r, "example_type", "") or "",
+                })
+            return out
+        except Exception as e:
+            logger.debug(f"Recall learnings failed: {e}")
             return []
         finally:
-            db.close()
+            session.close()
 
-    def recall_procedures(self, query: str = "", limit: int = 10,
-                          min_trust: float = 0.0) -> List[dict]:
-        """Recall learned procedures/skills."""
-        db = _get_db()
-        if not db:
+    def recall_procedures(
+        self,
+        query: str = "",
+        limit: int = 10,
+        min_trust: float = 0.0
+    ) -> List[dict]:
+        """Recall learned procedures. Uses Procedure via session."""
+        session = _get_session()
+        if not session:
             return []
         try:
-            from sqlalchemy import text
-            rows = db.execute(text(
-                "SELECT name, goal, steps, trust_score, success_rate, usage_count "
-                "FROM procedures WHERE trust_score >= :mt "
-                "ORDER BY trust_score DESC LIMIT :lim"
-            ), {"mt": min_trust, "lim": limit}).fetchall()
-            return [
-                {"name": r[0], "goal": r[1], "steps": (r[2] or "")[:300],
-                 "trust": r[3], "success_rate": r[4], "usage_count": r[5]}
-                for r in rows
-            ]
-        except Exception:
+            from cognitive.procedural_memory import Procedure
+            q = session.query(Procedure).filter(Procedure.trust_score >= min_trust)
+            if query and query.strip():
+                q = q.filter(Procedure.goal.contains(query))
+            rows = q.order_by(Procedure.trust_score.desc()).limit(limit).all()
+            out = []
+            for r in rows:
+                steps = getattr(r, "steps", None)
+                steps_str = steps[:300] if isinstance(steps, str) else (str(steps)[:300] if steps else "")
+                out.append({
+                    "name": getattr(r, "name", "") or "",
+                    "goal": getattr(r, "goal", "") or "",
+                    "steps": steps_str,
+                    "trust": getattr(r, "trust_score", 0) or 0,
+                    "success_rate": getattr(r, "success_rate", 0) or 0,
+                    "usage_count": getattr(r, "usage_count", 0) or 0,
+                })
+            return out
+        except Exception as e:
+            logger.debug(f"Recall procedures failed: {e}")
             return []
         finally:
-            db.close()
+            session.close()
 
-    def search_all(self, query: str, limit: int = 20,
-                   min_trust: float = 0.0) -> Dict[str, List[dict]]:
+    def search_all(
+        self,
+        query: str,
+        limit: int = 20,
+        min_trust: float = 0.0
+    ) -> Dict[str, Any]:
         """Search across ALL memory systems at once."""
         results = {
             "episodes": self.recall_episodes(query, limit=limit // 4 or 3, min_trust=min_trust),
@@ -219,50 +305,63 @@ class UnifiedMemory:
             "procedures": self.recall_procedures(query, limit=limit // 4 or 3, min_trust=min_trust),
         }
 
-        # Magma graph memory
-        results["magma"] = []
         try:
             from cognitive.magma_bridge import query_context
             ctx = query_context(query[:200])
-            if ctx:
-                results["magma"] = [{"context": ctx[:500]}]
+            results["magma"] = [{"context": ctx[:500]}] if ctx else []
         except Exception:
-            pass
+            results["magma"] = []
 
-        # Flash cache references
         try:
             from cognitive.flash_cache import get_flash_cache
             fc = get_flash_cache()
             refs = fc.search(query, limit=limit // 4 or 3, min_trust=min_trust)
             results["flash_cache"] = [
-                {"name": r.get("source_name", ""), "uri": r.get("source_uri", ""),
-                 "trust": r.get("trust_score", 0)}
+                {
+                    "name": r.get("source_name", ""),
+                    "uri": r.get("source_uri", ""),
+                    "trust": r.get("trust_score", 0),
+                }
                 for r in refs
             ]
         except Exception:
             results["flash_cache"] = []
 
-        results["total"] = sum(len(v) for v in results.values())
+        results["total"] = sum(
+            len(v) for k, v in results.items()
+            if k != "total" and isinstance(v, list)
+        )
         return results
 
     def get_stats(self) -> Dict[str, Any]:
-        """Aggregate statistics across all memory systems."""
+        """Aggregate statistics across all memory systems (ORM-based counts)."""
         stats = {}
-        db = _get_db()
-        if db:
+        session = _get_session()
+        if session:
             try:
-                from sqlalchemy import text
-                for table in ["learning_examples", "episodes", "procedures", "learning_patterns"]:
+                from cognitive.learning_memory import LearningExample, LearningPattern
+                from cognitive.episodic_memory import Episode
+                from cognitive.procedural_memory import Procedure
+                from sqlalchemy import func
+                for name, model in [
+                    ("learning_examples", LearningExample),
+                    ("episodes", Episode),
+                    ("procedures", Procedure),
+                    ("learning_patterns", LearningPattern),
+                ]:
                     try:
-                        count = db.execute(text(f"SELECT COUNT(*) FROM [{table}]")).scalar() or 0
-                        avg_trust = db.execute(text(f"SELECT AVG(trust_score) FROM [{table}]")).scalar() or 0
-                        stats[table] = {"count": count, "avg_trust": round(avg_trust, 3)}
+                        count = session.query(model).count()
+                        if hasattr(model, "trust_score"):
+                            avg = session.query(func.avg(model.trust_score)).scalar() or 0
+                        else:
+                            avg = 0
+                        stats[name] = {"count": count, "avg_trust": round(float(avg), 3)}
                     except Exception:
-                        stats[table] = {"count": 0, "avg_trust": 0}
+                        stats[name] = {"count": 0, "avg_trust": 0}
             except Exception:
                 pass
             finally:
-                db.close()
+                session.close()
 
         try:
             from cognitive.flash_cache import get_flash_cache
@@ -281,4 +380,5 @@ class UnifiedMemory:
 
 
 def get_unified_memory() -> UnifiedMemory:
+    """Return the singleton UnifiedMemory instance. This is THE entry point for all Grace memory."""
     return UnifiedMemory.get_instance()

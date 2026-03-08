@@ -41,48 +41,120 @@ class QdrantVectorDB:
         self.client: Optional[QdrantClient] = None
         self.connected = False
         
-    def connect(self) -> bool:
+    def connect(self, retries: int = 5, retry_delay: float = 2.0) -> bool:
         """
         Connect to Qdrant server (local or cloud).
-        
+        Retries with backoff so Qdrant has time to start (e.g. after docker start).
+
+        Args:
+            retries: Number of connection attempts.
+            retry_delay: Seconds to wait between attempts.
+
         Returns:
             bool: True if connection successful, False otherwise
         """
+        import time
+        last_error = None
+        # Cloud API from env: use QDRANT_URL (and QDRANT_API_KEY) when set in .env
         try:
-            # Check for cloud URL (Qdrant Cloud uses HTTPS)
-            qdrant_url = os.getenv("QDRANT_URL", "")
-            
-            if qdrant_url and qdrant_url.startswith("https://"):
-                # Cloud Qdrant connection
-                self.client = QdrantClient(
-                    url=qdrant_url,
-                    api_key=self.api_key,
-                    timeout=self.timeout,
-                )
-                logger.info(f"Connecting to Qdrant Cloud: {qdrant_url[:50]}...")
-            else:
-                # Local Qdrant connection
-                self.client = QdrantClient(
-                    host=self.host,
-                    port=self.port,
-                    api_key=self.api_key,
-                    timeout=self.timeout,
-                )
-            
-            # Test connection by getting server info
-            info = self.client.get_collections()
-            self.connected = True
-            logger.info(f"[OK] Connected to Qdrant at {self.host}:{self.port}")
-            return True
-        except Exception as e:
-            logger.error(f"[FAIL] Failed to connect to Qdrant: {e}")
-            self.connected = False
-            return False
+            from settings import settings
+            qdrant_url = (getattr(settings, "QDRANT_URL", None) or "").strip()
+        except Exception:
+            qdrant_url = (os.getenv("QDRANT_URL") or "").strip()
+
+        for attempt in range(1, retries + 1):
+            try:
+                # Check for cloud URL (Qdrant Cloud uses HTTPS) — use cloud API from env when set
+                if qdrant_url and qdrant_url.startswith("https://"):
+                    self.client = QdrantClient(
+                        url=qdrant_url,
+                        api_key=self.api_key,
+                        timeout=self.timeout,
+                    )
+                    logger.info(f"Connecting to Qdrant Cloud: {qdrant_url[:50]}...")
+                else:
+                    self.client = QdrantClient(
+                        host=self.host,
+                        port=self.port,
+                        api_key=self.api_key,
+                        timeout=self.timeout,
+                    )
+
+                # Test connection
+                self.client.get_collections()
+                self.connected = True
+                if qdrant_url and qdrant_url.startswith("https://"):
+                    logger.info("[OK] Connected to Qdrant Cloud")
+                else:
+                    logger.info(f"[OK] Connected to Qdrant at {self.host}:{self.port}")
+                return True
+            except Exception as e:
+                last_error = e
+                self.client = None
+                self.connected = False
+                if attempt < retries:
+                    logger.warning(
+                        "[Qdrant] Connection attempt %s/%s failed: %s. Retrying in %.1fs...",
+                        attempt, retries, e, retry_delay,
+                    )
+                    time.sleep(retry_delay)
+                else:
+                    if qdrant_url and qdrant_url.startswith("https://"):
+                        logger.error(
+                            "[FAIL] Failed to connect to Qdrant Cloud after %s attempts: %s. "
+                            "Check QDRANT_URL and QDRANT_API_KEY in backend/.env.",
+                            retries, e,
+                        )
+                    else:
+                        logger.error(
+                            "[FAIL] Failed to connect to Qdrant after %s attempts: %s. "
+                            "Ensure Qdrant is running (e.g. .\\start_services.bat qdrant or docker start qdrant), or set QDRANT_URL + QDRANT_API_KEY for Cloud.",
+                            retries, e,
+                        )
+        return False
     
     def is_connected(self) -> bool:
         """Check if connected to Qdrant."""
         return self.connected and self.client is not None
-    
+
+    def ensure_connected(self, retries: int = 2, retry_delay: float = 1.0) -> bool:
+        """
+        Ensure we have a live connection. If not connected, try to connect.
+        Call this when you want to give Qdrant a chance to come back (e.g. after startup).
+        """
+        if self.is_connected():
+            return True
+        return self.connect(retries=retries, retry_delay=retry_delay)
+
+    def _is_connection_error(self, e: Exception) -> bool:
+        """Heuristic: exception likely due to connection/transport failure."""
+        if e is None:
+            return False
+        msg = str(e).lower()
+        err_type = type(e).__name__
+        return (
+            "connection" in msg or "timeout" in msg or "refused" in msg
+            or "reset" in msg or "closed" in msg or "unreachable" in msg
+            or err_type in ("ConnectionError", "TimeoutError", "ConnectError")
+        )
+
+    def _with_reconnect(self, op, *args, **kwargs):
+        """
+        Run op(*args, **kwargs). On connection-like failure, reconnect once and retry.
+        Returns (result, True) on success, (None, False) on failure.
+        """
+        try:
+            return op(*args, **kwargs), True
+        except Exception as e:
+            if not self._is_connection_error(e):
+                raise
+            logger.warning("[Qdrant] Operation failed (connection-like), reconnecting once: %s", e)
+            self.client = None
+            self.connected = False
+            if not self.connect(retries=2, retry_delay=1.0):
+                raise
+            return op(*args, **kwargs), True
+
     def create_collection(
         self,
         collection_name: str,
@@ -102,18 +174,15 @@ class QdrantVectorDB:
         Returns:
             bool: True if successful, False otherwise
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             logger.error("Not connected to Qdrant")
             return False
-        
-        try:
-            # Check if collection already exists
+
+        def _do_create():
             collections = self.client.get_collections()
             if any(c.name == collection_name for c in collections.collections):
                 logger.info(f"Collection '{collection_name}' already exists")
                 return True
-            
-            # Map distance metric to Qdrant enum
             distance_map = {
                 "cosine": Distance.COSINE,
                 "euclidean": Distance.EUCLID,
@@ -121,8 +190,6 @@ class QdrantVectorDB:
                 "dot": Distance.DOT,
             }
             distance = distance_map.get(distance_metric.lower(), Distance.COSINE)
-            
-            # Create collection
             self.client.create_collection(
                 collection_name=collection_name,
                 vectors_config=VectorParams(size=vector_size, distance=distance),
@@ -130,7 +197,10 @@ class QdrantVectorDB:
             )
             logger.info(f"[OK] Created collection '{collection_name}' with vector size {vector_size}")
             return True
-        
+
+        try:
+            self._with_reconnect(_do_create)
+            return True
         except Exception as e:
             logger.error(f"[FAIL] Failed to create collection '{collection_name}': {e}")
             return False
@@ -145,9 +215,8 @@ class QdrantVectorDB:
         Returns:
             bool: True if collection exists, False otherwise
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             return False
-        
         try:
             collections = self.client.get_collections()
             return any(c.name == collection_name for c in collections.collections)
@@ -172,17 +241,15 @@ class QdrantVectorDB:
         Returns:
             bool: True if successful, False otherwise
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             logger.error("Not connected to Qdrant")
             return False
-        
-        try:
-            # Convert to PointStruct format
+
+        def _do_upsert():
             points = [
                 PointStruct(id=v[0], vector=v[1], payload=v[2])
                 for v in vectors
             ]
-            
             self.client.upsert(
                 collection_name=collection_name,
                 points=points,
@@ -190,7 +257,10 @@ class QdrantVectorDB:
             )
             logger.info(f"[OK] Upserted {len(vectors)} vectors to '{collection_name}'")
             return True
-        
+
+        try:
+            self._with_reconnect(_do_upsert)
+            return True
         except Exception as e:
             logger.error(f"[FAIL] Failed to upsert vectors: {e}")
             return False
@@ -216,11 +286,11 @@ class QdrantVectorDB:
         Returns:
             List of search results with scores and payloads
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             logger.error("Not connected to Qdrant")
             return []
-        
-        try:
+
+        def _do_search():
             results = self.client.query_points(
                 collection_name=collection_name,
                 query=query_vector,
@@ -228,59 +298,18 @@ class QdrantVectorDB:
                 score_threshold=score_threshold,
                 **kwargs
             )
-            
             return [
-                {
-                    "id": result.id,
-                    "score": result.score,
-                    "payload": result.payload
-                }
+                {"id": result.id, "score": result.score, "payload": result.payload}
                 for result in results.points
             ]
-        
+
+        try:
+            out, _ = self._with_reconnect(_do_search)
+            return out or []
         except Exception as e:
             logger.error(f"[FAIL] Search failed: {e}")
             return []
     
-    def scroll(
-        self,
-        collection_name: str,
-        limit: int = 100,
-        offset: Any = None,
-        with_vectors: bool = False,
-        with_payload: bool = True,
-        **kwargs
-    ):
-        """
-        Scroll through all points in a collection.
-
-        Args:
-            collection_name: Name of the collection
-            limit: Maximum points per page
-            offset: Pagination offset (point id)
-            with_vectors: Whether to include vectors in results
-            with_payload: Whether to include payloads in results
-
-        Returns:
-            Tuple of (list of points, next page offset) or ([], None) on error
-        """
-        if not self.is_connected():
-            logger.error("Not connected to Qdrant")
-            return [], None
-
-        try:
-            return self.client.scroll(
-                collection_name=collection_name,
-                limit=limit,
-                offset=offset,
-                with_vectors=with_vectors,
-                with_payload=with_payload,
-                **kwargs
-            )
-        except Exception as e:
-            logger.error(f"[FAIL] Scroll failed on '{collection_name}': {e}")
-            return [], None
-
     def delete_vectors(
         self,
         collection_name: str,
@@ -298,10 +327,9 @@ class QdrantVectorDB:
         Returns:
             bool: True if successful, False otherwise
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             logger.error("Not connected to Qdrant")
             return False
-        
         try:
             self.client.delete(
                 collection_name=collection_name,
@@ -325,9 +353,8 @@ class QdrantVectorDB:
         Returns:
             Dictionary with collection information or None if error
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             return None
-        
         try:
             info = self.client.get_collection(collection_name)
             return {
@@ -351,9 +378,8 @@ class QdrantVectorDB:
         Returns:
             bool: True if successful, False otherwise
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             return False
-        
         try:
             self.client.delete_collection(collection_name)
             logger.info(f"[OK] Deleted collection '{collection_name}'")
@@ -363,46 +389,6 @@ class QdrantVectorDB:
             logger.error(f"[FAIL] Failed to delete collection: {e}")
             return False
     
-    def scroll(
-        self,
-        collection_name: str,
-        limit: int = 100,
-        with_vectors: bool = False,
-        with_payload: bool = True,
-        offset: Optional[int] = None,
-        **kwargs,
-    ) -> List[Dict[str, Any]]:
-        """
-        Scroll through all points in a collection (paginated).
-
-        Used by Reverse KNN and other exhaustive search operations.
-        """
-        if not self.is_connected():
-            logger.error("Not connected to Qdrant")
-            return []
-
-        try:
-            results, _next_offset = self.client.scroll(
-                collection_name=collection_name,
-                limit=limit,
-                with_vectors=with_vectors,
-                with_payload=with_payload,
-                offset=offset,
-                **kwargs,
-            )
-
-            return [
-                {
-                    "id": point.id,
-                    "vector": point.vector if with_vectors else None,
-                    "payload": point.payload if with_payload else {},
-                }
-                for point in results
-            ]
-        except Exception as e:
-            logger.error(f"[FAIL] Scroll failed on '{collection_name}': {e}")
-            return []
-
     def list_collections(self) -> List[str]:
         """
         List all collections.
@@ -410,9 +396,8 @@ class QdrantVectorDB:
         Returns:
             List of collection names
         """
-        if not self.is_connected():
+        if not self.is_connected() and not self.ensure_connected():
             return []
-        
         try:
             collections = self.client.get_collections()
             return [c.name for c in collections.collections]
@@ -420,6 +405,22 @@ class QdrantVectorDB:
         except Exception as e:
             logger.error(f"[FAIL] Failed to list collections: {e}")
             return []
+
+    def get_collections(self):
+        """
+        Proxy to raw QdrantClient.get_collections() for backwards compatibility.
+        """
+        if not self.is_connected() and not self.ensure_connected():
+            class EmptyCollections:
+                collections = []
+            return EmptyCollections()
+        try:
+            return self.client.get_collections()
+        except Exception as e:
+            logger.error(f"[FAIL] Failed to get collections: {e}")
+            class EmptyCollections:
+                collections = []
+            return EmptyCollections()
 
 
 def get_qdrant_client(
@@ -431,9 +432,10 @@ def get_qdrant_client(
     """
     Get or create a Qdrant client instance (singleton pattern).
     Reads from settings/env if not provided. Supports both local and cloud Qdrant.
+    Uses circuit breaker so repeated connection failures fail fast and allow recovery.
     """
     global _qdrant_client
-    
+
     if _qdrant_client is None or force_new:
         # Read from settings
         try:
@@ -445,8 +447,23 @@ def get_qdrant_client(
             host = host or os.getenv('QDRANT_HOST', 'localhost')
             port = port or int(os.getenv('QDRANT_PORT', '6333'))
             api_key = api_key or os.getenv('QDRANT_API_KEY', '') or None
-        
-        _qdrant_client = QdrantVectorDB(host=host, port=port, api_key=api_key)
-        _qdrant_client.connect()
-    
+
+        client = QdrantVectorDB(host=host, port=port, api_key=api_key)
+
+        def _connect_raise():
+            if not client.connect():
+                raise ConnectionError("Qdrant connection failed")
+
+        try:
+            from core.resilience import get_breaker
+            cb = get_breaker("qdrant", failure_threshold=3, reset_timeout=20)
+            cb.call(_connect_raise)
+        except Exception:
+            client.connect()
+        _qdrant_client = client
+
+    # Lazy reconnect: if singleton exists but is disconnected, try once so we recover when Qdrant comes back
+    if not _qdrant_client.is_connected():
+        _qdrant_client.ensure_connected(retries=2, retry_delay=1.0)
+
     return _qdrant_client

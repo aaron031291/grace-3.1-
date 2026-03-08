@@ -7,6 +7,10 @@ Not "find similar" but "find what's MISSING":
   - Stale knowledge: clusters where all data is old (needs refresh)
   - Demand gaps: user queries with no good matches (supply vs demand)
 
+Embedding sources (all used for training-data-aware gap analysis):
+  - Qdrant documents
+  - Learning memory (LearningExample): embedded on the fly so neighbor search
+    sees sparse regions in training data; filled content is stored back as training data.
 Run nightly or on-demand. Results feed into idle learner and
 knowledge expansion cycle to automatically fill gaps.
 """
@@ -131,12 +135,13 @@ class ReverseKNNOracle:
 
     def fill_gaps_actively(self, max_gaps: int = 5, auto_ingest: bool = True) -> Dict[str, Any]:
         """
-        Actively fill knowledge gaps through 3 direct data pathways:
-          1. API calls — hit known API sources for structured data
-          2. Web search — SerpAPI for targeted research
-          3. Web scraping — fetch and extract from known URLs
+        Actively fill knowledge gaps through 4 data pathways:
+          1. FlashCache — cached API/web refs
+          2. Web search — SerpAPI
+          3. Direct fetch — known URLs (e.g. Python PEPs)
+          4. External sources — GitHub (repos), Stack Overflow, research papers (arXiv)
 
-        Each gap topic gets routed through whichever pathway has a matching source.
+        Each gap topic is tried in order until data is acquired.
         Results flow into FlashCache + Oracle + unified memory.
         """
         gaps = self.scan_knowledge_gaps()
@@ -221,10 +226,9 @@ class ReverseKNNOracle:
             if not result["data_acquired"]:
                 try:
                     import requests as req
+                    # Host-agnostic: use configurable or generic sources (no hardcoded GitHub API)
                     known_urls = {
                         "python": "https://peps.python.org/api/peps.json",
-                        "api": "https://api.github.com",
-                        "security": "https://api.github.com/repos/OWASP/CheatSheetSeries/contents/cheatsheets",
                     }
 
                     for keyword, url in known_urls.items():
@@ -245,6 +249,59 @@ class ReverseKNNOracle:
                                 pass
                 except Exception:
                     pass
+
+            # Pathway 4: GitHub, Stack Overflow, research papers (arXiv)
+            if not result["data_acquired"]:
+                try:
+                    from settings import settings
+                    from search.external_sources import fetch_all_external
+                    ext = fetch_all_external(
+                        topic,
+                        max_per_source=2,
+                        github_token=settings.GITHUB_TOKEN or None,
+                        include_github=getattr(settings, "GAP_FILL_GITHUB", True),
+                        include_stackoverflow=getattr(settings, "GAP_FILL_STACKOVERFLOW", True),
+                        include_arxiv=getattr(settings, "GAP_FILL_ARXIV", True),
+                        include_wikipedia=getattr(settings, "GAP_FILL_WIKIPEDIA", True),
+                        include_hackernews=getattr(settings, "GAP_FILL_HACKERNEWS", True),
+                        include_devto=getattr(settings, "GAP_FILL_DEVTO", True),
+                        include_pypi=getattr(settings, "GAP_FILL_PYPI", True),
+                        include_mdn=getattr(settings, "GAP_FILL_MDN", True),
+                        include_semantic_scholar=getattr(settings, "GAP_FILL_SEMANTIC_SCHOLAR", True),
+                        include_npm=getattr(settings, "GAP_FILL_NPM", True),
+                        include_ietf_rfc=getattr(settings, "GAP_FILL_IETF_RFC", True),
+                        semantic_scholar_key=getattr(settings, "SEMANTIC_SCHOLAR_API_KEY", None) or None,
+                    )
+                    for hit in ext:
+                        result["pathways_tried"].append({
+                            "pathway": hit.get("source", "external"),
+                            "source": hit.get("link", ""),
+                            "title": hit.get("title", ""),
+                        })
+                    if ext:
+                        result["data_acquired"] = True
+                        combined = "\n".join(
+                            f"{h.get('title', '')}: {h.get('snippet', '')}" for h in ext
+                        )
+                        if auto_ingest and combined.strip():
+                            self._ingest_discovery(topic, combined[:5000], "external:" + ",".join({h.get("source", "") for h in ext}))
+                        # Cache each in FlashCache
+                        try:
+                            from cognitive.flash_cache import get_flash_cache
+                            fc = get_flash_cache()
+                            for h in ext:
+                                fc.register(
+                                    source_uri=h.get("link", ""),
+                                    source_type=h.get("source", "web"),
+                                    source_name=(h.get("title", "") or "")[:100],
+                                    keywords=fc.extract_keywords(f"{topic} {h.get('snippet', '')}"),
+                                    summary=(h.get("snippet", "") or "")[:500],
+                                    trust_score=0.5,
+                                )
+                        except Exception:
+                            pass
+                except Exception as e:
+                    logger.debug("External sources (GitHub/StackOverflow/arXiv) failed: %s", e)
 
             fill_results.append(result)
 
@@ -343,9 +400,10 @@ class ReverseKNNOracle:
     # ── Internal ──────────────────────────────────────────────────────
 
     def _load_all_embeddings(self) -> List[Tuple[str, List[float], Dict]]:
-        """Load embeddings from vector DB or flash cache."""
+        """Load embeddings from vector DB, FlashCache, and learning memory (training data)."""
         embeddings = []
 
+        # 1. Qdrant documents
         try:
             from vector_db.client import get_qdrant_client
             client = get_qdrant_client()
@@ -355,15 +413,105 @@ class ReverseKNNOracle:
                 with_vectors=True,
                 with_payload=True,
             )
-            for point in results:
-                vec = point.get("vector") or []
-                payload = point.get("payload") or {}
-                if vec:
-                    embeddings.append((str(point["id"]), list(vec), payload))
+            if results and results[0]:
+                for point in results[0]:
+                    vec = point.vector if hasattr(point, 'vector') else []
+                    payload = point.payload if hasattr(point, 'payload') else {}
+                    if vec:
+                        embeddings.append((str(point.id), list(vec), payload))
         except Exception:
             pass
 
+        # 2. Learning memory (training data) — embed examples for neighbor search
+        try:
+            learning_embeddings = self._load_learning_memory_embeddings(limit=500, min_trust=0.3)
+            embeddings.extend(learning_embeddings)
+        except Exception as e:
+            logger.debug("Learning memory embeddings skipped: %s", e)
+
         return embeddings
+
+    def _load_learning_memory_embeddings(
+        self, limit: int = 500, min_trust: float = 0.3
+    ) -> List[Tuple[str, List[float], Dict]]:
+        """
+        Load learning examples and embed them for use as training-data-aware neighbor search.
+        Used for gap analysis so sparse regions in learning memory get filled from API/web/FlashCache.
+        """
+        out: List[Tuple[str, List[float], Dict]] = []
+        try:
+            from database.session import session_scope
+            from cognitive.learning_memory import LearningExample, _from_json_str
+        except Exception:
+            return out
+
+        try:
+            from embedding.embedder import get_embedding_model
+            embedder = get_embedding_model()
+        except Exception:
+            logger.debug("Embedder unavailable for learning memory")
+            return out
+
+        if embedder is None:
+            return out
+
+        texts: List[str] = []
+        metas: List[Dict] = []
+        ids: List[str] = []
+
+        with session_scope() as session:
+            rows = (
+                session.query(LearningExample)
+                .filter(LearningExample.trust_score >= min_trust)
+                .order_by(LearningExample.trust_score.desc(), LearningExample.last_used.desc())
+                .limit(limit)
+                .all()
+            )
+            for r in rows:
+                eid = str(getattr(r, "id", ""))
+                if not eid:
+                    continue
+                ic = getattr(r, "input_context", "") or "{}"
+                eo = getattr(r, "expected_output", "") or "{}"
+                d_ic = _from_json_str(ic) if isinstance(ic, str) else (ic or {})
+                d_eo = _from_json_str(eo) if isinstance(eo, str) else (eo or {})
+                text_ic = json.dumps(d_ic, default=str)[:1200]
+                text_eo = json.dumps(d_eo, default=str)[:1200]
+                text = f"{text_ic} {text_eo}".strip() or " "
+                created = getattr(r, "created_at", None)
+                created_at = created.isoformat() if hasattr(created, "isoformat") else str(created or "")
+                trust = float(getattr(r, "trust_score", 0) or 0)
+                example_type = str(getattr(r, "example_type", "") or "")
+                texts.append(text)
+                ids.append(f"learning_memory_{eid}")
+                metas.append({
+                    "source": "learning_memory",
+                    "created_at": created_at,
+                    "trust_score": trust,
+                    "example_type": example_type,
+                    "title": example_type or eid,
+                })
+
+        if not texts:
+            return out
+
+        try:
+            import numpy as np
+            emb = embedder.embed_text(texts, batch_size=32, convert_to_numpy=True)
+            if emb is None:
+                return out
+            arr = np.asarray(emb)
+            if arr.ndim == 1:
+                vec_list = [arr.tolist()]
+            else:
+                vec_list = [arr[i].tolist() for i in range(min(len(ids), len(arr)))]
+            for i, vec in enumerate(vec_list):
+                if i < len(ids) and i < len(metas) and vec:
+                    out.append((ids[i], list(vec), metas[i]))
+        except Exception as e:
+            logger.warning("Embedding learning memory failed: %s", e)
+
+        return out
 
     def _text_based_gap_analysis(self) -> Dict[str, Any]:
         """Fallback gap analysis using text matching when embeddings unavailable."""
@@ -431,3 +579,13 @@ def get_reverse_knn() -> ReverseKNNOracle:
     if _instance is None:
         _instance = ReverseKNNOracle()
     return _instance
+
+
+def scan_knowledge_gaps(k: int = 10, distance_threshold: float = 0.6, min_neighbours: int = 3) -> Dict[str, Any]:
+    """Module-level entry: run neighbor-by-neighbor gap analysis (for brain API / learning memory)."""
+    return get_reverse_knn().scan_knowledge_gaps(k=k, distance_threshold=distance_threshold, min_neighbours=min_neighbours)
+
+
+def fill_gaps_from_sources(max_gaps: int = 5, auto_ingest: bool = True) -> Dict[str, Any]:
+    """Run neighbor search then pull from API, web search, and FlashCache to fill gaps."""
+    return get_reverse_knn().fill_gaps_actively(max_gaps=max_gaps, auto_ingest=auto_ingest)

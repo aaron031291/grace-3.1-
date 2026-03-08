@@ -3,7 +3,6 @@ Tests for Grace Planning API
 
 Comprehensive tests for planning workflow system.
 """
-import pytest; pytest.importorskip("api.grace_planning_api", reason="api.grace_planning_api removed — consolidated into Brain API")
 
 import pytest
 from datetime import datetime

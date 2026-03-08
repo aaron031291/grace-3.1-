@@ -40,7 +40,7 @@ import json
 import logging
 import time
 import threading
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
@@ -49,19 +49,18 @@ logger = logging.getLogger(__name__)
 
 BATCH_DIR = Path(__file__).parent.parent / "data" / "consensus_batches"
 
-def _build_model_registry() -> dict:
-    """Build model registry using the actual configured model names."""
-    try:
-        from settings import settings
-        reason_model = getattr(settings, "OLLAMA_MODEL_REASON", "") or "deepseek-r1:7b"
-        qwen_model = getattr(settings, "QWEN_MODEL", "") or "qwen3.5:27b"
-        qwen_has_key = bool(getattr(settings, "QWEN_API_KEY", ""))
-    except Exception:
-        reason_model = "deepseek-r1:7b"
-        qwen_model = "qwen3.5:9b"
-        qwen_has_key = False
 
-    registry = {
+def _build_model_registry() -> dict:
+    """Build model registry using the actual configured model names (resolved to existing Ollama models)."""
+    try:
+        from llm_orchestrator.ollama_resolver import resolve_ollama_model
+        reason_model = resolve_ollama_model("reason")
+        code_model = resolve_ollama_model("code")
+    except Exception:
+        reason_model = "qwen3:32b"
+        code_model = "qwen3:32b"
+
+    return {
         "opus": {
             "name": "Opus 4.6 (Claude)",
             "provider": "opus",
@@ -75,21 +74,20 @@ def _build_model_registry() -> dict:
             "cost_tier": "cloud",
         },
         "qwen": {
-            "name": f"Qwen 3 — {qwen_model} ({'Cloud' if qwen_has_key else 'Local'})",
-            "provider": "qwen",
-            "strengths": ["code generation", "reasoning", "multilingual", "256K context", "tool calling"],
-            "cost_tier": "cloud" if qwen_has_key else "free",
+            "name": f"Qwen 3 — {code_model} (Local)",
+            "provider": "ollama",
+            "task": "code",
+            "strengths": ["code generation", "fast iteration", "local/private", "free"],
+            "cost_tier": "free",
         },
         "reasoning": {
-            "name": f"DeepSeek R1 — {reason_model} (Local)",
+            "name": f"Qwen 3 — {reason_model} (Local)",
             "provider": "ollama",
             "task": "reason",
             "strengths": ["chain-of-thought", "mathematical reasoning", "problem decomposition"],
             "cost_tier": "free",
         },
     }
-
-    return registry
 
 
 MODEL_REGISTRY = _build_model_registry()
@@ -118,7 +116,7 @@ class ConsensusResult:
     disagreements: List[str]
     final_output: str
     total_latency_ms: float
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     source: str = "user"  # user or autonomous
 
 
@@ -128,7 +126,7 @@ def _get_client(model_id: str):
     if not info:
         return None
 
-    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_deepseek_reasoner
+    from llm_orchestrator.factory import get_llm_client, get_llm_for_task, get_qwen_coder, get_deepseek_reasoner
 
     provider = info.get("provider")
     task = info.get("task")
@@ -137,14 +135,8 @@ def _get_client(model_id: str):
         return get_llm_client(provider="opus")
     elif provider == "kimi":
         return get_llm_client(provider="kimi")
-    elif provider == "qwen":
-        from llm_orchestrator.qwen_pool import get_qwen_pool
-        pool = get_qwen_pool()
-        return pool.get_client_for_task("general")
     elif task == "code":
-        from llm_orchestrator.qwen_pool import get_qwen_pool
-        pool = get_qwen_pool()
-        return pool.get_client_for_task("code")
+        return get_qwen_coder()
     elif task == "reason":
         return get_deepseek_reasoner()
     elif task:
@@ -157,11 +149,12 @@ def _check_model_available(model_id: str) -> bool:
     """Check if a model is available and configured.
 
     For cloud models (Opus, Kimi) this checks API keys.
-    For local Ollama models this pings the Ollama API to confirm the model
-    is actually pulled and reachable, falling back to a simple config check
-    if Ollama is unreachable.
+    For local Ollama models this uses the resolved model (with fallbacks)
+    and confirms that model exists in Ollama.
     """
     from settings import settings
+    from llm_orchestrator.ollama_resolver import resolve_ollama_model, ollama_model_exists
+
     info = MODEL_REGISTRY.get(model_id)
     if not info:
         return False
@@ -170,46 +163,11 @@ def _check_model_available(model_id: str) -> bool:
         return bool(getattr(settings, "OPUS_API_KEY", ""))
     elif info["provider"] == "kimi":
         return bool(getattr(settings, "KIMI_API_KEY", ""))
-    elif info["provider"] == "qwen":
-        if getattr(settings, "QWEN_API_KEY", ""):
-            return True
-        fallback_model = getattr(settings, "OLLAMA_MODEL_FAST", "")
-        if fallback_model:
-            return _ollama_model_exists(fallback_model, settings)
-        return False
     elif info["provider"] == "ollama":
-        if info.get("task") == "code":
-            model_name = getattr(settings, "OLLAMA_MODEL_CODE", "")
-        elif info.get("task") == "reason":
-            model_name = getattr(settings, "OLLAMA_MODEL_REASON", "")
-        else:
-            model_name = getattr(settings, "OLLAMA_MODEL_FAST", "")
-
-        if not model_name:
-            return False
-
-        return _ollama_model_exists(model_name, settings)
+        task = info.get("task") or "fast"
+        resolved = resolve_ollama_model(task)
+        return bool(resolved) and ollama_model_exists(resolved, settings)
     return True
-
-
-def _ollama_model_exists(model_name: str, settings) -> bool:
-    """Verify an Ollama model is pulled and reachable."""
-    import urllib.request
-    import json as _json
-    try:
-        url = (getattr(settings, "OLLAMA_URL", "http://localhost:11434")
-               .rstrip("/") + "/api/tags")
-        req = urllib.request.Request(url, method="GET")
-        with urllib.request.urlopen(req, timeout=3) as resp:
-            data = _json.loads(resp.read())
-        available = [m.get("name", "") for m in data.get("models", [])]
-        needle = model_name if ":" in model_name else f"{model_name}:latest"
-        return any(
-            needle == a or needle.split(":")[0] == a.split(":")[0]
-            for a in available
-        )
-    except Exception:
-        return True
 
 
 def get_available_models() -> List[dict]:
@@ -699,7 +657,7 @@ def queue_autonomous_query(prompt: str, context: str = "", priority: str = "norm
         "prompt": prompt,
         "context": context,
         "priority": priority,
-        "queued_at": datetime.now(timezone.utc).isoformat(),
+        "queued_at": datetime.utcnow().isoformat(),
         "status": "queued",
     }
     with _batch_lock:
@@ -734,7 +692,7 @@ def run_batch(max_queries: int = 5) -> List[dict]:
                 source="autonomous",
             )
             query["status"] = "completed"
-            query["completed_at"] = datetime.now(timezone.utc).isoformat()
+            query["completed_at"] = datetime.utcnow().isoformat()
             query["result_confidence"] = result.confidence
             query["result_summary"] = result.final_output[:500]
             results.append({

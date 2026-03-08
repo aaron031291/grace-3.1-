@@ -1,6 +1,6 @@
 import BackendPanel from './BackendPanel';
 import { useState, useEffect, useCallback } from 'react';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, API_V2 } from '../config/api';
 
 const C = { bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460', accent: '#e94560', accentAlt: '#533483', text: '#eee', muted: '#aaa', dim: '#666', border: '#333', success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3' };
 
@@ -26,6 +26,7 @@ function ServiceDot({ status }) {
 export default function SystemHealthTab() {
   const [health, setHealth] = useState(null);
   const [procs, setProcs] = useState([]);
+  const [graceState, setGraceState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullData, setFullData] = useState(null);
 
@@ -35,12 +36,14 @@ export default function SystemHealthTab() {
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    const [hRes, pRes] = await Promise.allSettled([
+    const [hRes, pRes, gRes] = await Promise.allSettled([
       fetch(`${API_BASE_URL}/api/system-health/dashboard`).then(r => r.ok ? r.json() : null),
       fetch(`${API_BASE_URL}/api/system-health/processes`).then(r => r.ok ? r.json() : null),
+      fetch(API_V2.graceState(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).then(r => r.ok ? r.json() : null).then(d => d?.data ?? d),
     ]);
     if (hRes.status === 'fulfilled') setHealth(hRes.value);
     if (pRes.status === 'fulfilled') setProcs(pRes.value?.processes || []);
+    if (gRes.status === 'fulfilled') setGraceState(gRes.value);
     setLoading(false);
   }, []);
 
@@ -59,6 +62,27 @@ export default function SystemHealthTab() {
       </div>
 
       <div style={{ padding: 16 }}>
+        {/* Grace State — single view of Ouroboros, mirror, health */}
+        {graceState && (
+          <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>🧠 Grace State</div>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 12 }}>
+              <div>
+                <span style={{ color: C.muted }}>Ouroboros: </span>
+                <span style={{ fontWeight: 600 }}>{graceState.ouroboros?.running ? 'Running' : 'Stopped'}</span>
+                <span style={{ color: C.dim }}> · cycles {graceState.ouroboros?.cycle_count ?? 0} · last {graceState.ouroboros?.last_result ?? '—'}</span>
+              </div>
+              <div>
+                <span style={{ color: C.muted }}>Mirror: </span>
+                <span style={{ fontWeight: 600 }}>{graceState.mirror?.problems_observed ?? 0} issues</span>
+                {Array.isArray(graceState.mirror?.problems) && graceState.mirror.problems.length > 0 && (
+                  <span style={{ color: C.warn }}> · {graceState.mirror.problems.slice(0, 2).map(p => p.component).join(', ')}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Resource gauges */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
           <Gauge label="CPU" value={r.cpu_total || 0} icon="⚡" />

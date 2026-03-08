@@ -482,11 +482,11 @@ class WebhookEventProcessor:
 
         return results
 
-    def parse_github_event(self, payload: Dict[str, Any]) -> WebhookEvent:
-        """Parse a GitHub webhook event."""
+    def parse_webhook_event(self, payload: Dict[str, Any], source: str = "webhook") -> WebhookEvent:
+        """Parse a git host / CI webhook event (generic)."""
         event_type = payload.get("action", "unknown")
 
-        # Determine event type from payload structure
+        # Determine event type from payload structure (GitHub-style shape; other hosts can be mapped similarly)
         if "pull_request" in payload:
             event_type = f"pull_request.{payload.get('action', 'unknown')}"
         elif "pusher" in payload:
@@ -498,7 +498,7 @@ class WebhookEventProcessor:
 
         return WebhookEvent(
             id=self._generate_event_id(payload),
-            source="github",
+            source=source,
             event_type=event_type,
             timestamp=datetime.utcnow().isoformat(),
             payload=payload,

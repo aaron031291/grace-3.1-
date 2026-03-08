@@ -50,6 +50,54 @@ def get_project_rules(project_id: str) -> dict:
     return {"project_id": project_id, "rules": rules, "config": config, "total": len(rules)}
 
 
+def get_governance_coding_contract(project_id: str = "") -> dict:
+    """
+    Governance coding contract — single source for what the pipeline must satisfy.
+    Combines: global rules (immutable), project rules, and governance rule documents.
+    Used by the coding pipeline and deterministic-first loop to enforce the contract.
+    """
+    pid = project_id or "default"
+    out = {
+        "global_rules": [],
+        "project_rules": [],
+        "documents": [],
+        "contract_text": "",
+        "project_id": pid,
+    }
+    try:
+        from core.project_container import get_container
+        container = get_container(pid)
+        combined = container.get_rules()
+        out["global_rules"] = list(combined.get("global_rules", []))
+        out["project_rules"] = [r.get("content", r.get("name", ""))[:500] for r in combined.get("project_rules", [])]
+    except Exception:
+        try:
+            from core.project_container import GLOBAL_RULES
+            out["global_rules"] = list(GLOBAL_RULES)
+        except Exception:
+            pass
+    try:
+        from core.services.govern_service import list_rules, get_rule_content
+        listed = list_rules()
+        for doc in (listed.get("documents") or [])[:20]:
+            doc_id = doc.get("id", "")
+            content = get_rule_content(doc_id)
+            if content.get("content"):
+                out["documents"].append({"id": doc_id, "content": content["content"][:1000]})
+    except Exception:
+        pass
+    parts = []
+    if out["global_rules"]:
+        parts.append("## Global rules (immutable)\n" + "\n".join(f"- {r}" for r in out["global_rules"]))
+    if out["project_rules"]:
+        parts.append("## Project rules\n" + "\n".join(str(r)[:300] for r in out["project_rules"]))
+    for d in out["documents"]:
+        parts.append(f"## {d.get('id', 'rule')}\n{d.get('content', '')}")
+    out["contract_text"] = "\n\n".join(parts) if parts else "(no rules loaded)"
+    out["total"] = len(out["global_rules"]) + len(out["project_rules"]) + len(out["documents"])
+    return out
+
+
 def set_project_rules(project_id: str, config: dict) -> dict:
     """Set governance config for a project."""
     rules_dir = DATA_DIR / "projects" / project_id / "governance"

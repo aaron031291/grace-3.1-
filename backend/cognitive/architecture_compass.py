@@ -141,6 +141,41 @@ COMPONENT_KNOWLEDGE = {
         "capabilities": ["large_file_upload", "integrity_verification", "resumable_upload"],
         "key_apis": ["/api/upload/initiate", "/api/upload/chunk", "/api/upload/complete"],
     },
+    "api/brain_api_v2.py": {
+        "purpose": "Unified brain router: chat response (Cursor-style), consensus, code generation, RAG, file ops, governance, health. Single entry point for all 93+ actions across 8 domains.",
+        "capabilities": ["chat_response", "full_nlp", "multi_model_consensus", "code_generation", "semantic_search", "file_operations", "governance"],
+        "key_apis": ["call_brain()", "brain_directory()", "health_map()", "semantic_query()"],
+    },
+    "api/stream_api.py": {
+        "purpose": "SSE streaming chat response. Cursor-style streaming: token-by-token delivery, model selection (Kimi/Opus), mention parsing, RAG context injection.",
+        "capabilities": ["chat_response", "streaming", "full_nlp", "multi_model"],
+        "key_apis": ["/api/stream/chat", "streamChat()"],
+    },
+    "api/completion_api.py": {
+        "purpose": "Inline code completion (Cursor-style). Context-aware completion from code before/after cursor, optional streaming. Used by IDE and chat.",
+        "capabilities": ["chat_response", "code_completion", "inline_completion"],
+        "key_apis": ["/api/complete", "getCompletion()", "streamCompletion()"],
+    },
+    "api/autonomous_loop_api.py": {
+        "purpose": "Autonomous task loop API. Background and one-shot autonomous runs, progress polling, task lifecycle.",
+        "capabilities": ["autonomous_loop", "background_tasks", "task_progress"],
+        "key_apis": ["/autonomous-learning/*", "run_background()", "progress"],
+    },
+    "api/retrieve.py": {
+        "purpose": "RAG retrieval and semantic search. Multi-tier retrieval (vector → model → context), reranking, trust-aware scoring. Full NLP pipeline for query understanding and document search.",
+        "capabilities": ["full_nlp", "semantic_search", "rag_retrieval", "reranking", "multi_tier"],
+        "key_apis": ["/api/retrieve/*", "retrieve()", "search()"],
+    },
+    "retrieval/retriever.py": {
+        "purpose": "Core vector retrieval against Qdrant. Embedding-based similarity, filters, scoring. Part of full NLP stack for semantic search.",
+        "capabilities": ["full_nlp", "vector_search", "embedding_similarity"],
+        "key_apis": ["retrieve()", "search()"],
+    },
+    "embedding/embedder.py": {
+        "purpose": "Text embedding model (e.g. Qwen). Encodes text to vectors for RAG and semantic search. Foundation for full NLP retrieval.",
+        "capabilities": ["full_nlp", "embeddings", "vector_encoding"],
+        "key_apis": ["embed()", "embed_batch()"],
+    },
 }
 
 
@@ -186,7 +221,7 @@ class ArchitectureCompass:
         if self._built:
             return
 
-        for subdir in ["api", "cognitive", "llm_orchestrator", "genesis", "security", "search"]:
+        for subdir in ["api", "cognitive", "llm_orchestrator", "genesis", "security", "search", "retrieval", "embedding"]:
             d = BACKEND_DIR / subdir
             if not d.exists():
                 continue

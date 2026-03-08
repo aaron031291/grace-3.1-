@@ -342,6 +342,45 @@ class GovernanceDecision(BaseModel):
         }
 
 
+class AdaptiveOverride(BaseModel):
+    """Stores user meta-learning overrides to governance/system rules."""
+    __tablename__ = "adaptive_overrides"
+
+    override_id = Column(String(64), nullable=False, index=True, unique=True)
+    context = Column(String(255), nullable=False)
+    rule_broken = Column(String(255), nullable=False)
+    actual_metric = Column(String(255), nullable=True)
+    user_action = Column(String(255), nullable=False)
+    llm_analysis = Column(Text, nullable=True)
+    proposed_rule = Column(Text, nullable=True)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
+    status = Column(String(50), default="proposed", nullable=False)
+
+    __table_args__ = (
+        Index("idx_override_status", "status"),
+        Index("idx_override_genesis", "genesis_key_id"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<AdaptiveOverride(id={self.id}, override_id={self.override_id}, status={self.status})>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "override_id": self.override_id,
+            "context": self.context,
+            "rule_broken": self.rule_broken,
+            "actual_metric": self.actual_metric,
+            "user_action": self.user_action,
+            "llm_analysis": self.llm_analysis,
+            "proposed_rule": self.proposed_rule,
+            "genesis_key": self.genesis_key_id,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
 # ── Learning & Memory ORM Models (consolidation) ─────────────────────
 
 class LearningExample(BaseModel):
@@ -416,3 +455,50 @@ class LLMUsageStats(BaseModel):
     success = Column(Boolean, default=True)
     error_message = Column(Text, nullable=True)
     caller = Column(String(255), nullable=True)
+
+
+class GraphNode(BaseModel):
+    """
+    Persisted graph nodes for Magma / relation graphs (semantic, temporal, causal, entity).
+    Used when graph state is stored in the DB. Table created so queries for graph_type='semantic' etc. succeed.
+    """
+    __tablename__ = "graph_nodes"
+    __table_args__ = {"extend_existing": True}
+
+    node_id = Column(String(255), nullable=False, index=True)
+    graph_type = Column(String(64), nullable=False, index=True)
+    node_type = Column(String(64), nullable=True)
+    content = Column(Text, nullable=True)
+    embedding_json = Column(Text, nullable=True)
+    metadata_json = Column(Text, nullable=True)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
+    trust_score = Column(Float, default=0.5, nullable=True)
+    workspace_id = Column(String(255), nullable=True, index=True)
+
+class SchemaProposal(BaseModel):
+    """
+    Autonomous Schema Evolution proposal model.
+    Tracks LLM-generated SQLAlchemy ast code before human approval.
+    """
+    __tablename__ = "schema_proposals"
+    __table_args__ = {"extend_existing": True}
+
+    proposal_id = Column(String(100), unique=True, nullable=False, index=True)
+    trigger_reason = Column(Text, nullable=False)
+    proposed_code = Column(Text, nullable=False)
+    status = Column(String(50), default="pending", nullable=False, index=True) # pending, approved, rejected, failed
+    execution_logs = Column(Text, nullable=True)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "proposal_id": self.proposal_id,
+            "trigger_reason": self.trigger_reason,
+            "proposed_code": self.proposed_code,
+            "status": self.status,
+            "execution_logs": self.execution_logs,
+            "genesis_key": self.genesis_key_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }

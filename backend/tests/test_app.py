@@ -7,13 +7,13 @@ from fastapi.testclient import TestClient
 from app import app, ChatRequest, ChatResponse, Message, HealthResponse
 
 
-# client = TestClient(app)  # Removed global client
+client = TestClient(app)
 
 
 class TestRootEndpoint:
     """Test the root endpoint."""
     
-    def test_root_endpoint(self, client):
+    def test_root_endpoint(self):
         """Test GET / returns API info."""
         response = client.get("/")
         assert response.status_code == 200
@@ -25,25 +25,29 @@ class TestRootEndpoint:
 
 class TestHealthEndpoint:
     """Test the health check endpoint."""
-    
-    def test_health_endpoint(self, client):
-        """Test GET /health returns health status."""
+
+    def test_health_endpoint(self):
+        """Test GET /health returns simple health (status, llm_running, models_available) for frontend."""
         response = client.get("/health")
         assert response.status_code == 200
         data = response.json()
+        assert "status" in data
+        assert "llm_running" in data
+        assert "models_available" in data
+        assert data["status"] in ["healthy", "unhealthy"]
+        assert isinstance(data["llm_running"], bool)
+        assert isinstance(data["models_available"], int)
 
-        # Should have these fields in the new health response format
+    def test_health_full_endpoint(self):
+        """Test GET /health/full returns comprehensive health (services, timestamp)."""
+        response = client.get("/health/full")
+        assert response.status_code == 200
+        data = response.json()
         assert "status" in data
         assert "services" in data
         assert "timestamp" in data
-
-        # Status should be either healthy, degraded, or unhealthy
         assert data["status"] in ["healthy", "degraded", "unhealthy"]
-
-        # Services should be a list
         assert isinstance(data["services"], list)
-
-        # Each service should have name and status fields
         for service in data["services"]:
             assert "name" in service
 
@@ -51,7 +55,7 @@ class TestHealthEndpoint:
 class TestChatEndpoint:
     """Test the chat endpoint."""
     
-    def test_chat_endpoint_with_valid_request(self, client):
+    def test_chat_endpoint_with_valid_request(self):
         """Test POST /chat with valid request."""
         request_data = {
             "messages": [
@@ -77,7 +81,7 @@ class TestChatEndpoint:
             assert isinstance(data["generation_time"], float)
             assert data["generation_time"] > 0
     
-    def test_chat_endpoint_with_multiple_messages(self, client):
+    def test_chat_endpoint_with_multiple_messages(self):
         """Test POST /chat with multi-turn conversation."""
         request_data = {
             "messages": [
@@ -92,7 +96,7 @@ class TestChatEndpoint:
         response = client.post("/chat", json=request_data)
         assert response.status_code in [200, 400, 503]
     
-    def test_chat_endpoint_without_model(self, client):
+    def test_chat_endpoint_without_model(self):
         """Test POST /chat without specifying model uses default."""
         request_data = {
             "messages": [
@@ -103,7 +107,7 @@ class TestChatEndpoint:
         response = client.post("/chat", json=request_data)
         assert response.status_code in [200, 400, 503]
     
-    def test_chat_endpoint_with_invalid_temperature(self, client):
+    def test_chat_endpoint_with_invalid_temperature(self):
         """Test POST /chat with invalid temperature."""
         request_data = {
             "messages": [
@@ -120,13 +124,13 @@ class TestChatEndpoint:
 class TestDocumentation:
     """Test the API documentation endpoints."""
     
-    def test_swagger_docs_available(self, client):
+    def test_swagger_docs_available(self):
         """Test that Swagger documentation is available."""
         response = client.get("/docs")
         assert response.status_code == 200
         assert "swagger" in response.text.lower() or "openapi" in response.text.lower()
     
-    def test_redoc_docs_available(self, client):
+    def test_redoc_docs_available(self):
         """Test that ReDoc documentation is available."""
         response = client.get("/redoc")
         assert response.status_code == 200

@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""
+Migration script to add folder_path column to chats table.
+This script adds the folder_path column to existing chats if it doesn't exist.
+"""
+
+import sys
+from sqlalchemy import Column, String, inspect, text
+from sqlalchemy.exc import OperationalError
+
+from database.config import DatabaseConfig
+from database.connection import DatabaseConnection
+from database.session import SessionLocal, initialize_session_factory
+from models.database_models import Chat
+
+
+def migrate():
+    """Add folder_path column to chats table if it doesn't exist."""
+    try:
+        # Initialize database connection
+        config = DatabaseConfig()
+        DatabaseConnection.initialize(config)
+        session_factory = initialize_session_factory()
+        session = session_factory()
+        
+        # Get database inspector
+        inspector = inspect(session.bind)
+        
+        # Get columns for chats table
+        columns = {column['name'] for column in inspector.get_columns('chats')}
+        
+        # Check if folder_path column already exists
+        if 'folder_path' in columns:
+            print("[OK] folder_path column already exists in chats table")
+            session.close()
+            return True
+        
+        print("Adding folder_path column to chats table...")
+        
+        # Get the database connection
+        with session.begin():
+            if 'postgresql' in str(session.bind.url):
+                # PostgreSQL
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
+                session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
+            elif 'mysql' in str(session.bind.url):
+                # MySQL
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
+                session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
+            elif 'sqlite' in str(session.bind.url):
+                # SQLite
+                session.execute(text("ALTER TABLE chats ADD COLUMN folder_path VARCHAR(512) DEFAULT ''"))
+                # SQLite doesn't support CREATE INDEX in same transaction for newly added columns
+                try:
+                    session.execute(text("CREATE INDEX idx_folder_path ON chats(folder_path)"))
+                except Exception:
+                    pass
+            else:
+                print("Unknown database type")
+                return False
+        
+        session.close()
+        print("[OK] Successfully added folder_path column to chats table")
+        return True
+        
+    except OperationalError as e:
+        if "already exists" in str(e) or "duplicate column" in str(e):
+            print("[OK] folder_path column already exists")
+            return True
+        else:
+            print(f"[FAIL] Database error: {e}")
+            return False
+    except Exception as e:
+        print(f"[FAIL] Migration failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+if __name__ == "__main__":
+    success = migrate()
+    sys.exit(0 if success else 1)

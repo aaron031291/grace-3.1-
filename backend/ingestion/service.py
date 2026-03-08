@@ -269,23 +269,29 @@ class TextIngestionService:
             similarity_threshold=0.5,
         )
         self.embedding_model = embedding_model
-        self.qdrant_client = get_qdrant_client()
-        
+        # NOTE: Do NOT cache qdrant_client at init time — use get_qdrant_client() each
+        # time to always get the live singleton (handles reconnects, circuit breaker, etc.)
+
         # Initialize confidence scorer
         self.confidence_scorer = ConfidenceScorer(
             embedding_model=embedding_model,
-            qdrant_client=self.qdrant_client,
+            qdrant_client=get_qdrant_client(),
             collection_name=collection_name,
         )
-        
+
         # Initialize Qdrant collection if not exists
         if self.embedding_model:
             embedding_dim = self.embedding_model.get_embedding_dimension()
-            self.qdrant_client.create_collection(
+            get_qdrant_client().create_collection(
                 collection_name=self.collection_name,
                 vector_size=embedding_dim,
                 distance_metric="cosine",
             )
+
+    @property
+    def qdrant_client(self):
+        """Always return the current live Qdrant singleton (handles reconnects)."""
+        return get_qdrant_client()
     
     @staticmethod
     def _get_db_session():
@@ -1026,26 +1032,3 @@ class TextIngestionService:
         
         finally:
             db.close()
-
-
-_ingestion_service: Optional[TextIngestionService] = None
-
-
-def get_ingestion_service() -> TextIngestionService:
-    """
-    Get or create the global ingestion service instance.
-    
-    Returns:
-        TextIngestionService instance
-    """
-    global _ingestion_service
-    if _ingestion_service is None:
-        from embedding import get_embedding_model
-        embedding_model = get_embedding_model()
-        _ingestion_service = TextIngestionService(
-            collection_name="documents",
-            chunk_size=512,
-            chunk_overlap=50,
-            embedding_model=embedding_model
-        )
-    return _ingestion_service

@@ -14,8 +14,9 @@ Tracks ALL inputs and actions in the Grace system:
 Every action gets a Genesis Key for complete audit trail.
 """
 
+import hashlib
+import json
 import logging
-import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 from sqlalchemy.orm import Session
@@ -27,6 +28,13 @@ from models.genesis_key_models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _deterministic_key_id(key_type, what, who, where, why, how, when_ts, input_data, parent_key_id) -> str:
+    """Single deterministic key ID formula (no random, no model)."""
+    inp_hash = hashlib.sha256(json.dumps(input_data or {}, sort_keys=True, default=str).encode()).hexdigest() if input_data else ""
+    payload = f"{key_type.value}|{what}|{who or ''}|{where or ''}|{why or ''}|{how or ''}|{when_ts}|{inp_hash}|{parent_key_id or ''}"
+    return "GK-" + hashlib.sha256(payload.encode()).hexdigest()[:32]
 
 
 class ComprehensiveTracker:
@@ -53,11 +61,11 @@ class ComprehensiveTracker:
         """
         self.db = db_session
         self.user_id = user_id or self._generate_user_id()
-        self.session_id = session_id or str(uuid.uuid4())
+        self.session_id = session_id or f"SS-{hashlib.sha256(str(id(db_session)).encode()).hexdigest()[:16]}"
 
     def _generate_user_id(self) -> str:
-        """Generate a unique user ID."""
-        return f"user_{uuid.uuid4().hex[:8]}"
+        """Generate deterministic user ID (no random)."""
+        return f"user_{hashlib.sha256(str(id(self.db)).encode()).hexdigest()[:8]}"
 
     def _create_genesis_key(
         self,
@@ -94,9 +102,15 @@ class ComprehensiveTracker:
         Returns:
             Created GenesisKey instance
         """
+        when_ts = datetime.utcnow().isoformat()
+        key_id = _deterministic_key_id(
+            key_type, what_description, who_actor or self.user_id,
+            where_location, why_reason, how_method, when_ts,
+            input_data, parent_key_id,
+        )
         try:
             key = GenesisKey(
-                key_id=str(uuid.uuid4()),
+                key_id=key_id,
                 parent_key_id=parent_key_id,
                 key_type=key_type,
                 status=GenesisKeyStatus.ACTIVE,

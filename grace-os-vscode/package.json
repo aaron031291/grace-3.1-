@@ -439,7 +439,7 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./dist/test/runTest.js",
+    "test": "node ./out/test/runTest.js",
     "test:unit": "mocha --require ts-node/register 'src/test/suite/**/*.test.ts'",
     "test:core": "mocha --require ts-node/register 'src/test/suite/GraceOSCore.test.ts'",
     "test:diagnostics": "mocha --require ts-node/register 'src/test/suite/DiagnosticMachine.test.ts'",

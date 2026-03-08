@@ -9,7 +9,7 @@ These models track:
 
 from sqlalchemy import Column, Integer, String, Text, Boolean, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
+from datetime import datetime
 from database.base import BaseModel
 
 
@@ -47,7 +47,7 @@ class QueryHandlingLog(BaseModel):
     response_time_ms = Column(Integer)
     
     # Tracking
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
     genesis_key_id = Column(String(255))
     user_id = Column(String(255))
     
@@ -81,7 +81,7 @@ class KnowledgeGap(BaseModel):
     resolved_at = Column(DateTime)
     
     # Metadata
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
     query_log = relationship("QueryHandlingLog", back_populates="knowledge_gaps")
@@ -114,7 +114,7 @@ class ContextSubmission(BaseModel):
     validated = Column(Boolean, default=False)
     
     # Tracking
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=datetime.utcnow)
     user_id = Column(String(255))
     genesis_key_id = Column(String(255))
     

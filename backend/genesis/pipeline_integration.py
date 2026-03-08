@@ -34,7 +34,8 @@ class DataPipeline:
     7. World Model → AI can understand & respond
     """
 
-    def __init__(self, session: Optional[Session] = None):
+    def __init__(self, session: Optional[Session] = None, *args, **kwargs):
+        """Accept session and ignore extra args for backward compatibility (e.g. DataPipeline(session, kb_path) in docs)."""
         self.session = session
         self.genesis_service = get_genesis_service(session)
         self.symbiotic_vc = get_symbiotic_version_control(session=session)

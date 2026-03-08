@@ -1,0 +1,29 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Background init started (training, diagnostics, embedding)
+[OK] Execution registry initialized
+[OK] OLLAMA is running and reachable
+WARNING: Corrupted KB file backed up to: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\knowledge_base\layer_1\genesis_key\system\keys_2026-03-07.json.corrupt.20260307_182636
+[OK] Qdrant is running with 3 collection(s)
+[FILE-WATCHER] Starting file system monitoring...[OK] File watcher started - automatic version tracking enabled
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[INGEST] [OK] Got embedding model (singleton)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[AUTO-INGEST] Scan completed with 1181 results
+[AUTO-INGEST] Excluded 1181 files (Genesis/already ingested)
+[OK] Continuous learning activated
+[OK] Diagnostic engine started ù self-healing active (60s heartbeat)

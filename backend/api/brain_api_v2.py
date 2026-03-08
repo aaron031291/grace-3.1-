@@ -9,6 +9,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from typing import Any, Optional, Dict, List
 from datetime import datetime
+import asyncio
 import logging
 import time
 
@@ -35,7 +36,46 @@ class BrainOrchestration(BaseModel):
     steps: list
 
 
-def _call(brain: str, action: str, payload: dict, handlers: dict,
+def _run_coro_sync(coro):
+    """Run an async coroutine from sync code. Safe when called from a thread with or without a running event loop."""
+    try:
+        asyncio.get_running_loop()
+        has_loop = True
+    except RuntimeError:
+        has_loop = False
+    if not has_loop:
+        return asyncio.run(coro)
+    import concurrent.futures
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(asyncio.run, coro)
+        return future.result()
+
+
+def _genesis_safe_payload(obj, max_items=50, max_str=500):
+    """Trim and sanitize payload for Genesis input_data/output_data (observability without huge blobs).
+    Recursively replaces coroutines and other non-JSON-serializable values so DB insert never fails."""
+    if obj is None:
+        return None
+    if asyncio.iscoroutine(obj):
+        return "<coroutine not awaited>"
+    if isinstance(obj, dict):
+        out = {}
+        for k, v in list(obj.items())[:max_items]:
+            out[k] = _genesis_safe_payload(v, max_items=max_items, max_str=max_str)
+        return out
+    if isinstance(obj, (list, tuple)):
+        return [_genesis_safe_payload(v, max_items=max_items, max_str=max_str) for v in list(obj)[:max_items]]
+    if isinstance(obj, (str, bytes)):
+        return (str(obj)[:max_str] if isinstance(obj, bytes) else obj[:max_str])
+    try:
+        import json
+        json.dumps(obj, default=str)
+        return obj
+    except (TypeError, ValueError):
+        return str(obj)[:max_str]
+
+
+async def _call(brain: str, action: str, payload: dict, handlers: dict,
           client_ip: str = "unknown") -> BrainResponse:
     """Route action to handler with tracing, rate limiting, validation, Genesis tracking."""
 
@@ -52,6 +92,11 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
     try:
         from core.security import check_rate_limit
         if not check_rate_limit(brain, client_ip):
+            try:
+                from core.kpi_recorder import record_brain_kpi
+                record_brain_kpi(brain, action, False)
+            except Exception:
+                pass
             return BrainResponse(brain=brain, action=action, ok=False,
                                  error="Rate limit exceeded — try again in 60s")
     except Exception:
@@ -63,8 +108,13 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
         for key, val in (payload or {}).items():
             if isinstance(val, str):
                 if check_sql_injection(val):
+                    try:
+                        from core.kpi_recorder import record_brain_kpi
+                        record_brain_kpi(brain, action, False)
+                    except Exception:
+                        pass
                     return BrainResponse(brain=brain, action=action, ok=False,
-                                         error=f"Invalid input in field '{key}'")
+                                        error=f"Invalid input in field '{key}'")
                 payload[key] = sanitize_string(val)
     except Exception:
         pass
@@ -72,17 +122,37 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
     start = time.time()
     handler = handlers.get(action)
     if not handler:
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain, action, False)
+        except Exception:
+            pass
         return BrainResponse(brain=brain, action=action, ok=False,
                              error=f"Unknown action '{action}'. Available: {', '.join(sorted(handlers.keys()))}")
     try:
         data = handler(payload)
+        if asyncio.iscoroutine(data):
+            data = await data
         latency = round((time.time() - start) * 1000, 1)
         gk = None
         try:
             from api._genesis_tracker import track
-            gk = track(key_type="api_request", what=f"brain/{brain}/{action}",
-                       who=f"brain.{brain}", how=action,
-                       tags=["brain", brain, action])
+            gk = track(
+                key_type="api_request",
+                what=f"brain/{brain}/{action}",
+                where=f"/brain/{brain}",
+                why="user or system action",
+                who=f"brain.{brain}",
+                how=action,
+                input_data=_genesis_safe_payload(payload),
+                output_data=_genesis_safe_payload(data) if data is not None else {"ok": True},
+                tags=["brain", brain, action],
+            )
+        except Exception:
+            pass
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain, action, True)
         except Exception:
             pass
         return BrainResponse(brain=brain, action=action, ok=True,
@@ -91,10 +161,25 @@ def _call(brain: str, action: str, payload: dict, handlers: dict,
         latency = round((time.time() - start) * 1000, 1)
         try:
             from api._genesis_tracker import track
-            track(key_type="error", what=f"brain/{brain}/{action}: {e}",
-                  who=f"brain.{brain}", is_error=True,
-                  error_type=type(e).__name__, error_message=str(e)[:200],
-                  tags=["brain", brain, action, "error"])
+            track(
+                key_type="error",
+                what=f"brain/{brain}/{action}: {e}",
+                where=f"/brain/{brain}",
+                why="user or system action",
+                who=f"brain.{brain}",
+                how=action,
+                input_data=_genesis_safe_payload(payload),
+                output_data={"error": str(e)[:500], "error_type": type(e).__name__},
+                is_error=True,
+                error_type=type(e).__name__,
+                error_message=str(e)[:200],
+                tags=["brain", brain, action, "error"],
+            )
+        except Exception:
+            pass
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain, action, False)
         except Exception:
             pass
         return BrainResponse(brain=brain, action=action, ok=False,
@@ -105,22 +190,44 @@ _calling_brain = "external"
 
 
 def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
-    """Cross-brain call with Hebbian learning — synapses strengthen on success."""
+    """Cross-brain call with Hebbian learning — every action gets a Genesis key."""
     global _calling_brain
     source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
               "system": _system, "data": _data, "tasks": _tasks, "code": _code,
-              "deterministic": _deterministic, "workspace": _workspace}
+              "deterministic": _deterministic}
     factory = brains.get(brain_name)
     if not factory:
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain_name, action or "unknown", False)
+        except Exception:
+            pass
+        try:
+            from api._genesis_tracker import track
+            track(key_type="error", what=f"call_brain unknown brain: {brain_name}", who=source, is_error=True, tags=["brain", "error"])
+        except Exception:
+            pass
         return {"ok": False, "error": f"Unknown brain: {brain_name}"}
     handler = factory().get(action)
     if not handler:
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain_name, action, False)
+        except Exception:
+            pass
+        try:
+            from api._genesis_tracker import track
+            track(key_type="error", what=f"call_brain unknown action: {brain_name}/{action}", who=source, is_error=True, tags=["brain", "error"])
+        except Exception:
+            pass
         return {"ok": False, "error": f"Unknown action '{action}' in brain '{brain_name}'"}
     try:
         old_caller = _calling_brain
         _calling_brain = brain_name
         data = handler(payload or {})
+        if asyncio.iscoroutine(data):
+            data = _run_coro_sync(data)
         _calling_brain = old_caller
 
         try:
@@ -128,7 +235,26 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
             get_hebbian_mesh().record(source, brain_name, success=True)
         except Exception:
             pass
-
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="api_request",
+                what=f"brain/{brain_name}/{action}",
+                where=f"/brain/{brain_name}",
+                why="internal brain call",
+                who=f"brain.{source}",
+                how=action,
+                input_data=_genesis_safe_payload(payload or {}),
+                output_data=_genesis_safe_payload(data) if data is not None else {"ok": True},
+                tags=["brain", brain_name, action],
+            )
+        except Exception:
+            pass
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain_name, action, True)
+        except Exception:
+            pass
         return {"ok": True, "data": data}
     except Exception as e:
         try:
@@ -136,7 +262,55 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
             get_hebbian_mesh().record(source, brain_name, success=False)
         except Exception:
             pass
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="error",
+                what=f"brain/{brain_name}/{action}: {e}",
+                where=f"/brain/{brain_name}",
+                why="internal brain call",
+                who=f"brain.{source}",
+                how=action,
+                input_data=_genesis_safe_payload(payload or {}),
+                output_data={"error": str(e)[:500], "error_type": type(e).__name__},
+                is_error=True,
+                error_type=type(e).__name__,
+                error_message=str(e)[:200],
+                tags=["brain", brain_name, action, "error"],
+            )
+        except Exception:
+            pass
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            record_brain_kpi(brain_name, action, False)
+        except Exception:
+            pass
         return {"ok": False, "error": str(e)[:200]}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  AGENTIC SHARED ACTIONS — injected into every brain domain
+# ═══════════════════════════════════════════════════════════════════
+
+def _agentic_actions(brain_name: str) -> dict:
+    """
+    Shared agentic actions injected into every brain.
+    Allows any brain action to be spawned as a background task.
+
+    Usage: POST /brain/{domain} {"action": "spawn_task", "payload": {"action": "scan", "payload": {}}}
+    """
+    from core.agentic_runner import spawn_task, get_task, list_tasks, get_agent_runner
+    return {
+        "spawn_task": lambda p: spawn_task(
+            brain=p.get("brain", brain_name),
+            action=p.get("action", ""),
+            payload=p.get("payload", {}),
+        ),
+        "task_status": lambda p: get_task(p.get("task_id", "")),
+        "task_list":   lambda p: {"tasks": list_tasks(brain=p.get("brain"), limit=p.get("limit", 30))},
+        "task_cancel": lambda p: {"cancelled": get_agent_runner().cancel_task(p.get("task_id", ""))},
+        "task_cleanup": lambda p: (get_agent_runner().cleanup_old() or {"cleaned": True}),
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -146,7 +320,7 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
 def _chat() -> dict:
     from core.services.chat_service import (
         list_chats, create_chat, get_chat, delete_chat,
-        get_history, send_prompt, run_consensus, get_world_model,
+        get_history, send_prompt, send_prompt_with_rag, run_consensus, get_world_model,
     )
     return {
         "list": lambda p: list_chats(p.get("limit", 50)),
@@ -155,13 +329,18 @@ def _chat() -> dict:
         "delete": delete_chat,
         "history": get_history,
         "send": send_prompt,
+        "send_with_rag": send_prompt_with_rag,
         "consensus": run_consensus,
         "world_model": lambda p: get_world_model(p),
+        **_agentic_actions("chat"),
     }
 
 
 def _files() -> dict:
-    from core.services.files_service import tree, browse, read, write, create, delete, search, stats, docs_all
+    from core.services.files_service import (
+        tree, browse, read, write, create, delete, search, stats, docs_all,
+        save_file_agentic, place_in_folder, create_doc, create_report, categorize, filing,
+    )
     return {
         "tree":     lambda p: tree(p.get("path"), p.get("max_depth", 3)),
         "browse":   lambda p: browse(p.get("path", "")),
@@ -172,6 +351,14 @@ def _files() -> dict:
         "search":   lambda p: search(p["query"], p.get("limit", 10)),
         "docs_all": lambda p: docs_all(),
         "stats":    lambda p: stats(),
+        # Agentic filing and categorization (through brain + Qwen/librarian)
+        "save_file":     lambda p: save_file_agentic(p),
+        "place_in_folder": lambda p: place_in_folder(p),
+        "create_doc":    lambda p: create_doc(p),
+        "create_report": lambda p: create_report(p),
+        "categorize":    lambda p: categorize(p),
+        "filing":        lambda p: filing(p),
+        **_agentic_actions("files"),
     }
 
 
@@ -179,7 +366,8 @@ def _govern() -> dict:
     from core.services.govern_service import (
         dashboard, get_approvals, approve_action, get_scores,
         list_rules, get_persona, update_persona, genesis_stats,
-        trigger_healing, trigger_learning, genesis_keys, approvals_history,
+        trigger_healing, trigger_learning, record_gap, genesis_keys, approvals_history,
+        adaptive_overrides, approve_override,
     )
     return {
         "dashboard":  lambda p: dashboard(),
@@ -192,8 +380,13 @@ def _govern() -> dict:
         "genesis_stats": lambda p: genesis_stats(),
         "heal":       lambda p: trigger_healing(),
         "learn":      lambda p: trigger_learning(),
+        "record_gap": lambda p: record_gap(p.get("what", ""), p.get("target", ""), p.get("tags")),
         "genesis_keys": lambda p: genesis_keys(p.get("limit", 20)),
         "approvals_history": lambda p: approvals_history(p.get("limit", 30)),
+        "adaptive_overrides": lambda p: adaptive_overrides(p.get("limit", 20)),
+        "approve_override": lambda p: approve_override(p.get("override_id"), p.get("action")),
+        "coding_contract": lambda p: _governance_coding_contract(p),
+        **_agentic_actions("govern"),
     }
 
 
@@ -207,6 +400,8 @@ def _ai() -> dict:
         "console": lambda p: _console_ask(p),
         "diagnose": lambda p: _console_diagnose(),
         "knowledge_gaps": lambda p: _knowledge_gaps(),
+        "fill_knowledge_gaps": lambda p: _fill_knowledge_gaps(p or {}),
+        "learning_memory_expand": lambda p: _learning_memory_expand(p or {}),
         "integration_matrix": lambda p: _integration_matrix(),
         "logic_tests": lambda p: _logic_tests(),
         "generate": lambda p: _code_generate(p),
@@ -225,20 +420,21 @@ def _ai() -> dict:
         "knowledge_gaps_deep": lambda p: _knowledge_gaps_deep(),
         "deterministic_scan": lambda p: _deterministic_scan(),
         "deterministic_fix": lambda p: _deterministic_fix(p),
-        "genesis_deterministic_scan": lambda p: _genesis_deterministic_scan(),
-        "rag_deterministic_scan": lambda p: _rag_deterministic_scan(),
-        "triad": lambda p: _run_triad(p),
-        "triad_status": lambda p: _triad_status(),
-
-        # Sub-Agent System
-        "agent_submit": lambda p: _agent_submit(p),
-        "agent_status": lambda p: _agent_task_status(p),
-        "agent_parallel": lambda p: _agent_parallel(p),
-        "agent_collaborative": lambda p: _agent_collaborative(p),
-        "agent_pipeline": lambda p: _agent_pipeline(p),
-        "agent_pool_status": lambda p: _agent_pool_status(),
+        "oracle_export": lambda p: _oracle_export(p or {}),
+        "governance_training_cycle": lambda p: _governance_training_cycle(p or {}),
+        "governance_report": lambda p: _governance_report(p or {}),
+        "propose_architecture": lambda p: _propose_architecture(p),
+        "build_architecture": lambda p: _build_architecture(p),
+        **_agentic_actions("ai"),
     }
 
+def _propose_architecture(p):
+    from cognitive.architecture_proposer import get_architecture_proposer
+    return get_architecture_proposer().propose(p.get("spec", {}))
+
+def _build_architecture(p):
+    from cognitive.architecture_proposer import get_architecture_proposer
+    return get_architecture_proposer().build(p.get("proposal_id", ""))
 
 def _system() -> dict:
     from core.services.system_service import (
@@ -261,6 +457,8 @@ def _system() -> dict:
         "correlate":    lambda p: _correlate(p),
         "triggers":     lambda p: _trigger_scan(),
         "scan_heal":    lambda p: _scan_heal(),
+        "decide_autonomous_action": lambda p: _decide_autonomous_action(p),
+        "model_version_check": lambda p: _model_version_check(),
         "probe":        lambda p: _probe_sweep(),
         "probe_models": lambda p: _probe_models(),
         "auto_status":  lambda p: dict(_loop_state),
@@ -313,6 +511,9 @@ def _system() -> dict:
         "pool_stats": lambda p: _pool_stats(),
         "cache_stats": lambda p: _cache_stats(),
         "clear_cache": lambda p: _clear_cache(),
+        "reset_db": lambda p: _reset_db(),
+        "reset_vector_db": lambda p: _reset_vector_db(),
+        "gc": lambda p: _gc(),
         "project_governance": lambda p: _project_gov(p),
         "set_project_rules": lambda p: _set_proj_rules(p),
         "create_approval": lambda p: _create_approval(p),
@@ -370,17 +571,22 @@ def _system() -> dict:
         "trust":        lambda p: _trust_state(),
         "mine_keys":    lambda p: _mine_genesis_keys(p),
         "mine_episodes": lambda p: _mine_episodes(),
-        "worker_pool":  lambda p: _worker_pool_status(),
-        "llm_cache":    lambda p: _llm_cache_stats(),
-        "clear_llm_cache": lambda p: _clear_llm_cache(),
-        "api_costs":    lambda p: _api_cost_summary(),
-        "memory_pressure": lambda p: _memory_pressure(),
-        "snapshot_stats": lambda p: _snapshot_stats(),
-        "db_info":      lambda p: _db_info(),
-        "user_rate_limit": lambda p: _user_rate_check(p),
-        "lifecycle_scan": lambda p: _lifecycle_scan(),
-        "lifecycle_probe_heal": lambda p: _lifecycle_probe_heal(p),
-        "lifecycle_events": lambda p: _lifecycle_events(p),
+        "architecture_explain":  lambda p: _architecture_explain(p),
+        "architecture_find":    lambda p: _architecture_find(p),
+        "architecture_connected": lambda p: _architecture_connected(p),
+        "architecture_diagnose": lambda p: _architecture_diagnose(),
+        "architecture_map":     lambda p: _architecture_map(),
+        "embedding_config":     lambda p: _embedding_config(),
+        "brain_directory":     lambda p: _brain_directory(),
+        "models_summary":      lambda p: _models_summary(),
+        "schema_info":         lambda p: _schema_info(),
+        "graphs_info":         lambda p: _graphs_info(),
+        "deterministic_first_loop": lambda p: _deterministic_first_loop(p),
+        "verify_built": lambda p: _verify_built(p),
+        "trigger_definitions": lambda p: _trigger_definitions(p),
+        "run_unified_triggers": lambda p: _run_unified_triggers(p),
+        "grace_state": lambda p: _grace_state(),
+        **_agentic_actions("system"),
     }
 
 
@@ -394,6 +600,17 @@ def _data() -> dict:
         "delete":      lambda p: delete_source(p["source_id"]),
         "stats":       lambda p: data_stats(),
         "flash_cache": lambda p: flash_cache_stats(),
+        # Agentic librarian (Qwen-backed): process, place, suggest, categorize
+        "librarian_process":      lambda p: _data_librarian_process(p),
+        "librarian_organise_file": lambda p: _data_librarian_organise_file(p),
+        "librarian_suggest_folder": lambda p: _data_librarian_suggest_folder(p),
+        "librarian_categorize":   lambda p: _data_librarian_categorize(p),
+        "librarian_on_new_folder": lambda p: _data_librarian_on_new_folder(p),
+        "librarian_stats":        lambda p: _data_librarian_stats(),
+        # Semantic entity classification — translate raw data to canonical domain model
+        "classify_entity": lambda p: _classify_entity(p),
+        "entity_schema_map": lambda p: _entity_schema_map(),
+        **_agentic_actions("data"),
     }
 
 
@@ -411,14 +628,36 @@ def _tasks() -> dict:
         "delete":     lambda p: delete_scheduled(p["task_id"]),
         "time_sense": lambda p: time_sense(),
         "planner":    lambda p: planner_sessions(),
+        **_agentic_actions("tasks"),
+    }
+
+
+def _classify_entity(p: dict) -> dict:
+    """Classify raw data into a canonical semantic entity bucket."""
+    from cognitive.semantic_entity_classifier import classify_entity
+    return classify_entity(
+        text=p.get("text", ""),
+        filename=p.get("filename", ""),
+        source_type=p.get("source_type", "user_generated"),
+        metadata=p.get("metadata"),
+    )
+
+
+def _entity_schema_map() -> dict:
+    """Return the full entity → db_table/vector_collection mapping."""
+    from cognitive.semantic_entity_classifier import ENTITY_SCHEMA_MAP
+    return {
+        "entity_buckets": list(ENTITY_SCHEMA_MAP.keys()),
+        "schema_map": {k: {"db_table": v[0], "vector_collection": v[1]} for k, v in ENTITY_SCHEMA_MAP.items()},
     }
 
 
 def _code() -> dict:
     from core.services.code_service import (
         list_projects, project_tree, read_file, write_file,
-        create_file, delete_file, generate_code, apply_code,
+        create_file, delete_file, apply_code,
     )
+    from core.services.code_service import generate_code as _code_service_generate
     from core.services.project_service import (
         list_projects as list_visual_projects,
         create_project, get_project, get_project_context,
@@ -431,8 +670,8 @@ def _code() -> dict:
         "write":     lambda p: write_file(p["path"], p["content"]),
         "create":    lambda p: create_file(p["path"], p.get("content", "")),
         "delete":    lambda p: delete_file(p["path"]),
-        "generate":  lambda p: _contract_enforced_generate(p),
-        "generate_raw": lambda p: generate_code(p.get("prompt", ""), p.get("project_folder", "")),
+        "generate":  lambda p: _code_service_generate(p.get("prompt", ""), p.get("project_folder", ""), p.get("use_pipeline", False)),
+        "generate_pipeline": lambda p: _code_service_generate(p.get("prompt", ""), p.get("project_folder", ""), True),
         "apply":     lambda p: apply_code(p["path"], p["content"]),
         "visual_projects": lambda p: list_visual_projects(),
         "create_project": lambda p: create_project(p.get("name", ""), p.get("description", ""), p.get("type", "fullstack")),
@@ -441,46 +680,9 @@ def _code() -> dict:
         "project_write": lambda p: write_project_file(p["project_id"], p["path"], p["content"]),
         "project_read": lambda p: read_project_file(p["project_id"], p["path"]),
         "project_chat": lambda p: _project_scoped_chat(p),
+        "assimilate":   lambda p: _hunter_assimilate(p),
+        **_agentic_actions("code"),
     }
-
-
-def _contract_enforced_generate(p):
-    """
-    Code generation through GRACE protocol — contract-enforced.
-
-    AI-to-AI: structured protocol (GraceMessage/GraceResponse).
-    NLP: generated only for human-facing output.
-    Contract: deterministic checks (syntax, imports, security, trust).
-    """
-    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
-
-    prompt = p.get("prompt", "")
-    if not prompt:
-        return {"error": "Missing 'prompt'"}
-
-    execution_allowed = p.get("execution_allowed", p.get("execute", True))
-
-    msg = GraceMessage(
-        operation=OperationType.CODE_GENERATE,
-        source="brain.code",
-        target="coding_agent",
-        payload={
-            "prompt": prompt,
-            "project_folder": p.get("project_folder", ""),
-            "file_path": p.get("file_path", ""),
-            "component": p.get("component", "user_request"),
-        },
-        output_mode=OutputMode.HUMAN if p.get("human_facing", True) else OutputMode.AI,
-        contract_type="code_generation",
-        execution_allowed=execution_allowed,
-    )
-
-    response = route_message(msg)
-    result = response.to_dict()
-
-    if response.human_text:
-        result["explanation"] = response.human_text
-    return result
 
 
 def _project_scoped_chat(p):
@@ -490,242 +692,28 @@ def _project_scoped_chat(p):
     message = p.get("message", p.get("prompt", ""))
     context = get_project_context(project_id)
 
-    from api.brain_api_v2 import call_brain as _cb_inner
-    return _cb_inner("ai", "fast", {
+    from api.brain_api_v2 import call_brain
+    return call_brain("ai", "fast", {
         "prompt": f"Project context:\n{context[:8000]}\n\nUser question: {message}",
         "models": p.get("models", ["kimi"]),
     }).get("data", {})
 
 
-# ═══════════════════════════════════════════════════════════════════
-#  DETERMINISTIC BRAIN — 9th brain domain
-# ═══════════════════════════════════════════════════════════════════
-
-def _deterministic() -> dict:
-    """
-    The Deterministic Brain — all deterministic capabilities as a first-class brain.
-
-    Consolidates: scanning, fixing, lifecycle, event bus, coding contracts,
-    genesis validation, RAG validation, component probing, and logging.
-    """
+def _hunter_assimilate(p):
+    """Run HUNTER assimilation (code → analyse → integrate). Handshake runs on success."""
+    from cognitive.hunter_assimilator import get_hunter
+    code = p.get("code", p.get("content", ""))
+    description = p.get("description", "")
+    user = p.get("user", "brain")
+    if not code.strip():
+        return {"error": "code or content required", "handshake_sent": False}
+    result = get_hunter().assimilate(code, description=description, user=user)
     return {
-        # Scanning
-        "scan": lambda p: _deterministic_scan(),
-        "fix": lambda p: _deterministic_fix(p),
-        "genesis_scan": lambda p: _genesis_deterministic_scan(),
-        "rag_scan": lambda p: _rag_deterministic_scan(),
-
-        # Lifecycle
-        "lifecycle_scan": lambda p: _lifecycle_scan(),
-        "probe_heal": lambda p: _lifecycle_probe_heal(p),
-        "probe_all": lambda p: _det_probe_all(),
-        "lifecycle_events": lambda p: _lifecycle_events(p),
-        "registry": lambda p: _det_registry(),
-
-        # Event Bus (multi-entry-point)
-        "publish": lambda p: _det_publish(p),
-        "bus_stats": lambda p: _det_bus_stats(),
-        "bus_log": lambda p: _det_bus_log(p),
-        "init_bridges": lambda p: _det_init_bridges(),
-
-        # Coding Contracts
-        "validate_code": lambda p: _det_validate_code(p),
-        "validate_fix": lambda p: _det_validate_fix(p),
-        "validate_component": lambda p: _det_validate_component(p),
-        "validate_healing": lambda p: _det_validate_healing(p),
-        "contracts": lambda p: _det_contracts(),
-
-        # Logging
-        "log": lambda p: _lifecycle_events(p),
-        "log_summary": lambda p: _det_log_summary(),
-
-        # GRACE Protocol (structured AI-to-AI, NLP only human-facing)
-        "protocol_route": lambda p: _protocol_route(p),
-        "protocol_review": lambda p: _protocol_review(p),
-
-        # E2E Validation (Genesis → Output, fully deterministic)
-        "e2e_validate": lambda p: _e2e_validate(),
-        "e2e_stage": lambda p: _e2e_stage(p),
-    }
-
-
-def _det_probe_all():
-    from core.deterministic_lifecycle import probe_all_components, _registry, auto_discover_components
-    if not _registry:
-        auto_discover_components()
-    return probe_all_components()
-
-def _det_registry():
-    from core.deterministic_lifecycle import get_registry, _registry, auto_discover_components
-    if not _registry:
-        auto_discover_components()
-    return {"registry": get_registry(), "total": len(get_registry())}
-
-def _det_publish(p):
-    from core.deterministic_event_bus import publish, TOPICS
-    topic = p.get("topic", "deterministic.problem_detected")
-    comp = p.get("component", "unknown")
-    payload = p.get("payload", {})
-    priority = p.get("priority", 5)
-    task_id = publish(topic, comp, payload, priority, source="brain_api")
-    return {"task_id": task_id, "topic": topic, "component": comp, "available_topics": TOPICS}
-
-def _det_bus_stats():
-    from core.deterministic_event_bus import get_bus_stats
-    return get_bus_stats()
-
-def _det_bus_log(p):
-    from core.deterministic_event_bus import get_task_log
-    return {"tasks": get_task_log(p.get("limit", 50))}
-
-def _det_init_bridges():
-    from core.deterministic_event_bus import initialize_bridges
-    initialize_bridges()
-    return {"status": "bridges_initialized"}
-
-def _det_validate_code(p):
-    from core.deterministic_coding_contracts import execute_code_generation_contract
-    return execute_code_generation_contract(
-        component=p.get("component", "unknown"),
-        generated_code=p.get("code", ""),
-        file_path=p.get("file_path"),
-        min_trust=p.get("min_trust", 0.5),
-    ).to_dict()
-
-def _det_validate_fix(p):
-    from core.deterministic_coding_contracts import execute_code_fix_contract
-    return execute_code_fix_contract(
-        component=p.get("component", "unknown"),
-        file_path=p.get("file_path", ""),
-        fix_code=p.get("code", ""),
-        original_problems=p.get("problems", []),
-        min_trust=p.get("min_trust", 0.5),
-    ).to_dict()
-
-def _det_validate_component(p):
-    from core.deterministic_coding_contracts import execute_component_creation_contract
-    return execute_component_creation_contract(
-        component=p.get("component", "unknown"),
-        component_code=p.get("code", ""),
-        file_path=p.get("file_path", ""),
-        min_trust=p.get("min_trust", 0.6),
-    ).to_dict()
-
-def _det_validate_healing(p):
-    from core.deterministic_coding_contracts import execute_healing_contract
-    return execute_healing_contract(
-        component=p.get("component", "unknown"),
-        healing_code=p.get("code", ""),
-        healing_method=p.get("method", "unknown"),
-        min_trust=p.get("min_trust", 0.5),
-    ).to_dict()
-
-def _det_contracts():
-    from core.deterministic_coding_contracts import get_available_contracts
-    return get_available_contracts()
-
-def _det_log_summary():
-    from core.deterministic_logger import get_event_summary
-    return get_event_summary()
-
-
-def _e2e_validate():
-    """Run full deterministic e2e LLM pipeline validation: Genesis → Output."""
-    from core.deterministic_e2e_validator import run_e2e_validation
-    return run_e2e_validation().to_dict()
-
-
-def _e2e_stage(p):
-    """Run a single e2e validation stage by number (1-10)."""
-    stage_num = p.get("stage", 0)
-    from core.deterministic_e2e_validator import (
-        _stage_genesis, _stage_governance, _stage_memory,
-        _stage_retrieval, _stage_llm_providers, _stage_cognitive_pipeline,
-        _stage_coding_contracts, _stage_brain_api, _stage_agent_pool,
-        _stage_output_integrity,
-    )
-    stage_map = {
-        1: _stage_genesis, 2: _stage_governance, 3: _stage_memory,
-        4: _stage_retrieval, 5: _stage_llm_providers, 6: _stage_cognitive_pipeline,
-        7: _stage_coding_contracts, 8: _stage_brain_api, 9: _stage_agent_pool,
-        10: _stage_output_integrity,
-    }
-    fn = stage_map.get(stage_num)
-    if not fn:
-        return {"error": f"Invalid stage {stage_num}. Valid: 1-10",
-                "stages": {k: fn.__name__.replace("_stage_", "") for k, fn in stage_map.items()}}
-    from dataclasses import asdict
-    return asdict(fn())
-
-
-def _protocol_route(p):
-    """Route a structured message through the GRACE protocol.
-    AI-to-AI: structured only. NLP generated only when output_mode == 'human'."""
-    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
-
-    op_str = p.get("operation", "analyze")
-    try:
-        operation = OperationType(op_str)
-    except ValueError:
-        return {"error": f"Unknown operation: {op_str}. Valid: {[o.value for o in OperationType]}"}
-
-    output_mode = OutputMode.HUMAN if p.get("human_facing", False) else OutputMode.AI
-
-    msg = GraceMessage(
-        operation=operation,
-        source=p.get("source", "brain.deterministic"),
-        target=p.get("target", "auto"),
-        payload=p.get("payload", {}),
-        output_mode=output_mode,
-        contract_type=p.get("contract_type"),
-        execution_allowed=p.get("execution_allowed", False),
-    )
-    return route_message(msg).to_dict()
-
-
-def _protocol_review(p):
-    """Review code through the GRACE protocol — deterministic checks, structured output."""
-    from core.grace_protocol import GraceMessage, OperationType, OutputMode, route_message
-
-    code = p.get("code", "")
-    if not code:
-        return {"error": "Missing 'code' in payload"}
-
-    msg = GraceMessage(
-        operation=OperationType.CODE_REVIEW,
-        source="brain.deterministic",
-        target="code_reviewer",
-        payload={
-            "code": code,
-            "component": p.get("component", "unknown"),
-        },
-        output_mode=OutputMode.HUMAN if p.get("human_facing", False) else OutputMode.AI,
-    )
-    return route_message(msg).to_dict()
-
-
-def _workspace() -> dict:
-    """Workspace brain — internal VCS, CI/CD, multi-tenant management.
-    Bridges dev tab, codebase, docs, and projects through Grace's platform."""
-    from core.services.workspace_service import (
-        ws_list, ws_create, ws_snapshot, ws_history, ws_diff,
-        ws_rollback, ws_branches, ws_create_branch, ws_files,
-        ws_content, ws_snapshot_dir, ws_pipeline_run, ws_pipeline_history,
-    )
-    return {
-        "list":             lambda p: ws_list(),
-        "create":           ws_create,
-        "snapshot":         ws_snapshot,
-        "snapshot_dir":     ws_snapshot_dir,
-        "history":          ws_history,
-        "diff":             ws_diff,
-        "rollback":         ws_rollback,
-        "content":          ws_content,
-        "files":            ws_files,
-        "branches":         ws_branches,
-        "create_branch":    ws_create_branch,
-        "pipeline_run":     ws_pipeline_run,
-        "pipeline_history": ws_pipeline_history,
+        "handshake_sent": result.handshake_sent,
+        "trust_score": result.trust_score,
+        "files_created": result.files_created,
+        "status": result.status,
+        "success": result.status == "complete" and result.trust_score >= 60,
     }
 
 
@@ -774,11 +762,79 @@ def _console_diagnose():
 
 
 def _knowledge_gaps():
+    """Neighbor-by-neighbor gap analysis (reverse kNN)."""
     try:
         from cognitive.reverse_knn import scan_knowledge_gaps
         return scan_knowledge_gaps()
     except Exception:
         return {"gaps": []}
+
+
+def _fill_knowledge_gaps(p: dict):
+    """After neighbor search, pull from API, web search, and FlashCache to fill gaps."""
+    try:
+        from cognitive.reverse_knn import fill_gaps_from_sources
+        max_gaps = p.get("max_gaps", 5)
+        auto_ingest = p.get("auto_ingest", True)
+        return fill_gaps_from_sources(max_gaps=max_gaps, auto_ingest=auto_ingest)
+    except Exception as e:
+        return {"error": str(e), "topics_processed": 0, "gaps_filled": 0}
+
+
+def _learning_memory_expand(p: dict):
+    """From learning memory: run neighbor search then pull from API, web, FlashCache."""
+    try:
+        from cognitive.reverse_knn import scan_knowledge_gaps, fill_gaps_from_sources
+        gaps = scan_knowledge_gaps()
+        total = (gaps.get("summary") or {}).get("total_gaps", 0)
+        if total == 0:
+            return {"scan": gaps, "filled": None, "message": "no_gaps_to_fill"}
+        max_gaps = p.get("max_gaps", 5)
+        filled = fill_gaps_from_sources(max_gaps=max_gaps, auto_ingest=True)
+        return {"scan": gaps, "filled": filled}
+    except Exception as e:
+        return {"error": str(e), "scan": None, "filled": None}
+
+
+def _oracle_export(p: dict):
+    """Push learning memory to Oracle (human-readable files for librarian and file management)."""
+    try:
+        from cognitive.governance_training_loop import run_oracle_export
+        import os
+        kb_path = p.get("kb_path") or os.environ.get("GRACE_KNOWLEDGE_BASE_PATH")
+        if kb_path:
+            from pathlib import Path
+            kb_path = Path(kb_path)
+        return run_oracle_export(kb_path=kb_path, limit=p.get("limit", 500), min_trust=p.get("min_trust", 0.3))
+    except Exception as e:
+        return {"error": str(e), "exported": 0}
+
+
+def _governance_training_cycle(p: dict):
+    """Full cycle: KB → Learning memory → Oracle → Sandbox review; 60d trial, governance, report, +30% approval."""
+    try:
+        from cognitive.governance_training_loop import run_full_cycle
+        import os
+        kb_path = p.get("kb_path") or os.environ.get("GRACE_KNOWLEDGE_BASE_PATH")
+        if kb_path:
+            from pathlib import Path
+            kb_path = Path(kb_path)
+        return run_full_cycle(
+            kb_path=kb_path,
+            export_to_oracle=p.get("export_to_oracle", True),
+            run_sandbox_review=p.get("run_sandbox_review", True),
+        )
+    except Exception as e:
+        return {"error": str(e), "cycle_at": None}
+
+
+def _governance_report(p: dict):
+    """60-day governance report for user-in-loop approval; +30% → add to system."""
+    try:
+        from cognitive.governance_training_loop import get_governance_report
+        return get_governance_report(experiment_id=p.get("experiment_id"))
+    except Exception as e:
+        return {"error": str(e)}
 
 
 def _integration_matrix():
@@ -798,9 +854,14 @@ def _logic_tests():
 
 
 def _code_generate(p):
+    """Agentic code generation: Qwen latest (reasoning + coding) via pipeline or fast path."""
     try:
         from cognitive.qwen_coding_net import generate_code
-        return generate_code(p.get("prompt", ""), p.get("project_folder", ""))
+        return generate_code(
+            p.get("prompt", ""),
+            p.get("project_folder", ""),
+            use_pipeline=p.get("use_pipeline", False),
+        )
     except Exception as e:
         return {"error": str(e)}
 
@@ -826,56 +887,112 @@ def _oracle_training():
 
 def _health_map(p):
     from api.component_health_api import health_map
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(health_map(p.get("window_minutes", 60)))
+    return health_map(p.get("window_minutes", 60))
 
 
 def _problems():
     from api.component_health_api import problems_list
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(problems_list())
+    return problems_list()
 
 
 def _baselines():
     from api.component_health_api import learned_baselines
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(learned_baselines())
+    return learned_baselines()
 
 
 def _orphans():
     from api.component_health_api import detect_orphan_services
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(detect_orphan_services())
+    return detect_orphan_services()
 
 
 def _correlate(p):
     from api.component_health_api import correlate_failure
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(correlate_failure(p.get("component", "")))
+    return _run_coro_sync(correlate_failure(p.get("component", "")))
 
 
 def _trigger_scan():
     from api.runtime_triggers_api import scan_triggers
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(scan_triggers())
+    return _run_coro_sync(scan_triggers())
 
 
 def _scan_heal():
     from api.runtime_triggers_api import scan_and_heal
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(scan_and_heal())
+    return _run_coro_sync(scan_and_heal())
+
+
+def _decide_autonomous_action(p: dict) -> dict:
+    """
+    Agentic decision: given a problem, return which brain action to run.
+    Returns either {escalate: True, reason} or {escalate: False, brain, action, payload}.
+    Centralizes routing so the autonomous loop only executes what the brain decides.
+    """
+    problem = p or {}
+    target = problem.get("target", "")
+    reason = problem.get("reason", "")
+    severity = problem.get("severity", "warning")
+    r = reason.lower()
+
+    if problem.get("flag_for_human"):
+        return {"escalate": True, "reason": reason, "type": "escalate"}
+
+    # Service down → HEAL (system/scan_heal)
+    if "unreachable" in r or "down" in r or "connection" in r:
+        return {"escalate": False, "brain": "system", "action": "scan_heal", "payload": {}, "type": "heal"}
+
+    # No activity (always-on) → HEAL (govern/heal)
+    if "no activity" in r and severity == "critical":
+        return {"escalate": False, "brain": "govern", "action": "heal", "payload": {}, "type": "heal"}
+
+    # High CPU/RAM → HEAL (govern/heal)
+    if "cpu" in r or "ram" in r or "memory" in r:
+        return {"escalate": False, "brain": "govern", "action": "heal", "payload": {}, "type": "heal"}
+
+    # Import/code errors → LEARN (govern/record_gap)
+    if "import" in r or "module" in r or "dependency" in r:
+        return {
+            "escalate": False,
+            "brain": "govern",
+            "action": "record_gap",
+            "payload": {
+                "what": f"Code gap: {target} — {reason}",
+                "target": target,
+                "tags": ["autonomous", "gap", "code-issue"],
+            },
+            "type": "learn",
+        }
+
+    # Test failures → LEARN (govern/record_gap)
+    if "test" in r or "failure" in r:
+        return {
+            "escalate": False,
+            "brain": "govern",
+            "action": "record_gap",
+            "payload": {
+                "what": f"Test gap: {target} — {reason}",
+                "target": target,
+                "tags": ["autonomous", "gap", "test-failure"],
+            },
+            "type": "learn",
+        }
+
+    # Default: escalate
+    return {"escalate": True, "reason": reason, "type": "escalate"}
+
+
+def _model_version_check():
+    """Run model auto-update check (Kimi/Opus/Ollama)."""
+    from cognitive.model_updater import check_all_models
+    return check_all_models()
 
 
 def _probe_sweep():
     from api.probe_agent_api import probe_sweep
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(probe_sweep())
+    return probe_sweep()
 
 
 def _probe_models():
     from api.probe_agent_api import probe_models
-    import asyncio
-    return asyncio.get_event_loop().run_until_complete(probe_models())
+    return probe_models()
 
 
 def _auto_start(p):
@@ -912,6 +1029,240 @@ def _consensus_fix():
 def _connectivity():
     from core.services.system_service import get_runtime_status
     return get_runtime_status()
+
+
+def _architecture_explain(p):
+    """What does this component do? (Living architectural map.)"""
+    try:
+        from cognitive.architecture_compass import get_compass
+        component = p.get("component", p.get("name", ""))
+        if not component:
+            return {"error": "Provide 'component' or 'name' (e.g. pipeline, trust_engine)."}
+        text = get_compass().explain(component)
+        return {"component": component, "explanation": text}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _architecture_find(p):
+    """What can handle this task? (Capability → components.)"""
+    try:
+        from cognitive.architecture_compass import get_compass
+        capability = p.get("capability", p.get("task", ""))
+        if not capability:
+            return {"error": "Provide 'capability' or 'task' (e.g. code review, health monitoring)."}
+        components = get_compass().find_for(capability)
+        return {"capability": capability, "components": components}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _architecture_connected(p):
+    """Trace path from one component to another (dependency/connection graph)."""
+    try:
+        from cognitive.architecture_compass import get_compass
+        comp_a = p.get("from", p.get("comp_a", p.get("source", "")))
+        comp_b = p.get("to", p.get("comp_b", p.get("target", "")))
+        if not comp_a or not comp_b:
+            return {"error": "Provide 'from' and 'to' (or comp_a/comp_b, source/target)."}
+        path = get_compass().how_connected(comp_a, comp_b)
+        return {"from": comp_a, "to": comp_b, "path": path}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _architecture_diagnose():
+    """Bottlenecks, isolated modules, most-depended-on, capabilities list."""
+    try:
+        from cognitive.architecture_compass import get_compass
+        return get_compass().diagnose()
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _architecture_map():
+    """Full component map with an NLP-friendly narrative summary."""
+    try:
+        from cognitive.architecture_compass import get_compass
+        data = get_compass().get_full_map()
+        components = data.get("components") or {}
+        total = data.get("total", len(components))
+        connected = data.get("connected", 0)
+        isolated_count = data.get("isolated", 0)
+
+        # Build a short narrative summary (no LLM) for Ask tab / NLP
+        top_hubs = sorted(
+            components.items(),
+            key=lambda x: x[1].get("connections_out", 0) + x[1].get("connections_in", 0),
+            reverse=True,
+        )[:5]
+        isolated = [p for p, c in components.items() if c.get("isolated")]
+
+        parts = [
+            f"Grace has {total} components ({connected} connected, {isolated_count} isolated)."
+        ]
+        if top_hubs:
+            hubs_str = ", ".join(
+                f"{p.replace('/', '.')} ({c.get('connections_out', 0)} out, {c.get('connections_in', 0)} in)"
+                for p, c in top_hubs
+            )
+            parts.append(f" Top hubs: {hubs_str}.")
+        if isolated:
+            names = [p.replace("/", ".") for p in isolated[:8]]
+            parts.append(f" Isolated modules: {', '.join(names)}{'...' if len(isolated) > 8 else ''}.")
+        data["summary"] = " ".join(parts)
+        return data
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _embedding_config():
+    """What embedding model are we using? (Model name, path, dimension if loaded.)"""
+    try:
+        out = {}
+        try:
+            from settings import settings
+            out["model_name"] = getattr(settings, "EMBEDDING_DEFAULT", None)
+            out["model_path"] = getattr(settings, "EMBEDDING_MODEL_PATH", None)
+            out["device"] = getattr(settings, "EMBEDDING_DEVICE", None)
+        except Exception:
+            out["model_name"] = None
+            out["model_path"] = None
+            out["device"] = None
+        try:
+            from embedding.embedder import get_embedding_model
+            model = get_embedding_model()
+            if model is not None:
+                out["loaded"] = True
+                out["dimension"] = model.get_embedding_dimension() if hasattr(model, "get_embedding_dimension") else None
+            else:
+                out["loaded"] = False
+                out["dimension"] = None
+        except Exception:
+            out["loaded"] = False
+            out["dimension"] = None
+        return out
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _brain_directory():
+    """All brains (domains) and their actions — queryable API map."""
+    try:
+        d = _build_directory()
+        total = sum(len(b["actions"]) for b in d.values())
+        return {
+            "brains": d,
+            "total_brains": len(d),
+            "total_actions": total,
+            "usage": "POST /brain/{domain} with { action: '...', payload: {...} }",
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _models_summary():
+    """LLM models + embedding model in one place."""
+    try:
+        out = {"embedding": _embedding_config()}
+        try:
+            from cognitive.consensus_engine import get_available_models
+            out["llm_models"] = get_available_models()
+        except Exception as e:
+            out["llm_models"] = []
+            out["llm_models_error"] = str(e)
+        try:
+            from settings import settings
+            out["llm_provider"] = getattr(settings, "LLM_PROVIDER", "ollama")
+        except Exception:
+            out["llm_provider"] = None
+        return out
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _schema_info():
+    """Database type, name, Qdrant status — schema/storage overview."""
+    try:
+        out = {}
+        try:
+            from settings import settings
+            out["database"] = {
+                "type": getattr(settings, "DATABASE_TYPE", "postgresql"),
+                "name": getattr(settings, "DATABASE_NAME", "grace"),
+                "path": getattr(settings, "DATABASE_PATH", None),
+                "host": getattr(settings, "DATABASE_HOST", None),
+                "port": getattr(settings, "DATABASE_PORT", None),
+            }
+        except Exception as e:
+            out["database"] = {"error": str(e)}
+        try:
+            from database.connection import DatabaseConnection
+            out["database"]["connected"] = DatabaseConnection.health_check()
+        except Exception:
+            out["database"]["connected"] = False
+        try:
+            from vector_db.client import get_qdrant_client
+            from settings import settings
+            q = get_qdrant_client()
+            out["qdrant"] = {
+                "connected": q.is_connected() if hasattr(q, "is_connected") else True,
+                "url": getattr(settings, "QDRANT_URL", None) or (f"{getattr(settings, 'QDRANT_HOST', 'localhost')}:{getattr(settings, 'QDRANT_PORT', 6333)}"),
+            }
+            if hasattr(q, "list_collections"):
+                out["qdrant"]["collections"] = len(q.list_collections())
+            elif hasattr(q, "get_collections"):
+                coll = q.get_collections()
+                out["qdrant"]["collections"] = len(coll.collections) if coll and hasattr(coll, "collections") else 0
+            else:
+                out["qdrant"]["collections"] = None
+        except Exception as e:
+            out["qdrant"] = {"error": str(e)}
+        return out
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _graphs_info():
+    """Graphs in Grace: component graph, vector store, magma."""
+    try:
+        out = {"graphs": []}
+        try:
+            from cognitive.architecture_compass import get_compass
+            m = get_compass().get_full_map()
+            out["component_graph"] = {"type": "architecture", "total_components": m.get("total", 0), "connected": m.get("connected", 0), "isolated": m.get("isolated", 0)}
+            out["graphs"].append("component_graph (architecture compass)")
+        except Exception as e:
+            out["component_graph"] = {"error": str(e)}
+        out["graphs"].append("qdrant (vector embeddings)")
+        out["graphs"].append("magma (cognitive/memory graphs when enabled)")
+        return out
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def _deterministic_first_loop(p):
+    """Run deterministic-first loop: Genesis keys → probe → AST/deterministic fix → handoff to LLM only when needed."""
+    from core.deterministic_first_loop import run_deterministic_first_loop, get_handoff_context
+    result = run_deterministic_first_loop(
+        task=p.get("task"),
+        run_probe=p.get("run_probe", True),
+        run_genesis_search=p.get("run_genesis_search", True),
+        run_deterministic_scan=p.get("run_deterministic_scan", True),
+    )
+    result["handoff_context"] = get_handoff_context(result)
+    return result
+
+
+def _deterministic() -> dict:
+    """Deterministic brain: rule-only scan and fix. No LLM until handoff."""
+    return {
+        "scan": lambda p: _deterministic_scan(),
+        "fix": lambda p: _deterministic_fix(p),
+        "first_loop": lambda p: _deterministic_first_loop(p),
+        "report": lambda p: _deterministic_scan(),  # alias for scan
+        **_agentic_actions("deterministic"),
+    }
 
 
 def _hot_reload_svc(p):
@@ -1042,6 +1393,12 @@ def _project_gov(p):
     from core.governance_engine import get_project_rules
     return get_project_rules(p.get("project_id", p.get("id", "")))
 
+
+def _governance_coding_contract(p):
+    """Return the governance coding contract (global + project rules) for the pipeline to enforce."""
+    from core.governance_engine import get_governance_coding_contract
+    return get_governance_coding_contract(p.get("project_id", p.get("id", "")))
+
 def _set_proj_rules(p):
     from core.governance_engine import set_project_rules
     pid = p.pop("project_id", p.pop("id", ""))
@@ -1136,6 +1493,91 @@ def _dist_session(p):
 def _librarian_ingest(p):
     from core.librarian import ingest_document
     return ingest_document(p.get("path",""), p.get("content",""), p.get("project_id",""))
+
+
+def _data_librarian_process(p):
+    """Data brain: process document through librarian (ingest, categorize, tag). Uses Qwen for analysis."""
+    from core.librarian import ingest_document
+    return ingest_document(
+        p.get("path", ""),
+        p.get("content", ""),
+        p.get("project_id", ""),
+        p.get("source", "brain"),
+    )
+
+
+def _data_librarian_organise_file(p):
+    """Data brain: move file to correct subfolder (agentic; Qwen suggests location)."""
+    from pathlib import Path
+    from cognitive.librarian_autonomous import get_autonomous_librarian
+    path = p.get("path", "")
+    target_folder = p.get("target_folder")
+    if not path:
+        return {"ok": False, "error": "path required"}
+    lib = get_autonomous_librarian()
+    if target_folder:
+        try:
+            from settings import settings
+            kb = Path(getattr(settings, "KNOWLEDGE_BASE_PATH", "knowledge_base"))
+            full = kb / path if not Path(path).is_absolute() else Path(path)
+            target_dir = kb / target_folder.strip("/")
+            target_dir.mkdir(parents=True, exist_ok=True)
+            dest = target_dir / full.name
+            if full.exists() and full != dest:
+                import shutil
+                shutil.move(str(full), str(dest))
+                return {"action": "moved", "from": path, "to": str(dest.relative_to(kb))}
+        except Exception as e:
+            return {"action": "failed", "error": str(e)}
+    return lib.organise_file(path)
+
+
+def _data_librarian_suggest_folder(p):
+    """Data brain: suggest subfolder for a path (Qwen-backed when needed)."""
+    from pathlib import Path
+    from cognitive.librarian_autonomous import get_autonomous_librarian
+    path = p.get("path", "")
+    if not path:
+        return {"suggestion": None, "error": "path required"}
+    try:
+        from settings import settings
+        kb = Path(getattr(settings, "KNOWLEDGE_BASE_PATH", "knowledge_base"))
+        full = kb / path if not Path(path).is_absolute() else Path(path)
+    except Exception:
+        full = Path(path)
+    suggestion = get_autonomous_librarian().suggest_location(full)
+    return {"path": path, "suggestion": suggestion}
+
+
+def _data_librarian_categorize(p):
+    """Data brain: return category/tags for path (uses librarian engine + Qwen when available)."""
+    from core.librarian import ingest_document
+    path = p.get("path", "")
+    if not path:
+        return {"category": "unknown", "tags": []}
+    try:
+        from pathlib import Path
+        from settings import settings
+        kb = Path(getattr(settings, "KNOWLEDGE_BASE_PATH", "knowledge_base"))
+        full = kb / path if not Path(path).is_absolute() else Path(path)
+        content = full.read_text(errors="ignore")[:50000] if full.exists() else ""
+    except Exception:
+        content = ""
+    meta = ingest_document(path, content, p.get("project_id", ""), source="categorize")
+    return {"category": meta.get("category", "other"), "tags": meta.get("tags", []), "metadata": meta}
+
+
+def _data_librarian_on_new_folder(p):
+    """Data brain: notify librarian of new folder (triggers auto-research, taxonomy)."""
+    from cognitive.librarian_autonomous import get_autonomous_librarian
+    return get_autonomous_librarian().on_new_folder(p.get("folder_path", p.get("path", "")))
+
+
+def _data_librarian_stats():
+    """Data brain: librarian index stats."""
+    from core.librarian import get_document_stats
+    return get_document_stats()
+
 
 def _librarian_search(p):
     from core.librarian import search_documents
@@ -1252,6 +1694,34 @@ def _clear_cache():
     clear_cache()
     return {"cleared": True}
 
+
+def _reset_db():
+    """Reset database connection (through brain)."""
+    try:
+        from database.connection import DatabaseConnection
+        DatabaseConnection.close()
+        return {"status": "closed"}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)[:200]}
+
+
+def _reset_vector_db():
+    """Reset vector DB client (through brain) by forcing a new connection."""
+    try:
+        from vector_db.client import get_qdrant_client
+        get_qdrant_client(force_new=True)
+        return {"status": "reset"}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)[:200]}
+
+
+def _gc():
+    """Force garbage collection (through brain)."""
+    import gc
+    gc.collect()
+    return {"status": "ok"}
+
+
 def _verify_ledger():
     from core.safety import verify_ledger
     return verify_ledger()
@@ -1329,59 +1799,6 @@ def _mine_episodes():
     return EpisodicMiner().mine_episodes()
 
 
-def _worker_pool_status():
-    from core.worker_pool import pool_status
-    return pool_status()
-
-
-def _llm_cache_stats():
-    from core.security import get_llm_cache
-    return get_llm_cache().stats()
-
-
-def _clear_llm_cache():
-    from core.security import get_llm_cache
-    get_llm_cache().clear()
-    return {"cleared": True}
-
-
-def _api_cost_summary():
-    from core.security import get_cost_tracker
-    return get_cost_tracker().get_summary()
-
-
-def _memory_pressure():
-    from core.memory_injector import get_memory_pressure
-    return get_memory_pressure()
-
-
-def _snapshot_stats():
-    from core.memory_injector import get_snapshot_stats
-    return get_snapshot_stats()
-
-
-def _db_info():
-    try:
-        from database.connection import DatabaseConnection
-        from core.db_compat import get_table_stats, get_db_size_mb
-        engine = DatabaseConnection.get_engine()
-        return {
-            "dialect": engine.dialect.name,
-            "size_mb": get_db_size_mb(engine),
-            "tables": get_table_stats(engine),
-            "healthy": DatabaseConnection.health_check(),
-        }
-    except Exception as e:
-        return {"error": str(e)}
-
-
-def _user_rate_check(p):
-    from core.security import check_user_rate_limit
-    user_id = p.get("user_id", "anonymous")
-    tier = p.get("tier", "default")
-    return check_user_rate_limit(user_id, tier)
-
-
 def _run_pipeline(p):
     from core.coding_pipeline import get_coding_pipeline, get_pipeline_progress
     pipeline = get_coding_pipeline()
@@ -1456,38 +1873,68 @@ def _deterministic_scan():
     from core.deterministic_bridge import build_deterministic_report
     return build_deterministic_report()
 
+
 def _deterministic_fix(p):
     from core.deterministic_bridge import deterministic_fix_cycle
     return deterministic_fix_cycle(p.get("task", ""))
 
-def _genesis_deterministic_scan():
-    from genesis.deterministic_genesis_validator import run_genesis_validation
-    return run_genesis_validation().to_dict()
 
-def _rag_deterministic_scan():
-    from retrieval.deterministic_rag_validator import run_rag_validation
-    return run_rag_validation().to_dict()
+def _verify_built(p):
+    """Deterministic verification that everything built has been built. Returns manifest."""
+    from core.build_verification import run_verify_built_checks, all_required_passed
+    skip_script = p.get("skip_verify_script", False)
+    manifest = run_verify_built_checks(skip_verify_script=skip_script)
+    manifest["ok"] = all_required_passed(manifest)
+    return manifest
 
-def _lifecycle_scan():
-    from core.deterministic_lifecycle import lifecycle_scan
-    return lifecycle_scan()
 
-def _lifecycle_probe_heal(p):
-    comp = p.get("component_id", p.get("component", ""))
-    if comp:
-        from core.deterministic_lifecycle import run_lifecycle, _registry, register_component
-        if comp not in _registry:
-            register_component(comp, comp)
-        return run_lifecycle(comp).to_dict()
-    else:
-        from core.deterministic_lifecycle import run_lifecycle_all
-        return run_lifecycle_all()
+def _trigger_definitions(p):
+    """Return unified trigger registry (determinism, self_heal, diagnostics, self_learning, self_governance, coding_agent)."""
+    from core.unified_trigger_brain import get_trigger_definitions, get_categories
+    category = p.get("category")
+    trigger_ids = p.get("trigger_ids")
+    return {
+        "triggers": get_trigger_definitions(category=category, trigger_ids=trigger_ids),
+        "categories": get_categories(),
+    }
 
-def _lifecycle_events(p):
-    from core.deterministic_logger import get_event_log, get_event_summary
-    comp = p.get("component", "")
-    limit = p.get("limit", 50)
-    return {"events": get_event_log(comp or None, limit), "summary": get_event_summary()}
+
+def _grace_state():
+    """Single view of Grace state: Ouroboros, mirror, problems, health. For unified dashboard."""
+    from api.autonomous_loop_api import _loop_state, _loop_log
+    last_cycle = _loop_log[-1] if _loop_log else None
+    try:
+        from core.services.system_service import get_health_dashboard
+        health = get_health_dashboard()
+    except Exception:
+        health = {}
+    try:
+        from api.component_health_api import _get_genesis_keys, _check_service_health, COMPONENT_REGISTRY, _classify_component
+        keys = _get_genesis_keys(minutes=60, limit=500)
+        svc = _check_service_health()
+        problems = []
+        for cid, comp in (COMPONENT_REGISTRY or {}).items():
+            classified = _classify_component(cid, comp, keys, svc)
+            if classified.get("status") in ("red", "orange"):
+                problems.append({"component": classified.get("label", cid), "reason": classified.get("reason"), "status": classified["status"]})
+        mirror = {"problems_observed": len(problems), "problems": problems[:10]}
+    except Exception:
+        mirror = {"problems_observed": 0, "problems": []}
+    return {
+        "ouroboros": {"running": _loop_state.get("running"), "cycle_count": _loop_state.get("cycle_count"), "last_cycle": _loop_state.get("last_cycle"), "last_result": _loop_state.get("last_result"), "actions_taken": _loop_state.get("actions_taken")},
+        "last_cycle_detail": last_cycle,
+        "mirror": mirror,
+        "health": health,
+    }
+
+
+def _run_unified_triggers(p):
+    """Run unified triggers (async loop); optionally filter by trigger_ids or category."""
+    from core.unified_trigger_brain import run_triggers_sync
+    return run_triggers_sync(
+        trigger_ids=p.get("trigger_ids"),
+        category=p.get("category"),
+    )
 
 def _knowledge_gaps_deep():
     from core.cognitive_mesh import CognitiveMesh
@@ -1508,9 +1955,8 @@ def _build_directory():
         "system": {"actions": list(_system().keys()), "description": "Health, runtime, monitoring, autonomous loop"},
         "data":   {"actions": list(_data().keys()), "description": "Whitelist sources, flash cache"},
         "tasks":  {"actions": list(_tasks().keys()), "description": "Scheduling, time sense, planner"},
-        "code":          {"actions": list(_code().keys()), "description": "Codebase, projects, code generation"},
-        "deterministic": {"actions": list(_deterministic().keys()), "description": "Deterministic scanning, lifecycle, event bus, coding contracts, probing"},
-        "workspace":     {"actions": list(_workspace().keys()), "description": "Internal VCS, CI/CD, multi-tenant workspaces (replaces GitHub)"},
+        "code":   {"actions": list(_code().keys()), "description": "Codebase, projects, code generation"},
+        "deterministic": {"actions": list(_deterministic().keys()), "description": "Rule-only scan and fix: AST, imports, DB, tests, services. No LLM until handoff. Verify-first cycle."},
     }
 
 
@@ -1519,39 +1965,39 @@ BRAIN_DIRECTORY = _build_directory()
 
 @router.post("/chat", response_model=BrainResponse)
 async def brain_chat(req: BrainRequest):
-    return _call("chat", req.action, req.payload or {}, _chat())
+    return await _call("chat", req.action, req.payload or {}, _chat())
 
 @router.post("/files", response_model=BrainResponse)
 async def brain_files(req: BrainRequest):
-    return _call("files", req.action, req.payload or {}, _files())
+    return await _call("files", req.action, req.payload or {}, _files())
 
 @router.post("/govern", response_model=BrainResponse)
 async def brain_govern(req: BrainRequest):
-    return _call("govern", req.action, req.payload or {}, _govern())
+    return await _call("govern", req.action, req.payload or {}, _govern())
 
 @router.post("/ai", response_model=BrainResponse)
 async def brain_ai(req: BrainRequest):
-    return _call("ai", req.action, req.payload or {}, _ai())
+    return await _call("ai", req.action, req.payload or {}, _ai())
 
 @router.post("/system", response_model=BrainResponse)
 async def brain_system(req: BrainRequest):
-    return _call("system", req.action, req.payload or {}, _system())
+    return await _call("system", req.action, req.payload or {}, _system())
 
 @router.post("/data", response_model=BrainResponse)
 async def brain_data(req: BrainRequest):
-    return _call("data", req.action, req.payload or {}, _data())
+    return await _call("data", req.action, req.payload or {}, _data())
 
 @router.post("/tasks", response_model=BrainResponse)
 async def brain_tasks(req: BrainRequest):
-    return _call("tasks", req.action, req.payload or {}, _tasks())
+    return await _call("tasks", req.action, req.payload or {}, _tasks())
 
 @router.post("/code", response_model=BrainResponse)
 async def brain_code(req: BrainRequest):
-    return _call("code", req.action, req.payload or {}, _code())
+    return await _call("code", req.action, req.payload or {}, _code())
 
 @router.post("/deterministic", response_model=BrainResponse)
 async def brain_deterministic(req: BrainRequest):
-    return _call("deterministic", req.action, req.payload or {}, _deterministic())
+    return await _call("deterministic", req.action, req.payload or {}, _deterministic())
 
 @router.post("/ask")
 async def brain_ask(request: Request):
@@ -1568,221 +2014,37 @@ async def brain_ask(request: Request):
     query = body.get("query", body.get("message", body.get("q", "")))
     payload = body.get("payload", {})
 
+    # Direct route for clear "which/what/list LLM or models" questions so Ask tab never hits chat/send
+    q = (query or "").strip().lower()
+    if any(phrase in q for phrase in ("which llm", "which models", "what llm", "what models", "list llm", "list models", "llm in the system", "models in the system")):
+        out = call_brain("system", "models_summary", {})
+        out["routing"] = {"query": query, "brain": "system", "action": "models_summary", "confidence": 1.0, "auto_routed": True, "direct_route": True}
+        return out
+
     from core.auto_router import smart_call
     return smart_call(query, payload)
-
-@router.post("/workspace", response_model=BrainResponse)
-async def brain_workspace(req: BrainRequest):
-    return _call("workspace", req.action, req.payload or {}, _workspace())
-
-def _agent_submit(p):
-    """Submit a task to a specific Qwen agent for background processing."""
-    from cognitive.qwen_agents import get_agent_pool, AgentRole, TaskPriority
-    pool = get_agent_pool()
-    role_map = {"code": AgentRole.CODE, "reason": AgentRole.REASON, "fast": AgentRole.FAST}
-    role = role_map.get(p.get("role", "code"), AgentRole.CODE)
-    priority_map = {"critical": TaskPriority.CRITICAL, "high": TaskPriority.HIGH,
-                    "normal": TaskPriority.NORMAL, "low": TaskPriority.LOW, "background": TaskPriority.BACKGROUND}
-    priority = priority_map.get(p.get("priority", "normal"), TaskPriority.NORMAL)
-    task_id = pool.submit_background(
-        prompt=p.get("prompt", ""),
-        role=role,
-        priority=priority,
-        use_pipeline=p.get("use_pipeline", False),
-        execution_allowed=p.get("execution_allowed", False),
-        project_folder=p.get("project_folder", ""),
-        context=p.get("context", {}),
-    )
-    return {"task_id": task_id, "role": role.value, "status": "queued"}
-
-
-def _agent_task_status(p):
-    """Get status of a background agent task."""
-    from cognitive.qwen_agents import get_agent_pool
-    task_id = p.get("task_id", "")
-    if not task_id:
-        return {"error": "Missing task_id"}
-    result = get_agent_pool().get_task(task_id)
-    return result or {"error": f"Task {task_id} not found"}
-
-
-def _agent_parallel(p):
-    """Run prompt across all 3 agents in parallel (multi-threaded)."""
-    from cognitive.qwen_agents import get_agent_pool, AgentRole
-    pool = get_agent_pool()
-    roles = None
-    if p.get("roles"):
-        role_map = {"code": AgentRole.CODE, "reason": AgentRole.REASON, "fast": AgentRole.FAST}
-        roles = [role_map[r] for r in p["roles"] if r in role_map]
-    return pool.run_parallel(
-        prompt=p.get("prompt", ""),
-        roles=roles,
-        context=p.get("context", {}),
-        timeout=p.get("timeout", 120),
-    )
-
-
-def _agent_collaborative(p):
-    """Full collaborative workflow: triage → parallel → synthesis → contract."""
-    from cognitive.qwen_agents import get_agent_pool
-    return get_agent_pool().run_collaborative(
-        prompt=p.get("prompt", ""),
-        context=p.get("context", {}),
-        execution_allowed=p.get("execution_allowed", False),
-    )
-
-
-def _agent_pipeline(p):
-    """Submit a task to the 9-layer coding pipeline via agent system. Returns task_id."""
-    from cognitive.qwen_agents import get_agent_pool
-    task_id = get_agent_pool().run_pipeline_with_agents(
-        prompt=p.get("prompt", ""),
-        execution_allowed=p.get("execution_allowed", False),
-        project_folder=p.get("project_folder", ""),
-    )
-    return {"task_id": task_id, "status": "queued", "pipeline": "9_layer"}
-
-
-def _agent_pool_status():
-    """Get status of all Qwen agents."""
-    from cognitive.qwen_agents import get_agent_pool
-    return get_agent_pool().get_pool_status()
-
-
-def _run_triad(p):
-    """Run the Qwen Triad Orchestrator — async parallel processing across all 3 models."""
-    import asyncio
-    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
-
-    orchestrator = get_triad_orchestrator()
-    prompt = p.get("prompt", p.get("message", p.get("query", "")))
-    if not prompt:
-        return {"error": "Missing 'prompt' in payload"}
-
-    loop = None
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        pass
-
-    if loop and loop.is_running():
-        import concurrent.futures
-        with concurrent.futures.ThreadPoolExecutor() as pool:
-            future = pool.submit(
-                asyncio.run,
-                orchestrator.process(
-                    prompt=prompt,
-                    system_prompt=p.get("system_prompt", ""),
-                    execution_allowed=p.get("execution_allowed", False),
-                    conversation_history=p.get("history", []),
-                    project_folder=p.get("project_folder", ""),
-                )
-            )
-            return future.result(timeout=300)
-    else:
-        return asyncio.run(
-            orchestrator.process(
-                prompt=prompt,
-                system_prompt=p.get("system_prompt", ""),
-                execution_allowed=p.get("execution_allowed", False),
-                conversation_history=p.get("history", []),
-                project_folder=p.get("project_folder", ""),
-            )
-        )
-
-
-def _triad_status():
-    """Get Qwen Triad Orchestrator status and configuration."""
-    from settings import settings
-    return {
-        "models": {
-            "code": settings.OLLAMA_MODEL_CODE or "qwen3.5:27b",
-            "reason": settings.OLLAMA_MODEL_REASON or "qwen3.5:27b",
-            "fast": settings.OLLAMA_MODEL_FAST or "qwen3.5:9b",
-        },
-        "features": {
-            "async_parallel": True,
-            "subsystem_context": [
-                "memory", "genesis_keys", "diagnostics", "self_healing",
-                "self_learning", "self_governance", "self_mirror", "timesense",
-                "trust_scores", "hebbian_mesh",
-            ],
-            "governance": "read_only_unless_user_specifies_execution",
-            "synthesis": "reasoning_model_merges_all_outputs",
-        },
-        "status": "active",
-    }
 
 
 @router.get("/directory")
 async def brain_directory():
+    try:
+        from api._genesis_tracker import track
+        track(key_type="api_request", what="brain/directory", who="api", how="GET", tags=["brain", "directory"])
+    except Exception:
+        pass
     d = _build_directory()
     total = sum(len(b["actions"]) for b in d.values())
     return {"brains": d, "total_brains": len(d), "total_actions": total,
             "usage": "POST /brain/{domain} { action: '...', payload: {...} }"}
 
-@router.post("/agents/submit")
-async def agent_submit_endpoint(req: BrainRequest):
-    """Submit a task to a Qwen agent for background processing. Returns task_id."""
-    return BrainResponse(brain="agents", action="submit", ok=True,
-                         data=_agent_submit(req.payload or {}))
-
-
-@router.post("/agents/status")
-async def agent_status_endpoint(req: BrainRequest):
-    """Check status of a background agent task."""
-    return BrainResponse(brain="agents", action="status", ok=True,
-                         data=_agent_task_status(req.payload or {}))
-
-
-@router.post("/agents/parallel")
-async def agent_parallel_endpoint(req: BrainRequest):
-    """Run prompt across all 3 agents in parallel."""
-    return BrainResponse(brain="agents", action="parallel", ok=True,
-                         data=_agent_parallel(req.payload or {}))
-
-
-@router.post("/agents/collaborative")
-async def agent_collaborative_endpoint(req: BrainRequest):
-    """Full collaborative workflow: triage → parallel → synthesis → contracts."""
-    return BrainResponse(brain="agents", action="collaborative", ok=True,
-                         data=_agent_collaborative(req.payload or {}))
-
-
-@router.post("/agents/pipeline")
-async def agent_pipeline_endpoint(req: BrainRequest):
-    """Submit task to 9-layer coding pipeline via agent system."""
-    return BrainResponse(brain="agents", action="pipeline", ok=True,
-                         data=_agent_pipeline(req.payload or {}))
-
-
-@router.get("/agents/pool")
-async def agent_pool_status_endpoint():
-    """Get status of all Qwen agents and their task queues."""
-    return _agent_pool_status()
-
-
-@router.post("/triad")
-async def triad_endpoint(req: BrainRequest):
-    """Qwen Triad — async parallel processing across all 3 Qwen models with full subsystem context."""
-    from cognitive.qwen_triad_orchestrator import get_triad_orchestrator
-    orchestrator = get_triad_orchestrator()
-    payload = req.payload or {}
-    prompt = payload.get("prompt", payload.get("message", payload.get("query", "")))
-    if not prompt:
-        raise HTTPException(status_code=400, detail="Missing 'prompt' in payload")
-    result = await orchestrator.process(
-        prompt=prompt,
-        system_prompt=payload.get("system_prompt", ""),
-        execution_allowed=payload.get("execution_allowed", False),
-        conversation_history=payload.get("history", []),
-        project_folder=payload.get("project_folder", ""),
-    )
-    return BrainResponse(brain="triad", action="process", ok=True, data=result)
-
-
 @router.post("/orchestrate")
 async def orchestrate(req: BrainOrchestration):
+    try:
+        from api._genesis_tracker import track
+        track(key_type="api_request", what="brain/orchestrate", who="api", how="orchestrate",
+              tags=["brain", "orchestrate"], output_data={"steps": len(req.steps or [])})
+    except Exception:
+        pass
     start = time.time()
     results = []
     for i, step in enumerate(req.steps):

@@ -20,7 +20,7 @@ import logging
 import threading
 import time
 import signal
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -62,7 +62,7 @@ class DiagnosticCycle:
     interpreted_data: Optional[InterpretedData] = None
     judgement: Optional[JudgementResult] = None
     action_decision: Optional[ActionDecision] = None
-    cycle_start: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    cycle_start: datetime = field(default_factory=datetime.utcnow)
     cycle_end: Optional[datetime] = None
     total_duration_ms: float = 0.0
     success: bool = True
@@ -115,12 +115,15 @@ class DiagnosticEngine:
         dry_run: bool = False,
         log_dir: str = None,
         diagnostic_report_path: str = None,
+        session = None,
+        kb_path: str = None,
     ):
         """Initialize the diagnostic engine."""
         self.heartbeat_interval = heartbeat_interval
         self.enable_heartbeat = enable_heartbeat
         self.dry_run = dry_run
         self.log_dir = Path(log_dir) if log_dir else Path(__file__).parent.parent / "logs"
+        self._diag_session = session  # for Layer4 LearningMemoryManager / neuro-symbolic
 
         # Initialize all layers
         self.sensor_layer = SensorLayer(
@@ -138,6 +141,8 @@ class DiagnosticEngine:
             enable_healing=enable_healing,
             enable_freeze=enable_freeze,
             dry_run=dry_run,
+            session=session,
+            kb_path=kb_path,
         )
 
         # Engine state
@@ -172,7 +177,7 @@ class DiagnosticEngine:
     def stats(self) -> EngineStats:
         """Get engine statistics."""
         if self._start_time:
-            self._stats.uptime_seconds = (datetime.now(timezone.utc) - self._start_time).total_seconds()
+            self._stats.uptime_seconds = (datetime.utcnow() - self._start_time).total_seconds()
         return self._stats
 
     def start(self) -> bool:
@@ -183,15 +188,12 @@ class DiagnosticEngine:
 
         try:
             self._state = EngineState.STARTING
-            self._start_time = datetime.now(timezone.utc)
+            self._start_time = datetime.utcnow()
             self._stop_event.clear()
 
             logger.info("Starting DiagnosticEngine...")
 
-            # Run initial diagnostic
-            self.run_cycle(TriggerSource.MANUAL)
-
-            # Start heartbeat thread if enabled
+            # Start heartbeat thread (handles first cycle immediately)
             if self.enable_heartbeat:
                 self._heartbeat_thread = threading.Thread(
                     target=self._heartbeat_loop,
@@ -253,7 +255,7 @@ class DiagnosticEngine:
         )
 
         try:
-            cycle_start = datetime.now(timezone.utc)
+            cycle_start = datetime.utcnow()
 
             # Layer 1: Collect sensor data
             logger.debug("Layer 1: Collecting sensor data...")
@@ -278,7 +280,7 @@ class DiagnosticEngine:
                 cycle.judgement
             )
 
-            cycle_end = datetime.now(timezone.utc)
+            cycle_end = datetime.utcnow()
             cycle.cycle_end = cycle_end
             cycle.total_duration_ms = (cycle_end - cycle_start).total_seconds() * 1000
             cycle.success = True
@@ -297,6 +299,8 @@ class DiagnosticEngine:
                 elif cycle.action_decision.action_type == ActionType.TRIGGER_HEALING:
                     self._stats.total_healing_actions += 1
                     self._fire_heal_callbacks(cycle)
+                    # Run deterministic auto-fix (code/config) and hot-reload on any fix
+                    self._run_deterministic_fix_and_reload(cycle)
                 elif cycle.action_decision.action_type == ActionType.FREEZE_SYSTEM:
                     self._stats.total_freeze_events += 1
                     self._fire_freeze_callbacks(cycle)
@@ -322,10 +326,16 @@ class DiagnosticEngine:
         except Exception as e:
             cycle.success = False
             cycle.error_message = str(e)
-            cycle.cycle_end = datetime.now(timezone.utc)
+            cycle.cycle_end = datetime.utcnow()
             self._stats.total_cycles += 1
             self._stats.failed_cycles += 1
             logger.error(f"Cycle {cycle.cycle_id} failed: {e}")
+            # Self-healing: hot-reload services so next cycle picks up code/config fixes
+            try:
+                from core.hot_reload import hot_reload_all_services
+                hot_reload_all_services()
+            except Exception as hr_err:
+                logger.debug(f"Hot-reload after cycle failure skipped: {hr_err}")
 
         return cycle
 
@@ -350,16 +360,18 @@ class DiagnosticEngine:
 
         while not self._stop_event.is_set():
             try:
+                # Skip if paused
+                if self._state == EngineState.PAUSED:
+                    if self._stop_event.wait(timeout=self.heartbeat_interval):
+                        break
+                    continue
+                
+                # Run diagnostic cycle (first one happens instantly since no sleep is before it yet)
+                cycle = self.run_cycle(TriggerSource.HEARTBEAT)
+
                 # Wait for interval or stop event
                 if self._stop_event.wait(timeout=self.heartbeat_interval):
                     break
-
-                # Skip if paused
-                if self._state == EngineState.PAUSED:
-                    continue
-
-                # Run diagnostic cycle
-                cycle = self.run_cycle(TriggerSource.HEARTBEAT)
 
                 # Check if we need to increase frequency based on health
                 if cycle.judgement and cycle.judgement.health.status == HealthStatus.CRITICAL:
@@ -428,7 +440,7 @@ class DiagnosticEngine:
         """Save engine statistics to file."""
         try:
             stats_dict = {
-                'timestamp': datetime.now(timezone.utc).isoformat(),
+                'timestamp': datetime.utcnow().isoformat(),
                 'total_cycles': self._stats.total_cycles,
                 'successful_cycles': self._stats.successful_cycles,
                 'failed_cycles': self._stats.failed_cycles,
@@ -486,6 +498,74 @@ class DiagnosticEngine:
                 callback(cycle)
             except Exception as e:
                 logger.error(f"Heal callback error: {e}")
+
+    def _run_deterministic_fix_and_reload(self, cycle: DiagnosticCycle):
+        """
+        Run brains that fix: (1) deterministic bridge auto-fix, (2) self-healing (scan_heal + heal),
+        (3) self-learning (govern/learn), (4) coding agent (deterministic code scan).
+        If any fix applied, hot-reload so the running process picks up changes immediately.
+        """
+        fixes_applied = 0
+        try:
+            from core.deterministic_bridge import build_deterministic_report, DeterministicAutoFixer
+            report = build_deterministic_report()
+            problems = report.get("problems") or []
+            if problems:
+                fixer = DeterministicAutoFixer()
+                fixes = fixer.auto_fix(problems)
+                fixes_applied += len(fixes)
+                if fixes:
+                    logger.info("[DIAGNOSTIC] Deterministic auto-fix applied %s fix(es).", len(fixes))
+        except Exception as e:
+            logger.debug("[DIAGNOSTIC] Deterministic fix skipped: %s", e)
+
+        # Schema sync: add missing DB columns (e.g. learning_examples.outcome_quality) so self-healing can fix schema drift
+        try:
+            from database.connection import DatabaseConnection
+            from database.migrations.add_learning_example_columns import ensure_learning_examples_columns
+            engine = DatabaseConnection.get_engine()
+            n = ensure_learning_examples_columns(engine, quiet=True)
+            if n > 0:
+                fixes_applied += n
+                logger.info("[DIAGNOSTIC] Schema sync: added %s column(s) to learning_examples", n)
+        except Exception as e:
+            logger.debug("[DIAGNOSTIC] Schema sync skipped: %s", e)
+
+        try:
+            from core.unified_trigger_brain import run_triggers_sync
+            from core.async_parallel import run_parallel
+            # Run categories in parallel: heal, learn, coding_agent, heal (verify), learn
+            categories = ("self_heal", "self_learning", "coding_agent", "self_heal", "self_learning")
+            thunks = [lambda _c=c: run_triggers_sync(category=_c) for c in categories]
+            parallel_results = run_parallel(thunks, return_exceptions=True)
+            for i, res in enumerate(parallel_results):
+                if isinstance(res, Exception):
+                    logger.debug("[DIAGNOSTIC] Category %s failed: %s", categories[i], res)
+                    continue
+                summary = res.get("summary") or {}
+                ok_count = summary.get("ok", 0)
+                if ok_count > 0:
+                    fixes_applied += ok_count
+                run_count = summary.get("run", 0)
+                if run_count:
+                    logger.debug(
+                        "[DIAGNOSTIC] Unified triggers category=%s run=%s ok=%s",
+                        categories[i], run_count, ok_count,
+                    )
+        except Exception as e:
+            logger.debug("[DIAGNOSTIC] Unified triggers (self_heal/self_learning/coding_agent) skipped: %s", e)
+
+        if fixes_applied > 0:
+            try:
+                from core.hot_reload import hot_reload_all_services
+                hr = hot_reload_all_services()
+                reloaded = hr.get("reloaded", 0)
+                logger.info(
+                    "[DIAGNOSTIC] Fix(es) applied (self-heal/learn/coding-agent) — hot reload: %s module(s).",
+                    reloaded,
+                )
+            except Exception as e:
+                logger.warning("[DIAGNOSTIC] Hot reload after fix failed: %s", e)
 
     def _fire_freeze_callbacks(self, cycle: DiagnosticCycle):
         """Fire freeze callbacks."""

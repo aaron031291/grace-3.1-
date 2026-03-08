@@ -33,12 +33,13 @@ class DatabaseConfig:
         max_overflow: int = 10,
         pool_pre_ping: bool = True,
         echo: bool = False,
+        sslmode: Optional[str] = None,
     ):
         """
         Initialize database configuration.
         
         Args:
-            db_type: Type of database (sqlite, postgresql, mysql, mariadb)
+            db_type: Type of database (default: postgresql; sqlite, mysql, mariadb also supported)
             host: Database host (required for remote databases)
             port: Database port (optional, uses default if not specified)
             username: Database username (required for remote databases)
@@ -65,6 +66,7 @@ class DatabaseConfig:
         self.pool_pre_ping = pool_pre_ping
         self.pool_recycle = 3600  # Recycle connections every hour
         self.echo = echo
+        self.sslmode = sslmode
     
     @classmethod
     def from_env(cls) -> "DatabaseConfig":
@@ -72,7 +74,7 @@ class DatabaseConfig:
         Create configuration from environment variables.
         
         Expected environment variables:
-            DATABASE_TYPE: Type of database (default: sqlite)
+            DATABASE_TYPE: Type of database (default: postgresql)
             DATABASE_HOST: Database host
             DATABASE_PORT: Database port
             DATABASE_USER: Database username
@@ -84,7 +86,7 @@ class DatabaseConfig:
         Returns:
             DatabaseConfig: Configuration instance
         """
-        db_type = os.getenv("DATABASE_TYPE", "sqlite")
+        db_type = os.getenv("DATABASE_TYPE", "postgresql")
         echo = os.getenv("DATABASE_ECHO", "false").lower() == "true"
         
         return cls(
@@ -96,6 +98,7 @@ class DatabaseConfig:
             database=os.getenv("DATABASE_NAME", "grace"),
             database_path=os.getenv("DATABASE_PATH", "./data/grace.db"),
             echo=echo,
+            sslmode=os.getenv("DATABASE_SSLMODE", "").strip() or None,
         )
     
     def get_connection_string(self) -> str:
@@ -128,19 +131,27 @@ class DatabaseConfig:
         return f"sqlite:///{db_path}"
     
     def _get_postgresql_url(self) -> str:
-        """Generate PostgreSQL connection string."""
+        """Generate PostgreSQL connection string (postgresql+psycopg2). Supports DATABASE_SSLMODE (e.g. require for DigitalOcean)."""
+        import urllib.parse
         if not self.host or not self.username:
             raise ValueError(
                 "PostgreSQL requires DATABASE_HOST and DATABASE_USER environment variables"
             )
-        
+        # Use psycopg2 driver explicitly (Grace typically has it; required for SQLAlchemy on Windows)
         port = self.port or 5432
-        password_part = f":{self.password}@" if self.password else "@"
         
-        return (
-            f"postgresql://{self.username}{password_part}"
+        # URL-encode username and password to safely handle special characters (like ?, #, @)
+        username = urllib.parse.quote_plus(self.username)
+        password_part = f":{urllib.parse.quote_plus(self.password)}@" if self.password else "@"
+        
+        base = (
+            f"postgresql+psycopg2://{username}{password_part}"
             f"{self.host}:{port}/{self.database}"
         )
+        if self.sslmode:
+            sep = "&" if "?" in base else "?"
+            base = f"{base}{sep}sslmode={self.sslmode}"
+        return base
     
     def _get_mysql_url(self) -> str:
         """Generate MySQL connection string."""

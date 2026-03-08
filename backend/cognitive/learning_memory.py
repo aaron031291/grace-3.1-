@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session, validates
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boolean, ForeignKey
 import json
 
+from core.datetime_utils import as_naive_utc
 from database.base import BaseModel
 
 
@@ -263,9 +264,14 @@ class LearningMemoryManager:
     5. Update trust based on outcomes
     """
 
-    def __init__(self, session: Session, knowledge_base_path: Path):
+    def __init__(self, session: Session, knowledge_base_path: Optional[Path] = None):
         self.session = session
-        self.kb_path = Path(knowledge_base_path) if isinstance(knowledge_base_path, str) else knowledge_base_path
+        if knowledge_base_path is None:
+            self.kb_path = Path(__file__).resolve().parent.parent / "knowledge_base"
+        elif isinstance(knowledge_base_path, str):
+            self.kb_path = Path(knowledge_base_path)
+        else:
+            self.kb_path = knowledge_base_path
         self.learning_memory_path = self.kb_path / "layer_1" / "learning_memory"
         self.trust_scorer = TrustScorer()
 
@@ -363,6 +369,12 @@ class LearningMemoryManager:
 
         self.session.add(example)
         self.session.flush()  # Use flush instead of commit to keep object attached
+
+        try:
+            from core.kpi_recorder import record_component_kpi
+            record_component_kpi("learning", "examples_ingested", 1.0, success=True)
+        except Exception:
+            pass
 
         # Check if this contributes to a pattern
         self._check_pattern_extraction(example)
@@ -603,7 +615,8 @@ class LearningMemoryManager:
         examples = self.session.query(LearningExample).all()
 
         for example in examples:
-            age_days = (datetime.utcnow() - example.created_at).days
+            created = as_naive_utc(example.created_at)
+            age_days = (datetime.utcnow() - created).days if created else 0
             example.recency_weight = self.trust_scorer._calculate_recency_weight(age_days)
 
             # Recalculate trust with new recency weight

@@ -13,7 +13,6 @@ These tests validate Grace from the perspective of:
 9. SRE — reliability and recovery
 10. End User — functional correctness
 """
-import pytest; pytest.importorskip("api.governance_rules_api", reason="api.governance_rules_api removed — consolidated into Brain API")
 
 import pytest
 import sys

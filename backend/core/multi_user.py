@@ -12,7 +12,7 @@ import hashlib
 import time
 import threading
 import logging
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from collections import defaultdict
@@ -40,7 +40,7 @@ def create_user(email: str, name: str = "") -> dict:
         "id": user_id,
         "email": email,
         "name": name or email.split("@")[0],
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.utcnow().isoformat(),
         "active_project": None,
         "projects": [],
     }
@@ -83,7 +83,7 @@ def log_activity(user_id: str, action: str, project_id: str = "",
         "project_id": project_id,
         "detail": detail[:200],
         "data": data or {},
-        "ts": datetime.now(timezone.utc).isoformat(),
+        "ts": datetime.utcnow().isoformat(),
     }
     with _activity_lock:
         _activity_log.append(entry)
@@ -100,7 +100,7 @@ def log_activity(user_id: str, action: str, project_id: str = "",
 
 def get_user_activity(user_id: str, hours: int = 24) -> list:
     """Get activity for a specific user."""
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
     with _activity_lock:
         return [a for a in _activity_log
                 if a["user_id"] == user_id and a["ts"] >= cutoff]
@@ -108,7 +108,7 @@ def get_user_activity(user_id: str, hours: int = 24) -> list:
 
 def get_project_activity(project_id: str, hours: int = 24) -> list:
     """Get activity for a specific project."""
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
     with _activity_lock:
         return [a for a in _activity_log
                 if a["project_id"] == project_id and a["ts"] >= cutoff]
@@ -120,7 +120,7 @@ def get_project_activity(project_id: str, hours: int = 24) -> list:
 
 def generate_daily_summary(project_id: str = "", hours: int = 24) -> dict:
     """Generate daily summary: per-person + team + Genesis key activity."""
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
 
     with _activity_lock:
         if project_id:
@@ -196,7 +196,7 @@ def generate_daily_summary(project_id: str = "", hours: int = 24) -> dict:
         "individual": individual,
         "team": team,
         "genesis": genesis_stats,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.utcnow().isoformat(),
     }
 
 
@@ -215,7 +215,7 @@ def switch_project(user_id: str, new_project: str) -> dict:
     # Load new context
     _active_sessions[user_id] = {
         "project": new_project,
-        "switched_at": datetime.now(timezone.utc).isoformat(),
+        "switched_at": datetime.utcnow().isoformat(),
         "previous": old_project,
     }
 
@@ -244,7 +244,7 @@ def _save_session(user_id: str, project_id: str):
     session_file = session_dir / f"{project_id}.json"
     session_file.write_text(json.dumps({
         "project_id": project_id,
-        "saved_at": datetime.now(timezone.utc).isoformat(),
+        "saved_at": datetime.utcnow().isoformat(),
         "user_id": user_id,
     }, indent=2))
 

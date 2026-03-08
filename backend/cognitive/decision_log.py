@@ -5,9 +5,11 @@ Implements Invariant 6: Observability Is Mandatory.
 All decisions are logged with full rationale and alternatives.
 """
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Dict, Any, List, Optional, TYPE_CHECKING
 from pathlib import Path
+
+from core.datetime_utils import as_naive_utc
 
 if TYPE_CHECKING:
     from .engine import DecisionContext
@@ -43,7 +45,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_start',
             'decision_id': context.decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
             'problem_statement': context.problem_statement,
             'goal': context.goal,
             'success_criteria': context.success_criteria,
@@ -72,7 +74,7 @@ class DecisionLogger:
         entry = {
             'event': 'alternatives_considered',
             'decision_id': decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
             'alternatives_count': len(alternatives),
             'alternatives': alternatives,
             'selected': selected,
@@ -93,13 +95,17 @@ class DecisionLogger:
             context: Decision context
             result: Result of the action
         """
+        # Use utcnow() for both sides — created_at is naive (datetime.utcnow()),
+        # so we must avoid mixing with timezone-aware datetime.now(timezone.utc).
+        _now = datetime.utcnow()
         entry = {
             'event': 'decision_complete',
             'decision_id': context.decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': _now.isoformat(),
             'duration_seconds': (
-                datetime.now(timezone.utc) - context.created_at
-            ).total_seconds(),
+                (_now - as_naive_utc(context.created_at)).total_seconds()
+                if context.created_at else 0.0
+            ),
             'result_summary': str(result)[:500],  # Truncate long results
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
             'impact_scope': context.impact_scope,
@@ -121,7 +127,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_finalized',
             'decision_id': context.decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
         }
 
         self._log_entries.append(entry)
@@ -142,7 +148,7 @@ class DecisionLogger:
         entry = {
             'event': 'decision_aborted',
             'decision_id': context.decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
             'reason': reason,
             'ambiguity_state': context.ambiguity_ledger.to_dict(),
         }
@@ -161,7 +167,7 @@ class DecisionLogger:
         entry = {
             'event': 'warning',
             'decision_id': decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
             'message': message,
         }
 
@@ -185,7 +191,7 @@ class DecisionLogger:
         entry = {
             'event': 'invariant_violation',
             'decision_id': decision_id,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
             'invariant_number': invariant_number,
             'violation': violation,
         }

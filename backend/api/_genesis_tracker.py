@@ -2,11 +2,12 @@
 Thin Genesis Key tracking helper — ASYNC, NON-BLOCKING.
 
 Fire-and-forget: genesis key creation never slows down the caller.
-Qdrant embeddings batched and pushed every 5 seconds in background thread.
+Qdrant embeddings batched and pushed when batch size reached (default 5) or timeout.
 Memory Mesh feed removed (was crashing and blocking).
 """
 
 import logging
+import os
 import threading
 import queue
 import time
@@ -14,9 +15,108 @@ from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
 
+# Batch size: upload when this many new keys are queued (default 5)
+BATCH_SIZE = int(os.getenv("GENESIS_BATCH_SIZE", "5"))
+# Max wait (seconds) before flushing a partial batch
+BATCH_TIMEOUT_SEC = int(os.getenv("GENESIS_BATCH_TIMEOUT", "30"))
+# Genesis keys Qdrant collection vector size (must match Qdrant Cloud collection; default 384 for all-MiniLM-L6-v2)
+GENESIS_VECTOR_SIZE = int(os.getenv("GENESIS_VECTOR_SIZE", "384"))
+
 # Background queue for Qdrant pushes (non-blocking)
 _qdrant_queue = queue.SimpleQueue()
 _qdrant_thread_started = False
+# Backoff: after a 400, skip upserts until this time (avoid log spam and repeated failures)
+_qdrant_backoff_until = 0.0
+_qdrant_backoff_logged = False
+# Seconds to skip upserts after a 400 (configurable via env)
+QDRANT_BACKOFF_SEC = int(os.getenv("GENESIS_QDRANT_BACKOFF_SEC", "300"))
+
+
+def _get_collection_vector_size(info) -> Optional[int]:
+    """Extract vector size from Qdrant collection info. Handles config.params.vectors.size (Qdrant Cloud) and legacy config.params.size."""
+    try:
+        config = getattr(info, "config", None)
+        if not config or not getattr(config, "params", None):
+            return None
+        params = config.params
+        # Qdrant Cloud: config.params.vectors.size
+        vectors = getattr(params, "vectors", None)
+        if vectors is not None:
+            size = getattr(vectors, "size", None)
+            if size is not None:
+                return int(size)
+            # Named vectors: dict of name -> VectorParams
+            if isinstance(vectors, dict) and vectors:
+                first = next(iter(vectors.values()))
+                return getattr(first, "size", None)
+        # Legacy: config.params.size
+        return getattr(params, "size", None)
+    except Exception:
+        return None
+
+
+def _get_genesis_vector_size() -> int:
+    """Effective vector size: GENESIS_VECTOR_SIZE env if set, else embedder dimension, else 384."""
+    env_val = os.getenv("GENESIS_VECTOR_SIZE", "").strip()
+    if env_val and env_val.isdigit():
+        return int(env_val)
+    try:
+        from embedding.embedder import get_embedding_model
+        model = get_embedding_model()
+        if model and hasattr(model, "get_embedding_dimension"):
+            return model.get_embedding_dimension()
+    except Exception:
+        pass
+    return 384
+
+
+def _vector_to_fixed_size(vec, size: int):
+    """Return a list of length `size`: slice if longer, pad with zeros if shorter."""
+    if vec is None:
+        return [0.0] * size
+    lst = vec.tolist() if hasattr(vec, "tolist") else list(vec)
+    if len(lst) >= size:
+        return lst[:size]
+    return lst + [0.0] * (size - len(lst))
+
+
+def _qdrant_safe_payload(item: dict, gk_id: str, key_type: str, what: str, where: str, tags: list) -> dict:
+    """Build a payload with only types Qdrant accepts (str, int, float, bool, list of str)."""
+    from datetime import datetime, timezone
+    safe_tags = [str(t) for t in (tags or []) if t is not None][:100]
+    return {
+        "gk_id": str(gk_id)[:64],
+        "genesis_key_id": str(gk_id)[:64],
+        "key_type": str(key_type)[:64],
+        "type": str(key_type)[:64],
+        "what": str(what or "")[:500],
+        "where": str(where or "")[:200],
+        "tags": safe_tags,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def _is_valid_point(vector: list, vec_size: int, payload: dict) -> bool:
+    """Return True if point is safe to send to Qdrant (vector length and payload types)."""
+    if not isinstance(vector, (list, tuple)) or len(vector) != vec_size:
+        return False
+    try:
+        for v in vector:
+            if not isinstance(v, (int, float)):
+                return False
+    except (TypeError, ValueError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    for k, v in payload.items():
+        if v is None:
+            continue
+        if isinstance(v, (str, int, float, bool)):
+            continue
+        if isinstance(v, list) and all(isinstance(x, str) for x in v):
+            continue
+        return False
+    return True
 
 
 def track(
@@ -134,8 +234,10 @@ def track(
         )
         gk_id = getattr(key, "key_id", None) or getattr(key, "id", None)
         if not gk_id:
-            import uuid
-            gk_id = f"GK-{uuid.uuid4().hex}"
+            # Deterministic fallback (no random, no model)
+            import hashlib
+            payload = f"{key_type}|{what}|{who}|{where or ''}"
+            gk_id = "GK-" + hashlib.sha256(payload.encode()).hexdigest()[:32]
 
         # Queue embedding for background batch push (NON-BLOCKING)
         try:
@@ -161,61 +263,165 @@ def _ensure_qdrant_thread():
     _qdrant_thread_started = True
 
     def _batch_worker():
-        """Background thread: batch-uploads genesis keys to Qdrant every 5 seconds."""
-        import os
+        """Background thread: batch-uploads genesis keys to Qdrant when batch size (default 5) or timeout.
+        Never raises: all failures are caught and logged; backoff after 400 to avoid log spam."""
+        global _qdrant_backoff_until, _qdrant_backoff_logged
+        if os.getenv("DISABLE_GENESIS_QDRANT_PUSH", "").strip().lower() in ("1", "true", "yes"):
+            return
         qdrant_url = os.getenv("QDRANT_URL", "")
         qdrant_key = os.getenv("QDRANT_API_KEY", "")
         if not qdrant_url:
             return
 
+        client = None
+        effective_size = 384
+        _collection_vector_size = None
         try:
             from qdrant_client import QdrantClient
             from qdrant_client.models import PointStruct, VectorParams, Distance
             client = QdrantClient(url=qdrant_url, api_key=qdrant_key, timeout=10)
-
-            # Ensure collection
+            effective_size = _get_genesis_vector_size()
             try:
                 collections = [c.name for c in client.get_collections().collections]
                 if "genesis_keys" not in collections:
                     client.create_collection("genesis_keys",
-                        vectors_config=VectorParams(size=384, distance=Distance.COSINE))
+                        vectors_config=VectorParams(size=effective_size, distance=Distance.COSINE))
+                    _collection_vector_size = effective_size
+                else:
+                    info = client.get_collection("genesis_keys")
+                    _collection_vector_size = _get_collection_vector_size(info)
+                    if _collection_vector_size is not None and _collection_vector_size != effective_size:
+                        logger.warning(
+                            "[GENESIS] Qdrant 'genesis_keys' vector size is %s but backend is using %s. "
+                            "Set GENESIS_VECTOR_SIZE=%s in backend/.env (or drop the collection in Qdrant Cloud to let backend recreate it).",
+                            _collection_vector_size, effective_size, _collection_vector_size,
+                        )
             except Exception:
                 pass
+        except Exception as e:
+            logger.warning("[GENESIS] Qdrant batch worker could not init client: %s. Genesis keys will not be pushed to Qdrant.", e)
+            return
 
-            buf = []
-            while True:
+        buf = []
+        last_flush_at = time.time()
+        while True:
+            try:
                 try:
                     item = _qdrant_queue.get(timeout=2)
                     buf.append(item)
                 except Exception:
                     pass
 
-                if buf and (len(buf) >= 50 or time.time() % 5 < 2):
-                    try:
-                        import hashlib
-                        points = []
-                        for item in buf:
-                            text = f"{item['key_type']} {item['what']} {item['where']} {' '.join(item['tags'])}"
-                            raw = hashlib.sha384(text.encode()).digest()
-                            vector = [b / 255.0 for b in raw]
-                            pid = int(hashlib.md5(item['gk_id'].encode()).hexdigest()[:16], 16) % (2**63)
-                            points.append(PointStruct(id=pid, vector=vector,
-                                payload={"gk_id": item["gk_id"], "type": item["key_type"],
-                                         "what": item["what"][:200], "tags": item["tags"]}))
-                        client.upsert("genesis_keys", points=points)
+                now = time.time()
+                # Respect backoff: after a 400 we skip upserts for a while
+                if now < _qdrant_backoff_until:
+                    if buf and not _qdrant_backoff_logged:
+                        _qdrant_backoff_logged = True
+                        logger.info("[GENESIS] Genesis keys Qdrant push in backoff until %s (set GENESIS_VECTOR_SIZE or DISABLE_GENESIS_QDRANT_PUSH=1 to fix).", time.ctime(_qdrant_backoff_until))
+                    if buf:
                         buf.clear()
-                    except Exception:
-                        buf.clear()
-        except Exception:
-            pass
+                        last_flush_at = now
+                    continue
 
-    t = threading.Thread(target=_batch_worker, daemon=True, name="qdrant_batch")
-    t.start()
+                should_flush = (
+                    buf
+                    and (
+                        len(buf) >= BATCH_SIZE
+                        or (now - last_flush_at) >= BATCH_TIMEOUT_SEC
+                    )
+                )
+                if not should_flush:
+                    continue
+
+                import hashlib
+                points = []
+                # Safe join: tags may contain non-strings
+                texts = []
+                for item in buf:
+                    tags = item.get("tags") or []
+                    tag_str = " ".join(str(t) for t in tags if t is not None)
+                    texts.append(f"{item.get('key_type','')} {item.get('what','')} {item.get('where','')} {tag_str}".strip())
+                vectors_raw = None
+                try:
+                    from embedding.embedder import get_embedding_model
+                    model = get_embedding_model()
+                    if model and hasattr(model, "embed_text"):
+                        emb = model.embed_text(texts, convert_to_numpy=True)
+                        if emb is not None and (emb.shape[0] if hasattr(emb, "shape") else len(emb)) == len(buf):
+                            vectors_raw = [emb[i] for i in range(len(buf))]
+                except Exception:
+                    pass
+                # Use existing collection size when available so we match Qdrant and avoid 400
+                vec_size = _collection_vector_size if _collection_vector_size is not None else _get_genesis_vector_size()
+                for i, item in enumerate(buf):
+                    if vectors_raw and i < len(vectors_raw) and vectors_raw[i] is not None:
+                        vector = _vector_to_fixed_size(vectors_raw[i], vec_size)
+                    else:
+                        raw = hashlib.sha384(texts[i].encode()).digest()
+                        vec48 = [b / 255.0 for b in raw]
+                        vector = (vec48 * (vec_size // len(vec48) + 1))[:vec_size]
+                    vector = [float(x) for x in vector]
+                    pid = int(hashlib.md5(item["gk_id"].encode()).hexdigest()[:16], 16) % (2**63)
+                    payload = _qdrant_safe_payload(
+                        item, item["gk_id"], item["key_type"], item["what"],
+                        item.get("where") or "", item.get("tags") or [],
+                    )
+                    if _is_valid_point(vector, vec_size, payload):
+                        points.append(PointStruct(id=pid, vector=vector, payload=payload))
+                if not points:
+                    buf.clear()
+                    last_flush_at = now
+                    continue
+                # vec_size already matches _collection_vector_size when collection exists (see above)
+                try:
+                    client.upsert("genesis_keys", points=points)
+                    _qdrant_backoff_logged = False  # success clears one-time backoff log
+                except Exception as e:
+                    err_msg = str(e)
+                    if "400" in err_msg or "Bad Request" in err_msg:
+                        _qdrant_backoff_until = time.time() + QDRANT_BACKOFF_SEC
+                        _qdrant_backoff_logged = False
+                        hint = ""
+                        try:
+                            info = client.get_collection("genesis_keys")
+                            actual = _get_collection_vector_size(info)
+                            if actual is not None:
+                                hint = " Collection vector size is %s — set GENESIS_VECTOR_SIZE=%s in backend/.env. " % (actual, actual)
+                        except Exception:
+                            pass
+                        logger.error(
+                            "[GENESIS] Qdrant upsert (genesis_keys) returns 400.%s Backoff %ss. Set GENESIS_VECTOR_SIZE or DISABLE_GENESIS_QDRANT_PUSH=1. Error: %s",
+                            hint, QDRANT_BACKOFF_SEC, err_msg[:300],
+                        )
+                    else:
+                        logger.error("[GENESIS] Qdrant upsert genesis_keys FAILED: %s", e, exc_info=True)
+                buf.clear()
+                last_flush_at = time.time()
+                if os.getenv("HOT_RELOAD_ON_DATA_BATCH", "").strip().lower() in ("1", "true", "yes"):
+                    try:
+                        from core.hot_reload import hot_reload_all_services
+                        hot_reload_all_services()
+                    except Exception:
+                        pass
+            except Exception as e:
+                logger.debug("[GENESIS] Qdrant batch worker loop error (non-fatal): %s", e)
+                try:
+                    buf.clear()
+                except Exception:
+                    pass
+                last_flush_at = time.time()
+
+    try:
+        t = threading.Thread(target=_batch_worker, daemon=True, name="qdrant_batch")
+        t.start()
+    except Exception as e:
+        logger.debug("[GENESIS] Could not start Qdrant batch thread: %s", e)
 
 
 def _push_to_qdrant(gk_id: str, key_type: str, what: str, where: str, tags: list):
     """Push genesis key as embedding to Qdrant Cloud for vector search."""
-    import os
+    if os.getenv("DISABLE_GENESIS_QDRANT_PUSH", "").strip().lower() in ("1", "true", "yes"):
+        return
     qdrant_url = os.getenv("QDRANT_URL", "")
     qdrant_key = os.getenv("QDRANT_API_KEY", "")
 
@@ -226,53 +432,67 @@ def _push_to_qdrant(gk_id: str, key_type: str, what: str, where: str, tags: list
         from qdrant_client import QdrantClient
         from qdrant_client.models import PointStruct, VectorParams, Distance
         import hashlib
+        from datetime import datetime
 
         client = QdrantClient(url=qdrant_url, api_key=qdrant_key, timeout=10)
 
-        # Ensure collection exists
+        effective_size = _get_genesis_vector_size()
+        # Ensure collection exists with effective vector size
         collections = [c.name for c in client.get_collections().collections]
         if "genesis_keys" not in collections:
             client.create_collection(
                 collection_name="genesis_keys",
-                vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+                vectors_config=VectorParams(size=effective_size, distance=Distance.COSINE),
             )
 
-        # Generate embedding from the text
-        text = f"{key_type} {what} {where or ''} {' '.join(tags or [])}"
+        tag_str = " ".join(str(t) for t in (tags or []) if t is not None)
+        text = f"{key_type or ''} {what or ''} {where or ''} {tag_str}".strip()
 
-        # Simple hash-based embedding (fast, deterministic, no model needed)
-        # Real embeddings happen when embedding model is loaded
-        raw = hashlib.sha384(text.encode()).digest()
-        vector = [b / 255.0 for b in raw]  # 384-dim normalised vector
-
-        # Try real embedding if available
+        # Try real embedding first, then slice/pad to effective size
+        vector = None
         try:
             from embedding.embedder import get_embedding_model
             model = get_embedding_model()
-            if model and hasattr(model, 'encode'):
-                real_vec = model.encode(text)
-                if real_vec is not None and len(real_vec) > 0:
-                    vector = real_vec.tolist() if hasattr(real_vec, 'tolist') else list(real_vec)
+            if model and hasattr(model, "embed_text"):
+                emb = model.embed_text(text, convert_to_numpy=True)
+                if emb is not None and (hasattr(emb, "shape") and emb.size > 0):
+                    vec = emb[0] if emb.ndim > 1 else emb
+                    vector = _vector_to_fixed_size(vec, effective_size)
         except Exception:
-            pass  # Use hash-based fallback
+            pass
 
-        # Generate numeric ID from genesis key hash
+        # Hash-based fallback: sha384 gives 48 bytes -> pad to effective size
+        if not vector or len(vector) != effective_size:
+            raw = hashlib.sha384(text.encode()).digest()
+            vec48 = [b / 255.0 for b in raw]
+            vector = (vec48 * (effective_size // len(vec48) + 1))[:effective_size]
+
         point_id = int(hashlib.md5(gk_id.encode()).hexdigest()[:16], 16) % (2**63)
+        payload = _qdrant_safe_payload(
+            {"gk_id": gk_id, "key_type": key_type, "what": what, "where": where or "", "tags": tags or []},
+            gk_id, key_type, what, where or "", tags or [],
+        )
 
         client.upsert(
             collection_name="genesis_keys",
-            points=[PointStruct(
-                id=point_id,
-                vector=vector[:384],  # Ensure 384 dims
-                payload={
-                    "genesis_key_id": gk_id,
-                    "key_type": key_type,
-                    "what": what[:500],
-                    "where": where[:200] if where else "",
-                    "tags": tags or [],
-                    "timestamp": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
-                },
-            )],
+            points=[PointStruct(id=point_id, vector=vector, payload=payload)],
         )
     except Exception as e:
-        logger.debug(f"Qdrant push skipped: {e}")
+        err_msg = str(e)
+        if "400" in err_msg or "Bad Request" in err_msg:
+            hint = ""
+            try:
+                from qdrant_client import QdrantClient as _QC
+                _client = _QC(url=qdrant_url, api_key=qdrant_key, timeout=5)
+                info = _client.get_collection("genesis_keys")
+                actual = _get_collection_vector_size(info)
+                if actual is not None:
+                    hint = " Collection size is %s — set GENESIS_VECTOR_SIZE=%s in backend/.env. " % (actual, actual)
+            except Exception:
+                pass
+            logger.error(
+                "[GENESIS] Qdrant push genesis_keys 400 - backend vector size: %s.%s Or set DISABLE_GENESIS_QDRANT_PUSH=1. %s",
+                _get_genesis_vector_size(), hint, err_msg[:200],
+            )
+        else:
+            logger.error("[GENESIS] Qdrant push genesis_keys FAILED: %s", e, exc_info=True)

@@ -188,8 +188,12 @@ class FileVersionTracker:
                 abs_file_path = alt_path
 
         if not os.path.exists(abs_file_path):
-            # Race condition or path mismatch: file was deleted/mis-located
-            logger.warning(f"File vanished before tracking: {abs_file_path}")
+            # Race condition or path mismatch: file was deleted/mis-located (e.g. SQLite .db-shm/.db-wal)
+            if (abs_file_path.endswith("-shm") or abs_file_path.endswith("-wal") or
+                    ".db-shm" in abs_file_path or ".db-wal" in abs_file_path):
+                logger.debug("File vanished before tracking (ephemeral): %s", abs_file_path)
+            else:
+                logger.warning("File vanished before tracking: %s", abs_file_path)
             return {
                 "changed": False,
                 "version_number": 0,

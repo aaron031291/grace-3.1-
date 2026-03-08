@@ -409,9 +409,9 @@ class AdaptiveCICD:
         Integrates with LLM orchestration for intelligent analysis.
         """
         try:
-            from llm_orchestrator.llm_orchestrator import get_llm_orchestrator
+            from api.llm_orchestration import get_orchestrator
 
-            orchestrator = get_llm_orchestrator()
+            orchestrator = get_orchestrator()
 
             # Build context for LLM
             trust = self.trust_scores.get(pipeline_id)
@@ -816,10 +816,11 @@ Format as JSON."""
 
         self.governance_requests[request.id] = request
 
+        # Try to integrate with actual governance system
         try:
-            from api.brain_api_v2 import call_brain
+            from api.governance_api import submit_governance_request
 
-            call_brain("govern", "submit_request", {
+            await submit_governance_request({
                 "type": request.action.value,
                 "resource": f"pipeline:{trigger.pipeline_id}",
                 "risk_level": risk_level,

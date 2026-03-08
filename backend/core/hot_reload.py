@@ -1,9 +1,12 @@
 """
 Hot Code Reload — swap modules without stopping Grace.
 
-Preserves state, rolls back on failure, cascades to dependents.
+Preserves state, rolls back on failure. Full hot-reload (config + code) via
+POST /api/runtime/hot-reload or brain system/hot_reload_all.
+Optional: set HOT_RELOAD_WATCH=1 to auto-reload when .py files are saved.
 """
 
+import os
 import sys
 import importlib
 import logging
@@ -13,6 +16,9 @@ from typing import Dict, Any, Optional
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+# Set HOT_RELOAD_WATCH=1 to start background watcher that reloads on .py save
+WATCH_ENABLED = os.getenv("HOT_RELOAD_WATCH", "").strip().lower() in ("1", "true", "yes")
 
 _state_store: Dict[str, Any] = {}
 _reload_lock = threading.Lock()
@@ -97,24 +103,38 @@ def hot_reload_service(service_name: str) -> dict:
         "system": "core.services.system_service",
         "brain": "api.brain_api_v2",
         "pipeline": "core.coding_pipeline",
+        "cognitive_pipeline": "cognitive.pipeline",
+        "unified_memory": "cognitive.unified_memory",
         "intelligence": "core.intelligence",
         "hebbian": "core.hebbian",
         "security": "core.security",
         "tracing": "core.tracing",
+        "model_updater": "cognitive.model_updater",
+        "commit_batch": "core.commit_batch_trigger",
+        "runtime_triggers": "api.runtime_triggers_api",
+        "genesis_tracker": "api._genesis_tracker",
+        "autonomous_loop": "api.autonomous_loop_api",
+        "hot_reload": "core.hot_reload",
     }
     module_path = module_map.get(service_name, service_name)
     return hot_reload_module(module_path)
 
 
 def hot_reload_all_services() -> dict:
-    """Reload all core service modules."""
-    services = ["chat", "files", "govern", "data", "tasks", "code", "system"]
+    """Reload all core service modules so runtime updates apply without restart."""
+    services = [
+        "chat", "files", "govern", "data", "tasks", "code", "system",
+        "brain", "cognitive_pipeline", "unified_memory",
+        "model_updater", "commit_batch", "runtime_triggers", "genesis_tracker",
+        "autonomous_loop",
+    ]
     results = {}
     for svc in services:
         results[svc] = hot_reload_service(svc)
     return {
         "reloaded": sum(1 for r in results.values() if r["status"] == "reloaded"),
         "failed": sum(1 for r in results.values() if r["status"] == "failed"),
+        "not_loaded": sum(1 for r in results.values() if r["status"] == "not_loaded"),
         "results": results,
     }
 
@@ -158,3 +178,65 @@ def save_and_reload(file_path: str, content: str) -> dict:
         result["error"] = str(e)[:200]
 
     return result
+
+
+def _file_path_to_module(backend_root: Path, file_path: Path) -> Optional[str]:
+    """Convert backend-relative .py path to importable module name."""
+    try:
+        rel = file_path.resolve().relative_to(backend_root)
+        if rel.suffix != ".py" or rel.name == "__init__.py":
+            return None
+        parts = list(rel.parts[:-1]) + [rel.stem]
+        return ".".join(parts)
+    except (ValueError, IndexError):
+        return None
+
+
+_watch_stop = threading.Event()
+_watch_started = False
+
+
+def _reload_watcher_loop(backend_root: Path, interval: float = 2.0):
+    """Background loop: when a .py file mtime changes, hot-reload that module."""
+    last_mtimes: Dict[Path, float] = {}
+    while not _watch_stop.is_set():
+        try:
+            for py in backend_root.rglob("*.py"):
+                if "__pycache__" in str(py) or "venv" in str(py):
+                    continue
+                try:
+                    mtime = py.stat().st_mtime
+                except OSError:
+                    continue
+                prev = last_mtimes.get(py)
+                last_mtimes[py] = mtime
+                if prev is not None and mtime > prev:
+                    mod = _file_path_to_module(backend_root, py)
+                    if mod and mod in sys.modules and mod != "core.hot_reload":
+                        hot_reload_module(mod)
+                        logger.info("Hot-reload (watch): %s", mod)
+        except Exception as e:
+            logger.debug("Reload watcher: %s", e)
+        _watch_stop.wait(timeout=interval)
+
+
+def start_reload_watcher():
+    """Start background file watcher for auto hot-reload on save (if HOT_RELOAD_WATCH=1)."""
+    global _watch_started
+    if not WATCH_ENABLED or _watch_started:
+        return
+    _watch_started = True
+    backend_root = Path(__file__).resolve().parent.parent
+    t = threading.Thread(
+        target=_reload_watcher_loop,
+        args=(backend_root,),
+        daemon=True,
+        name="hot_reload_watch",
+    )
+    t.start()
+    logger.info("Hot-reload watcher started (backend=%s)", backend_root)
+
+
+def stop_reload_watcher():
+    """Signal hot-reload watcher to stop (for graceful shutdown)."""
+    _watch_stop.set()

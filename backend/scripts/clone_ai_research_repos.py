@@ -1,8 +1,8 @@
 """
-Script to clone all AI research repositories from GitHub for Grace's training data.
+Script to clone AI research repositories for Grace's training data.
 
-This script clones all repositories listed in the documentation into the appropriate
-directory structure for ingestion.
+Accepts any git clone URL (e.g. from GitHub, GitLab, or other hosts). Repository
+definitions can be (owner/repo, name) for legacy GitHub.com or full URLs.
 
 Usage:
     python backend/scripts/clone_ai_research_repos.py
@@ -181,18 +181,21 @@ def clone_repository(
     depth: int = 1
 ) -> Tuple[bool, str]:
     """
-    Clone a repository from GitHub.
-    
+    Clone a repository from any git host.
+
     Args:
-        repo_url: GitHub repository URL (owner/repo format)
+        repo_url: Full git URL (https://... or git@...) or owner/repo for legacy GitHub.com
         target_path: Path where repository should be cloned
         repo_name: Local directory name for the repository
         depth: Git clone depth (1 = shallow clone, None = full clone)
-    
+
     Returns:
         (success, message)
     """
-    full_url = f"https://github.com/{repo_url}.git"
+    if "://" in repo_url or repo_url.strip().startswith("git@"):
+        full_url = repo_url if repo_url.endswith(".git") else f"{repo_url.rstrip('/')}.git"
+    else:
+        full_url = f"https://github.com/{repo_url}.git"
     clone_path = target_path / repo_name
     
     # Check if already exists

@@ -19,7 +19,7 @@ Architecture:
 
 import json
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Tuple
 from enum import Enum
 from pathlib import Path
@@ -54,9 +54,14 @@ class ExperimentType(Enum):
 class TrustThreshold:
     """Trust score thresholds for promotion"""
     SANDBOX_ENTRY = 0.3  # Minimum to enter sandbox
-    TRIAL_ENTRY = 0.6  # Minimum to start 90-day trial
+    TRIAL_ENTRY = 0.6  # Minimum to start trial
     PRODUCTION_READY = 0.85  # Minimum for production promotion
     AUTO_APPROVE = 0.95  # Can auto-approve (still notify user)
+
+
+# Governance training: 60-day trial, +30% improvement to add to system
+TRIAL_DAYS_GOVERNANCE = 60
+IMPROVEMENT_THRESHOLD_PROMOTION = 0.30  # 30% system improvement required for promotion
 
 
 class Experiment:
@@ -99,8 +104,8 @@ class Experiment:
         self.experiment_metrics: Dict[str, float] = {}
         self.improvement_percentage: Optional[float] = None
 
-        # Trial tracking
-        self.trial_duration_days = 90
+        # Trial tracking (60-day default for governance training loop)
+        self.trial_duration_days = TRIAL_DAYS_GOVERNANCE
         self.trial_data_points = 0
         self.trial_successes = 0
         self.trial_failures = 0
@@ -213,7 +218,7 @@ class Experiment:
         )
 
     def can_enter_trial(self) -> bool:
-        """Check if experiment can enter 90-day trial"""
+        """Check if experiment can enter trial (60-day governance default)"""
         return (
             self.status == ExperimentStatus.SANDBOX and
             self.current_trust_score >= TrustThreshold.TRIAL_ENTRY and
@@ -221,21 +226,23 @@ class Experiment:
         )
 
     def can_promote_to_production(self) -> bool:
-        """Check if experiment can be promoted to production"""
+        """Check if experiment can be promoted to production (governance: +30% improvement)."""
+        improvement_ok = (self.improvement_percentage or 0) >= (IMPROVEMENT_THRESHOLD_PROMOTION * 100)
         return (
             self.status == ExperimentStatus.VALIDATED and
             self.current_trust_score >= TrustThreshold.PRODUCTION_READY and
             self.is_trial_complete() and
+            improvement_ok and
             self.get_success_rate() >= 0.9  # 90% success rate minimum
         )
 
     def can_auto_approve(self) -> bool:
-        """Check if experiment can be auto-approved"""
+        """Check if experiment can be auto-approved (governance: +30% improvement)."""
         return (
             self.can_promote_to_production() and
             self.current_trust_score >= TrustThreshold.AUTO_APPROVE and
-            self.improvement_percentage and
-            self.improvement_percentage > 20.0  # 20% improvement
+            self.improvement_percentage is not None and
+            self.improvement_percentage >= (IMPROVEMENT_THRESHOLD_PROMOTION * 100)
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -467,9 +474,10 @@ class AutonomousSandboxLab:
         # Recalculate trust score
         exp.calculate_trust_score(self.ml_trust_scorer)
 
-        # Check if trial is complete and successful
+        # Check if trial is complete and successful (governance: require +30% improvement)
         if exp.is_trial_complete():
-            if exp.get_success_rate() >= 0.9 and exp.current_trust_score >= TrustThreshold.PRODUCTION_READY:
+            improvement_ok = (exp.improvement_percentage or 0) >= (IMPROVEMENT_THRESHOLD_PROMOTION * 100)
+            if exp.get_success_rate() >= 0.9 and exp.current_trust_score >= TrustThreshold.PRODUCTION_READY and improvement_ok:
                 exp.status = ExperimentStatus.VALIDATED
                 logger.info(f"[SANDBOX_LAB] Trial VALIDATED for {experiment_id}")
                 logger.info(f"[SANDBOX_LAB] Success rate: {exp.get_success_rate():.1%}, Trust: {exp.current_trust_score:.2f}")
@@ -568,7 +576,7 @@ class AutonomousSandboxLab:
             "MOTIVATION:",
             f"  {exp.motivation}",
             "",
-            "TRIAL RESULTS (90 days):",
+            f"TRIAL RESULTS ({exp.trial_duration_days} days):",
             f"  Data Points: {exp.trial_data_points:,}",
             f"  Success Rate: {exp.get_success_rate():.1%}",
             f"  Failures: {exp.trial_failures}",
@@ -595,7 +603,7 @@ class AutonomousSandboxLab:
 
         if exp.can_auto_approve():
             msg.append(f"  ✅ AUTO-APPROVE: Trust score {exp.current_trust_score:.2f} >= {TrustThreshold.AUTO_APPROVE}")
-            msg.append(f"  ✅ Improvement {exp.improvement_percentage:.1f}% > 20%")
+            msg.append(f"  ✅ Improvement {exp.improvement_percentage:.1f}% >= 30%")
             msg.append("  ✅ Grace recommends immediate production deployment")
         else:
             msg.append(f"  ⚠️  MANUAL REVIEW: Trust score {exp.current_trust_score:.2f} < {TrustThreshold.AUTO_APPROVE}")

@@ -22,8 +22,8 @@ Flow:
 All actions tracked via Genesis keys with full provenance chain.
 """
 
-from fastapi import APIRouter
-from typing import Dict, Any, List
+from fastapi import APIRouter, Body
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 import logging
 import threading
@@ -103,7 +103,7 @@ def _recall_similar_episode(problem_text: str) -> dict:
 def _update_kpis(cycle_result: dict):
     """Update KPI tracker with loop metrics."""
     try:
-        from ml_intelligence.kpi_tracker import get_kpi_tracker
+        from api.kpi_api import get_kpi_tracker
         tracker = get_kpi_tracker()
         tracker.increment_kpi("autonomous_loop", "cycles_completed", 1)
         tracker.increment_kpi("autonomous_loop", "triggers_detected", cycle_result.get("triggers_found", 0))
@@ -164,17 +164,40 @@ def _run_cycle() -> dict:
         for p in det_report.get("problems", []):
             problems.append({
                 "source": "deterministic",
-                "target": p.get("file", p.get("module", p.get("service", ""))),
+                "target": p.get("file", p.get("module", p.get("service", p.get("type", "")))),
                 "status": "red" if p.get("severity") == "critical" else "orange",
                 "reason": f"[{p['type']}] {p.get('message', p.get('error', ''))}",
                 "severity": p.get("severity", "warning"),
+                "flag_for_human": p.get("flag_for_human", False),
             })
 
-        # Auto-fix what we can without LLM
+        # Auto-fix what we can without LLM (deterministic fixes only)
         if det_report.get("problems"):
             fixer = DeterministicAutoFixer()
             auto_fixes = fixer.auto_fix(det_report["problems"])
             result["auto_fixes"] = len(auto_fixes)
+            # Problems that should be flagged for human (no auto-fix available)
+            for_human = [p for p in det_report.get("problems", []) if p.get("flag_for_human")]
+            if for_human:
+                result["for_human"] = [
+                    {"type": p.get("type"), "message": p.get("message", p.get("error", ""))[:200]}
+                    for p in for_human
+                ]
+                for p in for_human:
+                    logger.error(
+                        "FLAG_FOR_HUMAN: [%s] %s",
+                        p.get("type", ""),
+                        p.get("message", p.get("error", ""))[:300],
+                    )
+                try:
+                    from api.brain_api_v2 import call_brain
+                    call_brain("system", "notify", {
+                        "title": "Ouroboros: Issues need human attention",
+                        "message": "; ".join((p.get("message", p.get("error", "")) or "")[:80] for p in for_human[:3]),
+                        "type": "escalate",
+                    })
+                except Exception:
+                    pass
     except Exception:
         pass
 
@@ -201,8 +224,8 @@ def _run_cycle() -> dict:
         logger.debug(f"Health scan skipped: {e}")
 
     try:
-        from api.runtime_triggers_api import _scan_resources, _scan_code
-        for scanner in [_scan_resources, _scan_code]:
+        from api.runtime_triggers_api import _scan_resources, _scan_code, _scan_build
+        for scanner in [_scan_resources, _scan_code, _scan_build]:
             try:
                 found = scanner()
                 for t in found:
@@ -222,11 +245,21 @@ def _run_cycle() -> dict:
 
     result["triggers_found"] = len(problems)
 
-    # ── 1b. DEEP INTELLIGENCE (untapped actions now wired) ─────
+    # Unified trigger loop: run determinism, self-heal, diagnostics, self-learning, self-governance, coding agent
     try:
         from api.brain_api_v2 import call_brain
+        unified = call_brain("system", "run_unified_triggers", {"category": None})
+        result["unified_triggers"] = unified.get("summary", {})
+    except Exception as e:
+        logger.debug("Unified triggers skipped: %s", e)
+        result["unified_triggers"] = {"run": 0, "ok": 0, "failed": 0}
 
-        # Root cause correlation — don't alert on leaf failures
+    # ── 1b. DEEP INTELLIGENCE (parallel + background) ───────────────────
+    try:
+        from api.brain_api_v2 import call_brain
+        from core.async_parallel import run_parallel, run_background
+
+        # Root cause correlation — don't alert on leaf failures (sequential, touches problems)
         for p in list(problems):
             if p.get("component_id"):
                 corr = call_brain("system", "correlate", {"component": p["component_id"]})
@@ -234,75 +267,71 @@ def _run_cycle() -> dict:
                     p["suppressed"] = True
                     problems.remove(p)
 
-        # Orphan detection — find ghost services
-        orphans = call_brain("system", "orphans", {})
+        # Run independent intelligence calls in parallel
+        def _orphans(): return call_brain("system", "orphans", {})
+        def _baselines(): return call_brain("system", "baselines", {})
+        def _mine_keys(): return call_brain("system", "mine_keys", {"hours": 1})
+        def _episodes(): return call_brain("system", "mine_episodes", {})
+        def _intel(): return call_brain("system", "intelligence", {"hours": 1})
+        def _synapses(): return call_brain("system", "synapses", {})
+        def _trust(): return call_brain("system", "trust", {})
+        out = run_parallel([_orphans, _baselines, _mine_keys, _episodes, _intel, _synapses, _trust], return_exceptions=True)
+        orphans = out[0] if not isinstance(out[0], Exception) else {}
+        baselines = out[1] if not isinstance(out[1], Exception) else {}
+        key_patterns = out[2] if not isinstance(out[2], Exception) else {}
+        episodes = out[3] if not isinstance(out[3], Exception) else {}
+        intel = out[4] if not isinstance(out[4], Exception) else {}
+        synapses = out[5] if not isinstance(out[5], Exception) else {}
+        trust_state = out[6] if not isinstance(out[6], Exception) else {}
+
         if orphans.get("ok") and orphans.get("data", {}).get("orphans"):
             for o in orphans["data"]["orphans"]:
                 problems.append({"source": "orphan_detection", "target": o.get("label", ""),
                                  "reason": o.get("diagnosis", ""), "severity": "warning"})
-
-        # ML baselines — detect anomalies from historical patterns
-        baselines = call_brain("system", "baselines", {})
         result["baselines_checked"] = baselines.get("ok", False)
-
-        # Mine Genesis keys for patterns
-        key_patterns = call_brain("system", "mine_keys", {"hours": 1})
         if key_patterns.get("ok"):
             repeated = key_patterns.get("data", {}).get("repeated_failures", [])
             for rf in repeated[:3]:
                 problems.append({"source": "genesis_pattern", "target": rf.get("pattern", ""),
                                  "reason": f"Repeated {rf.get('count', 0)}x", "severity": "warning"})
-
-        # Mine episodic memory — what worked before
-        episodes = call_brain("system", "mine_episodes", {})
         result["episodes_mined"] = episodes.get("ok", False)
-
-        # Intelligence report feeds into decisions
-        intel = call_brain("system", "intelligence", {"hours": 1})
         result["intelligence_consulted"] = intel.get("ok", False)
-
-        # Synaptic weights influence routing
-        synapses = call_brain("system", "synapses", {})
         result["synapses_checked"] = synapses.get("ok", False)
-
-        # Trust scores gate actions
-        trust_state = call_brain("system", "trust", {})
         result["trust_state"] = trust_state.get("data", {}).get("models", {}) if trust_state.get("ok") else {}
 
-        # Genesis cleanup — prevent DB bloat
-        call_brain("system", "genesis_cleanup", {})
+        # Fire-and-forget: maintenance and scans (background)
+        def _deep_background():
+            try:
+                call_brain("system", "genesis_cleanup", {})
+                critical = [p for p in problems if p.get("severity") == "critical"]
+                if critical:
+                    call_brain("system", "consensus_fix", {})
+                call_brain("system", "triggers", {})
+                call_brain("system", "security_scan", {"code": "", "file": ""})
+                call_brain("govern", "heal", {})
+                call_brain("govern", "learn", {})
+                call_brain("ai", "diagnose", {})
+                call_brain("ai", "integration_matrix", {})
+                call_brain("ai", "knowledge_gaps", {})
+                call_brain("ai", "fill_knowledge_gaps", {"max_gaps": 3, "auto_ingest": True})
+                call_brain("ai", "oracle_export", {"limit": 300})
+                call_brain("ai", "governance_training_cycle", {"export_to_oracle": False, "run_sandbox_review": True})
+                if problems:
+                    call_brain("system", "notify", {
+                        "title": f"Ouroboros: {len(problems)} issues",
+                        "message": ", ".join(p.get("target", "?")[:20] for p in problems[:3]),
+                        "type": "warning",
+                    })
+            except Exception as e:
+                logger.debug("Deep intelligence background: %s", e)
+        run_background(_deep_background, "deep_intelligence")
 
-        # Consensus fix for critical problems
-        critical = [p for p in problems if p.get("severity") == "critical"]
-        if critical:
-            call_brain("system", "consensus_fix", {})
-
-        # Trigger scan
-        call_brain("system", "triggers", {})
-
-        # Security scan on recent code changes
-        call_brain("system", "security_scan", {"code": "", "file": ""})
-
-        # Governance heal + learn
-        call_brain("govern", "heal", {})
-        call_brain("govern", "learn", {})
-
-        # Diagnose via console
-        call_brain("ai", "diagnose", {})
-
-        # Check integration matrix
-        call_brain("ai", "integration_matrix", {})
-
-        # Check knowledge gaps
-        call_brain("ai", "knowledge_gaps", {})
-
-        # Notify about cycle results
-        if problems:
-            call_brain("system", "notify", {
-                "title": f"Ouroboros: {len(problems)} issues",
-                "message": ", ".join(p.get("target", "?")[:20] for p in problems[:3]),
-                "type": "warning",
-            })
+        # Commit batch (sync, quick)
+        try:
+            from core.commit_batch_trigger import check_and_upload_if_batch
+            result["commit_batch"] = check_and_upload_if_batch()
+        except Exception:
+            result["commit_batch"] = {"triggered": False, "error": "import or run failed"}
 
     except Exception as e:
         logger.debug(f"Deep intelligence scan: {e}")
@@ -341,10 +370,17 @@ def _run_cycle() -> dict:
         _update_kpis(result)
         return result
 
-    # ── 2. DECIDE + ACT (with trust gate + time filter + memory) ──
-    for problem in problems[:5]:
-        action = _decide_and_act(problem)
-
+    # ── 2. DECIDE + ACT in parallel (then trust gate + time filter + memory) ──
+    from core.async_parallel import run_parallel, run_background
+    problems_batch = problems[:5]
+    if problems_batch:
+        thunks = [lambda _p=p: _decide_and_act(_p) for p in problems_batch]
+        actions_raw = run_parallel(thunks, return_exceptions=True)
+    else:
+        actions_raw = []
+    for problem, action in zip(problems_batch, actions_raw):
+        if isinstance(action, Exception):
+            action = {"target": problem.get("target", ""), "reason": problem.get("reason", ""), "type": "escalate", "result": {"error": str(action)[:200]}}
         # TRUST GATE: check trust before executing
         trust = _get_trust_score(problem.get("target", "system"))
         threshold = TRUST_THRESHOLDS.get(action["type"], 0.5)
@@ -378,6 +414,17 @@ def _run_cycle() -> dict:
             cat = action["type"]
             if cat in _loop_state:
                 _loop_state[cat] += 1
+
+    # ── 2b. Cross-trigger: after any heal/learn, trigger learning in background ──
+    action_types_done = {a.get("type") for a in result.get("actions", [])}
+    if action_types_done & {"heal", "learn"}:
+        def _trigger_learn():
+            try:
+                from api.brain_api_v2 import call_brain
+                call_brain("govern", "learn", {})
+            except Exception:
+                pass
+        run_background(_trigger_learn, "govern/learn")
 
     # ── 3. LEARN: Record outcome + update KPIs ──────────────────
     try:
@@ -424,85 +471,142 @@ def _run_cycle() -> dict:
         except Exception:
             pass
 
+    # ── 4. RECURSIVE VERIFY: re-scan and act once more if problems remain ──
+    max_verify_rounds = 2
+    for verify_round in range(max_verify_rounds - 1):
+        try:
+            from core.deterministic_bridge import build_deterministic_report
+            det_report2 = build_deterministic_report()
+            still_problems = [p for p in det_report2.get("problems", []) if not p.get("flag_for_human")]
+            if not still_problems:
+                break
+            # One more DECIDE + ACT pass on remaining problems (up to 3)
+            for problem in still_problems[:3]:
+                action = _decide_and_act({
+                    "source": problem.get("type", "deterministic"),
+                    "target": problem.get("file", problem.get("module", problem.get("service", ""))),
+                    "reason": f"[{problem.get('type')}] {problem.get('message', problem.get('error', ''))}",
+                    "severity": problem.get("severity", "warning"),
+                    "flag_for_human": problem.get("flag_for_human", False),
+                })
+                trust = _get_trust_score(problem.get("file", "system"))
+                threshold = TRUST_THRESHOLDS.get(action["type"], 0.5)
+                if trust >= threshold and not (is_quiet and action["type"] not in ("escalate",)):
+                    result["actions"].append(action)
+                    with _loop_lock:
+                        _loop_state["actions_taken"] += 1
+                        if action.get("type") in _loop_state:
+                            _loop_state[action["type"]] += 1
+        except Exception as e:
+            logger.debug("Verify round %s: %s", verify_round + 1, e)
+            break
+
+    # ── 5. COMPOSITE LOOP: run heal_and_learn when we took heal/learn actions ──
+    action_types = {a.get("type") for a in result.get("actions", [])}
+    if action_types & {"heal", "learn"}:
+        try:
+            from cognitive.loop_orchestrator import LoopOrchestrator
+            orch = LoopOrchestrator.get_instance()
+            composite_result = orch.execute_composite(
+                "heal_and_learn",
+                context={"cycle_id": result.get("cycle_id"), "triggers": len(problems), "actions": len(result["actions"])},
+                parallel=False,
+            )
+            result["composite_loop"] = {
+                "id": "heal_and_learn",
+                "verdict": composite_result.verdict,
+                "passed": composite_result.loops_passed,
+                "failed": composite_result.loops_failed,
+            }
+        except Exception as e:
+            logger.debug("Composite loop heal_and_learn: %s", e)
+            result["composite_loop"] = {"id": "heal_and_learn", "error": str(e)[:200]}
+
     result["outcome"] = "acted"
     result["latency_ms"] = round((time.time() - cycle_start) * 1000, 1)
     return result
 
 
 def _decide_and_act(problem: dict) -> dict:
-    """Decide what type of action to take and execute it."""
+    """
+    Agentic decide-and-act: ask the brain what to do, then execute it.
+    All decisions flow through system/decide_autonomous_action; the loop only executes.
+    """
+    from api.brain_api_v2 import call_brain
+
     target = problem.get("target", "")
     reason = problem.get("reason", "")
-    severity = problem.get("severity", "warning")
-
     action = {"target": target, "reason": reason, "type": "none", "result": None}
 
-    # Service down → HEAL
-    if "unreachable" in reason.lower() or "down" in reason.lower() or "connection" in reason.lower():
-        action["type"] = "heal"
-        try:
-            from api.brain_api_v2 import call_brain
-            action["result"] = call_brain("system", "scan_heal", {})
-        except Exception as e:
-            action["result"] = {"error": str(e)[:100]}
+    # 1. Ask brain for decision (single agentic decision point)
+    try:
+        decision_resp = call_brain("system", "decide_autonomous_action", problem)
+    except Exception as e:
+        action["type"] = "escalate"
+        action["result"] = {"error": str(e)[:100], "queued": "human_review"}
         return action
 
-    # No activity (always-on) → HEAL (diagnostic cycle)
-    if "no activity" in reason.lower() and severity == "critical":
-        action["type"] = "heal"
-        try:
-            from diagnostic_machine.diagnostic_engine import get_diagnostic_engine, TriggerSource
-            engine = get_diagnostic_engine()
-            engine.run_cycle(TriggerSource.SENSOR_FLAG)
-            action["result"] = {"ran": "diagnostic_cycle"}
-        except Exception as e:
-            action["result"] = {"error": str(e)[:100]}
+    if not decision_resp.get("ok"):
+        action["type"] = "escalate"
+        action["result"] = {"error": decision_resp.get("error", "decision failed")[:100], "queued": "human_review"}
         return action
 
-    # High CPU/RAM → HEAL (GC)
-    if "cpu" in reason.lower() or "ram" in reason.lower() or "memory" in reason.lower():
-        action["type"] = "heal"
-        import gc
-        gc.collect()
-        action["result"] = {"ran": "gc_collect"}
+    data = decision_resp.get("data") or {}
+
+    # 2. Escalate: no execution, just record
+    if data.get("escalate"):
+        action["type"] = "escalate"
+        action["result"] = {"queued": "human_review", "reason": data.get("reason", reason)}
         return action
 
-    # Import/code errors → LEARN (record for future reference)
-    if "import" in reason.lower() or "module" in reason.lower() or "dependency" in reason.lower():
-        action["type"] = "learn"
-        try:
-            from api._genesis_tracker import track
-            track(
-                key_type="gap_identified",
-                what=f"Code gap: {target} — {reason}",
-                who="autonomous_loop",
-                tags=["autonomous", "gap", "code-issue"],
-            )
-            action["result"] = {"recorded": "knowledge_gap"}
-        except Exception as e:
-            action["result"] = {"error": str(e)[:100]}
-        return action
+    # 3. Execute the action the brain chose
+    brain = data.get("brain")
+    act = data.get("action")
+    payload = data.get("payload") or {}
+    action["type"] = data.get("type", "heal")
 
-    # Test failures → LEARN + optionally CODE
-    if "test" in reason.lower() or "failure" in reason.lower():
-        action["type"] = "learn"
-        try:
-            from api._genesis_tracker import track
-            track(
-                key_type="gap_identified",
-                what=f"Test gap: {target} — {reason}",
-                who="autonomous_loop",
-                tags=["autonomous", "gap", "test-failure"],
-            )
-            action["result"] = {"recorded": "test_gap"}
-        except Exception as e:
-            action["result"] = {"error": str(e)[:100]}
-        return action
+    try:
+        action["result"] = call_brain(brain, act, payload)
+    except Exception as e:
+        action["result"] = {"error": str(e)[:100]}
 
-    # Everything else → ESCALATE
-    action["type"] = "escalate"
-    action["result"] = {"queued": "human_review", "reason": reason}
     return action
+
+
+# ── Coding Agent Integration ──────────────────────────────────────────────
+
+def submit_coding_task(
+    instructions: str,
+    context: dict = None,
+    priority: int = 5,
+    error_class: str = "",
+    origin: str = "error_pipeline",
+) -> str:
+    """
+    Submit a coding task to the coding agent queue.
+
+    Called by error_pipeline when a runtime error needs a code fix,
+    and by the autonomous loop when it detects a code-related problem.
+
+    Returns a task_id string.
+    """
+    try:
+        from coding_agent.task_queue import submit
+        task_id = submit(
+            task_type="fix_error" if error_class else "code_task",
+            instructions=instructions,
+            context=context or {},
+            priority=priority,
+            origin=origin,
+            error_class=error_class,
+        )
+        logger.info(
+            "[AUTONOMOUS] Coding task submitted: %s (class=%s)", task_id, error_class
+        )
+        return task_id
+    except Exception as e:
+        logger.error("[AUTONOMOUS] submit_coding_task failed: %s", e)
+        return f"error_{int(time.time())}"
 
 
 # ── Background loop ──────────────────────────────────────────────
@@ -526,6 +630,12 @@ def _background_loop(interval_seconds: int = 30):
             with _loop_lock:
                 _loop_state["errors"] += 1
             logger.error(f"Autonomous loop error: {e}")
+            # Self-healing: hot-reload so next cycle picks up code fixes
+            try:
+                from core.hot_reload import hot_reload_all_services
+                hot_reload_all_services()
+            except Exception:
+                pass
 
         _stop_event.wait(interval_seconds)
 
@@ -581,60 +691,26 @@ async def get_loop_log(limit: int = 20):
         return {"log": list(reversed(_loop_log[-limit:])), "total": len(_loop_log)}
 
 
-# ── Deterministic Lifecycle Endpoints ─────────────────────────────
+# ── Unified trigger brain (determinism, self-heal, diagnostics, self-learning, self-governance, coding agent) ──
 
-@router.post("/lifecycle/scan")
-async def lifecycle_scan_endpoint():
-    """
-    Quick lifecycle scan: probe all components, scan unhealthy ones.
-    Read-only diagnostic — does NOT attempt fixes.
-
-    Flow: Auto-discover → Probe all → Scan dead components
-    """
-    from core.deterministic_lifecycle import lifecycle_scan
-    return lifecycle_scan()
-
-
-@router.post("/lifecycle/probe-and-heal")
-async def lifecycle_probe_and_heal(component_id: str = ""):
-    """
-    Full deterministic lifecycle: probe → test → scan → fix → reason → heal → verify → loop.
-
-    The recursive self-healing chain:
-    1. Probe: Is it alive?
-    2. Test: Does it work correctly?
-    3. Scan: Find problems deterministically (AST, imports, deps)
-    4. Fix: Try deterministic auto-fix (no LLM)
-    5. Reason: If unfixed → LLM reasoning (constrained by facts)
-    6. Heal: Self-heal via coding agent / healing coordinator
-    7. Verify: Re-probe + re-test
-    8. Loop: Recursive until healthy or max iterations
-
-    If component_id is empty, runs for ALL registered components.
-    """
-    if component_id:
-        from core.deterministic_lifecycle import run_lifecycle, _registry, register_component
-        if component_id not in _registry:
-            register_component(component_id, component_id)
-        result = run_lifecycle(component_id)
-        return result.to_dict()
-    else:
-        from core.deterministic_lifecycle import run_lifecycle_all
-        return run_lifecycle_all()
-
-
-@router.get("/lifecycle/registry")
-async def lifecycle_registry():
-    """Get all components registered in the deterministic lifecycle system."""
-    from core.deterministic_lifecycle import get_registry
-    return {"registry": get_registry(), "total": len(get_registry())}
-
-
-@router.get("/lifecycle/events")
-async def lifecycle_events(component: str = "", limit: int = 50):
-    """Get deterministic lifecycle event log."""
-    from core.deterministic_logger import get_event_log, get_event_summary
+@router.get("/triggers/definitions")
+async def get_unified_trigger_definitions(category: Optional[str] = None, trigger_ids: Optional[str] = None):
+    """List all defined triggers; optional filter by category or comma-separated trigger_ids."""
+    from core.unified_trigger_brain import get_trigger_definitions, get_categories
+    ids = [x.strip() for x in (trigger_ids or "").split(",") if x.strip()] or None
     return {
-        "events": get_event_log(component or None, limit),
-        "summary": get_event_summary(),
+        "triggers": get_trigger_definitions(category=category, trigger_ids=ids),
+        "categories": get_categories(),
     }
+
+
+@router.post("/triggers/run")
+async def run_unified_triggers(payload: Dict[str, Any] = Body(default={})):
+    """Run unified triggers (async multi-trigger). Body: { \"trigger_ids\": [...], \"category\": \"...\" }."""
+    from api.brain_api_v2 import call_brain
+    payload = payload or {}
+    result = call_brain("system", "run_unified_triggers", {
+        "trigger_ids": payload.get("trigger_ids"),
+        "category": payload.get("category"),
+    })
+    return result

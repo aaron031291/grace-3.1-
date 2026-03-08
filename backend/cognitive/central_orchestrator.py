@@ -20,7 +20,7 @@ import logging
 import threading
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -232,7 +232,7 @@ class CentralOrchestrator:
         except Exception:
             self.state.update("consensus", {"status": "unavailable"})
 
-        self.state.last_sync = datetime.now(timezone.utc).isoformat()
+        self.state.last_sync = datetime.utcnow().isoformat()
 
     def sync_state(self) -> Dict[str, Any]:
         """Force a full state sync and return the result."""
@@ -262,7 +262,7 @@ class CentralOrchestrator:
         self.state.add_task({
             "type": task_type,
             "target": target,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "data_keys": list(data.keys()),
         })
 

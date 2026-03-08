@@ -64,10 +64,10 @@ export default function LearningHealingTab() {
   const l = d.learning || {};
   const hs = d.health_snapshot || {};
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'learn', label: 'Learn', icon: '🧠' },
-    { id: 'heal', label: 'Heal', icon: '🔧' },
-    { id: 'skills', label: 'Skills', icon: '🎯' },
+    { id: 'overview', label: 'Overview', icon: '📊', title: 'Learning and healing dashboard and health snapshot' },
+    { id: 'learn', label: 'Learn', icon: '🧠', title: 'Trigger self-learning on a topic' },
+    { id: 'heal', label: 'Heal', icon: '🔧', title: 'Trigger self-healing actions' },
+    { id: 'skills', label: 'Skills', icon: '🎯', title: 'View and manage learned skills' },
   ];
 
   return (
@@ -75,7 +75,7 @@ export default function LearningHealingTab() {
       <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
         <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0' }}>🧬 Learning & Healing</span>
         {tabs.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+          <button key={t.id} type="button" title={t.title || t.label} onClick={() => setActiveTab(t.id)} style={{
             padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
             color: activeTab === t.id ? C.accent : C.muted,
             borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',

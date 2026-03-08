@@ -1,0 +1,48 @@
+# schema_drift.yaml
+# Grace self-healing playbook for database schema drift errors.
+# Triggered when: UndefinedColumn / UndefinedTable errors appear in session_scope.
+---
+trigger: guardian.schema_drift_detected
+description: >
+  Automatic remediation for PostgreSQL schema drift — when ORM models reference
+  columns or tables that don't exist in the live database.
+
+conditions:
+  - error_type: UndefinedColumn
+  - error_type: UndefinedTable
+  - source: database.session.session_scope
+
+remediation:
+  - step: run_auto_migrate
+    description: "Run database/auto_migrate.py to add missing columns/tables/enums."
+    module: database.auto_migrate
+    function: run_auto_migrate
+    args: [engine]
+
+  - step: record_learning
+    description: "Record schema drift event as a learning entry."
+    module: api._genesis_tracker
+    function: track
+    args:
+      key_type: system_event
+      what_description: "Schema drift detected and auto-healed"
+      is_error: true
+
+  - step: verify_health
+    description: "Verify episodes and related tables are queryable after migration."
+    validation_query: "SELECT COUNT(*) FROM episodes LIMIT 1"
+
+metrics:
+  - name: schema_drift_count
+    description: "Number of schema drift incidents auto-healed"
+  - name: MTTR_schema
+    description: "Mean time to repair schema drift"
+
+escalation:
+  trigger: guardian.escalate("schema_drift_unresolvable")
+  condition: "auto_migrate returns 0 changes but error persists after 3 retries"
+
+learning:
+  record_to: knowledge_base/layer_1/schema_health/drift_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags: [schema, database, self_healing, auto_migrate]

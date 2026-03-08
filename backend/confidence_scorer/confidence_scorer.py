@@ -289,11 +289,8 @@ class ConfidenceScorer:
         """
         if created_at is None:
             created_at = datetime.utcnow()
-        
-        # Ensure we're working with timezone-naive datetimes
-        if created_at.tzinfo is not None:
-            created_at = created_at.replace(tzinfo=None)
-        
+        from core.datetime_utils import as_naive_utc
+        created_at = as_naive_utc(created_at) or datetime.utcnow()
         now = datetime.utcnow()
         age_days = (now - created_at).days
         

@@ -10,8 +10,7 @@ def _load_scheduled():
     SCHED_PATH.parent.mkdir(parents=True, exist_ok=True)
     if SCHED_PATH.exists():
         try: return json.loads(SCHED_PATH.read_text())
-        except Exception as e:
-            logger.warning(f"Failed to load scheduled tasks: {e}")
+        except Exception: pass
     return []
 
 def _save_scheduled(data):

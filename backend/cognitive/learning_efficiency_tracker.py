@@ -109,9 +109,9 @@ class LearningEfficiencyTracker:
     6. Identify optimal learning paths
     """
     
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, knowledge_base_path: Optional[Any] = None):
         self.session = session
-        self.learning_memory = LearningMemoryManager(session, None)
+        self.learning_memory = LearningMemoryManager(session, knowledge_base_path)
         
         # Track cumulative data consumption
         self.total_bytes_consumed = 0.0

@@ -1,0 +1,44 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Background init started (training, diagnostics, embedding)
+[OK] Execution registry initialized
+[OK] OLLAMA is running and reachable
+WARNING: Corrupted KB file backed up to: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\knowledge_base\layer_1\genesis_key\system\keys_2026-03-07.json.corrupt.20260307_182351
+[OK] Qdrant is running with 3 collection(s)
+[FILE-WATCHER] Starting file system monitoring...[OK] File watcher started - automatic version tracking enabled
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[INGEST] [OK] Got embedding model (singleton)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[OK] Continuous learning activated
+[AUTO-INGEST] Scan completed with 1181 results
+[AUTO-INGEST] Excluded 1181 files (Genesis/already ingested)
+[OK] Diagnostic engine started ù self-healing active (60s heartbeat)
+Exception in thread Thread-16 (_readerthread):
+Traceback (most recent call last):
+  File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Python314\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\subprocess.py", line 1613, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "C:\Python314\Lib\encodings\cp1252.py", line 23, in decode
+    return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'charmap' codec can't decode byte 0x9d in position 415: character maps to <undefined>

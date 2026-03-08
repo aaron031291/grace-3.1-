@@ -160,52 +160,30 @@ class CognitivePipeline:
             observations["episodic"] = []
             observations["procedures"] = []
 
-            db = _get_db()
-            if db:
-                try:
-                    from sqlalchemy import text
-
-                    # Learning examples
-                    rows = db.execute(text(
-                        "SELECT input_context, expected_output, trust_score FROM learning_examples "
-                        "WHERE trust_score >= 0.6 ORDER BY trust_score DESC LIMIT 3"
-                    )).fetchall()
-                    for r in rows:
-                        ctx.learned_patterns.append({"input": (r[0] or "")[:100], "trust": r[2]})
-                        observations["learned_patterns"].append({"input": (r[0] or "")[:50], "trust": r[2]})
-
-                    # Episodic memory — concrete past experiences
-                    try:
-                        episodes = db.execute(text(
-                            "SELECT problem, action, outcome, trust_score FROM episodes "
-                            "WHERE trust_score >= 0.5 ORDER BY trust_score DESC LIMIT 3"
-                        )).fetchall()
-                        for ep in episodes:
-                            observations["episodic"].append({
-                                "problem": (ep[0] or "")[:80], "action": (ep[1] or "")[:80],
-                                "outcome": (ep[2] or "")[:80], "trust": ep[3]
-                            })
-                    except Exception:
-                        pass
-
-                    # Procedural memory — learned skills
-                    try:
-                        procs = db.execute(text(
-                            "SELECT name, goal, trust_score, success_rate FROM procedures "
-                            "WHERE trust_score >= 0.5 ORDER BY trust_score DESC LIMIT 3"
-                        )).fetchall()
-                        for p in procs:
-                            observations["procedures"].append({
-                                "name": p[0], "goal": (p[1] or "")[:80],
-                                "trust": p[2], "success": p[3]
-                            })
-                    except Exception:
-                        pass
-
-                except Exception:
-                    pass
-                finally:
-                    db.close()
+            # Unified memory — learning, episodic, procedural (single code path)
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                mem = get_unified_memory()
+                for item in mem.recall_learnings(query="", limit=3, min_trust=0.6):
+                    inp = (item.get("input") or "")[:100]
+                    ctx.learned_patterns.append({"input": inp[:100], "trust": item.get("trust", 0)})
+                    observations["learned_patterns"].append({"input": inp[:50], "trust": item.get("trust", 0)})
+                for ep in mem.recall_episodes(query="", limit=3, min_trust=0.5):
+                    observations["episodic"].append({
+                        "problem": (ep.get("problem") or "")[:80],
+                        "action": (ep.get("action") or "")[:80],
+                        "outcome": (ep.get("outcome") or "")[:80],
+                        "trust": ep.get("trust", 0),
+                    })
+                for p in mem.recall_procedures(query="", limit=3, min_trust=0.5):
+                    observations["procedures"].append({
+                        "name": p.get("name", ""),
+                        "goal": (p.get("goal") or "")[:80],
+                        "trust": p.get("trust", 0),
+                        "success": p.get("success_rate", 0),
+                    })
+            except Exception:
+                pass
 
             # Decision log — track this decision
             try:
@@ -434,7 +412,14 @@ class CognitivePipeline:
                 task_type = "code" if ctx.ooda.get("prompt_type") in ("code_generation", "bug_fix", "refactor", "testing") else "reason"
                 client = get_llm_for_task(task_type)
 
-
+            # Inject agent rules into system prompt
+            try:
+                from api.agent_rules_api import get_agent_rules_context
+                agent_rules = get_agent_rules_context()
+                if agent_rules:
+                    ctx.system_prompt = (ctx.system_prompt or "") + agent_rules
+            except Exception:
+                pass
 
             # Enrich prompt with pipeline context + all memory systems
             enriched = ctx.prompt
@@ -482,9 +467,11 @@ class CognitivePipeline:
             try:
                 from retrieval.retriever import DocumentRetriever
                 from embedding.embedder import get_embedding_model
+                from vector_db.client import get_qdrant_client
 
                 retriever = DocumentRetriever(
                     embedding_model=get_embedding_model(),
+                    qdrant_client=get_qdrant_client(),
                 )
                 # Search for content similar to the output
                 chunks = retriever.retrieve(
@@ -738,39 +725,38 @@ class FeedbackLoop:
     def record_outcome(genesis_key: str, prompt: str, output: str,
                        outcome: str, correction: str = None, trust_delta: float = 0):
         """
-        Record the outcome of a pipeline generation.
+        Record the outcome of a pipeline generation via unified memory.
         outcome: 'positive', 'negative', 'failure'
         """
-        db = _get_db()
-        if not db:
-            return
-
         try:
-            from sqlalchemy import text
-            now = datetime.utcnow()
-
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
             trust = {"positive": 0.8, "negative": 0.3, "failure": 0.1}.get(outcome, 0.5) + trust_delta
+            source = "cognitive_pipeline"
 
-            db.execute(text("""
-                INSERT INTO learning_examples
-                (example_type, input_context, expected_output, actual_output, trust_score,
-                 source_reliability, content_quality, consensus_score, recency_score,
-                 source, created_at, updated_at)
-                VALUES (:et, :ic, :eo, :ao, :ts, :sr, :cq, :cs, :rs, :src, :now, :now)
-            """), {
-                "et": f"pipeline_{outcome}",
-                "ic": prompt[:5000],
-                "eo": correction[:5000] if correction else "",
-                "ao": output[:5000],
-                "ts": trust,
-                "sr": trust,  # source_reliability matches trust
-                "cq": trust,  # content_quality
-                "cs": 0.5,    # consensus_score (neutral)
-                "rs": 1.0,    # recency_score (just created)
-                "src": "cognitive_pipeline",
-                "now": now,
-            })
-            db.commit()
+            mem.store_learning(
+                input_ctx=prompt[:5000],
+                expected=correction[:5000] if correction else output[:5000],
+                actual=output[:5000],
+                trust=trust,
+                source=source,
+                example_type=f"pipeline_{outcome}",
+            )
+            mem.store_episode(
+                problem=prompt[:2000],
+                action=f"pipeline_{outcome}",
+                outcome=output[:2000],
+                trust=trust,
+                source="feedback_loop",
+            )
+            if outcome == "positive" and trust >= 0.8:
+                mem.store_procedure(
+                    name=f"Learned from: {prompt[:50]}",
+                    goal=prompt[:200],
+                    steps="Generate, Verify, Apply",
+                    trust=trust,
+                    proc_type="pipeline_learned",
+                )
 
             from api._genesis_tracker import track
             track(
@@ -783,42 +769,6 @@ class FeedbackLoop:
                 parent_key_id=genesis_key,
             )
 
-            # Also store in episodic memory (concrete experience)
-            try:
-                db.execute(text("""
-                    INSERT INTO episodes (problem, action, outcome, trust_score, source, created_at, updated_at)
-                    VALUES (:problem, :action, :outcome, :ts, :src, :now, :now)
-                """), {
-                    "problem": prompt[:2000],
-                    "action": f"pipeline_{outcome}",
-                    "outcome": output[:2000],
-                    "ts": trust,
-                    "src": "feedback_loop",
-                    "now": now,
-                })
-                db.commit()
-            except Exception:
-                pass
-
-            # If high trust positive → promote to procedural memory (learned skill)
-            if outcome == "positive" and trust >= 0.8:
-                try:
-                    db.execute(text("""
-                        INSERT INTO procedures (name, goal, procedure_type, trust_score, success_rate, usage_count, created_at, updated_at)
-                        VALUES (:name, :goal, :ptype, :ts, :sr, 1, :now, :now)
-                    """), {
-                        "name": f"Learned from: {prompt[:50]}",
-                        "goal": prompt[:200],
-                        "ptype": "pipeline_learned",
-                        "ts": trust,
-                        "sr": 1.0,
-                        "now": now,
-                    })
-                    db.commit()
-                except Exception:
-                    pass
-
-            # Store in Magma memory
             try:
                 from cognitive.magma_bridge import ingest, store_pattern, store_decision, store_procedure
                 ingest(f"{outcome}: {prompt[:200]} → {output[:200]}", source="feedback_loop")
@@ -835,33 +785,20 @@ class FeedbackLoop:
             logger.info(f"[FEEDBACK] Recorded {outcome} outcome, trust={trust}")
         except Exception as e:
             logger.error(f"[FEEDBACK] Failed: {e}")
-        finally:
-            db.close()
 
     @staticmethod
     def get_relevant_patterns(prompt: str, limit: int = 5) -> list:
-        """Get high-trust patterns relevant to the prompt."""
-        db = _get_db()
-        if not db:
-            return []
+        """Get high-trust patterns via unified memory."""
         try:
-            from sqlalchemy import text
-            rows = db.execute(text("""
-                SELECT input_context, expected_output, actual_output, trust_score, example_type
-                FROM learning_examples
-                WHERE trust_score >= 0.6
-                ORDER BY trust_score DESC, created_at DESC
-                LIMIT :lim
-            """), {"lim": limit}).fetchall()
+            from cognitive.unified_memory import get_unified_memory
+            rows = get_unified_memory().recall_learnings(query=prompt or "", limit=limit, min_trust=0.6)
             return [
-                {"input": r[0][:200] if r[0] else "", "expected": r[1][:200] if r[1] else "",
-                 "actual": r[2][:200] if r[2] else "", "trust": r[3], "type": r[4]}
+                {"input": (r.get("input") or "")[:200], "expected": (r.get("expected") or "")[:200],
+                 "actual": "", "trust": r.get("trust", 0), "type": r.get("type", "")}
                 for r in rows
             ]
         except Exception:
             return []
-        finally:
-            db.close()
 
 
 # ── Helpers ────────────────────────────────────────────────────────────

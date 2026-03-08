@@ -283,46 +283,6 @@ class DocumentRetriever:
                 include_metadata=include_metadata
             )
     
-    def retrieve_and_rank(
-        self,
-        query: str,
-        limit: int = 5,
-        score_threshold: float = 0.3,
-        include_metadata: bool = True,
-        rerank: bool = True,
-    ) -> List[Dict[str, Any]]:
-        """
-        Retrieve chunks and rerank them using a cross-encoder model.
-
-        Args:
-            query: Query text to search for
-            limit: Maximum number of chunks to return
-            score_threshold: Minimum similarity score for initial retrieval
-            include_metadata: Whether to include chunk metadata
-            rerank: Whether to apply reranking (if False, behaves like retrieve)
-
-        Returns:
-            List of relevant chunks, reranked by cross-encoder relevance
-        """
-        candidates = self.retrieve(
-            query=query,
-            limit=limit * 3,
-            score_threshold=score_threshold,
-            include_metadata=include_metadata,
-        )
-
-        if not candidates or not rerank:
-            return candidates[:limit]
-
-        try:
-            from retrieval.reranker import get_reranker
-            reranker = get_reranker()
-            reranked = reranker.rerank(query=query, chunks=candidates, top_k=limit)
-            return reranked
-        except Exception as e:
-            logger.warning(f"Reranking failed, returning unranked results: {e}")
-            return candidates[:limit]
-
     def retrieve_by_document(
         self,
         document_id: int,
@@ -503,52 +463,6 @@ class DocumentRetriever:
         
         return "\n\n".join(context_parts)
     
-    def retrieve_and_rank(
-        self,
-        query: str,
-        limit: int = 5,
-        score_threshold: float = 0.3,
-        include_metadata: bool = True,
-        rerank_top_k: Optional[int] = None,
-    ) -> List[Dict[str, Any]]:
-        """
-        Retrieve chunks and rerank them using the cross-encoder reranker.
-
-        Flow: embed query → Qdrant search (3x limit) → rerank → top-k
-        """
-        try:
-            candidates = self.retrieve(
-                query=query,
-                limit=limit * 3,
-                score_threshold=0,
-                include_metadata=include_metadata,
-            )
-
-            if not candidates:
-                return []
-
-            try:
-                from retrieval.reranker import get_reranker
-                reranker = get_reranker()
-                reranked = reranker.rerank(
-                    query=query,
-                    chunks=candidates,
-                    top_k=rerank_top_k or limit,
-                    score_threshold=score_threshold,
-                )
-                return reranked
-            except Exception as e:
-                logger.warning(f"Reranker unavailable, falling back to base retrieval: {e}")
-                return candidates[:limit]
-
-        except Exception as e:
-            logger.error(f"retrieve_and_rank error: {e}", exc_info=True)
-            return self.retrieve(
-                query=query, limit=limit,
-                score_threshold=score_threshold,
-                include_metadata=include_metadata,
-            )
-
     @staticmethod
     def _get_db_session():
         """Get a database session, initializing if needed."""
@@ -560,10 +474,12 @@ class DocumentRetriever:
     
     def close(self):
         """Clean up resources."""
-        # Note: We don't unload the embedding model here because it's typically
-        # a shared singleton. The model will be unloaded when the process exits
-        # or if explicitly requested via the model instance itself.
-        pass
+        try:
+            emb = getattr(self, 'embedding_model', None)
+            if emb is not None and hasattr(emb, 'unload_model'):
+                emb.unload_model()
+        except Exception as e:
+            logger.warning(f"Error closing retriever: {e}")
     
     def __del__(self):
         """Destructor to ensure cleanup."""

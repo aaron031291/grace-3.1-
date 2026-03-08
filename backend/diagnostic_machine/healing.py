@@ -19,7 +19,7 @@ import logging
 import shutil
 import signal
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Dict, Any, Optional, Callable, List
 from dataclasses import dataclass, field
 from enum import Enum
@@ -40,7 +40,6 @@ class HealingActionType(str, Enum):
     CONNECTION_POOL_RESET = "connection_pool_reset"
     EMBEDDING_MODEL_RELOAD = "embedding_model_reload"
     SESSION_CLEANUP = "session_cleanup"
-    E2E_PIPELINE_HEAL = "e2e_pipeline_heal"
 
 
 class HealingRisk(str, Enum):
@@ -137,11 +136,6 @@ class HealingActionRegistry:
                 risk_level=HealingRisk.MEDIUM,
                 timeout_seconds=120,
             ),
-            HealingActionConfig(
-                action_type=HealingActionType.E2E_PIPELINE_HEAL,
-                risk_level=HealingRisk.MEDIUM,
-                timeout_seconds=180,
-            ),
         ]
 
         for config in defaults:
@@ -228,10 +222,6 @@ class HealingExecutor:
             HealingActionType.EMBEDDING_MODEL_RELOAD,
             self._heal_embedding_model
         )
-        self.registry.register_handler(
-            HealingActionType.E2E_PIPELINE_HEAL,
-            self._heal_e2e_pipeline
-        )
 
     def execute(
         self,
@@ -239,7 +229,7 @@ class HealingExecutor:
         parameters: Dict[str, Any] = None
     ) -> HealingResult:
         """Execute a healing action."""
-        start_time = datetime.now(timezone.utc)
+        start_time = datetime.utcnow()
         parameters = parameters or {}
 
         config = self.registry.get_action(action_type)
@@ -295,7 +285,7 @@ class HealingExecutor:
         result.post_state = self._capture_state(action_type)
 
         # Calculate duration
-        end_time = datetime.now(timezone.utc)
+        end_time = datetime.utcnow()
         result.duration_ms = (end_time - start_time).total_seconds() * 1000
 
         # Log the action
@@ -306,7 +296,7 @@ class HealingExecutor:
     def _capture_state(self, action_type: HealingActionType) -> Dict[str, Any]:
         """Capture relevant state before/after healing."""
         state = {
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.utcnow().isoformat(),
         }
 
         try:
@@ -321,7 +311,7 @@ class HealingExecutor:
     def _log_healing_action(self, result: HealingResult):
         """Log healing action for audit trail."""
         try:
-            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            today = datetime.utcnow().strftime("%Y-%m-%d")
             log_file = self.log_dir / f"healing_{today}.jsonl"
 
             import json
@@ -402,7 +392,7 @@ class HealingExecutor:
 
             # Try retrieval client reset
             try:
-                from vector_db.client import get_qdrant_client
+                from retrieval.qdrant_client import get_qdrant_client
                 client = get_qdrant_client()
                 if client:
                     return HealingResult(
@@ -543,7 +533,7 @@ class HealingExecutor:
                 try:
                     if log_file.stat().st_size > max_size_bytes:
                         # Rotate: rename with timestamp
-                        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+                        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
                         rotated_name = f"{log_file.stem}_{timestamp}{log_file.suffix}"
                         rotated_path = log_file.parent / rotated_name
 
@@ -729,114 +719,6 @@ class HealingExecutor:
                 success=False,
                 message=f"Embedding model reload error: {str(e)}",
             )
-
-
-    def _heal_e2e_pipeline(self, params: Dict) -> HealingResult:
-        """
-        Self-heal based on e2e pipeline validation results.
-        Runs deterministic checks, then applies deterministic fixes for what's broken.
-        """
-        fixes_applied = []
-        try:
-            from core.deterministic_e2e_validator import run_e2e_validation
-            report = run_e2e_validation()
-
-            if report.verdict.value == "pass":
-                return HealingResult(
-                    action_type=HealingActionType.E2E_PIPELINE_HEAL,
-                    success=True,
-                    message="E2E pipeline healthy — no healing needed",
-                    post_state={"verdict": "pass", "checks": report.total_checks},
-                )
-
-            for stage in report.stages:
-                for check in stage.checks:
-                    if check.verdict.value != "fail":
-                        continue
-
-                    fix = self._try_fix_e2e_check(stage.stage, stage.name, check)
-                    if fix:
-                        fixes_applied.append(fix)
-
-            if not fixes_applied:
-                from core.deterministic_bridge import build_deterministic_report, DeterministicAutoFixer
-                bridge = build_deterministic_report()
-                problems = [p for p in bridge.get("problems", []) if p.get("severity") in ("critical", "warning")]
-                if problems:
-                    fixer = DeterministicAutoFixer()
-                    auto_fixes = fixer.auto_fix(problems)
-                    for f in auto_fixes:
-                        fixes_applied.append({"method": "deterministic_auto_fixer", "fix": str(f)[:100]})
-
-            # Re-validate after fixes
-            post_report = run_e2e_validation()
-
-            return HealingResult(
-                action_type=HealingActionType.E2E_PIPELINE_HEAL,
-                success=post_report.total_failed <= report.total_failed and post_report.verdict.value != "fail",
-                message=(
-                    f"E2E heal: {len(fixes_applied)} fixes applied. "
-                    f"Before: {report.total_failed}F/{report.total_warnings}W. "
-                    f"After: {post_report.total_failed}F/{post_report.total_warnings}W."
-                ),
-                pre_state={
-                    "verdict": report.verdict.value,
-                    "failed": report.total_failed,
-                    "warnings": report.total_warnings,
-                },
-                post_state={
-                    "verdict": post_report.verdict.value,
-                    "failed": post_report.total_failed,
-                    "warnings": post_report.total_warnings,
-                    "fixes_applied": fixes_applied,
-                },
-            )
-        except Exception as e:
-            logger.error(f"E2E pipeline heal failed: {e}")
-            return HealingResult(
-                action_type=HealingActionType.E2E_PIPELINE_HEAL,
-                success=False,
-                message=f"E2E pipeline heal error: {e}",
-            )
-
-    def _try_fix_e2e_check(self, stage_num: int, stage_name: str, check) -> Optional[Dict]:
-        """Try to deterministically fix a specific broken e2e check."""
-        name = check.name
-        msg = check.message
-
-        if "DB not initialized" in msg or "Database not initialized" in msg:
-            try:
-                from database.config import DatabaseConfig
-                from database.connection import DatabaseConnection
-                config = DatabaseConfig.from_env()
-                DatabaseConnection.initialize(config)
-                return {"stage": stage_num, "check": name, "method": "db_init", "fixed": True}
-            except Exception:
-                pass
-
-        if "no such table" in msg:
-            try:
-                from database.connection import DatabaseConnection
-                from database.base import BaseModel
-                engine = DatabaseConnection.get_engine()
-                BaseModel.metadata.create_all(engine)
-                return {"stage": stage_num, "check": name, "method": "create_tables", "fixed": True}
-            except Exception:
-                pass
-
-        if "missing_import" in name or "ImportError" in msg:
-            module = ""
-            if "No module named" in msg:
-                module = msg.split("No module named '")[-1].split("'")[0] if "'" in msg else ""
-            if module and module not in ("torch",):
-                try:
-                    import subprocess
-                    subprocess.run(["pip", "install", module], capture_output=True, timeout=30)
-                    return {"stage": stage_num, "check": name, "method": f"pip_install_{module}", "fixed": True}
-                except Exception:
-                    pass
-
-        return None
 
 
 # Global instance

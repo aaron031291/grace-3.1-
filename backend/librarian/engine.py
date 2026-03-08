@@ -139,15 +139,27 @@ class LibrarianEngine:
             except Exception as e:
                 logger.warning(f"[LIBRARIAN] Could not connect to LLM Orchestrator: {e}")
 
-        # Optional AI analyzer (now uses orchestrator or generic client)
+        # Optional AI analyzer: use document-task client (Qwen for parse/read) when no client provided
         self.ai_analyzer = None
         if use_ai:
             try:
+                doc_client = llm_client
+                doc_model = ai_model_name
+                if doc_client is None:
+                    from llm_orchestrator.factory import get_llm_for_task
+                    from llm_orchestrator.ollama_resolver import resolve_ollama_model
+                    from settings import settings
+                    doc_client = get_llm_for_task("document")
+                    doc_model = getattr(doc_client, "_default_model", None) or resolve_ollama_model("document")
+                    if not doc_model and getattr(settings, "LIBRARIAN_AI_MODEL", None):
+                        doc_model = settings.LIBRARIAN_AI_MODEL
+                    doc_model = doc_model or "qwen3:32b"
+                    logger.info("[LIBRARIAN] Using document model for parse/read: %s", doc_model)
                 self.ai_analyzer = AIContentAnalyzer(
                     db_session,
-                    llm_client=llm_client,
+                    llm_client=doc_client,
                     llm_orchestrator=self._llm_orchestrator,  # Preferred
-                    model_name=ai_model_name
+                    model_name=doc_model
                 )
                 if not self.ai_analyzer.is_available():
                     logger.warning("[LIBRARIAN] AI analyzer created but not available")

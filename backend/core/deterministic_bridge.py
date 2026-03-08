@@ -45,6 +45,8 @@ class DeterministicDetector:
             ("db", self._check_database),
             ("tests", self._check_tests),
             ("services", self._check_services),
+            ("learning_memory", self._check_learning_memory),
+            ("genesis_qdrant", self._check_genesis_qdrant),
             ("circular_imports", self._check_circular_imports),
             ("unused_variables", self._check_unused_variables),
             ("config", self._check_config),
@@ -205,6 +207,7 @@ class DeterministicDetector:
             result = subprocess.run(
                 ["python3", "-m", "pytest", "tests/test_grace_system.py", "-v", "--tb=line", "-q"],
                 capture_output=True, text=True, timeout=30,
+                encoding='utf-8', errors='replace',
                 cwd=str(Path(__file__).parent.parent),
             )
             passed = result.stdout.count(" PASSED")
@@ -326,6 +329,68 @@ class DeterministicDetector:
 
         return {"checked": len(services), "problems": problems}
 
+    def _check_learning_memory(self) -> dict:
+        """Check if learning memory is available (Layer4 / neuro-symbolic). Deterministic."""
+        problems = []
+        try:
+            from database.session import session_scope
+            from cognitive.learning_memory import LearningMemoryManager
+            root = Path(__file__).parent.parent
+            kb_path = root / "data" / "knowledge_base"
+            kb_path.mkdir(parents=True, exist_ok=True)
+            with session_scope() as session:
+                mgr = LearningMemoryManager(session, str(kb_path))
+                examples = mgr.get_training_data(limit=1)
+            # OK if we get here
+            return {"available": True, "problems": problems}
+        except Exception as e:
+            problems.append({
+                "type": "learning_memory_unavailable",
+                "message": f"Learning memory unavailable: {str(e)[:120]}. Wire LearningMemoryManager in Layer4 or disable neuro-symbolic.",
+                "severity": "warning",
+                "deterministic": True,
+                "flag_for_human": True,
+            })
+            return {"available": False, "error": str(e)[:100], "problems": problems}
+
+    def _check_genesis_qdrant(self) -> dict:
+        """Check for Genesis/Qdrant upsert failures (e.g. 400). Deterministic via recent logs."""
+        problems = []
+        root = Path(__file__).parent.parent
+        log_file = root / "logs" / "grace.log"
+        if log_file.exists():
+            try:
+                tail = log_file.read_text(errors="ignore").splitlines()[-500:]
+                text = "\n".join(tail).lower()
+                if "400" in text and ("genesis" in text or "qdrant" in text or "points" in text or "bad request" in text):
+                    problems.append({
+                        "type": "genesis_qdrant_400",
+                        "message": "Qdrant upsert (genesis_keys) returns 400 — usually vector size mismatch. Fix: set GENESIS_VECTOR_SIZE to your collection's vector size in backend/.env (see logs for the value), or drop the genesis_keys collection in Qdrant Cloud to let the backend recreate it. To disable: DISABLE_GENESIS_QDRANT_PUSH=1.",
+                        "severity": "warning",
+                        "deterministic": True,
+                        "flag_for_human": True,
+                    })
+            except Exception:
+                pass
+        # Optionally check Qdrant collection exists
+        try:
+            from vector_db.client import get_qdrant_client
+            client = get_qdrant_client()
+            if client:
+                collections = client.get_collections().collections
+                names = [c.name for c in collections]
+                if "genesis_keys" not in names and names:
+                    problems.append({
+                        "type": "genesis_keys_missing",
+                        "message": "Qdrant collection 'genesis_keys' not found. Create it or disable Genesis push.",
+                        "severity": "warning",
+                        "deterministic": True,
+                        "flag_for_human": True,
+                    })
+        except Exception:
+            pass
+        return {"checked": True, "problems": problems}
+
 
 class DeterministicAutoFixer:
     """
@@ -414,6 +479,31 @@ def build_deterministic_report() -> dict:
     return detector.full_scan()
 
 
+# ─── LLM only after 3 failure tries ─────────────────────────────────────
+_LLM_AFTER_TRIES = 3
+_STATE_FILE = Path(__file__).parent.parent / "data" / "deterministic_bridge_state.json"
+
+
+def _load_failure_tries() -> int:
+    """Load persisted failure-try count (0 if missing or invalid)."""
+    try:
+        if _STATE_FILE.exists():
+            data = json.loads(_STATE_FILE.read_text())
+            return int(data.get("failure_tries", 0))
+    except Exception:
+        pass
+    return 0
+
+
+def _save_failure_tries(count: int) -> None:
+    """Persist failure-try count."""
+    try:
+        _STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        _STATE_FILE.write_text(json.dumps({"failure_tries": count, "updated_at": datetime.utcnow().isoformat()}))
+    except Exception as e:
+        logger.debug("Could not save deterministic_bridge_state: %s", e)
+
+
 def deterministic_fix_cycle(task: str = None) -> dict:
     """
     The full deterministic bridge cycle:
@@ -439,6 +529,7 @@ def deterministic_fix_cycle(task: str = None) -> dict:
     }
 
     if not report["problems"] and not task:
+        _save_failure_tries(0)
         result["status"] = "clean"
         return result
 
@@ -469,31 +560,75 @@ def deterministic_fix_cycle(task: str = None) -> dict:
     result["auto_fixes"] = auto_fixes
     result["auto_fixed_count"] = len(auto_fixes)
 
-    # Step 3: Feed remaining problems to LLM
+    # Step 3: Remaining problems after auto-fix
     unfixed = [p for p in report["problems"] if not any(
         f.get("file") == p.get("file") and f.get("type") == p.get("type", "").replace("missing_", "installed_").replace("syntax_error", "added_colon")
         for f in auto_fixes
     )]
 
-    if unfixed:
-        result["remaining_for_llm"] = len(unfixed)
-        result["status"] = "auto_fixed_partial"
-    elif auto_fixes:
-        result["status"] = "auto_fixed_complete"
-    else:
-        result["status"] = "ready_for_llm"
+    # No remaining problems → reset failure count, no LLM
+    if not unfixed:
+        _save_failure_tries(0)
+        if auto_fixes:
+            result["status"] = "auto_fixed_complete"
+        else:
+            result["status"] = "clean"
+        _track_genesis(result, report)
+        return result
 
-    # Track via Genesis
+    result["remaining_for_llm"] = len(unfixed)
+
+    # Increment failure tries and load current count
+    failure_tries = _load_failure_tries() + 1
+    _save_failure_tries(failure_tries)
+    result["failure_try"] = failure_tries
+    result["llm_after_tries"] = _LLM_AFTER_TRIES
+
+    # Call LLM only after 3 failure tries
+    if failure_tries < _LLM_AFTER_TRIES:
+        result["status"] = "deferred_llm"
+        result["message"] = f"LLM will be called after {_LLM_AFTER_TRIES} failure tries (current: {failure_tries})"
+        _track_genesis(result, report)
+        return result
+
+    # Failure tries >= 3: call LLM for fix
+    result["llm_called"] = True
+    try:
+        from llm_orchestrator.factory import get_llm_for_task
+        client = get_llm_for_task("code")
+        llm_fix = client.generate(
+            prompt=fix_prompt,
+            system_prompt="You are a code fixer. Use ONLY the deterministic facts given. Output ONLY the corrected code or minimal patch. No explanation.",
+            temperature=0.2,
+            max_tokens=2048,
+        )
+        result["llm_generated_fix"] = llm_fix[:2000] if isinstance(llm_fix, str) else str(llm_fix)[:2000]
+        result["fix_generated"] = True
+        # Reset after calling LLM so next cycle starts fresh
+        _save_failure_tries(0)
+        result["status"] = "llm_fix_generated"
+        result["message"] = "LLM was called after 3 failure tries; fix generated (apply/verify separately if needed)."
+    except Exception as e:
+        logger.warning("Deterministic bridge LLM call failed: %s", e)
+        result["status"] = "llm_fix_failed"
+        result["llm_error"] = str(e)[:300]
+        result["fix_generated"] = False
+        # Do not reset failure_tries so next run will retry LLM
+
+    _track_genesis(result, report)
+    return result
+
+
+def _track_genesis(result: dict, report: dict) -> None:
+    """Track deterministic scan/fix via Genesis."""
     try:
         from api._genesis_tracker import track
         track(
             key_type="system_event",
             what=f"Deterministic scan: {report['total_problems']} problems found",
             who="deterministic_bridge",
-            output_data={"problems": len(report["problems"]), "checks": report["total_checks"]},
+            output_data={"problems": len(report["problems"]), "checks": report["total_checks"], "status": result.get("status")},
             tags=["deterministic", "bridge", "scan"],
         )
     except Exception:
         pass
-
-    return result

@@ -1,0 +1,126 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Background init started (training, diagnostics, embedding)
+[OK] OLLAMA is running and reachable
+WARNING: Corrupted KB file backed up to: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\knowledge_base\layer_1\genesis_key\system\keys_2026-03-07.json.corrupt.20260307_161004
+[OK] Qdrant is running with 3 collection(s)
+[FILE-WATCHER] Starting file system monitoring...[OK] File watcher started - automatic version tracking enabled
+
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[INGEST] [OK] Got embedding model (singleton)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[AUTO-INGEST] Scan completed with 1181 results
+[AUTO-INGEST] Excluded 1181 files (Genesis/already ingested)
+[OK] Continuous learning activated
+[OK] Diagnostic engine started ù self-healing active (60s heartbeat)
+ERROR: FLAG_FOR_HUMAN: [genesis_qdrant_400] Qdrant upsert (genesis_keys) returns 400 ù usually vector size mismatch. Fix: set GENESIS_VECTOR_SIZE to your collection's vector size in backend/.env (see logs for the value), or drop the genesis_keys collection in Qdrant Cloud to let the backend recreate it. To disable: DISABLE_GENESIS_QDRANT_PUSH
+WARNING: ALERT: Health issues detected: 
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\genesis_key_service.py", line 371, in create_key
+    kb_integration.save_genesis_key_data(extracted_key_data)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'GenesisKBIntegration' object has no attribute 'save_genesis_key_data'. Did you mean: 'save_genesis_key'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\handlers.py", line 80, in emit
+    self.doRollover()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Python314\Lib\logging\handlers.py", line 185, in doRollover
+    self.rotate(self.baseFilename, dfn)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\logging\handlers.py", line 121, in rotate
+    os.rename(source, dest)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\logs\\grace.log' -> 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\logs\\grace.log.1'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1044, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\observers\api.py", line 213, in run
+    self.dispatch_events(self.event_queue)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\observers\api.py", line 391, in dispatch_events
+    handler.dispatch(event)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\events.py", line 217, in dispatch
+    getattr(self, f"on_{event.event_type}")(event)
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\file_watcher.py", line 213, in on_modified
+    self._track_file_change(file_path, "modify")
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\file_watcher.py", line 173, in _track_file_change
+    result = symbiotic.track_file_change(
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\symbiotic_version_control.py", line 81, in track_file_change
+    operation_genesis_key = self.genesis_service.create_key(
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\genesis_key_service.py", line 375, in create_key
+    kb_integration.save_genesis_key(key)
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\kb_integration.py", line 122, in save_genesis_key
+    with file_lock:
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\filelock\_api.py", line 297, in __enter__
+    self.acquire()
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\filelock\_api.py", line 266, in acquire
+    _LOGGER.debug(msg, lock_id, lock_filename, poll_interval)
+Message: 'Lock %s not acquired on %s, waiting %s seconds ...'
+Arguments: (2315038428624, 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-03-07.json.lock', 0.05)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\genesis_key_service.py", line 371, in create_key
+    kb_integration.save_genesis_key_data(extracted_key_data)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'GenesisKBIntegration' object has no attribute 'save_genesis_key_data'. Did you mean: 'save_genesis_key'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\handlers.py", line 80, in emit
+    self.doRollover()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Python314\Lib\logging\handlers.py", line 185, in doRollover
+    self.rotate(self.baseFilename, dfn)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\logging\handlers.py", line 121, in rotate
+    os.rename(source, dest)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\logs\\grace.log' -> 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\logs\\grace.log.1'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1044, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\observers\api.py", line 213, in run
+    self.dispatch_events(self.event_queue)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\observers\api.py", line 391, in dispatch_events
+    handler.dispatch(event)
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\watchdog\events.py", line 217, in dispatch
+    getattr(self, f"on_{event.event_type}")(event)
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\file_watcher.py", line 213, in on_modified
+    self._track_file_change(file_path, "modify")
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\file_watcher.py", line 173, in _track_file_change
+    result = symbiotic.track_file_change(
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\symbiotic_version_control.py", line 81, in track_file_change
+    operation_genesis_key = self.genesis_service.create_key(
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\genesis_key_service.py", line 375, in create_key
+    kb_integration.save_genesis_key(key)
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\genesis\kb_integration.py", line 122, in save_genesis_key
+    with file_lock:
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\filelock\_api.py", line 297, in __enter__
+    self.acquire()
+  File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\filelock\_api.py", line 257, in acquire
+    _LOGGER.debug("Lock %s acquired on %s", lock_id, lock_filename)
+Message: 'Lock %s acquired on %s'
+Arguments: (2315103668656, 'C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-03-07.json.lock')

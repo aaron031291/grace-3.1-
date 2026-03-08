@@ -346,6 +346,45 @@ async def get_document_detail(doc_id: int):
     finally:
         db.close()
 
+class DocumentRenameRequest(BaseModel):
+    filename: str
+
+@router.patch("/document/{doc_id}")
+async def rename_document(doc_id: int, req: DocumentRenameRequest):
+    """Rename a document in the library."""
+    from models.database_models import Document
+    db = _get_db()
+    try:
+        doc = db.query(Document).filter(Document.id == doc_id).first()
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        old_name = doc.filename
+        doc.filename = req.filename
+        
+        # We don't necessarily rename the file on disk instantly to avoid
+        # breaking existing embedding links, but we update the display filename.
+        
+        db.commit()
+        
+        try:
+            from api._genesis_tracker import track
+            track(
+                key_type="file_op", 
+                what=f"Renamed document from {old_name} to {req.filename}", 
+                how="PATCH /api/docs/document", 
+                tags=["rename", "document"]
+            )
+        except Exception:
+            pass
+            
+        return {"renamed": True, "id": doc_id, "new_filename": req.filename}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
+
 
 @router.delete("/document/{doc_id}")
 async def delete_document(doc_id: int, delete_file: bool = False):

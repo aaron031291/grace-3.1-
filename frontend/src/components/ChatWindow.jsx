@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 import VoiceButton from "./VoiceButton";
 import SearchInternetButton from "./SearchInternetButton";
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, API_V2 } from '../config/api';
 
 export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
@@ -227,24 +227,22 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     setLoading(true);
 
     try {
-      // Determine which API endpoint to use
+      // Brain-first: use /api/v2/chat/send (RAG + unified memory) when not in agent mode
       const endpoint = useAgent
         ? `${API_BASE_URL}/api/mcp/chat`
-        : `${API_BASE_URL}/chats/${chatId}/prompt`;
-
+        : API_V2.chat("send");
       const payload = useAgent ? {
         chat_id: chatId,
-        messages: [{ role: "user", content: userMessage }], // Send current message so backend can save/process it
+        messages: [{ role: "user", content: userMessage }],
         use_rag: true,
         use_web: true,
         stream: true,
         model: chatInfo?.model,
         temperature: chatInfo?.temperature || 0.7
       } : {
-        content: userMessage,
-        temperature: chatInfo?.temperature || 0.7,
-        top_p: 0.9,
-        top_k: 40,
+        chat_id: chatId,
+        message: userMessage,
+        use_rag: true,
       };
 
       // Send prompt and get response
@@ -389,10 +387,10 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         finalAssistantMessage = assistantContent;
 
       } else {
-        // Standard JSON response
-        const result = await response.json();
+        // Standard JSON response (brain v2 returns { ok, data }; legacy /chats/{id}/prompt returns flat)
+        const res = await response.json();
+        const result = res?.ok && res?.data ? res.data : res;
 
-        // Add assistant message with sources if available
         const assistantMessage = {
           id: result.assistant_message_id || Date.now() + Math.random(),
           role: "assistant",
@@ -563,7 +561,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                             method: 'POST', headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'positive'}),
                           });
-                        } catch { /* expected */ }
+                        } catch {}
                         msg._feedback = 'up';
                       }} title="Good response" style={{
                         background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,
@@ -575,7 +573,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
                             method: 'POST', headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({prompt: messages[messages.indexOf(msg)-1]?.content || '', output: msg.content, outcome: 'negative'}),
                           });
-                        } catch { /* expected */ }
+                        } catch {}
                         msg._feedback = 'down';
                       }} title="Bad response" style={{
                         background: 'none', border: 'none', cursor: 'pointer', fontSize: 14,

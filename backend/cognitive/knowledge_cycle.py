@@ -178,7 +178,8 @@ class KnowledgeExpansionCycle:
         try:
             from retrieval.retriever import DocumentRetriever
             from embedding.embedder import get_embedding_model
-            retriever = DocumentRetriever(embedding_model=get_embedding_model())
+            from vector_db.client import get_qdrant_client
+            retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
             chunks = retriever.retrieve(query=query[:200], limit=5, score_threshold=0.3)
             return [{"content": c.get("text", ""), "source": "rag",
                       "trust": c.get("score", 0.5) * 100,

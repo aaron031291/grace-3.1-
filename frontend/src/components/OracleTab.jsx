@@ -266,9 +266,9 @@ export default function OracleTab() {
   }, []);
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'training', label: 'Training Data', icon: '🧠' },
-    { id: 'audit', label: 'Audit & Gaps', icon: '🔍' },
+    { id: 'overview', label: 'Overview', icon: '📊', title: 'Oracle dashboard: examples, patterns, procedures, vectors' },
+    { id: 'training', label: 'Training Data', icon: '🧠', title: 'Manage training data and fill gaps' },
+    { id: 'audit', label: 'Audit & Gaps', icon: '🔍', title: 'Trust distribution, audit, and gap analysis' },
   ];
 
   return (
@@ -276,7 +276,7 @@ export default function OracleTab() {
       <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
         <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>🔮 Oracle</span>
         {tabs.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+          <button key={t.id} type="button" title={t.title || t.label} onClick={() => setActiveTab(t.id)} style={{
             padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
             color: activeTab === t.id ? C.accent : C.muted,
             borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',

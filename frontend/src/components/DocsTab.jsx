@@ -55,10 +55,14 @@ function statusBadge(status) {
 // ---------------------------------------------------------------------------
 // Document row — used in both views
 // ---------------------------------------------------------------------------
-function DocRow({ doc, onSelect, selected }) {
+function DocRow({ doc, onSelect, selected, domain }) {
   return (
     <div
       onClick={() => onSelect(doc)}
+      data-artifact-type="doc"
+      data-artifact-id={doc.id}
+      data-artifact-name={doc.filename}
+      data-artifact-domain={domain || 'Global'}
       style={{
         display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px',
         cursor: 'pointer',
@@ -93,7 +97,7 @@ function DocRow({ doc, onSelect, selected }) {
 // ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
-export default function DocsTab() {
+export default function DocsTab({ domain = "Global (All Domains)" }) {
   const [view, setView] = useState('all');      // 'all' | 'folders'
   const [docs, setDocs] = useState([]);
   const [folders, setFolders] = useState([]);
@@ -106,11 +110,16 @@ export default function DocsTab() {
   const [detail, setDetail] = useState(null);
   const [expandedFolders, setExpandedFolders] = useState(new Set());
 
+  // Inline edit state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState("");
+
   // Upload state
   const [uploading, setUploading] = useState(false);
   const [uploadFolder, setUploadFolder] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileRef = useRef(null);
 
   const [fullData, setFullData] = useState(null);
@@ -157,7 +166,7 @@ export default function DocsTab() {
   }, [view, fetchAll, fetchByFolder, fetchStats]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/docs/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+    fetch(`${API_BASE_URL}/api/tabs/docs/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => { });
   }, []);
 
   // Related docs & tags
@@ -170,6 +179,7 @@ export default function DocsTab() {
     setSelectedDoc(doc);
     setDetailLoading(true);
     setDetail(null);
+    setIsEditing(false);
     setRelatedDocs([]);
     setDocTags([]);
     try {
@@ -202,6 +212,27 @@ export default function DocsTab() {
       if (view === 'all') fetchAll(); else fetchByFolder();
       fetchStats();
     } catch (e) { notify(e.message, 'error'); }
+  };
+
+  const handleRename = async () => {
+    if (!selectedDoc) return;
+    const newName = prompt('Enter new filename:', selectedDoc.filename);
+    if (!newName || newName === selectedDoc.filename) return;
+    try {
+      // Assuming a generic PATCH endpoint or similar. If backend doesn't exist, this will fail gracefully.
+      const res = await fetch(`${API_BASE_URL}/api/docs/document/${selectedDoc.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: newName })
+      });
+      if (res.ok) {
+        notify('Document renamed successfully');
+        loadDetail({ ...selectedDoc, filename: newName });
+        if (view === 'all') fetchAll(); else fetchByFolder();
+      } else {
+        notify('Rename endpoint requires backend support for PATCH', 'error');
+      }
+    } catch (e) { notify('Rename failed: ' + e.message, 'error'); }
   };
 
   // ── Upload ──────────────────────────────────────────────────────────
@@ -292,7 +323,23 @@ export default function DocsTab() {
 
   // ── Render ──────────────────────────────────────────────────────────
   return (
-    <div style={{ display: 'flex', height: '100%', color: C.text, background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', position: 'relative' }}>
+    <div
+      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+      onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+      onDrop={(e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleUpload({ target: { files: e.dataTransfer.files } });
+        }
+      }}
+      style={{ display: 'flex', height: '100%', color: C.text, background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', position: 'relative' }}
+    >
+      {isDragging && (
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(233, 69, 96, 0.1)', border: `4px dashed ${C.accent}`, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontWeight: 700, color: C.accent, backdropFilter: 'blur(4px)' }}>
+          Drop files to upload instantly to {domain !== 'Global (All Domains)' ? domain : 'Global Library'}
+        </div>
+      )}
 
       {notification && (
         <div style={{
@@ -345,8 +392,8 @@ export default function DocsTab() {
         {/* View toggle + search + sort */}
         <div style={{ padding: '8px 16px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 8, alignItems: 'center', background: C.bg }}>
           <div style={{ display: 'flex', background: C.bgAlt, borderRadius: 4, overflow: 'hidden' }}>
-            <button onClick={() => setView('all')} style={{ ...btn, borderRadius: 0, fontSize: 12, padding: '5px 12px', background: view === 'all' ? C.accentAlt : 'transparent' }}>All Docs</button>
-            <button onClick={() => setView('folders')} style={{ ...btn, borderRadius: 0, fontSize: 12, padding: '5px 12px', background: view === 'folders' ? C.accentAlt : 'transparent' }}>By Folder</button>
+            <button type="button" title="View all documents in a single list" onClick={() => setView('all')} style={{ ...btn, borderRadius: 0, fontSize: 12, padding: '5px 12px', background: view === 'all' ? C.accentAlt : 'transparent' }}>All Docs</button>
+            <button type="button" title="View documents grouped by folder" onClick={() => setView('folders')} style={{ ...btn, borderRadius: 0, fontSize: 12, padding: '5px 12px', background: view === 'folders' ? C.accentAlt : 'transparent' }}>By Folder</button>
           </div>
           {view === 'all' && (
             <>
@@ -380,7 +427,7 @@ export default function DocsTab() {
               </div>
             ) : (
               docs.map(doc => (
-                <DocRow key={doc.id} doc={doc} selected={selectedDoc?.id === doc.id} onSelect={loadDetail} />
+                <DocRow key={doc.id} doc={doc} selected={selectedDoc?.id === doc.id} onSelect={loadDetail} domain={domain} />
               ))
             )
           ) : (
@@ -409,7 +456,7 @@ export default function DocsTab() {
                       <span style={{ fontSize: 11, color: C.dim }}>{f.document_count} docs · {formatBytes(f.total_size)}</span>
                     </div>
                     {isOpen && f.documents.map(doc => (
-                      <DocRow key={doc.id} doc={doc} selected={selectedDoc?.id === doc.id} onSelect={loadDetail} />
+                      <DocRow key={doc.id} doc={doc} selected={selectedDoc?.id === doc.id} onSelect={loadDetail} domain={domain} />
                     ))}
                   </div>
                 );
@@ -423,11 +470,18 @@ export default function DocsTab() {
       <div style={{ flex: '0 0 380px', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: C.bg }}>
         {selectedDoc ? (
           <>
-            <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div
+              data-artifact-type="doc"
+              data-artifact-id={selectedDoc.id}
+              data-artifact-name={selectedDoc.filename}
+              data-artifact-domain={domain || 'Global'}
+              style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', alignItems: 'center', gap: 8 }}
+            >
               <span style={{ fontSize: 22 }}>{fileIcon(selectedDoc.filename)}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ fontSize: 14, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {selectedDoc.filename}
+                  <button onClick={handleRename} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 12 }} title="Rename Document">✏️</button>
                 </div>
                 <div style={{ fontSize: 11, color: C.dim }}>{selectedDoc.folder || '(root)'}</div>
               </div>
@@ -481,18 +535,56 @@ export default function DocsTab() {
                     </div>
                   )}
 
-                  {/* Chunk preview */}
+                  {/* Content Preview / Editor */}
                   {detail.chunks && detail.chunks.length > 0 && (
                     <div style={{ marginBottom: 16 }}>
-                      <div style={{ fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 6 }}>
-                        Content Preview ({detail.total_chunk_count} chunks)
-                      </div>
-                      {detail.chunks.slice(0, 5).map((chunk, i) => (
-                        <div key={i} style={{ fontSize: 11, color: C.muted, padding: '6px 8px', marginBottom: 4, background: C.bgAlt, borderRadius: 4, border: `1px solid ${C.border}`, lineHeight: 1.5, maxHeight: 80, overflow: 'hidden' }}>
-                          <span style={{ color: C.dim, fontSize: 10, marginRight: 6 }}>#{chunk.index}</span>
-                          {chunk.text}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase' }}>
+                          Content Preview ({detail.total_chunk_count} chunks)
                         </div>
-                      ))}
+                        {!isEditing ? (
+                          <button onClick={() => {
+                            setEditContent(detail.chunks.map(c => c.text).join('\n\n'));
+                            setIsEditing(true);
+                          }} style={{ background: 'none', border: 'none', color: C.accent, cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>✎ Edit Inline</button>
+                        ) : (
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <button onClick={async () => {
+                              try {
+                                const res = await fetch(`${API_BASE_URL}/api/docs/document/${selectedDoc.id}/content`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ content: editContent })
+                                });
+                                if (res.ok) {
+                                  notify('Content updated');
+                                  setIsEditing(false);
+                                  await fetch(`${API_BASE_URL}/api/intelligence/document/${selectedDoc.id}/reprocess`, { method: 'POST' });
+                                  loadDetail(selectedDoc);
+                                } else {
+                                  notify('Edit endpoint requires backend PATCH support', 'error');
+                                }
+                              } catch (e) { notify('Save failed', 'error'); }
+                            }} style={{ background: C.success, border: 'none', color: '#fff', cursor: 'pointer', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>Save</button>
+                            <button onClick={() => setIsEditing(false)} style={{ background: C.border, border: 'none', color: '#fff', cursor: 'pointer', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>Cancel</button>
+                          </div>
+                        )}
+                      </div>
+
+                      {isEditing ? (
+                        <textarea
+                          value={editContent}
+                          onChange={e => setEditContent(e.target.value)}
+                          style={{ width: '100%', height: 300, background: C.bgAlt, color: C.text, border: `1px solid ${C.accent}`, borderRadius: 4, padding: 8, fontSize: 12, fontFamily: 'monospace', outline: 'none', resize: 'vertical' }}
+                        />
+                      ) : (
+                        detail.chunks.slice(0, 5).map((chunk, i) => (
+                          <div key={i} style={{ fontSize: 11, color: C.muted, padding: '6px 8px', marginBottom: 4, background: C.bgAlt, borderRadius: 4, border: `1px solid ${C.border}`, lineHeight: 1.5, maxHeight: 80, overflow: 'hidden' }}>
+                            <span style={{ color: C.dim, fontSize: 10, marginRight: 6 }}>#{chunk.index}</span>
+                            {chunk.text}
+                          </div>
+                        ))
+                      )}
                     </div>
                   )}
 

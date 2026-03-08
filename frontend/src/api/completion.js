@@ -5,7 +5,8 @@
  * Shows ghost text that can be accepted with Tab.
  */
 
-const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+import { API_BASE_URL } from "../config/api";
+const BASE = API_BASE_URL;
 
 /**
  * Get inline code completion.
@@ -56,12 +57,12 @@ export async function streamCompletion(codeBefore, language, onToken, onDone) {
           try {
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
-          } catch { /* expected */ }
+          } catch {}
         }
       }
     }
     onDone?.();
-  } catch { /* expected */ }
+  } catch {}
 }
 
 export default { getCompletion, streamCompletion };

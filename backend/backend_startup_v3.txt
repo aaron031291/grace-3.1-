@@ -1,0 +1,798 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Background init started (training, diagnostics, embedding)
+[OK] Execution registry initialized
+[OK] OLLAMA is running and reachable
+[OK] Startup diagnostic: HEALTHY
+[OK] Qdrant is running with 3 collection(s)
+[FILE-WATCHER] Starting file system monitoring...[OK] File watcher started - automatic version tracking enabled
+
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[OK] Embedding model loaded[INGEST] [OK] Got embedding model (singleton)
+
+[OK] NLP pipeline ready (voice/intent)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[OK] Continuous learning activated
+[AUTO-INGEST] Scan completed with 1203 results
+[AUTO-INGEST] Excluded 1203 files (Genesis/already ingested)
+[OK] Diagnostic engine started ÔÇö self-healing active (60s heartbeat)
+[OK] Autonomous loop started (first cycle in 5s, then 30s: heal->learn->verify->composite)
+[OK] Auto-probe registered (triggers on code changes)
+WARNING: ALERT: Health issues detected: 
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InvalidTextRepresentation) invalid input value for enum genesiskeytype: "error"
+LINE 1: DELETE FROM genesis_key WHERE key_type = 'error' AND when_ti...
+                                                 ^
+
+[SQL: DELETE FROM genesis_key WHERE key_type = %(kt)s AND when_timestamp < %(cutoff)s]
+[parameters: {'kt': 'error', 'cutoff': '2026-02-05T18:57:26.645191'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+WARNING: [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.predicted_outcome does not exist
+LINE 1: ...des_action, episodes.outcome AS episodes_outcome, episodes.p...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "predicted_outcome" of relation "episodes" does not exist
+LINE 1: INSERT INTO episodes (problem, action, outcome, predicted_ou...
+                                                        ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[service_down] ', 'action': '{"type": "heal", "target": "qdrant"}', 'outcome': '{"ok": true, "data": {"scan": {"total": 4, "critical": 0, "warning": 4, "triggers": [{"category": "RESOURCE", "name": "elevated_cpu", "severity": "wa ... (669 characters truncated) ...  "healed": false, "timestamp": "2026-03-07T18:57:31.981479"}], "scanned_at": "2026-03-07T18:57:31.992179"}, "healing": {"healed": 0, "actions": []}}}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909688', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 18, 57, 33, 899118), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 907981), 'updated_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 907983)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "predicted_outcome" of relation "episodes" does not exist
+LINE 1: INSERT INTO episodes (problem, action, outcome, predicted_ou...
+                                                        ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\async_parallel.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909688', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 18, 57, 33, 921094), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 924190), 'updated_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 924193)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "predicted_outcome" of relation "episodes" does not exist
+LINE 1: INSERT INTO episodes (problem, action, outcome, predicted_ou...
+                                                        ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909688', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 18, 57, 33, 934094), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 944928), 'updated_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 944930)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "predicted_outcome" of relation "episodes" does not exist
+LINE 1: INSERT INTO episodes (problem, action, outcome, predicted_ou...
+                                                        ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909688', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 18, 57, 33, 982067), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 986053), 'updated_at': datetime.datetime(2026, 3, 7, 18, 57, 33, 986055)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "predicted_outcome" of relation "episodes" does not exist
+LINE 1: INSERT INTO episodes (problem, action, outcome, predicted_ou...
+                                                        ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\base_component.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909688', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 18, 57, 34, 953), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 18, 57, 34, 11097), 'updated_at': datetime.datetime(2026, 3, 7, 18, 57, 34, 11099)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+WARNING: [GENESIS ALERT] error_burst: Error burst: 10 errors in 300s
+WARNING: ALERT: Health issues detected: 
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InvalidTextRepresentation) invalid input value for enum genesiskeytype: "error"
+LINE 1: DELETE FROM genesis_key WHERE key_type = 'error' AND when_ti...
+                                                 ^
+
+[SQL: DELETE FROM genesis_key WHERE key_type = %(kt)s AND when_timestamp < %(cutoff)s]
+[parameters: {'kt': 'error', 'cutoff': '2026-02-05T19:00:30.020890'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.genesis_key_id does not exist
+LINE 1: ..._trust_score, episodes.source AS episodes_source, episodes.g...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "genesis_key_id" of relation "episodes" does not exist
+LINE 1: ...d_outcome, prediction_error, trust_score, source, genesis_ke...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[service_down] ', 'action': '{"type": "heal", "target": "qdrant"}', 'outcome': '{"ok": true, "data": {"scan": {"total": 4, "critical": 0, "warning": 4, "triggers": [{"category": "RESOURCE", "name": "elevated_cpu", "severity": "wa ... (669 characters truncated) ...  "healed": false, "timestamp": "2026-03-07T19:00:34.921959"}], "scanned_at": "2026-03-07T19:00:34.936351"}, "healing": {"healed": 0, "actions": []}}}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909914', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 0, 36, 591977), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 592834), 'updated_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 592837)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "genesis_key_id" of relation "episodes" does not exist
+LINE 1: ...d_outcome, prediction_error, trust_score, source, genesis_ke...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\async_parallel.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909914', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 0, 36, 593725), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 594128), 'updated_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 594131)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "genesis_key_id" of relation "episodes" does not exist
+LINE 1: ...d_outcome, prediction_error, trust_score, source, genesis_ke...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909914', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 0, 36, 594801), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 595074), 'updated_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 595076)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "genesis_key_id" of relation "episodes" does not exist
+LINE 1: ...d_outcome, prediction_error, trust_score, source, genesis_ke...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909914', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 0, 36, 595734), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 596064), 'updated_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 596067)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "genesis_key_id" of relation "episodes" does not exist
+LINE 1: ...d_outcome, prediction_error, trust_score, source, genesis_ke...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\base_component.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772909914', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 0, 36, 596698), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 597025), 'updated_at': datetime.datetime(2026, 3, 7, 19, 0, 36, 597028)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+WARNING: ALERT: Health issues detected: 
+WARNING: ALERT: Health issues detected: 
+WARNING: [LAYER4] OODA Decide failed: Cannot decide in phase OODAPhase.COMPLETED. Must complete OBSERVE and ORIENT first.
+WARNING: ALERT: Health issues detected: 
+WARNING: [LAYER4] OODA Act failed: Cannot act in phase OODAPhase.COMPLETED. Must complete OBSERVE, ORIENT, and DECIDE first.
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InvalidTextRepresentation) invalid input value for enum genesiskeytype: "learning_complete"
+LINE 1: DELETE FROM genesis_key WHERE key_type = 'learning_complete'...
+                                                 ^
+
+[SQL: DELETE FROM genesis_key WHERE key_type = %(kt)s AND when_timestamp < %(cutoff)s]
+[parameters: {'kt': 'learning_complete', 'cutoff': '2025-12-07T19:02:21.857695'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[service_down] ', 'action': '{"type": "heal", "target": "qdrant"}', 'outcome': '{"ok": true, "data": {"scan": {"total": 4, "critical": 1, "warning": 3, "triggers": [{"category": "RESOURCE", "name": "high_cpu", "severity": "critic ... (774 characters truncated) ... "healing": {"healed": 2, "actions": [{"action": "diagnostic_cycle", "result": "ran"}, {"action": "gc_collect", "trigger": "high_cpu", "ok": true}]}}}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910096', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 2, 27, 147983), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 148470), 'updated_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 148472)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\async_parallel.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910096', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 2, 27, 149164), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 149552), 'updated_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 149555)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910096', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 2, 27, 150292), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 150606), 'updated_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 150609)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910096', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 2, 27, 151278), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 151521), 'updated_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 151523)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\base_component.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910096', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 2, 27, 152118), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 152462), 'updated_at': datetime.datetime(2026, 3, 7, 19, 2, 27, 152465)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+WARNING: ALERT: Health issues detected: 
+WARNING: ALERT: Health issues detected: 
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InvalidTextRepresentation) invalid input value for enum genesiskeytype: "learning_complete"
+LINE 1: DELETE FROM genesis_key WHERE key_type = 'learning_complete'...
+                                                 ^
+
+[SQL: DELETE FROM genesis_key WHERE key_type = %(kt)s AND when_timestamp < %(cutoff)s]
+[parameters: {'kt': 'learning_complete', 'cutoff': '2025-12-07T19:03:51.679211'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[service_down] ', 'action': '{"type": "heal", "target": "qdrant"}', 'outcome': '{"ok": true, "data": {"scan": {"total": 4, "critical": 1, "warning": 3, "triggers": [{"category": "RESOURCE", "name": "high_cpu", "severity": "critic ... (774 characters truncated) ... "healing": {"healed": 2, "actions": [{"action": "diagnostic_cycle", "result": "ran"}, {"action": "gc_collect", "trigger": "high_cpu", "ok": true}]}}}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910192', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 3, 59, 533649), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 535184), 'updated_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 535187)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\async_parallel.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910192', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 3, 59, 542582), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 545120), 'updated_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 545123)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910192', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 3, 59, 559132), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 559529), 'updated_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 559532)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910192', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 3, 59, 565933), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 567210), 'updated_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 567212)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\base_component.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910192', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 3, 59, 618234), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 642697), 'updated_at': datetime.datetime(2026, 3, 7, 19, 3, 59, 642701)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+WARNING: ALERT: Health issues detected: 
+WARNING: ALERT: Health issues detected: 
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 500}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InvalidTextRepresentation) invalid input value for enum genesiskeytype: "learning_complete"
+LINE 1: DELETE FROM genesis_key WHERE key_type = 'learning_complete'...
+                                                 ^
+
+[SQL: DELETE FROM genesis_key WHERE key_type = %(kt)s AND when_timestamp < %(cutoff)s]
+[parameters: {'kt': 'learning_complete', 'cutoff': '2025-12-07T19:05:31.875033'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+WARNING: [EPISODIC] Semantic recall failed, using fallback: (psycopg2.errors.UndefinedColumn) column episodes.timestamp does not exist
+LINE 1: ...id, episodes.decision_id AS episodes_decision_id, episodes.t...
+                                                             ^
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s AND episodes.embedding IS NOT NULL ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 9}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT episodes.problem AS episodes_problem, episodes.action AS episodes_action, episodes.outcome AS episodes_outcome, episodes.predicted_outcome AS episodes_predicted_outcome, episodes.prediction_error AS episodes_prediction_error, episodes.trust_score AS episodes_trust_score, episodes.source AS episodes_source, episodes.genesis_key_id AS episodes_genesis_key_id, episodes.decision_id AS episodes_decision_id, episodes.timestamp AS episodes_timestamp, episodes.embedding AS episodes_embedding, episodes.episode_metadata AS episodes_episode_metadata, episodes.id AS episodes_id, episodes.created_at AS episodes_created_at, episodes.updated_at AS episodes_updated_at 
+FROM episodes 
+WHERE episodes.trust_score >= %(trust_score_1)s ORDER BY episodes.timestamp DESC 
+ LIMIT %(param_1)s]
+[parameters: {'trust_score_1': 0.6, 'param_1': 6}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[service_down] ', 'action': '{"type": "heal", "target": "qdrant"}', 'outcome': '{"ok": true, "data": {"scan": {"total": 4, "critical": 0, "warning": 4, "triggers": [{"category": "RESOURCE", "name": "elevated_cpu", "severity": "wa ... (669 characters truncated) ...  "healed": false, "timestamp": "2026-03-07T19:05:36.289370"}], "scanned_at": "2026-03-07T19:05:36.289698"}, "healing": {"healed": 0, "actions": []}}}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910293', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 5, 38, 54325), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 56927), 'updated_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 56931)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\async_parallel.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910293', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 5, 38, 60699), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 67367), 'updated_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 67371)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910293', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 5, 38, 68431), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 68772), 'updated_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 68775)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\auto_router.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910293', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 5, 38, 69503), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 69821), 'updated_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 69823)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR: Database session_scope error: (psycopg2.errors.UndefinedColumn) column "timestamp" of relation "episodes" does not exist
+LINE 1: ...trust_score, source, genesis_key_id, decision_id, timestamp,...
+                                                             ^
+
+[SQL: INSERT INTO episodes (problem, action, outcome, predicted_outcome, prediction_error, trust_score, source, genesis_key_id, decision_id, timestamp, embedding, episode_metadata, created_at, updated_at) VALUES (%(problem)s, %(action)s, %(outcome)s, %(predicted_outcome)s, %(prediction_error)s, %(trust_score)s, %(source)s, %(genesis_key_id)s, %(decision_id)s, %(timestamp)s, %(embedding)s, %(episode_metadata)s, %(created_at)s, %(updated_at)s) RETURNING episodes.id]
+[parameters: {'problem': '[unused_variable] ', 'action': '{"type": "escalate", "target": "core\\\\base_component.py"}', 'outcome': '{"queued": "human_review", "reason": "[unused_variable] "}', 'predicted_outcome': '{"success": true}', 'prediction_error': 1.0, 'trust_score': 0.7, 'source': 'ouroboros_loop', 'genesis_key_id': 'AUTO-1772910293', 'decision_id': None, 'timestamp': datetime.datetime(2026, 3, 7, 19, 5, 38, 93064), 'embedding': None, 'episode_metadata': None, 'created_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 94602), 'updated_at': datetime.datetime(2026, 3, 7, 19, 5, 38, 94604)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)

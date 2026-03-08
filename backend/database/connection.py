@@ -19,7 +19,7 @@ from .config import DatabaseConfig, DatabaseType
 
 logger = logging.getLogger(__name__)
 
-SQLITE_BUSY_TIMEOUT_MS = 30_000
+SQLITE_BUSY_TIMEOUT_MS = 60_000  # 60s for Genesis Key and concurrent writes
 SQLITE_CONNECT_TIMEOUT_S = 60
 
 
@@ -48,12 +48,6 @@ class DatabaseConnection:
             DatabaseConnection: Singleton instance
         """
         instance = cls()
-        # If we are using :memory: database, don't re-initialize if engine already exists
-        # as it would destroy the in-memory data.
-        if instance._engine and config.database_path == ":memory:":
-            logger.info("Preserving existing :memory: database engine")
-            return instance
-            
         instance._config = config
         instance._engine = instance._create_engine(config)
         return instance
@@ -133,26 +127,6 @@ class DatabaseConnection:
                 f"busy_timeout={SQLITE_BUSY_TIMEOUT_MS}ms, "
                 f"connect_timeout={SQLITE_CONNECT_TIMEOUT_S}s"
             )
-        elif config.db_type == DatabaseType.POSTGRESQL:
-            connect_args = {
-                "options": "-c statement_timeout=30000",
-            }
-            engine = create_engine(
-                connection_string,
-                poolclass=QueuePool,
-                pool_size=config.pool_size,
-                max_overflow=config.max_overflow,
-                pool_pre_ping=config.pool_pre_ping,
-                pool_recycle=getattr(config, 'pool_recycle', 3600),
-                pool_timeout=30,
-                connect_args=connect_args,
-                isolation_level="READ COMMITTED",
-                echo=config.echo,
-            )
-            logger.info(
-                f"PostgreSQL engine configured: pool_size={config.pool_size}, "
-                f"max_overflow={config.max_overflow}, statement_timeout=30s"
-            )
         else:
             engine = create_engine(
                 connection_string,
@@ -164,8 +138,7 @@ class DatabaseConnection:
                 echo=config.echo,
             )
         
-        safe_url = connection_string.split("@")[-1] if "@" in connection_string else connection_string
-        logger.info(f"Database engine created successfully: {safe_url}")
+        logger.info(f"Database engine created successfully: {config.get_connection_string()}")
         return engine
     
     @classmethod

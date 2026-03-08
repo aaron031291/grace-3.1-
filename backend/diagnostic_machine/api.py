@@ -12,7 +12,7 @@ Provides REST API for:
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import Dict, List, Any, Optional
-from datetime import datetime, timezone
+from datetime import datetime
 import logging
 
 from .diagnostic_engine import (
@@ -23,7 +23,6 @@ from .diagnostic_engine import (
     TriggerSource,
     EngineState,
 )
-from settings import settings
 from .sensors import SensorLayer
 from .interpreters import InterpreterLayer
 from .judgement import JudgementLayer
@@ -105,7 +104,7 @@ def get_engine() -> DiagnosticEngine:
     if _engine is None:
         _engine = get_diagnostic_engine(
             heartbeat_interval=60,
-            enable_heartbeat=not getattr(settings, "DISABLE_AUTONOMOUS_LOOP", False),
+            enable_heartbeat=True,
             enable_cicd=True,
             enable_healing=True,
             enable_forensics=True,
@@ -355,8 +354,8 @@ async def get_full_diagnostic_report():
 
         # Build comprehensive report
         report = {
-            "report_id": f"REPORT-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "report_id": f"REPORT-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}",
+            "generated_at": datetime.utcnow().isoformat(),
             "cycle_id": cycle.cycle_id,
             "success": cycle.success,
         }

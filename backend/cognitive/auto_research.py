@@ -21,7 +21,7 @@ import logging
 import time
 from typing import Dict, Any, List, Optional
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -227,7 +227,8 @@ class AutoResearchEngine:
         try:
             from retrieval.retriever import DocumentRetriever
             from embedding.embedder import get_embedding_model
-            retriever = DocumentRetriever(embedding_model=get_embedding_model())
+            from vector_db.client import get_qdrant_client
+            retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
             chunks = retriever.retrieve(query=query, limit=3, score_threshold=0.4)
             if chunks:
                 return "\n\n".join(c.get("text", "")[:500] for c in chunks)

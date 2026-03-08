@@ -82,7 +82,7 @@ function WorldModelPanel({ onClose }) {
   }, [fetchSystemState]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/chat/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+    fetch(`${API_BASE_URL}/api/tabs/chat/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ function WorldModelPanel({ onClose }) {
     setGraceSending(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/ask-grace/query`, {
+      const response = await fetch(`${API_BASE_URL}/api/world-model/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, include_system_state: true }),
@@ -455,13 +455,14 @@ function WorldModelPanel({ onClose }) {
   );
 }
 
-export default function ChatTab() {
+export default function ChatTab({ domain = "Global (All Domains)" }) {
   const [chats, setChats] = useState([]);
   const [selectedChatId, setSelectedChatId] = useState(null);
-  const [selectedFolder, setSelectedFolder] = useState("");
+  const [selectedFolder, setSelectedFolder] = useState(domain !== "Global (All Domains)" ? domain : "");
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
   const [chatMode, setChatMode] = useState("general"); // general, consensus
+  const [useKimi, setUseKimi] = useState(false);
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
 
@@ -474,17 +475,29 @@ export default function ChatTab() {
   });
   const [availableModels, setAvailableModels] = useState([]);
   const [consensusMode, setConsensusMode] = useState(false);
+  const [consensusResult, setConsensusResult] = useState(null);
+  const [consensusRunning, setConsensusRunning] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/docs/by-folder`)
       .then(r => r.ok ? r.json() : { folders: [] })
       .then(d => setAvailableFolders((d.folders || []).map(f => f.folder)))
-      .catch(() => {});
+      .catch(() => { });
     fetch(`${API_BASE_URL}/api/consensus/models`)
       .then(r => r.ok ? r.json() : { models: [] })
       .then(d => setAvailableModels(d.models || []))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
+
+  useEffect(() => {
+    if (domain !== "Global (All Domains)") {
+      setFolderContext(domain);
+      setSelectedFolder(domain);
+    } else {
+      setFolderContext("");
+      setSelectedFolder("");
+    }
+  }, [domain]);
 
   useEffect(() => {
     fetchChats();
@@ -576,7 +589,7 @@ export default function ChatTab() {
             {[
               { id: "opus", label: "Opus", icon: "🧠", color: "#9c27b0" },
               { id: "kimi", label: "Kimi", icon: "🌙", color: "#e94560" },
-              { id: "qwen", label: "Qwen 3", icon: "⚡", color: "#2196f3" },
+              { id: "qwen", label: "Qwen", icon: "⚡", color: "#2196f3" },
               { id: "reasoning", label: "Reason", icon: "🔮", color: "#ff9800" },
             ].map(m => {
               const isOn = modelToggles[m.id];
@@ -590,6 +603,7 @@ export default function ChatTab() {
                     setModelToggles(newToggles);
                     const activeCount = Object.values(newToggles).filter(Boolean).length;
                     setConsensusMode(activeCount >= 2);
+                    if (m.id === "kimi") setUseKimi(!isOn);
                   }}
                   disabled={!isAvail}
                   title={`${m.label}${modelInfo ? ` — ${modelInfo.strengths?.join(", ")}` : ""}${!isAvail ? " (not configured)" : ""}`}
@@ -631,10 +645,10 @@ export default function ChatTab() {
           {/* Chat mode selector */}
           <div style={{ display: "flex", gap: 2, background: "#111", borderRadius: 6, padding: 2 }}>
             {[
-              { id: "general", label: "💬 Chat", },
-              { id: "consensus", label: "🤝 Consensus" },
+              { id: "general", label: "💬 Chat", title: "Single-model chat" },
+              { id: "consensus", label: "🤝 Consensus", title: "Multi-model consensus roundtable" },
             ].map(m => (
-              <button key={m.id} onClick={() => setChatMode(m.id)} style={{
+              <button key={m.id} type="button" title={m.title || m.label} onClick={() => setChatMode(m.id)} style={{
                 padding: "4px 10px", border: "none", borderRadius: 4, cursor: "pointer",
                 fontSize: 11, fontWeight: chatMode === m.id ? 700 : 500,
                 background: chatMode === m.id ? "#e94560" : "transparent",
@@ -643,32 +657,47 @@ export default function ChatTab() {
             ))}
           </div>
 
-          {/* Folder context selector */}
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 12, color: "#888" }}>📁</span>
-            <select
-              value={folderContext}
-              onChange={e => setFolderContext(e.target.value)}
-              style={{
-                padding: "4px 8px", fontSize: 12, background: "#1a1a2e",
-                color: folderContext ? "#e94560" : "#888",
-                border: "1px solid #333", borderRadius: 4, outline: "none",
-                maxWidth: 160,
-              }}
-            >
-              <option value="">All folders</option>
-              {availableFolders.map(f => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
-            {folderContext && (
-              <span
-                onClick={() => setFolderContext("")}
-                style={{ cursor: "pointer", fontSize: 14, color: "#888" }}
-                title="Clear folder context"
-              >✕</span>
-            )}
-          </div>
+          {/* Domain vs Global Indicator */}
+          {domain === 'Global (All Domains)' ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#111', padding: '4px 10px', borderRadius: 4 }} title="Global Chat can interact with all domains and general LLM context">
+              <span style={{ fontSize: 16 }}>🌍</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#aaa' }}>Global Chat</span>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#1a1a2e', padding: '4px 10px', borderRadius: 4, border: '1px solid #e94560' }} title="Scoped Chat is RAG-aware and restricted to this domain">
+              <span style={{ fontSize: 16 }}>🎯</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#e94560' }}>Scoped Chat: {domain}</span>
+            </div>
+          )}
+
+          {/* Folder context selector (only for Global when no domain is forced) */}
+          {domain === 'Global (All Domains)' && (
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontSize: 12, color: "#888" }}>📁</span>
+              <select
+                value={folderContext}
+                onChange={e => setFolderContext(e.target.value)}
+                style={{
+                  padding: "4px 8px", fontSize: 12, background: "#1a1a2e",
+                  color: folderContext ? "#e94560" : "#888",
+                  border: "1px solid #333", borderRadius: 4, outline: "none",
+                  maxWidth: 160,
+                }}
+              >
+                <option value="">All folders</option>
+                {availableFolders.map(f => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+              {folderContext && (
+                <span
+                  onClick={() => setFolderContext("")}
+                  style={{ cursor: "pointer", fontSize: 14, color: "#888" }}
+                  title="Clear folder context"
+                >✕</span>
+              )}
+            </div>
+          )}
         </div>
         <button
           onClick={() => setShowWorldModel(!showWorldModel)}

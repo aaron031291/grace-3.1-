@@ -515,7 +515,7 @@ class TestVoiceAPIIntegration:
     def test_full_nlp_pipeline(self, manager):
         """Test complete NLP processing pipeline"""
         # Input with filler words, entities, and clear intent
-        text = "um, like, can you help me open the file test.py at https://github.com"
+        text = "um, like, can you help me open the file test.py at https://example.com"
 
         result = manager.preprocess_text_nlp(text)
 

@@ -23,6 +23,7 @@
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Run Grace natively](#run-grace-natively)
   - [Local Development Setup](#local-development-setup)
   - [Docker Deployment](#docker-deployment)
   - [Kubernetes Deployment](#kubernetes-deployment)
@@ -138,7 +139,7 @@
 |-----------|-----------|
 | **Containerization** | Docker (multi-stage builds) |
 | **Orchestration** | Docker Compose, Kubernetes |
-| **CI/CD** | GitHub Actions |
+| **CI/CD** | Genesis CI (native) |
 | **Monitoring** | Prometheus metrics, Grafana dashboards |
 | **Caching** | Redis (optional) |
 | **IDE Extension** | Grace OS VSCode Extension (TypeScript) |
@@ -485,6 +486,14 @@ grace-3.1-/
 | **Docker** (optional) | Latest | Containerized deployment |
 | **Git** | Latest | Version control |
 
+### Run Grace natively
+
+Grace runs natively via local scripts and Genesis CI/CD. No GitHub or external CI required.
+
+- **Run the app:** One command runs everything: **`start.bat`** (no args) or **`start_grace.bat`** — starts Qdrant (if Docker), then backend (GPU venv) + frontend. See [Start scripts](docs/START_SCRIPTS.md).
+- **Pull latest:** If you have an upstream remote, `git pull upstream main` (or `origin main`). See [Pull the latest GRACE](docs/START_SCRIPTS.md#pull-the-latest-grace).
+- **CI/CD:** Use Genesis CI/CD only: pipelines `grace-ci`, `grace-quick`, and `grace-deploy` via `/api/cicd/trigger`. See [Genesis CI/CD docs](knowledge_base/cicd_pipelines/README.md).
+
 ### Local Development Setup
 
 #### 1. Clone the Repository
@@ -547,10 +556,16 @@ npm run dev
 | **Qdrant Dashboard** | http://localhost:6333/dashboard |
 
 #### Quick Start (Windows)
-```bash
-start.bat           # Starts both backend + frontend
-start.bat backend   # Backend only
-start.bat frontend  # Frontend only
+```powershell
+# PowerShell: use .\ (required for scripts in current folder)
+.\start.bat           # One command: Qdrant + backend + frontend
+.\start.bat backend   # Backend only
+.\start.bat frontend # Frontend only
+```
+```cmd
+REM CMD: from project folder (no args = everything)
+start.bat
+start.bat backend
 ```
 
 #### Quick Start (Linux/Mac)
@@ -559,6 +574,10 @@ start.bat frontend  # Frontend only
 ./start.sh backend   # Backend only
 ./start.sh frontend  # Frontend only
 ```
+
+#### Check logs (last 200 lines) and GPU
+- **Logs:** From project root, `backend\logs\grace.log` (or `backend/logs/grace.log` on Mac/Linux). In PowerShell: `Get-Content backend\logs\grace.log -Tail 200`
+- **GPU / embedding:** With backend running, open **http://localhost:8000/api/runtime/connectivity** and check `services.embedding.using_gpu` and `cuda_available`. If `false`, use Python 3.12 and run `.\setup_gpu.bat` then restart the backend.
 
 ### Docker Deployment
 

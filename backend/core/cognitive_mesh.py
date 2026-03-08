@@ -139,8 +139,9 @@ class CognitiveMesh:
             return None
         result = _safe(_run)
         if not result and options:
-            import random
-            return {"selected": random.choice(options), "method": "random_fallback"}
+            from core.determinism import deterministic_choice
+            seed = str(context or "") + "|".join(str(o) for o in options)
+            return {"selected": deterministic_choice(options, seed), "method": "deterministic_fallback"}
         return result or {"selected": options[0] if options else None, "method": "default"}
 
     # ── Meta-Learning ─────────────────────────────────────────

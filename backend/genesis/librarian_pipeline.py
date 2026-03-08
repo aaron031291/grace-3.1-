@@ -615,7 +615,7 @@ class LibrarianPipeline:
         """Index content for search/retrieval."""
         try:
             # Try to use the embedder if available
-            from embedding import get_embedder
+            from genesis.embedder import get_embedder
 
             embedder = get_embedder()
 
@@ -661,7 +661,7 @@ class LibrarianPipeline:
     ) -> Optional[str]:
         """Store in learning memory system."""
         try:
-            from cognitive.learning_memory import LearningMemoryManager as get_memory_manager
+            from learning_memory_api import get_memory_manager
 
             memory_manager = get_memory_manager()
 

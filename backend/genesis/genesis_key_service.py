@@ -1,10 +1,11 @@
 """
 Genesis Key Service - Comprehensive tracking and version control system.
 
-Automatically tracks every input, change, and action with full metadata
-for what, where, when, why, who, and how.
+Genesis keys are deterministic (hash-based) and never model-generated.
+Key IDs: GK- from (key_type, what, who, where, why, how, timestamp, input_hash, parent_key_id);
+GU- from identifier hash; FS- from genesis_key_id + suggestion content.
 """
-import uuid
+import asyncio
 import json
 import hashlib
 import logging
@@ -12,12 +13,13 @@ from datetime import datetime
 from typing import Optional, Dict, Any, List
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from models.genesis_key_models import (
     GenesisKey, FixSuggestion, GenesisKeyArchive, UserProfile,
     GenesisKeyType, GenesisKeyStatus, FixSuggestionStatus
 )
-from database.session import get_session
+from database.session import get_session, get_session_factory
 from version_control.git_service import GitService
 from genesis.kb_integration import get_kb_integration
 import os
@@ -51,13 +53,9 @@ class GenesisKeyService:
         Returns:
             Unique user ID
         """
-        if identifier:
-            # Generate deterministic ID from identifier
-            hash_obj = hashlib.sha256(identifier.encode())
-            return f"GU-{hash_obj.hexdigest()[:16]}"
-        else:
-            # Generate random ID
-            return f"GU-{uuid.uuid4().hex[:16]}"
+        # Always deterministic: hash of identifier or fallback seed (no random, no model)
+        seed = (identifier or "").strip() or "anonymous"
+        return f"GU-{hashlib.sha256(seed.encode()).hexdigest()[:16]}"
 
     def get_or_create_user(
         self,
@@ -164,8 +162,18 @@ class GenesisKeyService:
         Returns:
             Created Genesis Key
         """
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        if session is not None:
+            sess = session
+            close_session = False
+        elif self.session is not None:
+            sess = self.session
+            close_session = False
+        else:
+            try:
+                sess = get_session_factory()()
+            except RuntimeError:
+                sess = next(get_session())
+            close_session = True
 
         try:
             # CRITICAL: Clean up session state before new operations
@@ -178,14 +186,17 @@ class GenesisKeyService:
             except Exception as cleanup_error:
                 logger.warning(f"[GENESIS] Session cleanup warning: {cleanup_error}")
             
-            # Generate key ID
-            key_id = f"GK-{uuid.uuid4().hex}"
+            # Key ID is always deterministic (hash of content). Genesis keys are never model-generated.
+            when_ts = datetime.utcnow().isoformat()
+            input_hash = self._hash_data(input_data) if input_data else ""
+            payload = f"{key_type.value}|{what_description}|{who_actor}|{where_location or ''}|{why_reason or ''}|{how_method or ''}|{when_ts}|{input_hash}|{parent_key_id or ''}"
+            key_id = "GK-" + hashlib.sha256(payload.encode()).hexdigest()[:32]
 
 
             # Get current commit info if available
             commit_sha = None
             branch_name = None
-            if self.git_service:
+            if self.git_service and key_type != GenesisKeyType.API_REQUEST:
                 try:
                     commits = self.git_service.get_commits(limit=1)
                     if commits:
@@ -218,24 +229,23 @@ class GenesisKeyService:
 
             # Create Genesis Key
             def _sqlite_json_safe(val):
-                """Ensure value is JSON-serializable for SQLite JSON columns."""
+                """Ensure value is JSON-serializable for SQLite JSON columns. Recursively replaces
+                coroutines and other non-serializable values so insert never fails."""
                 if val is None:
                     return None
-                if isinstance(val, (list, tuple)):
-                    try:
-                        json.dumps(val, default=str)
-                        return val
-                    except (TypeError, ValueError):
-                        return [str(v) for v in val]
+                if asyncio.iscoroutine(val):
+                    return "<coroutine not awaited>"
                 if isinstance(val, dict):
-                    try:
-                        json.dumps(val, default=str)
-                        return val
-                    except (TypeError, ValueError):
-                        return {str(k): str(v) for k, v in val.items()}
-                if isinstance(val, str):
+                    return {str(k): _sqlite_json_safe(v) for k, v in val.items()}
+                if isinstance(val, (list, tuple)):
+                    return [_sqlite_json_safe(v) for v in val]
+                if isinstance(val, (str, int, float, bool)):
                     return val
-                return str(val)
+                try:
+                    json.dumps(val, default=str)
+                    return val
+                except (TypeError, ValueError):
+                    return str(val)
 
             key = GenesisKey(
                 key_id=key_id,
@@ -270,19 +280,44 @@ class GenesisKeyService:
             )
 
             sess.add(key)
-            
-            # CRITICAL: Always flush to ensure key_id is accessible
-            # This prevents DetachedInstanceError when caller accesses key.key_id
-            try:
-                sess.flush()
-            except Exception as e:
-                # If identity map conflict, attempt to merge instead
-                if "Identity map already had an identity" in str(e):
-                    key = sess.merge(key)
+
+            # Retry on SQLite "database is locked" / busy (up to 3 attempts)
+            last_err = None
+            for attempt in range(3):
+                try:
                     sess.flush()
-                else:
+                    break
+                except OperationalError as e:
+                    last_err = e
+                    if "locked" in str(e).lower() or "busy" in str(e).lower() or "timeout" in str(e).lower():
+                        if attempt < 2:
+                            import time
+                            time.sleep(0.3 * (attempt + 1))
+                            sess.rollback()
+                            sess.add(key)
+                            continue
                     raise
-            
+                except IntegrityError as e:
+                    # Duplicate key_id (deterministic hash collision or double-create)
+                    sess.rollback()
+                    existing = sess.query(GenesisKey).filter(GenesisKey.key_id == key_id).first()
+                    if existing:
+                        key = existing
+                        if close_session:
+                            sess.commit()
+                        return key
+                    raise
+                except Exception as e:
+                    if "Identity map already had an identity" in str(e):
+                        sess.rollback()
+                        key = sess.merge(key)
+                        sess.flush()
+                        break
+                    raise
+            else:
+                if last_err:
+                    raise last_err
+
             # CRITICAL: Extract all key data IMMEDIATELY after flush
             # This prevents DetachedInstanceError if session is rolled back later
             extracted_key_id = key.key_id
@@ -319,26 +354,29 @@ class GenesisKeyService:
                 except Exception:
                     pass
 
-            # Update user statistics if user_id provided
+            # Update user statistics if user_id provided (non-fatal)
             if user_id:
-                self._update_user_stats(user_id, key_type, is_error, sess)
+                try:
+                    self._update_user_stats(user_id, key_type, is_error, sess)
+                except Exception as us_err:
+                    logger.debug("Genesis user stats update skipped: %s", us_err)
 
             # Post-creation hooks - use extracted data to prevent DetachedInstanceError
             # These hooks should NEVER cause the main Genesis Key creation to fail
             
             # Hook 1: Auto-populate to knowledge base
             try:
+                import threading
                 kb_integration = get_kb_integration()
-                # Use extracted data instead of object to avoid session issues
-                kb_integration.save_genesis_key_data(extracted_key_data)
-            except AttributeError:
-                # Fallback: try old method if new method doesn't exist
-                try:
-                    kb_integration.save_genesis_key(key)
-                except Exception as kb_error:
-                    logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
+                _kb_data = dict(extracted_key_data)
+                def _save_kb():
+                    try:
+                        kb_integration.save_genesis_key(_kb_data)
+                    except Exception:
+                        pass
+                threading.Thread(target=_save_kb, daemon=True).start()
             except Exception as kb_error:
-                logger.warning(f"Failed to save Genesis Key to KB: {kb_error}")
+                logger.warning("Failed to launch KB save thread: %s", kb_error)
 
             # Hook 2: Feed into Memory Mesh for learning
             # ONLY feed meaningful events — not system noise.
@@ -502,7 +540,7 @@ class GenesisKeyService:
 
         try:
             suggestion = FixSuggestion(
-                suggestion_id=f"FS-{uuid.uuid4().hex[:16]}",
+                suggestion_id=f"FS-{hashlib.sha256((genesis_key_id + suggestion_type + (title or '') + (description or '')).encode()).hexdigest()[:16]}",
                 genesis_key_id=genesis_key_id,
                 suggestion_type=suggestion_type,
                 title=title,
@@ -723,3 +761,7 @@ def get_genesis_service(session: Optional[Session] = None) -> GenesisKeyService:
     """Get a Genesis Key service instance."""
     # Never use global singleton for session-dependent services in multi-threaded environments
     return GenesisKeyService(session=session)
+
+
+# Alias for code that imports get_genesis_key_service (e.g. MAGMA layer_integrations)
+get_genesis_key_service = get_genesis_service

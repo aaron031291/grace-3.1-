@@ -268,12 +268,10 @@ def get_librarian_pipeline():
 def get_learning_memory():
     """Get Learning Memory."""
     try:
-        from cognitive.learning_memory import LearningMemoryManager
+        from cognitive.learning_memory import LearningMemory
         from database.session import get_session
-        from settings import settings
         session = next(get_session())
-        kb_path = getattr(settings, 'KNOWLEDGE_BASE_PATH', 'knowledge_base')
-        return LearningMemoryManager(session, kb_path)
+        return LearningMemory(session)
     except Exception as e:
         logger.debug(f"[WL-Pipeline] Learning Memory not available: {e}")
         return None
@@ -282,8 +280,8 @@ def get_learning_memory():
 def get_ml_intelligence():
     """Get ML Intelligence system."""
     try:
-        from ml_intelligence.integration_orchestrator import get_ml_orchestrator
-        return get_ml_orchestrator()
+        from llm_orchestrator.ml_intelligence import get_ml_intelligence
+        return get_ml_intelligence()
     except Exception as e:
         logger.debug(f"[WL-Pipeline] ML Intelligence not available: {e}")
         return None

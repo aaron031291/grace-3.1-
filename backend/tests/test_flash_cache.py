@@ -1,7 +1,6 @@
 """
 Tests for the FlashCache — reference-based intelligent caching layer.
 """
-import pytest; pytest.importorskip("api.flash_cache_api", reason="api.flash_cache_api removed — consolidated into Brain API")
 
 import os
 import sys
@@ -286,8 +285,8 @@ class TestIntegrationWithWhitelist:
         cache._db_path = None
         cache._lru = {}
         cache._keyword_index = {}
-        kw = cache.extract_keywords("GitHub REST API v3 for repository management")
-        assert "github" in kw
+        kw = cache.extract_keywords("Git REST API v3 for repository management")
+        assert "git" in kw
         assert "api" in kw or "rest" in kw
 
 

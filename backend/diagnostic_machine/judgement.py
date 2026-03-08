@@ -176,11 +176,13 @@ class JudgementLayer:
 
     # Weights for health score calculation
     HEALTH_WEIGHTS = {
-        'tests': 0.25,
-        'services': 0.25,
-        'resources': 0.20,
-        'cognitive': 0.15,
-        'governance': 0.15,
+        'tests': 0.22,
+        'services': 0.22,
+        'resources': 0.18,
+        'cognitive': 0.14,
+        'governance': 0.14,
+        'learning_memory': 0.05,
+        'genesis_qdrant': 0.05,
     }
 
     def __init__(
@@ -274,6 +276,17 @@ class JudgementLayer:
             critical.append('services')
         elif service_score < 0.75:
             degraded.append('services')
+
+        # Learning memory and Genesis/Qdrant (so self-healing can flag/heal)
+        if sensor_data.metrics:
+            lm_health = getattr(sensor_data.metrics, 'learning_memory_health', True)
+            gq_health = getattr(sensor_data.metrics, 'genesis_qdrant_health', True)
+            component_scores['learning_memory'] = 1.0 if lm_health else 0.0
+            component_scores['genesis_qdrant'] = 1.0 if gq_health else 0.0
+            if not lm_health:
+                degraded.append('learning_memory')
+            if not gq_health:
+                degraded.append('genesis_qdrant')
 
         # Resource health
         resource_score = 1.0

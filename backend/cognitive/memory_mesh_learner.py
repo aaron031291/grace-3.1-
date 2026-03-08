@@ -58,23 +58,45 @@ class MemoryMeshLearner:
         gaps = []
 
         try:
-            # Query learning examples with high theoretical but low practical confidence
-            gap_examples = self.session.query(LearningExample).filter(
-                and_(
-                    LearningExample.metadata['data_confidence'].astext.cast(float) >= min_data_confidence,
-                    LearningExample.metadata['operational_confidence'].astext.cast(float) <= max_operational_confidence
-                )
-            ).limit(20).all()
+            # Query learning examples; filter in Python (example_metadata is Text, not SA MetaData)
+            import json
+            all_examples = self.session.query(LearningExample).limit(200).all()
+            gap_examples = []
+            for example in all_examples:
+                meta = {}
+                if getattr(example, 'example_metadata', None):
+                    try:
+                        meta = json.loads(example.example_metadata) if isinstance(example.example_metadata, str) else (example.example_metadata or {})
+                    except Exception:
+                        pass
+                dc = float(meta.get('data_confidence', 0))
+                oc = float(meta.get('operational_confidence', 1))
+                if dc >= min_data_confidence and oc <= max_operational_confidence:
+                    gap_examples.append(example)
+                if len(gap_examples) >= 20:
+                    break
 
             for example in gap_examples:
-                topic = example.input_context.get('topic', 'Unknown')
-                metadata = example.metadata or {}
-
+                ctx = example.input_context if isinstance(example.input_context, dict) else {}
+                if isinstance(example.input_context, str):
+                    try:
+                        ctx = json.loads(example.input_context)
+                    except Exception:
+                        ctx = {}
+                topic = ctx.get('topic', 'Unknown')
+                meta = {}
+                if getattr(example, 'example_metadata', None):
+                    try:
+                        meta = json.loads(example.example_metadata) if isinstance(example.example_metadata, str) else (example.example_metadata or {})
+                    except Exception:
+                        pass
+                dc = float(meta.get('data_confidence', 0))
+                oc = float(meta.get('operational_confidence', 0))
                 gaps.append({
                     "topic": topic,
-                    "data_confidence": metadata.get('data_confidence', 0.0),
-                    "operational_confidence": metadata.get('operational_confidence', 0.0),
-                    "gap_size": metadata.get('data_confidence', 0.0) - metadata.get('operational_confidence', 0.0),
+                    "data_confidence": dc,
+                    "operational_confidence": oc,
+                    "gap_size": dc - oc,
                     "recommendation": "practice",
                     "reason": f"Grace knows '{topic}' theoretically but needs hands-on practice",
                     "learning_example_id": example.id
@@ -86,8 +108,7 @@ class MemoryMeshLearner:
             logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(gaps)} knowledge gaps")
 
         except Exception as e:
-            # Suppress error logs for now as this feature is experimental
-            logger.debug(f"Error identifying knowledge gaps: {e}")
+            logger.error("[MEMORY-MESH-LEARNER] FAILED identifying knowledge gaps (fix LearningExample/example_metadata): %s", e, exc_info=True)
 
         return gaps
 
@@ -113,30 +134,37 @@ class MemoryMeshLearner:
         high_value_topics = []
 
         try:
-            # Group by topic and find high-trust, frequently occurring topics
-            topic_stats = self.session.query(
-                LearningExample.input_context['topic'].astext.label('topic'),
-                func.count(LearningExample.id).label('count'),
-                func.avg(LearningExample.trust_score).label('avg_trust')
-            ).group_by(
-                LearningExample.input_context['topic'].astext
-            ).having(
-                and_(
-                    func.count(LearningExample.id) >= min_occurrences,
-                    func.avg(LearningExample.trust_score) >= min_trust_score
-                )
-            ).all()
-
-            for topic, count, avg_trust in topic_stats:
-                if topic:
-                    high_value_topics.append({
-                        "topic": topic,
-                        "occurrences": count,
-                        "avg_trust_score": float(avg_trust),
-                        "recommendation": "reinforce",
-                        "reason": f"High-value topic (trust={avg_trust:.2f}) that appears {count} times",
-                        "priority": int(count * avg_trust)  # Priority = frequency * trust
-                    })
+            # Fetch examples and group by topic in Python (input_context is Text, not JSON column)
+            import json
+            examples = self.session.query(LearningExample).filter(
+                LearningExample.trust_score >= min_trust_score
+            ).limit(500).all()
+            topic_counts = {}
+            topic_trust_sum = {}
+            for ex in examples:
+                ctx = ex.input_context if isinstance(ex.input_context, dict) else {}
+                if isinstance(ex.input_context, str):
+                    try:
+                        ctx = json.loads(ex.input_context)
+                    except Exception:
+                        ctx = {}
+                topic = (ctx.get('topic') or '').strip()
+                if not topic:
+                    continue
+                topic_counts[topic] = topic_counts.get(topic, 0) + 1
+                topic_trust_sum[topic] = topic_trust_sum.get(topic, 0) + (ex.trust_score or 0)
+            for topic, count in topic_counts.items():
+                if count >= min_occurrences:
+                    avg_trust = topic_trust_sum[topic] / count
+                    if avg_trust >= min_trust_score:
+                        high_value_topics.append({
+                            "topic": topic,
+                            "occurrences": count,
+                            "avg_trust_score": float(avg_trust),
+                            "recommendation": "reinforce",
+                            "reason": f"High-value topic (trust={avg_trust:.2f}) that appears {count} times",
+                            "priority": int(count * avg_trust)
+                        })
 
             # Sort by priority
             high_value_topics.sort(key=lambda x: x['priority'], reverse=True)
@@ -144,7 +172,7 @@ class MemoryMeshLearner:
             logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(high_value_topics)} high-value topics")
 
         except Exception as e:
-            logger.debug(f"Error identifying high-value topics: {e}")
+            logger.error("[MEMORY-MESH-LEARNER] FAILED identifying high-value topics: %s", e, exc_info=True)
 
         return high_value_topics
 
@@ -158,45 +186,43 @@ class MemoryMeshLearner:
     ) -> List[Dict[str, Any]]:
         """
         Identify topics that frequently appear together.
-
-        When Grace learns topic A, she should also learn related topic B.
-
-        Returns topic pairs that should be studied together.
         """
         clusters = []
 
         try:
-            # Get all topics from learning examples
-            all_examples = self.session.query(LearningExample).limit(500).all()
+            import json
 
-            # Group by source file to find co-occurring topics
+            def _parse(val):
+                if isinstance(val, dict): return val
+                if isinstance(val, str):
+                    try: return json.loads(val)
+                    except Exception: return {}
+                return {}
+
+            all_examples = self.session.query(LearningExample).limit(500).all()
             file_topics: Dict[str, List[str]] = {}
 
             for example in all_examples:
-                file_path = example.metadata.get('file_path', 'unknown')
-                topic = example.input_context.get('topic', 'Unknown')
+                meta = _parse(getattr(example, 'example_metadata', None) or getattr(example, 'metadata', None))
+                ctx = _parse(example.input_context)
+                file_path = meta.get('file_path', 'unknown')
+                topic = ctx.get('topic', '').strip() or 'Unknown'
 
                 if file_path not in file_topics:
                     file_topics[file_path] = []
-
                 if topic not in file_topics[file_path]:
                     file_topics[file_path].append(topic)
 
-            # Find topic pairs that co-occur frequently
-            topic_pairs: Dict[Tuple[str, str], int] = {}
-
+            topic_pairs: Dict[tuple, int] = {}
             for topics in file_topics.values():
-                # For each pair of topics in the same file
                 for i, topic1 in enumerate(topics):
                     for topic2 in topics[i+1:]:
                         pair = tuple(sorted([topic1, topic2]))
                         topic_pairs[pair] = topic_pairs.get(pair, 0) + 1
 
-            # Filter by minimum correlation
-            total_files = len(file_topics)
+            total_files = max(len(file_topics), 1)
             for (topic1, topic2), count in topic_pairs.items():
                 correlation = count / total_files
-
                 if correlation >= min_correlation:
                     clusters.append({
                         "topic1": topic1,
@@ -207,15 +233,14 @@ class MemoryMeshLearner:
                         "reason": f"Topics '{topic1}' and '{topic2}' appear together {count} times (correlation={correlation:.2f})"
                     })
 
-            # Sort by correlation
             clusters.sort(key=lambda x: x['correlation'], reverse=True)
-
-            logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(clusters)} topic clusters")
+            logger.info("[MEMORY-MESH-LEARNER] Identified %d topic clusters", len(clusters))
 
         except Exception as e:
-            logger.debug(f"Error identifying topic clusters: {e}")
+            logger.debug("Error identifying topic clusters: %s", e)
 
         return clusters
+
 
     # ======================================================================
     # FAILURE PATTERN ANALYSIS
@@ -224,17 +249,19 @@ class MemoryMeshLearner:
     def analyze_failure_patterns(self) -> List[Dict[str, Any]]:
         """
         Analyze failures to identify what needs re-study.
-
-        Looks for:
-        - Topics with low validation counts
-        - Recently failed practice attempts
-        - Inconsistent knowledge (contradictions)
-
-        Returns topics Grace should re-study.
         """
         failure_patterns = []
 
         try:
+            import json
+
+            def _parse(val):
+                if isinstance(val, dict): return val
+                if isinstance(val, str):
+                    try: return json.loads(val)
+                    except Exception: return {}
+                return {}
+
             # Find examples with low or negative validation
             failing_examples = self.session.query(LearningExample).filter(
                 or_(
@@ -244,8 +271,9 @@ class MemoryMeshLearner:
             ).limit(20).all()
 
             for example in failing_examples:
-                topic = example.input_context.get('topic', 'Unknown')
-                metadata = example.metadata or {}
+                ctx = _parse(example.input_context)
+                topic = ctx.get('topic', 'Unknown')
+                metadata = _parse(getattr(example, 'example_metadata', None) or getattr(example, 'metadata', None))
 
                 failure_patterns.append({
                     "topic": topic,
@@ -258,12 +286,13 @@ class MemoryMeshLearner:
                     "urgency": "high" if example.times_invalidated > 2 else "medium"
                 })
 
-            logger.info(f"[MEMORY-MESH-LEARNER] Identified {len(failure_patterns)} failure patterns")
+            logger.info("[MEMORY-MESH-LEARNER] Identified %d failure patterns", len(failure_patterns))
 
         except Exception as e:
-            logger.error(f"Error analyzing failure patterns: {e}")
+            logger.error("[MEMORY-MESH-LEARNER] Error analyzing failure patterns: %s", e)
 
         return failure_patterns
+
 
     # ======================================================================
     # COMPREHENSIVE LEARNING SUGGESTIONS

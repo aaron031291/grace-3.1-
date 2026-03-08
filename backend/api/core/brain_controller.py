@@ -39,9 +39,14 @@ async def brain_dispatch(domain: str, action: str, request: Request):
         body = {}
 
     from api.brain_api_v2 import call_brain
+    from core.resilience import ErrorBoundary
 
     start = time.time()
-    result = call_brain(domain, action, body)
+    result = None
+    with ErrorBoundary("brain.dispatch", fallback={"ok": False, "error": "Request failed"}):
+        result = call_brain(domain, action, body)
+    if result is None:
+        result = {"ok": False, "error": "Request failed"}
     latency = round((time.time() - start) * 1000, 1)
 
     if not result.get("ok"):

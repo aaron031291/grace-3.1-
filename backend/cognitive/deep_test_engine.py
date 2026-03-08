@@ -17,22 +17,13 @@ import logging
 import os
 import time
 import threading
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 RESULTS_DIR = Path(__file__).parent.parent / "data" / "test_results"
-_DISCUSSION_DIR = Path(__file__).parent.parent / "data" / "governance_discussions"
-
-
-def _save_discussion(did: str, discussion: dict):
-    _DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
-    import json as _json
-    (_DISCUSSION_DIR / f"{did}.json").write_text(
-        _json.dumps(discussion, indent=2, default=str)
-    )
 
 
 class DeepTestEngine:
@@ -108,7 +99,7 @@ class DeepTestEngine:
         results["duration_ms"] = round((time.time() - start) * 1000, 1)
         results["pass_rate"] = round(results["passed"] / max(results["total"], 1) * 100, 1)
         results["status"] = "ALL PASS" if results["failed"] == 0 and results["errors"] == 0 else f"{results['failed']+results['errors']} FAILURES"
-        results["timestamp"] = datetime.now(timezone.utc).isoformat()
+        results["timestamp"] = datetime.utcnow().isoformat()
 
         # Log failures to diagnostics
         if results["failed"] > 0 or results["errors"] > 0:
@@ -275,7 +266,7 @@ class DeepTestEngine:
         analysis["escalated_to_governance"] = True
 
         try:
-            from core.services.govern_service import _ensure
+            from api.governance_discussion_api import _save_discussion, _ensure
             import uuid
 
             _ensure()
@@ -293,12 +284,12 @@ class DeepTestEngine:
                 "request_type": "test_fix_escalation",
                 "severity": "high",
                 "status": "open",
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.utcnow().isoformat(),
                 "messages": [
                     {
                         "role": "system",
                         "content": f"Auto-escalated: {analysis['attempts']} fix attempts failed. Diagnosis: {analysis['diagnosis'][:500]}",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "timestamp": datetime.utcnow().isoformat(),
                     }
                 ],
                 "decision": None,
@@ -339,7 +330,7 @@ class DeepTestEngine:
         try:
             playbook_dir = Path(__file__).parent.parent / "data" / "test_playbook"
             playbook_dir.mkdir(parents=True, exist_ok=True)
-            ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+            ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
             outcome = "fixed" if analysis.get("fix_succeeded") else "escalated" if analysis.get("escalated_to_governance") else "failed"
             (playbook_dir / f"{outcome}_{ts}.json").write_text(json.dumps({
                 "failures": [{"name": t["name"], "detail": t["detail"]} for t in failed_tests],
@@ -348,7 +339,7 @@ class DeepTestEngine:
                 "attempts": analysis.get("attempts", 0),
                 "fix_succeeded": analysis.get("fix_succeeded", False),
                 "escalated": analysis.get("escalated_to_governance", False),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.utcnow().isoformat(),
             }, indent=2, default=str))
 
             # Store as learning
@@ -380,7 +371,7 @@ class DeepTestEngine:
                 cycle_start = time.time()
 
                 # Run a subset of logic tests each cycle
-                mini_result = {"cycle": cycle, "timestamp": datetime.now(timezone.utc).isoformat(), "checks": []}
+                mini_result = {"cycle": cycle, "timestamp": datetime.utcnow().isoformat(), "checks": []}
 
                 checks = [
                     ("flash_cache", self._test_flash_cache_logic),
@@ -664,7 +655,7 @@ class DeepTestEngine:
 
     def _save_results(self, test_type: str, results: Dict):
         RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
         (RESULTS_DIR / f"{test_type}_{ts}.json").write_text(json.dumps(results, indent=2, default=str))
 
 

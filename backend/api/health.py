@@ -7,7 +7,7 @@ Health checks for all GRACE services and components.
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Optional, List
-from datetime import datetime, timezone
+from datetime import datetime
 import asyncio
 import logging
 
@@ -36,20 +36,23 @@ class SystemHealth(BaseModel):
 
 
 # Track startup time
-_startup_time = datetime.now(timezone.utc)
+_startup_time = datetime.utcnow()
 
 
 async def check_llm() -> ServiceHealth:
-    """Check LLM service health."""
+    """Check LLM service health. Uses circuit breaker to avoid thundering herd when LLM is down."""
     import time
     start = time.time()
     try:
         from llm_orchestrator.factory import get_llm_client
         from settings import settings
+        from core.resilience import get_breaker
         client = get_llm_client()
         provider = (settings.LLM_PROVIDER if settings else "llm").lower()
 
-        if client.is_running():
+        cb = get_breaker("llm", failure_threshold=3, reset_timeout=60)
+        is_running = cb.call(lambda: client.is_running(), fallback=False)
+        if is_running:
             models = client.get_all_models()
             latency = (time.time() - start) * 1000
             return ServiceHealth(
@@ -217,11 +220,11 @@ async def check_disk() -> ServiceHealth:
         )
 
 
-@router.get("", response_model=SystemHealth)
-@router.get("/", response_model=SystemHealth)
+@router.get("/full", response_model=SystemHealth)
 async def comprehensive_health_check():
     """
     Comprehensive health check for all GRACE services.
+    Use GET /health for the simple status/llm_running response expected by the frontend.
 
     Returns status of:
     - Ollama LLM service
@@ -273,11 +276,11 @@ async def comprehensive_health_check():
         overall_status = "healthy"
 
     # Calculate uptime
-    uptime = (datetime.now(timezone.utc) - _startup_time).total_seconds()
+    uptime = (datetime.utcnow() - _startup_time).total_seconds()
 
     return SystemHealth(
         status=overall_status,
-        timestamp=datetime.now(timezone.utc).isoformat(),
+        timestamp=datetime.utcnow().isoformat(),
         uptime_seconds=round(uptime, 2),
         services=services,
         summary=summary
@@ -310,4 +313,4 @@ async def liveness_check():
     Kubernetes-style liveness probe.
     Returns 200 if service is alive (basic check).
     """
-    return {"status": "alive", "timestamp": datetime.now(timezone.utc).isoformat()}
+    return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}

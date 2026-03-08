@@ -16,7 +16,7 @@ from layer1.message_bus import (
     MessageType,
     get_message_bus,
 )
-from layer1.message_bus import AutonomousAction
+from layer1.autonomous_actions import AutonomousAction
 
 # Import KPI tracker
 try:

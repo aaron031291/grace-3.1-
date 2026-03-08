@@ -1,8 +1,8 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import "./App.css";
-import { healthCheck, brainCall } from "./api/brain-client";
+import { healthCheck, brainCall, brainDirectory } from "./api/brain-client";
 
-// Lazy-loaded page components (only loaded when the tab is opened)
+// Lazy-load tab content to speed up initial load (H1)
 const ChatTab = lazy(() => import("./components/ChatTab"));
 const FoldersTab = lazy(() => import("./components/FoldersTab"));
 const DocsTab = lazy(() => import("./components/DocsTab"));
@@ -11,51 +11,113 @@ const CodebaseTab = lazy(() => import("./components/CodebaseTab"));
 const TasksTab = lazy(() => import("./components/TasksTab"));
 const DevTab = lazy(() => import("./components/DevTab"));
 const WhitelistTab = lazy(() => import("./components/WhitelistTab"));
+const SandboxTab = lazy(() => import("./components/SandboxTab"));
 const OracleTab = lazy(() => import("./components/OracleTab"));
 const BusinessIntelligenceTab = lazy(() => import("./components/BusinessIntelligenceTab"));
 const SystemHealthTab = lazy(() => import("./components/SystemHealthTab"));
 const LearningHealingTab = lazy(() => import("./components/LearningHealingTab"));
 const LabTab = lazy(() => import("./components/LabTab"));
 const APIsTab = lazy(() => import("./components/APIsTab"));
-const PersistentVoicePanel = lazy(() => import("./components/PersistentVoicePanel"));
-const ActivityFeed = lazy(() => import("./components/ActivityFeed"));
+const AskTab = lazy(() => import("./components/AskTab"));
+const ArchitectTab = lazy(() => import("./components/ArchitectTab"));
+const KPIDashboard = lazy(() => import("./components/KPIDashboard"));
+import PersistentVoicePanel from "./components/PersistentVoicePanel";
+import ActivityFeed from "./components/ActivityFeed";
+import ContextMenu from "./components/ContextMenu";
+import GenesisTimeline from "./components/GenesisTimeline";
 
-function TabLoader() {
-  return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%",color:"#888"}}>Loading...</div>;
-}
-
-// Sidebar sections
+// Sidebar sections — descriptions show as tooltips on hover
 const WORKSPACE = [
-  { id: "chat", label: "Chats", icon: "💬" },
-  { id: "folders", label: "Folders", icon: "📁" },
-  { id: "docs", label: "Docs", icon: "📄" },
-  { id: "codebase", label: "Codebase", icon: "💻" },
-  { id: "dev", label: "Dev Lab", icon: "🧪" },
-  { id: "governance", label: "Governance", icon: "🏛️" },
+  { id: 'chats', icon: '💬', label: 'Chats', desc: 'Conversational flows and agent orchestration' },
+  { id: 'folders', icon: '📁', label: 'Folders', desc: 'Project container organization' },
+  { id: 'docs', icon: '📄', label: 'Docs', desc: 'Universal document library & dropzone' },
+  { id: 'codebase', icon: '💻', label: 'Code Base', desc: 'Code exploration & artifact management' },
+  { id: 'devlab', icon: '🧪', label: 'Dev Lab', desc: 'Advanced sub-agent tracking & verification' },
+  { id: 'whitelist', icon: '🛡️', label: 'Knowledge Base', desc: 'Deterministic Context & Knowledge Synthesis' },
+  { id: "agents", icon: "🤖", label: "Oracle", desc: "Oracle and agent training. Trust distribution, audits, and agent capabilities." },
+  { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' }
 ];
 
 const SYSTEM = [
-  { id: "agents", label: "Agents", icon: "🤖" },
-  { id: "memory", label: "Memory", icon: "🧠" },
-  { id: "integrations", label: "Integrations", icon: "🔗" },
-  { id: "health", label: "Health", icon: "🏥" },
-  { id: "settings", label: "Settings", icon: "⚙️" },
+  { id: "governance", label: "Governance", icon: "🏛️", description: "Governance rules, approvals, trust scores, self-healing, and system policy." },
+  { id: "ask", label: "Ask (Architecture)", icon: "🗺️", description: "Ask questions about system architecture. Routes to the right brain and actions." },
+  { id: "architect", label: "Proposer", icon: "🏗️", description: "Design a new component in JSON and Grace will build and integrate it autonomously." },
+  { id: "memory", label: "Memory", icon: "🧠", description: "Learning and healing. Skills, self-learning triggers, and diagnostic dashboard." },
+  { id: "integrations", label: "Integrations", icon: "🔗", description: "Whitelist hub: API sources, web sources, and document ingestion." },
+  { id: "health", label: "Health", icon: "🏥", description: "System health dashboard. Processes, components, and service status." },
+  { id: "kpi", label: "KPIs & Trust", icon: "📊", description: "Live KPI dashboard and trust score tracking across all 9 brain domains." },
+  { id: "settings", label: "Settings", icon: "⚙️", description: "Business intelligence, KPIs, and system configuration." },
 ];
+
+// Preload lazy tab chunks on hover so click opens instantly
+const TAB_PRELOAD = {
+  chat: () => import("./components/ChatTab"),
+  folders: () => import("./components/FoldersTab"),
+  docs: () => import("./components/DocsTab"),
+  governance: () => import("./components/GovernanceTab"),
+  codebase: () => import("./components/CodebaseTab"),
+  tasks: () => import("./components/TasksTab"),
+  dev: () => import("./components/DevTab"),
+  whitelist: () => import("./components/WhitelistTab"),
+  sandbox: () => import("./components/SandboxTab"),
+  integrations: () => import("./components/WhitelistTab"),
+  agents: () => import("./components/OracleTab"),
+  memory: () => import("./components/LearningHealingTab"),
+  health: () => import("./components/SystemHealthTab"),
+  settings: () => import("./components/BusinessIntelligenceTab"),
+  lab: () => import("./components/LabTab"),
+  apis: () => import("./components/APIsTab"),
+  ask: () => import("./components/AskTab"),
+  architect: () => import("./components/ArchitectTab"),
+  kpi: () => import("./components/KPIDashboard"),
+  projects: () => import("./components/TasksTab"),
+};
 
 function App() {
   const [view, setView] = useState("home");
   const [health, setHealth] = useState(null);
+  const [brains, setBrains] = useState({ connected: false, count: 0, error: null });
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Phase 13: Global Domain State (Mirroring)
+  const [domain, setDomain] = useState("Global (All Domains)");
+  const DOMAINS = ["Global (All Domains)", "Dog Walking App", "E-Commerce Backend", "Internal Dashboard API"];
+  const [showGenesis, setShowGenesis] = useState(false);
+
   const [model, setModel] = useState("consensus");
   const [models, setModels] = useState([]);
   const [cmdOpen, setCmdOpen] = useState(false);
-  const [recentChats, _setRecentChats] = useState([]);
+  const [recentChats, setRecentChats] = useState([]);
   const [voiceResponse, setVoiceResponse] = useState("");
   const [voiceProcessing, setVoiceProcessing] = useState(false);
+  const inputRef = useRef(null);
+
+  const preloadTab = (id) => {
+    const fn = TAB_PRELOAD[id];
+    if (fn) fn().catch(() => { });
+  };
+
   useEffect(() => {
-    const check = async () => setHealth(await healthCheck());
+    const check = async () => {
+      const h = await healthCheck();
+      setHealth(h);
+    };
     check();
     const interval = setInterval(check, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const checkBrains = async () => {
+      const r = await brainDirectory();
+      setBrains({
+        connected: r.ok && r.total_brains > 0,
+        count: r.total_brains ?? 0,
+        error: r.error || null,
+      });
+    };
+    checkBrains();
+    const interval = setInterval(checkBrains, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -85,7 +147,17 @@ function App() {
     setVoiceProcessing(false);
   };
 
-  const online = health?.status === "healthy" || health?.llm_running;
+  // Switch to Dev Lab when a context menu task is started
+  useEffect(() => {
+    const handleTaskFocus = () => {
+      setView("dev");
+    };
+    window.addEventListener('DEVLAB_TASK_STARTED', handleTaskFocus);
+    return () => window.removeEventListener('DEVLAB_TASK_STARTED', handleTaskFocus);
+  }, []);
+
+  const online = health != null && (health.status === "healthy" || health.llm_running === true || health.status === "degraded");
+  const offlineTitle = "Start the backend (e.g. run start.bat or: backend on :8000, then refresh)";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#0a0a1a", color: "#ccc" }}>
@@ -96,9 +168,20 @@ function App() {
         borderBottom: "1px solid #111",
       }}>
         <span>{new Date().toLocaleTimeString()}</span>
-        <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: online ? "#4caf50" : "#f44336" }} />
-          {online ? "Connected" : "Offline"}
+        <span style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 4 }} title={brains.error || (brains.connected ? `${brains.count} brain domains` : 'Brains')}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: brains.connected ? "#4caf50" : "#f44336" }} />
+            {brains.connected ? `Brains: ${brains.count}` : `Brains: ${brains.error || "disconnected"}`}
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: 4 }} title={online ? "Backend reachable" : offlineTitle}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: online ? "#4caf50" : "#f44336" }} />
+            {online ? "Connected" : "Offline"}
+          </span>
+          <span
+            style={{ cursor: "pointer", padding: "0 4px", borderRadius: 3, background: "#12122a", fontSize: 9, color: "#888" }}
+            title="Open KPI & Trust dashboard"
+            onClick={() => typeof setView === 'function' && setView('kpi')}
+          >📊 KPIs</span>
         </span>
       </div>
 
@@ -110,6 +193,26 @@ function App() {
         <button onClick={() => setSidebarOpen(p => !p)} style={iconBtn}>☰</button>
         <span style={{ fontSize: 16, fontWeight: 800, color: "#e94560", cursor: "pointer" }} onClick={() => setView("home")}>Grace</span>
         <div style={{ flex: 1 }} />
+
+        {/* Domain Selector (Phase 13 Mirroring) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: "#12122a", border: "1px solid #e94560", borderRadius: 6, padding: "2px 8px" }}>
+          <select value={domain} onChange={e => setDomain(e.target.value)} style={{
+            background: "transparent", border: "none", color: "#e94560", fontSize: 11, outline: "none",
+            fontWeight: 700, cursor: 'pointer'
+          }}>
+            {DOMAINS.map(d => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <div style={{ width: 1, height: 14, background: '#e94560', opacity: 0.3 }} />
+          <button
+            onClick={() => setShowGenesis(true)}
+            style={{ background: 'transparent', border: 'none', color: '#e94560', cursor: 'pointer', fontSize: 11, fontWeight: 700, padding: '2px 4px' }}
+            title="View Genesis Version Control Timeline"
+          >
+            ⧗ Genesis Timeline
+          </button>
+        </div>
 
         {/* Model Selector */}
         <select value={model} onChange={e => setModel(e.target.value)} style={{
@@ -138,11 +241,11 @@ function App() {
             width: 220, background: "#0a0a18", borderRight: "1px solid #1a1a2e",
             display: "flex", flexDirection: "column", overflow: "auto", flexShrink: 0,
           }}>
-            {/* Workspace */}
+            {/* Workspace: 5 Primary Tabs */}
             <div style={{ padding: "12px 0" }}>
-              <div style={sectionLabel}>Workspace</div>
+              <div style={sectionLabel}>5-Tab Workspace</div>
               {WORKSPACE.map(item => (
-                <SidebarItem key={item.id} item={item} active={view === item.id} onClick={() => setView(item.id)} />
+                <SidebarItem key={item.id} item={item} active={view === item.id} onClick={() => setView(item.id)} onPreload={() => preloadTab(item.id)} />
               ))}
             </div>
 
@@ -150,14 +253,14 @@ function App() {
             <div style={{ padding: "4px 0", borderTop: "1px solid #151530" }}>
               <div style={sectionLabel}>System</div>
               {SYSTEM.map(item => (
-                <SidebarItem key={item.id} item={item} active={view === item.id} onClick={() => setView(item.id)} />
+                <SidebarItem key={item.id} item={item} active={view === item.id} onClick={() => setView(item.id)} onPreload={() => preloadTab(item.id)} />
               ))}
             </div>
 
             {/* Projects */}
             <div style={{ padding: "4px 0", borderTop: "1px solid #151530" }}>
               <div style={sectionLabel}>Projects</div>
-              <SidebarItem item={{ id: "projects", label: "All Projects", icon: "📋" }} active={view === "projects"} onClick={() => setView("projects")} />
+              <SidebarItem item={{ id: "projects", label: "All Projects", icon: "📋", description: "Tasks hub: live tasks, history, scheduling, and time-sense." }} active={view === "projects"} onClick={() => setView("projects")} onPreload={() => preloadTab("projects")} />
             </div>
 
             {/* Recent Chats */}
@@ -165,7 +268,7 @@ function App() {
               <div style={sectionLabel}>Recent</div>
               {recentChats.slice(0, 5).map((c, i) => (
                 <div key={i} style={{ padding: "4px 16px", fontSize: 11, color: "#555", cursor: "pointer" }}
-                     onClick={() => setView("chat")}>
+                  onClick={() => setView("chat")}>
                   {c.title || `Chat ${c.id}`}
                 </div>
               ))}
@@ -183,22 +286,33 @@ function App() {
 
         {/* Main Content */}
         <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-          <Suspense fallback={<TabLoader />}>
-          {view === "home" && <HomePage onNavigate={setView} />}
-          {view === "chat" && <ChatTab />}
-          {view === "folders" && <FoldersTab />}
-          {view === "docs" && <DocsTab />}
-          {view === "codebase" && <CodebaseTab />}
-          {view === "dev" && <DevTab />}
-          {view === "governance" && <GovernanceTab />}
-          {view === "agents" && <OracleTab />}
-          {view === "memory" && <LearningHealingTab />}
-          {view === "integrations" && <WhitelistTab />}
-          {view === "health" && <SystemHealthTab />}
-          {view === "settings" && <BusinessIntelligenceTab />}
-          {view === "projects" && <TasksTab />}
-          {view === "lab" && <LabTab />}
-          {view === "apis" && <APIsTab />}
+          <div style={{ background: "#080814", color: "#e94560", fontSize: 11, padding: "4px 16px", borderBottom: "1px solid #1a1a2e", fontWeight: 700 }}>
+            Active Scoped Domain: {domain}
+          </div>
+          <Suspense fallback={<div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#666", fontSize: 13 }}>Loading…</div>}>
+            {/* Main Workspace Area */}
+            <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {view === "home" && <HomePage onNavigate={setView} domain={domain} />}
+              {view === "chat" && <ChatTab domain={domain} />}
+              {view === "folders" && <FoldersTab domain={domain} />}
+              {view === "docs" && <DocsTab domain={domain} />}
+              {view === "codebase" && <CodebaseTab domain={domain} />}
+              {view === "devlab" && <DevTab domain={domain} />}
+              {view === "whitelist" && <WhitelistTab domain={domain} />}
+              {view === "sandbox" && <SandboxTab domain={domain} />}
+              {view === "governance" && <GovernanceTab domain={domain} />}
+              {view === "agents" && <OracleTab />}
+              {view === "memory" && <LearningHealingTab />}
+              {view === "integrations" && <WhitelistTab />}
+              {view === "health" && <SystemHealthTab />}
+              {view === "settings" && <BusinessIntelligenceTab />}
+              {view === "projects" && <TasksTab />}
+              {view === "lab" && <LabTab />}
+              {view === "apis" && <APIsTab />}
+              {view === "ask" && <AskTab />}
+              {view === "architect" && <ArchitectTab />}
+              {view === "kpi" && <KPIDashboard />}
+            </div>
           </Suspense>
         </div>
       </div>
@@ -207,13 +321,17 @@ function App() {
       <InputBar model={model} onNavigate={setView} />
 
       {/* ── Floating ──────────────────────────────────────────── */}
-      <Suspense fallback={null}>
-        <PersistentVoicePanel onSendMessage={handleVoice} lastResponse={voiceResponse} isProcessing={voiceProcessing} />
-        <ActivityFeed />
-      </Suspense>
+      <PersistentVoicePanel onSendMessage={handleVoice} lastResponse={voiceResponse} isProcessing={voiceProcessing} />
+      <ActivityFeed />
 
       {/* ── Command Palette ───────────────────────────────────── */}
       {cmdOpen && <CommandPalette onClose={() => setCmdOpen(false)} onNavigate={(v) => { setView(v); setCmdOpen(false); }} />}
+
+      {/* ── Universal Right-Click Context Menu ─────────────────── */}
+      <ContextMenu />
+
+      {/* ── Genesis Timeline Modal ─────────────────────────────── */}
+      {showGenesis && <GenesisTimeline domain={domain} onClose={() => setShowGenesis(false)} />}
     </div>
   );
 }
@@ -246,8 +364,8 @@ function HomePage({ onNavigate }) {
             color: "#ccc", fontSize: 13, fontWeight: 600,
             transition: "all .15s",
           }}
-          onMouseEnter={e => e.target.style.borderColor = "#e94560"}
-          onMouseLeave={e => e.target.style.borderColor = "#222"}
+            onMouseEnter={e => e.target.style.borderColor = "#e94560"}
+            onMouseLeave={e => e.target.style.borderColor = "#222"}
           >
             <div style={{ fontSize: 24, marginBottom: 6 }}>{a.icon}</div>
             {a.label}
@@ -256,7 +374,7 @@ function HomePage({ onNavigate }) {
       </div>
 
       <div style={{ color: "#555", fontSize: 12 }}>
-        8 brain domains | 103 actions | Autonomous self-healing
+        9 brain domains | 108 actions | Autonomous self-healing
       </div>
     </div>
   );
@@ -265,7 +383,7 @@ function HomePage({ onNavigate }) {
 
 /* ── Input Bar ─────────────────────────────────────────────────── */
 
-function InputBar({ model: _model, onNavigate }) {
+function InputBar({ model, onNavigate }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -279,9 +397,13 @@ function InputBar({ model: _model, onNavigate }) {
       message: input,
     }).catch(() => ({ ok: false }));
 
-    // If it fails, try auto-route
+    // If it fails, try brain/ask as fallback
     if (!r.ok) {
-      await import("./api/brain-client");
+      const { brainAsk } = await import("./api/brain-client");
+      const askRes = await brainAsk(input).catch(() => ({ ok: false }));
+      if (askRes.ok && askRes.data) {
+        onNavigate("chat");
+      }
     }
 
     setInput("");
@@ -320,16 +442,23 @@ function InputBar({ model: _model, onNavigate }) {
 
 /* ── Sidebar Item ──────────────────────────────────────────────── */
 
-function SidebarItem({ item, active, onClick }) {
+function SidebarItem({ item, active, onClick, onPreload }) {
+  const tooltip = item.description || item.label;
   return (
-    <button onClick={onClick} style={{
-      display: "flex", alignItems: "center", gap: 8, width: "100%",
-      padding: "7px 16px", border: "none", background: active ? "#1a1a3a" : "transparent",
-      color: active ? "#e94560" : "#888", cursor: "pointer", fontSize: 12,
-      fontWeight: active ? 700 : 400, textAlign: "left",
-      borderLeft: active ? "3px solid #e94560" : "3px solid transparent",
-    }}>
-      <span style={{ fontSize: 14 }}>{item.icon}</span>
+    <button
+      type="button"
+      title={tooltip}
+      onClick={onClick}
+      onMouseEnter={onPreload}
+      style={{
+        display: "flex", alignItems: "center", gap: 6, width: "100%",
+        padding: "4px 12px", border: "none", background: active ? "#1a1a3a" : "transparent",
+        color: active ? "#e94560" : "#888", cursor: "pointer", fontSize: 11,
+        fontWeight: active ? 700 : 400, textAlign: "left",
+        borderLeft: active ? "3px solid #e94560" : "3px solid transparent",
+      }}
+    >
+      <span style={{ fontSize: 13 }}>{item.icon}</span>
       {item.label}
     </button>
   );
@@ -370,8 +499,8 @@ function CommandPalette({ onClose, onNavigate }) {
               padding: "10px 16px", border: "none", background: "transparent",
               color: "#ccc", cursor: "pointer", fontSize: 13, textAlign: "left",
             }}
-            onMouseEnter={e => e.target.style.background = "#1a1a3a"}
-            onMouseLeave={e => e.target.style.background = "transparent"}
+              onMouseEnter={e => e.target.style.background = "#1a1a3a"}
+              onMouseLeave={e => e.target.style.background = "transparent"}
             >
               <span>{item.icon}</span> {item.label}
             </button>

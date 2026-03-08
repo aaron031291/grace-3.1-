@@ -6,6 +6,7 @@ const API_BASE = API_BASE_URL;
 
 // Connector type icons (emoji placeholders)
 const CONNECTOR_ICONS = {
+  git: "G",
   github: "G",
   gitlab: "GL",
   confluence: "C",
@@ -121,7 +122,7 @@ function ConnectorCard({ connector, onSync, onTest, onDelete, onSelect }) {
 function AddConnectorForm({ onAdd, onCancel }) {
   const [formData, setFormData] = useState({
     name: "",
-    connector_type: "github",
+    connector_type: "git",
     description: "",
     sync_frequency: "daily",
     enabled: true
@@ -153,7 +154,7 @@ function AddConnectorForm({ onAdd, onCancel }) {
             value={formData.connector_type}
             onChange={(e) => setFormData({ ...formData, connector_type: e.target.value })}
           >
-            <option value="github">GitHub</option>
+            <option value="git">Git repository</option>
             <option value="gitlab">GitLab</option>
             <option value="confluence">Confluence</option>
             <option value="notion">Notion</option>
@@ -431,12 +432,16 @@ export default function KnowledgeBaseManager() {
         <div className="header-actions">
           <div className="view-tabs">
             <button
+              type="button"
+              title="Manage connectors and knowledge sources"
               className={view === "connectors" ? "active" : ""}
               onClick={() => setView("connectors")}
             >
               Connectors
             </button>
             <button
+              type="button"
+              title="Search across the knowledge base"
               className={view === "search" ? "active" : ""}
               onClick={() => setView("search")}
             >

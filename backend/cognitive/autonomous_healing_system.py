@@ -18,7 +18,7 @@ Creates a fully autonomous system that:
 
 import logging
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from sqlalchemy.orm import Session
@@ -184,7 +184,7 @@ class AutonomousHealingSystem:
         health_status = self._calculate_health_status(anomalies)
 
         assessment = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "health_status": health_status.value,
             "code_issues": len(code_issues),
             "recent_errors": len(recent_errors),
@@ -205,7 +205,7 @@ class AutonomousHealingSystem:
 
     def _query_recent_errors(self, hours: int = 1) -> List[GenesisKey]:
         """Query recent error Genesis Keys."""
-        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
+        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
 
         errors = self.session.query(GenesisKey).filter(
             GenesisKey.created_at >= cutoff_time,
@@ -551,7 +551,7 @@ class AutonomousHealingSystem:
                 
                 # Reset Qdrant connection if available
                 try:
-                    from vector_db.client import get_qdrant_client
+                    from vector_db.qdrant_client import get_qdrant_client
                     qdrant = get_qdrant_client()
                     if qdrant:
                         # Qdrant client will auto-reconnect on next use
@@ -596,7 +596,7 @@ class AutonomousHealingSystem:
                 reset_items = []
                 try:
                     # Reset embedding model singleton
-                    from embedding.embedder import _embedding_model
+                    from embedding.embedding_model import _embedding_model
                     if _embedding_model:
                         reset_items.append("embedding_model")
                 except:
@@ -639,7 +639,7 @@ class AutonomousHealingSystem:
                 
                 # 2. Reset vector DB
                 try:
-                    from vector_db.client import _qdrant_client
+                    from vector_db.qdrant_client import _qdrant_client
                     if _qdrant_client:
                         services_reset.append("qdrant")
                 except:
@@ -866,7 +866,7 @@ Focus on practical, safe, and effective healing."""
 
         # Add to history
         self.healing_history.append({
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "decision": decision,
             "result": result,
             "success": success
@@ -902,7 +902,7 @@ Focus on practical, safe, and effective healing."""
             execution_results = {"executed": [], "awaiting_approval": [], "failed": []}
 
         return {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "health_status": assessment["health_status"],
             "anomalies_detected": assessment["anomalies_detected"],
             "decisions_made": len(decisions),

@@ -20,7 +20,7 @@ sudo systemctl start ollama
 
 # 3. Clone and setup Grace
 cd ~/projects
-git clone https://github.com/your-org/grace.git
+git clone <your-repo-url>
 cd grace
 
 # 4. Setup Python environment
@@ -93,7 +93,7 @@ ollama --version
 
 ```bash
 # 1. Clone and setup Grace
-git clone https://github.com/your-org/grace.git
+git clone <your-repo-url>
 cd grace
 git pull origin main
 
@@ -189,7 +189,7 @@ Grace-aligned answer for a hands-on system architect
 
    # 4. Grace repo
    mkdir -p ~/grace && cd ~/grace
-   git clone https://github.com/your-org/grace.git .
+   git clone <your-repo-url> .
    git pull origin main
 
    # 5. Dependencies

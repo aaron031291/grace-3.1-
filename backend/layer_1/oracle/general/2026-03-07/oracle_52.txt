@@ -1,0 +1,18 @@
+# Oracle training record (human-readable)
+id: 52
+type: general
+trust: 0.80
+source: error_pipeline
+updated: 2026-03-07
+
+## Context
+{
+  "topic": "error_healing.schema",
+  "error_type": "ProgrammingError",
+  "location": "unknown"
+}
+
+## Expected
+{
+  "fix": "Schema auto-migrate applied: ['col:learning_patterns.preconditions(TEXT)', 'col:learning_patterns.actions(TEXT)', 'col:learning_patterns.expected_outcomes(TEXT)', 'col:learning_patterns.sample_size(INTEGER)', 'col:learning_patterns.supporting_examples(TEXT)', 'col:learning_patterns.times_applied(INTEGER)', 'col:learning_patterns.times_succeeded(INTEGER)', 'col:learning_patterns.times_failed(INTEGER)', 'col:learning_patterns.linked_procedures(JSONB)']"
+}

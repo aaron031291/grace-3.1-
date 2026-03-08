@@ -211,6 +211,9 @@ class OllamaClient:
         top_k: int = 40,
         num_predict: Optional[int] = None,
         context: Optional[List[int]] = None,
+        system_prompt: Optional[str] = None,
+        system: Optional[str] = None,
+        options: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
         Generate a response from a model.
@@ -224,6 +227,9 @@ class OllamaClient:
             top_k: Top-k sampling parameter
             num_predict: Maximum tokens to generate
             context: Context tokens from previous interactions
+            system_prompt: Optional system prompt (alias: system)
+            system: Optional system prompt (alias for system_prompt)
+            options: Optional dict merged into request options (e.g. temperature, num_predict)
             
         Returns:
             str: The generated response
@@ -246,6 +252,10 @@ class OllamaClient:
                 "top_k": top_k,
             }
         }
+        if system_prompt is not None or system is not None:
+            payload["system"] = (system_prompt or system) or ""
+        if options:
+            payload["options"] = {**payload["options"], **options}
         
         if num_predict is not None:
             payload["options"]["num_predict"] = num_predict

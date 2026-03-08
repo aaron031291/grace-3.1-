@@ -66,7 +66,7 @@ class TestDatabaseConfig:
             password="pass",
             database="testdb"
         )
-        assert config.get_connection_string() == "postgresql://user:pass@localhost:5432/testdb"
+        assert config.get_connection_string() == "postgresql+psycopg2://user:pass@localhost:5432/testdb"
     
     def test_mysql_connection_string(self):
         """Test MySQL connection string generation."""

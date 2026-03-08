@@ -10,7 +10,8 @@ Plus: lightweight Genesis keys (in-memory ring buffer, batch-flush every 10s).
 """
 
 import time
-import uuid
+import hashlib
+from datetime import datetime
 import threading
 import queue
 import logging
@@ -28,9 +29,11 @@ logger = logging.getLogger(__name__)
 _trace_local = threading.local()
 
 
-def new_trace() -> str:
-    """Start a new trace. Returns trace_id."""
-    tid = uuid.uuid4().hex[:16]
+def new_trace(path: str = "", name: str = "") -> str:
+    """Start a new trace. Returns deterministic trace_id (no random)."""
+    bucket = datetime.utcnow().strftime("%Y%m%d%H%M")
+    seed = f"{path}|{name}|{bucket}|{id(_trace_local)}"
+    tid = hashlib.sha256(seed.encode()).hexdigest()[:16]
     _trace_local.trace_id = tid
     _trace_local.spans = []
     _trace_local.start_time = time.time()
@@ -192,13 +195,15 @@ def register_auto_probe():
     try:
         from cognitive.event_bus import subscribe
 
-        def _on_code_change(event_data):
-            tags = event_data.get("tags", [])
-            key_type = event_data.get("key_type", "")
+        def _on_code_change(event):
+            # Event bus passes an Event object with .data (dict), not a raw dict
+            data = event.data if hasattr(event, "data") else event
+            tags = data.get("tags", [])
+            key_type = data.get("key_type", "")
             if key_type in ("code_change", "file_op") or "code_change" in tags:
                 threading.Thread(
                     target=_run_auto_probe,
-                    args=(event_data,),
+                    args=(data,),
                     daemon=True,
                 ).start()
 

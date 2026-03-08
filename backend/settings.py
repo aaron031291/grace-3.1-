@@ -23,7 +23,7 @@ class Settings:
     
     # ==================== Ollama Configuration ====================
     OLLAMA_URL: str = os.getenv("OLLAMA_URL", "http://localhost:11434")
-    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "mistral:7b")
+    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "qwen3:14b")
     
     # ==================== Embedding Configuration ====================
     EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "all-MiniLM-L6-v2")
@@ -46,7 +46,7 @@ class Settings:
     DISABLE_GENESIS_TRACKING: bool = os.getenv("DISABLE_GENESIS_TRACKING", "false").lower() == "true"
     
     # ==================== Database Configuration ====================
-    DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite")
+    DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "postgresql")
     DATABASE_HOST: str = os.getenv("DATABASE_HOST", "localhost")
     DATABASE_PORT: int = int(os.getenv("DATABASE_PORT", "0")) or None
     DATABASE_USER: str = os.getenv("DATABASE_USER", "")
@@ -54,6 +54,7 @@ class Settings:
     DATABASE_NAME: str = os.getenv("DATABASE_NAME", "grace")
     DATABASE_PATH: str = os.getenv("DATABASE_PATH", str(BACKEND_DIR / "data" / "grace.db"))
     DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "false").lower() == "true"
+    DATABASE_SSLMODE: str = os.getenv("DATABASE_SSLMODE", "").strip() or ""
     
     # ==================== Qdrant Configuration ====================
     QDRANT_HOST: str = os.getenv("QDRANT_HOST", "localhost")
@@ -84,7 +85,6 @@ class Settings:
     # ==================== Component Control Flags (deduplicated) ====================
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
     DISABLE_PROACTIVE_HEALING: bool = os.getenv("DISABLE_PROACTIVE_HEALING", "false").lower() == "true"
-    DISABLE_AUTONOMOUS_LOOP: bool = os.getenv("DISABLE_AUTONOMOUS_LOOP", "false").lower() == "true"
 
     # ==================== Error Handling (deduplicated) ====================
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
@@ -104,6 +104,20 @@ class Settings:
     SERPAPI_MAX_RESULTS: int = int(os.getenv("SERPAPI_MAX_RESULTS", "5"))
     SERPAPI_AUTO_SCRAPE: bool = os.getenv("SERPAPI_AUTO_SCRAPE", "true").lower() == "true"
 
+    # ==================== Knowledge gap external sources (software engineering) ====================
+    GITHUB_TOKEN: str = os.getenv("GITHUB_TOKEN", "")  # Optional; higher rate limit when set
+    GAP_FILL_GITHUB: bool = os.getenv("GAP_FILL_GITHUB", "true").lower() == "true"
+    GAP_FILL_STACKOVERFLOW: bool = os.getenv("GAP_FILL_STACKOVERFLOW", "true").lower() == "true"
+    GAP_FILL_ARXIV: bool = os.getenv("GAP_FILL_ARXIV", "true").lower() == "true"
+    GAP_FILL_WIKIPEDIA: bool = os.getenv("GAP_FILL_WIKIPEDIA", "true").lower() == "true"
+    GAP_FILL_HACKERNEWS: bool = os.getenv("GAP_FILL_HACKERNEWS", "true").lower() == "true"
+    GAP_FILL_DEVTO: bool = os.getenv("GAP_FILL_DEVTO", "true").lower() == "true"
+    GAP_FILL_PYPI: bool = os.getenv("GAP_FILL_PYPI", "true").lower() == "true"
+    GAP_FILL_MDN: bool = os.getenv("GAP_FILL_MDN", "true").lower() == "true"
+    GAP_FILL_SEMANTIC_SCHOLAR: bool = os.getenv("GAP_FILL_SEMANTIC_SCHOLAR", "true").lower() == "true"
+    GAP_FILL_NPM: bool = os.getenv("GAP_FILL_NPM", "true").lower() == "true"
+    GAP_FILL_IETF_RFC: bool = os.getenv("GAP_FILL_IETF_RFC", "true").lower() == "true"
+    SEMANTIC_SCHOLAR_API_KEY: str = os.getenv("SEMANTIC_SCHOLAR_API_KEY", "")  # Optional; higher rate limit
 
     # ==================== LLM Provider Configuration ====================
     # LLM_PROVIDER: 'ollama', 'openai', or 'kimi'
@@ -121,20 +135,12 @@ class Settings:
     OPUS_BASE_URL: str = os.getenv("OPUS_BASE_URL", "https://api.anthropic.com/v1")
     OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
 
-    # ==================== Qwen 3 (Open Source via Ollama) ====================
-    # No API key needed — runs locally through Ollama
-    # Optional: set QWEN_API_KEY for DashScope cloud API instead
-    QWEN_API_KEY: str = os.getenv("QWEN_API_KEY", "")
-    QWEN_BASE_URL: str = os.getenv("QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1")
-    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.5:27b")
-    QWEN_CODE_MODEL: str = os.getenv("QWEN_CODE_MODEL", "qwen3.5:27b")
-    QWEN_REASON_MODEL: str = os.getenv("QWEN_REASON_MODEL", "qwen3.5:27b")
-
     # ==================== Local Model Configuration (per-task) ====================
-    # Tuned for RTX 5090 (32GB VRAM, 64GB RAM)
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:27b")
-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:27b")
-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:9b")
+    # Code: Qwen 2.5 Coder. Reason: Qwen3. Document: Qwen3 (parse/read docs; no GPT 4.1 required).
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:32b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3:32b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
+    OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3:32b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

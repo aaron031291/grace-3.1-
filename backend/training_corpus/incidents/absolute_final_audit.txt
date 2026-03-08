@@ -122,7 +122,7 @@ WHAT WE ACTUALLY FIXED (no narrative, just the diff)
 
 7. **Model access gaps closed** – Intelligence Layer can now read Ghost via `ghost://dataset/id` URI; Qwen Coding Net queries Training Corpus through new gRPC method `GetCorpusSlice`; Blueprint Engine ingests ML Trainer output via Kafka topic `grace.trainer.model`.
 
-8. **Testing black holes lit** – one test suite per tier, all wired into CI (GitHub Actions):  
+8. **Testing black holes lit** – one test suite per tier, all wired into CI (Genesis CI):  
    - Integration: `pytest integration/` – must pass before merge.  
    - Performance: k6 script asserts p99 < 250 ms for critical endpoints.  
    - Chaos: random loop kill daily in staging, SRE must document recovery.  

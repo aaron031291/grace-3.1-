@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database.repository import BaseRepository
 from models.database_models import User, Conversation, Message, Embedding, Chat, ChatHistory
 from typing import List, Optional
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 
 
 class UserRepository(BaseRepository[User]):
@@ -124,7 +124,8 @@ class ChatRepository(BaseRepository[Chat]):
     
     def get_recent(self, days: int = 7) -> List[Chat]:
         """Get chats created in the last N days."""
-        start_date = datetime.now(timezone.utc) - timedelta(days=days)
+        from datetime import timedelta
+        start_date = datetime.utcnow() - timedelta(days=days)
         return (
             self.session.query(Chat)
             .filter(Chat.created_at >= start_date)
@@ -247,7 +248,7 @@ class ChatHistoryRepository(BaseRepository[ChatHistory]):
                 edited_content=message.content,
                 content=new_content,
                 is_edited=True,
-                edited_at=datetime.now(timezone.utc),
+                edited_at=datetime.utcnow(),
             )
             return self.get(message_id)
         return None

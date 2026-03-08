@@ -183,12 +183,12 @@ export class GraceOSIntegration {
         this.core = new GraceOSCore(this.context);
         this.updateSystemStatus('core', 'active', true);
 
-        this.ghostLedger = new GhostLedger(this.core, this.context);
+        this.ghostLedger = new GhostLedger(this.core);
         await this.ghostLedger.initialize();
         this.updateSystemStatus('ghostLedger', 'active', true);
 
-        this.scheduler = new AutonomousScheduler(this.core, this.ideBridge);
-        await this.scheduler.start();
+        this.scheduler = new AutonomousScheduler(this.core);
+        await this.scheduler.initialize();
         this.updateSystemStatus('scheduler', 'active', true);
     }
 
@@ -220,7 +220,7 @@ export class GraceOSIntegration {
 
         // Diagnostic Machine (Layer 1-4)
         if (shouldInit('diagnostics')) {
-            this.diagnosticMachine = new DiagnosticMachine(this.core, this.ideBridge, this.wsBridge);
+            this.diagnosticMachine = new DiagnosticMachine(this.core, this.ideBridge);
             await this.diagnosticMachine.initialize();
             this.updateSystemStatus('diagnosticMachine', 'active', true);
         }
@@ -234,7 +234,7 @@ export class GraceOSIntegration {
 
         // Enterprise Agent
         if (shouldInit('agent')) {
-            this.enterpriseAgent = new EnterpriseAgent(this.core, this.ideBridge, this.wsBridge, this.securityLayer);
+            this.enterpriseAgent = new EnterpriseAgent(this.core, this.ideBridge);
             await this.enterpriseAgent.initialize();
             this.updateSystemStatus('enterpriseAgent', 'active', true);
         }
@@ -260,14 +260,14 @@ export class GraceOSIntegration {
 
         // Clarity Framework
         if (shouldInit('clarity')) {
-            this.clarityFramework = new ClarityFramework(this.core, this.ideBridge);
+            this.clarityFramework = new ClarityFramework(this.core);
             await this.clarityFramework.initialize();
             this.updateSystemStatus('clarityFramework', 'active', true);
         }
 
         // Deep Magma Memory (4 relation types)
         if (shouldInit('memory')) {
-            this.magmaMemory = new DeepMagmaMemory(this.core, this.ideBridge, this.wsBridge);
+            this.magmaMemory = new DeepMagmaMemory(this.core, this.ideBridge);
             await this.magmaMemory.initialize();
             this.updateSystemStatus('magmaMemory', 'active', true);
         }
@@ -281,7 +281,7 @@ export class GraceOSIntegration {
 
         // Neural-Symbolic AI
         if (shouldInit('neuralSymbolic')) {
-            this.neuralSymbolic = new NeuralSymbolicAI(this.core, this.ideBridge);
+            this.neuralSymbolic = new NeuralSymbolicAI(this.core);
             await this.neuralSymbolic.initialize();
             this.updateSystemStatus('neuralSymbolic', 'active', true);
         }
@@ -315,7 +315,9 @@ export class GraceOSIntegration {
 
         // Cognitive provider
         this.cognitiveProvider = new CognitiveIDEProvider(this.core, this.ideBridge);
-        await this.cognitiveProvider.initialize();
+        this.context.subscriptions.push(
+            vscode.window.registerTreeDataProvider('graceWorkbench', this.cognitiveProvider)
+        );
         this.updateSystemStatus('cognitiveProvider', 'active', true);
 
         // Memory mesh provider
@@ -326,7 +328,7 @@ export class GraceOSIntegration {
         this.updateSystemStatus('memoryProvider', 'active', true);
 
         // Genesis key provider
-        this.genesisProvider = new GenesisKeyProvider(this.core, this.ideBridge);
+        this.genesisProvider = new GenesisKeyProvider(this.core, this.ideBridge, this.ghostLedger);
         this.context.subscriptions.push(
             vscode.window.registerTreeDataProvider('graceGenesis', this.genesisProvider)
         );
@@ -539,7 +541,10 @@ export class GraceOSIntegration {
             name: 'OODA Cycle',
             handler: async () => {
                 if (this.oodaLoop) {
-                    await this.oodaLoop.runCycle();
+                    await this.oodaLoop.runCycle({
+                        trigger: 'scheduled',
+                        priority: 'normal',
+                    });
                 }
             },
             interval: 30000, // Every 30 seconds

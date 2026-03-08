@@ -3,8 +3,11 @@
 # GRACE Unified Start Script (Unix/Mac/WSL)
 # =============================================================================
 # Starts both backend (FastAPI) and frontend (Vite) servers
-# Usage: ./start.sh [backend|frontend|all]
-# Default: all (starts both)
+# Usage: ./start.sh [backend|frontend|all|full|staged|services]
+#   all     - Backend + Frontend (3s between) [default]
+#   full    - Same as all
+#   staged  - 1st runtime (backend) 30s ahead, 2nd (frontend) merges 15s behind
+#   services - Qdrant only
 # =============================================================================
 
 set -e
@@ -27,9 +30,9 @@ echo -e "${CYAN}================================================================
 echo ""
 
 # Validate mode
-if [[ ! "$MODE" =~ ^(all|backend|frontend)$ ]]; then
+if [[ ! "$MODE" =~ ^(all|full|staged|services|backend|frontend)$ ]]; then
     echo -e "${RED}Invalid mode: $MODE${NC}"
-    echo "Usage: ./start.sh [backend|frontend|all]"
+    echo "Usage: ./start.sh [backend|frontend|all|full|staged|services]"
     exit 1
 fi
 
@@ -119,13 +122,86 @@ start_all() {
     wait
 }
 
+start_staged() {
+    # 1st runtime 30s ahead, 2nd run merges 15s behind (preflight-friendly)
+    echo -e "${YELLOW}Starting GRACE (staged: 1st runtime 30s ahead, 2nd merges 15s behind)...${NC}"
+    echo ""
+
+    echo -e "${GREEN}[1st runtime] Backend starting (30s head start)...${NC}"
+    cd "$BACKEND_DIR"
+    if [ -f "venv_gpu/bin/activate" ] || [ -f "venv_gpu/Scripts/activate" ]; then
+        [ -f "venv_gpu/bin/activate" ] && source venv_gpu/bin/activate || source venv_gpu/Scripts/activate
+    elif [ -f "venv/bin/activate" ]; then
+        source venv/bin/activate
+    elif [ -f "venv/Scripts/activate" ]; then
+        source venv/Scripts/activate
+    fi
+    python -m uvicorn app:app --reload --host 0.0.0.0 --port 8000 &
+    BACKEND_PID=$!
+
+    echo "  Waiting 30s so backend gets head start..."
+    sleep 30
+
+    echo -e "${GREEN}[2nd run] Frontend starting (merges 15s behind)...${NC}"
+    cd "$FRONTEND_DIR"
+    npm run dev &
+    FRONTEND_PID=$!
+
+    echo "  Waiting 15s for merge..."
+    sleep 15
+
+    echo ""
+    echo -e "${CYAN}==============================================================================${NC}"
+    echo -e "${GREEN}Merge complete. GRACE System Started!${NC}"
+    echo -e "${CYAN}==============================================================================${NC}"
+    echo ""
+    echo "  Backend:  http://localhost:8000"
+    echo "  Frontend: http://localhost:5173"
+    echo ""
+    echo -e "${YELLOW}Press Ctrl+C to stop all services.${NC}"
+    echo ""
+
+    wait
+}
+
+ensure_qdrant() {
+    if [ -f "$BACKEND_DIR/.env" ] && grep -q "QDRANT_URL=https" "$BACKEND_DIR/.env" 2>/dev/null; then
+        echo -e "${GREEN}[OK] Qdrant Cloud configured.${NC}"
+        return 0
+    fi
+    if ! command -v docker &>/dev/null; then
+        echo -e "${YELLOW}[WARN] Docker not running. Backend will use Qdrant Cloud if set.${NC}"
+        return 0
+    fi
+    if docker ps --filter "name=qdrant" --format "{{.Names}}" 2>/dev/null | grep -q .; then
+        echo -e "${GREEN}[OK] Qdrant already running.${NC}"
+        return 0
+    fi
+    echo "Starting Qdrant (vector DB)..."
+    docker run -d -p 6333:6333 -p 6334:6334 --name qdrant qdrant/qdrant:latest 2>/dev/null || docker start qdrant 2>/dev/null
+    echo "Waiting for Qdrant (5s)..."
+    sleep 5
+}
+
+start_services() {
+    ensure_qdrant
+}
+
 # =============================================================================
 # Main execution
 # =============================================================================
 
 case "$MODE" in
-    all)
+    all|full)
+        ensure_qdrant
         start_all
+        ;;
+    staged)
+        ensure_qdrant
+        start_staged
+        ;;
+    services)
+        start_services
         ;;
     backend)
         start_backend

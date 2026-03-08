@@ -27,7 +27,7 @@ import ast
 import json
 import logging
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -52,7 +52,7 @@ def generate_tests_for_module(module_path: str) -> Dict[str, Any]:
 
     result = {
         "module": module_path,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.utcnow().isoformat(),
         "functions_found": 0,
         "tests_generated": 0,
         "tests_passed": 0,

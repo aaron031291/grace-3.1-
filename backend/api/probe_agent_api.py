@@ -21,13 +21,13 @@ The consensus auto-fix flow:
 
 from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import logging
-import asyncio
+import threading
 import time
 import json
-import threading
-import httpx
+import urllib.request
+import urllib.error
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/probe", tags=["Probe Agent"])
@@ -49,7 +49,7 @@ SKIP_PREFIXES = (
 )
 
 
-async def _discover_routes() -> List[dict]:
+def _discover_routes() -> List[dict]:
     """Discover all routes from the running FastAPI app — both GET and POST."""
     routes = []
 
@@ -82,9 +82,10 @@ async def _discover_routes() -> List[dict]:
 
     # Method 2: OpenAPI spec fallback
     try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(f"{BASE}/openapi.json", timeout=10)
-            spec = resp.json()
+        url = f"{BASE}/openapi.json"
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            spec = json.loads(resp.read())
 
         for path, methods in spec.get("paths", {}).items():
             if any(path.startswith(p) for p in SKIP_PREFIXES):
@@ -101,7 +102,7 @@ async def _discover_routes() -> List[dict]:
     return routes
 
 
-async def _probe_endpoint(client: httpx.AsyncClient, path: str, method: str = "GET") -> dict:
+def _probe_endpoint(path: str, method: str = "GET") -> dict:
     """Send a synthetic pulse to a single endpoint."""
     url = f"{BASE}{path}"
     start = time.time()
@@ -112,39 +113,45 @@ async def _probe_endpoint(client: httpx.AsyncClient, path: str, method: str = "G
         "status_code": 0,
         "latency_ms": 0,
         "error": None,
-        "probed_at": datetime.now(timezone.utc).isoformat(),
+        "probed_at": datetime.utcnow().isoformat(),
     }
 
     try:
-        headers = {
-            "X-Probe-Agent": "true",
-            "X-Genesis-Test": "true"
-        }
-        resp = await client.request(method, url, headers=headers, timeout=PROBE_TIMEOUT)
-        result["status_code"] = resp.status_code
-        result["latency_ms"] = round((time.time() - start) * 1000, 1)
-        
-        if resp.status_code < 500:
+        req = urllib.request.Request(url, method=method)
+        req.add_header("X-Probe-Agent", "true")
+        req.add_header("X-Genesis-Test", "true")
+        with urllib.request.urlopen(req, timeout=PROBE_TIMEOUT) as resp:
+            result["status_code"] = resp.status
+            result["latency_ms"] = round((time.time() - start) * 1000, 1)
             result["status"] = "active"
-            if resp.status_code >= 400:
-                result["error"] = f"HTTP {resp.status_code}"
+    except urllib.error.HTTPError as e:
+        result["status_code"] = e.code
+        result["latency_ms"] = round((time.time() - start) * 1000, 1)
+        if e.code == 405:
+            result["status"] = "active"
+        elif e.code < 500:
+            result["status"] = "active"
+            result["error"] = f"HTTP {e.code}"
         else:
             result["status"] = "broken"
-            result["error"] = f"HTTP {resp.status_code}: {resp.reason_phrase}"
-            
-    except httpx.TimeoutException:
-        result["latency_ms"] = round((time.time() - start) * 1000, 1)
-        result["status"] = "dormant"
-        result["error"] = "Timeout"
-    except Exception as e:
+            result["error"] = f"HTTP {e.code}: {str(e.reason)[:100]}"
+    except urllib.error.URLError as e:
         result["latency_ms"] = round((time.time() - start) * 1000, 1)
         result["status"] = "broken"
-        result["error"] = str(e)[:200]
+        result["error"] = f"Connection failed: {str(e.reason)[:100]}"
+    except Exception as e:
+        result["latency_ms"] = round((time.time() - start) * 1000, 1)
+        if "timed out" in str(e).lower() or "timeout" in str(e).lower():
+            result["status"] = "dormant"
+            result["error"] = "Timeout"
+        else:
+            result["status"] = "broken"
+            result["error"] = str(e)[:200]
 
     return result
 
 
-async def _probe_llm_models() -> List[dict]:
+def _probe_llm_models() -> List[dict]:
     """Probe each LLM model individually to check if it's callable."""
     results = []
     try:
@@ -308,11 +315,12 @@ async def probe_sweep():
     Full probe sweep — discover all routes, send synthetic pulses,
     classify as active/dormant/broken, track via Genesis keys.
     """
-    routes = await _discover_routes()
-    
-    async with httpx.AsyncClient() as client:
-        tasks = [_probe_endpoint(client, r["path"], r["method"]) for r in routes]
-        results = await asyncio.gather(*tasks)
+    routes = _discover_routes()
+    results = []
+
+    for route in routes:
+        result = _probe_endpoint(route["path"], route["method"])
+        results.append(result)
 
     _track_probe(results)
 
@@ -331,14 +339,14 @@ async def probe_sweep():
         "dormant": len(dormant),
         "broken_endpoints": broken,
         "dormant_endpoints": dormant,
-        "sweep_at": datetime.now(timezone.utc).isoformat(),
+        "sweep_at": datetime.utcnow().isoformat(),
     }
 
 
 @router.post("/sweep-models")
 async def probe_models():
     """Probe each LLM model individually — send a test prompt, check response."""
-    results = await _probe_llm_models()
+    results = _probe_llm_models()
 
     try:
         from api._genesis_tracker import track
@@ -429,6 +437,5 @@ async def get_probe_results():
 @router.post("/endpoint")
 async def probe_single(path: str):
     """Probe a single endpoint."""
-    async with httpx.AsyncClient() as client:
-        result = await _probe_endpoint(client, path)
+    result = _probe_endpoint(path)
     return result

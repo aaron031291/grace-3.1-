@@ -1033,11 +1033,11 @@ class MagmaGenesisIntegration:
             return True
 
         try:
-            from genesis.genesis_key_service import get_genesis_key_service
-            self.genesis = get_genesis_key_service()
+            from genesis.genesis_key_service import get_genesis_service
+            self.genesis = get_genesis_service()
             return True
-        except ImportError:
-            logger.warning("[MAGMA-SECURITY] Genesis Key service not available")
+        except Exception as e:
+            logger.warning("[MAGMA-SECURITY] Genesis Key service not available: %s", e)
             return False
 
     def track_ingestion(

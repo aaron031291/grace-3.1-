@@ -160,14 +160,17 @@ class SemanticProcedureFinder:
             # Generate embedding
             embedding = self.embedder.embed_text([proc_text])[0]
 
+            # Upsert to vector DB
             self.vector_db.upsert_vectors(
                 collection_name=self.collection_name,
-                vectors=[(procedure.id, embedding, {
+                vectors=[embedding],
+                ids=[procedure.id],
+                metadata=[{
                     "procedure_id": procedure.id,
                     "goal": procedure.goal,
                     "success_rate": procedure.success_rate,
-                    "times_used": procedure.times_used,
-                })],
+                    "times_used": procedure.times_used
+                }]
             )
 
             logger.debug(
@@ -210,10 +213,12 @@ class SemanticProcedureFinder:
             # Batch embed
             embeddings = self.embedder.embed_text(texts, batch_size=32)
 
-            tuples = list(zip(ids, embeddings, metadata))
+            # Batch upsert
             self.vector_db.upsert_vectors(
                 collection_name=self.collection_name,
-                vectors=tuples,
+                vectors=embeddings,
+                ids=ids,
+                metadata=metadata
             )
 
             logger.info(

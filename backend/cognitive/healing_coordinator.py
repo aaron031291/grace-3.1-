@@ -54,6 +54,7 @@ class HealingCoordinator:
         if step1.get("resolved"):
             result["resolved"] = True
             result["resolution"] = "self_healing"
+            self._trigger_learn_after_heal(problem, "self_healing")
             self._record_outcome(problem, result, success=True)
             return result
 
@@ -72,6 +73,7 @@ class HealingCoordinator:
             if step4.get("resolved"):
                 result["resolved"] = True
                 result["resolution"] = "coding_agent"
+                self._trigger_heal_and_learn_after_code_fix(problem, step4)
                 self._record_outcome(problem, result, success=True)
                 return result
 
@@ -94,58 +96,67 @@ class HealingCoordinator:
         result["completed_at"] = datetime.utcnow().isoformat()
         return result
 
-    # ── Step 1: Basic self-healing ─────────────────────────────────────
+    # ── Step 1: Basic self-healing (all paths through brain) ─────────────
 
     def _step_self_heal(self, problem: Dict) -> Dict:
+        """Self-heal via brain: system/reset_db, reset_vector_db, scan_heal; govern/heal for rest."""
         try:
-            from cognitive.self_healing import get_healer
-            healer = get_healer()
-            
-            component = problem.get("component", "")
-            if "database" in component.lower():
-                ok = healer._heal_database()
-                return {"step": "self_heal", "action": "database_reconnect", "resolved": ok}
-            elif "qdrant" in component.lower() or "vector" in component.lower():
-                ok = healer._heal_qdrant()
-                return {"step": "self_heal", "action": "qdrant_reconnect", "resolved": ok}
-            elif "llm" in component.lower() or "ollama" in component.lower():
-                ok = healer._heal_llm()
-                return {"step": "self_heal", "action": "llm_reconnect", "resolved": ok}
+            from api.brain_api_v2 import call_brain
+            component = (problem.get("component") or "").lower()
+            action_key = "unknown"
+            if "database" in component or "db" in component:
+                r = call_brain("system", "reset_db", {})
+                action_key = "database_reconnect"
+                ok = bool(r.get("ok"))
+            elif "qdrant" in component or "vector" in component:
+                r = call_brain("system", "reset_vector_db", {})
+                action_key = "qdrant_reconnect"
+                ok = bool(r.get("ok"))
+            elif "llm" in component or "ollama" in component:
+                r = call_brain("system", "scan_heal", {})
+                action_key = "llm_reconnect"
+                ok = bool(r.get("ok"))
             else:
-                healer._heal_memory()
-                return {"step": "self_heal", "action": "gc_collect", "resolved": False}
+                r = call_brain("govern", "heal", {})
+                action_key = "gc_collect"
+                ok = bool(r.get("ok"))
+            return {"step": "self_heal", "action": action_key, "resolved": ok}
         except Exception as e:
             return {"step": "self_heal", "action": "failed", "resolved": False, "error": str(e)}
 
-    # ── Step 2: Diagnostics — Grace + Kimi independently ──────────────
+    # ── Step 2: Diagnostics — Grace + Kimi in parallel ─────────────────
 
     def _step_diagnose(self, problem: Dict) -> Dict:
+        from core.async_parallel import run_parallel
         diagnostics = {"step": "diagnose", "grace": None, "kimi": None}
+        desc = problem.get("description", "") or ""
+        err = problem.get("error", "") or ""
+        comp = problem.get("component", "") or ""
+        payload = f"Problem: {desc}\nError: {err}\nComponent: {comp}"
 
-        # Grace's diagnosis (local LLM)
-        try:
-            from llm_orchestrator.factory import get_raw_client
-            client = get_raw_client()
-            grace_diag = client.chat(messages=[
-                {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
-                {"role": "user", "content": f"Problem: {problem.get('description', '')}\nError: {problem.get('error', '')}\nComponent: {problem.get('component', '')}"},
-            ], temperature=0.2)
-            diagnostics["grace"] = grace_diag
-        except Exception as e:
-            diagnostics["grace"] = f"Grace diagnosis unavailable: {e}"
+        def _grace():
+            try:
+                from llm_orchestrator.factory import get_raw_client
+                return get_raw_client().chat(messages=[
+                    {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
+                    {"role": "user", "content": payload},
+                ], temperature=0.2)
+            except Exception as e:
+                return f"Grace diagnosis unavailable: {e}"
 
-        # Kimi's diagnosis (cloud)
-        try:
-            from llm_orchestrator.factory import get_kimi_client
-            client = get_kimi_client()
-            kimi_diag = client.chat(messages=[
-                {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
-                {"role": "user", "content": f"Problem: {problem.get('description', '')}\nError: {problem.get('error', '')}\nComponent: {problem.get('component', '')}"},
-            ], temperature=0.2)
-            diagnostics["kimi"] = kimi_diag
-        except Exception as e:
-            diagnostics["kimi"] = f"Kimi diagnosis unavailable: {e}"
+        def _kimi():
+            try:
+                from llm_orchestrator.factory import get_kimi_client
+                return get_kimi_client().chat(messages=[
+                    {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
+                    {"role": "user", "content": payload},
+                ], temperature=0.2)
+            except Exception as e:
+                return f"Kimi diagnosis unavailable: {e}"
 
+        grace_diag, kimi_diag = run_parallel([_grace, _kimi], return_exceptions=True)
+        diagnostics["grace"] = grace_diag if not isinstance(grace_diag, Exception) else str(grace_diag)
+        diagnostics["kimi"] = kimi_diag if not isinstance(kimi_diag, Exception) else str(kimi_diag)
         return diagnostics
 
     # ── Step 3: Agree on best fix ─────────────────────────────────────
@@ -174,32 +185,30 @@ class HealingCoordinator:
             "kimi_recommendation": str(kimi_diag)[:300] if kimi_diag else "",
         }
 
-    # ── Step 4: Coding agent fix ──────────────────────────────────────
+    # ── Step 4: Coding agent fix (via brain code/generate) ───────────────
 
     def _step_code_fix(self, problem: Dict, agreement: Dict) -> Dict:
+        """Coding agent fix via brain (code/generate returns {code, prompt})."""
         try:
-            from cognitive.pipeline import CognitivePipeline
-            pipeline = CognitivePipeline()
-
+            from api.brain_api_v2 import call_brain
             prompt = (
                 f"Fix this problem:\n{problem.get('description', '')}\n"
                 f"Error: {problem.get('error', '')}\n"
                 f"Grace diagnosis: {agreement.get('grace_recommendation', '')}\n"
                 f"Kimi diagnosis: {agreement.get('kimi_recommendation', '')}"
             )
-
-            ctx = pipeline.run(
-                prompt=prompt,
-                project_folder=problem.get("file_path", "").rsplit("/", 1)[0] if problem.get("file_path") else "",
-                current_file=problem.get("file_path"),
-            )
-
+            project_folder = (problem.get("file_path") or "").rsplit("/", 1)[0]
+            r = call_brain("code", "generate", {"prompt": prompt, "project_folder": project_folder})
+            if not r.get("ok"):
+                return {"step": "code_fix", "resolved": False, "error": r.get("error", "brain error")}
+            data = r.get("data") or {}
+            fix = data.get("code") or data.get("response")
             return {
                 "step": "code_fix",
-                "resolved": bool(ctx.llm_response),
-                "fix": ctx.llm_response[:1000] if ctx.llm_response else None,
-                "trust": ctx.trust_score,
-                "pipeline_stages": ctx.stages_passed,
+                "resolved": bool(fix),
+                "fix": fix[:1000] if isinstance(fix, str) else fix,
+                "trust": data.get("trust_score", 0.5),
+                "pipeline_stages": data.get("stages_passed", []),
             }
         except Exception as e:
             return {"step": "code_fix", "resolved": False, "error": str(e)}
@@ -213,7 +222,8 @@ class HealingCoordinator:
         try:
             from retrieval.retriever import DocumentRetriever
             from embedding.embedder import get_embedding_model
-            retriever = DocumentRetriever(embedding_model=get_embedding_model())
+            from vector_db.client import get_qdrant_client
+            retriever = DocumentRetriever(embedding_model=get_embedding_model(), qdrant_client=get_qdrant_client())
             chunks = retriever.retrieve(query=problem.get("description", ""), limit=3, score_threshold=0.3)
             if chunks:
                 context["sources"].append({"type": "knowledge_base", "count": len(chunks),
@@ -271,6 +281,42 @@ class HealingCoordinator:
                 pass
 
         return {"step": "apply_fix", "resolved": bool(fix), "fix_preview": fix[:500]}
+
+    # ── Cross-triggers: heal → learn, code_fix → heal + learn ───────────
+
+    def _trigger_learn_after_heal(self, problem: Dict, resolution: str):
+        """After a successful heal, trigger learning in background."""
+        from core.async_parallel import run_background
+        def _do():
+            try:
+                from api.brain_api_v2 import call_brain
+                call_brain("govern", "learn", {})
+                call_brain("govern", "record_gap", {
+                    "what": f"Heal succeeded: {resolution} — {problem.get('component', '')}",
+                    "target": problem.get("component", ""),
+                    "tags": ["heal_triggered_learn", resolution],
+                })
+            except Exception as e:
+                logger.debug("Trigger learn after heal: %s", e)
+        run_background(_do, "learn_after_heal")
+
+    def _trigger_heal_and_learn_after_code_fix(self, problem: Dict, step4: Dict):
+        """After coding agent fix, trigger heal + learn in background."""
+        from core.async_parallel import run_background
+        def _do():
+            try:
+                from api.brain_api_v2 import call_brain
+                call_brain("system", "scan_heal", {})
+                call_brain("govern", "heal", {})
+                call_brain("govern", "learn", {})
+                call_brain("govern", "record_gap", {
+                    "what": f"Code fix applied: {problem.get('description', '')[:200]}",
+                    "target": problem.get("file_path", problem.get("component", "")),
+                    "tags": ["code_fix_triggered_heal_learn", "coding_agent"],
+                })
+            except Exception as e:
+                logger.debug("Trigger heal+learn after code fix: %s", e)
+        run_background(_do, "heal_learn_after_code_fix")
 
     # ── Record outcome for learning ───────────────────────────────────
 

@@ -146,13 +146,16 @@ class GenesisStorage:
         removed = 0
         try:
             from database.session import session_scope
-            from models.genesis_key_models import GenesisKey
+            from models.genesis_key_models import GenesisKey, GenesisKeyType
             from sqlalchemy import text
 
+            valid_key_types = {e.value for e in GenesisKeyType}
             with session_scope() as s:
                 for key_type, hours in TTL_HOURS.items():
                     if key_type == "default":
                         continue
+                    if key_type not in valid_key_types:
+                        continue  # e.g. "debug", "performance" are TTL labels not enum values
                     cutoff = datetime.utcnow() - timedelta(hours=hours)
                     count = s.execute(text(
                         "DELETE FROM genesis_key WHERE key_type = :kt AND when_timestamp < :cutoff"

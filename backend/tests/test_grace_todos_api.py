@@ -4,7 +4,6 @@ Tests for Grace Todos API
 Comprehensive tests for autonomous task management system.
 Updated to match current API model structure.
 """
-import pytest; pytest.importorskip("api.grace_todos_api", reason="api.grace_todos_api removed — consolidated into Brain API")
 
 import pytest
 from datetime import datetime

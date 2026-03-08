@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ws-1",
+    "name": "DeepMind Docs",
+    "url": "https://deepmind.google/technologies",
+    "type": "web",
+    "active": true,
+    "domain": "Global"
+  },
+  {
+    "id": "ws-2",
+    "name": "GitHub API",
+    "url": "api.github.com/v3",
+    "type": "api",
+    "active": true,
+    "domain": "Global"
+  },
+  {
+    "id": "ws-3",
+    "name": "ArXiv CS Papers",
+    "url": "export.arxiv.org/api",
+    "type": "api",
+    "active": true,
+    "domain": "Global"
+  }
+]

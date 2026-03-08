@@ -19,7 +19,7 @@ import logging
 import asyncio
 import threading
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Set
 from pathlib import Path
 import json
@@ -115,8 +115,9 @@ class ContinuousLearningOrchestrator:
         # Get Mirror System (requires database session)
         try:
             from cognitive.mirror_self_modeling import get_mirror_system
-            from database.session import SessionLocal
-            session = SessionLocal()
+            from database.session import get_session_factory
+            session_factory = get_session_factory()
+            session = session_factory()
             self.mirror_system = get_mirror_system(session=session)
             logger.info("[CONTINUOUS_LEARNING] [OK] Mirror System initialized")
         except Exception as e:
@@ -124,9 +125,8 @@ class ContinuousLearningOrchestrator:
 
         # Get Learning Orchestrator
         try:
-            from cognitive.thread_learning_orchestrator import ThreadLearningOrchestrator
-            kb_path = str(Path(__file__).parent.parent / "data" / "knowledge_base")
-            self.learning_orchestrator = ThreadLearningOrchestrator(knowledge_base_path=kb_path)
+            from api.autonomous_learning import get_learning_orchestrator
+            self.learning_orchestrator = get_learning_orchestrator()
             logger.info("[CONTINUOUS_LEARNING] [OK] Learning Orchestrator initialized")
         except Exception as e:
             logger.debug(f"[CONTINUOUS_LEARNING] Learning Orchestrator unavailable: {e}")

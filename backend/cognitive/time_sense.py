@@ -11,7 +11,7 @@ Provides time-based intelligence across the system:
 - Daily/weekly/monthly rhythm detection
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 import logging
 
@@ -29,7 +29,7 @@ class TimeSense:
     @staticmethod
     def now_context() -> Dict[str, Any]:
         """What does Grace know about RIGHT NOW."""
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
         hour = now.hour
         dow = now.weekday()
         day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -74,7 +74,7 @@ class TimeSense:
         except (ValueError, TypeError):
             return {"urgency": 0, "label": "no_deadline"}
 
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
         delta = deadline - now
         hours_left = delta.total_seconds() / 3600
 
@@ -101,7 +101,7 @@ class TimeSense:
         except (ValueError, TypeError):
             return {"text": "unknown", "seconds": 0}
 
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
         delta = target - now
         secs = delta.total_seconds()
 

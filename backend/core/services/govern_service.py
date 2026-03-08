@@ -54,7 +54,7 @@ def save_rule_content(doc_id, content):
 
 def dashboard():
     try:
-        from security.governance import GovernanceEngine
+        from governance.governance_engine import GovernanceEngine
         engine = GovernanceEngine()
         return {"timestamp": datetime.utcnow().isoformat(),
                 "pillars": {"self_governance": True, "human_oversight": True}}
@@ -84,9 +84,9 @@ def approve_action(decision_id, action, reason=""):
 
 def get_scores():
     try:
-        from ml_intelligence.kpi_tracker import get_kpi_tracker
-        tracker = get_kpi_tracker()
-        return tracker.get_system_health()
+        from kpi.kpi_tracker import get_tracker
+        tracker = get_tracker()
+        return tracker.get_system_trust()
     except Exception:
         return {"trust_score": 0.5}
 
@@ -108,6 +108,21 @@ def trigger_learning():
         return {"status": "triggered"}
     except Exception:
         return {"status": "logged"}
+
+
+def record_gap(what: str, target: str = "", tags: list = None):
+    """Record a knowledge/code/test gap via Genesis (used by autonomous loop and brain)."""
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="gap_identified",
+            what=what[:500] if what else "gap",
+            who="govern_service",
+            tags=list(tags)[:20] if tags else ["gap"],
+        )
+        return {"status": "recorded", "target": target[:200] if target else ""}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)[:200]}
 
 def genesis_stats():
     try:
@@ -138,7 +153,43 @@ def approvals_history(limit=30):
         from database.session import session_scope
         from sqlalchemy import text
         with session_scope() as db:
-            rows = db.execute(text("SELECT * FROM governance_decisions ORDER BY id DESC LIMIT :lim"), {"lim": int(limit)}).fetchall()
+            rows = db.execute(text(f"SELECT * FROM governance_decisions ORDER BY id DESC LIMIT {int(limit)}")).fetchall()
             return {"history": [dict(r._mapping) for r in rows]}
     except Exception:
         return {"history": []}
+
+def adaptive_overrides(limit=20):
+    try:
+        from database.session import session_scope
+        from models.database_models import AdaptiveOverride
+        with session_scope() as s:
+            overrides = s.query(AdaptiveOverride).order_by(AdaptiveOverride.id.desc()).limit(limit).all()
+            return {"overrides": [o.to_dict() for o in overrides]}
+    except Exception as e:
+        return {"error": str(e), "overrides": []}
+
+def approve_override(override_id: str, action: str):
+    try:
+        from database.session import session_scope
+        from models.database_models import AdaptiveOverride
+        from api._genesis_tracker import track
+        with session_scope() as s:
+            override = s.query(AdaptiveOverride).filter_by(override_id=override_id).first()
+            if not override:
+                return {"error": "Override not found"}
+            
+            override.status = action
+            s.commit()
+            
+            # Record it in genesis as a rule evolution or exception
+            track(
+                key_type="rule_evolution",
+                what=f"Override '{override_id}' actioned: {action}",
+                who="user_govern",
+                how="approve_override",
+                tags=["governance", "override", action],
+                output_data={"override_id": override_id, "action": action, "rule": override.proposed_rule}
+            )
+            return {"override_id": override_id, "action": action, "status": "updated"}
+    except Exception as e:
+        return {"error": str(e)}

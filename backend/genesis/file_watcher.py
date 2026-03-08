@@ -48,7 +48,8 @@ class GenesisFileWatcher(FileSystemEventHandler):
             '.git', '__pycache__', '.pyc', '.pyo', '.pyd',
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
-            'grace.db', 'grace.db-shm', 'grace.db-wal',
+            '.db', '.db-shm', '.db-wal',
+            'observations.json',
             '.log', 'embedding_debug.log', 'logs',  # Exclude logs directory to prevent infinite loop
             'genesis_key',  # Exclude KB genesis_key folder to prevent recursive tracking
             'layer_1',  # Exclude entire layer_1 folder which contains genesis_key data
@@ -423,7 +424,8 @@ def start_watching_workspace(workspace_path: Optional[str] = None) -> bool:
             '.git', '__pycache__', '.pyc', '.pyo', '.pyd',
             'node_modules', '.venv', 'venv', 'env',
             '.genesis_file_versions.json', '.genesis_immutable_memory.json',
-            'grace.db', 'grace.db-shm', 'grace.db-wal',
+            '.db', '.db-shm', '.db-wal',
+            'observations.json',
             '.log', 'embedding_debug.log', 'nul', 'logs',  # Exclude logs directory
             'auto_search',  # Exclude internet search cache
             'sandbox_lab',  # Exclude sandbox experiment files

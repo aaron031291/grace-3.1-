@@ -213,15 +213,18 @@ class SystemRegistry:
         except Exception:
             pass
 
-    def _on_genesis_event(self, event: Dict):
-        """Update last_seen for components based on genesis key activity."""
-        where = event.get("where", "")
-        key_type = event.get("key_type", "")
+    def _on_genesis_event(self, event):
+        """Update last_seen for components based on genesis key activity. Accepts Event or dict."""
+        data = getattr(event, "data", event) if event is not None else {}
+        if not isinstance(data, dict):
+            data = {}
+        where = data.get("where", "")
+        key_type = data.get("key_type", "")
 
         for comp in self._components.values():
             if comp.module_path and comp.module_path in where:
-                comp.last_seen = event.get("timestamp", "")
-                comp.last_genesis_key = event.get("what", "")[:100]
+                comp.last_seen = data.get("timestamp", "")
+                comp.last_genesis_key = (data.get("what", "") or "")[:100]
 
     # ── HUNTER handshake registration ──────────────────────────────────
 

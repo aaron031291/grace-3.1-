@@ -58,7 +58,7 @@ class QwenCodingNet:
         ghost = get_ghost_memory()
         ghost.start_task(task)
 
-        # 2. TimeSense context (shared with Kimi+Opus via consensus)
+        # 2. TimeSense context
         time_context = self._get_time_context()
         ghost.append("context", f"Time: {time_context.get('summary', 'unknown')}")
 
@@ -66,6 +66,38 @@ class QwenCodingNet:
         if self._immune_scan(task, ghost):
             result["status"] = "blocked_by_immune"
             return result
+
+        # 3b. ── Deterministic gate (BEFORE LLM) ──────────────────────────
+        try:
+            from coding_agent.deterministic_gate import get_gate
+            gate_report = get_gate().analyze(task)
+            if not gate_report.gate_passed:
+                result["status"] = "blocked_by_gate"
+                result["gate_report"] = gate_report.as_prompt_context()
+                ghost.append("gate_blocked", f"Risk={gate_report.risk_score:.2f}")
+                return result
+            ghost.append("gate", f"Gate OK (risk={gate_report.risk_score:.2f})")
+        except Exception as _ge:
+            gate_report = None
+            logger.debug("[QWEN-NET] Gate skipped: %s", _ge)
+
+        # 3c. ── Episodic memory injection ────────────────────────────────
+        episodic_context = ""
+        try:
+            from cognitive.episodic_memory import EpisodicMemory
+            from database.session import session_scope
+            with session_scope() as _ep_session:
+                ep_mem = EpisodicMemory(_ep_session)
+                past = ep_mem.retrieve_similar(task, limit=3)
+                if past:
+                    snippets = []
+                    for ep in past:
+                        outcome = ep.outcome if isinstance(ep.outcome, str) else str(ep.outcome)[:100]
+                        snippets.append(f"Past: {ep.problem[:80]} → {outcome[:80]}")
+                    episodic_context = "\n".join(snippets)
+                    ghost.append("episodic", episodic_context[:200])
+        except Exception as _ee:
+            logger.debug("[QWEN-NET] Episodic injection skipped: %s", _ee)
 
         # 4. Get architecture context from compass
         arch_context = self._get_architecture_context(task)
@@ -77,6 +109,12 @@ class QwenCodingNet:
         else:
             blueprint = {"architecture": task, "functions": [], "direct": True}
 
+        # Inject gate report + episodic context into blueprint
+        if gate_report:
+            blueprint["_gate_context"] = gate_report.as_prompt_context()
+        if episodic_context:
+            blueprint["_episodic_context"] = episodic_context
+
         ghost.append("blueprint", json.dumps(blueprint, default=str)[:500])
 
         # 6. Build code with token-managed loop
@@ -87,29 +125,52 @@ class QwenCodingNet:
             result["status"] = "completed"
             ghost.append("success", f"Code generated: {len(code)} chars")
 
-            # 7. Compile and test
-            test_result = self._compile_and_test(code, ghost)
-            result["test_result"] = test_result
-
-            if test_result.get("passed"):
-                # 8. Run diagnostic on the generated code
-                diag = self._run_diagnostics(code, ghost)
-                result["diagnostics"] = diag
-
-                # 9. Deep test engine validation
-                self._run_tests(code, ghost)
-
-                ghost.append("pass", "All checks passed")
-                result["status"] = "deployed"
-            else:
-                # 10. Self-healing attempt
-                healed = self._self_heal(code, test_result, ghost)
-                if healed:
-                    result["code"] = healed
-                    result["status"] = "healed_and_deployed"
+            # ── Verification pass (post-generation, pre-compile) ──────────
+            verified = True
+            try:
+                from coding_agent.verification_pass import get_verification_pass
+                vpass = get_verification_pass()
+                ghost_ctx = ghost.get_context(max_tokens=500) if hasattr(ghost, "get_context") else ""
+                v_result = vpass.verify(code, task, ghost_context=ghost_ctx)
+                result["verification"] = {
+                    "accepted": v_result.accepted,
+                    "trust_score": v_result.trust_score,
+                    "flags": v_result.flags,
+                }
+                if not v_result.accepted:
+                    ghost.append("verify_rejected", v_result.revision_hint[:200])
+                    result["status"] = "verification_failed"
+                    result["revision_hint"] = v_result.revision_hint
+                    verified = False
                 else:
-                    ghost.append("failure", f"Tests failed: {test_result.get('error', '')}")
-                    result["status"] = "needs_fix"
+                    ghost.append("verify_passed", f"Trust={v_result.trust_score:.2f}")
+            except Exception as _ve:
+                logger.debug("[QWEN-NET] Verification skipped: %s", _ve)
+
+            if verified:
+                # 7. Compile and test
+                test_result = self._compile_and_test(code, ghost)
+                result["test_result"] = test_result
+
+                if test_result.get("passed"):
+                    # 8. Run diagnostic on the generated code
+                    diag = self._run_diagnostics(code, ghost)
+                    result["diagnostics"] = diag
+
+                    # 9. Deep test engine validation
+                    self._run_tests(code, ghost)
+
+                    ghost.append("pass", "All checks passed")
+                    result["status"] = "deployed"
+                else:
+                    # 10. Self-healing attempt
+                    healed = self._self_heal(code, test_result, ghost)
+                    if healed:
+                        result["code"] = healed
+                        result["status"] = "healed_and_deployed"
+                    else:
+                        ghost.append("failure", f"Tests failed: {test_result.get('error', '')}")
+                        result["status"] = "needs_fix"
         else:
             result["status"] = "failed"
             ghost.append("failure", "No code generated")
@@ -317,7 +378,9 @@ class QwenCodingNet:
             return {"architecture": task, "functions": [], "fallback": True}
 
     def _build_with_token_management(self, task: str, blueprint: Dict, ghost) -> Optional[str]:
-        """Build code with circuit breaker managing token limits."""
+        """Build code with circuit breaker managing token limits.
+        Deterministic gate context + episodic memory prepended to prompt.
+        """
         try:
             from cognitive.circuit_breaker import enter_loop, exit_loop
 
@@ -329,31 +392,36 @@ class QwenCodingNet:
                 from llm_orchestrator.factory import get_qwen_coder
                 qwen = get_qwen_coder()
 
-                # Build prompt with ghost context (token-managed)
-                ghost_context = ghost.get_context(max_tokens=1000)
+                # Build prompt with ghost context + gate report + episodic context
+                ghost_context = ghost.get_context(max_tokens=800)
                 arch = blueprint.get("architecture", task)
+                gate_ctx = blueprint.get("_gate_context", "")
+                episodic_ctx = blueprint.get("_episodic_context", "")
 
-                prompt = (
-                    f"Build Python code for this task:\n\n"
-                    f"Task: {task}\n"
-                    f"Architecture: {arch[:500]}\n\n"
-                    f"Context from previous work:\n{ghost_context}\n\n"
-                    f"Output ONLY valid Python code. No explanations."
-                )
+                # Assemble structured prompt: deterministic first, then LLM takes over
+                sections = [f"Build Python code for this task:\n\nTask: {task}\nArchitecture: {arch[:400]}"]
+                if gate_ctx:
+                    sections.append(gate_ctx)
+                if episodic_ctx:
+                    sections.append(f"=== RELATED PAST WORK ===\n{episodic_ctx}\n========================")
+                if ghost_context:
+                    sections.append(f"Session context:\n{ghost_context}")
+                sections.append("Output ONLY valid Python code. No explanations.")
 
-                # Token check — if prompt too large, trim ghost context
+                prompt = "\n\n".join(sections)
+
+                # Token check — trim if too large
                 est_tokens = len(prompt) // 4
-                if est_tokens > 3000:
-                    ghost_context = ghost.get_context(max_tokens=500)
+                if est_tokens > 3500:
                     prompt = (
                         f"Build Python code:\nTask: {task}\n"
-                        f"Context:\n{ghost_context}\n\n"
-                        f"Output ONLY Python code."
+                        + (gate_ctx[:300] if gate_ctx else "")
+                        + "\nOutput ONLY Python code."
                     )
 
                 code = qwen.generate(
                     prompt=prompt,
-                    system_prompt="You are a Python code generator. Output ONLY code.",
+                    system_prompt="You are a precise Python code generator. Use the deterministic analysis provided. Output ONLY code.",
                     temperature=0.2,
                     max_tokens=2048,
                 )
@@ -403,3 +471,56 @@ class QwenCodingNet:
 
 def get_qwen_net() -> QwenCodingNet:
     return QwenCodingNet.get_instance()
+
+
+def generate_code(prompt: str, project_folder: str = "", use_pipeline: bool = False) -> Dict[str, Any]:
+    """
+    Generate code from a prompt. Agentic entry: either fast path (Qwen coder only)
+    or full pipeline (consensus design → Qwen build → compile/test → self-heal).
+    Returns {code, prompt, status?, stages_passed?, trust_score?} for brain/HealingCoordinator.
+    """
+    if use_pipeline or not prompt.strip():
+        result = get_qwen_net().execute_task(prompt or "Generate placeholder", use_consensus=True)
+        code = result.get("code", "")
+        return {
+            "code": code,
+            "prompt": prompt,
+            "status": result.get("status", "unknown"),
+            "stages_passed": ["design", "build", "compile"] if result.get("test_result", {}).get("passed") else ["design", "build"],
+            "trust_score": result.get("test_result", {}).get("trust_score", 0.5),
+        }
+    # Fast path: Qwen coder only (reasoning + coding via latest model)
+    try:
+        from llm_orchestrator.factory import get_qwen_coder
+        qwen = get_qwen_coder()
+        context = ""
+        if project_folder:
+            try:
+                from pathlib import Path
+                from settings import settings
+                kb = Path(settings.KNOWLEDGE_BASE_PATH)
+                target = (kb / project_folder.replace("..", "")).resolve()
+                if str(target).startswith(str(kb.resolve())):
+                    files = list(target.rglob("*"))[:20]
+                    context = "Project files: " + ", ".join(f.name for f in files if f.is_file() and f.suffix in (".py", ".js", ".ts", ".jsx", ".tsx"))
+            except Exception:
+                pass
+        full_prompt = f"{context}\n\n{prompt}" if context else prompt
+        raw = qwen.generate(
+            prompt=full_prompt,
+            system_prompt="You are a precise code generator. Output only valid code; use markdown code blocks only when necessary.",
+            temperature=0.2,
+            max_tokens=4096,
+        )
+        code = raw if isinstance(raw, str) else str(raw)
+        if code.strip().startswith("```"):
+            lines = code.strip().split("\n")
+            if lines[0].startswith("```"):
+                lines = lines[1:]
+            if lines and lines[-1].strip() == "```":
+                lines = lines[:-1]
+            code = "\n".join(lines)
+        return {"code": code.strip(), "prompt": prompt, "trust_score": 0.7}
+    except Exception as e:
+        logger.exception("generate_code fast path failed: %s", e)
+        return {"code": "", "prompt": prompt, "error": str(e), "trust_score": 0.0}

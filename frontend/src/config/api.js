@@ -5,8 +5,25 @@
  * 10 resources, 108 endpoints.
  */
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Backend URL: use env override, or in Vite dev use relative (proxy). Otherwise explicit localhost:8000.
+const DEFAULT_BACKEND = "http://localhost:8000";
+function getApiBase() {
+  if (import.meta.env.VITE_API_BASE_URL)
+    return String(import.meta.env.VITE_API_BASE_URL).replace(/\/$/, "");
+  // Vite dev server proxies /health, /brain, /api etc to backend — relative URL works
+  if (import.meta.env.DEV) return "";
+  // Production build or non-Vite: no proxy, so point directly at backend
+  return DEFAULT_BACKEND;
+}
+export const API_BASE_URL = getApiBase();
 export const API_BASE = API_BASE_URL;
+
+// Brain-first unified API (single control plane for chat, system, etc.)
+export const API_V2 = {
+  chat: (action) => `${API_BASE_URL}/api/v2/chat/${action}`,
+  system: (action) => `${API_BASE_URL}/api/v2/system/${action}`,
+  graceState: () => `${API_BASE_URL}/api/v2/system/grace_state`,
+};
 
 // v1 Resource endpoints
 export const V1 = {

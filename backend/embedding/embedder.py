@@ -2,12 +2,16 @@
 Embedding module for generating text embeddings using Qwen3-Embedding-4B model.
 """
 
+import logging
 import os
+import threading
 import numpy as np
 from pathlib import Path
 from typing import List, Union, Optional, Tuple
 import torch
 from sentence_transformers import SentenceTransformer
+
+logger = logging.getLogger(__name__)
 
 # Import settings
 try:
@@ -15,6 +19,47 @@ try:
     USE_SETTINGS = True
 except ImportError:
     USE_SETTINGS = False
+
+# One-time log for CUDA fallback (avoid spam when multiple components load)
+_cuda_fallback_logged = False
+_env_cpu_fix_attempted = False
+
+
+def _set_env_embedding_device_cpu_once():
+    """Set EMBEDDING_DEVICE=cpu in backend/.env so next run does not request CUDA (no warning)."""
+    global _env_cpu_fix_attempted
+    if _env_cpu_fix_attempted:
+        return
+    _env_cpu_fix_attempted = True
+    try:
+        import re
+        backend_dir = Path(__file__).resolve().parent.parent
+        env_file = backend_dir / ".env"
+        if not env_file.exists():
+            return
+        text = env_file.read_text(encoding="utf-8")
+        if "EMBEDDING_DEVICE=" not in text:
+            return
+        new_text = re.sub(r"EMBEDDING_DEVICE=\w+", "EMBEDDING_DEVICE=cpu", text)
+        if new_text != text:
+            env_file.write_text(new_text, encoding="utf-8")
+            logger.info("Set EMBEDDING_DEVICE=cpu in backend/.env (CUDA not available). Restart to use GPU after running setup_gpu.py with Python 3.11/3.12.")
+    except Exception:
+        pass
+
+
+def _cuda_really_works():
+    """True only if a real CUDA kernel runs (catches RTX 5090 / sm_120 with old PyTorch)."""
+    if not torch.cuda.is_available():
+        return False
+    try:
+        # Actually run a kernel; RTX 5090 (sm_120) fails with "no kernel image is available" on PyTorch built for sm_50-sm_90
+        torch.zeros(1, device="cuda").item()
+        return True
+    except RuntimeError as e:
+        if "no kernel image is available" in str(e) or "CUDA" in str(e):
+            return False
+        raise
 
 
 class EmbeddingModel:
@@ -50,13 +95,13 @@ class EmbeddingModel:
         EmbeddingModel._instance_count += 1
         instance_num = EmbeddingModel._instance_count
         
-        # SAFETY CHECK: Should never create more than 1 instance
+        # SAFETY CHECK: Multiple instances in same process usually means a race or worker process
         if instance_num > 1:
-            print(f"[WARN]  WARNING: EmbeddingModel instance #{instance_num} created!")
-            print(f"[WARN]  This should not happen - use get_embedding_model() singleton instead!")
-            print(f"[WARN]  Stack trace:")
-            import traceback
-            traceback.print_stack()
+            logger.warning(
+                "EmbeddingModel instance #%s created in this process; use get_embedding_model() singleton. "
+                "This can happen in uvicorn workers (each process has its own singleton).",
+                instance_num,
+            )
         
         # print(f"[EMBEDDING] Creating EmbeddingModel instance #{instance_num}...")
         
@@ -70,10 +115,27 @@ class EmbeddingModel:
             # CRITICAL: Default to CPU to avoid out-of-memory errors
             device = device or "cpu"
         
-        # Force CPU if device not explicitly set and not available
-        if device == 'cuda' and not torch.cuda.is_available():
-            print("[WARN] CUDA requested but not available, falling back to CPU")
-            device = 'cpu'
+        # Force CPU if CUDA not available or not compatible (e.g. RTX 5090 sm_120 with PyTorch built for sm_90)
+        global _cuda_fallback_logged
+        if device == 'cuda':
+            if not torch.cuda.is_available():
+                if not _cuda_fallback_logged:
+                    _cuda_fallback_logged = True
+                    logger.warning(
+                        "CUDA requested but not available (PyTorch CPU-only or no GPU). Falling back to CPU. "
+                        "For GPU: use Python 3.11/3.12, run backend\\scripts\\setup_gpu.py, then restart."
+                    )
+                    _set_env_embedding_device_cpu_once()
+                device = 'cpu'
+            elif not _cuda_really_works():
+                if not _cuda_fallback_logged:
+                    _cuda_fallback_logged = True
+                    logger.warning(
+                        "CUDA device seen but no compatible kernel (e.g. RTX 5090 / sm_120 with current PyTorch). "
+                        "Falling back to CPU. Set EMBEDDING_DEVICE=cpu in .env or wait for PyTorch with sm_120 support."
+                    )
+                    _set_env_embedding_device_cpu_once()
+                device = 'cpu'
         
         self.device = device
         
@@ -155,7 +217,14 @@ class EmbeddingModel:
                 # print(f"[EMBEDDING]   GPU Used: {torch.cuda.memory_allocated(0) / 1e9:.2f} GB")
     
     def __del__(self):
-        """Destructor to unload model from VRAM."""
+        """Destructor to unload model from VRAM. Skip if this is the global singleton (avoid 'model unloaded' runtime error)."""
+        try:
+            import sys
+            mod = sys.modules.get("embedding.embedder") or sys.modules.get(__name__)
+            if mod and getattr(mod, "_embedding_model_instance", None) is self:
+                return  # Singleton must stay loaded for get_embedding_model()
+        except Exception:
+            pass
         self.unload_model()
     
     def unload_model(self):
@@ -427,9 +496,10 @@ class EmbeddingModel:
         }
 
 
-# Global instance for convenience - STRICTLY ENFORCED SINGLETON
-_embedding_model_instance = None  # Renamed for clarity
-_embedding_model_loaded = False  # Track whether model has been loaded
+# Global instance for convenience - STRICTLY ENFORCED SINGLETON (per process)
+_embedding_model_instance = None
+_embedding_model_loaded = False
+_embedding_model_lock = threading.Lock()
 
 
 def get_embedding_model(
@@ -440,6 +510,7 @@ def get_embedding_model(
     """
     Get or create the global embedding model instance (singleton pattern).
     The model is loaded ONLY ONCE on first call and reused thereafter.
+    Thread-safe so concurrent startup (e.g. lifespan + workers) does not create duplicates.
     
     CRITICAL: This is the ONLY way to get the embedding model.
     Direct EmbeddingModel() instantiation should never happen in production code.
@@ -450,25 +521,24 @@ def get_embedding_model(
         reset: Force reload the model (not recommended in production)
         
     Returns:
-        EmbeddingModel instance (always the same singleton instance)
+        EmbeddingModel instance (always the same singleton instance in this process)
     """
     global _embedding_model_instance, _embedding_model_loaded
     
-    # FAST PATH: If model is already loaded, return immediately without logging
+    # FAST PATH: Already loaded (no lock needed for read)
     if _embedding_model_loaded and not reset:
         return _embedding_model_instance
-    
-    # SLOW PATH: First initialization or reset requested
     if _embedding_model_instance is not None and not reset:
         return _embedding_model_instance
     
-    # print(f"[EMBEDDING] Creating new embedding model instance (singleton)...")
-    # print(f"[EMBEDDING]   model_path={model_path}, device={device}, reset={reset}")
-    
-    _embedding_model_instance = EmbeddingModel(model_path=model_path, device=device)
-    _embedding_model_loaded = True
-    
-    # print(f"[EMBEDDING] [OK] Embedding model singleton created and ready")
+    with _embedding_model_lock:
+        # Double-check after acquiring lock (another thread may have created it)
+        if _embedding_model_loaded and not reset:
+            return _embedding_model_instance
+        if _embedding_model_instance is not None and not reset:
+            return _embedding_model_instance
+        _embedding_model_instance = EmbeddingModel(model_path=model_path, device=device)
+        _embedding_model_loaded = True
     return _embedding_model_instance
 
 

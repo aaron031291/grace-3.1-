@@ -6,11 +6,11 @@ Provides REST endpoints to trigger and monitor file-based ingestion.
 from fastapi import APIRouter, HTTPException, Query, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from datetime import datetime, timezone
+from datetime import datetime
 import logging
 
 from ingestion.file_manager import IngestionFileManager, IngestionResult
-from ingestion.service import get_ingestion_service
+from api.ingest import get_ingestion_service
 from embedding import get_embedding_model
 from genesis.genesis_key_service import get_genesis_service
 from models.genesis_key_models import GenesisKeyType
@@ -67,7 +67,7 @@ class FileIngestionResultItem(BaseModel):
     document_id: Optional[int] = None
     message: str = ""
     error: Optional[str] = None
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
 class ScanResults(BaseModel):
@@ -76,7 +76,7 @@ class ScanResults(BaseModel):
     successful: int
     failed: int
     results: List[FileIngestionResultItem]
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
 class FileManagerStatus(BaseModel):
@@ -85,7 +85,7 @@ class FileManagerStatus(BaseModel):
     knowledge_base_path: str
     tracked_files: int
     git_initialized: bool
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
 # ==================== Endpoints ====================

@@ -146,6 +146,7 @@ BRAIN_RATE_LIMITS = {
     "data": 50,
     "tasks": 100,
     "code": 30,
+    "deterministic": 20,  # scan/fix are heavier; conservative limit
 }
 
 
@@ -166,203 +167,6 @@ def get_rate_limit_status() -> dict:
         "limits": BRAIN_RATE_LIMITS,
         "active_limiters": list(_brain_limiters.keys()),
     }
-
-
-# ═══════════════════════════════════════════════════════════════════
-#  PER-USER RATE LIMITER — tracks by user_id, not just IP
-# ═══════════════════════════════════════════════════════════════════
-
-_user_limiters: Dict[str, RateLimiter] = {}
-_user_limiter_lock = threading.Lock()
-
-USER_RATE_LIMITS = {
-    "free": 30,
-    "pro": 120,
-    "admin": 500,
-    "default": 60,
-}
-
-
-def check_user_rate_limit(user_id: str, tier: str = "default") -> dict:
-    """
-    Per-user rate limiting. Returns dict with allowed, remaining, limit.
-
-    Args:
-        user_id: Unique user identifier
-        tier: User tier (free, pro, admin, default)
-    """
-    rpm = USER_RATE_LIMITS.get(tier, USER_RATE_LIMITS["default"])
-
-    with _user_limiter_lock:
-        if user_id not in _user_limiters:
-            _user_limiters[user_id] = RateLimiter(requests_per_minute=rpm)
-
-    limiter = _user_limiters[user_id]
-    allowed = limiter.allow(user_id)
-    remaining = limiter.remaining(user_id)
-
-    return {
-        "allowed": allowed,
-        "remaining": remaining,
-        "limit": rpm,
-        "tier": tier,
-        "user_id": user_id,
-    }
-
-
-# ═══════════════════════════════════════════════════════════════════
-#  LLM RESPONSE CACHE — avoids repeated API calls for same queries
-# ═══════════════════════════════════════════════════════════════════
-
-class LLMCache:
-    """
-    In-memory LRU cache for LLM responses with TTL.
-    Avoids costly re-calls for identical or near-identical prompts.
-    """
-
-    def __init__(self, max_size: int = 500, ttl_seconds: int = 3600):
-        self._max_size = max_size
-        self._ttl = ttl_seconds
-        self._cache: Dict[str, dict] = {}
-        self._access_order: list = []
-        self._lock = threading.Lock()
-        self._hits = 0
-        self._misses = 0
-
-    def _make_key(self, prompt: str, model: str = "", temperature: float = 0.7) -> str:
-        normalized = prompt.strip().lower()[:2000]
-        raw = f"{model}:{temperature}:{normalized}"
-        return hashlib.sha256(raw.encode()).hexdigest()
-
-    def get(self, prompt: str, model: str = "", temperature: float = 0.7) -> Optional[str]:
-        key = self._make_key(prompt, model, temperature)
-        with self._lock:
-            entry = self._cache.get(key)
-            if entry is None:
-                self._misses += 1
-                return None
-            if time.time() - entry["ts"] > self._ttl:
-                del self._cache[key]
-                self._misses += 1
-                return None
-            self._hits += 1
-            return entry["response"]
-
-    def put(self, prompt: str, response: str, model: str = "", temperature: float = 0.7):
-        key = self._make_key(prompt, model, temperature)
-        with self._lock:
-            if len(self._cache) >= self._max_size:
-                oldest_key = min(self._cache, key=lambda k: self._cache[k]["ts"])
-                del self._cache[oldest_key]
-            self._cache[key] = {
-                "response": response,
-                "ts": time.time(),
-                "model": model,
-            }
-
-    def stats(self) -> dict:
-        with self._lock:
-            return {
-                "size": len(self._cache),
-                "max_size": self._max_size,
-                "ttl_seconds": self._ttl,
-                "hits": self._hits,
-                "misses": self._misses,
-                "hit_rate": round(self._hits / max(self._hits + self._misses, 1), 3),
-            }
-
-    def clear(self):
-        with self._lock:
-            self._cache.clear()
-            self._hits = 0
-            self._misses = 0
-
-
-_llm_cache: Optional[LLMCache] = None
-_cache_lock = threading.Lock()
-
-
-def get_llm_cache() -> LLMCache:
-    global _llm_cache
-    if _llm_cache is None:
-        with _cache_lock:
-            if _llm_cache is None:
-                max_size = int(os.getenv("LLM_CACHE_SIZE", "500"))
-                ttl = int(os.getenv("LLM_CACHE_TTL", "3600"))
-                _llm_cache = LLMCache(max_size=max_size, ttl_seconds=ttl)
-    return _llm_cache
-
-
-# ═══════════════════════════════════════════════════════════════════
-#  API COST TRACKER — monitors LLM API spend
-# ═══════════════════════════════════════════════════════════════════
-
-class APICostTracker:
-    """Tracks estimated API costs per model and per user."""
-
-    COST_PER_1K_TOKENS = {
-        "kimi-k2.5": {"input": 0.002, "output": 0.006},
-        "claude-sonnet-4-20250514": {"input": 0.003, "output": 0.015},
-        "gpt-4o": {"input": 0.005, "output": 0.015},
-        "deepseek-r1:7b": {"input": 0.0, "output": 0.0},
-        "qwen2.5-coder:7b": {"input": 0.0, "output": 0.0},
-        "qwen2.5:7b": {"input": 0.0, "output": 0.0},
-        "mistral:7b": {"input": 0.0, "output": 0.0},
-    }
-
-    def __init__(self):
-        self._lock = threading.Lock()
-        self._by_model: Dict[str, dict] = defaultdict(
-            lambda: {"calls": 0, "input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0}
-        )
-        self._by_user: Dict[str, dict] = defaultdict(
-            lambda: {"calls": 0, "cost_usd": 0.0}
-        )
-        self._total_cost = 0.0
-
-    def record(
-        self,
-        model: str,
-        input_tokens: int = 0,
-        output_tokens: int = 0,
-        user_id: str = "system",
-    ):
-        rates = self.COST_PER_1K_TOKENS.get(model, {"input": 0.001, "output": 0.003})
-        cost = (input_tokens / 1000 * rates["input"]) + (output_tokens / 1000 * rates["output"])
-
-        with self._lock:
-            m = self._by_model[model]
-            m["calls"] += 1
-            m["input_tokens"] += input_tokens
-            m["output_tokens"] += output_tokens
-            m["cost_usd"] += cost
-
-            u = self._by_user[user_id]
-            u["calls"] += 1
-            u["cost_usd"] += cost
-
-            self._total_cost += cost
-
-    def get_summary(self) -> dict:
-        with self._lock:
-            return {
-                "total_cost_usd": round(self._total_cost, 4),
-                "by_model": {k: {**v, "cost_usd": round(v["cost_usd"], 4)} for k, v in self._by_model.items()},
-                "by_user": {k: {**v, "cost_usd": round(v["cost_usd"], 4)} for k, v in self._by_user.items()},
-            }
-
-
-_cost_tracker: Optional[APICostTracker] = None
-_cost_lock = threading.Lock()
-
-
-def get_cost_tracker() -> APICostTracker:
-    global _cost_tracker
-    if _cost_tracker is None:
-        with _cost_lock:
-            if _cost_tracker is None:
-                _cost_tracker = APICostTracker()
-    return _cost_tracker
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -417,79 +221,41 @@ def safe_sql_text(sql: str, params: dict):
 # ═══════════════════════════════════════════════════════════════════
 
 def backup_database(source_path: str = None, backup_dir: str = None) -> str:
-    """Create a timestamped backup — supports both SQLite (file copy) and PostgreSQL (pg_dump)."""
+    """Create a timestamped backup of the SQLite database."""
     import shutil
-    import subprocess
     from datetime import datetime
 
-    try:
-        from settings import settings
-        db_type = getattr(settings, "DATABASE_TYPE", "sqlite")
-    except Exception:
-        db_type = os.getenv("DATABASE_TYPE", "sqlite")
-
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-
-    if db_type == "postgresql":
-        if not backup_dir:
-            backup_dir = str(Path(__file__).parent.parent / "data" / "backups")
-        Path(backup_dir).mkdir(parents=True, exist_ok=True)
-        backup_path = f"{backup_dir}/grace_{timestamp}.sql"
-
+    if not source_path:
         try:
-            from settings import settings as s
-            pg_env = {
-                **os.environ,
-                "PGPASSWORD": s.DATABASE_PASSWORD or "",
-            }
-            cmd = [
-                "pg_dump",
-                "-h", s.DATABASE_HOST or "localhost",
-                "-p", str(s.DATABASE_PORT or 5432),
-                "-U", s.DATABASE_USER or "grace",
-                "-d", s.DATABASE_NAME or "grace",
-                "-F", "c",
-                "-f", backup_path,
-            ]
-            subprocess.run(cmd, env=pg_env, check=True, timeout=300)
-            size_mb = round(Path(backup_path).stat().st_size / 1048576, 2)
-            logger.info(f"PostgreSQL backup: {backup_path} ({size_mb} MB)")
-        except FileNotFoundError:
-            backup_path = f"pg_dump not found — install PostgreSQL client tools"
-        except subprocess.CalledProcessError as e:
-            backup_path = f"pg_dump failed: {e}"
-        except Exception as e:
-            backup_path = f"PostgreSQL backup failed: {e}"
-    else:
-        if not source_path:
-            try:
-                from settings import settings
-                source_path = settings.DATABASE_PATH
-            except Exception:
-                source_path = "data/grace.db"
+            from settings import settings
+            source_path = settings.DATABASE_PATH
+        except Exception:
+            source_path = "data/grace.db"
 
-        if not backup_dir:
-            backup_dir = str(Path(source_path).parent / "backups")
+    if not backup_dir:
+        backup_dir = str(Path(source_path).parent / "backups")
 
-        Path(backup_dir).mkdir(parents=True, exist_ok=True)
-        backup_path = f"{backup_dir}/grace_{timestamp}.db"
+    Path(backup_dir).mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    backup_path = f"{backup_dir}/grace_{timestamp}.db"
 
-        source = Path(source_path)
-        if not source.exists():
-            return f"Source not found: {source_path}"
+    source = Path(source_path)
+    if not source.exists():
+        return f"Source not found: {source_path}"
 
-        shutil.copy2(str(source), backup_path)
+    shutil.copy2(str(source), backup_path)
 
-        wal = Path(f"{source_path}-wal")
-        if wal.exists():
-            shutil.copy2(str(wal), f"{backup_path}-wal")
+    # Also backup WAL if present
+    wal = Path(f"{source_path}-wal")
+    if wal.exists():
+        shutil.copy2(str(wal), f"{backup_path}-wal")
 
-        size_mb = round(Path(backup_path).stat().st_size / 1048576, 2)
-        logger.info(f"SQLite backup: {backup_path} ({size_mb} MB)")
+    size_mb = round(Path(backup_path).stat().st_size / 1048576, 2)
+    logger.info(f"Database backup: {backup_path} ({size_mb} MB)")
 
     try:
         from api._genesis_tracker import track
-        track(key_type="system_event", what=f"Database backup: {backup_path}",
+        track(key_type="system_event", what=f"Database backup: {backup_path} ({size_mb}MB)",
               who="security.backup_database", tags=["backup", "database"])
     except Exception:
         pass

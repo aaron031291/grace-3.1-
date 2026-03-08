@@ -1,5 +1,7 @@
 """
-Complete Grace Startup Script
+Complete Grace Startup Script (backend-internal full init).
+
+For normal startup from project root use: start_everything.bat or python grace_start.py.
 
 Initializes and activates ALL Grace systems:
 1. Version control setup (Git hooks, file watcher)
@@ -252,7 +254,7 @@ def verify_systems():
 
     # Check autonomous learning
     try:
-        from cognitive.thread_learning_orchestrator import ThreadLearningOrchestrator
+        from api.autonomous_learning import get_learning_orchestrator
         systems.append("Autonomous Learning")
         print_success("Autonomous Learning ready")
     except Exception as e:

@@ -29,8 +29,6 @@ class PatternType(str, Enum):
     LEARNING_OPPORTUNITY = "learning_opportunity"
     INFRASTRUCTURE_ISSUE = "infrastructure_issue"
     CODE_QUALITY_ISSUE = "code_quality_issue"
-    E2E_PIPELINE_FAILURE = "e2e_pipeline_failure"
-    E2E_PIPELINE_DEGRADED = "e2e_pipeline_degraded"
 
 
 class AnomalyType(str, Enum):
@@ -191,10 +189,6 @@ class InterpreterLayer:
         if sensor_data.genesis_keys:
             patterns.extend(self._detect_genesis_patterns(sensor_data))
 
-        # E2E pipeline patterns
-        if sensor_data.e2e_pipeline:
-            patterns.extend(self._detect_e2e_patterns(sensor_data.e2e_pipeline))
-
         # Learning opportunity patterns
         patterns.extend(self._detect_learning_opportunities(sensor_data))
 
@@ -339,35 +333,6 @@ class InterpreterLayer:
                     'applied_fixes': genesis.applied_fixes,
                 }],
                 suggested_action="Review unapplied fixes" if fix_rate < 0.5 else None
-            ))
-
-        return patterns
-
-    def _detect_e2e_patterns(self, e2e: 'E2EPipelineData') -> List[Pattern]:
-        """Detect patterns in e2e LLM pipeline validation results."""
-        from .sensors import E2EPipelineData
-        patterns = []
-
-        if e2e.failed > 0:
-            patterns.append(Pattern(
-                pattern_type=PatternType.E2E_PIPELINE_FAILURE,
-                description=f"E2E pipeline: {e2e.failed} checks failed across {len(e2e.broken_stages)} stages",
-                confidence=1.0,
-                frequency=e2e.failed,
-                affected_components=[s.get("name", "") for s in e2e.broken_stages],
-                evidence=e2e.broken_checks[:10],
-                suggested_action="Run e2e_pipeline_heal to auto-fix deterministic issues",
-            ))
-
-        if e2e.warnings > 3:
-            patterns.append(Pattern(
-                pattern_type=PatternType.E2E_PIPELINE_DEGRADED,
-                description=f"E2E pipeline degraded: {e2e.warnings} warnings ({e2e.passed}/{e2e.total_checks} passing)",
-                confidence=0.8,
-                frequency=e2e.warnings,
-                affected_components=[c.get("stage_name", "") for c in e2e.broken_checks if c.get("verdict") == "warn"],
-                evidence=e2e.broken_checks[:5],
-                suggested_action="Review service connectivity and runtime dependencies",
             ))
 
         return patterns

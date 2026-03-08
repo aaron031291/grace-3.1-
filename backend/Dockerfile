@@ -11,29 +11,8 @@
 FROM node:20-slim as mcp-builder
 
 WORKDIR /app
-
-# Build DesktopCommanderMCP
 COPY mcp_repos/DesktopCommanderMCP ./mcp_repos/DesktopCommanderMCP
 WORKDIR /app/mcp_repos/DesktopCommanderMCP
-RUN npm install && npm run build
-
-# Build MCP memory server
-WORKDIR /app
-COPY mcp_repos/mcp-servers/src/memory ./mcp_repos/mcp-servers/src/memory
-COPY mcp_repos/mcp-servers/tsconfig.json ./mcp_repos/mcp-servers/tsconfig.json
-WORKDIR /app/mcp_repos/mcp-servers/src/memory
-RUN npm install && npm run build
-
-# Build MCP filesystem server
-WORKDIR /app
-COPY mcp_repos/mcp-servers/src/filesystem ./mcp_repos/mcp-servers/src/filesystem
-WORKDIR /app/mcp_repos/mcp-servers/src/filesystem
-RUN npm install && npm run build
-
-# Build MCP sequential-thinking server
-WORKDIR /app
-COPY mcp_repos/mcp-servers/src/sequentialthinking ./mcp_repos/mcp-servers/src/sequentialthinking
-WORKDIR /app/mcp_repos/mcp-servers/src/sequentialthinking
 RUN npm install && npm run build
 
 # Stage 1: Builder - Install dependencies
@@ -96,12 +75,6 @@ COPY --chown=grace:grace . .
 # Copy built MCP assets from Stage 0
 COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/DesktopCommanderMCP/dist /app/mcp_repos/DesktopCommanderMCP/dist
 COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/DesktopCommanderMCP/node_modules /app/mcp_repos/DesktopCommanderMCP/node_modules
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/memory/dist /app/mcp_repos/mcp-servers/src/memory/dist
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/memory/node_modules /app/mcp_repos/mcp-servers/src/memory/node_modules
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/filesystem/dist /app/mcp_repos/mcp-servers/src/filesystem/dist
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/filesystem/node_modules /app/mcp_repos/mcp-servers/src/filesystem/node_modules
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/sequentialthinking/dist /app/mcp_repos/mcp-servers/src/sequentialthinking/dist
-COPY --from=mcp-builder --chown=grace:grace /app/mcp_repos/mcp-servers/src/sequentialthinking/node_modules /app/mcp_repos/mcp-servers/src/sequentialthinking/node_modules
 
 # Create necessary directories
 RUN mkdir -p /app/data /app/logs /app/knowledge_base && \

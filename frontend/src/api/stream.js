@@ -8,7 +8,8 @@
  *   );
  */
 
-const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+import { API_BASE_URL } from "../config/api";
+const BASE = API_BASE_URL;
 
 /**
  * Stream a chat response token by token.
@@ -50,7 +51,7 @@ export async function streamChat(prompt, model = "kimi", mentions = [], onToken,
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
             if (parsed.error) onError?.(parsed.error);
-          } catch { /* expected */ }
+          } catch {}
         }
       }
     }
@@ -90,12 +91,12 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
           try {
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
-          } catch { /* expected */ }
+          } catch {}
         }
       }
     }
     onDone?.();
-  } catch { /* expected */ }
+  } catch {}
 }
 
 /**
@@ -105,7 +106,7 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
  */
 export function parseMentions(text) {
   const mentions = [];
-  const cleanText = text.replace(/@([\w./-]+)/g, (_match, path) => {
+  const cleanText = text.replace(/@([\w./\-]+)/g, (match, path) => {
     mentions.push(path);
     return "";
   }).trim();

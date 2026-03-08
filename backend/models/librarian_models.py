@@ -17,7 +17,7 @@ The librarian system automatically organizes and indexes all files from:
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, CheckConstraint
 from sqlalchemy.orm import relationship
 from database.base import BaseModel
-from datetime import datetime, timezone
+from datetime import datetime
 
 
 class LibrarianTag(BaseModel):
@@ -67,7 +67,7 @@ class DocumentTag(BaseModel):
     tag_id = Column(Integer, ForeignKey("librarian_tags.id", ondelete="CASCADE"), nullable=False, index=True)
     assigned_by = Column(String(50), default="auto")  # "auto", "user", "ai", "rule"
     confidence = Column(Float, default=1.0)  # Confidence in tag assignment (0.0-1.0)
-    assigned_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    assigned_at = Column(DateTime, default=datetime.utcnow)
     assignment_metadata = Column(JSON, nullable=True)  # Additional context (e.g., rule_id, ai_reasoning)
 
     # Relationships

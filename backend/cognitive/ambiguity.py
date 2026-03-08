@@ -26,7 +26,7 @@ class AmbiguityEntry:
     confidence: Optional[float] = None  # 0.0 to 1.0 for inferences
     blocking: bool = False  # Does this block irreversible actions?
     notes: str = ""
-    created_at: str = field(default_factory=lambda: str(__import__('datetime').datetime.now(__import__('datetime').timezone.utc)))
+    created_at: str = field(default_factory=lambda: str(__import__('datetime').datetime.utcnow()))
 
 
 class AmbiguityLedger:

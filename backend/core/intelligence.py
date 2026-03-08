@@ -15,7 +15,7 @@ import json
 import time
 import threading
 from collections import defaultdict, Counter
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class GenesisKeyMiner:
         try:
             from database.session import session_scope
             from models.genesis_key_models import GenesisKey
-            since = datetime.now(timezone.utc) - timedelta(hours=hours)
+            since = datetime.utcnow() - timedelta(hours=hours)
             with session_scope() as s:
                 keys = s.query(GenesisKey).filter(
                     GenesisKey.when_timestamp >= since
@@ -315,7 +315,7 @@ _episodic_miner = EpisodicMiner()
 def get_intelligence_report(hours: int = 24) -> dict:
     """Full intelligence report — everything mined and analyzed."""
     return {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.utcnow().isoformat(),
         "genesis_patterns": _miner.mine_patterns(hours=hours),
         "trust_state": AdaptiveTrust.get_all_trust(),
         "episodic_analysis": _episodic_miner.mine_episodes(),

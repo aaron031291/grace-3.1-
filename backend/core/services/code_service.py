@@ -20,8 +20,7 @@ def _load_projects():
     PROJECTS_META.parent.mkdir(parents=True, exist_ok=True)
     if PROJECTS_META.exists():
         try: return json.loads(PROJECTS_META.read_text())
-        except Exception as e:
-            logger.warning(f"Failed to load projects metadata: {e}")
+        except Exception: pass
     return []
 
 def _save_projects(data):
@@ -61,8 +60,7 @@ def write_file(path, content):
         from api._genesis_tracker import track
         track(key_type="code_change", what=f"File written: {path}",
               who="code_service", file_path=path, tags=["code", "write"])
-    except Exception as e:
-        logger.debug(f"Genesis tracking unavailable for code_change: {e}")
+    except Exception: pass
     return {"path": path, "saved": True}
 
 def create_file(path, content=""):
@@ -77,10 +75,17 @@ def delete_file(path):
     target.unlink()
     return {"path": path, "deleted": True}
 
-def generate_code(prompt, project_folder=""):
+def generate_code(prompt, project_folder="", use_pipeline=False):
+    """
+    Generate code via Qwen (latest coder model). Follows pipeline when use_pipeline=True:
+    consensus design → Qwen build → compile/test → self-heal. Otherwise uses Qwen coder only.
+    """
     try:
-        from llm_orchestrator.factory import get_llm_client
-        client = get_llm_client()
+        if use_pipeline:
+            from cognitive.qwen_coding_net import generate_code as pipeline_generate
+            return pipeline_generate(prompt, project_folder, use_pipeline=True)
+        from llm_orchestrator.factory import get_llm_for_task
+        client = get_llm_for_task("code")
         context = ""
         if project_folder:
             try:
@@ -90,11 +95,12 @@ def generate_code(prompt, project_folder=""):
                     if f.is_file() and f.suffix in (".py", ".js", ".ts", ".jsx", ".tsx"):
                         files.append(f.name)
                 context = f"Project files: {', '.join(files[:20])}"
-            except Exception: pass
-
+            except Exception:
+                pass
         full_prompt = f"{context}\n\n{prompt}" if context else prompt
-        response = client.generate(prompt=full_prompt, system_prompt="You are a code generator.", max_tokens=4096)
-        return {"code": response if isinstance(response, str) else str(response), "prompt": prompt}
+        response = client.generate(prompt=full_prompt, system_prompt="You are a precise code generator. Output only valid code.", max_tokens=4096)
+        code = response if isinstance(response, str) else str(response)
+        return {"code": code, "prompt": prompt}
     except Exception as e:
         return {"error": str(e)}
 

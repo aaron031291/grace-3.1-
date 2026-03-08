@@ -1,1621 +1,724 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config/api';
 
 const C = {
-  bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460',
-  accent: '#e94560', accentAlt: '#533483',
-  text: '#eee', muted: '#aaa', dim: '#666', border: '#333',
-  success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3',
+  bg: '#080814',
+  bgAlt: '#12122a',
+  accent: '#e94560',
+  success: '#3fb950',
+  text: '#eee',
+  dim: '#888',
+  border: '#222',
+  highlight: '#2a2a4a',
+  warn: '#d29922',
+  error: '#f85149'
 };
 
-const btn = (bg = C.accentAlt) => ({
-  padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer',
-  fontSize: 12, fontWeight: 600, color: '#fff', background: bg, transition: 'opacity .15s',
-});
+export default function GovernanceTab({ domain = "Global (All Domains)" }) {
+  const [activeView, setActiveView] = useState("genesis");
 
-function StatusBadge({ status }) {
-  const colors = {
-    approved: C.success, completed: C.success, healthy: C.success, excellent: C.success, good: C.success,
-    pending: C.warn, discussion: C.warn, fair: C.warn, degraded: C.warn, warning: C.warn,
-    denied: C.error, failed: C.error, poor: C.error, critical: C.error,
-  };
-  const bg = colors[(status || '').toLowerCase()] || C.dim;
-  return (
-    <span style={{
-      fontSize: 10, padding: '2px 8px', borderRadius: 10, fontWeight: 700,
-      background: bg + '30', color: bg, textTransform: 'uppercase', letterSpacing: '0.3px',
-    }}>{status || 'unknown'}</span>
-  );
-}
-
-function MeterBar({ value, max = 100, color = C.accent }) {
-  const pct = Math.min((value / max) * 100, 100);
-  return (
-    <div style={{ height: 6, background: C.bgDark, borderRadius: 3, overflow: 'hidden', flex: 1 }}>
-      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 3, transition: 'width .4s' }} />
-    </div>
-  );
-}
-
-function Card({ title, children, extra }) {
-  return (
-    <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 12 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{title}</span>
-        {extra}
-      </div>
-      {children}
-    </div>
-  );
-}
-
-// ── Sub-tab: Approvals ────────────────────────────────────────────────
-function ApprovalsPanel() {
-  const [pending, setPending] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [actioning, setActioning] = useState(null);
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    const [pRes, hRes] = await Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/governance-hub/approvals`),
-      fetch(`${API_BASE_URL}/api/governance-hub/approvals/history?limit=30`),
-    ]);
-    if (pRes.status === 'fulfilled' && pRes.value.ok) setPending((await pRes.value.json()).decisions || []);
-    if (hRes.status === 'fulfilled' && hRes.value.ok) setHistory((await hRes.value.json()).decisions || []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { refresh(); }, [refresh]);
-
-  const handleAction = async (id, decision) => {
-    setActioning(id);
-    try {
-      await fetch(`${API_BASE_URL}/api/governance-hub/approvals/${id}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision }),
-      });
-      refresh();
-    } catch { /* silent */ }
-    finally { setActioning(null); }
-  };
-
-  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading approvals...</div>;
+  // Inline Styles
+  const navBtnStyle = (active) => ({
+    background: active ? C.highlight : 'transparent',
+    color: active ? '#fff' : C.dim,
+    border: 'none',
+    padding: '12px 16px',
+    textAlign: 'left',
+    width: '100%',
+    cursor: 'pointer',
+    fontSize: 14,
+    fontWeight: active ? 700 : 500,
+    borderLeft: active ? `3px solid ${C.accent}` : '3px solid transparent',
+    transition: 'all 0.2s'
+  });
 
   return (
-    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
-      <Card title={`Pending Approvals (${pending.length})`} extra={
-        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh</button>
-      }>
-        {pending.length === 0 ? (
-          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 13 }}>No pending approvals</div>
-        ) : pending.map(d => (
-          <div key={d.id} style={{ padding: '10px 12px', marginBottom: 6, background: C.bg, borderRadius: 6, border: `1px solid ${C.border}` }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-              <StatusBadge status={d.severity} />
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{d.title}</span>
-              <span style={{ fontSize: 10, color: C.dim, marginLeft: 'auto' }}>{d.pillar_type}</span>
-            </div>
-            {d.description && <div style={{ fontSize: 12, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>{d.description}</div>}
-            <div style={{ display: 'flex', gap: 6 }}>
-              <button onClick={() => handleAction(d.id, 'approve')} disabled={actioning === d.id} style={btn(C.success)}>✓ Approve</button>
-              <button onClick={() => handleAction(d.id, 'deny')} disabled={actioning === d.id} style={btn(C.error)}>✕ Deny</button>
-              <button onClick={() => handleAction(d.id, 'discuss')} disabled={actioning === d.id} style={btn(C.warn)}>💬 Discuss</button>
-            </div>
-          </div>
-        ))}
-      </Card>
+    <div style={{ display: 'flex', height: '100%', background: C.bg, overflow: 'hidden' }}>
 
-      <Card title={`Decision History (${history.length})`}>
-        {history.length === 0 ? (
-          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No history</div>
-        ) : history.map(d => (
-          <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: `1px solid ${C.border}`, fontSize: 12 }}>
-            <StatusBadge status={d.status} />
-            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.title}</span>
-            <span style={{ color: C.dim, fontSize: 10, flexShrink: 0 }}>{d.created_at ? new Date(d.created_at).toLocaleDateString() : ''}</span>
-          </div>
-        ))}
-      </Card>
-    </div>
-  );
-}
-
-// ── Sub-tab: Scores ───────────────────────────────────────────────────
-function ScoresPanel() {
-  const [scores, setScores] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/governance-hub/scores`)
-      .then(r => r.ok ? r.json() : { components: [] })
-      .then(setScores).catch(() => {}).finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading scores...</div>;
-  if (!scores) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
-
-  const systemTrust = scores.system_trust?.trust_score || 0;
-  const trustColor = systemTrust >= 0.8 ? C.success : systemTrust >= 0.5 ? C.warn : C.error;
-
-  return (
-    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
-      <Card title="System Trust Score">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
-          <span style={{ fontSize: 36, fontWeight: 800, color: trustColor }}>{(systemTrust * 100).toFixed(0)}%</span>
-          <div style={{ flex: 1 }}>
-            <MeterBar value={systemTrust * 100} color={trustColor} />
-            <div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>
-              Status: <StatusBadge status={scores.system_trust?.status || 'unknown'} />
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      <Card title={`Component Scores (${scores.component_count})`}>
-        {(scores.components || []).length === 0 ? (
-          <div style={{ padding: 16, textAlign: 'center', color: C.dim, fontSize: 12 }}>No components tracked yet</div>
-        ) : (scores.components || []).map((comp, i) => {
-          const ts = comp.trust_score || 0;
-          const tc = ts >= 0.8 ? C.success : ts >= 0.5 ? C.warn : C.error;
-          return (
-            <div key={i} style={{ padding: '8px 0', borderBottom: `1px solid ${C.border}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 600, flex: 1 }}>{comp.name}</span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: tc }}>{(ts * 100).toFixed(0)}%</span>
-                <StatusBadge status={comp.status} />
-              </div>
-              <MeterBar value={ts * 100} color={tc} />
-            </div>
-          );
-        })}
-      </Card>
-    </div>
-  );
-}
-
-// ── Sub-tab: Performance ──────────────────────────────────────────────
-function PerformancePanel() {
-  const [metrics, setMetrics] = useState(null);
-  const [bridge, setBridge] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [fullData, setFullData] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/governance/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
-  }, []);
-
-  const refresh = useCallback(() => {
-    setLoading(true);
-    Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/governance-hub/performance`).then(r => r.ok ? r.json() : null),
-      fetch(`${API_BASE_URL}/api/bridge/governance/full`).then(r => r.ok ? r.json() : null),
-    ]).then(([mRes, bRes]) => {
-      if (mRes.status === 'fulfilled') setMetrics(mRes.value);
-      if (bRes.status === 'fulfilled') setBridge(bRes.value);
-      setLoading(false);
-    });
-  }, []);
-
-  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
-
-  if (loading && !metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading metrics...</div>;
-  if (!metrics) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Failed to load</div>;
-
-  const cpuColor = (metrics.cpu?.total_percent || 0) > 80 ? C.error : (metrics.cpu?.total_percent || 0) > 50 ? C.warn : C.success;
-  const memColor = (metrics.memory?.percent || 0) > 80 ? C.error : (metrics.memory?.percent || 0) > 50 ? C.warn : C.success;
-  const diskColor = (metrics.disk?.percent || 0) > 80 ? C.error : (metrics.disk?.percent || 0) > 50 ? C.warn : C.success;
-
-  return (
-    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
-        {[
-          { label: 'CPU', val: metrics.cpu?.total_percent, unit: '%', color: cpuColor, sub: `${metrics.cpu?.core_count} cores` },
-          { label: 'Memory', val: metrics.memory?.percent, unit: '%', color: memColor, sub: `${metrics.memory?.used_gb} / ${metrics.memory?.total_gb} GB` },
-          { label: 'Disk', val: metrics.disk?.percent, unit: '%', color: diskColor, sub: `${metrics.disk?.used_gb} / ${metrics.disk?.total_gb} GB` },
-        ].map((m, i) => (
-          <div key={i} style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
-            <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 8 }}>{m.label}</div>
-            <div style={{ fontSize: 28, fontWeight: 800, color: m.color }}>{(m.val || 0).toFixed(1)}{m.unit}</div>
-            <MeterBar value={m.val || 0} color={m.color} />
-            <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>{m.sub}</div>
-          </div>
-        ))}
-      </div>
-
-      {metrics.cpu?.per_core && (
-        <Card title="CPU Per Core">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 6 }}>
-            {metrics.cpu.per_core.map((v, i) => (
-              <div key={i} style={{ textAlign: 'center', padding: 6, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 10, color: C.dim }}>Core {i}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: v > 80 ? C.error : v > 50 ? C.warn : C.success }}>{v.toFixed(0)}%</div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
-
-      {metrics.database && (
-        <Card title="Database">
-          <div style={{ display: 'flex', gap: 24, fontSize: 13 }}>
-            <div><span style={{ color: C.muted }}>Tables:</span> <b>{metrics.database.tables}</b></div>
-            <div><span style={{ color: C.muted }}>Rows:</span> <b>{(metrics.database.total_rows || 0).toLocaleString()}</b></div>
-          </div>
-        </Card>
-      )}
-
-      {/* Bridge data — connected subsystems */}
-      {bridge && (
-        <>
-          {bridge.memory_mesh && Object.keys(bridge.memory_mesh).length > 0 && (
-            <Card title="🧠 Memory Mesh">
-              {Object.entries(bridge.memory_mesh).map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '3px 0', borderBottom: `1px solid ${C.border}` }}>
-                  <span style={{ color: C.muted }}>{k.replace(/_/g, ' ')}</span>
-                  <span style={{ fontWeight: 700 }}>{(v || 0).toLocaleString()}</span>
-                </div>
-              ))}
-            </Card>
-          )}
-
-          {bridge.monitoring?.organs && (
-            <Card title="🫀 Organs of Grace">
-              {bridge.monitoring.organs.map((o, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0', borderBottom: `1px solid ${C.border}` }}>
-                  <span style={{ fontSize: 12, flex: 1 }}>{o.name}</span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: o.progress >= 50 ? C.success : C.warn }}>{o.progress}%</span>
-                  <MeterBar value={o.progress} color={o.progress >= 50 ? C.success : C.warn} />
-                </div>
-              ))}
-            </Card>
-          )}
-
-          {bridge.ml_intelligence?.available && (
-            <Card title="🤖 ML Intelligence">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                {(bridge.ml_intelligence.components || []).map((c, i) => (
-                  <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{c.replace(/_/g, ' ')}</span>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          {bridge.ooda?.recent_decisions?.length > 0 && (
-            <Card title="🔄 Recent OODA Decisions">
-              {bridge.ooda.recent_decisions.slice(0, 5).map((d, i) => (
-                <div key={i} style={{ fontSize: 11, padding: '4px 0', borderBottom: `1px solid ${C.border}`, color: C.muted }}>
-                  <span style={{ color: C.text }}>{d.type}</span> — {d.action} ({((d.confidence || 0) * 100).toFixed(0)}%)
-                </div>
-              ))}
-            </Card>
-          )}
-        </>
-      )}
-
-      {/* Full aggregation: extra sections */}
-      {fullData?.governance_pillars && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Governance Pillars</div>
-          {typeof fullData.governance_pillars === 'object' ? (
-            Object.entries(fullData.governance_pillars).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.governance_pillars)}</span>
-          )}
-        </div>
-      )}
-      {fullData?.kpi_dashboard && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>KPI Dashboard</div>
-          {typeof fullData.kpi_dashboard === 'object' ? (
-            Object.entries(fullData.kpi_dashboard).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.kpi_dashboard)}</span>
-          )}
-        </div>
-      )}
-      {fullData?.monitoring_organs && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Monitoring Organs</div>
-          {typeof fullData.monitoring_organs === 'object' ? (
-            Object.entries(fullData.monitoring_organs).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.monitoring_organs)}</span>
-          )}
-        </div>
-      )}
-      {fullData?.diagnostic_status && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Diagnostic Status</div>
-          {typeof fullData.diagnostic_status === 'object' ? (
-            Object.entries(fullData.diagnostic_status).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.diagnostic_status)}</span>
-          )}
-        </div>
-      )}
-      {fullData?.telemetry_status && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Telemetry Status</div>
-          {typeof fullData.telemetry_status === 'object' ? (
-            Object.entries(fullData.telemetry_status).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.telemetry_status)}</span>
-          )}
-        </div>
-      )}
-      {fullData?.autonomous_status && (
-        <div style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '12px 16px', marginTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', marginBottom: 8 }}>Autonomous Status</div>
-          {typeof fullData.autonomous_status === 'object' ? (
-            Object.entries(fullData.autonomous_status).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #33333344', fontSize: 11 }}>
-                <span style={{ color: '#aaa' }}>{k.replace(/_/g, ' ')}</span>
-                <span style={{ color: '#eee', fontWeight: 600 }}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
-              </div>
-            ))
-          ) : (
-            <span style={{ fontSize: 11, color: '#eee' }}>{String(fullData.autonomous_status)}</span>
-          )}
-        </div>
-      )}
-
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh All</button>
-      </div>
-    </div>
-  );
-}
-
-// ── Sub-tab: Actions (Healing + Learning) ─────────────────────────────
-function ActionsPanel() {
-  const [healActions, setHealActions] = useState([]);
-  const [triggering, setTriggering] = useState(null);
-  const [learnQuery, setLearnQuery] = useState('');
-  const [learnMethod, setLearnMethod] = useState('kimi');
-  const [learnResult, setLearnResult] = useState(null);
-  const [learnLoading, setLearnLoading] = useState(false);
-  const [notification, setNotification] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/governance-hub/healing/actions`)
-      .then(r => r.ok ? r.json() : { actions: [] })
-      .then(d => setHealActions(d.actions || []))
-      .catch(() => {});
-  }, []);
-
-  const triggerHealing = async (action) => {
-    setTriggering(action);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-hub/healing/trigger`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action }),
-      });
-      if (res.ok) setNotification(`Healing action '${action}' triggered`);
-    } catch { /* silent */ }
-    finally { setTriggering(null); setTimeout(() => setNotification(null), 3000); }
-  };
-
-  const triggerLearning = async () => {
-    if (!learnQuery.trim()) return;
-    setLearnLoading(true);
-    setLearnResult(null);
-    try {
-      const body = { method: learnMethod };
-      if (learnMethod === 'kimi' || learnMethod === 'websearch') body.query = learnQuery;
-      if (learnMethod === 'study') body.topic = learnQuery;
-      if (learnMethod === 'websearch') body.url = learnQuery;
-
-      const res = await fetch(`${API_BASE_URL}/api/governance-hub/learning/trigger`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (res.ok) setLearnResult(await res.json());
-    } catch (e) { setLearnResult({ error: e.message }); }
-    finally { setLearnLoading(false); }
-  };
-
-  return (
-    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
-      {notification && (
-        <div style={{ padding: '8px 16px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>
-      )}
-
-      <Card title="🔧 Self-Healing Actions">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {healActions.map(a => (
-            <button
-              key={a.id}
-              onClick={() => triggerHealing(a.id)}
-              disabled={triggering === a.id}
-              style={{
-                ...btn(C.bgDark), padding: '10px 12px', textAlign: 'left',
-                display: 'flex', flexDirection: 'column', gap: 4,
-                opacity: triggering === a.id ? 0.5 : 1,
-              }}
-            >
-              <span style={{ fontWeight: 700, fontSize: 12 }}>{a.name}</span>
-              <span style={{ fontWeight: 400, fontSize: 10, color: C.dim }}>{a.description}</span>
-            </button>
-          ))}
-        </div>
-      </Card>
-
-      <Card title="🧠 Self-Learning Triggers">
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
-            {[
-              { id: 'kimi', label: '🌐 Kimi 2.5' },
-              { id: 'websearch', label: '🔍 Web Search' },
-              { id: 'study', label: '📚 Self-Study' },
-              { id: 'ingestion', label: '📥 Ingestion' },
-            ].map(m => (
-              <button
-                key={m.id}
-                onClick={() => setLearnMethod(m.id)}
-                style={{
-                  ...btn(learnMethod === m.id ? C.accentAlt : C.bgDark),
-                  fontSize: 11, padding: '4px 10px',
-                }}
-              >{m.label}</button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input
-              placeholder={learnMethod === 'websearch' ? 'URL to scrape...' : learnMethod === 'study' ? 'Topic to study...' : 'Ask Kimi...'}
-              value={learnQuery}
-              onChange={e => setLearnQuery(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && triggerLearning()}
-              disabled={learnMethod === 'ingestion'}
-              style={{
-                flex: 1, padding: '8px 10px', background: C.bg, border: `1px solid ${C.border}`,
-                borderRadius: 4, color: C.text, fontSize: 12, outline: 'none',
-              }}
-            />
-            <button
-              onClick={triggerLearning}
-              disabled={learnLoading || learnMethod === 'ingestion'}
-              style={{ ...btn(C.accent), opacity: learnLoading ? 0.5 : 1 }}
-            >
-              {learnLoading ? '⏳' : '▶ Go'}
-            </button>
-          </div>
+      {/* Left Navigation */}
+      <div style={{ width: 280, borderRight: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '24px 16px', borderBottom: `1px solid ${C.border}` }}>
+          <h2 style={{ margin: 0, fontSize: 18, color: C.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+            🏛️ Governance
+          </h2>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>System Oversight & Accountability</div>
         </div>
 
-        {learnResult && (
-          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12, fontSize: 12, maxHeight: 300, overflowY: 'auto' }}>
-            {learnResult.error ? (
-              <div style={{ color: C.error }}>{learnResult.error}</div>
-            ) : learnResult.response ? (
-              <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: C.text, lineHeight: 1.6 }}>{learnResult.response}</pre>
-            ) : (
-              <pre style={{ margin: 0, color: C.muted }}>{JSON.stringify(learnResult, null, 2)}</pre>
-            )}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
-}
-
-// ── Sub-tab: Rules & Persona ──────────────────────────────────────────
-function RulesPersonaPanel() {
-  const [docs, setDocs] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedDoc, setSelectedDoc] = useState(null);
-  const [docContent, setDocContent] = useState('');
-  const [docLoading, setDocLoading] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [editText, setEditText] = useState('');
-  const [saving, setSaving] = useState(false);
-  const [hasUnsaved, setHasUnsaved] = useState(false);
-
-  // Persona
-  const [personal, setPersonal] = useState('');
-  const [professional, setProfessional] = useState('');
-  const [personaLoading, setPersonaLoading] = useState(true);
-  const [personaSaving, setPersonaSaving] = useState(false);
-
-  // Upload
-  const [showUpload, setShowUpload] = useState(false);
-  const [uploadCat, setUploadCat] = useState('general');
-  const [uploadDesc, setUploadDesc] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef(null);
-
-  // Reasoning
-  const [reasonQ, setReasonQ] = useState('');
-  const [reasonResult, setReasonResult] = useState(null);
-  const [reasoning, setReasoning] = useState(false);
-
-  // Domain rules
-  const [domainMode, setDomainMode] = useState('global'); // 'global' or 'domain'
-  const [domainFolders, setDomainFolders] = useState([]);
-  const [selectedDomain, setSelectedDomain] = useState('');
-  const [domainRules, setDomainRules] = useState([]);
-  const domainFileRef = useRef(null);
-
-  useEffect(() => {
-    if (domainMode === 'domain') {
-      fetch(`${API_BASE_URL}/api/librarian-fs/tree?max_depth=1`)
-        .then(r => r.ok ? r.json() : { children: [] })
-        .then(d => {
-          const folders = (d.children || []).filter(c => c.type === 'directory').map(c => c.name);
-          setDomainFolders(folders);
-        }).catch(() => {});
-    }
-  }, [domainMode]);
-
-  useEffect(() => {
-    if (selectedDomain) {
-      fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`)
-        .then(r => r.ok ? r.json() : { rules: [] })
-        .then(d => setDomainRules(d.rules || []))
-        .catch(() => setDomainRules([]));
-    }
-  }, [selectedDomain]);
-
-  const [notification, setNotification] = useState(null);
-  const notifTimer = useRef(null);
-  const notify = useCallback((msg, type = 'success') => {
-    setNotification({ msg, type });
-    clearTimeout(notifTimer.current);
-    notifTimer.current = setTimeout(() => setNotification(null), 4000);
-  }, []);
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents`);
-      if (res.ok) {
-        const d = await res.json();
-        setDocs(d.documents || []);
-        setCategories(d.categories || []);
-      }
-    } catch { /* silent */ }
-    finally { setLoading(false); }
-  }, []);
-
-  useEffect(() => {
-    refresh();
-    fetch(`${API_BASE_URL}/api/governance-rules/persona`)
-      .then(r => r.ok ? r.json() : {})
-      .then(d => { setPersonal(d.personal || ''); setProfessional(d.professional || ''); })
-      .catch(() => {})
-      .finally(() => setPersonaLoading(false));
-  }, [refresh]);
-
-  const openDoc = async (doc) => {
-    setSelectedDoc(doc);
-    setDocLoading(true);
-    setEditMode(false);
-    setHasUnsaved(false);
-    setReasonResult(null);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(doc.id)}/content`);
-      if (res.ok) { const d = await res.json(); setDocContent(d.content || ''); setEditText(d.content || ''); }
-    } catch { /* silent */ }
-    finally { setDocLoading(false); }
-  };
-
-  const saveDoc = async () => {
-    if (!selectedDoc) return;
-    setSaving(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(selectedDoc.id)}/content`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: editText }),
-      });
-      if (res.ok) { setDocContent(editText); setHasUnsaved(false); notify('Rule document saved'); }
-    } catch { notify('Save failed', 'error'); }
-    finally { setSaving(false); }
-  };
-
-  const deleteDoc = async (docId) => {
-    if (!window.confirm('Delete this governance rule document?')) return;
-    try {
-      await fetch(`${API_BASE_URL}/api/governance-rules/documents/${encodeURIComponent(docId)}`, { method: 'DELETE' });
-      notify('Document deleted');
-      if (selectedDoc?.id === docId) { setSelectedDoc(null); setDocContent(''); }
-      refresh();
-    } catch { notify('Delete failed', 'error'); }
-  };
-
-  const handleUpload = async (e) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append('file', files[0]);
-      fd.append('category', uploadCat);
-      fd.append('description', uploadDesc);
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/upload`, { method: 'POST', body: fd });
-      if (res.ok) { notify('Rule document uploaded — it is now LAW'); refresh(); setShowUpload(false); }
-    } catch { notify('Upload failed', 'error'); }
-    finally { setUploading(false); if (fileRef.current) fileRef.current.value = ''; }
-  };
-
-  const savePersona = async () => {
-    setPersonaSaving(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/persona`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ personal, professional }),
-      });
-      if (res.ok) notify('Persona saved');
-    } catch { notify('Save failed', 'error'); }
-    finally { setPersonaSaving(false); }
-  };
-
-  const handleReason = async () => {
-    if (!reasonQ.trim() || !selectedDoc) return;
-    setReasoning(true); setReasonResult(null);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-rules/documents/reason`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ document_id: selectedDoc.id, question: reasonQ, use_kimi: true }),
-      });
-      if (res.ok) setReasonResult(await res.json());
-    } catch { setReasonResult({ error: 'Reasoning failed' }); }
-    finally { setReasoning(false); }
-  };
-
-  const catOptions = ['general', 'gdpr', 'iso', 'anti_bribery', 'code_standards', 'user_rules', 'industry'];
-
-  return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden', position: 'relative' }}>
-      {notification && (
-        <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', zIndex: 100, padding: '8px 20px', borderRadius: 6, fontSize: 13, fontWeight: 500, background: notification.type === 'success' ? C.success : C.error, color: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,.4)' }}>{notification.msg}</div>
-      )}
-
-      {/* Left: Document list + Persona */}
-      <div style={{ flex: '0 0 280px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-
-        {/* Persona context windows */}
-        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '12px' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, marginBottom: 8 }}>🎭 Persona</div>
-
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Personal — how Grace talks to you</div>
-            <textarea
-              value={personal}
-              onChange={e => setPersonal(e.target.value)}
-              placeholder="e.g. Be casual and friendly, use my name, explain things simply..."
-              disabled={personaLoading}
-              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
-            />
-          </div>
-
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, textTransform: 'uppercase', marginBottom: 4 }}>Professional — how Grace shows up externally</div>
-            <textarea
-              value={professional}
-              onChange={e => setProfessional(e.target.value)}
-              placeholder="e.g. Formal tone, use company name, cite sources, UK English..."
-              disabled={personaLoading}
-              style={{ width: '100%', height: 60, resize: 'vertical', padding: 8, fontSize: 11, lineHeight: 1.5, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
-            />
-          </div>
-
-          <button onClick={savePersona} disabled={personaSaving} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
-            {personaSaving ? '⏳ Saving...' : '💾 Save Persona'}
+        <div style={{ flex: 1, padding: '16px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <button onClick={() => setActiveView("genesis")} style={navBtnStyle(activeView === "genesis")}>
+            ⧗ Genesis Decisions Hub
+          </button>
+          <button onClick={() => setActiveView("rules")} style={navBtnStyle(activeView === "rules")}>
+            ⚖️ Rules Architect
+          </button>
+          <button onClick={() => setActiveView("persona")} style={navBtnStyle(activeView === "persona")}>
+            🎭 Persona Manager
+          </button>
+          <button onClick={() => setActiveView("kpi")} style={navBtnStyle(activeView === "kpi")}>
+            📊 KPI & Trust Dashboard
+          </button>
+          <button onClick={() => setActiveView("adaptive")} style={navBtnStyle(activeView === "adaptive")}>
+            🧬 Adaptive Overrides (Meta)
+          </button>
+          <button onClick={() => setActiveView("schema")} style={navBtnStyle(activeView === "schema")}>
+            🗄️ Schema Evolution
           </button>
         </div>
 
-        {/* Scope toggle: Global vs Domain */}
-        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}` }}>
-          <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
-            <button onClick={() => setDomainMode('global')} style={{ ...btn(domainMode === 'global' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>🌐 Global Rules</button>
-            <button onClick={() => setDomainMode('domain')} style={{ ...btn(domainMode === 'domain' ? C.accentAlt : C.bgDark), flex: 1, fontSize: 10 }}>📁 Per Domain</button>
-          </div>
-          {domainMode === 'domain' && (
-            <div>
-              <select value={selectedDomain} onChange={e => setSelectedDomain(e.target.value)}
-                style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, outline: 'none', marginBottom: 6 }}>
-                <option value="">Select domain folder...</option>
-                {domainFolders.map(f => <option key={f} value={f}>{f}</option>)}
-              </select>
-              {selectedDomain && (
-                <>
-                  <input type="file" ref={domainFileRef} style={{ display: 'none' }} onChange={async (e) => {
-                    if (!e.target.files?.length) return;
-                    const fd = new FormData();
-                    fd.append('file', e.target.files[0]);
-                    await fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules/upload`, { method: 'POST', body: fd });
-                    e.target.value = '';
-                    fetch(`${API_BASE_URL}/api/v1/domain/${encodeURIComponent(selectedDomain)}/rules`).then(r => r.ok ? r.json() : { rules: [] }).then(d => setDomainRules(d.rules || []));
-                    notify('Domain rule uploaded');
-                  }} />
-                  <button onClick={() => domainFileRef.current?.click()} style={{ ...btn(C.success), width: '100%', fontSize: 10, marginBottom: 4 }}>📤 Upload Rule to {selectedDomain}</button>
-                  {domainRules.length > 0 && domainRules.map(r => (
-                    <div key={r.filename} style={{ padding: '4px 8px', fontSize: 11, borderBottom: `1px solid ${C.border}22`, display: 'flex', alignItems: 'center', gap: 6, color: C.muted }}>
-                      <span>⚖️</span><span style={{ flex: 1 }}>{r.filename}</span>
-                    </div>
-                  ))}
-                  {domainRules.length === 0 && <div style={{ fontSize: 10, color: C.dim, textAlign: 'center', padding: 8 }}>No domain rules yet</div>}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Upload global */}
-        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, display: 'flex', gap: 6 }}>
-          <button onClick={() => setShowUpload(!showUpload)} style={{ ...btn(C.accent), flex: 1, fontSize: 11 }}>📤 Upload Global Rule</button>
-          <button onClick={refresh} style={{ ...btn(C.bgDark), fontSize: 11 }}>↻</button>
-        </div>
-
-        {showUpload && (
-          <div style={{ padding: '8px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
-            <select value={uploadCat} onChange={e => setUploadCat(e.target.value)} style={{ width: '100%', padding: '5px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none' }}>
-              {catOptions.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ').toUpperCase()}</option>)}
-            </select>
-            <input placeholder="Description..." value={uploadDesc} onChange={e => setUploadDesc(e.target.value)} style={{ width: '100%', padding: '5px 8px', fontSize: 11, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, marginBottom: 6, outline: 'none', boxSizing: 'border-box' }} />
-            <input type="file" ref={fileRef} onChange={handleUpload} style={{ display: 'none' }} />
-            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...btn(C.success), width: '100%', fontSize: 11 }}>
-              {uploading ? '⏳' : '📎 Choose File'}
-            </button>
-          </div>
-        )}
-
-        {/* Document list by category */}
-        <div style={{ flex: 1, overflowY: 'auto' }}>
-          {loading ? (
-            <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>Loading...</div>
-          ) : categories.length === 0 && docs.length === 0 ? (
-            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>
-              <div style={{ fontSize: 32, marginBottom: 8 }}>📜</div>
-              <div style={{ fontSize: 12 }}>No rule documents yet</div>
-              <div style={{ fontSize: 10, marginTop: 4 }}>Upload GDPR, ISO, or custom rules</div>
-            </div>
-          ) : categories.map(cat => (
-            <div key={cat.name}>
-              <div style={{ padding: '6px 12px', fontSize: 10, fontWeight: 700, color: C.muted, textTransform: 'uppercase', background: C.bgAlt, borderBottom: `1px solid ${C.border}` }}>
-                📂 {cat.name.replace(/_/g, ' ')} ({cat.count})
-              </div>
-              {cat.documents.map(doc => (
-                <div
-                  key={doc.id}
-                  onClick={() => openDoc(doc)}
-                  style={{
-                    padding: '7px 12px', cursor: 'pointer', fontSize: 12,
-                    background: selectedDoc?.id === doc.id ? C.bgDark : 'transparent',
-                    borderLeft: selectedDoc?.id === doc.id ? `3px solid ${C.accent}` : '3px solid transparent',
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    transition: 'background .1s',
-                  }}
-                  onMouseEnter={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = C.bgAlt; }}
-                  onMouseLeave={e => { if (selectedDoc?.id !== doc.id) e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <span>{doc.enforced ? '⚖️' : '📄'}</span>
-                  <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <div style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.filename}</div>
-                    {doc.description && <div style={{ fontSize: 10, color: C.dim }}>{doc.description}</div>}
-                  </div>
-                  <span onClick={e => { e.stopPropagation(); deleteDoc(doc.id); }} style={{ cursor: 'pointer', fontSize: 12, color: C.dim, padding: '0 2px' }}>🗑</span>
-                </div>
-              ))}
-            </div>
-          ))}
+        <div style={{ padding: 16, borderTop: `1px solid ${C.border}`, fontSize: 11, color: C.dim }}>
+          Active Target: <span style={{ color: C.accent, fontWeight: 700 }}>{domain}</span>
         </div>
       </div>
 
-      {/* Right: Document viewer/editor + Reasoning */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {selectedDoc ? (
-          <>
-            {/* Toolbar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
-              <span>⚖️</span>
-              <span style={{ fontWeight: 700, fontSize: 13 }}>{selectedDoc.filename}</span>
-              {hasUnsaved && <span style={{ fontSize: 10, color: C.accent, fontWeight: 600 }}>UNSAVED</span>}
-              <span style={{ fontSize: 10, color: C.dim }}>({selectedDoc.category})</span>
-              <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
-                {editMode ? (
-                  <>
-                    <button onClick={saveDoc} disabled={saving || !hasUnsaved} style={{ ...btn(hasUnsaved ? C.success : C.bgDark), fontSize: 11 }}>{saving ? '⏳' : '💾 Save'}</button>
-                    <button onClick={() => { if (hasUnsaved && !window.confirm('Discard?')) return; setEditMode(false); setEditText(docContent); setHasUnsaved(false); }} style={{ ...btn(C.border), fontSize: 11 }}>View</button>
-                  </>
-                ) : (
-                  <button onClick={() => { setEditMode(true); setEditText(docContent); }} style={{ ...btn(C.accentAlt), fontSize: 11 }}>✏️ Edit</button>
-                )}
-                <span onClick={() => { setSelectedDoc(null); setDocContent(''); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div style={{ flex: 1, overflow: 'auto' }}>
-              {docLoading ? (
-                <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading...</div>
-              ) : editMode ? (
-                <textarea
-                  value={editText}
-                  onChange={e => { setEditText(e.target.value); setHasUnsaved(e.target.value !== docContent); }}
-                  onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveDoc(); } }}
-                  spellCheck={false}
-                  style={{ width: '100%', height: '100%', resize: 'none', background: '#0d1117', color: '#e6edf3', border: 'none', outline: 'none', padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, boxSizing: 'border-box' }}
-                />
-              ) : (
-                <pre style={{ margin: 0, padding: '16px 20px', fontFamily: '"Fira Code", Consolas, monospace', fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#e6edf3', background: '#0d1117', height: '100%', overflow: 'auto' }}>
-                  {docContent || '(empty document)'}
-                </pre>
-              )}
-            </div>
-
-            {/* Reasoning bar — type or upload */}
-            <div style={{ borderTop: `1px solid ${C.border}`, padding: '8px 16px', background: C.bgAlt, display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>🤖</span>
-              <input
-                placeholder="Ask about this rule, or upload a document to compare..."
-                value={reasonQ}
-                onChange={e => setReasonQ(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleReason()}
-                disabled={reasoning}
-                style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }}
-              />
-              <input type="file" id="govReasonUpload" accept=".pdf,.txt,.md,.doc,.docx,.csv,.json" style={{ display: 'none' }}
-                onChange={async (e) => {
-                  if (!e.target.files?.length) return;
-                  const f = e.target.files[0];
-                  const text = await f.text().catch(() => `[File: ${f.name}]`);
-                  setReasonQ(`Analyse this document and compare with current rules: ${f.name}\n\n${text.substring(0, 2000)}`);
-                  e.target.value = '';
-                }}
-              />
-              <button onClick={() => document.getElementById('govReasonUpload')?.click()} title="Upload document to reason about"
-                style={{ ...btn(C.bgDark), fontSize: 14, padding: '4px 8px' }}>📎</button>
-              <button onClick={handleReason} disabled={reasoning || !reasonQ.trim()} style={{ ...btn(C.accent), fontSize: 11, opacity: reasoning ? 0.5 : 1 }}>
-                {reasoning ? '⏳' : '🧠 Reason'}
-              </button>
-            </div>
-            {reasonResult && (
-              <div style={{ borderTop: `1px solid ${C.border}`, padding: '12px 16px', background: C.bg, maxHeight: 200, overflowY: 'auto' }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: C.muted, marginBottom: 6 }}>
-                  Grace + Kimi Analysis ({reasonResult.provider || 'kimi'})
-                </div>
-                <pre style={{ margin: 0, fontSize: 12, color: C.text, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
-                  {reasonResult.response || reasonResult.error || JSON.stringify(reasonResult)}
-                </pre>
-              </div>
-            )}
-          </>
-        ) : (
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center', color: C.dim }}>
-              <div style={{ fontSize: 56, marginBottom: 12, opacity: 0.5 }}>⚖️</div>
-              <div style={{ fontSize: 15, fontWeight: 500, color: C.muted }}>Select a rule document</div>
-              <div style={{ fontSize: 12, marginTop: 4, maxWidth: 300 }}>
-                Upload industry standards (GDPR, ISO, anti-bribery), code parameters, or custom rules.
-                They become law — Grace and Kimi will follow them.
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Main Content Area */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: 32 }}>
+        {activeView === "genesis" && <GenesisDecisionsHub domain={domain} />}
+        {activeView === "rules" && <RulesArchitect domain={domain} />}
+        {activeView === "persona" && <PersonaManager domain={domain} />}
+        {activeView === "kpi" && <KpiTrustDashboard domain={domain} />}
+        {activeView === "adaptive" && <AdaptiveOverrides domain={domain} />}
+        {activeView === "schema" && <SchemaEvolution domain={domain} />}
       </div>
     </div>
   );
 }
 
-// ── Sub-tab: Genesis Keys ─────────────────────────────────────────────
-function GenesisKeysPanel() {
-  const [folders, setFolders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [dayData, setDayData] = useState(null);
-  const [dayLoading, setDayLoading] = useState(false);
+// ────────────────────────────────────────────────────────────────────────
+// 1. Genesis Decisions Hub
+// ────────────────────────────────────────────────────────────────────────
+function GenesisDecisionsHub() {
   const [selectedKey, setSelectedKey] = useState(null);
-  const [keyDetail, setKeyDetail] = useState(null);
-  const [keyLoading, setKeyLoading] = useState(false);
-  const [stats, setStats] = useState(null);
-  const [expandedTypes, setExpandedTypes] = useState(new Set());
+  const [keys, setKeys] = useState([]);
 
-  useEffect(() => {
-    Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/genesis-daily/folders?days=60`).then(r => r.ok ? r.json() : { folders: [] }),
-      fetch(`${API_BASE_URL}/api/genesis-daily/stats`).then(r => r.ok ? r.json() : null),
-    ]).then(([fRes, sRes]) => {
-      if (fRes.status === 'fulfilled') setFolders(fRes.value.folders || []);
-      if (sRes.status === 'fulfilled') setStats(sRes.value);
-      setLoading(false);
-    });
-  }, []);
-
-  const openFolder = useCallback(async (date) => {
-    setSelectedDate(date);
-    setSelectedKey(null);
-    setKeyDetail(null);
-    setDayLoading(true);
+  const fetchApprovals = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/folder/${date}`);
-      if (res.ok) setDayData(await res.json());
-    } catch { /* silent */ }
-    finally { setDayLoading(false); }
-  }, []);
-
-  const openKey = useCallback(async (keyId) => {
-    setSelectedKey(keyId);
-    setKeyLoading(true);
-    setKeyDetail(null);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/genesis-daily/key/${keyId}`);
-      if (res.ok) setKeyDetail(await res.json());
-    } catch { /* silent */ }
-    finally { setKeyLoading(false); }
-  }, []);
-
-  const toggleType = (type) => {
-    setExpandedTypes(prev => {
-      const n = new Set(prev);
-      if (n.has(type)) n.delete(type); else n.add(type);
-      return n;
-    });
-  };
-
-  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading Genesis Keys...</div>;
-
-  return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
-
-      {/* Left: Date folders */}
-      <div style={{ flex: '0 0 240px', borderRight: `1px solid ${C.border}`, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-        {stats && (
-          <div style={{ padding: '10px 12px', borderBottom: `1px solid ${C.border}`, background: C.bgAlt }}>
-            <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>Total Keys: <b style={{ color: C.text }}>{(stats.total_keys || 0).toLocaleString()}</b></div>
-            <div style={{ fontSize: 11, color: C.muted }}>Today: <b style={{ color: C.accent }}>{(stats.today_keys || 0).toLocaleString()}</b></div>
-          </div>
-        )}
-        <div style={{ padding: '8px 12px', fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', borderBottom: `1px solid ${C.border}` }}>
-          📅 Daily Folders
-        </div>
-        {folders.length === 0 ? (
-          <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>No genesis keys yet</div>
-        ) : folders.map(f => (
-          <div
-            key={f.date}
-            onClick={() => openFolder(f.date)}
-            style={{
-              padding: '8px 12px', cursor: 'pointer', fontSize: 12,
-              background: selectedDate === f.date ? C.bgDark : 'transparent',
-              borderLeft: selectedDate === f.date ? `3px solid ${C.accent}` : '3px solid transparent',
-              borderBottom: `1px solid ${C.border}22`,
-              transition: 'background .1s',
-            }}
-            onMouseEnter={e => { if (selectedDate !== f.date) e.currentTarget.style.background = C.bgAlt; }}
-            onMouseLeave={e => { if (selectedDate !== f.date) e.currentTarget.style.background = 'transparent'; }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>📁</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600 }}>{f.date}</div>
-                <div style={{ fontSize: 10, color: C.dim }}>{f.label}</div>
-              </div>
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                <div style={{ fontWeight: 700, color: C.text }}>{f.key_count}</div>
-                {f.error_count > 0 && <div style={{ fontSize: 9, color: C.error }}>{f.error_count} err</div>}
-              </div>
-            </div>
-            {/* Metadata summary */}
-            {f.summary && (
-              <div style={{ fontSize: 10, color: C.muted, marginTop: 4, lineHeight: 1.5, paddingLeft: 24 }}>
-                {f.summary}
-              </div>
-            )}
-            <div style={{ display: 'flex', gap: 8, fontSize: 9, color: C.dim, marginTop: 3, paddingLeft: 24, flexWrap: 'wrap' }}>
-              {f.unique_actors > 0 && <span>👤 {f.unique_actors}</span>}
-              {f.unique_files > 0 && <span>📄 {f.unique_files} files</span>}
-              {f.fix_count > 0 && <span style={{ color: C.success }}>✅ {f.fix_count} fixes</span>}
-              {f.top_file && <span title={f.top_file}>📌 {f.top_file}</span>}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Center: Day contents grouped by type */}
-      <div style={{ flex: 1, overflow: 'auto', borderRight: selectedKey ? `1px solid ${C.border}` : 'none' }}>
-        {!selectedDate ? (
-          <div style={{ padding: 60, textAlign: 'center', color: C.dim }}>
-            <div style={{ fontSize: 48, marginBottom: 12, opacity: 0.5 }}>🔑</div>
-            <div style={{ fontSize: 14, fontWeight: 500, color: C.muted }}>Select a daily folder</div>
-            <div style={{ fontSize: 12 }}>Each folder contains all Genesis Keys from that 24-hour window</div>
-          </div>
-        ) : dayLoading ? (
-          <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading keys...</div>
-        ) : dayData ? (
-          <div style={{ padding: 16 }}>
-            {/* Demographics bar */}
-            <div style={{
-              display: 'flex', gap: 16, padding: '10px 14px', marginBottom: 14,
-              background: C.bgAlt, borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 12, flexWrap: 'wrap',
-            }}>
-              <span>🔑 <b>{dayData.demographics?.total_keys || 0}</b> keys</span>
-              <span>❌ <b style={{ color: C.error }}>{dayData.demographics?.total_errors || 0}</b> errors</span>
-              <span>✅ <b style={{ color: C.success }}>{dayData.demographics?.total_fixes || 0}</b> fixes</span>
-              <span>👤 <b>{dayData.demographics?.unique_actors || 0}</b> actors</span>
-              <span>📄 <b>{dayData.demographics?.unique_files || 0}</b> files</span>
-            </div>
-
-            {/* Types */}
-            {(dayData.by_type || []).map(group => {
-              const isOpen = expandedTypes.has(group.type);
-              return (
-                <div key={group.type} style={{ marginBottom: 6 }}>
-                  <div
-                    onClick={() => toggleType(group.type)}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
-                      background: C.bgAlt, borderRadius: 6, cursor: 'pointer',
-                      border: `1px solid ${C.border}`, userSelect: 'none',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, width: 14, textAlign: 'center', color: C.muted }}>{isOpen ? '▼' : '▶'}</span>
-                    <span style={{ fontSize: 16 }}>{group.icon}</span>
-                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{group.label}</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: C.accent }}>{group.count}</span>
-                    {group.error_count > 0 && <span style={{ fontSize: 10, color: C.error }}>({group.error_count} errors)</span>}
-                  </div>
-                  {isOpen && (
-                    <div style={{ paddingLeft: 12, borderLeft: `2px solid ${C.border}`, marginLeft: 20, marginTop: 4 }}>
-                      {group.keys.map(k => (
-                        <div
-                          key={k.key_id || k.id}
-                          onDoubleClick={() => openKey(k.key_id)}
-                          onClick={() => openKey(k.key_id)}
-                          style={{
-                            padding: '6px 10px', marginBottom: 2, borderRadius: 4, cursor: 'pointer',
-                            background: selectedKey === k.key_id ? C.bgDark : 'transparent',
-                            borderLeft: selectedKey === k.key_id ? `2px solid ${C.accent}` : '2px solid transparent',
-                            fontSize: 12, transition: 'background .1s',
-                          }}
-                          onMouseEnter={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = C.bgAlt; }}
-                          onMouseLeave={e => { if (selectedKey !== k.key_id) e.currentTarget.style.background = 'transparent'; }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            {k.is_error && <span style={{ color: C.error }}>❌</span>}
-                            {k.fix_applied && <span style={{ color: C.success }}>✅</span>}
-                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: C.text }}>{k.what}</span>
-                            <span style={{ fontSize: 10, color: C.dim, flexShrink: 0 }}>
-                              {k.timestamp ? new Date(k.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                            </span>
-                          </div>
-                          {k.file_path && <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>📄 {k.file_path}</div>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
-      </div>
-
-      {/* Right: Key detail panel */}
-      {selectedKey && (
-        <div style={{ flex: '0 0 380px', overflow: 'auto', padding: '12px 16px' }}>
-          {keyLoading ? (
-            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Loading key...</div>
-          ) : keyDetail ? (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <span style={{ fontSize: 18 }}>🔑</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 11, fontFamily: 'monospace', color: C.accent, wordBreak: 'break-all' }}>{keyDetail.key_id}</div>
-                  <StatusBadge status={keyDetail.key_type} />
-                </div>
-                <span onClick={() => { setSelectedKey(null); setKeyDetail(null); }} style={{ cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</span>
-              </div>
-
-              {/* What/Who/When/Where/Why/How */}
-              <Card title="Details">
-                {[
-                  ['What', keyDetail.what],
-                  ['Who', keyDetail.who],
-                  ['When', keyDetail.timestamp ? new Date(keyDetail.timestamp).toLocaleString() : ''],
-                  ['Where', keyDetail.where],
-                  ['Why', keyDetail.why],
-                  ['How', keyDetail.how],
-                  ['Status', keyDetail.status],
-                  ['File', keyDetail.file_path],
-                  ['Function', keyDetail.function_name],
-                  ['Line', keyDetail.line_number],
-                ].filter(([, v]) => v).map(([label, val]) => (
-                  <div key={label} style={{ display: 'flex', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
-                    <span style={{ color: C.muted, width: 55, flexShrink: 0 }}>{label}</span>
-                    <span style={{ color: C.text, wordBreak: 'break-all' }}>{String(val)}</span>
-                  </div>
-                ))}
-              </Card>
-
-              {/* Source code context */}
-              {keyDetail.source_context && (
-                <Card title={`📄 Source: ${keyDetail.source_context.file_path || keyDetail.file_path}`}>
-                  <pre style={{
-                    margin: 0, padding: 10, background: '#0d1117', borderRadius: 4,
-                    fontSize: 11, lineHeight: 1.5, overflow: 'auto', maxHeight: 300,
-                    fontFamily: '"Fira Code", "JetBrains Mono", Consolas, monospace',
-                    color: '#e6edf3', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-                  }}>
-                    {keyDetail.source_context.lines
-                      ? keyDetail.source_context.lines.map((line, i) => {
-                          const lineNum = (keyDetail.source_context.start_line || 1) + i;
-                          const isHighlight = lineNum === keyDetail.source_context.highlight_line;
-                          return (
-                            <div key={i} style={{ background: isHighlight ? '#e9456020' : 'transparent', display: 'flex' }}>
-                              <span style={{ width: 40, textAlign: 'right', paddingRight: 10, color: isHighlight ? C.accent : '#484f58', userSelect: 'none', flexShrink: 0 }}>{lineNum}</span>
-                              <span>{line}</span>
-                            </div>
-                          );
-                        })
-                      : keyDetail.source_context.preview || '(no preview)'
-                    }
-                  </pre>
-                </Card>
-              )}
-
-              {/* Code before/after */}
-              {(keyDetail.code_before || keyDetail.code_after) && (
-                <Card title="Code Change">
-                  {keyDetail.code_before && (
-                    <div style={{ marginBottom: 8 }}>
-                      <div style={{ fontSize: 10, color: C.error, fontWeight: 600, marginBottom: 4 }}>— Before</div>
-                      <pre style={{ margin: 0, padding: 8, background: C.error + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_before}</pre>
-                    </div>
-                  )}
-                  {keyDetail.code_after && (
-                    <div>
-                      <div style={{ fontSize: 10, color: C.success, fontWeight: 600, marginBottom: 4 }}>+ After</div>
-                      <pre style={{ margin: 0, padding: 8, background: C.success + '10', borderRadius: 4, fontSize: 11, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{keyDetail.code_after}</pre>
-                    </div>
-                  )}
-                </Card>
-              )}
-
-              {/* Error info */}
-              {keyDetail.is_error && (
-                <Card title="❌ Error">
-                  <div style={{ fontSize: 12, color: C.error, fontWeight: 600 }}>{keyDetail.error_type}</div>
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 4, whiteSpace: 'pre-wrap' }}>{keyDetail.error_message}</div>
-                </Card>
-              )}
-
-              {/* Tags */}
-              {keyDetail.tags && keyDetail.tags.length > 0 && (
-                <Card title="Tags">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                    {keyDetail.tags.map((t, i) => (
-                      <span key={i} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: C.accentAlt + '44', color: C.text }}>{t}</span>
-                    ))}
-                  </div>
-                </Card>
-              )}
-
-              {/* Input/Output data */}
-              {keyDetail.input_data && Object.keys(keyDetail.input_data).length > 0 && (
-                <Card title="Input Data">
-                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.input_data, null, 2)}</pre>
-                </Card>
-              )}
-              {keyDetail.output_data && Object.keys(keyDetail.output_data).length > 0 && (
-                <Card title="Output Data">
-                  <pre style={{ margin: 0, fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'auto' }}>{JSON.stringify(keyDetail.output_data, null, 2)}</pre>
-                </Card>
-              )}
-
-              {/* Child/parent keys */}
-              {keyDetail.parent_key && (
-                <Card title="Parent Key">
-                  <div onClick={() => openKey(keyDetail.parent_key.key_id)} style={{ cursor: 'pointer', fontSize: 12, color: C.info }}>
-                    🔗 {keyDetail.parent_key.what} <span style={{ fontSize: 10, color: C.dim }}>({keyDetail.parent_key.type})</span>
-                  </div>
-                </Card>
-              )}
-              {keyDetail.child_keys && keyDetail.child_keys.length > 0 && (
-                <Card title={`Child Keys (${keyDetail.child_keys.length})`}>
-                  {keyDetail.child_keys.map(ck => (
-                    <div key={ck.key_id} onClick={() => openKey(ck.key_id)} style={{ cursor: 'pointer', fontSize: 11, padding: '3px 0', borderBottom: `1px solid ${C.border}`, color: C.info }}>
-                      🔗 {ck.what} <span style={{ fontSize: 9, color: C.dim }}>({ck.type})</span>
-                    </div>
-                  ))}
-                </Card>
-              )}
-
-              {/* Fix suggestions */}
-              {keyDetail.fix_suggestions && keyDetail.fix_suggestions.length > 0 && (
-                <Card title={`Fix Suggestions (${keyDetail.fix_suggestions.length})`}>
-                  {keyDetail.fix_suggestions.map(fs => (
-                    <div key={fs.id} style={{ padding: '6px 8px', marginBottom: 4, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
-                      <div style={{ fontSize: 12, fontWeight: 600 }}>{fs.title}</div>
-                      <div style={{ fontSize: 10, color: C.muted }}><StatusBadge status={fs.status} /> · {fs.severity} · {fs.confidence ? (fs.confidence * 100).toFixed(0) + '% confidence' : ''}</div>
-                      {fs.fix_code && <pre style={{ margin: '4px 0 0', fontSize: 10, color: C.success, background: C.success + '10', padding: 6, borderRadius: 3, whiteSpace: 'pre-wrap', maxHeight: 80, overflow: 'auto' }}>{fs.fix_code}</pre>}
-                    </div>
-                  ))}
-                </Card>
-              )}
-            </>
-          ) : (
-            <div style={{ padding: 30, textAlign: 'center', color: C.dim }}>Failed to load key detail</div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Sub-tab: Self-Healing / Self-Learning / Self-Building ──────────────
-function SelfHealingPanel() {
-  const [status, setStatus] = useState(null);
-  const [issues, setIssues] = useState(null);
-  const [stubs, setStubs] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [diagnosticRunning, setDiagnosticRunning] = useState(false);
-  const [notification, setNotification] = useState(null);
-  const [expandedSection, setExpandedSection] = useState('status');
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    const [sRes, iRes, stubRes] = await Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/status`),
-      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/issues`),
-      fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/stubs`),
-    ]);
-    if (sRes.status === 'fulfilled' && sRes.value.ok) setStatus(await sRes.value.json());
-    if (iRes.status === 'fulfilled' && iRes.value.ok) setIssues(await iRes.value.json());
-    if (stubRes.status === 'fulfilled' && stubRes.value.ok) setStubs(await stubRes.value.json());
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { refresh(); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
-
-  const runDiagnostic = async () => {
-    setDiagnosticRunning(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/full-diagnostic`, { method: 'POST' });
-      if (res.ok) {
-        setNotification('Full diagnostic completed');
-        refresh();
+      const res = await fetch(`${API_BASE_URL}/api/v2/govern/approvals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const data = await res.json();
+      if (data.ok && data.data?.approvals) {
+        setKeys(data.data.approvals.map(a => ({
+          id: a.id,
+          type: a.action_type || a.pillar_type || "Anomaly",
+          status: a.status === 'pending' ? 'Blocked (Human needed)' : 'Resolved',
+          title: a.title,
+          timestamp: new Date(a.created_at || Date.now()).toLocaleString(),
+          description: a.description
+        })));
       }
-    } catch { /* silent */ }
-    finally { setDiagnosticRunning(false); setTimeout(() => setNotification(null), 3000); }
+    } catch (e) { console.error(e); }
   };
 
-  const triggerHeal = async (action) => {
+  useEffect(() => { fetchApprovals(); }, []);
+
+  const handleAction = async (action) => {
+    if (!selectedKey) return;
     try {
-      const res = await fetch(`${API_BASE_URL}/api/governance-hub/proactive-healing/trigger`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action }),
+      const res = await fetch(`${API_BASE_URL}/api/v2/govern/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedKey.id, action })
       });
       if (res.ok) {
-        setNotification(`Healing action '${action}' executed`);
-        setTimeout(refresh, 1000);
+        setSelectedKey(null);
+        fetchApprovals();
       }
-    } catch { /* silent */ }
-    finally { setTimeout(() => setNotification(null), 3000); }
+    } catch (e) { console.error(e); }
   };
 
-  if (loading && !status) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading self-healing status...</div>;
-
-  const s = status?.status || {};
-  const caps = status?.capabilities || {};
-  const lims = status?.limitations || [];
-  const activeIssues = issues?.active || [];
-  const resolvedIssues = issues?.resolved || [];
-  const healingLog = issues?.healing_log || [];
-  const detectedStubs = stubs?.stubs || [];
-  const trendData = status?.trend_data || {};
-
-  const engineHealthColor = s.running ? (s.active_issues === 0 ? C.success : s.active_issues < 3 ? C.warn : C.error) : C.dim;
-  const engineStatusLabel = s.running ? (s.active_issues === 0 ? 'HEALTHY' : s.active_issues < 3 ? 'DEGRADED' : 'CRITICAL') : 'OFFLINE';
-
-  const toggle = (section) => setExpandedSection(prev => prev === section ? null : section);
-
   return (
-    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
-      {notification && (
-        <div style={{ padding: '8px 16px', marginBottom: 12, background: C.success + '30', border: `1px solid ${C.success}`, borderRadius: 6, fontSize: 12, color: C.success }}>{notification}</div>
-      )}
-
-      {/* Engine Status Header */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
-          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Engine Status</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: engineHealthColor }}>{engineStatusLabel}</div>
-          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{s.running ? `Cycle #${s.cycle_count || 0}` : 'Not running'}</div>
-        </div>
-        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
-          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Auto-Healed</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: C.success }}>{s.total_healed || 0}</div>
-          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{resolvedIssues.length} resolved</div>
-        </div>
-        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
-          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Active Issues</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: activeIssues.length > 0 ? C.error : C.success }}>{activeIssues.length}</div>
-          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{(detectedStubs || []).length} stubs</div>
-        </div>
-        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16, textAlign: 'center' }}>
-          <div style={{ fontSize: 10, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Limitations</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: lims.length > 0 ? C.warn : C.success }}>{lims.length}</div>
-          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>expand below</div>
-        </div>
+    <div style={{ display: 'flex', height: '100%', gap: 24 }}>
+      {/* List */}
+      <div style={{ flex: '0 0 300px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <h3 style={{ margin: 0, color: C.text, fontSize: 16 }}>Flagged Decisions</h3>
+        {keys.map(k => (
+          <div
+            key={k.id}
+            onClick={() => setSelectedKey(k)}
+            style={{
+              background: selectedKey?.id === k.id ? C.highlight : C.bgAlt,
+              border: `1px solid ${selectedKey?.id === k.id ? C.accent : C.border}`,
+              padding: 16, borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s'
+            }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: k.status.includes('Blocked') ? C.error : C.success }}>{k.status}</span>
+              <span style={{ fontSize: 11, color: C.dim }}>{k.timestamp}</span>
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{k.title}</div>
+            <div style={{ fontSize: 12, color: C.dim, fontFamily: 'monospace' }}>{k.id}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Action buttons */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-        <button onClick={runDiagnostic} disabled={diagnosticRunning} style={{ ...btn(C.accent), opacity: diagnosticRunning ? 0.5 : 1 }}>
-          {diagnosticRunning ? '⏳ Running...' : '🔍 Run Full Diagnostic'}
-        </button>
-        <button onClick={refresh} style={btn(C.bgDark)}>↻ Refresh</button>
-        <span style={{ marginLeft: 'auto', fontSize: 10, color: C.dim, alignSelf: 'center' }}>
-          Kimi: {s.kimi_enabled ? '✓ ON' : '✕ OFF'} | Auto-heal: {s.auto_heal_enabled ? '✓ ON' : '✕ OFF'} | Interval: {s.check_interval_seconds}s
-        </span>
+      {/* Detail Area */}
+      <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column' }}>
+        {!selectedKey ? (
+          <div style={{ margin: 'auto', textAlign: 'center', color: C.dim }}>
+            <div style={{ fontSize: 32, marginBottom: 16 }}>⧗</div>
+            <div>Select a Genesis Key to view lineage and resolve blockers.</div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+            <div style={{ borderBottom: `1px solid ${C.border}`, paddingBottom: 16, marginBottom: 16 }}>
+              <h2 style={{ margin: '0 0 8px 0', color: '#fff' }}>{selectedKey.title}</h2>
+              <div style={{ display: 'flex', gap: 16, fontSize: 12, color: C.dim }}>
+                <span>ID: <strong style={{ color: C.accent }}>{selectedKey.id}</strong></span>
+                <span>Type: <strong>{selectedKey.type}</strong></span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flex: 1, gap: 24, overflow: 'hidden' }}>
+              {/* Left Column: Lineage & Report */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto', paddingRight: 8 }}>
+                <div style={{ background: C.bg, padding: 16, borderRadius: 6, border: `1px solid ${C.border}` }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: C.text, marginBottom: 12 }}>BRANCH LINEAGE (DECISION TREE)</div>
+                  <div style={{ fontSize: 12, color: C.dim, paddingLeft: 12, borderLeft: `2px solid ${C.border}` }}>
+                    <div style={{ marginBottom: 8 }}>⚬ 14:02 - Automated Agent requested schema drop</div>
+                    <div style={{ marginBottom: 8 }}>⚬ 14:02 - Global Rule "Protect Prod DB" intercepted</div>
+                    <div style={{ color: C.error, fontWeight: 700 }}>⚬ 14:03 - Execution Halted. Human approval required.</div>
+                  </div>
+                </div>
+
+                <div style={{ background: C.bg, padding: 16, borderRadius: 6, border: `1px solid ${C.warn}`, position: 'relative' }}>
+                  <div style={{ fontSize: 10, background: C.warn, color: '#000', padding: '2px 8px', borderRadius: 4, position: 'absolute', top: -10, left: 16, fontWeight: 800 }}>LLM REPORT</div>
+                  <div style={{ fontSize: 13, color: '#ccc', lineHeight: 1.5, marginTop: 8 }}>
+                    {selectedKey.description}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Scoped Chat */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, overflow: 'hidden' }}>
+                <div style={{ padding: '8px 12px', background: C.highlight, fontSize: 11, fontWeight: 800, color: '#fff', borderBottom: `1px solid ${C.border}` }}>
+                  SCOPED RESOLUTION CHAT
+                </div>
+                <div style={{ flex: 1, padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ alignSelf: 'flex-start', background: C.bgAlt, padding: '8px 12px', borderRadius: 8, fontSize: 13, border: `1px solid ${C.border}`, maxWidth: '85%' }}>
+                    How would you like to handle {selectedKey.id}? The agent is waiting for your decision.
+                  </div>
+                </div>
+                <div style={{ padding: 12, borderTop: `1px solid ${C.border}`, background: C.bgAlt }}>
+                  <input type="text" placeholder="Discuss the decision here..." style={{ width: '100%', padding: '10px 12px', background: C.bg, border: `1px solid ${C.border}`, color: C.text, borderRadius: 4, fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 8 }}>
+                    <button onClick={() => handleAction('rejected')} style={{ background: C.error, color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 4, fontSize: 12, cursor: 'pointer', fontWeight: 700 }}>Reject Agent Action</button>
+                    <button onClick={() => handleAction('approved')} style={{ background: C.success, color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 4, fontSize: 12, cursor: 'pointer', fontWeight: 700 }}>Override & Approve</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Capabilities Section */}
-      <Card title={`Self-Healing Capabilities (${Object.keys(caps).length})`} extra={
-        <span onClick={() => toggle('caps')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'caps' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'caps' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-            {Object.entries(caps).map(([key, cap]) => (
-              <div key={key} style={{ padding: '8px 10px', background: C.bg, borderRadius: 6, border: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 8, background: cap.autonomous ? C.success + '30' : C.warn + '30', color: cap.autonomous ? C.success : C.warn, fontWeight: 600 }}>
-                    {cap.autonomous ? 'AUTO' : 'MANUAL'}
-                  </span>
-                  <span style={{ fontSize: 11, fontWeight: 600, flex: 1 }}>{key.replace(/_/g, ' ')}</span>
-                  <span style={{ fontSize: 10, color: C.dim }}>{cap.risk} risk</span>
-                </div>
-                <div style={{ fontSize: 10, color: C.muted }}>{cap.description}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <MeterBar value={(cap.success_rate || 0) * 100} color={cap.success_rate > 0.8 ? C.success : C.warn} />
-                  <span style={{ fontSize: 10, color: C.dim, flexShrink: 0 }}>{((cap.success_rate || 0) * 100).toFixed(0)}%</span>
-                  {cap.autonomous && <button onClick={() => triggerHeal(key)} style={{ ...btn(C.bgDark), fontSize: 9, padding: '2px 8px' }}>▶</button>}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-
-      {/* Limitations Section */}
-      <Card title={`Limitations & Expansion Needed (${lims.length})`} extra={
-        <span onClick={() => toggle('lims')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'lims' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'lims' && (
-          lims.length === 0 ? (
-            <div style={{ padding: 12, textAlign: 'center', color: C.dim, fontSize: 12 }}>No limitations registered yet</div>
-          ) : lims.map((lim, i) => (
-            <div key={i} style={{ padding: '8px 10px', marginBottom: 6, background: C.bg, borderRadius: 6, border: `1px solid ${C.warn}40` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                <span style={{ fontSize: 12 }}>⚠️</span>
-                <span style={{ fontSize: 12, fontWeight: 600, color: C.warn }}>{lim.type?.replace(/_/g, ' ') || 'Unknown'}</span>
-                {lim.count && <span style={{ fontSize: 10, color: C.dim }}>({lim.count} items)</span>}
-              </div>
-              <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>{lim.message}</div>
-              {lim.action_required && (
-                <div style={{ fontSize: 10, color: C.accent, fontStyle: 'italic' }}>Action needed: {lim.action_required}</div>
-              )}
-            </div>
-          ))
-        )}
-      </Card>
-
-      {/* Active Issues */}
-      <Card title={`Active Issues (${activeIssues.length})`} extra={
-        <span onClick={() => toggle('active')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'active' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'active' && (
-          activeIssues.length === 0 ? (
-            <div style={{ padding: 12, textAlign: 'center', color: C.success, fontSize: 12 }}>No active issues — system healthy</div>
-          ) : activeIssues.map((issue, i) => (
-            <div key={i} style={{ padding: '6px 10px', marginBottom: 4, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}`, fontSize: 11 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <StatusBadge status={issue.severity || 'unknown'} />
-                <span style={{ flex: 1 }}>{issue.message}</span>
-                <span style={{ fontSize: 9, color: C.dim }}>{issue.service}</span>
-              </div>
-              {issue.kimi_diagnosis?.diagnosis && (
-                <div style={{ marginTop: 4, padding: '4px 8px', background: C.bgDark, borderRadius: 4, fontSize: 10, color: C.muted }}>
-                  🤖 Kimi: {issue.kimi_diagnosis.diagnosis.substring(0, 200)}...
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </Card>
-
-      {/* Healing Log */}
-      <Card title={`Healing Log (${healingLog.length})`} extra={
-        <span onClick={() => toggle('log')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'log' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'log' && (
-          healingLog.length === 0 ? (
-            <div style={{ padding: 12, textAlign: 'center', color: C.dim, fontSize: 12 }}>No healing actions yet</div>
-          ) : healingLog.slice(-20).reverse().map((entry, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
-              <span style={{ color: entry.outcome === 'healed' ? C.success : C.error }}>{entry.outcome === 'healed' ? '✓' : '✕'}</span>
-              <span style={{ flex: 1 }}>{entry.action?.replace(/_/g, ' ')}</span>
-              <span style={{ fontSize: 10, color: C.dim }}>{entry.issue?.substring(0, 40)}</span>
-              {entry.manual && <span style={{ fontSize: 9, padding: '1px 4px', borderRadius: 4, background: C.info + '30', color: C.info }}>manual</span>}
-              <span style={{ fontSize: 9, color: C.dim }}>{entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString() : ''}</span>
-            </div>
-          ))
-        )}
-      </Card>
-
-      {/* Detected Stubs */}
-      <Card title={`Placeholder/Stub Code (${(detectedStubs || []).length})`} extra={
-        <span onClick={() => toggle('stubs')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'stubs' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'stubs' && (
-          (detectedStubs || []).length === 0 ? (
-            <div style={{ padding: 12, textAlign: 'center', color: C.success, fontSize: 12 }}>No stubs detected</div>
-          ) : (detectedStubs || []).slice(0, 30).map((stub, i) => (
-            <div key={i} style={{ padding: '4px 8px', marginBottom: 2, fontSize: 10, fontFamily: 'monospace', background: C.bg, borderRadius: 3, borderLeft: `2px solid ${C.warn}` }}>
-              <span style={{ color: C.muted }}>{stub.file}:{stub.line}</span>
-              <span style={{ color: C.dim, marginLeft: 8 }}>{stub.content}</span>
-            </div>
-          ))
-        )}
-      </Card>
-
-      {/* Subsystem Integration Status */}
-      <Card title={`Integrated Subsystems (${(s.subsystems_integrated || []).length})`} extra={
-        <span onClick={() => toggle('subsystems')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'subsystems' ? '▼' : '▶'}</span>
-      }>
-        {expandedSection === 'subsystems' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
-            {(s.subsystems_integrated || []).map((sub, i) => (
-              <div key={i} style={{ padding: '6px 10px', background: C.bg, borderRadius: 4, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: sub.status === 'connected' ? C.success : C.error, flexShrink: 0 }} />
-                <span style={{ fontSize: 11, flex: 1 }}>{(sub.name || '').replace(/_/g, ' ')}</span>
-                <span style={{ fontSize: 9, color: sub.status === 'connected' ? C.success : C.dim }}>{sub.status}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-
-      {/* Trend Data */}
-      {trendData.memory_samples?.length > 0 && (
-        <Card title="Resource Trends" extra={
-          <span onClick={() => toggle('trends')} style={{ cursor: 'pointer', fontSize: 12, color: C.muted }}>{expandedSection === 'trends' ? '▼' : '▶'}</span>
-        }>
-          {expandedSection === 'trends' && (
-            <div>
-              <div style={{ fontSize: 11, color: C.muted, marginBottom: 6 }}>Memory Usage (last {trendData.sample_count} samples)</div>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 40 }}>
-                {(trendData.memory_samples || []).map((val, i) => (
-                  <div key={i} style={{
-                    flex: 1, height: `${Math.max(2, val || 0) * 0.4}px`,
-                    background: val > 85 ? C.error : val > 70 ? C.warn : C.success,
-                    borderRadius: '2px 2px 0 0', minWidth: 2,
-                  }} title={`${val?.toFixed(1)}%`} />
-                ))}
-              </div>
-              <div style={{ fontSize: 11, color: C.muted, marginTop: 8 }}>Error Counts (last {trendData.sample_count} samples)</div>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 30 }}>
-                {(trendData.error_counts || []).map((val, i) => (
-                  <div key={i} style={{
-                    flex: 1, height: `${Math.max(2, (val || 0) * 3)}px`,
-                    background: val > 10 ? C.error : val > 3 ? C.warn : C.success,
-                    borderRadius: '2px 2px 0 0', minWidth: 2,
-                  }} title={`${val} errors`} />
-                ))}
-              </div>
-            </div>
-          )}
-        </Card>
-      )}
     </div>
   );
 }
 
-// ── Main GovernanceTab ────────────────────────────────────────────────
-export default function GovernanceTab() {
-  const [activeTab, setActiveTab] = useState('approvals');
-  const [dashboard, setDashboard] = useState(null);
+// ────────────────────────────────────────────────────────────────────────
+// 2. Rules Architect
+// ────────────────────────────────────────────────────────────────────────
+function RulesArchitect({ domain }) {
+  const isGlobal = domain.includes("Global");
+  const [globalDocs, setGlobalDocs] = useState([]);
+  const [localDocs, setLocalDocs] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/governance-hub/dashboard`)
-      .then(r => r.ok ? r.json() : null)
-      .then(setDashboard).catch(() => {});
-  }, []);
-
-  const tabs = [
-    { id: 'approvals', label: 'Approvals', icon: '✓', badge: dashboard?.approvals?.pending_count },
-    { id: 'scores', label: 'Scores', icon: '📊' },
-    { id: 'performance', label: 'Performance', icon: '⚡' },
-    { id: 'actions', label: 'Actions', icon: '🔧' },
-    { id: 'selfhealing', label: 'Self-Healing', icon: '🩺' },
-    { id: 'rules', label: 'Rules & Persona', icon: '⚖️' },
-    { id: 'genesis', label: 'Genesis Keys', icon: '🔑' },
-  ];
+    const fetchRules = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v2/govern/rules`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.ok && data.data?.documents) {
+          const docs = data.data.documents;
+          setGlobalDocs(docs.filter(d => d.category === 'global'));
+          setLocalDocs(docs.filter(d => d.category !== 'global'));
+        }
+      } catch (e) { console.error(e); }
+    };
+    fetchRules();
+  }, [domain]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: C.text, background: C.bg }}>
+    <div style={{ display: 'flex', height: '100%', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', gap: 24, flex: 1 }}>
 
-      {/* Header with sub-tabs */}
-      <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
-        <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-          🏛️ Governance
-        </span>
-        {tabs.map(t => (
-          <button
-            key={t.id}
-            onClick={() => setActiveTab(t.id)}
-            style={{
-              padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
-              color: activeTab === t.id ? C.accent : C.muted,
-              borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',
-              fontSize: 13, fontWeight: activeTab === t.id ? 700 : 500,
-              display: 'flex', alignItems: 'center', gap: 6,
-              transition: 'all .15s',
-            }}
-          >
-            <span>{t.icon}</span> {t.label}
-            {t.badge > 0 && (
-              <span style={{
-                background: C.error, color: '#fff', fontSize: 9, fontWeight: 700,
-                padding: '1px 6px', borderRadius: 10, lineHeight: '14px',
-              }}>{t.badge}</span>
+        {/* Global Rules */}
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ borderBottom: `1px solid ${C.border}`, paddingBottom: 16, marginBottom: 16 }}>
+            <h2 style={{ margin: 0, color: '#fff', fontSize: 18 }}>🌐 Global Laws</h2>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Universal constraints that apply to the entire Grace system. Cannot be overridden lightly.</div>
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <ul style={{ color: C.text, fontSize: 13, lineHeight: 1.6, paddingLeft: 20 }}>
+              <li><strong>Do no harm:</strong> Operations must not execute deletion on active production environments without cryptographic approval.</li>
+              <li><strong>Uptime Constraint:</strong> APIs must maintain a 99.9% uptime response threshold; aggressive tasks should spawn to background workers.</li>
+            </ul>
+          </div>
+          <div style={{ border: `2px dashed ${C.border}`, borderRadius: 8, padding: 20, textAlign: 'center', background: C.bg, cursor: 'pointer', marginTop: 16 }}>
+            <div style={{ fontSize: 20, marginBottom: 4 }}>📄</div>
+            <div style={{ fontSize: 13, color: C.text, fontWeight: 600 }}>Drag & Drop Global Policy Documents</div>
+            <div style={{ fontSize: 11, color: C.dim }}>PDFs or Text. These become foundational laws.</div>
+          </div>
+        </div>
+
+        {/* Localized Rules */}
+        <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${isGlobal ? C.border : C.accent}`, borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ borderBottom: `1px solid ${C.border}`, paddingBottom: 16, marginBottom: 16 }}>
+            <h2 style={{ margin: 0, color: '#fff', fontSize: 18 }}>📁 Localized Laws ({domain})</h2>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Contextual project constraints bound strictly by the Global Laws above.</div>
+          </div>
+
+          {isGlobal ? (
+            <div style={{ margin: 'auto', textAlign: 'center', color: C.dim }}>
+              <div style={{ fontSize: 24, marginBottom: 8 }}>🔒</div>
+              <div>Select a specific Domain from the top navigation to set localized rules.</div>
+            </div>
+          ) : (
+            <>
+              <div style={{ flex: 1, overflowY: 'auto' }}>
+                <ul style={{ color: C.text, fontSize: 13, lineHeight: 1.6, paddingLeft: 20 }}>
+                  <li><strong>Styling:</strong> Use TailwindCSS for all frontend components in this project.</li>
+                  <li><strong>Deploy Target:</strong> All code in this folder pushes to the Staging AWS environment ONLY.</li>
+                </ul>
+              </div>
+              <div style={{ border: `2px dashed ${C.accent}`, borderRadius: 8, padding: 20, textAlign: 'center', background: C.bg, cursor: 'pointer', marginTop: 16 }}>
+                <div style={{ fontSize: 20, marginBottom: 4 }}>📄</div>
+                <div style={{ fontSize: 13, color: C.text, fontWeight: 600 }}>Drag & Drop Local Docs</div>
+                <div style={{ fontSize: 11, color: C.dim }}>Anchors constraints specifically to this domain.</div>
+              </div>
+            </>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 3. Persona Manager
+// ────────────────────────────────────────────────────────────────────────
+function PersonaManager() {
+  const [personal, setPersonal] = useState("Loading...");
+  const [professional, setProfessional] = useState("Loading...");
+
+  useEffect(() => {
+    const fetchPersona = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v2/govern/persona`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.ok) {
+          setPersonal(data.data.personal || "");
+          setProfessional(data.data.professional || "");
+        }
+      } catch (e) { console.error(e); }
+    };
+    fetchPersona();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v2/govern/update_persona`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ personal, professional })
+      });
+      if (res.ok) alert("Persona saved successfully.");
+    } catch (e) { console.error(e); }
+  };
+
+  return (
+    <div style={{ maxWidth: 800, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 24 }}>
+        <h2 style={{ margin: '0 0 8px 0', color: '#fff', fontSize: 18 }}>🎭 Personal Persona</h2>
+        <div style={{ fontSize: 12, color: C.dim, marginBottom: 16 }}>Defines how Grace interacts with you privately during pair-programming, brainstorming, and system management.</div>
+        <textarea
+          value={personal}
+          onChange={(e) => setPersonal(e.target.value)}
+          style={{ width: '100%', height: 120, background: C.bg, border: `1px solid ${C.border}`, color: C.text, padding: 12, borderRadius: 6, fontSize: 13, fontFamily: 'monospace', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+        />
+      </div>
+
+      <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 24 }}>
+        <h2 style={{ margin: '0 0 8px 0', color: '#fff', fontSize: 18 }}>👔 Professional Persona</h2>
+        <div style={{ fontSize: 12, color: C.dim, marginBottom: 16 }}>Defines outbound communications: emails, external document generation, polished client-facing code summaries.</div>
+        <textarea
+          value={professional}
+          onChange={(e) => setProfessional(e.target.value)}
+          style={{ width: '100%', height: 120, background: C.bg, border: `1px solid ${C.border}`, color: C.text, padding: 12, borderRadius: 6, fontSize: 13, fontFamily: 'monospace', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+        />
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button onClick={handleSave} style={{ background: C.success, color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 6, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+          Save Persona Configurations
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 4. KPI & Trust Score Dashboard
+// ────────────────────────────────────────────────────────────────────────
+function KpiTrustDashboard({ domain }) {
+  const [score, setScore] = useState("94.2%");
+  const [kpis, setKpis] = useState([
+    { name: "Global Trust Score", val: "94.2%", status: "healthy", desc: "Cumulative system confidence" },
+    { name: "Code Quality Index", val: "98.1%", status: "healthy", desc: "Test coverage & strict typing adherence" },
+    { name: "Retrieval Accuracy", val: "91.5%", status: "healthy", desc: "RAG query relevance in chats" },
+    { name: "Dev Agent Efficiency", val: "76.4%", status: "degrading", desc: "Speed of resolving multi-file tickets" }
+  ]);
+
+  useEffect(() => {
+    const fetchScores = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v2/govern/scores`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.ok && data.data?.trust_score !== undefined) {
+          const trust = (data.data.trust_score * 100).toFixed(1) + "%";
+          setScore(trust);
+          setKpis(prev => {
+            const newKpis = [...prev];
+            newKpis[0].val = trust;
+            return newKpis;
+          });
+        }
+      } catch (e) { console.error(e); }
+    };
+    fetchScores();
+  }, [domain]);
+
+  return (
+    <div style={{ padding: 40, flex: 1, overflowY: 'auto' }}>
+      <h2 style={{ margin: '0 0 8px 0', color: '#fff', fontSize: 24 }}>KPI & Trust Score Dashboard</h2>
+      <div style={{ fontSize: 13, color: C.dim, marginBottom: 32 }}>Real-time telemetry measuring system efficiency and adherence to constraints in the {domain} scope.</div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 24 }}>
+        {kpis.map((k, i) => (
+          <div key={i} style={{ background: C.bgAlt, border: `1px solid ${k.status === 'degrading' ? C.warn : C.border}`, padding: 24, borderRadius: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{k.name}</div>
+              <div style={{ fontSize: 10, background: k.status === 'degrading' ? C.warn : C.success, color: k.status === 'degrading' ? '#000' : '#fff', padding: '2px 8px', borderRadius: 12, fontWeight: 800, textTransform: 'uppercase' }}>
+                {k.status}
+              </div>
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: k.status === 'degrading' ? C.warn : C.accent, marginBottom: 8 }}>{k.val}</div>
+            <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.4 }}>{k.desc}</div>
+
+            {k.status === 'degrading' && (
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.border}`, display: 'flex', gap: 8 }}>
+                <button style={{ flex: 1, background: C.accent, color: '#fff', border: 'none', padding: '8px', borderRadius: 4, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Trigger Self-Healing</button>
+                <button style={{ flex: 1, background: 'transparent', color: C.text, border: `1px solid ${C.border}`, padding: '8px', borderRadius: 4, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>Trigger Self-Learning</button>
+              </div>
             )}
-          </button>
+          </div>
         ))}
+      </div>
+    </div>
+  );
+}
 
-        {/* Quick stats from dashboard */}
-        {dashboard && (
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, fontSize: 11, color: C.dim, paddingRight: 8 }}>
-            {dashboard.trust?.system_score != null && (
-              <span>Trust: <b style={{ color: dashboard.trust.system_score >= 0.7 ? C.success : C.warn }}>{(dashboard.trust.system_score * 100).toFixed(0)}%</b></span>
-            )}
-            {dashboard.performance?.cpu_percent != null && (
-              <span>CPU: <b>{dashboard.performance.cpu_percent.toFixed(0)}%</b></span>
-            )}
-            {dashboard.healing?.available && dashboard.healing.health_status && (
-              <span>Health: <StatusBadge status={dashboard.healing.health_status} /></span>
-            )}
+// ────────────────────────────────────────────────────────────────────────
+// 5. Adaptive Overrides (Meta-Learning)
+// ────────────────────────────────────────────────────────────────────────
+function AdaptiveOverrides({ domain }) {
+  const [selectedLog, setSelectedLog] = useState(null);
+  const [logs, setLogs] = useState([]);
+
+  const fetchOverrides = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v2/govern/adaptive_overrides`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const data = await res.json();
+      if (data.ok && data.data?.overrides) {
+        setLogs(data.data.overrides.map(o => ({
+          ...o,
+          id: o.override_id,
+          timestamp: new Date(o.created_at || Date.now()).toLocaleString()
+        })));
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  useEffect(() => { fetchOverrides(); }, [domain]);
+
+  const handleApprove = async (action) => {
+    if (!selectedLog) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v2/govern/approve_override`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ override_id: selectedLog.id, action })
+      });
+      if (res.ok) {
+        alert(action === "approved" ? "Rule globally applied and anchored." : "Logged as exception.");
+        fetchOverrides();
+        setSelectedLog(null);
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  return (
+    <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+
+      {/* Inbox / Log List */}
+      <div style={{ width: 320, borderRight: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '16px 24px', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#fff' }}>OVERRIDE HISTORY</div>
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>Manual user rule-breaks</div>
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {logs.map(log => (
+            <div
+              key={log.id}
+              onClick={() => setSelectedLog(log)}
+              style={{
+                background: selectedLog?.id === log.id ? C.highlight : C.bg,
+                border: `1px solid ${selectedLog?.id === log.id ? C.accent : C.border}`,
+                padding: 16, borderRadius: 8, cursor: 'pointer', transition: 'all 0.1s'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{ fontSize: 11, color: C.accent, fontWeight: 800, fontFamily: 'monospace' }}>{log.id}</span>
+                <span style={{ fontSize: 10, color: C.dim }}>{log.timestamp}</span>
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{log.context}</div>
+              <div style={{ fontSize: 11, color: C.muted }}>Override: {log.user_action}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Analysis & Proposal Engine */}
+      <div style={{ flex: 1, padding: 32, background: C.bg, overflowY: 'auto' }}>
+        {!selectedLog ? (
+          <div style={{ margin: 'auto', textAlign: 'center', color: C.dim, marginTop: 100 }}>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>🧬</div>
+            <div style={{ fontSize: 14 }}>Select an override log to analyze Grace's rule evolution proposals.</div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: 700 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <h2 style={{ margin: 0, color: '#fff', fontSize: 24 }}>Anomaly Analysis: {selectedLog.context}</h2>
+              <div style={{ fontSize: 11, color: C.dim, fontFamily: 'monospace', padding: '4px 8px', background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 4 }}>{selectedLog.genesis_key}</div>
+            </div>
+
+            {/* The Override Facts */}
+            <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+              <div style={{ flex: 1, background: C.bgAlt, border: `1px solid ${C.border}`, padding: 16, borderRadius: 8 }}>
+                <div style={{ fontSize: 10, color: C.dim, textTransform: 'uppercase', fontWeight: 800, marginBottom: 4 }}>System Rule Broken</div>
+                <div style={{ fontSize: 13, color: '#fff' }}>{selectedLog.rule_broken}</div>
+                <div style={{ fontSize: 12, color: C.error, marginTop: 4 }}>Actual: {selectedLog.actual_metric}</div>
+              </div>
+              <div style={{ flex: 1, background: C.highlight, border: `1px solid ${C.accent}`, padding: 16, borderRadius: 8 }}>
+                <div style={{ fontSize: 10, color: C.dim, textTransform: 'uppercase', fontWeight: 800, marginBottom: 4 }}>User Action (Override)</div>
+                <div style={{ fontSize: 13, color: '#fff', fontWeight: 700 }}>{selectedLog.user_action}</div>
+              </div>
+            </div>
+
+            {/* AI Synthesis */}
+            <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 24, marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                <span style={{ fontSize: 18 }}>🧠</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: C.text, textTransform: 'uppercase' }}>Grace's Meta-Learning Synthesis</span>
+              </div>
+              <div style={{ fontSize: 14, color: C.muted, lineHeight: 1.6, fontStyle: 'italic' }}>
+                "{selectedLog.llm_analysis}"
+              </div>
+            </div>
+
+            {/* Proposed Rule Evolution */}
+            <div style={{ background: '#1c1c14', border: `1px solid ${C.warn}`, borderRadius: 8, padding: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: C.warn, textTransform: 'uppercase' }}>Rule Evolution Proposal</div>
+              </div>
+              <textarea
+                defaultValue={selectedLog.proposed_rule}
+                style={{ width: '100%', background: '#0a0a07', color: '#ffebc2', border: `1px solid ${C.warn}`, borderRadius: 6, padding: 16, fontSize: 14, fontFamily: 'monospace', resize: 'vertical', minHeight: 80, outline: 'none', lineHeight: 1.5, boxSizing: 'border-box' }}
+              />
+
+              <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                <button onClick={() => handleApprove('approved')} style={{ background: C.success, color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                  ✓ Approve as Standing Rule
+                </button>
+                <button onClick={() => handleApprove('exception')} style={{ background: C.bgAlt, color: C.text, border: `1px solid ${C.border}`, padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                  Keep as One-Time Exception
+                </button>
+              </div>
+            </div>
+
           </div>
         )}
       </div>
 
-      {/* Tab content */}
-      <div style={{ flex: 1, overflow: 'hidden' }}>
-        {activeTab === 'approvals' && <ApprovalsPanel />}
-        {activeTab === 'scores' && <ScoresPanel />}
-        {activeTab === 'performance' && <PerformancePanel />}
-        {activeTab === 'actions' && <ActionsPanel />}
-        {activeTab === 'selfhealing' && <SelfHealingPanel />}
-        {activeTab === 'rules' && <RulesPersonaPanel />}
-        {activeTab === 'genesis' && <GenesisKeysPanel />}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 6. Schema Evolution
+// ────────────────────────────────────────────────────────────────────────
+function SchemaEvolution({ domain }) {
+  const [selectedProposal, setSelectedProposal] = useState(null);
+  const [proposals, setProposals] = useState([]);
+
+  const fetchProposals = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/schema-evolution/proposals`);
+      const data = await res.json();
+      if (data.proposals) {
+        setProposals(data.proposals.map(p => ({
+          ...p,
+          id: p.proposal_id,
+          timestamp: new Date(p.created_at || Date.now()).toLocaleString()
+        })));
+      }
+    } catch (e) {
+      console.error("Failed to fetch proposals", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchProposals();
+  }, [domain]);
+
+  const handleAction = async (action) => {
+    if (!selectedProposal) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/schema-evolution/proposals/${selectedProposal.id}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(action === "approve" ? "Schema Migrated Live." : "Proposal Rejected.");
+        fetchProposals();
+        setSelectedProposal(null);
+      } else {
+        alert("Failed: " + data.detail);
+      }
+    } catch (e) {
+      alert("Error executing action.");
+      console.error(e);
+    }
+  };
+
+  const statusColor = (status) => {
+    if (status === 'pending') return C.warn;
+    if (status === 'approved') return C.success;
+    if (status === 'rejected') return C.dim;
+    return C.error;
+  };
+
+  return (
+    <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+
+      {/* Inbox / Log List */}
+      <div style={{ width: 320, borderRight: `1px solid ${C.border}`, background: C.bgAlt, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '16px 24px', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#fff' }}>SCHEMA PROPOSALS</div>
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>Autonomous Database Migrations</div>
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {proposals.map(prop => (
+            <div
+              key={prop.id}
+              onClick={() => setSelectedProposal(prop)}
+              style={{
+                background: selectedProposal?.id === prop.id ? C.highlight : C.bg,
+                border: `1px solid ${selectedProposal?.id === prop.id ? C.accent : C.border}`,
+                padding: 16, borderRadius: 8, cursor: 'pointer', transition: 'all 0.1s'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{ fontSize: 11, color: statusColor(prop.status), fontWeight: 800, textTransform: 'uppercase' }}>{prop.status}</span>
+                <span style={{ fontSize: 10, color: C.dim }}>{prop.timestamp}</span>
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 4 }} title={prop.trigger_reason}>
+                {prop.trigger_reason.substring(0, 40) + "..."}
+              </div>
+              <div style={{ fontSize: 11, color: C.muted, fontFamily: 'monospace' }}>{prop.id}</div>
+            </div>
+          ))}
+          {proposals.length === 0 && (
+            <div style={{ fontSize: 12, color: C.dim, textAlign: 'center', marginTop: 32 }}>No schema proposals logged.</div>
+          )}
+        </div>
+      </div>
+
+      {/* Analysis & execution view */}
+      <div style={{ flex: 1, padding: 32, background: C.bg, overflowY: 'auto' }}>
+        {!selectedProposal ? (
+          <div style={{ margin: 'auto', textAlign: 'center', color: C.dim, marginTop: 100 }}>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>🗄️</div>
+            <div style={{ fontSize: 14 }}>Select a schema evolution proposal to review AST constraints.</div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: 800 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+              <div>
+                <h2 style={{ margin: 0, color: '#fff', fontSize: 24 }}>Evolve Database Schema</h2>
+                <div style={{ fontSize: 13, color: statusColor(selectedProposal.status), fontWeight: 800, marginTop: 8, textTransform: 'uppercase' }}>
+                  Status: {selectedProposal.status}
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: C.dim, fontFamily: 'monospace', padding: '4px 8px', background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 4 }}>{selectedProposal.id}</div>
+            </div>
+
+            <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, padding: 20, borderRadius: 8, marginBottom: 24 }}>
+              <div style={{ fontSize: 10, color: C.dim, textTransform: 'uppercase', fontWeight: 800, marginBottom: 8 }}>Trigger Reason / Analysis</div>
+              <div style={{ fontSize: 14, color: '#fff', lineHeight: 1.5 }}>{selectedProposal.trigger_reason}</div>
+            </div>
+
+            <div style={{ background: '#1c1c14', border: `1px solid ${C.warn}`, borderRadius: 8, padding: 24, marginBottom: 24 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: C.warn, textTransform: 'uppercase', marginBottom: 16 }}>Proposed SQLAlchemy Core Expansion</div>
+
+              <div style={{ background: '#0a0a07', padding: 16, borderRadius: 6, border: `1px solid ${C.border}`, overflowX: 'auto' }}>
+                <pre style={{ margin: 0, fontSize: 13, color: '#ffebc2', fontFamily: 'monospace', lineHeight: 1.5 }}>
+                  {selectedProposal.proposed_code}
+                </pre>
+              </div>
+
+              {selectedProposal.status === 'pending' && (
+                <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                  <button onClick={() => handleAction('approve')} style={{ background: C.success, color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span>✓</span> Approve & Execute Migration
+                  </button>
+                  <button onClick={() => handleAction('reject')} style={{ background: C.bgAlt, color: C.text, border: `1px solid ${C.border}`, padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                    Reject Proposal
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {selectedProposal.execution_logs && (
+              <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20 }}>
+                <div style={{ fontSize: 10, color: C.dim, textTransform: 'uppercase', fontWeight: 800, marginBottom: 8 }}>Migration Execution Trace</div>
+                <div style={{ fontSize: 12, color: '#ccc', fontFamily: 'monospace', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                  {selectedProposal.execution_logs}
+                </div>
+              </div>
+            )}
+
+          </div>
+        )}
       </div>
     </div>
   );

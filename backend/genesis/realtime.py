@@ -17,6 +17,8 @@ from typing import Dict, Any, List, Callable, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from collections import deque
+
+from core.datetime_utils import as_naive_utc
 from threading import Lock
 
 logger = logging.getLogger(__name__)
@@ -170,7 +172,8 @@ class GenesisRealtimeEngine:
         # Dedup: don't fire same alert within 30 seconds
         for existing in self._alerts[-10:]:
             if existing.alert_type == alert_type and not existing.acknowledged:
-                if (datetime.utcnow() - datetime.fromisoformat(existing.timestamp)).seconds < 30:
+                ts = as_naive_utc(datetime.fromisoformat(existing.timestamp))
+                if ts and (datetime.utcnow() - ts).seconds < 30:
                     return
 
         alert = Alert(

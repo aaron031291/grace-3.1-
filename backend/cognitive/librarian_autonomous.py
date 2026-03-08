@@ -274,13 +274,12 @@ class AutonomousLibrarian:
         except Exception:
             pass
 
-        # Unknown file type — ask Kimi to reason about where it should go
-        return self._ask_kimi_for_location(file_path)
+        # Unknown file type — ask LLM (Qwen by default) to reason about where it should go
+        return self._ask_llm_for_location(file_path)
 
-    def _ask_kimi_for_location(self, file_path: Path) -> Optional[str]:
-        """Query Kimi to reason about where an unknown file type should be placed."""
+    def _ask_llm_for_location(self, file_path: Path) -> Optional[str]:
+        """Query LLM (Qwen document model by default) to reason about where an unknown file should be placed."""
         try:
-            # Read file preview for context
             content_preview = ""
             try:
                 content_preview = file_path.read_text(errors="ignore")[:2000]
@@ -288,39 +287,54 @@ class AutonomousLibrarian:
                 content_preview = f"[Binary file: {file_path.suffix}, size: {file_path.stat().st_size} bytes]"
 
             categories = ", ".join(DIRECTORY_TAXONOMY.keys())
-
-            from llm_orchestrator.kimi_enhanced import get_kimi_enhanced
-            kimi = get_kimi_enhanced()
-            response = kimi._call(
+            prompt = (
                 f"You are a file organiser. Where should this file be placed?\n\n"
                 f"Filename: {file_path.name}\n"
                 f"Extension: {file_path.suffix}\n"
                 f"Content preview:\n{content_preview[:1000]}\n\n"
                 f"Available categories: {categories}\n"
                 f"Subcategories can be created freely.\n\n"
-                f"Respond with ONLY the directory path, e.g. 'documentation' or 'code/python' or 'research/ai'. Nothing else.",
-                system="You are a librarian. Respond with only the directory path. No explanation.",
-                temperature=0.1, max_tokens=50,
+                f"Respond with ONLY the directory path, e.g. 'documentation' or 'code/python' or 'research/ai'. Nothing else."
             )
 
+            from llm_orchestrator.factory import get_llm_for_task
+            from llm_orchestrator.ollama_resolver import resolve_ollama_model
+            client = get_llm_for_task("document")
+            doc_model = resolve_ollama_model("document")
+            if hasattr(client, "chat"):
+                raw = client.chat(
+                    model=doc_model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.1,
+                    stream=False,
+                )
+                if isinstance(raw, dict) and "message" in raw:
+                    response = raw["message"].get("content", "")
+                else:
+                    response = str(raw) if raw else ""
+            else:
+                response = ""
+
             if response:
-                # Clean the response — should be just a path
                 suggestion = response.strip().strip("'\"").strip("/").lower()
                 suggestion = suggestion.replace(" ", "_")
-                # Validate it's reasonable
-                if 1 < len(suggestion) < 50 and "/" in suggestion or suggestion in DIRECTORY_TAXONOMY:
-                    logger.info(f"[LIBRARIAN] Kimi suggests: {file_path.name} → {suggestion}")
-
-                    from api._genesis_tracker import track
-                    track(key_type="librarian",
-                          what=f"Kimi file reasoning: {file_path.name} → {suggestion}",
-                          where=str(file_path), file_path=str(file_path),
-                          input_data={"filename": file_path.name, "extension": file_path.suffix},
-                          output_data={"suggestion": suggestion, "source": "kimi_reasoning"},
-                          tags=["librarian", "kimi_reasoning", "file_placement"])
+                if 1 < len(suggestion) < 50 and ("/" in suggestion or suggestion in DIRECTORY_TAXONOMY):
+                    logger.info(f"[LIBRARIAN] Qwen suggests: {file_path.name} → {suggestion}")
+                    try:
+                        from api._genesis_tracker import track
+                        track(
+                            key_type="librarian",
+                            what=f"LLM file reasoning: {file_path.name} → {suggestion}",
+                            where=str(file_path), file_path=str(file_path),
+                            input_data={"filename": file_path.name, "extension": file_path.suffix},
+                            output_data={"suggestion": suggestion, "source": "qwen_document"},
+                            tags=["librarian", "file_placement"],
+                        )
+                    except Exception:
+                        pass
                     return suggestion
         except Exception as e:
-            logger.debug(f"[LIBRARIAN] Kimi reasoning failed: {e}")
+            logger.debug(f"[LIBRARIAN] LLM reasoning failed: {e}")
 
         return None
 

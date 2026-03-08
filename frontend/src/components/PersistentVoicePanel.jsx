@@ -26,6 +26,46 @@ export default function PersistentVoicePanel({
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
+  // Drag state
+  const [pos, setPos] = useState({ bottom: 24, left: 240 });
+  const isDragging = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDragged = useRef(false);
+
+  const handlePointerDown = (e) => {
+    // Only allow drag from header if clicking on panel
+    if (e.target.closest('.persistent-voice-panel') && !e.target.closest('.voice-panel-header')) return;
+
+    isDragging.current = true;
+    hasDragged.current = false;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - dragStartPos.current.x;
+    const dy = e.clientY - dragStartPos.current.y;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) hasDragged.current = true;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    setPos(p => ({ left: p.left + dx, bottom: p.bottom - dy }));
+  };
+
+  const handlePointerUp = (e) => {
+    if (isDragging.current) {
+      isDragging.current = false;
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
+
+  const wrapToggle = () => {
+    if (hasDragged.current) {
+      hasDragged.current = false;
+      return;
+    }
+    setIsPanelOpen(!isPanelOpen);
+  };
+
   // Transcript and conversation
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [conversationLog, setConversationLog] = useState([]);
@@ -312,7 +352,12 @@ export default function PersistentVoicePanel({
       {/* Main toggle button - always visible */}
       <button
         className={`voice-toggle-btn ${isEnabled ? "active" : ""} ${isListening ? "listening" : ""} ${isSpeaking ? "speaking" : ""}`}
-        onClick={() => setIsPanelOpen(!isPanelOpen)}
+        onClick={wrapToggle}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        style={{ left: pos.left, bottom: pos.bottom, touchAction: 'none' }}
         title={isEnabled ? "Voice mode active" : "Voice mode off"}
       >
         <VoiceIcon />
@@ -327,8 +372,15 @@ export default function PersistentVoicePanel({
 
       {/* Expanded panel */}
       {isPanelOpen && (
-        <div className="persistent-voice-panel">
-          <div className="voice-panel-header">
+        <div
+          className="persistent-voice-panel"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          style={{ left: pos.left, bottom: pos.bottom + 66, touchAction: 'none' }}
+        >
+          <div className="voice-panel-header" style={{ cursor: 'move' }}>
             <h3>Voice Mode</h3>
             <div className="voice-panel-actions">
               <button

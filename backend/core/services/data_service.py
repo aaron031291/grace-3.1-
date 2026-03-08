@@ -16,8 +16,7 @@ def _load(kind):
     p = DATA_DIR / f"{kind}.json"
     if p.exists():
         try: return json.loads(p.read_text())
-        except Exception as e:
-            logger.warning(f"Failed to load {kind} data: {e}")
+        except Exception: pass
     return []
 
 def _save(kind, data):

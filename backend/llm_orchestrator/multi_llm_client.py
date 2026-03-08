@@ -357,6 +357,31 @@ class MultiLLMClient:
             ],
             priority=9
         ),
+        "qwen3-32b": LLMModel(
+            name="Qwen 3 32B",
+            model_id="qwen3:32b",
+            capabilities=[ModelCapability.REASONING, ModelCapability.CODE, ModelCapability.GENERAL],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.REASONING,
+                TaskType.PLANNING,
+                TaskType.CODE_GENERATION,
+                TaskType.GENERAL
+            ],
+            priority=10
+        ),
+        "qwen3-14b": LLMModel(
+            name="Qwen 3 14B",
+            model_id="qwen3:14b",
+            capabilities=[ModelCapability.REASONING, ModelCapability.SPEED, ModelCapability.GENERAL],
+            context_window=32768,
+            recommended_tasks=[
+                TaskType.REASONING,
+                TaskType.QUICK_QUERY,
+                TaskType.VALIDATION
+            ],
+            priority=8
+        ),
         "mistral-small": LLMModel(
             name="Mistral Small",
             model_id="mistral-small:22b",

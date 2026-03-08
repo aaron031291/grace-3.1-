@@ -162,6 +162,36 @@ async def ingest_text(
 
     try:
         print("Ingesting text document...")
+
+        # ── Semantic entity classification (pre-materialization step) ──
+        # Classify what kind of entity this data represents BEFORE hitting the DB.
+        # This routes to the canonical table/collection and normalizes fields.
+        entity_meta = {}
+        try:
+            from cognitive.semantic_entity_classifier import classify_entity
+            classified = classify_entity(
+                text=request.text,
+                filename=request.filename,
+                source_type=request.source_type or "user_generated",
+                metadata=request.metadata,
+            )
+            entity_meta = {
+                "entity_type": classified["entity_type"],
+                "entity_confidence": classified["confidence"],
+                "target_table": classified["db_table"],
+                "target_collection": classified["vector_collection"],
+                "canonical_fields": classified["canonical_fields"],
+            }
+            logger.info(
+                "[SEMANTIC] Classified '%s' → %s (%.0f%%)",
+                request.filename, classified["entity_type"], classified["confidence"] * 100
+            )
+        except Exception as ce:
+            logger.debug("[SEMANTIC] Classification skipped: %s", ce)
+
+        # Merge entity metadata with any user-provided metadata
+        merged_metadata = {**(request.metadata or {}), **entity_meta}
+
         document_id, message = service.ingest_text_fast(
             text_content=request.text,
             filename=request.filename,
@@ -170,12 +200,22 @@ async def ingest_text(
             source_type=request.source_type,
             description=request.description,
             tags=request.tags,
-            metadata=request.metadata,
+            metadata=merged_metadata,
         )
-        
+
         if document_id is None:
+            try:
+                from core.kpi_recorder import record_component_kpi
+                record_component_kpi("ingestion", "requests", 1.0, success=False)
+            except Exception:
+                pass
             raise HTTPException(status_code=400, detail=message)
         
+        try:
+            from core.kpi_recorder import record_component_kpi
+            record_component_kpi("ingestion", "requests", 1.0, success=True)
+        except Exception:
+            pass
         return IngestionResponse(
             success=True,
             message=message,
@@ -185,6 +225,11 @@ async def ingest_text(
     except HTTPException:
         raise
     except Exception as e:
+        try:
+            from core.kpi_recorder import record_component_kpi
+            record_component_kpi("ingestion", "requests", 1.0, success=False)
+        except Exception:
+            pass
         logger.error(f"Ingestion error: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,
@@ -306,10 +351,19 @@ async def ingest_file(
         
         if document_id is None:
             logger.error(f"[API_FILE_INGEST] Ingestion failed: {message}")
+            try:
+                from core.kpi_recorder import record_component_kpi
+                record_component_kpi("ingestion", "requests", 1.0, success=False)
+            except Exception:
+                pass
             raise HTTPException(status_code=400, detail=message)
         
         logger.info(f"[API_FILE_INGEST] [OK] Successfully ingested document {document_id}")
-        
+        try:
+            from core.kpi_recorder import record_component_kpi
+            record_component_kpi("ingestion", "requests", 1.0, success=True)
+        except Exception:
+            pass
         return IngestionResponse(
             success=True,
             message=message,
@@ -319,6 +373,11 @@ async def ingest_file(
     except HTTPException:
         raise
     except Exception as e:
+        try:
+            from core.kpi_recorder import record_component_kpi
+            record_component_kpi("ingestion", "requests", 1.0, success=False)
+        except Exception:
+            pass
         logger.error(f"[API_FILE_INGEST] File ingestion error: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,

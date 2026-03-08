@@ -9,7 +9,7 @@ click
 coverage
 dulwich
 fastapi
-filelock==3.13.1
+filelock
 fsspec
 h11
 hf-xet
@@ -75,6 +75,7 @@ pydub
 moviepy
 ffmpeg-python
 schedule
+filelock==3.13.1
 mcp>=1.2.0
 fastmcp>=0.1.0
 pytest-asyncio>=0.23.0

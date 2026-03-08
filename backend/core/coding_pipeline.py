@@ -1,39 +1,28 @@
 """
-Grace Coding Pipeline — 8-Layer Error Mitigation System.
+Grace Coding Pipeline — 9-Phase Error Mitigation (determinism to the door of LLMs).
 
-This is the LAW that governs how ALL models (Kimi, Opus, Qwen, DeepSeek)
-produce code. No model can skip layers. No layer can pass without
-100% completion. Everything tracked via Genesis keys.
+Determinism full scope and full breadth: Phase 0 runs first (Genesis keys, probe agent,
+AST/deterministic bridge, auto-fix). LLM is used only when we can't finish deterministically.
 
 Flow:
+  Phase 0 (deterministic): Search Genesis keys → Probe agent → Deterministic scan + fix →
   User task → Planner → Consensus on plan → Break into chunks →
-  Each chunk runs through all 8 layers → Probe + verify at each layer →
-  Consensus after each chunk → Final consensus → Deployment gate
+  Each chunk runs through Layers 1–8 → Probe + verify at each layer →
+  Hand off to LLM only for reasoning/validation/generation when Phase 0 says so.
 
-Layers:
+Phases:
+  0. DETERMINISTIC PRE-PHASE — Genesis error search, probe (testing), AST/parse, auto-fix
   1. RUNTIME ENVIRONMENT — isolated context per task
   2. TASK DECOMPOSITION — break into sub-problems
   3. SOLUTION PROPOSAL — generate 3 diverse approaches
   4. SOLUTION SELECTION — evaluate and pick best approach
   5. SIMULATION & REASONING — simulate against requirements
   6. CODE GENERATION — translate chosen approach into code
-  7. VERIFICATION — sandbox test, probe, fact-check
+  7. VERIFICATION — deterministic first, then probe, then LLM backup
   8. DEPLOYMENT GATE — consensus approval, trust score check
 
-Cross-cutting concerns (run at EVERY layer):
-  - Genesis Key tracking (provenance at every operation)
-  - Trust Score (confidence metric, must be >= threshold to pass)
-  - Self-Mirror (observe own behavior for anomalies)
-  - TimeSense (urgency, scheduling, defer non-critical)
-  - LLM Reasoning (OODA cycle before proceeding)
-  - Probe (verify everything works after each layer)
-  - Activity tracker (what happened, duration, errors)
-  - Anti-hallucination verification (check outputs against governance rules)
-  - @ mention context injection (file content included in LLM calls)
-  - Streaming output (token-by-token for real-time feedback)
-  - Report generation (track achievements for daily reports)
-  - Hot code reload (apply changes without restart)
-  - Hebbian learning (strengthen successful brain connections)
+Cross-cutting: Genesis keys, trust score, probe at every layer, anti-hallucination,
+LLM only where Phase 0 / deterministic path cannot complete.
 """
 
 import hashlib
@@ -79,6 +68,7 @@ class PipelineResult:
     trust_score: float = 0.0
 
 
+PHASE_0_NAME = "Deterministic Pre-Phase"
 LAYER_NAMES = {
     1: "Runtime Environment",
     2: "Task Decomposition",
@@ -175,8 +165,8 @@ class CodingPipeline:
 
     def run_background(self, task: str, context: dict = None) -> str:
         """Run the pipeline in a background thread. Returns run_id for tracking."""
-        import uuid
-        run_id = f"PIPE-{uuid.uuid4().hex[:8]}"
+        from core.determinism import deterministic_run_id
+        run_id = deterministic_run_id(task[:500])
 
         def _bg():
             self.run(task, context, run_id=run_id)
@@ -190,12 +180,12 @@ class CodingPipeline:
 
     def run(self, task: str, context: dict = None, run_id: str = None) -> PipelineResult:
         """Execute the full pipeline for a task with progress tracking."""
-        import uuid
         import concurrent.futures
+        from core.determinism import deterministic_run_id
 
         start = time.time()
         if not run_id:
-            run_id = f"PIPE-{uuid.uuid4().hex[:8]}"
+            run_id = deterministic_run_id(task[:500])
         result = PipelineResult(task=task)
 
         # SAFETY: snapshot state before any changes
@@ -212,8 +202,38 @@ class CodingPipeline:
 
         self._track("pipeline_start", f"Pipeline started: {task[:100]}", {"task": task, "run_id": run_id})
 
+        # Phase 0: Deterministic first (Genesis keys, probe, AST, auto-fix) — hand off to LLM only when we can't finish
+        phase0_result = None
+        try:
+            from core.deterministic_first_loop import run_deterministic_first_loop, get_handoff_context
+            phase0_result = run_deterministic_first_loop(
+                task=task,
+                run_probe=True,
+                run_genesis_search=True,
+                run_deterministic_scan=True,
+            )
+            handoff = get_handoff_context(phase0_result)
+            context = dict(context or {})
+            context["phase0"] = phase0_result
+            context["handoff_to_llm"] = handoff
+        except Exception as e:
+            logger.debug(f"Phase 0 (deterministic first) skipped: {e}")
+            context = context or {}
+
+        # Connect governance coding contract so every layer can enforce it
+        try:
+            from core.governance_engine import get_governance_coding_contract
+            from core.environment import get_environment
+            env = get_environment()
+            contract = get_governance_coding_contract(env)
+            context = dict(context)
+            context["governance_coding_contract"] = contract
+            context["contract_text"] = contract.get("contract_text", "")
+        except Exception as e:
+            logger.debug(f"Governance coding contract load skipped: {e}")
+
         # Step 1: Plan
-        chunks = self._plan_task(task, context or {})
+        chunks = self._plan_task(task, context)
         if not chunks:
             result.status = "failed"
             self.progress.start(run_id, task, 0)
@@ -463,23 +483,28 @@ class CodingPipeline:
             except Exception:
                 pass
 
-            # LLM Reasoning about this layer
-            reasoning = self._reason(layer_num, chunk, task)
-            result.reasoning = reasoning
+            # LLM Reasoning only when Phase 0 says handoff (deterministic-first gate)
+            phase0 = (context or {}).get("phase0")
+            from core.determinism import should_use_llm
+            if should_use_llm(phase0, task, name):
+                reasoning = self._reason(layer_num, chunk, task)
+                result.reasoning = reasoning
+            else:
+                result.reasoning = "proceed"  # deterministic path handled; skip LLM
 
-            # Execute the layer logic
+            # Execute the layer logic (context includes governance_coding_contract)
             if layer_num == 1:
                 result.output = self._layer_runtime(chunk, context)
             elif layer_num == 2:
-                result.output = self._layer_decompose(chunk, task)
+                result.output = self._layer_decompose(chunk, task, context)
             elif layer_num == 3:
-                result.output = self._layer_propose(chunk, task)
+                result.output = self._layer_propose(chunk, task, context)
             elif layer_num == 4:
                 result.output = self._layer_select(chunk, result.output or {})
             elif layer_num == 5:
                 result.output = self._layer_simulate(chunk, task)
             elif layer_num == 6:
-                result.output = self._layer_generate(chunk, task)
+                result.output = self._layer_generate(chunk, task, context)
             elif layer_num == 7:
                 result.output = self._layer_verify(chunk)
             elif layer_num == 8:
@@ -491,8 +516,8 @@ class CodingPipeline:
                 result.status = "failed"
                 result.output = {"hallucination_detected": hallucination["flags"], "original_output": result.output}
 
-            # Probe check
-            result.probe_passed = self._probe_layer(layer_num)
+            # Probe check (use Phase 0 probe result when available — deterministic first)
+            result.probe_passed = self._probe_layer(layer_num, context)
 
             # Trust score
             result.trust_score = self._layer_trust(layer_num, result)
@@ -522,23 +547,35 @@ class CodingPipeline:
     # ── Layer implementations ─────────────────────────────────
 
     def _layer_runtime(self, chunk: str, context: dict) -> dict:
-        """Layer 1: Check system health, connectivity, rules before touching anything."""
+        """Layer 1: Check system health, connectivity, rules. Deterministic probe when Phase 0 provided."""
         from api.brain_api_v2 import call_brain
         health = call_brain("system", "health", {})
         connectivity = call_brain("system", "connectivity", {})
         rules = call_brain("govern", "rules", {})
+        # Phase 0 (deterministic first) state when present — probe + Genesis + AST already ran
+        phase0 = (context or {}).get("phase0")
         gaps = call_brain("ai", "knowledge_gaps_deep", {})
-        return {
+        out = {
             "environment": "isolated",
             "health": health.get("data") if health.get("ok") else "unavailable",
             "connectivity": connectivity.get("data") if connectivity.get("ok") else "unavailable",
             "active_rules": len(rules.get("data", {}).get("documents", [])) if rules.get("ok") else 0,
             "knowledge_gaps": len(gaps.get("data", {}).get("knowledge_gaps", [])) if gaps.get("ok") else 0,
         }
+        if phase0:
+            out["phase0_deterministic"] = {
+                "handoff_to_llm": phase0.get("handoff_to_llm"),
+                "probe_broken": phase0.get("probe_result", {}).get("total_broken", 0),
+                "remaining_for_llm": phase0.get("deterministic_result", {}).get("remaining_count", 0),
+            }
+        return out
 
-    def _layer_decompose(self, chunk: str, task: str) -> dict:
-        """Layer 2: Decompose with ambiguity check, project context, governance rules."""
+    def _layer_decompose(self, chunk: str, task: str, context: dict = None) -> dict:
+        """Layer 2: Decompose with ambiguity check, project context, governance coding contract."""
         from api.brain_api_v2 import call_brain
+
+        contract_text = (context or {}).get("contract_text", "")[:2000]
+        contract_preamble = f"\n\nGovernance coding contract (must be satisfied):\n{contract_text}" if contract_text else ""
 
         # Check ambiguity BEFORE decomposing
         ambiguity = call_brain("ai", "ambiguity", {"text": chunk})
@@ -557,7 +594,7 @@ class CodingPipeline:
 
         # Run models independently — don't block on one slow model
         planner = call_brain("system", "run_independent", {
-            "prompt": f"Decompose this into sub-tasks:\n{chunk}",
+            "prompt": f"Decompose this into sub-tasks. Follow the governance coding contract.{contract_preamble}\n\nTask:\n{chunk}",
             "models": ["kimi"],
         })
 
@@ -569,9 +606,12 @@ class CodingPipeline:
             "existing_code_found": len(existing.get("data", {}).get("results", [])) if existing.get("ok") else 0,
         }
 
-    def _layer_propose(self, chunk: str, task: str) -> dict:
-        """Layer 3: Propose using consensus, check models, oracle, training data."""
+    def _layer_propose(self, chunk: str, task: str, context: dict = None) -> dict:
+        """Layer 3: Propose using consensus, check models, oracle, governance coding contract."""
         from api.brain_api_v2 import call_brain
+
+        contract_text = (context or {}).get("contract_text", "")[:2000]
+        contract_preamble = f"\n\nGovernance coding contract:\n{contract_text}" if contract_text else ""
 
         # Check available models
         models = call_brain("ai", "models", {})
@@ -584,7 +624,7 @@ class CodingPipeline:
 
         # Full consensus proposal (all models deliberate)
         proposals = call_brain("ai", "consensus", {
-            "prompt": f"Propose 3 different approaches. Follow all governance rules.\n{chunk}",
+            "prompt": f"Propose 3 different approaches. Follow the governance coding contract.{contract_preamble}\n\n{chunk}",
         })
 
         # Quick alternative
@@ -620,9 +660,12 @@ class CodingPipeline:
             "cognitive_assessment": cognitive.get("data", {}).get("invariants") if cognitive.get("ok") else {},
         }
 
-    def _layer_generate(self, chunk: str, task: str) -> dict:
-        """Layer 6: Generate code with persona, context, governance, environment routing."""
+    def _layer_generate(self, chunk: str, task: str, context: dict = None) -> dict:
+        """Layer 6: Generate code with persona, context, governance coding contract, environment routing."""
         from api.brain_api_v2 import call_brain
+
+        contract_text = (context or {}).get("contract_text", "")[:2000]
+        contract_preamble = f"Governance coding contract (must satisfy):\n{contract_text}\n\n" if contract_text else ""
 
         # Load persona for coding style
         persona = call_brain("govern", "persona", {})
@@ -632,11 +675,11 @@ class CodingPipeline:
         env = get_environment()
         scoped = call_brain("code", "project_chat", {
             "project_id": env,
-            "message": f"Generate code for: {chunk}",
+            "message": f"{contract_preamble}Generate code for: {chunk}",
         })
 
-        # Generate code
-        code = call_brain("code", "generate", {"prompt": chunk, "project_folder": "."})
+        # Generate code (contract in prompt so output satisfies it)
+        code = call_brain("code", "generate", {"prompt": f"{contract_preamble}{chunk}", "project_folder": "."})
 
         # SAFETY: security scan generated code before accepting
         generated_code = code.get("data", {}).get("code", "") if code.get("ok") else ""
@@ -835,7 +878,12 @@ class CodingPipeline:
 
         return checks
 
-    def _probe_layer(self, layer_num: int) -> bool:
+    def _probe_layer(self, layer_num: int, context: dict = None) -> bool:
+        """Probe check: use Phase 0 (deterministic) probe result when available, else runtime check."""
+        phase0 = (context or {}).get("phase0")
+        if phase0 and phase0.get("probe_result") is not None:
+            total_broken = phase0["probe_result"].get("total_broken", 0)
+            return total_broken == 0
         try:
             from api.brain_api_v2 import call_brain
             r = call_brain("system", "runtime", {})

@@ -8,6 +8,7 @@ Trigger categories:
   CODE       — import errors, dependency mismatches, missing modules
   NETWORK    — port conflicts, connection refused, timeout
   LOGICAL    — test failures, invariant violations, consensus disagreement
+  BUILD      — deterministic verify_built failed (required checks)
   DEGRADATION— latency spikes, error-rate increase, throughput drop
 
 Each trigger can:
@@ -19,7 +20,7 @@ Each trigger can:
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from datetime import datetime, timezone
+from datetime import datetime
 import logging
 import os
 import sys
@@ -45,7 +46,7 @@ class TriggerEntry:
         self.detail = detail
         self.value = value
         self.healed = healed
-        self.timestamp = datetime.now(timezone.utc).isoformat()
+        self.timestamp = datetime.utcnow().isoformat()
 
     def to_dict(self):
         return {
@@ -192,6 +193,34 @@ def _scan_code() -> List[dict]:
     return triggers
 
 
+def _scan_build() -> List[dict]:
+    """Deterministic build verification — failed required checks become triggers."""
+    triggers = []
+    try:
+        from core.build_verification import run_verify_built_checks
+        manifest = run_verify_built_checks(skip_verify_script=True)
+        for c in manifest.get("checks", []):
+            if c.get("required") and c.get("passed") is False:
+                triggers.append(TriggerEntry(
+                    "BUILD",
+                    f"build_{c.get('id', 'unknown')}",
+                    "critical",
+                    c.get("detail", "required check failed"),
+                    value=c.get("id"),
+                ))
+        if manifest.get("summary", {}).get("required_failed", 0) > 0:
+            triggers.append(TriggerEntry(
+                "BUILD",
+                "verify_built_required_failed",
+                "critical",
+                f"{manifest['summary']['required_failed']} required build check(s) failed",
+                value=manifest["summary"]["required_failed"],
+            ))
+    except Exception as e:
+        triggers.append(TriggerEntry("BUILD", "verify_built_error", "warning", str(e)[:200]))
+    return triggers
+
+
 def _scan_network() -> List[dict]:
     """Port conflicts."""
     triggers = []
@@ -228,9 +257,9 @@ def _scan_logical() -> List[dict]:
         pass
 
     try:
-        from api.component_health_api import _check_service_health
-        health = _check_service_health()
-        broken = [{"path": k, "healthy": v} for k, v in health.items() if not v]
+        from api.api_registry_api import _build_registry
+        reg = _build_registry()
+        broken = [r for r in reg.get("routes", []) if not r.get("healthy", True)]
         if broken:
             triggers.append(TriggerEntry("LOGICAL", "broken_apis", "warning",
                                          f"{len(broken)} broken API routes",
@@ -263,21 +292,24 @@ def _auto_heal(triggers: List[dict]) -> dict:
     except Exception as e:
         logger.warning("Diagnostic healing failed: %s", e)
 
-    # Service-specific healing
+    # Service-specific healing — all paths through brain
     for t in critical:
-        name = t.get("name", "")
+        name = (t.get("name") or "").lower()
         try:
+            from api.brain_api_v2 import call_brain
             if "db" in name:
-                from database.connection import DatabaseConnection
-                DatabaseConnection.get_engine().dispose()
-                healed.append({"action": "db_reconnect", "trigger": name})
+                r = call_brain("system", "reset_db", {})
+                healed.append({"action": "db_reconnect", "trigger": name, "ok": r.get("ok")})
             elif "ollama" in name:
-                healed.append({"action": "ollama_alert", "trigger": name,
-                               "note": "Ollama requires manual restart"})
+                r = call_brain("system", "scan_heal", {})
+                healed.append({"action": "ollama_scan_heal", "trigger": name, "ok": r.get("ok"),
+                               "note": "Ollama may require manual restart"})
             elif "ram" in name or "cpu" in name:
-                import gc
-                gc.collect()
-                healed.append({"action": "gc_collect", "trigger": name})
+                r = call_brain("system", "gc", {})
+                healed.append({"action": "gc_collect", "trigger": name, "ok": r.get("ok")})
+            else:
+                r = call_brain("govern", "heal", {})
+                healed.append({"action": "heal", "trigger": name, "ok": r.get("ok")})
         except Exception as e:
             healed.append({"action": "heal_error", "trigger": name, "error": str(e)})
 
@@ -296,6 +328,7 @@ async def scan_triggers():
         "CODE": _scan_code,
         "NETWORK": _scan_network,
         "LOGICAL": _scan_logical,
+        "BUILD": _scan_build,
     }
     for cat, scanner in categories.items():
         try:
@@ -314,7 +347,7 @@ async def scan_triggers():
         "critical": sum(1 for t in all_triggers if t.get("severity") == "critical"),
         "warning": sum(1 for t in all_triggers if t.get("severity") == "warning"),
         "triggers": all_triggers,
-        "scanned_at": datetime.now(timezone.utc).isoformat(),
+        "scanned_at": datetime.utcnow().isoformat(),
     }
 
 

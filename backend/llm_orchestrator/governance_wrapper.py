@@ -209,15 +209,10 @@ class GovernanceAwareLLM(BaseLLMClient):
     """
     Wraps any LLM client to inject governance rules and persona
     into every call automatically. Tracks usage stats for BI.
-
-    AI-to-AI calls (ai_mode=True): Skip NLP governance prefix,
-    use structured constraints instead. NLP persona/rules only
-    injected for human-facing calls.
     """
 
     def __init__(self, inner: BaseLLMClient):
         self._inner = inner
-        self.ai_mode = False
 
     def generate(
         self,
@@ -230,11 +225,9 @@ class GovernanceAwareLLM(BaseLLMClient):
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
         import time as _time
-        ai_mode = kwargs.pop("ai_mode", self.ai_mode)
-        if not ai_mode:
-            gov_prefix = build_governance_prefix()
-            if gov_prefix:
-                system_prompt = (system_prompt or "") + gov_prefix
+        gov_prefix = build_governance_prefix()
+        if gov_prefix:
+            system_prompt = (system_prompt or "") + gov_prefix
 
         provider_name = type(self._inner).__name__
         start = _time.time()
@@ -248,6 +241,17 @@ class GovernanceAwareLLM(BaseLLMClient):
             error_msg = str(e)
             latency = (_time.time() - start) * 1000
             _track_llm_call(prompt[:200], "", provider_name, latency, error_msg)
+            # Publish llm.error so trigger_fabric routes to self-healing + learning
+            try:
+                from cognitive.event_bus import publish_async
+                publish_async("llm.error", {
+                    "provider": provider_name,
+                    "error": error_msg[:200],
+                    "latency_ms": latency,
+                    "prompt_preview": prompt[:100],
+                }, source="governance_wrapper")
+            except Exception:
+                pass
             raise
 
         latency = (_time.time() - start) * 1000
@@ -259,31 +263,90 @@ class GovernanceAwareLLM(BaseLLMClient):
         return result
 
     def _hallucination_check(self, result, prompt: str):
-        """Quick hallucination check on every LLM response."""
+        """
+        Deep hallucination guard on every LLM response.
+
+        Checks:
+        1. Classic self-referential / overconfidence text patterns
+        2. If response contains code → AST syntax validation
+        3. Ghost memory contradiction (session context)
+        4. RAG trust score – if KB has relevant content and confidence is low, flag
+        """
         if not isinstance(result, str) or len(result) < 20:
             return result
-        try:
-            flags = []
-            lower = result.lower()
-            if "as an ai language model" in lower:
-                flags.append("self_referential")
-            if any(p in lower for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
-                flags.append("overconfident")
-            if len(result) < 30 and "?" not in prompt:
-                flags.append("suspiciously_short")
 
-            if flags:
-                try:
-                    from cognitive.event_bus import publish_async
-                    publish_async("hallucination.detected", {
-                        "flags": flags, "provider": type(self._inner).__name__,
-                        "prompt_preview": prompt[:100],
-                    }, source="governance_wrapper")
-                except Exception:
-                    pass
+        flags = []
+        lower = result.lower()
+
+        # ── 1. Classic patterns ──────────────────────────────────────────
+        if "as an ai language model" in lower:
+            flags.append("self_referential")
+        if any(p in lower for p in ["100% guaranteed", "absolutely impossible", "never fails"]):
+            flags.append("overconfident")
+        if len(result) < 30 and "?" not in prompt:
+            flags.append("suspiciously_short")
+
+        # ── 2. Code syntax validation ────────────────────────────────────
+        # If response looks like code, check it parses
+        if "def " in result or "class " in result or "import " in result:
+            try:
+                import ast as _ast
+                _ast.parse(result)
+            except SyntaxError as se:
+                flags.append(f"code_syntax_error:line_{se.lineno}")
+
+        # ── 3. Ghost memory contradiction ────────────────────────────────
+        try:
+            from cognitive.ghost_memory import get_ghost_memory
+            ghost = get_ghost_memory()
+            ctx = ghost.get_context(max_tokens=300) if hasattr(ghost, "get_context") else ""
+            if ctx:
+                # Simple contradiction: response says X "does not exist" but ghost has X
+                import re
+                denied = re.findall(r"(\w+) does not exist", lower)
+                for term in denied:
+                    if term in ctx.lower() and len(term) > 4:
+                        flags.append(f"ghost_contradiction:denied_{term}_but_exists_in_session")
         except Exception:
             pass
+
+        # ── 4. RAG confidence check ──────────────────────────────────────
+        # Only run for longer responses (don't penalise short factual answers)
+        if len(result) > 200 and len(flags) == 0:
+            try:
+                from ml_intelligence.neuro_symbolic_reasoner import get_neuro_symbolic_reasoner
+                reasoner = get_neuro_symbolic_reasoner()
+                reasoning = reasoner.reason(prompt[:200], limit=2)
+                # If KB has high-confidence content but response is suspiciously different
+                if (reasoning.fusion_confidence > 0.8 and
+                        len(reasoning.fused_results) > 0):
+                    kb_text = str(reasoning.fused_results[0].get("text", "")).lower()
+                    # Flag if the response completely ignores the KB top result topic
+                    if kb_text[:30] and kb_text[:30] not in lower:
+                        flags.append("possible_kb_divergence")
+            except Exception:
+                pass
+
+        # ── Publish if any flags ─────────────────────────────────────────
+        if flags:
+            try:
+                from cognitive.event_bus import publish_async
+                publish_async("hallucination.detected", {
+                    "flags": flags,
+                    "provider": type(self._inner).__name__,
+                    "prompt_preview": prompt[:100],
+                    "response_preview": result[:100],
+                }, source="governance_wrapper")
+            except Exception:
+                pass
+
+            logger.warning(
+                "[HALLUCINATION-GUARD] %d flag(s) on response from %s: %s",
+                len(flags), type(self._inner).__name__, flags,
+            )
+
         return result
+
 
     def chat(
         self,
@@ -294,12 +357,8 @@ class GovernanceAwareLLM(BaseLLMClient):
         **kwargs
     ) -> Union[str, Dict[str, Any]]:
         import time as _time
-        ai_mode = kwargs.pop("ai_mode", self.ai_mode)
+        gov_prefix = build_governance_prefix()
         prompt_preview = messages[-1].get("content", "")[:200] if messages else ""
-        if not ai_mode:
-            gov_prefix = build_governance_prefix()
-        else:
-            gov_prefix = ""
         if gov_prefix:
             messages = list(messages)
             if messages and messages[0].get("role") == "system":

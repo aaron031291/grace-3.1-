@@ -22,22 +22,31 @@ class BrainOrchestrator:
     """
 
     TASK_BRAIN_MAP = {
-        "build": ["code", "ai", "system", "govern"],
-        "fix": ["deterministic", "ai", "code", "system"],
-        "test": ["deterministic", "ai", "system", "code"],
-        "deploy": ["system", "govern", "code"],
-        "analyze": ["deterministic", "ai", "system", "files"],
-        "search": ["files", "code", "data"],
-        "learn": ["ai", "govern", "system"],
-        "heal": ["deterministic", "system", "ai", "govern"],
-        "chat": ["chat", "ai"],
-        "upload": ["files", "data", "govern"],
-        "plan": ["tasks", "ai", "govern"],
-        "review": ["deterministic", "ai", "code", "govern"],
-        "scan": ["deterministic", "system", "ai"],
-        "validate": ["deterministic", "system"],
-        "probe": ["deterministic", "system"],
+        # Code & build tasks
+        "build":    ["code", "ai", "system", "govern"],
+        "fix":      ["ai", "code", "system"],
+        "test":     ["ai", "system", "code"],
+        "deploy":   ["system", "govern", "code"],
+        # Analysis & review
+        "analyze":  ["ai", "system", "files"],
+        "review":   ["ai", "code", "govern"],
+        # Knowledge & learning — first-class brain targets
+        "learn":    ["learn", "memory", "ai"],
+        "remember": ["memory", "learn", "ai"],
+        "search":   ["files", "code", "data"],
+        # Healing & governance
+        "heal":     ["system", "ai", "govern"],
+        "plan":     ["tasks", "ai", "govern"],
+        # Interaction & data
+        "chat":     ["chat", "ai"],
+        "upload":   ["files", "data", "govern"],
+        "filing":   ["files", "data"],
+        "document": ["data", "files"],
+        # Memory operations
+        "recall":   ["memory", "ai"],
+        "store":    ["memory", "data"],
     }
+
 
     def __init__(self):
         self._executor = ThreadPoolExecutor(max_workers=8, thread_name_prefix="orchestrator")
@@ -71,12 +80,19 @@ class BrainOrchestrator:
 
         latency = round((time.time() - start) * 1000, 1)
 
-        # Record KPIs
+        # Record KPIs (governance + ML tracker)
         try:
             from core.governance_engine import record_kpi
             for brain, result in results.items():
                 record_kpi("brain_orchestrator", brain,
                            passed=result.get("ok", False))
+        except Exception:
+            pass
+        try:
+            from core.kpi_recorder import record_brain_kpi
+            for brain, result in results.items():
+                action = payload.get("action") or "orchestrate"
+                record_brain_kpi(brain, action, result.get("ok", False))
         except Exception:
             pass
 
@@ -129,7 +145,11 @@ class BrainOrchestrator:
             ("govern", "review"): "scores",
             ("files", "search"): "search",
             ("files", "analyze"): "stats",
+            ("files", "filing"): "filing",
+            ("files", "document"): "create_doc",
             ("data", "search"): "api_sources",
+            ("data", "filing"): "librarian_organise_file",
+            ("data", "document"): "librarian_process",
             ("chat", "chat"): "send",
             ("tasks", "plan"): "submit",
         }

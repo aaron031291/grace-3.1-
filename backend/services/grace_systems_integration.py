@@ -95,9 +95,9 @@ class GraceSystemsIntegration:
         """
         try:
             # Import memory system
-            from cognitive.magma import MagmaMemory
+            from cognitive.deep_magma_memory import DeepMagmaMemory
 
-            memory = MagmaMemory()
+            memory = DeepMagmaMemory()
 
             result = await memory.store(
                 key=key,
@@ -151,9 +151,9 @@ class GraceSystemsIntegration:
             limit: Max results
         """
         try:
-            from cognitive.magma import MagmaMemory
+            from cognitive.deep_magma_memory import DeepMagmaMemory
 
-            memory = MagmaMemory()
+            memory = DeepMagmaMemory()
             results = await memory.retrieve(
                 query=query,
                 memory_type=memory_type,
@@ -226,9 +226,9 @@ class GraceSystemsIntegration:
             depth: quick, standard, full
         """
         try:
-            from diagnostic_machine.diagnostic_engine import DiagnosticEngine
+            from diagnostic_machine.core import DiagnosticMachine
 
-            diagnostic = DiagnosticEngine()
+            diagnostic = DiagnosticMachine()
 
             # Run through 4 layers: Sensors -> Interpreters -> Judgment -> Action
             result = await diagnostic.analyze(
@@ -269,9 +269,9 @@ class GraceSystemsIntegration:
             systems: Specific systems to check, or all if None
         """
         try:
-            from diagnostic_machine.diagnostic_engine import DiagnosticEngine
+            from diagnostic_machine.core import DiagnosticMachine
 
-            diagnostic = DiagnosticEngine()
+            diagnostic = DiagnosticMachine()
             health_report = await diagnostic.health_check(systems=systems)
 
             return {
@@ -310,9 +310,9 @@ class GraceSystemsIntegration:
             input_data: Data for prediction
         """
         try:
-            from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+            from api.ml_intelligence_api import get_orchestrator
 
-            orchestrator = get_ml_orchestrator()
+            orchestrator = get_orchestrator()
 
             if prediction_type == "task_success":
                 result = await orchestrator.predict_task_success(input_data)
@@ -358,9 +358,9 @@ class GraceSystemsIntegration:
             available_assignees: List of team members/agents with skills
         """
         try:
-            from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+            from api.ml_intelligence_api import get_orchestrator
 
-            orchestrator = get_ml_orchestrator()
+            orchestrator = get_orchestrator()
 
             # Build feature set
             features = {
@@ -434,9 +434,9 @@ class GraceSystemsIntegration:
             executor_id: Who/what will execute
         """
         try:
-            from security.governance import GovernanceEngine
+            from security.layer import SecurityLayer
 
-            security = GovernanceEngine()
+            security = SecurityLayer()
 
             result = await security.validate_action(
                 action_type="task_execution",
@@ -487,9 +487,9 @@ class GraceSystemsIntegration:
             resource: Resource being accessed
         """
         try:
-            from security.governance import GovernanceEngine
+            from security.layer import SecurityLayer
 
-            security = GovernanceEngine()
+            security = SecurityLayer()
 
             has_permission = await security.check_permission(
                 user_id=user_id,
@@ -621,9 +621,9 @@ class GraceSystemsIntegration:
             reasoning_type: analytical, creative, logical, hybrid
         """
         try:
-            from ml_intelligence.neuro_symbolic_reasoner import NeuroSymbolicReasoner
+            from cognitive.neural_symbolic import NeuralSymbolicAI
 
-            reasoner = NeuroSymbolicReasoner()
+            reasoner = NeuralSymbolicAI()
 
             result = await reasoner.reason(
                 problem=problem,
@@ -674,9 +674,9 @@ class GraceSystemsIntegration:
             output_type: code, document, config, etc.
         """
         try:
-            from api.ingest import get_ingestion_service
+            from api.ingestion_api import get_ingestion_pipeline
 
-            pipeline = get_ingestion_service()
+            pipeline = get_ingestion_pipeline()
 
             result = await pipeline.ingest(
                 source=f"task:{task_id}",
@@ -724,9 +724,9 @@ class GraceSystemsIntegration:
             context_data: Context for suggestions
         """
         try:
-            from cognitive.proactive_learner import ProactiveLearningOrchestrator
+            from api.proactive_learning import get_proactive_system
 
-            proactive = ProactiveLearningOrchestrator()
+            proactive = get_proactive_system()
 
             suggestions = await proactive.suggest_improvements(
                 context_type=context_type,
@@ -760,9 +760,9 @@ class GraceSystemsIntegration:
             learning_task: Learning task details
         """
         try:
-            from cognitive.proactive_learner import ProactiveLearningOrchestrator
+            from api.proactive_learning import get_proactive_system
 
-            proactive = ProactiveLearningOrchestrator()
+            proactive = get_proactive_system()
 
             result = await proactive.queue_task(learning_task)
 

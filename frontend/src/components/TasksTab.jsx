@@ -57,7 +57,7 @@ function LivePanel() {
     if (tsRes.status === 'fulfilled') setTimeSense(tsRes.value);
   }, []);
 
-  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 5000); return () => clearInterval(i); }, [refresh]);
+  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 15000); return () => clearInterval(i); }, [refresh]);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -527,11 +527,11 @@ export default function TasksTab() {
   const [activeTab, setActiveTab] = useState('live');
 
   const tabs = [
-    { id: 'live', label: 'Live', icon: '🟢' },
-    { id: 'submit', label: 'Submit Task', icon: '📝' },
-    { id: 'schedule', label: 'Schedule', icon: '⏰' },
-    { id: 'planner', label: 'Planner Chat', icon: '🤝' },
-    { id: 'blueprint', label: 'Blueprint IDE', icon: '🧠' },
+    { id: 'live', label: 'Live', icon: '🟢', title: 'Live tasks, history, and time-sense' },
+    { id: 'submit', label: 'Submit Task', icon: '📝', title: 'Submit a new task to the hub' },
+    { id: 'schedule', label: 'Schedule', icon: '⏰', title: 'Scheduled tasks and cron-style runs' },
+    { id: 'planner', label: 'Planner Chat', icon: '🤝', title: 'Planner sessions and refinement' },
+    { id: 'blueprint', label: 'Blueprint IDE', icon: '🧠', title: 'Blueprint IDE for planning' },
   ];
 
   return (
@@ -539,7 +539,7 @@ export default function TasksTab() {
       <div style={{ borderBottom: `1px solid ${C.border}`, background: C.bgAlt, padding: '0 16px', display: 'flex', alignItems: 'stretch' }}>
         <span style={{ fontSize: 15, fontWeight: 700, padding: '12px 16px 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>📋 Tasks</span>
         {tabs.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+          <button key={t.id} type="button" title={t.title || t.label} onClick={() => setActiveTab(t.id)} style={{
             padding: '10px 16px', border: 'none', background: 'none', cursor: 'pointer',
             color: activeTab === t.id ? C.accent : C.muted,
             borderBottom: activeTab === t.id ? `2px solid ${C.accent}` : '2px solid transparent',

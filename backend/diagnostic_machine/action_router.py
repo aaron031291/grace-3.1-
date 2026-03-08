@@ -25,7 +25,7 @@ import os
 import json
 import logging
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -208,7 +208,7 @@ class CICDConfig:
     """Configuration for CI/CD triggering."""
     enabled: bool = True
     pipeline_command: Optional[str] = None
-    github_actions_workflow: Optional[str] = None
+    external_workflow_file: Optional[str] = None
     test_command: str = "pytest tests/ -v"
     pre_flight_checks: List[str] = field(default_factory=list)
 
@@ -374,11 +374,17 @@ class ActionRouter:
         else:
             self.memory_mesh = None
 
-        # RAG System
+        # RAG System (requires embedding model instance)
         if RAG_AVAILABLE:
             try:
-                self.rag_retriever = DocumentRetriever()
-                logger.info("[LAYER4] RAG Retriever initialized")
+                from embedding.embedder import get_embedding_model
+                _emb = get_embedding_model()
+                if _emb is not None:
+                    self.rag_retriever = DocumentRetriever(embedding_model=_emb)
+                    logger.info("[LAYER4] RAG Retriever initialized")
+                else:
+                    logger.warning("[LAYER4] RAG Retriever unavailable: get_embedding_model() returned None")
+                    self.rag_retriever = None
             except Exception as e:
                 logger.warning(f"[LAYER4] RAG Retriever unavailable: {e}")
                 self.rag_retriever = None
@@ -388,7 +394,7 @@ class ActionRouter:
         # World Model
         if WORLD_MODEL_AVAILABLE and self.session:
             try:
-                self.world_model = DataPipeline(self.session, str(self.kb_path))
+                self.world_model = DataPipeline(session=self.session)
                 logger.info("[LAYER4] World Model initialized")
             except Exception as e:
                 logger.warning(f"[LAYER4] World Model unavailable: {e}")
@@ -396,11 +402,23 @@ class ActionRouter:
         else:
             self.world_model = None
 
-        # Neuro-Symbolic Reasoner
+        # Neuro-Symbolic Reasoner (wire retriever + learning memory when available)
         if NEURO_SYMBOLIC_AVAILABLE:
             try:
-                self.neuro_symbolic_reasoner = NeuroSymbolicReasoner()
-                logger.info("[LAYER4] Neuro-Symbolic Reasoner initialized")
+                _retriever = self.rag_retriever  # use RAG retriever if we have it
+                _learning_memory = None
+                if self.session and self.kb_path:
+                    try:
+                        from cognitive.learning_memory import LearningMemoryManager
+                        _learning_memory = LearningMemoryManager(self.session, str(self.kb_path))
+                    except Exception:
+                        pass
+                self.neuro_symbolic_reasoner = NeuroSymbolicReasoner(
+                    retriever=_retriever,
+                    learning_memory=_learning_memory,
+                )
+                logger.info("[LAYER4] Neuro-Symbolic Reasoner initialized (retriever=%s, learning_memory=%s)",
+                           _retriever is not None, _learning_memory is not None)
             except Exception as e:
                 logger.warning(f"[LAYER4] Neuro-Symbolic Reasoner unavailable: {e}")
                 self.neuro_symbolic_reasoner = None
@@ -421,7 +439,9 @@ class ActionRouter:
         # Learning Efficiency Tracker
         if LEARNING_EFFICIENCY_AVAILABLE and self.session:
             try:
-                self.efficiency_tracker = LearningEfficiencyTracker(self.session)
+                self.efficiency_tracker = LearningEfficiencyTracker(
+                    self.session, knowledge_base_path=getattr(self, "kb_path", None)
+                )
                 logger.info("[LAYER4] Learning Efficiency Tracker initialized")
             except Exception as e:
                 logger.warning(f"[LAYER4] Learning Efficiency Tracker unavailable: {e}")
@@ -490,7 +510,7 @@ class ActionRouter:
                 }
             )
         except Exception as e:
-            logger.warning(f"[LAYER4] Failed to create Genesis Key: {e}")
+            logger.error("[LAYER4] GENESIS KEY CREATION FAILED (fix genesis/DB): %s", e, exc_info=True)
             return None
 
     def route(
@@ -516,6 +536,28 @@ class ActionRouter:
         """
         start_time = datetime.utcnow()
         self._decision_counter += 1
+
+        try:
+            return self._route_impl(sensor_data, interpreted_data, judgement)
+        except Exception as e:
+            # LOUD: log full traceback and re-raise so the cycle fails and you can fix the cause
+            logger.exception("[LAYER4] ROUTING FAILED (cycle will fail): %s", e)
+            raise
+
+    def _route_impl(
+        self,
+        sensor_data: SensorData,
+        interpreted_data: InterpretedData,
+        judgement: JudgementResult
+    ) -> ActionDecision:
+        """Inner routing logic; exceptions are caught by route() for robust cycles."""
+        start_time = datetime.utcnow()
+        # Reset OODA so each decision starts with OBSERVE (avoids "Cannot observe in phase DECIDE")
+        if self.cognitive_engine and hasattr(self.cognitive_engine, 'ooda') and self.cognitive_engine.ooda:
+            try:
+                self.cognitive_engine.ooda.reset()
+            except Exception:
+                pass
 
         # ========== STEP 1: OODA Loop (Observe → Orient → Decide) ==========
         if self.cognitive_engine:
@@ -686,7 +728,7 @@ class ActionRouter:
                     insight_type="action",
                     description=f"Executed {decision.action_type.value}",
                     trust_score=decision.confidence,
-                    time_to_insight_seconds=duration,
+                    time_to_insight=timedelta(seconds=duration),
                     genesis_key_id=None  # Would link to Genesis Key if created
                 )
             except Exception as e:
@@ -762,23 +804,31 @@ class ActionRouter:
             'none': (ActionType.DO_NOTHING, ActionPriority.LOW),
         }
 
-        recommended = judgement.recommended_action
+        recommended = getattr(judgement, 'recommended_action', 'none') or 'none'
         action_type, priority = action_mapping.get(recommended, (ActionType.DO_NOTHING, ActionPriority.LOW))
 
-        # Determine target components
+        # Determine target components (safe if health missing)
         target_components = []
-        if judgement.health.critical_components:
-            target_components.extend(judgement.health.critical_components)
-        if judgement.health.degraded_components:
-            target_components.extend(judgement.health.degraded_components)
+        health = getattr(judgement, 'health', None)
+        if health:
+            if getattr(health, 'critical_components', None):
+                target_components.extend(health.critical_components)
+            if getattr(health, 'degraded_components', None):
+                target_components.extend(health.degraded_components)
 
-        # Build parameters
+        # Build parameters (safe defaults)
+        conf = 0.5
+        if getattr(judgement, 'confidence', None) is not None:
+            conf = getattr(judgement.confidence, 'overall_confidence', 0.5) or 0.5
+        health_status_val = 'unknown'
+        if health and getattr(health, 'status', None) is not None:
+            health_status_val = getattr(health.status, 'value', 'unknown')
         parameters = {
-            'health_status': judgement.health.status.value,
-            'health_score': judgement.health.overall_score,
-            'confidence': judgement.confidence.overall_confidence,
-            'risk_count': len(judgement.risk_vectors),
-            'alert_count': len(judgement.avn_alerts),
+            'health_status': health_status_val,
+            'health_score': getattr(health, 'overall_score', 0.0) if health else 0.0,
+            'confidence': conf,
+            'risk_count': len(getattr(judgement, 'risk_vectors', []) or []),
+            'alert_count': len(getattr(judgement, 'avn_alerts', []) or []),
         }
 
         # Check if CI/CD should be triggered
@@ -801,7 +851,7 @@ class ActionRouter:
             action_type=action_type,
             priority=priority,
             reason=self._generate_reason(action_type, judgement),
-            confidence=judgement.confidence.overall_confidence,
+            confidence=conf,
             target_components=list(set(target_components)),
             parameters=parameters,
         )
@@ -1766,45 +1816,55 @@ This is an automated message from GRACE Action Router.
         except Exception as e:
             logger.error(f"Failed to log decision: {e}")
 
-    # Healing function implementations
+    # Healing function implementations — all paths through brain
     def _heal_clear_cache(self, params: Dict) -> bool:
-        """Clear application cache."""
+        """Clear application cache via brain (system/clear_cache)."""
         try:
-            # Placeholder - implement actual cache clearing
-            logger.info("Clearing application cache")
-            return True
+            from api.brain_api_v2 import call_brain
+            r = call_brain("system", "clear_cache", params or {})
+            ok = bool(r.get("ok", False))
+            if ok:
+                logger.info("Clearing application cache (via brain)")
+            return ok
         except Exception as e:
             logger.error(f"Cache clear failed: {e}")
             return False
 
     def _heal_reset_database(self, params: Dict) -> bool:
-        """Reset database connection."""
+        """Reset database connection via brain (system/reset_db)."""
         try:
-            from database.connection import DatabaseConnection
-            DatabaseConnection.close()
-            logger.info("Database connection reset")
-            return True
+            from api.brain_api_v2 import call_brain
+            r = call_brain("system", "reset_db", params or {})
+            ok = bool(r.get("ok", False))
+            if ok:
+                logger.info("Database connection reset (via brain)")
+            return ok
         except Exception as e:
             logger.error(f"Database reset failed: {e}")
             return False
 
     def _heal_reset_vector_db(self, params: Dict) -> bool:
-        """Reset vector database client."""
+        """Reset vector database client via brain (system/reset_vector_db)."""
         try:
-            # Placeholder - implement actual vector DB reset
-            logger.info("Vector DB client reset")
-            return True
+            from api.brain_api_v2 import call_brain
+            r = call_brain("system", "reset_vector_db", params or {})
+            ok = bool(r.get("ok", False))
+            if ok:
+                logger.info("Vector DB client reset (via brain)")
+            return ok
         except Exception as e:
             logger.error(f"Vector DB reset failed: {e}")
             return False
 
     def _heal_garbage_collection(self, params: Dict) -> bool:
-        """Force garbage collection."""
+        """Force garbage collection via brain (system/gc)."""
         try:
-            import gc
-            gc.collect()
-            logger.info("Garbage collection completed")
-            return True
+            from api.brain_api_v2 import call_brain
+            r = call_brain("system", "gc", params or {})
+            ok = bool(r.get("ok", False))
+            if ok:
+                logger.info("Garbage collection completed (via brain)")
+            return ok
         except Exception as e:
             logger.error(f"GC failed: {e}")
             return False

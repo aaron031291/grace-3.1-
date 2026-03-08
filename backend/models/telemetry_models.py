@@ -4,7 +4,7 @@ Self-modeling telemetry models for Grace.
 These models enable Grace to observe her own execution,
 track performance baselines, detect drift, and replay operations.
 """
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Dict, Any
 from sqlalchemy import (
     Column, String, Integer, Float, DateTime,
@@ -54,7 +54,7 @@ class OperationLog(BaseModel):
     operation_name = Column(String(255), nullable=False)  # e.g., "ingest_pdf", "retrieve_hybrid"
 
     # Timing
-    started_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    started_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     completed_at = Column(DateTime, nullable=True)
     duration_ms = Column(Float, nullable=True)  # Milliseconds
 
@@ -126,7 +126,7 @@ class PerformanceBaseline(BaseModel):
     contradiction_rate = Column(Float, nullable=True)
 
     # Last updated
-    last_updated = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    last_updated = Column(DateTime, nullable=False, default=datetime.utcnow)
     baseline_window_days = Column(Integer, nullable=False, default=7)  # Rolling window
 
     # Unique constraint on operation type + name
@@ -193,7 +193,7 @@ class OperationReplay(BaseModel):
 
     # Replay configuration
     replay_reason = Column(String(255), nullable=True)  # Why we're replaying
-    replayed_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    replayed_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # Comparison results
     original_duration_ms = Column(Float, nullable=True)
