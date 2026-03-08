@@ -714,6 +714,13 @@ app.add_middleware(
     max_age=security_config.CORS_MAX_AGE,
 )
 
+# Add Multi-Trigger Fabric Exception Middleware (must be before routers)
+try:
+    from self_healing.trigger_fabric import _wire_fastapi_middleware
+    _wire_fastapi_middleware(app)
+except Exception as e:
+    print(f"[WARN] Failed to wire trigger_fabric middleware: {e}")
+
 # =============================================================================
 # API ROUTERS — v1 resource layer + minimal core
 # =============================================================================

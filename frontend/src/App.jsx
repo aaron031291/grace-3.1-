@@ -11,6 +11,7 @@ const CodebaseTab = lazy(() => import("./components/CodebaseTab"));
 const TasksTab = lazy(() => import("./components/TasksTab"));
 const DevTab = lazy(() => import("./components/DevTab"));
 const WhitelistTab = lazy(() => import("./components/WhitelistTab"));
+const KnowledgeTab = lazy(() => import("./components/KnowledgeTab"));
 const SandboxTab = lazy(() => import("./components/SandboxTab"));
 const OracleTab = lazy(() => import("./components/OracleTab"));
 const BusinessIntelligenceTab = lazy(() => import("./components/BusinessIntelligenceTab"));
@@ -33,7 +34,8 @@ const WORKSPACE = [
   { id: 'docs', icon: '📄', label: 'Docs', desc: 'Universal document library & dropzone' },
   { id: 'codebase', icon: '💻', label: 'Code Base', desc: 'Code exploration & artifact management' },
   { id: 'devlab', icon: '🧪', label: 'Dev Lab', desc: 'Advanced sub-agent tracking & verification' },
-  { id: 'whitelist', icon: '🛡️', label: 'Knowledge Base', desc: 'Deterministic Context & Knowledge Synthesis' },
+  { id: 'knowledge', icon: '🧠', label: 'Knowledge Base', desc: 'Deterministic Context & Document Memory' },
+  { id: 'whitelist', icon: '🔗', label: 'Integrations', desc: 'API Sources & Whitelisted Web Tools' },
   { id: "agents", icon: "🤖", label: "Oracle", desc: "Oracle and agent training. Trust distribution, audits, and agent capabilities." },
   { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' }
 ];
@@ -43,7 +45,7 @@ const SYSTEM = [
   { id: "ask", label: "Ask (Architecture)", icon: "🗺️", description: "Ask questions about system architecture. Routes to the right brain and actions." },
   { id: "architect", label: "Proposer", icon: "🏗️", description: "Design a new component in JSON and Grace will build and integrate it autonomously." },
   { id: "memory", label: "Memory", icon: "🧠", description: "Learning and healing. Skills, self-learning triggers, and diagnostic dashboard." },
-  { id: "integrations", label: "Integrations", icon: "🔗", description: "Whitelist hub: API sources, web sources, and document ingestion." },
+  { id: "memory", label: "Self Healing", icon: "🧬", description: "Learning and healing. Skills, self-learning triggers, and diagnostic dashboard." },
   { id: "health", label: "Health", icon: "🏥", description: "System health dashboard. Processes, components, and service status." },
   { id: "kpi", label: "KPIs & Trust", icon: "📊", description: "Live KPI dashboard and trust score tracking across all 9 brain domains." },
   { id: "settings", label: "Settings", icon: "⚙️", description: "Business intelligence, KPIs, and system configuration." },
@@ -60,8 +62,9 @@ const TAB_PRELOAD = {
   dev: () => import("./components/DevTab"),
   whitelist: () => import("./components/WhitelistTab"),
   sandbox: () => import("./components/SandboxTab"),
-  integrations: () => import("./components/WhitelistTab"),
-  agents: () => import("./components/OracleTab"),
+  whitelist: () => import("./components/WhitelistTab"),
+  knowledge: () => import("./components/KnowledgeTab"),
+  sandbox: () => import("./components/SandboxTab"),
   memory: () => import("./components/LearningHealingTab"),
   health: () => import("./components/SystemHealthTab"),
   settings: () => import("./components/BusinessIntelligenceTab"),
@@ -298,6 +301,7 @@ function App() {
               {view === "docs" && <DocsTab domain={domain} />}
               {view === "codebase" && <CodebaseTab domain={domain} />}
               {view === "devlab" && <DevTab domain={domain} />}
+              {view === "knowledge" && <KnowledgeTab domain={domain} />}
               {view === "whitelist" && <WhitelistTab domain={domain} />}
               {view === "sandbox" && <SandboxTab domain={domain} />}
               {view === "governance" && <GovernanceTab domain={domain} />}

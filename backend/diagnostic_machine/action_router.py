@@ -562,6 +562,10 @@ class ActionRouter:
         # ========== STEP 1: OODA Loop (Observe → Orient → Decide) ==========
         if self.cognitive_engine:
             try:
+                # Force a reset of the main cognitive engine OODA loop directly as well
+                if hasattr(self.cognitive_engine, 'reset'):
+                    self.cognitive_engine.reset()
+
                 decision_context = DecisionContext(
                     problem_statement=f"System health: {judgement.health.status.value}",
                     goal="Restore system health",

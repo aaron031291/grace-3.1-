@@ -111,6 +111,14 @@ class CognitiveEngine:
         # Active decision contexts
         self._active_contexts: Dict[str, DecisionContext] = {}
 
+    def reset(self) -> None:
+        """
+        Reset the cognitive engine's internal OODA state.
+        Must be called before starting a new standalone decision cycle.
+        """
+        self.ooda.reset()
+
+
     def begin_decision(
         self,
         problem_statement: str,

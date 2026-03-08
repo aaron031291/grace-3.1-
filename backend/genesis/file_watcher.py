@@ -163,6 +163,17 @@ class GenesisFileWatcher(FileSystemEventHandler):
     def _track_file_change(self, file_path: str, operation_type: str):
         """Track file change using symbiotic version control."""
         try:
+            # Ensure database is actually ready before trying to track
+            try:
+                from database.connection import DatabaseConnection
+                engine = DatabaseConnection.get_engine()
+                if not engine:
+                    logger.debug(f"[FILE_WATCHER] DB not ready, skipping {operation_type} for {file_path}")
+                    return
+            except RuntimeError:
+                logger.debug(f"[FILE_WATCHER] DB not initialized yet, skipping {operation_type} for {file_path}")
+                return
+
             # Get relative path from watch root
             rel_path = os.path.relpath(file_path, self.watch_path)
             
