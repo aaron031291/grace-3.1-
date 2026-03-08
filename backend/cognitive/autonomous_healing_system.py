@@ -203,8 +203,8 @@ class AutonomousHealingSystem:
 
         return assessment
 
-    def _query_recent_errors(self, hours: int = 1) -> List[GenesisKey]:
-        """Query recent error Genesis Keys."""
+    def _query_recent_errors(self, hours: int = 24) -> List[GenesisKey]:
+        """Query recent error Genesis Keys. Modified to 24h for testing."""
         cutoff_time = datetime.utcnow() - timedelta(hours=hours)
 
         errors = self.session.query(GenesisKey).filter(
@@ -212,6 +212,7 @@ class AutonomousHealingSystem:
             GenesisKey.key_type == GenesisKeyType.ERROR
         ).all()
 
+        logger.info(f"[AUTONOMOUS-HEALING] Debug: Found {len(errors)} ERROR keys in last {hours}h")
         return errors
 
     def _detect_anomalies(
@@ -843,18 +844,18 @@ Focus on practical, safe, and effective healing."""
 
         # Create learning example
         example = LearningExample(
-            topic=f"healing:{action.value}",
-            learning_type="healing_outcome",
-            content={
-                "anomaly_type": decision["anomaly"]["type"].value,
-                "anomaly_severity": decision["anomaly"]["severity"],
-                "action_taken": action.value,
-                "success": success,
-                "result": result
-            },
-            outcome="success" if success else "failure",
-            confidence_score=self.trust_scores[action],
-            metadata={
+            example_type="healing_outcome",
+            input_context=decision["anomaly"]["type"].value,
+            expected_output=decision["anomaly"]["severity"],
+            actual_output=action.value,
+            source="system_observation_success" if success else "system_observation_failure",
+            trust_score=self.trust_scores[action],
+            outcome_quality=1.0 if success else 0.0,
+            consistency_score=0.5,
+            recency_weight=1.0,
+            example_metadata={
+                "topic": f"healing:{action.value}",
+                "result": result,
                 "trust_score_before": decision["trust_score"],
                 "trust_score_after": self.trust_scores[action],
                 "execution_mode": decision["execution_mode"]

@@ -24,8 +24,8 @@ const ArchitectTab = lazy(() => import("./components/ArchitectTab"));
 const KPIDashboard = lazy(() => import("./components/KPIDashboard"));
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
-import ContextMenu from "./components/ContextMenu";
 import GenesisTimeline from "./components/GenesisTimeline";
+import ContextMenu from "./components/ContextMenu";
 
 // Sidebar sections — descriptions show as tooltips on hover
 const WORKSPACE = [
@@ -84,6 +84,7 @@ function App() {
   const [domain, setDomain] = useState("Global (All Domains)");
   const DOMAINS = ["Global (All Domains)", "Dog Walking App", "E-Commerce Backend", "Internal Dashboard API"];
   const [showGenesis, setShowGenesis] = useState(false);
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null });
 
   const [model, setModel] = useState("consensus");
   const [models, setModels] = useState([]);
@@ -138,7 +139,22 @@ function App() {
       if (e.key === "Escape") setCmdOpen(false);
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+
+    const handleContextMenu = (e) => {
+      // Only trigger custom context menu if clicking an element with data-context-item
+      const target = e.target.closest('[data-context-item]');
+      if (target) {
+        e.preventDefault();
+        const itemData = JSON.parse(target.getAttribute('data-context-item'));
+        setContextMenu({ visible: true, x: e.clientX, y: e.clientY, item: itemData });
+      }
+    };
+    window.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("contextmenu", handleContextMenu);
+    };
   }, []);
 
   const handleVoice = async (msg) => {
@@ -330,7 +346,10 @@ function App() {
       {cmdOpen && <CommandPalette onClose={() => setCmdOpen(false)} onNavigate={(v) => { setView(v); setCmdOpen(false); }} />}
 
       {/* ── Universal Right-Click Context Menu ─────────────────── */}
-      <ContextMenu />
+      <ContextMenu
+        {...contextMenu}
+        onClose={() => setContextMenu({ ...contextMenu, visible: false })}
+      />
 
       {/* ── Genesis Timeline Modal ─────────────────────────────── */}
       {showGenesis && <GenesisTimeline domain={domain} onClose={() => setShowGenesis(false)} />}

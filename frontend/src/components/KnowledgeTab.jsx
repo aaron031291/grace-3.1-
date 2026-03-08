@@ -1,6 +1,6 @@
 import React from 'react';
 import KnowledgeBaseManager from './KnowledgeBaseManager';
-import './TabCommon.css';
+import '../App.css';
 
 /**
  * KnowledgeTab - Dedicated tab for managing the Knowledge Base, 

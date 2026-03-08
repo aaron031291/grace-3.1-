@@ -1,0 +1,46 @@
+============================================================
+  GRACE AI SYSTEM VERIFICATION
+============================================================
+
+> IMPORTS
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+  ✅ app.py imports
+  ✅ Routes registered: 203
+  ✅ Brain API: 9 domains
+  ✅ Brain actions: 304
+  ✅ All 7 service modules import
+  ✅ Consensus engine import
+  ✅ Unified memory import
+  ✅ TimeSense: period=evening
+  ✅ Circuit breaker: state=closed
+  ✅ Degradation level: full
+  ✅ Genesis tracker import
+
+> BRAIN DOMAINS
+  ✅ brain/chat: 14 actions
+  ✅ brain/files: 20 actions
+  ✅ brain/govern: 21 actions
+  ✅ brain/ai: 37 actions
+  ✅ brain/system: 148 actions
+  ✅ brain/data: 20 actions
+  ✅ brain/tasks: 13 actions
+  ✅ brain/code: 22 actions
+  ✅ brain/deterministic: 9 actions
+
+> SERVICE FUNCTIONS
+  ✅ files_service.stats(): 2317 files
+  ✅ govern_service.get_persona()
+  ✅ data_service.api_sources(): 0 sources
+  ✅ tasks_service.time_sense(): period=evening
+  ✅ code_service.list_projects(): 0 projects
+
+> CROSS-BRAIN ORCHESTRATION
+  ✅ call_brain('tasks', 'time_sense'): ok=True
+  ✅ call_brain('system', 'runtime'): ok=True
+
+============================================================
+  RESULTS: 27 passed, 0 failed, 0 skipped (total 27)
+  STATUS: ALL CHECKS PASSED ✅
+============================================================

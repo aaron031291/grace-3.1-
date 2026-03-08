@@ -153,7 +153,7 @@ def health_monitor_thread():
 
     while not shutdown_requested:
         try:
-            time.sleep(300)  # Check every 5 minutes
+            time.sleep(30)  # Check every 30 seconds for faster demo
 
             if not shutdown_requested and healing_system:
                 logger.info("[HEALTH] Running periodic health check...")
