@@ -38,7 +38,7 @@ ENUM_COLUMN_MAP: dict[str, tuple[str, list[str]]] = {
             # Extended types used at runtime
             "learning_complete", "gap_identified", "audit_event",
             "mission_created", "research", "fix_applied",
-            "schema_migration", "healing_event",
+            "schema_migration", "healing_event", "coding_task",
         ],
     ),
     "genesiskeystatus": (
