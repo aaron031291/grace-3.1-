@@ -65,6 +65,7 @@ from search.serpapi_service import SerpAPIService
 from api.codebase_hub_api import router as codebase_hub_router
 from api.whitelist_hub_api import router as whitelist_hub_router
 from api.devlab_api import router as devlab_router
+from api.test_verify_api import router as test_verify_router
 from api.sandbox_api import router as sandbox_router
 from api.tasks_hub_api import router as tasks_hub_router
 
@@ -775,6 +776,7 @@ from api.version_control_api import router as version_control_router
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
 app.include_router(devlab_router, prefix="/api")
+app.include_router(test_verify_router)
 app.include_router(sandbox_router, prefix="/api")
 app.include_router(tasks_hub_router, prefix="/api")
 app.include_router(schema_evolution_router, prefix="/api")
