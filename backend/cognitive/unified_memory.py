@@ -95,7 +95,7 @@ class UnifiedMemory:
             return False
             
         if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning("TRUST_GATE: Mutation proposed without valid Trust Coin from VVT layer. Rejected.")
+            logger.warning(f"TRUST_GATE: Episode mutation from '{source}' proposed without valid Trust Coin from VVT layer. Rejected.")
             return False
             
         session = _get_session()
@@ -140,7 +140,7 @@ class UnifiedMemory:
             return False
             
         if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning("TRUST_GATE: Learning mutation proposed without valid Trust Coin. Rejected.")
+            logger.warning(f"TRUST_GATE: Learning mutation from '{source}' proposed without valid Trust Coin. Rejected.")
             return False
             
         session = _get_session()
@@ -182,7 +182,7 @@ class UnifiedMemory:
             return False
             
         if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning("TRUST_GATE: Procedural mutation proposed without valid Trust Coin. Rejected.")
+            logger.warning(f"TRUST_GATE: Procedural mutation from '{source}' proposed without valid Trust Coin. Rejected.")
             return False
             
         session = _get_session()

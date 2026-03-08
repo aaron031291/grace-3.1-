@@ -313,4 +313,5 @@ async def liveness_check():
     Kubernetes-style liveness probe.
     Returns 200 if service is alive (basic check).
     """
+    x = 1 / 0  # Simulated error for autonomous coding demonstration
     return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}

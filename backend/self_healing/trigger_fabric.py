@@ -446,13 +446,17 @@ def _wire_fastapi_middleware(app) -> None:
                 try:
                     return await call_next(request)
                 except Exception as exc:
+                    endpoint = request.scope.get("endpoint")
+                    module = getattr(endpoint, "__module__", "api") if endpoint else "api"
+                    function = getattr(endpoint, "__name__", str(request.url.path)) if endpoint else str(request.url.path)
+
                     # Non-blocking: route to error pipeline in background
                     threading.Thread(
                         target=_route_exception,
                         args=(exc, {
                             "url": str(request.url),
                             "method": request.method,
-                        }, "api", str(request.url.path)),
+                        }, module, function),
                         daemon=True,
                     ).start()
                     raise  # re-raise so FastAPI/Starlette handles the response

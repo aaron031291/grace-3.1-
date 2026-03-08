@@ -139,7 +139,7 @@ def _persist_task(task: Dict) -> None:
                 "updated_at": task["updated_at"],
             })
     except Exception as e:
-        logger.debug("[CODING-AGENT] Task persistence skipped (table may not exist yet): %s", e)
+        logger.error("[CODING-AGENT] Task persistence skipped (table may not exist yet): %s", e)
 
 
 def poll() -> Optional[Dict]:
@@ -458,8 +458,12 @@ def _default_handler(task: Dict) -> Dict:
         enriched_instructions += (
             f"[Self-healing task — {error_class} error "
             f"from {ctx.get('location', ctx.get('file', 'unknown'))}]\n"
-            f"Error: {ctx.get('sql_error', ctx.get('error', ''))}\n\n"
+            f"Error: {ctx.get('sql_error', ctx.get('error', ''))}\n"
         )
+        if ctx.get("existing_code"):
+            enriched_instructions += f"\n[EXISTING SOURCE CODE OF {ctx.get('file', 'target_file')}]\n```python\n{ctx.get('existing_code')}\n```\n\n"
+        else:
+            enriched_instructions += "\n"
     enriched_instructions += instructions
 
     # ── 4. Ghost Memory — start tracking this task ──────────────────────
