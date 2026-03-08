@@ -348,7 +348,8 @@ def _route_mirror_pattern(pattern: dict) -> None:
         logger.debug("[MIRROR-OBSERVER] Pattern routing error (%s): %s", pattern_type, e)
 
 
-def _on_rate_limited(data: Dict) -> None:
+def _on_rate_limited(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Rate limit hit — log for ops visibility, future circuit breaker."""
     service = data.get("service", "unknown")
     logger.warning(
@@ -368,13 +369,15 @@ def _on_rate_limited(data: Dict) -> None:
         pass
 
 
-def _on_network_healed(data: Dict) -> None:
+def _on_network_healed(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Network heal completed — log for ops."""
     fixes = data.get("fixes", [])
     logger.info("[TRIGGER-FABRIC] 🌐 Network healed: %s", " | ".join(str(f) for f in fixes))
 
 
-def _on_probe_result(data: Dict) -> None:
+def _on_probe_result(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """
     Probe sweep result arrived (probe.light.result / probe.deep.result).
     Route any FAIL checks into the error pipeline for self-healing.
@@ -485,7 +488,8 @@ def _submit_code_action(problem: dict, action: dict) -> None:
 
 # ── Event handlers ────────────────────────────────────────────────────────
 
-def _on_llm_error(data: Dict) -> None:
+def _on_llm_error(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """LLM call failed → report to error pipeline for healing."""
     try:
         _route_exception(
@@ -498,7 +502,8 @@ def _on_llm_error(data: Dict) -> None:
         pass
 
 
-def _on_hallucination(data: Dict) -> None:
+def _on_hallucination(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Hallucination detected → learning trigger: record as negative example."""
     try:
         import json
@@ -525,7 +530,8 @@ def _on_hallucination(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] Hallucination error: %s", e)
 
 
-def _on_knowledge_gap(data: Dict) -> None:
+def _on_knowledge_gap(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Knowledge gap detected → submit coding task to generate missing knowledge."""
     try:
         from api.autonomous_loop_api import submit_coding_task
@@ -546,7 +552,8 @@ def _on_knowledge_gap(data: Dict) -> None:
         pass
 
 
-def _on_repeated_error(data: Dict) -> None:
+def _on_repeated_error(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Same error pattern repeated — escalate priority."""
     try:
         from api.autonomous_loop_api import submit_coding_task
@@ -567,7 +574,8 @@ def _on_repeated_error(data: Dict) -> None:
         pass
 
 
-def _on_fix_applied(data: Dict) -> None:
+def _on_fix_applied(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Fix successfully applied → immediately reward in learning system."""
     try:
         import json
@@ -584,7 +592,8 @@ def _on_fix_applied(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] Fix applied error: %s", e)
 
 
-def _on_verification_rejected(data: Dict) -> None:
+def _on_verification_rejected(event: Any) -> None:
+    data = getattr(event, \'data\', event)
     """Verification pass rejected code → record as training signal."""
     try:
         import json
