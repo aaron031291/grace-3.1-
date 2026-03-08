@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Inject a fuzzy-matcher to redirect to the closest active route for internal calls.
+---
+trigger: api.route.missing
+description: Inject a fuzzy-matcher to redirect to the closest active route for internal
+  calls.
+conditions:
+- error_type: HTTP 404
+- source: internal_traffic_only
+remediation:
+- step: fuzzy_route_match
+  description: Identify if a route was renamed and proxy silently.
+  module: api.health
+  function: register_fuzzy_proxy
+metrics:
+- name: fuzzy_route_matches
+  description: Count of 404s bypassed internally.
+escalation:
+  trigger: guardian.escalate('api_route_broken')
+  condition: No fuzzy match > 0.9 confidence available.
+learning:
+  record_to: knowledge_base/layer_3/routing/fuzzy_404.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - routing
+  - api
+  - '404'
+  - self_healing

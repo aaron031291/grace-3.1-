@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Auto-recreates database/Redis connection instances upon ConnectionResetError.
+---
+trigger: network.tcp.connection_reset
+description: Auto-recreates database/Redis connection instances upon ConnectionResetError.
+conditions:
+- error_type: ConnectionResetError
+- source: socket_layer
+remediation:
+- step: recreate_connection_pool
+  description: Dispose old engine and recreate TCP socket.
+  module: database.connection
+  function: reconnect_engine
+metrics:
+- name: conn_resets_recovered
+  description: Instances of transparent TCP socket recovery.
+escalation:
+  trigger: guardian.escalate('tcp_peer_dead')
+  condition: Recreated sockets reset immediately 3x.
+learning:
+  record_to: knowledge_base/layer_1/network/tcp_resets.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - tcp
+  - socket
+  - self_healing

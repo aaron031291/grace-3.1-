@@ -52,7 +52,7 @@ class TestLevel1Smoke:
     def test_brain_api_imports(self):
         from api.brain_api_v2 import call_brain, _build_directory
         d = _build_directory()
-        assert len(d) == 8
+        assert len(d) == 9
         genesis_test("smoke_brain_import", True, "8 domains")
 
     def test_all_services_import(self):
@@ -314,7 +314,7 @@ class TestLevel4EndToEnd:
         """All 8 domains with 87+ actions accessible."""
         from api.brain_api_v2 import _build_directory
         d = _build_directory()
-        assert len(d) == 8
+        assert len(d) == 9
         total = sum(len(b["actions"]) for b in d.values())
         assert total >= 87
         genesis_test("e2e_brain_directory", True, f"{len(d)} domains, {total} actions")

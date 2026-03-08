@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Pauses traffic routing to a degraded microservice and aggressively pings health endpoint.
+---
+trigger: network.lb.502
+description: Pauses traffic routing to a degraded microservice and aggressively pings
+  health endpoint.
+conditions:
+- error_type: HTTP 502 Bad Gateway
+remediation:
+- step: quarantine_backend_node
+  description: Remove the target microservice from the internal DNS/Proxy pool momentarily.
+  module: api.health
+  function: quarantine_service_node
+metrics:
+- name: nodes_quarantined
+  description: Count of times bad gateway nodes were removed.
+escalation:
+  trigger: guardian.escalate('all_nodes_dead')
+  condition: 0 active nodes remain in proxy pool.
+learning:
+  record_to: knowledge_base/layer_3/network/bad_gateway.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - '502'
+  - proxy
+  - self_healing

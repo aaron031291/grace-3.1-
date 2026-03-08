@@ -1,0 +1,36 @@
+# Grace self-healing playbook
+# Auto-kills idle DB connections when the SQLAlchemy pool limit is reached preventing new connections.
+---
+trigger: database.pool.exhausted
+description: Auto-kills idle DB connections when the SQLAlchemy pool limit is reached
+  preventing new connections.
+conditions:
+- error_type: TimeoutError
+- source: database.pool
+remediation:
+- step: clear_idle_connections
+  description: Trigger db engine dispose mapping to close idle threads
+  module: database.connection
+  function: dispose_engine
+- step: record_learning
+  description: Log pool exhaustion
+  module: api._genesis_tracker
+  function: track
+  args:
+    key_type: system_event
+    what_description: DB Pool exhausted. Idle connections terminated.
+    is_error: true
+metrics:
+- name: MTTR_pool_exhaustion
+  description: Seconds to clear pool
+escalation:
+  trigger: guardian.escalate('database_deadlock')
+  condition: Dispose fails to free connections after 3 seconds.
+learning:
+  record_to: knowledge_base/layer_1/db/pool_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - database
+  - pool
+  - exhaustion
+  - self_healing

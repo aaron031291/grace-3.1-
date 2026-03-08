@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Inject safe default values for non-critical missing configs that block boot.
+---
+trigger: os.env.missing
+description: Inject safe default values for non-critical missing configs that block
+  boot.
+conditions:
+- error_type: KeyError (os.environ)
+remediation:
+- step: inject_default
+  description: Insert a safe generic string matching expected type via introspection.
+  module: core.services.system_service
+  function: inject_default_env
+metrics:
+- name: envs_auto_patched
+  description: Count of environment variables dynamically added at runtime.
+escalation:
+  trigger: guardian.escalate('critical_secret_missing')
+  condition: Env var requires high-entropy cryptographic secret.
+learning:
+  record_to: knowledge_base/layer_1/os/env_missing.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - env
+  - config
+  - self_healing

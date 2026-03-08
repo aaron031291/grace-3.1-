@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Triggers frontend clients to apply staggered reconnect delays preventing server crush after restart.
+---
+trigger: network.websocket.storm
+description: Triggers frontend clients to apply staggered reconnect delays preventing
+  server crush after restart.
+conditions:
+- metric: active_websocket_connections
+- threshold: '> 200 within 500ms'
+remediation:
+- step: issue_ws_reconnect_jitter
+  description: Send a Close frame with a custom 1013 code indicating retry delay bounds
+  module: api.stream_handlers
+  function: jitter_websocket_reconnects
+metrics:
+- name: ws_storms_calmed
+  description: Instances of smoothing connection avalanches.
+escalation:
+  trigger: guardian.escalate('ws_pool_exhausted')
+  condition: Server exhausts async handlers accepting ws handshakes.
+learning:
+  record_to: knowledge_base/layer_3/network/websocket_storms.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - websocket
+  - jitter
+  - self_healing

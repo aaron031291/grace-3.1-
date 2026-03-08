@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Increase worker timeouts temporarily during extremely long generation phases.
+---
+trigger: api.gateway.timeout
+description: Increase worker timeouts temporarily during extremely long generation
+  phases.
+conditions:
+- error_type: HTTP 504 Gateway Timeout
+remediation:
+- step: extend_proxy_timeout
+  description: Increase timeout length by 30s transparently for next attempt.
+  module: core.resilience
+  function: extend_gateway_timeout
+metrics:
+- name: timeouts_extended
+  description: Count of generation phases saved by timeout extension.
+escalation:
+  trigger: guardian.escalate('process_stuck_infinite')
+  condition: Process times out at 300s max length.
+learning:
+  record_to: knowledge_base/layer_1/network/timeouts.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - timeout
+  - '504'
+  - self_healing

@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Increases gateway worker timeout bounds dynamically when massive RAG tasks take > 60s.
+---
+trigger: network.lb.504
+description: Increases gateway worker timeout bounds dynamically when massive RAG
+  tasks take > 60s.
+conditions:
+- error_type: HTTP 504 Gateway Timeout
+remediation:
+- step: increase_gateway_timeout
+  description: Bump Uvicorn/traefik timeout allowance for route.
+  module: core.resilience
+  function: extend_gateway_timeout
+metrics:
+- name: timeouts_auto_extended
+  description: Count of 504s solved by extending wait periods.
+escalation:
+  trigger: guardian.escalate('rag_task_hanging')
+  condition: Timeout exceeds 5 minutes.
+learning:
+  record_to: knowledge_base/layer_3/network/gateway_timeout.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - '504'
+  - timeout
+  - self_healing

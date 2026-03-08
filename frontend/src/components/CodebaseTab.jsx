@@ -38,6 +38,10 @@ export default function CodebaseTab({ domain = "Global (All Domains)" }) {
   const [editingNodePath, setEditingNodePath] = useState(null);
   const [editingNodeName, setEditingNodeName] = useState("");
 
+  // Analysis state
+  const [analyzePath, setAnalyzePath] = useState("");
+  const [useKimi, setUseKimi] = useState(false);
+
   const showToast = (msg, type = 'info') => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);

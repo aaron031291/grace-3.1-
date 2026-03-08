@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Auto-flushes local application DNS caches if endpoints unexpectedly resolve to local loopbacks.
+---
+trigger: network.dns.poisoned
+description: Auto-flushes local application DNS caches if endpoints unexpectedly resolve
+  to local loopbacks.
+conditions:
+- metric: unexpected_loopback_resolution
+- source: security_probe
+remediation:
+- step: flush_python_dns_cache
+  description: Clear urllib3 and requests internal connection pools.
+  module: core.services.system_service
+  function: flush_dns_pools
+metrics:
+- name: dns_cache_flushes
+  description: Count of detected poisoning overrides.
+escalation:
+  trigger: guardian.escalate('active_mitm_detected')
+  condition: External API resolves to 127.0.0.1 immediately post flush.
+learning:
+  record_to: knowledge_base/layer_1/security/dns_poison.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - security
+  - network
+  - dns
+  - self_healing

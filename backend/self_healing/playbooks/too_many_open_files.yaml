@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Auto-kills idle network sockets and HTTP keep-alive handlers when OS file descriptors exhaust.
+---
+trigger: os.limits.file_descriptors
+description: Auto-kills idle network sockets and HTTP keep-alive handlers when OS
+  file descriptors exhaust.
+conditions:
+- error_type: 'OSError: [Errno 24] Too many open files'
+remediation:
+- step: flush_idle_sockets
+  description: Close all active keep-alive sessions not currently transmitting.
+  module: core.services.system_service
+  function: close_idle_sockets
+metrics:
+- name: fd_exhaustion_bypassed
+  description: Count of successful file descriptor purges.
+escalation:
+  trigger: guardian.escalate('fatal_fd_exhaustion')
+  condition: Cannot open socket to logger after flush.
+learning:
+  record_to: knowledge_base/layer_1/os/file_descriptors.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - network
+  - sockets
+  - self_healing

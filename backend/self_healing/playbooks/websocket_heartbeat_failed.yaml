@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Severs dead TCP connections when a client stops responding to WebSocket ping frames.
+---
+trigger: network.websocket.ghost
+description: Severs dead TCP connections when a client stops responding to WebSocket
+  ping frames.
+conditions:
+- error_type: pong missing in timeframe
+- source: asgi_server
+remediation:
+- step: sever_ghost_websocket
+  description: Cleanly drop the connection mapping and free RAM.
+  module: api.stream_handlers
+  function: drop_stale_websockets
+metrics:
+- name: ghost_sockets_purged
+  description: Count of RAM recovered from dead mobile clients.
+escalation:
+  trigger: guardian.escalate('ws_keepalive_broken')
+  condition: All active websockets misreport heartbeats.
+learning:
+  record_to: knowledge_base/layer_3/network/ghost_sockets.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - websocket
+  - ping
+  - self_healing

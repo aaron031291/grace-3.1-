@@ -1,0 +1,36 @@
+# Grace self-healing playbook
+# Auto-summarize or truncate prompt payloads before retry to bypass token limits.
+---
+trigger: llm.context.exceeded
+description: Auto-summarize or truncate prompt payloads before retry to bypass token
+  limits.
+conditions:
+- error_type: ContextWindowExceededError
+- source: llm_orchestrator
+remediation:
+- step: truncate_history
+  description: Drop oldest 30% of dialogue strings and retry.
+  module: llm_orchestrator.prompt_formatter
+  function: truncate_history_payload
+- step: record_learning
+  description: Track context drop
+  module: api._genesis_tracker
+  function: track
+  args:
+    key_type: system_event
+    what_description: Context window exceeded. Dropped 30% of history.
+    is_error: true
+metrics:
+- name: MTTR_context_window
+  description: Time to bypass context window length.
+escalation:
+  trigger: guardian.escalate('payload_uncompressable')
+  condition: Context still exceeded after 2 truncations.
+learning:
+  record_to: knowledge_base/layer_2/llm/context_limit.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - llm
+  - context
+  - truncate
+  - self_healing

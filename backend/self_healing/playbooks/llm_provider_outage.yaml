@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Failover to secondary API keys or local offline models when OpenAI/Anthropic 5xx out.
+---
+trigger: llm.provider.outage
+description: Failover to secondary API keys or local offline models when OpenAI/Anthropic
+  5xx out.
+conditions:
+- error_type: APIConnectionError
+- source: llm_orchestrator
+remediation:
+- step: switch_model_provider
+  description: Reroute to local Ollama instance.
+  module: llm_orchestrator.factory
+  function: failover_to_local
+metrics:
+- name: MTTR_provider_failover
+  description: Seconds taken to failover to local model.
+escalation:
+  trigger: guardian.escalate('all_llms_dead')
+  condition: Local failover also unconnected or missing weights.
+learning:
+  record_to: knowledge_base/layer_2/llm/provider_outage.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - llm
+  - failover
+  - ollama
+  - self_healing

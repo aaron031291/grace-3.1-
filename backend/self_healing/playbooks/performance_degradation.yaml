@@ -1,0 +1,50 @@
+# performance_degradation.yaml
+# Grace self-healing playbook for latency trace anomalies.
+# Triggered when: High latency is detected on API routes indicating blocking synchronous logic.
+---
+trigger: guardian.latency_spike_detected
+description: >
+  Automatic remediation for severe API latency — when routes block the main thread
+  for > 1s instead of returning instantly. We saw this specifically when 
+  _check_service_health executed synchronous network pings repeatedly.
+
+conditions:
+  - metric: latency_trace_total
+  - threshold: "> 1000ms"
+  - source: guardian.metrics.publisher
+
+remediation:
+  - step: apply_in_memory_cache
+    description: "Automatically inject @lru_cache or equivalent TTL caching on the offending synchronous network function."
+    module: self_healing.auto_patcher
+    function: apply_ttl_cache_wrapper
+    args:
+      ttl_seconds: 30
+
+  - step: reduce_polling_frequency
+    description: "Signal the frontend or client to back off polling frequency."
+    module: api._genesis_tracker
+    function: track
+    args:
+      key_type: system_event
+      what_description: "Performance degradation auto-healed via TTL cache and backoff."
+      is_error: true
+
+  - step: verify_health
+    description: "Verify the subsequent latency trace drops below 100ms."
+    validation_query: "SELECT avg(latency) FROM metrics WHERE route = '{route_name}' AND recorded_at > NOW() - interval '1 minute'"
+
+metrics:
+  - name: MTTR_latency
+    description: "Mean time to repair route latency"
+  - name: peak_latency_reduction
+    description: "Milliseconds shaved off the P99 route latency"
+
+escalation:
+  trigger: guardian.escalate("latency_spike_unresolvable")
+  condition: "Cache application fails and server CPU remains > 90%."
+
+learning:
+  record_to: knowledge_base/layer_2/performance/latency_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags: [performance, latency, caching, self_healing]

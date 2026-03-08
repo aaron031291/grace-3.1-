@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Rebinds services to fallback interfaces if the host ethernet/loopback drops.
+---
+trigger: os.network.interface_down
+description: Rebinds services to fallback interfaces if the host ethernet/loopback
+  drops.
+conditions:
+- error_type: 'OSError: [Errno 10051] Network is unreachable'
+remediation:
+- step: rebind_0_0_0_0
+  description: Restart uvicorn binding globally instead of localhost specific.
+  module: core.services.system_service
+  function: restart_uvicorn_global_bind
+metrics:
+- name: interface_rebounds
+  description: Count of server re-bindings.
+escalation:
+  trigger: guardian.escalate('server_offline')
+  condition: 0.0.0.0 bind fails entirely.
+learning:
+  record_to: knowledge_base/layer_1/os/interface_down.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - network
+  - bind
+  - self_healing

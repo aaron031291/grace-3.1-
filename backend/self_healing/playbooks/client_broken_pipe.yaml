@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Gracefully handles UI clients disconnecting midway through long SSE streams without panicking.
+---
+trigger: network.client.broken_pipe
+description: Gracefully handles UI clients disconnecting midway through long SSE streams
+  without panicking.
+conditions:
+- error_type: BrokenPipeError
+- source: asgi_server
+remediation:
+- step: terminate_generator
+  description: Kill the backend LLM/SSE generation to save compute.
+  module: api.stream_handlers
+  function: terminate_disconnected_stream
+metrics:
+- name: compute_saved_by_broken_pipe
+  description: Tokens saved by killing dead generators.
+escalation:
+  trigger: guardian.escalate('ddos_broken_pipes')
+  condition: Thousands of broken pipes hit per minute.
+learning:
+  record_to: knowledge_base/layer_3/network/broken_pipes.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - sse
+  - broken_pipe
+  - self_healing

@@ -1,0 +1,29 @@
+# Grace self-healing playbook
+# Moves blocked outbound webhooks from synchronous loops to an asynchronous retry queue.
+---
+trigger: network.webhook.timeout
+description: Moves blocked outbound webhooks from synchronous loops to an asynchronous
+  retry queue.
+conditions:
+- error_type: TimeoutError
+- source: outbound_webhook
+remediation:
+- step: queue_webhook_async
+  description: Offload the dead URL payload into a RabbitMQ/Celery style delayed retry
+    pattern.
+  module: core.services.system_service
+  function: offload_failed_hook
+metrics:
+- name: async_hooks_rescued
+  description: Count of webhooks eventually delivered.
+escalation:
+  trigger: guardian.escalate('webhook_partner_offline')
+  condition: Webhook fails delivery queue after 3 days.
+learning:
+  record_to: knowledge_base/layer_3/network/webhook_timeouts.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - webhook
+  - async
+  - self_healing

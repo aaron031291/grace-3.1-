@@ -1,0 +1,29 @@
+# Grace self-healing playbook
+# Triggers a full-state REST synchronization if the Redis Pub/Sub WebSocket misses sequential IDs.
+---
+trigger: network.redis.desync
+description: Triggers a full-state REST synchronization if the Redis Pub/Sub WebSocket
+  misses sequential IDs.
+conditions:
+- error_type: Message ID out of sequence
+- source: redis_listener
+remediation:
+- step: trigger_full_sync
+  description: Call the REST endpoints to grab recent state rather than relying on
+    PubSub diffs.
+  module: core.memory.redis_client
+  function: resync_state
+metrics:
+- name: state_desyncs_resolved
+  description: Count of PubSub sequence breaks patched.
+escalation:
+  trigger: guardian.escalate('pubsub_fatal_desync')
+  condition: Full-state sync fails to clear the pending queue.
+learning:
+  record_to: knowledge_base/layer_1/network/pubsub_desync.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - redis
+  - pubsub
+  - self_healing

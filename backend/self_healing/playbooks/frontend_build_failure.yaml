@@ -1,0 +1,34 @@
+# Grace self-healing playbook
+# Auto-clear vite caches and retry build if chunk corruption causes exits.
+---
+trigger: frontend.build.failure
+description: Auto-clear vite caches and retry build if chunk corruption causes exits.
+conditions:
+- error_type: 'Vite Error: chunk format missing'
+remediation:
+- step: clear_vite_cache
+  description: Wipe node_modules/.vite directory.
+  module: self_healing.auto_patcher
+  function: run_command
+  args:
+    cmd: rm -rf frontend/node_modules/.vite
+- step: rebuild_frontend
+  description: Run npm run build again.
+  module: self_healing.auto_patcher
+  function: run_command
+  args:
+    cmd: cd frontend && npm run build
+metrics:
+- name: vite_build_heals
+  description: Count of successfully retry builds.
+escalation:
+  trigger: guardian.escalate('frontend_syntax_error')
+  condition: Build fails after cache clear.
+learning:
+  record_to: knowledge_base/layer_9/ci_cd/vite_build.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - frontend
+  - vite
+  - build
+  - self_healing

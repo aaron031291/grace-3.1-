@@ -1,0 +1,49 @@
+# database_unreachable.yaml
+# Grace self-healing playbook for connection drops.
+# Triggered when: Qdrant or Redis cannot be reached.
+---
+trigger: network.probe.unreachable
+description: >
+  Automatic remediation for sudden database disconnection — specifically when
+  Redis or Qdrant fail 4x consecutively in network probes.
+
+conditions:
+  - error_type: ConnectionError
+  - service_target: ["Qdrant", "Redis"]
+  - consecutive_failures: ">= 4"
+
+remediation:
+  - step: switch_to_local_fallback
+    description: "Disable vector stores and fallback to SQLite memory stores instantly to avoid blocking."
+    module: core.memory.unified_memory
+    function: enable_local_fallback
+    args: []
+
+  - step: restart_local_container
+    description: "Attempt to restart the missing container if running locally via Docker."
+    module: core.services.system_service
+    function: restart_container
+    args:
+      service_name: "{service_target}"
+
+  - step: record_learning
+    description: "Log network probe failure and fallback trace."
+    module: api._genesis_tracker
+    function: track
+    args:
+      key_type: system_event
+      what_description: "{service_target} unreachable 4x. Local fallback enabled."
+      is_error: true
+
+metrics:
+  - name: MTTR_database
+    description: "Mean time to repair database connection"
+
+escalation:
+  trigger: guardian.escalate("database_data_loss_imminent")
+  condition: "Local container restart fails and no snapshot available."
+
+learning:
+  record_to: knowledge_base/layer_1/infrastructure/database_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags: [database, network, qdrant, redis, self_healing]

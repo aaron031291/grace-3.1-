@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Trigger an LLM-based structured JSON repair loop when a model returns broken markdown chunks instead of schemas.
+---
+trigger: llm.response.malformed_json
+description: Trigger an LLM-based structured JSON repair loop when a model returns
+  broken markdown chunks instead of schemas.
+conditions:
+- error_type: JSONDecodeError
+- source: llm_orchestrator
+remediation:
+- step: run_json_repair
+  description: Use lightweight regex/repair algorithm locally on the string.
+  module: self_healing.auto_patcher
+  function: repair_json_string
+metrics:
+- name: json_parse_repairs
+  description: Count of successfully repaired JSON strings.
+escalation:
+  trigger: guardian.escalate('unparseable_llm_output')
+  condition: Repair parser fails heavily syntaxed output.
+learning:
+  record_to: knowledge_base/layer_2/llm/bad_json.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - llm
+  - json
+  - repair
+  - self_healing

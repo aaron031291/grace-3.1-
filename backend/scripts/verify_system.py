@@ -43,7 +43,7 @@ print("  GRACE AI SYSTEM VERIFICATION")
 print("=" * 60)
 
 # ── 1. Import Checks ─────────────────────────────────────────
-print("\n▶ IMPORTS")
+print("\n> IMPORTS")
 try:
     from app import app
     check("app.py imports", True)
@@ -54,7 +54,7 @@ except Exception as e:
 try:
     from api.brain_api_v2 import call_brain, _build_directory
     d = _build_directory()
-    check(f"Brain API: {len(d)} domains", len(d) == 8)
+    check(f"Brain API: {len(d)} domains", len(d) == 9)
     total_actions = sum(len(b["actions"]) for b in d.values())
     check(f"Brain actions: {total_actions}", total_actions >= 80)
 except Exception as e:
@@ -106,7 +106,7 @@ except Exception as e:
     check("Genesis tracker import", False, str(e))
 
 # ── 2. Brain Domain Checks ───────────────────────────────────
-print("\n▶ BRAIN DOMAINS")
+print("\n> BRAIN DOMAINS")
 try:
     from api.brain_api_v2 import _build_directory
     d = _build_directory()
@@ -116,7 +116,7 @@ except Exception as e:
     check("Brain domain check", False, str(e))
 
 # ── 3. Service Function Checks ───────────────────────────────
-print("\n▶ SERVICE FUNCTIONS")
+print("\n> SERVICE FUNCTIONS")
 
 try:
     from core.services.files_service import stats
@@ -154,7 +154,7 @@ except Exception as e:
     check("code_service.list_projects()", False, str(e))
 
 # ── 4. Cross-Brain Call ──────────────────────────────────────
-print("\n▶ CROSS-BRAIN ORCHESTRATION")
+print("\n> CROSS-BRAIN ORCHESTRATION")
 try:
     from api.brain_api_v2 import call_brain
     r = call_brain("tasks", "time_sense", {})

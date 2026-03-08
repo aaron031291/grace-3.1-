@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Auto-provision temporary self-signed certs for internal networks to prevent blocking.
+---
+trigger: security.ssl.expired
+description: Auto-provision temporary self-signed certs for internal networks to prevent
+  blocking.
+conditions:
+- error_type: SSLCertVerificationError
+- source: internal_requests
+remediation:
+- step: provision_temporary_cert
+  description: Generate rotating internal SSL cert.
+  module: core.security.ssl
+  function: provision_fallback_cert
+metrics:
+- name: ssl_bypasses
+  description: Count of times internal SSL was auto-patched.
+escalation:
+  trigger: guardian.escalate('ssl_provisioning_failed')
+  condition: OpenSSL fails to bind temporary cert.
+learning:
+  record_to: knowledge_base/layer_1/security/ssl_cert.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - security
+  - ssl
+  - cert
+  - self_healing

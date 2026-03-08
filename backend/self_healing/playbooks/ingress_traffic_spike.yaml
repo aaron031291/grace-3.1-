@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Scales up application-level rate limiting proactively when massive a sudden spike comes.
+---
+trigger: network.traffic.spike
+description: Scales up application-level rate limiting proactively when massive a
+  sudden spike comes.
+conditions:
+- metric: requests_per_second
+- threshold: '> 500'
+remediation:
+- step: drop_rate_limit_bounds
+  description: Temporarily lower acceptable RPS bounds for non-admin IPs.
+  module: core.security
+  function: tighten_rate_limits
+metrics:
+- name: ddos_spikes_survived
+  description: Count of high traffic events gracefully limited.
+escalation:
+  trigger: guardian.escalate('volumetric_ddos_detected')
+  condition: Server CPU 100% processing packet drops alone.
+learning:
+  record_to: knowledge_base/layer_3/network/traffic_spikes.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - traffic
+  - rate_limit
+  - self_healing

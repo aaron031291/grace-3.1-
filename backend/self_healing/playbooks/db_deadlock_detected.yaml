@@ -1,0 +1,32 @@
+# Grace self-healing playbook
+# Rollback and retry blocking transactions that hit concurrent lock waiting states.
+---
+trigger: database.transaction.deadlock
+description: Rollback and retry blocking transactions that hit concurrent lock waiting
+  states.
+conditions:
+- error_type: DeadlockDetected
+- source: database.transaction
+remediation:
+- step: rollback_transaction
+  description: Rollback current SQLAlchemy session.
+  module: database.session
+  function: rollback
+- step: retry_with_backoff
+  description: Wait randomly 1-3 seconds and retry transaction
+  module: database.retry
+  function: exponential_backoff
+metrics:
+- name: deadlocks_healed
+  description: Count of successfully retried deadlocks
+escalation:
+  trigger: guardian.escalate('unresolvable_transaction_deadlock')
+  condition: Transaction fails after 3 retry backoffs.
+learning:
+  record_to: knowledge_base/layer_1/db/deadlock_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - database
+  - deadlock
+  - transaction
+  - self_healing

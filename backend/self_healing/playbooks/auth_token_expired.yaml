@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Auto-refresh internal service account tokens seamlessly.
+---
+trigger: security.auth.expired
+description: Auto-refresh internal service account tokens seamlessly.
+conditions:
+- error_type: HTTP 401 Unauthorized
+- source: internal_jwt
+remediation:
+- step: refresh_service_token
+  description: Request new JWT token using service secret.
+  module: core.security.tokens
+  function: refresh_internal_token
+metrics:
+- name: tokens_refreshed_seamlessly
+  description: Count of bypassed 401 errors.
+escalation:
+  trigger: guardian.escalate('auth_secret_invalid')
+  condition: Secret fails to generate new token.
+learning:
+  record_to: knowledge_base/layer_1/security/token_refresh.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - security
+  - auth
+  - '401'
+  - self_healing

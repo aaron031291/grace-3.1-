@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Switches server outputs to Brotli/Gzip extreme compression when outbound bandwidth caps are nearing limits.
+---
+trigger: network.traffic.bandwidth
+description: Switches server outputs to Brotli/Gzip extreme compression when outbound
+  bandwidth caps are nearing limits.
+conditions:
+- error_type: Bandwidth limit exceeded
+remediation:
+- step: force_gzip_compression
+  description: Ensure middleware compresses ALL outbounding text/json.
+  module: core.services.system_service
+  function: enable_extreme_compression
+metrics:
+- name: bandwidth_saved_mb
+  description: Megabytes compressed aggressively to save caps.
+escalation:
+  trigger: guardian.escalate('bandwidth_hard_capped')
+  condition: Host OS kills our socket bindings for bandwidth usage.
+learning:
+  record_to: knowledge_base/layer_1/network/bandwidth_limits.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - bandwidth
+  - gzip
+  - self_healing

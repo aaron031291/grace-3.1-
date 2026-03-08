@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Falls back to direct IP routing or secondary DNS resolvers if primary lookup fails.
+---
+trigger: network.dns.lookup_failed
+description: Falls back to direct IP routing or secondary DNS resolvers if primary
+  lookup fails.
+conditions:
+- error_type: 'socket.gaierror: [Errno -2] Name or service not known'
+remediation:
+- step: fallback_dns_resolver
+  description: Query 8.8.8.8 for the failing domain directly.
+  module: core.services.system_service
+  function: resolve_domain_fallback
+metrics:
+- name: dns_fallbacks
+  description: Count of successfully routed requests post-fallback.
+escalation:
+  trigger: guardian.escalate('dns_outage')
+  condition: 8.8.8.8 resolver also unreachable.
+learning:
+  record_to: knowledge_base/layer_1/network/dns_failures.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - dns
+  - resolve
+  - self_healing

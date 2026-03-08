@@ -1,0 +1,29 @@
+# Grace self-healing playbook
+# Auto-appends the blocked frontend origin to FastAPI's CORS middleware dynamically when 403s occur on known IPs.
+---
+trigger: security.cors.violation
+description: Auto-appends the blocked frontend origin to FastAPI's CORS middleware
+  dynamically when 403s occur on known IPs.
+conditions:
+- error_type: HTTP 403 Forbidden
+- logs_contain:
+  - CORS
+remediation:
+- step: append_cors_origin
+  description: Add origin header to allowed hosts if IP matches trusted frontend mask.
+  module: api.health
+  function: dynamic_cors_append
+metrics:
+- name: cors_auto_allow
+  description: Count of seamless frontend UI connections granted.
+escalation:
+  trigger: guardian.escalate('cors_brute_force')
+  condition: 100+ different origins attempt CORS access.
+learning:
+  record_to: knowledge_base/layer_3/security/cors_blocks.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - security
+  - cors
+  - network
+  - self_healing

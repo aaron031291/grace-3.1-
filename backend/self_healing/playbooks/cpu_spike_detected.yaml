@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Drop background concurrency limit when CPU spins at 100% for over 60s.
+---
+trigger: os.cpu.spike
+description: Drop background concurrency limit when CPU spins at 100% for over 60s.
+conditions:
+- metric: cpu_percent
+- threshold: '> 95'
+- duration: 60s
+remediation:
+- step: shed_background_tasks
+  description: Temporarily pause async intelligence workers
+  module: core.intelligence.scheduler
+  function: pause_background_workers
+metrics:
+- name: cpu_spike_shedding
+  description: Count of times CPU load shedding fired.
+escalation:
+  trigger: guardian.escalate('cpu_bound_deadlock')
+  condition: CPU remains 100% after shedding tasks.
+learning:
+  record_to: knowledge_base/layer_1/os/cpu_spikes.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - cpu
+  - load_shedding
+  - self_healing

@@ -1,0 +1,26 @@
+# Grace self-healing playbook
+# Apply exponential backoff parameters dynamically when 429s are hit.
+---
+trigger: network.rate_limit.exceeded
+description: Apply exponential backoff parameters dynamically when 429s are hit.
+conditions:
+- error_type: HTTPError 429
+remediation:
+- step: apply_exponential_backoff
+  description: Delay future calls mapped by Retry-After header
+  module: core.resilience
+  function: apply_dynamic_backoff
+metrics:
+- name: rate_limits_bypassed
+  description: Count of successfully backed-off requests.
+escalation:
+  trigger: guardian.escalate('external_api_blacklisted')
+  condition: Target API 403s our IP completely.
+learning:
+  record_to: knowledge_base/layer_1/network/rate_limits.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - api
+  - '429'
+  - self_healing

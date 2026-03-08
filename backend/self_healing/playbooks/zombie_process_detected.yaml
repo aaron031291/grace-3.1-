@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Scan and SIGKILL orphaned Python/Node sub-processes that hold locks.
+---
+trigger: os.process.zombie
+description: Scan and SIGKILL orphaned Python/Node sub-processes that hold locks.
+conditions:
+- metric: zombie_child_count
+- threshold: '> 5'
+remediation:
+- step: sigkill_orphans
+  description: Force kill orphaned child processes holding file handlers.
+  module: core.services.system_service
+  function: kill_orphans
+metrics:
+- name: orphans_reaped
+  description: Count of zombie processes terminated.
+escalation:
+  trigger: guardian.escalate('unreapable_process')
+  condition: Orphans survive SIGKILL.
+learning:
+  record_to: knowledge_base/layer_1/os/zombies.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - process
+  - zombie
+  - self_healing

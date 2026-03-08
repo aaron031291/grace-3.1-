@@ -1,0 +1,26 @@
+# Grace self-healing playbook
+# Auto-increment binding ports for internal microservices.
+---
+trigger: network.port.conflict
+description: Auto-increment binding ports for internal microservices.
+conditions:
+- error_type: 'OSError: [Errno 98] Address already in use'
+remediation:
+- step: increment_bind_port
+  description: Override uvicorn start port +1
+  module: core.services.system_service
+  function: increment_env_port
+metrics:
+- name: port_conflicts_resolved
+  description: Count of port shifts.
+escalation:
+  trigger: guardian.escalate('port_scanning_failed')
+  condition: Increment failed 5 consecutive times.
+learning:
+  record_to: knowledge_base/layer_1/network/port_conflicts.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - port
+  - conflict
+  - self_healing

@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Automatically downgrades Qdrant integration to rely on standard REST HTTP if the gRPC channel HTTP/2 closes.
+---
+trigger: network.grpc.unavailable
+description: Automatically downgrades Qdrant integration to rely on standard REST
+  HTTP if the gRPC channel HTTP/2 closes.
+conditions:
+- error_type: 'grpc.RpcError: StatusCode.UNAVAILABLE'
+remediation:
+- step: downgrade_to_rest
+  description: Switch vector_db client from gRPC connection object to REST mode.
+  module: vector_db.client
+  function: force_rest_protocol
+metrics:
+- name: grpc_to_rest_downgrades
+  description: Count of Qdrant integrations seamlessly maintained.
+escalation:
+  trigger: guardian.escalate('vector_cluster_offline')
+  condition: REST protocol also fails to ping.
+learning:
+  record_to: knowledge_base/layer_1/network/grpc_failures.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - grpc
+  - qdrant
+  - self_healing

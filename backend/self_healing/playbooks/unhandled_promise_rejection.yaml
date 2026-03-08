@@ -1,0 +1,26 @@
+# Grace self-healing playbook
+# Inject global catch block fallbacks to stabilize the UI.
+---
+trigger: frontend.promise.unhandled
+description: Inject global catch block fallbacks to stabilize the UI.
+conditions:
+- error_type: UnhandledPromiseRejectionWarning
+remediation:
+- step: inject_global_catch
+  description: Ensure App.jsx has a window.onunhandledrejection wrapper.
+  module: self_healing.auto_patcher
+  function: inject_js_global_catch
+metrics:
+- name: promises_caught
+  description: Count of promises caught automatically.
+escalation:
+  trigger: guardian.escalate('fatal_frontend_crash')
+  condition: Promises crash despite global wrappers.
+learning:
+  record_to: knowledge_base/layer_9/ci_cd/promise_catch.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - frontend
+  - promise
+  - js
+  - self_healing

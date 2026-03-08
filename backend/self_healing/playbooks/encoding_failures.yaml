@@ -1,0 +1,52 @@
+# encoding_failures.yaml
+# Grace self-healing playbook for Unicode printing crashes on Windows.
+# Triggered when: scripts/verify_system.py throws a cp1252 charmap encoding exception.
+---
+trigger: guardian.unicode_encode_error
+description: >
+  Automatic remediation for Windows-specific Unicode printing errors. Windows
+  Powershell/CMD defaults to cp1252 and crashes when Grace tries to print 
+  emoji or arrows.
+
+conditions:
+  - error_type: UnicodeEncodeError
+  - os_platform: Windows
+
+remediation:
+  - step: enforce_utf8_env
+    description: "Automatically set PYTHONIOENCODING=utf-8 in the execution environment."
+    module: core.services.system_service
+    function: set_environment_variable
+    args:
+      key: PYTHONIOENCODING
+      value: "utf-8"
+
+  - step: strip_invalid_chars
+    description: "Replace complex Unicode characters (e.g. arrows) with simplified ANSI equivalents in the crashed script."
+    module: self_healing.auto_patcher
+    function: regex_replace_file
+    args:
+      pattern: "[\u25b6]"
+      replacement: ">"
+
+  - step: record_learning
+    description: "Track the Unicode patch."
+    module: api._genesis_tracker
+    function: track
+    args:
+      key_type: system_event
+      what_description: "UnicodeEncodeError bypassed via utf-8 env map and character stripping."
+      is_error: true
+
+metrics:
+  - name: encoding_crashes_prevented
+    description: "Number of Unicode errors automatically handled"
+
+escalation:
+  trigger: guardian.escalate("stdout_pipe_broken")
+  condition: "stdout continues to drop logs after Unicode replacements."
+
+learning:
+  record_to: knowledge_base/layer_1/os/encoding_log.json
+  feed_to: cognitive.memory_mesh_learner
+  tags: [os, encoding, unicode, windows, self_healing]

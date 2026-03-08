@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Trigger vector collection optimization and payload compression when disk space drops.
+---
+trigger: qdrant.storage.critical
+description: Trigger vector collection optimization and payload compression when disk
+  space drops.
+conditions:
+- error_type: StorageExhausted
+- service_target: Qdrant
+remediation:
+- step: trigger_optimization
+  description: Run Qdrant optimize_collection API call
+  module: vector_db.client
+  function: optimize_all_collections
+metrics:
+- name: qdrant_bytes_freed
+  description: Bytes freed post-optimization
+escalation:
+  trigger: guardian.escalate('vector_disk_full')
+  condition: Optimization does not free > 10% disk.
+learning:
+  record_to: knowledge_base/layer_1/infrastructure/qdrant_storage.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - qdrant
+  - vector_db
+  - storage
+  - self_healing

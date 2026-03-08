@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Identifies timeouts in inter-container traffic across Envoy sidecars.
+---
+trigger: network.mesh.timeout
+description: Identifies timeouts in inter-container traffic across Envoy sidecars.
+conditions:
+- error_type: HTTP 504 Gateway Timeout
+- source: envoy_proxy
+remediation:
+- step: flush_mesh_connection
+  description: Signal sidecar to drop TCP keepalives and route pure fresh HTTP.
+  module: api.health
+  function: reset_sidecar_connections
+metrics:
+- name: sidecar_resets
+  description: Count of inter-container routing healed.
+escalation:
+  trigger: guardian.escalate('mesh_routing_unavailable')
+  condition: Service cannot ping sister container at all.
+learning:
+  record_to: knowledge_base/layer_1/network/mesh_timeouts.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - mesh
+  - envoy
+  - self_healing

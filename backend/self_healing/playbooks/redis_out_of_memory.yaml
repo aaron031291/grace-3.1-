@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Evict oldest non-critical cache keys to prevent Redis from completely stalling out.
+---
+trigger: redis.memory.oom
+description: Evict oldest non-critical cache keys to prevent Redis from completely
+  stalling out.
+conditions:
+- error_type: OOM command not allowed
+- service_target: Redis
+remediation:
+- step: flush_old_cache
+  description: Evict stale keys > 24 hours.
+  module: core.memory.redis_client
+  function: evict_stale
+metrics:
+- name: MTTR_redis_oom
+  description: Mean time to repair Redis limits
+escalation:
+  trigger: guardian.escalate('redis_hard_oom')
+  condition: Redis still OOM after forced eviction.
+learning:
+  record_to: knowledge_base/layer_1/infrastructure/redis_OOM.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - redis
+  - oom
+  - cache
+  - self_healing

@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Catches upstream 503s and implements a randomized jitter backoff to avoid thundering herds.
+---
+trigger: network.lb.503
+description: Catches upstream 503s and implements a randomized jitter backoff to avoid
+  thundering herds.
+conditions:
+- error_type: HTTP 503 Service Unavailable
+remediation:
+- step: apply_jitter_backoff
+  description: Implement a localized randomized wait matching typical Retry-After
+    headers.
+  module: core.resilience
+  function: jittered_retry
+metrics:
+- name: 503_thundering_herd_bypassed
+  description: Count of randomized successful queries.
+escalation:
+  trigger: guardian.escalate('upstream_permanently_down')
+  condition: 503 persists for 30 minutes.
+learning:
+  record_to: knowledge_base/layer_3/network/service_unavailable.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - network
+  - '503'
+  - jitter
+  - self_healing

@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Hot-restart specific sub-processes consuming massive RAM.
+---
+trigger: os.memory.leak
+description: Hot-restart specific sub-processes consuming massive RAM.
+conditions:
+- metric: process_ram_mb
+- threshold: '> 2000'
+remediation:
+- step: restart_memory_hog
+  description: Send SIGTERM and restart to leak process.
+  module: core.services.system_service
+  function: restart_process_by_pid
+metrics:
+- name: memory_leak_restarts
+  description: Count of times process was OOM-killed externally.
+escalation:
+  trigger: guardian.escalate('memory_leak_fatal')
+  condition: Process exceeds 2GB again within 5 minutes.
+learning:
+  record_to: knowledge_base/layer_1/os/memory_leaks.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - memory
+  - leak
+  - self_healing

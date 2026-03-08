@@ -1,0 +1,28 @@
+# Grace self-healing playbook
+# Auto-clear .pytest_cache, logs, and temporary files when disk space < 10%.
+---
+trigger: os.disk.critical
+description: Auto-clear .pytest_cache, logs, and temporary files when disk space <
+  10%.
+conditions:
+- metric: disk_free_percent
+- threshold: < 10
+remediation:
+- step: clear_temp_caches
+  description: Delete all tmp and pycache directories
+  module: core.services.system_service
+  function: clear_disk_caches
+metrics:
+- name: gb_freed_automatically
+  description: Gigabytes cleared automatically.
+escalation:
+  trigger: guardian.escalate('disk_full_fatal')
+  condition: Caches cleared but disk still < 10%.
+learning:
+  record_to: knowledge_base/layer_1/os/disk_space.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - os
+  - disk
+  - cache
+  - self_healing

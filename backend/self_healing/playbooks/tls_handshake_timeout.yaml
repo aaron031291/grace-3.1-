@@ -1,0 +1,27 @@
+# Grace self-healing playbook
+# Dynamically extends SSL/TLS socket timeout limits when contacting slow external APIs.
+---
+trigger: network.tls.timeout
+description: Dynamically extends SSL/TLS socket timeout limits when contacting slow
+  external APIs.
+conditions:
+- error_type: 'ssl.SSLError: The read operation timed out'
+remediation:
+- step: extend_tls_timeout
+  description: Increase socket default timeout constraint for External IP.
+  module: core.security.ssl
+  function: extend_domain_timeout
+metrics:
+- name: tls_timeouts_resolved
+  description: Count of connections succeeding post extension.
+escalation:
+  trigger: guardian.escalate('tls_handshake_hang')
+  condition: TLS hangs past 60s timeout limit.
+learning:
+  record_to: knowledge_base/layer_1/security/tls_timeouts.json
+  feed_to: cognitive.memory_mesh_learner
+  tags:
+  - security
+  - network
+  - tls
+  - self_healing
