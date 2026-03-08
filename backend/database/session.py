@@ -213,7 +213,7 @@ def session_scope() -> Generator[Session, None, None]:
             # Avoid circular import — lazy import inside handler
             import importlib
             ep_mod = importlib.import_module("self_healing.error_pipeline")
-            ep_mod.report_error(e, context={"sql_error": err_str[:300]})
+            ep_mod.get_error_pipeline().report_error(e, context={"sql_error": err_str[:300]})
         except Exception:
             pass
 

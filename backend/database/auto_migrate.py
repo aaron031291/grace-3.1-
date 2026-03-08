@@ -150,7 +150,20 @@ def run_auto_migrate(engine: Engine) -> list[str]:
                         continue
 
                     pg_type = _pg_type_for_column(col)
-                    nullable_clause = "" if col.nullable else " NOT NULL DEFAULT ''"
+                    
+                    # Generate safe, type-aware default values for non-nullable cols
+                    if col.nullable:
+                        nullable_clause = ""
+                    else:
+                        if pg_type in ("JSON", "JSONB"):
+                            nullable_clause = " NOT NULL DEFAULT '{}'::jsonb"
+                        elif pg_type in ("INTEGER", "DOUBLE PRECISION", "FLOAT"):
+                            nullable_clause = " NOT NULL DEFAULT 0"
+                        elif pg_type == "BOOLEAN":
+                            nullable_clause = " NOT NULL DEFAULT false"
+                        else:
+                            nullable_clause = " NOT NULL DEFAULT ''"
+                            
                     try:
                         conn.execute(
                             text(
