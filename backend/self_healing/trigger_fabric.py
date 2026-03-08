@@ -40,14 +40,43 @@ logger = logging.getLogger(__name__)
 _started = False
 _started_lock = threading.Lock()
 
-# Grace's critical service map: (host, port, service_name)
-_SERVICE_MAP = [
-    ("localhost", 5432,  "PostgreSQL"),
-    ("localhost", 6333,  "Qdrant"),
-    ("localhost", 11434, "Ollama"),
-    ("localhost", 6379,  "Redis"),
-    ("localhost", 8000,  "GraceAPI"),
-]
+def _get_service_map():
+    try:
+        from settings import settings
+        from urllib.parse import urlparse
+        
+        # Qdrant
+        q_host, q_port = settings.QDRANT_HOST or "localhost", settings.QDRANT_PORT or 6333
+        if getattr(settings, "QDRANT_URL", None):
+            p = urlparse(settings.QDRANT_URL)
+            q_host = p.hostname or q_host
+            q_port = p.port or (443 if p.scheme == "https" else 6333)
+            
+        # Postgres
+        db_host = settings.DATABASE_HOST or "localhost"
+        db_port = settings.DATABASE_PORT or 5432
+        
+        # Ollama
+        o_host, o_port = "localhost", 11434
+        if getattr(settings, "OLLAMA_URL", None):
+            p = urlparse(settings.OLLAMA_URL)
+            o_host = p.hostname or "localhost"
+            o_port = p.port or 11434
+            
+        return [
+            (db_host, db_port, "PostgreSQL"),
+            (q_host, q_port, "Qdrant"),
+            (o_host, o_port, "Ollama"),
+            ("localhost", 8000, "GraceAPI"),
+        ]
+    except Exception as e:
+        logger.debug(f"[NETWORK-PROBE] Failed to parse dynamic service map: {e}")
+        return [
+            ("localhost", 5432,  "PostgreSQL"),
+            ("localhost", 6333,  "Qdrant"),
+            ("localhost", 11434, "Ollama"),
+            ("localhost", 8000,  "GraceAPI"),
+        ]
 _PROBE_INTERVAL_S = 60   # probe every 60 seconds
 _PROBE_TIMEOUT_S  = 3    # 3s per service probe
 
@@ -160,7 +189,7 @@ def _network_probe_loop() -> None:
         except Exception:
             interval = _PROBE_INTERVAL_S
 
-        for host, port, service in _SERVICE_MAP:
+        for host, port, service in _get_service_map():
             reachable = _probe_tcp(host, port)
             key = f"{service}:{port}"
 
