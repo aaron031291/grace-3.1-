@@ -156,21 +156,31 @@ class VerificationPass:
                 )
 
     def _rag_check(self, code: str, task: str, result: VerificationResult) -> None:
-        """Cross-check generated code against knowledge base."""
         try:
             from ml_intelligence.neuro_symbolic_reasoner import get_neuro_symbolic_reasoner
-            reasoner = get_neuro_symbolic_reasoner()
-            # Query: does the KB have anything relevant to this task?
-            query = f"code implementation: {task[:200]}"
-            reasoning = reasoner.reason(query, limit=3)
-            result.kb_matches = [
-                {"score": r.get("fusion_score", 0), "text": str(r.get("text", ""))[:100]}
-                for r in reasoning.fused_results[:3]
-            ]
-
-            # If KB has relevant content and trust is high, boost confidence
-            if reasoning.fusion_confidence > 0.7 and result.kb_matches:
-                result.flags.append("kb_verified")  # positive flag
+            from cognitive.learning_memory import LearningMemoryManager
+            from database.session import SessionLocal
+            import os
+            from pathlib import Path
+            
+            db = SessionLocal() if SessionLocal else None
+            if db:
+                try:
+                    lm = LearningMemoryManager(db, Path(os.environ.get("GRACE_KNOWLEDGE_BASE_PATH", ".")))
+                    reasoner = get_neuro_symbolic_reasoner(learning_memory=lm)
+                    # Query: does the KB have anything relevant to this task?
+                    query = f"code implementation: {task[:200]}"
+                    reasoning = reasoner.reason(query, limit=3)
+                    result.kb_matches = [
+                        {"score": r.get("fusion_score", 0), "text": str(r.get("text", ""))[:100]}
+                        for r in reasoning.fused_results[:3]
+                    ]
+        
+                    # If KB has relevant content and trust is high, boost confidence
+                    if reasoning.fusion_confidence > 0.7 and result.kb_matches:
+                        result.flags.append("kb_verified")  # positive flag
+                finally:
+                    db.close()
         except Exception:
             pass  # KB check is optional
 
