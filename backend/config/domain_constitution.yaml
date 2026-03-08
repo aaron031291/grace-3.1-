@@ -1,0 +1,34 @@
+# Domain Intelligence Constitution
+# Defines the rigid constraints that any LLM-generated code MUST pass before hot-swapping.
+# This ensures Grace remains domain-focused and safe, rather than unconstrained.
+
+version: "1.0"
+description: "Core invariants for safe Domain Intelligence execution."
+
+forbidden_modules:
+  - "os.system"
+  - "subprocess.Popen"
+  - "subprocess.run"
+  - "subprocess.call"
+  - "eval"
+  - "exec"
+  - "socket"          # Prevent unauthorized raw sockets
+  - "http.server"     # Prevent spawning unauthorized servers
+
+forbidden_operations:
+  - "bare_except"     # "except:" without a specific Exception type
+  - "infinite_loop"   # "while True:" without explicit break conditions (heuristically checked)
+
+allowed_paths_for_io:
+  - "/tmp/"
+  - "__grACE_shadow/"
+  - "backend/memory_tables/"
+  - "knowledge/"
+  - "backend/domain_knowledge/"
+
+performance_constraints:
+  max_ast_depth: 25   # Prevent overly complex/nested logic
+  max_lines: 500      # Prevent massive, unreadable file dumps
+
+# Note: The ConstitutionalInterpreter uses Python's `ast` module to statically verify 
+# that the proposed code does not violate these constraints.

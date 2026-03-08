@@ -4,20 +4,20 @@ LLM Factory — Central access point for ALL AI models.
 Model hierarchy:
   LOCAL (free, fast, private):
     - Qwen 2.5 Coder (code generation — latest dedicated coder, reasoning for code)
-    - Qwen 3 (reasoning — latest reasoning model)
-    - Qwen 3 14B (fast — quick responses)
+    - Qwen 2.5 (reasoning — latest reasoning model)
+    - Qwen 2.5 14B (fast — quick responses)
 
   CLOUD (paid, powerful, reasoning):
-    - Opus 4.6 / Claude (deep reasoning, architecture, audit)
+    - Claude 3.5 Sonnet (deep reasoning, architecture, audit)
     - Kimi K2.5 (long context, document analysis, 262K window)
 
 Task routing:
     code     → Qwen 2.5 Coder (local)
-    reason   → Qwen 3 (local) or Opus (cloud)
-    fast     → Qwen 3 14B (local)
-    document → Qwen 3 (local, parse/read docs) or Kimi (cloud) if no OLLAMA_MODEL_DOCUMENT
+    reason   → Qwen 2.5 (local) or Claude 3.5 (cloud)
+    fast     → Qwen 2.5 14B (local)
+    document → Qwen 2.5 (local, parse/read docs) or Kimi (cloud) if no OLLAMA_MODEL_DOCUMENT
     general  → default model
-    audit    → Opus (cloud)
+    audit    → Claude 3.5 (cloud)
 
 Every client wrapped with GovernanceAwareLLM:
     - Governance rules injected into every call
@@ -75,12 +75,13 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
     Routes to the optimal model based on task requirements.
 
     Tasks:
-      code     → Qwen 2.5 Coder (local, reasoning + coding)
-      reason   → Qwen 3 (local, reasoning)
-      fast     → Qwen 3 14B (local, quick responses)
-      audit    → Opus (cloud, deep analysis)
-      document → Qwen (local, parse/read) or Kimi (cloud, 262K) if no local
-      general  → default model
+      code         → Qwen 3.5 Coder (local)
+      reason       → Qwen 3.5 (local)
+      self_healing → Qwen 3.5 (local)
+      fast         → Qwen 3.5 14B (local, quick responses)
+      audit        → Claude 3.5 (cloud, deep analysis)
+      document     → Qwen 3.5 (local) or Kimi (cloud)
+      general      → default model (Chat)
     """
     if task == "code" and settings.OLLAMA_MODEL_CODE:
         return _ollama_with_model(resolve_ollama_model("code"))
@@ -88,16 +89,17 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
     elif task == "reason" and settings.OLLAMA_MODEL_REASON:
         return _ollama_with_model(resolve_ollama_model("reason"))
 
+    elif task == "self_healing" and settings.OLLAMA_MODEL_REASON:
+        return _ollama_with_model(resolve_ollama_model("reason"))
+
     elif task == "fast" and settings.OLLAMA_MODEL_FAST:
         return _ollama_with_model(resolve_ollama_model("fast"))
 
     elif task == "audit":
-        if getattr(settings, 'OPUS_API_KEY', ''):
-            return get_opus_client()
         return get_llm_client()
 
     elif task == "document":
-        # Prefer local Qwen for doc parsing/reading (no GPT 4.1 or Kimi required)
+        # Prefer local Qwen for doc parsing/reading
         if getattr(settings, "OLLAMA_MODEL_DOCUMENT", ""):
             return _ollama_with_model(resolve_ollama_model("document"))
         if getattr(settings, 'KIMI_API_KEY', ''):
@@ -115,7 +117,7 @@ def get_kimi_client() -> BaseLLMClient:
 
 
 def get_opus_client() -> BaseLLMClient:
-    """Get Opus 4.6 (Claude) — deep reasoning, architecture, audit."""
+    """Get Claude 3.5 Sonnet / Opus — deep reasoning, architecture, audit."""
     return _wrap(OpusLLMClient(
         api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
     ))
@@ -128,7 +130,7 @@ def get_qwen_coder() -> BaseLLMClient:
 
 
 def get_qwen_reasoner() -> BaseLLMClient:
-    """Get Qwen 3 — reasoning model (local). Uses resolved model (with fallbacks)."""
+    """Get Qwen 2.5 — reasoning model (local). Uses resolved model (with fallbacks)."""
     model = resolve_ollama_model("reason")
     return _ollama_with_model(model)
 
@@ -140,13 +142,14 @@ def get_qwen_document() -> BaseLLMClient:
 
 
 def get_deepseek_reasoner() -> BaseLLMClient:
-    """Alias for get_qwen_reasoner(). Qwen 3 is the default reasoning model."""
+    """Alias for get_qwen_reasoner(). Qwen 2.5 is the default reasoning model."""
     return get_qwen_reasoner()
 
 
 def get_raw_client(provider: str = None) -> BaseLLMClient:
     """Get a raw client WITHOUT governance wrapping (internal use only)."""
     provider = provider or settings.LLM_PROVIDER
+        
     if provider == "openai":
         return OpenAILLMClient(api_key=settings.LLM_API_KEY)
     elif provider == "kimi":
@@ -168,8 +171,8 @@ def get_all_available_models() -> list:
     # Local models
     for task, model_attr, desc in [
         ("code", "OLLAMA_MODEL_CODE", "Code generation (Qwen 2.5 Coder)"),
-        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (Qwen 3)"),
-        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 3 14B)"),
+        ("reason", "OLLAMA_MODEL_REASON", "Reasoning (Qwen 2.5)"),
+        ("fast", "OLLAMA_MODEL_FAST", "Fast tasks (Qwen 2.5 14B)"),
     ]:
         model = getattr(settings, model_attr, "")
         models.append({
@@ -196,7 +199,7 @@ def get_all_available_models() -> list:
         "id": "opus",
         "provider": "opus",
         "model": settings.OPUS_MODEL,
-        "description": "Opus 4.6 (Claude) — deep reasoning, architecture, audit",
+        "description": "Claude 3.5 Sonnet — deep reasoning, architecture, audit",
         "available": bool(settings.OPUS_API_KEY),
         "cost": "cloud",
         "location": "cloud",

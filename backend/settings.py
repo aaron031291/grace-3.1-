@@ -137,7 +137,7 @@ class Settings:
 
     # ==================== Local Model Configuration (per-task) ====================
     # Code: Qwen 2.5 Coder. Reason: Qwen3. Document: Qwen3 (parse/read docs; no GPT 4.1 required).
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:32b")
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5-coder:32b")
     OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3:32b")
     OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
     OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3:32b")

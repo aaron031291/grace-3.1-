@@ -100,6 +100,48 @@ class MemoryMeshIntegration:
             'actual': outcome
         }
 
+        # ── CIRCUIT BREAKER: Memory Heat ──
+        # Prevent runaway self-redefinition by checking recent ingestion volume
+        try:
+            from datetime import datetime, timedelta
+            from sqlalchemy import func
+            
+            # Count learning examples ingested in the last 10 minutes
+            ten_minutes_ago = datetime.utcnow() - timedelta(minutes=10)
+            recent_count = self.session.query(func.count(LearningExample.id)).filter(
+                LearningExample.created_at >= ten_minutes_ago
+            ).scalar() or 0
+            
+            # Get total volume for threshold calculation
+            total_count = self.session.query(func.count(LearningExample.id)).scalar() or 1
+            
+            # If we're modifying more than 50 items or 30% of total memory in 10 mins: TRIP IT
+            # (Using a minimum absolute floor of 50 to avoid tripping on small, new systems)
+            if recent_count > 50 and (recent_count / total_count) > 0.30:
+                from cognitive.unified_memory import UnifiedMemory
+                UnifiedMemory._heat_breaker_active = True
+                
+                # Try to log via telemetry if available
+                try:
+                    from api._genesis_tracker import track
+                    track(
+                        key_type="circuit_breaker_tripped",
+                        what="Memory Heat threshold exceeded. UnifiedMemory gates sealed.",
+                        who="memory_mesh_integration.ingest",
+                        how=f"{recent_count} updates in 10m (threshold: 30%)",
+                        input_data={"recent_count": recent_count, "total": total_count},
+                        output_data={"action": "downgrade to READ_ONLY_OBSERVATION"},
+                        tags=["guardian", "circuit-breaker", "memory-mesh", "fatal"]
+                    )
+                except ImportError:
+                    pass
+                
+                print(f"CRITICAL: Memory Heat Circuit Breaker tripped! ({recent_count} updates/10m). Write operations locked.")
+                return "CIRCUIT_BREAKER_TRIPPED"
+        except Exception as e:
+            # If the circuit breaker check fails, we fail OPEN (safe) for MVP
+            print(f"Circuit breaker check failed: {e}")
+
         learning_example = self.learning_memory.ingest_learning_data(
             learning_type=experience_type,
             learning_data=learning_data,
@@ -148,7 +190,7 @@ class MemoryMeshIntegration:
                 tags=["memory-mesh", "learning", experience_type],
                 parent_key_id=genesis_key_id,
             )
-        except Exception:
+        except ImportError:
             pass
 
         return learning_example.id

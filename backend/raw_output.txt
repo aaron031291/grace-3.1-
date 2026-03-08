@@ -1,0 +1,5 @@
+--- Querying Qwen 3.5 (local) ---
+Failed to query Qwen: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)
+
+--- Querying Kimi (cloud) ---
+Failed to query Kimi: 'choices'

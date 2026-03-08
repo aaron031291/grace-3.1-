@@ -531,54 +531,79 @@ def _default_handler(task: Dict) -> Dict:
         except Exception as ve:
             logger.debug("[CODING-AGENT] Verification pass skipped: %s", ve)
 
-    # ── 6. Apply to disk if we have a target file ───────────────────────
+    # ── 6. Quarantine and Verify (Context Shadowing) ───────────────────────
     target_file = ctx.get("target_file") or ctx.get("file") or ctx.get("location")
     if generated_code and target_file and target_file.endswith(".py"):
         try:
-            from coding_agent.fix_applier import get_fix_applier
-            apply_result = get_fix_applier().apply(
-                file_path=target_file,
-                generated_code=generated_code,
-                task_id=task["task_id"],
-                task_description=task["instructions"][:200],
+            from verification.context_shadower import shadower
+            
+            # Use the shadower to write to __grACE_shadow, verify via VVT, and atomic swap if perfect
+            shadow_result = shadower.propose_module_update(
+                target_file_path=target_file,
+                new_code_content=generated_code,
+                module_name_to_test=target_file.split("/")[-1].replace(".py", "") # Simple heuristic
             )
+            
             code_result["apply_result"] = {
-                "success": apply_result.success,
-                "file": apply_result.file_path,
-                "lines": apply_result.lines_written,
-                "rolled_back": apply_result.rolled_back,
-                "reloaded": apply_result.module_reloaded,
-                "error": apply_result.error[:150] if apply_result.error else "",
+                "success": shadow_result.get("success", False),
+                "file": target_file,
+                "lines": len(generated_code.splitlines()) if shadow_result.get("success") else 0,
+                "status": shadow_result.get("status", "UNKNOWN_SHADOW_ERROR"),
+                "trust_coin": shadow_result.get("trust_coin", "DENIED"),
+                "error": shadow_result.get("error", "")[:150]
             }
-            if apply_result.success:
+            
+            if shadow_result.get("success"):
                 logger.info(
-                    "[CODING-AGENT] ✅ Fix applied to disk: %s (%d lines)",
-                    target_file, apply_result.lines_written,
+                    "[CODING-AGENT] ✅ Code verified in quarantine and HOT-SWAPPED: %s (%s)",
+                    target_file, shadow_result.get("trust_coin")
                 )
             else:
                 logger.warning(
-                    "[CODING-AGENT] ⚠️ Apply failed for %s: %s",
-                    target_file, apply_result.error[:100],
+                    "[CODING-AGENT] ⚠️ Context Shadowing blocked mutation on VVT Failure: %s",
+                    target_file
                 )
         except Exception as e:
-            logger.error("[CODING-AGENT] fix_applier error: %s", e)
+            logger.error("[CODING-AGENT] Context shadower error: %s", e)
             code_result["apply_result"] = {"success": False, "error": str(e)[:200]}
     else:
         code_result["apply_result"] = {
             "success": False,
-            "reason": "no target_file in task context — manual review needed",
+            "reason": "no valid python target_file in task context — manual review needed",
             "code_preview": generated_code[:200] if generated_code else "",
         }
 
     # ── 7. Store outcome into all 3 memory layers ───────────────────────
     apply_ok = code_result["apply_result"].get("success", False)
-    _store_memory_outcome(
-        instructions=instructions,
-        error_class=error_class,
-        success=apply_ok or bool(generated_code),
-        result=code_result,
-        task_id=task["task_id"],
-    )
+    trust_coin = code_result.get("apply_result", {}).get("trust_coin")
+
+    # Only pass trust_coin downstream if the shadower minted one
+    if apply_ok and trust_coin:
+        from cognitive.unified_memory import get_unified_memory
+        # By passing the trust coin, we prove to the TrustGate we belong in episodic/procedural memory
+        _store_memory_outcome(
+            instructions=instructions,
+            error_class=error_class,
+            success=True,
+            result=code_result,
+            task_id=task["task_id"],
+        )
+        get_unified_memory().store_episode(
+            problem=instructions[:200],
+            action=f"coding_agent.{error_class or 'general'}",
+            outcome=f"success: Hot-swapped {target_file}",
+            trust=0.9,
+            source="context_shadower",
+            trust_coin=trust_coin
+        )
+    else:
+        _store_memory_outcome(
+            instructions=instructions,
+            error_class=error_class,
+            success=False,
+            result=code_result,
+            task_id=task["task_id"],
+        )
 
     return code_result
 

@@ -1,0 +1,57 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\tests
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 3 items
+
+test_global_governance_integration.py::test_telemetry_reports_success_to_kpis FAILED [ 33%]
+test_global_governance_integration.py::test_telemetry_reports_failure_to_kpis PASSED [ 66%]
+test_global_governance_integration.py::test_shadower_identifies_high_risk_files FAILED [100%]
+
+================================== FAILURES ===================================
+___________________ test_telemetry_reports_success_to_kpis ____________________
+
+    def test_telemetry_reports_success_to_kpis():
+        evaluator = TelemetryEvaluator(observation_window_sec=0)
+        baseline = {"error_rate": 0.05, "avg_latency_ms": 100.0}
+    
+        # Mock current metrics to show improvement
+        def good_metrics():
+            return {"error_rate": 0.01, "avg_latency_ms": 40.0}
+    
+        evaluator._gather_current_metrics = good_metrics
+        score = evaluator.evaluate_swap_impact("test_module", baseline)
+    
+        # Verify the score > 0
+        assert score > 0.0
+    
+        # Verify it posted to the KPI tracker
+        tracker = get_kpi_tracker()
+        kpi = tracker.get_component_kpis("context_evolution")
+        assert kpi is not None
+        assert kpi.get_kpi("successes").count == 1
+        assert kpi.get_kpi("requests").count == 1
+>       assert kpi.get_trust_score() > 0.5 # Default is 0.5, success should raise it
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 0.09090909090909091 > 0.5
+E        +  where 0.09090909090909091 = get_trust_score()
+E        +    where get_trust_score = ComponentKPIs(component_name='context_evolution', kpis={'successes': KPI(component_name='context_evolution', metric_name='successes', value=1.6, count=1, timestamp=datetime.datetime(2026, 3, 8, 20, 55, 0, 388062), metadata={}), 'requests': KPI(component_name='context_evolution', metric_name='requests', value=1.0, count=1, timestamp=datetime.datetime(2026, 3, 8, 20, 55, 0, 388062), metadata={})}, created_at=datetime.datetime(2026, 3, 8, 20, 55, 0, 388062), updated_at=datetime.datetime(2026, 3, 8, 20, 55, 0, 388062)).get_trust_score
+
+test_global_governance_integration.py:38: AssertionError
+__________________ test_shadower_identifies_high_risk_files ___________________
+
+    def test_shadower_identifies_high_risk_files():
+        assert shadower._is_high_risk("C:/grace/backend/memory_tables/schema.json") is True
+        assert shadower._is_high_risk("C:/grace/backend/governance/inline_approval_engine.py") is True
+>       assert shadower._is_high_risk("C:/grace/backend/api/validation_api.py") is True
+E       AssertionError: assert False is True
+E        +  where False = _is_high_risk('C:/grace/backend/api/validation_api.py')
+E        +    where _is_high_risk = <verification.context_shadower.ContextShadower object at 0x000001F66CE8D850>._is_high_risk
+
+test_global_governance_integration.py:64: AssertionError
+=========================== short test summary info ===========================
+FAILED test_global_governance_integration.py::test_telemetry_reports_success_to_kpis
+FAILED test_global_governance_integration.py::test_shadower_identifies_high_risk_files
+======================== 2 failed, 1 passed in 15.15s =========================

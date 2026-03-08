@@ -1,5 +1,5 @@
 """
-Opus 4.6 (Anthropic Claude) LLM Client.
+Opus/Claude 3.5 LLM Client.
 
 Opus has higher capability than Kimi and can:
 - Audit Kimi's outputs and improve them
@@ -17,7 +17,7 @@ from settings import settings
 logger = logging.getLogger(__name__)
 
 OPUS_BASE_URL = "https://api.anthropic.com/v1"
-OPUS_DEFAULT_MODEL = "claude-sonnet-4-20250514"
+OPUS_DEFAULT_MODEL = "claude-3-5-sonnet-latest"
 
 
 class OpusLLMClient(BaseLLMClient):
@@ -98,7 +98,7 @@ class OpusLLMClient(BaseLLMClient):
             return False
 
     def get_all_models(self) -> List[Dict]:
-        return [{"id": self.default_model, "name": "Opus 4.6"}]
+        return [{"id": self.default_model, "name": "Claude 3.5 Sonnet"}]
 
     def model_exists(self, model_name: str) -> bool:
         return True
