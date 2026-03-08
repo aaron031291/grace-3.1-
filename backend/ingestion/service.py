@@ -351,6 +351,9 @@ class TextIngestionService:
         Returns:
             Tuple of (document_id, status_message)
         """
+        # Sanitize input to prevent PostgreSQL NUL byte errors
+        text_content = text_content.replace("\x00", "")
+        
         logger.info(f"[INGEST_FAST] Starting fast ingestion for: {filename}")
         logger.info(f"[INGEST_FAST] Text content length: {len(text_content)} characters")
         logger.info(f"[INGEST_FAST] Metadata: {metadata}")
@@ -625,6 +628,9 @@ class TextIngestionService:
         Returns:
             Tuple of (document_id, status_message)
         """
+        # Sanitize input to prevent PostgreSQL NUL byte errors
+        text_content = text_content.replace("\x00", "")
+        
         db = self._get_db_session()
         
         try:
