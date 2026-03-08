@@ -47,6 +47,17 @@ def ingest_training_corpus(force: bool = False) -> Dict[str, Any]:
     if not CORPUS_DIR.exists():
         return {"status": "no_corpus", "message": "training_corpus/ directory not found"}
 
+    # Ensure database is actually ready before trying to track
+    try:
+        from database.connection import DatabaseConnection
+        engine = DatabaseConnection.get_engine()
+        if not engine:
+            logger.debug("[TRAINING] DB not ready, deferring training ingestion")
+            return {"status": "deferred", "message": "DB not ready"}
+    except RuntimeError:
+        logger.debug("[TRAINING] DB not initialized yet, deferring training ingestion")
+        return {"status": "deferred", "message": "DB not initialized"}
+
     ingested = set() if force else _load_ingested()
     results = {"ingested": 0, "skipped": 0, "errors": 0, "details": []}
 

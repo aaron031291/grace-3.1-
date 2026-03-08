@@ -475,14 +475,23 @@ async def lifespan(app: FastAPI):
             
             # Ensure database is initialized in this thread context
             print("\n[AUTO-INGEST] Verifying database connection...", flush=True)
-            try:
-                engine = DatabaseConnection.get_engine()
-                if engine:
-                    print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
-            except RuntimeError as e:
-                print(f"[AUTO-INGEST] [WARN] Database not initialized yet: {e}", flush=True)
-                print("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
-                time.sleep(2)
+            max_db_retries = 30
+            db_ready = False
+            for db_retry in range(max_db_retries):
+                try:
+                    engine = DatabaseConnection.get_engine()
+                    if engine:
+                        print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
+                        db_ready = True
+                        break
+                except RuntimeError as e:
+                    if db_retry % 5 == 0:
+                        print(f"[AUTO-INGEST] [WARN] Waiting for DB to initialize...", flush=True)
+                    time.sleep(2)
+                    
+            if not db_ready:
+                print("[AUTO-INGEST] [FAIL] Database failed to initialize after 60s timeout.", flush=True)
+                return
             
             # Initialize session factory in this thread if needed
             print("[AUTO-INGEST] Initializing session factory...", flush=True)
