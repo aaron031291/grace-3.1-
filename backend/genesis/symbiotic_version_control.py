@@ -12,7 +12,7 @@ import os
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Tuple
 from sqlalchemy.orm import Session
@@ -123,7 +123,12 @@ class SymbioticVersionControl:
                 except Exception:
                     # Fallback: merge if detached or re-query
                     operation_genesis_key = session.merge(operation_genesis_key)
-                    session.refresh(operation_genesis_key)
+                    try:
+                        session.refresh(operation_genesis_key)
+                    except Exception:
+                        # If still failing, it might not be in DB yet (rolled back)
+                        # In this case, merge should have put it back in session.new
+                        pass
 
                 operation_genesis_key.context_data = operation_context_data
                 # session_scope will handle commit
@@ -136,7 +141,7 @@ class SymbioticVersionControl:
                 "changed": version_result.get("changed", True),
                 "file_path": rel_path,
                 "absolute_path": abs_path,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "symbiotic": True
             }
 

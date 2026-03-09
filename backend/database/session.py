@@ -286,7 +286,8 @@ def _commit_with_retry(session: Session) -> None:
                     "retrying in %.1fs …",
                     attempt, _RETRY_MAX, wait,
                 )
-                session.rollback()
+                # DO NOT rollback here - it destroys the session state we want to commit.
+                # SQLite's busy_timeout should handle this, but if we're here, we wait and retry.
                 time.sleep(wait)
             else:
                 _track_db_error(e)

@@ -11,7 +11,7 @@ import os
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
@@ -69,14 +69,14 @@ class FileVersionTracker:
                     pass
                 self.version_metadata = {
                     "version": "1.0",
-                    "created_at": datetime.utcnow().isoformat(),
+                    "created_at": datetime.now(timezone.utc).isoformat(),
                     "files": {}
                 }
                 self._save_metadata()
         else:
             self.version_metadata = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "files": {}  # file_genesis_key -> version info
             }
             self._save_metadata()
@@ -207,7 +207,7 @@ class FileVersionTracker:
                 "file_genesis_key": file_genesis_key,
                 "file_path": file_path,
                 "absolute_path": abs_file_path,
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "version_count": 0,
                 "versions": [],
                 "last_hash": None
@@ -294,7 +294,7 @@ class FileVersionTracker:
                 "version_number": version_number,
                 "version_key_id": version_key_id,
                 "genesis_key_db_id": version_key_db_id,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "file_hash": current_hash,
                 "file_size": file_stats.st_size,
                 "user_id": user_id or "system",
@@ -304,7 +304,7 @@ class FileVersionTracker:
 
             file_info["versions"].append(version_info)
             file_info["last_hash"] = current_hash
-            file_info["last_updated"] = datetime.utcnow().isoformat()
+            file_info["last_updated"] = datetime.now(timezone.utc).isoformat()
 
             self._save_metadata()
 

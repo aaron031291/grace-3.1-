@@ -7,7 +7,7 @@ All execution flows through Observe → Orient → Decide → Act.
 from enum import Enum
 from typing import Dict, Any, Callable, Optional
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class OODAPhase(str, Enum):
@@ -27,7 +27,7 @@ class OODAState:
     orientation: Dict[str, Any] = field(default_factory=dict)
     decision: Optional[Dict[str, Any]] = None
     action_result: Optional[Any] = None
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
 
 
@@ -143,7 +143,7 @@ class OODALoop:
         self.state.current_phase = next_phase
 
         if next_phase == OODAPhase.COMPLETED:
-            self.state.completed_at = datetime.utcnow()
+            self.state.completed_at = datetime.now(timezone.utc)
 
     def get_phase_history(self) -> list[OODAPhase]:
         """
