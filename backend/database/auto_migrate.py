@@ -50,7 +50,7 @@ ENUM_COLUMN_MAP: dict[str, tuple[str, list[str]]] = {
 
 # Columns that SQLAlchemy may carry as server-side types the inspector
 # cannot auto-detect — map column python type → pg type string.
-_PY_TO_PG: dict[str, str] = {
+_PY_TO_DB: dict[str, str] = {
     "String":  "VARCHAR",
     "Text":    "TEXT",
     "Float":   "DOUBLE PRECISION",
@@ -61,25 +61,45 @@ _PY_TO_PG: dict[str, str] = {
     "LargeBinary": "BYTEA",
 }
 
+_PY_TO_SQLITE: dict[str, str] = {
+    "String":  "TEXT",
+    "Text":    "TEXT",
+    "Float":   "REAL",
+    "Integer": "INTEGER",
+    "Boolean": "INTEGER",
+    "DateTime":"DATETIME",
+    "JSON":    "TEXT",
+    "LargeBinary": "BLOB",
+}
 
-def _pg_type_for_column(col: sa.Column) -> str:
-    """Best-effort PostgreSQL type from a SQLAlchemy Column."""
+
+def _db_type_for_column(col: sa.Column, dialect_name: str) -> str:
+    """Best-effort database type from a SQLAlchemy Column."""
     type_name = type(col.type).__name__
-    return _PY_TO_PG.get(type_name, "TEXT")
+    if dialect_name == "sqlite":
+        return _PY_TO_SQLITE.get(type_name, "TEXT")
+    return _PY_TO_DB.get(type_name, "TEXT")
 
 
-def _get_existing_columns(conn, table_name: str) -> set[str]:
-    result = conn.execute(
-        text(
-            "SELECT column_name FROM information_schema.columns "
-            "WHERE table_name = :t"
-        ),
-        {"t": table_name},
-    )
-    return {row[0] for row in result}
+def _get_existing_columns(conn, table_name: str, dialect_name: str) -> set[str]:
+    if dialect_name == "sqlite":
+        # SQLite doesn't have information_schema by default
+        result = conn.execute(text(f"PRAGMA table_info({table_name})"))
+        return {row[1] for row in result} # row[1] is 'name'
+    else:
+        result = conn.execute(
+            text(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name = :t"
+            ),
+            {"t": table_name},
+        )
+        return {row[0] for row in result}
 
 
-def _get_existing_enum_values(conn, type_name: str) -> set[str]:
+def _get_existing_enum_values(conn, type_name: str, dialect_name: str) -> set[str]:
+    if dialect_name == "sqlite":
+        return set() # SQLite has no native enums
     result = conn.execute(
         text(
             "SELECT e.enumlabel FROM pg_type t "
@@ -91,8 +111,10 @@ def _get_existing_enum_values(conn, type_name: str) -> set[str]:
     return {row[0] for row in result}
 
 
-def _ensure_enum_values(conn, type_name: str, desired: list[str], changes: list[str]) -> None:
-    existing = _get_existing_enum_values(conn, type_name)
+def _ensure_enum_values(conn, type_name: str, desired: list[str], changes: list[str], dialect_name: str) -> None:
+    if dialect_name == "sqlite":
+        return
+    existing = _get_existing_enum_values(conn, type_name, dialect_name)
     if not existing:
         return  # enum type doesn't exist yet — let Alembic/create_all handle it
     for val in desired:
@@ -119,6 +141,7 @@ def run_auto_migrate(engine: Engine) -> list[str]:
 
     try:
         with engine.begin() as conn:
+            dialect_name = conn.dialect.name
             inspector = inspect(conn)
             existing_tables = set(inspector.get_table_names())
 
@@ -140,7 +163,7 @@ def run_auto_migrate(engine: Engine) -> list[str]:
                     continue
 
                 # ── Add missing columns ─────────────────────────────────
-                existing_cols = _get_existing_columns(conn, table_name)
+                existing_cols = _get_existing_columns(conn, table_name, dialect_name)
                 for col in table.columns:
                     col_name = col.name
                     if col_name in existing_cols:
@@ -149,32 +172,43 @@ def run_auto_migrate(engine: Engine) -> list[str]:
                     if col.server_default and col.name in ("id", "created_at", "updated_at"):
                         continue
 
-                    pg_type = _pg_type_for_column(col)
+                    db_type = _db_type_for_column(col, dialect_name)
                     
                     # Generate safe, type-aware default values for non-nullable cols
                     if col.nullable:
                         nullable_clause = ""
                     else:
-                        if pg_type in ("JSON", "JSONB"):
-                            nullable_clause = " NOT NULL DEFAULT '{}'::jsonb"
-                        elif pg_type in ("INTEGER", "DOUBLE PRECISION", "FLOAT"):
-                            nullable_clause = " NOT NULL DEFAULT 0"
-                        elif pg_type == "BOOLEAN":
-                            nullable_clause = " NOT NULL DEFAULT false"
+                        if dialect_name == "sqlite":
+                            if db_type == "INTEGER" and col.primary_key:
+                                # Primary key columns are handled by create table
+                                continue
+                            if db_type == "INTEGER":
+                                nullable_clause = " NOT NULL DEFAULT 0"
+                            elif db_type == "REAL":
+                                nullable_clause = " NOT NULL DEFAULT 0.0"
+                            elif db_type == "BOOLEAN":
+                                nullable_clause = " NOT NULL DEFAULT 0"
+                            else:
+                                nullable_clause = " NOT NULL DEFAULT ''"
                         else:
-                            nullable_clause = " NOT NULL DEFAULT ''"
+                            if db_type in ("JSON", "JSONB"):
+                                nullable_clause = " NOT NULL DEFAULT '{}'::jsonb"
+                            elif db_type in ("INTEGER", "DOUBLE PRECISION", "FLOAT"):
+                                nullable_clause = " NOT NULL DEFAULT 0"
+                            elif db_type == "BOOLEAN":
+                                nullable_clause = " NOT NULL DEFAULT false"
+                            else:
+                                nullable_clause = " NOT NULL DEFAULT ''"
                             
                     try:
-                        conn.execute(
-                            text(
-                                f"ALTER TABLE {table_name} "
-                                f"ADD COLUMN IF NOT EXISTS {col_name} {pg_type}{nullable_clause}"
-                            )
-                        )
-                        changes.append(f"col:{table_name}.{col_name}({pg_type})")
+                        sql = f"ALTER TABLE {table_name} ADD COLUMN {col_name} {db_type}{nullable_clause}"
+                        if dialect_name != "sqlite":
+                            sql = sql.replace("ADD COLUMN", "ADD COLUMN IF NOT EXISTS")
+                        conn.execute(text(sql))
+                        changes.append(f"col:{table_name}.{col_name}({db_type})")
                         logger.info(
                             "[AUTO-MIGRATE] Added column %s.%s (%s)",
-                            table_name, col_name, pg_type,
+                            table_name, col_name, db_type,
                         )
                     except Exception as col_err:
                         logger.warning(
@@ -184,7 +218,7 @@ def run_auto_migrate(engine: Engine) -> list[str]:
 
             # ── Sync all known enums ────────────────────────────────────
             for _, (type_name, desired_vals) in ENUM_COLUMN_MAP.items():
-                _ensure_enum_values(conn, type_name, desired_vals, changes)
+                _ensure_enum_values(conn, type_name, desired_vals, changes, dialect_name)
 
     except Exception as e:
         logger.error("[AUTO-MIGRATE] Migration failed: %s", e)

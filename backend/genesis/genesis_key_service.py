@@ -346,11 +346,11 @@ class GenesisKeyService:
             # If a session was passed in, let the caller handle commits
             if close_session:
                 sess.commit()
-                # Detach key cleanly so caller can read key_id after session close
-                from sqlalchemy.orm.session import make_transient
+                # Detach key from session to avoid DetachedInstanceError later
                 try:
+                    # Access key_id to ensure it's loaded if expired by commit
+                    _ = key.key_id
                     sess.expunge(key)
-                    make_transient(key)
                 except Exception:
                     pass
 
