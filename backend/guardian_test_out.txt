@@ -1,0 +1,12 @@
+--- Test 1: Authorized Dry Run (Code Mutation) ---
+{'status': 'success', 'task_id': 'dry_run_simulation', 'message': 'Guardian Sandboxed Dry-Run successful. The task queue would have handled this.'} 
+
+--- Test 2: Unauthorized Non-Dry Run (Code Mutation) ---
+{'status': 'blocked', 'reason': "Guardian STRICT ENFORCEMENT: 'submit_coding_task' requires 'dry_run: true' parameter. Auto-defense REJECT."} 
+
+--- Test 3: Unauthorized Command (Shell) ---
+{'status': 'blocked', 'reason': "Command 'rm -rf /' is not in the Guardian shell whitelist. Allowed: ['ls', 'cat', 'grep', 'df -h', 'free -m', 'top -b -n 1']."} 
+
+--- Test 4: Insufficient Trust Score ---
+{'status': 'blocked', 'reason': 'insufficient_trust_score'} 
+

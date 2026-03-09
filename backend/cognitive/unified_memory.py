@@ -116,6 +116,13 @@ class UnifiedMemory:
                 store_decision(problem[:200], str(action)[:200], str(outcome)[:200])
             except Exception:
                 pass
+                
+            # TRIGGER ACTIVE RESILIENCE HOOK
+            try:
+                self.analyze_for_resilience()
+            except Exception as e:
+                logger.error(f"Active resilience hook failed: {e}")
+                
             return True
         except Exception as e:
             logger.debug(f"Store episode failed: {e}")
@@ -420,6 +427,78 @@ class UnifiedMemory:
 
         return stats
 
+    def analyze_for_resilience(self) -> None:
+        """
+        Active Resilience Hook:
+        Analyzes recent episodic memory to detect repeated failures or trust degradation.
+        Dispatches events to self-healing or continuous learning if thresholds are met.
+        """
+        session = _get_session()
+        if not session:
+            return
+            
+        try:
+            from cognitive.episodic_memory import Episode
+            from datetime import datetime, timedelta
+            
+            # Look at episodes from the last hour
+            time_threshold = datetime.utcnow() - timedelta(hours=1)
+            recent_episodes = session.query(Episode).filter(Episode.timestamp >= time_threshold).order_by(Episode.timestamp.desc()).limit(20).all()
+            
+            if not recent_episodes:
+                return
+                
+            # 1. Check for Repeated Failures (Self-Healing Fallback)
+            failure_counts = {}
+            for ep in recent_episodes:
+                outcome_str = str(getattr(ep, 'outcome', ''))
+                if "fail" in outcome_str.lower() or "error" in outcome_str.lower() or "exception" in outcome_str.lower():
+                    source = getattr(ep, 'source', 'unknown')
+                    failure_counts[source] = failure_counts.get(source, 0) + 1
+                    
+            for source, count in failure_counts.items():
+                if count >= 3: # Threshold for repeated failure
+                    logger.warning(f"[ACTIVE-RESILIENCE] Detected {count} repeated failures for module '{source}'. Dispatching self-healing event.")
+                    try:
+                        from cognitive.event_bus import publish_async
+                        publish_async("system.repeated_failure_detected", {
+                            "module": source,
+                            "failure_count": count,
+                            "action_taken": "Requesting fallback APIs or auto-healing"
+                        }, source="unified_memory")
+                    except Exception as e:
+                        logger.error(f"Failed to publish repeated failure event: {e}")
+            
+            # 2. Check for Model Trust Degradation (Retraining Workflow)
+            model_trust_sums = {}
+            model_counts = {}
+            for ep in recent_episodes:
+                source = getattr(ep, 'source', '')
+                trust = getattr(ep, 'trust_score', 0.0)
+                # Check sources that look like models or our orchestration loop
+                if "model:" in source.lower() or source in ["qwen", "kimi", "opus", "synaptic_core_orchestration", "system"]:
+                    model_trust_sums[source] = model_trust_sums.get(source, 0.0) + trust
+                    model_counts[source] = model_counts.get(source, 0) + 1
+                    
+            for source, count in model_counts.items():
+                if count >= 3:
+                    avg_trust = model_trust_sums[source] / count
+                    if avg_trust < 0.5:
+                        logger.warning(f"[ACTIVE-RESILIENCE] Trust degradation detected for '{source}' (Avg: {avg_trust:.2f}). Dispatching retraining workflow.")
+                        try:
+                            from cognitive.event_bus import publish_async
+                            publish_async("learning.needs_retraining", {
+                                "model_or_source": source,
+                                "average_trust": avg_trust,
+                                "episode_count": count
+                            }, source="unified_memory")
+                        except Exception as e:
+                            logger.error(f"Failed to publish retraining event: {e}")
+                            
+        except Exception as e:
+            logger.error(f"[ACTIVE-RESILIENCE] Analysis failed: {e}")
+        finally:
+            session.close()
 
 def get_unified_memory() -> UnifiedMemory:
     """Return the singleton UnifiedMemory instance. This is THE entry point for all Grace memory."""

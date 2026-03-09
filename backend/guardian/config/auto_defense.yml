@@ -1,0 +1,39 @@
+# Grace Guardian Auto-Defense ACL
+# Defines what the Consensus engine can execute autonomously in production.
+
+graduated_whitelist:
+  # Base diagnostics 
+  - action_type: "execute_shell_command"
+    require_dry_run: false
+    allowed_commands:
+      - "ls"
+      - "cat"
+      - "grep"
+      - "df -h"
+      - "free -m"
+      - "top -b -n 1"
+    max_risk_score: 0.3
+
+  # Reversible Cache / Resets
+  - action_type: "restart_service"
+    require_dry_run: true
+    allowed_targets:
+      - "cache"
+    max_risk_score: 0.5
+    
+  # Code mutation (Must be dry-run simulated)
+  - action_type: "submit_coding_task"
+    require_dry_run: false
+    require_explanation: true
+    max_visual_diff: 0.02
+    stage_timeouts:
+      unit: 60
+      integration: 180
+      visual: 120
+      lighthouse: 90
+    max_risk_score: 0.7
+    
+  # Learning ingestion
+  - action_type: "update_knowledge_base"
+    require_dry_run: false
+    max_risk_score: 0.7

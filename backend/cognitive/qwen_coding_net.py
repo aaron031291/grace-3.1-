@@ -38,7 +38,7 @@ class QwenCodingNet:
             cls._instance = cls()
         return cls._instance
 
-    def execute_task(self, task: str, use_consensus: bool = True) -> Dict[str, Any]:
+    def execute_task(self, task: str, use_consensus: bool = True, system_prompt: str = None) -> Dict[str, Any]:
         """
         Full unified execution: task description → working code.
         Connected to: ghost memory, consensus, TimeSense, compiler,
@@ -118,7 +118,7 @@ class QwenCodingNet:
         ghost.append("blueprint", json.dumps(blueprint, default=str)[:500])
 
         # 6. Build code with token-managed loop
-        code = self._build_with_token_management(task, blueprint, ghost)
+        code = self._build_with_token_management(task, blueprint, ghost, system_prompt)
 
         if code:
             result["code"] = code
@@ -377,7 +377,7 @@ class QwenCodingNet:
             ghost.append("error", f"Consensus design failed: {e}")
             return {"architecture": task, "functions": [], "fallback": True}
 
-    def _build_with_token_management(self, task: str, blueprint: Dict, ghost) -> Optional[str]:
+    def _build_with_token_management(self, task: str, blueprint: Dict, ghost, system_prompt: str = None) -> Optional[str]:
         """Build code with circuit breaker managing token limits.
         Deterministic gate context + episodic memory prepended to prompt.
         """
@@ -419,9 +419,10 @@ class QwenCodingNet:
                         + "\nOutput ONLY Python code."
                     )
 
+                sys_p = system_prompt or "You are a precise Python code generator. Use the deterministic analysis provided. Output ONLY code."
                 code = qwen.generate(
                     prompt=prompt,
-                    system_prompt="You are a precise Python code generator. Use the deterministic analysis provided. Output ONLY code.",
+                    system_prompt=sys_p,
                     temperature=0.2,
                     max_tokens=2048,
                 )

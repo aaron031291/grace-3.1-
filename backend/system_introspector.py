@@ -433,9 +433,9 @@ def index_models_and_weights(root: Path = BACKEND_ROOT) -> Dict[str, Any]:
             "provider": getattr(settings, 'LLM_PROVIDER', 'ollama'),
             "kimi_model": getattr(settings, 'KIMI_MODEL', 'kimi-k2.5'),
             "opus_model": getattr(settings, 'OPUS_MODEL', 'claude-sonnet-4-20250514'),
-            "code_model": getattr(settings, 'OLLAMA_MODEL_CODE', 'qwen2.5-coder:7b'),
+            "code_model": getattr(settings, 'OLLAMA_MODEL_CODE', 'qwen3.5-coder:7b'),
             "reasoning_model": getattr(settings, 'OLLAMA_MODEL_REASON', 'deepseek-r1:7b'),
-            "fast_model": getattr(settings, 'OLLAMA_MODEL_FAST', 'qwen2.5:7b'),
+            "fast_model": getattr(settings, 'OLLAMA_MODEL_FAST', 'qwen3.5:7b'),
         }
     except ImportError:
         pass

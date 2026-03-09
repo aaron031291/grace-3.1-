@@ -187,6 +187,15 @@ class FileVersionTracker:
                 logger.info(f"[VERSION-TRACKER] Fallback path resolved: {alt_path}")
                 abs_file_path = alt_path
 
+        if os.path.isdir(abs_file_path):
+            logger.debug("Path is a directory, skipping tracking: %s", abs_file_path)
+            return {
+                "changed": False,
+                "version_number": 0,
+                "version_key_id": None,
+                "message": "Path is directory"
+            }
+
         if not os.path.exists(abs_file_path):
             # Race condition or path mismatch: file was deleted/mis-located (e.g. SQLite .db-shm/.db-wal)
             if (abs_file_path.endswith("-shm") or abs_file_path.endswith("-wal") or

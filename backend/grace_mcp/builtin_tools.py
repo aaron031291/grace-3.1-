@@ -209,6 +209,86 @@ async def _handle_web_fetch(arguments: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # =============================================================================
+# Actuation Tool Handlers (Exposed from ConsensusActuation)
+# =============================================================================
+
+async def _handle_execute_shell_command(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    """Execute a shell command via the consensus actuation gateway."""
+    try:
+        from cognitive.consensus_actuation import get_actuation_gateway
+        gateway = get_actuation_gateway()
+        result = gateway.execute_action(
+            action_payload={
+                "action_type": "execute_shell_command",
+                "params": arguments,
+                "rationale": arguments.get("rationale", "Autonomous system operation")
+            },
+            decision_context="Autonomous agent direct execution",
+            trust_score=0.99  # High trust for autonomous local actions
+        )
+        return {"success": result.get("status") == "success", "content": json.dumps(result, indent=2)}
+    except Exception as e:
+        logger.error(f"[BUILTIN] execute_shell_command error: {e}")
+        return {"success": False, "content": f"Shell command execution error: {str(e)}"}
+
+async def _handle_submit_coding_task(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    """Submit an autonomous coding task directly to the agent queue."""
+    try:
+        from cognitive.consensus_actuation import get_actuation_gateway
+        gateway = get_actuation_gateway()
+        result = gateway.execute_action(
+            action_payload={
+                "action_type": "submit_coding_task",
+                "params": arguments,
+                "rationale": arguments.get("rationale", "Autonomous system operation")
+            },
+            decision_context="Autonomous agent direct execution",
+            trust_score=0.99
+        )
+        return {"success": result.get("status") == "success", "content": json.dumps(result, indent=2)}
+    except Exception as e:
+        logger.error(f"[BUILTIN] submit_coding_task error: {e}")
+        return {"success": False, "content": f"Submit coding task error: {str(e)}"}
+
+async def _handle_restart_service(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    """Restart a system service / backend component."""
+    try:
+        from cognitive.consensus_actuation import get_actuation_gateway
+        gateway = get_actuation_gateway()
+        result = gateway.execute_action(
+            action_payload={
+                "action_type": "restart_service",
+                "params": arguments,
+                "rationale": arguments.get("rationale", "Autonomous system operation")
+            },
+            decision_context="Autonomous agent direct execution",
+            trust_score=0.99
+        )
+        return {"success": result.get("status") == "success", "content": json.dumps(result, indent=2)}
+    except Exception as e:
+        logger.error(f"[BUILTIN] restart_service error: {e}")
+        return {"success": False, "content": f"Restart service error: {str(e)}"}
+
+async def _handle_update_knowledge_base(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    """Inject discovered knowledge or solutions directly into Unified Memory or Magma."""
+    try:
+        from cognitive.consensus_actuation import get_actuation_gateway
+        gateway = get_actuation_gateway()
+        result = gateway.execute_action(
+            action_payload={
+                "action_type": "update_knowledge_base",
+                "params": arguments,
+                "rationale": arguments.get("rationale", "Autonomous system operation")
+            },
+            decision_context="Autonomous agent direct execution",
+            trust_score=0.99
+        )
+        return {"success": result.get("status") == "success", "content": json.dumps(result, indent=2)}
+    except Exception as e:
+        logger.error(f"[BUILTIN] update_knowledge_base error: {e}")
+        return {"success": False, "content": f"Knowledge base update error: {str(e)}"}
+
+# =============================================================================
 # Tool Registry
 # =============================================================================
 
@@ -303,5 +383,108 @@ def get_builtin_tools(
             },
             handler=_handle_web_fetch
         ))
+
+    # Add Consensus Actuation endpoints
+    tools.append(BuiltinTool(
+        name="execute_shell_command",
+        description=(
+            "Execute a robust shell command via the consensus actuation gateway. "
+            "Allows the agent to actuate physical commands like `ls`, `grep`, or process inspection."
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "description": "The shell command to execute"
+                },
+                "rationale": {
+                    "type": "string",
+                    "description": "Why this action is being taken"
+                }
+            },
+            "required": ["command"]
+        },
+        handler=_handle_execute_shell_command
+    ))
+
+    tools.append(BuiltinTool(
+        name="submit_coding_task",
+        description=(
+            "Submit an autonomous coding task directly to the agent queue to resolve a code-level error. "
+            "Specify instructions and an optional target file."
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "instructions": {
+                    "type": "string",
+                    "description": "Detailed instructions for the coding task"
+                },
+                "target_file": {
+                    "type": "string",
+                    "description": "The specific file to target (if any)"
+                },
+                "error_class": {
+                    "type": "string",
+                    "description": "Optional error classification for tracking"
+                },
+                "rationale": {
+                    "type": "string",
+                    "description": "Why this action is being taken"
+                }
+            },
+            "required": ["instructions"]
+        },
+        handler=_handle_submit_coding_task
+    ))
+
+    tools.append(BuiltinTool(
+        name="restart_service",
+        description=(
+            "Restart a specific system service, component or process, such as `backend`. "
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "target": {
+                    "type": "string",
+                    "description": "Target service to restart (e.g. 'backend', 'worker', 'database', 'cache')"
+                },
+                "rationale": {
+                    "type": "string",
+                    "description": "Why this action is being taken"
+                }
+            },
+            "required": ["target"]
+        },
+        handler=_handle_restart_service
+    ))
+
+    tools.append(BuiltinTool(
+        name="update_knowledge_base",
+        description=(
+            "Inject a discovered rule, solution, or system pattern directly into the system's runtime memory."
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "description": "The raw knowledge/solution to store"
+                },
+                "pattern_type": {
+                    "type": "string",
+                    "description": "Optional category of the knowledge (e.g., 'consensus_learning')"
+                },
+                "rationale": {
+                    "type": "string",
+                    "description": "Why this action is being taken"
+                }
+            },
+            "required": ["content"]
+        },
+        handler=_handle_update_knowledge_base
+    ))
 
     return tools

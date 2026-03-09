@@ -26,6 +26,7 @@ import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 import GenesisTimeline from "./components/GenesisTimeline";
 import ContextMenu from "./components/ContextMenu";
+import TerminalLogViewer from "./components/TerminalLogViewer";
 
 // Sidebar sections — descriptions show as tooltips on hover
 const WORKSPACE = [
@@ -45,7 +46,7 @@ const SYSTEM = [
   { id: "ask", label: "Ask (Architecture)", icon: "🗺️", description: "Ask questions about system architecture. Routes to the right brain and actions." },
   { id: "architect", label: "Proposer", icon: "🏗️", description: "Design a new component in JSON and Grace will build and integrate it autonomously." },
   { id: "memory", label: "Memory", icon: "🧠", description: "Learning and healing. Skills, self-learning triggers, and diagnostic dashboard." },
-  { id: "memory", label: "Self Healing", icon: "🧬", description: "Learning and healing. Skills, self-learning triggers, and diagnostic dashboard." },
+  { id: "self_healing", label: "Self Healing", icon: "🧬", description: "Healing actions and logic." },
   { id: "health", label: "Health", icon: "🏥", description: "System health dashboard. Processes, components, and service status." },
   { id: "kpi", label: "KPIs & Trust", icon: "📊", description: "Live KPI dashboard and trust score tracking across all 9 brain domains." },
   { id: "settings", label: "Settings", icon: "⚙️", description: "Business intelligence, KPIs, and system configuration." },
@@ -64,6 +65,7 @@ const TAB_PRELOAD = {
   sandbox: () => import("./components/SandboxTab"),
   knowledge: () => import("./components/KnowledgeTab"),
   memory: () => import("./components/LearningHealingTab"),
+  self_healing: () => import("./components/LearningHealingTab"),
   health: () => import("./components/SystemHealthTab"),
   settings: () => import("./components/BusinessIntelligenceTab"),
   lab: () => import("./components/LabTab"),
@@ -84,6 +86,7 @@ function App() {
   const [domain, setDomain] = useState("Global (All Domains)");
   const DOMAINS = ["Global (All Domains)", "Dog Walking App", "E-Commerce Backend", "Internal Dashboard API"];
   const [showGenesis, setShowGenesis] = useState(false);
+  const [showTerminal, setShowTerminal] = useState(false);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null });
 
   const [model, setModel] = useState("consensus");
@@ -247,6 +250,15 @@ function App() {
           ⌘K
         </button>
 
+        {/* Terminal Toggle */}
+        <button
+          onClick={() => setShowTerminal(!showTerminal)}
+          style={{ ...iconBtn, fontSize: 12, padding: "3px 8px", border: "1px solid #333", borderRadius: 4, background: showTerminal ? '#1a1a3a' : 'transparent', color: showTerminal ? '#e94560' : '#888' }}
+          title="Toggle Grace Core Terminal"
+        >
+          {'>_'}
+        </button>
+
         <button style={iconBtn}>👤</button>
       </div>
 
@@ -321,6 +333,7 @@ function App() {
               {view === "governance" && <GovernanceTab domain={domain} />}
               {view === "agents" && <OracleTab />}
               {view === "memory" && <LearningHealingTab />}
+              {view === "self_healing" && <LearningHealingTab />}
               {view === "integrations" && <WhitelistTab />}
               {view === "health" && <SystemHealthTab />}
               {view === "settings" && <BusinessIntelligenceTab />}
@@ -337,6 +350,9 @@ function App() {
 
       {/* ── Input Bar ─────────────────────────────────────────── */}
       <InputBar model={model} onNavigate={setView} />
+
+      {/* ── Terminal Overlays ─────────────────────────────────── */}
+      {showTerminal && <TerminalLogViewer onClose={() => setShowTerminal(false)} />}
 
       {/* ── Floating ──────────────────────────────────────────── */}
       <PersistentVoicePanel onSendMessage={handleVoice} lastResponse={voiceResponse} isProcessing={voiceProcessing} />

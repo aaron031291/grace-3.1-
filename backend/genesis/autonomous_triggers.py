@@ -598,8 +598,12 @@ class GenesisTriggerPipeline:
         """
         metadata = genesis_key.context_data or {}
 
-        # Trigger on error Genesis Keys
+        # Trigger on error Genesis Keys (specifically created as ERROR type)
         if genesis_key.key_type == GenesisKeyType.ERROR:
+            return True
+            
+        # Trigger on any broken/failed Genesis Key
+        if getattr(genesis_key, 'is_error', False) or getattr(genesis_key, 'status', '') == 'error':
             return True
 
         # Trigger if explicitly requested

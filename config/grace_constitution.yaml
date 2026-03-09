@@ -1,0 +1,46 @@
+version: "3.1"
+pillars:
+  - name: knowledge_application
+    description: "All critical kernels must map here. Asserts telemetry export from every component."
+    obligations:
+      - "component_meta.pillar enforcement"
+  - name: business_revenue
+    description: "Produce ROI metrics from coding_agent, scheduler, api_server."
+    obligations:
+      - "backend/guardian_metrics dimension=pillar:business_revenue"
+  - name: renewable_energy
+    description: "Report infrastructure energy budgets."
+    obligations:
+      - "infrastructure_manager energy reports"
+  - name: science_beyond_limits
+    description: "Produce research missions with immutable log and risk classification."
+    obligations:
+      - "agentic_spine and meta_loop enforcement"
+  - name: cohabitation_innovation
+    description: "Run governance hooks before exposing user-facing features."
+    obligations:
+      - "voice_conversation and api_server hooks"
+  - name: transparency_and_audit
+    description: "Ensure all decisions are auditable with 5W1H via Clarity Framework."
+    obligations:
+      - "ClarityDecision records for autonomous actions"
+  - name: autonomous_resilience
+    description: "Self-healing through closed-loop tracking."
+    obligations:
+      - "Level 0 to 4 escalation and MTTR target tracking"
+
+clauses:
+  - id: clause_1_provenance
+    text: "Baseline mismatch (>0 new/deleted files), drift artifacts, or missing genesis roots strictly fail the Boot Gate."
+  - id: clause_2_handshake
+    text: "Components must perform request -> governance approval -> distribution -> observation handshake."
+  - id: clause_3_playbook_execution
+    text: "Playbooks must log start/complete to the immutable log with outcome and ID."
+  - id: clause_4_approval
+    text: "Actions with risk score > 0.7 must escalate and require explicit approval. < 0.3 auto-approve."
+
+okrs:
+  - id: okr_1_uptime
+    description: "Maintain 99.9% uptime across all Grace kernels."
+  - id: okr_2_autonomous_fixes
+    description: "Achieve 80% automated resolution for Level 1 and Level 2 drifts without human intervention."

@@ -1,0 +1,14 @@
+# playbooks/auto_revert.yml
+
+trigger: "validation_pipeline.lighthouse_failure"
+conditions:
+  - "lighthouse_score_drop > 5"
+  - "target_type == 'frontend'"
+remediation:
+  - step: "checkout_previous_commit"
+    command: "git reset --hard HEAD~1"
+  - step: "rerun_validation_pipeline"
+    action: "trigger_pipeline"
+metrics:
+  - name: "MTTR"
+escalation: "guardian.escalate('auto_revert_failed')"

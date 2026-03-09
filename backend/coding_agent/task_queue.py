@@ -50,6 +50,7 @@ def submit(
     priority: int = 5,
     origin: str = "unknown",
     error_class: str = "",
+    explain_fix: str = "",
 ) -> str:
     """
     Submit a task to the coding agent queue.
@@ -85,6 +86,7 @@ def submit(
         "priority": priority,
         "origin": origin,
         "error_class": error_class,
+        "explain_fix": explain_fix,
         "status": "pending",
         "attempts": 0,
         "created_at": datetime.utcnow().isoformat(),
@@ -129,7 +131,10 @@ def _persist_task(task: Dict) -> None:
                 "task_id": task["task_id"],
                 "task_type": task["task_type"],
                 "instructions": task["instructions"][:2000],
-                "context_data": json.dumps(task["context"])[:4000],
+                "context_data": json.dumps({
+                    **task["context"],
+                    "explain_fix": task.get("explain_fix", "")
+                })[:4000],
                 "priority": task["priority"],
                 "origin": task["origin"],
                 "error_class": task["error_class"],
@@ -311,6 +316,23 @@ def _build_memory_context(instructions: str, error_class: str = "") -> str:
     except Exception:
         pass
 
+    # 4. Recent Successful Validations (from MongoDB validation_results)
+    try:
+        from database.mongo_client import get_db
+        db = get_db()
+        if db is not None:
+            collection = db["validation_results"]
+            successes = collection.find({"status": "success"}).sort("completed_at", -1).limit(3)
+            val_lines = []
+            for doc in successes:
+                target = doc.get("target", "unknown")
+                duration = doc.get("duration_sec", 0)
+                val_lines.append(f"  - {target} passed in {duration:.1f}s")
+            if val_lines:
+                sections.append("[RECENT SUCCESSFUL VALIDATIONS]\n" + "\n".join(val_lines))
+    except Exception:
+        pass
+
     if not sections:
         return ""
 
@@ -473,8 +495,17 @@ def _default_handler(task: Dict) -> Dict:
     except Exception:
         pass
 
+    # ── 4b. Context-Aware Prompt Override ────────────────────────────────
+    system_prompt = (
+        "You are a surgical self-healing AI. You must analyze the error trace, identify the logical fault, "
+        "and output ONLY the complete patched target file. Do not invent new features; surgically fix the error."
+    ) if error_class else (
+        "You are Grace's elite coding agent. Write elegant, robust, and cleanly documented Python code. "
+        "Output the full file contents of the requested file."
+    )
+
     # ── 5. Call Qwen ─────────────────────────────────────────────────────
-    code_result = net.execute_task(enriched_instructions, use_consensus=False)
+    code_result = net.execute_task(enriched_instructions, use_consensus=False, system_prompt=system_prompt)
     generated_code = code_result.get("code", "")
 
     # ── 5b. Verification Pass — trust gate before anything touches disk ──

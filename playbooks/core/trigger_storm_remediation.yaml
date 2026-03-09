@@ -1,0 +1,10 @@
+trigger: guardian.trigger_storm
+conditions:
+  - message_rate > 100/s
+  - guardian_state == degrading
+remediation:
+  - step: pause_pipeline
+  - step: apply_rate_limiter
+metrics:
+  - name: MTTR
+escalation: guardian.escalate("trigger_storm")

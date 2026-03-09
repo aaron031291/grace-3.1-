@@ -401,7 +401,16 @@ def layer3_align(
     alignment_prompt += (
         f"Original query: {prompt[:1000]}\n\n"
         f"Consensus:\n{consensus[:4000]}\n\n"
-        f"Produce the final aligned response."
+        f"Produce the final aligned response.\n\n"
+        f"IF an explicit system action is warranted (e.g. running a shell command, submitting a coding fix, "
+        f"restarting a service), output a JSON block inside ```json ... ``` with this exact structure:\n"
+        f"```json\n"
+        f"{{\n"
+        f"  \"action_type\": \"execute_shell_command\" | \"submit_coding_task\" | \"restart_service\" | \"update_knowledge_base\",\n"
+        f"  \"params\": {{ ... specific params based on action type ... }},\n"
+        f"  \"rationale\": \"Brief explanation of why this action is necessary\"\n"
+        f"}}\n"
+        f"```"
     )
 
     client = _get_client("kimi") or _get_client("opus") or _get_client("qwen")
@@ -556,6 +565,15 @@ def run_consensus(
         source=source,
     )
 
+    # Extract potential JSON actuation block
+    actuation_intent = None
+    if "```json" in final_output:
+        try:
+            json_str = final_output.split("```json")[1].split("```")[0].strip()
+            actuation_intent = json.loads(json_str)
+        except Exception as e:
+            logger.warning(f"Failed to parse actuation JSON from consensus: {e}")
+
     # Route disagreements to governance approval queue + ML reward buffer
     if disagreements:
         try:
@@ -592,6 +610,25 @@ def run_consensus(
             })
         except Exception:
             pass
+            
+    # Execute Actuation if verified and intended
+    actuation_result = None
+    if actuation_intent and verification["passed"]:
+        try:
+            from cognitive.consensus_actuation import get_actuation_gateway
+            gateway = get_actuation_gateway()
+            actuation_result = gateway.execute_action(
+                action_payload=actuation_intent,
+                decision_context=prompt[:200],
+                trust_score=result.confidence
+            )
+            logger.info(f"Consensus directed actuation completed: {actuation_result}")
+        except Exception as e:
+            logger.error(f"Failed to execute consensus actuation: {e}")
+            actuation_result = {"status": "error", "error": str(e)}
+            
+    if actuation_result:
+        result.final_output += f"\n\n--- Actuation Result ---\n{json.dumps(actuation_result, indent=2)}"
 
     # Log to reporting engine
     try:

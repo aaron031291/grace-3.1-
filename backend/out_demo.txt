@@ -1,0 +1,27 @@
+==============================================
+   SYNAPTIC CORE / ORCHESTRATION BUS DEMO     
+==============================================
+
+
+[PHASE 1] Simple Dispatch Test (Qwen)
+Prompt: 'What is the capital of France? Provide just the city name.'
+-> Qwen Response: Error: Model qwen failed to generate.
+
+
+[PHASE 2] Cross-Model Orchestration Chain Test
+
+Executing Chain:
+  Step 1: KIMI - Draft a high-level architecture concept for the caching mechanism described in the context.
+  Step 2: OPUS - Critique the provided architecture concept. Identify 1 potential flaw and suggest an improvement.
+  Step 3: QWEN - Synthesize the original concept and the critique into a final, actionable implementation summary.
+
+Processing... (this will take a few moments as 3 models deliberate)
+
+================== FINAL OUTPUT ==================
+Error: Model qwen failed to generate.
+==================================================
+
+
+[PHASE 3] Living Memory Test: Logging to Unified Memory
+
+FAILED: Memory logging did not succeed.

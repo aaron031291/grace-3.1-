@@ -1,0 +1,11 @@
+trigger: guardian.log_error
+conditions:
+  - payload contains "Traceback" or "ERROR"
+remediation:
+  - step: research_stack_trace_against_magma_memory
+  - step: invoke_coding_agent_for_patch
+  - step: evaluate_patch_in_sandbox
+  - step: commit_and_restart
+metrics:
+  - name: MTTR
+escalation: guardian.escalate("log_error_escalation")

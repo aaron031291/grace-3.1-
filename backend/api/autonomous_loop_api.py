@@ -22,7 +22,9 @@ Flow:
 All actions tracked via Genesis keys with full provenance chain.
 """
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, WebSocket, WebSocketDisconnect
+import asyncio
+import os
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 import logging
@@ -581,6 +583,7 @@ def submit_coding_task(
     priority: int = 5,
     error_class: str = "",
     origin: str = "error_pipeline",
+    explain_fix: str = "",
 ) -> str:
     """
     Submit a coding task to the coding agent queue.
@@ -599,6 +602,7 @@ def submit_coding_task(
             priority=priority,
             origin=origin,
             error_class=error_class,
+            explain_fix=explain_fix,
         )
         logger.info(
             "[AUTONOMOUS] Coding task submitted: %s (class=%s)", task_id, error_class
@@ -690,6 +694,72 @@ async def get_loop_log(limit: int = 20):
     with _loop_lock:
         return {"log": list(reversed(_loop_log[-limit:])), "total": len(_loop_log)}
 
+
+@router.get("/validation/status/{task_id}")
+async def get_validation_status(task_id: str):
+    """Get the live status of a validation pipeline run."""
+    try:
+        from database.mongo_client import get_db
+        db = get_db()
+        if db is not None:
+            collection = db["validation_results"]
+            doc = collection.find_one({"task_id": task_id}, {"_id": 0})
+            if doc:
+                try:
+                    from api.kpi_api import get_kpi_tracker
+                    tracker = get_kpi_tracker()
+                    if doc.get("status") == "success":
+                        tracker.increment_kpi("validation", "validation_success_total", 1)
+                    else:
+                        tracker.increment_kpi("validation", "validation_failure_total", 1)
+                except Exception:
+                    pass
+                return doc
+        
+        return {"status": "not_found", "task_id": task_id, "message": "Validation run not found or MongoDB unavailable"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@router.get("/validation/runs")
+async def get_recent_validation_runs(limit: int = 10):
+    """Get the latest validation pipeline runs."""
+    try:
+        from database.mongo_client import get_db
+        db = get_db()
+        if db is not None:
+            collection = db["validation_results"]
+            docs = list(collection.find({}, {"_id": 0}).sort("started_at", -1).limit(limit))
+            return {"runs": docs}
+        return {"runs": []}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@router.websocket("/logs/stream")
+async def stream_logs_websocket(websocket: WebSocket):
+    """Real-time log streaming for the UI terminal."""
+    await websocket.accept()
+    log_file_path = "logs/grace.log"
+    try:
+        if not os.path.exists(log_file_path):
+            await websocket.send_text("Log file not found.")
+            await asyncio.sleep(2)
+        
+        # Open and tail the file
+        with open(log_file_path, "r", encoding="utf-8", errors="replace") as f:
+            f.seek(0, os.SEEK_END)
+            while True:
+                line = f.readline()
+                if not line:
+                    await asyncio.sleep(0.5)
+                    continue
+                await websocket.send_text(line.strip())
+    except WebSocketDisconnect:
+        logger.info("[LOG_STREAM] Client disconnected from real-time logs.")
+    except Exception as e:
+        try:
+            await websocket.send_text(f"Error streaming logs: {e}")
+        except:
+            pass
 
 # ── Unified trigger brain (determinism, self-heal, diagnostics, self-learning, self-governance, coding agent) ──
 

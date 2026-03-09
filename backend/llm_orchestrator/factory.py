@@ -69,10 +69,10 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
 
 
-def get_llm_for_task(task: str = "general") -> BaseLLMClient:
+def get_llm_for_task(task: str = "general", task_description: str = "", context: dict = None) -> BaseLLMClient:
     """
     Get the best model for a specific task type.
-    Routes to the optimal model based on task requirements.
+    Routes to the optimal model based on task requirements or dynamic risk arbitration.
 
     Tasks:
       code         → Qwen 3.5 Coder (local)
@@ -83,6 +83,22 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
       document     → Qwen 3.5 (local) or Kimi (cloud)
       general      → default model (Chat)
     """
+    # Dynamic Arbitration based on Risk
+    if task_description:
+        try:
+            from infrastructure.resource_arbitrator import get_resource_arbitrator
+            arbitrator = get_resource_arbitrator()
+            model_id = arbitrator.route_task(task_description, context)
+            if model_id == "opus":
+                return get_opus_client()
+            elif model_id == "kimi":
+                return get_kimi_client()
+            else:
+                return _ollama_with_model(resolve_ollama_model("reason"))
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Failed to use ResourceArbitrator: {e}")
+
     if task == "code" and settings.OLLAMA_MODEL_CODE:
         return _ollama_with_model(resolve_ollama_model("code"))
 

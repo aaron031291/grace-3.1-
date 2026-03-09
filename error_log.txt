@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\core\file_artifact_tracker.py", line 4, in <module>
+    import logging
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\core\logging.py", line 35, in <module>
+    class StructuredFormatter(logging.Formatter):
+                              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'logging' has no attribute 'Formatter' (consider renaming 'C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\core\logging.py' since it has the same name as the standard library module named 'logging' and prevents importing that standard library module)
