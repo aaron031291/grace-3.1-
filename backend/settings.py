@@ -142,6 +142,11 @@ class Settings:
     OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
     OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3:32b")
 
+    # ==================== RunPod Configuration ====================
+    RUNPOD_API_KEY: str = os.getenv("RUNPOD_API_KEY", "")
+    RUNPOD_ENDPOINT_ID: str = os.getenv("RUNPOD_ENDPOINT_ID", "")
+    RUNPOD_MODEL: str = os.getenv("RUNPOD_MODEL", "Mistral-7B-Instruct-v0.3")
+
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")
     
@@ -171,8 +176,13 @@ class Settings:
             # If LLM_MODEL is not set, use OLLAMA_LLM_DEFAULT
             if not cls.LLM_MODEL:
                 cls.LLM_MODEL = cls.OLLAMA_LLM_DEFAULT
+        elif cls.LLM_PROVIDER == "runpod":
+            if not cls.RUNPOD_API_KEY:
+                errors.append("RUNPOD_API_KEY is required when LLM_PROVIDER is 'runpod'")
+            if not cls.RUNPOD_ENDPOINT_ID:
+                errors.append("RUNPOD_ENDPOINT_ID is required when LLM_PROVIDER is 'runpod'")
         else:
-            errors.append(f"Unsupported LLM_PROVIDER: '{cls.LLM_PROVIDER}'. Must be 'ollama' or 'openai'")
+            errors.append(f"Unsupported LLM_PROVIDER: '{cls.LLM_PROVIDER}'. Must be 'ollama', 'openai', or 'runpod'")
 
         # Validate Ollama settings (only if using ollama)
         if cls.LLM_PROVIDER == "ollama":

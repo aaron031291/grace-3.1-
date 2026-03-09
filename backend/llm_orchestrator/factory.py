@@ -31,6 +31,7 @@ from .ollama_adapter import OllamaLLMClient
 from .openai_client import OpenAILLMClient
 from .kimi_client import KimiLLMClient
 from .opus_client import OpusLLMClient
+from .runpod_client import RunPodLLMClient
 from .governance_wrapper import GovernanceAwareLLM
 from .ollama_resolver import resolve_ollama_model
 from settings import settings
@@ -64,6 +65,11 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
     elif provider == "opus":
         return _wrap(OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+        ))
+    elif provider == "runpod":
+        return _wrap(RunPodLLMClient(
+            api_key=settings.RUNPOD_API_KEY,
+            endpoint_id=settings.RUNPOD_ENDPOINT_ID
         ))
     else:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
@@ -156,6 +162,11 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
     elif provider == "opus":
         return OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
+        )
+    elif provider == "runpod":
+        return RunPodLLMClient(
+            api_key=settings.RUNPOD_API_KEY,
+            endpoint_id=settings.RUNPOD_ENDPOINT_ID
         )
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
