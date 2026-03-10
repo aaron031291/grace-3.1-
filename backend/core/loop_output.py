@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Dict, Any, Optional, List
 
@@ -214,7 +214,7 @@ class GraceLoopOutput:
     def start(self):
         """Mark loop as started."""
         self.status = LoopStatus.RUNNING
-        self.started_at = datetime.utcnow()
+        self.started_at = datetime.now(timezone.utc)
 
     def complete(
         self,
@@ -227,7 +227,7 @@ class GraceLoopOutput:
         self.result = result
         self.confidence = confidence
         self.result_summary = summary
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(timezone.utc)
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     def fail(self, error: str, details: Optional[Dict[str, Any]] = None):
@@ -235,14 +235,14 @@ class GraceLoopOutput:
         self.status = LoopStatus.FAILED
         self.error = error
         self.error_details = details
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(timezone.utc)
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     def interrupt(self, reason: str):
         """Mark loop as interrupted."""
         self.status = LoopStatus.INTERRUPTED
         self.error = f"Interrupted: {reason}"
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(timezone.utc)
         self.duration_ms = (self.completed_at - self.started_at).total_seconds() * 1000
 
     # =========================================================================

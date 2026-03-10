@@ -35,7 +35,7 @@ import asyncio
 import logging
 import hashlib
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -223,7 +223,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("health"),
             event_type=AutonomousTriggerType.HEALTH_CHECK,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="health_monitor",
             payload={"check_type": "periodic"},
             genesis_key=self._generate_genesis_key("health_check")
@@ -236,7 +236,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("scheduled"),
             event_type=AutonomousTriggerType.SCHEDULED,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="scheduler",
             payload={"schedule_type": "periodic"},
             genesis_key=self._generate_genesis_key("scheduled_ci")
@@ -261,7 +261,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("file"),
             event_type=AutonomousTriggerType.FILE_CHANGE,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="file_watcher",
             payload={
                 "file_path": file_path,
@@ -285,7 +285,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("learning"),
             event_type=AutonomousTriggerType.LEARNING_OPPORTUNITY,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="learning_system",
             payload={
                 "topic": topic,
@@ -310,7 +310,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("anomaly"),
             event_type=AutonomousTriggerType.ANOMALY_RESPONSE,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="anomaly_detector",
             payload={
                 "anomaly_type": anomaly_type,
@@ -335,7 +335,7 @@ class AutonomousCICDEngine:
         event = AutonomousEvent(
             id=self._generate_id("healing"),
             event_type=AutonomousTriggerType.HEALING_ACTION,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source="healing_system",
             payload={
                 "healing_action": healing_action,
@@ -387,7 +387,7 @@ class AutonomousCICDEngine:
             approved=can_auto,
             execution_mode=execution_mode,
             genesis_key=self._generate_genesis_key("decision"),
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             pipeline_config=self._build_pipeline_config(event, action)
         )
 
@@ -635,7 +635,7 @@ class AutonomousCICDEngine:
 
             # Record for learning
             self.learning_history.append({
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "decision_id": decision.decision_id,
                 "action": decision.action,
                 "pipeline_id": run.id,
@@ -678,7 +678,7 @@ class AutonomousCICDEngine:
                 )
 
         self.learning_history.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "decision_id": decision_id,
             "success": success,
             "details": details,
@@ -744,13 +744,13 @@ class AutonomousCICDEngine:
 
     def _generate_id(self, prefix: str) -> str:
         """Generate unique ID."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         data = f"{prefix}:{timestamp}:{len(self.events)}"
         return hashlib.sha256(data.encode()).hexdigest()[:12]
 
     def _generate_genesis_key(self, action: str) -> str:
         """Generate Genesis Key."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         data = f"autonomous_cicd:{action}:{timestamp}"
         key_hash = hashlib.sha256(data.encode()).hexdigest()[:12]
         return f"GK-acicd-{key_hash}"

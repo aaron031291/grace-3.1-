@@ -11,7 +11,7 @@ Report Cards — each component gets a score card linked to Genesis key.
 import time
 import logging
 from typing import Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ def validate_component(component_id: str, test_fn, test_cases: list) -> dict:
         "passed": 0,
         "failed": 0,
         "errors": [],
-        "tested_at": datetime.utcnow().isoformat(),
+        "tested_at": datetime.now(timezone.utc).isoformat(),
     }
 
     for i, case in enumerate(test_cases):
@@ -103,7 +103,7 @@ def validate_all_components() -> dict:
         "total_failed": total_failed,
         "pass_rate": round(total_passed / max(total_passed + total_failed, 1) * 100, 1),
         "results": results,
-        "validated_at": datetime.utcnow().isoformat(),
+        "validated_at": datetime.now(timezone.utc).isoformat(),
     }
 
 

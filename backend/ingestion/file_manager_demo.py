@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import shutil
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent / "backend"))
@@ -235,7 +235,7 @@ class TestSuite:
                 "test.md": "hash1",
                 "test.txt": "hash2",
             },
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "count": 2,
         }
         

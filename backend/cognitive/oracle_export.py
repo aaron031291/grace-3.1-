@@ -14,7 +14,7 @@ Layout: knowledge_base/layer_1/oracle/
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
@@ -79,7 +79,7 @@ def export_learning_memory_to_oracle(
                 source = str(getattr(r, "source", "") or "")
                 example_type = str(getattr(r, "example_type", "") or "general").replace("/", "_").replace("\\", "_") or "general"
                 updated = getattr(r, "updated_at", None)
-                date_str = updated.strftime("%Y-%m-%d") if hasattr(updated, "strftime") else datetime.utcnow().strftime("%Y-%m-%d")
+                date_str = updated.strftime("%Y-%m-%d") if hasattr(updated, "strftime") else datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
                 dir_path = oracle_root / example_type / date_str
                 dir_path.mkdir(parents=True, exist_ok=True)

@@ -171,8 +171,13 @@ class Settings:
             # If LLM_MODEL is not set, use OLLAMA_LLM_DEFAULT
             if not cls.LLM_MODEL:
                 cls.LLM_MODEL = cls.OLLAMA_LLM_DEFAULT
+        elif cls.LLM_PROVIDER == "runpod":
+            if not os.getenv("RUNPOD_API_KEY") or not os.getenv("RUNPOD_ENDPOINT_ID"):
+                errors.append("RUNPOD_API_KEY and RUNPOD_ENDPOINT_ID are required when LLM_PROVIDER is 'runpod'")
+            if not cls.LLM_MODEL:
+                cls.LLM_MODEL = os.getenv("RUNPOD_MODEL", "Mistral-7B-Instruct-v0.3")
         else:
-            errors.append(f"Unsupported LLM_PROVIDER: '{cls.LLM_PROVIDER}'. Must be 'ollama' or 'openai'")
+            errors.append(f"Unsupported LLM_PROVIDER: '{cls.LLM_PROVIDER}'. Must be 'ollama', 'openai', or 'runpod'")
 
         # Validate Ollama settings (only if using ollama)
         if cls.LLM_PROVIDER == "ollama":

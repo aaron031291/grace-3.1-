@@ -14,7 +14,7 @@ Key Features:
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 from embedding import EmbeddingModel, get_embedding_model
@@ -45,7 +45,7 @@ class ReasoningResult:
     
     def __post_init__(self):
         if self.timestamp is None:
-            self.timestamp = datetime.utcnow()
+            self.timestamp = datetime.now(timezone.utc)
     
     @property
     def confidence(self) -> float:
@@ -127,7 +127,7 @@ class NeuroSymbolicReasoner:
             ReasoningResult with fused neural-symbolic results
         """
         context = context or {}
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         reasoning_trace = {}
         
         # ========== STEP 1: Neural Search (Fuzzy) ==========
@@ -180,7 +180,7 @@ class NeuroSymbolicReasoner:
             reasoning_trace=reasoning_trace if include_trace else {},
         )
         
-        elapsed_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
+        elapsed_ms = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
         logger.info(f"[NEURO-SYMBOLIC] Reasoning completed in {elapsed_ms:.1f}ms, {len(fused_results)} fused results")
         
         return result

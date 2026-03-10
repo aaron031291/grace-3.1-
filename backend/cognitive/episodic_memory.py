@@ -9,7 +9,7 @@ OPTIMIZED: Now supports semantic similarity using embeddings
 from sqlalchemy import Column, String, Float, Text, DateTime
 from sqlalchemy.orm import Session, validates
 from database.base import BaseModel
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 import logging
 import json
@@ -120,7 +120,7 @@ class EpisodicBuffer:
             source=source or "system",
             genesis_key_id=genesis_key_id,
             decision_id=decision_id,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
 
         self.session.add(episode)

@@ -13,7 +13,7 @@ import json
 import hashlib
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
@@ -66,7 +66,7 @@ def ingest_document(file_path: str, content: str, project_id: str = "",
         "hash": content_hash,
         "project_id": project_id,
         "source": source,
-        "ingested_at": datetime.utcnow().isoformat(),
+        "ingested_at": datetime.now(timezone.utc).isoformat(),
     }
 
     # 4. Version tracking
@@ -77,7 +77,7 @@ def ingest_document(file_path: str, content: str, project_id: str = "",
         "version": version,
         "hash": content_hash,
         "size": len(content),
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "source": source,
     })
     metadata["version"] = version
@@ -91,7 +91,7 @@ def ingest_document(file_path: str, content: str, project_id: str = "",
         "project_id": project_id,
         "size": len(content),
         "version": version,
-        "indexed_at": datetime.utcnow().isoformat(),
+        "indexed_at": datetime.now(timezone.utc).isoformat(),
         "content_preview": content[:200],
     })
 

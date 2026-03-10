@@ -18,7 +18,7 @@ import logging
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 
 from genesis.layer1_integration import get_layer1_integration
 from genesis.autonomous_triggers import get_genesis_trigger_pipeline
@@ -291,7 +291,7 @@ class AutonomousMasterIntegration:
         logger.info("[MASTER-INTEGRATION] Running proactive monitoring cycle...")
 
         results = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "actions": []
         }
 

@@ -215,9 +215,10 @@ class MultiTierQueryHandler:
         # If context provided, integrate it
         if context:
             logger.info(f"[{query_id}] User context provided, integrating...")
-            # TODO: Implement context integration
-            # For now, just add to query
-            query = f"{query}\n\nContext: {context.get('text', '')}"
+            # Integrate context if provided (e.g., from Tier 3/4 feedback)
+            context_text = context.get('text', '')
+            if context_text:
+                query = f"User-Provided Context:\n{context_text}\n\nOriginal Query: {query}"
         
         # ==================== MODEL-FIRST STRATEGY ====================
         # Try Model Knowledge FIRST (Tier 2)
@@ -601,10 +602,9 @@ class MultiTierQueryHandler:
             query_id: Query identifier for logging
         """
         try:
-            # Import ingestion service
             from ingestion.service import TextIngestionService
             from embedding import get_embedding_model  # Get global singleton
-            import datetime
+            import datetime as dt
             
             # CRITICAL: Use global singleton embedding model to prevent unload
             # The singleton is kept alive for the entire application lifecycle
@@ -630,7 +630,7 @@ class MultiTierQueryHandler:
 
 Source: {link}
 Query: {query}
-Retrieved: {datetime.datetime.now().isoformat()}
+Retrieved: {dt.datetime.now().isoformat()}
 
 ---
 

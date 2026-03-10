@@ -26,7 +26,7 @@ import os
 import threading
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
@@ -70,7 +70,7 @@ class ComponentCandidate:
     trust_score: float = 0.0
     citizenship: CitizenshipLevel = CitizenshipLevel.NONE
     errors: List[str] = field(default_factory=list)
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 # Citizenship ledger — persisted to disk
@@ -459,7 +459,7 @@ def promote_component(file_path: str, level: str) -> Dict[str, Any]:
         if file_path not in _ledger:
             return {"error": f"Component not found: {file_path}"}
         _ledger[file_path]["citizenship"] = level
-        _ledger[file_path]["promoted_at"] = datetime.utcnow().isoformat()
+        _ledger[file_path]["promoted_at"] = datetime.now(timezone.utc).isoformat()
 
     _save_ledger()
     return {"promoted": True, "file": file_path, "level": level}

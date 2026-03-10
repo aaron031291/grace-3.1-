@@ -40,7 +40,7 @@ import json
 import logging
 import time
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
@@ -87,6 +87,12 @@ def _build_model_registry() -> dict:
             "strengths": ["chain-of-thought", "mathematical reasoning", "problem decomposition"],
             "cost_tier": "free",
         },
+        "runpod": {
+            "name": "RunPod (Mistral/vLLM)",
+            "provider": "runpod",
+            "strengths": ["fast", "custom finetunes", "serverless inference"],
+            "cost_tier": "cloud",
+        },
     }
 
 
@@ -116,7 +122,7 @@ class ConsensusResult:
     disagreements: List[str]
     final_output: str
     total_latency_ms: float
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     source: str = "user"  # user or autonomous
 
 
@@ -135,6 +141,9 @@ def _get_client(model_id: str):
         return get_llm_client(provider="opus")
     elif provider == "kimi":
         return get_llm_client(provider="kimi")
+    elif provider == "runpod":
+        from cognitive.runpod_client import get_runpod_client
+        return get_runpod_client()
     elif task == "code":
         return get_qwen_coder()
     elif task == "reason":
@@ -163,6 +172,8 @@ def _check_model_available(model_id: str) -> bool:
         return bool(getattr(settings, "OPUS_API_KEY", ""))
     elif info["provider"] == "kimi":
         return bool(getattr(settings, "KIMI_API_KEY", ""))
+    elif info["provider"] == "runpod":
+        return bool(getattr(settings, "RUNPOD_API_KEY", "")) and bool(getattr(settings, "RUNPOD_ENDPOINT_ID", ""))
     elif info["provider"] == "ollama":
         task = info.get("task") or "fast"
         resolved = resolve_ollama_model(task)
@@ -694,7 +705,7 @@ def queue_autonomous_query(prompt: str, context: str = "", priority: str = "norm
         "prompt": prompt,
         "context": context,
         "priority": priority,
-        "queued_at": datetime.utcnow().isoformat(),
+        "queued_at": datetime.now(timezone.utc).isoformat(),
         "status": "queued",
     }
     with _batch_lock:
@@ -729,7 +740,7 @@ def run_batch(max_queries: int = 5) -> List[dict]:
                 source="autonomous",
             )
             query["status"] = "completed"
-            query["completed_at"] = datetime.utcnow().isoformat()
+            query["completed_at"] = datetime.now(timezone.utc).isoformat()
             query["result_confidence"] = result.confidence
             query["result_summary"] = result.final_output[:500]
             results.append({

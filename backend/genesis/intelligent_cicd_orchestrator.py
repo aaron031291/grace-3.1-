@@ -50,7 +50,7 @@ import hashlib
 import json
 import logging
 from dataclasses import dataclass, field, asdict
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
@@ -209,7 +209,7 @@ class IntelligentTestSelector:
         if coverage > 0:
             metrics.coverage_value = coverage
 
-        metrics.last_run = datetime.utcnow().isoformat()
+        metrics.last_run = datetime.now(timezone.utc).isoformat()
         metrics.total_runs += 1
 
         # Update bandit arms
@@ -333,7 +333,7 @@ class IntelligentTestSelector:
 
         # Record selection
         self.selection_history.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "strategy": strategy.value,
             "tests_selected": len(selected),
             "total_tests": len(all_tests)
@@ -500,7 +500,7 @@ class WebhookEventProcessor:
             id=self._generate_event_id(payload),
             source=source,
             event_type=event_type,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             payload=payload,
             genesis_key=self._generate_genesis_key("webhook", event_type)
         )
@@ -512,7 +512,7 @@ class WebhookEventProcessor:
 
     def _generate_genesis_key(self, category: str, action: str) -> str:
         """Generate Genesis Key for webhook event."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         data = f"webhook:{category}:{action}:{timestamp}"
         key_hash = hashlib.sha256(data.encode()).hexdigest()[:12]
         return f"GK-webhook-{key_hash}"
@@ -565,7 +565,7 @@ class ClosedLoopFeedback:
         metric = ClosedLoopMetric(
             metric_name=name,
             value=value,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             source=source,
             trend=trend,
             alert_threshold=alert_threshold
@@ -607,7 +607,7 @@ class ClosedLoopFeedback:
         )
 
         action = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "metric_name": name,
             "metric_value": metric.value,
             "action": "trigger_investigation",
@@ -826,7 +826,7 @@ class IntelligentCICDOrchestrator:
                 "sandbox_required": self.sandbox_required_for_autonomous
             },
             genesis_key=genesis_key,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             metadata={
                 "feedback_recommendation": feedback_recommendation.value if feedback_recommendation else None,
                 "context": context
@@ -1073,7 +1073,7 @@ Respond in JSON format:
 
             # Record pipeline run
             self.pipeline_runs.append({
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "decision_id": decision.decision_id,
                 "result": result
             })
@@ -1129,7 +1129,7 @@ Respond in JSON format:
 
         # Store in learning memory
         self.learning_memory.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "decision_id": decision_id,
             "decision": decision.decision.value,
             "test_strategy": decision.test_strategy.value,
@@ -1230,13 +1230,13 @@ Respond in JSON format:
 
     def _generate_decision_id(self) -> str:
         """Generate unique decision ID."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         data = f"decision:{timestamp}:{len(self.decisions)}"
         return hashlib.sha256(data.encode()).hexdigest()[:12]
 
     def _generate_genesis_key(self, category: str, action: str) -> str:
         """Generate Genesis Key for CI/CD operations."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         data = f"intelligent_cicd:{category}:{action}:{timestamp}"
         key_hash = hashlib.sha256(data.encode()).hexdigest()[:12]
         return f"GK-icicd-{key_hash}"

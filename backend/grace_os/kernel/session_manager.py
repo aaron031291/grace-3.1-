@@ -9,7 +9,7 @@ import asyncio
 import logging
 import uuid
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .message_bus import MessageBus
 from .layer_registry import LayerRegistry
@@ -22,7 +22,7 @@ class SessionState:
     def __init__(self, trace_id: str, prompt: str):
         self.trace_id = trace_id
         self.prompt = prompt
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now(timezone.utc)
         self.status = "initializing"  # initializing | planning | executing | verifying | completed | failed
         self.tasks: List[Dict[str, Any]] = []
         self.current_trust_score = 0.0
@@ -203,5 +203,5 @@ class SessionManager:
             "tasks_count": len(session.tasks),
             "trust_score": session.current_trust_score,
             "error": session.error,
-            "duration_sec": (datetime.utcnow() - session.start_time).total_seconds()
+            "duration_sec": (datetime.now(timezone.utc) - session.start_time).total_seconds()
         }

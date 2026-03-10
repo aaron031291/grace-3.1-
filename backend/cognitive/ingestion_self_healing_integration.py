@@ -19,7 +19,7 @@ Every ingestion creates Genesis Keys that trigger:
 import logging
 from typing import Dict, Any, List, Optional
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from models.genesis_key_models import GenesisKey, GenesisKeyType
@@ -147,7 +147,7 @@ class IngestionSelfHealingIntegration:
         result = {
             "ingestion_key_id": ingestion_key.key_id,
             "file_path": str(file_path),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "steps": []
         }
 
@@ -494,7 +494,7 @@ class IngestionSelfHealingIntegration:
         logger.info("[INGESTION-INTEGRATION] Running improvement cycle...")
 
         cycle_results = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "observations": {},
             "improvements": []
         }

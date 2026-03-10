@@ -15,7 +15,7 @@ when no user activity for 5+ minutes.
 import logging
 import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -134,7 +134,7 @@ class IdleLearner:
     def _teach(self, topic: str, category: str) -> Dict[str, Any]:
         """Have Kimi teach a specific topic."""
         self._is_learning = True
-        result = {"topic": topic, "category": category, "timestamp": datetime.utcnow().isoformat()}
+        result = {"topic": topic, "category": category, "timestamp": datetime.now(timezone.utc).isoformat()}
 
         try:
             from llm_orchestrator.kimi_enhanced import get_kimi_enhanced

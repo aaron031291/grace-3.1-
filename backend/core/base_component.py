@@ -17,7 +17,7 @@ import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Dict, Any, Optional, List, Set, TYPE_CHECKING
 
@@ -258,7 +258,7 @@ class BaseComponent(ABC):
             await self._do_activate()
 
             self._set_state(ComponentState.ACTIVE)
-            self._manifest.last_active_at = datetime.utcnow()
+            self._manifest.last_active_at = datetime.now(timezone.utc)
             self._stats["activations"] += 1
 
             logger.info(f"[{self.name}] Activated successfully")
@@ -393,7 +393,7 @@ class BaseComponent(ABC):
         """Calculate uptime since last activation."""
         if not self._manifest.last_active_at:
             return 0.0
-        return (datetime.utcnow() - self._manifest.last_active_at).total_seconds()
+        return (datetime.now(timezone.utc) - self._manifest.last_active_at).total_seconds()
 
     # =========================================================================
     # TRUST MANAGEMENT
@@ -490,7 +490,7 @@ class BaseComponent(ABC):
         self._state_history.append({
             "from_state": old_state.value,
             "to_state": new_state.value,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         })
 
         # Keep history bounded

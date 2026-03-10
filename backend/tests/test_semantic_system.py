@@ -7,7 +7,7 @@ This tests the confidence scorer with contradiction detection.
 import sys
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Setup path for imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -105,7 +105,7 @@ def test_confidence_scorer():
         result = scorer.calculate_confidence_score(
             text_content=text,
             source_type="user_generated",
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
             existing_chunks=[]
         )
         

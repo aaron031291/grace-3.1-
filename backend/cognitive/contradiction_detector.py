@@ -22,7 +22,7 @@ import logging
 import re
 from collections import deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Dict, Any, Optional, List, Set, Tuple
 
@@ -327,7 +327,7 @@ class GraceCognitionLinter(BaseComponent):
         recent = [
             o for o in self._output_history
             if o.loop_type == output.loop_type
-            and (datetime.utcnow() - o.completed_at) < timedelta(hours=1)
+            and (datetime.now(timezone.utc) - o.completed_at) < timedelta(hours=1)
         ]
 
         if not recent:
@@ -351,7 +351,7 @@ class GraceCognitionLinter(BaseComponent):
                             source_b=prev_claim,
                             context={
                                 "previous_loop_id": prev_output.loop_id,
-                                "time_delta_seconds": (datetime.utcnow() - prev_output.completed_at).total_seconds(),
+                                "time_delta_seconds": (datetime.now(timezone.utc) - prev_output.completed_at).total_seconds(),
                             },
                             suggested_resolution="Explain or acknowledge the change from previous position",
                         ))

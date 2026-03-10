@@ -13,7 +13,7 @@ import sys
 import os
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -152,7 +152,7 @@ def run_consensus():
     """Run the forensic analysis through available models."""
     print("=" * 80)
     print("FORENSIC DEEP DIVE — Self-Healing System Consensus Analysis")
-    print(f"Started: {datetime.utcnow().isoformat()}")
+    print(f"Started: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 80)
 
     results = {}
@@ -225,11 +225,11 @@ def run_consensus():
     # Save results
     output_dir = Path(__file__).parent.parent / "data" / "self_healing_analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_file = output_dir / f"forensic_analysis_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+    output_file = output_dir / f"forensic_analysis_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
 
     with open(output_file, "w") as f:
         json.dump({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "prompt": FORENSIC_PROMPT[:500] + "...",
             "results": results,
         }, f, indent=2, default=str)
@@ -254,11 +254,11 @@ def generate_local_analysis():
 
     output_dir = Path(__file__).parent.parent / "data" / "self_healing_analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_file = output_dir / f"forensic_analysis_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+    output_file = output_dir / f"forensic_analysis_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
 
     with open(output_file, "w") as f:
         json.dump({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "source": "codebase_forensic_analysis",
             "results": analysis,
         }, f, indent=2, default=str)

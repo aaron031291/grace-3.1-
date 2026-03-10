@@ -43,7 +43,7 @@ import sqlite3
 import threading
 import time
 from collections import OrderedDict
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -85,7 +85,7 @@ class FlashCacheEntry:
             return False
         try:
             last = datetime.fromisoformat(self.last_accessed)
-            return datetime.utcnow() - last > timedelta(hours=self.ttl_hours)
+            return datetime.now(timezone.utc) - last > timedelta(hours=self.ttl_hours)
         except Exception:
             return False
 
@@ -202,7 +202,7 @@ class FlashCache:
         Does NOT download the content — only stores the URI and metadata.
         """
         entry_id = hashlib.sha256(source_uri.encode()).hexdigest()[:16]
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         kw_list = [k.lower().strip() for k in (keywords or []) if k.strip()]
 
         entry = FlashCacheEntry(
@@ -649,7 +649,7 @@ class FlashCache:
         with self._db_lock:
             conn = self._get_conn()
             try:
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc)
                 rows = conn.execute(
                     "SELECT id, last_accessed, ttl_hours, validation_status FROM flash_entries"
                 ).fetchall()
@@ -742,7 +742,7 @@ class FlashCache:
 
     def _touch(self, entry_id: str):
         """Update access count and timestamp."""
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         with self._db_lock:
             conn = self._get_conn()
             try:

@@ -8,7 +8,7 @@ Complete provenance and auditability.
 import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class GenesisFileTracker:
                 key_type='FILE_OPERATION',
                 what=f"File uploaded: {Path(file_path).name}",
                 where=str(file_path),
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who=user_id,
                 why=metadata.get('reason', 'Knowledge base expansion'),
                 how='file_upload_api',
@@ -125,7 +125,7 @@ class GenesisFileTracker:
                 key_type='FILE_OPERATION',
                 what=f"File processed: {Path(file_path).name}",
                 where=f"document_id:{file_id}",
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who='ingestion_service',
                 why='Convert file to searchable knowledge',
                 how=processing_result.get('strategy', 'adaptive_processing'),
@@ -173,7 +173,7 @@ class GenesisFileTracker:
                 key_type='SYSTEM_HEALTH',
                 what="File system health check",
                 where='file_management_system',
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who='file_health_monitor',
                 why='Ensure file system integrity',
                 how='automated_health_scan',
@@ -225,7 +225,7 @@ class GenesisFileTracker:
                 key_type='LEARNING_TASK',
                 what=f"Discovered relationships for document {file_id}",
                 where=f"document_id:{file_id}",
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who='relationship_engine',
                 why='Build semantic knowledge graph',
                 how='multi_method_relationship_detection',
@@ -279,7 +279,7 @@ class GenesisFileTracker:
                 key_type='FILE_OPERATION',
                 what=f"Extracted intelligence: {Path(file_path).name}",
                 where=str(file_path),
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who='file_intelligence_agent',
                 why='Deep content understanding',
                 how='ai_powered_analysis',
@@ -329,7 +329,7 @@ class GenesisFileTracker:
                 key_type='FILE_OPERATION',
                 what=f"File deleted: {Path(file_path).name}",
                 where=str(file_path),
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who=user_id,
                 why=reason,
                 how='file_management_api',
@@ -382,7 +382,7 @@ class GenesisFileTracker:
                 key_type='LEARNING_TASK',
                 what=f"Learned optimal strategy for {file_type}",
                 where='adaptive_file_processor',
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who='strategy_learner',
                 why='Continuous processing improvement',
                 how='outcome_based_learning',

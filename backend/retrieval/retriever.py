@@ -3,11 +3,7 @@ Document retriever module for RAG (Retrieval-Augmented Generation).
 Retrieves relevant document chunks based on semantic similarity to queries.
 """
 
-import logging
 from typing import List, Dict, Any, Optional, Tuple
-from datetime import datetime
-
-from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk
@@ -72,7 +68,7 @@ class DocumentRetriever:
             except RuntimeError as e:
                 # Check if it's a CUDA out of memory error
                 if "CUDA out of memory" in str(e) or "out of memory" in str(e).lower():
-                    logger.error(f"CUDA Out of Memory - falling back to CPU inference")
+                    logger.error("CUDA Out of Memory - falling back to CPU inference")
                     # Force switch to CPU
                     self.embedding_model.device = 'cpu'
                     if hasattr(self.embedding_model.model, 'to'):

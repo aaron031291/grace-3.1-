@@ -1,7 +1,7 @@
 """Tasks domain service — scheduling, time sense."""
 from pathlib import Path
 import json, uuid, logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 logger = logging.getLogger(__name__)
 SCHED_PATH = Path(__file__).parent.parent.parent / "data" / "scheduled_tasks.json"
@@ -22,22 +22,22 @@ def live_activity():
         from database.session import session_scope
         from sqlalchemy import text
         with session_scope() as db:
-            cutoff = (datetime.utcnow() - timedelta(minutes=5)).isoformat()
+            cutoff = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
             rows = db.execute(text(
                 "SELECT key_type, what_description, who_actor, when_timestamp "
                 "FROM genesis_key WHERE when_timestamp >= :c ORDER BY when_timestamp DESC LIMIT 20"
             ), {"c": cutoff}).fetchall()
             return {"activities": [dict(r._mapping) for r in rows],
-                    "timestamp": datetime.utcnow().isoformat()}
+                    "timestamp": datetime.now(timezone.utc).isoformat()}
     except Exception:
-        return {"activities": [], "timestamp": datetime.utcnow().isoformat()}
+        return {"activities": [], "timestamp": datetime.now(timezone.utc).isoformat()}
 
 def task_history(limit=40):
     try:
         from database.session import session_scope
         from sqlalchemy import text
         with session_scope() as db:
-            cutoff = (datetime.utcnow() - timedelta(hours=24)).isoformat()
+            cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
             rows = db.execute(text(
                 "SELECT key_type, what_description, who_actor, when_timestamp "
                 "FROM genesis_key WHERE when_timestamp >= :c ORDER BY when_timestamp DESC LIMIT :l"
@@ -58,7 +58,7 @@ def submit_task(payload):
 
 def get_scheduled():
     tasks = _load_scheduled()
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(timezone.utc).isoformat()
     for t in tasks:
         if t.get("status") == "scheduled" and t.get("scheduled_for", "") <= now:
             t["status"] = "overdue"
@@ -71,7 +71,7 @@ def schedule_task(payload):
             "scheduled_for": payload.get("scheduled_for", ""),
             "priority": payload.get("priority", "medium"),
             "status": "scheduled",
-            "created_at": datetime.utcnow().isoformat()}
+            "created_at": datetime.now(timezone.utc).isoformat()}
     tasks.append(task)
     _save_scheduled(tasks)
     return task

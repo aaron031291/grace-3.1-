@@ -29,7 +29,7 @@ def _save_state(last_commit_sha: str):
     import datetime
     STATE_FILE.write_text(json.dumps({
         "last_commit_sha": last_commit_sha,
-        "last_upload_at": datetime.datetime.utcnow().isoformat(),
+        "last_upload_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     }, indent=2))
 
 

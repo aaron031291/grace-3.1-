@@ -18,7 +18,7 @@ Creates a fully autonomous system that:
 
 import logging
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 from pathlib import Path
 from sqlalchemy.orm import Session
@@ -184,7 +184,7 @@ class AutonomousHealingSystem:
         health_status = self._calculate_health_status(anomalies)
 
         assessment = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "health_status": health_status.value,
             "code_issues": len(code_issues),
             "recent_errors": len(recent_errors),
@@ -205,7 +205,7 @@ class AutonomousHealingSystem:
 
     def _query_recent_errors(self, hours: int = 24) -> List[GenesisKey]:
         """Query recent error Genesis Keys. Modified to 24h for testing."""
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
 
         errors = self.session.query(GenesisKey).filter(
             GenesisKey.created_at >= cutoff_time,
@@ -867,7 +867,7 @@ Focus on practical, safe, and effective healing."""
 
         # Add to history
         self.healing_history.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "decision": decision,
             "result": result,
             "success": success
@@ -903,7 +903,7 @@ Focus on practical, safe, and effective healing."""
             execution_results = {"executed": [], "awaiting_approval": [], "failed": []}
 
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "health_status": assessment["health_status"],
             "anomalies_detected": assessment["anomalies_detected"],
             "decisions_made": len(decisions),

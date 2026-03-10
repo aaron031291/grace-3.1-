@@ -108,7 +108,7 @@ class DeterministicHealer:
         """
         Fix: can't subtract offset-naive and offset-aware datetimes.
         Strategy: find the source file, replace naive datetime.now() /
-        datetime.utcnow() calls with timezone-aware equivalents.
+        datetime.now(timezone.utc) calls with timezone-aware equivalents.
         """
         TZ_SIGNAL = "can't subtract offset-naive and offset-aware datetimes"
         if TZ_SIGNAL not in exc_str and "offset-naive" not in exc_str:
@@ -140,7 +140,7 @@ class DeterministicHealer:
             "datetime.now(timezone.utc)",
             source,
         )
-        # Patch 3: replace datetime.utcnow() → datetime.now(timezone.utc)
+        # Patch 3: replace datetime.now(timezone.utc) → datetime.now(timezone.utc)
         source = re.sub(
             r"datetime\.utcnow\(\s*\)",
             "datetime.now(timezone.utc)",

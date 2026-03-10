@@ -18,7 +18,7 @@ import logging
 import threading
 import queue
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -92,7 +92,7 @@ def process_documents(files: List[dict], category: str = "general",
         )
         try:
             _processing_queue.put_nowait(job)
-            _processing_status[job.file_name] = {"status": "queued", "queued_at": datetime.utcnow().isoformat()}
+            _processing_status[job.file_name] = {"status": "queued", "queued_at": datetime.now(timezone.utc).isoformat()}
             results["queued"] += 1
         except queue.Full:
             results["jobs"].append({"file": job.file_name, "status": "queue_full"})
@@ -154,7 +154,7 @@ def _process_single(job: DocumentJob) -> dict:
         _processing_status[job.file_name] = {
             "status": "done",
             "chunks": stored,
-            "completed_at": datetime.utcnow().isoformat(),
+            "completed_at": datetime.now(timezone.utc).isoformat(),
         }
 
         # Full Genesis key for the completed document (not per-chunk)

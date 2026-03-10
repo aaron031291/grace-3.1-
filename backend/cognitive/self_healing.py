@@ -11,7 +11,7 @@ import logging
 import gc
 import time
 from typing import Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class SelfHealer:
     def check_and_heal(self) -> Dict[str, Any]:
         """Run full health check and heal what's broken."""
         results = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "checks": {},
             "healed": [],
             "failed": [],

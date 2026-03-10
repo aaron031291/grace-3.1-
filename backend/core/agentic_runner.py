@@ -18,7 +18,7 @@ import threading
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
@@ -60,7 +60,7 @@ class AgentTaskRunner:
             brain=brain,
             action=action,
             payload=payload,
-            queued_at=datetime.utcnow().isoformat(),
+            queued_at=datetime.now(timezone.utc).isoformat(),
         )
         with self._lock:
             self._tasks[task_id] = task
@@ -79,7 +79,7 @@ class AgentTaskRunner:
                 if not task:
                     return
                 task.status = "running"
-                task.started_at = datetime.utcnow().isoformat()
+                task.started_at = datetime.now(timezone.utc).isoformat()
 
             start = time.time()
             try:
@@ -90,7 +90,7 @@ class AgentTaskRunner:
                     task.result = result
                     task.status = "done"
                     task.elapsed_ms = round(elapsed, 1)
-                    task.completed_at = datetime.utcnow().isoformat()
+                    task.completed_at = datetime.now(timezone.utc).isoformat()
                 logger.info("[Agent] Task %s done in %.0fms", task_id, elapsed)
             except Exception as e:
                 elapsed = (time.time() - start) * 1000
@@ -98,7 +98,7 @@ class AgentTaskRunner:
                     task.error = str(e)[:500]
                     task.status = "error"
                     task.elapsed_ms = round(elapsed, 1)
-                    task.completed_at = datetime.utcnow().isoformat()
+                    task.completed_at = datetime.now(timezone.utc).isoformat()
                 logger.error("[Agent] Task %s failed: %s", task_id, e)
 
     def get_task(self, task_id: str) -> Optional[Dict[str, Any]]:

@@ -12,7 +12,7 @@ import logging
 import time
 from typing import Optional, Set, Dict, Any
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent, FileCreatedEvent, FileDeletedEvent
 
@@ -280,7 +280,7 @@ class GenesisFileWatcher(FileSystemEventHandler):
                     file_path=rel_path,
                     context_data={
                         "operation_type": "delete",
-                        "deleted_at": datetime.utcnow().isoformat()
+                        "deleted_at": datetime.now(timezone.utc).isoformat()
                     },
                     tags=["file_delete", "watcher"],
                     session=session

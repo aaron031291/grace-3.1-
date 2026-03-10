@@ -17,7 +17,7 @@ import time
 import importlib
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ class DeterministicDetector:
     def full_scan(self) -> dict:
         """Run every deterministic check and return structured facts."""
         report = {
-            "scanned_at": datetime.utcnow().isoformat(),
+            "scanned_at": datetime.now(timezone.utc).isoformat(),
             "checks": {},
             "problems": [],
             "total_checks": 0,
@@ -499,7 +499,7 @@ def _save_failure_tries(count: int) -> None:
     """Persist failure-try count."""
     try:
         _STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        _STATE_FILE.write_text(json.dumps({"failure_tries": count, "updated_at": datetime.utcnow().isoformat()}))
+        _STATE_FILE.write_text(json.dumps({"failure_tries": count, "updated_at": datetime.now(timezone.utc).isoformat()}))
     except Exception as e:
         logger.debug("Could not save deterministic_bridge_state: %s", e)
 
@@ -513,7 +513,7 @@ def deterministic_fix_cycle(task: str = None) -> dict:
       4. VERIFY fix (deterministic)
     """
     result = {
-        "started_at": datetime.utcnow().isoformat(),
+        "started_at": datetime.now(timezone.utc).isoformat(),
         "detection": None,
         "fix_prompt": None,
         "fix_generated": False,

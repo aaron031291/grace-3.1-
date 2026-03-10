@@ -1,7 +1,7 @@
 """Data domain service — whitelist sources, flash cache."""
 from pathlib import Path
 import json, uuid, logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent.parent.parent / "data" / "whitelist_sources"
@@ -29,7 +29,7 @@ def web_sources(): return {"sources": _load("web_sources")}
 def add_api(payload):
     sources = _load("api_sources")
     source = {"id": f"api-{uuid.uuid4().hex[:8]}", "name": payload.get("name", ""),
-              "url": payload.get("url", ""), "created_at": datetime.utcnow().isoformat()}
+              "url": payload.get("url", ""), "created_at": datetime.now(timezone.utc).isoformat()}
     sources.append(source)
     _save("api_sources", sources)
     return source
@@ -37,7 +37,7 @@ def add_api(payload):
 def add_web(payload):
     sources = _load("web_sources")
     source = {"id": f"web-{uuid.uuid4().hex[:8]}", "name": payload.get("name", ""),
-              "url": payload.get("url", ""), "created_at": datetime.utcnow().isoformat()}
+              "url": payload.get("url", ""), "created_at": datetime.now(timezone.utc).isoformat()}
     sources.append(source)
     _save("web_sources", sources)
     return source

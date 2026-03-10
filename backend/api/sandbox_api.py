@@ -38,7 +38,7 @@ async def mock_sandbox_worker(experiment_id: str, hypothesis: str, target_source
         
         for step in steps:
             await asyncio.sleep(1.2)
-            log_entry = f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] {step}"
+            log_entry = f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')}] {step}"
             active_experiments[experiment_id]["logs"].append(log_entry)
             
         active_experiments[experiment_id]["status"] = "completed"

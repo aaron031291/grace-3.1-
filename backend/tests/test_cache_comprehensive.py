@@ -19,7 +19,7 @@ import asyncio
 import json
 import time
 from unittest.mock import Mock, AsyncMock, MagicMock, patch
-from datetime import datetime
+from datetime import datetime, timezone
 
 import sys
 sys.path.insert(0, '/home/user/grace-3.1-/backend')
@@ -133,7 +133,7 @@ class TestSerialization:
     def test_serialize_datetime(self):
         """Test serializing datetime (uses str default)."""
         cache = RedisCache()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         data = {"timestamp": now}
         serialized = cache._serialize(data)
         result = json.loads(serialized)

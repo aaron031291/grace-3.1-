@@ -13,7 +13,7 @@ Librarian and brains are connected via Oracle export (librarian sees files) and 
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -73,7 +73,7 @@ def run_full_cycle(
     - Run governance checks (global/local rules, trust APIs)
     - Optionally review sandbox experiments (60-day trial, report, approval queue)
     """
-    start = datetime.utcnow()
+    start = datetime.now(timezone.utc)
     result = {
         "cycle_at": start.isoformat(),
         "oracle_export": None,
@@ -128,7 +128,7 @@ def run_full_cycle(
             result["errors"].append(f"sandbox_review: {e}")
             result["sandbox_review"] = {"error": str(e)}
 
-    result["duration_sec"] = (datetime.utcnow() - start).total_seconds()
+    result["duration_sec"] = (datetime.now(timezone.utc) - start).total_seconds()
     return result
 
 

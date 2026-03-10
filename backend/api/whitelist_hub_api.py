@@ -79,7 +79,7 @@ def record_genesis_block(file_path: str, content: str, trigger: str = "Whitelist
     new_version = {
         "linear_version": linear_ver,
         "genesis_key": genesis_key,
-        "timestamp": datetime.datetime.utcnow().isoformat(),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "trigger": trigger,
         "file_size": len(content),
         "status": "active"
@@ -150,7 +150,7 @@ async def run_llm_consensus(req: ConsensusRequest):
     
     flash_content = ""
     validated_nodes = []
-    timestamp = datetime.datetime.utcnow().isoformat()
+    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     
     if req.flash_cache:
         try:
@@ -188,7 +188,7 @@ async def run_llm_consensus(req: ConsensusRequest):
     knowledge_dir = WORKSPACE_ROOT / "backend" / "data" / "domains" / domain_safe / "whitelist"
     knowledge_dir.mkdir(parents=True, exist_ok=True)
     
-    file_name = f"consensus_{datetime.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.json"
+    file_name = f"consensus_{datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d%H%M%S')}.json"
     file_path = knowledge_dir / file_name
     
     content_str = json.dumps(validated_nodes, indent=2)

@@ -12,7 +12,7 @@ Provides:
 import json
 import logging
 import statistics
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
@@ -110,7 +110,7 @@ class TimeSeriesStore:
     def store(self, metric_name: str, value: float, tags: Dict[str, str] = None):
         """Store a metric data point."""
         point = MetricPoint(
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             value=value,
             metric_name=metric_name,
             tags=tags or {},
@@ -139,7 +139,7 @@ class TimeSeriesStore:
         end_time: datetime = None
     ) -> List[MetricPoint]:
         """Retrieve metric points within time range."""
-        end_time = end_time or datetime.utcnow()
+        end_time = end_time or datetime.now(timezone.utc)
         start_time = end_time - timedelta(hours=hours)
 
         # Get from cache first
@@ -165,7 +165,7 @@ class TimeSeriesStore:
         """Persist metric data to disk."""
         try:
             # Create daily file
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
             safe_name = metric_name.replace('/', '_').replace(' ', '_')
             file_path = self.storage_dir / f"{safe_name}_{today}.jsonl"
 
@@ -238,7 +238,7 @@ class TimeSeriesStore:
     def cleanup_old_data(self):
         """Remove data older than retention period."""
         try:
-            cutoff = datetime.utcnow() - timedelta(days=self.retention_days)
+            cutoff = datetime.now(timezone.utc) - timedelta(days=self.retention_days)
             cutoff_str = cutoff.strftime("%Y-%m-%d")
 
             for file_path in self.storage_dir.glob("*.jsonl"):

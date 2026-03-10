@@ -14,7 +14,7 @@ import uuid
 import json
 import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
@@ -31,7 +31,7 @@ class RepoScanner:
     def __init__(self, repo_path: str):
         self.repo_path = repo_path
         self.immutable_memory = {
-            "scan_timestamp": datetime.utcnow().isoformat(),
+            "scan_timestamp": datetime.now(timezone.utc).isoformat(),
             "repo_path": repo_path,
             "root_genesis_key": None,
             "directories": {},
@@ -152,7 +152,7 @@ class RepoScanner:
             "is_root": is_root,
             "subdirectories": [],
             "files": [],
-            "scanned_at": datetime.utcnow().isoformat()
+            "scanned_at": datetime.now(timezone.utc).isoformat()
         }
 
         # Scan contents
@@ -212,7 +212,7 @@ class RepoScanner:
             "name": file_name,
             "extension": file_ext,
             "directory_genesis_key": parent_dir_key,
-            "scanned_at": datetime.utcnow().isoformat(),
+            "scanned_at": datetime.now(timezone.utc).isoformat(),
             **metadata
         }
 

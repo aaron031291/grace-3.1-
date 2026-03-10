@@ -7,7 +7,7 @@ import uuid
 import json
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session
@@ -72,7 +72,7 @@ class ArchivalService:
         try:
             # Default to yesterday
             if target_date is None:
-                target_date = datetime.utcnow() - timedelta(days=1)
+                target_date = datetime.now(timezone.utc) - timedelta(days=1)
 
             # Get start and end of day
             day_start = target_date.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -137,7 +137,7 @@ class ArchivalService:
             # Mark keys as archived
             for key in keys:
                 key.status = GenesisKeyStatus.ARCHIVED
-                key.archived_at = datetime.utcnow()
+                key.archived_at = datetime.now(timezone.utc)
                 key.archive_path = keys_file
 
             sess.commit()
@@ -231,7 +231,7 @@ class ArchivalService:
             "=" * 80,
             f"GENESIS KEY DAILY REPORT",
             f"Date: {date.strftime('%Y-%m-%d')}",
-            f"Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
             "=" * 80,
             "",
             "SUMMARY",
@@ -325,7 +325,7 @@ class ArchivalService:
         # Structured data
         report_data = {
             "date": date.isoformat(),
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "statistics": stats,
             "tracking_summary": {
                 "unique_actors": len(actors),

@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -36,7 +36,7 @@ def smoke_test() -> Dict[str, Any]:
     start = time.time()
     results = {
         "type": "smoke_test",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "checks": [],
         "passed": 0,
         "failed": 0,
@@ -143,7 +143,7 @@ def full_test() -> Dict[str, Any]:
 
     result = {
         "type": "full_test",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "passed": passed,
         "failed": failed,
         "total": passed + failed,
@@ -222,7 +222,7 @@ def diagnostic() -> Dict[str, Any]:
 
     result = {
         "type": "diagnostic",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "smoke_test": smoke,
         "full_test": full,
         "integration_health": health_data,
@@ -394,7 +394,7 @@ def _build_smoke_summary(results: Dict) -> str:
 
 def _save_result(result: Dict):
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     (RESULTS_DIR / f"{result['type']}_{ts}.json").write_text(
         json.dumps(result, indent=2, default=str)
     )

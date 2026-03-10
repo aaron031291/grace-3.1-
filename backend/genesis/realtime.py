@@ -15,7 +15,7 @@ import logging
 import time
 from typing import Dict, Any, List, Callable, Optional
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import deque
 
 from core.datetime_utils import as_naive_utc
@@ -68,7 +68,7 @@ class GenesisRealtimeEngine:
         Called every time a genesis key is created.
         This is the real-time hook — fires instantly, no polling.
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         event = {
             "key_type": key_type,
             "what": what,
@@ -173,7 +173,7 @@ class GenesisRealtimeEngine:
         for existing in self._alerts[-10:]:
             if existing.alert_type == alert_type and not existing.acknowledged:
                 ts = as_naive_utc(datetime.fromisoformat(existing.timestamp))
-                if ts and (datetime.utcnow() - ts).seconds < 30:
+                if ts and (datetime.now(timezone.utc) - ts).seconds < 30:
                     return
 
         alert = Alert(
@@ -181,7 +181,7 @@ class GenesisRealtimeEngine:
             message=message,
             severity=severity,
             data=data,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         )
         self._alerts.append(alert)
         self._stats["total_alerts"] += 1

@@ -12,7 +12,7 @@ import json
 import time
 import threading
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from collections import deque
@@ -32,7 +32,7 @@ _rollback_lock = threading.Lock()
 def snapshot_state(label: str = "") -> str:
     """Take a snapshot of critical files for rollback."""
     snapshot_id = f"SNAP-{int(time.time())}"
-    snapshot = {"id": snapshot_id, "label": label, "ts": datetime.utcnow().isoformat(), "files": {}}
+    snapshot = {"id": snapshot_id, "label": label, "ts": datetime.now(timezone.utc).isoformat(), "files": {}}
 
     root = Path(__file__).parent.parent
     critical = ["app.py", "api/brain_api_v2.py"] + \
@@ -242,7 +242,7 @@ def record_provenance(action: str, content_hash: str, model: str = "",
 
     entry = {
         "seq": int(time.time() * 1000),
-        "ts": datetime.utcnow().isoformat(),
+        "ts": datetime.now(timezone.utc).isoformat(),
         "action": action,
         "content_hash": content_hash,
         "model": model,

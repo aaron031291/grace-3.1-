@@ -9,7 +9,7 @@ Connects LLM orchestration to Layer 1 message bus for:
 
 from typing import Dict, Any, Optional
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
@@ -105,7 +105,7 @@ class LLMOrchestrationConnector:
         self.available_skills[procedure_name] = {
             "procedure_id": procedure_id,
             "trust_score": trust_score,
-            "registered_at": datetime.utcnow().isoformat()
+            "registered_at": datetime.now(timezone.utc).isoformat()
         }
 
         # Publish skill registered event
@@ -140,7 +140,7 @@ class LLMOrchestrationConnector:
                 "llm_used": llm_used,
                 "confidence": confidence,
                 "success": confidence >= 0.7,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
             from_component=ComponentType.LLM_ORCHESTRATION
         )
@@ -233,7 +233,7 @@ class LLMOrchestrationConnector:
         self.available_skills[skill_name] = {
             "procedure_id": procedure_id,
             "trust_score": trust_score,
-            "registered_at": datetime.utcnow().isoformat()
+            "registered_at": datetime.now(timezone.utc).isoformat()
         }
 
         logger.info(

@@ -17,7 +17,7 @@ downloadable and exportable.
 import json
 import logging
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Any
 
@@ -31,7 +31,7 @@ def generate_daily_report(hours: int = 24) -> dict:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     report = {
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "window_hours": hours,
         "sections": {},
     }
@@ -93,7 +93,7 @@ def generate_daily_report(hours: int = 24) -> dict:
     report["title"] = title
 
     # Save
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     safe_title = "".join(c if c.isalnum() or c in " -_" else "" for c in title)[:60].strip().replace(" ", "_")
     filename = f"{timestamp}_{safe_title}.json"
     filepath = REPORTS_DIR / filename
@@ -144,7 +144,7 @@ def _generate_title(report: dict) -> str:
     except Exception:
         pass
 
-    return f"Grace Daily Report {datetime.utcnow().strftime('%Y-%m-%d')}"
+    return f"Grace Daily Report {datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
 
 
 def list_reports() -> list:

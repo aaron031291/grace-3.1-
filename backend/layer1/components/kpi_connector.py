@@ -7,7 +7,7 @@ KPI tracking and trust score generation from component performance.
 
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -186,7 +186,7 @@ class KPIConnector:
                     "component_name": component_name,
                     "metric_name": metric_name,
                     "value": value,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.COGNITIVE_ENGINE,
             )
@@ -265,7 +265,7 @@ class KPIConnector:
             # Extract metadata from message
             metadata = {
                 "topic": message.topic,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
             
             # Increment KPI

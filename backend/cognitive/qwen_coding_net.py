@@ -21,7 +21,7 @@ The full loop:
 import json
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -320,7 +320,7 @@ class QwenCodingNet:
             ts = TimeSense()
             return ts.get_context()
         except Exception:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             return {
                 "summary": f"{now.strftime('%A %H:%M')} UTC",
                 "hour": now.hour,

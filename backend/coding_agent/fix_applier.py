@@ -21,7 +21,7 @@ import shutil
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -87,7 +87,7 @@ class FixApplier:
         Returns:
             ApplyResult with full details of what happened
         """
-        result = ApplyResult(applied_at=datetime.utcnow().isoformat())
+        result = ApplyResult(applied_at=datetime.now(timezone.utc).isoformat())
 
         # ── 1. Resolve and validate path ───────────────────────────────
         target = self._resolve_safe_path(file_path)

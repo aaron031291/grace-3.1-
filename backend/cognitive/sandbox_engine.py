@@ -27,7 +27,7 @@ import logging
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from enum import Enum
@@ -149,9 +149,9 @@ def propose_and_start_experiment(
         hypothesis=hypothesis,
         domain=domain,
         status=ExperimentStatus.PROPOSED,
-        created_at=datetime.utcnow().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
         tracking_days=tracking_days,
-        end_date=(datetime.utcnow() + timedelta(days=tracking_days)).isoformat(),
+        end_date=(datetime.now(timezone.utc) + timedelta(days=tracking_days)).isoformat(),
         config_changes=config_changes or {},
         source=source,
     )
@@ -185,7 +185,7 @@ def propose_and_start_experiment(
 
     # Auto-start (no permission needed for experiments)
     exp.status = ExperimentStatus.RUNNING
-    exp.end_date = (datetime.utcnow() + timedelta(days=tracking_days)).isoformat()
+    exp.end_date = (datetime.now(timezone.utc) + timedelta(days=tracking_days)).isoformat()
 
     _save_experiment(exp)
 
@@ -217,7 +217,7 @@ def start_experiment(exp_id: str) -> Dict[str, Any]:
         return {"error": "Experiment not found"}
 
     exp.status = ExperimentStatus.RUNNING
-    exp.end_date = (datetime.utcnow() + timedelta(days=exp.tracking_days)).isoformat()
+    exp.end_date = (datetime.now(timezone.utc) + timedelta(days=exp.tracking_days)).isoformat()
 
     _save_experiment(exp)
     return {"started": True, "id": exp_id, "end_date": exp.end_date}
@@ -231,9 +231,9 @@ def record_checkpoint(exp_id: str) -> Dict[str, Any]:
 
     current = _capture_baseline_metrics()
     checkpoint = {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "metrics": current,
-        "day": (datetime.utcnow() - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
+        "day": (datetime.now(timezone.utc) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     # Calculate deltas from baseline
@@ -292,7 +292,7 @@ def analyse_experiment(exp_id: str) -> Dict[str, Any]:
         "improvement_rate": round(improved_count / total_metrics, 3) if total_metrics else 0,
         "recommendation": "adopt" if improved_count > total_metrics / 2 else "reject",
         "checkpoints_recorded": len(exp.checkpoints),
-        "days_tracked": (datetime.utcnow() - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
+        "days_tracked": (datetime.now(timezone.utc) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     exp.final_report = json.dumps(analysis, indent=2)

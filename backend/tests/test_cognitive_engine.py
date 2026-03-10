@@ -4,7 +4,7 @@ Tests for the cognitive engine and invariant enforcement.
 These tests validate that the 12 invariants are properly enforced.
 """
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from cognitive.engine import CognitiveEngine, DecisionContext
 from cognitive.ooda import OODALoop, OODAPhase
@@ -195,7 +195,7 @@ def test_decision_freeze_point_enforced():
         problem_statement="Make decision",
         goal="Decide on action",
         success_criteria=["Decision made"],
-        decision_freeze_point=datetime.utcnow() - timedelta(seconds=1)  # Past
+        decision_freeze_point=datetime.now(timezone.utc) - timedelta(seconds=1)  # Past
     )
 
     result = validator.validate_all(context)

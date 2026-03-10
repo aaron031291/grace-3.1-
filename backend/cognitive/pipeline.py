@@ -19,7 +19,7 @@ import logging
 import os
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ class CognitivePipeline:
         ctx = PipelineContext(
             prompt=prompt, system_prompt=system_prompt,
             project_folder=project_folder, current_file=current_file,
-            started_at=datetime.utcnow().isoformat(),
+            started_at=datetime.now(timezone.utc).isoformat(),
         )
         skip = set(skip_stages or [])
 
@@ -109,7 +109,7 @@ class CognitivePipeline:
 
         self._stage_genesis(ctx)
 
-        ctx.completed_at = datetime.utcnow().isoformat()
+        ctx.completed_at = datetime.now(timezone.utc).isoformat()
         return ctx
 
     # ── Stage 1: TimeSense ─────────────────────────────────────────────

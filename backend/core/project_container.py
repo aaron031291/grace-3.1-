@@ -10,7 +10,7 @@ Rule hierarchy: GLOBAL (immutable) → PROJECT (per-project) → EXECUTION (per-
 import json
 import logging
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
@@ -132,7 +132,7 @@ class ProjectContainer:
         """Update project whitelist."""
         wl_file = self.root / "whitelist" / "sources.json"
         wl_file.parent.mkdir(parents=True, exist_ok=True)
-        data["updated_at"] = datetime.utcnow().isoformat()
+        data["updated_at"] = datetime.now(timezone.utc).isoformat()
         wl_file.write_text(json.dumps(data, indent=2))
         return {"updated": True}
 

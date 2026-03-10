@@ -15,7 +15,7 @@ test in sandbox, and request human approval via governance.
 import asyncio
 import json
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -282,7 +282,7 @@ class AdaptiveCICD:
         self.run_history[pipeline_id].append({
             "status": status,
             "duration": duration,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "metadata": metadata or {}
         })
 
@@ -303,7 +303,7 @@ class AdaptiveCICD:
         if not history:
             return PipelineKPIs(
                 pipeline_id=pipeline_id,
-                timestamp=datetime.utcnow().isoformat()
+                timestamp=datetime.now(timezone.utc).isoformat()
             )
 
         # Performance KPIs
@@ -319,7 +319,7 @@ class AdaptiveCICD:
         )
 
         # Calculate throughput (runs per hour in last 24h)
-        recent_cutoff = datetime.utcnow() - timedelta(hours=24)
+        recent_cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
         recent_runs = [
             r for r in history
             if datetime.fromisoformat(r.get("timestamp", "2000-01-01")) > recent_cutoff
@@ -373,7 +373,7 @@ class AdaptiveCICD:
 
         kpis = PipelineKPIs(
             pipeline_id=pipeline_id,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             success_rate=success_rate,
             avg_duration_seconds=avg_duration,
             p95_duration_seconds=p95_duration,
@@ -479,7 +479,7 @@ Format as JSON."""
             cache_key = f"{pipeline_id}:{hashlib.md5(json.dumps(context, sort_keys=True).encode()).hexdigest()[:8]}"
             self.llm_cache[cache_key] = {
                 "recommendation": recommendation,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "prompt": prompt[:500]
             }
 
@@ -603,7 +603,7 @@ Format as JSON."""
             governance_action=governance_action,
             llm_recommendation=json.dumps(llm_rec),
             sandbox_required=sandbox_required,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             metadata={
                 "context": context,
                 "trust_level": trust.trust_level.value,
@@ -736,9 +736,9 @@ Format as JSON."""
 
             # Wait for completion (with timeout)
             timeout = 300  # 5 minutes
-            start = datetime.utcnow()
+            start = datetime.now(timezone.utc)
 
-            while (datetime.utcnow() - start).seconds < timeout:
+            while (datetime.now(timezone.utc) - start).seconds < timeout:
                 current_run = cicd.get_run(run.id)
                 if current_run.status.value in ["success", "failed", "cancelled"]:
                     break
@@ -756,7 +756,7 @@ Format as JSON."""
                     if s.status.value == "success"
                 ),
                 "stages_total": len(final_run.stage_results),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
 
             self.sandbox_runs[sandbox_id] = sandbox_result
@@ -794,11 +794,11 @@ Format as JSON."""
 
         # Calculate deadline based on risk
         if risk_level == "critical":
-            deadline = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+            deadline = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
         elif risk_level == "high":
-            deadline = (datetime.utcnow() + timedelta(hours=4)).isoformat()
+            deadline = (datetime.now(timezone.utc) + timedelta(hours=4)).isoformat()
         else:
-            deadline = (datetime.utcnow() + timedelta(hours=24)).isoformat()
+            deadline = (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat()
 
         request = GovernanceRequest(
             id=f"gov-{trigger.id[:8]}",
@@ -858,7 +858,7 @@ Format as JSON."""
 
         request.status = "approved" if approved else "rejected"
         request.reviewer = reviewer
-        request.response_time = datetime.utcnow().isoformat()
+        request.response_time = datetime.now(timezone.utc).isoformat()
 
         logger.info(
             f"[Adaptive] Governance request {request_id} {request.status} by {reviewer}"
@@ -911,7 +911,7 @@ Format as JSON."""
                 })
 
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "pipelines_analyzed": len(self.trust_scores),
             "improvements_found": len(improvements),
             "improvements": improvements
@@ -923,21 +923,21 @@ Format as JSON."""
 
     def _generate_genesis_key(self, action: str, resource: str) -> str:
         """Generate Genesis Key for adaptive operations."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         key_data = f"adaptive:{action}:{resource}:{timestamp}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:12]
         return f"gk-adapt-{key_hash}"
 
     def _generate_trigger_id(self, pipeline_id: str) -> str:
         """Generate unique trigger ID."""
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         key_data = f"trigger:{pipeline_id}:{timestamp}"
         return hashlib.sha256(key_data.encode()).hexdigest()[:12]
 
     def get_dashboard_data(self) -> Dict[str, Any]:
         """Get comprehensive dashboard data."""
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "trust_scores": {
                 pid: asdict(ts) for pid, ts in self.trust_scores.items()
             },

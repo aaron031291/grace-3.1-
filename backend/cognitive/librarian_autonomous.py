@@ -19,7 +19,7 @@ import os
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -455,7 +455,7 @@ class AutonomousLibrarian:
         config = {
             "domain": domain_name,
             "description": description,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "subdirectories": subdirs,
             "auto_learn": True,
             "governance_rules": [],

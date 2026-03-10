@@ -14,7 +14,7 @@ Key Features:
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import json
 import uuid
@@ -60,7 +60,7 @@ class SymbolicRule:
     
     def __post_init__(self):
         if self.created_at is None:
-            self.created_at = datetime.utcnow()
+            self.created_at = datetime.now(timezone.utc)
 
 
 class NeuralToSymbolicRuleGenerator:
@@ -170,7 +170,7 @@ class NeuralToSymbolicRuleGenerator:
                 confidence=confidence,
                 support_count=len(member_indices),
                 features=features,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
             )
             
             patterns.append(pattern)

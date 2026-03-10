@@ -16,7 +16,7 @@ import json
 import logging
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, Optional
 
@@ -62,7 +62,7 @@ def write_file(path: str, content: str, source: str = "unknown") -> dict:
         "source": source,
         "genesis_key": gk_id,
         "hash": content_hash,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     with _event_lock:
         _file_events.append(event)

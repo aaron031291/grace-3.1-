@@ -12,7 +12,7 @@ import os
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Tuple
 from sqlalchemy.orm import Session
@@ -63,70 +63,72 @@ class SymbioticVersionControl:
         Wrapped in session_scope for thread-safe atomicity.
         """
         with session_scope() as session:
-            # 1. Path Resolution
-            if not os.path.isabs(file_path):
-                abs_path = os.path.join(self.base_path, file_path)
-            else:
-                abs_path = file_path
-            
-            rel_path = os.path.relpath(abs_path, self.base_path)
-
-            # 2. Key Identification (FILE-prefix)
-            file_hash_id = hashlib.md5(rel_path.encode()).hexdigest()[:12]
-            file_genesis_key = f"FILE-{file_hash_id}"
-
-            # 3. Create Operation Key
-            # We use the factory pattern which is thread-safe
-            self.genesis_service = get_genesis_service(session)
-            operation_genesis_key = self.genesis_service.create_key(
-                key_type=GenesisKeyType.FILE_OPERATION,
-                what_description=f"{operation_type.capitalize()}d file: {os.path.basename(abs_path)}",
-                who_actor=user_id or "system",
-                where_location=rel_path,
-                why_reason=change_description or f"File {operation_type} operation",
-                how_method="Symbiotic Version Control",
-                user_id=user_id,
-                file_path=rel_path,
-                parent_key_id=file_genesis_key,
-                context_data={"operation_type": operation_type, "symbiotic": True},
-                tags=["file_operation", operation_type, file_genesis_key, "symbiotic"],
-                session=session
-            )
-
-            # 4. Defensive Data Extraction
-            try:
-                operation_key_id = operation_genesis_key.key_id
-                operation_context_data = (operation_genesis_key.context_data or {}).copy()
-            except Exception:
-                operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
-                operation_context_data = {}
-
-            # 5. Version Tracking
-            self.version_tracker = get_file_version_tracker(self.base_path)
-            version_result = self.version_tracker.track_file_version(
-                file_genesis_key=file_genesis_key,
-                file_path=abs_path,
-                user_id=user_id,
-                version_note=f"Genesis Key: {operation_key_id}",
-                auto_detect_change=True,
-                session=session
-            )
-
-            # 6. Linking (Update Operation Key with Version Info)
-            if version_result.get("changed", True):
-                operation_context_data["version_key_id"] = version_result["version_key_id"]
-                operation_context_data["version_number"] = version_result["version_number"]
+            # Create a savepoint for this symbiotic tracking operation
+            with session.begin_nested():
+                # 1. Path Resolution
+                if not os.path.isabs(file_path):
+                    abs_path = os.path.join(self.base_path, file_path)
+                else:
+                    abs_path = file_path
                 
+                rel_path = os.path.relpath(abs_path, self.base_path)
+    
+                # 2. Key Identification (FILE-prefix)
+                file_hash_id = hashlib.md5(rel_path.encode()).hexdigest()[:12]
+                file_genesis_key = f"FILE-{file_hash_id}"
+    
+                # 3. Create Operation Key
+                # We use the factory pattern which is thread-safe
+                self.genesis_service = get_genesis_service(session)
+                operation_genesis_key = self.genesis_service.create_key(
+                    key_type=GenesisKeyType.FILE_OPERATION,
+                    what_description=f"{operation_type.capitalize()}d file: {os.path.basename(abs_path)}",
+                    who_actor=user_id or "system",
+                    where_location=rel_path,
+                    why_reason=change_description or f"File {operation_type} operation",
+                    how_method="Symbiotic Version Control",
+                    user_id=user_id,
+                    file_path=rel_path,
+                    parent_key_id=file_genesis_key,
+                    context_data={"operation_type": operation_type, "symbiotic": True},
+                    tags=["file_operation", operation_type, file_genesis_key, "symbiotic"],
+                    session=session
+                )
+    
+                # 4. Defensive Data Extraction
                 try:
-                    # Attempt refresh if persistent
-                    session.refresh(operation_genesis_key)
+                    operation_key_id = operation_genesis_key.key_id
+                    operation_context_data = (operation_genesis_key.context_data or {}).copy()
                 except Exception:
-                    # Fallback: merge if detached or re-query
-                    operation_genesis_key = session.merge(operation_genesis_key)
-                    session.refresh(operation_genesis_key)
-
-                operation_genesis_key.context_data = operation_context_data
-                # session_scope will handle commit
+                    operation_key_id = f"UNKNOWN-{id(operation_genesis_key)}"
+                    operation_context_data = {}
+    
+                # 5. Version Tracking
+                self.version_tracker = get_file_version_tracker(self.base_path)
+                version_result = self.version_tracker.track_file_version(
+                    file_genesis_key=file_genesis_key,
+                    file_path=abs_path,
+                    user_id=user_id,
+                    version_note=f"Genesis Key: {operation_key_id}",
+                    auto_detect_change=True,
+                    session=session
+                )
+    
+                # 6. Linking (Update Operation Key with Version Info)
+                if version_result.get("changed", True):
+                    operation_context_data["version_key_id"] = version_result["version_key_id"]
+                    operation_context_data["version_number"] = version_result["version_number"]
+                    
+                    try:
+                        # Attempt refresh if persistent
+                        session.refresh(operation_genesis_key)
+                    except Exception:
+                        # Fallback: merge if detached or re-query
+                        operation_genesis_key = session.merge(operation_genesis_key)
+                        session.refresh(operation_genesis_key)
+    
+                    operation_genesis_key.context_data = operation_context_data
+                    # session_scope will handle commit
 
             return {
                 "file_genesis_key": file_genesis_key,
@@ -136,7 +138,7 @@ class SymbioticVersionControl:
                 "changed": version_result.get("changed", True),
                 "file_path": rel_path,
                 "absolute_path": abs_path,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "symbiotic": True
             }
 

@@ -13,7 +13,7 @@ Three layers:
 import json
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -55,7 +55,7 @@ class GhostMemory:
             "type": event_type,
             "content": content[:3000],
             "metadata": metadata or {},
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
             "turn": self._total_turns,
         })
         self._total_turns += 1
@@ -155,7 +155,7 @@ class GhostMemory:
             "errors_encountered": len(errors),
             "total_turns": self._total_turns,
             "confidence": confidence,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "duration_s": round(time.time() - self._task_start, 1),
             "would_do_differently": "Try fewer iterations" if len(errors) > 3 else "Same approach",
         }
@@ -163,7 +163,7 @@ class GhostMemory:
     def _save_to_playbook(self, reflection: Dict):
         """Save reflection to the long-term playbook."""
         PLAYBOOK_DIR.mkdir(parents=True, exist_ok=True)
-        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         (PLAYBOOK_DIR / f"{reflection['pattern_name']}_{ts}.json").write_text(
             json.dumps(reflection, indent=2, default=str)
         )

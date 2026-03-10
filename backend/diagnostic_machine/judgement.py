@@ -12,7 +12,7 @@ Evaluates interpreted data to produce:
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
@@ -205,7 +205,7 @@ class JudgementLayer:
         interpreted_data: InterpretedData
     ) -> JudgementResult:
         """Produce judgement from sensor and interpreted data."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         result = JudgementResult()
 
         # Calculate health score
@@ -235,7 +235,7 @@ class JudgementLayer:
         # Determine recommended action
         result.recommended_action = self._determine_action(result)
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         result.judgement_timestamp = end_time
         result.judgement_duration_ms = (end_time - start_time).total_seconds() * 1000
 
@@ -725,7 +725,7 @@ class JudgementLayer:
             is_active=True,
             anomalies_detected=anomaly_count,
             violations_detected=violation_count,
-            last_check=datetime.utcnow(),
+            last_check=datetime.now(timezone.utc),
             alert_threshold=self.avn_threshold,
             current_alert_level=alert_level,
         )

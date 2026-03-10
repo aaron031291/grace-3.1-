@@ -9,7 +9,7 @@ import logging
 import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -182,7 +182,7 @@ class KnowledgeBaseManager:
             metadata_dict[file_metadata_key] = {
                 "filename": filename,
                 "size": len(file_content),
-                "created": datetime.utcnow().isoformat(),
+                "created": datetime.now(timezone.utc).isoformat(),
                 "user_metadata": metadata or {},
             }
             

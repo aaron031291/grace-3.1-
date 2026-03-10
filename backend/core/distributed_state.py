@@ -10,7 +10,7 @@ import json
 import time
 import threading
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -121,7 +121,7 @@ def register_instance(instance_id: str, metadata: dict = None):
     """Register a Grace instance for multi-instance awareness."""
     set_state(f"instance:{instance_id}", {
         "id": instance_id,
-        "started_at": datetime.utcnow().isoformat(),
+        "started_at": datetime.now(timezone.utc).isoformat(),
         "metadata": metadata or {},
     }, ttl=300)
 
@@ -143,7 +143,7 @@ def list_instances() -> list:
             return instances
         except Exception:
             pass
-    return [{"id": "local", "started_at": datetime.utcnow().isoformat(), "note": "single instance (no Redis)"}]
+    return [{"id": "local", "started_at": datetime.now(timezone.utc).isoformat(), "note": "single instance (no Redis)"}]
 
 
 def get_distributed_stats() -> dict:

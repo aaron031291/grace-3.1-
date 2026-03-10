@@ -12,7 +12,7 @@ import json
 import logging
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -42,7 +42,7 @@ class NotificationSystem:
             "title": title,
             "message": message,
             "severity": severity,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "channels_sent": [],
         }
 
@@ -55,7 +55,7 @@ class NotificationSystem:
         # File
         if channel in ("all", "file"):
             NOTIF_DIR.mkdir(parents=True, exist_ok=True)
-            ts = datetime.utcnow().strftime("%Y%m%d")
+            ts = datetime.now(timezone.utc).strftime("%Y%m%d")
             log_file = NOTIF_DIR / f"alerts_{ts}.jsonl"
             with open(log_file, "a") as f:
                 f.write(json.dumps(notif) + "\n")
@@ -93,7 +93,7 @@ class NotificationSystem:
         return list(reversed(self._history[-limit:]))
 
     def get_today(self) -> List[Dict]:
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         return [n for n in self._history if n["timestamp"][:10] == today]
 
 

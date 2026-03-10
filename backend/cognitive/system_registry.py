@@ -22,7 +22,7 @@ import json
 import time
 from typing import Dict, Any, List, Optional
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
@@ -125,7 +125,7 @@ class SystemRegistry:
                     module_path=str(d.relative_to(backend)),
                     description=self._get_module_description(d),
                     status=status,
-                    registered_at=datetime.utcnow().isoformat(),
+                    registered_at=datetime.now(timezone.utc).isoformat(),
                     source="auto_discovery",
                     file_count=len(py_files),
                 )
@@ -144,7 +144,7 @@ class SystemRegistry:
                             module_path=f"frontend/src/components/{f.name}",
                             description=f"Frontend tab: {f.stem}",
                             status="green",
-                            registered_at=datetime.utcnow().isoformat(),
+                            registered_at=datetime.now(timezone.utc).isoformat(),
                             source="auto_discovery",
                             file_count=1,
                         )
@@ -183,7 +183,7 @@ class SystemRegistry:
                     id=comp_id, name=name, category=category,
                     module_path=path, description=desc,
                     status=status,
-                    registered_at=datetime.utcnow().isoformat(),
+                    registered_at=datetime.now(timezone.utc).isoformat(),
                     source="auto_discovery",
                 )
 
@@ -243,7 +243,7 @@ class SystemRegistry:
             description=f"HUNTER assimilated component (trust: {trust:.0f})",
             status="green" if trust >= 60 else "amber" if trust >= 40 else "red",
             health_score=trust,
-            registered_at=datetime.utcnow().isoformat(),
+            registered_at=datetime.now(timezone.utc).isoformat(),
             source="hunter_handshake",
             file_count=len(files),
             is_new=True,

@@ -11,7 +11,7 @@ import os
 import subprocess
 import logging
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +217,7 @@ class GitGenesisBridge:
                 "files_tracked": len(genesis_keys_created),
                 "genesis_keys": genesis_keys_created,
                 "errors": errors,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
 
         except Exception as e:

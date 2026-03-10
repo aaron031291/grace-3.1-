@@ -5,7 +5,7 @@ Tests the SemanticContradictionDetector and its integration with ConfidenceScore
 
 import pytest
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import Mock, patch, MagicMock
 
 # Setup path for imports
@@ -170,7 +170,7 @@ class TestConfidenceScorerIntegration:
         result = scorer.calculate_confidence_score(
             text_content=text,
             source_type="user_generated",
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
             existing_chunks=[]
         )
         

@@ -6,7 +6,7 @@ the 12-invariant cognitive blueprint.
 """
 import functools
 from typing import Callable, Any, Optional, Dict, List
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from .engine import CognitiveEngine, DecisionContext
 from .ooda import OODAPhase
@@ -79,7 +79,7 @@ def cognitive_operation(
             # Set planning timeout if specified
             if planning_timeout_seconds:
                 context.decision_freeze_point = (
-                    datetime.utcnow() + timedelta(seconds=planning_timeout_seconds)
+                    datetime.now(timezone.utc) + timedelta(seconds=planning_timeout_seconds)
                 )
 
             # OBSERVE: Gather inputs

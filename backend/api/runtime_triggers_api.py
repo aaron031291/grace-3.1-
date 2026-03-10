@@ -20,7 +20,7 @@ Each trigger can:
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import os
 import sys
@@ -46,7 +46,7 @@ class TriggerEntry:
         self.detail = detail
         self.value = value
         self.healed = healed
-        self.timestamp = datetime.utcnow().isoformat()
+        self.timestamp = datetime.now(timezone.utc).isoformat()
 
     def to_dict(self):
         return {
@@ -347,7 +347,7 @@ async def scan_triggers():
         "critical": sum(1 for t in all_triggers if t.get("severity") == "critical"),
         "warning": sum(1 for t in all_triggers if t.get("severity") == "warning"),
         "triggers": all_triggers,
-        "scanned_at": datetime.utcnow().isoformat(),
+        "scanned_at": datetime.now(timezone.utc).isoformat(),
     }
 
 

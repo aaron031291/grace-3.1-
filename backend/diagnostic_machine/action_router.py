@@ -25,7 +25,7 @@ import os
 import json
 import logging
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -162,7 +162,7 @@ class ActionResult:
     message: str
     details: Dict = field(default_factory=dict)
     duration_ms: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -176,7 +176,7 @@ class ActionDecision:
     target_components: List[str] = field(default_factory=list)
     parameters: Dict = field(default_factory=dict)
     results: List[ActionResult] = field(default_factory=list)
-    decision_timestamp: datetime = field(default_factory=datetime.utcnow)
+    decision_timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -498,7 +498,7 @@ class ActionRouter:
                 key_type=action_type.value.upper(),
                 what=what,
                 where=",".join(decision.target_components) if decision.target_components else "system",
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 who="layer4_action_router",
                 how="autonomous_action",
                 why=decision.reason,
@@ -534,7 +534,7 @@ class ActionRouter:
         9. Execute: Execute with tracking
         10. Learn: Store outcome in memory
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         self._decision_counter += 1
 
         try:
@@ -551,7 +551,7 @@ class ActionRouter:
         judgement: JudgementResult
     ) -> ActionDecision:
         """Inner routing logic; exceptions are caught by route() for robust cycles."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         # Reset OODA so each decision starts with OBSERVE (avoids "Cannot observe in phase DECIDE")
         if self.cognitive_engine and hasattr(self.cognitive_engine, 'ooda') and self.cognitive_engine.ooda:
             try:
@@ -708,7 +708,7 @@ class ActionRouter:
             except Exception as e:
                 logger.warning(f"[LAYER4] OODA Act failed: {e}")
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         decision.decision_timestamp = end_time
 
         # ========== STEP 12: Learn from Outcome ==========
@@ -940,7 +940,7 @@ class ActionRouter:
     def _execute_freeze(self, decision: ActionDecision) -> ActionResult:
         """Execute system freeze action with Genesis Key tracking."""
         self._action_counter += 1
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         # Create Genesis Key
         genesis_key = self._create_action_genesis_key(
@@ -965,7 +965,7 @@ class ActionRouter:
             freeze_file = self.log_dir / "SYSTEM_FROZEN"
             with open(freeze_file, 'w') as f:
                 json.dump({
-                    'frozen_at': datetime.utcnow().isoformat(),
+                    'frozen_at': datetime.now(timezone.utc).isoformat(),
                     'decision_id': decision.decision_id,
                     'reason': decision.reason,
                     'components': decision.target_components,
@@ -974,7 +974,7 @@ class ActionRouter:
 
             logger.critical(f"SYSTEM FROZEN: {decision.reason}")
 
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.FREEZE_SYSTEM,
@@ -1030,13 +1030,13 @@ class ActionRouter:
     def _execute_alert(self, decision: ActionDecision, judgement: JudgementResult) -> ActionResult:
         """Execute alert action."""
         self._action_counter += 1
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         try:
             # Build alert payload
             alert_payload = {
                 'alert_id': f"ALERT-{self._action_counter:04d}",
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'severity': 'critical' if judgement.health.status == HealthStatus.CRITICAL else 'warning',
                 'decision_id': decision.decision_id,
                 'reason': decision.reason,
@@ -1075,7 +1075,7 @@ class ActionRouter:
 
             alert_payload['notification_results'] = notification_results
 
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             return ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.ALERT_HUMAN,
@@ -1347,7 +1347,7 @@ This is an automated message from GRACE Action Router.
                     key_type="HEALING_ACTION",
                     what=f"Execute self-healing for {', '.join(decision.target_components)}",
                     where=",".join(decision.target_components),
-                    when=datetime.utcnow(),
+                    when=datetime.now(timezone.utc),
                     who="layer4_action_router",
                     how="autonomous_healing",
                     why=decision.reason,
@@ -1418,7 +1418,7 @@ This is an automated message from GRACE Action Router.
         # ========== STEP 4: Test in Sandbox (if risky) ==========
         for healing in healing_actions:
             self._action_counter += 1
-            start_time = datetime.utcnow()
+            start_time = datetime.now(timezone.utc)
 
             # Check if action should be tested in sandbox first
             should_test_sandbox = (
@@ -1461,7 +1461,7 @@ This is an automated message from GRACE Action Router.
                     func = self._healing_functions[healing.function]
                     success = func(healing.parameters)
 
-                    end_time = datetime.utcnow()
+                    end_time = datetime.now(timezone.utc)
                     result = ActionResult(
                         action_id=f"ACT-{self._action_counter:04d}",
                         action_type=ActionType.TRIGGER_HEALING,
@@ -1604,7 +1604,7 @@ This is an automated message from GRACE Action Router.
     def _execute_cicd(self, decision: ActionDecision) -> ActionResult:
         """Execute CI/CD pipeline trigger."""
         self._action_counter += 1
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         try:
             cicd_reason = decision.parameters.get('cicd_reason', 'diagnostic_trigger')
@@ -1612,7 +1612,7 @@ This is an automated message from GRACE Action Router.
             # Log CI/CD trigger
             cicd_log = {
                 'trigger_id': f"CICD-{self._action_counter:04d}",
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'reason': cicd_reason,
                 'decision_id': decision.decision_id,
             }
@@ -1635,7 +1635,7 @@ This is an automated message from GRACE Action Router.
                 # Dry run - just log the trigger
                 success = True
 
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             return ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.TRIGGER_CICD,
@@ -1660,7 +1660,7 @@ This is an automated message from GRACE Action Router.
     ) -> ActionResult:
         """Execute learning capture action with Memory Mesh integration."""
         self._action_counter += 1
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         # Create Genesis Key
         genesis_key = self._create_action_genesis_key(
@@ -1678,7 +1678,7 @@ This is an automated message from GRACE Action Router.
 
             learning_data = {
                 'capture_id': f"LEARN-{self._action_counter:04d}",
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'decision_id': decision.decision_id,
                 'genesis_key_id': genesis_key.key_id if genesis_key else None,
                 'patterns': [
@@ -1710,7 +1710,7 @@ This is an automated message from GRACE Action Router.
 
             logger.info(f"Learning captured: {len(learning_patterns)} patterns")
 
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             result = ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.RECOMMEND_LEARNING,
@@ -1743,12 +1743,12 @@ This is an automated message from GRACE Action Router.
     ) -> ActionResult:
         """Execute observation logging action."""
         self._action_counter += 1
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         try:
             observation = {
                 'observation_id': f"OBS-{self._action_counter:04d}",
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'decision_id': decision.decision_id,
                 'health_score': judgement.health.overall_score,
                 'health_status': judgement.health.status.value,
@@ -1764,7 +1764,7 @@ This is an automated message from GRACE Action Router.
             with open(obs_file, 'a') as f:
                 f.write(json.dumps(observation) + '\n')
 
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             return ActionResult(
                 action_id=f"ACT-{self._action_counter:04d}",
                 action_type=ActionType.LOG_OBSERVATION,

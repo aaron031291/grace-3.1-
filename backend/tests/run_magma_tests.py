@@ -18,7 +18,7 @@ Run: python run_magma_tests.py
 import sys
 import os
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Any
 
 # Add backend to path
@@ -200,7 +200,7 @@ def test_relation_graphs():
     # Test TemporalGraph
     def test_temporal_graph_add_event():
         graph = TemporalGraph()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         node_id = graph.add_event("test event", now)
         assert_true(node_id.startswith("temp-"))
         assert_in(node_id, graph.nodes)
@@ -208,7 +208,7 @@ def test_relation_graphs():
 
     def test_temporal_graph_auto_linking():
         graph = TemporalGraph()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         n1 = graph.add_event("event 1", now - timedelta(minutes=5))
         n2 = graph.add_event("event 2", now)
         assert_true(len(graph.edges) >= 1, "Should auto-link temporal events")
@@ -216,7 +216,7 @@ def test_relation_graphs():
 
     def test_temporal_graph_range_query():
         graph = TemporalGraph()
-        base = datetime.utcnow()
+        base = datetime.now(timezone.utc)
         for i in range(10):
             graph.add_event(f"event {i}", base + timedelta(hours=i))
         events = graph.get_events_in_range(base + timedelta(hours=3), base + timedelta(hours=7))
@@ -298,7 +298,7 @@ def test_relation_graphs():
     def test_magma_graphs_unified_stats():
         graphs = MagmaRelationGraphs()
         graphs.semantic.add_concept("c1", sample_embedding)
-        graphs.temporal.add_event("e1", datetime.utcnow())
+        graphs.temporal.add_event("e1", datetime.now(timezone.utc))
         stats = graphs.get_unified_stats()
         assert_in("semantic", stats)
         assert_in("total_nodes", stats)
@@ -599,7 +599,7 @@ def test_synaptic_ingestion():
         linker = TemporalLinker(graphs)
         from datetime import datetime
         segment = Segment(id="seg-test", content="This happened yesterday", segment_type=SegmentType.SENTENCE, start_pos=0, end_pos=22)
-        result = linker.link_segment(segment, timestamp=datetime.utcnow())  # link_segment not link
+        result = linker.link_segment(segment, timestamp=datetime.now(timezone.utc))  # link_segment not link
         # Creates temporal node
         assert_is_not_none(result)
     runner.run_test("TemporalLinker", test_temporal_linker)

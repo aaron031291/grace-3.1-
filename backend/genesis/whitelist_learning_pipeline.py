@@ -26,7 +26,7 @@ import asyncio
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field, asdict
@@ -404,7 +404,7 @@ class WhitelistLearningPipeline:
         entries_file = self.storage_dir / "entries.json"
         data = {
             "entries": [asdict(e) for e in self.entries.values()],
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.now(timezone.utc).isoformat()
         }
         with open(entries_file, "w") as f:
             json.dump(data, f, indent=2, default=str)
@@ -444,7 +444,7 @@ class WhitelistLearningPipeline:
                 logger.warning(f"[WL-Pipeline] Genesis Key Service error: {e}")
 
         # Fallback
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         key_data = f"whitelist:{category.value}:{source}:{content_hash}:{timestamp}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:12]
         return f"gk-wl-{key_hash}"
@@ -457,7 +457,7 @@ class WhitelistLearningPipeline:
         version_entry = {
             "version": len(self.pipeline_versions[entry_id]) + 1,
             "stage": stage.value,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "data": data
         }
 
@@ -469,7 +469,7 @@ class WhitelistLearningPipeline:
 
     async def _stage_trust_verification(self, entry: WhitelistEntry) -> StageResult:
         """Stage 1: Verify trust level of the source."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             trust_score = self.trust_thresholds.get(entry.trust_level, 0.0)
@@ -486,14 +486,14 @@ class WhitelistLearningPipeline:
                     stage=PipelineStage.TRUST_VERIFICATION,
                     success=False,
                     error="Trust level too low for processing",
-                    duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                    duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
                 )
 
             return StageResult(
                 stage=PipelineStage.TRUST_VERIFICATION,
                 success=True,
                 output={"trust_score": trust_score, "trust_level": entry.trust_level.value},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -501,12 +501,12 @@ class WhitelistLearningPipeline:
                 stage=PipelineStage.TRUST_VERIFICATION,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_genesis_key(self, entry: WhitelistEntry) -> StageResult:
         """Stage 2: Assign Genesis Key for tracking."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             content_hash = hashlib.sha256(entry.content.encode()).hexdigest()[:16]
@@ -525,7 +525,7 @@ class WhitelistLearningPipeline:
                 success=True,
                 output={"genesis_key": genesis_key, "content_hash": content_hash},
                 genesis_key=genesis_key,
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -533,12 +533,12 @@ class WhitelistLearningPipeline:
                 stage=PipelineStage.GENESIS_KEY_ASSIGNMENT,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_data_extraction(self, entry: WhitelistEntry) -> StageResult:
         """Stage 3: Extract and analyze content."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             # Extract key information based on category
@@ -570,7 +570,7 @@ class WhitelistLearningPipeline:
                 stage=PipelineStage.DATA_EXTRACTION,
                 success=True,
                 output=extracted,
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -578,12 +578,12 @@ class WhitelistLearningPipeline:
                 stage=PipelineStage.DATA_EXTRACTION,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_librarian_filing(self, entry: WhitelistEntry, extracted: Dict) -> StageResult:
         """Stage 4: File with Librarian, organize and name."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             file_path = None
@@ -604,7 +604,7 @@ class WhitelistLearningPipeline:
                 }
 
                 prefix = category_prefixes.get(entry.category, "data")
-                timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+                timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
                 gk_suffix = entry.genesis_key.split("-")[-1][:6] if entry.genesis_key else "unknown"
 
                 filename = f"{prefix}_{timestamp}_{gk_suffix}.md"
@@ -642,7 +642,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.LIBRARIAN_FILING,
                 success=True,
                 output={"file_path": file_path},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -650,12 +650,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.LIBRARIAN_FILING,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_embedding(self, entry: WhitelistEntry) -> StageResult:
         """Stage 5: Generate vector embeddings."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             embedding_id = None
@@ -679,7 +679,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.EMBEDDING_GENERATION,
                 success=True,
                 output={"embedding_id": embedding_id},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -687,12 +687,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.EMBEDDING_GENERATION,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_memory_storage(self, entry: WhitelistEntry, extracted: Dict) -> StageResult:
         """Stage 6: Store in learning memory."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             memory_id = None
@@ -718,7 +718,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MEMORY_STORAGE,
                 success=True,
                 output={"memory_id": memory_id},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -726,12 +726,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MEMORY_STORAGE,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_memory_mesh(self, entry: WhitelistEntry, memory_id: str) -> StageResult:
         """Stage 7: Link in memory mesh."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             links = []
@@ -752,7 +752,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MEMORY_MESH_LINKING,
                 success=True,
                 output={"links": links},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -760,12 +760,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MEMORY_MESH_LINKING,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_cognitive(self, entry: WhitelistEntry) -> StageResult:
         """Stage 8: Process through cognitive framework."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             cognitive_result = None
@@ -786,7 +786,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.COGNITIVE_PROCESSING,
                 success=True,
                 output={"cognitive_result": cognitive_result},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -794,12 +794,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.COGNITIVE_PROCESSING,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_clarity(self, entry: WhitelistEntry, cognitive_result: Any) -> StageResult:
         """Stage 9: Apply clarity framework."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             # Clarity framework ensures clear understanding
@@ -829,7 +829,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.CLARITY_ANALYSIS,
                 success=True,
                 output=clarity_analysis,
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -837,12 +837,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.CLARITY_ANALYSIS,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_contradiction_check(self, entry: WhitelistEntry) -> StageResult:
         """Stage 10: Check for contradictions with existing knowledge."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             contradictions = []
@@ -856,7 +856,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.CONTRADICTION_CHECK,
                 success=True,
                 output={"contradictions": contradictions},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -864,12 +864,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.CONTRADICTION_CHECK,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_pattern_extraction(self, entry: WhitelistEntry, extracted: Dict) -> StageResult:
         """Stage 11: Extract patterns for ML training."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             patterns = []
@@ -903,7 +903,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.PATTERN_EXTRACTION,
                 success=True,
                 output={"patterns": patterns},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -911,12 +911,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.PATTERN_EXTRACTION,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_ml_training(self, entry: WhitelistEntry, patterns: List) -> StageResult:
         """Stage 12: Trigger ML training if applicable."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             training_triggered = False
@@ -931,7 +931,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.ML_TRAINING,
                 success=True,
                 output={"training_triggered": training_triggered, "patterns_count": len(patterns)},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -939,12 +939,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.ML_TRAINING,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_knowledge_base(self, entry: WhitelistEntry, results: Dict) -> StageResult:
         """Stage 13: Update knowledge base."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             knowledge_id = None
@@ -976,7 +976,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.KNOWLEDGE_BASE_UPDATE,
                 success=True,
                 output={"knowledge_id": knowledge_id},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -984,12 +984,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.KNOWLEDGE_BASE_UPDATE,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_proactive_learning(self, entry: WhitelistEntry) -> StageResult:
         """Stage 14: Trigger proactive learning."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             proactive_actions = []
@@ -1015,7 +1015,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.PROACTIVE_LEARNING,
                 success=True,
                 output={"proactive_actions": proactive_actions},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -1023,12 +1023,12 @@ created_at: {entry.created_at}
                 stage=PipelineStage.PROACTIVE_LEARNING,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     async def _stage_mirror_observation(self, entry: WhitelistEntry, all_results: Dict) -> StageResult:
         """Stage 15: Mirror self-modeling observes the learning."""
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
 
         try:
             if self._mirror:
@@ -1040,7 +1040,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MIRROR_OBSERVATION,
                 success=True,
                 output={"observed": True},
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
         except Exception as e:
@@ -1048,7 +1048,7 @@ created_at: {entry.created_at}
                 stage=PipelineStage.MIRROR_OBSERVATION,
                 success=False,
                 error=str(e),
-                duration_ms=int((datetime.utcnow() - start).total_seconds() * 1000)
+                duration_ms=int((datetime.now(timezone.utc) - start).total_seconds() * 1000)
             )
 
     # =========================================================================
@@ -1082,7 +1082,7 @@ created_at: {entry.created_at}
         Returns:
             PipelineResult with all processing results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         entry_id = self._generate_entry_id()
         stages_completed = []
         stage_outputs = {}
@@ -1209,7 +1209,7 @@ created_at: {entry.created_at}
             stages_completed.append(result.stage.value)
 
             # Calculate duration
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
 
             # Build final result
             pipeline_result = PipelineResult(
@@ -1239,7 +1239,7 @@ created_at: {entry.created_at}
             return pipeline_result
 
         except Exception as e:
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
 
             logger.error(f"[WL-Pipeline] Pipeline failed for entry {entry_id}: {e}")
 

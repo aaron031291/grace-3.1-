@@ -14,7 +14,7 @@ This test suite ensures:
 import sys
 import os
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -114,7 +114,7 @@ class TestDataStructures:
     def test_system_report_to_dict(self):
         report = SystemConnectionReport(
             status="all_connected",
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             total_connections=3,
             connected_count=3,
             disconnected_count=0,

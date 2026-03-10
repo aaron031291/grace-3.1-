@@ -4,7 +4,7 @@ Practical examples of cognitive blueprint integration with Grace.
 These examples show how to apply the 12 invariants to real operations.
 """
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from .engine import CognitiveEngine, DecisionContext
 from .decorators import cognitive_operation, blast_radius, enforce_reversibility
@@ -63,7 +63,7 @@ def rag_query_with_cognitive(query: str, chat_id: int) -> Dict[str, Any]:
         'query': query,
         'query_length': len(query),
         'chat_id': chat_id,
-        'timestamp': datetime.utcnow().isoformat()
+        'timestamp': datetime.now(timezone.utc).isoformat()
     }
     engine.observe(context, observations)
 
@@ -231,7 +231,7 @@ def batch_process_documents(
     context.max_iterations = 100  # Max files to process
 
     # Set time bound (30 minutes)
-    context.decision_freeze_point = datetime.utcnow() + timedelta(minutes=30)
+    context.decision_freeze_point = datetime.now(timezone.utc) + timedelta(minutes=30)
 
     # Track recursion
     def process_directory_recursive(path: str, depth: int = 0):

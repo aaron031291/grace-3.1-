@@ -9,7 +9,7 @@ import logging
 import threading
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from pathlib import Path
 
@@ -115,12 +115,12 @@ All user actions, inputs, and outputs are tracked here from the first login.
             if session_id:
                 filename = f"session_{session_id}.json"
             else:
-                ts = when_timestamp or datetime.utcnow()
+                ts = when_timestamp or datetime.now(timezone.utc)
                 if isinstance(ts, str):
                     try:
                         ts = datetime.fromisoformat(ts)
                     except Exception:
-                        ts = datetime.utcnow()
+                        ts = datetime.now(timezone.utc)
                 date_str = ts.strftime('%Y-%m-%d')
                 filename = f"keys_{date_str}.json"
 
@@ -170,7 +170,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 try:
                     keys_data = json.load(f)
                 except json.JSONDecodeError as e:
-                    backup_path = f"{file_path}.corrupt.{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+                    backup_path = f"{file_path}.corrupt.{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
                     try:
                         import shutil
                         shutil.copy2(file_path, backup_path)
@@ -194,14 +194,14 @@ All user actions, inputs, and outputs are tracked here from the first login.
                     keys_data = {
                         "user_id": user_id,
                         "session_id": session_id,
-                        "created_at": datetime.utcnow().isoformat(),
+                        "created_at": datetime.now(timezone.utc).isoformat(),
                         "keys": []
                     }
         else:
             keys_data = {
                 "user_id": user_id,
                 "session_id": session_id,
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "keys": []
             }
 
@@ -211,7 +211,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
         elif when_ts is not None:
             ts_str = when_ts.isoformat()
         else:
-            ts_str = datetime.utcnow().isoformat()
+            ts_str = datetime.now(timezone.utc).isoformat()
 
         # Handle key_type: may be an Enum or a string
         key_type_raw = _get('key_type', 'unknown')
@@ -258,7 +258,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
             "tags": _get('tags'),
         }
         keys_data["keys"].append(key_dict)
-        keys_data["last_updated"] = datetime.utcnow().isoformat()
+        keys_data["last_updated"] = datetime.now(timezone.utc).isoformat()
         keys_data["total_keys"] = len(keys_data["keys"])
 
         with open(file_path, 'w') as f:
@@ -292,7 +292,7 @@ All user actions, inputs, and outputs are tracked here from the first login.
                 existing_profile.update(profile_data)
                 profile_data = existing_profile
 
-            profile_data["last_updated"] = datetime.utcnow().isoformat()
+            profile_data["last_updated"] = datetime.now(timezone.utc).isoformat()
 
             with open(profile_path, 'w') as f:
                 json.dump(profile_data, f, indent=2, default=str)

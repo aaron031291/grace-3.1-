@@ -67,7 +67,7 @@ Return EXCLUSIVELY a raw JSON array matching this exact format, without markdown
         "goal": goal,
         "status": "completed",
         "progress": 100,
-        "created_at": datetime.datetime.utcnow().isoformat(),
+        "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "phases": phases
     }
     sessions_db[sid] = session

@@ -12,7 +12,7 @@ import sys
 import os
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Initialize database
 from database.connection import DatabaseConnection
@@ -72,7 +72,7 @@ def check_layer1_export():
             return False
 
         # Get today's date folder
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         today_folder = layer1_path / today
 
         if not today_folder.exists():
@@ -126,7 +126,7 @@ def view_daily_summary():
     try:
         backend_dir = Path(__file__).parent
         layer1_path = backend_dir / "knowledge_base" / "layer_1" / "genesis_keys"
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         summary_file = layer1_path / today / "DAILY_SUMMARY.md"
 
         if not summary_file.exists():

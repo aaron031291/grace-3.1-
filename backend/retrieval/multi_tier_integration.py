@@ -11,6 +11,7 @@ from retrieval.query_intelligence import MultiTierQueryHandler, QueryTier
 from database.session import get_session
 from models.query_intelligence_models import QueryHandlingLog, KnowledgeGap, ContextSubmission
 from datetime import datetime
+import contextlib
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +80,10 @@ def log_query_handling(
         user_id: Optional user identifier
         genesis_key_id: Optional Genesis Key
     """
+    session = None
     try:
-        session = next(get_session())
+        from database.session import SessionLocal
+        session = SessionLocal()
         
         # Create query log
         query_log = QueryHandlingLog(

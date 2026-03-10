@@ -29,7 +29,7 @@ import hashlib
 import logging
 import time
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
@@ -100,7 +100,7 @@ class PipelineProgress:
                 "current_layer": 0,
                 "current_layer_name": "",
                 "percent": 0,
-                "started_at": datetime.utcnow().isoformat(),
+                "started_at": datetime.now(timezone.utc).isoformat(),
                 "layers_completed": 0,
                 "total_layers": total_chunks * 8,
                 "errors": [],
@@ -133,7 +133,7 @@ class PipelineProgress:
             if run_id in self._runs:
                 self._runs[run_id]["status"] = status
                 self._runs[run_id]["percent"] = 100 if status == "passed" else self._runs[run_id]["percent"]
-                self._runs[run_id]["finished_at"] = datetime.utcnow().isoformat()
+                self._runs[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()
 
     def get(self, run_id: str) -> dict:
         with self._lock:

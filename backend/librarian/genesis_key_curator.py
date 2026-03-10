@@ -9,7 +9,7 @@ import logging
 import schedule
 import time
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Optional
 from sqlalchemy.orm import Session
 
@@ -57,7 +57,7 @@ class GenesisKeyCurator:
                     f"[LIBRARIAN-CURATOR] ✅ Curated {result['total_keys']} Genesis Keys for {result['date']}"
                 )
 
-                self.last_curation = datetime.utcnow()
+                self.last_curation = datetime.now(timezone.utc)
 
                 return {
                     "success": True,
@@ -90,7 +90,7 @@ class GenesisKeyCurator:
 
     def curate_yesterday(self, session: Optional[Session] = None) -> dict:
         """Curate Genesis Keys for yesterday (useful for missed days)."""
-        yesterday = datetime.utcnow() - timedelta(days=1)
+        yesterday = datetime.now(timezone.utc) - timedelta(days=1)
         result = self.organizer.export_daily_keys(target_date=yesterday, session=session)
 
         if result['exported']:
@@ -185,7 +185,7 @@ class GenesisKeyCurator:
             return
 
         # Check if more than 25 hours since last curation
-        time_since_last = datetime.utcnow() - self.last_curation
+        time_since_last = datetime.now(timezone.utc) - self.last_curation
         if time_since_last > timedelta(hours=25):
             logger.warning("[LIBRARIAN-CURATOR] Missed curation detected, running now")
             self._run_curation_job()

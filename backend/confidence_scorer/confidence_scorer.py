@@ -22,7 +22,7 @@ from artificially boosting consensus scores.
 import logging
 import numpy as np
 from typing import List, Optional, Dict, Any, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
 from .contradiction_detector import SemanticContradictionDetector
@@ -288,10 +288,10 @@ class ConfidenceScorer:
             Recency score between 0.0 and 1.0
         """
         if created_at is None:
-            created_at = datetime.utcnow()
-        from core.datetime_utils import as_naive_utc
-        created_at = as_naive_utc(created_at) or datetime.utcnow()
-        now = datetime.utcnow()
+            created_at = datetime.now(timezone.utc)
+        from core.datetime_utils import ensure_aware
+        created_at = ensure_aware(created_at) or datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         age_days = (now - created_at).days
         
         if age_days <= 90:  # 3 months

@@ -14,7 +14,7 @@ Provides real-time monitoring and alerting for performance degradation.
 import logging
 import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import deque
 import statistics
 
@@ -55,9 +55,9 @@ class PerformanceMetrics:
         # Throughput tracking
         self.total_queries = 0
         self.queries_per_minute = deque(maxlen=60)  # Last 60 minutes
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now(timezone.utc)
         self.last_minute_count = 0
-        self.current_minute = datetime.utcnow().minute
+        self.current_minute = datetime.now(timezone.utc).minute
 
         # Alerts
         self.performance_alerts = []
@@ -74,7 +74,7 @@ class PerformanceMetrics:
         self.total_queries += 1
 
         # Track per-minute throughput
-        current_minute = datetime.utcnow().minute
+        current_minute = datetime.now(timezone.utc).minute
         if current_minute != self.current_minute:
             self.queries_per_minute.append(self.last_minute_count)
             self.last_minute_count = 1
@@ -175,7 +175,7 @@ class PerformanceMetrics:
 
     def get_throughput_metrics(self) -> Dict[str, Any]:
         """Get throughput metrics"""
-        uptime = (datetime.utcnow() - self.start_time).total_seconds()
+        uptime = (datetime.now(timezone.utc) - self.start_time).total_seconds()
 
         # Queries per second (overall average)
         qps = self.total_queries / uptime if uptime > 0 else 0
@@ -202,7 +202,7 @@ class PerformanceMetrics:
     def get_all_metrics(self) -> Dict[str, Any]:
         """Get all performance metrics"""
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "query_latency": self.get_query_percentiles(),
             "embedding_latency": self.get_embedding_percentiles(),
             "vector_search_latency": self.get_vector_search_percentiles(),
@@ -223,7 +223,7 @@ class PerformanceMetrics:
     def _add_alert(self, message: str, severity: str = "info"):
         """Add performance alert"""
         alert = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "message": message,
             "severity": severity
         }
@@ -281,7 +281,7 @@ class PerformanceMetrics:
             "health_score": health_score,
             "issues": issues,
             "recommendations": recommendations,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
     # ================================================================
@@ -298,7 +298,7 @@ class PerformanceMetrics:
         self.cache_misses = 0
         self.total_queries = 0
         self.queries_per_minute.clear()
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now(timezone.utc)
         self.performance_alerts = []
 
         logger.info("[METRICS] All metrics reset")

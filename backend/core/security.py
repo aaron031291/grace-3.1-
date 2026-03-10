@@ -223,7 +223,7 @@ def safe_sql_text(sql: str, params: dict):
 def backup_database(source_path: str = None, backup_dir: str = None) -> str:
     """Create a timestamped backup of the SQLite database."""
     import shutil
-    from datetime import datetime
+    from datetime import datetime, timezone
 
     if not source_path:
         try:
@@ -236,7 +236,7 @@ def backup_database(source_path: str = None, backup_dir: str = None) -> str:
         backup_dir = str(Path(source_path).parent / "backups")
 
     Path(backup_dir).mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     backup_path = f"{backup_dir}/grace_{timestamp}.db"
 
     source = Path(source_path)

@@ -1,7 +1,7 @@
 import sys
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 # Add backend to path
@@ -39,7 +39,7 @@ def trigger_network_chaos():
             is_error=True,
             error_type="TimeoutError",
             error_message="Connection to upstream database timed out after 30000ms",
-            when_timestamp=datetime.utcnow()
+            when_timestamp=datetime.now(timezone.utc)
         )
         session.add(error_key)
         

@@ -6,7 +6,7 @@ Provides REST endpoints for uploading and managing documents.
 from fastapi import APIRouter, HTTPException, File, UploadFile, Form, Query, Depends, Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 from ingestion.service import TextIngestionService
@@ -543,7 +543,7 @@ async def get_status(
             "ingestion_service": "operational",
             "vector_db_connected": qdrant.is_connected(),
             "collections": qdrant.list_collections(),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     
     except Exception as e:
@@ -552,5 +552,5 @@ async def get_status(
             "ingestion_service": "error",
             "vector_db_connected": False,
             "error": str(e),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }

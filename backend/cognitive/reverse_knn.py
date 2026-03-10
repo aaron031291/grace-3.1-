@@ -20,7 +20,7 @@ import json
 import logging
 import math
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -94,7 +94,7 @@ class ReverseKNNOracle:
             created = meta.get("created_at", "")
             by_source[source].append(created)
 
-        cutoff = (datetime.utcnow() - timedelta(days=90)).isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
         for source, dates in by_source.items():
             if dates and all(d < cutoff for d in dates if d):
                 gaps["stale_clusters"].append({
@@ -361,7 +361,7 @@ class ReverseKNNOracle:
             "query": query,
             "had_results": had_results,
             "best_score": best_score,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         })
         if len(self._query_log) > 1000:
             self._query_log = self._query_log[-500:]
@@ -568,7 +568,7 @@ class ReverseKNNOracle:
 
     def _save_gaps(self, gaps: Dict):
         GAPS_DIR.mkdir(parents=True, exist_ok=True)
-        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         (GAPS_DIR / f"gaps_{ts}.json").write_text(json.dumps(gaps, indent=2, default=str))
 
 

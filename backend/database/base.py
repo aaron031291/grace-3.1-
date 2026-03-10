@@ -5,7 +5,7 @@ Provides declarative base and utility base model for all ORM models.
 
 from sqlalchemy.orm import declarative_base, DeclarativeBase
 from sqlalchemy import Column, DateTime, Integer
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 
@@ -51,7 +51,7 @@ class BaseModel(Base):
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
     
     def __repr__(self) -> str:
         """String representation of model."""

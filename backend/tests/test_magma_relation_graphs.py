@@ -12,7 +12,7 @@ NOT a smoke test - comprehensive coverage of all functionality.
 """
 
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import List
 import uuid
 
@@ -588,7 +588,7 @@ class TestTemporalGraph:
 
     def test_add_event(self, temporal_graph):
         """Test adding a temporal event."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         node_id = temporal_graph.add_event(
             content="User logged in",
             timestamp=now,
@@ -601,7 +601,7 @@ class TestTemporalGraph:
 
     def test_auto_temporal_linking(self, temporal_graph):
         """Test automatic temporal relationship creation."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         # Add events in sequence
         event1_id = temporal_graph.add_event("Event 1", now - timedelta(minutes=5))
@@ -612,7 +612,7 @@ class TestTemporalGraph:
 
     def test_concurrent_events(self, temporal_graph):
         """Test concurrent event detection."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         event1_id = temporal_graph.add_event("Event A", now)
         event2_id = temporal_graph.add_event("Event B", now + timedelta(seconds=30))  # Within 1 minute
@@ -624,7 +624,7 @@ class TestTemporalGraph:
 
     def test_temporal_before_after(self, temporal_graph):
         """Test before/after relationships."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         early_id = temporal_graph.add_event("Early event", now - timedelta(hours=1))
         late_id = temporal_graph.add_event("Late event", now)
@@ -639,7 +639,7 @@ class TestTemporalGraph:
 
     def test_get_events_in_range(self, temporal_graph):
         """Test getting events in a time range."""
-        base_time = datetime.utcnow()
+        base_time = datetime.now(timezone.utc)
 
         # Add events at different times
         for i in range(10):
@@ -657,7 +657,7 @@ class TestTemporalGraph:
 
     def test_get_event_sequence(self, temporal_graph):
         """Test getting event sequence."""
-        base_time = datetime.utcnow()
+        base_time = datetime.now(timezone.utc)
 
         event_ids = []
         for i in range(5):
@@ -673,7 +673,7 @@ class TestTemporalGraph:
 
     def test_time_weight_decay(self, temporal_graph):
         """Test that edge weight decays with time difference."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         event1_id = temporal_graph.add_event("Event 1", now - timedelta(hours=23))
         event2_id = temporal_graph.add_event("Event 2", now)
@@ -941,7 +941,7 @@ class TestMagmaRelationGraphs:
             genesis_key_id=genesis_key
         )
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         temp_id = magma_graphs.temporal.add_event(
             "ML event",
             now,
@@ -969,7 +969,7 @@ class TestMagmaRelationGraphs:
         # Add some data
         magma_graphs.semantic.add_concept("concept 1", sample_embedding)
         magma_graphs.semantic.add_concept("concept 2", sample_embedding)
-        magma_graphs.temporal.add_event("event 1", datetime.utcnow())
+        magma_graphs.temporal.add_event("event 1", datetime.now(timezone.utc))
         magma_graphs.entity.add_entity("entity 1", "thing")
 
         stats = magma_graphs.get_unified_stats()
@@ -1015,7 +1015,7 @@ class TestIntegrationScenarios:
         dl_id = magma_graphs.semantic.add_concept("Deep Learning", [x + 0.05 for x in sample_embedding])
 
         # Add temporal events
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         learn_event = magma_graphs.temporal.add_event("Learned ML basics", now - timedelta(days=30))
         apply_event = magma_graphs.temporal.add_event("Applied ML model", now)
 
@@ -1041,7 +1041,7 @@ class TestIntegrationScenarios:
         # User starts a task
         start_event = magma_graphs.temporal.add_event(
             "Started coding task",
-            datetime.utcnow() - timedelta(hours=1),
+            datetime.now(timezone.utc) - timedelta(hours=1),
             genesis_key_id=genesis_key
         )
 
@@ -1055,7 +1055,7 @@ class TestIntegrationScenarios:
         # User completes the task
         end_event = magma_graphs.temporal.add_event(
             "Completed coding task",
-            datetime.utcnow(),
+            datetime.now(timezone.utc),
             genesis_key_id=genesis_key
         )
 

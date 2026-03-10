@@ -8,7 +8,7 @@ Endpoints:
   GET /api/genesis-daily/key/{key_id}     → single key detail for right panel
 """
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from sqlalchemy import func
 from collections import defaultdict
 import logging
@@ -34,7 +34,7 @@ async def get_folders(days: int = 60):
         from database.session import session_scope
         from models.genesis_key_models import GenesisKey
 
-        since = datetime.utcnow() - timedelta(days=days)
+        since = datetime.now(timezone.utc) - timedelta(days=days)
         with session_scope() as s:
             try:
                 q = s.query(
@@ -99,7 +99,7 @@ async def get_stats():
 
         with session_scope() as s:
             total = s.query(func.count(GenesisKey.id)).scalar() or 0
-            today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+            today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
             today = s.query(func.count(GenesisKey.id)).filter(GenesisKey.when_timestamp >= today_start).scalar() or 0
             return {"total_keys": total, "today_keys": today}
     except Exception as e:

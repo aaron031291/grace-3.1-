@@ -11,7 +11,7 @@ Plus: lightweight Genesis keys (in-memory ring buffer, batch-flush every 10s).
 
 import time
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 import threading
 import queue
 import logging
@@ -31,7 +31,7 @@ _trace_local = threading.local()
 
 def new_trace(path: str = "", name: str = "") -> str:
     """Start a new trace. Returns deterministic trace_id (no random)."""
-    bucket = datetime.utcnow().strftime("%Y%m%d%H%M")
+    bucket = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
     seed = f"{path}|{name}|{bucket}|{id(_trace_local)}"
     tid = hashlib.sha256(seed.encode()).hexdigest()[:16]
     _trace_local.trace_id = tid

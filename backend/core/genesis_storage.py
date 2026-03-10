@@ -19,7 +19,7 @@ import zlib
 import threading
 import logging
 from collections import deque, defaultdict, Counter
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
@@ -156,7 +156,7 @@ class GenesisStorage:
                         continue
                     if key_type not in valid_key_types:
                         continue  # e.g. "debug", "performance" are TTL labels not enum values
-                    cutoff = datetime.utcnow() - timedelta(hours=hours)
+                    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
                     count = s.execute(text(
                         "DELETE FROM genesis_key WHERE key_type = :kt AND when_timestamp < :cutoff"
                     ), {"kt": key_type, "cutoff": cutoff.isoformat()}).rowcount

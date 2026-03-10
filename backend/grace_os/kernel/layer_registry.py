@@ -6,7 +6,7 @@ Dynamic discovery and health-checking for all layers.
 
 import logging
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class LayerRegistration:
         self.capabilities = capabilities
         self.instance = instance
         self.status = "healthy"  # healthy | degraded | offline
-        self.last_heartbeat = datetime.utcnow()
+        self.last_heartbeat = datetime.now(timezone.utc)
 
 class LayerRegistry:
     """
@@ -80,6 +80,6 @@ class LayerRegistry:
         Record a heartbeat for a layer to mark it as healthy.
         """
         if layer_name in self._layers:
-            self._layers[layer_name].last_heartbeat = datetime.utcnow()
+            self._layers[layer_name].last_heartbeat = datetime.now(timezone.utc)
             if self._layers[layer_name].status != "healthy":
                 self.set_status(layer_name, "healthy")

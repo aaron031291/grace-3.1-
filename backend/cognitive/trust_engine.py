@@ -23,7 +23,7 @@ Verification sources (checked in order):
 
 import logging
 from typing import Dict, Any, Optional, List, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
@@ -108,7 +108,7 @@ class TrustEngine:
             comp.trust_score = round(avg_chunk_score * 0.7 + comp.previous_trust * 0.3, 1)
         
         comp.trend = "up" if comp.trust_score > comp.previous_trust else "down" if comp.trust_score < comp.previous_trust else "stable"
-        comp.last_updated = datetime.utcnow().isoformat()
+        comp.last_updated = datetime.now(timezone.utc).isoformat()
 
         # Determine verification and remediation needs
         comp.needs_verification = comp.trust_score < 80

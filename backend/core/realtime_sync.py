@@ -10,7 +10,7 @@ import time
 import threading
 import logging
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Set, Any, Optional
 from collections import deque
 from fastapi import WebSocket, WebSocketDisconnect
@@ -31,7 +31,7 @@ def publish_change(event_type: str, path: str, project_id: str = "",
         "project_id": project_id,
         "user_id": user_id,
         "data": data or {},
-        "ts": datetime.utcnow().isoformat(),
+        "ts": datetime.now(timezone.utc).isoformat(),
     }
 
     with _sub_lock:

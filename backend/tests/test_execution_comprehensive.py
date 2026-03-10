@@ -21,7 +21,7 @@ Coverage:
 import pytest
 from unittest.mock import Mock, MagicMock, patch, AsyncMock
 from typing import Dict, Any, Optional, List, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
 import uuid
@@ -533,7 +533,7 @@ class TestActionExecution:
                 self.action_history = []
 
             async def execute(self, action: ActionRequest) -> ActionResult:
-                start = datetime.utcnow()
+                start = datetime.now(timezone.utc)
                 result = ActionResult(
                     action_id=action.action_id,
                     action_type=action.action_type,

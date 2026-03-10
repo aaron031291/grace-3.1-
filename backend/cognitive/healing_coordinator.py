@@ -17,7 +17,7 @@ trust engine, KPI tracker, learning memory, web search.
 
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class HealingCoordinator:
         """
         result = {
             "problem": problem,
-            "started_at": datetime.utcnow().isoformat(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
             "steps": [],
             "resolved": False,
             "resolution": None,
@@ -93,7 +93,7 @@ class HealingCoordinator:
             result["resolution"] = "coordinated_fix" if result["resolved"] else "unresolved"
 
         self._record_outcome(problem, result, success=result["resolved"])
-        result["completed_at"] = datetime.utcnow().isoformat()
+        result["completed_at"] = datetime.now(timezone.utc).isoformat()
         return result
 
     # ── Step 1: Basic self-healing (all paths through brain) ─────────────

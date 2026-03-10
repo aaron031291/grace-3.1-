@@ -8,11 +8,10 @@ symbolic trust scores from the knowledge base.
 
 import logging
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
 
 from retrieval.retriever import DocumentRetriever
 from ml_intelligence.trust_aware_embedding import TrustAwareEmbeddingModel, TrustContext, get_trust_aware_embedding_model
-from embedding import EmbeddingModel, get_embedding_model
+from embedding import get_embedding_model
 
 logger = logging.getLogger(__name__)
 

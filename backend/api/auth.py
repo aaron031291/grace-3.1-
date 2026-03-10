@@ -7,7 +7,7 @@ Includes secure session management and security logging.
 from fastapi import APIRouter, HTTPException, Depends, Response, Cookie
 from pydantic import BaseModel, Field
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 
 from database.session import get_session
@@ -99,7 +99,7 @@ async def login(
         is_new_user = True
         identifier = request.email or request.username
         user = genesis_service.get_or_create_user(
-            username=request.username or f"User_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}",
+            username=request.username or f"User_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
             email=request.email,
             session=session
         )

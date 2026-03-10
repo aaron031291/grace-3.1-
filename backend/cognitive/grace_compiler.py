@@ -27,7 +27,7 @@ import logging
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -328,7 +328,7 @@ except Exception as e:
     def _log_compilation(self, result: CompileResult):
         """Log compilation for history."""
         COMPILE_LOG_DIR.mkdir(parents=True, exist_ok=True)
-        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         log_path = COMPILE_LOG_DIR / f"compile_{ts}_{result.code_hash}.json"
         log_path.write_text(json.dumps(result.to_dict(), indent=2, default=str))
 

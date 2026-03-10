@@ -31,7 +31,7 @@ import gc
 import time
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -181,7 +181,7 @@ class GraceImmuneSystem:
         scan_start = time.time()
         result = {
             "scan_id": f"scan_{int(scan_start)}",
-            "started_at": datetime.utcnow().isoformat(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
             "scan_interval": self._scan_interval,
             "snapshots": [],
             "anomalies": [],
@@ -214,7 +214,7 @@ class GraceImmuneSystem:
                 health_score=max(0, 100 - genesis_health["error_rate"] * 200),
                 status="error_spike" if genesis_health["error_spike"] else "normal",
                 metrics={"error_rate": genesis_health["error_rate"], "recent_errors": genesis_health["recent_errors"]},
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(timezone.utc).isoformat(),
             ))
 
         # ── OODA Orient: detect anomalies against baselines ────────────
@@ -273,7 +273,7 @@ class GraceImmuneSystem:
 
     def _observe_all_components(self) -> List[ComponentSnapshot]:
         snapshots = []
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
 
         # Database
         snapshots.append(self._check_component("database", self._check_db))
@@ -295,9 +295,9 @@ class GraceImmuneSystem:
     def _check_component(self, name: str, check_fn) -> ComponentSnapshot:
         try:
             health, status, metrics = check_fn()
-            return ComponentSnapshot(name=name, health_score=health, status=status, metrics=metrics, timestamp=datetime.utcnow().isoformat())
+            return ComponentSnapshot(name=name, health_score=health, status=status, metrics=metrics, timestamp=datetime.now(timezone.utc).isoformat())
         except Exception as e:
-            return ComponentSnapshot(name=name, health_score=0, status="error", anomalies=[str(e)], timestamp=datetime.utcnow().isoformat())
+            return ComponentSnapshot(name=name, health_score=0, status="error", anomalies=[str(e)], timestamp=datetime.now(timezone.utc).isoformat())
 
     def _check_db(self) -> Tuple[float, str, Dict]:
         try:
@@ -389,7 +389,7 @@ class GraceImmuneSystem:
                 return {"available": False}
             from sqlalchemy import text
             # Count recent keys and errors (last 5 minutes)
-            cutoff = datetime.utcnow() - timedelta(minutes=5)
+            cutoff = datetime.now(timezone.utc) - timedelta(minutes=5)
             total = db.execute(text("SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d"), {"d": cutoff}).scalar() or 0
             errors = db.execute(text("SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d AND is_error = 1"), {"d": cutoff}).scalar() or 0
 
@@ -431,7 +431,7 @@ class GraceImmuneSystem:
                     severity=1.0, component=snap.name,
                     description=f"{snap.name} is down",
                     healing_actions=["reconnect", "restart"],
-                    detected_at=datetime.utcnow().isoformat(),
+                    detected_at=datetime.now(timezone.utc).isoformat(),
                 ))
 
             # Performance degradation (relative to baseline)
@@ -442,7 +442,7 @@ class GraceImmuneSystem:
                     component=snap.name,
                     description=f"{snap.name} degraded: {snap.health_score:.0f}% (baseline: {baseline_health:.0f}%)",
                     healing_actions=["recalibrate", "cache_flush"],
-                    detected_at=datetime.utcnow().isoformat(),
+                    detected_at=datetime.now(timezone.utc).isoformat(),
                 ))
 
             # Memory pressure
@@ -453,7 +453,7 @@ class GraceImmuneSystem:
                     component="memory",
                     description=f"Memory at {snap.metrics['percent']:.0f}%",
                     healing_actions=["gc_collect", "cache_flush"],
-                    detected_at=datetime.utcnow().isoformat(),
+                    detected_at=datetime.now(timezone.utc).isoformat(),
                 ))
 
             # Disk pressure
@@ -463,7 +463,7 @@ class GraceImmuneSystem:
                     severity=0.9, component="disk",
                     description=f"Disk at {snap.metrics['percent']:.0f}%",
                     healing_actions=["log_rotation", "temp_cleanup"],
-                    detected_at=datetime.utcnow().isoformat(),
+                    detected_at=datetime.now(timezone.utc).isoformat(),
                 ))
 
         return anomalies
@@ -638,7 +638,7 @@ class GraceImmuneSystem:
             side_effects=side_effects,
             trust_before=trust_before,
             trust_after=trust_after,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         )
         self._healing_playbook.append(record)
 

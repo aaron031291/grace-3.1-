@@ -7,7 +7,7 @@ import threading
 import time
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from collections import defaultdict
 
@@ -105,7 +105,7 @@ def get_profile(user_id: str = "default") -> dict:
         "keyboard_shortcuts": True,
         "notifications": True,
         "auto_save": True,
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
 
@@ -113,7 +113,7 @@ def update_profile(user_id: str, updates: dict) -> dict:
     profiles = _load_profiles()
     profile = profiles.get(user_id, get_profile(user_id))
     profile.update(updates)
-    profile["updated_at"] = datetime.utcnow().isoformat()
+    profile["updated_at"] = datetime.now(timezone.utc).isoformat()
     profiles[user_id] = profile
     _save_profiles(profiles)
     return profile
@@ -136,7 +136,7 @@ def notify(title: str, message: str, type: str = "info", source: str = "system")
         "type": type,  # info, success, warning, error
         "source": source,
         "read": False,
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     }
     with _notif_lock:
         _notifications.append(notif)
@@ -193,7 +193,7 @@ def set_permission(workspace: str, user_id: str, level: str = "read"):
     perms = _load_permissions()
     if workspace not in perms:
         perms[workspace] = {}
-    perms[workspace][user_id] = {"level": level, "granted_at": datetime.utcnow().isoformat()}
+    perms[workspace][user_id] = {"level": level, "granted_at": datetime.now(timezone.utc).isoformat()}
     _save_permissions(perms)
     return {"workspace": workspace, "user": user_id, "level": level}
 

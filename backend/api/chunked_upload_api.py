@@ -6,7 +6,7 @@ Integrates directly with docs_library_api.py to register assembled files.
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Request
 from pydantic import BaseModel
 from typing import Optional, Dict, List, Set, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import hashlib
 import json
@@ -129,7 +129,7 @@ def cleanup_orphaned_uploads() -> int:
     if not temp_dir.exists():
         return 0
         
-    cutoff_time = datetime.utcnow() - timedelta(hours=ORPHAN_TTL_HOURS)
+    cutoff_time = datetime.now(timezone.utc) - timedelta(hours=ORPHAN_TTL_HOURS)
     cleaned_count = 0
     
     for entry in temp_dir.iterdir():
@@ -219,7 +219,7 @@ async def initiate_upload(req: InitiateUploadRequest):
         "received_chunks": set(),
         "chunk_hashes": {},
         "status": "in_progress",
-        "created_at": datetime.utcnow().isoformat()
+        "created_at": datetime.now(timezone.utc).isoformat()
     })
     
     return {

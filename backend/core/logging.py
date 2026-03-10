@@ -16,7 +16,7 @@ import json
 import uuid
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 _correlation = threading.local()
@@ -37,7 +37,7 @@ class StructuredFormatter(logging.Formatter):
 
     def format(self, record):
         entry = {
-            "ts": datetime.utcnow().isoformat() + "Z",
+            "ts": datetime.now(timezone.utc).isoformat() + "Z",
             "level": record.levelname,
             "msg": record.getMessage(),
             "logger": record.name,

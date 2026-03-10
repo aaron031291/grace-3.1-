@@ -65,6 +65,9 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         return _wrap(OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
         ))
+    elif provider == "runpod":
+        from cognitive.runpod_client import get_runpod_client
+        return _wrap(get_runpod_client())
     else:
         return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
 
@@ -176,6 +179,9 @@ def get_raw_client(provider: str = None) -> BaseLLMClient:
         return OpusLLMClient(
             api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
         )
+    elif provider == "runpod":
+        from cognitive.runpod_client import get_runpod_client
+        return get_runpod_client()
     else:
         return OllamaLLMClient(base_url=settings.OLLAMA_URL)
 

@@ -21,7 +21,7 @@ The consensus auto-fix flow:
 
 from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import logging
 import threading
 import time
@@ -113,7 +113,7 @@ def _probe_endpoint(path: str, method: str = "GET") -> dict:
         "status_code": 0,
         "latency_ms": 0,
         "error": None,
-        "probed_at": datetime.utcnow().isoformat(),
+        "probed_at": datetime.now(timezone.utc).isoformat(),
     }
 
     try:
@@ -339,7 +339,7 @@ async def probe_sweep():
         "dormant": len(dormant),
         "broken_endpoints": broken,
         "dormant_endpoints": dormant,
-        "sweep_at": datetime.utcnow().isoformat(),
+        "sweep_at": datetime.now(timezone.utc).isoformat(),
     }
 
 

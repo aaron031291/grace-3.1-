@@ -28,7 +28,7 @@ import logging
 import threading
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
@@ -263,7 +263,7 @@ class LoopOrchestrator:
     def _execute_single_loop(self, loop_id: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a single loop with the shared context."""
         # Each loop type maps to a real system action
-        output = {"loop": loop_id, "status": "executed", "timestamp": datetime.utcnow().isoformat()}
+        output = {"loop": loop_id, "status": "executed", "timestamp": datetime.now(timezone.utc).isoformat()}
 
         if "trust" in loop_id:
             try:

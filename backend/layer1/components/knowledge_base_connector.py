@@ -8,7 +8,7 @@ to the Layer 1 message bus, enabling autonomous knowledge base management.
 import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -188,7 +188,7 @@ class KnowledgeBaseIngestionConnector:
                 payload={
                     "repo_path": str(repo_path),
                     "category": category,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -206,7 +206,7 @@ class KnowledgeBaseIngestionConnector:
                     "repo_path": str(repo_path),
                     "category": category,
                     "stats": stats,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -233,7 +233,7 @@ class KnowledgeBaseIngestionConnector:
             await self.message_bus.publish(
                 topic="knowledge_base.ingestion_all_started",
                 payload={
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -243,7 +243,7 @@ class KnowledgeBaseIngestionConnector:
 
             # Update status on success
             self._ingestion_status["state"] = "completed"
-            self._ingestion_status["last_ingestion"] = datetime.utcnow().isoformat()
+            self._ingestion_status["last_ingestion"] = datetime.now(timezone.utc).isoformat()
             self._ingestion_status["repositories_ingested"] += stats.get("repositories_processed", 0)
             self._ingestion_status["total_documents"] += stats.get("total_documents", 0)
 
@@ -252,7 +252,7 @@ class KnowledgeBaseIngestionConnector:
                 topic="knowledge_base.ingestion_all_complete",
                 payload={
                     "stats": stats,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -314,7 +314,7 @@ class KnowledgeBaseIngestionConnector:
             topic="knowledge_base.verify_integrity",
             payload={
                 "trigger": "post_ingestion",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             },
             from_component=ComponentType.KNOWLEDGE_BASE,
         )

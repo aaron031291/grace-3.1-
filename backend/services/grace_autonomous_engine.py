@@ -15,7 +15,7 @@ import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Set
 import heapq
@@ -278,7 +278,7 @@ class TaskScheduler:
     ) -> str:
         """Schedule a task for execution"""
         if scheduled_time is None:
-            scheduled_time = datetime.utcnow() + timedelta(seconds=delay_seconds)
+            scheduled_time = datetime.now(timezone.utc) + timedelta(seconds=delay_seconds)
 
         scheduled_task = ScheduledTask(
             task_id=task_id,
@@ -325,7 +325,7 @@ class TaskScheduler:
     def _run_scheduler(self):
         """Main scheduler loop"""
         while self._running:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
 
             with self._schedule_lock:
                 tasks_to_execute = []
@@ -467,11 +467,11 @@ class ParallelExecutor:
         **kwargs
     ) -> TaskResult:
         """Execute a task with timing and error tracking"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         try:
             result_data = handler(*args, **kwargs)
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
 
             result = TaskResult(
                 task_id=task_id,
@@ -480,7 +480,7 @@ class ParallelExecutor:
                 duration_ms=duration_ms
             )
         except Exception as e:
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
             result = TaskResult(
                 task_id=task_id,
                 success=False,
@@ -556,7 +556,7 @@ class GraceAutonomousEngine:
 
         # Metrics
         self._metrics = defaultdict(int)
-        self._start_time = datetime.utcnow()
+        self._start_time = datetime.now(timezone.utc)
 
         # State
         self._running = False
@@ -623,12 +623,12 @@ class GraceAutonomousEngine:
             "execution_mode": execution_mode,
             "required_capabilities": required_capabilities or [],
             "dependencies": dependencies or [],
-            "submitted_at": datetime.utcnow(),
+            "submitted_at": datetime.now(timezone.utc),
             "status": "queued"
         }
 
         with self._lock:
-            if scheduled_time and scheduled_time > datetime.utcnow():
+            if scheduled_time and scheduled_time > datetime.now(timezone.utc):
                 # Schedule for later
                 self.scheduler.schedule(
                     task_id=task_id,
@@ -664,7 +664,7 @@ class GraceAutonomousEngine:
         handler = self._task_handlers.get(task_type, self._default_handler)
 
         task_data["status"] = "running"
-        task_data["started_at"] = datetime.utcnow()
+        task_data["started_at"] = datetime.now(timezone.utc)
 
         if execution_mode == ExecutionMode.PARALLEL:
             self.executor.execute_background(task_id, handler, (task_data,))
@@ -685,13 +685,13 @@ class GraceAutonomousEngine:
         """Process a single task"""
         task_id = task_data["task_id"]
         task_type = task_data["task_type"]
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         try:
             handler = self._task_handlers.get(task_type, self._default_handler)
             result_data = handler(task_data)
 
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
             result = TaskResult(
                 task_id=task_id,
                 success=True,
@@ -703,7 +703,7 @@ class GraceAutonomousEngine:
             self._metrics["tasks_completed"] += 1
 
         except Exception as e:
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
             result = TaskResult(
                 task_id=task_id,
                 success=False,
@@ -793,7 +793,7 @@ class GraceAutonomousEngine:
 
     def get_metrics(self) -> Dict[str, Any]:
         """Get engine metrics"""
-        uptime = (datetime.utcnow() - self._start_time).total_seconds()
+        uptime = (datetime.now(timezone.utc) - self._start_time).total_seconds()
 
         return {
             "uptime_seconds": uptime,

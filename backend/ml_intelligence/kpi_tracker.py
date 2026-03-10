@@ -15,7 +15,7 @@ Key Features:
 import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 import json
 
@@ -36,7 +36,7 @@ class KPI:
         """Increment KPI value."""
         self.count += 1
         self.value += value
-        self.timestamp = datetime.utcnow()
+        self.timestamp = datetime.now(timezone.utc)
         if metadata:
             self.metadata.update(metadata)
 
@@ -64,7 +64,7 @@ class ComponentKPIs:
         """Increment a KPI."""
         kpi = self.get_kpi(metric_name)
         kpi.increment(value, metadata)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
     
     def get_trust_score(self, metric_weights: Optional[Dict[str, float]] = None) -> float:
         """
@@ -112,7 +112,7 @@ class ComponentKPIs:
             return None
         
         kpi = self.kpis[metric_name]
-        if datetime.utcnow() - kpi.timestamp > time_window:
+        if datetime.now(timezone.utc) - kpi.timestamp > time_window:
             return None
         
         return kpi

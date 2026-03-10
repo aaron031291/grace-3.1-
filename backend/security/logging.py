@@ -11,7 +11,7 @@ Provides centralized logging for security-related events:
 
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 from starlette.requests import Request
 
@@ -80,7 +80,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "AUTH_ATTEMPT",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "success": success,
             "username": username[:50] if username else None,
             "reason": reason,
@@ -104,7 +104,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "RATE_LIMIT_EXCEEDED",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "limit": limit,
             "endpoint": endpoint,
             **request_info
@@ -126,7 +126,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "SUSPICIOUS_REQUEST",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "reason": reason,
             "details": details,
             **request_info
@@ -145,7 +145,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "VALIDATION_FAILURE",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "field": field_name,
             "error": error,
             **request_info
@@ -164,7 +164,7 @@ class SecurityLogger:
 
         event = {
             "event_type": "ACCESS_DENIED",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "resource": resource,
             "reason": reason,
             **request_info
@@ -187,7 +187,7 @@ class SecurityLogger:
 
         event = {
             "event_type": event_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "details": details,
             **request_info
         }

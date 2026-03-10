@@ -19,7 +19,7 @@ Coverage:
 import pytest
 import asyncio
 from unittest.mock import Mock, AsyncMock, MagicMock, patch
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import uuid
 
 # Import the module under test
@@ -220,7 +220,7 @@ class TestTaskResult:
 
     def test_to_dict_with_timestamps(self):
         """Test TaskResult serialization with timestamps."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         result = TaskResult(
             task_id="TEST-006",
             status=TaskStatus.COMPLETED,

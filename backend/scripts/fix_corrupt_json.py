@@ -1,7 +1,7 @@
 import os
 import json
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 
 def fix_truncated_json(file_path):
     """
@@ -47,7 +47,7 @@ def fix_truncated_json(file_path):
                     fixed_content = fixed_content[:last_brace+1]
                 
                 # Close the list and the root object
-                fixed_content += '\n  ],\n  "last_updated": "' + datetime.utcnow().isoformat() + '",\n  "total_keys": 0,\n  "repaired": true\n}'
+                fixed_content += '\n  ],\n  "last_updated": "' + datetime.now(timezone.utc).isoformat() + '",\n  "total_keys": 0,\n  "repaired": true\n}'
             else:
                 # Case 2: Very early truncation
                 fixed_content += '}'

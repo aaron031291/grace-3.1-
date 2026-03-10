@@ -109,7 +109,9 @@ class DatabaseConnection:
                     "check_same_thread": False,
                     "timeout": SQLITE_CONNECT_TIMEOUT_S,
                 },
-                poolclass=StaticPool,
+                poolclass=QueuePool,
+                pool_size=config.pool_size,
+                max_overflow=config.max_overflow,
                 echo=config.echo,
             )
 

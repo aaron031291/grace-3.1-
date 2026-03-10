@@ -7,7 +7,7 @@ Librarian organizes keys every 24 hours with metadata.
 import os
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from sqlalchemy.orm import Session
@@ -70,7 +70,7 @@ class GenesisKeyDailyOrganizer:
         try:
             # Default to today
             if target_date is None:
-                target_date = datetime.utcnow()
+                target_date = datetime.now(timezone.utc)
 
             # Get date string for folder name
             date_str = target_date.strftime("%Y-%m-%d")
@@ -213,7 +213,7 @@ class GenesisKeyDailyOrganizer:
 
         return {
             "date": date_str,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "summary": summary,
             "statistics": {
                 "total_keys": len(keys),
@@ -419,7 +419,7 @@ class GenesisKeyDailyOrganizer:
         results = []
 
         for i in range(days_back):
-            target_date = datetime.utcnow() - timedelta(days=i)
+            target_date = datetime.now(timezone.utc) - timedelta(days=i)
             result = self.export_daily_keys(target_date, session)
             results.append(result)
 

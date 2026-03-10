@@ -6,7 +6,7 @@ Assigns Genesis IDs to users on first access.
 """
 import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -59,7 +59,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
 
         t1 = time.time()
         # Track request start
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         request_data = await self._extract_request_data(request)
 
         # Create Genesis Key for request
@@ -118,7 +118,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
 
         # Track response with full output for traceability
         try:
-            duration_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
+            duration_ms = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             output_payload = {
                 "status_code": response.status_code,
                 "duration_ms": duration_ms,
@@ -196,7 +196,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
                 profile_data={
                     "user_id": genesis_id,
                     "username": user.username,
-                    "first_seen": (user.first_seen or datetime.utcnow()).isoformat(),
+                    "first_seen": (user.first_seen or datetime.now(timezone.utc)).isoformat(),
                     "user_agent": request.headers.get("user-agent"),
                     "initial_ip": request.client.host if request.client else None,
                     "initial_path": request.url.path
@@ -228,7 +228,7 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
             return session_id
 
         # Deterministic session ID (no random) from genesis + path + date-hour
-        hour_bucket = datetime.utcnow().strftime("%Y-%m-%d-%H")
+        hour_bucket = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H")
         gid = getattr(request.state, "genesis_id", "") or ""
         seed = f"{gid}|{request.url.path}|{hour_bucket}"
         session_id = f"SS-{hashlib.sha256(seed.encode()).hexdigest()[:16]}"

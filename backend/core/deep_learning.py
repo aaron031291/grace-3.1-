@@ -15,7 +15,7 @@ import json
 import logging
 import threading
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Tuple, Optional
 from collections import Counter
 
@@ -59,7 +59,7 @@ def _key_to_features(key: dict) -> list:
     # Hour of day (1 dim, normalized)
     when = key.get("when", "")
     try:
-        dt = datetime.fromisoformat(when) if when else datetime.utcnow()
+        dt = datetime.fromisoformat(when) if when else datetime.now(timezone.utc)
         features[11] = dt.hour / 24.0
         features[12] = dt.weekday() / 7.0
     except Exception:

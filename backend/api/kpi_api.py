@@ -60,17 +60,17 @@ async def get_component_kpis(name: str):
         return {
             "trust_score": 0.0,
             "kpis": {},
-            "created_at": datetime.datetime.utcnow().isoformat(),
-            "updated_at": datetime.datetime.utcnow().isoformat()
+            "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat()
         }
         
     return {
         "trust_score": target_comp["trust_score"],
-        "created_at": (datetime.datetime.utcnow() - datetime.timedelta(days=30)).isoformat(),
-        "updated_at": datetime.datetime.utcnow().isoformat(),
+        "created_at": (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)).isoformat(),
+        "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "kpis": {
-            "success_rate": {"metric_name": "Success Rate", "count": target_comp["total_actions"], "value": target_comp["trust_score"] * 100, "timestamp": datetime.datetime.utcnow().isoformat()},
-            "avg_latency": {"metric_name": "Avg Latency (ms)", "count": 1500, "value": 45.2, "timestamp": datetime.datetime.utcnow().isoformat()},
-            "error_rate": {"metric_name": "Error Rate", "count": 25, "value": (1.0 - target_comp["trust_score"]) * 100, "timestamp": datetime.datetime.utcnow().isoformat()},
+            "success_rate": {"metric_name": "Success Rate", "count": target_comp["total_actions"], "value": target_comp["trust_score"] * 100, "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()},
+            "avg_latency": {"metric_name": "Avg Latency (ms)", "count": 1500, "value": 45.2, "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()},
+            "error_rate": {"metric_name": "Error Rate", "count": 25, "value": (1.0 - target_comp["trust_score"]) * 100, "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()},
         }
     }

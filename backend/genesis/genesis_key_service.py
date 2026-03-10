@@ -9,7 +9,7 @@ import asyncio
 import json
 import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
@@ -65,8 +65,9 @@ class GenesisKeyService:
         session: Optional[Session] = None
     ) -> UserProfile:
         """Get or create a user profile."""
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        from database.session import SessionLocal
+        sess = session or self.session or SessionLocal()
+        close_session = (session is None and self.session is None)
 
         try:
             # Generate user_id if not provided
@@ -187,7 +188,7 @@ class GenesisKeyService:
                 logger.warning(f"[GENESIS] Session cleanup warning: {cleanup_error}")
             
             # Key ID is always deterministic (hash of content). Genesis keys are never model-generated.
-            when_ts = datetime.utcnow().isoformat()
+            when_ts = datetime.now(timezone.utc).isoformat()
             input_hash = self._hash_data(input_data) if input_data else ""
             payload = f"{key_type.value}|{what_description}|{who_actor}|{where_location or ''}|{why_reason or ''}|{how_method or ''}|{when_ts}|{input_hash}|{parent_key_id or ''}"
             key_id = "GK-" + hashlib.sha256(payload.encode()).hexdigest()[:32]
@@ -209,7 +210,7 @@ class GenesisKeyService:
                 key_type=key_type,
                 what=what_description,
                 where=where_location or file_path,
-                when=datetime.utcnow(),
+                when=datetime.now(timezone.utc),
                 why=why_reason,
                 who=who_actor,
                 how=how_method
@@ -218,7 +219,7 @@ class GenesisKeyService:
             # Generate AI-readable metadata
             metadata_ai = {
                 "key_type": key_type.value,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "commit_sha": commit_sha,
                 "has_code_change": bool(code_before or code_after),
                 "is_error": is_error,
@@ -256,7 +257,7 @@ class GenesisKeyService:
                 session_id=session_id,
                 what_description=what_description,
                 where_location=where_location,
-                when_timestamp=datetime.utcnow(),
+                when_timestamp=datetime.now(timezone.utc),
                 why_reason=why_reason,
                 who_actor=who_actor,
                 how_method=how_method,
@@ -279,13 +280,19 @@ class GenesisKeyService:
                 tags=_sqlite_json_safe(tags),
             )
 
-            sess.add(key)
+            # Step 1: Remove from session if already there (defensive for retries)
+            if key in sess:
+                sess.expunge(key)
 
             # Retry on SQLite "database is locked" / busy (up to 3 attempts)
             last_err = None
             for attempt in range(3):
                 try:
-                    sess.flush()
+                    # Use a nested transaction (savepoint) for each attempt.
+                    # This allows rolling back just this attempt without invalidating the whole session transaction.
+                    with sess.begin_nested():
+                        sess.add(key)
+                        sess.flush()
                     break
                 except OperationalError as e:
                     last_err = e
@@ -293,13 +300,15 @@ class GenesisKeyService:
                         if attempt < 2:
                             import time
                             time.sleep(0.3 * (attempt + 1))
-                            sess.rollback()
-                            sess.add(key)
+                            # Savepoint auto-rolled back by context manager
+                            # Expunge and re-add for next attempt
+                            if key in sess:
+                                sess.expunge(key)
                             continue
                     raise
                 except IntegrityError as e:
                     # Duplicate key_id (deterministic hash collision or double-create)
-                    sess.rollback()
+                    # Savepoint auto-rolled back by context manager
                     existing = sess.query(GenesisKey).filter(GenesisKey.key_id == key_id).first()
                     if existing:
                         key = existing
@@ -309,7 +318,7 @@ class GenesisKeyService:
                     raise
                 except Exception as e:
                     if "Identity map already had an identity" in str(e):
-                        sess.rollback()
+                        # Savepoint auto-rolled back. Try merging.
                         key = sess.merge(key)
                         sess.flush()
                         break
@@ -480,7 +489,7 @@ class GenesisKeyService:
                 # Perform operation
                 result = upload_file()
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         key = None
 
         try:
@@ -500,23 +509,25 @@ class GenesisKeyService:
             yield key
 
             # Update on success
-            sess = session or self.session or next(get_session())
+            from database.session import SessionLocal
+            sess = session or self.session or SessionLocal()
             key.what_description = f"Completed: {operation_name}"
             key.status = GenesisKeyStatus.ACTIVE
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now(timezone.utc) - start_time).total_seconds()
             key.output_data = {"duration_seconds": duration, "status": "success"}
             sess.commit()
 
         except Exception as e:
             # Update on error
             if key:
-                sess = session or self.session or next(get_session())
+                from database.session import SessionLocal
+                sess = session or self.session or SessionLocal()
                 key.what_description = f"Failed: {operation_name}"
                 key.status = GenesisKeyStatus.ERROR
                 key.is_error = True
                 key.error_type = type(e).__name__
                 key.error_message = str(e)
-                duration = (datetime.utcnow() - start_time).total_seconds()
+                duration = (datetime.now(timezone.utc) - start_time).total_seconds()
                 key.output_data = {"duration_seconds": duration, "status": "failed"}
                 sess.commit()
             raise
@@ -535,8 +546,9 @@ class GenesisKeyService:
         session: Optional[Session] = None
     ) -> FixSuggestion:
         """Create a fix suggestion for an error."""
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        from database.session import SessionLocal
+        sess = session or self.session or SessionLocal()
+        close_session = (session is None and self.session is None)
 
         try:
             suggestion = FixSuggestion(
@@ -575,8 +587,9 @@ class GenesisKeyService:
         session: Optional[Session] = None
     ) -> GenesisKey:
         """Apply a fix suggestion and create a new Genesis Key for the fix."""
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        from database.session import SessionLocal
+        sess = session or self.session or SessionLocal()
+        close_session = (session is None and self.session is None)
 
         try:
             # Get suggestion
@@ -609,7 +622,7 @@ class GenesisKeyService:
 
             # Update suggestion
             suggestion.status = FixSuggestionStatus.APPLIED
-            suggestion.applied_at = datetime.utcnow()
+            suggestion.applied_at = datetime.now(timezone.utc)
             suggestion.applied_by = applied_by
             suggestion.result_key_id = fix_key.key_id
 
@@ -673,7 +686,7 @@ class GenesisKeyService:
             user = session.query(UserProfile).filter(UserProfile.user_id == user_id).first()
             if user:
                 user.total_actions += 1
-                user.last_seen = datetime.utcnow()  # Always set a fresh datetime
+                user.last_seen = datetime.now(timezone.utc)  # Always set a fresh datetime
 
                 if key_type == GenesisKeyType.CODE_CHANGE:
                     user.total_changes += 1
@@ -692,8 +705,9 @@ class GenesisKeyService:
         session: Optional[Session] = None
     ) -> List[GenesisKey]:
         """Get keys ready for archival (older than specified date)."""
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        from database.session import SessionLocal
+        sess = session or self.session or SessionLocal()
+        close_session = (session is None and self.session is None)
 
         try:
             keys = sess.query(GenesisKey).filter(
@@ -712,8 +726,9 @@ class GenesisKeyService:
         session: Optional[Session] = None
     ) -> GenesisKey:
         """Rollback to a specific Genesis Key state."""
-        sess = session or self.session or next(get_session())
-        close_session = session is None and self.session is None
+        from database.session import SessionLocal
+        sess = session or self.session or SessionLocal()
+        close_session = (session is None and self.session is None)
 
         try:
             # Get the key to rollback to

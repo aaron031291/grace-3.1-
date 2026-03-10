@@ -17,7 +17,7 @@ Every action gets a Genesis Key for complete audit trail.
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 from sqlalchemy.orm import Session
 from models.genesis_key_models import (
@@ -102,7 +102,7 @@ class ComprehensiveTracker:
         Returns:
             Created GenesisKey instance
         """
-        when_ts = datetime.utcnow().isoformat()
+        when_ts = datetime.now(timezone.utc).isoformat()
         key_id = _deterministic_key_id(
             key_type, what_description, who_actor or self.user_id,
             where_location, why_reason, how_method, when_ts,
@@ -118,7 +118,7 @@ class ComprehensiveTracker:
                 session_id=self.session_id,
                 what_description=what_description,
                 where_location=where_location,
-                when_timestamp=datetime.utcnow(),
+                when_timestamp=datetime.now(timezone.utc),
                 why_reason=why_reason,
                 who_actor=who_actor or self.user_id,
                 how_method=how_method,

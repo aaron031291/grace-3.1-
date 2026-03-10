@@ -43,7 +43,7 @@ import math
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -67,7 +67,7 @@ class PatternRecognitionEngine:
     def observe(self, loop_name: str, metrics: Dict[str, float], outcome: str):
         """Record an observation from a loop execution."""
         observation = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "loop": loop_name,
             "metrics": metrics,
             "outcome": outcome,  # success, failure, improvement, degradation
@@ -304,7 +304,7 @@ class NeuroSymbolicEngine:
             "action": action,
             "source": source,
             "confidence": confidence,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "times_applied": 0,
             "times_correct": 0,
         }
@@ -325,7 +325,7 @@ class NeuroSymbolicEngine:
             "action": f"apply_pattern(success_rate={pattern['success_rate']})",
             "source": "ml_promoted",
             "confidence": pattern["success_rate"],
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "original_pattern": pattern,
             "times_applied": 0,
             "times_correct": 0,

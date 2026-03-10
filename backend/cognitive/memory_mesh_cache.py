@@ -12,7 +12,7 @@ Performance Improvement: 5-10x faster for cached queries
 import logging
 from functools import lru_cache, wraps
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import hashlib
 import json
 
@@ -45,7 +45,7 @@ class MemoryMeshCache:
             'hits': 0,
             'misses': 0,
             'invalidations': 0,
-            'last_reset': datetime.utcnow()
+            'last_reset': datetime.now(timezone.utc)
         }
 
         logger.info(f"[MEMORY-MESH-CACHE] Initialized with TTL={ttl_seconds}s")

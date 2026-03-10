@@ -17,7 +17,7 @@ Flow:
 
 from fastapi import APIRouter
 from typing import List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import json
 
@@ -240,7 +240,7 @@ async def scan_all_problems():
         "problems": problems,
         "total": len(problems),
         "critical": sum(1 for p in problems if p.get("severity") == "critical" or p.get("status") == "red"),
-        "scanned_at": datetime.utcnow().isoformat(),
+        "scanned_at": datetime.now(timezone.utc).isoformat(),
     }
 
 

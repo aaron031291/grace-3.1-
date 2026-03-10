@@ -19,7 +19,7 @@ import logging
 import shutil
 import signal
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, Callable, List
 from dataclasses import dataclass, field
 from enum import Enum
@@ -229,7 +229,7 @@ class HealingExecutor:
         parameters: Dict[str, Any] = None
     ) -> HealingResult:
         """Execute a healing action."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         parameters = parameters or {}
 
         config = self.registry.get_action(action_type)
@@ -285,7 +285,7 @@ class HealingExecutor:
         result.post_state = self._capture_state(action_type)
 
         # Calculate duration
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         result.duration_ms = (end_time - start_time).total_seconds() * 1000
 
         # Log the action
@@ -296,7 +296,7 @@ class HealingExecutor:
     def _capture_state(self, action_type: HealingActionType) -> Dict[str, Any]:
         """Capture relevant state before/after healing."""
         state = {
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
         }
 
         try:
@@ -311,7 +311,7 @@ class HealingExecutor:
     def _log_healing_action(self, result: HealingResult):
         """Log healing action for audit trail."""
         try:
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
             log_file = self.log_dir / f"healing_{today}.jsonl"
 
             import json
@@ -533,7 +533,7 @@ class HealingExecutor:
                 try:
                     if log_file.stat().st_size > max_size_bytes:
                         # Rotate: rename with timestamp
-                        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+                        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
                         rotated_name = f"{log_file.stem}_{timestamp}{log_file.suffix}"
                         rotated_path = log_file.parent / rotated_name
 

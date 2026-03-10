@@ -14,7 +14,7 @@ Supports multiple concurrent clients with room-based subscriptions.
 import asyncio
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Set, Any, Optional, Callable
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -126,7 +126,7 @@ class ConnectionManager:
         await websocket.accept()
 
         if not client_id:
-            client_id = f"client-{len(self._clients) + 1:04d}-{datetime.utcnow().timestamp():.0f}"
+            client_id = f"client-{len(self._clients) + 1:04d}-{datetime.now(timezone.utc).timestamp():.0f}"
 
         client = ClientInfo(
             client_id=client_id,
@@ -237,7 +237,7 @@ class ConnectionManager:
                     event_id=self._next_event_id(),
                     event_type=EventType.HEARTBEAT,
                     data={
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
                         "clients": self.client_count,
                     },
                     priority="low"

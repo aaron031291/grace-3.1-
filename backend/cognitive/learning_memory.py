@@ -10,14 +10,14 @@ serialize Python dicts on INSERT — the sqlite3 C driver raises
 "ProgrammingError: type 'dict' is not supported" when it encounters
 a raw dict in a parameter slot.
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from sqlalchemy.orm import Session, validates
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boolean, ForeignKey
 import json
 
-from core.datetime_utils import as_naive_utc
+from core.datetime_utils import ensure_aware
 from database.base import BaseModel
 
 
@@ -490,7 +490,7 @@ class LearningMemoryManager:
         Extract pattern from multiple learning examples.
         """
         # Simple pattern extraction (can be enhanced with ML)
-        pattern_name = f"pattern_{examples[0].example_type}_{datetime.utcnow().timestamp()}"
+        pattern_name = f"pattern_{examples[0].example_type}_{datetime.now(timezone.utc).timestamp()}"
 
         # Extract common preconditions
         preconditions = self._extract_common_preconditions(examples)
@@ -596,7 +596,7 @@ class LearningMemoryManager:
 
         # Update usage tracking
         example.times_referenced += 1
-        example.last_used = datetime.utcnow()
+        example.last_used = datetime.now(timezone.utc)
 
         # Update trust based on outcome
         new_trust = self.trust_scorer.update_trust_on_validation(
@@ -615,8 +615,8 @@ class LearningMemoryManager:
         examples = self.session.query(LearningExample).all()
 
         for example in examples:
-            created = as_naive_utc(example.created_at)
-            age_days = (datetime.utcnow() - created).days if created else 0
+            created = ensure_aware(example.created_at)
+            age_days = (datetime.now(timezone.utc) - created).days if created else 0
             example.recency_weight = self.trust_scorer._calculate_recency_weight(age_days)
 
             # Recalculate trust with new recency weight

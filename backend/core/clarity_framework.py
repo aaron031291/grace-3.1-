@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 import logging
@@ -32,7 +32,7 @@ class ClarityFramework:
     def _generate_decision_id() -> str:
         """Generates a unique ID for a clarity decision."""
         # Format: decision_<timestamp>_<uuid4_prefix>
-        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         short_uuid = str(uuid.uuid4()).split("-")[0]
         return f"decision_{timestamp}_{short_uuid}"
 

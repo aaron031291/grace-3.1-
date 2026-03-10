@@ -12,7 +12,7 @@ Integration Flow:
 Layer 1 Input → Cognitive Engine (OODA + Invariants) → Genesis Pipeline → World Model
 """
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, List, Any, Callable
 from sqlalchemy.orm import Session
 
@@ -95,7 +95,7 @@ class CognitiveLayer1Integration:
 
         # Set planning timeout
         context.decision_freeze_point = (
-            datetime.utcnow() + timedelta(seconds=planning_timeout_seconds)
+            datetime.now(timezone.utc) + timedelta(seconds=planning_timeout_seconds)
         )
 
         try:
@@ -104,7 +104,7 @@ class CognitiveLayer1Integration:
                 context,
                 observations or {
                     'operation': operation_name,
-                    'timestamp': datetime.utcnow().isoformat()
+                    'timestamp': datetime.now(timezone.utc).isoformat()
                 }
             )
 

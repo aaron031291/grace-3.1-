@@ -17,7 +17,7 @@ import os
 import sys
 import json
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -84,7 +84,7 @@ def main():
 
         total_expired = 0
         for key_type, hours in ttl_rules.items():
-            cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+            cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
             count = s.execute(text(
                 "DELETE FROM genesis_key WHERE key_type = :kt AND when_timestamp < :cutoff"
             ), {"kt": key_type, "cutoff": cutoff}).rowcount
@@ -99,18 +99,18 @@ def main():
         archive_dir = Path("data/genesis_archive")
         archive_dir.mkdir(parents=True, exist_ok=True)
 
-        cold_cutoff = (datetime.utcnow() - timedelta(days=7)).isoformat()
+        cold_cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
         cold_keys = s.execute(text(
             "SELECT key_type, COUNT(*) as cnt FROM genesis_key "
             "WHERE when_timestamp < :cutoff GROUP BY key_type"
         ), {"cutoff": cold_cutoff}).fetchall()
 
         archive_data = {
-            "archived_at": datetime.utcnow().isoformat(),
+            "archived_at": datetime.now(timezone.utc).isoformat(),
             "cutoff": cold_cutoff,
             "summary": {t[0]: t[1] for t in cold_keys},
         }
-        archive_file = archive_dir / f"archive_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+        archive_file = archive_dir / f"archive_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
         archive_file.write_text(json.dumps(archive_data, indent=2))
         print(f"  Archive saved: {archive_file}")
 

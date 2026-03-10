@@ -17,7 +17,7 @@ import json
 import hashlib
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field, asdict
@@ -208,7 +208,7 @@ class LibrarianPipeline:
         registry_file = self.storage_dir / "registry.json"
         data = {
             "records": [asdict(r) for r in self.registry.values()],
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.now(timezone.utc).isoformat()
         }
         with open(registry_file, "w") as f:
             json.dump(data, f, indent=2, default=str)
@@ -257,7 +257,7 @@ class LibrarianPipeline:
                 logger.warning(f"[LIBRARIAN] Genesis Key Service error, falling back: {e}")
 
         # Fallback to simple key generation
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         key_data = f"librarian:ingest:{content_type.value}:{content_hash}:{timestamp}"
         key_hash = hashlib.sha256(key_data.encode()).hexdigest()[:12]
         return f"gk-lib-{key_hash}"
@@ -270,7 +270,7 @@ class LibrarianPipeline:
         version_entry = {
             "version": len(self._ingestion_versions[ingestion_id]) + 1,
             "mutation_type": mutation_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "status": record.status.value,
             "genesis_key": record.genesis_key,
             "snapshot": {
@@ -347,7 +347,7 @@ class LibrarianPipeline:
         base_dir.mkdir(parents=True, exist_ok=True)
 
         # Create date-based subdirectory
-        date_dir = base_dir / datetime.utcnow().strftime("%Y/%m/%d")
+        date_dir = base_dir / datetime.now(timezone.utc).strftime("%Y/%m/%d")
         date_dir.mkdir(parents=True, exist_ok=True)
 
         # Generate unique filename
@@ -371,7 +371,7 @@ class LibrarianPipeline:
     ):
         """Update ingestion status and add to timeline."""
         record.status = status
-        record.updated_at = datetime.utcnow().isoformat()
+        record.updated_at = datetime.now(timezone.utc).isoformat()
         record.timeline.append({
             "status": status.value,
             "timestamp": record.updated_at,
@@ -418,7 +418,7 @@ class LibrarianPipeline:
         Returns:
             IngestionResult with status and IDs
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         file_path = Path(file_path)
 
         if not file_path.exists():
@@ -463,7 +463,7 @@ class LibrarianPipeline:
         Returns:
             IngestionResult with status and IDs
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         ingestion_id = f"ing-{uuid.uuid4().hex[:12]}"
 
         try:
@@ -566,7 +566,7 @@ class LibrarianPipeline:
             # Track completion version
             self._track_ingestion_version(ingestion_id, record, "complete")
 
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
 
             logger.info(f"[LIBRARIAN] Completed {ingestion_id} in {duration_ms}ms -> {destination}")
 
@@ -590,7 +590,7 @@ class LibrarianPipeline:
                 record.error = str(e)
                 self._update_status(record, IngestionStatus.FAILED, str(e))
 
-            duration_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            duration_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
 
             return IngestionResult(
                 success=False,

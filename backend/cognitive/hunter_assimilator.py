@@ -23,7 +23,7 @@ import logging
 import re
 import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -68,7 +68,7 @@ class HunterAssimilator:
         """
         result = AssimilationResult(
             request_id=f"hunter_{int(time.time())}",
-            started_at=datetime.utcnow().isoformat(),
+            started_at=datetime.now(timezone.utc).isoformat(),
         )
 
         # Genesis: track the start
@@ -161,7 +161,7 @@ class HunterAssimilator:
 
         # Complete
         result.status = "complete"
-        result.completed_at = datetime.utcnow().isoformat()
+        result.completed_at = datetime.now(timezone.utc).isoformat()
 
         # Genesis: track completion
         try:
@@ -441,7 +441,7 @@ class HunterAssimilator:
             "files": result.files_created,
             "schemas": result.schemas_detected,
             "trust_score": result.trust_score,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
         # Announce via genesis realtime engine

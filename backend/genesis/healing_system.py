@@ -10,7 +10,7 @@ Uses Genesis Keys to:
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
@@ -133,7 +133,7 @@ class HealingSystem:
                 "suggested_fix": issue.suggested_fix,
                 "fix_confidence": issue.fix_confidence,
                 "context": issue.context,
-                "detected_at": datetime.utcnow().isoformat()
+                "detected_at": datetime.now(timezone.utc).isoformat()
             })
 
         return issues
@@ -219,7 +219,7 @@ class HealingSystem:
             "file_path": file_info["path"],
             "issues_found": len(issues),
             "fixes_applied": fixes_applied,
-            "healed_at": datetime.utcnow().isoformat(),
+            "healed_at": datetime.now(timezone.utc).isoformat(),
             "issues": issues
         }
         self.healing_log.append(healing_record)
@@ -359,11 +359,11 @@ class HealingSystem:
         if not output_path:
             output_path = os.path.join(
                 self.repo_path,
-                f".genesis_healing_report_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+                f".genesis_healing_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
             )
 
         report = {
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "summary": self.get_healing_summary(),
             "detailed_log": self.healing_log
         }

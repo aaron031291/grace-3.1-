@@ -8,7 +8,7 @@ enabling autonomous integrity checking and trust scoring.
 import logging
 from typing import Dict, Any, Optional, List
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 from layer1.message_bus import (
     Layer1MessageBus,
@@ -148,7 +148,7 @@ class DataIntegrityConnector:
                 payload={
                     "category": category,
                     "detailed": detailed,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -167,7 +167,7 @@ class DataIntegrityConnector:
                 payload={
                     "report": report.summary if hasattr(report, 'summary') else report,
                     "all_checks_passed": self._check_all_passed(report),
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )
@@ -176,7 +176,7 @@ class DataIntegrityConnector:
             self._last_report = {
                 "report": report.summary if hasattr(report, 'summary') else report,
                 "all_checks_passed": self._check_all_passed(report),
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
 
             return {
@@ -247,7 +247,7 @@ class DataIntegrityConnector:
                 payload={
                     "trust_score": trust_score,
                     "source": "integrity_verification",
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 },
                 from_component=ComponentType.KNOWLEDGE_BASE,
             )

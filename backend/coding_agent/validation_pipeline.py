@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ async def run_pipeline(task_id: str, target: str):
     except Exception:
         collection = None
 
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     for stage_name, timeout in stages.items():
         if failed:
@@ -66,7 +66,7 @@ async def run_pipeline(task_id: str, target: str):
             failed = True
             raise
             
-    end_time = datetime.utcnow()
+    end_time = datetime.now(timezone.utc)
     
     summary = {
         "task_id": task_id,

@@ -15,7 +15,7 @@ This is the ingestion pipeline that feeds the relation graphs.
 from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional, Set, Tuple, Callable
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import re
 import logging
@@ -478,7 +478,7 @@ class SynapticIngestionPipeline:
         Returns:
             IngestionResult with details of what was created
         """
-        timestamp = timestamp or datetime.utcnow()
+        timestamp = timestamp or datetime.now(timezone.utc)
         metadata = metadata or {}
 
         # 1. Segment content

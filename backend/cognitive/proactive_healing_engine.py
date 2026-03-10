@@ -28,7 +28,7 @@ import threading
 import logging
 import traceback
 from collections import deque
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from enum import Enum
@@ -449,7 +449,7 @@ class ProactiveHealingEngine:
     # ====================================================================
 
     def _collect_metrics(self) -> Dict[str, Any]:
-        metrics = {"timestamp": datetime.utcnow().isoformat(), "memory_percent": 0, "cpu_percent": 0, "error_count": 0}
+        metrics = {"timestamp": datetime.now(timezone.utc).isoformat(), "memory_percent": 0, "cpu_percent": 0, "error_count": 0}
 
         try:
             import psutil
@@ -466,7 +466,7 @@ class ProactiveHealingEngine:
             from models.genesis_key_models import GenesisKey, GenesisKeyType
             session = SessionLocal()
             try:
-                cutoff = datetime.utcnow() - timedelta(minutes=5)
+                cutoff = datetime.now(timezone.utc) - timedelta(minutes=5)
                 metrics["error_count"] = session.query(GenesisKey).filter(
                     GenesisKey.created_at >= cutoff,
                     GenesisKey.key_type == GenesisKeyType.ERROR,
@@ -643,7 +643,7 @@ class ProactiveHealingEngine:
     # ====================================================================
 
     def _handle_issue(self, issue: Dict[str, Any], time_ctx: Dict) -> Optional[Dict]:
-        issue["detected_at"] = datetime.utcnow().isoformat()
+        issue["detected_at"] = datetime.now(timezone.utc).isoformat()
 
         if not self.enable_auto_heal:
             issue["outcome"] = HealingOutcome.DEFERRED
@@ -694,7 +694,7 @@ class ProactiveHealingEngine:
 
                 if verified:
                     issue["outcome"] = HealingOutcome.HEALED
-                    issue["healed_at"] = datetime.utcnow().isoformat()
+                    issue["healed_at"] = datetime.now(timezone.utc).isoformat()
                     self._resolved_issues.append(issue)
 
                     # Capability 23: Learn from success
@@ -736,7 +736,7 @@ class ProactiveHealingEngine:
         self._log_to_telemetry(heal_action, issue)
 
         self._healing_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": heal_action,
             "issue": issue.get("message", "")[:100],
             "outcome": issue.get("outcome", "unknown"),
@@ -748,7 +748,7 @@ class ProactiveHealingEngine:
         return issue
 
     def _handle_prediction(self, prediction: Dict, time_ctx: Dict):
-        prediction["detected_at"] = datetime.utcnow().isoformat()
+        prediction["detected_at"] = datetime.now(timezone.utc).isoformat()
         prediction["proactive"] = True
         prediction["healable"] = True
 
@@ -877,7 +877,7 @@ class ProactiveHealingEngine:
             if log_dir.exists():
                 for lf in log_dir.rglob("*.log"):
                     if lf.stat().st_size > 50 * 1024 * 1024:
-                        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+                        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
                         lf.rename(lf.parent / f"{lf.stem}_{ts}{lf.suffix}")
                         rotated += 1
             return {"success": True, "message": f"Rotated {rotated} logs"}
@@ -970,7 +970,7 @@ class ProactiveHealingEngine:
                     component=issue.get("service", "unknown"),
                     healing_action=issue.get("heal_action", ""),
                     success=True,
-                    timestamp=datetime.utcnow().isoformat(),
+                    timestamp=datetime.now(timezone.utc).isoformat(),
                 ))
         except Exception:
             pass
@@ -1085,7 +1085,7 @@ class ProactiveHealingEngine:
     # ====================================================================
 
     def _take_snapshot(self, action: str):
-        snapshot = {"timestamp": datetime.utcnow().isoformat(), "action": action}
+        snapshot = {"timestamp": datetime.now(timezone.utc).isoformat(), "action": action}
         try:
             import psutil
             snapshot["memory_percent"] = psutil.virtual_memory().percent
@@ -1127,7 +1127,7 @@ class ProactiveHealingEngine:
                     pass
 
         self._known_stubs = stubs
-        self._last_stub_scan = datetime.utcnow()
+        self._last_stub_scan = datetime.now(timezone.utc)
         if stubs:
             self._add_limitation({"type": "stub_code", "count": len(stubs),
                                   "message": f"{len(stubs)} placeholder/stub implementations detected",
@@ -1155,7 +1155,7 @@ class ProactiveHealingEngine:
                                   "message": f"{len(crit)} critical imports broken", "details": crit})
 
     def _run_periodic_deep_scan(self):
-        if self._last_stub_scan is None or datetime.utcnow() - self._last_stub_scan > timedelta(minutes=10):
+        if self._last_stub_scan is None or datetime.now(timezone.utc) - self._last_stub_scan > timedelta(minutes=10):
             self._scan_for_stubs()
         try:
             import psutil
@@ -1171,7 +1171,7 @@ class ProactiveHealingEngine:
     # ====================================================================
 
     def _add_limitation(self, limitation: Dict):
-        limitation["registered_at"] = datetime.utcnow().isoformat()
+        limitation["registered_at"] = datetime.now(timezone.utc).isoformat()
         for existing in self._limitations:
             if existing.get("type") == limitation.get("type"):
                 existing.update(limitation)
@@ -1185,7 +1185,7 @@ class ProactiveHealingEngine:
     def _notify_governance(self, event_type: str, data: Dict):
         self._governance_notifications.append({
             "event_type": event_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "data": data,
         })
 
@@ -1272,7 +1272,7 @@ class ProactiveHealingEngine:
         logger.info(f"[PROACTIVE-HEALING] Manual heal: {action}")
         result = self._execute_heal(action, {"source": "manual"})
         self._healing_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": action, "issue": "Manual trigger",
             "outcome": HealingOutcome.HEALED if result.get("success") else HealingOutcome.ESCALATED,
             "manual": True,
@@ -1287,7 +1287,7 @@ class ProactiveHealingEngine:
         predictions = self._analyze_trends(metrics)
         immune_result = self._run_immune_scan()
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "metrics": metrics,
             "issues": issues,
             "predictions": predictions,

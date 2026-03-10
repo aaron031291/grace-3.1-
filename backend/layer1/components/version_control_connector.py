@@ -9,7 +9,7 @@ UPDATED: Now fully integrated with Layer 1 message bus with autonomous actions.
 """
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
@@ -145,7 +145,7 @@ class VersionControlConnector:
                 "version_key_id": result.get("version_key_id"),
                 "file_genesis_key": result["file_genesis_key"],
                 "symbiotic": True,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
 
         except Exception as e:
@@ -367,7 +367,7 @@ class VersionControlConnector:
                     "genesis_key": result.get("genesis_key"),
                     "version_number": result.get("version_number"),
                     "operation": "ingest",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 },
                 from_component=ComponentType.VERSION_CONTROL
             )
@@ -398,7 +398,7 @@ class VersionControlConnector:
                     "version_number": result.get("version_number"),
                     "operation": "upload",
                     "user_id": user_id,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 },
                 from_component=ComponentType.VERSION_CONTROL
             )
@@ -467,7 +467,7 @@ class VersionControlConnector:
                     "affected_files": [file_path],
                     "user_id": user_id,
                     "description": description,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 },
                 from_component=ComponentType.VERSION_CONTROL
             )

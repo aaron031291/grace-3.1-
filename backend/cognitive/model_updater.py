@@ -15,7 +15,7 @@ Can be triggered manually or run on a schedule (e.g. daily).
 import json
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
@@ -63,7 +63,7 @@ def check_kimi_models() -> Dict[str, Any]:
             result["new_found"] = [m.get("id") for m in new_models]
 
         result["model_count"] = len(models)
-        result["checked_at"] = datetime.utcnow().isoformat()
+        result["checked_at"] = datetime.now(timezone.utc).isoformat()
     except Exception as e:
         result["error"] = str(e)
 
@@ -106,7 +106,7 @@ def check_opus_models() -> Dict[str, Any]:
         else:
             result["error"] = f"HTTP {resp.status_code}: {resp.text[:200]}"
 
-        result["checked_at"] = datetime.utcnow().isoformat()
+        result["checked_at"] = datetime.now(timezone.utc).isoformat()
     except Exception as e:
         result["error"] = str(e)
 
@@ -132,7 +132,45 @@ def check_ollama_models() -> Dict[str, Any]:
         else:
             result["error"] = f"HTTP {resp.status_code}"
 
-        result["checked_at"] = datetime.utcnow().isoformat()
+        result["checked_at"] = datetime.now(timezone.utc).isoformat()
+    except Exception as e:
+        result["error"] = str(e)
+
+    return result
+
+
+def check_runpod_models() -> Dict[str, Any]:
+    """Check available RunPod vLLM models."""
+    from settings import settings
+    result = {"provider": "runpod", "current_model": getattr(settings, "RUNPOD_MODEL", "Mistral-7B-Instruct"), "available": [], "new_found": []}
+
+    if not getattr(settings, "RUNPOD_API_KEY", None) or not getattr(settings, "RUNPOD_ENDPOINT_ID", None):
+        result["error"] = "RUNPOD_API_KEY or RUNPOD_ENDPOINT_ID not configured"
+        return result
+
+    try:
+        import requests
+        base_url = f"https://api.runpod.ai/v2/{settings.RUNPOD_ENDPOINT_ID}/openai/v1"
+        resp = requests.get(
+            f"{base_url}/models",
+            headers={"Authorization": f"Bearer {settings.RUNPOD_API_KEY}"},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            models = data.get("data", [])
+            result["available"] = [{"id": m.get("id")} for m in models]
+            
+            current = result["current_model"]
+            new_models = [m for m in models if m.get("id") != current]
+            if new_models:
+                result["new_found"] = [m.get("id") for m in new_models]
+
+            result["model_count"] = len(models)
+        else:
+            result["error"] = f"HTTP {resp.status_code}: {resp.text[:200]}"
+
+        result["checked_at"] = datetime.now(timezone.utc).isoformat()
     except Exception as e:
         result["error"] = str(e)
 
@@ -145,7 +183,8 @@ def check_all_models() -> Dict[str, Any]:
         "kimi": check_kimi_models(),
         "opus": check_opus_models(),
         "ollama": check_ollama_models(),
-        "checked_at": datetime.utcnow().isoformat(),
+        "runpod": check_runpod_models(),
+        "checked_at": datetime.now(timezone.utc).isoformat(),
     }
 
     # Track any new discoveries
@@ -164,12 +203,14 @@ def check_all_models() -> Dict[str, Any]:
         "kimi_count": results["kimi"].get("model_count", 0),
         "opus_count": results["opus"].get("model_count", 0),
         "ollama_count": results["ollama"].get("model_count", 0),
+        "runpod_count": results["runpod"].get("model_count", 0),
     })
     history["checks"] = history["checks"][-50:]  # Keep last 50 checks
     history["current"] = {
         "kimi": results["kimi"].get("current_model"),
         "opus": results["opus"].get("current_model"),
         "ollama": results["ollama"].get("current_model"),
+        "runpod": results["runpod"].get("current_model"),
     }
     _save_version_history(history)
 
@@ -209,6 +250,9 @@ def update_model(provider: str, model_id: str) -> Dict[str, Any]:
     elif provider == "ollama":
         old_model = settings.OLLAMA_LLM_DEFAULT
         settings.OLLAMA_LLM_DEFAULT = model_id
+    elif provider == "runpod":
+        old_model = getattr(settings, "RUNPOD_MODEL", "Mistral-7B-Instruct")
+        settings.RUNPOD_MODEL = model_id
     else:
         return {"error": f"Unknown provider: {provider}"}
 
@@ -219,6 +263,7 @@ def update_model(provider: str, model_id: str) -> Dict[str, Any]:
             "kimi": "KIMI_MODEL",
             "opus": "OPUS_MODEL",
             "ollama": "OLLAMA_LLM_DEFAULT",
+            "runpod": "RUNPOD_MODEL",
         }.get(provider)
 
         if env_key and env_file.exists():
@@ -242,7 +287,7 @@ def update_model(provider: str, model_id: str) -> Dict[str, Any]:
         "provider": provider,
         "old_model": old_model,
         "new_model": model_id,
-        "updated_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
     })
     history["current"][provider] = model_id
     _save_version_history(history)

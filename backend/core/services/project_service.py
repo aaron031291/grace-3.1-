@@ -4,7 +4,7 @@ import json
 import os
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
@@ -73,8 +73,8 @@ def create_project(name: str, description: str = "", project_type: str = "fullst
         "name": name,
         "description": description,
         "type": project_type,
-        "created_at": datetime.utcnow().isoformat(),
-        "updated_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
         "language": "python",
         "status": "active",
     }

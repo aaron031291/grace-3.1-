@@ -9,7 +9,7 @@ Analyzes raw sensor data to detect:
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
@@ -150,7 +150,7 @@ class InterpreterLayer:
 
     def interpret(self, sensor_data: SensorData) -> InterpretedData:
         """Interpret sensor data to extract patterns, anomalies, and clarity."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         result = InterpretedData()
 
         # Detect patterns
@@ -167,7 +167,7 @@ class InterpreterLayer:
             sensor_data, result.patterns, result.anomalies, result.invariant_checks
         )
 
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         result.interpretation_timestamp = end_time
         result.interpretation_duration_ms = (end_time - start_time).total_seconds() * 1000
 

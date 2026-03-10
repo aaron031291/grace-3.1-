@@ -9,7 +9,7 @@ import json
 import re
 from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import numpy as np
 
 from embedding import EmbeddingModel
@@ -383,7 +383,7 @@ class TextIngestionService:
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now(timezone.utc).isoformat(),
                 "source_type": source_type,
             }
             
@@ -420,7 +420,7 @@ class TextIngestionService:
             logger.info(f"[INGEST_FAST] [OK] Chunked text into {len(chunks)} chunks")
             
             # Get document creation date for embedding into chunks
-            created_at = document.created_at.isoformat() if document.created_at else datetime.utcnow().isoformat()
+            created_at = document.created_at.isoformat() if document.created_at else datetime.now(timezone.utc).isoformat()
             
             # Generate embeddings and store chunks
             vector_id_counter = int(f"{document_id}000")
@@ -650,14 +650,14 @@ class TextIngestionService:
             doc_confidence_data = self.confidence_scorer.calculate_confidence_score(
                 text_content=text_content,
                 source_type=source_type,
-                created_at=datetime.utcnow(),
+                created_at=datetime.now(timezone.utc),
             )
             
             # Prepare document metadata
             doc_metadata = {
                 "user_metadata": metadata or {},
                 "original_source": source,
-                "upload_timestamp": datetime.utcnow().isoformat(),
+                "upload_timestamp": datetime.now(timezone.utc).isoformat(),
                 "source_type": source_type,
             }
             
@@ -718,7 +718,7 @@ class TextIngestionService:
                 chunk_confidence_data = self.confidence_scorer.calculate_confidence_score(
                     text_content=chunk_text,
                     source_type=source_type,
-                    created_at=datetime.utcnow(),
+                    created_at=datetime.now(timezone.utc),
                     existing_chunks=all_chunk_texts[:chunk_index] + all_chunk_texts[chunk_index+1:],  # Exclude current chunk
                 )
                 

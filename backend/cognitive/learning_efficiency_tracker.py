@@ -17,7 +17,7 @@ Key Metrics:
 import logging
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 from collections import defaultdict
 import json
@@ -220,7 +220,7 @@ class LearningEfficiencyTracker:
             Insight object
         """
         # Initialize start time if first insight
-        current_time = datetime.utcnow()
+        current_time = datetime.now(timezone.utc)
         if self.start_time is None:
             self.start_time = current_time
         
@@ -333,7 +333,7 @@ class LearningEfficiencyTracker:
                 "chunks": 0
             })
             
-            current_time = datetime.utcnow()
+            current_time = datetime.now(timezone.utc)
             time_to_acq = current_time - self.start_time if self.start_time else timedelta(0)
             self.domain_acquisitions[domain] = DomainAcquisition(
                 domain=domain,
@@ -363,7 +363,7 @@ class LearningEfficiencyTracker:
         if domain:
             filtered_insights = [i for i in filtered_insights if i.domain == domain]
         if time_window:
-            cutoff = datetime.utcnow() - time_window
+            cutoff = datetime.now(timezone.utc) - time_window
             filtered_insights = [i for i in filtered_insights if i.timestamp >= cutoff]
         
         if not filtered_insights:

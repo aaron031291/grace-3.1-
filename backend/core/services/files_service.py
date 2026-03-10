@@ -176,7 +176,7 @@ def create_report(p: Dict[str, Any]) -> dict:
     Create a report (e.g. daily summary), place in reports folder, and register with librarian.
     Payload: title, report_type (optional), content (optional); or generate_daily_report if no content.
     """
-    from datetime import datetime
+    from datetime import datetime, timezone
     title = p.get("title", "report")
     report_type = p.get("report_type", "daily")
     content = p.get("content")
@@ -186,9 +186,9 @@ def create_report(p: Dict[str, Any]) -> dict:
             data = generate_daily_report(p.get("hours", 24))
             content = json.dumps(data, indent=2, default=str)
         except Exception as e:
-            content = f'{{ "error": "{e}", "generated_at": "{datetime.utcnow().isoformat()}" }}'
+            content = f'{{ "error": "{e}", "generated_at": "{datetime.now(timezone.utc).isoformat()}" }}'
     safe_name = "".join(c if c.isalnum() or c in " -_" else "_" for c in title)[:80]
-    path = f"reports/{report_type}/{safe_name}_{datetime.utcnow().strftime('%Y%m%d_%H%M')}.json"
+    path = f"reports/{report_type}/{safe_name}_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M')}.json"
     out = create(path, content, directory=None)
     if out.get("error"):
         return out

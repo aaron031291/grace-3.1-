@@ -13,7 +13,7 @@ Used by the 9-phase coding pipeline: Phase 0 (this loop) then Layers 1–8.
 
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -120,7 +120,7 @@ def run_deterministic_first_loop(
       - handoff_to_llm: True if reasoning/validation/generation needed
     """
     result = {
-        "started_at": datetime.utcnow().isoformat(),
+        "started_at": datetime.now(timezone.utc).isoformat(),
         "genesis_errors": [],
         "probe_result": None,
         "deterministic_result": None,

@@ -9,7 +9,7 @@ import logging
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from llm_orchestrator.factory import get_llm_client
 
 logger = logging.getLogger(__name__)
@@ -100,7 +100,7 @@ class FileIntelligenceAgent:
                 'file_size': len(content),
                 'line_count': content.count('\n') + 1,
                 'word_count': len(content.split()),
-                'analyzed_at': datetime.utcnow().isoformat()
+                'analyzed_at': datetime.now(timezone.utc).isoformat()
             }
 
             logger.info(

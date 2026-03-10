@@ -22,7 +22,7 @@ Reports are:
 
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -54,12 +54,12 @@ def generate_report(period: str = "daily", days: int = 1) -> Dict[str, Any]:
     elif period == "monthly":
         days = 30
 
-    cutoff = datetime.utcnow() - timedelta(days=days)
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
     report = {
-        "report_id": f"report_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+        "report_id": f"report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}",
         "period": period,
         "days_covered": days,
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "cutoff": cutoff.isoformat(),
         "sections": {},
         "summary": {},

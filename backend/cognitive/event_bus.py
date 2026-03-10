@@ -19,7 +19,7 @@ import logging
 import threading
 import time
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional
 from dataclasses import dataclass, field
 
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 class Event:
     topic: str
     data: Dict[str, Any]
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     source: str = "system"
 
 

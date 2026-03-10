@@ -5,7 +5,7 @@ Implements the Central Cortex that orchestrates OODA loops,
 enforces invariants, and manages decision-making.
 """
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -68,7 +68,7 @@ class DecisionContext:
     future_flexibility_metric: float = 1.0
 
     # Invariant 11: Time Bounds
-    planning_start: datetime = field(default_factory=datetime.utcnow)
+    planning_start: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     planning_deadline: Optional[datetime] = None
     decision_freeze_point: Optional[datetime] = None
 
@@ -79,7 +79,7 @@ class DecisionContext:
 
     # Metadata
     parent_decision_id: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -384,7 +384,7 @@ class CognitiveEngine:
         if context.decision_freeze_point is None:
             return False
 
-        return datetime.utcnow() >= context.decision_freeze_point
+        return datetime.now(timezone.utc) >= context.decision_freeze_point
 
     def check_recursion_bounds(self, context: DecisionContext) -> bool:
         """

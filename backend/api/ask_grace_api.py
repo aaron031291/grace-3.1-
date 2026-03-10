@@ -18,7 +18,7 @@ cognitive event bus (publishes ask_grace.* events).
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import traceback
 
@@ -425,7 +425,7 @@ def _summarize_context(context: Dict[str, Any]) -> str:
 @router.post("/query")
 async def ask_grace(query: AskGraceQuery) -> Dict[str, Any]:
     """Main Ask Grace endpoint. Classifies intent, gathers context, responds."""
-    start = datetime.utcnow()
+    start = datetime.now(timezone.utc)
     intent = _classify_intent(query.query)
 
     context = await _build_context_for_intent(intent, query.include_system_state)
@@ -453,7 +453,7 @@ async def ask_grace(query: AskGraceQuery) -> Dict[str, Any]:
             "query": query.query,
             "intent": intent,
             "method": method,
-            "duration_ms": (datetime.utcnow() - start).total_seconds() * 1000,
+            "duration_ms": (datetime.now(timezone.utc) - start).total_seconds() * 1000,
         }, source="ask_grace")
     except Exception:
         pass
@@ -478,8 +478,8 @@ async def ask_grace(query: AskGraceQuery) -> Dict[str, Any]:
         "sources_used": sources_used,
         "components_referenced": components_referenced,
         "system_health": health_info,
-        "timestamp": datetime.utcnow().isoformat(),
-        "duration_ms": round((datetime.utcnow() - start).total_seconds() * 1000, 1),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "duration_ms": round((datetime.now(timezone.utc) - start).total_seconds() * 1000, 1),
     }
 
 

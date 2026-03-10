@@ -10,7 +10,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 BACKEND_DIR = Path(__file__).parent.resolve()
@@ -181,7 +181,7 @@ for key, entry in files_dict.items():
     new_files[key] = entry
 
 data["files"] = new_files
-data["last_path_fix"] = datetime.utcnow().isoformat()
+data["last_path_fix"] = datetime.now(timezone.utc).isoformat()
 data["path_fix_backend_dir"] = str(BACKEND_DIR)
 
 # ── Step 5: Write backup + save ───────────────────────────────────────────────

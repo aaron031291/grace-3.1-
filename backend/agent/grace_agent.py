@@ -16,7 +16,7 @@ import asyncio
 import logging
 from typing import Dict, Any, List, Optional, Callable, Tuple
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 import uuid
 
@@ -253,7 +253,7 @@ class GraceAgent:
                 result.status = TaskStatus.COMPLETED
 
             result.summary = await self._create_summary(task, result)
-            result.completed_at = datetime.utcnow()
+            result.completed_at = datetime.now(timezone.utc)
             result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
 
             logger.info(
@@ -267,7 +267,7 @@ class GraceAgent:
             logger.exception(f"Task {task_id} failed with error")
             result.status = TaskStatus.FAILED
             result.error = str(e)
-            result.completed_at = datetime.utcnow()
+            result.completed_at = datetime.now(timezone.utc)
             result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
             return result
 

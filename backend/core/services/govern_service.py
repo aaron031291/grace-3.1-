@@ -1,7 +1,7 @@
 """Governance domain service — direct calls, no HTTP."""
 from pathlib import Path
 import json, logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +56,10 @@ def dashboard():
     try:
         from governance.governance_engine import GovernanceEngine
         engine = GovernanceEngine()
-        return {"timestamp": datetime.utcnow().isoformat(),
+        return {"timestamp": datetime.now(timezone.utc).isoformat(),
                 "pillars": {"self_governance": True, "human_oversight": True}}
     except Exception:
-        return {"timestamp": datetime.utcnow().isoformat(), "status": "basic"}
+        return {"timestamp": datetime.now(timezone.utc).isoformat(), "status": "basic"}
 
 def get_approvals():
     try:
@@ -77,7 +77,7 @@ def approve_action(decision_id, action, reason=""):
         from sqlalchemy import text
         with session_scope() as db:
             db.execute(text("UPDATE governance_decisions SET status=:s, resolved_at=:t WHERE id=:id"),
-                       {"s": action, "t": datetime.utcnow().isoformat(), "id": decision_id})
+                       {"s": action, "t": datetime.now(timezone.utc).isoformat(), "id": decision_id})
             return {"decision_id": decision_id, "action": action}
     except Exception as e:
         return {"error": str(e)}

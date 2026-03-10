@@ -26,7 +26,7 @@ from fastapi import APIRouter, Body, WebSocket, WebSocketDisconnect
 import asyncio
 import os
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import threading
 import time
@@ -131,7 +131,7 @@ def _run_cycle() -> dict:
     cycle_start = time.time()
     result = {
         "cycle_id": f"AUTO-{int(time.time())}",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "triggers_found": 0,
         "actions": [],
         "outcome": "clean",

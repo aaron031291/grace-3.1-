@@ -11,7 +11,7 @@ import os
 import hashlib
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, List, Any
 from sqlalchemy.orm import Session
@@ -69,14 +69,14 @@ class FileVersionTracker:
                     pass
                 self.version_metadata = {
                     "version": "1.0",
-                    "created_at": datetime.utcnow().isoformat(),
+                    "created_at": datetime.now(timezone.utc).isoformat(),
                     "files": {}
                 }
                 self._save_metadata()
         else:
             self.version_metadata = {
                 "version": "1.0",
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "files": {}  # file_genesis_key -> version info
             }
             self._save_metadata()
@@ -160,188 +160,192 @@ class FileVersionTracker:
         # Ensure we use a fresh service bound to the active session
         genesis_service = get_genesis_service(local_session)
 
-        # Get absolute path
-        if not os.path.isabs(file_path):
-            abs_file_path = os.path.join(self.base_path, file_path)
-        else:
-            abs_file_path = file_path
-
-        # Log path resolution for debugging
-        logger.info(f"[VERSION-TRACKER] Path received: file_path={file_path}, is_abs={os.path.isabs(file_path)}, abs_file_path={abs_file_path}, base_path={self.base_path}")
-
-        # If primary path missing, try knowledge_base prefix (scraped files saved there)
-        if not os.path.exists(abs_file_path):
-            # If the path is absolute and missing knowledge_base, inject it after base_path
-            alt_path = None
-            base_prefix = os.path.join(self.base_path, "auto_search")
-            kb_prefix = os.path.join(self.base_path, "knowledge_base", "auto_search")
-
-            if os.path.isabs(abs_file_path) and abs_file_path.startswith(base_prefix):
-                alt_path = abs_file_path.replace(base_prefix, kb_prefix, 1)
-            else:
-                # If relative, simply prepend knowledge_base
-                rel_path = file_path if not os.path.isabs(file_path) else os.path.relpath(file_path, self.base_path)
-                alt_path = os.path.join(self.base_path, "knowledge_base", rel_path)
-
-            if alt_path and os.path.exists(alt_path):
-                logger.info(f"[VERSION-TRACKER] Fallback path resolved: {alt_path}")
-                abs_file_path = alt_path
-
-        if os.path.isdir(abs_file_path):
-            logger.debug("Path is a directory, skipping tracking: %s", abs_file_path)
-            return {
-                "changed": False,
-                "version_number": 0,
-                "version_key_id": None,
-                "message": "Path is directory"
-            }
-
-        if not os.path.exists(abs_file_path):
-            # Race condition or path mismatch: file was deleted/mis-located (e.g. SQLite .db-shm/.db-wal)
-            if (abs_file_path.endswith("-shm") or abs_file_path.endswith("-wal") or
-                    ".db-shm" in abs_file_path or ".db-wal" in abs_file_path):
-                logger.debug("File vanished before tracking (ephemeral): %s", abs_file_path)
-            else:
-                logger.warning("File vanished before tracking: %s", abs_file_path)
-            return {
-                "changed": False,
-                "version_number": 0,
-                "version_key_id": None,
-                "message": "File not found (vanished)"
-            }
-
-        # Initialize file tracking if not exists
-        if file_genesis_key not in self.version_metadata["files"]:
-            self.version_metadata["files"][file_genesis_key] = {
-                "file_genesis_key": file_genesis_key,
-                "file_path": file_path,
-                "absolute_path": abs_file_path,
-                "created_at": datetime.utcnow().isoformat(),
-                "version_count": 0,
-                "versions": [],
-                "last_hash": None
-            }
-
-        file_info = self.version_metadata["files"][file_genesis_key]
-
-        # Compute current file hash
-        current_hash = self._compute_file_hash(abs_file_path)
-
-        # Check if file actually changed
-        if auto_detect_change and file_info["last_hash"] == current_hash:
-            logger.info(f"File {file_path} hasn't changed since last version")
-            return {
-                "file_genesis_key": file_genesis_key,
-                "version_number": file_info["version_count"],
-                "changed": False,
-                "message": "File content unchanged"
-            }
-
-        # Increment version number
-        file_info["version_count"] += 1
-        version_number = file_info["version_count"]
-
-        # Generate version Genesis Key
-        version_key_id = f"VER-{file_genesis_key.replace('FILE-', '')}-{version_number}"
-
-        # Read file content
-        try:
-            with open(abs_file_path, 'r', encoding='utf-8') as f:
-                file_content = f.read()
-        except UnicodeDecodeError:
-            # Binary file
-            file_content = None
-            logger.info(f"Binary file detected: {file_path}")
-
-        # Get file stats
-        file_stats = os.stat(abs_file_path)
-
-        # Create version Genesis Key
-        try:
-            version_key = genesis_service.create_key(
-                key_type=GenesisKeyType.FILE_OPERATION,
-                what_description=f"File version {version_number}: {os.path.basename(file_path)}",
-                who_actor=user_id or "system",
-                where_location=file_path,
-                why_reason=version_note or f"File version {version_number} created",
-                how_method="File version control system",
-                user_id=user_id,
-                file_path=file_path,
-                parent_key_id=file_genesis_key,  # Link to file Genesis Key
-                code_after=file_content,
-                context_data={
-                    "file_genesis_key": file_genesis_key,
-                    "version_number": version_number,
-                    "version_key_id": version_key_id,
-                    "file_hash": current_hash,
-                    "file_size": file_stats.st_size,
-                    "modified_time": datetime.fromtimestamp(file_stats.st_mtime).isoformat()
-                },
-                tags=["file_version", "version_control", version_key_id],
-                session=local_session
-            )
-
-            # Store key_id immediately to prevent DetachedInstanceError
+        # Create a nested transaction savepoint to prevent cascading rollbacks
+        with local_session.begin_nested():
             try:
-                # If using extracted data is possible, we should prefer it
-                # But here we need to ensure the object is valid
-                version_key_db_id = version_key.key_id
-            except (Exception, AttributeError):
-                # Defensive refresh/merge in case the object was expired or detached
+                # Get absolute path
+                if not os.path.isabs(file_path):
+                    abs_file_path = os.path.join(self.base_path, file_path)
+                else:
+                    abs_file_path = file_path
+
+                # Log path resolution for debugging
+                logger.info(f"[VERSION-TRACKER] Path received: file_path={file_path}, is_abs={os.path.isabs(file_path)}, abs_file_path={abs_file_path}, base_path={self.base_path}")
+
+                # If primary path missing, try knowledge_base prefix (scraped files saved there)
+                if not os.path.exists(abs_file_path):
+                    # If the path is absolute and missing knowledge_base, inject it after base_path
+                    alt_path = None
+                    base_prefix = os.path.join(self.base_path, "auto_search")
+                    kb_prefix = os.path.join(self.base_path, "knowledge_base", "auto_search")
+
+                    if os.path.isabs(abs_file_path) and abs_file_path.startswith(base_prefix):
+                        alt_path = abs_file_path.replace(base_prefix, kb_prefix, 1)
+                    else:
+                        # If relative, simply prepend knowledge_base
+                        rel_path = file_path if not os.path.isabs(file_path) else os.path.relpath(file_path, self.base_path)
+                        alt_path = os.path.join(self.base_path, "knowledge_base", rel_path)
+
+                    if alt_path and os.path.exists(alt_path):
+                        logger.info(f"[VERSION-TRACKER] Fallback path resolved: {alt_path}")
+                        abs_file_path = alt_path
+
+                if os.path.isdir(abs_file_path):
+                    logger.debug("Path is a directory, skipping tracking: %s", abs_file_path)
+                    return {
+                        "changed": False,
+                        "version_number": 0,
+                        "version_key_id": None,
+                        "message": "Path is directory"
+                    }
+
+                if not os.path.exists(abs_file_path):
+                    # Race condition or path mismatch: file was deleted/mis-located (e.g. SQLite .db-shm/.db-wal)
+                    if (abs_file_path.endswith("-shm") or abs_file_path.endswith("-wal") or
+                            ".db-shm" in abs_file_path or ".db-wal" in abs_file_path):
+                        logger.debug("File vanished before tracking (ephemeral): %s", abs_file_path)
+                    else:
+                        logger.warning("File vanished before tracking: %s", abs_file_path)
+                    return {
+                        "changed": False,
+                        "version_number": 0,
+                        "version_key_id": None,
+                        "message": "File not found (vanished)"
+                    }
+
+                # Initialize file tracking if not exists
+                if file_genesis_key not in self.version_metadata["files"]:
+                    self.version_metadata["files"][file_genesis_key] = {
+                        "file_genesis_key": file_genesis_key,
+                        "file_path": file_path,
+                        "absolute_path": abs_file_path,
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                        "version_count": 0,
+                        "versions": [],
+                        "last_hash": None
+                    }
+
+                file_info = self.version_metadata["files"][file_genesis_key]
+
+                # Compute current file hash
+                current_hash = self._compute_file_hash(abs_file_path)
+
+                # Check if file actually changed
+                if auto_detect_change and file_info["last_hash"] == current_hash:
+                    logger.info(f"File {file_path} hasn't changed since last version")
+                    return {
+                        "file_genesis_key": file_genesis_key,
+                        "version_number": file_info["version_count"],
+                        "changed": False,
+                        "message": "File content unchanged"
+                    }
+
+                # Increment version number
+                file_info["version_count"] += 1
+                version_number = file_info["version_count"]
+
+                # Generate version Genesis Key
+                version_key_id = f"VER-{file_genesis_key.replace('FILE-', '')}-{version_number}"
+
+                # Read file content
                 try:
-                    local_session.flush()
-                    version_key = local_session.merge(version_key)
-                    local_session.refresh(version_key)
-                    version_key_db_id = version_key.key_id
+                    with open(abs_file_path, 'r', encoding='utf-8') as f:
+                        file_content = f.read()
+                except UnicodeDecodeError:
+                    # Binary file
+                    file_content = None
+                    logger.info(f"Binary file detected: {file_path}")
+
+                # Get file stats
+                file_stats = os.stat(abs_file_path)
+
+                # Create version Genesis Key
+                try:
+                    version_key = genesis_service.create_key(
+                        key_type=GenesisKeyType.FILE_OPERATION,
+                        what_description=f"File version {version_number}: {os.path.basename(file_path)}",
+                        who_actor=user_id or "system",
+                        where_location=file_path,
+                        why_reason=version_note or f"File version {version_number} created",
+                        how_method="File version control system",
+                        user_id=user_id,
+                        file_path=file_path,
+                        parent_key_id=file_genesis_key,  # Link to file Genesis Key
+                        code_after=file_content,
+                        context_data={
+                            "file_genesis_key": file_genesis_key,
+                            "version_number": version_number,
+                            "version_key_id": version_key_id,
+                            "file_hash": current_hash,
+                            "file_size": file_stats.st_size,
+                            "modified_time": datetime.fromtimestamp(file_stats.st_mtime).isoformat()
+                        },
+                        tags=["file_version", "version_control", version_key_id],
+                        session=local_session
+                    )
+
+                    # Store key_id immediately to prevent DetachedInstanceError
+                    try:
+                        # If using extracted data is possible, we should prefer it
+                        # But here we need to ensure the object is valid
+                        version_key_db_id = version_key.key_id
+                    except (Exception, AttributeError):
+                        # Defensive refresh/merge in case the object was expired or detached
+                        try:
+                            local_session.flush()
+                            version_key = local_session.merge(version_key)
+                            local_session.refresh(version_key)
+                            version_key_db_id = version_key.key_id
+                        except Exception as e:
+                            logger.warning(f"[VERSION-TRACKER] Could not get key_id for version_key, using fallback: {e}")
+                            # Fallback to the ID we generated if it matches the schema
+                            version_key_db_id = version_key_id 
+
+                    # Store version info
+                    version_info = {
+                        "version_number": version_number,
+                        "version_key_id": version_key_id,
+                        "genesis_key_db_id": version_key_db_id,
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "file_hash": current_hash,
+                        "file_size": file_stats.st_size,
+                        "user_id": user_id or "system",
+                        "version_note": version_note,
+                        "has_content": file_content is not None
+                    }
+
+                    file_info["versions"].append(version_info)
+                    file_info["last_hash"] = current_hash
+                    file_info["last_updated"] = datetime.now(timezone.utc).isoformat()
+
+                    self._save_metadata()
+
+                    # Commit if we own the session
+                    if close_session:
+                        local_session.commit()
+
+                    logger.info(f"Created version {version_number} for file {file_genesis_key}")
+
+                    return {
+                        "file_genesis_key": file_genesis_key,
+                        "version_key_id": version_key_id,
+                        "version_number": version_number,
+                        "genesis_key_db_id": version_key.key_id,
+                        "changed": True,
+                        "file_hash": current_hash,
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }
+
                 except Exception as e:
-                    logger.warning(f"[VERSION-TRACKER] Could not get key_id for version_key, using fallback: {e}")
-                    # Fallback to the ID we generated if it matches the schema
-                    version_key_db_id = version_key_id 
+                    logger.error(f"Failed to create file version: {e}")
+                    if close_session:
+                        local_session.rollback()
+                        local_session.close()
+                    raise
 
-            # Store version info
-            version_info = {
-                "version_number": version_number,
-                "version_key_id": version_key_id,
-                "genesis_key_db_id": version_key_db_id,
-                "timestamp": datetime.utcnow().isoformat(),
-                "file_hash": current_hash,
-                "file_size": file_stats.st_size,
-                "user_id": user_id or "system",
-                "version_note": version_note,
-                "has_content": file_content is not None
-            }
-
-            file_info["versions"].append(version_info)
-            file_info["last_hash"] = current_hash
-            file_info["last_updated"] = datetime.utcnow().isoformat()
-
-            self._save_metadata()
-
-            # Commit if we own the session
-            if close_session:
-                local_session.commit()
-
-            logger.info(f"Created version {version_number} for file {file_genesis_key}")
-
-            return {
-                "file_genesis_key": file_genesis_key,
-                "version_key_id": version_key_id,
-                "version_number": version_number,
-                "genesis_key_db_id": version_key.key_id,
-                "changed": True,
-                "file_hash": current_hash,
-                "timestamp": datetime.utcnow().isoformat()
-            }
-
-        except Exception as e:
-            logger.error(f"Failed to create file version: {e}")
-            if close_session:
-                local_session.rollback()
-                local_session.close()
-            raise
-        finally:
-            if close_session:
-                local_session.close()
+            finally:
+                if close_session:
+                    local_session.close()
 
     def get_file_versions(self, file_genesis_key: str) -> Optional[Dict[str, Any]]:
         """Get all versions for a file."""

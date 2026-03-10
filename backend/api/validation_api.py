@@ -15,7 +15,7 @@ Frontend can poll GET /api/validation/status for a live dashboard.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
@@ -134,7 +134,7 @@ async def get_validation_status():
     Suitable for frontend polling (30s interval recommended).
     """
     return {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "kpis": _get_kpi_snapshot(),
         "recent_verifications": _get_recent_verification_results(limit=10),
         "healing_stats": _get_healing_stats(),
@@ -156,7 +156,7 @@ async def get_trust_scores():
 
     # Map to pillar-aligned user-facing names
     return {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "scores": {
             "coding_agent":     _t("coding_agent.verification"),
             "verification":     _t("verification_pass"),
@@ -196,7 +196,7 @@ async def get_recent_verifications(limit: int = 50):
     Use to display verification history in the frontend.
     """
     return {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "results": _get_recent_verification_results(limit=limit),
     }
 
@@ -226,7 +226,7 @@ async def get_active_playbooks():
         from self_healing.error_pipeline import get_error_pipeline
         ep = get_error_pipeline()
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "active": getattr(ep, "active_playbooks", {}),
             "recent_history": getattr(ep, "playbook_history", [])[-20:]
         }
@@ -243,7 +243,7 @@ async def get_memory_stream(limit: int = 50):
         # In a real implementation this would query the backing stores ordered by timestamp.
         # For now, return the stats and a synthesized log based on the counters.
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "stats": stats,
             "recent_ingestion": [] # Stub for actual DB query
         }
@@ -258,7 +258,7 @@ async def get_recent_patches(limit: int = 20):
         tq = get_task_queue()
         patches = getattr(tq, "recent_patches", [])[-limit:]
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "patches": patches
         }
     except Exception as e:
@@ -270,7 +270,7 @@ async def get_active_swarm():
     try:
         from coding_agent.task_queue import get_swarm_status
         return {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "tasks": get_swarm_status()
         }
     except Exception as e:
@@ -321,7 +321,7 @@ async def get_llm_monitor(limit: int = 20):
                 .all()
             )
             return {
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "calls": [
                     {
                         "id": str(r.id),

@@ -8,7 +8,7 @@ OPTIMIZED: Now supports semantic similarity for procedure finding
 """
 from sqlalchemy import Column, String, Float, Integer, Text, JSON, ForeignKey
 from database.base import BaseModel
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 import logging
@@ -116,7 +116,7 @@ class ProceduralRepository:
         """Generate unique procedure name."""
         # Clean goal for name
         clean_goal = goal.lower().replace(' ', '_')[:50]
-        timestamp = int(datetime.utcnow().timestamp())
+        timestamp = int(datetime.now(timezone.utc).timestamp())
         return f"{proc_type}_{clean_goal}_{timestamp}"
 
     def find_procedure(

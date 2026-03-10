@@ -18,7 +18,7 @@ import threading
 import time
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -89,8 +89,8 @@ def submit(
         "explain_fix": explain_fix,
         "status": "pending",
         "attempts": 0,
-        "created_at": datetime.utcnow().isoformat(),
-        "updated_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
         "time_context": time_ctx,   # available to worker/handler
     }
 
@@ -154,7 +154,7 @@ def poll() -> Optional[Dict]:
             if task["status"] == "pending" and task["attempts"] < MAX_RETRIES:
                 task["status"] = "running"
                 task["attempts"] += 1
-                task["updated_at"] = datetime.utcnow().isoformat()
+                task["updated_at"] = datetime.now(timezone.utc).isoformat()
                 return task
     return None
 
@@ -167,7 +167,7 @@ def complete(task_id: str, success: bool, result: Any = None, error: str = "") -
                 task["status"] = "completed" if success else "failed"
                 task["result"] = result
                 task["error"] = error
-                task["updated_at"] = datetime.utcnow().isoformat()
+                task["updated_at"] = datetime.now(timezone.utc).isoformat()
 
                 if not success and task["attempts"] < MAX_RETRIES:
                     # Re-queue for retry with backoff

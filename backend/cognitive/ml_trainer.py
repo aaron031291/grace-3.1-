@@ -22,7 +22,7 @@ import math
 import os
 import time
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -57,9 +57,9 @@ class GraceMLTrainer:
             "loop": loop_name,
             "metrics": metrics,
             "outcome": outcome,  # success, failure, degradation
-            "timestamp": datetime.utcnow().isoformat(),
-            "hour": datetime.utcnow().hour,
-            "day_of_week": datetime.utcnow().weekday(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "hour": datetime.now(timezone.utc).hour,
+            "day_of_week": datetime.now(timezone.utc).weekday(),
         }
         self._observations.append(obs)
 
@@ -291,7 +291,7 @@ class GraceMLTrainer:
             "anomaly": self._anomaly_model,
             "predictor": self._predictor_model,
             "scaler": self._scaler,
-            "trained_at": datetime.utcnow().isoformat(),
+            "trained_at": datetime.now(timezone.utc).isoformat(),
             "sample_count": len(self._observations),
         }
         (ML_DIR / "grace_ml_model.json").write_text(json.dumps(model_data, indent=2, default=str))

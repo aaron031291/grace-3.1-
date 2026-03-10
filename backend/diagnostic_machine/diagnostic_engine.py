@@ -20,7 +20,7 @@ import logging
 import threading
 import time
 import signal
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -177,7 +177,7 @@ class DiagnosticEngine:
     def stats(self) -> EngineStats:
         """Get engine statistics."""
         if self._start_time:
-            self._stats.uptime_seconds = (datetime.utcnow() - self._start_time).total_seconds()
+            self._stats.uptime_seconds = (datetime.now(timezone.utc) - self._start_time).total_seconds()
         return self._stats
 
     def start(self) -> bool:
@@ -188,7 +188,7 @@ class DiagnosticEngine:
 
         try:
             self._state = EngineState.STARTING
-            self._start_time = datetime.utcnow()
+            self._start_time = datetime.now(timezone.utc)
             self._stop_event.clear()
 
             logger.info("Starting DiagnosticEngine...")
@@ -255,7 +255,7 @@ class DiagnosticEngine:
         )
 
         try:
-            cycle_start = datetime.utcnow()
+            cycle_start = datetime.now(timezone.utc)
 
             # Layer 1: Collect sensor data
             logger.debug("Layer 1: Collecting sensor data...")
@@ -280,7 +280,7 @@ class DiagnosticEngine:
                 cycle.judgement
             )
 
-            cycle_end = datetime.utcnow()
+            cycle_end = datetime.now(timezone.utc)
             cycle.cycle_end = cycle_end
             cycle.total_duration_ms = (cycle_end - cycle_start).total_seconds() * 1000
             cycle.success = True
@@ -326,7 +326,7 @@ class DiagnosticEngine:
         except Exception as e:
             cycle.success = False
             cycle.error_message = str(e)
-            cycle.cycle_end = datetime.utcnow()
+            cycle.cycle_end = datetime.now(timezone.utc)
             self._stats.total_cycles += 1
             self._stats.failed_cycles += 1
             logger.error(f"Cycle {cycle.cycle_id} failed: {e}")
@@ -440,7 +440,7 @@ class DiagnosticEngine:
         """Save engine statistics to file."""
         try:
             stats_dict = {
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'total_cycles': self._stats.total_cycles,
                 'successful_cycles': self._stats.successful_cycles,
                 'failed_cycles': self._stats.failed_cycles,

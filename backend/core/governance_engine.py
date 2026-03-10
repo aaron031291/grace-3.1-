@@ -10,7 +10,7 @@ import json
 import time
 import threading
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from collections import defaultdict
@@ -103,7 +103,7 @@ def set_project_rules(project_id: str, config: dict) -> dict:
     rules_dir = DATA_DIR / "projects" / project_id / "governance"
     rules_dir.mkdir(parents=True, exist_ok=True)
     config_path = rules_dir / "_config.json"
-    config["updated_at"] = datetime.utcnow().isoformat()
+    config["updated_at"] = datetime.now(timezone.utc).isoformat()
     config_path.write_text(json.dumps(config, indent=2))
     return {"saved": True, "project_id": project_id}
 
@@ -133,7 +133,7 @@ def create_approval(title: str, description: str, category: str = "general",
             "severity": severity,
             "status": "pending",
             "data": data or {},
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "responses": [],
         }
         _approvals.append(approval)
@@ -171,13 +171,13 @@ def respond_to_approval(approval_id: int, action: str, reason: str = "",
             "action": action,
             "reason": reason,
             "user_id": user_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         approval["responses"].append(response)
 
         if action in ("approve", "deny"):
             approval["status"] = "approved" if action == "approve" else "denied"
-            approval["resolved_at"] = datetime.utcnow().isoformat()
+            approval["resolved_at"] = datetime.now(timezone.utc).isoformat()
         elif action == "discuss":
             approval["status"] = "discussing"
 

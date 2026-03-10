@@ -9,7 +9,7 @@ Connects ingestion system to Layer 1 message bus for:
 
 from typing import Dict, Any, Optional
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
@@ -132,7 +132,7 @@ class IngestionConnector:
                 payload={
                     "file_path": file_path,
                     "genesis_key_id": genesis_key_id,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 },
                 from_component=ComponentType.INGESTION
             )
@@ -160,7 +160,7 @@ class IngestionConnector:
                 "file_path": file_path,
                 "genesis_key_id": genesis_key_id,
                 "chunks_created": chunks_created,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -171,7 +171,7 @@ class IngestionConnector:
             payload={
                 "file_path": file_path,
                 "genesis_key_id": genesis_key_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -195,7 +195,7 @@ class IngestionConnector:
                 "file_type": file_type,
                 "error": error,
                 "suggested_action": "retry_with_different_parser",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
             from_component=ComponentType.INGESTION
         )
@@ -241,7 +241,7 @@ class IngestionConnector:
         # Perform ingestion
         try:
             # Simplified - actual implementation would call ingestion service
-            document_id = f"doc-{datetime.utcnow().timestamp()}"
+            document_id = f"doc-{datetime.now(timezone.utc).timestamp()}"
 
             # Trigger processing completion
             await self.message_bus.publish(

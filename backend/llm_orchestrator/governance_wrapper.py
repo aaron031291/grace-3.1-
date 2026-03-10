@@ -11,6 +11,7 @@ Kimi always follow them.
 Persona context (personal + professional) shapes how Grace communicates.
 """
 
+from datetime import timezone
 import logging
 from typing import List, Dict, Any, Optional, Union
 from .base_client import BaseLLMClient
@@ -155,7 +156,7 @@ def _track_llm_call(prompt: str, response: str, provider: str, latency_ms: float
                     "ct": len(response.split()) if isinstance(response, str) else 0,
                     "lat": latency_ms, "suc": error is None,
                     "err": error, "caller": "governance_wrapper",
-                    "now": __import__("datetime").datetime.utcnow(),
+                    "now": __import__("datetime").datetime.now(timezone.utc),
                 })
                 db.commit()
             except Exception:

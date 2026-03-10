@@ -16,7 +16,7 @@ Snapshots are saved as .genesis_immutable_memory_mesh.json
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
@@ -51,7 +51,7 @@ class MemoryMeshSnapshot:
 
         snapshot = {
             "snapshot_metadata": {
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "version": "1.0",
                 "type": "memory_mesh_immutable_snapshot"
             },
@@ -241,7 +241,7 @@ class MemoryMeshSnapshot:
         import hashlib
 
         # Create hash from counts and timestamps
-        hash_input = f"{datetime.utcnow().isoformat()}_mesh_snapshot"
+        hash_input = f"{datetime.now(timezone.utc).isoformat()}_mesh_snapshot"
         return hashlib.sha256(hash_input.encode()).hexdigest()[:16]
 
     def _group_by_type(self, examples: List[LearningExample]) -> Dict[str, int]:
@@ -291,7 +291,7 @@ class MemoryMeshSnapshot:
 
     def _get_recent_count(self, items: List, days: int = 7) -> int:
         """Count items from last N days."""
-        cutoff = datetime.utcnow().timestamp() - (days * 24 * 60 * 60)
+        cutoff = datetime.now(timezone.utc).timestamp() - (days * 24 * 60 * 60)
         return len([
             item for item in items
             if hasattr(item, 'timestamp') and item.timestamp.timestamp() >= cutoff
@@ -444,7 +444,7 @@ class MemoryMeshSnapshot:
         """
         snapshot = self.create_snapshot()
 
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         versioned_path = self.kb_path / f".genesis_immutable_memory_mesh_{timestamp}.json"
 
         with open(versioned_path, 'w') as f:

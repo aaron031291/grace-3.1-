@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import MagicMock
 from genesis.kb_integration import GenesisKBIntegration
 from models.genesis_key_models import GenesisKey, GenesisKeyType, GenesisKeyStatus
@@ -21,7 +21,7 @@ def create_mock_key(i):
         status=GenesisKeyStatus.ACTIVE,
         user_id="test_user_concurrency",
         what_description=f"Concurrent write {i}",
-        when_timestamp=datetime.utcnow(),
+        when_timestamp=datetime.now(timezone.utc),
         who_actor="tester",
         # ... other required fields mock ...
     )

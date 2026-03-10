@@ -51,7 +51,7 @@ async def stream_task_logs(task_id: str):
                     
             if task_status != reported_status:
                 reported_status = task_status
-                yield {"data": f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] Swarm Status Update: {task_status.upper()}"}
+                yield {"data": f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')}] Swarm Status Update: {task_status.upper()}"}
                 
                 if task_status == "running":
                     yield {"data": "[AGENT] Qwen 2.5 Coder has picked up the task and is processing..."}

@@ -12,7 +12,7 @@ Two views:
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
@@ -137,7 +137,7 @@ def register_document(
             description=description,
             document_metadata=json.dumps({
                 "directory": directory,
-                "registered_at": datetime.utcnow().isoformat(),
+                "registered_at": datetime.now(timezone.utc).isoformat(),
             }),
         )
         db.add(doc)

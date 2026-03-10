@@ -21,7 +21,7 @@ async def get_bi_dashboard():
         with session_scope() as session:
             genesis_total = session.query(func.count(GenesisKey.id)).scalar()
             
-            today_start = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+            today_start = datetime.datetime.now(datetime.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
             genesis_today = session.query(func.count(GenesisKey.id)).filter(GenesisKey.created_at >= today_start).scalar()
     except Exception as e:
         logger.error(f"BI dashboard error fetching genesis keys: {e}")
@@ -67,7 +67,7 @@ async def get_bi_dashboard():
 async def get_bi_trends():
     """Return a 7-day activity array."""
     days = []
-    today = datetime.datetime.utcnow().date()
+    today = datetime.datetime.now(datetime.timezone.utc).date()
     
     for i in range(6, -1, -1):
         target_date = today - datetime.timedelta(days=i)

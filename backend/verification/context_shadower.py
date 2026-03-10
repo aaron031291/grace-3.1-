@@ -15,7 +15,7 @@ import shutil
 import importlib
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from verification.deterministic_vvt_pipeline import vvt_vault
 from verification.constitutional_interpreter import ConstitutionalInterpreter, ConstitutionalViolation
@@ -48,7 +48,7 @@ class ContextShadower:
         logger.info(f"Context Shadower engaged for proposed update to: {target_file_path}")
         
         # 1. Create Shadow File
-        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         base_name = os.path.basename(target_file_path)
         shadow_name = f"shadow_{timestamp}_{base_name}"
         shadow_path = os.path.join(SHADOW_DIR, shadow_name)

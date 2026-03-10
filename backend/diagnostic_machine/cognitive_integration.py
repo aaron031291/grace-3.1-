@@ -13,7 +13,7 @@ learning improves diagnostics.
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -309,7 +309,7 @@ class DecisionLogIntegration:
         decision_entry = {
             "event": "diagnostic_decision",
             "decision_id": decision_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "decision_type": decision_type,
             "input_summary": {
                 "health_status": input_data.get('health_status', 'unknown'),
@@ -338,7 +338,7 @@ class DecisionLogIntegration:
         decision_entry = {
             "event": "healing_decision",
             "decision_id": decision_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "healing_action": healing_action,
             "target_component": target_component,
             "justification": justification,
@@ -361,7 +361,7 @@ class DecisionLogIntegration:
         decision_entry = {
             "event": "freeze_decision",
             "decision_id": decision_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "reason": reason,
             "affected_components": affected_components,
             "severity": severity,
@@ -374,7 +374,7 @@ class DecisionLogIntegration:
     def _write_decision(self, entry: Dict[str, Any]):
         """Write decision to log file."""
         try:
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
             log_file = self.log_dir / f"diagnostic_decisions_{today}.jsonl"
 
             with open(log_file, 'a') as f:
@@ -425,7 +425,7 @@ class MemoryMeshIntegration:
                 "recommended_actions": actions,
                 "effectiveness": effectiveness,
                 "source": "diagnostic_machine",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
 
             if self._memory_mesh:
@@ -571,7 +571,7 @@ class ProceduralMemoryIntegration:
                     "expected_outcomes": procedure.expected_outcomes,
                     "success_rate": procedure.success_rate,
                     "times_applied": procedure.times_applied,
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                 }, f, indent=2)
 
             logger.info(f"Stored diagnostic procedure: {procedure.procedure_id}")

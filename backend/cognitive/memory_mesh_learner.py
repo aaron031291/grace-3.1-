@@ -15,7 +15,7 @@ import logging
 from typing import Dict, Any, List, Tuple, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from cognitive.learning_memory import TrustScorer, LearningExample
 
@@ -311,7 +311,7 @@ class MemoryMeshLearner:
         Returns prioritized list of what Grace should learn next.
         """
         suggestions = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "knowledge_gaps": [],
             "high_value_topics": [],
             "related_clusters": [],

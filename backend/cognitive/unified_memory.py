@@ -23,7 +23,7 @@ import logging
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -442,7 +442,7 @@ class UnifiedMemory:
             from datetime import datetime, timedelta
             
             # Look at episodes from the last hour
-            time_threshold = datetime.utcnow() - timedelta(hours=1)
+            time_threshold = datetime.now(timezone.utc) - timedelta(hours=1)
             recent_episodes = session.query(Episode).filter(Episode.timestamp >= time_threshold).order_by(Episode.timestamp.desc()).limit(20).all()
             
             if not recent_episodes:

@@ -80,7 +80,7 @@ def record_genesis_block(file_path: str, content: str, trigger: str = "Manual Ed
     new_version = {
         "linear_version": linear_ver,
         "genesis_key": genesis_key,
-        "timestamp": datetime.datetime.utcnow().isoformat(),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "trigger": trigger,
         "file_size": len(content),
         "status": "active"

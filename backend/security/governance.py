@@ -20,7 +20,7 @@ import asyncio
 import logging
 import uuid
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Dict, List, Any, Optional, Callable, Set, Tuple
 from dataclasses import dataclass, field, asdict
@@ -913,7 +913,7 @@ class GovernanceMetrics:
         """Record a latency sample."""
         sample = MetricSample(
             value=latency_ms,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             metadata={"operation": operation}
         )
         self._latency_samples.append(sample)
@@ -923,7 +923,7 @@ class GovernanceMetrics:
         """Record an operation result."""
         sample = MetricSample(
             value=1.0 if success else 0.0,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             metadata={"operation": operation}
         )
         if success:
@@ -937,46 +937,46 @@ class GovernanceMetrics:
         kpi = self._kpis["learning_success_rate"]
         kpi.samples.append(MetricSample(
             value=1.0 if success else 0.0,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         ))
 
         # Update rolling average
         recent_samples = list(kpi.samples)[-100:]
         if recent_samples:
             kpi.current_value = sum(s.value for s in recent_samples) / len(recent_samples)
-            kpi.last_updated = datetime.utcnow()
+            kpi.last_updated = datetime.now(timezone.utc)
 
         # Update pattern quality
         if pattern_quality > 0:
             pq_kpi = self._kpis["pattern_quality"]
-            pq_kpi.samples.append(MetricSample(value=pattern_quality, timestamp=datetime.utcnow()))
+            pq_kpi.samples.append(MetricSample(value=pattern_quality, timestamp=datetime.now(timezone.utc)))
             recent_pq = list(pq_kpi.samples)[-50:]
             if recent_pq:
                 pq_kpi.current_value = sum(s.value for s in recent_pq) / len(recent_pq)
-                pq_kpi.last_updated = datetime.utcnow()
+                pq_kpi.last_updated = datetime.now(timezone.utc)
 
     def record_confidence(self, confidence: float):
         """Record a confidence score."""
         kpi = self._kpis["confidence_score"]
-        kpi.samples.append(MetricSample(value=confidence, timestamp=datetime.utcnow()))
+        kpi.samples.append(MetricSample(value=confidence, timestamp=datetime.now(timezone.utc)))
 
         recent_samples = list(kpi.samples)[-100:]
         if recent_samples:
             kpi.current_value = sum(s.value for s in recent_samples) / len(recent_samples)
-            kpi.last_updated = datetime.utcnow()
+            kpi.last_updated = datetime.now(timezone.utc)
 
     def record_hallucination(self, detected: bool):
         """Record hallucination detection."""
         kpi = self._kpis["hallucination_rate"]
         kpi.samples.append(MetricSample(
             value=1.0 if detected else 0.0,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         ))
 
         recent_samples = list(kpi.samples)[-100:]
         if recent_samples:
             kpi.current_value = sum(s.value for s in recent_samples) / len(recent_samples)
-            kpi.last_updated = datetime.utcnow()
+            kpi.last_updated = datetime.now(timezone.utc)
 
     def update_component_health(self, component: str, health: float):
         """Update component health score."""
@@ -986,12 +986,12 @@ class GovernanceMetrics:
         if self._component_health:
             avg_health = sum(self._component_health.values()) / len(self._component_health)
             self._kpis["component_availability"].current_value = avg_health
-            self._kpis["component_availability"].last_updated = datetime.utcnow()
+            self._kpis["component_availability"].last_updated = datetime.now(timezone.utc)
 
     def update_trust_score(self, trust: float):
         """Update trust score KPI."""
         self._kpis["trust_score"].current_value = trust
-        self._kpis["trust_score"].last_updated = datetime.utcnow()
+        self._kpis["trust_score"].last_updated = datetime.now(timezone.utc)
 
     def record_sla_violation(
         self,
@@ -1003,7 +1003,7 @@ class GovernanceMetrics:
     ):
         """Record an SLA violation."""
         violation = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "component": component,
             "sla_tier": sla_tier.value,
             "violation_type": violation_type,
@@ -1030,14 +1030,14 @@ class GovernanceMetrics:
         # Average latency
         avg_latency = sum(recent) / len(recent)
         self._kpis["avg_response_time"].current_value = avg_latency
-        self._kpis["avg_response_time"].last_updated = datetime.utcnow()
+        self._kpis["avg_response_time"].last_updated = datetime.now(timezone.utc)
 
         # P95 latency
         sorted_latencies = sorted(recent)
         p95_idx = int(len(sorted_latencies) * 0.95)
         p95_latency = sorted_latencies[p95_idx] if p95_idx < len(sorted_latencies) else sorted_latencies[-1]
         self._kpis["p95_latency"].current_value = p95_latency
-        self._kpis["p95_latency"].last_updated = datetime.utcnow()
+        self._kpis["p95_latency"].last_updated = datetime.now(timezone.utc)
 
     def _update_quality_kpis(self):
         """Update quality-related KPIs."""
@@ -1047,7 +1047,7 @@ class GovernanceMetrics:
 
         success_rate = len(self._success_samples) / total_ops
         self._kpis["success_rate"].current_value = success_rate
-        self._kpis["success_rate"].last_updated = datetime.utcnow()
+        self._kpis["success_rate"].last_updated = datetime.now(timezone.utc)
 
     def check_kpi_health(self, kpi_id: str) -> Tuple[str, str]:
         """
@@ -1296,8 +1296,8 @@ class GovernanceEngine:
 
         # Trust decay configuration
         self._trust_decay_config = TrustDecayConfig()
-        self._last_activity_timestamp = datetime.utcnow()
-        self._last_decay_check = datetime.utcnow()
+        self._last_activity_timestamp = datetime.now(timezone.utc)
+        self._last_decay_check = datetime.now(timezone.utc)
 
         # Stats
         self._stats = {
@@ -1556,7 +1556,7 @@ class GovernanceEngine:
 
     def _has_recent_sla_violations(self, component: str, hours: int = 1) -> bool:
         """Check if component has recent SLA violations."""
-        cutoff = datetime.utcnow() - timedelta(hours=hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
         recent_violations = [
             v for v in self.metrics._sla_violations
             if v.get("component") == component and
@@ -1601,7 +1601,7 @@ class GovernanceEngine:
                 continue
 
             # Check expiration
-            if rule.expires_at and datetime.utcnow() > rule.expires_at:
+            if rule.expires_at and datetime.now(timezone.utc) > rule.expires_at:
                 continue
 
             try:
@@ -1866,13 +1866,13 @@ class GovernanceEngine:
             return False, reasons
 
         # Check cooldown
-        if progress.cooldown_until and datetime.utcnow() < progress.cooldown_until:
-            remaining = (progress.cooldown_until - datetime.utcnow()).total_seconds()
+        if progress.cooldown_until and datetime.now(timezone.utc) < progress.cooldown_until:
+            remaining = (progress.cooldown_until - datetime.now(timezone.utc)).total_seconds()
             reasons.append(f"Capability on cooldown for {remaining:.0f}s")
             return False, reasons
 
         # Check daily execution limit
-        today = datetime.utcnow().date()
+        today = datetime.now(timezone.utc).date()
         if progress.daily_reset_date != today:
             progress.daily_reset_date = today
             progress.daily_execution_count = 0
@@ -1924,7 +1924,7 @@ class GovernanceEngine:
         # Check quarantine
         if context.target_resource in self._quarantined_resources:
             quarantine = self._quarantined_resources[context.target_resource]
-            if not quarantine.released and datetime.utcnow() < quarantine.release_at:
+            if not quarantine.released and datetime.now(timezone.utc) < quarantine.release_at:
                 reasons.append(f"Resource '{context.target_resource}' is quarantined")
                 return False, reasons
 
@@ -1945,20 +1945,20 @@ class GovernanceEngine:
 
         if success:
             progress.successful_executions += 1
-            progress.last_success = datetime.utcnow()
+            progress.last_success = datetime.now(timezone.utc)
             progress.daily_execution_count += 1
 
             # Award trust
             self.adjust_trust_score(requirement.success_reward)
 
             # Reset activity timestamp for decay
-            self._last_activity_timestamp = datetime.utcnow()
+            self._last_activity_timestamp = datetime.now(timezone.utc)
 
             # Check if capability is now earned
             if not progress.earned:
                 if progress.successful_executions >= requirement.success_count_required:
                     progress.earned = True
-                    progress.earned_at = datetime.utcnow()
+                    progress.earned_at = datetime.now(timezone.utc)
                     self._stats["capabilities_earned"] += 1
                     logger.info(
                         f"[GOVERNANCE] Capability earned: {action_category.value} "
@@ -1966,14 +1966,14 @@ class GovernanceEngine:
                     )
         else:
             progress.failed_executions += 1
-            progress.last_failure = datetime.utcnow()
+            progress.last_failure = datetime.now(timezone.utc)
 
             # Apply trust penalty
             self.adjust_trust_score(-requirement.failure_penalty)
 
             # Apply cooldown
             if requirement.cooldown_on_failure_seconds > 0:
-                progress.cooldown_until = datetime.utcnow() + timedelta(
+                progress.cooldown_until = datetime.now(timezone.utc) + timedelta(
                     seconds=requirement.cooldown_on_failure_seconds
                 )
 
@@ -1991,7 +1991,7 @@ class GovernanceEngine:
         if progress.last_failure is None:
             return 0
 
-        cutoff = datetime.utcnow() - timedelta(hours=hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
         if progress.last_failure < cutoff:
             return 0
 
@@ -2002,7 +2002,7 @@ class GovernanceEngine:
         """Revoke a previously earned capability."""
         progress = self._capability_progress[action_category]
         progress.revoked = True
-        progress.revoked_at = datetime.utcnow()
+        progress.revoked_at = datetime.now(timezone.utc)
         progress.revocation_reason = reason
         self._stats["capabilities_revoked"] += 1
 
@@ -2065,7 +2065,7 @@ class GovernanceEngine:
         Should be called periodically (e.g., daily).
         """
         config = self._trust_decay_config
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         # Check if enough time has passed since last decay check
         hours_since_check = (now - self._last_decay_check).total_seconds() / 3600
@@ -2107,7 +2107,7 @@ class GovernanceEngine:
 
     def reset_activity_timestamp(self):
         """Reset the activity timestamp (call on successful actions)."""
-        self._last_activity_timestamp = datetime.utcnow()
+        self._last_activity_timestamp = datetime.now(timezone.utc)
 
     # ==========================================================================
     # VIOLATION ESCALATION SYSTEM
@@ -2154,7 +2154,7 @@ class GovernanceEngine:
         """
         Check recent violations and trigger escalations if thresholds exceeded.
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         cutoff_1h = now - timedelta(hours=1)
         cutoff_24h = now - timedelta(hours=24)
 
@@ -2225,7 +2225,7 @@ class GovernanceEngine:
             if escalation.escalation_id == escalation_id:
                 escalation.acknowledged = True
                 escalation.acknowledged_by = acknowledger_id
-                escalation.acknowledged_at = datetime.utcnow()
+                escalation.acknowledged_at = datetime.now(timezone.utc)
                 if resolution:
                     escalation.resolution = resolution
                 logger.info(
@@ -2260,7 +2260,7 @@ class GovernanceEngine:
         duration_hours: int = 24
     ):
         """Quarantine a resource due to governance violations."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         quarantine = QuarantinedResource(
             resource_id=resource_id,
             quarantine_reason=reason,
@@ -2290,7 +2290,7 @@ class GovernanceEngine:
             quarantine = self._quarantined_resources[resource_id]
             quarantine.released = True
             quarantine.released_by = releaser_id
-            quarantine.released_at = datetime.utcnow()
+            quarantine.released_at = datetime.now(timezone.utc)
 
             logger.info(
                 f"[GOVERNANCE] Quarantine released: {resource_id} by {releaser_id}"
@@ -2306,9 +2306,9 @@ class GovernanceEngine:
             return False
 
         # Auto-release if duration expired
-        if datetime.utcnow() >= quarantine.release_at:
+        if datetime.now(timezone.utc) >= quarantine.release_at:
             quarantine.released = True
-            quarantine.released_at = datetime.utcnow()
+            quarantine.released_at = datetime.now(timezone.utc)
             return False
 
         return True
@@ -2324,7 +2324,7 @@ class GovernanceEngine:
                 "violation_count": q.violation_count
             }
             for q in self._quarantined_resources.values()
-            if not q.released and datetime.utcnow() < q.release_at
+            if not q.released and datetime.now(timezone.utc) < q.release_at
         ]
 
     # ==========================================================================
@@ -2350,7 +2350,7 @@ class GovernanceEngine:
             "kpi_health": self.metrics.get_all_kpi_health(),
             "recent_violations": len([
                 v for v in self._violations
-                if v.timestamp > datetime.utcnow() - timedelta(hours=24)
+                if v.timestamp > datetime.now(timezone.utc) - timedelta(hours=24)
             ]),
             "capability_status": {
                 action.value: progress.earned
@@ -2372,7 +2372,7 @@ class GovernanceEngine:
                 "context_snapshot": context_snapshot,
                 "warnings": decision.warnings,
                 "reasoning": decision.reasoning_trace,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
             from_component=ComponentType.GENESIS_KEYS,
             priority=9
@@ -2412,7 +2412,7 @@ class GovernanceEngine:
             approved=approved,
             justification=justification,
             risk_acknowledged=risk_acknowledged,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             context_snapshot={
                 "trust_score": self._trust_score,
                 "autonomy_tier": self._current_tier.value
@@ -2422,7 +2422,7 @@ class GovernanceEngine:
 
         if not approved:
             record.outcome = "rejected"
-            record.outcome_timestamp = datetime.utcnow()
+            record.outcome_timestamp = datetime.now(timezone.utc)
             return {
                 "approval_id": approval_id,
                 "approved": False,
@@ -2435,7 +2435,7 @@ class GovernanceEngine:
 
         if hard_violations:
             record.outcome = "blocked_post_approval"
-            record.outcome_timestamp = datetime.utcnow()
+            record.outcome_timestamp = datetime.now(timezone.utc)
             return {
                 "approval_id": approval_id,
                 "approved": False,
@@ -2446,7 +2446,7 @@ class GovernanceEngine:
         # Check if resource was quarantined since decision
         if self.is_resource_quarantined(pending_decision.context.target_resource):
             record.outcome = "blocked_quarantine"
-            record.outcome_timestamp = datetime.utcnow()
+            record.outcome_timestamp = datetime.now(timezone.utc)
             return {
                 "approval_id": approval_id,
                 "approved": False,
@@ -2475,7 +2475,7 @@ class GovernanceEngine:
         for record in self._approval_records:
             if record.approval_id == approval_id:
                 record.outcome = "success" if success else "failure"
-                record.outcome_timestamp = datetime.utcnow()
+                record.outcome_timestamp = datetime.now(timezone.utc)
 
                 # Only adjust trust based on actual outcome
                 if success:

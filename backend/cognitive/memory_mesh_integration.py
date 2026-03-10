@@ -6,7 +6,7 @@ creating a feedback loop for continuous improvement.
 """
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from cognitive.learning_memory import (
@@ -107,7 +107,7 @@ class MemoryMeshIntegration:
             from sqlalchemy import func
             
             # Count learning examples ingested in the last 10 minutes
-            ten_minutes_ago = datetime.utcnow() - timedelta(minutes=10)
+            ten_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=10)
             recent_count = self.session.query(func.count(LearningExample.id)).filter(
                 LearningExample.created_at >= ten_minutes_ago
             ).scalar() or 0
@@ -237,7 +237,7 @@ class MemoryMeshIntegration:
             trust_score=learning_example.trust_score,
             source=learning_example.source,
             genesis_key_id=learning_example.genesis_key_id,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             metadata={'learning_example_id': str(learning_example.id)}
         )
 

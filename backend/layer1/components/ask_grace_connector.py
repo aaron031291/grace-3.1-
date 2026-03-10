@@ -10,7 +10,7 @@ Connects Ask Grace to the message bus so it can:
 
 from typing import Dict, Any, Optional, List
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 
 from layer1.message_bus import (
@@ -116,12 +116,12 @@ class AskGraceConnector:
 
     async def _on_probe_completed(self, message: Message):
         self._cached_health = message.payload
-        self._cached_health_ts = datetime.utcnow()
+        self._cached_health_ts = datetime.now(timezone.utc)
         logger.info("[ASK-GRACE-CONNECTOR] Cached fresh probe results")
 
     async def _on_health_changed(self, message: Message):
         self._cached_health = message.payload
-        self._cached_health_ts = datetime.utcnow()
+        self._cached_health_ts = datetime.now(timezone.utc)
 
     async def publish_query_event(self, query: str, intent: str, result_count: int):
         await self.message_bus.publish(
@@ -130,7 +130,7 @@ class AskGraceConnector:
                 "query": query,
                 "intent": intent,
                 "result_count": result_count,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             },
             from_component=ComponentType.COGNITIVE_ENGINE,
         )
@@ -166,7 +166,7 @@ class AskGraceConnector:
     async def gather_system_context(self) -> Dict[str, Any]:
         """Aggregate system state from all available sources."""
         context: Dict[str, Any] = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "sources_queried": [],
         }
 
@@ -239,7 +239,7 @@ class AskGraceConnector:
             "query": query,
             "response_preview": response[:200] if response else "",
             "intent": intent,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         })
         if len(self._recent_queries) > self._max_recent:
             self._recent_queries = self._recent_queries[-self._max_recent:]

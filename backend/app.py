@@ -9,7 +9,7 @@ from typing import List, Optional
 import re
 import time
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import sys
 from pathlib import Path
@@ -1558,7 +1558,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
                 completion_time=generation_time
             )
 
-            chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+            chat_repo.update(chat_id, last_message_at=datetime.now(timezone.utc))
             total_tokens = history_repo.count_tokens_in_chat(chat_id)
 
             return PromptResponse(
@@ -1653,7 +1653,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
         )
         
         # Update chat's last_message_at
-        chat_repo.update(chat_id, last_message_at=datetime.utcnow())
+        chat_repo.update(chat_id, last_message_at=datetime.now(timezone.utc))
         
         # Get total tokens in chat
         total_tokens = history_repo.count_tokens_in_chat(chat_id)

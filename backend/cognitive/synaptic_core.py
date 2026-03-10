@@ -44,6 +44,8 @@ class SynapticCore:
             if provider == "ollama":
                 from llm_orchestrator.factory import _ollama_with_model
                 client = _ollama_with_model("qwen3:14b")
+            elif provider == "runpod":
+                client = get_llm_client(provider="runpod")
             else:
                 client = get_llm_client(provider=provider)
         except Exception as e:

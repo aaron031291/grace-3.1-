@@ -27,7 +27,7 @@ import threading
 import time
 import traceback
 from collections import defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -175,7 +175,7 @@ class ErrorPipeline:
             "module": module,
             "function": function,
             "context": context or {},
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
         try:
@@ -261,7 +261,7 @@ class ErrorPipeline:
                 "playbook_id": playbook_name,
                 "location": location,
                 "status": "success" if healed else "failed",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             })
             # Keep history trimmed
             if len(self.playbook_history) > 50:
