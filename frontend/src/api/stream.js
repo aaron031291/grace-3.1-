@@ -51,7 +51,7 @@ export async function streamChat(prompt, model = "kimi", mentions = [], onToken,
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
             if (parsed.error) onError?.(parsed.error);
-          } catch { }
+          } catch { /* ignore parse error */ }
         }
       }
     }
@@ -91,12 +91,12 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
           try {
             const parsed = JSON.parse(data);
             if (parsed.token) onToken(parsed.token);
-          } catch { }
+          } catch { /* ignore parse error */ }
         }
       }
     }
     onDone?.();
-  } catch { }
+  } catch { /* ignore network error */ }
 }
 
 /**

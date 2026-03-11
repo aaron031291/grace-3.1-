@@ -40,6 +40,15 @@ export default function UndoToast() {
   const [lastUndo, setLastUndo] = useState(null);
   const [show, setShow] = useState(false);
 
+  const handleUndo = useCallback(async () => {
+    const action = await undo();
+    if (action) {
+      setLastUndo(action);
+      setShow(true);
+      setTimeout(() => setShow(false), 3000);
+    }
+  }, [undo]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
@@ -49,16 +58,7 @@ export default function UndoToast() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [canUndo]);
-
-  const handleUndo = async () => {
-    const action = await undo();
-    if (action) {
-      setLastUndo(action);
-      setShow(true);
-      setTimeout(() => setShow(false), 3000);
-    }
-  };
+  }, [handleUndo]);
 
   if (!canUndo && !show) return null;
 

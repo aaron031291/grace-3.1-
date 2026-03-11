@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./GenesisLogin.css";
 import { API_BASE_URL } from '../config/api';
 
@@ -15,9 +15,9 @@ export default function GenesisLogin({ onLogin }) {
   // Check if user already has Genesis ID on mount
   useEffect(() => {
     checkExistingSession();
-  }, []);
+  }, [checkExistingSession]);
 
-  const checkExistingSession = async () => {
+  const checkExistingSession = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/auth/whoami`, {
         credentials: "include", // Include cookies
@@ -36,9 +36,9 @@ export default function GenesisLogin({ onLogin }) {
     } catch {
       console.log("No existing session found");
     }
-  };
+  }, [API_BASE, loadSessionInfo, onLogin]);
 
-  const loadSessionInfo = async () => {
+  const loadSessionInfo = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/auth/session`, {
         credentials: "include",
@@ -51,7 +51,7 @@ export default function GenesisLogin({ onLogin }) {
     } catch (err) {
       console.error("Failed to load session info:", err);
     }
-  };
+  }, [API_BASE]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

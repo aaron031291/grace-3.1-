@@ -2,7 +2,7 @@
  * GovernanceDiscussion — Chat with Kimi+Opus about governance approvals.
  * User can discuss each request before approving/denying.
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
 
 const C = {
@@ -23,14 +23,17 @@ export default function GovernanceDiscussion({ discussionId, onClose }) {
   const [deciding, setDeciding] = useState(false);
   const endRef = useRef(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/governance/discuss/${discussionId}`);
       if (res.ok) setDiscussion(await res.json());
     } catch { /* skip */ }
-  };
+  }, [discussionId]);
 
-  useEffect(() => { if (discussionId) load(); }, [discussionId]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (discussionId) load();
+  }, [discussionId, load]);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [discussion?.messages]);
 
   const sendMessage = async () => {

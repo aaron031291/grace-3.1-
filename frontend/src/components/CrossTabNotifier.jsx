@@ -2,14 +2,16 @@
  * CrossTabNotifier — Notifications when Grace finds something relevant
  * in another tab. Click to navigate to that tab.
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 let _notifications = [];
 let _notifListeners = [];
 let _navigateFn = null;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function setNavigator(fn) { _navigateFn = fn; }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function notify(message, targetTab, type = 'info') {
   const notif = {
     id: Date.now(),

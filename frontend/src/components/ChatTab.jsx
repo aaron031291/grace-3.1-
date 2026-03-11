@@ -462,7 +462,7 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
   const [loading, setLoading] = useState(false);
   const [showWorldModel, setShowWorldModel] = useState(false);
   const [chatMode, setChatMode] = useState("general"); // general, consensus
-  const [useKimi, setUseKimi] = useState(false);
+  const [_useKimi, _setUseKimi] = useState(false);
   const [folderContext, setFolderContext] = useState("");
   const [availableFolders, setAvailableFolders] = useState([]);
 
@@ -475,8 +475,8 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
   });
   const [availableModels, setAvailableModels] = useState([]);
   const [consensusMode, setConsensusMode] = useState(false);
-  const [consensusResult, setConsensusResult] = useState(null);
-  const [consensusRunning, setConsensusRunning] = useState(false);
+  const [_consensusResult, _setConsensusResult] = useState(null);
+  const [_consensusRunning, _setConsensusRunning] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/docs/by-folder`)
@@ -499,11 +499,7 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
     }
   }, [domain]);
 
-  useEffect(() => {
-    fetchChats();
-  }, [selectedFolder]);
-
-  const fetchChats = async () => {
+  const fetchChats = useCallback(async () => {
     try {
       setLoading(true);
       const folderParam = selectedFolder
@@ -529,7 +525,11 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedFolder, selectedChatId]);
+
+  useEffect(() => {
+    fetchChats();
+  }, [fetchChats]);
 
   const createNewChat = async () => {
     try {
@@ -603,7 +603,7 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
                     setModelToggles(newToggles);
                     const activeCount = Object.values(newToggles).filter(Boolean).length;
                     setConsensusMode(activeCount >= 2);
-                    if (m.id === "kimi") setUseKimi(!isOn);
+                    if (m.id === "kimi") _setUseKimi(!isOn);
                   }}
                   disabled={!isAvail}
                   title={`${m.label}${modelInfo ? ` — ${modelInfo.strengths?.join(", ")}` : ""}${!isAvail ? " (not configured)" : ""}`}

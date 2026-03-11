@@ -162,10 +162,10 @@ export default function PersistentVoicePanel({
     };
 
     return recognition;
-  }, [settings.continuousListen, isEnabled]);
+  }, [settings.continuousListen, isEnabled, handleFinalTranscript, startListening]);
 
   // Handle final transcript
-  const handleFinalTranscript = async (text) => {
+  const handleFinalTranscript = useCallback(async (text) => {
     const trimmedText = text.trim().toLowerCase();
 
     // Check wake word if enabled
@@ -191,7 +191,7 @@ export default function PersistentVoicePanel({
     if (onSendMessage) {
       onSendMessage(text);
     }
-  };
+  }, [settings.useWakeWord, settings.wakeWord, onSendMessage]);
 
   // Start listening
   const startListening = useCallback(() => {
@@ -275,10 +275,10 @@ export default function PersistentVoicePanel({
       // Fallback to browser TTS
       fallbackSpeak(text);
     }
-  }, [isSpeaking, settings, isEnabled, startListening, stopListening]);
+  }, [isSpeaking, settings, isEnabled, startListening, stopListening, fallbackSpeak]);
 
   // Browser fallback TTS
-  const fallbackSpeak = (text) => {
+  const fallbackSpeak = useCallback((text) => {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-US";
@@ -296,7 +296,7 @@ export default function PersistentVoicePanel({
     } else {
       setIsSpeaking(false);
     }
-  };
+  }, [isEnabled, settings.continuousListen, startListening, stopListening]);
 
   // Stop speaking
   const stopSpeaking = () => {

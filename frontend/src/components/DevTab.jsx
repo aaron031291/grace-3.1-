@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { brainCall } from "../api/brain-client";
 import { API_BASE_URL } from "../config/api";
 
 const C = {
@@ -270,7 +269,7 @@ function BuildArena({ onOpenTaskManager }) {
           const d = await res.json();
           setSwarmTasks(d.tasks || []);
         }
-      } catch (e) {
+      } catch {
         // silent fail for polling
       }
       if (active) {

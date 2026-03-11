@@ -16,11 +16,11 @@ function langIcon(name) {
   return m[ext] || '📄';
 }
 
-export default function CodebaseTab({ domain = "Global (All Domains)" }) {
-  const [environments, setEnvironments] = useState(["root", "backend", "frontend"]);
+export default function CodebaseTab({ _domain = "Global (All Domains)" }) {
+  const [_environments, setEnvironments] = useState(["root", "backend", "frontend"]);
   const [selectedEnv, setSelectedEnv] = useState("backend");
 
-  const [tree, setTree] = useState(null);
+  const [_tree, setTree] = useState(null);
   const [expanded, setExpanded] = useState(new Set());
   const [selectedNode, setSelectedNode] = useState(null);
   const [fileContent, setFileContent] = useState("");
@@ -40,7 +40,7 @@ export default function CodebaseTab({ domain = "Global (All Domains)" }) {
 
   // Analysis state
   const [analyzePath, setAnalyzePath] = useState("");
-  const [useKimi, setUseKimi] = useState(false);
+  const [useKimi, _setUseKimi] = useState(false);
 
   const showToast = (msg, type = 'info') => {
     setToast({ msg, type });
@@ -85,6 +85,7 @@ export default function CodebaseTab({ domain = "Global (All Domains)" }) {
 
   useEffect(() => {
     fetchEnvironments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTree]);
 
   const toggleExpand = path => {

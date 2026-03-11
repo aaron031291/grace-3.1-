@@ -564,7 +564,7 @@ export default function DocsTab({ domain = "Global (All Domains)" }) {
                                 } else {
                                   notify('Edit endpoint requires backend PATCH support', 'error');
                                 }
-                              } catch (e) { notify('Save failed', 'error'); }
+                              } catch { notify('Save failed', 'error'); }
                             }} style={{ background: C.success, border: 'none', color: '#fff', cursor: 'pointer', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>Save</button>
                             <button onClick={() => setIsEditing(false)} style={{ background: C.border, border: 'none', color: '#fff', cursor: 'pointer', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>Cancel</button>
                           </div>

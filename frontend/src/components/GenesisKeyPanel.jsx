@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./GenesisKeyPanel.css";
 import { API_BASE_URL } from '../config/api';
 
@@ -21,9 +21,9 @@ export default function GenesisKeyPanel() {
     loadKeys();
     loadStats();
     loadArchives();
-  }, [filter]);
+  }, [loadKeys, loadStats, loadArchives]);
 
-  const loadKeys = async () => {
+  const loadKeys = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -47,9 +47,9 @@ export default function GenesisKeyPanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE, filter]);
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/genesis/stats`);
       if (response.ok) {
@@ -59,9 +59,9 @@ export default function GenesisKeyPanel() {
     } catch (err) {
       console.error("Error loading stats:", err);
     }
-  };
+  }, [API_BASE]);
 
-  const loadArchives = async () => {
+  const loadArchives = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/genesis/archives?limit=10`);
       if (response.ok) {
@@ -71,7 +71,7 @@ export default function GenesisKeyPanel() {
     } catch (err) {
       console.error("Error loading archives:", err);
     }
-  };
+  }, [API_BASE]);
 
   const handleKeyDoubleClick = async (key) => {
     // Double-click opens version control module

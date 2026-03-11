@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./FileBrowser.css";
 import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
 import { API_BASE_URL } from '../config/api';
@@ -15,16 +15,7 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
   const [uploadingFiles, setUploadingFiles] = useState([]);
   const API_BASE = API_BASE_URL;
 
-  // Load directory on mount and when path changes
-  useEffect(() => {
-    loadDirectory();
-    // Notify parent of path change
-    if (onPathChange) {
-      onPathChange(currentPath);
-    }
-  }, [currentPath]);
-
-  const loadDirectory = async () => {
+  const loadDirectory = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -40,7 +31,16 @@ export default function FileBrowser({ onOpenVSCode, onPathChange }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPath, API_BASE]);
+
+  // Load directory on mount and when path changes
+  useEffect(() => {
+    loadDirectory();
+    // Notify parent of path change
+    if (onPathChange) {
+      onPathChange(currentPath);
+    }
+  }, [currentPath, loadDirectory, onPathChange]);
 
   const navigateTo = (path) => {
     setCurrentPath(path);

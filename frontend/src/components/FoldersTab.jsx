@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { API_BASE_URL } from '../config/api';
-import { useChunkedUpload, CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
+import { CHUNKED_THRESHOLD } from '../hooks/useChunkedUpload';
 import UploadProgress from './UploadProgress';
 
 const COLORS = {
@@ -42,7 +42,7 @@ const inputStyle = {
   boxSizing: 'border-box',
 };
 
-const sectionTitle = {
+const _sectionTitle = {
   fontSize: 12,
   fontWeight: 600,
   textTransform: 'uppercase',
@@ -73,8 +73,8 @@ function _fileIcon(nameOrExt) {
   return map[ext] || '📄';
 }
 
-// ── Tree Node ──────────────────────────────────────────────────────────
-function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleExpand, searchFilter }) {
+// ── Tree Node (Unused) ──────────────────────────────────────────────────
+function _TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleExpand, searchFilter }) {
   const isDir = node.type === 'directory';
   const isExpanded = expandedPaths.has(node.path);
   const isSelected = selectedPath === node.path;
@@ -130,7 +130,7 @@ function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleEx
         )}
       </div>
       {isDir && isExpanded && node.children && node.children.map(child => (
-        <TreeNode
+        <_TreeNode
           key={child.path}
           node={child}
           depth={depth + 1}
@@ -147,20 +147,20 @@ function TreeNode({ node, depth, selectedPath, onSelect, expandedPaths, toggleEx
 
 // ── Main Component ─────────────────────────────────────────────────────
 const FoldersTab = () => {
-  const [tree, setTree] = useState(null);
-  const [treeLoading, setTreeLoading] = useState(false);
+  const [_tree, setTree] = useState(null);
+  const [_treeLoading, setTreeLoading] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [dirItems, setDirItems] = useState([]);
   const [dirLoading, setDirLoading] = useState(false);
   const [fileContent, setFileContent] = useState('');
   const [fileLoading, setFileLoading] = useState(false);
-  const [stats, setStats] = useState(null);
+  const [_stats, setStats] = useState(null);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState(null);
 
-  const [expandedPaths, setExpandedPaths] = useState(new Set());
-  const [treeSearch, setTreeSearch] = useState('');
+  const [_expandedPaths, _setExpandedPaths] = useState(new Set());
+  const [_treeSearch, _setTreeSearch] = useState('');
   const [showPlusMenu, setShowPlusMenu] = useState(false);
 
   // CRUD state
@@ -168,22 +168,22 @@ const FoldersTab = () => {
   const [showNewDir, setShowNewDir] = useState(false);
   const [renameOld, setRenameOld] = useState('');
   const [renameNew, setRenameNew] = useState('');
-  const [showRename, setShowRename] = useState(false);
+  const [_showRename, setShowRename] = useState(false);
   const [moveSource, setMoveSource] = useState('');
   const [moveDest, setMoveDest] = useState('');
-  const [showMove, setShowMove] = useState(false);
+  const [_showMove, setShowMove] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(null);
+  const [_uploadProgress, setUploadProgress] = useState(null);
 
   // AI state
   const [analyzeTarget, setAnalyzeTarget] = useState('');
-  const [useKimi, setUseKimi] = useState(false);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [organizeTarget, setOrganizeTarget] = useState('');
-  const [organizeDryRun, setOrganizeDryRun] = useState(true);
-  const [organizing, setOrganizing] = useState(false);
-  const [organizeResult, setOrganizeResult] = useState(null);
+  const [_useKimi, _setUseKimi] = useState(false);
+  const [_analyzing, _setAnalyzing] = useState(false);
+  const [_analysisResult, _setAnalysisResult] = useState(null);
+  const [_organizeTarget, _setOrganizeTarget] = useState('');
+  const [_organizeDryRun, _setOrganizeDryRun] = useState(true);
+  const [_organizing, _setOrganizing] = useState(false);
+  const [_organizeResult, _setOrganizeResult] = useState(null);
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -281,8 +281,8 @@ const FoldersTab = () => {
   }, [currentPath, browseDir]);
 
   // ── Tree interactions ────────────────────────────────────────────────
-  const toggleExpand = useCallback((path) => {
-    setExpandedPaths(prev => {
+  const _toggleExpand = useCallback((path) => {
+    _setExpandedPaths(prev => {
       const next = new Set(prev);
       if (next.has(path)) next.delete(path);
       else next.add(path);
@@ -290,7 +290,7 @@ const FoldersTab = () => {
     });
   }, []);
 
-  const handleTreeSelect = useCallback((node) => {
+  const _handleTreeSelect = useCallback((node) => {
     // Mount to global context for agents
     window.selectedArtifacts = [{
       id: node.path,
@@ -355,7 +355,7 @@ const FoldersTab = () => {
     }
   };
 
-  const handleUpload = async (e, targetDir) => {
+  const _handleUpload = async (e, targetDir) => {
     const files = e.target ? e.target.files : e;
     if (!files || files.length === 0) return;
     setUploading(true);
@@ -466,7 +466,7 @@ const FoldersTab = () => {
     }
   };
 
-  const handleRename = async () => {
+  const _handleRename = async () => {
     if (!renameOld.trim() || !renameNew.trim()) return;
     setActionBusy(true);
     try {
@@ -488,7 +488,7 @@ const FoldersTab = () => {
     }
   };
 
-  const handleMove = async () => {
+  const _handleMove = async () => {
     if (!moveSource.trim() || !moveDest.trim()) return;
     setActionBusy(true);
     try {
@@ -597,42 +597,42 @@ const FoldersTab = () => {
   };
 
   // ── AI ───────────────────────────────────────────────────────────────
-  const handleAnalyze = async () => {
+  const _handleAnalyze = async () => {
     if (!analyzeTarget.trim()) return;
-    setAnalyzing(true);
-    setAnalysisResult(null);
+    _setAnalyzing(true);
+    _setAnalysisResult(null);
     try {
       const res = await fetch(`${API_BASE_URL}/api/librarian-fs/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ file_path: analyzeTarget, use_kimi: useKimi }),
+        body: JSON.stringify({ file_path: analyzeTarget, use_kimi: _useKimi }),
       });
       if (!res.ok) throw new Error('Analysis failed');
-      setAnalysisResult(await res.json());
+      _setAnalysisResult(await res.json());
     } catch (e) {
       setError(e.message);
     } finally {
-      setAnalyzing(false);
+      _setAnalyzing(false);
     }
   };
 
-  const handleAutoOrganize = async () => {
-    if (!organizeTarget.trim()) return;
-    setOrganizing(true);
-    setOrganizeResult(null);
+  const _handleAutoOrganize = async () => {
+    if (!_organizeTarget.trim()) return;
+    _setOrganizing(true);
+    _setOrganizeResult(null);
     try {
       const res = await fetch(`${API_BASE_URL}/api/librarian-fs/auto-organize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: organizeTarget, use_kimi: useKimi, dry_run: organizeDryRun }),
+        body: JSON.stringify({ path: _organizeTarget, use_kimi: _useKimi, dry_run: _organizeDryRun }),
       });
       if (!res.ok) throw new Error('Auto-organize failed');
-      setOrganizeResult(await res.json());
-      if (!organizeDryRun) refresh();
+      _setOrganizeResult(await res.json());
+      if (!_organizeDryRun) refresh();
     } catch (e) {
       setError(e.message);
     } finally {
-      setOrganizing(false);
+      _setOrganizing(false);
     }
   };
 

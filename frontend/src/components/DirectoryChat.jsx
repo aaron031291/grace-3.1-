@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./DirectoryChat.css";
 import { API_BASE_URL } from '../config/api';
 
@@ -12,19 +12,12 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
 
   const API_BASE = API_BASE_URL;
 
-  // Load chat history when chatId changes
-  useEffect(() => {
-    if (chatId) {
-      loadChatHistory();
-    }
-  }, [chatId]);
-
-  const loadChatHistory = async () => {
+  const loadChatHistory = useCallback(async () => {
     if (!chatId) return;
 
     setLoadingHistory(true);
     try {
-      const response = await fetch(`${API_BASE}/chats/${chatId}/messages`, {
+      const response = await fetch(`${API_BASE_URL}/chats/${chatId}/messages`, {
         method: "GET",
       });
 
@@ -44,7 +37,13 @@ export default function DirectoryChat({ currentPath = "", chatId = null }) {
     } finally {
       setLoadingHistory(false);
     }
-  };
+  }, [chatId]);
+
+  useEffect(() => {
+    if (chatId) {
+      loadChatHistory();
+    }
+  }, [chatId, loadChatHistory]);
 
   useEffect(() => {
     scrollToBottom();

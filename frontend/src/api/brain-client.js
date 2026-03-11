@@ -34,7 +34,7 @@ export async function brainCall(domain, action, payload = {}) {
     let result
     try {
       result = await response.json()
-    } catch (_) {
+    } catch {
       return {
         ok: false,
         data: null,
@@ -194,7 +194,7 @@ export async function healthCheck() {
     let data = null
     try {
       data = await r.json()
-    } catch (_) {
+    } catch {
       data = {}
     }
     if (!r.ok) return null
@@ -203,7 +203,7 @@ export async function healthCheck() {
       llm_running: data && 'llm_running' in data ? data.llm_running : r.ok,
       ...data
     }
-  } catch (err) {
+  } catch {
     return null
   }
 }

@@ -75,10 +75,12 @@ export default function ActivityFeed() {
             id: i, topic: e.topic || '', source: e.source || '',
             ts: e.ts || '', icon: getIcon(e.topic),
           }));
-          if (newEvents.length > events.length) {
-            setUnread(prev => prev + (newEvents.length - events.length));
-          }
-          setEvents(newEvents);
+          setEvents(prevEvents => {
+            if (newEvents.length > prevEvents.length) {
+              setUnread(prev => prev + (newEvents.length - prevEvents.length));
+            }
+            return newEvents;
+          });
         }
       } catch { /* polling, skip errors */ }
     };

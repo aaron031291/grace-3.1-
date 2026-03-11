@@ -37,7 +37,7 @@ export default function ChatList({
       setChatMode("folders");
       setExpandedFolder(selectedFolder);
     }
-  }, []);
+  }, [selectedFolder]);
 
   const fetchFolders = async () => {
     try {

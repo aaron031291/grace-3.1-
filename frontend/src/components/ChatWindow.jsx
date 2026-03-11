@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatWindow.css";
 import VoiceButton from "./VoiceButton";
 import SearchInternetButton from "./SearchInternetButton";
@@ -18,6 +18,29 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [useAgent, setUseAgent] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const fetchChatHistory = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/chats/${chatId}/messages`
+      );
+      const data = await response.json();
+      setMessages(data.messages);
+    } catch (error) {
+      console.error("Failed to fetch chat history:", error);
+    }
+  }, [chatId]);
+
+  const fetchChatInfo = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/chats/${chatId}`);
+      const data = await response.json();
+      setChatInfo(data);
+      setTemperature(data.temperature || 0.7);
+    } catch (error) {
+      console.error("Failed to fetch chat info:", error);
+    }
+  }, [chatId]);
+
   useEffect(() => {
     if (chatId) {
       fetchChatHistory();
@@ -26,7 +49,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
       setMessages([]);
       setChatInfo(null);
     }
-  }, [chatId]);
+  }, [chatId, fetchChatHistory, fetchChatInfo]);
 
   useEffect(() => {
     scrollToBottom();
@@ -91,28 +114,7 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     }
   };
 
-  const fetchChatHistory = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/chats/${chatId}/messages`
-      );
-      const data = await response.json();
-      setMessages(data.messages);
-    } catch (error) {
-      console.error("Failed to fetch chat history:", error);
-    }
-  };
-
-  const fetchChatInfo = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/chats/${chatId}`);
-      const data = await response.json();
-      setChatInfo(data);
-      setTemperature(data.temperature || 0.7);
-    } catch (error) {
-      console.error("Failed to fetch chat info:", error);
-    }
-  };
+  // Original fetchChatHistory and fetchChatInfo removed since we hoisted them up to replace the original hook
 
   const updateTemperature = async (newTemp) => {
     setTemperature(newTemp);

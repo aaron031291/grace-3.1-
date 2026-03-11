@@ -29,7 +29,10 @@ export default function LabTab() {
     } catch { /* skip */ }
   }, []);
 
-  useEffect(() => { fetchExperiments(); }, [fetchExperiments]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchExperiments();
+  }, [fetchExperiments]);
 
   const proposeExperiment = async () => {
     if (!newTitle.trim()) return;

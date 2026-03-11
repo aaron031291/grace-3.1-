@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './WebScraper.css';
 import { API_BASE_URL } from '../config/api';
 
@@ -80,9 +80,9 @@ export default function WebScraper() {
     }, 2000); // Poll every 2 seconds
 
     return () => clearInterval(interval);
-  }, [jobId, scraping]);
+  }, [jobId, scraping, API_BASE, fetchResults]);
 
-  const fetchResults = async (id) => {
+  const fetchResults = useCallback(async (id) => {
     try {
       const response = await fetch(`${API_BASE}/scrape/results/${id}`);
       if (!response.ok) throw new Error('Failed to fetch results');
@@ -93,7 +93,7 @@ export default function WebScraper() {
       console.error('Failed to fetch results:', err);
       setError('Failed to fetch scraping results');
     }
-  };
+  }, [API_BASE]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

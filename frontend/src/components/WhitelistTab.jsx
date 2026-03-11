@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
 
 const C = {
@@ -20,7 +20,7 @@ export default function WhitelistTab({ domain = "Global" }) {
   const [consensusRunning, setConsensusRunning] = useState(false);
   const [validatedKnowledge, setValidatedKnowledge] = useState([]);
 
-  const fetchSources = async () => {
+  const fetchSources = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/whitelist-hub/sources?domain=${domain}`);
       if (res.ok) {
@@ -31,11 +31,11 @@ export default function WhitelistTab({ domain = "Global" }) {
         setAuthorities(sources.filter(s => s.type === 'authority').map(s => ({ ...s, web: s.url, video: "" })));
       }
     } catch (e) { console.error("Error fetching whitelist sources:", e); }
-  };
+  }, [domain]);
 
   useEffect(() => {
     fetchSources();
-  }, [domain]);
+  }, [fetchSources]);
 
   const addSourceToBackend = async (type, name, url) => {
     try {

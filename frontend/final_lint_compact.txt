@@ -1,0 +1,31 @@
+﻿D:\grace-3.1-\frontend\src\App.jsx: line 1, col 31, Warning - 'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\ChatWindow.jsx: line 566, col 33, Warning - Empty block statement. (no-empty)
+D:\grace-3.1-\frontend\src\components\ChatWindow.jsx: line 578, col 33, Warning - Empty block statement. (no-empty)
+D:\grace-3.1-\frontend\src\components\CodebaseTab.jsx: line 19, col 39, Warning - 'domain' is assigned a value but never used. Allowed unused args must match /^_/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\CodebaseTab.jsx: line 20, col 10, Warning - 'environments' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\CodebaseTab.jsx: line 23, col 10, Warning - 'tree' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\CodebaseTab.jsx: line 88, col 6, Warning - React Hook useEffect has a missing dependency: 'fetchEnvironments'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)
+D:\grace-3.1-\frontend\src\components\FoldersTab.jsx: line 150, col 10, Warning - 'tree' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\FoldersTab.jsx: line 151, col 10, Warning - 'treeLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u. (no-unused-vars)
+D:\grace-3.1-\frontend\src\components\GovernanceDiscussion.jsx: line 33, col 39, Warning - Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  31 |   }, [discussionId]);
+  32 |
+> 33 |   useEffect(() => { if (discussionId) load(); }, [discussionId, load]);
+     |                                       ^^^^ Avoid calling setState() directly within an effect
+  34 |   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [discussion?.messages]);
+  35 |
+  36 |   const sendMessage = async () => { (react-hooks/set-state-in-effect)
+D:\grace-3.1-\frontend\src\components\GovernanceTab.jsx: line 239, col 9, Warning - Unused eslint-disable directive (no problems were reported from 'no-unused-vars').
+D:\grace-3.1-\frontend\src\components\GovernanceTab.jsx: line 241, col 9, Warning - Unused eslint-disable directive (no problems were reported from 'no-unused-vars').
+D:\grace-3.1-\frontend\src\components\GovernanceTab.jsx: line 248, col 5, Warning - Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect').
+D:\grace-3.1-\frontend\src\components\UndoManager.jsx: line 11, col 17, Warning - Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components. (react-refresh/only-export-components)
+D:\grace-3.1-\frontend\src\components\UndoManager.jsx: line 17, col 17, Warning - Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components. (react-refresh/only-export-components)
+
+15 problems
