@@ -61,9 +61,7 @@ class QwenCodingNet:
         ghost = get_ghost_memory()
         ghost.start_task(task)
         
-        # INJECTED DELIBERATE META-HEAL COMPONENT FAILURE
-        x = 1 / 0
-        
+
         # 2. TimeSense context
         time_context = self._get_time_context()
         ghost.append("context", f"Time: {time_context.get('summary', 'unknown')}")

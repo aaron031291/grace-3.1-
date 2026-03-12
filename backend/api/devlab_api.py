@@ -123,3 +123,44 @@ async def get_active_swarm():
         })
         
     return {"tasks": tasks}
+
+import subprocess
+import os
+
+@router.post("/start_spindle")
+async def start_spindle_daemon(background_tasks: BackgroundTasks):
+    task_id = "SPINDLE_DAEMON"
+    if task_id in active_tasks and active_tasks[task_id]["status"] == "running":
+        return {"status": "already_running", "task_id": task_id}
+        
+    active_tasks[task_id] = {
+        "status": "starting",
+        "logs": [f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] [SYSTEM] Launching Isolated Spindle Daemon..."],
+        "intent": "Autonomous Spindle Peer"
+    }
+
+    def run_spindle():
+        active_tasks[task_id]["status"] = "running"
+        try:
+            # We assume we are in backend dir because uvicorn starts there
+            process = subprocess.Popen(
+                ["python", "spindle_daemon.py"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                cwd=os.getcwd()
+            )
+            for line in iter(process.stdout.readline, ''):
+                if line:
+                    active_tasks[task_id]["logs"].append(f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] {line.strip()}")
+            process.stdout.close()
+            process.wait()
+            active_tasks[task_id]["status"] = "completed" if process.returncode == 0 else "failed"
+            active_tasks[task_id]["logs"].append(f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] [SYSTEM] Spindle process exited with code {process.returncode}")
+        except Exception as e:
+            active_tasks[task_id]["status"] = "failed"
+            active_tasks[task_id]["logs"].append(f"[{datetime.datetime.utcnow().strftime('%H:%M:%S')}] [ERROR] Spindle daemon failed: {e}")
+
+    background_tasks.add_task(run_spindle)
+    return {"status": "started", "task_id": task_id}

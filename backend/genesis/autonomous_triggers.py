@@ -655,7 +655,10 @@ class GenesisTriggerPipeline:
             )
 
         except Exception as e:
-            logger.error(f"Error triggering health check: {e}")
+            if hasattr(settings, 'SUPPRESS_GENESIS_ERRORS') and settings.SUPPRESS_GENESIS_ERRORS:
+                logger.debug(f"Spindle isolation or health check failed (suppressed): {e}")
+            else:
+                logger.error(f"Error triggering health check: {e}")
 
         return actions
 

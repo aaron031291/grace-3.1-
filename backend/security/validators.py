@@ -11,6 +11,7 @@ Provides secure input handling to prevent:
 import re
 import html
 from typing import Any, Optional, List, Union
+from pathlib import Path
 from .config import get_security_config
 
 

@@ -12,6 +12,7 @@ import hashlib
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 from fastapi import Request, Response, HTTPException, Depends, Cookie
+from fastapi.status import HTTP_401_UNAUTHORIZED
 
 from .config import get_security_config
 from .logging import get_security_logger

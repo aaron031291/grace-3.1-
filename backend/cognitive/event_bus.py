@@ -93,3 +93,71 @@ def get_recent_events(limit: int = 50) -> List[Dict[str, Any]]:
 def get_subscriber_count() -> Dict[str, int]:
     with _lock:
         return {topic: len(handlers) for topic, handlers in _subscribers.items()}
+
+# ── ZeroMQ IPC Bridge (Spindle Autonomy Integration) ─────────────────────
+import json
+import threading
+
+_zmq_context = None
+_zmq_pub_socket = None
+_zmq_thread = None
+
+# We use local TCP instead of strict IPC for robust Windows compatibility.
+ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5515"  # Grace broadcasts here (Spindle SUBs to this)
+ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5516"  # Grace listens here (Spindle PUBs to this)
+
+def _zmq_bridge_loop():
+    import zmq
+    global _zmq_context, _zmq_pub_socket
+    _zmq_context = zmq.Context()
+    
+    # Grace PUB socket (broadcasts internal events to Spindle)
+    _zmq_pub_socket = _zmq_context.socket(zmq.PUB)
+    _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+    
+    # Grace SUB socket (listens for events from Spindle)
+    sub_socket = _zmq_context.socket(zmq.SUB)
+    sub_socket.bind(ZMQ_SUB_ENDPOINT)
+    sub_socket.setsockopt_string(zmq.SUBSCRIBE, "")  # Subscribe to all topics
+
+    logger.info(f"[ZMQ-BRIDGE] Bound PUB to {ZMQ_PUB_ENDPOINT}, SUB to {ZMQ_SUB_ENDPOINT}")
+
+    # Listen to the internal event bus to forward out via ZMQ
+    def _forward_to_zmq(event: Event):
+        if event.source == "zmq_peer":
+            return # Don't echo back events we just received
+        if _zmq_pub_socket:
+            try:
+                msg = {"topic": event.topic, "data": event.data, "source": event.source, "timestamp": event.timestamp}
+                _zmq_pub_socket.send_string(f"{event.topic} {json.dumps(msg)}")
+            except Exception as e:
+                logger.error(f"[ZMQ-BRIDGE] Error forwarding event {event.topic}: {e}")
+                
+    # Subscribe to EVERYTHING internally so we can broadcast it
+    subscribe("*", _forward_to_zmq)
+
+    # Listen for incoming ZMQ events from Spindle and publish them to local bus
+    while True:
+        try:
+            raw_msg = sub_socket.recv_string()
+            topic, payload_str = raw_msg.split(" ", 1)
+            payload = json.loads(payload_str)
+            # Publish locally. Mark source as 'zmq_peer' so we don't infinitely loop
+            publish_async(topic=topic, data=payload.get("data", {}), source="zmq_peer")
+        except Exception as e:
+            logger.error(f"[ZMQ-BRIDGE] Error receiving event: {e}")
+            time.sleep(1)
+
+def start_zmq_bridge():
+    """Initializes the ZeroMQ pub/sub bridge for isolated parallel runtimes (e.g. Spindle)."""
+    global _zmq_thread
+    if _zmq_thread is None:
+        try:
+            import zmq
+            _zmq_thread = threading.Thread(target=_zmq_bridge_loop, daemon=True, name="zmq-event-bridge")
+            _zmq_thread.start()
+        except ImportError:
+            logger.warning("[ZMQ-BRIDGE] pyzmq not installed. IPC bridge for Spindle will not start.")
+
+# Auto-start the bridge when the module loads
+start_zmq_bridge()

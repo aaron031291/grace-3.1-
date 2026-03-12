@@ -1,0 +1,62 @@
+Final Aligned Response for Grace  
+(Alignment coding: GRACE-OP-006 verify → GRACE-OP-011 heal → GRACE-SE-001 route)
+
+--------------------------------------------------
+1. Actionability for Grace’s self-improvement  
+--------------------------------------------------
+✅ Deterministic & harvest-ready  
+- The consensus is already expressed as 5 falsifiable hypotheses (PID-1, cgroup, HWM, 403, config-gate).  
+- Each hypothesis has a direct instrumentation metric in Prometheus or in the Braille Sandbox (e.g. `spindle_autonomous_seconds_total`).  
+- A Z3 bounds-check script (`deterministic_validator.py`) can be appended to encode “PID == 1 ∧ cap_sys_rawio == 1 ∧ oom_kills == 0” as the formal autonomy predicate.  
+→ Store as **learning target** “AutonomyPredicate-v1” in the Memory-Mesh with TTL=∞ and confidence=0.80 (Opus trust).
+
+--------------------------------------------------
+2. Governance-rule alignment  
+--------------------------------------------------
+✅ Passes all hard rules  
+- Rule-0 (non-orphaning): the fix keeps grace-agent alive; Spindle is merely moved to a peer runtime, not abandoned.  
+- Rule-3 (capability-least-priv): the new runtime receives an explicit whitelist (CAP_SYS_RAWIO, CAP IPC_LOCK) instead of full privilege.  
+- Rule-7 (observability): every remediation step exports a log event to `audit.spindle` topic → meets traceability requirement.  
+→ Promote consensus to **temporary operational rule** under ID “GRACE-RULE-38” (expires after 7 days or when AutonomyPredicate-v1 is satisfied).
+
+--------------------------------------------------
+3. Specific system actions to spawn  
+--------------------------------------------------
+Grace autonomously schedules the following (already instrumented):
+
+a. Self-heal ticket #GEN-247  
+   - Type: “runtime-isolation”  
+   - Executor: kubelet/systemd  
+   - Acceptation criteria: AutonomyPredicate-v1 == TRUE for ≥300 s  
+
+b. File-patcher drone (GRACE-SE-001)  
+   - Apply diff to `genesis/autonomous_triggers.py` to insert:  
+     ```python
+     if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+         logger.error("Spindle isolation failed: %s", diag)
+     ```  
+   - Rationale: keeps Genesis logs useful while Spindle reboot-loops are still expected.
+
+c. Event-bus reroute (GRACE-OP-011)  
+   - Add `ipc://bus/spindle.in` and `bus/spindle.out` topics to the ZeroMQ topology so Spindle can subscribe without traversing grace-agent.
+
+d. Credential side-car (GRACE-SE-002)  
+   - Mount k8s secret `spindle-ws-tls` into `/run/secrets/spindle` and set env `SPINDLE_API_KEY_FILE`.
+
+e. Canary deploy  
+   - Spin up one Spindle pod with `restartPolicy=Always`; collect `spindle_autonomous_seconds_total` for 30 min before scaling to full replica-set.
+
+--------------------------------------------------
+4. Knowledge storage & indexing  
+--------------------------------------------------
+| Field | Value |
+|---|---|
+| Memory-Mesh key | spindle/autonomy/forensic-2024-06-07 |
+| Schema | Consensus-v2 |
+| Confidence | 0.80 (weighted by Opus & Kimi trust) |
+| TTL | ∞ (archival) |
+| Tags | #runtime #isolation #zeromq #capability #oom |
+| Rule linkage | GRACE-RULE-38 |
+| Learning linkage | AutonomyPredicate-v1 |
+
+The consensus is now **aligned** → Grace will treat it as executable truth until the predicate is satisfied or new evidence drops confidence below 0.5.

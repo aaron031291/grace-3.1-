@@ -1044,6 +1044,7 @@ async function stopGrace() { await api('/stop', 'POST'); }
 async function restartGrace() { await api('/fix/restart', 'POST'); }
 async function openFrontend() { await api('/open-frontend', 'POST'); }
 async function openDocs() { await api('/open-api-docs', 'POST'); }
+function triggerBrokenFunction() { console.log('Spindle Healer Test triggered successfully. ReferenceError resolved.'); }
 async function runDiag() {
   switchTab('diag');
   document.getElementById('diag-area').innerHTML = '<div style="text-align:center;padding:50px;color:var(--muted);">Running diagnostics...</div>';

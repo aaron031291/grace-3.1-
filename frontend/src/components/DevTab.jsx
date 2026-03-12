@@ -310,7 +310,27 @@ function BuildArena({ onOpenTaskManager }) {
         placeholder="e.g., 'Add a new endpoint to api.py that returns user statistics, and upate the frontend dashboard to display it.'"
         style={{ height: 120, padding: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text, fontSize: 14, resize: "none", outline: "none", fontFamily: "inherit", marginBottom: 16, flexShrink: 0 }}
       />
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <button onClick={async () => {
+          setActiveTask({ id: "SPINDLE_DAEMON", name: "Spindle Autonomous Daemon", intent: "Parallel Peer Process" });
+          setLogs([">>> Connecting to Dev Lab Task Queue...", ">>> Launching Spindle Daemon..."]);
+          try {
+            await fetch(`${API_BASE_URL}/api/devlab/start_spindle`, { method: "POST" });
+            const eventSource = new EventSource(`${API_BASE_URL}/api/devlab/stream/SPINDLE_DAEMON`);
+            eventSource.onmessage = (event) => {
+              setLogs(prev => [...prev, event.data]);
+              if (event.data.includes("[END OF STREAM]")) eventSource.close();
+            };
+            eventSource.onerror = () => {
+              setLogs(prev => [...prev, "[ERROR] Connection to Task Stream lost."]);
+              eventSource.close();
+            };
+          } catch (e) {
+            setLogs(prev => [...prev, `[ERROR] Failed to start Spindle: ${e.message}`]);
+          }
+        }} style={{ padding: "12px 24px", background: "#7c3aed", border: "none", borderRadius: 6, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+          🚀 Launch Isolated Spindle Daemon
+        </button>
         <button style={{ padding: "12px 24px", background: C.accent, border: "none", borderRadius: 6, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
           Run Build Pipeline
         </button>
